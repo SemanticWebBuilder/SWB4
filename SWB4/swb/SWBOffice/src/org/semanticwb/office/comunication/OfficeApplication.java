@@ -98,39 +98,37 @@ import org.semanticwb.resource.office.sem.WordResource;
  */
 public class OfficeApplication extends XmlRpcObject implements IOfficeApplication, FlowNotification
 {
-    
+
     /** The Constant swb_office. */
     private static final SemanticClass swb_office = org.semanticwb.repository.office.OfficeDocument.swboffice_OfficeDocument;
-    
     /** The Constant SWB_FILEREP_DELETED. */
     private static final String SWB_FILEREP_DELETED = "swbfilerep:deleted";
-    
     /** The Constant REP_FILE. */
     private static final String REP_FILE = "swbfilerep:RepositoryFile";
-    
     /** The Constant REP_FOLDER. */
     private static final String REP_FOLDER = "swbfilerep:RepositoryFolder";
-    
     /** The rep. */
     private static SWBRepository rep = null;
-    
     /** The Constant JCR_CONTENT. */
     public static final String JCR_CONTENT = "jcr:content";
-    
     /** The Constant log. */
     private static final Logger log = SWBUtils.getLogger(OfficeApplication.class);
-    
     /** The Constant loader. */
     private static final RepositoryManagerLoader loader = RepositoryManagerLoader.getInstance();
 
-    static {
-        try {
+    static
+    {
+        try
+        {
             rep = new SWBRepository();
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.error(e);
         }
     }
     //private Session session;
+
     /**
      * Checks if is valid version.
      * 
@@ -246,8 +244,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         catch (Exception e)
         {
             throw e;
-        }
-        finally
+        } finally
         {
             if (session != null)
             {
@@ -309,8 +306,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         {
             log.error(e);
             throw e;
-        }
-        finally
+        } finally
         {
             if (session != null)
             {
@@ -373,8 +369,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         {
             log.error(e);
             throw e;
-        }
-        finally
+        } finally
         {
             if (session != null)
             {
@@ -403,8 +398,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             session = loader.openSession(repositoryName, this.user, this.password);
             Node node = session.getNodeByUUID(id);
             canDeleteCategory = !node.getNodes().hasNext();
-        }
-        finally
+        } finally
         {
             if (session != null)
             {
@@ -443,8 +437,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         catch (Throwable e)
         {
             log.error(e);
-        }
-        finally
+        } finally
         {
             if (session != null)
             {
@@ -509,8 +502,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             //e.printStackTrace();
             log.error(e);
             throw e;
-        }
-        finally
+        } finally
         {
             if (session != null)
             {
@@ -563,8 +555,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         catch (Exception e)
         {
             throw e;
-        }
-        finally
+        } finally
         {
             if (session != null)
             {
@@ -613,8 +604,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         catch (Exception e)
         {
             throw e;
-        }
-        finally
+        } finally
         {
             if (session != null)
             {
@@ -644,7 +634,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
         return types.toArray(new ContentType[types.size()]);
     }
-    
+
     /**
      * Checks if is su.
      * 
@@ -652,11 +642,11 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
      */
     private boolean isSu()
     {
-        UserGroup su=UserGroup.ClassMgr.getUserGroup("su", SWBContext.getAdminRepository());
+        UserGroup su = UserGroup.ClassMgr.getUserGroup("su", SWBContext.getAdminRepository());
         User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
-        return ((su!=null && ouser.hasUserGroup(su)));
+        return ((su != null && ouser.hasUserGroup(su)));
     }
-    
+
     /**
      * Search.
      * 
@@ -671,59 +661,59 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
      * @throws Exception the exception
      */
     @Override
-    public ContentInfo[] search(String repositoryName, String title, String description, String category, String type, String officeType,WebPageInfo webPageInfo) throws Exception
+    public ContentInfo[] search(String repositoryName, String title, String description, String category, String type, String officeType, WebPageInfo webPageInfo) throws Exception
     {
-        if(webPageInfo==null)
+        if (webPageInfo == null)
         {
-            return search(repositoryName,title,description,category,type,officeType);
+            return search(repositoryName, title, description, category, type, officeType);
         }
-        WebSite site=WebSite.ClassMgr.getWebSite(webPageInfo.siteID);
-        if(site==null)
+        WebSite site = WebSite.ClassMgr.getWebSite(webPageInfo.siteID);
+        if (site == null)
         {
-            return search(repositoryName,title,description,category,type,officeType);
+            return search(repositoryName, title, description, category, type, officeType);
         }
-        WebPage page=site.getWebPage(webPageInfo.id);
-        if(page==null)
+        WebPage page = site.getWebPage(webPageInfo.id);
+        if (page == null)
         {
-            return search(repositoryName,title,description,category,type,officeType);
+            return search(repositoryName, title, description, category, type, officeType);
         }
-        HashSet<String> resourcesToSeach=new HashSet<String>();
-        GenericIterator<Resource> resources=page.listResources();
-        while(resources.hasNext())
+        HashSet<String> resourcesToSeach = new HashSet<String>();
+        GenericIterator<Resource> resources = page.listResources();
+        while (resources.hasNext())
         {
-            Resource resource=resources.next();
-            String sclass=resource.getResourceType().getResourceClassName();
-            boolean isOffice=sclass.equals(WordResource.class.getCanonicalName()) || sclass.equals(ExcelResource.class.getCanonicalName()) || sclass.equals(PPTResource.class.getCanonicalName());
-            if(isOffice)
+            Resource resource = resources.next();
+            String sclass = resource.getResourceType().getResourceClassName();
+            boolean isOffice = sclass.equals(WordResource.class.getCanonicalName()) || sclass.equals(ExcelResource.class.getCanonicalName()) || sclass.equals(PPTResource.class.getCanonicalName());
+            if (isOffice)
             {
-                if(resource.getResourceData()!=null)
+                if (resource.getResourceData() != null)
                 {
-                    GenericObject go=resource.getResourceData().createGenericInstance();
-                    if(go!=null && go instanceof OfficeResource)
+                    GenericObject go = resource.getResourceData().createGenericInstance();
+                    if (go != null && go instanceof OfficeResource)
                     {
-                        OfficeResource officeResource=(OfficeResource)go;
-                        if(officeResource.getContent()!=null)
+                        OfficeResource officeResource = (OfficeResource) go;
+                        if (officeResource.getContent() != null)
                         {
-                            resourcesToSeach.add(officeResource.getContent());                            
+                            resourcesToSeach.add(officeResource.getContent());
                         }
                     }
-                    
+
                 }
-                
+
             }
         }
         ArrayList<ContentInfo> contents = new ArrayList<ContentInfo>();
-        for(String uuid : resourcesToSeach)
+        for (String uuid : resourcesToSeach)
         {
-            List<ContentInfo> temp=search(repositoryName, title, description, category, type, officeType, uuid);            
-            if(temp!=null && temp.size()>0)
+            List<ContentInfo> temp = search(repositoryName, title, description, category, type, officeType, uuid);
+            if (temp != null && temp.size() > 0)
             {
                 contents.addAll(temp);
             }
         }
         return contents.toArray(new ContentInfo[contents.size()]);
     }
-    
+
     /**
      * Search.
      * 
@@ -737,21 +727,21 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
      * @return the list
      * @throws Exception the exception
      */
-    private List<ContentInfo> search(String repositoryName, String title, String description, String category, String type, String officeType,String uuid) throws Exception
+    private List<ContentInfo> search(String repositoryName, String title, String description, String category, String type, String officeType, String uuid) throws Exception
     {
         Session session = null;
         ArrayList<ContentInfo> contents = new ArrayList<ContentInfo>();
-        HashSet<String> repositories=new HashSet<String>();
+        HashSet<String> repositories = new HashSet<String>();
 
-        if(repositoryName==null || repositoryName.equals("") || repositoryName.equals("*"))
+        if (repositoryName == null || repositoryName.equals("") || repositoryName.equals("*"))
         {
-            repositoryName=null;
+            repositoryName = null;
         }
-        if(repositoryName==null)
+        if (repositoryName == null)
         {
             User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
-            RepositoryInfo[] repInfo= loader.getWorkspacesForOffice(ouser);
-            for(RepositoryInfo info : repInfo)
+            RepositoryInfo[] repInfo = loader.getWorkspacesForOffice(ouser);
+            for (RepositoryInfo info : repInfo)
             {
                 repositories.add(info.name);
             }
@@ -760,10 +750,10 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         {
             repositories.add(repositoryName);
         }
-        
-        for(String repositoryToseach : repositories)
+
+        for (String repositoryToseach : repositories)
         {
-            repositoryName=repositoryToseach;
+            repositoryName = repositoryToseach;
             try
             {
                 session = loader.openSession(repositoryName, this.user, this.password);
@@ -787,7 +777,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                         statement.append("\",\"i\") ");
                     }
 
-                    if (uuid!=null && !uuid.equals("") && !uuid.equals("*"))
+                    if (uuid != null && !uuid.equals("") && !uuid.equals("*"))
                     {
                         statement.append(" ?x jcr:uuid ?uuid . ");
                         statement.append(" FILTER (?uuid=\"");
@@ -846,31 +836,31 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                         try
                         {
                             Node resNode = node.getNode(JCR_CONTENT);//, swb_office.getPrefix() + ":" + swb_office.getName());
-                            String userlogin=resNode.getProperty(cm_user).getString();
-                            if(isSu() || (userlogin!=null && userlogin.equals(this.user)))
+                            String userlogin = resNode.getProperty(cm_user).getString();
+                            if (isSu() || (userlogin != null && userlogin.equals(this.user)))
                             {
                                 ContentInfo info = new ContentInfo();
                                 info.id = node.getUUID();
                                 info.title = node.getProperty(cm_title).getValue().getString();
                                 info.descripcion = node.getProperty(cm_description).getValue().getString();
-                                info.respositoryName=repositoryName;
+                                info.respositoryName = repositoryName;
                                 info.categoryId = parent.getUUID();
                                 info.categoryTitle = parent.getProperty(cm_title).getValue().getString();
                                 info.created = node.getProperty("jcr:created").getDate().getTime();
                                 contents.add(info);
                             }
                         }
-                        catch(RuntimeException rte)
+                        catch (RuntimeException rte)
                         {
                             try
                             {
                                 String id = node.getUUID();
                                 String titlenode = node.getProperty(cm_title).getValue().getString();
                                 String categoryIdnode = parent.getUUID();
-                                String categoryTitle=parent.getProperty(cm_title).getValue().getString();
-                                log.error("Error triyng to get the content with id "+id+" and title "+titlenode+" and category "+categoryIdnode+" and the title of category is "+categoryTitle,rte);
+                                String categoryTitle = parent.getProperty(cm_title).getValue().getString();
+                                log.error("Error triyng to get the content with id " + id + " and title " + titlenode + " and category " + categoryIdnode + " and the title of category is " + categoryTitle, rte);
                             }
-                            catch(Throwable t)
+                            catch (Throwable t)
                             {
                                 log.error(t);
                             }
@@ -885,31 +875,31 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                             try
                             {
                                 Node resNode = node.getNode(JCR_CONTENT);
-                                String userlogin=resNode.getProperty(cm_user).getString();
-                                if(isSu() || (userlogin!=null && userlogin.equals(this.user)))
+                                String userlogin = resNode.getProperty(cm_user).getString();
+                                if (isSu() || (userlogin != null && userlogin.equals(this.user)))
                                 {
                                     ContentInfo info = new ContentInfo();
                                     info.id = node.getUUID();
                                     info.title = node.getProperty(cm_title).getValue().getString();
                                     info.descripcion = node.getProperty(cm_description).getValue().getString();
-                                    info.respositoryName=repositoryName;
+                                    info.respositoryName = repositoryName;
                                     info.categoryId = parent.getUUID();
                                     info.categoryTitle = parent.getProperty(cm_title).getValue().getString();
                                     info.created = node.getProperty("jcr:created").getDate().getTime();
                                     contents.add(info);
                                 }
                             }
-                            catch(RuntimeException rte)
+                            catch (RuntimeException rte)
                             {
                                 try
                                 {
                                     String id = node.getUUID();
                                     String titlenode = node.getProperty(cm_title).getValue().getString();
                                     String categoryIdnode = parent.getUUID();
-                                    String categoryTitle=parent.getProperty(cm_title).getValue().getString();
-                                    log.error("Error triyng to get the content with id "+id+" and title "+titlenode+" and category "+categoryIdnode+" and the title of category is "+categoryTitle,rte);
+                                    String categoryTitle = parent.getProperty(cm_title).getValue().getString();
+                                    log.error("Error triyng to get the content with id " + id + " and title " + titlenode + " and category " + categoryIdnode + " and the title of category is " + categoryTitle, rte);
                                 }
-                                catch(Throwable t)
+                                catch (Throwable t)
                                 {
                                     log.error(t);
                                 }
@@ -922,8 +912,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             {
                 log.debug(e);
                 throw e;
-            }
-            finally
+            } finally
             {
                 if (session != null)
                 {
@@ -933,7 +922,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
         return contents;
     }
-    
+
     /**
      * Search.
      * 
@@ -949,7 +938,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     @Override
     public ContentInfo[] search(String repositoryName, String title, String description, String category, String type, String officeType) throws Exception
     {
-        List<ContentInfo> contents=search(repositoryName, title, description, category, type, officeType, "*");
+        List<ContentInfo> contents = search(repositoryName, title, description, category, type, officeType, "*");
         return contents.toArray(new ContentInfo[contents.size()]);
     }
 
@@ -977,7 +966,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 Node frozenNode = versiontoReturn.getNode("jcr:frozenNode");
                 String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
                 String file = frozenNode.getProperty(cm_file).getString();
-                String encode=System.getProperty("file.encoding","utf-8");
+                String encode = System.getProperty("file.encoding", "utf-8");
                 if (encode == null || encode.equals(""))
                 {
                     encode = "utf-8";
@@ -1005,8 +994,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         {
             log.error(e);
             throw e;
-        }
-        finally
+        } finally
         {
             if (session != null)
             {
@@ -1030,10 +1018,10 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         {
             WebSite site = sites.next();
             User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
-            String siteid=site.getId();
+            String siteid = site.getId();
             if (!(siteid.equals(SWBContext.WEBSITE_ADMIN) || siteid.equals(SWBContext.WEBSITE_GLOBAL) || siteid.equals(SWBContext.WEBSITE_ONTEDITOR)))
             {
-                WebPage home = site.getHomePage();                
+                WebPage home = site.getHomePage();
                 if (SWBPortal.getAdminFilterMgr().haveTreeAccessToSemanticObject(ouser, site.getSemanticObject()) && SWBPortal.getAdminFilterMgr().haveTreeAccessToSemanticObject(ouser, home.getSemanticObject()))
                 {
                     WebSiteInfo info = new WebSiteInfo();
@@ -1094,25 +1082,28 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         while (pages.hasNext())
         {
             WebPage page = pages.next();
-            User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
-            if (SWBPortal.getAdminFilterMgr().haveTreeAccessToSemanticObject(ouser, page.getSemanticObject()))
+            if (!page.isDeleted())
             {
-                WebPageInfo info = new WebPageInfo();
-                info.id = page.getId();
-                info.active = page.isActive();
-                info.title = page.getTitle();
-                info.siteID = webpage.siteID;
-                info.description = page.getDescription();
-                info.url = page.getUrl();
-                int childs = 0;
-                GenericIterator<WebPage> childWebPages = page.listChilds();
-                if (childWebPages.hasNext())
+                User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
+                if (SWBPortal.getAdminFilterMgr().haveTreeAccessToSemanticObject(ouser, page.getSemanticObject()))
                 {
-                    childWebPages.next();
-                    childs++;
+                    WebPageInfo info = new WebPageInfo();
+                    info.id = page.getId();
+                    info.active = page.isActive();
+                    info.title = page.getTitle();
+                    info.siteID = webpage.siteID;
+                    info.description = page.getDescription();
+                    info.url = page.getUrl();
+                    int childs = 0;
+                    GenericIterator<WebPage> childWebPages = page.listChilds();
+                    if (childWebPages.hasNext())
+                    {
+                        childWebPages.next();
+                        childs++;
+                    }
+                    info.childs = childs;
+                    pagesToReturn.add(info);
                 }
-                info.childs = childs;
-                pagesToReturn.add(info);
             }
         }
         return pagesToReturn.toArray(new WebPageInfo[pagesToReturn.size()]);
@@ -1169,7 +1160,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             for (String type : OfficeDocument.getOfficeTypes())
             {
                 ResourceType resourceType = site.getResourceType(type);
-                if (resourceType!=null && res.getResourceType().equals(resourceType))
+                if (resourceType != null && res.getResourceType().equals(resourceType))
                 {
                     OfficeResource officeResource = OfficeResource.getOfficeResource(res.getId(), site);
                     officeResource.setResourceBase(res);
@@ -1280,7 +1271,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             for (String type : OfficeDocument.getOfficeTypes())
             {
                 ResourceType resourceType = site.getResourceType(type);
-                if (resourceType!=null && res.getResourceType().equals(resourceType))
+                if (resourceType != null && res.getResourceType().equals(resourceType))
                 {
                     OfficeResource officeResource = OfficeResource.getOfficeResource(res.getId(), site);
                     officeResource.setResourceBase(res);
@@ -1359,7 +1350,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             for (String type : OfficeDocument.getOfficeTypes())
             {
                 ResourceType resourceType = site.getResourceType(type);
-                if (resourceType!=null && res.getResourceType().equals(resourceType))
+                if (resourceType != null && res.getResourceType().equals(resourceType))
                 {
                     OfficeResource officeResource = OfficeResource.getOfficeResource(res.getId(), site);
                     officeResource.setResourceBase(res);
@@ -1596,8 +1587,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             try
             {
                 InputStream in = doc.getContent(officeResource.getRepositoryName(), officeResource.getContent(), officeResource.getVersionToShow());
-                User wbuser=SWBContext.getAdminRepository().getUserByLogin(user);
-                officeResource.loadContent(in,wbuser);
+                User wbuser = SWBContext.getAdminRepository().getUserByLogin(user);
+                officeResource.loadContent(in, wbuser);
             }
             catch (Exception e)
             {
@@ -1639,8 +1630,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         WebSite site = SWBContext.getWebSite(webpage.siteID);
         WebPage parent = site.getWebPage(webpage.id);
         User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
-        if(parent!=null && ouser!=null && parent.getSemanticObject()!=null)
-        {            
+        if (parent != null && ouser != null && parent.getSemanticObject() != null)
+        {
             return SWBPortal.getAdminFilterMgr().haveClassAction(ouser, parent.getSemanticObject().getSemanticClass(), AdminFilter.ACTION_ADD) && SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(ouser, parent.getSemanticObject());
         }
         return false;
@@ -1677,8 +1668,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         {
             log.error(e);
             throw e;
-        }
-        finally
+        } finally
         {
             if (session != null)
             {
@@ -1721,8 +1711,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             //e.printStackTrace();
             log.error(e);
             throw e;
-        }
-        finally
+        } finally
         {
             if (session != null)
             {
@@ -1763,8 +1752,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         {
             log.error(e);
             throw e;
-        }
-        finally
+        } finally
         {
             if (session != null)
             {
@@ -1806,8 +1794,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             //e.printStackTrace();
             log.error(e);
             throw e;
-        }
-        finally
+        } finally
         {
             if (session != null)
             {
@@ -1827,53 +1814,53 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     public SemanticRepository[] getSemanticRepositories(SiteInfo siteInfo) throws Exception
     {
 
-        HashSet<SemanticRepository> getSemanticRepositories=new HashSet<SemanticRepository>();
+        HashSet<SemanticRepository> getSemanticRepositories = new HashSet<SemanticRepository>();
         WebSite website = SWBContext.getWebSite(siteInfo.id);
-        Iterator<ResourceType> resourceTypes=ResourceType.ClassMgr.listResourceTypes(website);
-        while(resourceTypes.hasNext())
+        Iterator<ResourceType> resourceTypes = ResourceType.ClassMgr.listResourceTypes(website);
+        while (resourceTypes.hasNext())
         {
-            ResourceType resourceType=resourceTypes.next();
-            if(resourceType.getResourceClassName().equals("org.semanticwb.resources.filerepository.SemanticRepositoryFile"))
+            ResourceType resourceType = resourceTypes.next();
+            if (resourceType.getResourceClassName().equals("org.semanticwb.resources.filerepository.SemanticRepositoryFile"))
             {
-                Iterator<Resource> resources=Resource.ClassMgr.listResourceByResourceType(resourceType, website);
-                while(resources.hasNext())
+                Iterator<Resource> resources = Resource.ClassMgr.listResourceByResourceType(resourceType, website);
+                while (resources.hasNext())
                 {
-                    Resource resource=resources.next();
-                    GenericIterator<Resourceable> resourceables=resource.listResourceables();
-                    while(resourceables.hasNext())
+                    Resource resource = resources.next();
+                    GenericIterator<Resourceable> resourceables = resource.listResourceables();
+                    while (resourceables.hasNext())
                     {
-                        Resourceable resourceable=resourceables.next();
-                        if(resourceable instanceof WebPage)
+                        Resourceable resourceable = resourceables.next();
+                        if (resourceable instanceof WebPage)
                         {
-                            WebPage wp=(WebPage)resourceable;                            
-                            SemanticRepository sr=new SemanticRepository();
-                            sr.name=resource.getTitle();
-                            sr.resid=resource.getId();                            
-                            sr.pageid=wp.getId();
-                            sr.uri=resource.getURI();                            
+                            WebPage wp = (WebPage) resourceable;
+                            SemanticRepository sr = new SemanticRepository();
+                            sr.name = resource.getTitle();
+                            sr.resid = resource.getId();
+                            sr.pageid = wp.getId();
+                            sr.uri = resource.getURI();
                             getSemanticRepositories.add(sr);
                         }
                     }
                 }
             }
-            if(resourceType.getResourceClassName().equals("com.infotec.wb.resources.repository"))
+            if (resourceType.getResourceClassName().equals("com.infotec.wb.resources.repository"))
             {
-                Iterator<Resource> resources=Resource.ClassMgr.listResourceByResourceType(resourceType, website);
-                while(resources.hasNext())
+                Iterator<Resource> resources = Resource.ClassMgr.listResourceByResourceType(resourceType, website);
+                while (resources.hasNext())
                 {
-                    Resource resource=resources.next();
-                    GenericIterator<Resourceable> resourceables=resource.listResourceables();
-                    while(resourceables.hasNext())
+                    Resource resource = resources.next();
+                    GenericIterator<Resourceable> resourceables = resource.listResourceables();
+                    while (resourceables.hasNext())
                     {
-                        Resourceable resourceable=resourceables.next();
-                        if(resourceable instanceof WebPage)
+                        Resourceable resourceable = resourceables.next();
+                        if (resourceable instanceof WebPage)
                         {
-                            WebPage wp=(WebPage)resourceable;
-                            SemanticRepository sr=new SemanticRepository();
-                            sr.name=resource.getTitle();
-                            sr.resid=resource.getId();
-                            sr.pageid=wp.getId();
-                            sr.uri=resource.getURI();                            
+                            WebPage wp = (WebPage) resourceable;
+                            SemanticRepository sr = new SemanticRepository();
+                            sr.name = resource.getTitle();
+                            sr.resid = resource.getId();
+                            sr.pageid = wp.getId();
+                            sr.uri = resource.getURI();
                             getSemanticRepositories.add(sr);
                         }
                     }
@@ -1882,7 +1869,6 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
         return getSemanticRepositories.toArray(new SemanticRepository[getSemanticRepositories.size()]);
     }
-
 
     /**
      * Gets the semantic folder repositories.
@@ -1893,22 +1879,22 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
      * @throws Exception the exception
      */
     @Override
-    public SemanticFolderRepository[] getSemanticFolderRepositories(SiteInfo siteInfo,SemanticRepository semanticRepository) throws Exception
+    public SemanticFolderRepository[] getSemanticFolderRepositories(SiteInfo siteInfo, SemanticRepository semanticRepository) throws Exception
     {
-        HashSet<SemanticFolderRepository> getSemanticFolderRepositories=new HashSet<SemanticFolderRepository>();
+        HashSet<SemanticFolderRepository> getSemanticFolderRepositories = new HashSet<SemanticFolderRepository>();
         WebSite website = SWBContext.getWebSite(siteInfo.id);
-        Resource resource=new Resource(SemanticObject.getSemanticObject(semanticRepository.uri));
-        GenericIterator<Resourceable> resourceables=resource.listResourceables();
-        while(resourceables.hasNext())
+        Resource resource = new Resource(SemanticObject.getSemanticObject(semanticRepository.uri));
+        GenericIterator<Resourceable> resourceables = resource.listResourceables();
+        while (resourceables.hasNext())
         {
-            Resourceable resourceable=resourceables.next();
-            if(resourceable instanceof WebPage)
+            Resourceable resourceable = resourceables.next();
+            if (resourceable instanceof WebPage)
             {
-                WebPage wp=(WebPage)resourceable;
+                WebPage wp = (WebPage) resourceable;
                 String resUUID = resource.getAttribute(wp.getId() + "_uuid");
-                Session session=null;
-                String idrep=docRepNS(website);
-                if(idrep!=null)
+                Session session = null;
+                String idrep = docRepNS(website);
+                if (idrep != null)
                 {
                     org.semanticwb.model.User userModel = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(this.user);
                     session = rep.login(new SWBCredentials(userModel), idrep);
@@ -1917,15 +1903,15 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                     while (nit.hasNext())
                     {
                         Node nodofolder = nit.nextNode();
-                        boolean hasChilds=false;
-                        NodeIterator nc=nodofolder.getNodes(REP_FOLDER);
-                        hasChilds=nc.hasNext();
-                        String title=nodofolder.getProperty("swb:title").getString();
-                        String uuid=nodofolder.getUUID();
-                        SemanticFolderRepository sf=new SemanticFolderRepository();
-                        sf.name=title;
-                        sf.uuid=uuid;
-                        sf.haschilds=hasChilds;
+                        boolean hasChilds = false;
+                        NodeIterator nc = nodofolder.getNodes(REP_FOLDER);
+                        hasChilds = nc.hasNext();
+                        String title = nodofolder.getProperty("swb:title").getString();
+                        String uuid = nodofolder.getUUID();
+                        SemanticFolderRepository sf = new SemanticFolderRepository();
+                        sf.name = title;
+                        sf.uuid = uuid;
+                        sf.haschilds = hasChilds;
                         getSemanticFolderRepositories.add(sf);
                     }
                 }
@@ -1934,14 +1920,14 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return getSemanticFolderRepositories.toArray(new SemanticFolderRepository[getSemanticFolderRepositories.size()]);
     }
 
-    public String createCategory(User user,String repositoryName, String title, String description) throws Exception
+    public String createCategory(User user, String repositoryName, String title, String description) throws Exception
     {
         String UUID = "";
         Session session = null;
         Node root = null;
         try
         {
-            session = loader.openSession(repositoryName,user);
+            session = loader.openSession(repositoryName, user);
             root = session.getRootNode();
             String cm_category = loader.getOfficeManager(repositoryName).getCategoryType();
             String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
@@ -1977,8 +1963,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         {
             log.error(e);
             throw e;
-        }
-        finally
+        } finally
         {
             if (session != null)
             {
@@ -1995,19 +1980,25 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
      * @param site the site
      * @return the string
      */
-    private String docRepNS(WebSite site) {
+    private String docRepNS(WebSite site)
+    {
         String NS = null;
         WebSite ws = site;
-        try {
+        try
+        {
 
             String[] lws = rep.listWorkspaces();
-            for (int i = 0; i < lws.length; i++) {
-                if (lws[i].endsWith(ws.getId() + "_rep")) {
+            for (int i = 0; i < lws.length; i++)
+            {
+                if (lws[i].endsWith(ws.getId() + "_rep"))
+                {
                     NS = lws[i];
                     break;
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.error("Error al obtener el NameSpace del Repositorio de documentos.", e);
         }
         return NS;
@@ -2023,21 +2014,21 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
      * @throws Exception the exception
      */
     @Override
-    public SemanticFileRepository[] getSemanticFileRepositories(SiteInfo siteInfo,SemanticRepository semanticRepository,SemanticFolderRepository semanticFolder) throws Exception
+    public SemanticFileRepository[] getSemanticFileRepositories(SiteInfo siteInfo, SemanticRepository semanticRepository, SemanticFolderRepository semanticFolder) throws Exception
     {
-        HashSet<SemanticFileRepository> getSemanticFileRepositories=new HashSet<SemanticFileRepository>();
+        HashSet<SemanticFileRepository> getSemanticFileRepositories = new HashSet<SemanticFileRepository>();
         WebSite website = SWBContext.getWebSite(siteInfo.id);
-        Resource resource=new Resource(SemanticObject.getSemanticObject(semanticRepository.uri));
-        GenericIterator<Resourceable> resourceables=resource.listResourceables();
-        while(resourceables.hasNext())
+        Resource resource = new Resource(SemanticObject.getSemanticObject(semanticRepository.uri));
+        GenericIterator<Resourceable> resourceables = resource.listResourceables();
+        while (resourceables.hasNext())
         {
-            Resourceable resourceable=resourceables.next();
-            if(resourceable instanceof WebPage)
+            Resourceable resourceable = resourceables.next();
+            if (resourceable instanceof WebPage)
             {
-                WebPage wp=(WebPage)resourceable;                
-                Session session=null;
-                String idrep=docRepNS(website);
-                if(idrep!=null)
+                WebPage wp = (WebPage) resourceable;
+                Session session = null;
+                String idrep = docRepNS(website);
+                if (idrep != null)
                 {
                     org.semanticwb.model.User userModel = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(this.user);
                     session = rep.login(new SWBCredentials(userModel), idrep);
@@ -2049,20 +2040,24 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                         if (nodoFile.getPrimaryNodeType().getName().equals(REP_FILE))
                         {
                             boolean isdeleted = false;
-                            try {
+                            try
+                            {
                                 isdeleted = nodoFile.getProperty(SWB_FILEREP_DELETED).getBoolean();
-                            } catch (Exception e) {
+                            }
+                            catch (Exception e)
+                            {
                                 log.event("Error al revisar la propiedad Deleted del repositorio de documentos.", e);
                             }
-                            if(!isdeleted)
+                            if (!isdeleted)
                             {
-                                String title=nodoFile.getProperty("swb:title").getString();
-                                Date created=nodoFile.getProperty("jcr:created").getDate().getTime();
-                                SemanticFileRepository sf=new SemanticFileRepository();
-                                sf.uuid=nodoFile.getUUID();
-                                sf.title=title;
-                                sf.name=nodoFile.getName();
-                                sf.date=created;
+                                String title = nodoFile.getProperty("swb:title").getString();
+                                Date created = nodoFile.getProperty("jcr:created").getDate().getTime();
+                                SemanticFileRepository sf = new SemanticFileRepository();
+                                sf.uuid = nodoFile.getUUID();
+                                sf.title = title;
+                                sf.name = nodoFile.getName();
+                                sf.date = created;
+                                sf.url = "wbrelpath://" + wp.getWebSiteId() + "/" + wp.getId() + "/_rid/" + idrep + "/_mto/3/_act/inline/_mod/getFile/_wst/maximized/" + sf.uuid + "/" + sf.name;
                                 getSemanticFileRepositories.add(sf);
                             }
                         }
@@ -2071,6 +2066,9 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 }
             }
         }
+        //String path = "wbrelpath://"+ site.id +"/"+ repository.pageid +"/_rid/"+ repository.resid +"/_mto/3/_act/inline/_mod/getFile/_wst/maximized/"+ file.uuid +"/"+file.name;
+        //http://localhost:8080/swb/es/demo/home/_rid/45/_mto/3/_act/inline/_mod/getFile/_wst/maximized/33a923a1-8e02-4123-9cb4-86901fe62ec1/Asley%20005.jpg
+        //http://192.168.5.173:8080/en/demo/nueva/_rid/47/_mto/3/Semantic_Web_Process_BPMN_Modeler.docx?repfop=view&reptp=CNFWB_Rep47&repfiddoc=1&repinline=true
         return getSemanticFileRepositories.toArray(new SemanticFileRepository[getSemanticFileRepositories.size()]);
     }
 
@@ -2086,19 +2084,19 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     @Override
     public SemanticFolderRepository[] getSemanticFolderRepositories(SiteInfo siteInfo, SemanticRepository semanticRepository, SemanticFolderRepository semanticFolderRepository) throws Exception
     {
-        HashSet<SemanticFolderRepository> getSemanticFolderRepositories=new HashSet<SemanticFolderRepository>();
+        HashSet<SemanticFolderRepository> getSemanticFolderRepositories = new HashSet<SemanticFolderRepository>();
         WebSite website = SWBContext.getWebSite(siteInfo.id);
-        Resource resource=new Resource(SemanticObject.getSemanticObject(semanticRepository.uri));
-        GenericIterator<Resourceable> resourceables=resource.listResourceables();
-        while(resourceables.hasNext())
+        Resource resource = new Resource(SemanticObject.getSemanticObject(semanticRepository.uri));
+        GenericIterator<Resourceable> resourceables = resource.listResourceables();
+        while (resourceables.hasNext())
         {
-            Resourceable resourceable=resourceables.next();
-            if(resourceable instanceof WebPage)
+            Resourceable resourceable = resourceables.next();
+            if (resourceable instanceof WebPage)
             {
-                WebPage wp=(WebPage)resourceable;                
-                Session session=null;
-                String idrep=docRepNS(website);
-                if(idrep!=null)
+                WebPage wp = (WebPage) resourceable;
+                Session session = null;
+                String idrep = docRepNS(website);
+                if (idrep != null)
                 {
                     org.semanticwb.model.User userModel = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(this.user);
                     session = rep.login(new SWBCredentials(userModel), idrep);
@@ -2107,15 +2105,15 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                     while (nit.hasNext())
                     {
                         Node subnodofolder = nit.nextNode();
-                        boolean hasChilds=false;
-                        NodeIterator nc=subnodofolder.getNodes(REP_FOLDER);
-                        hasChilds=nc.hasNext();
-                        String title=subnodofolder.getProperty("swb:title").getString();
-                        String uuid=subnodofolder.getUUID();
-                        SemanticFolderRepository sf=new SemanticFolderRepository();
-                        sf.name=title;
-                        sf.uuid=uuid;
-                        sf.haschilds=hasChilds;
+                        boolean hasChilds = false;
+                        NodeIterator nc = subnodofolder.getNodes(REP_FOLDER);
+                        hasChilds = nc.hasNext();
+                        String title = subnodofolder.getProperty("swb:title").getString();
+                        String uuid = subnodofolder.getUUID();
+                        SemanticFolderRepository sf = new SemanticFolderRepository();
+                        sf.name = title;
+                        sf.uuid = uuid;
+                        sf.haschilds = hasChilds;
                         getSemanticFolderRepositories.add(sf);
                     }
                 }
@@ -2123,7 +2121,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
         return getSemanticFolderRepositories.toArray(new SemanticFolderRepository[getSemanticFolderRepositories.size()]);
     }
-    
+
     /**
      * Gets the semantic file repositories.
      * 
@@ -2133,22 +2131,22 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
      * @throws Exception the exception
      */
     @Override
-    public SemanticFileRepository[] getSemanticFileRepositories(SiteInfo siteInfo,SemanticRepository semanticRepository) throws Exception
+    public SemanticFileRepository[] getSemanticFileRepositories(SiteInfo siteInfo, SemanticRepository semanticRepository) throws Exception
     {
-        HashSet<SemanticFileRepository> getSemanticFileRepositories=new HashSet<SemanticFileRepository>();
+        HashSet<SemanticFileRepository> getSemanticFileRepositories = new HashSet<SemanticFileRepository>();
         WebSite website = SWBContext.getWebSite(siteInfo.id);
-        Resource resource=new Resource(SemanticObject.getSemanticObject(semanticRepository.uri));
-        GenericIterator<Resourceable> resourceables=resource.listResourceables();
-        while(resourceables.hasNext())
+        Resource resource = new Resource(SemanticObject.getSemanticObject(semanticRepository.uri));
+        GenericIterator<Resourceable> resourceables = resource.listResourceables();
+        while (resourceables.hasNext())
         {
-            Resourceable resourceable=resourceables.next();
-            if(resourceable instanceof WebPage)
+            Resourceable resourceable = resourceables.next();
+            if (resourceable instanceof WebPage)
             {
-                WebPage wp=(WebPage)resourceable;
+                WebPage wp = (WebPage) resourceable;
                 String resUUID = resource.getAttribute(wp.getId() + "_uuid");
-                Session session=null;
-                String idrep=docRepNS(website);
-                if(idrep!=null)
+                Session session = null;
+                String idrep = docRepNS(website);
+                if (idrep != null)
                 {
                     org.semanticwb.model.User userModel = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(this.user);
                     session = rep.login(new SWBCredentials(userModel), idrep);
@@ -2160,20 +2158,23 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                         if (nodoFile.getPrimaryNodeType().getName().equals(REP_FILE))
                         {
                             boolean isdeleted = false;
-                            try {
+                            try
+                            {
                                 isdeleted = nodoFile.getProperty(SWB_FILEREP_DELETED).getBoolean();
-                            } catch (Exception e) {
+                            }
+                            catch (Exception e)
+                            {
                                 log.event("Error al revisar la propiedad Deleted del repositorio de documentos.", e);
                             }
-                            if(!isdeleted)
+                            if (!isdeleted)
                             {
-                                String title=nodoFile.getProperty("swb:title").getString();
-                                Date created=nodoFile.getProperty("jcr:created").getDate().getTime();
-                                SemanticFileRepository sf=new SemanticFileRepository();
-                                sf.uuid=nodoFile.getUUID();
-                                sf.title=title;
-                                sf.name=nodoFile.getName();
-                                sf.date=created;
+                                String title = nodoFile.getProperty("swb:title").getString();
+                                Date created = nodoFile.getProperty("jcr:created").getDate().getTime();
+                                SemanticFileRepository sf = new SemanticFileRepository();
+                                sf.uuid = nodoFile.getUUID();
+                                sf.title = title;
+                                sf.name = nodoFile.getName();
+                                sf.date = created;
                                 getSemanticFileRepositories.add(sf);
                             }
                         }
