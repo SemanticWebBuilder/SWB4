@@ -20,7 +20,7 @@ import org.semanticwb.process.model.ProcessElement;
  *
  * @author Hasdai Pacheco <ebenezer.sanchez@infotec.com.mx>
  */
-public class ProcessDocumentationResource extends GenericAdmResource {
+public class DocumentationResource extends GenericAdmResource {
     public static String ACT_UPDATETEXT = "updateText";
     public static String PARAM_TEXT = "txt";
     
