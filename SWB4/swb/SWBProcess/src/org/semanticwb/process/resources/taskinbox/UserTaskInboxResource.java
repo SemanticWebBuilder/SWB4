@@ -33,8 +33,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
@@ -625,9 +629,11 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         try {
             RequestDispatcher rd = request.getRequestDispatcher(jsp);
             request.setAttribute("paramRequest", paramRequest);
-            request.setAttribute("instances", getProcessInstances(request, paramRequest));
-            request.setAttribute("statusWp", getDisplayMapWp());
-            request.setAttribute("itemsPerPage", getItemsPerPage());
+            if (paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT) {
+                request.setAttribute("instances", getProcessInstances(request, paramRequest));
+                request.setAttribute("statusWp", getDisplayMapWp());
+                request.setAttribute("itemsPerPage", getItemsPerPage());
+            }
             rd.include(request, response);
         } catch (Exception e) {
             log.error("Error including jsp in detail mode", e);
@@ -712,6 +718,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         ArrayList<ProcessInstance> instances = new ArrayList<ProcessInstance>();
         String suri = request.getParameter("suri");
         Process p = (Process)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
+        HashMap<User, Integer> participantCount = new HashMap<User, Integer>();
         
         if (p != null) {
             int page = 1;
@@ -731,20 +738,61 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                 
                 //Conteo de instancias
                 if (pi.getStatus() == ProcessInstance.STATUS_PROCESSING) {
+                    if (pi.getCreator() != null) {
+                        if (participantCount.get(pi.getCreator()) == null) {
+                            participantCount.put(pi.getCreator(), new Integer(1));
+                        } else {
+                            participantCount.put(pi.getCreator(), participantCount.get(pi.getCreator())+1);
+                        }
+                    }
+                    if (pi.getAssignedto()!= null) {
+                        if (participantCount.get(pi.getAssignedto()) == null) {
+                            participantCount.put(pi.getAssignedto(), new Integer(1));
+                        } else {
+                            participantCount.put(pi.getAssignedto(), participantCount.get(pi.getAssignedto())+1);
+                        }
+                    }
                     boolean isDelayed = false;
                     //Verifica retraso
                     Iterator<FlowNodeInstance> itfni = pi.listAllFlowNodeInstance();
                     while (itfni.hasNext() && !isDelayed) {
                         FlowNodeInstance fni = itfni.next();
-                        if (fni.getStatus() == FlowNodeInstance.STATUS_PROCESSING && fni.getFlowNodeType() instanceof UserTask) {
-                            UserTask ut = (UserTask) fni.getFlowNodeType();
-                            int delay = ut.getNotificationTime();
+                        if (fni.getFlowNodeType() instanceof UserTask) {
+                            if (fni.getStatus() == FlowNodeInstance.STATUS_PROCESSING) {
+                                if (fni.getCreator() != null) {
+                                    if (participantCount.get(fni.getCreator()) == null) {
+                                        participantCount.put(fni.getCreator(), new Integer(1));
+                                    } else {
+                                        participantCount.put(fni.getCreator(), participantCount.get(fni.getCreator())+1);
+                                    }
+                                }
+                                if (fni.getAssignedto()!= null) {
+                                    if (participantCount.get(fni.getAssignedto()) == null) {
+                                        participantCount.put(fni.getAssignedto(), new Integer(1));
+                                    } else {
+                                        participantCount.put(fni.getAssignedto(), participantCount.get(fni.getAssignedto())+1);
+                                    }
+                                }
+                                
+                                UserTask ut = (UserTask) fni.getFlowNodeType();
+                                int delay = ut.getNotificationTime();
 
-                            if (delay > 0) {
-                                long today = System.currentTimeMillis();
-                                long cr = fni.getCreated().getTime();
-                                if (today - cr > (1000*60*delay)) {
-                                    isDelayed = true;
+                                if (delay > 0) {
+                                    long today = System.currentTimeMillis();
+                                    long cr = fni.getCreated().getTime();
+                                    if (today - cr > (1000*60*delay)) {
+                                        isDelayed = true;
+                                    }
+                                }
+                            }
+                            
+                            if (fni.getStatus() == FlowNodeInstance.STATUS_CLOSED) {
+                                if (fni.getEndedby() != null) {
+                                    if (participantCount.get(fni.getEndedby()) == null) {
+                                        participantCount.put(fni.getEndedby(), new Integer(1));
+                                    } else {
+                                        participantCount.put(fni.getEndedby(), participantCount.get(fni.getEndedby())+1);
+                                    }
                                 }
                             }
                         }
@@ -759,6 +807,14 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                 }
                 if (pi.getStatus() == ProcessInstance.STATUS_ABORTED) aborted++;
                 if (pi.getStatus() == ProcessInstance.STATUS_CLOSED) {
+                    if (pi.getEndedby() != null) {
+                        if (participantCount.get(pi.getEndedby()) == null) {
+                            participantCount.put(pi.getEndedby(), new Integer(1));
+                        } else {
+                            participantCount.put(pi.getEndedby(), participantCount.get(pi.getEndedby())+1);
+                        }
+                    }
+                    
                     //Cálculo de tiempos de respuesta generales
                     long resTime = pi.getEnded().getTime() - pi.getCreated().getTime();
                     if (resTime > maxTime) {
@@ -817,6 +873,42 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             for (int i = sIndex; i < eIndex; i++) {
                 ProcessInstance instance = unpaged.get(i);
                 instances.add(instance);
+            }
+            
+            Iterator<User> uit = participantCount.keySet().iterator();
+            if (uit.hasNext()) {
+                int max = 0;
+                User theUser = null;
+                
+                try {
+                    JSONObject processInfo = new JSONObject();
+                    processInfo.put("name", p.getTitle());
+                    processInfo.put("size", 10);
+                    processInfo.put("type", "process");
+
+                    JSONArray users = new JSONArray();
+                    while (uit.hasNext()) {
+                        User key = uit.next();
+                        int value = (Integer) participantCount.get(key);
+                        if (value > max) {
+                            max = value;
+                            theUser = key;
+                        }
+                        
+                        JSONObject jsonUser = new JSONObject();
+                        jsonUser.put("name", key.getFullName()==null?"Anónimo":key.getFullName());
+                        jsonUser.put("size", (10 + (value / 70)));
+                        jsonUser.put("participa", value);
+                        users.put(jsonUser);
+                    }
+                    processInfo.put("max", max);
+                    processInfo.put("children", users);
+                    processInfo.put("theUser", theUser.getFullName()==null?"Anónimo":theUser.getFullName());
+                    
+                    request.setAttribute("participation", processInfo.toString());
+                } catch (JSONException ex) {
+                    log.error("UserTaskInboxResource - Error al generar JSON", ex);
+                }
             }
         }
         return instances;
