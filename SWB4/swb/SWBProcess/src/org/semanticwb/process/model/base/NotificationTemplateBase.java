@@ -104,6 +104,29 @@ public abstract class NotificationTemplateBase extends org.semanticwb.process.mo
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.NotificationTemplate with a determined Documentation
+       * @param value Documentation of the type org.semanticwb.process.model.Documentation
+       * @param model Model of the org.semanticwb.process.model.NotificationTemplate
+       * @return Iterator with all the org.semanticwb.process.model.NotificationTemplate
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.NotificationTemplate> listNotificationTemplateByDocumentation(org.semanticwb.process.model.Documentation value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.NotificationTemplate> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasDocumentation, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.NotificationTemplate with a determined Documentation
+       * @param value Documentation of the type org.semanticwb.process.model.Documentation
+       * @return Iterator with all the org.semanticwb.process.model.NotificationTemplate
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.NotificationTemplate> listNotificationTemplateByDocumentation(org.semanticwb.process.model.Documentation value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.NotificationTemplate> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasDocumentation,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.NotificationTemplate with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.NotificationTemplate

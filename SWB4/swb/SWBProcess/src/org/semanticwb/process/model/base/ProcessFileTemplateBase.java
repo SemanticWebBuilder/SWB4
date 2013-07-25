@@ -103,6 +103,29 @@ public abstract class ProcessFileTemplateBase extends org.semanticwb.process.mod
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.ProcessFileTemplate with a determined Documentation
+       * @param value Documentation of the type org.semanticwb.process.model.Documentation
+       * @param model Model of the org.semanticwb.process.model.ProcessFileTemplate
+       * @return Iterator with all the org.semanticwb.process.model.ProcessFileTemplate
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessFileTemplate> listProcessFileTemplateByDocumentation(org.semanticwb.process.model.Documentation value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessFileTemplate> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasDocumentation, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessFileTemplate with a determined Documentation
+       * @param value Documentation of the type org.semanticwb.process.model.Documentation
+       * @return Iterator with all the org.semanticwb.process.model.ProcessFileTemplate
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessFileTemplate> listProcessFileTemplateByDocumentation(org.semanticwb.process.model.Documentation value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessFileTemplate> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasDocumentation,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.ProcessFileTemplate with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.ProcessFileTemplate

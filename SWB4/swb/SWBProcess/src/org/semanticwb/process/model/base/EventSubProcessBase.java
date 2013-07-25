@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class EventSubProcessBase extends org.semanticwb.process.model.SubProcess implements org.semanticwb.model.RoleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Traceable,org.semanticwb.process.model.Containerable,org.semanticwb.model.TemplateRefable
+public abstract class EventSubProcessBase extends org.semanticwb.process.model.SubProcess implements org.semanticwb.process.model.Containerable,org.semanticwb.model.Traceable,org.semanticwb.model.TemplateRefable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swp_EventSubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#EventSubProcess");
    /**
@@ -145,6 +145,29 @@ public abstract class EventSubProcessBase extends org.semanticwb.process.model.S
         public static java.util.Iterator<org.semanticwb.process.model.EventSubProcess> listEventSubProcessByChild(org.semanticwb.process.model.GraphicalElement value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventSubProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasChildInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.EventSubProcess with a determined Documentation
+       * @param value Documentation of the type org.semanticwb.process.model.Documentation
+       * @param model Model of the org.semanticwb.process.model.EventSubProcess
+       * @return Iterator with all the org.semanticwb.process.model.EventSubProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.EventSubProcess> listEventSubProcessByDocumentation(org.semanticwb.process.model.Documentation value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventSubProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasDocumentation, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.EventSubProcess with a determined Documentation
+       * @param value Documentation of the type org.semanticwb.process.model.Documentation
+       * @return Iterator with all the org.semanticwb.process.model.EventSubProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.EventSubProcess> listEventSubProcessByDocumentation(org.semanticwb.process.model.Documentation value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventSubProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasDocumentation,value.getSemanticObject(),sclass));
             return it;
         }
        /**

@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class MessageFlowBase extends org.semanticwb.process.model.ConnectionObject implements org.semanticwb.process.model.ConnectionObjectEditable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class MessageFlowBase extends org.semanticwb.process.model.ConnectionObject implements org.semanticwb.model.Traceable,org.semanticwb.process.model.ConnectionObjectEditable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swp_MessageFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#MessageFlow");
    /**
@@ -99,6 +99,29 @@ public abstract class MessageFlowBase extends org.semanticwb.process.model.Conne
         public static java.util.Iterator<org.semanticwb.process.model.MessageFlow> listMessageFlowByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageFlow> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.MessageFlow with a determined Documentation
+       * @param value Documentation of the type org.semanticwb.process.model.Documentation
+       * @param model Model of the org.semanticwb.process.model.MessageFlow
+       * @return Iterator with all the org.semanticwb.process.model.MessageFlow
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.MessageFlow> listMessageFlowByDocumentation(org.semanticwb.process.model.Documentation value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageFlow> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasDocumentation, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.MessageFlow with a determined Documentation
+       * @param value Documentation of the type org.semanticwb.process.model.Documentation
+       * @return Iterator with all the org.semanticwb.process.model.MessageFlow
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.MessageFlow> listMessageFlowByDocumentation(org.semanticwb.process.model.Documentation value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageFlow> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasDocumentation,value.getSemanticObject(),sclass));
             return it;
         }
        /**

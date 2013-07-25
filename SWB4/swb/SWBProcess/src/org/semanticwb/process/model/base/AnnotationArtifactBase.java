@@ -148,6 +148,29 @@ public abstract class AnnotationArtifactBase extends org.semanticwb.process.mode
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.AnnotationArtifact with a determined Documentation
+       * @param value Documentation of the type org.semanticwb.process.model.Documentation
+       * @param model Model of the org.semanticwb.process.model.AnnotationArtifact
+       * @return Iterator with all the org.semanticwb.process.model.AnnotationArtifact
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.AnnotationArtifact> listAnnotationArtifactByDocumentation(org.semanticwb.process.model.Documentation value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AnnotationArtifact> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasDocumentation, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.AnnotationArtifact with a determined Documentation
+       * @param value Documentation of the type org.semanticwb.process.model.Documentation
+       * @return Iterator with all the org.semanticwb.process.model.AnnotationArtifact
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.AnnotationArtifact> listAnnotationArtifactByDocumentation(org.semanticwb.process.model.Documentation value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AnnotationArtifact> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasDocumentation,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.AnnotationArtifact with a determined Parent
        * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
        * @param model Model of the org.semanticwb.process.model.AnnotationArtifact

@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class BusinessRuleTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.model.RoleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Traceable,org.semanticwb.process.model.Callable
+public abstract class BusinessRuleTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.model.Traceable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.process.model.Callable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Referensable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swp_BusinessRuleTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#BusinessRuleTask");
    /**
@@ -145,6 +145,29 @@ public abstract class BusinessRuleTaskBase extends org.semanticwb.process.model.
         public static java.util.Iterator<org.semanticwb.process.model.BusinessRuleTask> listBusinessRuleTaskByChild(org.semanticwb.process.model.GraphicalElement value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.BusinessRuleTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasChildInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.BusinessRuleTask with a determined Documentation
+       * @param value Documentation of the type org.semanticwb.process.model.Documentation
+       * @param model Model of the org.semanticwb.process.model.BusinessRuleTask
+       * @return Iterator with all the org.semanticwb.process.model.BusinessRuleTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.BusinessRuleTask> listBusinessRuleTaskByDocumentation(org.semanticwb.process.model.Documentation value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.BusinessRuleTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasDocumentation, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.BusinessRuleTask with a determined Documentation
+       * @param value Documentation of the type org.semanticwb.process.model.Documentation
+       * @return Iterator with all the org.semanticwb.process.model.BusinessRuleTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.BusinessRuleTask> listBusinessRuleTaskByDocumentation(org.semanticwb.process.model.Documentation value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.BusinessRuleTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasDocumentation,value.getSemanticObject(),sclass));
             return it;
         }
        /**
