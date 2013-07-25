@@ -99,11 +99,6 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <rdfs:label xml:lang="es">Tema</rdfs:label>
   </owl:Class>
-  <owl:Class rdf:ID="Listenerable">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-    <rdfs:comment>Esta interfaz se le agrega a las clases de tipo SocialNetwork que se va ha desear que escuchen en las redes sociales, lo cual en teoría deberían de ser a todas, pero por si en un futuro de desea que no sea así.</rdfs:comment>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
-  </owl:Class>
   <owl:Class rdf:ID="PostOutContainer">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
@@ -225,7 +220,13 @@
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#Listenerable"/>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Listenerable">
+        <rdfs:label>Interfaz que se agrega a todas las redes sociales que vayan a escuchar en las redes sociales (Listener), esto en teoría debería de aplicar para todas, pero talvez en un futuro no se desee que sea así.</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Tagable"/>
     <swb:displayObject>
@@ -413,6 +414,13 @@
                   <swb:Interface rdf:ID="Messageable">
                     <rdfs:comment>Interface que es utilizada para definir metodos necesarios para el envio y recepción de Post de tipo Mensaje en las diferentes redes sociales que así lo requieran.</rdfs:comment>
                     <rdfs:subClassOf rdf:resource="#SocialNetPostable"/>
+                    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+                  </swb:Interface>
+                </rdfs:subClassOf>
+                <rdfs:subClassOf>
+                  <swb:Interface rdf:ID="KeepAliveListenerable">
+                    <rdfs:comment>Interface para las redes sociales que pueden mantener abierta la conección para realizar las busquedas (listener) como es el caso de Twitter con su Streaming Api.</rdfs:comment>
+                    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
                     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
                   </swb:Interface>
                 </rdfs:subClassOf>
@@ -804,17 +812,17 @@
     </owl:inverseOf>
     <rdfs:comment>SocialNetwork al que se hace referencia en esta clase y en la cual se ira a buscar despues del dato que se encuentre en nextDatetoSearch</rdfs:comment>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasSocialPostInv">
-    <rdfs:comment>Con esta inversa, Cuando se elimine una red social, se eliminaran todos los objetos de tipo PostOutNet que este asociados a la misma.</rdfs:comment>
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="socialRule">
     <rdfs:domain rdf:resource="#SocialRuleRef"/>
     <rdfs:range rdf:resource="#SocialRule"/>
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="hasSocialRuleRefInv"/>
     </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasSocialPostInv">
+    <rdfs:comment>Con esta inversa, Cuando se elimine una red social, se eliminaran todos los objetos de tipo PostOutNet que este asociados a la misma.</rdfs:comment>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasSocialNetStreamSearchInv">
     <rdfs:comment>Una red social puede tener varias fechas proximas de busqueda, una por cada stream en la que este configurada. Si se elimina una red social, se eliminan los objetos de esta clase (SocialNetStreamSerch) Asociados.</rdfs:comment>
@@ -1231,11 +1239,6 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:comment>Fecha o id siguiente para busqueda en una red social.</rdfs:comment>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="snu_id">
-    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Id del usuario en una determinada red social, es decir, en twitter, facebook, google+, youtube, flicker, etc.</rdfs:comment>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="SentimentType">
     <rdfs:domain>
       <swb:Class rdf:ID="SentimentalLearningPhrase">
@@ -1248,6 +1251,11 @@
     </rdfs:domain>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:comment>Calor sentimental que le dan los usuarios al clasificar los mensajes, este valor se lo dan a las palabras o secuencia de palabras que se guardan en este objeto. 1=Positivo, 2=Negativo</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="snu_id">
+    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Id del usuario en una determinada red social, es decir, en twitter, facebook, google+, youtube, flicker, etc.</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="socialNetMsgID">
     <rdfs:comment>Identificador del mensaje en la red social</rdfs:comment>
@@ -1284,6 +1292,20 @@
         <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="capitalLongitude">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_capitalLongitude">
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Longitud de Capital</rdfs:label>
+    <rdfs:label xml:lang="en">Capital Longitude</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="#GeoMapable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="geoDistanceUnit">
     <rdfs:comment>Unidad de medida para la distancia entre el centro y el radio. Ej. KM, MI</rdfs:comment>
@@ -1540,6 +1562,21 @@
     <rdfs:label xml:lang="es">Intesidad Alta</rdfs:label>
     <rdfs:label xml:lang="en">High Intensity</rdfs:label>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="capitalLatitude">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_capitalLatitude">
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Latitud de Capital</rdfs:label>
+    <rdfs:label xml:lang="en">Capital Latitude</rdfs:label>
+    <rdfs:comment>Latitud de la capital</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="#GeoMapable"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="pfiStep">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -1710,6 +1747,20 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#SocialNetworkUser"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="keepAliveManager">
+    <rdfs:domain rdf:resource="#Stream"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:label xml:lang="es">Maneja Conexiones abiertas en Escuchador</rdfs:label>
+    <rdfs:label xml:lang="en">Manage open conections in Listener</rdfs:label>
+    <rdfs:comment>Propiedad que indica si el stream va manejar conexiones abiertas en las cuentas de redes sociales que así lo permitan, en este momento solo twitter con su "Stream Api" lo maneja.</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_isKeepAliveManager">
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >70</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="refreshToken">
     <rdfs:comment>Token para refrescar un token expirado.</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -1724,24 +1775,6 @@
     <rdfs:domain rdf:resource="#SentimentalLearningPhrase"/>
     <rdfs:comment>Frase a ser re-clasificada por los usuarios.</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="isKeepingConnection">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_isKeepingConnection">
-        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >10</swb:index>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:comment>Propiedad en la que se puede definir si la red social va ha mantener la conección abierta (mediante Stream Api) o no lo va ha ser (Poolean de información por el listener c/x tiempo),  por defecto es false (Es decir sera por pooleo).</rdfs:comment>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain>
-      <swb:Interface rdf:ID="KeepAliveListenerable">
-        <rdfs:comment>Interface para las redes sociales que pueden mantener abierta la conección para realizar las busquedas (listener) como es el caso de Twitter con su Streaming Api.</rdfs:comment>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Interface>
-    </rdfs:domain>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="status">
     <rdfs:domain rdf:resource="#PostOutNet"/>
@@ -1767,6 +1800,11 @@
     <rdfs:comment>Categoría del video en la red social. Hasta el momento se utiliza solo para las categorias de YouTube, sin embargo, otras redes sociales que añadamos y que manejen videos, seguramente utilizaran también categorias. En este campo se graba el uri de la categoría, para youtube se toman de la clase de tipo catálogo llamada "YouTubeCategory".</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#PostVideoable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="po_created">
+    <rdfs:comment>Fecha de cración de este elemento, este nos sirve para que si pasa mas de 1 día de creado el elemento (Ese tiempo fue el que consideré), y si esta siendo monitoreado, se quite del MonitorMgr, esto para que no se monitoree elementos que una red social no responda que ya este publicado o no.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <rdfs:domain rdf:resource="#PostOutNet"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="postPlace">
     <rdfs:domain rdf:resource="#PostIn"/>
