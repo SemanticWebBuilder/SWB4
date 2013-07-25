@@ -730,7 +730,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         } catch (Exception e) {
         }
         if (aListExternalPost.size() > 0) {
-            new Classifier(aListExternalPost, stream, this);
+            new Classifier(aListExternalPost, stream, this, false);
         }
         System.out.println("Total resources: " + totalResources);
     }

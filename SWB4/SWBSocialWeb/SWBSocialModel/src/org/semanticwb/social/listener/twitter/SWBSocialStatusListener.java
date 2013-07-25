@@ -134,9 +134,9 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                     tweetsReceived++;
                     System.out.println("TweetNumber:"+tweetsReceived+",User: @" + status.getUser().getScreenName() + "\tID:" + status.getId() + "\tTime:" + status.getCreatedAt() + "\tText:" + status.getText());
                     
-                    if(tweetsReceived>=10 && aListExternalPost.size()>0){
+                    if(tweetsReceived>=1 && aListExternalPost.size()>0){
                         System.out.println("Va a enviar a Clasificador--1");
-                        new Classifier(aListExternalPost, stream, socialNetwork);
+                        new Classifier(aListExternalPost, stream, socialNetwork, true);
                         setLastTweetID(currentTweetID, stream);//Save
                         tweetsReceived=0;
                         aListExternalPost=new ArrayList();

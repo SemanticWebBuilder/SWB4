@@ -23,6 +23,10 @@ public abstract class PostOutNetBase extends org.semanticwb.model.SWBClass
    */
     public static final org.semanticwb.platform.SemanticProperty social_socialPost=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#socialPost");
    /**
+   * Fecha de cración de este elemento, este nos sirve para que si pasa mas de 1 día de creado el elemento (Ese tiempo fue el que consideré), y si esta siendo monitoreado, se quite del MonitorMgr, esto para que no se monitoree elementos que una red social no responda que ya este publicado o no.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_po_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#po_created");
+   /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
    */
     public static final org.semanticwb.platform.SemanticClass social_SocialNetwork=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialNetwork");
@@ -246,6 +250,24 @@ public abstract class PostOutNetBase extends org.semanticwb.model.SWBClass
              ret=(org.semanticwb.social.PostOut)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Po_created property
+* @return java.util.Date with the Po_created
+*/
+    public java.util.Date getPo_created()
+    {
+        return getSemanticObject().getDateProperty(social_po_created);
+    }
+
+/**
+* Sets the Po_created property
+* @param value long with the Po_created
+*/
+    public void setPo_created(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(social_po_created, value);
     }
    /**
    * Sets the value for the property SocialNetwork

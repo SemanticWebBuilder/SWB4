@@ -4,6 +4,7 @@
  */
 package org.semanticwb.social.listener;
 
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -13,6 +14,7 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.social.PostMonitor;
 import org.semanticwb.social.PostOutNet;
 import org.semanticwb.social.SocialMonitorable;
+import org.semanticwb.social.util.SWBSocialUtil;
 
 /**
  *
@@ -88,6 +90,17 @@ public class MonitorMgr {
                                     //PostOut la siguiente vez en sus PostOutNet, lo cual puede tardar mucho.
                                     //System.out.println("Entra a MonitorMgr/Run-5/ESTATUS 1");
                                 }**/
+                            }else if(postOutNet.getPo_created()!=null){
+                                int days=SWBSocialUtil.Util.Datediff(postOutNet.getPo_created(), Calendar.getInstance().getTime());
+                                System.out.println("Monitor/respuesta:False--->Days:"+days);
+                                if(days>=1)
+                                {
+                                    System.out.println("Va a eliminar de Monitor el PostOutNet:"+postOutNet);
+                                    postMonitor.removePostOutNet(postOutNet);
+                                    System.out.println("Elimino de Monitor el PostOutNet:"+postOutNet);
+                                }
+                            }else{
+                                postMonitor.removePostOutNet(postOutNet);
                             }
                         }
                     }

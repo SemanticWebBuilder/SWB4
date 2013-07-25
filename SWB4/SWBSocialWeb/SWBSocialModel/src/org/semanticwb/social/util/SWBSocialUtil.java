@@ -38,7 +38,6 @@ import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.Messageable;
 import org.semanticwb.social.Photo;
 import org.semanticwb.social.Photoable;
-import org.semanticwb.social.Post;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.PostMonitor;
 import org.semanticwb.social.PostOut;
@@ -962,6 +961,23 @@ public class SWBSocialUtil implements SWBAppObject {
     public static class Util {
         
         
+        public static boolean isPointInsideCoodinates(double latitude, double longitude, GeoLocation[] geolocation)
+        {
+            if(latitude==0 || longitude==0 || geolocation==null) return false;
+            
+            double south=geolocation[0].getLatitudeInDegrees();
+            double west=geolocation[0].getLongitudeInDegrees();
+            double north=geolocation[1].getLatitudeInDegrees();
+            double east=geolocation[1].getLongitudeInDegrees();
+            
+            if(north>=latitude && south<=latitude && east>=longitude && west<=longitude)
+            {
+                return true;
+            }
+            return false;
+        }
+        
+        
         public static void sendEmail2UserGroup(UserGroup userGroup, String body)
         {
             //TODO:Ver si se utiliza este metodo e implementarlo de ser el caso.
@@ -1141,6 +1157,7 @@ public class SWBSocialUtil implements SWBAppObject {
                 postOutNet.setSocialPost(postOut);
                 postOutNet.setSocialNetwork(socialNet);
                 postOutNet.setSocialNetMsgID(socialNetMsgId);
+                postOutNet.setPo_created(new Date());
                 System.out.println("Entra a savePostOutNetID-4:"+postOutNet);
                 //Si la red social es de tipo SocialMonitorable, se pone a monitorear el PostOutNet creado.
                 if(socialNet instanceof SocialMonitorable)

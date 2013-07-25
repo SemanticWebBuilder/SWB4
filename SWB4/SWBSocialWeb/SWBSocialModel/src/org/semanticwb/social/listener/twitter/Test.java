@@ -5,8 +5,14 @@
 package org.semanticwb.social.listener.twitter;
 
 import java.io.IOException;
-import org.semanticwb.social.util.GeoLocation;
+import twitter4j.FilterQuery;
+import twitter4j.StallWarning;
+import twitter4j.Status;
+import twitter4j.StatusDeletionNotice;
+import twitter4j.StatusListener;
 import twitter4j.TwitterException;
+import twitter4j.TwitterStream;
+import twitter4j.TwitterStreamFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
 /**
@@ -17,6 +23,7 @@ public class Test {
 
     public static void main(String[] args) throws TwitterException, IOException {
         //El resultado sera en la misma unidad de medida que sea parado el Radio
+        /*
         double EARTRADIUS_KM = 6371.01;   //KM
         double EARTRADIUS_MI = 3958.762079;
         GeoLocation myLocation = GeoLocation.fromDegrees(19.319901, -99.152130);
@@ -32,9 +39,9 @@ public class Test {
         System.out.println("S:"+boundingCoordinates[0].getLatitudeInDegrees());
         System.out.println("W:"+boundingCoordinates[0].getLongitudeInDegrees());
         
+        */
         
         
-        /*
         StatusListener listener = new StatusListener() {
             public void onStatus(Status status) {
                 System.out.println(status.getUser().getName() + " : " + status.getText());
@@ -69,12 +76,18 @@ public class Test {
             String[] tr = {"infotec"};
             query.track(tr);
         }
+        
+        double[][] boundingBox2FindTweets = {{19.048220, -99.364067}, 
+            {19.591579, -98.940193}};
+        
+        query.locations(boundingBox2FindTweets);
+        
         twitterStream.filter(query);
         
         
         // sample() method internally creates a thread which manipulates TwitterStream and calls these adequate listener methods continuously.
         //twitterStream.sample();
-        * */
+       
     }
     
     
@@ -87,8 +100,8 @@ public class Test {
         cb.setDebugEnabled(true)
           .setOAuthConsumerKey("V5Xp0RYFuf3N0WsHkqSOIQ")
           .setOAuthConsumerSecret("4DZ9UrE4X5VavUjXzBcGFTvEsHVsCGOgIuLVSZMA8")
-          .setOAuthAccessToken("47531700-jXeCrVfnUEksmoZCrTnYo8iFu8ZOnhMAJRZ4089pw")
-          .setOAuthAccessTokenSecret("d9JSNytuJmp0ft8LPlxMrtLlpNOW0H23WFAg5ubBXsw"); 
+          .setOAuthAccessToken("47531700-lyEHlP3671bb3IcFKKc5dueGmJTmnIZ4ZrMkD8RY")
+          .setOAuthAccessTokenSecret("8je7NslBcJyV3OW9SBzaM3yslAPjPCSVAN1PLafqc"); 
         return cb;
     }
 }

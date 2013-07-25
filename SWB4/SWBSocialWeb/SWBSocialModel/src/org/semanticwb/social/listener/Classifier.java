@@ -41,10 +41,10 @@ public class Classifier {
     }
     * */
     
-    public Classifier (ArrayList <ExternalPost> aListExternalPost, Stream stream, SocialNetwork socialNetwork)
+    public Classifier (ArrayList <ExternalPost> aListExternalPost, Stream stream, SocialNetwork socialNetwork, boolean classifyGeoLocation)
     {
         try{
-            ClassifierThread classThread=new ClassifierThread(aListExternalPost, stream, socialNetwork);
+            ClassifierThread classThread=new ClassifierThread(aListExternalPost, stream, socialNetwork, classifyGeoLocation);
             //System.out.println("THREAD CREADO:"+classThread);
             classThread.start();
             //System.out.println("classThread.isAlive():"+classThread);

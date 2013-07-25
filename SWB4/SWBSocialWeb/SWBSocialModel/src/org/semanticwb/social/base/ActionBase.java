@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase padre de todas las acciones posibles en swbsocial 
    */
-public abstract class ActionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class ActionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Clase principal para manejo de reglas en swbSocial
