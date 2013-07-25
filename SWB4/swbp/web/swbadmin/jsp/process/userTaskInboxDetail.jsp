@@ -23,33 +23,14 @@
 <script type="text/javascript" charset="utf-8" src="/swbadmin/jsp/process/userTaskInboxUtils.js"></script>
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-ArrayList<ProcessInstance> tinstances = (ArrayList<ProcessInstance>) request.getAttribute("instances");
 WebSite site = paramRequest.getWebPage().getWebSite();
 User user = paramRequest.getUser();
 
 String lang = "es";
 String pNum = request.getParameter("page");
 String suri = request.getParameter("suri");
-int maxPages = (Integer) request.getAttribute("maxPages");
+
 int pageNum = 1;
-int aborted = (Integer)request.getAttribute("aborted");
-int processing = (Integer)request.getAttribute("processing");
-int closed = (Integer)request.getAttribute("closed");
-int total = aborted+processing+closed;
-
-long minTime = (Long)request.getAttribute("minTime");
-long maxTime = (Long)request.getAttribute("maxTime");
-long avgTime = (Long)request.getAttribute("avgTime");
-
-int ontime = (Integer)request.getAttribute("ontime");
-int delayed = (Integer)request.getAttribute("delayed");
-
-if (pNum != null && !pNum.trim().equals("")) {
-    pageNum = Integer.valueOf(request.getParameter("page"));
-    if (pageNum > maxPages) {
-        pageNum = maxPages;
-    }
-}
 
 if (user != null && user.getLanguage() != null) {
     lang = user.getLanguage();
@@ -81,6 +62,28 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
     </div>
     <%
 } else {
+    ArrayList<ProcessInstance> tinstances = (ArrayList<ProcessInstance>) request.getAttribute("instances");
+    int maxPages = (Integer) request.getAttribute("maxPages");
+    
+    if (pNum != null && !pNum.trim().equals("")) {
+        pageNum = Integer.valueOf(request.getParameter("page"));
+        if (pageNum > maxPages) {
+            pageNum = maxPages;
+        }
+    }
+    
+    int aborted = (Integer)request.getAttribute("aborted");
+    int processing = (Integer)request.getAttribute("processing");
+    int closed = (Integer)request.getAttribute("closed");
+    int total = aborted+processing+closed;
+
+    long minTime = (Long)request.getAttribute("minTime");
+    long maxTime = (Long)request.getAttribute("maxTime");
+    long avgTime = (Long)request.getAttribute("avgTime");
+
+    int ontime = (Integer)request.getAttribute("ontime");
+    int delayed = (Integer)request.getAttribute("delayed");
+    
     Process p = (Process)ont.getGenericObject(suri);
     if (p == null) {%>
         <script>
