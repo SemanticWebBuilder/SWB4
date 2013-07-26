@@ -221,33 +221,36 @@ public class SentimentalDataClassifier {
         //Para el caso de Streaming Api que no se le puede enviar un bounding box, ni una latitud, longitud y radio para que solo me traiga tweets de una región
         if(stream.getGeoCenterLatitude()!=0 && stream.getGeoCenterLongitude()!=0 && classifyGeoLocation)
         {
+            System.out.println("Geo-1");
             if(externalPost.getLatitude()!=0 && externalPost.getLongitude()!=0) 
             {
-                double radio=50;    //50 de radio por defecto.
                 double eart_Radio=SWBSocialUtil.EART_RADIUS_KM; //Por defecto se mide en Kilometros
                 if(stream.getGeoDistanceUnit().equals("MI"))
                 {
                     eart_Radio=SWBSocialUtil.EART_RADIUS_MI;
                 }
-                double distance = 50;
+                double distance = 50;   //distancia en Radio por defecto 50
                 if(stream.getGeoRadio()>0)
                 {
                     distance=stream.getGeoRadio();
                 }
-
+                System.out.println("Geo-2");
                 org.semanticwb.social.util.GeoLocation myLocation = org.semanticwb.social.util.GeoLocation.fromDegrees(stream.getGeoCenterLatitude(), stream.getGeoCenterLongitude());
                 org.semanticwb.social.util.GeoLocation[] boundingCoordinates =myLocation.boundingCoordinates(distance, eart_Radio);
-                
                 if(!SWBSocialUtil.Util.isPointInsideCoodinates(externalPost.getLatitude(), externalPost.getLongitude(), boundingCoordinates))
                 {
+                    System.out.println("Geo-3");
                     externalPost=null;  //Destruyo el objeto ExternalPost, para que no consuma memoria.
                     return; //Regresa sin hacer nada.
                 }
             }else{  //Si en el stream se indica que es mandatorio que se tomen los tweets de una cierta región y el tweet que llega no tiene localización (latitud y longitud) pues No se hace nada con ese externalPost;
+                System.out.println("Geo-4");
                 externalPost=null;  //Destruyo el objeto ExternalPost, para que no consuma memoria.
                 return; //Regresa sin hacer nada.
             }
         }
+        //Pasó filtrado por región.
+        System.out.println("Geo-Fin");
                 
         HashMap hmapValues=SWBSocialUtil.Classifier.classyfyText(externalString2Clasify);
         float promSentimentalValue=((Float)hmapValues.get("promSentimentalValue")).floatValue();
