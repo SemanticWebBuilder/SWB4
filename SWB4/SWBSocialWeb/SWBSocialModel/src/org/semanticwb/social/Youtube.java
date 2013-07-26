@@ -3,6 +3,7 @@ package org.semanticwb.social;
 import com.google.gdata.client.youtube.YouTubeService;
 import java.io.BufferedReader;
 import java.io.Closeable;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -26,10 +27,12 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
@@ -48,6 +51,9 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.social.listener.Classifier;
 import org.semanticwb.social.util.SWBSocialUtil;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class Youtube extends org.semanticwb.social.base.YoutubeBase {
 
@@ -194,7 +200,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
        
         //Valida que este activo el token, de lo contrario manda el token refresh
         //para que nos regrese un nuevo 
-        /*
+        
         try {
             HttpClient client = new DefaultHttpClient();
             //client.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
@@ -234,11 +240,6 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         System.out.println("el token de acceso es: " + this.getAccessToken());
         System.out.println("la developerkey es: " + this.getDeveloperKey());
 
-        String url = UPLOAD_URL;
-
-        HttpClient client = new DefaultHttpClient();
-        client.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
-        HttpPost post = new HttpPost(url);
         String base = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String boundary = "";
         for (int i = 0; i < 8; i++) {
@@ -246,94 +247,98 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             String caracter = base.substring(numero, numero + 1);
             boundary = boundary + caracter;
         }
+        String url1 = UPLOAD_URL;
+        URL url;
+        HttpURLConnection conn = null;
         try {
+            url = new URL(url1);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            conn.setUseCaches(false);
+            conn.setRequestProperty("Host", "uploads.gdata.youtube.com");
+            conn.setRequestProperty("Authorization", "Bearer " + this.getAccessToken());
+            conn.setRequestProperty("GData-Version", "2");
+            //conn.setRequestProperty("X-GData-Client", clientID);
+            conn.setRequestProperty("X-GData-Key", "key=" + this.getDeveloperKey());
+            conn.setRequestProperty("Slug", video.getTitle());
+            conn.setRequestProperty("Content-Type", "multipart/related; boundary=\"" + boundary + "\"");
+            //conn.setRequestProperty("Content-Length", getLength());
+            conn.setRequestProperty("Connection", "close");
+            DataOutputStream writer = new DataOutputStream(conn.getOutputStream());
+            writer.write(("\r\n--" + boundary + "\r\n").getBytes());
+            writer.write("Content-Type: application/atom+xml; charset=UTF-8\r\n\r\n".getBytes());
+            String xml = "<?xml version=\"1.0\"?>\r\n" +
+            " <entry xmlns=\"http://www.w3.org/2005/Atom\"" + "\r\n" +
+            "xmlns:media=\"http://search.yahoo.com/mrss/\"\r\n" +
+            "xmlns:yt=\"http://gdata.youtube.com/schemas/2007\"> \r\n" +
+            " <media:group> \r\n" +
+            " <media:title type=\"plain\">"+video.getTitle()+"</media:title> \r\n" +
+            " <media:description type=\"plain\"> \r\n" +
+            video.getMsg_Text()+"\r\n" +
+            " </media:description> \r\n" +
+            " <media:category\r\n" +
+            "scheme=\"http://gdata.youtube.com/schemas/2007/categories.cat\"> "+video.getCategory()+" \r\n" +
+            " </media:category> \r\n" +
+            " <media:keywords>"+video.getTags()+"</media:keywords> \r\n" +
+            " </media:group> \r\n" +
+            " </entry> \r\n";
+            writer.write(xml.getBytes("UTF-8"));
+            writer.write(("--" + boundary + "\r\n").getBytes());
+            String[] arr = video.getVideo().split("\\.");
+            String ext = "Content-Type: video/"+arr[1]+"\r\n";
+            writer.write(ext.getBytes());
+            writer.write("Content-Transfer-Encoding: binary\r\n\r\n".getBytes());
+            
             String videoPath = SWBPortal.getWorkPath() + video.getWorkPath() + "/" + video.getVideo();
             SWBFile fileVideo = new SWBFile(videoPath);
+            
+            FileInputStream reader = new FileInputStream(fileVideo);
+                        byte[] array;
+                        int bufferSize = Math.min(reader.available(), 2048);
+                        array = new byte[bufferSize];
+                        int read = 0;
+                        read = reader.read(array, 0, bufferSize);
+                        while ( read > 0)
+                        {
+                                writer.write(array, 0, bufferSize);
+                                bufferSize = Math.min(reader.available(), 2048);
+                                array = new byte[bufferSize];
+                                read = reader.read(array, 0, bufferSize);
+                        }
+                        writer.write(("--" + boundary + "--\r\n").getBytes());
+                        writer.write(("--" + boundary + "--\r\n").getBytes());
+                        writer.flush();
+                        writer.close();
+                        reader.close();
+                        BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                        String docxml = readerl.readLine();
+                        System.out.print("--docxml en postVideo----" + docxml);               
+                        String videoId = docxml.substring(docxml.indexOf("<yt:videoid>"), docxml.lastIndexOf("</yt:videoid>"));
+                        videoId = videoId.replace("<yt:videoid>", "");
+                        System.out.println("videoId..." + videoId);
+                        //Si el videoId es diferente de null manda a preguntar por el status del video
+                        //de lo contrario manda el error al log
+                        if(videoId != null){
+                           SWBSocialUtil.PostOutUtil.savePostOutNetID(video, this, videoId);
+                        }  
+        } 
+                        catch(Exception ex)
+                        {
+                            log.error("ERROR" + ex.toString());
+                            System.out.println("ERROR" + ex.toString());
+                            ex.printStackTrace();
+                        }
 
-            System.out.println("filevideo:  " + fileVideo);
-            System.out.println("nombre del video: " + video.getVideo());
-            String[] arr = video.getVideo().split("\\.");
-            String ext = arr[1];
-            System.out.println("la extension del archivo es: " + ext);
-
-            post.setHeader("Authorization", "Bearer " + this.getAccessToken());
-            post.setHeader("GData-Version", "2");
-            //post.setHeader("X-GData-Key", "key=" +this.//Falta developerkey);
-            post.setHeader("X-GData-Key", "key=" + this.getDeveloperKey());
-            post.setHeader("Slug", video.getVideo());
-            post.setHeader("Content-Type", "multipart/related; boundary=" + boundary);
-            post.setHeader("Connection", "close");
-            post.setHeader("", "--" + boundary);
-            post.setHeader("Content-Type", "application/atom+xml; charset=UTF-8");
-            System.out.println(post.getMethod());
-            StringEntity entity = new StringEntity(
-                    "<?xml version=\"1.0\"?>"
-                    + "<entry xmlns=\"http://www.w3.org/2005/Atom\""
-                    + " xmlns:media=\"http://search.yahoo.com/mrss/\""
-                    + " xmlns:yt=\"http://gdata.youtube.com/schemas/2007\">"
-                    + "<media:group>"
-                    + "<media:title type=\"plain\">Bad Wedding Toast</media:title>"
-                    + "<media:description type=\"plain\">"
-                    + "I gave a bad toast at my friend's wedding."
-                    + "</media:description>"
-                    + "<media:category "
-                    + "scheme=\"http://gdata.youtube.com/schemas/2007/categories.cat\">People"
-                    + "</media:category>"
-                    + "<media:keywords>toast, wedding</media:keywords>"
-                    + "</media:group>"
-                    + "</entry>");
-            post.setEntity(entity);
-            post.setHeader("", "--" + boundary);
-            post.setHeader("Content-Type", "video/" + ext);
-            post.setHeader("Content-Transfer-Encoding", "binary");
-
-            if (fileVideo.exists()) {
-                //File fileVideo = new File("C:/Users/ana.garcias/Documents/Video.asf");
-                byte[] archivoBytes = null;
-                long tamanoArch = fileVideo.length();
-                if (tamanoArch > Integer.MAX_VALUE) {
-                    System.out.println("El archivo es demasiado largo.");
-                } else {
-
-                    try {
-                        archivoBytes = new byte[(int) tamanoArch]; //Le damos al array el tamaño del archivo.
-                        FileInputStream docu = new FileInputStream(fileVideo);
-                        //Leemos los bytes del archivo y a la vez se van insertando en el array de bytes creado.
-                        int numBytes = docu.read(archivoBytes);
-                        System.out.println("El archivo tiene " + numBytes + " de bytes.");
-                        docu.close();
-                    } catch (FileNotFoundException e) {
-                        System.out.println("No se ha encontrado el archivo.");
-                    } catch (IOException e) {
-                        System.out.println("No se ha podido leer el archivo." + e);
-                    }
-                }
-
-                if (archivoBytes != null) {
-                    post.setEntity(new ByteArrayEntity(archivoBytes));
-                }
-
-                post.setHeader("", "--" + boundary + "--");
-                ResponseHandler<String> responseHandler = new BasicResponseHandler();
-                String responseBody = client.execute(post, responseHandler);
-                System.out.println("responseBody : " + responseBody);
-            }
-        } catch (HttpResponseException e) {
-            System.out.println("Msg" + e.getMessage());
-            System.out.println("Error code" + e.getStatusCode());
-            e.printStackTrace();
-        } catch (Exception e) {
-            System.out.println("Error: " + e);
-        }
-        * */
-        try
+     /*   try
         {
            System.out.println("Va a Grabar en savePostOutNetID - George/video:"+video+", this:"+this);
            SWBSocialUtil.PostOutUtil.savePostOutNetID(video, this, "12345678");
         }catch(Exception e)
         {
             
-        }
+        }*/
         
     }
 
@@ -835,10 +840,76 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
 
     @Override
     public boolean isPublished(PostOutNet postOutNet) {
-        //System.out.println("Entra a YouTube, Instancia:"+this+", PostOut:"+postOutNet.getSocialPost());
-        //postOutNet.setStatus(1);      //Con esta línea le indicamos al PostOutNet que ya se ha publicado su PostOut en su red social asociada
-        return false;
-    }
-
-    
+      System.out.println("Entra al metodo isPublished....");
+        System.out.println("El id del video es...." +postOutNet.getSocialNetMsgID());
+        
+        boolean exit = false;
+        try{
+         HttpClient client = new DefaultHttpClient();
+            HttpGet get = new HttpGet("https://gdata.youtube.com/feeds/api/users/default/uploads/" +postOutNet.getSocialNetMsgID());
+            get.setHeader("Authorization", "Bearer " + this.getAccessToken());
+            HttpResponse res = client.execute(get);
+            BufferedReader rd = new BufferedReader(new InputStreamReader(res.getEntity().getContent()));
+            String dcxml = rd.readLine();
+            System.out.println("docxml dentro de isPublished:   " + dcxml); 
+            if(dcxml.contains("Video not found")){
+             //   postOutNet.setError(dcxml);
+                exit = true;
+            }
+            Document doc = SWBUtils.XML.xmlToDom(dcxml);
+            doc.getDocumentElement().normalize();
+            NodeList nodosRaiz = doc.getDocumentElement().getChildNodes();
+            boolean found = false;
+            int setErr = 0;
+            String reasonCode = "";
+            String descriptionReason="";
+            for(int i=0; i<nodosRaiz.getLength(); i++){
+                    Node childNode = nodosRaiz.item(i);
+                    if (childNode.getNodeName().equals("app:control")){
+                        found = true;
+                        System.out.println("Entra a app:control....");
+                        NodeList children = childNode.getChildNodes();
+                        for(int j=0;j<children.getLength();j++){
+                        Node children2 = children.item(j);
+                        if (children2.getNodeName().equals("yt:state")) {
+                            String name = children2.getAttributes().getNamedItem("name").getTextContent();
+                            System.out.println("lo que trae yt:state name: " +name);
+                            if(name.equals("processing")){
+                                System.out.println("Entra a la validacion de que el name es igual a processing");
+                                //exit = false;
+                            }
+                            else{
+                            reasonCode = children2.getAttributes().getNamedItem("reasonCode").getTextContent();
+                            System.out.println("lo que trae yt:state reasonCode: " +reasonCode);
+                            descriptionReason = children2.getTextContent();
+                            System.out.println("lo que trae yt:state: " +descriptionReason);
+                            setErr = 1;
+                            }
+                        }
+                        }
+                        break;
+                    }
+       }
+            if (found == true){
+            System.out.println("La variable found es true, si encontro un tag llamado app.control");
+                    if(setErr == 1){
+                        postOutNet.setStatus(0);
+                        postOutNet.setError(reasonCode+ " : " +descriptionReason);
+                        exit = true;
+                    }
+                    else{
+                        exit = false; 
+                    }              
+            }
+            else{
+                System.out.println("No encontro un tag app:control....");
+                postOutNet.setStatus(1);
+                exit = true;
+            }
+          }
+          catch (Exception e) {
+            e.printStackTrace();
+          }
+          return exit;
+    }   
 }
