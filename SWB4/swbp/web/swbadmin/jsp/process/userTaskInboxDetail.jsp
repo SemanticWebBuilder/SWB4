@@ -164,6 +164,10 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
                     var nodes = flatten(root);
                     var links = d3.layout.tree().links(nodes);
                     var max = root['max'];
+                    
+                    root.fixed = true;
+                    root.x = w/2;
+                    root.y = h/2;
 
                     var linkScale = d3.scale.linear()
                         .domain([1,max])
@@ -359,7 +363,7 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
                 var h = d3.select("#participationGraph").style("height").replace("px","");
 
                 var force = d3.layout.force()
-                    .charge(-800)
+                    .charge(-60)
                     .distance(80)
                     .gravity(.05)
                     //.linkDistance(50)
