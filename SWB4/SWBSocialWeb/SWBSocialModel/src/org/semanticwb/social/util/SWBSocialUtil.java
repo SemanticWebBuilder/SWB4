@@ -969,7 +969,6 @@ public class SWBSocialUtil implements SWBAppObject {
             double west=geolocation[0].getLongitudeInDegrees();
             double north=geolocation[1].getLatitudeInDegrees();
             double east=geolocation[1].getLongitudeInDegrees();
-            
             if(north>=latitude && south<=latitude && east>=longitude && west<=longitude)
             {
                 return true;
