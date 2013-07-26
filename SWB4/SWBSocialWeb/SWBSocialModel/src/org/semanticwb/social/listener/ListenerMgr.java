@@ -195,6 +195,7 @@ public class ListenerMgr implements SWBAppObject {
                         //siguiente red social del Stream, dado que la actual no se va a enviar a que escuche.
                         if(socialNet instanceof KeepAliveListenerable)
                         {
+                            System.out.println("Ejecuta Red Social/ListenAlive:"+socialNet.getId());
                             KeepAliveListenerable listenAliveableNet=(KeepAliveListenerable)socialNet;
                             listenAliveableNet.listenAlive(stream);
                         }else   //De lo contrario, si se envía a que escuche

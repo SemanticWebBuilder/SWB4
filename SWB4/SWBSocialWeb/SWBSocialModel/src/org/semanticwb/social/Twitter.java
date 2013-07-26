@@ -539,6 +539,8 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             
             TwitterStream twitterStream = new TwitterStreamFactory(configureOAuth().build()).getInstance();
             
+            System.out.println(twitterStream);
+            
             twitterStream.addListener(listener);
 
             twitterStream.filter(query);

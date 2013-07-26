@@ -123,7 +123,7 @@ public class SentimentalDataClassifier {
     
     private void initAnalysis()
     {
-        
+        long tini=System.currentTimeMillis();
         //Normalizo
         String externalString2Clasify_TMP=externalString2Clasify;
         /*
@@ -473,6 +473,8 @@ public class SentimentalDataClassifier {
                 }
             }
         }
+         long tfin=System.currentTimeMillis() - tini;
+         System.out.println("\n<!--Total Time to Classify: " + tfin + "ms - SWBSocial--> ");
     }
     
     /*
