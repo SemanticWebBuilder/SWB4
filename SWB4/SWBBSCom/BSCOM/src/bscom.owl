@@ -138,16 +138,6 @@
     </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="And">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Logical"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Or">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Logical"/>
-    </rdfs:subClassOf>
-  </owl:Class>
   <owl:Class rdf:ID="Schedule">
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Cualquier elemento BSC que se pueda programar con fechas de inicio y fin</rdfs:comment>
@@ -214,10 +204,11 @@
     <swb:hasClass rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Countries"/>
   </owl:Class>
-  <owl:Class rdf:ID="LessThan">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Relational"/>
-    </rdfs:subClassOf>
+  <owl:Class rdf:ID="Seasonable">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cualquier elemento BSC al que se le puedan asignar períodos de medición</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="Indicator">
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -254,9 +245,7 @@
         <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
       </owl:Restriction>
     </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Seasonable"/>
-    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Seasonable"/>
     <rdfs:subClassOf>
       <swb:Interface rdf:ID="Committable">
         <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -291,20 +280,6 @@
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Undeleteable"/>
-  </owl:Class>
-  <owl:Class rdf:about="#Seasonable">
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Cualquier elemento BSC al que se le puedan asignar períodos de medición</rdfs:comment>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
-  </owl:Class>
-  <owl:Class rdf:about="#Relational">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Operation"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="GreaterThan">
-    <rdfs:subClassOf rdf:resource="#Relational"/>
   </owl:Class>
   <owl:Class rdf:about="#Status">
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -392,11 +367,6 @@
     <rdfs:subClassOf rdf:resource="#Sortable"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:about="#Logical">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Operation"/>
-    </rdfs:subClassOf>
-  </owl:Class>
   <owl:Class rdf:ID="Period">
     <rdfs:label xml:lang="en">Period</rdfs:label>
     <rdfs:label xml:lang="es">Período</rdfs:label>
@@ -430,6 +400,30 @@
   </owl:Class>
   <owl:Class rdf:ID="BSC">
     <swb:hasClass rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Collection"/>
+    <swb:hasClass>
+      <swb:Class rdf:ID="Operation">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <swb:displayObject>
+          <swbxf:DisplayObject rdf:ID="do_operation">
+            <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >3</swbxf:dropMatchLevel>
+            <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:dragSupport>
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconWebPage</swb:iconClass>
+            <rdfs:label xml:lang="en">Operation</rdfs:label>
+            <rdfs:label xml:lang="es">Operación</rdfs:label>
+          </swbxf:DisplayObject>
+        </swb:displayObject>
+        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.bsc.tracing</swb:classCodePackage>
+        <rdfs:subClassOf>
+          <owl:Class rdf:about="#BSCTracing"/>
+        </rdfs:subClassOf>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </swb:hasClass>
     <swb:hasClass>
       <swb:Class rdf:ID="Distinctive">
         <rdfs:subClassOf>
@@ -485,6 +479,17 @@
     </swb:hasHerarquicalNode>
     <swb:hasClass rdf:resource="#Indicator"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebSite"/>
+    <swb:hasHerarquicalNode>
+      <swbxf:HerarquicalNode rdf:ID="hn_Operations">
+        <swb:description xml:lang="en">Available operations to define the evaluation criteria of the indicators</swb:description>
+        <swb:description xml:lang="es">Operaciones disponibles para configurar los criterios de evaluación de los indicadores</swb:description>
+        <swbxf:heClass rdf:resource="#Operation"/>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconWebPage</swb:iconClass>
+        <swb:title xml:lang="en">Operations</swb:title>
+        <swb:title xml:lang="es">Operaciones</swb:title>
+      </swbxf:HerarquicalNode>
+    </swb:hasHerarquicalNode>
     <swb:hasClass>
       <owl:Class rdf:ID="Risk"/>
     </swb:hasClass>
@@ -745,9 +750,6 @@
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Los temas para distintivos agrupan distintivos con fines en común. A su vez, los temas para distintivos están agrupados dentro de las perspectivas.</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:about="#Operation">
-    <rdfs:subClassOf rdf:resource="#BSCTracing"/>
   </owl:Class>
   <owl:ObjectProperty rdf:ID="parent">
     <swb:displayProperty>
@@ -1423,6 +1425,17 @@
     >Mostrar en una ventana o cuadro de diálogo</rdfs:comment>
     <rdfs:domain rdf:resource="#HelpPage"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="operator">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_operator">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#uniqueTextElement"/>
+        <rdfs:label xml:lang="en">Operator</rdfs:label>
+        <rdfs:label xml:lang="es">Operador</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Operation"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="actualStart">
     <rdfs:domain rdf:resource="#Schedule"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
@@ -1732,6 +1745,14 @@
     <swb:maxLength rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >2</swb:maxLength>
   </bsc:Number>
+  <swb:Class rdf:ID="GreaterThan">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.bsc.tracing</swb:classCodePackage>
+    <rdfs:subClassOf rdf:resource="#Operation"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
   <bsc:SelectOneUserByRoleGroup rdf:ID="facilitators">
     <swbxf:so_userRepository rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swbxf:so_userRepository>
@@ -1758,6 +1779,12 @@
     >150</swb:index>
     <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
   </swbxf:DisplayProperty>
+  <bsc:Operation rdf:ID="Operation_1">
+    <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:valid>
+    <swb:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:active>
+  </bsc:Operation>
   <swbxf:HerarquicalNode rdf:ID="hn_Objetives">
     <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >swbIconWebPage</swb:iconClass>
@@ -1788,6 +1815,14 @@
     >El valor ordinal es requerido</swbxf:propInvalidMessage>
     <swbxf:formElement rdf:resource="#ordinal"/>
   </swbxf:DisplayProperty>
+  <swb:Class rdf:ID="LessThan">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.bsc.tracing</swb:classCodePackage>
+    <rdfs:subClassOf rdf:resource="#Operation"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
   <swbxf:DisplayProperty rdf:ID="dp_folio">
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >40</swb:index>
