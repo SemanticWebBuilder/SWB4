@@ -4,6 +4,8 @@
     Author     : francisco.jimenez
 --%>
 
+<%@page import="org.semanticwb.model.WebSite"%>
+<%@page import="org.semanticwb.model.SWBModel"%>
 <%@page import="org.semanticwb.social.Facebook"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="java.util.Iterator"%>
@@ -555,6 +557,7 @@
 
     HashMap<String, String> params = new HashMap<String, String>(2);
     params.put("access_token", facebookBean.getAccessToken());
+    SWBModel model=WebSite.ClassMgr.getWebSite(facebookBean.getSemanticObject().getModel().getName());
     
     params.put("limit", "25");
     params.put("fields", "id,from,to,message,message_tags,story,story_tags,picture,caption,link,object_id,application,source,name,description,properties,icon,actions,privacy,type,status_type,created_time,likes,comments.limit(5),place");    
@@ -565,7 +568,7 @@
     String fbResponse = postRequest(params, "https://graph.facebook.com/me/home",
                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
         
-    String untilPost = parseResponse(fbResponse, out, true, request, paramRequest, NEWS_FEED_TAB);//Gets the newest post and saves the ID of the last one    
+    String untilPost = parseResponse(fbResponse, out, true, request, paramRequest, NEWS_FEED_TAB, model);//Gets the newest post and saves the ID of the last one    
     SWBResourceURL renderURL = paramRequest.getRenderUrl().setParameter("suri", objUri).setParameter("currentTab", NEWS_FEED_TAB);
     String since = (String)session.getAttribute(objUri + NEWS_FEED_TAB + "since");
     System.out.println("\n\n\nsession.getAttribute(since):" + session.getAttribute(objUri + NEWS_FEED_TAB +  "since"));
@@ -579,7 +582,7 @@
             if(since != null){
                 System.out.println("Calling the funtion!");
         %>
-            setInterval(function(){ postSocialHtml('<%=renderURL.setMode("newPostsAvailable")%>','<%=objUri%>newPostsAvailable'); },20000);
+            //setInterval(function(){ postSocialHtml('<%=renderURL.setMode("newPostsAvailable")%>','<%=objUri%>newPostsAvailable'); },20000);
         <%
             }
         %>

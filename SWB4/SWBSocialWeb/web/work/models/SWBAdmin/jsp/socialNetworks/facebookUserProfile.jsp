@@ -53,7 +53,7 @@
         return fbResponse;
     }
 %>
-<div class="swbform">
+
 <%
     String target = (String) request.getParameter("id");
     String objUri = (String) request.getParameter("suri");
@@ -115,7 +115,6 @@
         }
         
 %>
-</div>
 
 <div class="swbform" style="width: 500px">
     <fieldset>
