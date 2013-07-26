@@ -39,7 +39,6 @@
     }
 
 %>
-<div class="swbform">
 <%
     String target = (String) request.getParameter("id");
     String objUri = (String) request.getParameter("suri");
@@ -92,9 +91,8 @@
             generalInfo = information.getString("general_info");
         }
 %>
-</div>
 
-<div class="swbform" style="width: 500px">
+<div class="swbform" style="width: 500px;">
     <fieldset>
         <div align="center"><a href="http://www.facebook.com/<%=target%>" title="View profile on Facebook"  target="_blank"><img src="https://graph.facebook.com/<%=target%>/picture?width=150&height=150"/></a></div>
     </fieldset>
