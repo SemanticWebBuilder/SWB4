@@ -163,7 +163,12 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
                 function updateD3Chart () {
                     var nodes = flatten(root);
                     var links = d3.layout.tree().links(nodes);
-                    
+                    var max = root['max'];
+
+                    var linkScale = d3.scale.linear()
+                        .domain([1,max])
+                        .range([1,5]);
+            
                     force.nodes(nodes)
                         .links(links)
                         .start();
@@ -186,6 +191,9 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
                         })
                         .attr("y2", function(d) {
                             return d.target.y;
+                        })
+                        .attr("stroke-width", function(d) {
+                            return linkScale(d.target.participa)+"px";
                         });
                         
                     link.exit().remove();
@@ -292,7 +300,7 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
                 }
                 
                 var d3Color = d3.scale.category20();
-                
+
                 function color(d, i) {
                     return d3Color(i);
                 }
