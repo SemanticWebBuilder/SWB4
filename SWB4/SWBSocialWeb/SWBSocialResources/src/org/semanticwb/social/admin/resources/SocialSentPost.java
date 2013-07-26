@@ -248,9 +248,9 @@ public class SocialSentPost extends GenericResource {
         out.println("<table><tr><td>");
         out.print(paramRequest.getLocaleString("postType")); 
         out.print("</td><td>");
-        out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/css/images/arrow_down.png\" height=\"16\"/></a>");
         urlOderby.setParameter("orderBy", "PostTypeDown"); 
-        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/css/images/arrow_up.png\" height=\"16\"/></a>");
         out.print("</td></tr></table>");
         out.println("</th>");
         
@@ -263,9 +263,9 @@ public class SocialSentPost extends GenericResource {
         out.println("<table><tr><td>");
         out.println(paramRequest.getLocaleString("source"));
          out.print("</td><td>");
-        out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_down.png\" height=\"16\"/></a>");
         urlOderby.setParameter("orderBy", "origenDown");
-        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_up.png\" height=\"16\"/></a>");
         out.print("</td></tr></table>");
         out.println("</th>");
         
@@ -284,9 +284,9 @@ public class SocialSentPost extends GenericResource {
         out.println("<table><tr><td>");
         out.println(paramRequest.getLocaleString("created"));
         out.print("</td><td>");
-        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_down.png\" height=\"16\"/></a>");
         urlOderby.setParameter("orderBy", "cretedDown");
-        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_up.png\" height=\"16\"/></a>");
         out.print("</td></tr></table>");
         out.println("</th>");
     
@@ -295,9 +295,9 @@ public class SocialSentPost extends GenericResource {
         out.println("<table><tr><td>");
         out.println(paramRequest.getLocaleString("updated"));
         out.print("</td><td>");
-        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_down.png\" height=\"16\"/></a>");
         urlOderby.setParameter("orderBy", "updatedDown");
-        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_up.png\" height=\"16\"/></a>");
         out.print("</td></tr></table>");
         out.println("</th>");
         
@@ -308,9 +308,9 @@ public class SocialSentPost extends GenericResource {
             out.println("<table><tr><td>");
             out.println(paramRequest.getLocaleString("sentiment"));
             out.print("</td><td>");
-            out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+            out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_down.png\" height=\"16\"/></a>");
             urlOderby.setParameter("orderBy", "sentimentDown");
-            out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+            out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_up.png\" height=\"16\"/></a>");
             out.print("</td></tr></table>");
             out.println("</th>");
 
@@ -319,9 +319,9 @@ public class SocialSentPost extends GenericResource {
             out.println("<table><tr><td>");
             out.println(paramRequest.getLocaleString("intensity"));
             out.print("</td><td>");
-            out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+            out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_down.png\" height=\"16\"/></a>");
             urlOderby.setParameter("orderBy", "intensityDown");
-            out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+            out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_up.png\" height=\"16\"/></a>");
             out.print("</td></tr></table>");
             out.println("</th>");
         }
@@ -331,9 +331,9 @@ public class SocialSentPost extends GenericResource {
         out.println("<table><tr><td>");
         out.println(paramRequest.getLocaleString("status"));
         out.print("</td><td>");
-        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_down.png\" height=\"16\"/></a>");
         urlOderby.setParameter("orderBy", "statusDown");
-        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_up.png\" height=\"16\"/></a>");
         out.print("</td></tr></table>");
         out.println("</th>");
         
@@ -733,10 +733,10 @@ public class SocialSentPost extends GenericResource {
                             out.println("---");
                         }else if(postOut.getPostSentimentalType()==1)
                         {
-                            out.println("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/images/feelpos.png"+"\">");
+                            out.println("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/feelpos.png"+"\">");
                         }else if(postOut.getPostSentimentalType()==2)
                         {
-                            out.println("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/images/feelneg.png"+"\">");
+                            out.println("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/feelneg.png"+"\">");
                         }
                         out.println("</td>");
 

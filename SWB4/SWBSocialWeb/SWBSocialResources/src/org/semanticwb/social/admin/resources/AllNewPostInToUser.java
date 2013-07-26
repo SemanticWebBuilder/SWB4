@@ -383,9 +383,9 @@ public class AllNewPostInToUser extends GenericResource {
                 //Emoticon
                 out.println("<td>");
                 if (postIn.getPostSentimentalEmoticonType() == 1) {
-                    out.println("<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/images/emopos.png" + "/>");
+                    out.println("<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/css/images/emopos.png" + "/>");
                 } else if (postIn.getPostSentimentalEmoticonType() == 2) {
-                    out.println("<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/images/emoneg.png" + "/>");
+                    out.println("<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/css/images/emoneg.png" + "/>");
                 } else if (postIn.getPostSentimentalEmoticonType() == 0) {
                     out.println("Neutro");
                 }
