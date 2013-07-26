@@ -194,7 +194,9 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
                         })
                         .attr("stroke-width", function(d) {
                             return linkScale(d.target.participa)+"px";
-                        });
+                        })
+                        .attr("stroke", "#BFBFCF")
+                        .attr("fill", "none");
                         
                     link.exit().remove();
                     
