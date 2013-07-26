@@ -82,7 +82,24 @@ public class SocialWebResource extends GenericAdmResource
                 out.println("       <td style=\"text-align: center;\"><h3>La cuenta está autenticada correctamente</h3></td>");
                 out.println("   </tr>");
                 out.println("</table>");
-                out.println("</div>");                
+                out.println("</div>");
+                
+                out.println("<div class=\"swbform\">");
+                out.println("<table width=\"100%\" border=\"0px\">");            
+                out.println("   <tr>");
+                out.println("       <td style=\"text-align: center;\"><h3>Refrescar los tokens de acceso</h3></td>");
+                out.println("   </tr>");
+                out.println("   <tr>");
+                out.println("       <td style=\"text-align: center;\">");
+                out.println("   <form type=\"dijit.form.Form\" id=\"nc\" action=\"" +  paramRequest.getRenderUrl().setMode(OAUTH_MODE) + "\" method=\"post\" onsubmit=\"submitForm('nc'); return false;\">");
+                out.println("       <input type=\"hidden\"  name=\"suri\" value=\"" + objUri +"\">");
+                out.println("       <input type=\"hidden\"  name=\"wsid\" value=\"" + socialNetwork.getSemanticObject().getModel().getName()+"\">");
+                out.println("       <button dojoType=\"dijit.form.Button\" type=\"submit\">" + "Refrescar" + "</button>");
+                out.println("   </form>");
+                out.println("       </td>");
+                out.println("   </tr>");
+                out.println("</table>");
+                out.println("</div>");
             }else if(!socialNetwork.isSn_authenticated()){
                 out.println("<div class=\"swbform\">");
                 out.println("<table width=\"100%\" border=\"0px\">");            
@@ -128,9 +145,9 @@ public class SocialWebResource extends GenericAdmResource
             SocialNetwork socialNetwork = (SocialNetwork)session.getAttribute("sw");
             session.removeAttribute("sw");
             objUri = socialNetwork.getURI();
-            if(!socialNetwork.isSn_authenticated()) {
+            //if(!socialNetwork.isSn_authenticated()) {
                 socialNetwork.authenticate(request, response, paramRequest);
-            }                        
+            //}                        
         }        
     }
     
