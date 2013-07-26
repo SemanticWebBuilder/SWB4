@@ -344,10 +344,9 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
             }%>
             <div class="processChartPie" id="participationGraph"></div>
             <script type="text/javascript">
-                var w = 400, 
-                    h = 200;
-            
                 var theJson = JSON.parse('<%=processInfo%>');
+                var w = d3.select("#participationGraph").style("width").replace("px","");
+                var h = d3.select("#participationGraph").style("height").replace("px","");
 
                 var force = d3.layout.force()
                     .charge(-800)
