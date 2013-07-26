@@ -21,6 +21,7 @@ import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -44,8 +45,19 @@ import org.semanticwb.social.Facebook;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.semanticwb.model.SWBModel;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.social.Kloutable;
+import org.semanticwb.social.MessageIn;
+import org.semanticwb.social.PostIn;
+import org.semanticwb.social.SocialNetwork;
+import org.semanticwb.social.SocialNetworkUser;
+import org.semanticwb.social.SocialTopic;
+import org.semanticwb.social.util.SWBSocialUtil;
+import twitter4j.Status;
+import twitter4j.User;
 
 /**
  *
@@ -60,6 +72,7 @@ public class FacebookWall extends GenericResource {
     public static String INFORMATION = "/inf";
     public static String LIKE = "/lik";
     public static String REPLY ="/rep";
+    public static String TOPIC ="/topic";
     
     /*Additionally every div has a suffix to identify if the status is inside the tab of
      home, mentions, favorites or myTweets */ 
@@ -371,10 +384,101 @@ public class FacebookWall extends GenericResource {
                 response.setMode("postSent");                
             } catch (Exception ex) {
                 log.error("Error when trying to reply ", ex);
+            }//**ini
+        }else if(action.equals("setSocialTopic")){
+            System.out.println("SOCIAL NETWORK IN setSocialTopic: " + request.getParameter("suri"));
+            /*
+            SocialNetwork socialNetwork = null;
+            Long id = Long.parseLong(request.getParameter("id"));
+            String idStatus = request.getParameter("id");            
+
+            try {
+                socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+            }catch(Exception e){
+                System.out.println("Error getting the SocialNetwork " + e);
+                return;
             }
+            
+            try {
+                Status status = twitter.showStatus(id);
+                String creatorId = status.getUser().getId() + "";
+                SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
+                SocialNetworkUser socialNetUser = SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(""+status.getUser().getId(), socialNetwork, model);
+                               
+                
+                PostIn post = PostIn.getPostInbySocialMsgId(model, status.getId()+"");
+                if(post != null){
+                    log.error("The post with id :" + post.getSocialNetMsgId() + " already exists");
+                    return;
+                }
+                
+                PostIn postIn = null; //The post
+                postIn = MessageIn.ClassMgr.createMessageIn(model);
+                postIn.setSocialNetMsgId(status.getId()+"");
+                postIn.setMsg_Text(status.getText());
+                postIn.setPostInSocialNetwork(socialNetwork);
+                postIn.setPostInStream(null);
+                
+                if(socialNetUser != null){//User already exists
+                    System.out.println("The user already exists: " + socialNetUser.getSnu_name() + " - " + socialNetUser.getSnu_id() +"="+ status.getUser().getId());
+                    int userKloutScore = 0;
+                    int days=SWBSocialUtil.Util.Datediff(socialNetUser.getUpdated(), Calendar.getInstance().getTime());
+                    if(days > 5){  //Si ya pasaron 5 o mas días de que se actualizó la info del usuario, entonces busca su score en Klout
+                        System.out.println("YA PASARON MAS DE 5 DÍAS, BUSCAR KLOUT DE USUARIO...");
+                        Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
+                        userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
+                        System.out.println("userKloutScore K TRAJO:" + userKloutScore);
+                        socialNetUser.setSnu_klout(userKloutScore);
+                    }
+
+                }else{//User does not exist, create it
+                    System.out.println("USUARIO NO EXISTE EN EL SISTEMA, REVISAR QUE KLOUT TIENE");
+                    Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
+                    int userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue();
+                    User twitterUser = twitter.showUser(status.getUser().getId());                    
+                    
+                    socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);//Create a socialNetworkUser
+                    socialNetUser.setSnu_id(status.getUser().getId()+"");
+                    socialNetUser.setSnu_klout(userKloutScore);
+                    socialNetUser.setSnu_name("@"+status.getUser().getScreenName());
+                    socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject());
+                    if(twitterUser != null){
+                        socialNetUser.setCreated(twitterUser.getCreatedAt());
+                        socialNetUser.setFollowers(twitterUser.getFollowersCount());
+                        socialNetUser.setFriends(twitterUser.getFriendsCount());
+                    }else{
+                        socialNetUser.setCreated(new Date());
+                        socialNetUser.setFollowers(0);
+                        socialNetUser.setFriends(0);
+                    }
+                }
+                //SocialNetworkUser socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);//Create a socialNetworkUser
+                
+                postIn.setPostInSocialNetworkUser(socialNetUser);
+                
+                if(request.getParameter("newSocialTopic").equals("none"))
+                {
+                    postIn.setSocialTopic(null);
+                }else {
+                    SemanticObject semObjSocialTopic=SemanticObject.getSemanticObject(request.getParameter("newSocialTopic"));
+                    if(semObjSocialTopic!=null)
+                    {
+                        SocialTopic socialTopic=(SocialTopic)semObjSocialTopic.createGenericInstance();
+                        postIn.setSocialTopic(socialTopic);//Asigns socialTipic
+                    }
+                }
+                response.setRenderParameter("postUri", postIn.getURI());
+                System.out.println("POST CREADO CORRECTAMENTE: " + postIn.getId() + " ** " + postIn.getSocialNetMsgId());
+            }catch(Exception e){
+                System.out.println("Error trying to setSocialTopic");
+            }
+            * */
+            response.setRenderParameter("currentTab", request.getParameter("currentTab"));
+            //response.setRenderParameter("id", idStatus);            
+            response.setMode("assignedPost");
         }
     }
-
+//**fin
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
@@ -530,8 +634,55 @@ public class FacebookWall extends GenericResource {
             }catch (Exception e) {
                 System.out.println("Error displaying user profile");
             }
-        }
-        else {
+        }else if(mode.equals("doShowTopic")){//**ini
+            final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/assignTopic.jsp";
+            RequestDispatcher dis = request.getRequestDispatcher(path);
+            String objUri = (String) request.getParameter("suri");
+            if (dis != null) {
+                try {
+                    request.setAttribute("suri", objUri);
+                    request.setAttribute("paramRequest", paramRequest);
+                    dis.include(request, response);
+                } catch (Exception e) {
+                    log.error("Error on doShowTopic: " + e);
+                }
+            }
+        }else if(mode.equals("doReclassifyTopic")){
+            final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/classifybyTopic.jsp";
+            RequestDispatcher dis = request.getRequestDispatcher(path);
+            if (dis != null) {
+                try {
+                    SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
+                    request.setAttribute("postUri", semObject);
+                    request.setAttribute("paramRequest", paramRequest);
+                    dis.include(request, response);
+                } catch (Exception e) {
+                    log.error("Error on doReclassifyTopic: " + e);
+                }
+            }
+        }else if(mode.equals("assignedPost")){
+            String id = request.getParameter("id");
+            String postUri = request.getParameter("postUri");
+            SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", id).setParameter("postUri", postUri).setParameter("currentTab", currentTab);
+            String url= "<a href=\"#\" title=\"" + "Reclasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','Reclasificar tweet'); return false;\">Reclasificar</a>";
+            out.println("<span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
+            out.println("<script type=\"dojo/method\">");
+            out.println("   hideDialog(); ");            
+            out.println("   try{");///////////Falta poner el id de FACEBOOK
+            out.println("   var spanId = dijit.byId('" + id + TOPIC + currentTab +  "');");            
+            out.println("   spanId.attr('content', '" + url.replace("'", "\\'") +"');");           
+            out.println("   }catch(noe){alert('Error:' + noe);}");
+            out.println("   showStatus('Tema asociado correctamente');");
+            out.println("</script>");
+            out.println("</span>");
+            //response.setRenderParameter("currentTab", request.getParameter("currentTab"));
+            //response.setRenderParameter("id", idStatus);
+        }else if(mode.equals("reAssignedPost")){
+            out.println("<script type=\"javascript\">");
+            out.println("   hideDialog(); ");
+            out.println("   showStatus('El tema fue cambiado correctamente');");
+            out.println("</script>");
+        }else{//**fin
             super.processRequest(request, response, paramRequest);
         }
     }
@@ -545,6 +696,7 @@ public class FacebookWall extends GenericResource {
         SWBResourceURL renderURL = paramRequest.getRenderUrl();
         SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
         Facebook facebook = (Facebook)semanticObject.createGenericInstance();
+        SWBModel model=WebSite.ClassMgr.getWebSite(facebook.getSemanticObject().getModel().getName());
         if(objUri!= null){
             actionURL.setParameter("suri", objUri);
             renderURL.setParameter("suri", objUri);
@@ -564,7 +716,7 @@ public class FacebookWall extends GenericResource {
             fbResponse = postRequest(params, "https://graph.facebook.com/" + facebook.getFacebookUserId() +"/feed",
                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
         }
-        String untilPost = parseResponse(fbResponse, out, false, request, paramRequest, currentTab);
+        String untilPost = parseResponse(fbResponse, out, false, request, paramRequest, currentTab, model);
         
         //CAMBIAR EL ID DEL DIV dependiendo de donde sea llamado
         if(scope.equals("newsFeed")){
@@ -620,14 +772,14 @@ public class FacebookWall extends GenericResource {
      * @param paramRequest est&aacute;ndar SWBParamRequest
      * @return 
      */
-    public static String parseResponse(String response, Writer out, boolean includeSinceParam, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix) {
+    public static String parseResponse(String response, Writer out, boolean includeSinceParam, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, SWBModel model) {
         
         String  until="";
         String  since="";
         String objUri = (String) request.getParameter("suri");
         SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
         Facebook facebook = (Facebook)semanticObject.createGenericInstance();
-        
+                
         try {
                 JSONObject phraseResp = new JSONObject(response);
                 System.out.println("Tamanio del arreglo:" + phraseResp.length());                       
@@ -637,7 +789,7 @@ public class FacebookWall extends GenericResource {
                     for (int k = 0; k < postsData.length(); k++) {
                         cont++;
                         System.out.println("\n\nPost de FACEBOOOK*********: " + postsData.getJSONObject(k));
-                        doPrintPost(out,  postsData.getJSONObject(k), request, paramRequest, tabSuffix, facebook);
+                        doPrintPost(out,  postsData.getJSONObject(k), request, paramRequest, tabSuffix, facebook, model);
                     }
                     if(phraseResp.has("paging")){
                         System.out.println("pagination information:\n" + phraseResp.getJSONObject("paging"));
@@ -790,7 +942,7 @@ public class FacebookWall extends GenericResource {
         return jsonObject;
     }
     
-    public static void doPrintPost(Writer writer, JSONObject postsData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook){
+    public static void doPrintPost(Writer writer, JSONObject postsData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model){
         try{
             SWBResourceURL actionURL = paramRequest.getActionUrl();                        
             SWBResourceURL renderURL = paramRequest.getRenderUrl();
@@ -1166,6 +1318,20 @@ public class FacebookWall extends GenericResource {
                         writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + REPLY + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
                             writer.write(" <a href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyPost").setParameter("commentID", postsData.getString("id")) + "','Reply to " + postsData.getJSONObject("from").getString("name") + "');return false;\">Reply</a>  ");
                         writer.write("   </span>");
+//**ini                        
+                        
+                        ///////////////////////If I can post I can Classify it to answer
+                        PostIn post = PostIn.getPostInbySocialMsgId(model, postsData.getString("id"));
+                        writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + TOPIC + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
+                        if(post != null){
+                            
+                        }else{
+                            SWBResourceURL clasifybyTopic = renderURL.setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("id")).setParameter("currentTab", tabSuffix);
+                            writer.write("<a href=\"#\" title=\"" + "Clasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                            + "Clasificar Post'); return false;\">Clasificar</a>");
+                        }
+                        writer.write("   </span>");
+              //**fin          
                     }else if(actions.getJSONObject(i).getString("name").equals("Like")){//I can like
                         writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + LIKE + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");                        
                         if(iLikedPost){
@@ -1539,6 +1705,7 @@ public class FacebookWall extends GenericResource {
         SWBResourceURL renderURL = paramRequest.getRenderUrl();
         SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
         Facebook facebook = (Facebook)semanticObject.createGenericInstance();
+        SWBModel model=WebSite.ClassMgr.getWebSite(facebook.getSemanticObject().getModel().getName());
         if(objUri!= null){
             actionURL.setParameter("suri", objUri);
             renderURL.setParameter("suri", objUri);
@@ -1558,7 +1725,7 @@ public class FacebookWall extends GenericResource {
             fbResponse = postRequest(params, "https://graph.facebook.com/me/feed",
                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
         }
-        String untilPost = parseResponse(fbResponse, out, true, request, paramRequest, currentTab);
+        String untilPost = parseResponse(fbResponse, out, true, request, paramRequest, currentTab, model);
         session.setAttribute(objUri + currentTab + "processing", "false");
     }
         
