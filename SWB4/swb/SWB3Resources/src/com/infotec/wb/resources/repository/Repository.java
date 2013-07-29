@@ -40,6 +40,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.Role;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebPage;
@@ -114,7 +115,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
         } else {
             level = 3;
         }
-        
+
         if (level == 0) {
             String mdy = base.getAttribute("modify");
             if (mdy != null) {
@@ -127,7 +128,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                 level = 2;
             }
         }
-        
+
         if (level == 0) {
             String viw = base.getAttribute("view");
             if (viw != null) {
@@ -142,7 +143,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
         }
         return level;
     }
-    
+
     public int supportGuestUser() {
         int level = 0;
         String viw = base.getAttribute("view");
@@ -155,7 +156,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
         }
         return level;
     }
-    
+
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
 
@@ -169,7 +170,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
         String repacc = request.getParameter("repacc");
         String reptp = request.getParameter("reptp");
         WebSite ws = null;
-        
+
         String repfop = request.getParameter("repfop");
         String home = "CNFWB_Rep" + base.getId();
         String sub = base.getAttribute("showdirectory", "true");
@@ -184,18 +185,18 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
         //System.out.println("Support Guest user: "+supportGuestUser());
         // quitar para quitar la validaci�n de usuario firmado
         //i_log=1;
-        
-        String path1 = "" + SWBPortal.getContextPath() + "/swbadmin/images/Repository/";        
-        
+
+        String path1 = "" + SWBPortal.getContextPath() + "/swbadmin/images/Repository/";
+
         Document dom = null;
         //xml definition
         try {
-            dom = SWBUtils.XML.getNewDocument();            
-            
+            dom = SWBUtils.XML.getNewDocument();
+
             Element resource = dom.createElement("resource");
             dom.appendChild(resource);
             //xml definition
-            
+
             if (paramsRequest.getCallMethod() == paramsRequest.Call_STRATEGY) {
                 if (reptp == null) {
                     reptp = paramsRequest.getWebPage().getId();
@@ -215,169 +216,76 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
             } catch (Exception e) {
                 log.error(e);
             }
-            
+
             if (null == dir) {
                 ws = topic.getWebSite();
                 dir = ws.createWebPage(reptp);
                 dir.setTitle(paramsRequest.getWebPage().getTitle());
             }
-            
+            String path = SWBPlatform.getContextPath() + "/swbadmin/images/Repository/";
+//            ret.append("\n<script type=\"text/javascript\" >");
+//            ret.append("\n  loadjscssfile(\"" + path + "css-repositorio.css\", \"css\") ;      ");
+//            ret.append("\n</script>");
+
+
             if (sub.equals("false")) {
+
+                ret.append("\n<script type=\"text/javascript\">");
+                ret.append("\n  loadjscssfile(\"" + path + "css-repositorio.css\", \"css\") ;      ");
+                ret.append("\n</script>");
+                ret.append("\n<div  id=\"repositorio\" >");
+                ret.append("\n<div id=\"titulo\">");
+                ret.append("\n<p>" + base.getTitle() + "</p>");
+                ret.append("\n</div>");
                 if (i_log == 1) {
-                    ret.append("\n<style type=\"text/css\">");
-                    ret.append("\n<!--");
-                    ret.append("\n  .Estilo6 {color: #000000; font-weight: bold;}");
-                    ret.append("\n  .Estilo8 {color: #FFFFFF}");
-                    ret.append("\n  .Estilo12 {color: #b48222}");
-                    ret.append("\n  .Estilo14 {color: #666666}");
-                    ret.append("\n-->");
-                    ret.append("\n</style>");
-                    
-                    
-                    ret.append("\n<table id=\"Table_02\" width=\"100%\" height=\"138\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
-                    ret.append("\n   <tr>");
-                    ret.append("\n<td colspan=\"2\" rowspan=\"2\"> <img src=\"" + path1 + "folderinsin_01.gif\" width=\"98\" height=\"14\" alt=\"\"></td>");
-                    ret.append("\n<td colspan=\"3\"> <img src=\"" + path1 + "folderinsin_02.gif\" width=\"198\" height=\"7\" alt=\"\"></td>");
-                    ret.append("\n<td width=\"4\"> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"7\" alt=\"\"></td>");
-                    ret.append("\n</tr>");
-                    ret.append("\n<tr>");
-                    ret.append("\n<td width=\"100%\"> <img src=\"" + path1 + "folderinsin_03.gif\" width=\"100%\" height=\"7\" alt=\"\"></td>");
-                    ret.append("\n<td colspan=\"2\" rowspan=\"2\" valign=top> <img src=\"" + path1 + "folderinsin_04.gif\" width=\"16\" height=\"15\" alt=\"\"></td>");
-                    ret.append("\n<td> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"7\" alt=\"\"></td>");
-                    ret.append("\n</tr>");
-                    ret.append("\n<tr>");
-                    ret.append("\n<td width=\"4\" rowspan=\"3\"> <img src=\"" + path1 + "folderinsin_05.gif\" width=\"4\" height=\"100%\" alt=\"\"></td>");
-                    ret.append("\n<td colspan=\"2\" rowspan=\"3\" bgcolor=\"#FFFFFF\">");
-                    
+                    ret.append("<div id=\"file\">");
                     if ("Notification".equals(repobj)) {
-                        
                         ret.append(notify.getHtml(request, response, user, topic, arguments, dir, paramsRequest));
                     } else {
                         ret.append(files.getHtml(request, response, user, topic, arguments, dir, level, paramsRequest));
                     }
-                    
-                    ret.append("</td>");
-                    ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"8\" alt=\"\"></td>");
-                    ret.append("</tr>");
-                    ret.append("<tr>");
-                    ret.append("<td width=\"12\" rowspan=\"2\"> <img src=\"" + path1 + "folderinsin_07.gif\" width=\"12\" height=\"100%\"></td>");
-                    ret.append("<td width=\"4\" valign=top> <img src=\"" + path1 + "folderinsin_08.gif\" width=\"4\" height=\"100%\" ></td>");
-                    ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"106\" alt=\"\"></td>");
-                    ret.append("</tr>");
-                    ret.append("<tr>");
-                    ret.append("<td> <img src=\"" + path1 + "folderinsin_09.gif\" width=\"4\" height=\"100%\" alt=\"\"></td>");
-                    ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"2\" alt=\"\"></td>");
-                    ret.append("</tr>");
-                    ret.append("<tr>");
-                    ret.append("<td> <img src=\"" + path1 + "folderinsin_10.gif\" width=\"4\" height=\"7\" alt=\"\"></td>");
-                    ret.append("<td colspan=\"3\"> <img src=\"" + path1 + "folderinsin_11.gif\" width=\"100%\" height=\"7\" alt=\"\"></td>");
-                    ret.append("<td> <img src=\"" + path1 + "folderinsin_12.gif\" width=\"4\" height=\"7\" alt=\"\"></td>");
-                    ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"7\" alt=\"\"></td>");
-                    ret.append("</tr>");
-                    ret.append("<tr>");
-                    ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"4\" height=\"1\" alt=\"\"></td>");
-                    ret.append("<td width=\"94\"> <img src=\"" + path1 + "spacer.gif\" width=\"94\" height=\"1\" alt=\"\"></td>");
-                    ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"182\" height=\"1\" alt=\"\"></td>");
-                    ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"12\" height=\"1\" alt=\"\"></td>");
-                    ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"4\" height=\"1\" alt=\"\"></td>");
-                    ret.append("<td></td>");
-                    ret.append("</tr>");
-                    ret.append("</table>");
+                    ret.append("</div>");
                 } else {
-                    ret.append("<p align=center><font size=2 face=arial>" + paramsRequest.getLocaleString("msgMostSigned") + "</font></p>");
+                    ret.append("<p>" + paramsRequest.getLocaleString("msgMostSigned") + "</p>");
                 }
-                
+                ret.append("</div>");
             } else {
-                
-                //System.out.println("Repository:ShowDirs");
+
                 String ver = repobj;
                 if (ver == null) {
                     ver = "";
                 }
                 if ("MoveDoc".equals(ver)) {
-                    //System.out.println("Repository:MoveDoc");
 
-                    ret.append("\n<style type=\"text/css\">");
-                    ret.append("\n<!--");
-                    ret.append("\n  .Estilo6 {color: #000000; font-weight: bold;}");
-                    ret.append("\n  .Estilo8 {color: #FFFFFF}");
-                    ret.append("\n  .Estilo12 {color: #b48222}");
-                    ret.append("\n  .Estilo14 {color: #666666}");
-                    ret.append("\n-->");
+                    ret.append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n");
+                    ret.append("<html>\n");
+                    ret.append(" <head>\n");
+                    ret.append("<link href=\"" + path + "css-repositorio.css\" rel=\"stylesheet\" type=\"text/css\" />");
+                    ret.append("\n<style>");
+                    ret.append("#dir  { width:100%; }\n");
                     ret.append("\n</style>");
-                    
-                    ret.append("\n<font face=\"Verdana, Arial, Helvetica, sans-serif\" color=black>");
-                    ret.append("\n<TABLE width=\"100%\"  border=\"0\" cellpadding=\"4\" cellspacing=\"1\" bgcolor=\"#999999\">\n");
-                    
-                    ret.append("\n<tr bgcolor=\"EFF0E1\"><td bgcolor=\"EFF0E1\"><span class=\"Estilo6\">");
-                    ret.append("\n<FONT size=\"2\" face=\"Verdana, Arial, Helvetica, sans-serif\">" + base.getTitle() + "</font></span>");
-                    //ret.append("\n<FONT size=\"1\" face=\"Verdana, Arial, Helvetica, sans-serif\"><BR>");
-                    //ret.append("\n<span class=\"Estilo12\">"+((base.getDescription()!=null)?base.getDescription():"")+"</span></font>");
-                    ret.append("\n</td></tr>\n");
-                    ret.append("\n<tr><td valign=\"top\" bgcolor=\"#FFFFFF\">");
-                    
-                    ret.append("<table width=\"100%\"  border=\"0\" cellspacing=\"0\" valign=top>");
-                    ret.append("\n<tr><td valign=top>");
-                    
-                    ret.append("\n<table boder=0 width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">");
-                    ret.append("\n<tr><td>");
-                    
-                    ret.append("\n<table id=\"Table_01\" width=\"300\" height=\"138\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
-                    ret.append("\n   <tr>");
-                    ret.append("\n<td colspan=\"2\" rowspan=\"2\"> <img src=\"" + path1 + "folderinsin_01.gif\" width=\"98\" height=\"14\" alt=\"\"></td>");
-                    ret.append("\n<td colspan=\"3\"> <img src=\"" + path1 + "folderinsin_02.gif\" width=\"198\" height=\"7\" alt=\"\"></td>");
-                    ret.append("\n<td width=\"4\"> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"7\" alt=\"\"></td>");
-                    ret.append("\n</tr>");
-                    ret.append("\n<tr>");
-                    ret.append("\n<td width=\"681\"> <img src=\"" + path1 + "folderinsin_03.gif\" width=\"100%\" height=\"7\" alt=\"\"></td>");
-                    ret.append("\n<td colspan=\"2\" rowspan=\"2\" valign=top> <img src=\"" + path1 + "folderinsin_04.gif\" width=\"16\" height=\"15\" alt=\"\"></td>");
-                    ret.append("\n<td> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"7\" alt=\"\"></td>");
-                    ret.append("\n</tr>");
-                    ret.append("\n<tr>");
-                    ret.append("\n<td width=\"4\" rowspan=\"3\"> <img src=\"" + path1 + "folderinsin_05.gif\" width=\"4\" height=\"100%\" alt=\"\"></td>");
-                    ret.append("\n<td colspan=\"2\" rowspan=\"3\" bgcolor=\"#FFFFFF\">");
+                    ret.append("\n</head><body>");
+                    ret.append("\n <div  id=\"repositorio\" >");
+                    ret.append("\n<div id=\"titulo\">");
+                    ret.append("\n<p>" + base.getTitle() + "</p>");
+                    ret.append("\n</div>");
+                    ret.append("<div id=\"dir\">");
                     tree.setResourceBase(getResourceBase());
                     if (i_log == 1) {
                         ret.append(tree.getDirs(request, response, user, topic, arguments, topic.getWebSite().getWebPage(home), paramsRequest));
                     }
-                    
-                    ret.append("</td>");
-                    ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"8\"></td>");
-                    ret.append("</tr>");
-                    ret.append("<tr>");
-                    ret.append("<td width=\"12\" rowspan=\"2\"> <img src=\"" + path1 + "folderinsin_07.gif\" width=\"12\" height=\"100%\"></td>");
-                    ret.append("<td width=\"4\" valign=top> <img src=\"" + path1 + "folderinsin_08.gif\" width=\"4\" height=\"100%\"></td>");
-                    ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"106\" ></td>");
-                    ret.append("</tr>");
-                    ret.append("<tr>");
-                    ret.append("<td> <img src=\"" + path1 + "folderinsin_09.gif\" width=\"4\" height=\"100%\"></td>");
-                    ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"2\"></td>");
-                    ret.append("</tr>");
-                    ret.append("<tr>");
-                    ret.append("<td> <img src=\"" + path1 + "folderinsin_10.gif\" width=\"4\" height=\"7\" ></td>");
-                    ret.append("<td colspan=\"3\"> <img src=\"" + path1 + "folderinsin_11.gif\" width=\"100%\" height=\"7\" ></td>");
-                    ret.append("<td> <img src=\"" + path1 + "folderinsin_12.gif\" width=\"4\" height=\"7\" ></td>");
-                    ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"7\" ></td>");
-                    ret.append("</tr>");
-                    ret.append("<tr>");
-                    ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"4\" height=\"1\" ></td>");
-                    ret.append("<td width=\"94\"> <img src=\"" + path1 + "spacer.gif\" width=\"94\" height=\"1\" ></td>");
-                    ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"182\" height=\"1\" ></td>");
-                    ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"12\" height=\"1\" </td>");
-                    ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"4\" height=\"1\" ></td>");
-                    ret.append("<td></td>");
-                    ret.append("</tr>");
-                    ret.append("</table>");
-                    
-                    ret.append("\n</td></tr>");
-                    ret.append("\n</table>");
-                    //System.out.println("Repository:MoveDoc___END");
+                    ret.append("\n</div>");
+                    ret.append("\n</div>");
+                    ret.append("\n</body></html>");
                 } else {
-                    
+
+                    ret.append("\n<script type=\"text/javascript\">");
+                    ret.append("\n  loadjscssfile(\"" + path + "css-repositorio.css\", \"css\") ;      ");
+                    ret.append("\n</script>");
                     boolean salir = false;
                     //Leer archivo directo
                     if ("view".equals(repfop)) {
-                        
+
                         if (dir != null) {
                             if (i_log == 1) {
                                 ret.append(files.getHtml(request, response, user, topic, null, dir, level, paramsRequest));
@@ -391,9 +299,9 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                         } else {
                             i_log = supportGuestUser();
                         }
-                        
+
                         s_message = paramsRequest.getLocaleString("msgAlertMostBeLogged");
-                        ret.append("\n<script language='JavaScript'>");
+                        ret.append("\n<script type=\"text/javascript\">");
                         ret.append("\n  function doCreateTopic(ivar){");
                         ret.append("\n      if( ivar == 0){");
                         ret.append("\n          alert('" + s_message + "');");
@@ -438,7 +346,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                         ret.append("\n      document.frmMoveDoc.submit();");
                         ret.append("\n  }");
                         ret.append("\n</script>");
-                        
+
                         SWBResourceURL urlTopic = paramsRequest.getRenderUrl();
                         urlTopic.setMode(paramsRequest.Mode_VIEW);
 
@@ -450,126 +358,51 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                         ret.append("\n<input type=hidden name=\"repobj\" value=\"\">");
                         ret.append("\n<input type=hidden name=\"repiddoc\" value=\"\">");
                         ret.append("\n</form>");
-                        
+
                         ret.append("\n<form name=\"frmadmtopic\" method=\"post\" action=\"" + urlTopic.toString() + "\">");
                         ret.append("\n<input type=\"hidden\" name=\"reptp\" value=\"\">");
                         ret.append("\n<input type=\"hidden\" name=\"repacc\" value=\"\">");
                         ret.append("\n<input type=\"hidden\" name=\"repobj\" value=\"\">");
                         ret.append("\n</form>");
-                        
-                        ret.append("\n<style type=\"text/css\">");
-                        ret.append("\n<!--");
-                        ret.append("\n  .Estilo6 {color: #000000; font-weight: bold;}");
-                        ret.append("\n  .Estilo8 {color: #FFFFFF}");
-                        ret.append("\n  .Estilo12 {color: #b48222}");
-                        ret.append("\n  .Estilo14 {color: #666666}");
-                        ret.append("\n-->");
-                        ret.append("\n</style>");
-                        
-                        ret.append("\n<font face=\"Verdana, Arial, Helvetica, sans-serif\" color=black>");
-                        ret.append("\n<TABLE width=\"100%\"  border=\"0\" cellpadding=\"4\" cellspacing=\"1\" bgcolor=\"#999999\">\n");
-                        
-                        ret.append("\n<tr bgcolor=\"EFF0E1\"><td bgcolor=\"EFF0E1\"><span class=\"Estilo6\">");
-                        ret.append("\n<FONT size=\"2\" face=\"Verdana, Arial, Helvetica, sans-serif\">" + base.getTitle() + "</font></span>");
-                        ret.append("\n<FONT size=\"1\" face=\"Verdana, Arial, Helvetica, sans-serif\"><BR>");
-                        ret.append("\n<span class=\"Estilo12\">" + ((base.getDescription() != null) ? base.getDescription() : "") + "</span></font>");
-                        ret.append("\n</td></tr>\n");
-                        ret.append("\n<tr><td valign=\"top\" bgcolor=\"#FFFFFF\">");
+
+
+                        ret.append("\n <div  id=\"repositorio\" >");
+                        ret.append("\n<div id=\"titulo\">");
+                        ret.append("\n<p>" + base.getTitle() + "</p>");
+                        //ret.append("\n<p>" +  ((base.getDescription() != null) ? base.getDescription() : "") + "</p>");
+                        ret.append("\n</div>");
                         if (i_log == 1) {
-                            ret.append("<table width=\"100%\"  border=\"0\" cellspacing=\"0\" valign=top>");
-                            ret.append("\n<tr><td valign=top>");
-                            
-                            ret.append("\n<table boder=0 width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">");
-                            ret.append("\n<tr><td>");
-                            
-                            ret.append("\n<table id=\"Table_01\" width=\"297\" height=\"138\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
-                            ret.append("\n   <tr>");
-                            ret.append("\n<td colspan=\"2\" rowspan=\"2\"> <img src=\"" + path1 + "folderinsin_01.gif\" width=\"98\" height=\"14\" alt=\"\"></td>");
-                            ret.append("\n<td colspan=\"3\"> <img src=\"" + path1 + "folderinsin_02.gif\" width=\"198\" height=\"7\" alt=\"\"></td>");
-                            ret.append("\n<td width=\"4\"> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"7\" alt=\"\"></td>");
-                            ret.append("\n</tr>");
-                            ret.append("\n<tr>");
-                            ret.append("\n<td width=\"681\"> <img src=\"" + path1 + "folderinsin_03.gif\" width=\"100%\" height=\"7\" alt=\"\"></td>");
-                            ret.append("\n<td colspan=\"2\" rowspan=\"2\" valign=top> <img src=\"" + path1 + "folderinsin_04.gif\" width=\"16\" height=\"15\" alt=\"\"></td>");
-                            ret.append("\n<td> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"7\" alt=\"\"></td>");
-                            ret.append("\n</tr>");
-                            ret.append("\n<tr>");
-                            ret.append("\n<td width=\"4\" rowspan=\"3\"> <img src=\"" + path1 + "folderinsin_05.gif\" width=\"4\" height=\"100%\" alt=\"\"></td>");
-                            ret.append("\n<td colspan=\"2\" rowspan=\"3\" bgcolor=\"#FFFFFF\">");
-                            ret.append(tree.getHtml(request, response, user, topic, arguments, topic.getWebSite().getWebPage(home), paramsRequest));
-                            ret.append("<p align=center valign=top>");
-                            ret.append("<IMG src=\"" + path1 + "line.gif\" width=\"100%\" height=\"5\">");
+                            ret.append("<div id=\"dir\">");
+
                             //************************** menu directorios ********************************************
-                            
                             if (!"AdmTopics".equals(repobj)) {
                                 int islog = 0;
                                 if (user.isSigned()) {
                                     islog = 1;
                                 }
-                                
+
+                                ret.append("<div id=\"diropcion\">");
+
                                 if (level > 1 && user.isSigned()) {
-                                    ret.append("\n<a href=\"javascript: doCreateTopic(" + islog + ");\"><img src=\"" + path1 + paramsRequest.getLocaleString("img_b_create") + ".gif\" alt=\"" + paramsRequest.getLocaleString("msgAltCreateDirectory") + "\" border=0></a>\n");
+                                    ret.append("\n<a  class=\"crear\" href=\"#\" onclick=\"javascript: doCreateTopic(" + islog + ");\" title=\"" + paramsRequest.getLocaleString("msgAltCreateDirectory") + "\" ><span>crear</span></a>\n");
                                 }
                                 if (level > 2 && !home.equals(reptp)) {
-                                    
-                                    ret.append("\n<a onclick=\"javascript: doDeleteTopic(" + islog + ");\"><img src=\"" + path1 + paramsRequest.getLocaleString("img_b_delete") + ".gif\" alt=\"" + paramsRequest.getLocaleString("msgAltDelDirectory") + "\" border=0></a>\n");
+
+                                    ret.append("\n<a class=\"eliminar\" href=\"#\" onclick=\"javascript: doDeleteTopic(" + islog + ");\" title=\"" + paramsRequest.getLocaleString("msgAltDelDirectory") + "\"><span>eliminar</span></a>\n");
                                 }
                                 if (level > 2 && user.isSigned()) {
-                                    
-                                    ret.append("\n<a href=\"javascript: doChangeTopic(" + islog + ");\"><img src=\"" + path1 + paramsRequest.getLocaleString("img_b_edit") + ".gif\" alt=\"" + paramsRequest.getLocaleString("msgAltRenDirectory") + "\" border=0></a>\n");
+
+                                    ret.append("\n<a class=\"editar\" href=\"#\" onclick=\"javascript: doChangeTopic(" + islog + ");\" title=\"" + paramsRequest.getLocaleString("msgAltRenDirectory") + "\"><span>editar</span></a>\n");
                                 }
+                                ret.append("</div>");
                             }
-                            
-                            ret.append("</p></td>");
-                            ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"8\"></td>");
-                            ret.append("</tr>");
-                            ret.append("<tr>");
-                            ret.append("<td width=\"12\" rowspan=\"2\"> <img src=\"" + path1 + "folderinsin_07.gif\" width=\"12\" height=\"100%\"></td>");
-                            ret.append("<td width=\"4\" valign=top> <img src=\"" + path1 + "folderinsin_08.gif\" width=\"4\" height=\"100%\"></td>");
-                            ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"106\" ></td>");
-                            ret.append("</tr>");
-                            ret.append("<tr>");
-                            ret.append("<td> <img src=\"" + path1 + "folderinsin_09.gif\" width=\"4\" height=\"100%\"></td>");
-                            ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"2\"></td>");
-                            ret.append("</tr>");
-                            ret.append("<tr>");
-                            ret.append("<td> <img src=\"" + path1 + "folderinsin_10.gif\" width=\"4\" height=\"7\" ></td>");
-                            ret.append("<td colspan=\"3\"> <img src=\"" + path1 + "folderinsin_11.gif\" width=\"100%\" height=\"7\" ></td>");
-                            ret.append("<td> <img src=\"" + path1 + "folderinsin_12.gif\" width=\"4\" height=\"7\" ></td>");
-                            ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"7\" ></td>");
-                            ret.append("</tr>");
-                            ret.append("<tr>");
-                            ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"4\" height=\"1\" ></td>");
-                            ret.append("<td width=\"94\"> <img src=\"" + path1 + "spacer.gif\" width=\"94\" height=\"1\" ></td>");
-                            ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"182\" height=\"1\" ></td>");
-                            ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"12\" height=\"1\" </td>");
-                            ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"4\" height=\"1\" ></td>");
-                            ret.append("<td></td>");
-                            ret.append("</tr>");
-                            ret.append("</table>");
-                            
-                            ret.append("\n</td></tr>");
-                            ret.append("\n</table>");
+                            ///// directorios o carpetas
+                            ret.append(tree.getHtml(request, response, user, topic, arguments, topic.getWebSite().getWebPage(home), paramsRequest));
+
+                            ret.append("</div>");
                             ///////////////////////////////////////////////////  muestra archivos en el folder
-                            ret.append("\n</td><td valign=top>");
-                            ret.append("\n<table id=\"Table_02\" width=\"100%\" height=\"138\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
-                            ret.append("\n   <tr>");
-                            ret.append("\n<td colspan=\"2\" rowspan=\"2\"> <img src=\"" + path1 + "folderinsin_01.gif\" width=\"98\" height=\"14\" ></td>");
-                            ret.append("\n<td colspan=\"3\"> <img src=\"" + path1 + "folderinsin_02.gif\" width=\"198\" height=\"7\"></td>");
-                            ret.append("\n<td width=\"4\"> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"7\" ></td>");
-                            ret.append("\n</tr>");
-                            ret.append("\n<tr>");
-                            ret.append("\n<td width=\"681\"> <img src=\"" + path1 + "folderinsin_03.gif\" width=\"100%\" height=\"7\" ></td>");
-                            ret.append("\n<td colspan=\"2\" rowspan=\"2\" valign=top> <img src=\"" + path1 + "folderinsin_04.gif\" width=\"16\" height=\"15\"></td>");
-                            ret.append("\n<td> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"7\"></td>");
-                            ret.append("\n</tr>");
-                            ret.append("\n<tr>");
-                            ret.append("\n<td width=\"4\" rowspan=\"3\"> <img src=\"" + path1 + "folderinsin_05.gif\" width=\"4\" height=\"100%\"></td>");
-                            ret.append("\n<td colspan=\"2\" rowspan=\"3\" bgcolor=\"#FFFFFF\">");
-                            
-                            
+                            ret.append("<div id=\"file\">");
                             if ("AdmTopics".equals(repobj)) {
-                                
                                 if ("create".equals(repacc)) {
                                     ret.append(admtp.create(request, response, user, topic, arguments, dir, paramsRequest));
                                 } else if ("createUpd".equals(repacc)) {
@@ -582,54 +415,20 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                                     ret.append(admtp.changeNameUpd(request, response, user, topic, arguments, dir, paramsRequest));
                                 }
                             } else if ("Notification".equals(repobj)) {
-                                
                                 ret.append(notify.getHtml(request, response, user, topic, arguments, dir, paramsRequest));
                             } else {
                                 ret.append(files.getHtml(request, response, user, topic, arguments, dir, level, paramsRequest));
                             }
-                            
-                            ret.append("</td>");
-                            ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"8\" ></td>");
-                            ret.append("</tr>");
-                            ret.append("<tr>");
-                            ret.append("<td width=\"12\" rowspan=\"2\"> <img src=\"" + path1 + "folderinsin_07.gif\" width=\"12\" height=\"100%\" ></td>");
-                            ret.append("<td width=\"4\" valign=top> <img src=\"" + path1 + "folderinsin_08.gif\" width=\"4\" height=\"100%\" ></td>");
-                            ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"106\" ></td>");
-                            ret.append("</tr>");
-                            ret.append("<tr>");
-                            ret.append("<td> <img src=\"" + path1 + "folderinsin_09.gif\" width=\"4\" height=\"100%\" ></td>");
-                            ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"2\" ></td>");
-                            ret.append("</tr>");
-                            ret.append("<tr>");
-                            ret.append("<td> <img src=\"" + path1 + "folderinsin_10.gif\" width=\"4\" height=\"7\" ></td>");
-                            ret.append("<td colspan=\"3\"> <img src=\"" + path1 + "folderinsin_11.gif\" width=\"100%\" height=\"7\" ></td>");
-                            ret.append("<td> <img src=\"" + path1 + "folderinsin_12.gif\" width=\"4\" height=\"7\" ></td>");
-                            ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"1\" height=\"7\" ></td>");
-                            ret.append("</tr>");
-                            ret.append("<tr>");
-                            ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"4\" height=\"1\" ></td>");
-                            ret.append("<td width=\"94\"> <img src=\"" + path1 + "spacer.gif\" width=\"94\" height=\"1\" ></td>");
-                            ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"182\" height=\"1\" ></td>");
-                            ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"12\" height=\"1\" ></td>");
-                            ret.append("<td> <img src=\"" + path1 + "spacer.gif\" width=\"4\" height=\"1\" ></td>");
-                            ret.append("<td></td>");
-                            ret.append("</tr>");
-                            ret.append("</table>");
+                            ret.append("</div>");
                         } else {
-                            ret.append("<span class=\"Estilo6\"><font size=2 face=arial>" + paramsRequest.getLocaleString("msgMostSigned") + "</font></span>");
+                            ret.append("<p>" + paramsRequest.getLocaleString("msgMostSigned") + "</p>");
                         }
-                        ret.append("\n</td></tr>");
-                        
-                        ret.append("\n</table>");
-                        ret.append("\n</td></tr>");
-                        
-                        ret.append("\n</table>");
-                        ret.append("\n</font>");
+                        ret.append("</div>");
                     }
                 }
-                
+
             }
-            
+
         } catch (Exception e) {
             log.error("Error in Repository.doView() with resouce id" + ": " + base.getId(), e);
         }
@@ -643,10 +442,10 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
 //            System.out.println(parametro+" -> "+request.getParameter(parametro));
 //        }
 //        System.out.println("<<<<<<<<<<<<<<<<<<<<<<");
-        
+
         try {
             String param2 = request.getParameter("repobj");
-            
+
             if (paramsRequest.getCallMethod() != paramsRequest.Call_DIRECT) {
                 response.getWriter().println(ret.toString());
             } //            else if(paramsRequest.getCallMethod() == paramsRequest.Call_DIRECT && !sub.equals("true"))
@@ -658,8 +457,8 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
             } else {
                 //System.out.println("No imprime nada...");
             }
-            
-            
+
+
         } catch (Exception e) {
             log.error("Error while trying to getWriter() in class Repository.doView()", e);
         }
@@ -718,7 +517,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
         } catch (Exception e) {
             existe = false;
         }
-        
+
         if (!existe) {
             try {
                 String dbname = SWBUtils.DB.getDatabaseName().toLowerCase();
@@ -769,7 +568,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                 if (conn != null) {
                     conn.close();
                 }
-                
+
             } catch (Exception e) {
                 log.error("Error on method install Repository resource", e);
             } finally {
@@ -806,7 +605,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
         try {
             //Connection conn = null;
             String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
-            conn = SWBUtils.DB.getConnection(tmp_conn, "Repository.uninstall()");            
+            conn = SWBUtils.DB.getConnection(tmp_conn, "Repository.uninstall()");
             pst1 = conn.prepareStatement("select * from wbresourcetype where idtm<>? and objclass=? ");
             pst1.setString(1, recobj.getWebSite().getId());
             pst1.setString(2, "com.infotec.wb.resources.repository.Repository");
@@ -842,7 +641,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
             } catch (Exception e3) {
             }
         }
-        
+
         Connection con = null;
         String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
         Statement st = null;
@@ -856,10 +655,10 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
         String strparttwo = null;
         String lresid = "0";
         int j = 0;
-        
+
         HashMap hmtables = new HashMap();
         //TopicMgr tpmgr = TopicMgr.getInstance();
-        
+
         try {
             // Get the related records
             //con = WBUtils.getInstance().getDBConnection();
@@ -869,7 +668,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
             rs = pst.executeQuery();
             while (rs.next()) {
                 lresid = rs.getString("resId");
-                
+
                 strtopic = rs.getString("topic");
                 if (strtopic != null) {
                     j = 0;
@@ -923,9 +722,9 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
             } catch (Exception e3) {
             }
         }
-        
-        
-        
+
+
+
         if (!existe) {
             try {
                 //con = WBUtils.getInstance().getDBConnection();
@@ -957,7 +756,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                 // eliminar folder con su contenido dentro del folder work, sites, repositorio //REVISAR RUTA
                 //WBUtils.getInstance().getWorkPath()+"/"+recobj.getTopicMapId()+"/resources/"+recobj.getName()
                 SWBUtils.IO.removeDirectory(SWBUtils.getApplicationPath() + "/work/models/" + recobj.getWebSite().getId() + "/Resource/" + recobj.getId());
-                
+
             } catch (Exception e) {
                 log.error("Error on method uninstall of Repository resource", e);
             } finally {
@@ -1046,7 +845,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                 } catch (Exception e3) {
                 }
             }
-            
+
         }
     }
 
@@ -1082,7 +881,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
         String s_sql = null;
         String cmd = null;
         String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "swb");
-        
+
         PrintWriter out = response.getWriter();
         String accion = paramsRequest.getAction();
         User user = paramsRequest.getUser();
@@ -1104,41 +903,40 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
 
         strTopicMap = request.getParameter("tm");
         strTopic = request.getParameter("topic");
-        if(strTopicMap==null) strTopicMap = paramsRequest.getWebPage().getWebSiteId();
-        if(strTopic==null) strTopic = paramsRequest.getWebPage().getId();
+        if (strTopicMap == null) {
+            strTopicMap = paramsRequest.getWebPage().getWebSiteId();
+        }
+        if (strTopic == null) {
+            strTopic = paramsRequest.getWebPage().getId();
+        }
         WebSite topicMap = getResourceBase().getWebSite();
         strTopicMap = topicMap.getId();
-        
+
         if (accion.equals("add")) {
-            
+
             topic = topicMap.getWebPage(strTopic);
             if (topic != null) {
                 WebPage aux = WebPage.ClassMgr.createWebPage("CNFWB_Rep" + base.getId(), topicMap);
                 org.semanticwb.model.Language lang = org.semanticwb.model.Language.ClassMgr.getLanguage(user.getLanguage(), topicMap);
                 aux.setLanguage(lang);
                 aux.setTitle(base.getTitle());
-                //BaseName bn=new BaseName(base.getTitle());
-                //aux.addBaseName(bn);
-//                bn.setScope(new Scope(topic.getMap().getlang()));
                 aux.setParent(topic);
-
-//                topic.getMap().update2DB();
             }
         }
 
         // -------------------------- Inicia remove
-        
+
         if (accion.equals("remove")) {
             strAdmin = "0";
             String strTMId = paramsRequest.getWebPage().getWebSiteId();
             flag = true;
             strTopic = "CNFWB_Rep" + base.getId();
-            
+
             topic = topicMap.getWebPage(strTopic);
             Connection conn = null;
             PreparedStatement pst = null;
             ResultSet rsdocs = null;
-            
+
             try {
                 conn = SWBUtils.DB.getConnection(tmp_conn, "Repository.doAdmin() -- remove --");
                 String sql = "select * from resrepository where resid = ? and idtm=?";
@@ -1146,9 +944,9 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                 pst.setString(1, base.getId());
                 pst.setString(2, base.getWebSiteId());
                 rsdocs = pst.executeQuery();
-                
+
                 while (rsdocs.next()) {  // borrando de la tabla de resrepositoryversions
-                    
+
                     PreparedStatement pstver = conn.prepareStatement("delete from resrepositoryversions where rep_docId = ? and idtm=?");
                     pstver.setLong(1, rsdocs.getLong("rep_docId"));
                     pstver.setString(2, rsdocs.getString("idtm"));
@@ -1156,14 +954,14 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                     pstver.close();
                     pstver = null;
                 }
-                
+
                 rsdocs.close();
                 pst.close();
                 rsdocs = null;
                 pst = null;
                 conn.close();
                 conn = null;
-                
+
             } catch (Exception e) {
                 log.error("Error while getting repository file records. Repository.doAdmin(remove)", e);
             } finally {
@@ -1189,7 +987,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                 } catch (Exception e3) {
                 }
             }
-            
+
             if (topic != null) {
                 Iterator<WebPage> itetopics = topic.listChilds();
                 while (itetopics.hasNext()) {
@@ -1202,8 +1000,8 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                         pst.setString(2, tpIter.getId());
                         int deleted = pst.executeUpdate();
                         pst.close();
-                        
-                        
+
+
                         sql = "delete from resrepositorynotify where idtm=? and topic = ?";
                         PreparedStatement pst2 = conn.prepareStatement(sql);
                         pst2.setString(1, strTMId);
@@ -1211,7 +1009,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                         deleted = pst2.executeUpdate();
                         pst2.close();
                         conn.close();
-                        
+
                         PreparedStatement pstlog = conn.prepareStatement("delete from resrepositorylog where rep_topicid = ? and rep_topicmapid = ?");
                         pstlog.setString(1, tpIter.getId());
                         pstlog.setString(2, strTMId);
@@ -1226,8 +1024,8 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                     }
                 }
             }
-            
-            
+
+
             if (topic != null) {
                 Iterator<WebPage> itetopics = topic.listChilds();
                 while (itetopics.hasNext()) {
@@ -1243,7 +1041,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                         int deleted = pst.executeUpdate();
                         pst.close();
                         pst = null;
-                        
+
                         sql = "delete from resrepositorynotify where idtm=? and topic = ?";
                         pst2 = conn.prepareStatement(sql);
                         pst2.setString(1, strTMId);
@@ -1251,14 +1049,14 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                         deleted = pst2.executeUpdate();
                         pst2.close();
                         pst2 = null;
-                        
+
                         pstlog = conn.prepareStatement("delete from resrepositorylog where rep_topicid = ? and rep_topicmapid = ?");
                         pstlog.setString(1, tpIter.getId());
                         pstlog.setString(2, strTMId);
                         int logborrado = pstlog.executeUpdate();
                         pstlog.close();
                         pstlog = null;
-                        
+
                         conn.close();
                         conn = null;
                     } catch (Exception e) {
@@ -1302,7 +1100,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                     }
                 }
             }
-            
+
             PreparedStatement psttp = null;
             PreparedStatement pstnot = null;
             PreparedStatement pstlog = null;
@@ -1314,24 +1112,24 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                 int tpborrado = psttp.executeUpdate();
                 psttp.close();
                 psttp = null;
-                
+
                 pstnot = conn.prepareStatement("delete from resrepositorynotify where idtm=? and topic = ?");
                 pstnot.setString(1, strTMId);
                 pstnot.setString(2, strTopic);
                 int tpnot = pstnot.executeUpdate();
                 pstnot.close();
                 pstnot = null;
-                
+
                 pstlog = conn.prepareStatement("delete from resrepositorylog where rep_topicid = ? and rep_topicmapid = ?");
                 pstlog.setString(1, strTopic);
                 pstlog.setString(2, strTMId);
                 int logborrado = pstlog.executeUpdate();
                 pstlog.close();
                 pstlog = null;
-                
+
                 conn.close();
                 conn = null;
-                
+
             } catch (Exception e) {
                 log.error("Error while getting repository file records. Repository.doAdmin(remove)", e);
             } finally {
@@ -1364,32 +1162,30 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                 } catch (Exception e4) {
                 }
             }
-            
-            
+
+
             if (topic != null) {
-                //WebSite tpmap = topic.getWebSite();
                 topic.remove();
-                //tpmap.removeTopicandChild(user,topic.getId());
-                //tpmap.update2DB();
                 SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + base.getWorkPath());
             }
-            
+
         }  // ----------------- Termina remove
-        
+
         out.println("<div class=box>");
         out.println("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"10\">");
         out.println("<tr>");
         out.println("<td class=tabla>");
         out.println("Repository Resource" + "</td>");
         out.println("</tr>");
-        
-        
+
+
         if (!accion.equals("addrule")) {
             if (accion.equals("ShowOld")) {
                 try {
-                    //con = WBUtils.getInstance().getDBConnection();
                     con = SWBUtils.DB.getConnection(tmp_conn, "Repository.doAdmin() -- recover folder --");
-                    if(null==con) con = SWBUtils.DB.getDefaultConnection();
+                    if (null == con) {
+                        con = SWBUtils.DB.getDefaultConnection();
+                    }
                     cmd = request.getParameter("cmd");
                     WebSite oTM = null;
                     WebPage oRep = null;
@@ -1411,7 +1207,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                             //oTM.update2DB();
                             //si se pudo recuperar los t�picos (sub directorios), se recuperaran los archivos al directorio.
                         }
-                        
+
                         ps = con.prepareStatement("update resrepository set rep_deleted = 0 where rep_docId=? and idtm=?");
                         ps.setLong(1, Long.parseLong(request.getParameter("docid")));
                         ps.setString(2, strTMParam);
@@ -1424,7 +1220,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                                 String[] values = request.getParameterValues("ifile");
                                 for (int i = 0; i < values.length; i++) {
                                     id = Long.parseLong(values[i]);
-                                    
+
                                     ps = con.prepareStatement("select * from resrepository where rep_docId=? and idtm=?");
                                     ps.setLong(1, id);
                                     ps.setString(2, strTopicMap);
@@ -1442,7 +1238,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                                     }
                                     rsCheck.close();
                                     ps.close();
-                                    
+
                                     ps = con.prepareStatement("delete from resrepository where rep_docId=? and idtm=?");
                                     ps.setLong(1, id);
                                     ps.setString(2, strTopicMap);
@@ -1458,31 +1254,24 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                                     ps.setString(2, strTopicMap);
                                     ps.executeUpdate();
                                     ps.close();
-                                    
+
                                     // Quitar archhivos del index
-                                    
+
                                     File fdir = new File(SWBPortal.getWorkPath() + "/" + base.getWorkPath() + "/");
                                     String filestarts = id + "_";
-                                    File[] files=fdir.listFiles();
+                                    File[] files = fdir.listFiles();
                                     // eliminando archivos
                                     SWBIndexer swbindx = SWBPortal.getIndexMgr().getDefaultIndexer();
-                                    for(int j=0;j<files.length;j++)
-                                    {
-                                        File f=files[j];
-                                        if(f.getName().startsWith(filestarts))
-                                        {
-                                            if(f.exists()&&j==(files.length-1))
-                                            {
-                                                
-                                                if(swbindx!=null)
-                                                {
-                                                    try
-                                                    {
-                                                        swbindx.removeSearchable("file:"+f.getAbsolutePath());  // Para eliminar un archivo del index
-                                                    }
-                                                    catch(Exception ex)
-                                                    {
-                                                        log.error("Error while trying to remove a file from index.",ex);
+                                    for (int j = 0; j < files.length; j++) {
+                                        File f = files[j];
+                                        if (f.getName().startsWith(filestarts)) {
+                                            if (f.exists() && j == (files.length - 1)) {
+
+                                                if (swbindx != null) {
+                                                    try {
+                                                        swbindx.removeSearchable("file:" + f.getAbsolutePath());  // Para eliminar un archivo del index
+                                                    } catch (Exception ex) {
+                                                        log.error("Error while trying to remove a file from index.", ex);
                                                     }
                                                 }
                                             }
@@ -1494,7 +1283,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                             }
                         }
                     }
-                    
+
                     s_sql = "select * from resrepository where resId = ? and rep_deleted = ? and idtm = ? order by rep_title";
                     ps = con.prepareStatement(s_sql);
                     ps.setString(1, base.getId());
@@ -1512,7 +1301,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                     SWBResourceURL urlShowOld = paramsRequest.getRenderUrl();
                     urlShowOld.setMode(paramsRequest.Mode_ADMIN);
                     urlShowOld.setAction("ShowOld");
-                    
+
                     out.println("<form action=\"" + urlShowOld.toString() + "\" name=\"frmdelfile\" method=POST><input type=\"hidden\" name=\"cmd\" value=\"del_file\">");
                     out.println("<input type=\"hidden\" name=\"tm\" value=\"" + strTopicMap + "\"><input type=\"hidden\" name=\"topic\" value=\"" + strTopic + "\"><input type=\"hidden\" name=\"ifile\" value=\"\">");
                     out.println("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"5\">");
@@ -1544,7 +1333,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                             String idSub = "";
                             int intDeleted = 0;
                             WebSite tpMAP = WebSite.ClassMgr.getWebSite(tmsid);
-                            
+
                             WebPage tpSubDir = tpMAP.getWebPage(tpsid); //,true);
                             if (tpSubDir != null) {
                                 if (tpSubDir.isDeleted()) {
@@ -1555,39 +1344,41 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                                 nameFolder = tpSubDir.getDisplayName(user.getLanguage()) + folderborrado;
                             } else {
                                 tpSubDir = tpMAP.getWebPage(tpsid); //,false);
-                                if(tpSubDir!=null) nameFolder = tpSubDir.getDisplayName(user.getLanguage());
-                                else nameFolder = "Carpeta no encontrada: ("+tpsid+")";
+                                if (tpSubDir != null) {
+                                    nameFolder = tpSubDir.getDisplayName(user.getLanguage());
+                                } else {
+                                    nameFolder = "Carpeta no encontrada: (" + tpsid + ")";
+                                }
                             }
-                            
+
                             WebSite wsite = paramsRequest.getWebPage().getWebSite();
-                            String userID =repemail;
-                            if(repemail.indexOf("_")!=-1){
-                                userID = repemail.substring(0,repemail.indexOf("_"));
+                            String userID = repemail;
+                            if (repemail.indexOf("_") != -1) {
+                                userID = repemail.substring(0, repemail.indexOf("_"));
                             }
-                            
+
                             //String userRepoID = repemail.substring(repemail.indexOf("_"));
                             //System.out.println("usr Repo id : "+userRepoID);
-                            
+
                             UserRepository urepo = wsite.getUserRepository();
-                            
+
                             //UserRepository urepo = UserRepository.ClassMgr.getUserRepository(userRepoID);
-                           // if(null==urepo) urepo = wsite.getUserRepository();
-                            
+                            // if(null==urepo) urepo = wsite.getUserRepository();
+
                             out.println("<td class=datos>" + nameFolder + "</td>");
                             out.println("<td class=datos>" + reptitle + "</td>");
                             out.println("<td class=datos>" + SWBUtils.TEXT.getStrDate(new java.util.Date(repcreate.getTime()), "es") + "</td>");
                             //System.out.println("email de la db: "+repemail+"-----"+userID);
                             User usrrepo = urepo.getUser(userID);
                             String usrEMAIL = null;
-                            if(usrrepo!=null&&usrrepo.getEmail()!=null) {
+                            if (usrrepo != null && usrrepo.getEmail() != null) {
                                 usrEMAIL = usrrepo.getEmail();
-                            }
-                            else {
+                            } else {
                                 usrEMAIL = "No se encontró usuario";
                             }
-                            
+
                             out.println("<td class=datos><a href=\"mailto:" + usrEMAIL + "\">" + usrEMAIL + "</a></td>");
-                            
+
                             out.println("<td class=datos>");
                             if (canRecover(str_tm, str_topic)) {
                                 out.println("<a class=link href=\"javascript: DoRecover(" + str_doc + "," + intDeleted + ",'" + idSub + "');\">" + "<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/recover.gif\" border=0 title=\"" + paramsRequest.getLocaleString("msgAltRestore") + "\" >" + "</a>");
@@ -1614,7 +1405,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                     SWBResourceURL urlEdit = paramsRequest.getRenderUrl();
                     urlEdit.setMode(paramsRequest.Mode_ADMIN);
                     urlEdit.setAction("edit");
-                    
+
                     out.println("<form name=\"frmredir\" action=\"" + urlEdit.toString() + "\" method=\"post\">");
                     out.println("<input type=\"hidden\" name=\"tm\" value=\"" + strTopicMap + "\"><input type=\"hidden\" name=\"topic\" value=\"" + strTopic + "\">");
                     out.println("</form>");
@@ -1633,7 +1424,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                     out.println("      }");
                     out.println("  }");
                     out.println("  function DoRecover(ivar,f_erased,id_sub){");
-                    
+
                     out.println("      if(f_erased=='1') ");
                     out.println("       {");
                     out.println("           if(confirm('" + "Si recuperas este archivo se recuperara el folder. \\n \\n �Est�s seguro de querer hacerlo?" + "')) ");
@@ -1659,7 +1450,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                     out.println("      ");
                     out.println("  }");
                     out.println("</script>");
-                    
+
                 } catch (Exception e) {
                     log.error("Error in method Repository.doAdmin() when action is ShowOld, resource is " + base.getId(), e);
                 } finally {
@@ -1667,7 +1458,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                     ps = null;
                     con = null;
                 }
-                
+
             } else {
                 if (base.getAttribute("view") != null) {
                     strView = base.getAttribute("view");
@@ -1710,14 +1501,14 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                         break;
                     }
                 }
-                
+
                 out.println("<tr> ");
                 out.println("<td class=valores>");
-                
+
                 SWBResourceURL urlAddRule = paramsRequest.getRenderUrl();
                 urlAddRule.setMode(paramsRequest.Mode_ADMIN);
                 urlAddRule.setAction("addrule");
-                
+
                 out.println("<form name=\"myForm\" onSubmit=\" if(DoValidate()) return true;\" enctype=\"multipart/form-data\" action=\"" + urlAddRule.toString() + "\" method=\"POST\">");
                 out.println("<table  width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"10\">");
 
@@ -1733,7 +1524,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                 if (strRules.toString().length() > 0) {
                     strTemp = strRules.toString();
                 }
-                
+
                 out.println("<tr><td colspan=2 class=valores><B>" + paramsRequest.getLocaleString("msgRolesDefinitionLevel") + "</b></td></tr>");
                 out.println("<tr><td align=right class=valores width=150>" + paramsRequest.getLocaleString("msgView") + ":</td>");
                 out.println("<td><select name=\"ver\" class=campos>" + strTemp + "</select><input type=\"checkbox\" name=\"guest\" id=\"guest\" value=\"true\" " + (strGuest.equals("true") ? "checked" : "") + "><label for=\"guest\">usuario an&oacute;nimo</label></td></tr>");
@@ -1745,9 +1536,9 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                 out.println("<td><input class=campos type=\"checkbox\" name=\"showdirectory\" value=\"1\" " + strCheck + " " + strEnable + ">");
                 out.println("<input type=\"hidden\" name=\"showdirectoryaux\" value=\"" + i_chk + "\"");
                 out.println("</td></tr>");
-                
+
                 out.println("<tr><td align=right class=valores width=150>" + paramsRequest.getLocaleString("msgCreateNotificationMessage") + ":</td>");
-                
+
                 strNotify = "";
                 if (base.getAttribute("notifycreate") != null) {
                     strNotify = base.getAttribute("notifycreate");
@@ -1762,10 +1553,10 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                     strMsg.append("\n   " + paramsRequest.getLocaleString("msgCreationUser") + ":   {getUserName} <{getUserEmail}>");
                     strNotify = strMsg.toString();
                 }
-                
+
                 out.println("<td><textarea class=campos name=\"notificationcreate\" cols=60 rows=10>" + strNotify + "</textarea></td></tr>");
                 out.println("<tr><td align=right class=valores width=150>" + paramsRequest.getLocaleString("msgUpdNotificationMessage") + ":</td>");
-                
+
                 strNotify = "";
                 if (base.getAttribute("notifyupdate") != null) {
                     strNotify = base.getAttribute("notifyupdate");
@@ -1782,10 +1573,10 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                     strMsg.append("\n        {getComments}");
                     strNotify = strMsg.toString();
                 }
-                
+
                 out.println("<td><textarea class=campos name=\"notificationupdate\" cols=60 rows=10>" + strNotify + "</textarea></td></tr>");
                 out.println("<tr><td align=right class=valores width=150>" + paramsRequest.getLocaleString("msgRemoveNotificationMessage") + ":</td>");
-                
+
                 strNotify = "";
                 if (base.getAttribute("notifyremove") != null) {
                     strNotify = base.getAttribute("notifyremove");
@@ -1798,11 +1589,11 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                     strMsg.append("\n   " + paramsRequest.getLocaleString("msgUserName") + ":       {getUserName} <{getUserEmail}>");
                     strNotify = strMsg.toString();
                 }
-                
+
                 out.println("<td><textarea class=campos name=\"notificationremove\" cols=60 rows=10>" + strNotify + "</textarea></td></tr>");
                 out.println("<tr><td colspan=2 align=right><HR noshade size=1><INPUT type=\"submit\" class=\"boton\" value=\"" + paramsRequest.getLocaleString("msgBTNAccept") + "\" id=\"btnEnviar\" name=\"btnEnviar\" >&nbsp;<input type=button class=boton onclick=\"javascript:DoOld();\" value=\"" + paramsRequest.getLocaleString("msgBTNViewOldFiles") + "\">");
                 out.println("</td></tr>");
-                
+
                 out.println("<tr><td colspan=2 class=valores><br>* " + paramsRequest.getLocaleString("msgNotificationKeys") + ":</td></tr>");
                 out.println("<tr><td colspan=2 class=datos>");
                 out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getUserName}   " + paramsRequest.getLocaleString("msgCompleteUserName"));
@@ -1815,7 +1606,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                 out.println("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getDocLink} " + paramsRequest.getLocaleString("msgDocLink"));
                 out.println("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getLastUpdate} " + paramsRequest.getLocaleString("msgLastDateModification"));
                 out.println("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getComments}   " + paramsRequest.getLocaleString("msgModificationComment"));
-                
+
                 out.println("</font></td></tr>");
 
                 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1827,11 +1618,11 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                 out.println("</p>");
                 out.println("<script language=javascript>");
                 out.println("  function DoOld(){");
-                
+
                 SWBResourceURL urlShowOld = paramsRequest.getRenderUrl();
                 urlShowOld.setMode(paramsRequest.Mode_ADMIN);
                 urlShowOld.setAction("ShowOld");
-                
+
                 out.println("      window.document.frmold.action=\"" + urlShowOld.toString() + "\";");
                 out.println("      window.document.frmold.submit();");
                 out.println("  }");
@@ -1845,7 +1636,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                 out.println("<form action=\"\" name=\"frmold\" method=POST>");
                 out.println("<input type=\"hidden\" name=\"tm\" value=\"" + strTopicMap + "\"><input type=\"hidden\" name=\"topic\" value=\"" + strTopic + "\">");
                 out.println("</form>");
-                
+
                 if (flag) {
                     if (strView.equals("-1")) {
                         strView = "0";
@@ -1865,9 +1656,9 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                 }
             }
             out.println("</td>");
-                    out.println("</tr>");
-                    out.println("</table>");
-                    out.println("</div>");
+            out.println("</tr>");
+            out.println("</table>");
+            out.println("</div>");
         } else {
             try {
                 FileUpload fUpload = new FileUpload();
@@ -1883,7 +1674,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                         flag = true;
                     }
                 }
-                
+
                 if (fUpload.getValue("guest") != null) //&& !fUpload.getValue("guest").equals("false")
                 {
                     if (fUpload.getValue("guest").equals("true")) {
@@ -1896,7 +1687,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                     strGuest = "false";
                     flag = true;
                 }
-                
+
                 if (fUpload.getValue("modificar") != null && !fUpload.getValue("modificar").equals("-1")) {
                     if (fUpload.getValue("modificar").equals("0")) {
                         base.removeAttribute("modify");
@@ -1908,7 +1699,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                         flag = true;
                     }
                 }
-                
+
                 if (fUpload.getValue("administrar") != null && !fUpload.getValue("administrar").equals("-1")) {
                     if (fUpload.getValue("administrar").equals("0")) {
                         base.removeAttribute("admin");
@@ -1920,7 +1711,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                         flag = true;
                     }
                 }
-                
+
                 if (fUpload.getValue("showdirectory") != null) {
                     base.setAttribute("showdirectory", "true");
                     strSubDir = "1";
@@ -2094,7 +1885,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
      * @return A string value with the applet html call
      */
     public String tmApplet(String tpid, String tmid, SWBParamRequest paramsRequest) {
-        
+
         StringBuffer sbfRet = new StringBuffer();
         sbfRet.append("<APPLET id=\"appttmadmin\" name=\"appttmadmin\" code=\"applets.mapsadm.TMWBAdmin.class\" codebase=\"" + SWBPlatform.getContextPath() + "\" ARCHIVE=\"swbadmin/lib/TMWBAdmin.jar, swbadmin/lib/WBCommons.jar\" width=\"100%\" height=\"100%\">");
         SWBResourceURL url = paramsRequest.getRenderUrl();
@@ -2112,7 +1903,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
             sbfRet.append("<PARAM NAME=\"TP\" VALUE=\"" + tpid + "\">"); //request.getParameter("tp")
         }
         sbfRet.append("\n</APPLET>");
-        
+
         return sbfRet.toString();
     }
 
@@ -2125,61 +1916,57 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
      */
     @Override
     public void doIndex(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-    
-    //System.out.println("Repository.doIndex");
+
+        //System.out.println("Repository.doIndex");
         Resource base = getResourceBase();
-        String idtm=base.getWebSiteId();
+        String idtm = base.getWebSiteId();
         String resid = base.getId();
         SWBIndexer w_indx = SWBPortal.getIndexMgr().getDefaultIndexer();
 
         Connection conn = null;
-        PreparedStatement pst=null;
-        PreparedStatement pst1=null;
+        PreparedStatement pst = null;
+        PreparedStatement pst1 = null;
         ResultSet rs = null;
         ResultSet rs1 = null;
-        try
-        {
+        try {
             conn = SWBUtils.DB.getDefaultConnection();
             pst = conn.prepareStatement("select topic,rep_title,rep_description,rep_docId,rep_lastVersion from resrepository where resId=? and idtm=?");
             pst.setString(1, resid);
             pst.setString(2, idtm);
             rs = pst.executeQuery();
-            while(rs.next())
-            {
+            while (rs.next()) {
                 String webpageid = rs.getString("topic");
-                String title=rs.getString("rep_title");
-                String description=rs.getString("rep_description");
+                String title = rs.getString("rep_title");
+                String description = rs.getString("rep_description");
                 long docid = rs.getLong("rep_docId");
                 int i_version = rs.getInt("rep_lastVersion");
-                pst1= conn.prepareStatement("select rep_fileName from resrepositoryversions where rep_docId=? and rep_fileVersion=? and idtm=?");
+                pst1 = conn.prepareStatement("select rep_fileName from resrepositoryversions where rep_docId=? and rep_fileVersion=? and idtm=?");
                 pst1.setLong(1, docid);
                 pst1.setInt(2, i_version);
-                pst1.setString(3,idtm);
+                pst1.setString(3, idtm);
                 rs1 = pst1.executeQuery();
-                while(rs1.next())
-                {
-                    String file_name=rs1.getString("rep_fileName");
-                    int pos=file_name.lastIndexOf('.');
-                    if(pos!=-1)
-                    {
-                        String file_db=docid+"_"+i_version+file_name.substring(pos);;
-                        File f = new File(SWBPortal.getWorkPath() +"/"+base.getWorkPath()+"/"+file_db);
+                while (rs1.next()) {
+                    String file_name = rs1.getString("rep_fileName");
+                    int pos = file_name.lastIndexOf('.');
+                    if (pos != -1) {
+                        String file_db = docid + "_" + i_version + file_name.substring(pos);;
+                        File f = new File(SWBPortal.getWorkPath() + "/" + base.getWorkPath() + "/" + file_db);
                         ////////////////// quitar del indice anterior
                         if (f.exists()) {
                             try {
-                               w_indx.removeSearchable("file:"+f.getAbsolutePath());
+                                w_indx.removeSearchable("file:" + f.getAbsolutePath());
                             } catch (Exception ex) {
                                 Repository.log.error("Error while trying to remove a file from index.", ex);
                             }
-                        
-                        //////////////           
-                        
-                        ///// agregando archivo al nuevo indice
+
+                            //////////////           
+
+                            ///// agregando archivo al nuevo indice
                             try {
                                 String type = f.getName();
                                 SWBResourceURL urllineA = paramRequest.getRenderUrl();
                                 urllineA.setCallMethod(SWBResourceURL.Call_DIRECT);
-                                urllineA.setMode(SWBResourceURL.Mode_VIEW);  
+                                urllineA.setMode(SWBResourceURL.Mode_VIEW);
                                 String url = "" + urllineA + "/" + type + "?repfop=view&reptp=" + webpageid + "&repfiddoc=" + Long.toString(docid) + "&repinline=true";
                                 FileSearchWrapper fsw = new FileSearchWrapper(f, title, description, null, url, base);
                                 w_indx.indexSerchable(fsw);
@@ -2196,19 +1983,16 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
             rs.close();
             pst.close();
             conn.close();
-        }
-        catch(Exception e)
-        {
-            log.error(SWBUtils.TEXT.iso8601DateFormat(new java.util.Date(System.currentTimeMillis()))+" - Error while trying to index files of Repository resource with id:"+resid+", from WebSite:"+idtm,e);
-        }
-        finally{
+        } catch (Exception e) {
+            log.error(SWBUtils.TEXT.iso8601DateFormat(new java.util.Date(System.currentTimeMillis())) + " - Error while trying to index files of Repository resource with id:" + resid + ", from WebSite:" + idtm, e);
+        } finally {
             if (conn != null) {
-                    try {
-                        conn.close();
-                    } catch (Exception e) {
-                        log.error("Error in Repository.doIndex",e);
-                    }
+                try {
+                    conn.close();
+                } catch (Exception e) {
+                    log.error("Error in Repository.doIndex", e);
                 }
+            }
         }
     }
 }

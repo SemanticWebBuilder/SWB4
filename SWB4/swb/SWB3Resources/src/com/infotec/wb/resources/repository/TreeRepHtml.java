@@ -111,14 +111,11 @@ public class TreeRepHtml {
             Document dom = null;
             WebPage tpid = null;
             Vector vctPath = new Vector();
-            int intLevel = 4, intWidth = 10;
+            int intLevel =1, intWidth = 10;
             String idhome = null;
             String dir = topic.getId();
-            int widthsize = 15;
-            String backg = " bgcolor=\"FFFFFF\"";
-            String color = "666666";
-            //String path=WBUtils.getInstance().getWorkPath()+base.getResourceWorkPath();
-            String path1 = "" + webpath + "/swbadmin/images/Repository/";
+            int widthsize = 10;
+           String backg = "class=\"cerrado\""; 
 
             if (request.getParameter("reptp") != null && !request.getParameter("reptp").trim().equals("")) {
                 tpid = tm.getWebPage(request.getParameter("reptp"));
@@ -142,96 +139,60 @@ public class TreeRepHtml {
                 tpsite = tm.getHomePage();
             }
 
-
-            sbfRet.append("<TABLE border=\"0\" cellPadding=\"0\" cellSpacing=\"0\" width=\"100%\">");
-            sbfRet.append("<TR>");
-            sbfRet.append("<TD>");
-            sbfRet.append("<FONT class=\"Estilo6\" face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgFolders") + "...</FONT>");
-            sbfRet.append("</TD>");
-            sbfRet.append("</TR>");
-
-
+            sbfRet.append("<ul>");
+            backg = "class=\"cerrado\""; 
             if ((tpid != null && tpid.getId().equals(topic.getId())) || (tpid == null)) {
-                backg = " bgcolor=\"B48222\"";
-                color = "FFFFFF";
+                backg = "class=\"abierto selec\"";
+            } else if(tpid!=null&&tpid.isChildof(topic)) {
+                backg ="class=\"abierto\"";
             }
 
-            sbfRet.append("<TR>");
-            sbfRet.append("<TD" + backg + " >");
-            sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"15\" src=\"" + path1 + "minus.gif\"/>");
-            sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\"" + path1 + "openfolder.gif\"></IMG>");
+            sbfRet.append("<li >");
             url1.setTopic(topic);
-            sbfRet.append("<A href=\"" + url1 + "\">");
-            sbfRet.append("<FONT face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\" style=\"text-decoration: none\" color=\"" + color + "\">&nbsp;&nbsp;" + topic.getDisplayName(user.getLanguage()));
-            sbfRet.append("</FONT>");
-            sbfRet.append("</A>");
-            sbfRet.append("</TD>");
-            sbfRet.append("</TR>");
+            sbfRet.append("<a " + backg + "  href=\"" + url1 + "\">");
+            sbfRet.append( topic.getDisplayName(user.getLanguage()));
+            sbfRet.append("</a>");
+            boolean cerrar = Boolean.FALSE;
 
             Iterator<WebPage> it = sortByOrderedName(tpsite.listChilds());
+            if(it.hasNext()){
+                sbfRet.append("<ul>");
+                cerrar = Boolean.TRUE;
+            }
             while (it.hasNext()) {
                 intLevel = 1;
                 WebPage tp = it.next();
-                if(!tp.isActive()||tp.isDeleted()||tp.isHidden()) continue;
+                if (!tp.isActive() || tp.isDeleted() || tp.isHidden()) {
+                    continue;
+                }
                 if (user.haveAccess(tp) && tp.getId() != null) {
-                    backg = " bgcolor=\"FFFFFF\"";
-                    color = "666666";
+                    
+                    backg = "class=\"cerrado\""; 
                     if (tpid != null && tpid.getId().equals(tp.getId())) {
-                        backg = " bgcolor=\"B48222\"";
-                        color = "FFFFFF";
-                    }
-                    sbfRet.append("<TR>");
-                    sbfRet.append("<TD>");
-                    sbfRet.append("<TABLE border=\"0\" cellPadding=\"0\" cellSpacing=\"0\">");
-                    sbfRet.append("<TR>");
-                    sbfRet.append("<TD>");
-                    sbfRet.append("	<IMG height=\"5\" width=\"5\" border=\"0\" src=\"" + path1 + "pixel.gif\"></IMG>");
-                    sbfRet.append("</TD>");
-                    sbfRet.append("<TD width=\"50\">");
-                    if (sortByOrderedName(tp.listChilds()).hasNext() || vctPath.contains(tp.getId())) {
-                        if (tpid != null && (tpid.getId().equals(tp.getId()) || vctPath.contains(tp.getId()))) {
-                            url1.setTopic(tp);
-                            sbfRet.append("<A href=\"" + url1 + "?reptp=" + tp.getId() + "\">");
-                            sbfRet.append("<IMG height=\"10\" width=\"10\" border=\"0\" src=\"" + path1 + "pixel.gif\"></IMG>");
-                            sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"15\" src=\"" + path1 + "minus.gif\"/>");
-                            sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\"" + path1 + "openfolder.gif\"></IMG>");
-                            sbfRet.append("</A>");
-                        } else {
-                            url1.setTopic(tp);
-                            sbfRet.append("<A href=\"" + url1 + "?reptp=" + tp.getId() + "\">");
-                            sbfRet.append("<IMG height=\"10\" width=\"10\" border=\"0\" src=\"" + path1 + "pixel.gif\"></IMG>");
-                            sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"15\" src=\"" + path1 + "plus.gif\"></IMG>");
-                            sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\"" + path1 + "folder.gif\"></IMG>");
-                            sbfRet.append("</A>");
-                        }
-
-                    } else {
-                        url1.setTopic(tp);
-                        sbfRet.append("<A href=\"" + url1 + "?reptp=" + tp.getId() + "\">");
-                        sbfRet.append("<IMG height=\"10\" width=\"10\" border=\"0\" src=\"" + path1 + "pixel.gif\"></IMG>");
-                        sbfRet.append("<IMG height=\"10\" width=\"15\" border=\"0\" src=\"" + path1 + "pixel.gif\"></IMG>");
-                        sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\"" + path1 + "folder.gif\"></IMG>");
-                        sbfRet.append("</A>");
-                    }
-                    sbfRet.append("</TD>");
-
-                    sbfRet.append("<TD" + backg + ">");
+                        backg = " class=\"abierto selec\"";
+                    } 
+//                    else if(tpid != null && tpid.isParentof(tp)){
+//                        backg ="class=\"abierto\"";
+//                    }
+                    sbfRet.append("<li>");
                     url1.setTopic(tp);
-                    sbfRet.append("<A href=\"" + url1 + "?reptp=" + tp.getId() + "\">");
-                    sbfRet.append("<FONT face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\" style=\"text-decoration: none\" color=\"" + color + "\">&nbsp;" + tp.getDisplayName() + "</FONT></A>");
-                    sbfRet.append("</TD>");
-                    sbfRet.append("</TR>");
-                    sbfRet.append("</TABLE>");
-                    sbfRet.append("</TD>");
-                    sbfRet.append("</TR>");
+                    sbfRet.append("<a " + backg + " href=\"" + url1 + "?reptp=" + tp.getId() + "\">");
+                    sbfRet.append( tp.getDisplayName() +"</a>");
                     if ((intLevel < intMaxLevel || (tpid != null && tp.getId().equals(tpid.getId()))
                             || vctPath.contains(tp.getId())) && sortByOrderedName(tp.listChilds()).hasNext()) {
+                        sbfRet.append("<ul>");
                         sbfRet.append(getChilds(tpid, tp, user, vctPath, intLevel + 1, intWidth, "", widthsize, paramsRequest));
+                        sbfRet.append("</ul>");
                     }
+                    sbfRet.append("</li>");
                 }
             }
-
-            sbfRet.append("</TABLE>");
+            if(cerrar){
+                sbfRet.append("</ul>");
+                cerrar = Boolean.TRUE;
+            }
+            sbfRet.append("</li>");
+            sbfRet.append("</ul>");
 
         } catch (Exception e) {
             Repository.log.error("Error in resource " + "TreeRepHtml:getHtml", e);
@@ -257,12 +218,9 @@ public class TreeRepHtml {
     public String getChilds(WebPage tpid, WebPage tpc, User user, Vector vctPath, int intLevel, int intWidth, String topicrec, int widthsize, SWBParamRequest paramsRequest) {
 
         Document dcmDom = base.getDom();
-        //String strResmaptopic=null;
 
         StringBuffer sbfRet = new StringBuffer();
         try {
-            String path1 = "" + webpath + "/swbadmin/images/Repository/";
-            //String path=WBUtils.getInstance().getWorkPath()+base.getResourceWorkPath();
 
             SWBResourceURLImp url1 = new SWBResourceURLImp(null, base, tpid, SWBResourceURLImp.UrlType_RENDER);
             url1.setMode(url1.Mode_VIEW);
@@ -271,71 +229,31 @@ public class TreeRepHtml {
             while (it.hasNext()) {
                 WebPage tpsub = it.next();
                if(!tpsub.isActive()||tpsub.isDeleted()||tpsub.isHidden()) continue;
-                //if(!tpsub.hasVirtualParent(tpc)) tpsub.addVirtualParent(tpsub);
                 if (tpsub.getId() != null && user.haveAccess(tpsub)) {
                     if (vTopic.contains(tpsub)) {
                         break;
                     }
                     vTopic.addElement(tpsub);
 
-                    String backg = " bgcolor=\"FFFFFF\"";
-                    String color = "666666";
+                    String backg = "class=\"cerrado\""; 
                     if (tpid != null && tpsub.getId().equals(tpid.getId())) {
-                        backg = " bgcolor=\"B48222\"";
-                        color = "FFFFFF";
+                        backg = " class=\"abierto selec\"";
+                    } else if(tpid != null && tpsub.isParentof(tpid)){
+                        backg ="class=\"abierto\"";
                     }
 
-                    sbfRet.append("<TR>");
-                    sbfRet.append("<TD>");
-                    sbfRet.append("<TABLE border=\"0\" cellPadding=\"0\" cellSpacing=\"0\">");
-                    sbfRet.append("<TR>");
-
-                    for (int i = 0; i < intLevel - 1; i++) {
-                        sbfRet.append("<TD>");
-                        sbfRet.append("<IMG height=\"5\" width=\"" + widthsize + "\" border=\"0\" src=\"" + path1 + "pixel.gif></IMG>");
-                        sbfRet.append("</TD>");
-                    }
-                    sbfRet.append("<TD width=\"30\">");
-
-                    if (isMapParent(tpid, tpsub, vctPath) || vctPath.contains(tpsub.getId())) {
-                        if ((tpid != null && tpsub.getId().equals(tpid.getId()) || vctPath.contains(tpsub.getId()))) {
-                            url1.setTopic(tpsub);
-                            sbfRet.append("<A href=\"" + url1 + "?reptp=" + tpsub.getId() + "\">");
-                            sbfRet.append("<IMG height=\"10\" width=\"" + widthsize + "\" border=\"0\" src=\"" + path1 + "pixel.gif\"></IMG>");
-                            sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"15\" src=\"" + path1 + "minus.gif\"/>");
-                            sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\"" + path1 + "openfolder.gif\"></IMG>");
-                            sbfRet.append("</A>");
-                        } else {
-                            url1.setTopic(tpsub);
-                            sbfRet.append("<A href=\"" + url1 + "?reptp=" + tpsub.getId() + "\">");
-                            sbfRet.append("<IMG height=\"10\" width=\"" + widthsize + "\" border=\"0\" src=\"" + path1 + "pixel.gif\"></IMG>");
-                            sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"15\" src=\"" + path1 + "plus.gif\"/>");
-                            sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\"" + path1 + "folder.gif\"></IMG>");
-                            sbfRet.append("</A>");
-                        }
-                    } else {
-                        url1.setTopic(tpsub);
-                        sbfRet.append("<A href=\"" + url1 + "?reptp=" + tpsub.getId() + "\">");
-                        sbfRet.append("<IMG height=\"10\" width=\"" + 15 + "\" border=\"0\" src=\"" + path1 + "pixel.gif\"></IMG>");
-                        sbfRet.append("<IMG height=\"10\" width=\"" + widthsize + "\" border=\"0\" src=\"" + path1 + "pixel.gif\"></IMG>");
-                        sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\"" + path1 + "folder.gif\"></IMG>");
-                        sbfRet.append("</A>");
-                    }
-                    sbfRet.append("<IMG height=\"10\" width=\"" + 5 + "\" border=\"0\" src=\"" + path1 + "pixel.gif\"></IMG>");
-                    sbfRet.append("</TD>");
-                    sbfRet.append("<TD" + backg + ">");
+                    sbfRet.append("<li>");
                     url1.setTopic(tpsub);
-                    sbfRet.append("<A href=\"" + url1 + "?reptp=" + tpsub.getId() + "\">");
-                    sbfRet.append("<FONT face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\" style=\"text-decoration: none\" color=\"" + color + "\">&nbsp;" + tpsub.getDisplayName() + "</FONT></A>");
-                    sbfRet.append("</TD>");
-                    sbfRet.append("</TR>");
-                    sbfRet.append("</TABLE>");
-                    sbfRet.append("</TD>");
-                    sbfRet.append("</TR>");
+                    sbfRet.append("<a " + backg + " href=\"" + url1 + "?reptp=" + tpsub.getId() + "\">");
+                    sbfRet.append( tpsub.getDisplayName() + "</a>");
+                    
                     if ((intLevel < intMaxLevel || (tpid != null && tpsub.getId().equals(tpid.getId()))
                             || vctPath.contains(tpsub.getId())) && sortByOrderedName(tpsub.listChilds()).hasNext()) {
-                        sbfRet.append(getChilds(tpid, tpsub, user, vctPath, intLevel + 1, intWidth, "", widthsize + 10, paramsRequest));
+                        sbfRet.append("<ul>");
+                        sbfRet.append(getChilds(tpid, tpsub, user, vctPath, intLevel + 1, intWidth, "", widthsize + 5, paramsRequest));
+                        sbfRet.append("</ul>");
                     }
+                    sbfRet.append("</li>");
                     vTopic.removeElement(tpsub);
                 }
             }
@@ -422,7 +340,7 @@ public class TreeRepHtml {
      * @return The directory structure
      */
     public String getDirs(HttpServletRequest request, HttpServletResponse response, User user, WebPage topicrec, HashMap arguments, WebPage topic, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        //System.out.println("get Dirs");
+
         Document dcmDom = base.getDom();
         if (dcmDom == null) {
             throw new SWBResourceException("Dom nulo - getDirs()");
@@ -441,17 +359,14 @@ public class TreeRepHtml {
         String strUrl = url1.toString();
         try {
             WebSite tm = topic.getWebSite();
-            //Document dom=null;
+
             WebPage tpid = null;
             Vector vctPath = new Vector();
             int intLevel = 4, intWidth = 10;
             String idhome = null;
             String dir = topic.getId();
             int widthsize = 15;
-            String backg = " bgcolor=\"FFFFFF\"";
-            String color = "666666";
-            //String path=WBUtils.getInstance().getWorkPath()+base.getResourceWorkPath();
-            String path1 = "" + webpath + "/swbadmin/images/Repository/";
+            String backg = "class=\"cerrado\""; 
 
             if (request.getParameter("reptp") != null && !request.getParameter("reptp").trim().equals("")) {
                 tpid = tm.getWebPage(request.getParameter("reptp"));
@@ -472,87 +387,57 @@ public class TreeRepHtml {
                 tpsite = tm.getHomePage();
             }
 
-
-            sbfRet.append("<TABLE border=\"0\" cellPadding=\"0\" cellSpacing=\"0\" width=\"100%\">");
-            sbfRet.append("<TR>");
-            sbfRet.append("<TD>");
-            sbfRet.append("<FONT class=\"Estilo6\" face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgFolders") + "...</FONT>");
-            sbfRet.append("</TD>");
-            sbfRet.append("</TR>");
-
+            sbfRet.append("<ul>");
+            backg = "class=\"cerrado\""; 
             if ((tpid != null && tpid.getId().equals(topic.getId())) || (tpid == null)) {
-                backg = " bgcolor=\"B48222\"";
-                color = "FFFFFF";
+                backg = "class=\"abierto selec\"";
+            } else if(tpid!=null&&tpid.isChildof(topic)) {
+                backg ="class=\"abierto\"";
             }
 
-            sbfRet.append("<TR>");
-            sbfRet.append("<TD" + backg + " >");
-            sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"15\" src=\"" + path1 + "minus.gif\"/>");
-            sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\"" + path1 + "openfolder.gif\"></IMG>");
-            sbfRet.append("<A href=\"" + strUrl + "&reptp=" + topic.getId() + "\">");
-            sbfRet.append("<FONT face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\" style=\"text-decoration: none\" color=\"" + color + "\">&nbsp;&nbsp;" + topic.getDisplayName(user.getLanguage()));
-            sbfRet.append("</FONT>");
-            sbfRet.append("</A>");
-            sbfRet.append("</TD>");
-            sbfRet.append("</TR>");
+            sbfRet.append("<li   "+ backg +" >");
+            sbfRet.append("<a href=\"" + strUrl + "&reptp=" + topic.getId() + "\" >");
+            sbfRet.append( topic.getDisplayName(user.getLanguage()));
+            sbfRet.append("</a>");
+            boolean cerrar = Boolean.FALSE;
+
             Iterator<WebPage> it = sortByOrderedName(tpsite.listChilds());
+            
+            if(it.hasNext()){
+                sbfRet.append("<ul>");
+                cerrar = Boolean.TRUE;
+            }
+            
             while (it.hasNext()) {
                 intLevel = 1;
                 WebPage tp = it.next();
                 if(!tp.isActive()||tp.isDeleted()||tp.isHidden()) continue;
-                //if(!tp.hasVirtualParent(tpsite)) tp.addVirtualParent(tpsite);
                 if (tp.getId() != null) {
-                    backg = " bgcolor=\"FFFFFF\"";
-                    color = "666666";
+                    backg = "class=\"cerrado\""; 
                     if (tpid != null && tpid.getId().equals(tp.getId())) {
-                        backg = " bgcolor=\"B48222\"";
-                        color = "FFFFFF";
+                        backg = " class=\"abierto selec\"";
+                    } else if(tpid != null && tpid.isParentof(tp)){
+                        backg ="class=\"abierto\"";
                     }
-                    sbfRet.append("<TR>");
-                    sbfRet.append("<TD>");
-                    sbfRet.append("<TABLE border=\"0\" cellPadding=\"0\" cellSpacing=\"0\">");
-                    sbfRet.append("<TR>");
-                    sbfRet.append("<TD>");
-                    sbfRet.append("	<IMG height=\"5\" width=\"5\" border=\"0\" src=\"" + path1 + "pixel.gif\"></IMG>");
-                    sbfRet.append("</TD>");
-                    sbfRet.append("<TD width=\"50\">");
-                    if (sortByOrderedName(tp.listChilds()).hasNext() || vctPath.contains(tp.getId())) {
-                        if (tpid != null && (tpid.getId().equals(tp.getId()) || vctPath.contains(tp.getId()))) {
-                            sbfRet.append("<A href=\"" + strUrl + "&reptp=" + tp.getParent().getId() + "\">");
-                            sbfRet.append("<IMG height=\"10\" width=\"10\" border=\"0\" src=\"" + path1 + "pixel.gif\"></IMG>");
-                            sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"15\" src=\"" + path1 + "minus.gif\"/>");
-                            sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\"" + path1 + "openfolder.gif\"></IMG>");
-                            sbfRet.append("</A>");
-                        } else {
-                            sbfRet.append("<A href=\"" + strUrl + "&reptp=" + tp.getId() + "\">");
-                            sbfRet.append("<IMG height=\"10\" width=\"10\" border=\"0\" src=\"" + path1 + "pixel.gif\"></IMG>");
-                            sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"15\" src=\"" + path1 + "plus.gif\"></IMG>");
-                            sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\"" + path1 + "folder.gif\"></IMG>");
-                            sbfRet.append("</A>");
-                        }
-                    } else {
-                        sbfRet.append("<A href=\"" + strUrl + "&reptp=" + tp.getId() + "\">");
-                        sbfRet.append("<IMG height=\"10\" width=\"10\" border=\"0\" src=\"" + path1 + "pixel.gif\"></IMG>");
-                        sbfRet.append("<IMG height=\"10\" width=\"15\" border=\"0\" src=\"" + path1 + "pixel.gif\"></IMG>");
-                        sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\"" + path1 + "folder.gif\"></IMG>");
-                        sbfRet.append("</A>");
-                    }
-                    sbfRet.append("</TD>");
-                    sbfRet.append("<TD" + backg + ">");
-                    sbfRet.append("<A href=\"" + strUrl + "&reptp=" + tp.getId() + "\">");
-                    sbfRet.append("<FONT face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\" style=\"text-decoration: none\" color=\"" + color + "\">&nbsp;" + tp.getDisplayName(user.getLanguage()) + "</FONT></A>");
-                    sbfRet.append("</TD>");
-                    sbfRet.append("</TR>");
-                    sbfRet.append("</TABLE>");
-                    sbfRet.append("</TD>");
-                    sbfRet.append("</TR>");
+                    sbfRet.append("<li>");
+                    sbfRet.append("<a " + backg + " href=\"" + strUrl + "&reptp=" + tp.getId() + "\">");
+                    sbfRet.append(tp.getDisplayName(user.getLanguage()) );
+                    sbfRet.append(" </a>");
                     if ((intLevel < intMaxLevel || (tpid != null && tp.getId().equals(tpid.getId()))
                             || vctPath.contains(tp.getId())) && sortByOrderedName(tp.listChilds()).hasNext()) {
+                        sbfRet.append("<ul>");
                         sbfRet.append(getChilds2(tpid, tp, user, vctPath, intLevel + 1, intWidth, "", widthsize, paramsRequest, 0, request));
+                        sbfRet.append("</ul>");
                     }
+                    sbfRet.append("</li>");
                 }
             }
-            sbfRet.append("</TABLE>");
+            if(cerrar){
+                sbfRet.append("</ul>");
+                cerrar = Boolean.TRUE;
+            }
+            sbfRet.append("</li>");
+            sbfRet.append("</ul>");
             sbfRet.append("\n<script type=\"text/javascript\">");
             sbfRet.append("\n function enviar(frm){");
             sbfRet.append("\n   ");
@@ -570,13 +455,16 @@ public class TreeRepHtml {
             sbfRet.append("<input type=hidden name=\"reptp\" value=\"" + request.getParameter("reptp") + "\">");
             sbfRet.append("<input type=hidden name=\"repobj\" value=\"MoveDoc\">");
             sbfRet.append("<input type=hidden name=\"repiddoc\" value=\"" + request.getParameter("repiddoc") + "\">");
-            sbfRet.append("<TABLE width=100% cellpadding=0 cellspacing=0>");
-            sbfRet.append("<TR><TD align=center><HR noshade size=1>");
+            sbfRet.append("<table width=100% cellpadding=0 cellspacing=0>");
+            sbfRet.append("<tr><td align=center><HR noshade size=1>");
             if (user.isSigned()) {
-                sbfRet.append("<input type=button name=\"mover\" value=\"" + paramsRequest.getLocaleString("msgBTNMove") + "\" onclick=\"if(confirm('" + paramsRequest.getLocaleString("msgConfirmShureMove") + "?')) {enviar(frmSnd);} else { return(false);}\">&nbsp;<input type=\"button\" name=\"btn_cancel\" value=\"" + paramsRequest.getLocaleString("msgBTNCancel") + "\" onclick=\"javascript:window.close();\">");
+                sbfRet.append("<div id=\"diropcion\">");
+                sbfRet.append("<a href=\"#\"  class=\"crear\"  name=\"mover\" onclick=\"if(confirm('" + paramsRequest.getLocaleString("msgConfirmShureMove") + "?')) {enviar(frmSnd);} else { return(false);}\"><span>" + paramsRequest.getLocaleString("msgBTNMove") + "</span></a>&nbsp;");
+                sbfRet.append("<a href=\"#\"  class=\"crear\" name=\"btn_cancel\" onclick=\"javascript:window.close();\"><span>" + paramsRequest.getLocaleString("msgBTNCancel") + "</span></a>");
+                sbfRet.append("</div>");
             }
-            sbfRet.append("</TD></TR>");
-            sbfRet.append("</TABLE>");
+            sbfRet.append("</td></tr>");
+            sbfRet.append("</table>");
             if (user.isSigned()) {
                 sbfRet.append("</form>");
             }
@@ -604,11 +492,8 @@ public class TreeRepHtml {
      */
     public String getChilds2(WebPage tpid, WebPage tpc, User user, Vector vctPath, int intLevel, int intWidth, String topicrec, int widthsize, SWBParamRequest paramsRequest, int direct, HttpServletRequest request) {
 
-        Document dcmDom = base.getDom();
         StringBuffer sbfRet = new StringBuffer();
         try {
-            String path1 = "" + webpath + "/swbadmin/images/Repository/";
-            //String path=WBUtils.getInstance().getWorkPath()+base.getResourceWorkPath();
             String strUrl = tpc.getWebSite().getHomePage().getUrl();
             SWBResourceURL url1 = paramsRequest.getRenderUrl();
             url1.setMode(url1.Mode_VIEW);
@@ -625,65 +510,29 @@ public class TreeRepHtml {
             while (it.hasNext()) {
                 WebPage tpsub = it.next();
                 if(!tpsub.isActive()||tpsub.isDeleted()||tpsub.isHidden()) continue;
-                //if(!tpsub.hasVirtualParent(tpc)) tpsub.addVirtualParent(tpsub);
+
                 if (tpsub.getId() != null && user.haveAccess(tpsub)) {
                     if (vTopic.contains(tpsub)) {
                         break;
                     }
                     vTopic.addElement(tpsub);
-                    String backg = " bgcolor=\"FFFFFF\"";
-                    String color = "666666";
+                   String backg = "class=\"cerrado\""; 
                     if (tpid != null && tpsub.getId().equals(tpid.getId())) {
-                        backg = " bgcolor=\"B48222\"";
-                        color = "FFFFFF";
+                        backg = " class=\"abierto selec\"";
+                    } else if(tpid != null && tpsub.isParentof(tpid)){
+                        backg ="class=\"abierto\"";
                     }
-
-                    sbfRet.append("<TR>");
-                    sbfRet.append("<TD>");
-                    sbfRet.append("<TABLE border=\"0\" cellPadding=\"0\" cellSpacing=\"0\">");
-                    sbfRet.append("<TR>");
-
-                    for (int i = 0; i < intLevel - 1; i++) {
-                        sbfRet.append("<TD>");
-                        sbfRet.append("<IMG height=\"5\" width=\"" + widthsize + "\" border=\"0\" src=\"" + path1 + "pixel.gif></IMG>");
-                        sbfRet.append("</TD>");
-                    }
-                    sbfRet.append("<TD width=\"30\">");
-                    if (isMapParent(tpid, tpsub, vctPath) || vctPath.contains(tpsub.getId())) {
-                        if ((tpid != null && tpsub.getId().equals(tpid.getId()) || vctPath.contains(tpsub.getId()))) {
-                            sbfRet.append("<A href=\"" + strUrl + "&reptp=" + tpsub.getParent().getId() + "\">");
-                            sbfRet.append("<IMG height=\"10\" width=\"" + widthsize + "\" border=\"0\" src=\"" + path1 + "pixel.gif\"></IMG>");
-                            sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"15\" src=\"" + path1 + "minus.gif\"/>");
-                            sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\"" + path1 + "openfolder.gif\"></IMG>");
-                            sbfRet.append("</A>");
-                        } else {
-                            sbfRet.append("<A href=\"" + strUrl + "&reptp=" + tpsub.getId() + "\">");
-                            sbfRet.append("<IMG height=\"10\" width=\"" + widthsize + "\" border=\"0\" src=\"" + path1 + "pixel.gif\"></IMG>");
-                            sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"15\" src=\"" + path1 + "plus.gif\"/>");
-                            sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\"" + path1 + "folder.gif\"></IMG>");
-                            sbfRet.append("</A>");
-                        }
-                    } else {
-                        sbfRet.append("<A href=\"" + strUrl + "&reptp=" + tpsub.getId() + "\">");
-                        sbfRet.append("<IMG height=\"10\" width=\"" + 15 + "\" border=\"0\" src=\"" + path1 + "pixel.gif\"></IMG>");
-                        sbfRet.append("<IMG height=\"10\" width=\"" + widthsize + "\" border=\"0\" src=\"" + path1 + "pixel.gif\"></IMG>");
-                        sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\"" + path1 + "folder.gif\"></IMG>");
-                        sbfRet.append("</A>");
-                    }
-                    sbfRet.append("<IMG height=\"10\" width=\"" + 5 + "\" border=\"0\" src=\"" + path1 + "pixel.gif\"></IMG>");
-                    sbfRet.append("</TD>");
-                    sbfRet.append("<TD" + backg + ">");
-                    sbfRet.append("<A href=\"" + strUrl + "&reptp=" + tpsub.getId() + "\">");
-                    sbfRet.append("<FONT face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\" style=\"text-decoration: none\" color=\"" + color + "\">&nbsp;" + tpsub.getDisplayName() + "</FONT></A>");
-                    sbfRet.append("</TD>");
-                    sbfRet.append("</TR>");
-                    sbfRet.append("</TABLE>");
-                    sbfRet.append("</TD>");
-                    sbfRet.append("</TR>");
+                    sbfRet.append("<li>");
+                    sbfRet.append("<a " + backg + " href=\"" + strUrl + "&reptp=" + tpsub.getId() + "\" >");
+                    sbfRet.append(tpsub.getDisplayName());
+                    sbfRet.append("</a>");
                     if ((intLevel < intMaxLevel || (tpid != null && tpsub.getId().equals(tpid.getId()))
                             || vctPath.contains(tpsub.getId())) && sortByOrderedName( tpsub.listChilds()).hasNext()) {
+                        sbfRet.append("<ul>");
                         sbfRet.append(getChilds2(tpid, tpsub, user, vctPath, intLevel + 1, intWidth, "", widthsize + 10, paramsRequest, 1, request));
+                        sbfRet.append("</ul>");
                     }
+                    sbfRet.append("</li>");
                     vTopic.removeElement(tpsub);
                 }
             }
@@ -705,7 +554,6 @@ public class TreeRepHtml {
         if (it == null) {
             return null;
         }
-
 
         set = new TreeSet(new Comparator() {
             public int compare(Object o1, Object o2) {

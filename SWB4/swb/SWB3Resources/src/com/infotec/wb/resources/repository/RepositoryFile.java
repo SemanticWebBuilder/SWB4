@@ -238,7 +238,7 @@ public class RepositoryFile {
                     long id = Integer.parseInt(fup.getValue("repfiddoc"));
                     this.newversion(request, response, user, topic, hashMap, dir, this.resource, nivel, paramsRequest, fup);
                     ret.append("<form name=\"frmnewversion\" action=\"" + url1.toString() + "\" method=\"post\">");
-                    ret.append("<input type=\"hidden\" name=\"repfop\" value=\"history\"><input type=\"hidden\" name=\"reptp\" value=\"" + dir.getId() + "\"><input type=\"hidden\" name=\"repfiddoc\" value=\"" + id + "\">");
+                    ret.append("<input type=\"hidden\" name=\"repfop\" value=\"history\" /><input type=\"hidden\" name=\"reptp\" value=\"" + dir.getId() + "\" /><input type=\"hidden\" name=\"repfiddoc\" value=\"" + id + "\" />");
                     ret.append("</form>");
                     ret.append("<script type='text/javascript'>\r\n");
                     ret.append("window.document.frmnewversion.submit();");
@@ -907,38 +907,38 @@ public class RepositoryFile {
                     ret.append("<input type='hidden' name='reptp' value='" + tp + "'>");
 
                     ret.append("<table width='100%'  border='0' cellspacing='0' cellpadding='1'>");
-                    ret.append("<TR>");
-                    ret.append("<TD>&nbsp;&nbsp;&nbsp;&nbsp; <B><FONT face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgEditFileStatus") + "...</FONT></B></TD>");
-                    ret.append("</TR>");
-                    ret.append("<TR>");
+                    ret.append("<tr>");
+                    ret.append("<td>&nbsp;&nbsp;&nbsp;&nbsp; <B><font face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgEditFileStatus") + "...</font></B></td>");
+                    ret.append("</tr>");
+                    ret.append("<tr>");
 
-                    ret.append("<TD bgcolor='#999933'><FONT color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'><IMG src='" + path + "file.gif' width='20' height='14'>" + title + "</FONT></TD>");
-                    ret.append("</TR>");
+                    ret.append("<td bgcolor='#999933'><font color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'><img src='" + path + "file.gif' width='20' height='14'>" + title + "</font></td>");
+                    ret.append("</tr>");
 
-                    ret.append("<TR>");
-                    ret.append("<TD align='center'>");
-                    ret.append("<FONT face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgComments") + "</FONT><BR>");
-                    ret.append("<TEXTAREA name='repfdescription' cols='50' rows='3' onKeyDown='textCounter(this.form.repfdescription,255);' onKeyUp='textCounter(this.form.repfdescription,255);'></TEXTAREA>");
-                    ret.append("</TD>");
-                    ret.append("</TR>");
+                    ret.append("<tr>");
+                    ret.append("<td align='center'>");
+                    ret.append("<font face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgComments") + "</font><BR>");
+                    ret.append("<textarea name='repfdescription' cols='50' rows='3' onKeyDown='textCounter(this.form.repfdescription,255);' onKeyUp='textCounter(this.form.repfdescription,255);'></textarea>");
+                    ret.append("</td>");
+                    ret.append("</tr>");
 
-                    ret.append("<TR>");
-                    ret.append("<TD align='center'>");
-                    ret.append("<INPUT type='file' name='repfdoc'>");
-                    ret.append("<INPUT type='hidden' name='repfdocOri' value=\"" + fileName + "\">");
-                    ret.append("</TD>");
-                    ret.append("</TR>");
-                    ret.append("<TR>");
-                    ret.append("<TD><IMG src='" + path + "line.gif' width='100%' height='5'></TD>");
-                    ret.append("</TR>");
-                    ret.append("<TR align='center'>");
-                    ret.append("<TD>");
-                    ret.append("<INPUT type='button'  name='Submit3' value='" + paramsRequest.getLocaleString("msgBTNSave") + "' onclick='javascript:valida();'>");
+                    ret.append("<tr>");
+                    ret.append("<td align='center'>");
+                    ret.append("<input type='file' name='repfdoc' />");
+                    ret.append("<input type='hidden' name='repfdocOri' value=\"" + fileName + "\" />");
+                    ret.append("</td>");
+                    ret.append("</tr>");
+                    ret.append("<tr>");
+                    ret.append("<td><img src='" + path + "line.gif' width='100%' height='5' /></td>");
+                    ret.append("</tr>");
+                    ret.append("<tr align='center'>");
+                    ret.append("<td>");
+                    ret.append("<input type='button'  name='Submit3' value='" + paramsRequest.getLocaleString("msgBTNSave") + "' onclick='javascript:valida();' />");
                     ret.append("&nbsp;");
-                    ret.append("<INPUT type='button'  name='Submit32' value='" + paramsRequest.getLocaleString("msgBTNCancel") + "' onclick='javascript:init();'>");
+                    ret.append("<input type='button'  name='Submit32' value='" + paramsRequest.getLocaleString("msgBTNCancel") + "' onclick='javascript:init();' />");
 
-                    ret.append("</TD>");
-                    ret.append("</TR>");
+                    ret.append("</td>");
+                    ret.append("</tr>");
                     ret.append("</table>");
                     ret.append("</form>");
 
@@ -1359,17 +1359,17 @@ public class RepositoryFile {
             if (user.isSigned()) {
                 ret.append("<form name='frmnewdoc' method='GET' action='" + url.toString() + "'>");
             }
-            ret.append("<input type='hidden' name='repfop' value='updatetitle'>");
-            ret.append("<input type='hidden' name='repfiddoc' value='" + id + "'>");
-            ret.append("<input type='hidden' name='reptp' value='" + tp + "'>");
+            ret.append("<input type='hidden' name='repfop' value='updatetitle' />");
+            ret.append("<input type='hidden' name='repfiddoc' value='" + id + "' />");
+            ret.append("<input type='hidden' name='reptp' value='" + tp + "' />");
 
-            ret.append("<TABLE width='100%'  border='0' cellspacing='0' cellpadding='1'>");
-            ret.append("<TR>");
-            ret.append("<TD colspan='10'><IMG src='" + path + "openfolder.gif' width='20' height='20'> <B><FONT face='Verdana, Arial, Helvetica, sans-serif' size=\"2\">" + dir.getDisplayName() + "</FONT></B></TD>");
-            ret.append("</TR>");
-            ret.append("<TR>");
-            ret.append("<TD colspan='10'><IMG src='" + path + "line.gif' width='100%' height='5'></TD>");
-            ret.append("</TR>");
+            ret.append("<table width='100%'  border='0' cellspacing='0' cellpadding='1'>");
+            ret.append("<tr>");
+            ret.append("<td colspan='10'><img src='" + path + "openfolder.gif' width='20' height='20' /> <B><font face='Verdana, Arial, Helvetica, sans-serif' size=\"2\">" + dir.getDisplayName() + "</font></B></td>");
+            ret.append("</tr>");
+            ret.append("<tr>");
+            ret.append("<td colspan='10'><img src='" + path + "line.gif' width='100%' height='5' /></td>");
+            ret.append("</tr>");
 
             con = SWBUtils.DB.getDefaultConnection();
             ps = con.prepareStatement("select rep_docId, resId, rep_email, rep_title, rep_description, rep_lastVersion, rep_status, rep_emailCheckOut, rep_xml from resrepository where rep_docId=? and idtm=?");
@@ -1390,10 +1390,10 @@ public class RepositoryFile {
                 String repxml = rs.getAsciiStream("rep_xml") != null ? SWBUtils.IO.readInputStream(rs.getAsciiStream("rep_xml")) : null;
                 //String repxml = com.infotec.appfw.util.AFUtils.getInstance().readInputStream(rs.getAsciiStream("rep_xml")); //rs.getString("rep_xml");
 
-                ret.append("<TR>");
-                ret.append("<TD bgcolor='#FFFFFF' width='150'><FONT color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgTitle") + ":</FONT></TD>");
-                ret.append("</Td>");
-                ret.append("<Td>");
+                ret.append("<tr>");
+                ret.append("<td bgcolor='#FFFFFF' width='150'><font color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgTitle") + ":</font></td>");
+                ret.append("</td>");
+                ret.append("<td>");
                 if (nivel == 3) {
                     canupdate = true;
                 } else {
@@ -1407,24 +1407,24 @@ public class RepositoryFile {
                 }
 
                 if (canupdate) {
-                    ret.append("<input  type='text' maxlength='99' name='repftitle' value='" + reptitle + "'>");
+                    ret.append("<input  type='text' maxlength='99' name='repftitle' value='" + reptitle + "' />");
                 } else {
-                    ret.append("<FONT size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + reptitle + "</FONT>");
+                    ret.append("<font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + reptitle + "</font>");
                 }
-                ret.append("</Td>");
-                ret.append("</TR>");
+                ret.append("</td>");
+                ret.append("</tr>");
 
-                ret.append("<TR>");
-                ret.append("<TD bgcolor='#FFFFFF' width='150'><FONT color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgDescription") + ":</FONT></TD>");
-                ret.append("</Td>");
-                ret.append("<Td>");
+                ret.append("<tr>");
+                ret.append("<td bgcolor='#FFFFFF' width='150'><font color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgDescription") + ":</font></td>");
+                ret.append("</td>");
+                ret.append("<td>");
                 if (canupdate) {
-                    ret.append("<TEXTAREA name='repfdescription' cols='50' rows='3' onKeyDown='textCounter(this.form.repfdescription,255);' onKeyUp='textCounter(this.form.repfdescription,255);'>" + repdescription + "</TEXTAREA>");
+                    ret.append("<textarea name='repfdescription' cols='50' rows='3' onKeyDown='textCounter(this.form.repfdescription,255);' onKeyUp='textCounter(this.form.repfdescription,255);'>" + repdescription + "</textarea>");
                 } else {
-                    ret.append("<FONT size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + repdescription + "</FONT>");
+                    ret.append("<font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + repdescription + "</font>");
                 }
-                ret.append("</Td>");
-                ret.append("</TR>");
+                ret.append("</td>");
+                ret.append("</tr>");
 
                 PreparedStatement ps2 = con.prepareStatement("select * from resrepositoryversions where rep_docId=? and rep_fileVersion=? and idtm=?");
                 ps2.setLong(1, repdocid);
@@ -1437,18 +1437,18 @@ public class RepositoryFile {
 
                     DateFormat df = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT, Locale.getDefault());
                     date = df.format(new Date(repcreate.getTime()));
-                    ret.append("<TR>");
-                    ret.append("<TD bgcolor='#FFFFFF' width='150'><FONT color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgLastUpdate") + ":</FONT></TD>");
-                    ret.append("</Td>");
-                    ret.append("<Td>");
-                    ret.append("<FONT size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + date + "</FONT>");
-                    ret.append("</Td>");
-                    ret.append("</TR>");
+                    ret.append("<tr>");
+                    ret.append("<td bgcolor='#FFFFFF' width='150'><font color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgLastUpdate") + ":</font></td>");
+                    ret.append("</td>");
+                    ret.append("<td>");
+                    ret.append("<font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + date + "</font>");
+                    ret.append("</td>");
+                    ret.append("</tr>");
 
-                    ret.append("<TR>");
-                    ret.append("<TD bgcolor='#FFFFFF' width='150'><FONT color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgAuthor") + ":</FONT></TD>");
-                    ret.append("</Td>");
-                    ret.append("<Td>");
+                    ret.append("<tr>");
+                    ret.append("<td bgcolor='#FFFFFF' width='150'><font color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgAuthor") + ":</font></td>");
+                    ret.append("</td>");
+                    ret.append("<td>");
                     if (s_author == null) {
                         s_author = "&nbsp;";
                     } else {
@@ -1469,57 +1469,57 @@ public class RepositoryFile {
                             Repository.log.error("Error on method info class RepositoryFile trying to create new user docId" + ": " + id, e);
                         }
                     }
-                    ret.append("<FONT size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + s_author + "</FONT>");
-                    ret.append("</Td>");
-                    ret.append("</TR>");
+                    ret.append("<font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + s_author + "</font>");
+                    ret.append("</td>");
+                    ret.append("</tr>");
 
-                    ret.append("<TR>");
+                    ret.append("<tr>");
 
-                    ret.append("<TD bgcolor='#FFFFFF' width='150'><FONT color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgCurrentVersion") + ":</FONT></TD>");
-                    ret.append("</Td>");
-                    ret.append("<Td>");
+                    ret.append("<td bgcolor='#FFFFFF' width='150'><font color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgCurrentVersion") + ":</font></td>");
+                    ret.append("</td>");
+                    ret.append("<td>");
 
-                    ret.append("<FONT size='2' face='Verdana, Arial, Helvetica, sans-serif'><a href=\"javascript: doShowHistory(" + repdocid + ");\">" + replastversion + "</a></FONT>");
-                    ret.append("</Td>");
-                    ret.append("</TR>");
+                    ret.append("<font size='2' face='Verdana, Arial, Helvetica, sans-serif'><a href=\"javascript: doShowHistory(" + repdocid + ");\">" + replastversion + "</a></font>");
+                    ret.append("</td>");
+                    ret.append("</tr>");
                     //////////////////////////////////////
-                    ret.append("<TR>");
+                    ret.append("<tr>");
 
-                    ret.append("<TD bgcolor='#FFFFFF' width='150'><FONT color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgFileName") + ":</FONT></TD>");
-                    ret.append("<Td>");
-                    ret.append("<FONT size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + rsversions.getString("rep_fileName") + "</FONT>");
-                    ret.append("</Td>");
-                    ret.append("</TR>");
+                    ret.append("<td bgcolor='#FFFFFF' width='150'><font color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgFileName") + ":</font></td>");
+                    ret.append("<td>");
+                    ret.append("<font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + rsversions.getString("rep_fileName") + "</font>");
+                    ret.append("</td>");
+                    ret.append("</tr>");
 
                     /////////////////////////////////////
 
 
-                    ret.append("<TR>");
+                    ret.append("<tr>");
 
-                    ret.append("<TD bgcolor='#FFFFFF' width='150'><FONT color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgFileType") + ":</FONT></TD>");
-                    ret.append("<Td>");
-                    ret.append("<FONT size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + getFileType(rsversions.getString("rep_fileName")) + "</FONT>");
-                    ret.append("</Td>");
-                    ret.append("</TR>");
-                    ret.append("<TR>");
+                    ret.append("<td bgcolor='#FFFFFF' width='150'><font color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgFileType") + ":</font></td>");
+                    ret.append("<td>");
+                    ret.append("<font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + getFileType(rsversions.getString("rep_fileName")) + "</font>");
+                    ret.append("</td>");
+                    ret.append("</tr>");
+                    ret.append("<tr>");
 
-                    ret.append("<TD bgcolor='#FFFFFF' width='150'><FONT color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgSize") + ":</FONT></TD>");
-                    ret.append("</Td>");
-                    ret.append("<Td>");
+                    ret.append("<td bgcolor='#FFFFFF' width='150'><font color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgSize") + ":</font></td>");
+                    ret.append("</td>");
+                    ret.append("<td>");
                     int size = rsversions.getInt("rep_fileSize") / 1024;
                     if (size == 0) {
                         size = 1;
                     }
-                    ret.append("<FONT size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + size + "k</FONT>");
-                    ret.append("</Td>");
-                    ret.append("</TR>");
+                    ret.append("<font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + size + "k</font>");
+                    ret.append("</td>");
+                    ret.append("</tr>");
 
 
                     if (repstatus == 1 && repemailCOut != null) {
-                        ret.append("<TR>");
-                        ret.append("<TD bgcolor='#FFFFFF' width='150'><FONT color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgReservedBy") + ":</FONT></TD>");
-                        ret.append("</Td>");
-                        ret.append("<Td>");
+                        ret.append("<tr>");
+                        ret.append("<td bgcolor='#FFFFFF' width='150'><font color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgReservedBy") + ":</font></td>");
+                        ret.append("</td>");
+                        ret.append("<td>");
                         String usercheckout = repemailCOut;
 
                         if (DBUser.getInstance().getUserById(usercheckout) != null) {
@@ -1544,17 +1544,17 @@ public class RepositoryFile {
                         rs3.close();
                         ps3.close();
 
-                        ret.append("<FONT size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + usercheckout + checkOutDate + "</FONT>");
-                        ret.append("</Td>");
-                        ret.append("</TR>");
+                        ret.append("<font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + usercheckout + checkOutDate + "</font>");
+                        ret.append("</td>");
+                        ret.append("</tr>");
                     }
-                    ret.append("<TR>");
-                    ret.append("<TD colspan='2' align='center'>");
+                    ret.append("<tr>");
+                    ret.append("<td colspan='2' align='center'>");
 
                     if (nivel >= 2 && user.isSigned()) {
 
                         if (repstatus == 0) {
-                            ret.append("<A href=\"javascript: doCheckout(" + i_log + "," + repdocid + ");\"><IMG src='" + path + "out.gif' height='14' width='25' alt='" + paramsRequest.getLocaleString("msgCOut") + "' border='0'>");
+                            ret.append("<a href=\"javascript: doCheckout(" + i_log + "," + repdocid + ");\"><img src='" + path + "out.gif' height='14' width='25' alt='" + paramsRequest.getLocaleString("msgCOut") + "' border='0' />");
                         } else {
                             boolean cancheckin = false;
                             PreparedStatement psuser = con.prepareStatement("select rep_emailCheckOut from resrepository where rep_docId=? and idtm=?");
@@ -1577,13 +1577,13 @@ public class RepositoryFile {
                             psuser = null;
 
                             if (cancheckin) {
-                                ret.append("<A href=\"javascript: doCheckin(" + i_log + "," + repdocid + ");\"><IMG src='" + path + "in.gif' alt='" + paramsRequest.getLocaleString("msgCIn") + "' height='14' width='25' border='0' /></A>");
-                                ret.append("&nbsp;<A href=\"javascript: doUndocheckout(" + i_log + "," + repdocid + ");\"><IMG src='" + path + "undo.gif' alt='" + paramsRequest.getLocaleString("msgUndoCOut") + "' height='14' width='45' border='0' /></A>");
+                                ret.append("<a href=\"javascript: doCheckin(" + i_log + "," + repdocid + ");\"><img src='" + path + "in.gif' alt='" + paramsRequest.getLocaleString("msgCIn") + "' height='14' width='25' border='0' /></a>");
+                                ret.append("&nbsp;<a href=\"javascript: doUndocheckout(" + i_log + "," + repdocid + ");\"><img src='" + path + "undo.gif' alt='" + paramsRequest.getLocaleString("msgUndoCOut") + "' height='14' width='45' border='0' /></a>");
                             } else {
                                 if (nivel == 3) {
-                                    ret.append("<a href=\"javascript: doUndocheckout(" + i_log + "," + repdocid + ");\"><IMG src='" + path + "undo.gif' alt='" + paramsRequest.getLocaleString("msgUndoCOut") + "' height='14' width='45' border='0'></a>");
+                                    ret.append("<a href=\"javascript: doUndocheckout(" + i_log + "," + repdocid + ");\"><img src='" + path + "undo.gif' alt='" + paramsRequest.getLocaleString("msgUndoCOut") + "' height='14' width='45' border='0'></a>");
                                 } else {
-                                    ret.append("<IMG src='" + path + paramsRequest.getLocaleString("img_Reserved") + ".gif' alt='" + paramsRequest.getLocaleString("msgReserved") + "' border='0'>");
+                                    ret.append("<img src='" + path + paramsRequest.getLocaleString("img_Reserved") + ".gif' alt='" + paramsRequest.getLocaleString("msgReserved") + "' border='0'>");
                                 }
                             }
                         }
@@ -1592,9 +1592,9 @@ public class RepositoryFile {
                         if (!subcriptions.contains(new Long(0))) { //dir
 
                             if (!subcriptions.contains(new Long(repdocid))) {
-                                ret.append("<a href=\"javascript: doSuscribeDoc(" + i_log + "," + repdocid + ");\"><IMG src='" + path + "suscribe.gif' alt='" + paramsRequest.getLocaleString("msgSuscribe") + "' border='0'></a>");
+                                ret.append("<a href=\"javascript: doSuscribeDoc(" + i_log + "," + repdocid + ");\"><img src='" + path + "suscribe.gif' alt='" + paramsRequest.getLocaleString("msgSuscribe") + "' border='0'></a>");
                             } else {
-                                ret.append("<a href=\"javascript: doUnsuscribeDoc(" + i_log + "," + repdocid + ");\"><IMG src='" + path + "unsuscribe.gif' alt='" + paramsRequest.getLocaleString("msgUnSuscribe") + "' border='0'></a>");
+                                ret.append("<a href=\"javascript: doUnsuscribeDoc(" + i_log + "," + repdocid + ");\"><img src='" + path + "unsuscribe.gif' alt='" + paramsRequest.getLocaleString("msgUnSuscribe") + "' border='0'></a>");
                             }
                         }
                     }
@@ -1619,9 +1619,9 @@ public class RepositoryFile {
                     if (candelete && user.isSigned()) {
                         if (repstatus == 0) {
                             if (resource.getAttribute("showdirectory", "true").equals("true")) {
-                                ret.append("<a href=\"javascript: doMoveDocDir(" + i_log + "," + repdocid + ");\"><IMG src='" + path + "folder.gif' alt='" + paramsRequest.getLocaleString("msgALTMove") + "' border='0'></a>");
+                                ret.append("<a href=\"javascript: doMoveDocDir(" + i_log + "," + repdocid + ");\"><img src='" + path + "folder.gif' alt='" + paramsRequest.getLocaleString("msgALTMove") + "' border='0'></a>");
                             }
-                            ret.append("<a href=\"javascript: doDelete(" + i_log + "," + repdocid + ");\"><IMG src='" + path + "delete.gif' alt='" + paramsRequest.getLocaleString("msgAltDelete") + "' border='0'></a>");
+                            ret.append("<a href=\"javascript: doDelete(" + i_log + "," + repdocid + ");\"><img src='" + path + "delete.gif' alt='" + paramsRequest.getLocaleString("msgAltDelete") + "' border='0'></a>");
                         }
                     }
                     if (nivel >= 1) {
@@ -1646,30 +1646,30 @@ public class RepositoryFile {
                             tmp = 1;
                         }
                         if (inline) {
-                            ret.append("<a href=\"javascript: doViewInLine(" + tmp + "," + repdocid + ");\"><IMG src='" + path + "preview.gif' alt='" + paramsRequest.getLocaleString("msgAltPreview") + "' border='0'></a>");
+                            ret.append("<a href=\"javascript: doViewInLine(" + tmp + "," + repdocid + ");\"><img src='" + path + "preview.gif' alt='" + paramsRequest.getLocaleString("msgAltPreview") + "' border='0'></a>");
                         } else {
-                            ret.append("<a href=\"javascript: doView(" + tmp + "," + repdocid + ");\"><IMG src='" + path + "preview.gif' alt='" + paramsRequest.getLocaleString("msgAltPreview") + "' border='0'></a>");
+                            ret.append("<a href=\"javascript: doView(" + tmp + "," + repdocid + ");\"><img src='" + path + "preview.gif' alt='" + paramsRequest.getLocaleString("msgAltPreview") + "' border='0'></a>");
                         }
                     }
-                    ret.append("</TD>");
-                    ret.append("</TR>");
+                    ret.append("</td>");
+                    ret.append("</tr>");
 
-                    ret.append("<TR>");
-                    ret.append("<Td colspan='2'>");
+                    ret.append("<tr>");
+                    ret.append("<td colspan='2'>");
                     ret.append("<img width=\"100%\" src=\"" + path + "line.gif\" height=5>");
-                    ret.append("</Td>");
-                    ret.append("</TR>");
-                    ret.append("<TR>");
-                    ret.append("<TD colspan='2' align='center'>");
+                    ret.append("</td>");
+                    ret.append("</tr>");
+                    ret.append("<tr>");
+                    ret.append("<td colspan='2' align='center'>");
                     if (canupdate && user.isSigned()) {
-                        ret.append("<input  type='button' name='s' value='" + paramsRequest.getLocaleString("msgBTNSubmit") + "' onClick='javascript:valida(" + i_log + ")'>&nbsp;&nbsp;&nbsp;");
+                        ret.append("<input  type='button' name='s' value='" + paramsRequest.getLocaleString("msgBTNSubmit") + "' onClick='javascript:valida(" + i_log + ")' />&nbsp;&nbsp;&nbsp;");
                     }
-                    ret.append("<input  type='button' name='n' value='" + paramsRequest.getLocaleString("msgBTNViewAllFiles") + "' onClick='javascript:init()'>&nbsp;&nbsp;&nbsp;");
+                    ret.append("<input  type='button' name='n' value='" + paramsRequest.getLocaleString("msgBTNViewAllFiles") + "' onClick='javascript:init()' />&nbsp;&nbsp;&nbsp;");
                     if (canupdate && user.isSigned()) {
                         ret.append("<input  type='button' name='c' value='" + paramsRequest.getLocaleString("msgBTNCancel") + "' onClick='javascript:init()'>");
                     }
-                    ret.append("</TD>");
-                    ret.append("</TR>");
+                    ret.append("</td>");
+                    ret.append("</tr>");
                 }
             }
             ps.close();
@@ -1968,46 +1968,37 @@ public class RepositoryFile {
             ret.append("\n<input type=\"hidden\" name=\"repdocid\" value=\"\">");
             ret.append("\n<input type=\"hidden\" name=\"repordid\" value=\"\">");
             ret.append("\n</form>");
-            ret.append("\n<TABLE width='100%'  border='0' cellspacing='0' cellpadding='1'>");
-            ret.append("\n<TR>");
-            ret.append("\n<TD colspan='10'>");
-            ret.append("\n<TABLE width='100%'  border='0' cellspacing='0' cellpadding='0'>");
-            ret.append("\n<TR>");
-            ret.append("\n<TD colspan='10' width='50%'><IMG src='" + path + "openfolder.gif' width='20' height='20'> <B class=\"Estilo6\"><FONT face=\"Verdana, Arial, Helvetica, sans-serif\">" + foldername);
+            ret.append("\n<table>");
+            ret.append("\n<caption>");
+            ret.append("\n<span>" + foldername+"</span> ");
             if (user.getId() != null && user.isSigned()) {
                 if (!subcriptions.contains(new Long(0))) {
-                    ret.append("&nbsp;&nbsp;&nbsp;<a href=\"javascript: doSuscribe(" + i_log + ");\"><FONT color='#666666' size='1' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgSuscribeDirectory") + "</font></a>");
+                    ret.append("<a  class=\"suscribir\" href=\"javascript: doSuscribe(" + i_log + ");\" title=\"" + paramsRequest.getLocaleString("msgSuscribeDirectory") + "\"><span>" + paramsRequest.getLocaleString("msgSuscribeDirectory") + "</span></a>");
                 } else {
-                    ret.append("&nbsp;&nbsp;&nbsp;<a href=\"javascript: doUnsuscribe(" + i_log + ");\"><FONT color='#666666' size='1' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgUnsuscribeDirectory") + "</font></a>");
+                    ret.append("<a class=\"nosuscribir\" href=\"javascript: doUnsuscribe(" + i_log + ");\" title=\"" + paramsRequest.getLocaleString("msgUnsuscribeDirectory") + "\" ><span>" + paramsRequest.getLocaleString("msgUnsuscribeDirectory") + "</span></a>");
                 }
             }
-            ret.append("</FONT></B></TD>");
             if (nivel >= 2 && user.isSigned()) {
-                ret.append("\n<TD width='50%' align='right'><A href=\"javascript: doAddFile(" + i_log + ");\"><IMG src='" + path + "add.gif' alt='" + paramsRequest.getLocaleString("msgAltAdd") + "' width='20' height='18' border='0'></A><FONT size='1' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgALTAddFile") + "</FONT> </TD>");
+                ret.append("\n<a class=\"agregar\" href=\"javascript: doAddFile(" + i_log + ");\" title=\"" + paramsRequest.getLocaleString("msgAltAdd") + "\"><span>" + paramsRequest.getLocaleString("msgALTAddFile") + "</span></a>");
             }
-            ret.append("\n</TR>");
-            ret.append("\n</TABLE>");
-            ret.append("\n</TD>");
-            ret.append("\n</TR>");
+            ret.append("\n</caption>");
 
-            ret.append("\n<TR bgcolor='#589942'>");
-            ret.append("\n<TD width='20'><FONT color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>&nbsp;</FONT></TD>");
-            ret.append("\n<TD width='20'><FONT color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>&nbsp;</FONT></TD>");
-            ret.append("\n<TD width='150'><FONT color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'><a style=\"text-decoration:none; color:#FFFFFF;\" href=\"javascript: doResOrderTitle();\" >" + paramsRequest.getLocaleString("msgTitle") + "</a></FONT></TD>");
-            ret.append("\n<TD width='150' align='center'><FONT color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'><a style=\"text-decoration:none; color:#FFFFFF;\" href=\"javascript: doResOrderDate();\">" + paramsRequest.getLocaleString("msgDate") + "</a></FONT></TD>");
-
-            if (nivel >= 2) {
-                ret.append("\n<TD width='140' align='center'><FONT color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgCheck") + "</FONT></TD>");
+            ret.append("\n<thead>");
+            ret.append("\n<tr>");
+            ret.append("\n<th class=\"info\">Información</th>");
+            ret.append("\n<th class=\"archivo\"><a href=\"#\" onclick=\"javascript: doResOrderTitle();\" >" + paramsRequest.getLocaleString("msgTitle") + "</a></th>");
+            ret.append("\n<th class=\"fecha\"><a  href=\"#\" onclick=\"javascript: doResOrderDate();\">" + paramsRequest.getLocaleString("msgDate") + "</a></th>");
+             if (nivel >= 2) {
+                 ret.append("\n<th class=\"marcar\">" + paramsRequest.getLocaleString("msgCheck") + "</th>");
             } else {
-                ret.append("\n<td></td>");
+                 ret.append("\n<th class=\"marcar\">&nbsp;</th>");
             }
-            ret.append("\n<TD width='80' align='center'><FONT color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgAction") + "</FONT></TD>");
+            ret.append("\n<th class=\"accion\">" + paramsRequest.getLocaleString("msgAction") + "</th>");
+            ret.append("\n</tr>");
+            ret.append("\n</thead>");
 
-            ret.append("\n</TR>");
-            ret.append("\n<TR>");
-            ret.append("\n<TD colspan='10'><IMG src='" + path + "line.gif' width='100%' height='5'></TD>");
-            ret.append("\n</TR>");
-
+            ret.append("\n<tbody>");
+            
             while (rs.next()) {
                 long repdocid = rs.getLong("rep_docId");
                 String reptitle = rs.getString("rep_title");
@@ -2024,42 +2015,41 @@ public class RepositoryFile {
                     String repfiletype = rsversions.getString("rep_fileType");
                     ret.append("<tr>");
 
-                    ret.append("\n<TD width='20'><a href=\"javascript: doInfo(" + repdocid + ");\">" + "<IMG src='" + path + "info.gif' width='20' height='14' border='0'>" + "</a></TD>"); //paramsRequest.getLocaleString("msgInfo")
-
-                    String file = "ico_default2.gif";
+                    ret.append("\n<td class=\"info\"><a href=\"#\" onclick=\"javascript: doInfo(" + repdocid + ");\" title=\""+paramsRequest.getLocaleString("msgInfo")+"\">" + "<span>Más información" + "</span></a></td>");
+                    
+                    String file = "default";
                     String type = "";
+                    String classStyle = "";
                     if (repfiletype != null) {
                         type = rsversions.getString("rep_fileName");
                         file = getFileName(type);
+                        classStyle = getFileStyleClass(type);
                     }
-
-                    //ret.append("\n<TD width='20'><a href=\"javascript: doView(" + i_log + ","+ repdocid+",'"+type+"');\" ><IMG border=0 src='"+ path +""+ file +"' alt=\""+getFileType(type)+"\"></a></TD>");
 
                     SWBResourceURL urllineA = paramsRequest.getRenderUrl();
                     urllineA.setCallMethod(urllineA.Call_DIRECT);
-                    ret.append("\n<TD width='20'>");//"<a href=\"javascript: doView(" + i_log + ","+ repdocid+",'"+type+"');\" ></a></TD>");
+                    
+                    ret.append("\n<td class=\"archivo\">");
                     if (i_log == 1 || supportGuestUser() == 1) {
-                        ret.append("<a target='_new' href='" + urllineA + "/" + type + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + Long.toString(repdocid) + "&repinline=true'><IMG border=0 src='" + path + "" + file + "' alt=\"" + getFileType(type) + "\"></a>");
+                        ret.append("<a  class=\""+classStyle+"\" target='_new' href='" + urllineA + "/" + type + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + Long.toString(repdocid) + "&repinline=true' title=\"" + getFileType(type) + "\"><span>" + reptitle+"</span></a>");
                     } else {
-                        ret.append("<a onclick='javascript:alert(\"Debes estar firmado para poder ver este archivo.\")'><IMG border=0 src='" + path + "" + file + "' alt=\"" + getFileType(type) + "\"></a>");
+                        ret.append("\n<a class=\""+classStyle+"\" href=\"#\" onclick=\"javascript:alert('Debes estar firmado para poder ver este archivo.');\" title=\"" + getFileType(type) + "\"><span>" + reptitle+"</span></a>");
                     }
-                    ret.append("</TD>");
 
-
-                    ret.append("\n<TD width='150'><FONT size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + reptitle);
-                    ret.append("\n</FONT></TD>");
+                    ret.append("\n</td>");
 
                     Timestamp repcreate = rsversions.getTimestamp("rep_create");
                     String date = repcreate.toString();
                     DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, new java.util.Locale("es"));
                     date = df.format(new Date(repcreate.getTime()));
-                    ret.append("\n<TD width='150'><FONT size='1' face='Verdana, Arial, Helvetica, sans-serif'>" + date + "</FONT></TD>");
+                    ret.append("\n<td  class=\"fecha\">" + date + "</td>");
 
+                    ret.append("<td class=\"marcar\">");
                     if (nivel >= 2 && user.isSigned()) {
                         if (repstatus == 0) {
-                            ret.append("\n<TD width='140' align=\"center\">");
-                            ret.append("<A href=\"javascript: doCheckout(" + i_log + "," + repdocid + ");\"><IMG src='" + path + "out.gif' height='14' width='25' alt='" + paramsRequest.getLocaleString("msgCOut") + "' border='0'></A>");
-                            ret.append("</TD>");
+                            
+                            ret.append("<a  class=\"out\" href=\"#\" onclick=\"javascript: doCheckout(" + i_log + "," + repdocid + ");\" title='" + paramsRequest.getLocaleString("msgCOut") + "'><span>out</span></a>");
+
                         } else {
                             boolean cancheckin = false;
                             PreparedStatement psuser = con.prepareStatement("select rep_emailCheckOut from resrepository where rep_docId=? and idtm=?");
@@ -2077,38 +2067,32 @@ public class RepositoryFile {
 
                             rsuser.close();
                             psuser.close();
-                            String strReservado = ""; //<font size='-3' face='Verdana, Arial, Helvetica, sans-serif'>&lt;reservado&gt;</font>";  // despues cambiar por la imagen <IMG src='"+ path +"undo.gif' alt='"+paramsRequest.getLocaleString("msgReserved)+"' height='14' width='45' border='0' />
+                            String strReservado = ""; 
 
-                            strReservado = "<IMG src=\"" + path + paramsRequest.getLocaleString("img_Reserved") + ".gif\" alt=\"" + paramsRequest.getLocaleString("msgReserved") + "\" height=\"14\" width=\"45\" border=\"0\" />&nbsp;";
+                            strReservado =  "<a href=\"#\" class=\"reser\"><span>"+paramsRequest.getLocaleString("img_Reserved") +"</span></a> ";
                             if (cancheckin) {
-                                ret.append("\n<TD width='140' align=\"center\">\r\n<A href=\"javascript: doCheckin(" + i_log + "," + repdocid + ");\">");
-                                ret.append("\n<IMG src='" + path + "in.gif' alt='" + paramsRequest.getLocaleString("msgCIn") + "' height='14' width='25' border='0' /></A>");
-                                ret.append("&nbsp;<A href=\"javascript: doUndocheckout(" + i_log + "," + repdocid + ");\"><IMG src='" + path + "undo.gif' alt='" + paramsRequest.getLocaleString("msgUndoCOut") + "' height='14' width='45' border='0' /></A>");
-                                ret.append("\n</TD>");
+                                ret.append("\n<a  class=\"in\" href=\"#\" onclick=\"javascript: doCheckin(" + i_log + "," + repdocid + ");\" title'" + paramsRequest.getLocaleString("msgCIn") + "'> ");
+                                ret.append("\n<span>in</span></a>");
+                                ret.append("<a class=\"undo\" href=\"#\" onclick=\"javascript: doUndocheckout(" + i_log + "," + repdocid + ");\" title='" + paramsRequest.getLocaleString("msgUndoCOut") + "' ><span>undo</span></a>");
                             } else {
                                 if (nivel == 3) {
-                                    ret.append("\n<TD width='140' align=\"center\">");
                                     ret.append(strReservado);
-                                    ret.append("<a href=\"javascript: doUndocheckout(" + i_log + "," + repdocid + ");\"><IMG src='" + path + "undo.gif' alt='" + paramsRequest.getLocaleString("msgUndoCOut") + "' height='14' width='45' border='0'></a>");
-                                    ret.append("\n</TD>");
+                                    ret.append("<a class=\"undo\" href=\"#\" onclick=\"javascript: doUndocheckout(" + i_log + "," + repdocid + ");\" title='" + paramsRequest.getLocaleString("msgUndoCOut") + "' ><span>undo</span></a>");
                                 } else {
-                                    ret.append("\n<TD width='140' align='center'>");
                                     ret.append(strReservado);
-                                    ret.append("\n</TD>");
                                 }
-
                             }
-
                         }
                     }
-                    ret.append("<TD width='80' align='center'>");
+                    ret.append("\n</td>");
+                    ret.append("\n<td class=\"accion\">");
                     if (user.getId() != null && user.isSigned()) {
                         if (!subcriptions.contains(new Long(0))) //dir
                         {
                             if (!subcriptions.contains(new Long(repdocid))) {
-                                ret.append("<a href=\"javascript: doSuscribeDoc(" + i_log + "," + repdocid + ");\"><IMG src='" + path + "suscribe.gif' alt='" + paramsRequest.getLocaleString("msgSuscribe") + "' border='0'></a>");
+                                ret.append("<a href=\"#\" class=\"suscribir\" onclick=\"javascript: doSuscribeDoc(" + i_log + "," + repdocid + ");\" title=\"" + paramsRequest.getLocaleString("msgSuscribe") + "\"><span>Susribir</span></a>");
                             } else {
-                                ret.append("<a href=\"javascript: doUnsuscribeDoc(" + i_log + "," + repdocid + ");\"><IMG src='" + path + "unsuscribe.gif' alt='" + paramsRequest.getLocaleString("msgUnSuscribe") + "' border='0'></a>");
+                                ret.append("<a href=\"#\" class=\"nosuscribir\" onclick=\"javascript: doUnsuscribeDoc(" + i_log + "," + repdocid + ");\" title='" + paramsRequest.getLocaleString("msgUnSuscribe") + "' ><span>Cancelar susribir</span></a>");
                             }
                         }
                     }
@@ -2132,9 +2116,9 @@ public class RepositoryFile {
                     if (candelete && user.isSigned()) {
                         if (repstatus == 0) {
                             if (resource.getAttribute("showdirectory", "true").equals("true")) {
-                                ret.append("<a href=\"javascript: doMoveDocDir(" + i_log + "," + repdocid + ");\"><IMG src='" + path + "folder.gif' alt='" + paramsRequest.getLocaleString("msgALTMove") + "' border='0'></a>");
+                                ret.append("<a href=\"#\" class=\"mover\" title=\"" + paramsRequest.getLocaleString("msgALTMove") + "\" onclick=\"javascript: doMoveDocDir(" + i_log + "," + repdocid + ");\"><span>Mover</span></a>");
                             }
-                            ret.append("<a href=\"javascript: doDelete(" + i_log + "," + repdocid + ");\"><IMG src='" + path + "delete.gif' alt='" + paramsRequest.getLocaleString("msgALTDelete") + "' border='0'></a>");
+                            ret.append("<a href=\"#\" class=\"eliminar\" title=\"" + paramsRequest.getLocaleString("msgALTDelete") + "\" onclick=\"javascript: doDelete(" + i_log + "," + repdocid + ");\"><span>Eliminar</span></a>");
                         }
                     }
                     if (nivel >= 1) {
@@ -2155,39 +2139,35 @@ public class RepositoryFile {
                         if (inline) {
                             SWBResourceURL urlline = paramsRequest.getRenderUrl();
                             urlline.setCallMethod(urlline.Call_DIRECT);
-//                            urlline.setParameter("repfop","view");
-//                            urlline.setParameter("reptp", dir.getId());
-//                            urlline.setParameter("repfiddoc",Long.toString(repdocid));
-//                            urlline.setParameter("repinline","true");
+
                             if (i_log == 1 || supportGuestUser() == 1) {
-                                ret.append("<a target='_new' href='" + urlline + "/" + type + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + Long.toString(repdocid) + "&repinline=true'><IMG src='" + path + "preview.gif' alt='" + paramsRequest.getLocaleString("msgALTPreview") + "' border='0'></a>");
+                                ret.append("<a  class=\"ver\" title=\"" + paramsRequest.getLocaleString("msgALTPreview") + "\" target='_new' href='" + urlline + "/" + type + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + Long.toString(repdocid) + "&repinline=true'><span>Ver</span></a>");
                             } else {
-                                ret.append("<a onclick='javascript:alert(\"Debes estar firmado para poder ver este archivo.\")'><IMG src='" + path + "preview.gif' alt='" + paramsRequest.getLocaleString("msgALTPreview") + "' border='0'></a>");
+                                ret.append("<a href=\"#\" class=\"ver\" title=\"'" + paramsRequest.getLocaleString("msgALTPreview") + "\" onclick='javascript:alert(\"Debes estar firmado para poder ver este archivo.\")'><span>Ver</span></a>");
                             }
                         } else {
                             int tmp = i_log;
                             if (supportGuestUser() == 1) {
                                 tmp = 1;
                             }
-                            ret.append("<a href=\"javascript: doView(" + tmp + "," + repdocid + ",'" + type + "');\"><IMG src='" + path + "preview.gif' alt='" + paramsRequest.getLocaleString("msgALTPreview") + "' border='0'></a>");
+                            ret.append("<a href=\"#\" class=\"ver\" title=\"ver\" onclick=\"javascript: doView(" + tmp + "," + repdocid + ",'" + type + "');\"><span>Ver</span></a>");
                         }
                     }
-                    ret.append("</TD>");
-                    ret.append("</tr>");
-                    ret.append("<TR><TD colspan='10'><IMG src='" + path + "line.gif' width='100%' height='5'></TD></TR>");
+                    ret.append("</td>");
+                    
                 }
                 rsversions.close();
                 ps2.close();
+                ret.append("</tr>");
             }
+            
 
-            ret.append("<TR>");
-            ret.append("<TD  align='left' colspan='3'><FONT size='1' face='Verdana, Arial, Helvetica, sans-serif'><b>" + i_tot + "</b> " + "file(s)" + "</FONT></TD>");
-            ret.append("<TD  align='right' colspan='7'>");
-            if (nivel >= 2 && user.isSigned()) {
-                ret.append("<A href=\"javascript: doAddFile(" + i_log + ");\"><IMG src='" + path + "add.gif' alt='" + paramsRequest.getLocaleString("msgAdd") + "' width='20' height='18' border='0'></A><FONT size='1' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgAddFile") + "</FONT>");
-            }
-            ret.append("&nbsp;</TD>");
-            ret.append("</TR>");
+            ret.append("\n</tbody>");
+            ret.append("\n<tfoot>");
+            ret.append("\n<tr>");
+            ret.append("\n<td colspan=\"5\">" + i_tot + " file(s)</td>");
+            ret.append("\n</tr>");
+            ret.append("\n</tfoot>");
 
             rs.close();
             ps.close();
@@ -2249,7 +2229,44 @@ public class RepositoryFile {
         }
         return file;
     }
-
+    
+        public String getFileStyleClass(String filename) {
+        String file = "default";
+        String type = filename.toLowerCase();
+        if (type.indexOf(".bmp") != -1 || type.indexOf(".gif") != -1 || type.indexOf(".img") != -1|| type.indexOf(".jpg") != -1|| type.indexOf(".jpeg") != -1|| type.indexOf(".tif") != -1|| type.indexOf(".tiff") != -1|| type.indexOf(".png") != -1) {
+            file = "img";
+        } else if (type.indexOf(".pdf") != -1) {
+            file = "pdf";
+        } else if (type.indexOf(".xls") != -1 || type.indexOf(".xlsx") != -1) {
+            file = "xls";
+        } else if (type.indexOf(".html") != -1 || type.indexOf(".htm") != -1) {
+            file = "htm";
+        } else if (type.indexOf("vsd") != -1 || type.indexOf("vsdx") != -1) {
+            file = "vsd";
+        } else if (type.indexOf(".ppt") != -1 || type.indexOf(".pptx") != -1) {
+            file = "ppt";
+        } else if (type.indexOf(".exe") != -1) {
+            file = "exe";
+        } else if (type.indexOf(".txt") != -1 || type.indexOf(".properties") != -1) {
+            file = "txt";
+        } else if (type.indexOf(".doc") != -1 || type.indexOf(".docx") != -1 || type.indexOf(".rtf") != -1) {
+            file = "doc";
+        } else if (type.indexOf(".xml") != -1 || type.indexOf(".xsl") != -1 || type.indexOf(".xslt") != -1) {
+            file = "xml";
+        } else if (type.indexOf(".mmap") != -1 || type.indexOf(".mm") != -1 || type.indexOf(".xmind") != -1) {
+            file = "mmap";
+        } else if (type.indexOf(".mpp") != -1 ) {
+            file = "mpp";
+        } else if (type.indexOf(".avi") != -1 || type.indexOf(".mpeg") != -1  || type.indexOf(".mov") != -1  || type.indexOf(".mts") != -1  ) {
+            file = "avi";
+        } else if (type.indexOf(".mp3") != -1 || type.indexOf(".mp4") != -1  || type.indexOf(".wma") != -1  || type.indexOf(".aac") != -1 || type.indexOf(".wav") != -1 ) {
+            file = "mp3";
+        } else if (type.indexOf(".zip") != -1 || type.indexOf(".rar") != -1) {
+            file = "zip";
+        }
+        return file;
+    }
+        
     /**
      * Get the file type
      *
@@ -2342,23 +2359,23 @@ public class RepositoryFile {
             ResultSet rs = ps.executeQuery();
 
             String tp = dir.getId();
-            ret.append("\n<TABLE width='100%'  border='0' cellspacing='0' cellpadding='1'>");
-            ret.append("\n<TR>");
-            ret.append("\n<TD colspan='10'><IMG src='" + path + "openfolder.gif' width='20' height='20'> <B><FONT face='Verdana, Arial, Helvetica, sans-serif' size=\"2\">" + dir.getDisplayName() + "</FONT></B></TD>");
-            ret.append("</TR>");
-            ret.append("\n<TR bgcolor='#589942'>");
-            ret.append("\n<TD width='20'><FONT color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>&nbsp;</FONT></TD>");
-            ret.append("\n<TD width='55'><FONT color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgVersion") + "</FONT></TD>");
-            ret.append("\n<TD><FONT color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgAuthor") + "</FONT></TD>");
-            ret.append("\n<TD width='90'><FONT color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgComments") + "</FONT></TD>");
-            ret.append("\n<TD width='100'><FONT color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgFileName") + "</FONT></TD>");
-            ret.append("\n<TD width='100'><FONT color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgLastUpdate") + "</FONT></TD>");
-            ret.append("\n<TD width='55'><FONT color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgSize") + "</FONT></TD>");
+            ret.append("\n<table width='100%'  border='0' cellspacing='0' cellpadding='1'>");
+            ret.append("\n<tr>");
+            ret.append("\n<td colspan='10'><img src='" + path + "openfolder.gif' width='20' height='20'> <B><font face='Verdana, Arial, Helvetica, sans-serif' size=\"2\">" + dir.getDisplayName() + "</font></B></td>");
+            ret.append("</tr>");
+            ret.append("\n<tr bgcolor='#589942'>");
+            ret.append("\n<td width='20'><font color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>&nbsp;</font></td>");
+            ret.append("\n<td width='55'><font color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgVersion") + "</font></td>");
+            ret.append("\n<td><font color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgAuthor") + "</font></td>");
+            ret.append("\n<td width='90'><font color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgComments") + "</font></td>");
+            ret.append("\n<td width='100'><font color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgFileName") + "</font></td>");
+            ret.append("\n<td width='100'><font color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgLastUpdate") + "</font></td>");
+            ret.append("\n<td width='55'><font color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgSize") + "</font></td>");
             if (nivel >= 1) {
-                ret.append("\n<TD width='55' align='center'><FONT color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgView") + "</FONT></TD>");
+                ret.append("\n<td width='55' align='center'><font color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgView") + "</font></td>");
             }
-            ret.append("\n</TR>");
-            ret.append("\n<TR><TD colspan='10'><IMG src='" + path + "line.gif' width='100%' height='5'></TD></TR>");
+            ret.append("\n</tr>");
+            ret.append("\n<tr><td colspan='10'><img src='" + path + "line.gif' width='100%' height='5' /></td></tr>");
 
             while (rs.next()) {
                 file = "file.gif";
@@ -2389,27 +2406,27 @@ public class RepositoryFile {
                 SWBResourceURL urlrecdoc = paramsRequest.getRenderUrl();
                 urlrecdoc.setCallMethod(urlrecdoc.Call_DIRECT);
                 ret.append("\n<tr>");
-                ret.append("\n<TD width='20'><a href='" + urlrecdoc.toString() + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + rs.getString("rep_docId") + "&repfversion=" + rs.getString("rep_fileVersion") + "'><IMG src='" + path + "" + file + "' border=0></a></TD>");
-                ret.append("\n<TD align='center' width='55'><FONT size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + rs.getString("rep_fileVersion") + "</FONT></TD>");
-                ret.append("\n<TD width='55'><FONT size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + s_author + "</FONT></TD>");
-                ret.append("\n<TD width='55'><FONT size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + rs.getString("rep_comment") + "</FONT></TD>");
-                ret.append("\n<TD width='55'><FONT size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + rs.getString("rep_fileName") + "</FONT></TD>");
+                ret.append("\n<td width='20'><a href='" + urlrecdoc.toString() + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + rs.getString("rep_docId") + "&repfversion=" + rs.getString("rep_fileVersion") + "'><img src='" + path + "" + file + "' border='0' /></a></td>");
+                ret.append("\n<td align='center' width='55'><font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + rs.getString("rep_fileVersion") + "</font></td>");
+                ret.append("\n<td width='55'><font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + s_author + "</font></td>");
+                ret.append("\n<td width='55'><font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + rs.getString("rep_comment") + "</font></td>");
+                ret.append("\n<td width='55'><font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + rs.getString("rep_fileName") + "</font></td>");
                 Timestamp repcreate = rs.getTimestamp("rep_create");
                 date = repcreate.toString();
                 DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, new java.util.Locale("es"));
                 date = df.format(new Date(repcreate.getTime()));
 
-                ret.append("\n<TD width='55'><FONT size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + date + "</FONT></TD>");
+                ret.append("\n<td width='55'><font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + date + "</font></td>");
 
 
                 int size = rs.getInt("rep_fileSize") / 1024;
                 if (size == 0) {
                     size = 1;
                 }
-                ret.append("\n<TD width='55'><FONT size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + size + " Kb</FONT></TD>");
+                ret.append("\n<td width='55'><font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + size + " Kb</font></td>");
 
                 if (nivel >= 1) {
-                    ret.append("<TD width='55' align='center'>");
+                    ret.append("<td width='55' align='center'>");
                     boolean inline = false;
                     if (rs.getString("rep_fileType") != null) {
                         for (int i = 0; i < values.length; i++) {
@@ -2427,20 +2444,20 @@ public class RepositoryFile {
                     if (inline) {
                         SWBResourceURL urlrec = paramsRequest.getRenderUrl();
                         urlrec.setCallMethod(urlrec.Call_DIRECT);
-                        ret.append("\n<a target='_new' href='" + urlrec.toString() + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + rs.getString("rep_docId") + "&repfversion=" + rs.getString("rep_fileVersion") + "&repinline=true'><IMG src='" + path + "preview.gif' alt='" + paramsRequest.getLocaleString("msgALTPreview") + "' border='0'></a>");
+                        ret.append("\n<a target='_new' href='" + urlrec.toString() + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + rs.getString("rep_docId") + "&repfversion=" + rs.getString("rep_fileVersion") + "&repinline=true'><img src='" + path + "preview.gif' alt='" + paramsRequest.getLocaleString("msgALTPreview") + "' border='0' /></a>");
                     } else {
                         SWBResourceURL urlrec = paramsRequest.getRenderUrl();
                         urlrec.setCallMethod(urlrec.Call_DIRECT);
-                        ret.append("\n<a href='" + urlrec.toString() + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + rs.getString("rep_docId") + "&repfversion=" + rs.getString("rep_fileVersion") + "'><IMG src='" + path + "preview.gif' alt='" + paramsRequest.getLocaleString("msgALTPreview") + "' border='0'></a>");
+                        ret.append("\n<a href='" + urlrec.toString() + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + rs.getString("rep_docId") + "&repfversion=" + rs.getString("rep_fileVersion") + "'><img src='" + path + "preview.gif' alt='" + paramsRequest.getLocaleString("msgALTPreview") + "' border='0' /></a>");
                     }
-                    ret.append("\n</TD>");
+                    ret.append("\n</td>");
                 }
                 ret.append("\n</tr>");
-                ret.append("\n<TR><TD colspan='10'><IMG src='" + path + "line.gif' width='100%' height='5'></TD></TR>");
+                ret.append("\n<tr><td colspan='10'><img src='" + path + "line.gif' width='100%' height='5' /></td></tr>");
             }
             rs.close();
             ps.close();
-            ret.append("\n<TR><TD colspan='10' align='center'><input  type='button' name='n' value='" + paramsRequest.getLocaleString("msgBTNViewAllFiles") + "' onClick='javascript:init()'></TD></TR>");
+            ret.append("\n<tr><td colspan='10' align='center'><input  type='button' name='n' value='" + paramsRequest.getLocaleString("msgBTNViewAllFiles") + "' onClick='javascript:init()' /></td></tr>");
             ret.append("\n</table>");
             ret.append("<script type='text/javascript'>\r\n");
             ret.append("function textCounter(field,  maxlimit) {\r\n");
@@ -2670,24 +2687,24 @@ public class RepositoryFile {
         }
         ret.append("\n<form name='frmnewdoc' method='POST' enctype='multipart/form-data' action='" + url.toString() + "'>");
         ret.append("\n<input type='hidden' name='repfop' value='insert'>");
-        ret.append("\n<TABLE width='100%'  border='0' cellspacing='0' cellpadding='1'>");
-        ret.append("\n<TR>");
-        ret.append("\n<TD colspan='2'><IMG src='" + path + "openfolder.gif' width='20' height='20'> <B><FONT face='Verdana, Arial, Helvetica, sans-serif' size=\"2\">" + dir.getDisplayName() + "</FONT></B></TD>");
-        ret.append("\n</TR>");
-        ret.append("\n<TR>");
-        ret.append("\n<TD colspan='10'><IMG src='" + path + "line.gif' width='100%' height='5'></TD>");
-        ret.append("\n</TR>");
+        ret.append("\n<table width='100%'  border='0' cellspacing='0' cellpadding='1'>");
+        ret.append("\n<tr>");
+        ret.append("\n<td colspan='2'><img src='" + path + "openfolder.gif' width='20' height='20' /> <B><font face='Verdana, Arial, Helvetica, sans-serif' size=\"2\">" + dir.getDisplayName() + "</font></B></td>");
+        ret.append("\n</tr>");
+        ret.append("\n<tr>");
+        ret.append("\n<td colspan='10'><img src='" + path + "line.gif' width='100%' height='5' /></td>");
+        ret.append("\n</tr>");
         ret.append("\n<tr>");
         ret.append("\n<td width=\"200\">");
-        ret.append("\n<FONT face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgTitleDocument") + "</font>");
+        ret.append("\n<font face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgTitleDocument") + "</font>");
         ret.append("\n</td>");
         ret.append("\n<td>");
-        ret.append("\n<input  type='text' maxlength='99' name='repftitle'>");
+        ret.append("\n<input  type='text' maxlength='99' name='repftitle' />");
         ret.append("\n</td>");
         ret.append("\n</tr>");
         ret.append("\n<tr>");
         ret.append("\n<td width=\"200\">");
-        ret.append("\n<FONT face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgDescription") + "</font>");
+        ret.append("\n<font face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgDescription") + "</font>");
         ret.append("\n</td>");
         ret.append("\n<td>");
         ret.append("\n<textarea rows='5' name='repfdescription' cols='20' onKeyDown='textCounter(this.form.repfdescription,255);' onKeyUp='textCounter(this.form.repfdescription,255);'></textarea>");
@@ -2695,19 +2712,19 @@ public class RepositoryFile {
         ret.append("\n</tr>");
         ret.append("\n<tr>");
         ret.append("\n<td width=\"200\">");
-        ret.append("\n<FONT face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgFile") + "</font>");
+        ret.append("\n<font face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgFile") + "</font>");
         ret.append("\n</td>");
         ret.append("\n<td>");
-        ret.append("\n<input type='file'  name='repfdoc'>");
+        ret.append("\n<input type='file'  name='repfdoc' />");
         ret.append("\n</td>");
         ret.append("\n</tr>");
-        ret.append("\n<TR>");
-        ret.append("\n<TD colspan='2'><IMG src='" + path + "line.gif' width='100%' height='5'></TD>");
-        ret.append("\n</TR>");
+        ret.append("\n<tr>");
+        ret.append("\n<td colspan='2'><img src='" + path + "line.gif' width='100%' height='5' /></td>");
+        ret.append("\n</tr>");
         ret.append("\n<tr>");
         ret.append("\n<td colspan='2' align='center'>");
-        ret.append("\n<input type='button'  name='s' value='" + paramsRequest.getLocaleString("msgBTNSave") + "' onclick='javascript:valida();'>\r\n");
-        ret.append("\n<input type='button'  name='cancel' value='" + paramsRequest.getLocaleString("msgBTNCancel") + "' onclick='javascript:init();'>\r\n");
+        ret.append("\n<input type='button'  name='s' value='" + paramsRequest.getLocaleString("msgBTNSave") + "' onclick='javascript:valida();' />\r\n");
+        ret.append("\n<input type='button'  name='cancel' value='" + paramsRequest.getLocaleString("msgBTNCancel") + "' onclick='javascript:init();' />\r\n");
         ret.append("\n</td>");
         ret.append("\n</tr>");
         ret.append("\n</table>");

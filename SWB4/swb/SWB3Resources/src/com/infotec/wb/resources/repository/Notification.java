@@ -28,14 +28,6 @@
 package com.infotec.wb.resources.repository;
 
 //import com.infotec.appfw.exception.AFException;
-//import com.infotec.appfw.util.AFUtils;
-//import com.infotec.appfw.lib.mail.MailMessage;
-//import com.infotec.topicmaps.Topic;
-//import com.infotec.wb.core.*;
-//import com.infotec.wb.core.db.*;
-//import com.infotec.wb.lib.*;
-//import com.infotec.wb.util.WBUtils;
-import com.infotec.appfw.lib.mail.MailMessage;
 import java.io.IOException;
 import java.sql.*;
 import java.util.*;
