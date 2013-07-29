@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -528,7 +529,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         String developerKey = getDeveloperKey();
         String uri = getRedirectUrl(request, paramRequest);
         //YouTube no permite enviarle una url dinamica por lo cual se envia a un jsp y nuevamnete se redirecciona
-        String uriTemp = "http://localhost:8080/work/SWBAdmin/jsp/oauth/callback.jsp";
+        String uriTemp = "http://localhost:8080/work/models/SWBAdmin/jsp/oauth/callback.jsp";
         //Se crea una variable de sesion para recuperar en el jsp la url dinamica
         HttpSession session = request.getSession(true);
         session.setAttribute("redirectYouTube", uri);
@@ -639,7 +640,15 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         System.out.println("Entra al metodo listen....");
         ArrayList<ExternalPost> aListExternalPost = new ArrayList();
         String searchPhrases = getPhrases(stream.getPhrase());
-
+         String category = "";
+        
+        Iterator<YouTubeCategory> it = listYoutubeCategories();
+       
+        while(it.hasNext()){
+            System.out.println("EL ITERATOR CATEGORY.." + category);
+            category = category + it.next().getId() + ",";
+        }
+        System.out.println("La cadena final de category es: " + category);
         int limit = 20;
         int maxResults = 10;
         int totalResources = 0;
@@ -658,6 +667,10 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             params.put("max-results", String.valueOf(maxResults));
             params.put("alt", "jsonc");
             params.put("orderby", "published");
+            if(category != ""){
+            params.put("category", category);
+            }
+            
             System.out.println("QUe palabras va a buscar: " + searchPhrases);
 
             try {
