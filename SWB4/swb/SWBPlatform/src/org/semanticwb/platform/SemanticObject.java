@@ -173,19 +173,19 @@ public class SemanticObject
     }    
     
     /**
-     * Carega de un semanticObject de DB
+     * Carga de un semanticObject de DB
      * @param smodel
      * @param res
      * @param stit 
      */
-    public SemanticObject(SemanticModel smodel, Resource res, StmtIterator stit) 
+    public SemanticObject(SemanticModel smodel, Resource res, Iterator<Statement> stit) 
     {
         m_model=smodel;
         m_res=res;
         init(stit);
     }
     
-    private void init(StmtIterator stit)
+    private void init(Iterator<Statement> stit)
     {
         while (stit.hasNext()) 
         {            
@@ -202,7 +202,7 @@ public class SemanticObject
                 //System.out.println("Class:"+m_cls);
             }
         }
-        stit.close();
+        if(stit instanceof StmtIterator)((StmtIterator)stit).close();
     }
         
     private void initInverse(StmtIterator stit)
