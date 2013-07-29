@@ -703,8 +703,8 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                     }
                     String categoryItem = id.getString("category");
                    
-                    JSONObject content = id.getJSONObject("content");
-                    String url = content.getString("5");
+                    JSONObject player = id.getJSONObject("player");
+                    String url = player.getString("default");
                     System.out.println("uploaded:" + uploadedStr + " -- " + lastVideoID);
                     //Temporal
                     Date uploaded = formatter.parse(id.getString("uploaded"));
@@ -722,6 +722,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                         external.setMessage(description);
                         external.setCategory(categoryItem);
                         external.setSocialNetwork(this);
+                        external.setLink(url);
                         external.setPostType(SWBSocialUtil.VIDEO);
                         aListExternalPost.add(external);
                         currentVideoID = uploaded;
