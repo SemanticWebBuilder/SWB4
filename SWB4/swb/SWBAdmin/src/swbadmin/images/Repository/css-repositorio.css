@@ -1,0 +1,167 @@
+@charset "utf-8";
+/* CSS Document */
+.rounded {
+behavior: url(images/border-radius.htc); /*IE */
+border-radius:2px; /*opera y CSS3*/ 
+-moz-border-radius:2px; /*FireFox*/
+-webkit-border-radius:2px; /*Safari Chrome*/
+-khtml-border-radius:2px; /* Linux browers */
+}
+
+#repositorio *  { margin:0; padding:0; font-family:Arial, Helvetica, sans-serif;}
+#repositorio 	{ border:solid 1px #ccc; width:100%;
+border-radius:5px; /*opera y CSS3*/ 
+-moz-border-radius:5px; /*FireFox*/
+-webkit-border-radius:5px; /*Safari Chrome*/
+-khtml-border-radius:5px;}
+#repositorio p  { font-weight:bold; font-size:16px;}
+
+#titulo   { border-bottom:solid 1px #efefef;}
+#titulo p {  border-bottom:solid 1px #ccc; padding:6px 0 6px 20px; color:#666; text-shadow:1px 1px 0px #FFF; letter-spacing:1px;
+border-radius:5px 5px 0px 0px; /*opera y CSS3*/ 
+-moz-border-radius:5px 5px 0px 0px; /*FireFox*/
+-webkit-border-radius:5px 5px 0px 0px; /*Safari Chrome*/
+-khtml-border-radius:5px 5px 0px 0px;
+background: #efefef; 
+background: -webkit-linear-gradient(#fff, #e1e1e1);
+background: -moz-linear-gradient(#fff, #e1e1e1);}
+
+#dir, #file     { display:inline-table; vertical-align:top;}
+#dir *, #file * { font-size:14px}
+#dir p, #file p { font-weight:bold; font-size:14px}
+#dir  { width:24%; border-right:solid 1px #ccc;}
+#file { width:70%; padding:25px 0 0 20px;}
+
+#dir	{ background:#f8fbfc;
+background: -webkit-linear-gradient(#fefefe, #f7f8f9);
+background: -moz-linear-gradient(#fefefe, #f7f8f9);}
+#dir p	{ display:none;}
+#dir ul { padding:5px 0 0; /*background:url(linea-ul.gif) repeat-y 9px 0px; */} 
+#dir li { list-style-type:none; padding:7px 0px 7px 30px; margin:3px 0;/* background:url(linea-li.gif) no-repeat 12px 11px; */}
+#dir a  { padding:8px 10px 6px 47px; text-decoration:none;}
+#dir .cerrado { background:url(images/folder-closed.png) no-repeat 5px 3px; color:#369;}
+#dir .abierto { background:url(images/folder-open.png) no-repeat 6px 3px; color:#369;}
+#dir .selec   { background:url(images/folder-select.png) no-repeat 5px 3px #F0F8F9; color:#369; border:solid 1px #ccc;
+border-radius:3px; /*opera y CSS3*/ 
+-moz-border-radius:3px; /*FireFox*/
+-webkit-border-radius:3px; /*Safari Chrome*/
+-khtml-border-radius:3px;}
+
+#diropcion   { border-bottom:1px solid #CCCCCC; padding:10px 20px; background:#fafafa;}
+#diropcion a { color:#FFF; text-shadow:1px 1px 0px #666; padding:3px 7px; text-transform:capitalize; margin-right:10px; font-weight:bold;
+background:#3079b2;
+background: -webkit-linear-gradient(#7eb3dd, #3079b2, #216499);
+background: -moz-linear-gradient(#7eb3dd, #3079b2, #216499);
+border-radius:3px; /*opera y CSS3*/ 
+-moz-border-radius:3px; /*FireFox*/
+-webkit-border-radius:3px; /*Safari Chrome*/
+-khtml-border-radius:3px;}
+#diropcion a:hover {
+background:#7eb3dd;
+background: -webkit-linear-gradient(#216499, #3079b2, #7eb3dd);
+background: -moz-linear-gradient(#216499, #3079b2, #7eb3dd);}
+#diropcion a.inactivo { background:#e1e1e1 !important; cursor:default; text-shadow:none; color:#F6F6F6;}
+
+#file p		{ color: #3079b2;}
+#file table { border:solid 1px #999; border-collapse:collapse; width:100%;}
+#file caption { color: #3079b2; font-size:14px; font-weight:bold; text-align:left; margin-bottom:10px;}
+#file caption a { float:right; display:block; width:20px; height:20px; margin:0 10px;}
+#file caption a span { display:none;}
+#file caption .suscribir { background:url(images/accion-suscribir.png) no-repeat;}
+#file caption .nosuscribir { background:url(images/accion-nosuscribir.png) no-repeat;}
+#file caption .agregar   { background:url(images/accion-agregar.png) no-repeat;}
+#file caption .suscribir:hover { background:url(images/accion-suscribir2.png) no-repeat;}
+#file caption .nosuscribir:hover { background:url(images/accion-nosuscribir2.png) no-repeat;}
+#file caption .agregar:hover   { background:url(images/accion-agregar2.png) no-repeat;}
+#file thead { background:#3079b2; color:#FFF;}
+#file tbody {}
+#file tr    {}
+#file th:first-child { border-left:none !important;}
+#file th    { border-left: solid 1px #FFF; padding:7px; text-align:center;}
+#file td    { border: solid 1px #ccc; padding:7px; text-align:center;}
+#file td, #file td a { color:#666 !important;}
+#file td.archivo   { text-align:left !important;}
+#file td.archivo a { padding:3px 5px 3px 26px;}
+#file a     { text-decoration:none;}
+#file span  {}
+#file tfoot td	{ text-align:left !important; background:#f4f4f4;}
+
+#file .info a		{ background:url(images/info.png) no-repeat; display:block; height:20px; margin:auto; width:20px;}
+#file .info a:hover { background:url(images/info2.png) no-repeat; display:block; height:20px; margin:auto; width:20px;}
+#file .info span    { display:none;}
+#file .archivo      {}
+
+#file .archivo .pdf,
+#file .archivo .pdfx  { background:url(images/ico-pdf.jpg) no-repeat;}
+#file .archivo .doc,
+#file .archivo .docx,
+#file .archivo .rtf { background:url(images/ico-doc.jpg) no-repeat;}
+#file .archivo .ppt,
+#file .archivo .pptx  { background:url(images/ico-ppt.jpg) no-repeat;}
+#file .archivo .xls,
+#file .archivo .xlsx  { background:url(images/ico-xls.jpg) no-repeat;}
+#file .archivo .img,
+#file .archivo .bmp,
+#file .archivo .jpg,
+#file .archivo .jpeg,
+#file .archivo .tif,
+#file .archivo .tiff,
+#file .archivo .png,
+#file .archivo .gif  { background:url(images/ico-img.jpg) no-repeat;}
+#file .archivo .wav,
+#file .archivo .mp3,
+#file .archivo .mp4,
+#file .archivo .wma,
+#file .archivo .aac  { background:url(images/ico-audio.jpg) no-repeat;}
+#file .archivo .avi,
+#file .archivo .mov,
+#file .archivo .mpeg,
+#file .archivo .mts   { background:url(images/ico-video.jpg) no-repeat;}
+
+#file .archivo .mpp,
+#file .archivo .mppx   { background:url(images/ico-mpp.jpg) no-repeat;}
+#file .archivo .vsd,
+#file .archivo .vsdx   { background:url(images/ico-vsd.jpg) no-repeat;}
+#file .archivo .txt,
+#file .archivo .properties { background:url(images/ico-txt.jpg) no-repeat;}
+#file .archivo .exe   { background:url(images/ico-exe.jpg) no-repeat;}
+#file .archivo .htm,
+#file .archivo .html   { background:url(images/ico-htm.jpg) no-repeat;}
+#file .archivo .zip,
+#file .archivo .rar   { background:url(images/ico-zip.jpg) no-repeat;}
+#file .archivo .mmap,
+#file .archivo .mm,
+#file .archivo .xmind  { background:url(images/ico-mapa.jpg) no-repeat;}
+#file .archivo .xml,
+#file .archivo .xsl,
+#file .archivo .xslt { background:url(images/ico-xml.jpg) no-repeat;}
+#file .archivo .default   { background:url(images/ico-default.jpg) no-repeat;}
+
+#file .fecha        {}
+#file .marcar       {}
+#file .marcar .in, #file .marcar .out, #file .marcar .undo, #file .marcar .reser { display:inline-block; margin:auto; color:#FFF !important; font-weight:bold; text-shadow:1px 1px 0px #666;
+border-radius:3px; /*opera y CSS3*/ 
+-moz-border-radius:3px; /*FireFox*/
+-webkit-border-radius:3px; /*Safari Chrome*/
+-khtml-border-radius:3px;}
+#file .marcar .in          { background:#090; width:50px;}
+#file .marcar .in:hover    { background:#0C0; width:50px;}
+#file .marcar .out         { background:#C60; width:50px;}
+#file .marcar .out:hover   { background:#F60; width:50px;}
+#file .marcar .undo        { background:#999; width:50px;}
+#file .marcar .undo:hover  { background:#CCC; width:50px;}
+#file .marcar .reser       { background:#C00; width:80px;}
+#file .marcar .reser:hover { background:#F00; width:80px;}
+
+#file .accion a     { padding:2px 0 2px 20px; color:#368dcd !important; margin:0 5px;}
+#file .accion span  { display:none;}
+#file .accion .suscribir { background:url(images/accion-suscribir.png) no-repeat;}
+#file .accion .nosuscribir { background:url(images/accion-nosuscribir.png) no-repeat;}
+#file .accion .mover     { background:url(images/accion-mover.png) no-repeat;}
+#file .accion .eliminar  { background:url(images/accion-eliminar.png) no-repeat;}
+#file .accion .ver       { background:url(images/accion-ver.png) no-repeat;}
+#file .accion .suscribir:hover { background:url(images/accion-suscribir2.png) no-repeat;}
+#file .accion .nosuscribir:hover { background:url(images/accion-nosuscribir2.png) no-repeat;}
+#file .accion .mover:hover     { background:url(images/accion-mover2.png) no-repeat;}
+#file .accion .eliminar:hover  { background:url(images/accion-eliminar2.png) no-repeat;}
+#file .accion .ver:hover       { background:url(images/accion-ver2.png) no-repeat;}
