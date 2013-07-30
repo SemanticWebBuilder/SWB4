@@ -46,7 +46,6 @@ if (showResponse) {
 %>
 
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<script src="/swbadmin/jsp/process/d3.v3.min.js" charset="utf-8"></script> 
 <script type="text/javascript">
     google.load("visualization", "1", {packages:["corechart"]});
     google.setOnLoadCallback(drawChart);
