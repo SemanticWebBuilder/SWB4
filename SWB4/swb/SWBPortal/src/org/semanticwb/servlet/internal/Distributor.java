@@ -265,7 +265,7 @@ public class Distributor implements InternalServlet
                     SWBResource base = SWBPortal.getResourceMgr().getResource(idtm, rid);
                     if (!webpage.getWebSite().equals(SWBContext.getAdminWebSite()))
                     {
-                        if(base == null)
+                        if(base == null || !base.getResourceBase().isValid())
                         {
                             response.sendError(404, "No tiene permiso para accesar a la pagina " + request.getRequestURI() + ", (Control de IPs)... ");
                             if(!pageCache)log.debug("Distributor: SendError 404");
@@ -347,10 +347,15 @@ public class Distributor implements InternalServlet
                     String extParams=dparams.getNotAccResourceURI(rid);
 
                     SWBResource currResource = SWBPortal.getResourceMgr().getResource(idtm, rid);
-                    if(currResource==null)
+                    if(currResource==null || !currResource.getResourceBase().isValid())
                     {
                         if(!pageCache)log.warn("Error al procesar el URL:"+request.getRequestURL());
                         response.sendError(404, "No se encontro:" + request.getRequestURI() + "<br/>");
+                        return false;
+                    }else if(!user.haveAccess(currResource.getResourceBase()))
+                    {
+                        response.sendError(403, "No tiene permiso para accesar a la pagina " + request.getRequestURI());
+                        if(!pageCache)log.debug("Distributor: SendError 403");
                         return false;
                     }
                     SWBActionResponseImp resParams = new SWBActionResponseImp(response);
