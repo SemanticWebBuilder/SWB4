@@ -88,6 +88,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     public static final String COL_STATUSTASK = "statusTask";
     public static final String COL_FLAGTASK = "flagTask";
     public static final String ATT_COLS = "cols";
+    public static final String ATT_SHOWPERFORMANCE = "showPerformance";
     public static final String ATT_GRAPHSENGINE = "graphsEngine";
     public static final String ATT_INSTANCEGRAPH = "instanceGraph";
     public static final String ATT_RESPONSEGRAPH = "responseGraph";
@@ -178,6 +179,10 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             update = true;
         }
         
+        if (base.getAttribute(ATT_SHOWPERFORMANCE) == null) {
+            base.setAttribute(ATT_SHOWPERFORMANCE, "yes");
+        }
+        
         //Establecer el motor de graficado
         if (base.getAttribute(ATT_GRAPHSENGINE) == null) {
             base.setAttribute(ATT_GRAPHSENGINE, "google");
@@ -245,6 +250,13 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             String resp = request.getParameter(ATT_RESPONSEGRAPH);
             String status = request.getParameter(ATT_STATUSGRAPH);
             String participation = request.getParameter(ATT_PARTGRAPH);
+            String show = request.getParameter(ATT_SHOWPERFORMANCE);
+            
+            if (show != null) {
+                base.setAttribute(ATT_SHOWPERFORMANCE, "yes");
+            } else {
+                base.setAttribute(ATT_SHOWPERFORMANCE, "n");
+            }
             
             if (engine != null && !base.getAttribute(ATT_GRAPHSENGINE,"").equals(engine)) {
                 base.setAttribute(ATT_GRAPHSENGINE, engine);
@@ -629,25 +641,36 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         sb.append("  </fieldset>");
         sb.append("</form>");
         
+        //Configuración de detalle
         SWBResourceURL setGraphUrl = paramRequest.getActionUrl().setAction(ACT_SETGRAPHS);
+        String disableControls = "disabled ";
+        if (base.getAttribute(ATT_SHOWPERFORMANCE,"").equals("yes")) {
+            disableControls = "";
+        }
         sb.append("<form class=\"swbform\" id=\"").append(getId()).append("/detail\" method=\"post\" action=\"").append(setGraphUrl).append("\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('").append(getId()).append("/detail'); return false;\">");
         sb.append("<div class=\"swbform\">");
         sb.append("  <fieldset><legend>Configuración de detalle de procesos</legend>");
         sb.append("    <table>");
         sb.append("      <tr>");
+        sb.append("        <td width=\"200px\" align=\"right\">").append("Mostrar desempeño:&nbsp;").append("</td>");
+        sb.append("        <td>");
+        sb.append("          <input dojoType=\"dijit.form.CheckBox\" ").append(base.getAttribute(ATT_SHOWPERFORMANCE,"").equals("yes")?"checked":"").append(" type=\"checkbox\" name=\"").append(ATT_SHOWPERFORMANCE).append("\" />Mostrar desempeño");
+        sb.append("        <td>");
+        sb.append("      </tr>");
+        sb.append("      <tr>");
         sb.append("        <td width=\"200px\" align=\"right\">").append("Motor de gráficas:&nbsp;").append("</td>");
         sb.append("        <td>");
-        sb.append("          <input dojoType=\"dijit.form.RadioButton\" ").append(base.getAttribute(ATT_GRAPHSENGINE,"").equals("google")?"checked":"").append(" type=\"radio\" name=\"").append(ATT_GRAPHSENGINE).append("\" value=\"google\" id=\"radioGoogle\"/><label for=\"radioGoogle\">Google Graphs</label><br>");
-        sb.append("          <input dojoType=\"dijit.form.RadioButton\" ").append(base.getAttribute(ATT_GRAPHSENGINE,"").equals("d3")?"checked":"").append(" type=\"radio\" name=\"").append(ATT_GRAPHSENGINE).append("\" value=\"d3\" id=\"radioD3\"/><label for=\"radioD3\">D3</label>");
+        sb.append("          <input dojoType=\"dijit.form.RadioButton\" ").append(disableControls).append(base.getAttribute(ATT_GRAPHSENGINE,"").equals("google")?"checked":"").append(" type=\"radio\" name=\"").append(ATT_GRAPHSENGINE).append("\" value=\"google\" id=\"radioGoogle\"/><label for=\"radioGoogle\">Google Graphs</label><br>");
+        sb.append("          <input dojoType=\"dijit.form.RadioButton\" ").append(disableControls).append(base.getAttribute(ATT_GRAPHSENGINE,"").equals("d3")?"checked":"").append(" type=\"radio\" name=\"").append(ATT_GRAPHSENGINE).append("\" value=\"d3\" id=\"radioD3\"/><label for=\"radioD3\">D3</label>");
         sb.append("        <td>");
         sb.append("      </tr>");
         sb.append("      <tr>");
         sb.append("        <td width=\"200px\" align=\"right\">").append("Gráficas visibles:&nbsp;").append("</td>");
         sb.append("        <td>");
-        sb.append("          <input dojoType=\"dijit.form.CheckBox\" type=\"checkbox\" ").append(base.getAttribute(ATT_INSTANCEGRAPH,"").equals("use")?"checked":"").append(" name=\"").append(ATT_INSTANCEGRAPH).append("\"/>Instancias<br>");
-        sb.append("          <input dojoType=\"dijit.form.CheckBox\" type=\"checkbox\" ").append(base.getAttribute(ATT_RESPONSEGRAPH,"").equals("use")?"checked":"").append(" name=\"").append(ATT_RESPONSEGRAPH).append("\"/>Tiempos de respuesta<br>");
-        sb.append("          <input dojoType=\"dijit.form.CheckBox\" type=\"checkbox\" ").append(base.getAttribute(ATT_STATUSGRAPH,"").equals("use")?"checked":"").append(" name=\"").append(ATT_STATUSGRAPH).append("\"/>Estatus de procesos<br>");
-        sb.append("          <input dojoType=\"dijit.form.CheckBox\" type=\"checkbox\" ").append(base.getAttribute(ATT_PARTGRAPH,"").equals("use")?"checked":"").append(" name=\"").append(ATT_PARTGRAPH).append("\"/>Participación<br>");
+        sb.append("          <input dojoType=\"dijit.form.CheckBox\" type=\"checkbox\" ").append(disableControls).append(base.getAttribute(ATT_INSTANCEGRAPH,"").equals("use")?"checked":"").append(" name=\"").append(ATT_INSTANCEGRAPH).append("\"/>Instancias<br>");
+        sb.append("          <input dojoType=\"dijit.form.CheckBox\" type=\"checkbox\" ").append(disableControls).append(base.getAttribute(ATT_RESPONSEGRAPH,"").equals("use")?"checked":"").append(" name=\"").append(ATT_RESPONSEGRAPH).append("\"/>Tiempos de respuesta<br>");
+        sb.append("          <input dojoType=\"dijit.form.CheckBox\" type=\"checkbox\" ").append(disableControls).append(base.getAttribute(ATT_STATUSGRAPH,"").equals("use")?"checked":"").append(" name=\"").append(ATT_STATUSGRAPH).append("\"/>Estatus de procesos<br>");
+        sb.append("          <input dojoType=\"dijit.form.CheckBox\" type=\"checkbox\" ").append(disableControls).append(base.getAttribute(ATT_PARTGRAPH,"").equals("use")?"checked":"").append(" name=\"").append(ATT_PARTGRAPH).append("\"/>Participación<br>");
         sb.append("        </td>");
         sb.append("      </tr>");
         sb.append("    </table>");
@@ -737,6 +760,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                 request.setAttribute("instances", getProcessInstances(request, paramRequest));
                 request.setAttribute("statusWp", getDisplayMapWp());
                 request.setAttribute("itemsPerPage", getItemsPerPage());
+                request.setAttribute("base", getResourceBase());
             }
             rd.include(request, response);
         } catch (Exception e) {
@@ -842,20 +866,20 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                 
                 //Conteo de instancias
                 if (pi.getStatus() == ProcessInstance.STATUS_PROCESSING) {
-                    if (pi.getCreator() != null) {
-                        if (participantCount.get(pi.getCreator()) == null) {
-                            participantCount.put(pi.getCreator(), new Integer(1));
-                        } else {
-                            participantCount.put(pi.getCreator(), participantCount.get(pi.getCreator())+1);
-                        }
-                    }
-                    if (pi.getAssignedto()!= null) {
-                        if (participantCount.get(pi.getAssignedto()) == null) {
-                            participantCount.put(pi.getAssignedto(), new Integer(1));
-                        } else {
-                            participantCount.put(pi.getAssignedto(), participantCount.get(pi.getAssignedto())+1);
-                        }
-                    }
+//                    if (pi.getCreator() != null) {
+//                        if (participantCount.get(pi.getCreator()) == null) {
+//                            participantCount.put(pi.getCreator(), new Integer(1));
+//                        } else {
+//                            participantCount.put(pi.getCreator(), participantCount.get(pi.getCreator())+1);
+//                        }
+//                    }
+//                    if (pi.getAssignedto()!= null) {
+//                        if (participantCount.get(pi.getAssignedto()) == null) {
+//                            participantCount.put(pi.getAssignedto(), new Integer(1));
+//                        } else {
+//                            participantCount.put(pi.getAssignedto(), participantCount.get(pi.getAssignedto())+1);
+//                        }
+//                    }
                     boolean isDelayed = false;
                     //Verifica retraso
                     Iterator<FlowNodeInstance> itfni = pi.listAllFlowNodeInstance();
@@ -863,20 +887,20 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                         FlowNodeInstance fni = itfni.next();
                         if (fni.getFlowNodeType() instanceof UserTask) {
                             if (fni.getStatus() == FlowNodeInstance.STATUS_PROCESSING) {
-                                if (fni.getCreator() != null) {
-                                    if (participantCount.get(fni.getCreator()) == null) {
-                                        participantCount.put(fni.getCreator(), new Integer(1));
-                                    } else {
-                                        participantCount.put(fni.getCreator(), participantCount.get(fni.getCreator())+1);
-                                    }
-                                }
-                                if (fni.getAssignedto()!= null) {
-                                    if (participantCount.get(fni.getAssignedto()) == null) {
-                                        participantCount.put(fni.getAssignedto(), new Integer(1));
-                                    } else {
-                                        participantCount.put(fni.getAssignedto(), participantCount.get(fni.getAssignedto())+1);
-                                    }
-                                }
+//                                if (fni.getCreator() != null) {
+//                                    if (participantCount.get(fni.getCreator()) == null) {
+//                                        participantCount.put(fni.getCreator(), new Integer(1));
+//                                    } else {
+//                                        participantCount.put(fni.getCreator(), participantCount.get(fni.getCreator())+1);
+//                                    }
+//                                }
+//                                if (fni.getAssignedto()!= null) {
+//                                    if (participantCount.get(fni.getAssignedto()) == null) {
+//                                        participantCount.put(fni.getAssignedto(), new Integer(1));
+//                                    } else {
+//                                        participantCount.put(fni.getAssignedto(), participantCount.get(fni.getAssignedto())+1);
+//                                    }
+//                                }
                                 
                                 UserTask ut = (UserTask) fni.getFlowNodeType();
                                 int delay = ut.getNotificationTime();
