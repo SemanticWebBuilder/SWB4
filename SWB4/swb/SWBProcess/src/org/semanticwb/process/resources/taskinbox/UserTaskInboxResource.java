@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.json.JSONArray;
@@ -89,12 +88,18 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     public static final String COL_STATUSTASK = "statusTask";
     public static final String COL_FLAGTASK = "flagTask";
     public static final String ATT_COLS = "cols";
+    public static final String ATT_GRAPHSENGINE = "graphsEngine";
+    public static final String ATT_INSTANCEGRAPH = "instanceGraph";
+    public static final String ATT_RESPONSEGRAPH = "responseGraph";
+    public static final String ATT_STATUSGRAPH = "statusGraph";
+    public static final String ATT_PARTGRAPH = "partGraph";
     public static final String ACT_UPDATE = "update";
     public static final String ACT_CREATE = "create";
     public static final String ACT_ADDCOL = "addCol";
     public static final String ACT_DELCOL = "delCol";
     public static final String ACT_CONFIG = "config";
     public static final String ACT_SWAP = "swap";
+    public static final String ACT_SETGRAPHS = "setGraphs";
     public static final String PARAM_INDEX = "idx";
     public static final String PARAM_DIR = "dir";
     public static final String PARAM_COL = "selectedCol";
@@ -160,6 +165,9 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
      */
     private void initTaskInbox() {
         Resource base = getResourceBase(); 
+        boolean update = false;
+        
+        //Establecer las columnas por defecto
         if (base.getAttribute(ATT_COLS+"1", "").equals("")) {
             base.setAttribute(ATT_COLS+"1", COL_IDPROCESS+"|Caso");
             base.setAttribute(ATT_COLS+"2", COL_NAMEPROCESS+"|Proceso");
@@ -167,6 +175,34 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             base.setAttribute(ATT_COLS+"4", COL_STARTTASK+"|Iniciada");
             base.setAttribute(ATT_COLS+"5", COL_ENDTASK+"|Cerrada");
             base.setAttribute(ATT_COLS+"6", COL_ACTIONS+"|Acciones");
+            update = true;
+        }
+        
+        //Establecer el motor de graficado
+        if (base.getAttribute(ATT_GRAPHSENGINE) == null) {
+            base.setAttribute(ATT_GRAPHSENGINE, "google");
+            update = true;
+        }
+        
+        //Establecer las gráficas por defecto
+        if (base.getAttribute(ATT_INSTANCEGRAPH) == null) {
+            base.setAttribute(ATT_INSTANCEGRAPH, "use");
+            update = true;
+        }
+        if (base.getAttribute(ATT_RESPONSEGRAPH) == null) {
+            base.setAttribute(ATT_RESPONSEGRAPH, "use");
+            update = true;
+        }
+        if (base.getAttribute(ATT_STATUSGRAPH) == null) {
+            base.setAttribute(ATT_STATUSGRAPH, "use");
+            update = true;
+        }
+        if (base.getAttribute(ATT_PARTGRAPH) == null) {
+            base.setAttribute(ATT_PARTGRAPH, "use");
+            update = true;
+        }
+        
+        if (update) {
             try {
                 base.updateAttributesToDB();
             } catch (Exception ex) {
@@ -203,7 +239,47 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         String act = response.getAction();
         Resource base = getResourceBase();
         
-        if (ACT_UPDATE.equals(act)) {
+        if (ACT_SETGRAPHS.equals(act)) {
+            String engine = request.getParameter(ATT_GRAPHSENGINE);
+            String instances = request.getParameter(ATT_INSTANCEGRAPH);
+            String resp = request.getParameter(ATT_RESPONSEGRAPH);
+            String status = request.getParameter(ATT_STATUSGRAPH);
+            String participation = request.getParameter(ATT_PARTGRAPH);
+            
+            if (engine != null && !base.getAttribute(ATT_GRAPHSENGINE,"").equals(engine)) {
+                base.setAttribute(ATT_GRAPHSENGINE, engine);
+            }
+            
+            if (instances != null) {
+                base.setAttribute(ATT_INSTANCEGRAPH, "use");
+            } else {
+                base.setAttribute(ATT_INSTANCEGRAPH, "n");
+            }
+            
+            if (resp != null) {
+                base.setAttribute(ATT_RESPONSEGRAPH, "use");
+            } else {
+                base.setAttribute(ATT_RESPONSEGRAPH, "n");
+            }
+            
+            if (status != null) {
+                base.setAttribute(ATT_STATUSGRAPH, "use");
+            } else {
+                base.setAttribute(ATT_STATUSGRAPH, "n");
+            }
+            
+            if (participation != null) {
+                base.setAttribute(ATT_PARTGRAPH, "use");
+            } else {
+                base.setAttribute(ATT_PARTGRAPH, "n");
+            }
+            
+            try {
+                base.updateAttributesToDB();
+            } catch (Exception e) {
+                log.error("Error al configurar gráficas....", e);
+            }
+        } else if (ACT_UPDATE.equals(act)) {
             SWBFormMgr mgr = new SWBFormMgr(getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
             try {
                 mgr.processForm(request);
@@ -549,9 +625,37 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             }
             sb.append("    </table>");
         }
+        sb.append("    <button type=\"submit\" dojoType=\"dijit.form.Button\">Actualizar columnas</button>");
         sb.append("  </fieldset>");
-        sb.append("  <button type=\"submit\" dojoType=\"dijit.form.Button\">Actualizar columnas</button>");
         sb.append("</form>");
+        
+        SWBResourceURL setGraphUrl = paramRequest.getActionUrl().setAction(ACT_SETGRAPHS);
+        sb.append("<form class=\"swbform\" id=\"").append(getId()).append("/detail\" method=\"post\" action=\"").append(setGraphUrl).append("\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('").append(getId()).append("/detail'); return false;\">");
+        sb.append("<div class=\"swbform\">");
+        sb.append("  <fieldset><legend>Configuración de detalle de procesos</legend>");
+        sb.append("    <table>");
+        sb.append("      <tr>");
+        sb.append("        <td width=\"200px\" align=\"right\">").append("Motor de gráficas:&nbsp;").append("</td>");
+        sb.append("        <td>");
+        sb.append("          <input dojoType=\"dijit.form.RadioButton\" ").append(base.getAttribute(ATT_GRAPHSENGINE,"").equals("google")?"checked":"").append(" type=\"radio\" name=\"").append(ATT_GRAPHSENGINE).append("\" value=\"google\" id=\"radioGoogle\"/><label for=\"radioGoogle\">Google Graphs</label><br>");
+        sb.append("          <input dojoType=\"dijit.form.RadioButton\" ").append(base.getAttribute(ATT_GRAPHSENGINE,"").equals("d3")?"checked":"").append(" type=\"radio\" name=\"").append(ATT_GRAPHSENGINE).append("\" value=\"d3\" id=\"radioD3\"/><label for=\"radioD3\">D3</label>");
+        sb.append("        <td>");
+        sb.append("      </tr>");
+        sb.append("      <tr>");
+        sb.append("        <td width=\"200px\" align=\"right\">").append("Gráficas visibles:&nbsp;").append("</td>");
+        sb.append("        <td>");
+        sb.append("          <input dojoType=\"dijit.form.CheckBox\" type=\"checkbox\" ").append(base.getAttribute(ATT_INSTANCEGRAPH,"").equals("use")?"checked":"").append(" name=\"").append(ATT_INSTANCEGRAPH).append("\"/>Instancias<br>");
+        sb.append("          <input dojoType=\"dijit.form.CheckBox\" type=\"checkbox\" ").append(base.getAttribute(ATT_RESPONSEGRAPH,"").equals("use")?"checked":"").append(" name=\"").append(ATT_RESPONSEGRAPH).append("\"/>Tiempos de respuesta<br>");
+        sb.append("          <input dojoType=\"dijit.form.CheckBox\" type=\"checkbox\" ").append(base.getAttribute(ATT_STATUSGRAPH,"").equals("use")?"checked":"").append(" name=\"").append(ATT_STATUSGRAPH).append("\"/>Estatus de procesos<br>");
+        sb.append("          <input dojoType=\"dijit.form.CheckBox\" type=\"checkbox\" ").append(base.getAttribute(ATT_PARTGRAPH,"").equals("use")?"checked":"").append(" name=\"").append(ATT_PARTGRAPH).append("\"/>Participación<br>");
+        sb.append("        </td>");
+        sb.append("      </tr>");
+        sb.append("    </table>");
+        sb.append("    <button type=\"submit\" dojoType=\"dijit.form.Button\">Guardar</button>");
+        sb.append("  </fieldset>");
+        sb.append("</div>");
+        sb.append("</form>");
+        
         out.println(sb.toString());
     }
     
