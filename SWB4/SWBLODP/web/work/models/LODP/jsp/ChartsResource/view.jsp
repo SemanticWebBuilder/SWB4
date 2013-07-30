@@ -52,7 +52,7 @@
     String paramSDate = "";
     String paramFDate = "";
     if(dataset!=null){
-        datasetObj = Dataset.ClassMgr.getDataset(dataset, wsite);   
+        datasetObj = Dataset.ClassMgr.getDataset(dataset, wsite);
         idDSSelected = datasetObj.getId();
         DateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
         fechaInicial = sdf1.format(dStart);
@@ -191,8 +191,9 @@ svg {
                      .y(function(d) { return d[1]})
                      .color(d3.scale.category10().range())
                      .average(function(d) { return d.mean; })
-                     .clipVoronoi(true)
-                     .showControls(false);
+                     .clipVoronoi(false)
+                     .showControls(false)
+                     .tooltips(true);
 
           if(rango=="Días"){
             chart.xAxis
@@ -267,7 +268,8 @@ svg {
                         .showDistX(true)
                         .showDistY(true)                        
                         .useVoronoi(true)
-                        .color(d3.scale.category10().range());
+                        .color(d3.scale.category10().range())
+                        .tooltips(true);
           chart.xAxis
                   .tickFormat(d3.format('d'));;
           chart.yAxis
@@ -300,14 +302,15 @@ svg {
             var chart = nv.models.pieChart()
                 .x(function(d) { return d.key })
                 .y(function(d) { return d.y })
-                .showLabels(false)
+                .showLabels(true)
                 .values(function(d) { return d })
-                .color(d3.scale.category10().range())
+                .color(d3.scale.category20c().range())
                 .width(width)
-                .height(height);
+                .height(height)
+                .tooltips(true);
             d3.select("#grafica svg")
                 .datum([dataPieChart])
-                .transition().duration(1200)
+                .transition().duration(30000)
                 .attr('width', width)
                 .attr('height', height)
                 .call(chart);
