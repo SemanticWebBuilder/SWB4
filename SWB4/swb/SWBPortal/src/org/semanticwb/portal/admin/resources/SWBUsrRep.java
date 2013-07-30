@@ -492,7 +492,7 @@ public class SWBUsrRep extends GenericResource {
                     }
                 }
                 //Parseo de nombre de NameSpace anteriores por nuevos
-                String newNs = "http://www." + newId + ".swb#";
+                String newNs = "http://user." + newId + ".swb#";
                 File fileModel = new File(MODELS + newId + "/" + oldIDModel + ".nt");
                 FileInputStream frdfio = new FileInputStream(fileModel);
                 String rdfcontent = SWBUtils.IO.readInputStream(frdfio);
