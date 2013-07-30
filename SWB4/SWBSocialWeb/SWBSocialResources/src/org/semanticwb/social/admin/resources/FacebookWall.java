@@ -398,16 +398,45 @@ public class FacebookWall extends GenericResource {
                 return;
             }
             
-            SWBModel model=WebSite.ClassMgr.getWebSite(facebook.getSemanticObject().getModel().getName());
+            SocialNetwork socialNetwork = null;
+            try {
+                socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+            }catch(Exception e){
+                System.out.println("Error getting the SocialNetwork " + e);
+                return;
+            }
+            SocialNetworkUser socialNetUser = null;
+            
+            SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
+            System.out.println("EL MODELO EN SETSOCIALNET: " + model);
             
             try {
                 
                 JSONObject postData = getPostFromFullId(idPost, facebook);
                 System.out.println("This is the post: " + postData);
+                socialNetUser = SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(postData.getString("id"), socialNetwork, model);
                 
+                if(socialNetUser == null){
+                    System.out.println("\n\nEL USUARIO NO EXISTE");
+                }else{
+                    System.out.println("\n\nEL USUARIO EXISTE: " + socialNetUser.getSnu_id());
+                }
+                
+                //if(socialNetUser == null){
+                    socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);//Create a socialNetworkUser
+                    socialNetUser.setSnu_id(postData.getJSONObject("from").getString("id"));
+                    //socialNetUser.setSnu_klout(postData.getJSONObject("from").getString("id"));
+                    socialNetUser.setSnu_name(postData.getJSONObject("from").getString("name"));
+                    socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject());                    
+                    socialNetUser.setCreated(new Date());
+                    socialNetUser.setFollowers(0);
+                    socialNetUser.setFriends(0);
+                    System.out.println("YA SE CREO O SOBRE ESC el usuario");
+                //}
                 PostIn postIn = PostIn.getPostInbySocialMsgId(model, postData.getString("id"));
                 if(postIn != null){
                     log.error("The post with id :" + postData.getString("id") + " already exists");
+                    System.out.println("THE MESSAGE TEXT:" + postIn.getMsg_Text());
                     return;
                 }
                 
@@ -440,21 +469,33 @@ public class FacebookWall extends GenericResource {
                                 if(statusLike.has("message")){
                                     message = statusLike.getString("message");
                                 }
-                            }*/
+                            }*/                           
+                        }
+                        
+                         System.out.println("TEXTO A GUARDAR\n\n: " + message + " story: " + story);
                             if(!message.isEmpty()){
+                                System.out.println("SETTING MENSAGE");
                                 postIn.setMsg_Text(message);
                             }else if(!story.isEmpty()){
+                                System.out.println("SETTING STORY");
                                 postIn.setMsg_Text(story);
-                            }
-                        }
+                            }                            
+                        postIn.setSocialNetMsgId(postData.getString("id"));
+                        postIn.setPostInSocialNetwork(socialNetwork);
+                        postIn.setPostInStream(null);
+                        postIn.setPostInSocialNetworkUser(socialNetUser);
+                        System.out.println("GUARDADO OK");
+                        System.out.println("GUARDADO OK");
+                        System.out.println("GUARDADO OK");
                     }
                 }else if(postType.equals("video") || postType.equals("swf")){}
-                
+/*                
                 postIn=MessageIn.ClassMgr.createMessageIn(model);
                 postIn = MessageIn.ClassMgr.createMessageIn(model);
                 postIn.setSocialNetMsgId(postData.getString("id"));
-                postIn.setPostInSocialNetwork(facebook);
+                postIn.setPostInSocialNetwork(socialNetwork);                 
                 postIn.setPostInStream(null);
+                * */
                 
 //                postIn.set
                                 
@@ -1143,9 +1184,9 @@ public class FacebookWall extends GenericResource {
                 }
             }
         }catch(IOException ieo){
-            System.out.println("Error getting post that user liked:" + ieo.getMessage());
+            System.out.println("Error getting post from post with, tested both methods:" + ieo.getMessage());
         }catch(JSONException jsone){
-            System.out.println("Error parsing information from string recieved:" + jsone.getMessage());
+            System.out.println("Error parsing information from response recieved:" + jsone.getMessage());
         }
         return jsonObject;
     }
