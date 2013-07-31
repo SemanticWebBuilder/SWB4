@@ -1139,6 +1139,14 @@
     >false</swb:removeDependency>
     <rdfs:range rdf:resource="#PeriodStatus"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="objectsType">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <rdfs:range rdf:resource="#BSCElement"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Indica el tipo de objetos que se mostrarán en la vista resumen</rdfs:comment>
+    <rdfs:domain rdf:resource="#SummaryView"/>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="next">
     <rdfs:domain rdf:resource="#Machinable"/>
     <swb:displayProperty>
@@ -1644,12 +1652,6 @@
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dateTo"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="objectsType">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Indica el tipo de objetos que se mostrarán en la vista resumen</rdfs:comment>
-    <rdfs:domain rdf:resource="#SummaryView"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="values">
     <swb:localeable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
