@@ -3,6 +3,7 @@
     Created on : 4/07/2013, 10:14:08 PM
     Author     : Hasdai Pacheco <ebenezer.sanchez@infotec.com.mx>
 --%>
+<%@page import="org.semanticwb.model.Resource"%>
 <%@page import="org.semanticwb.process.model.Activity"%>
 <%@page import="org.semanticwb.process.model.ProcessSite"%>
 <%@page import="org.semanticwb.model.WebSite"%>
@@ -25,10 +26,25 @@
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
 WebSite site = paramRequest.getWebPage().getWebSite();
 User user = paramRequest.getUser();
+Resource base = (Resource) request.getAttribute("base");
 
 String lang = "es";
 String pNum = request.getParameter("page");
 String suri = request.getParameter("suri");
+boolean showGraphs = false;
+if (base != null && base.getAttribute(UserTaskInboxResource.ATT_SHOWPERFORMANCE,"").equals("yes")) {
+    showGraphs = true;
+}
+
+boolean showParticipation  = false;
+if (base != null && base.getAttribute(UserTaskInboxResource.ATT_PARTGRAPH,"").equals("use")) {
+    showParticipation = true;
+}
+
+String engine = "google";
+if (base != null && base.getAttribute(UserTaskInboxResource.ATT_GRAPHSENGINE, "").equals("d3")) {
+    engine = "d3";
+}
 
 int pageNum = 1;
 
@@ -72,18 +88,6 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
         }
     }
     
-    int aborted = (Integer)request.getAttribute("aborted");
-    int processing = (Integer)request.getAttribute("processing");
-    int closed = (Integer)request.getAttribute("closed");
-    int total = aborted+processing+closed;
-
-    long minTime = (Long)request.getAttribute("minTime");
-    long maxTime = (Long)request.getAttribute("maxTime");
-    long avgTime = (Long)request.getAttribute("avgTime");
-
-    int ontime = (Integer)request.getAttribute("ontime");
-    int delayed = (Integer)request.getAttribute("delayed");
-    
     String processInfo = (String)request.getAttribute("participation");
     Process p = (Process)ont.getGenericObject(suri);
     if (p == null) {%>
@@ -94,298 +98,217 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
         <h1><%=p.getTitle()%>&nbsp;<a href="<%=viewUrl%>"><img alt="volver" src="/work/models/<%=site.getId()%>/css/images/icono-atras.png"/></a></h1>
         <p><%=p.getDescription()==null?"":p.getDescription()%></p>
         <p>&nbsp;</p> 
-        <div class="bandeja-combo"><strong><span style="font-size: medium">Desempe&ntilde;o</span></strong></div>
-        <%if (tinstances != null && !tinstances.isEmpty()) {%>
-            <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-            <script src="/swbadmin/jsp/process/d3.v3.min.js" charset="utf-8"></script> 
-            <script type="text/javascript">
-                google.load("visualization", "1", {packages:["corechart"]});
-                google.setOnLoadCallback(drawChart);
-                function drawChart() {
-                    var options = {
-                      title: 'Instancias de proceso (<%=total%>)',
-                      backgroundColor: {fill:'none'}
-                    };
-                    
-                    <%
-                    if (processing == 0 && closed == 0 && aborted == 0) {
-                        
-                    } else {
-                        %>
-                        var data = google.visualization.arrayToDataTable([
-                            ['Estatus', 'Unidades'],
-                            ['En proceso',     <%=processing%>],
-                            ['Cerrados',     <%=closed%>],
-                            ['Abortados',      <%=aborted%>]
-                        ]);
-                        var chart = new google.visualization.PieChart(document.getElementById('performanceGraph'));
-                        chart.draw(data, options);
-                    <%
-                    }
-                    
-                    if (minTime == 0 && maxTime == 0 && avgTime == 0) {
-                        
-                    } else {
-                        %>
-                        var data2 = google.visualization.arrayToDataTable([
-                            ['Tiempo de respuesta', 'Horas'],
-                            ['Mínimo',     <%=minTime%>],
-                            ['Máximo',     <%=maxTime%>],
-                            ['Promedio',      <%=avgTime%>]
-                        ]);
-                        
-                        var chart2 = new google.visualization.PieChart(document.getElementById('responseTime'));
-                        options.title = "Tiempo de respuesta (min)";
-                        options.pieSliceText = "value";
-                        chart2.draw(data2, options);
-                        <%
-                    }
-                    
-                    if (delayed == 0 && ontime == 0) {
-                        
-                    } else {
-                        %>
-                        var data3 = google.visualization.arrayToDataTable([
-                            ['Estado', 'Valor'],
-                            ['Retrasadas', <%=delayed%>],
-                            ['A tiempo', <%=ontime%>]
-                        ]);
-                        
-                        var chart3 = new google.visualization.PieChart(document.getElementById('overdueGraph'));
-                        options.title = "Estatus de ejecución";
-                        options.pieSliceText = "percent";
-                        chart3.draw(data3, options);
-                        <%
-                    }
-                    %>
-                }
+        <%if (tinstances != null && !tinstances.isEmpty()) {
+            if (showGraphs) {
+                %><div class="bandeja-combo"><strong><span style="font-size: medium">Desempe&ntilde;o</span></strong></div><%
                 
-                function updateD3Chart () {
-                    var nodes = flatten(root);
-                    var links = d3.layout.tree().links(nodes);
-                    var max = root['max'];
-                    
-                    root.fixed = true;
-                    root.x = w/2;
-                    root.y = h/2;
-
-                    var linkScale = d3.scale.linear()
-                        .domain([1,max])
-                        .range([1,5]);
+                if (engine.equals("google")) {
+                    %><jsp:include page="/swbadmin/jsp/process/userTaskInboxGoogleGraphs.jsp" flush="true"/><%
+                } else {
+                    %><jsp:include page="/swbadmin/jsp/process/userTaskInboxD3Graphs.jsp" flush="true"/><%
+                }
             
-                    force.nodes(nodes)
-                        .links(links)
-                        .start();
-                    
-                    var link = vis.selectAll("line.link")
-                        .data(links, function(d) {
-                            return d.target.id;
-                        });
-                        
-                    link.enter().insert("svg:line", ".node")
-                        .attr("class", "link")
-                        .attr("x1", function(d) {
-                            return d.source.x;
-                        })
-                        .attr("y1", function(d) {
-                            return d.source.y;
-                        })
-                        .attr("x2", function(d) {
-                            return d.target.x;
-                        })
-                        .attr("y2", function(d) {
-                            return d.target.y;
-                        })
-                        .attr("stroke-width", function(d) {
-                            return linkScale(d.target.participa)+"px";
-                        })
-                        .attr("stroke", "#BFBFCF")
-                        .attr("fill", "none");
-                        
-                    link.exit().remove();
-                    
-                    var node = vis.selectAll("g.node")
-                        .data(nodes, function(d) {
-                            return d.id;
-                        });
-                        
-                    node.select("circle")
-                        .style("fill", color);
-                    
-                    var nodeEnter = node.enter().append("svg:g")
-                        .attr("class", "node")
-                        .attr("transform", function(d) {
-                            return "translate(" + d.x + "," + d.y + ")";
-                        })
-                        .call(force.drag);
-                
-                    /*nodeEnter.append("svg:circle")
-                        .attr("r", function(d) {
-                            return  d.size;
-                        })
-                        .on("click", click)
-                        .on("mouseover", function(d) {
-                            d3.select(this)
-                            //.transition()
-                            .attr("r", function(d) {
-                                console.log("on selected "+d.size);
-                                return d.size * 2;
+                if (showParticipation) {%>
+                    <div class="processChartPie" id="participationGraph"></div>
+                    <script src="/swbadmin/jsp/process/d3.v3.min.js" charset="utf-8"></script>
+                    <script type="text/javascript">
+                        var theJson = JSON.parse('<%=processInfo%>');
+                        var w = d3.select("#participationGraph").style("width").replace("px","");
+                        var h = d3.select("#participationGraph").style("height").replace("px","");
+
+                        function updateD3Chart () {
+                            var nodes = flatten(root);
+                            var links = d3.layout.tree().links(nodes);
+                            var max = root['max'];
+
+                            root.fixed = true;
+                            root.x = w/2;
+                            root.y = h/2;
+
+                            var linkScale = d3.scale.linear()
+                                .domain([1,max])
+                                .range([1,5]);
+
+                            force.nodes(nodes)
+                                .links(links)
+                                .start();
+
+                            var link = vis.selectAll("line.link")
+                                .data(links, function(d) {
+                                    return d.target.id;
+                                });
+
+                            link.enter().insert("svg:line", ".node")
+                                .attr("class", "link")
+                                .attr("x1", function(d) {
+                                    return d.source.x;
+                                })
+                                .attr("y1", function(d) {
+                                    return d.source.y;
+                                })
+                                .attr("x2", function(d) {
+                                    return d.target.x;
+                                })
+                                .attr("y2", function(d) {
+                                    return d.target.y;
+                                })
+                                .attr("stroke-width", function(d) {
+                                    return linkScale(d.target.participa)+"px";
+                                })
+                                .attr("stroke", "#BFBFCF")
+                                .attr("fill", "none");
+
+                            link.exit().remove();
+
+                            var node = vis.selectAll("g.node")
+                                .data(nodes, function(d) {
+                                    return d.id;
+                                });
+
+                            var nodeEnter = node.enter().append("svg:g")
+                                .attr("class", "node")
+                                .attr("transform", function(d) {
+                                    return "translate(" + d.x + "," + d.y + ")";
+                                })
+                                .call(force.drag);
+
+                            /*nodeEnter.append("svg:circle")
+                                .attr("r", function(d) {
+                                    return  d.size;
+                                })
+                                .on("click", click)
+                                .on("mouseover", function(d) {
+                                    d3.select(this)
+                                    //.transition()
+                                    .attr("r", function(d) {
+                                        console.log("on selected "+d.size);
+                                        return d.size * 2;
+                                    });
+                                    console.log("over "+d.name);
+                                })
+                                .on("mouseout", function(d) {
+                                    d3.select(this)
+                                    .attr("r", function(d) {
+                                        console.log("on unselected "+d.size);
+                                        return d.size;
+                                    });
+                                    console.log("out "+d.name);
+                                })
+                                .style("fill", color);*/
+
+                            nodeEnter.append("svg:image")
+                                .attr("xlink:href", function(d) {
+                                    if (d.type && d.type==="process") {
+                                        return "<%="/work/models/"+site.getId()+"/css/images/icono-iniciado.gif"%>";
+                                    } else {
+                                        return "<%="/work/models/"+site.getId()+"/css/images/colaborador.png"%>";
+                                    }
+                                })
+                                .attr("x", -10)
+                                .attr("y", -10)
+                                .attr("width", 20)
+                                .attr("height", 20);
+
+                            nodeEnter.append("svg:text")
+                                .attr("font-family", "Arial")
+                                .attr("font-size", "11")
+                                .attr("stroke", "none")
+                                .attr("fill", "#000000")
+                                .attr("text-anchor", "middle")
+                                .attr("dy", "2em")
+                                .text(function(d) {
+                                    return d.name;
+                                });
+
+                            nodeEnter.append("svg:title")
+                                .attr("class", "nodetext")
+                                .attr("text-anchor", "middle")
+                                .attr("dy", ".15em")
+                                .text(function(d,i) {
+                                    if (d.participa && d.participa !== null) {
+                                        return d.participa +" participaciones";
+                                    } else {
+                                        return d.name;
+                                    }
+                                });
+
+                            node.exit().remove();
+
+                            link = vis.selectAll("line.link");
+                            node = vis.selectAll("g.node");
+
+                            force.on("tick", function() {
+                                link.attr("x1", function(d) {
+                                    return d.source.x;
+                                })
+                                .attr("y1", function(d) {
+                                    return d.source.y;
+                                })
+                                .attr("x2", function(d) {
+                                    return d.target.x;
+                                })
+                                .attr("y2", function(d) {
+                                    return d.target.y;
+                                });
+
+                                node.attr("transform", function(d) {
+                                    return "translate(" + d.x + "," + d.y + ")";
+                                });
                             });
-                            console.log("over "+d.name);
-                        })
-                        .on("mouseout", function(d) {
-                            d3.select(this)
-                            .attr("r", function(d) {
-                                console.log("on unselected "+d.size);
-                                return d.size;
-                            });
-                            console.log("out "+d.name);
-                        })
-                        .style("fill", color);*/
-    
-                    nodeEnter.append("svg:image")
-                        .attr("xlink:href", function(d) {
-                            if (d.type && d.type==="process") {
-                                return "<%="/work/models/"+site.getId()+"/css/images/icono-iniciado.gif"%>";
+                        }
+
+                        function click(d) {
+                            if (d.children) {
+                                d._children = d.children;
+                                d.children = null;
                             } else {
-                                return "<%="/work/models/"+site.getId()+"/css/images/colaborador.png"%>";
+                                d.children = d._children;
+                                d._children = null;
                             }
-                        })
-                        .attr("x", -10)
-                        .attr("y", -10)
-                        .attr("width", 20)
-                        .attr("height", 20)
-                        .style("fill", color);
-                
-                    nodeEnter.append("svg:text")
-                        .attr("font-family", "Arial")
-                        .attr("font-size", "11")
-                        .attr("stroke", "none")
-                        .attr("fill", "#000000")
-                        .attr("text-anchor", "middle")
-                        .attr("dy", "2em")
-                        .text(function(d) {
-                            return d.name;
-                        });
-                        
-                    nodeEnter.append("svg:title")
-                        .attr("class", "nodetext")
-                        .attr("text-anchor", "middle")
-                        .attr("dy", ".15em")
-                        .text(function(d,i) {
-                            if (d.participa && d.participa !== null) {
-                                return d.participa +" participaciones";
-                            } else {
-                                return d.name;
+                            updateD3Chart();
+                        }
+
+                        function flatten(root) {
+                            var nodes = [], i = 0;
+                            function recurse(node) {
+                                if (node.children)
+                                    node.children.forEach(recurse);
+                                if (!node.id)
+                                    node.id = ++i;
+                                nodes.push(node);
                             }
-                        });
-                        
-                    node.exit().remove();
-                    
-                    link = vis.selectAll("line.link");
-                    node = vis.selectAll("g.node");
-                    
-                    force.on("tick", function() {
-                        link.attr("x1", function(d) {
-                            return d.source.x;
-                        })
-                        .attr("y1", function(d) {
-                            return d.source.y;
-                        })
-                        .attr("x2", function(d) {
-                            return d.target.x;
-                        })
-                        .attr("y2", function(d) {
-                            return d.target.y;
-                        });
-                        
-                        node.attr("transform", function(d) {
-                            return "translate(" + d.x + "," + d.y + ")";
-                        });
-                    });
-                }
-                
-                var d3Color = d3.scale.category20();
+                            recurse(root);
+                            return nodes;
+                        }
 
-                function color(d, i) {
-                    return d3Color(i);
-                }
-                
-                function click(d) {
-                    if (d.children) {
-                        d._children = d.children;
-                        d.children = null;
-                    } else {
-                        d.children = d._children;
-                        d._children = null;
-                    }
-                    updateD3Chart();
-                }
-                
-                function flatten(root) {
-                    var nodes = [], i = 0;
-                    function recurse(node) {
-                        if (node.children)
-                            node.children.forEach(recurse);
-                        if (!node.id)
-                            node.id = ++i;
-                        nodes.push(node);
-                    }
-                    recurse(root);
-                    return nodes;
-                }
-            </script>
-            <%if (processing == 0 && closed == 0 && aborted == 0) {
-                        
-            } else {
-                %>
-                <div class="processChartPie" id="performanceGraph"></div>
+                        var force = d3.layout.force()
+                            .charge(-60)
+                            .distance(80)
+                            .gravity(.05)
+                            //.linkDistance(50)
+                            .size([w, h]);
+
+                        var vis = d3.select("#participationGraph").append("svg:svg")
+                            .attr("width", w)
+                            .attr("height", h);
+
+                        vis.append("svg:text")
+                            .text("Grafo de participación")
+                            .attr("x","67")
+                            .attr("y","22.85")
+                            .attr("font-family", "Arial")
+                            .attr("font-size", "11")
+                            .attr("font-weight", "bold")
+                            .attr("stroke", "none")
+                            .attr("fill", "#000000");
+
+                        var root = theJson;
+                        updateD3Chart();
+                    </script>
                 <%
+                }
             }
-            if (minTime == 0 && maxTime == 0 && avgTime == 0) {
-                        
-            } else {
-                %>
-                <div class="processChartPie" id="responseTime"></div>
-                <%
-            }
-            if (delayed == 0 && ontime == 0) {
-                        
-            } else {
-                %>
-                <div class="processChartPie" id="overdueGraph"></div>
-                <%
-            }%>
-            <div class="processChartPie" id="participationGraph"></div>
-            <script type="text/javascript">
-                var theJson = JSON.parse('<%=processInfo%>');
-                var w = d3.select("#participationGraph").style("width").replace("px","");
-                var h = d3.select("#participationGraph").style("height").replace("px","");
-
-                var force = d3.layout.force()
-                    .charge(-60)
-                    .distance(80)
-                    .gravity(.05)
-                    //.linkDistance(50)
-                    .size([w, h]);
-
-                var vis = d3.select("#participationGraph").append("svg:svg")
-                    .attr("width", w)
-                    .attr("height", h);
-
-                vis.append("svg:text")
-                        .text("Grafo de participación")
-                        .attr("x","67")
-                        .attr("y","22.85")
-                        .attr("font-family", "Arial")
-                        .attr("font-size", "11")
-                        .attr("font-weight", "bold")
-                        .attr("stroke", "none")
-                        .attr("fill", "#000000");
-                
-                var root = theJson;
-                updateD3Chart();
-            </script>
+            %>
             <div class="bandeja-combo"><strong><span style="font-size: medium">Instancias del proceso</span></strong></div>
             <div>
                 <table class="tabla-bandeja">
