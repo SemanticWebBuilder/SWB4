@@ -51,11 +51,13 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.Kloutable;
 import org.semanticwb.social.MessageIn;
+import org.semanticwb.social.PhotoIn;
 import org.semanticwb.social.Post;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialTopic;
+import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.util.SWBSocialUtil;
 import twitter4j.Status;
 import twitter4j.User;
@@ -482,7 +484,7 @@ public class FacebookWall extends GenericResource {
                             postIn.setMsg_Text(story);
                         }
 
-                        System.out.println("STATUS guardado OK");
+                        System.out.println("********************STATUS guardado OK");
                     }else if(postType.equals("link")){
                         if(!postData.isNull("story")){
                             story = (!postData.isNull("story")) ? postData.getString("story") : "";
@@ -495,8 +497,10 @@ public class FacebookWall extends GenericResource {
                         if(postData.has("link") && postData.has("name")){
                             System.out.println("<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>");
                             postIn.setTitle("<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>");//Link o Title
-                            story = story + ": " + "<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>";                            
-                            message = message + ":" + "<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>";
+                            if(!story.isEmpty())
+                                story = story + ": " + "<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>";                            
+                            if(!message.isEmpty())
+                                message = message + ":" + "<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>";
                             
                         }
                         
@@ -509,9 +513,10 @@ public class FacebookWall extends GenericResource {
                         }else if(!story.isEmpty()){
                             postIn.setMsg_Text(story);
                         }
-                        System.out.println("LINK guardado OK");                        
+                        System.out.println("********************LINK guardado OK");
                     }
                     
+                    //Information of post IN
                     postIn.setSocialNetMsgId(postData.getString("id"));
                     postIn.setPostInSocialNetwork(socialNetwork);
                     postIn.setPostInStream(null);
@@ -529,7 +534,130 @@ public class FacebookWall extends GenericResource {
                         }
                     }
                     response.setRenderParameter("postUri", postIn.getURI());
-                }else if(postType.equals("video") || postType.equals("swf")){}
+                }else if(postType.equals("video") || postType.equals("swf")){
+                    postIn=VideoIn.ClassMgr.createVideoIn(model);
+                    //Get message and/or story
+                    if(!postData.isNull("message")){
+                        message = postData.getString("message");
+                    }else if(!postData.isNull("story")){
+                        story = (!postData.isNull("story")) ? postData.getString("story") : "";
+                        story = getTagsFromPost(postData.getJSONObject("story_tags"), story);
+                    }
+                        
+                    if(postData.has("source") && postData.has("name")){
+                        if(!story.isEmpty())
+                            story = story + ": " + "<a href=\"" + postData.getString("source") + "\" target=\"_blank\">" + postData.getString("name") + "</a>";
+                        if(!message.isEmpty())
+                            message = message + ": " + "<a href=\"" + postData.getString("source") + "\" target=\"_blank\">" + postData.getString("name") + "</a>";
+                    }else if(postData.has("source") && !postData.has("name")){
+                        if(!story.isEmpty())
+                            story = story + ": " + "<a href=\"" + postData.getString("source") + "\" target=\"_blank\">View video</a>";
+                        if(!message.isEmpty())
+                            message = message + ": " + "<a href=\"" + postData.getString("source") + "\" target=\"_blank\">View video</a>";
+                    }
+
+                    if(postData.has("description")){
+                        postIn.setDescription(postData.getString("description"));
+                    }
+                        
+                    System.out.println("THE MESSAGE******\n" + message);
+                    System.out.println("THE STORY******\n" + story);
+                    if(!message.isEmpty()){
+                        System.out.println("SETTING MESSAGE");
+                        postIn.setMsg_Text(message);
+                    }else if(!story.isEmpty()){
+                        System.out.println("SETTING STORY");
+                        postIn.setMsg_Text(story);
+                    }else{
+                        System.out.println("SETTING ONLY THE NAME!!!!!");
+                        postIn.setMsg_Text("<a href=\"" + postData.getString("source") + "\" target=\"_blank\">" + postData.getString("name") +"</a>");
+                    }
+                    
+                    if(postData.has("source")){
+                        System.out.println("Setting the VIDEO");
+                        VideoIn videoIn=(VideoIn)postIn;
+                        videoIn.setVideo(postData.getString("source"));
+                    }
+                    
+                    //Information of post IN
+                    postIn.setSocialNetMsgId(postData.getString("id"));
+                    postIn.setPostInSocialNetwork(socialNetwork);
+                    postIn.setPostInStream(null);
+                    postIn.setPostInSocialNetworkUser(socialNetUser);
+                    //Sets the social topic
+                    if(request.getParameter("newSocialTopic").equals("none"))
+                    {
+                        postIn.setSocialTopic(null);
+                    }else {
+                        SemanticObject semObjSocialTopic=SemanticObject.getSemanticObject(request.getParameter("newSocialTopic"));
+                        if(semObjSocialTopic!=null)
+                        {
+                            SocialTopic socialTopic=(SocialTopic)semObjSocialTopic.createGenericInstance();
+                            postIn.setSocialTopic(socialTopic);//Asigns socialTipic
+                        }
+                    }
+                    System.out.println("********************VIDEO guardado OK");
+                    response.setRenderParameter("postUri", postIn.getURI());
+                }else if(postType.equals("photo")){
+                    postIn=PhotoIn.ClassMgr.createPhotoIn(model);
+                    //Get message and/or story
+                    if(!postData.isNull("message")){
+                        message = postData.getString("message");
+                    }else if(!postData.isNull("story")){
+                        story = (!postData.isNull("story")) ? postData.getString("story") : "";
+                        story = getTagsFromPost(postData.getJSONObject("story_tags"), story);
+                    }
+                        
+                    if(postData.has("picture") && postData.has("name")){
+                        if(!story.isEmpty())
+                            story = story + ": " + "<a href=\"" + postData.getString("picture").replace("_s.", "_n.") + "\" target=\"_blank\">" + postData.getString("name") + "</a>";
+                        if(!message.isEmpty())
+                            message = message + ": " + "<a href=\"" + postData.getString("picture").replace("_s.", "_n.") + "\" target=\"_blank\">" + postData.getString("name") + "</a>";
+                    }else if(postData.has("picture") && !postData.has("name")){
+                        if(!story.isEmpty())
+                            story = story + ": " + "<a href=\"" + postData.getString("picture").replace("_s.", "_n.") + "\" target=\"_blank\">View picture</a>";
+                        if(!message.isEmpty())
+                            message = message + ": " + "<a href=\"" + postData.getString("picture").replace("_s.", "_n.") + "\" target=\"_blank\">View picture</a>";
+                    }
+                    
+                    
+                    
+                    if(postData.has("description")){
+                        postIn.setDescription(postData.getString("description"));
+                    }
+                        
+                    if(!message.isEmpty()){
+                        postIn.setMsg_Text(message);
+                    }else if(!story.isEmpty()){
+                        postIn.setMsg_Text(story);
+                    }
+                    
+                    if(postData.has("picture")){
+                        String photo=postData.getString("picture");
+                        PhotoIn photoIn=(PhotoIn)postIn;
+                        photoIn.addPhoto(photo);
+                    }
+                    
+                    //Information of post IN
+                    postIn.setSocialNetMsgId(postData.getString("id"));
+                    postIn.setPostInSocialNetwork(socialNetwork);
+                    postIn.setPostInStream(null);
+                    postIn.setPostInSocialNetworkUser(socialNetUser);
+                    //Sets the social topic
+                    if(request.getParameter("newSocialTopic").equals("none"))
+                    {
+                        postIn.setSocialTopic(null);
+                    }else {
+                        SemanticObject semObjSocialTopic=SemanticObject.getSemanticObject(request.getParameter("newSocialTopic"));
+                        if(semObjSocialTopic!=null)
+                        {
+                            SocialTopic socialTopic=(SocialTopic)semObjSocialTopic.createGenericInstance();
+                            postIn.setSocialTopic(socialTopic);//Asigns socialTipic
+                        }
+                    }
+                    System.out.println("********************STATUS guardado OK");
+                    response.setRenderParameter("postUri", postIn.getURI());
+                }
 /*                
                 postIn=MessageIn.ClassMgr.createMessageIn(model);
                 postIn = MessageIn.ClassMgr.createMessageIn(model);
