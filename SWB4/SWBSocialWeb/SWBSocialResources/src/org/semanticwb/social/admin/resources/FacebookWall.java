@@ -528,7 +528,7 @@ public class FacebookWall extends GenericResource {
                             postIn.setSocialTopic(socialTopic);//Asigns socialTipic
                         }
                     }
-                    
+                    response.setRenderParameter("postUri", postIn.getURI());
                 }else if(postType.equals("video") || postType.equals("swf")){}
 /*                
                 postIn=MessageIn.ClassMgr.createMessageIn(model);
@@ -733,7 +733,9 @@ public class FacebookWall extends GenericResource {
             }
             
             response.setRenderParameter("currentTab", request.getParameter("currentTab"));
-            //response.setRenderParameter("id", idStatus);            
+            response.setRenderParameter("id", idPost);
+            response.setRenderParameter("fbid", facebook.getId());
+            
             response.setMode("assignedPost");
         }else if(action.equals("changeSocialTopic"))
         {
@@ -937,6 +939,7 @@ public class FacebookWall extends GenericResource {
             }
         }else if(mode.equals("assignedPost")){
             String id = request.getParameter("id");
+            String fbid = request.getParameter("fbid");
             String postUri = request.getParameter("postUri");
             SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", id).setParameter("postUri", postUri).setParameter("currentTab", currentTab);
             String url= "<a href=\"#\" title=\"" + "Reclasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','Reclasificar tweet'); return false;\">Reclasificar</a>";
@@ -944,7 +947,7 @@ public class FacebookWall extends GenericResource {
             out.println("<script type=\"dojo/method\">");
             out.println("   hideDialog(); ");            
             out.println("   try{");///////////Falta poner el id de FACEBOOK
-            out.println("   var spanId = dijit.byId('" + id + TOPIC + currentTab +  "');");            
+            out.println("   var spanId = dijit.byId('" + fbid + id + TOPIC + currentTab +  "');");            
             out.println("   spanId.attr('content', '" + url.replace("'", "\\'") +"');");           
             out.println("   }catch(noe){alert('Error:' + noe);}");
             out.println("   showStatus('Tema asociado correctamente');");
