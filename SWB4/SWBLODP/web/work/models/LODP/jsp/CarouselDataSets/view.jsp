@@ -14,13 +14,14 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.semanticwb.model.Resource"%>
-<script type="text/javascript" src="/work/models/LODP/jsp/CarouselDataSets/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/work/models/LODP/jsp/CarouselDataSets/js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="/work/models/LODP/jsp/CarouselDataSets/js/jquery.bxslider.js"></script>
 <script type="text/javascript" src="/work/models/LODP/jsp/CarouselDataSets/js/jquery.bxslider.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/work/models/LODP/jsp/CarouselDataSets/js/jquery.bxslider.css" />
 <script>
     $(document).ready(function() {
         $('.slider4').bxSlider({
+            mode: 'horizontal',              
             slideWidth: 148,
             minSlides: 5,
             maxSlides: 5,
