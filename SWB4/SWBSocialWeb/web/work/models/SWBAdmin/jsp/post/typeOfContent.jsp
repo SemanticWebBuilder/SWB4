@@ -113,7 +113,7 @@
 <div id="pub-detalle">
     <span class="sel-txtdiv"></span>
     <div class="swbform">
-        <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadText" action="<%=urlAction.setAction("postMessage")%>" onsubmit="submitForm('<%=objUri%>frmUploadText');
+        <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadText" action="<%=urlAction.setAction("postMessage")%>" onsubmit="submitForm('<%=objUri%><%=sourceCall%>frmUploadText');
                 return false;" method="post">
 
             <div class="pub-info">
@@ -173,9 +173,9 @@
                     }
 
                 %>
-                <ul class="btns_final">
-                    <button dojoType="dijit.form.Button" type="submit"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
-                </ul>
+            
+                    <button class="submit" type="submit"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+               
             </div>      
             <%
                 if (postInSN == null) {
@@ -197,11 +197,11 @@
                             String typeClass = "";
                             if (socialNetwork instanceof Youtube) {
                                 typeClass = "ico-ytb";
-                            }/*
+                            }
                             if (socialNetwork instanceof Facebook){
                                 
                              typeClass = "ico-fcb";
-                             }*/
+                             }
                             if (socialNetwork instanceof Twitter) {
                                 typeClass = "ico-twt";
                             }
@@ -248,10 +248,10 @@
     <div id="pub-detalle">
         <span class="sel-imgdiv"></span>
         <div class="swbform">
-            <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadPhoto" action="<%=urlAction.setAction("uploadPhoto")%>" method="post" onsubmit="submitForm('<%=objUri%>frmUploadPhoto');
+            <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadPhoto" action="<%=urlAction.setAction("uploadPhoto")%>" method="post" onsubmit="submitForm('<%=objUri%><%=sourceCall%>frmUploadPhoto');
                 return false;">
                 <%= photoMgr.getFormHiddens()%>
-                <div class="pub-info">
+                <div class="pub-redes">
                     <p class="titulo">Detalles de la publicaci&oacute;n</p>
                     <p>
                     <div class="etiqueta"><label for="description"><%=Photo.social_msg_Text.getDisplayName()%>:</label></div>
@@ -259,7 +259,7 @@
                     </p>
                     <p>
                     <div class="etiqueta"><label for="photo"><%=photoMgr.renderLabel(request, PostImageable.social_hasPhoto, photoMgr.MODE_CREATE)%>: </label></div>
-                    <%=photoMgr.getFormElement(PostImageable.social_hasPhoto).renderElement(request, obj2, PostImageable.social_hasPhoto, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang)%>       
+                    <%=photoMgr.getFormElement(PostImageable.social_hasPhoto).renderElement(request, obj2, PostImageable.social_hasPhoto, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang).replaceAll("hasPhoto_new", "hasPhoto_new" + objUri+sourceCall)%>       
 
                     <%
                         if (postIn != null) {
@@ -305,11 +305,7 @@
                         }
                     %>
 
-                    <ul class="btns_final">
-                        <button dojoType="dijit.form.Button" type="submit"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
-                    </ul>
-
-
+                        <button class="submit" type="submit"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
                 </div>
 
                 <%
@@ -327,9 +323,9 @@
                              if (socialNetwork instanceof Youtube){
                                  typeClass = "ico-ytb";
                              }
-                             /* if (socialNetwork instanceof Facebook){
+                              if (socialNetwork instanceof Facebook){
                                  typeClass = "ico-fcb";
-                             }*/
+                             }
                                if (socialNetwork instanceof Twitter){
                                  typeClass = "ico-twt";
                              }
@@ -356,7 +352,7 @@
         </div>
     </div>
 
-    <%} else if (contentType.equals("uploadVideo")) {       ///////////////////////////////POSTEO DE VIDEOS/////////////////////////////
+<%} else if (contentType.equals("uploadVideo")) {       ///////////////////////////////POSTEO DE VIDEOS/////////////////////////////
         urlAction.setParameter("toPost", "video");
         SWBFormMgr videoMgr = new SWBFormMgr(Video.sclass, paramRequest.getWebPage().getWebSite().getSemanticObject(), null);
         videoMgr.setType(SWBFormMgr.TYPE_DOJO);
@@ -377,7 +373,7 @@
                 return false;">
             <%= videoMgr.getFormHiddens()%>
             
-             <div class="pub-info">
+             <div class="pub-redes">
                  <p class="titulo">Detalles de la publicaci&oacute;n</p>
                     <p>
                       <div id="<%=objUri%><%=sourceCall%>divCategory" style="display:none;" class="etiqueta"><label for="description">Categoría:</label>
@@ -463,10 +459,9 @@
                 }
             %>  
                     </p>
-            <ul class="btns_final">
-                <button dojoType="dijit.form.Button" type="submit" onclick="return validateChecks()"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
-            </ul>           
+             <button class="submit" type="submit" onclick="return validateChecks()"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
              </div>
+                
             <%
                 if (postInSN == null) {
             %>
@@ -477,17 +472,18 @@
                 Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
                 while (it.hasNext()) {
                     SocialNetwork socialNetwork = (SocialNetwork) it.next();
+                    if (socialNetwork instanceof Videoable && socialNetwork.isActive()) {
                     String typeClass = "";
                              if (socialNetwork instanceof Youtube){
                                  typeClass = "ico-ytb";
                              }
-                             /* if (socialNetwork instanceof Facebook){
+                              if (socialNetwork instanceof Facebook){
                                  typeClass = "ico-fcb";
-                             }*/
+                             }
                                if (socialNetwork instanceof Twitter){
                                  typeClass = "ico-twt";
                              }
-                    if (socialNetwork instanceof Videoable && socialNetwork.isActive()) {
+                   
                         if (socialNetwork instanceof Youtube) {
             %>
             <li class="<%=typeClass%>">
@@ -497,8 +493,9 @@
             <%
             } else {
             %>
-            <li>
-                <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" /><%=socialNetwork.getTitle()%>
+            <li class="<%=typeClass%>">
+                <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" />
+                <label><span></span><%=socialNetwork.getTitle()%></label>
             </li>
             <%
                         }
