@@ -169,6 +169,7 @@
                             <%
                             if(!postOut.isPublished())
                             {
+                                String firstError=null;
                                 boolean postOutwithPostOutNets=false;
                                 boolean someOneIsNotPublished=false;
                                 Iterator <PostOutNet> itPostOutNets=PostOutNet.ClassMgr.listPostOutNetBySocialPost(postOut, wsite);
@@ -179,7 +180,11 @@
                                     if(postOutNet.getStatus()==0) 
                                     {
                                         someOneIsNotPublished=true;
-                                        break;
+                                        if(postOutNet.getError()!=null)
+                                        {
+                                            firstError=postOutNet.getError();
+                                            break;
+                                        }
                                     }
                                 }
 
@@ -202,9 +207,18 @@
                                      if (!needAuthorization) {
                                          if(someOneIsNotPublished)
                                          {
-                                          %>   
-                                             <%=SWBSocialUtil.Util.getStringFromGenericLocale("toReview", user.getLanguage())%> 
-                                          <%    
+                                           if(firstError!=null)
+                                           {
+                                             %>   
+                                             <%=SWBUtils.TEXT.encode(firstError, "utf-8")%> 
+                                             <%
+                                           }
+                                           else
+                                           {
+                                              %>   
+                                                   <%=SWBSocialUtil.Util.getStringFromGenericLocale("toReview", user.getLanguage())%> 
+                                              <%
+                                           }
                                          }else{
                                          %>    
                                              <%=SWBSocialUtil.Util.getStringFromGenericLocale("publish", user.getLanguage())%> 
