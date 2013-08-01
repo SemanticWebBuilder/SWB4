@@ -643,12 +643,12 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
          String category = "";
         
         Iterator<YouTubeCategory> it = listYoutubeCategories();
-       
-        while(it.hasNext()){
-            System.out.println("EL ITERATOR CATEGORY.." + category);
-            category = category + it.next().getId() + ",";
-        }
-        System.out.println("La cadena final de category es: " + category);
+        category = it.next().getId();
+   
+        if(it.hasNext()){
+            System.out.println("Tiene mas de una categoria...");
+            category = category + "|" + it.next().getId();
+        }     
         int limit = 20;
         int maxResults = 10;
         int totalResources = 0;
@@ -671,8 +671,6 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             params.put("category", category);
             }
             
-            System.out.println("QUe palabras va a buscar: " + searchPhrases);
-
             try {
                 String r2 = postRequest2(params, "https://gdata.youtube.com/feeds/api/videos", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
                 //Convertir la String res2 a un objeto json
@@ -722,7 +720,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                         external.setMessage(description);
                         external.setCategory(categoryItem);
                         external.setSocialNetwork(this);
-                        external.setLink(url);
+                        external.setVideo(url);
                         external.setPostType(SWBSocialUtil.VIDEO);
                         aListExternalPost.add(external);
                         currentVideoID = uploaded;
@@ -925,5 +923,5 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             e.printStackTrace();
           }
           return exit;
-    }   
+    } 
 }
