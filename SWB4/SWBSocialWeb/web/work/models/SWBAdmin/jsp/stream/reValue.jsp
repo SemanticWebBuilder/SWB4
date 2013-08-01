@@ -66,12 +66,12 @@
         }else if(postIn.getPostSentimentalType()==1)
         {
         %>    
-            <img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/feelpos.png">
+            <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/feelpos.png">
         <%    
         }else if(postIn.getPostSentimentalType()==2)
         {
         %>
-            <img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/feelneg.png">
+            <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/feelneg.png">
         <%    
         }
         %>

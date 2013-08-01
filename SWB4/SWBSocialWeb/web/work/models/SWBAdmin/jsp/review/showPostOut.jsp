@@ -38,7 +38,7 @@
     
     org.semanticwb.model.User userCreator=postOut.getCreator(); 
     String userPhoto=null; //Sacar la foto de la redSocial;
-    if(userPhoto==null) userPhoto="/swbadmin/images/profileDefImg.jpg";
+    if(userPhoto==null) userPhoto="/swbadmin/css/images/profileDefImg.jpg";
     System.out.println("postOut-Jorgito-3:"+userCreator);
     //Un mensaje de entrada siempre debe estar atachado a un usuar
     PostIn postInSource=null;
@@ -110,12 +110,12 @@
               }else if(postInSource.getPostSentimentalType()==1)
               {
                  %>
-                      <img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/feelpos.png">
+                      <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/feelpos.png">
                  <%
               }else if(postInSource.getPostSentimentalType()==2) 
               {
                   %>
-                      <img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/feelneg.png">
+                      <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/feelneg.png">
                   <%
               }
               %>
