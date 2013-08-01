@@ -214,6 +214,7 @@ public class SocialTopicInBox extends GenericResource {
         String page = request.getParameter("page");
         if(page==null && request.getParameter("noSaveSess")==null)  //Cuando venga page!=null no se mete nada a session, ni tampoco se manda return.
         {
+            System.out.println("Entra a Cuestiones de Sesión-Jorge---");
             HttpSession session = request.getSession(true);
             if (null == searchWord) {
                 searchWord = "";
@@ -230,7 +231,7 @@ public class SocialTopicInBox extends GenericResource {
                 {
                     swbSocialUser = (String)session.getAttribute(id + this.getClass().getName() +"swbSocialUser");
                     session.removeAttribute(id + this.getClass().getName() +"swbSocialUser");
-            }
+                }
             }else{//Add word to session var
                 session.setAttribute(id + this.getClass().getName() +"swbSocialUser", swbSocialUser);//Save the word in the session var
                 return;
