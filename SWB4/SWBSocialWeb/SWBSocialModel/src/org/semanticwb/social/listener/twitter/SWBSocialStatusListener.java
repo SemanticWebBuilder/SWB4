@@ -124,7 +124,8 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                             }
                         }
                     }
-
+                    
+                    
                     external.setSocialNetwork(socialNetwork);
                     external.setPostShared((int)status.getRetweetCount());
                     external.setCreatorPhotoUrl(status.getUser().getBiggerProfileImageURL());

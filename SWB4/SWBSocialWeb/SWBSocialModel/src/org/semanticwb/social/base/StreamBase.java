@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que contendra los streams que configurados para cada usuario 
    */
-public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.social.Geolocable,org.semanticwb.social.SocialRuleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Trashable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable
+public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.social.SocialRuleRefable,org.semanticwb.social.Geolocable,org.semanticwb.model.Filterable,org.semanticwb.model.Trashable,org.semanticwb.model.Traceable
 {
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
@@ -996,6 +996,24 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     public void setStream_KloutValue(int value)
     {
         getSemanticObject().setIntProperty(social_stream_KloutValue, value);
+    }
+
+/**
+* Gets the GeoLanguage property
+* @return String with the GeoLanguage
+*/
+    public String getGeoLanguage()
+    {
+        return getSemanticObject().getProperty(social_geoLanguage);
+    }
+
+/**
+* Sets the GeoLanguage property
+* @param value long with the GeoLanguage
+*/
+    public void setGeoLanguage(String value)
+    {
+        getSemanticObject().setProperty(social_geoLanguage, value);
     }
 
    /**

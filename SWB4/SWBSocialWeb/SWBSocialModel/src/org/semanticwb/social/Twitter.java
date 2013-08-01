@@ -477,58 +477,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             
             /*create filterQuery*/
             FilterQuery query = new FilterQuery();
-            /*
-            try
-            {
-                if(stream.getGeoCenterLatitude()!=0 && stream.getGeoCenterLongitude()!=0)
-                {
-                        double eart_Radio=SWBSocialUtil.EART_RADIUS_KM;
-                        if(stream.getGeoDistanceUnit().equals("MI"))
-                        {
-                            eart_Radio=SWBSocialUtil.EART_RADIUS_MI;
-                        }
-                        double distance = 50;
-                        if(stream.getGeoRadio()>0)
-                        {
-                            distance=stream.getGeoRadio();
-                        }
-                        
-                        org.semanticwb.social.util.GeoLocation myLocation = org.semanticwb.social.util.GeoLocation.fromDegrees(stream.getGeoCenterLatitude(), stream.getGeoCenterLongitude());
-                        org.semanticwb.social.util.GeoLocation[] boundingCoordinates =myLocation.boundingCoordinates(distance, eart_Radio);
-                        
-                        //SW
-                        System.out.println("S:"+boundingCoordinates[0].getLatitudeInDegrees());
-                        System.out.println("W:"+boundingCoordinates[0].getLongitudeInDegrees());
-                        
-                        //NE
-                        System.out.println("N:"+boundingCoordinates[1].getLatitudeInDegrees());
-                        System.out.println("E:"+boundingCoordinates[1].getLongitudeInDegrees());
-                        
-                        
-                        double[][] boundingBox2FindTweets = {{boundingCoordinates[0].getLatitudeInDegrees(), boundingCoordinates[0].getLongitudeInDegrees()}, 
-                            {boundingCoordinates[1].getLatitudeInDegrees(), boundingCoordinates[1].getLongitudeInDegrees()}};
-                        
-                        
-                        double[][] boundingBox2FindTweets = {{19.048220, -99.364067}, 
-                            {19.591579, -98.940193}};
-                        
-                        
-                        double[][] boundingBox2FindTweets = {{40.714623d, -74.006605d}, 
-                            {42.3583d,  -71.0603d}};
-                           
-                        
-                        //double[][] locations = { { 40.714623d, -74.006605d }, { 42.3583d, -71.0603d } };
-                        
-                        query.locations(boundingBox2FindTweets);
-                        
-
-                }
-            }catch(Exception e)
-            {
-                System.out.println("Error En ListenAlive:"+e.getMessage());
-                log.error(e);
-            }
-            */
+            
             
             //Palabras a monitorear
             String words2Monitor=stream.getPhrase();
