@@ -65,17 +65,17 @@ if(request.getParameter("showSource")!=null)
                 <%if(isMessageAble){
                     args.put("valor", "postMessage");
                 %>
-                     <td style="text-align: center;"><a style="cursor: pointer;" title="Mensaje" onclick="postHtml('<%=url.setMode("post").setParameters(args)%>', 'postType')"><img src="/swbadmin/images/text.png"/></a></td>
+                     <td style="text-align: center;"><a style="cursor: pointer;" title="Mensaje" onclick="postHtml('<%=url.setMode("post").setParameters(args)%>', 'postType')"><img src="/swbadmin/css/images/text.png"/></a></td>
                 <%}%>
                 <%if(isPhotoable){  
                     args.put("valor", "uploadPhoto"); 
                 %> 
-                    <td style="text-align: center;"><a style="cursor: pointer;" title="Foto" onclick="postHtml('<%=url.setMode("post").setParameters(args)%>', 'postType')"><img src="/swbadmin/images/photo.png"/></a></td>
+                    <td style="text-align: center;"><a style="cursor: pointer;" title="Foto" onclick="postHtml('<%=url.setMode("post").setParameters(args)%>', 'postType')"><img src="/swbadmin/css/images/photo.png"/></a></td>
                 <%}%>
                 <%if(isVideoable){
                     args.put("valor", "uploadVideo"); 
                 %> 
-                    <td style="text-align: center;"><a style="cursor: pointer;" title="Video" onclick="postHtml('<%=url.setMode("post").setParameters(args)%>', 'postType')"><img src="/swbadmin/images/video.png"/></a></td>
+                    <td style="text-align: center;"><a style="cursor: pointer;" title="Video" onclick="postHtml('<%=url.setMode("post").setParameters(args)%>', 'postType')"><img src="/swbadmin/css/images/video.png"/></a></td>
                 <%}%>    
            </tr>        
         </table>

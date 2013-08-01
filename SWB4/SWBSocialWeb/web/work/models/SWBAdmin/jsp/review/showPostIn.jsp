@@ -37,7 +37,7 @@
     
     SocialNetworkUser socialNetworkUser=postIn.getPostInSocialNetworkUser();
     String userPhoto=socialNetworkUser.getSnu_photoUrl(); //Sacar la foto de la redSocial;
-    if(userPhoto==null) userPhoto="/swbadmin/images/profileDefImg.jpg";
+    if(userPhoto==null) userPhoto="/swbadmin/css/images/profileDefImg.jpg";
     
  %>
 
@@ -87,12 +87,12 @@
                 }else if(postIn.getPostSentimentalType()==1)
                 {
                    %>
-                        <img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/feelpos.png">
+                        <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/feelpos.png">
                    <%
                 }else if(postIn.getPostSentimentalType()==2)
                 {
                     %>
-                        <img src="<%=SWBPortal.getContextPath()%>/swbadmin/images/feelneg.png">
+                        <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/feelneg.png">
                     <%
                 }
                 %>

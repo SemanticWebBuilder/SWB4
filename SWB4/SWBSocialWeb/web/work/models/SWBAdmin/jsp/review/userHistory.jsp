@@ -37,7 +37,7 @@
     if(socialNetUser==null) return;   
     
     String userPhoto=socialNetUser.getSnu_photoUrl(); //Sacar la foto de la redSocial;
-    if(userPhoto==null) userPhoto="/swbadmin/images/profileDefImg.jpg";
+    if(userPhoto==null) userPhoto="/swbadmin/css/images/profileDefImg.jpg";
     
  %>
 

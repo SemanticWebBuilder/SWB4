@@ -20,7 +20,7 @@
         String objUri=request.getParameter("suri");
         String param = "suri=" + URLEncoder.encode(request.getParameter("suri"));
         //System.out.println("parametro en tabs.jsp:" + param);
-        String loading="<BR/><center><img src='"+SWBPlatform.getContextPath()+"/swbadmin/images/loading.gif'/><center>";
+        String loading="<BR/><center><img src='"+SWBPlatform.getContextPath()+"/swbadmin/css/images/loading.gif'/><center>";
         
         //All tabs are inside the same resource
         //Setting refreshOnShow=false does not reload tab when double-clicked.
