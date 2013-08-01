@@ -1142,20 +1142,22 @@ public class SWBSocialUtil implements SWBAppObject {
          * en las diferentes redes sociales a los que se envia un postOut desde swbsocial, esto nos sirve para llevar
          * la trazabilidad de los mensajes enviados.
          */
-        public static PostOutNet savePostOutNetID(PostOut postOut, SocialNetwork socialNet, String socialNetMsgId)
+        public static PostOutNet savePostOutNetID(PostOut postOut, SocialNetwork socialNet, String socialNetMsgId, String error)
         {
             System.out.println("Entra a savePostOutNetID-1");
             PostOutNet postOutNet=null;
             try
             {
-                if(postOut==null || socialNet==null || socialNetMsgId==null) return null;
+                if(postOut==null || socialNet==null) return null;
                 WebSite wsite=WebSite.ClassMgr.getWebSite(postOut.getSemanticObject().getModel().getName());
                 System.out.println("Entra a savePostOutNetID-2:"+wsite);
                 postOutNet=PostOutNet.ClassMgr.createPostOutNet(wsite);
                 System.out.println("Entra a savePostOutNetID-3:"+postOutNet);
                 postOutNet.setSocialPost(postOut);
                 postOutNet.setSocialNetwork(socialNet);
-                postOutNet.setSocialNetMsgID(socialNetMsgId);
+                if(socialNetMsgId!=null)  {
+                    postOutNet.setSocialNetMsgID(socialNetMsgId);
+                }
                 postOutNet.setPo_created(new Date());
                 System.out.println("Entra a savePostOutNetID-4:"+postOutNet);
                 //Si la red social es de tipo SocialMonitorable, se pone a monitorear el PostOutNet creado.
@@ -1164,8 +1166,11 @@ public class SWBSocialUtil implements SWBAppObject {
                     System.out.println("Entra a savePostOutNetID-5:"+socialNet);
                     SWBSocialUtil.PostOutUtil.savePostOutNetToMonitor(postOutNet);
                     System.out.println("Entra a savePostOutNetID-6:"+socialNet);
-                }else{
+                }else if(socialNetMsgId!=null && error ==null){
                     postOutNet.setStatus(1);
+                }else if(error!=null){
+                    postOutNet.setStatus(0);
+                    postOutNet.setError(error);
                 }
             }catch(Exception e)
             {

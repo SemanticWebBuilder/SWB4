@@ -93,7 +93,9 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 
                 if(longStat>0)
                 {
-                    SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, String.valueOf(longStat));
+                    SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, String.valueOf(longStat), null);
+                }else{
+                    SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, null, "Hubo un error muy cañon");
                 }
                 
                 // System.out.println("longStat: " + longStat + " texto: " + stat.getText());
@@ -162,8 +164,12 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 }
                 long longStat = stat.getId();
                 
-                
-               SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, String.valueOf(longStat));  
+                if(longStat>0)
+                {
+                     SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, String.valueOf(longStat), null);
+                }else{
+                    SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, null, "Hubo un error muy cañon");
+                }
                 
                 
             } catch (UnsupportedEncodingException ex) {

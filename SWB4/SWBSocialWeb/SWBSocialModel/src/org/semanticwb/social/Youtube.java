@@ -322,7 +322,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                         //Si el videoId es diferente de null manda a preguntar por el status del video
                         //de lo contrario manda el error al log
                         if(videoId != null){
-                           SWBSocialUtil.PostOutUtil.savePostOutNetID(video, this, videoId);
+                           SWBSocialUtil.PostOutUtil.savePostOutNetID(video, this, videoId, null);
                         }  
         } 
                         catch(Exception ex)
