@@ -93,11 +93,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 
                 if(longStat>0)
                 {
-                    PostOutNet postOutNet=SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, String.valueOf(longStat));
-                    if(postOutNet!=null)
-                    {
-                        postOutNet.setStatus(1);
-                    }
+                    SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, String.valueOf(longStat));
                 }
                 
                 // System.out.println("longStat: " + longStat + " texto: " + stat.getText());

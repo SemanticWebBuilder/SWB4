@@ -1164,6 +1164,8 @@ public class SWBSocialUtil implements SWBAppObject {
                     System.out.println("Entra a savePostOutNetID-5:"+socialNet);
                     SWBSocialUtil.PostOutUtil.savePostOutNetToMonitor(postOutNet);
                     System.out.println("Entra a savePostOutNetID-6:"+socialNet);
+                }else{
+                    postOutNet.setStatus(1);
                 }
             }catch(Exception e)
             {
@@ -1328,6 +1330,7 @@ public class SWBSocialUtil implements SWBAppObject {
                     String isSentMgstoClassify=SWBSocialUtil.Util.getModelPropertyValue(wsite, SWBSocialUtil.CLASSIFYSENTMGS_PROPNAME);
                     if(isSentMgstoClassify!=null && isSentMgstoClassify.equalsIgnoreCase("true")) //Los mensajes de salida si se deben clasificar por sentimientos e intensidad, tal como los de entrada.
                     {
+                        System.out.println("Entra a Clasificar mensaje de Salida...");
                         String text2Classify=null;
                         if(postOut.getTitle()!=null) text2Classify=postOut.getTitle();
                         if(postOut.getDescription()!=null) text2Classify+=" " + postOut.getDescription();
