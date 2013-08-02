@@ -252,7 +252,7 @@ public class SentimentalDataClassifier {
         //Pasó filtrado por región.
         System.out.println("Geo-Fin");
                 
-        HashMap hmapValues=SWBSocialUtil.Classifier.classyfyText(externalString2Clasify);
+        HashMap hmapValues=SWBSocialUtil.Classifier.classifyText(externalString2Clasify);
         float promSentimentalValue=((Float)hmapValues.get("promSentimentalValue")).floatValue();
         int sentimentalTweetValueType=((Integer)hmapValues.get("sentimentalTweetValueType")).intValue();
         float promIntensityValue=((Float)hmapValues.get("promIntensityValue")).floatValue();
@@ -787,6 +787,7 @@ public class SentimentalDataClassifier {
      *TODO:Ver si encuentra otra forma más optima de hacer esto.
      *
      */
+    /*
     private void findInLearnigPhrases()
     {
         int contPositive=0;
@@ -851,10 +852,12 @@ public class SentimentalDataClassifier {
             wordsCont=0;
         }
     }
+    * */
 
     /*
      * Función que encuentra el número de ocurrencias en una frase
      */
+    /*
     private int findOccurrencesNumber(String phrase, int contOcurrences)
     {
         int iocurrence=externalString2Clasify.indexOf(phrase);
@@ -867,7 +870,7 @@ public class SentimentalDataClassifier {
         }
         return contOcurrences;
     }
-
+     */
   
     /*
      * Encuentra emoticons en el mensaje
