@@ -4,8 +4,12 @@ package org.semanticwb.bsc.element.base;
    /**
    * Define la estructura de propiedades a mostrar en las vistas resumen. 
    */
-public abstract class SummaryViewBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class SummaryViewBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
+   /**
+   * Indica el tipo de objetos que se mostrarán en la vista resumen
+   */
+    public static final org.semanticwb.platform.SemanticProperty bsc_objectsType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#objectsType");
    /**
    * Define el orden en que debe aparecer una propiedad en la vista resumen correspondiente.
    */
@@ -282,6 +286,24 @@ public abstract class SummaryViewBase extends org.semanticwb.model.SWBClass impl
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+/**
+* Gets the ObjectsType property
+* @return String with the ObjectsType
+*/
+    public String getObjectsType()
+    {
+        return getSemanticObject().getProperty(bsc_objectsType);
+    }
+
+/**
+* Sets the ObjectsType property
+* @param value long with the ObjectsType
+*/
+    public void setObjectsType(String value)
+    {
+        getSemanticObject().setProperty(bsc_objectsType, value);
     }
    /**
    * Sets the value for the property Creator
