@@ -511,7 +511,7 @@ public class SWBSocialUtil implements SWBAppObject {
     public static class Classifier {
         
         
-        public static HashMap classyfyText(String text)
+        public static HashMap classifyText(String text)
         {
             float sentimentalTweetValue;
             float IntensiveTweetValue;
@@ -538,6 +538,7 @@ public class SWBSocialUtil implements SWBAppObject {
             sentimentalTweetValue=((Float)hmapValues.get("sentimentalTweetValue")).floatValue();
             IntensiveTweetValue=((Float)hmapValues.get("IntensiveTweetValue")).floatValue();
             wordsCont=((Integer)hmapValues.get("wordsCont")).intValue();
+            text=((String)hmapValues.get("text"));
             
             
             //System.out.println("ANALISIS-4:sentimentalTweetValue:"+sentimentalTweetValue+", IntensiveTweetValue:+"+IntensiveTweetValue+", wordsCont:"+wordsCont);
@@ -669,7 +670,14 @@ public class SWBSocialUtil implements SWBAppObject {
            {
                SentimentalLearningPhrase sntLPhrase=itSntPhases.next();
                //System.out.println("Frase Learn:"+sntLPhrase.getPhrase());
-               int contOcurr=findOccurrencesNumber(text, sntLPhrase.getPhrase(), 0);
+               HashMap hmap=new HashMap();
+               hmap.put("text", text);
+               hmap.put("contOcurr", 0);
+               
+               hmap=findOccurrencesNumber(sntLPhrase.getPhrase(), hmap);
+               text=(String)hmap.get("text");
+               int contOcurr=((Integer)hmap.get("contOcurr")).intValue();
+               //int contOcurr=findOccurrencesNumber(text, sntLPhrase.getPhrase(), 0);
                //System.out.println("sntLPhrase:"+sntLPhrase.getPhrase()+",contOcurrJorge:"+contOcurr);
                if(contOcurr>0)
                {
@@ -724,24 +732,31 @@ public class SWBSocialUtil implements SWBAppObject {
            mapValues.put("sentimentalTweetValue", sentimentalTweetValue);
            mapValues.put("IntensiveTweetValue", IntensiveTweetValue);
            mapValues.put("wordsCont", wordsCont);
-
+           mapValues.put("text", text);
+           
            return mapValues;
        }
 
        /*
         * Función que encuentra el número de ocurrencias en una frase
         */
-       private static int findOccurrencesNumber(String text, String phrase, int contOcurrences)
+       private static HashMap findOccurrencesNumber(String phrase, HashMap hmap)
        {
+           String text=(String)hmap.get("text");
+           int contOcurrences=((Integer)hmap.get("contOcurr")).intValue();
            int iocurrence=text.indexOf(phrase);
            if(iocurrence>-1)
            {
                contOcurrences++;
                text=text.substring(0, iocurrence)+text.substring(iocurrence+phrase.length());
                //System.out.println("phrase:"+phrase+",Ocurrencia:"+contOcurrences+",externalString2Clasify:"+externalString2Clasify);
-               contOcurrences=findOccurrencesNumber(text, phrase, contOcurrences);
+               hmap=new HashMap();
+               hmap.put("text", text);
+               hmap.put("contOcurr", contOcurrences);
+               hmap=findOccurrencesNumber(phrase, hmap);
            }
-           return contOcurrences;
+           
+           return hmap;
        }
         
         
@@ -1343,7 +1358,7 @@ public class SWBSocialUtil implements SWBAppObject {
                         if(postOut.getTags()!=null) text2Classify+=" " + postOut.getTags();
                         if(text2Classify!=null)
                         {
-                            HashMap hmapValues=SWBSocialUtil.Classifier.classyfyText(text2Classify);
+                            HashMap hmapValues=SWBSocialUtil.Classifier.classifyText(text2Classify);
                             float promSentimentalValue=((Float)hmapValues.get("promSentimentalValue")).floatValue();
                             int sentimentalTweetValueType=((Integer)hmapValues.get("sentimentalTweetValueType")).intValue();
                             float promIntensityValue=((Float)hmapValues.get("promIntensityValue")).floatValue();
