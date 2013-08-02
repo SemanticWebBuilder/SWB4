@@ -5,7 +5,7 @@ public abstract class SummaryViewManagerBase extends org.semanticwb.portal.api.G
 {
     public static final org.semanticwb.platform.SemanticClass bsc_SummaryView=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#SummaryView");
     public static final org.semanticwb.platform.SemanticProperty bsc_activeView=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#activeView");
-    public static final org.semanticwb.platform.SemanticClass bsc_BSCElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#BSCElement");
+    public static final org.semanticwb.platform.SemanticClass swb_Class=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Class");
     public static final org.semanticwb.platform.SemanticProperty bsc_workClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#workClass");
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
@@ -81,42 +81,25 @@ public abstract class SummaryViewManagerBase extends org.semanticwb.portal.api.G
          }
          return ret;
     }
-   /**
-   * Sets the value for the property WorkClass
-   * @param value WorkClass to set
-   */
 
-    public void setWorkClass(org.semanticwb.bsc.element.BSCElement value)
+    public void setWorkClass(org.semanticwb.platform.SemanticObject value)
     {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(bsc_workClass, value.getSemanticObject());
-        }else
-        {
-            removeWorkClass();
-        }
+        getSemanticObject().setObjectProperty(bsc_workClass, value);
     }
-   /**
-   * Remove the value for WorkClass property
-   */
 
     public void removeWorkClass()
     {
         getSemanticObject().removeProperty(bsc_workClass);
     }
 
-   /**
-   * Gets the WorkClass
-   * @return a org.semanticwb.bsc.element.BSCElement
-   */
-    public org.semanticwb.bsc.element.BSCElement getWorkClass()
+/**
+* Gets the WorkClass property
+* @return the value for the property as org.semanticwb.platform.SemanticObject
+*/
+    public org.semanticwb.platform.SemanticObject getWorkClass()
     {
-         org.semanticwb.bsc.element.BSCElement ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_workClass);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.bsc.element.BSCElement)obj.createGenericInstance();
-         }
+         org.semanticwb.platform.SemanticObject ret=null;
+         ret=getSemanticObject().getObjectProperty(bsc_workClass);
          return ret;
     }
    /**
