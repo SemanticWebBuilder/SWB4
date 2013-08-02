@@ -1130,7 +1130,7 @@ border-radius: 4px; /*IE */
 .ico-fcb span { background: url(images/iconos-swbSocial.png) no-repeat -20px -108px;}
 .ico-ytb span { background: url(images/iconos-swbSocial.png) no-repeat -20px -126px;}
 
-.boton { margin:auto; border:#FFF solid 1px; padding:0.4em 0.9em; color:#FFF;
+.submit { margin:auto; border:#FFF solid 1px; padding:0.4em 0.9em; color:#FFF;
 box-shadow: 0 0 1px #666666;
 background:#eb8602;
 background: -webkit-linear-gradient(#f68800, #d76d00);
