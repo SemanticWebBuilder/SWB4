@@ -16,7 +16,6 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
 <%
-    System.out.println("SURI en StreamMap:"+request.getParameter("suri"));
     String apiKey=SWBSocialUtil.Util.getModelPropertyValue(SWBContext.getAdminWebSite(), "GoogleMapsApiKey");
     if(apiKey==null){
         out.println("Error:No se puede mostrar el mapa debido a que la llave de Google Maps no esta configurada(GoogleMapsApiKey), contactese con su administrador");
@@ -24,19 +23,20 @@
     }
     String suri=request.getParameter("suri");
     if(suri==null) {
-        System.out.println("Error en StreamMap.jsp/suri:"+suri);
         return;
     }
     SemanticObject semObj=SemanticObject.getSemanticObject(suri);
     if(semObj==null) return;
     Stream stream=(Stream)semObj.getGenericInstance();
     WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName()); 
-    System.out.println("wsite en StreamMap:"+wsite);
     User user=paramRequest.getUser(); 
     
     String stateMsg=SWBSocialUtil.Util.getStringFromGenericLocale("state", user.getLanguage());
     String positivesMsg=SWBSocialUtil.Util.getStringFromGenericLocale("positives", user.getLanguage());
     String negativesMsg=SWBSocialUtil.Util.getStringFromGenericLocale("negatives", user.getLanguage());
+    
+    int streamMapView=Integer.parseInt(paramRequest.getResourceBase().getAttribute("streamMapView", "1"));
+    
 %>
 
 
@@ -54,7 +54,6 @@
     <script type="text/javascript">
     //<![CDATA[
 
-    //var IMAGES = [ 'sun', 'rain', 'snow', 'storm' ];
     var ICONS = [];
     var map = null;
     var mgr = null;
@@ -82,7 +81,7 @@
         while(itPostIns.hasNext())
         {
             PostIn postIn=itPostIns.next();
-            if(postIn.getGeoStateMap()!=null)
+            if(postIn.getGeoStateMap()!=null && (streamMapView==1 || streamMapView==3))
             {
                 if(!hmapPoints.containsKey(postIn.getGeoStateMap().getId())) 
                 {
@@ -97,7 +96,6 @@
                     } //Con sentimiento Negativo
                     if(!sentimentHash.isEmpty())
                     {
-                        
                         //System.out.println("sentimentHash PRIMERO:"+sentimentHash);
                         hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
                         //System.out.println("Entra a hmapPoints-2:"+hmapPoints);
@@ -137,6 +135,10 @@
                             hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
                         }
                     }
+                }
+                if(streamMapView==3)
+                {
+                    aPostInsNotInStates.add(postIn);
                 }
             }else{
                 aPostInsNotInStates.add(postIn);
@@ -221,21 +223,19 @@
                         if(postIn.getPostSentimentalType()==1)
                         {
                             %>
-                               tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/greenPoint.png', new google.maps.Size(15, 15), new google.maps.Point(15,15)),
+                               tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/greenGMapMarker.png'),
                             <%
                         }else{
                             %>
-                                tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/redPoint.png', new google.maps.Size(15, 15), new google.maps.Point(15,15)),
+                                tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/redGMapMarker.png'),
                             <%
                         }
                         %>
                
                        batch.push(new google.maps.Marker({
-                        position: new google.maps.LatLng(<%=postIn.getLatitude()%>,<%=postIn.getLongitude()%>),
-                        //shadow: tmpIcon.shadow,
-                        icon: tmpIcon,
-                        //shape: tmpIcon.shape,
-                        title: '<%=msg%>'  
+                       position: new google.maps.LatLng(<%=postIn.getLatitude()%>,<%=postIn.getLongitude()%>),
+                       icon: tmpIcon,
+                       title: '<%=msg%>'  
                     })
                     );  
                 <%         
