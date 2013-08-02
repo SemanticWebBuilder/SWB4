@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -21,7 +22,7 @@ import org.semanticwb.portal.api.SWBResourceURL;
  *
  * @author jorge.jimenez
  */
-public class StreamMap extends GenericResource{
+public class StreamMap extends GenericAdmResource{
     
     private static Logger log = SWBUtils.getLogger(StreamMap.class);
     
