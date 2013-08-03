@@ -9,6 +9,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.*;
+import javaQuery.j2ee.tinyURL;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.JSONArray;
@@ -448,12 +449,29 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         JSONObject jsonResponse = null;
         String facebookResponse = "";
         
+        //TODO:REVISAR COMO HACER UN POST A ALGUNO O VARIOS USUARIOS
         try {
+            if(message.getPostInSource() != null && message.getPostInSource().getSocialNetMsgId() != null){//is a response
+                System.out.println("1ST OPTION: RESPONDING TO SOMEONE:" + message.getPostInSource().getSocialNetMsgId());
+                facebookResponse = postRequest(params, "https://graph.facebook.com/" + message.getPostInSource().getSocialNetMsgId() + "/comments" ,
+                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "POST");
+            }else{//is a single post to my wall
+                System.out.println("2ND OPTION: MAKING SINGLE POST");
+                facebookResponse = postRequest(params, url, 
+                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95",
+                    "POST");
+            } 
+            /*
             facebookResponse = postRequest(params, url, 
                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95",
                     "POST");
+                    */
+            
             jsonResponse = new JSONObject(facebookResponse);
             if (jsonResponse != null && jsonResponse.get("id") != null) {
+                SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, jsonResponse.get("id").toString(),null);
+
+                System.out.println("SAVING SENT POST ID: "  + jsonResponse.get("id").toString());
                 //message.setSocialNetPostId(jsonResponse.getString("id"));
                 //addPost(message);
                 //--TODO:Ver si se agrega esta línea despues(addSentPost(message, jsonResponse.getString("id"), this); )
@@ -462,6 +480,8 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 //addSentPost(message, jsonResponse.getString("id"), this); 
                 //addPost(message, "IDpuestoxFacebook", this);
                 //this.msg = message;
+            }else{
+                log.error("Unable to post facebook message:" + facebookResponse);
             }
         } catch (IOException ioe) {
             try {
@@ -507,6 +527,8 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 log.error("No photo(s) found!");
                 System.out.println("No Photos FOUND");
                 return;
+            }else if (photoNumber > 1){
+                additionalPhotos = shortUrl("http://mysocial.com.mx:8080/swbadmin/jsp/social/postViewFiles.jsp?uri="+ photo.getURI());
             }
             
             System.out.println("The photo to be published FACEBOOK:" + photoToPublish);
@@ -530,10 +552,30 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 SWBFileInputStream fileStream = new SWBFileInputStream(photoFile);
 //                String facebookResponse = postFileRequest(params, url,
 //                        photo.getPhoto(), fileStream, "POST", "photo");
+                String facebookResponse="";
+                
+                //if it's a response to a post and a photo is included don't upload the photo, only the url to the local site
+                if(photo.getPostInSource() != null && photo.getPostInSource().getSocialNetMsgId() != null){
+                     //facebookResponse = postFileRequest(params, "https://graph.facebook.com/" + photo.getPostInSource().getSocialNetMsgId() + "/comments",
+                     //   photoToPublish, fileStream, "POST", "photo");
+                    facebookResponse = postRequest(params, "https://graph.facebook.com/" + photo.getPostInSource().getSocialNetMsgId() + "/comments" ,
+                        "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "POST");
+                    System.out.println("1ST OPTION: RESPONDING TO SOMEONE WITH PICTURE:" + photo.getPostInSource().getSocialNetMsgId());                    
+                
+                }else{//is a single post to my wall
+                    facebookResponse = postFileRequest(params, url,
+                       photoToPublish, fileStream, "POST", "photo");
+                    System.out.println("2ND OPTION: MAKING SINGLE POST WITH PICTURE");
+                } 
+                 /*
                 String facebookResponse = postFileRequest(params, url,
                         photoToPublish, fileStream, "POST", "photo");
                 jsonResponse = new JSONObject(facebookResponse);
+                */
+                 jsonResponse = new JSONObject(facebookResponse);
             }
+            
+            System.out.println("THIS IS THE RESPONSE:" + jsonResponse );
             if (jsonResponse != null && jsonResponse.get("id") != null) {
                 //photo.setSocialNetPostId(jsonResponse.getString("id"));
                 //this.addPost(photo);
@@ -686,7 +728,8 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             in = conex.getInputStream();
             response = getResponse(in);
         } catch (java.io.IOException ioe) {
-            ioe.printStackTrace();
+                response = getResponse(conex.getErrorStream());
+                //ioe.printStackTrace();
         } finally {
             close(in);
             close(out);
@@ -768,8 +811,11 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             in = conex.getInputStream();
             facebookResponse = getResponse(in);
         } catch (IOException ioe) {
-            facebookResponse = "{\"errorMsg\":\"Ocurrio un problema en la peticion a Facebook "
-                    + ioe.getMessage() + "\"}";
+            //facebookResponse = "{\"errorMsg\":\"Ocurrio un problema en la peticion a Facebook "
+            //        + ioe.getMessage() + "\"}";
+            try{
+            facebookResponse = getResponse(conex.getErrorStream());
+            }catch(Exception e){}
         } finally {
             close(urlOut);
             close(in);
@@ -1016,6 +1062,22 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     @Override
     public String doRequestAccess() {
         return null;
+    }
+    
+    private String shortUrl(String urlLong) {
+        String mensajeNuevo = "";
+        if (urlLong != null && !urlLong.equals("")) {
+            String delimiter = " ";
+            String[] temp = urlLong.split(delimiter);
+            for (int i = 0; i < temp.length; i++) {
+                if ((temp[i].startsWith("http://") || temp[i].startsWith("https://")) && ((temp[i].length() > 9))) {
+                    tinyURL tU = new tinyURL();
+                    temp[i] = tU.getTinyURL(temp[i]);
+                }
+                mensajeNuevo += temp[i] + " ";
+            }
+        }
+        return mensajeNuevo;
     }
     
 }
