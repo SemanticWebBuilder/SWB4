@@ -132,7 +132,10 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 log.error("No photo(s) found!");
                 System.out.println("No Photos FOUND");
                 return;
+            }else if (photoNumber > 1){
+                additionalPhotos = "http://mysocial.com.mx:8080/swbadmin/jsp/social/postViewFiles.jsp?uri="+ photo.getEncodedURI();
             }
+            
             System.out.println("The photo to be published TWITTER:" + photoToPublish);
             System.out.println("Additional Photos TWITTER: " + additionalPhotos);
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
