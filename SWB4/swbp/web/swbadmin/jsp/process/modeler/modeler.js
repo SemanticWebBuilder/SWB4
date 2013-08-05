@@ -2215,7 +2215,10 @@
                     hideLoadDialog();
                 } , false);
             }
-            callbackHandler();
+            
+            if (callbackHandler && callbackHandler != null) {
+                callbackHandler();
+            }
         },
         
         keydown:function(evt) {
