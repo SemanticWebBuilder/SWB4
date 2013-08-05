@@ -1863,6 +1863,11 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#PostOutNet"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="snu_profileGeoLocation">
+    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Localización del usuario que se encuentra en el profile de la red social específica.</rdfs:comment>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="east">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_east">
