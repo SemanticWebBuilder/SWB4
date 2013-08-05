@@ -57,9 +57,10 @@
     var ICONS = [];
     var map = null;
     var mgr = null;
-
+    var geocoder;
     
     function setupMap() {
+      geocoder=new google.maps.Geocoder();   
       var myOptions = {
         zoom: 5,
         //center: new google.maps.LatLng(48.25, 11.00),
@@ -212,9 +213,11 @@
         while(restOfPostIns.hasNext())
         {
             PostIn postIn=restOfPostIns.next();
+            System.out.println("postIn Msg Todos:"+postIn.getMsg_Text()+":"+postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation());
              //Para los PostIns que tienen un sentimiento positivo o negativo y ademas tienen latitud y longitud asociada
             if(postIn.getPostSentimentalType()>0 && postIn.getLatitude()!=0 && postIn.getLongitude()!=0)
             {
+                 System.out.println("Entra G1");
                  String msg=replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false);
             
                 %>
@@ -223,11 +226,11 @@
                         if(postIn.getPostSentimentalType()==1)
                         {
                             %>
-                               tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/greenGMapMarker.png'),
+                               tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/greenGMapMarker.png');
                             <%
                         }else{
                             %>
-                                tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/redGMapMarker.png'),
+                                tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/redGMapMarker.png');
                             <%
                         }
                         %>
@@ -239,6 +242,37 @@
                     })
                     );  
                 <%         
+            }else if(postIn.getPostInSocialNetworkUser()!=null && postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation()!=null && postIn.getPostSentimentalType()>0){ 
+                %>
+                        var tmpIcon;
+                        <%        
+                        if(postIn.getPostSentimentalType()==1)
+                        {
+                            %>
+                               tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/greenGMapMarker.png');
+                            <%
+                        }else{
+                            %>
+                                tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/redGMapMarker.png');
+                            <%
+                        }
+                        %>
+                        var postLocation='<%=postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation()%>';
+                        var title='<%=postIn.getMsg_Text()!=null?postIn.getMsg_Text():postIn.getDescription()!=null?postIn.getDescription():postIn.getTags()!=null?postIn.getTags():"Sin Mensaje.."%>';
+                        geocoder.geocode( { 'address': postLocation}, function(results, status) { 
+                            if(status==google.maps.GeocoderStatus.OK){
+                                batch.push(new google.maps.Marker({
+                                map: map,
+                                position: new google.maps.LatLng(results[0].geometry.location.lat(),results[0].geometry.location.lng()),
+                                icon: tmpIcon,
+                                title: 'By GeoUser Profile:'+title
+                                 })
+                                );  
+                            }else{
+                                alert("Esa dirección no existe:"+postLocation);
+                            }
+                        });
+                <%        
             }
         }
       %>          
@@ -251,6 +285,7 @@
       mgr = new MarkerManager(map);
       
       google.maps.event.addListener(mgr, 'loaded', function(){
+          mgr.addMarkers(getMarkers(), 18);
           mgr.addMarkers(getMarkers(), 3);
           mgr.addMarkers(getMarkers(), 0);
           mgr.refresh();          
