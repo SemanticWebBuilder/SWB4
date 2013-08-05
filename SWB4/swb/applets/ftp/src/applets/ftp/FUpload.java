@@ -123,11 +123,19 @@ public class FUpload extends javax.swing.JDialog implements FileUploadListener
     @Override
     public void onSend(int size, int value)
     {
-        this.jProgressBar1.setValue(value);
+        final JProgressBar jbar=this.jProgressBar1;
+        jbar.setValue(value);
         //this.jProgressBar1.repaint();
         //this.jProgressBar1.updateUI();
-        jPanel1.updateUI();
-        SwingUtilities.updateComponentTreeUI(this.jProgressBar1);
+        
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run()
+            {
+                jPanel1.updateUI();
+                SwingUtilities.updateComponentTreeUI(jbar);
+            }
+        });        
     }
 
     private byte[] xor(byte[] cont, int start, int offset)
