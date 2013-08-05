@@ -281,7 +281,8 @@ public class GateWayOffice implements InternalServlet
     private void showWordContent(PrintWriter out, String file, String dir, String contentId, String repositoryName) throws IOException
     {
         file = file.replace(".doc", ".html");
-        String path = SWBPortal.getWorkPath() + dir + "\\" + file;
+        //String path = SWBPortal.getWorkPath() + dir + "\\" + file;
+        String path = SWBPortal.getWorkPath() + dir + "/" + file;
         StringBuffer html = new StringBuffer();
         File filecontent = new File(path);
         if (filecontent.exists())
