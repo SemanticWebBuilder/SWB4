@@ -703,7 +703,7 @@ public class SentimentalDataClassifier {
                             }
                         }
                     }
-                    
+                   
                     if(externalPost.getPostShared()>0)
                     {
                         postIn.setPostShared(externalPost.getPostShared());
@@ -739,9 +739,16 @@ public class SentimentalDataClassifier {
                         socialNetUser.setUpdated(new Date());
                     }
                     
+                    System.out.println("Poner en UserGe-0");
                     if(socialNetUser!=null)
                     {
                         postIn.setPostInSocialNetworkUser(socialNetUser);
+                        System.out.println("Poner en UserGe-1");
+                        if(externalPost.getUserGeoLocation()!=null)
+                        {
+                            System.out.println("Poner en UserGeo:"+externalPost.getUserGeoLocation());
+                            socialNetUser.setSnu_profileGeoLocation(externalPost.getUserGeoLocation());
+                        }
                     }
                 }
                 

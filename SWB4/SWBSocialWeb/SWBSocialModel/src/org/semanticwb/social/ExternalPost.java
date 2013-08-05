@@ -150,6 +150,11 @@ public class ExternalPost {
      */
     private String countryCode;
     
+    /*
+     * indicates de user geolocation which is registered in the specific social netwwork.
+     */
+    private String userGeoLocation;
+    
 
     /**
      * Creates a new instance of ExternalPost
@@ -587,6 +592,24 @@ public class ExternalPost {
     public SocialNetwork getSocialNetwork()
     {
         return socialNetwork;
+    }
+    
+    /**
+     * 
+     * @param userGeolocation is the user Geolocatión registered in the social network for the user
+     */
+    public void setUserGeoLocation(String userGeolocation)
+    {
+        this.userGeoLocation=userGeolocation;
+    }
+    
+    /**
+     * 
+     * @return userGeoLocation of the user
+     */
+    public String getUserGeoLocation()
+    {
+        return userGeoLocation;
     }
     
 }
