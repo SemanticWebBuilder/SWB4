@@ -103,6 +103,8 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                     external.setPostType(SWBSocialUtil.MESSAGE);   //TODO:VER SI SIEMPRE EN TWITTER LE DEBO DE PONER ESTE TIPO O TAMBIÉN LE PUDIERA PONER QUE ES DE TIPO FOTO
                     external.setFollowers(status.getUser().getFollowersCount());
                     external.setFriendsNumber(status.getUser().getFriendsCount());
+                    System.out.println("status.getUser().getLocation()----->"+status.getUser().getLocation());
+                    
                     if(status.getPlace()!=null)
                     {
                         external.setPlace(status.getPlace().getFullName());
@@ -113,7 +115,7 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                             double latCenterPoint=((boundingBox[3].getLatitude()-boundingBox[0].getLatitude())/2)+boundingBox[0].getLatitude();
                             double lngCenterPoint=((boundingBox[1].getLongitude()-boundingBox[0].getLongitude())/2)+boundingBox[0].getLongitude();
 
-                            //System.out.println("Punto 5:["+latCenterPoint+"," +lngCenterPoint+"]");
+                            System.out.println("Punto 5--JJ:["+latCenterPoint+"," +lngCenterPoint+"]");
 
                             external.setLatitude(latCenterPoint);
                             external.setLongitude(lngCenterPoint);
@@ -123,6 +125,9 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                                 external.setCountryCode(status.getPlace().getCountryCode().toUpperCase());
                             }
                         }
+                    }else if(status.getUser().getLocation()!=null){
+                        System.out.println("Pone en External UserGeo:"+status.getUser().getLocation());
+                        external.setUserGeoLocation(status.getUser().getLocation());
                     }
                     
                     

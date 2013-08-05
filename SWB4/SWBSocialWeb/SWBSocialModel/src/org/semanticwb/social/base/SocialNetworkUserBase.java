@@ -15,6 +15,10 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
    */
     public static final org.semanticwb.platform.SemanticProperty social_friends=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#friends");
    /**
+   * Localización del usuario que se encuentra en el profile de la red social específica.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_snu_profileGeoLocation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_profileGeoLocation");
+   /**
    * Id del usuario en una determinada red social, es decir, en twitter, facebook, google+, youtube, flicker, etc.
    */
     public static final org.semanticwb.platform.SemanticProperty social_snu_id=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_id");
@@ -314,6 +318,24 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
     public void setCreated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
+* Gets the Snu_profileGeoLocation property
+* @return String with the Snu_profileGeoLocation
+*/
+    public String getSnu_profileGeoLocation()
+    {
+        return getSemanticObject().getProperty(social_snu_profileGeoLocation);
+    }
+
+/**
+* Sets the Snu_profileGeoLocation property
+* @param value long with the Snu_profileGeoLocation
+*/
+    public void setSnu_profileGeoLocation(String value)
+    {
+        getSemanticObject().setProperty(social_snu_profileGeoLocation, value);
     }
 
 /**
