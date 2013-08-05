@@ -14,7 +14,7 @@ public class SemanticFileRepository {
     public String name;
     public String uuid;
     public Date date;
-    
+    public String url;
 
     @Override
     public String toString()
