@@ -259,7 +259,13 @@
                     </p>
                     <p>
                     <div class="etiqueta"><label for="photo"><%=photoMgr.renderLabel(request, PostImageable.social_hasPhoto, photoMgr.MODE_CREATE)%>: </label></div>
-                    <%=photoMgr.getFormElement(PostImageable.social_hasPhoto).renderElement(request, obj2, PostImageable.social_hasPhoto, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang)/*.replaceAll("hasPhoto_new", "hasPhoto_new" + objUri+sourceCall)*/%>       
+                    <%
+                        String formElementStr=photoMgr.getFormElement(PostImageable.social_hasPhoto).renderElement(request, obj2, PostImageable.social_hasPhoto, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang);
+                        formElementStr=formElementStr.replaceFirst("hasPhoto_new", "hasPhoto_new_#swbsocial_" + objUri+sourceCall);
+                        formElementStr=formElementStr.replaceFirst("hasPhoto_new_dynamic", "hasPhoto_new_#swbsocial_" + objUri+sourceCall+"_dynamic");
+                        //System.out.println("formElementStr:"+formElementStr);
+                    %>       
+                    <%=formElementStr%>
 
                     <%
                         if (postIn != null) {
