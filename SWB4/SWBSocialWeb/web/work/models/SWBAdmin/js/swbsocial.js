@@ -258,6 +258,42 @@
                     }
                 }
             }
+     function checksRedesPhoto(objUri,sourceCall){
+          var frm = document.getElementById(objUri+sourceCall+'frmUploadPhoto');
+          var checkRed = false;
+           for (i = 0; i < frm.checkRedes.length; i++) {
+                    if (frm.checkRedes[i].checked)
+                    {
+                        checkRed = true;
+                        break;
+                    }
+           }
+           if(checkRed == false){
+                  alert("Debes seleccionar al menos una red");
+                   return false;
+                }
+                else{
+                    return true;
+                }
+     }
+     function checksRedesText(objUri,sourceCall){
+          var frm = document.getElementById(objUri+sourceCall+'frmUploadText');
+          var checkRed = false;
+           for (i = 0; i < frm.checkRedes.length; i++) {
+                    if (frm.checkRedes[i].checked)
+                    {
+                        checkRed = true;
+                        break;
+                    }
+           }
+           if(checkRed == false){
+                  alert("Debes seleccionar al menos una red");
+                   return false;
+                }
+                else{
+                    return true;
+                }
+     }
      function validateChecks(objUri,sourceCall){
           var frm = document.getElementById(objUri+sourceCall+'frmUploadVideo');
           var checkYT = false;
