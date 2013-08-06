@@ -258,9 +258,25 @@
                     }
                 }
             }
-     function validateChecks(){
-                if(document.getElementById('checkYT').checked == false && 
-                        document.getElementById('checkRedes').checked == false){
+     function validateChecks(objUri,sourceCall){
+          var frm = document.getElementById(objUri+sourceCall+'frmUploadVideo');
+          var checkYT = false;
+          var checkRed = false;
+           for (i = 0; i < frm.checkYT.length; i++) {
+                    if (frm.checkYT[i].checked)
+                    {
+                        checkYT = true;
+                        break;
+                    }
+           }
+           for (j = 0; j < frm.checkRedes.length; j++) {
+                    if (frm.checkRedes[j].checked)
+                    {
+                        checkRed = true;
+                        break;
+                    }
+           }
+                if((checkYT == false) && (checkRed == false)){
                     alert("Debes seleccionar al menos una red");
                     return false;
                 }
