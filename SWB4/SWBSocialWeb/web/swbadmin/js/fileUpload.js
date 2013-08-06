@@ -20,19 +20,19 @@ function fileUpload_addNewUpload(pname,filters,url)
 {
     var pnameTmp=pname;
     var node = document.createElement('input');
-	var post=pname.indexOf("_#swbsocial_");
+    var post=pname.indexOf("_#swbsocial_");
     if(post>-1)
-	{
-	   pnameTmp=pname.substring(0, post);
-	}
-	dojo.byId(pname+'_dynamic').appendChild(node);
-	var widget = new dojox.form.FileInputAuto({	    
-            id: "" + pnameTmp + "_dynamic"+(++fileUploadCounter),    
-			url: "" + url,
-            blurDelay: 0,
-            name: "" + pnameTmp + "_dynamic"+fileUploadCounter,
-            onComplete: fileUpload_Callback,
-            fileMask: ""+filters
+    {
+       pnameTmp=pname.substring(0, post);
+    }
+    dojo.byId(pname+'_dynamic').appendChild(node);
+    var widget = new dojox.form.FileInputAuto({	    
+        id: "" + pnameTmp + "_dynamic"+(++fileUploadCounter),    
+                    url: "" + url,
+        blurDelay: 0,
+        name: "" + pnameTmp + "_dynamic"+fileUploadCounter,
+        onComplete: fileUpload_Callback,
+        fileMask: ""+filters
     },node);
     widget.startup();
     
