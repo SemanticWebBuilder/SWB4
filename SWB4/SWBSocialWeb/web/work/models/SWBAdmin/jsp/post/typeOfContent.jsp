@@ -116,7 +116,7 @@
         <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadText" action="<%=urlAction.setAction("postMessage")%>" onsubmit="submitForm('<%=objUri%><%=sourceCall%>frmUploadText');
                 return false;" method="post">
 
-            <div class="pub-info">
+            <div class="pub-redes">
                 <%= messageFormMgr.getFormHiddens()%>
                 <p class="titulo">Detalles de la publicaci&oacute;n</p>
                 <p><div class="etiqueta"><label for="msj"><%=Message.social_Message.getDisplayName(lang)%>: </label></div>
@@ -245,7 +245,7 @@
     //StringBuffer ret = new StringBuffer();
         SemanticObject obj2 = new SemanticObject(paramRequest.getWebPage().getWebSite().getSemanticModel(), Photo.sclass);
     %>
-    <div id="pub-redes">
+    <div id="pub-detalle">
         <span class="sel-imgdiv"></span>
         <div class="swbform">
             <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadPhoto" action="<%=urlAction.setAction("uploadPhoto")%>" method="post" onsubmit="submitForm('<%=objUri%><%=sourceCall%>frmUploadPhoto');
