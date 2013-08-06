@@ -245,7 +245,7 @@
     //StringBuffer ret = new StringBuffer();
         SemanticObject obj2 = new SemanticObject(paramRequest.getWebPage().getWebSite().getSemanticModel(), Photo.sclass);
     %>
-    <div id="pub-detalle">
+    <div id="pub-redes">
         <span class="sel-imgdiv"></span>
         <div class="swbform">
             <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadPhoto" action="<%=urlAction.setAction("uploadPhoto")%>" method="post" onsubmit="submitForm('<%=objUri%><%=sourceCall%>frmUploadPhoto');
@@ -259,7 +259,7 @@
                     </p>
                     <p>
                     <div class="etiqueta"><label for="photo"><%=photoMgr.renderLabel(request, PostImageable.social_hasPhoto, photoMgr.MODE_CREATE)%>: </label></div>
-                    <%=photoMgr.getFormElement(PostImageable.social_hasPhoto).renderElement(request, obj2, PostImageable.social_hasPhoto, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang).replaceAll("hasPhoto_new", "hasPhoto_new" + objUri+sourceCall)%>       
+                    <%=photoMgr.getFormElement(PostImageable.social_hasPhoto).renderElement(request, obj2, PostImageable.social_hasPhoto, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang)/*.replaceAll("hasPhoto_new", "hasPhoto_new" + objUri+sourceCall)*/%>       
 
                     <%
                         if (postIn != null) {
@@ -459,7 +459,7 @@
                 }
             %>  
                     </p>
-             <button class="submit" type="submit" onclick="return validateChecks()"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+             <button class="submit" type="submit" onclick="return validateChecks('<%=objUri%>','<%=sourceCall%>');"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
              </div>
                 
             <%
