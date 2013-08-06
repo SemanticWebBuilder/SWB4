@@ -38,7 +38,7 @@ public class MessageIn extends org.semanticwb.social.base.MessageInBase
                             //De lo contrarío se quedaría ahi como basura, pudiendo crecer demaciado la info en esa Clase.
                             
                             //****Si el usuario no tiene mas de un mensaje, que elimine a su SocialNewWorkUser asociado, porque un mensaje
-                            //Porque javier mansa llamar este código antes de que se elimine el mensaje por el cual llegó aqui, de lo 
+                            //Porque Javier manda llamar este código antes de que se elimine el mensaje por el cual llegó aqui, de lo 
                             //contrario vería si no tiene ningún mensaje (0 mensajes) ejecutaría este código, pero como no es así, por 
                             //eso lo hago cuando solo tenga un mensaje, ya que aún cuenta por el que llega a este código.
                             
@@ -57,8 +57,33 @@ public class MessageIn extends org.semanticwb.social.base.MessageInBase
                                 System.out.println("Elimino socialNetUser en MessageIn:"+socialNetworkUser);
                             }
                         }
+                        
+                        if(postIn.getPostInStream()!=null)
+                        {
+                            //Si el postIn que llega es el ultimo mensaje en su Stream, que elimine el registro(instancia) de ese Stream en la
+                            //clase SocialNetStreamSearch
+                            Stream stream=postIn.getPostInStream();
+                            int i=0;
+                            Iterator<PostIn> itPostInStreamNumber=stream.listPostInStreamInvs();
+                            while(itPostInStreamNumber.hasNext())
+                            {
+                                i++;
+                                if(i>1) break;
+                                itPostInStreamNumber.next();
+                            }
+
+                            if(i<=1)    
+                            {
+                                Iterator <SocialNetStreamSearch> itSocialNetStreamSearch=SocialNetStreamSearch.ClassMgr.listSocialNetStreamSearchByStream(stream, stream.getSocialSite());
+                                while(itSocialNetStreamSearch.hasNext())
+                                {
+                                    SocialNetStreamSearch socialNetStreamSearch=itSocialNetStreamSearch.next();
+                                    System.out.println("Remueve en Stream:"+socialNetStreamSearch);
+                                    socialNetStreamSearch.remove();
+                                }
+                            }
+                        }
                     }
-                    
                 }
             }
         });

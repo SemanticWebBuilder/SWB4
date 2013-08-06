@@ -56,8 +56,32 @@ public class VideoIn extends org.semanticwb.social.base.VideoInBase
                                 System.out.println("Elimino socialNetUser en VideoIn:"+socialNetworkUser);
                             }
                         }
+                        if(postIn.getPostInStream()!=null)
+                        {
+                            //Si el postIn que llega es el ultimo mensaje en su Stream, que elimine el registro(instancia) de ese Stream en la
+                            //clase SocialNetStreamSearch
+                            Stream stream=postIn.getPostInStream();
+                            int i=0;
+                            Iterator<PostIn> itPostInStreamNumber=stream.listPostInStreamInvs();
+                            while(itPostInStreamNumber.hasNext())
+                            {
+                                i++;
+                                if(i>1) break;
+                                itPostInStreamNumber.next();
+                            }
+
+                            if(i<=1)    
+                            {
+                                Iterator <SocialNetStreamSearch> itSocialNetStreamSearch=SocialNetStreamSearch.ClassMgr.listSocialNetStreamSearchByStream(stream, stream.getSocialSite());
+                                while(itSocialNetStreamSearch.hasNext())
+                                {
+                                    SocialNetStreamSearch socialNetStreamSearch=itSocialNetStreamSearch.next();
+                                    System.out.println("Remueve en Stream:"+socialNetStreamSearch);
+                                    socialNetStreamSearch.remove();
+                                }
+                            }
+                        }
                     }
-                    
                 }
             }
         });
