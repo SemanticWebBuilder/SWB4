@@ -174,7 +174,7 @@
 
                 %>
             
-                    <button class="submit" type="submit"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+                    <button class="submit" type="submit" onclick="return checksRedesText('<%=objUri%>','<%=sourceCall%>');"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
                
             </div>      
             <%
@@ -211,7 +211,7 @@
                             }
                 %>
                 <li class="<%=typeClass%>">
-                    <input type="checkbox" name="<%=socialNetwork.getURI()%>" <%=selected%> />
+                    <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" <%=selected%> />
                     <label for="t1"><span></span><%=socialNetwork.getTitle()%></label> 
                 </li>
                 <%
@@ -311,7 +311,7 @@
                         }
                     %>
 
-                        <button class="submit" type="submit"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+                        <button class="submit" type="submit" onclick="return checksRedesPhoto('<%=objUri%>','<%=sourceCall%>');"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
                 </div>
 
                 <%
@@ -337,7 +337,7 @@
                              }
                 %>
                 <li class="<%=typeClass%>">
-                    <input type="checkbox" name="<%=socialNetwork.getURI()%>"/>
+                    <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>"/>
                     <label for="t1"><span></span><%=socialNetwork.getTitle()%></label>
                 </li>
                 <%
