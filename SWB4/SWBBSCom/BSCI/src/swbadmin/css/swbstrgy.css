@@ -1,0 +1,102 @@
+/* 
+    Document   : swbstrgy
+    Created on : 29-jul-2013, 17:31:46
+    Author     : carlos.ramos
+    Description: Estilo para los íconos de la administración de SWBStrategy.
+*/
+
+
+
+.swbstrgyIconAction,
+.swbstrgyIconActionU,
+.swbstrgyIconRisks,
+.swbstrgyIconRisksU,
+.swbstrgyIconInitiative,
+.swbstrgyIconInitiativeU,
+.swbstrgyIconActions,
+.swbstrgyIconActionsU,
+.swbstrgyIconState,
+.swbstrgyIconStateU,
+.swbstrgyIconPeriod,
+.swbstrgyIconPeriodU,
+.swbstrgyIconFormats,
+.swbstrgyIconFormatsU,
+.swbstrgyIconFormat,
+.swbstrgyIconFormatU,
+.swbstrgyIconBSC,
+.swbstrgyIconBSCU,
+.swbstrgyIconInitiatives,
+.swbstrgyIconInitiativesU,
+.swbstrgyIconStates,
+.swbstrgyIconStatesU,
+.swbstrgyIconSeries,
+.swbstrgyIconSeriesU,
+.swbstrgyIconPeriodicities,
+.swbstrgyIconPeriodicitiesU,
+.swbstrgyIconObjective,
+.swbstrgyIconObjectiveU,
+.swbstrgyIconPerspective,
+.swbstrgyIconPerspectiveU,
+.swbstrgyIconPeriods,
+.swbstrgyIconPeriodsU,
+.swbstrgyIconIndicator,
+.swbstrgyIconIndicatorU,
+.swbstrgyIconRisk,
+.swbstrgyIconRiskU,
+.swbstrgyIconPerspectives,
+.swbstrgyIconPerspectivesU,
+.swbstrgyIconPeriodicity,
+.swbstrgyIconPeriodicityU,
+.swbstrgyIconTheme,
+.swbstrgyIconThemeU {
+    background-repeat: no-repeat;
+    width:20px;
+    height: 18px;
+    text-align: center;
+    padding-right:0px;
+    background-image: url('../images/icons/icons.png');	
+    background-position: -0px -0px;
+}
+
+.swbstrgyIconAction { background-position: 0 0;}
+.swbstrgyIconActionU { background-position: 0 -22px;}
+.swbstrgyIconRisks { background-position: 0 -44px;}
+.swbstrgyIconRisksU { background-position: 0 -66px;}
+.swbstrgyIconInitiative { background-position: 0 -88px;}
+.swbstrgyIconInitiativeU { background-position: 0 -110px;}
+.swbstrgyIconActions { background-position: -22px 0;}
+.swbstrgyIconActionsU { background-position: -22px -22px;}
+.swbstrgyIconState { background-position: -22px -44px;}
+.swbstrgyIconStateU { background-position: -22px -66px;}
+.swbstrgyIconPeriod { background-position: -22px -88px;}
+.swbstrgyIconPeriodU { background-position: -22px -110px;}
+.swbstrgyIconFormats { background-position: -44px 0;}
+.swbstrgyIconFormatsU { background-position: -44px -22px;}
+.swbstrgyIconFormat { background-position: -44px -44px;}
+.swbstrgyIconFormatU { background-position: -44px -66px;}
+.swbstrgyIconBSC { background-position: -44px -88px;}
+.swbstrgyIconBSCU { background-position: -44px -110px;}
+.swbstrgyIconInitiatives { background-position: -66px 0;}
+.swbstrgyIconInitiativesU { background-position: -66px -22px;}
+.swbstrgyIconStates { background-position: -66px -44px;}
+.swbstrgyIconStatesU { background-position: -66px -66px;}
+.swbstrgyIconSeries { background-position: -66px -88px;}
+.swbstrgyIconSeriesU { background-position: -66px -110px;}
+.swbstrgyIconPeriodicities { background-position: -88px 0;}
+.swbstrgyIconPeriodicitiesU { background-position: -88px -22px;}
+.swbstrgyIconObjective { background-position: -88px -44px;}
+.swbstrgyIconObjectiveU { background-position: -88px -66px;}
+.swbstrgyIconPerspective { background-position: -88px -88px;}
+.swbstrgyIconPerspectiveU { background-position: -88px -110px;}
+.swbstrgyIconPeriods { background-position: -110px 0;}
+.swbstrgyIconPeriodsU { background-position: -110px -22px;}
+.swbstrgyIconIndicator { background-position: -110px -44px;}
+.swbstrgyIconIndicatorU { background-position: -110px -66px;}
+.swbstrgyIconRisk { background-position: -110px -88px;}
+.swbstrgyIconRiskU { background-position: -110px -110px;}
+.swbstrgyIconPerspectives { background-position: -132px 0;}
+.swbstrgyIconPerspectivesU { background-position: -132px -22px;}
+.swbstrgyIconPeriodicity { background-position: -132px -44px;}
+.swbstrgyIconPeriodicityU { background-position: -132px -66px;}
+.swbstrgyIconTheme { background-position: -132px -88px;}
+.swbstrgyIconThemeU { background-position: -132px -110px;}
