@@ -815,7 +815,7 @@ public class SocialSentPost extends GenericResource {
                             }
                        }
                    }else{
-                       System.out.println("ESA MADRE ESTA PUBLICADO WEY..");
+                       //System.out.println("ESE POST ESTA PUBLICADO..");
                        out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">Publicado</a>");
                    }
                    out.println("</td>");
