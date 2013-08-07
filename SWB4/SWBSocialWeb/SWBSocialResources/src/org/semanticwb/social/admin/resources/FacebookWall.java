@@ -1110,10 +1110,10 @@ public class FacebookWall extends GenericResource {
         System.out.println("\n\n\nTHE CURRENT TAB:" + currentTab);
         HashMap<String, String> params = new HashMap<String, String>(3);
         params.put("access_token", facebook.getAccessToken());
-        params.put("limit", "25");
+        params.put("limit", "50");
         params.put("fields", "id,from,to,message,message_tags,story,story_tags,picture,caption,link,object_id,application,source,name,description,properties,icon,actions,privacy,type,status_type,created_time,likes,comments.limit(5),place");
         params.put("until", request.getParameter("until"));
-        System.out.println("Get the next 25 Posts!!");
+        System.out.println("Get the next 50 Posts!!");
         String fbResponse = "";
         if(scope.equals("newsFeed")){
             fbResponse = postRequest(params, "https://graph.facebook.com/me/home",
