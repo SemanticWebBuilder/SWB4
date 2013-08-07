@@ -613,10 +613,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         if (this.getAccessToken() != null) {
             params.put("access_token", this.getAccessToken());
         }
-        /*
-        if (video.getTitle() != null) {
+        
+        if(video.getTitle() != null) {
             params.put("title", video.getTitle());    //TODO:Estoy enviando esto como título a la red social, ver como lo pone en la misma
-        }*/        
+        }
         if (video.getMsg_Text() != null) {
             params.put("description", video.getMsg_Text());
         }
