@@ -358,6 +358,13 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                 if (postsData.getJSONObject(k).has("name")) {
                                     external.setPostName(postsData.getJSONObject(k).getString("name"));
                                 }
+                                
+                                if(postsData.getJSONObject(k).has("likes")){
+                                    if(postsData.getJSONObject(k).getJSONObject("likes").has("count")){
+                                        external.setPostShared(postsData.getJSONObject(k).getJSONObject("likes").getInt("count"));
+                                    }
+                                }
+                                
                                 if (postsData.getJSONObject(k).has("type")) {
                                     if(postsData.getJSONObject(k).getString("type").equals("status")){//Status -> message
                                         if(postsData.getJSONObject(k).has("message")){
