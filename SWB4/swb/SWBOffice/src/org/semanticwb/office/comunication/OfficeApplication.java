@@ -1078,13 +1078,14 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         ArrayList<WebPageInfo> pagesToReturn = new ArrayList<WebPageInfo>();
         WebSite site = SWBContext.getWebSite(webpage.siteID);
         WebPage parent = site.getWebPage(webpage.id);
-        GenericIterator<WebPage> pages = parent.listChilds();
+        User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
+        Iterator<WebPage> pages = parent.listVisibleChilds(ouser.getLanguage());
         while (pages.hasNext())
         {
             WebPage page = pages.next();
             if (!page.isDeleted())
             {
-                User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
+                
                 if (SWBPortal.getAdminFilterMgr().haveTreeAccessToSemanticObject(ouser, page.getSemanticObject()))
                 {
                     WebPageInfo info = new WebPageInfo();
