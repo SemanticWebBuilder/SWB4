@@ -26,6 +26,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.security.AccessControlException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -711,7 +713,17 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 contents.addAll(temp);
             }
         }
+        Collections.sort(contents, new Comparator<ContentInfo>()
+        {
+
+            @Override
+            public int compare(ContentInfo o1, ContentInfo o2)
+            {
+                return o1.title.compareTo(o2.title);
+            }
+        });
         return contents.toArray(new ContentInfo[contents.size()]);
+
     }
 
     /**
@@ -920,6 +932,15 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 }
             }
         }
+        Collections.sort(contents, new Comparator<ContentInfo>()
+        {
+
+            @Override
+            public int compare(ContentInfo o1, ContentInfo o2)
+            {
+                return o1.title.compareTo(o2.title);
+            }
+        });
         return contents;
     }
 
@@ -939,6 +960,15 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     public ContentInfo[] search(String repositoryName, String title, String description, String category, String type, String officeType) throws Exception
     {
         List<ContentInfo> contents = search(repositoryName, title, description, category, type, officeType, "*");
+        Collections.sort(contents, new Comparator<ContentInfo>()
+        {
+
+            @Override
+            public int compare(ContentInfo o1, ContentInfo o2)
+            {
+                return o1.title.compareTo(o2.title);
+            }
+        });
         return contents.toArray(new ContentInfo[contents.size()]);
     }
 
