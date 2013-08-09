@@ -8,6 +8,7 @@
                 <input type="radio" id="usedas0" name="streamMapView" label="Only Counters:" value="1" checked="true"/>
                 <input type="radio" id="usedas1" name="streamMapView" label="Only Mensages:" value="2" />
                 <input type="radio" id="usedas2" name="streamMapView" label="Mensages & Counters:" value="3" />
+                <input type="radio" id="usedas3" name="streamMapView" label="Show also without sentiment:" value="4" />
             </fieldset>
             <fieldset>
                 <input type="submit" name="btnSave" id="btnSave" value="Save" onclick="return jsValida(this.form)" />
