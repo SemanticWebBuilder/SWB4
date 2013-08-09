@@ -686,7 +686,7 @@ public class SentimentalDataClassifier {
                         Country country=null;
                         if(externalPost.getCountryCode()!=null)
                         {
-                            country=Country.ClassMgr.getCountry(externalPost.getCountryCode(), SWBContext.getAdminWebSite());
+                            country=Country.ClassMgr.getCountry(externalPost.getCountryCode().toUpperCase(), SWBContext.getAdminWebSite());
                         }else 
                         {
                             country=SWBSocialUtil.Util.getMessageMapCountry(postIn.getLatitude(), postIn.getLongitude());
