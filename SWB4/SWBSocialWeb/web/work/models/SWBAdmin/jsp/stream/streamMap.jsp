@@ -86,10 +86,11 @@
             SocialTopic socialTopic=(SocialTopic) semObj.getGenericInstance();
             itPostIns=PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
         }
-        
+        //System.out.println("streamMapView:"+streamMapView);
         while(itPostIns.hasNext())
         {
             PostIn postIn=itPostIns.next();
+            //System.out.println("postIn/lat:"+postIn.getLatitude()+",lng:"+postIn.getLongitude());
             if(postIn.getGeoStateMap()!=null && (streamMapView==1 || streamMapView==3 || streamMapView==4))
             {
                 if(!hmapPoints.containsKey(postIn.getGeoStateMap().getId())) 
@@ -224,7 +225,7 @@
             PostIn postIn=restOfPostIns.next();
             //System.out.println("postIn Msg Todos:"+postIn.getMsg_Text()+":"+postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation());
              //Para los PostIns que tienen un sentimiento positivo o negativo y ademas tienen latitud y longitud asociada
-            if(postIn.getLatitude()!=0 && postIn.getLongitude()!=0 && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==4))
+            if(postIn.getLatitude()!=0 && postIn.getLongitude()!=0 && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==2 || streamMapView==4))
             {
                  cont1++;
                  String msg=replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false);
@@ -256,7 +257,7 @@
                     })
                     );  
                 <%         
-            }else if(postIn.getPostInSocialNetworkUser()!=null && postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation()!=null && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==4)){ 
+            }else if(postIn.getPostInSocialNetworkUser()!=null && postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation()!=null && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==2 || streamMapView==4)){ 
                 cont2++; 
                 %>
                         var tmpIcon;
