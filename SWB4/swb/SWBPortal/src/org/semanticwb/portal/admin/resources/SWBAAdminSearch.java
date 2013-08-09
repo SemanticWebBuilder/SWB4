@@ -177,9 +177,12 @@ public class SWBAAdminSearch extends GenericAdmResource {
                         Iterator<Resource> itres = ws.listResources();
                         while (itres.hasNext()) {
                             resource = itres.next();
-                            //System.out.println("res:"+resource.getDisplayTitle(usr.getLanguage()));
-                            if (!searchtype.equals("id") && resource.getDisplayTitle(usr.getLanguage())!=null&& resource.getDisplayTitle(usr.getLanguage()).indexOf(searctxt) > -1) {
-                                hmresult.put(resource, resource);
+                            if(!resource.isDeleted())
+                            {
+                                //System.out.println("res:"+resource.getDisplayTitle(usr.getLanguage()));
+                                if (!searchtype.equals("id") && resource.getDisplayTitle(usr.getLanguage())!=null&& resource.getDisplayTitle(usr.getLanguage()).indexOf(searctxt) > -1) {
+                                    hmresult.put(resource, resource);
+                                }
                             }
                         }
                     }
@@ -194,9 +197,12 @@ public class SWBAAdminSearch extends GenericAdmResource {
                         Iterator<WebPage> itwp = ws.listWebPages();
                         while (itwp.hasNext()) {
                             webPage = itwp.next();
-                            //System.out.println("wp:"+webPage.getDisplayTitle(usr.getLanguage()));
-                            if (!searchtype.equals("id") && webPage.getDisplayTitle(usr.getLanguage())!=null&&webPage.getDisplayTitle(usr.getLanguage()).indexOf(searctxt) > -1) {
-                                hmresult.put(webPage, webPage);
+                            if(!webPage.isDeleted())
+                            {
+                                //System.out.println("wp:"+webPage.getDisplayTitle(usr.getLanguage()));
+                                if (!searchtype.equals("id") && webPage.getDisplayTitle(usr.getLanguage())!=null&&webPage.getDisplayTitle(usr.getLanguage()).indexOf(searctxt) > -1) {
+                                    hmresult.put(webPage, webPage);
+                                }
                             }
                         }
                     }
