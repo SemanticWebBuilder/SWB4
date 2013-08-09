@@ -3,6 +3,9 @@
     Created on : 7/06/2013, 06:54:00 PM
     Author     : francisco.jimenez
 --%>
+<%@page import="org.semanticwb.model.WebSite"%>
+<%@page import="org.semanticwb.model.SWBModel"%>
+<%@page import="org.semanticwb.social.PostIn"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="java.util.TimeZone"%>
@@ -27,7 +30,7 @@
 
 <%!
 
-    /*public static String getTagsFromPost(JSONObject objectTags, String postContent, SWBResourceURL renderURL){
+    public static String getTagsFromPost(JSONObject objectTags, String postContent, SWBResourceURL renderURL){
         String postContentWithUrl = postContent;
         Iterator<?> keyTags = objectTags.keys();
         try{
@@ -59,7 +62,7 @@
         return postContentWithUrl;    
     }
 
-    public static String picture(String response, Writer out, boolean includeSinceParam, HttpServletRequest request, SWBParamRequest paramRequest) {
+    public static String picture(String response, Writer out, boolean includeSinceParam, HttpServletRequest request, SWBParamRequest paramRequest, SWBModel model) {
         
         String  createdTime="";
         
@@ -108,7 +111,7 @@
                     return null;
                 }
                 
-                createdTime = printPicture(out,  postsData.getJSONObject(k), profileID, request, paramRequest, MEDIA_TAB, facebook );
+                createdTime = printPicture(out,  postsData.getJSONObject(k), profileID, request, paramRequest, MEDIA_TAB, facebook, model);
             }
             
             System.out.println("TOTAL PICTURE POSTS RECEIVED:" + postsData.length());
@@ -118,7 +121,7 @@
         return createdTime;
     }
 
-    public static String printPicture(Writer writer, JSONObject postsData, JSONObject profileData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook){
+    public static String printPicture(Writer writer, JSONObject postsData, JSONObject profileData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model){
         String createdTime="";
         
         try{
@@ -320,6 +323,21 @@
                     writer.write("   <span class=\"inline\" id=\"" + postsData.getString("post_id") + REPLY + MEDIA_TAB + "\" dojoType=\"dojox.layout.ContentPane\">");
                         writer.write(" <a href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyPost").setParameter("commentID", postsData.getString("post_id")) + "','Reply to " + "" + "');return false;\">Reply</a>  ");
                     writer.write("   </span>");
+                    //**ini                                                
+                    ///////////////////////If I can post I can Classify it to answer it later
+                    PostIn post = PostIn.getPostInbySocialMsgId(model, postsData.getString("post_id"));
+                    writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("post_id") + TOPIC + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
+                    if(post != null){
+                        SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("post_id")).setParameter("postUri", post.getURI()).setParameter("currentTab", tabSuffix);
+                            writer.write("<a href=\"#\" title=\"" + "Tema actual: " +  post.getSocialTopic().getTitle() + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                            + "Reclasificar post'); return false;\">Reclasificar(" + post.getSocialTopic().getTitle()+ ")</a>");
+                    }else{
+                        SWBResourceURL clasifybyTopic = renderURL.setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("post_id")).setParameter("currentTab", tabSuffix);
+                        writer.write("<a href=\"#\" title=\"" + "Clasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                        + "Clasificar Post'); return false;\">Clasificar</a>");
+                    }
+                    writer.write("   </span>");
+                    //**fin
                 }else{
                     writer.write("CAN'T POST");
                 }
@@ -388,7 +406,7 @@
             System.out.println("Error getting user information"  + e.getMessage());
         }
         return fbResponse;
-    }*/
+    }
 %>
 
 <%
@@ -400,17 +418,17 @@
 <div id="<%=objUri%>picturesStream" dojoType="dojox.layout.ContentPane"></div>
 <%
     System.out.println("SURI jsp: " + paramRequest.getMode().toString());
-    
+    SWBModel model=WebSite.ClassMgr.getWebSite(facebookBean.getSemanticObject().getModel().getName());
     HashMap<String, String> params = new HashMap<String, String>(3);//SELECT uid, name, first_name, middle_name, last_name FROM user WHERE uid = 1921576442
     //TODO: it seems than 'likes' is deprecated and it must be replaced with like_info
     params.put("q", "{\"pictures\": \"SELECT actor_id, created_time, like_info, post_id, attachment, message, description, description_tags, type, comments FROM stream WHERE filter_key IN " + 
-                "( SELECT filter_key FROM stream_filter WHERE uid = me() AND name = 'Photos') LIMIT 25\", \"usernames\": \"SELECT uid, name FROM user WHERE uid IN (SELECT actor_id FROM #pictures)\", \"pages\":\"SELECT page_id, name FROM page WHERE page_id IN (SELECT actor_id FROM #pictures)\"}");
+                "( SELECT filter_key FROM stream_filter WHERE uid = me() AND name = 'Photos') LIMIT 50\", \"usernames\": \"SELECT uid, name FROM user WHERE uid IN (SELECT actor_id FROM #pictures)\", \"pages\":\"SELECT page_id, name FROM page WHERE page_id IN (SELECT actor_id FROM #pictures)\"}");
     params.put("access_token", facebookBean.getAccessToken());
     
     //params1.put("access_token", "CAACEdEose0cBAKyWLxR6XedK1KrfMDVmqUQshOoZA2vGCnuqIyrekZCGQ9HZBc0FWKIXfNMexJGxxinNvtcvEnHGkBLpCCmEuPVgmUAddZCxcDWc1KigZCrYaDCSSoEUHIhda1G3y4tCZBq4ripHKZAw1steVi0NGYZD");    
     String fbResponse = getRequest(params, "https://graph.facebook.com/fql",
                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
-    String createdTime = picture(fbResponse, out, true, request, paramRequest);//Gets the newest post and saves the ID of the last one
+    String createdTime = picture(fbResponse, out, true, request, paramRequest, model);//Gets the newest post and saves the ID of the last one
     SWBResourceURL renderURL = paramRequest.getRenderUrl().setParameter("suri", objUri).setParameter("currentTab", MEDIA_TAB);
     
     /*

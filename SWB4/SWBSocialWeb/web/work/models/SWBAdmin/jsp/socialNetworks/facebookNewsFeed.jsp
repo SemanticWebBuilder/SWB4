@@ -385,29 +385,29 @@ public static void doPrintPost(Writer writer, JSONObject postsData, HttpServletR
                 writer.write("   <tr>");
                 writer.write("   <td rowspan=\"3\">");
                 if(postType.equals("video") || postType.equals("swf")){
-                    writer.write("      <div id=\"vid" + tabSuffix + facebook.getId() +postsData.getString("id") + "\" style=\"width: 250px; height: 250px; border: thick #666666; overflow: hidden; position: relative;\">");
+                    writer.write("      <div id=\"vid" + tabSuffix + facebook.getId() + postsData.getString("id") + "\" style=\"width: 250px; height: 250px; border: thick #666666; overflow: hidden; position: relative;\">");
                     writer.write("      <a href=\"#\" onclick=\"showSocialDialog('"+ renderURL.setMode("displayVideo").setParameter("videoUrl", URLEncoder.encode(postsData.getString("source"), "UTF-8")) +
-                            "','Video from " + postsData.getJSONObject("from").getString("name") + "'); return false;\"><img src=\"" + picture + "\" style=\"position: relative;\" onload=\"imageLoad(" + "this, 'vid" + tabSuffix + facebook.getId() + postsData.getString("id") + "');\"/></a>");
+                            "','Video from " + postsData.getJSONObject("from").getString("name") + "'); return false;\"><img src=\"" + picture + "\" style=\"position: relative;\" onerror=\"this.src ='" + picture.replace("_n.", "_s.") + "'\" onload=\"imageLoad(" + "this, 'vid" + tabSuffix + facebook.getId() + postsData.getString("id") + "');\"/></a>");
                     writer.write("      </div>");
                 }else{
                     if(isALinkLike){//If the post is a link -> it has link and name
                         if(linkLike.has("link") && linkLike.has("picture")){
                             writer.write("IMAGEN de LIKES  ALINK");
                             writer.write("      <div id=\"img" + tabSuffix + facebook.getId() + postsData.getString("id") + "\" style=\"width: 250px; height: 250px; border: thick #666666; overflow: hidden; position: relative;\">");
-                            writer.write("      <a href=\"" + linkLike.getString("link") + "\" target=\"_blank\">" + "<img src=\"" + picture + "\" style=\"position: relative;\" onload=\"imageLoad(" + "this, 'img" + tabSuffix +facebook.getId() + postsData.getString("id") + "');\"/></a>");
+                            writer.write("      <a href=\"" + linkLike.getString("link") + "\" target=\"_blank\">" + "<img src=\"" + picture + "\" style=\"position: relative;\" onerror=\"this.src ='" + picture.replace("_n.", "_s.") + "'\" onload=\"imageLoad(" + "this, 'img" + tabSuffix +facebook.getId() + postsData.getString("id") + "');\"/></a>");
                             writer.write("      </div>");
                         }
                     }else if(postType.equals("link")){//If the post is a link -> it has link and name
                         if(postsData.has("name") && postsData.has("link")){
                             writer.write("IS A LINK");
                             writer.write("      <div id=\"img" + tabSuffix + facebook.getId() + postsData.getString("id") + "\" style=\"width: 250px; height: 250px; border: thick #666666; overflow: hidden; position: relative;\">");
-                            writer.write("      <a href=\"" + postsData.getString("link") + "\" target=\"_blank\">" + "<img src=\"" + picture + "\" style=\"position: relative;\" onload=\"imageLoad(" + "this, 'img" + tabSuffix +facebook.getId() + postsData.getString("id") + "');\"/></a>");
+                            writer.write("      <a href=\"" + postsData.getString("link") + "\" target=\"_blank\">" + "<img src=\"" + picture + "\" style=\"position: relative;\" onerror=\"this.src ='" + picture.replace("_n.", "_s.") + "'\" onerror=\"this.src ='" + picture.replace("_n.", "_s.") + "'\" onload=\"imageLoad(" + "this, 'img" + tabSuffix +facebook.getId() + postsData.getString("id") + "');\"/></a>");
                             writer.write("      </div>");
                         }
                     }else{
                         writer.write("      <div id=\"img" + tabSuffix + facebook.getId() + postsData.getString("id") + "\" style=\"width: 250px; height: 250px; border: thick #666666; overflow: hidden; position: relative;\">");
                         writer.write("      <a href=\"#\" onclick=\"showSocialDialog('" + renderURL.setMode("displayPicture").setParameter("pictureUrl", URLEncoder.encode(picture, "UTF-8")) +
-                                "','Picture from " + postsData.getJSONObject("from").getString("name") + "'); return false;\"><img src=\"" + picture + "\" style=\"position: relative;\" onload=\"imageLoad(" + "this, 'img" + tabSuffix +facebook.getId() + postsData.getString("id") + "');\"/></a>");
+                                "','Picture from " + postsData.getJSONObject("from").getString("name") + "'); return false;\"><img src=\"" + picture + "\" style=\"position: relative;\" onerror=\"this.src ='" + picture.replace("_n.", "_s.") + "'\" onload=\"imageLoad(" + "this, 'img" + tabSuffix +facebook.getId() + postsData.getString("id") + "');\"/></a>");
                         writer.write("      </div>");
                     }
                 }
@@ -507,24 +507,21 @@ public static void doPrintPost(Writer writer, JSONObject postsData, HttpServletR
                     }
                     writer.write("   </table>");
                     
+                    if(postsData.getJSONObject("comments").has("paging")){//Link to get more comments
+                        JSONObject pagingComments = postsData.getJSONObject("comments").getJSONObject("paging");
+
+                        if(pagingComments.has("next") && pagingComments.has("cursors")){
+                            writer.write("<div align=\"left\" id=\"" + postsData.getString("id") + "/" + tabSuffix + "/comments\" dojoType=\"dojox.layout.ContentPane\">");
+                            SWBResourceURL commentsURL = paramRequest.getRenderUrl().setMode("moreComments").setParameter("suri", request.getParameter("suri")).setParameter("postId", postsData.getString("id"));
+                            commentsURL = commentsURL.setParameter("after", pagingComments.getJSONObject("cursors").getString("after")).setParameter("currentTab", tabSuffix);
+                            writer.write("<label id=\"morePostsLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + commentsURL
+                                    + "','" + postsData.getString("id") + "/" + tabSuffix +"/comments', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">View more comments</a></label>");
+                            writer.write("</div>");                            
+                        }
+                    }
+                    
                     writer.write("   </td>");
                     writer.write("</tr>");
-                }
-                
-                if(postsData.getJSONObject("comments").has("paging")){//Link to get more comments
-                    if(postsData.getJSONObject("comments").getJSONObject("paging").has("next")){
-                        writer.write("<tr>");
-                        writer.write("   <td width=\"10%\">"); 
-                        writer.write("       &nbsp;");
-                        writer.write("   </td>");
-                        writer.write("   <td width=\"90%\">");
-                        //writer.write("      <a href=\"#\">View all comments</a>");
-                        writer.write("<div align=\"center\" id=\"\" dojoType=\"dijit.layout.ContentPane\">");
-                        writer.write("<label id=\"morePostsLabel\"><a href=\"#\" onclick=\"appendHtmlAt('','', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">View all comments</a></label>");
-                        writer.write("</div>");
-                        writer.write("   </td>");
-                        writer.write("</tr>");
-                    }
                 }
             }
             //Comments, end
@@ -574,7 +571,7 @@ public static void doPrintPost(Writer writer, JSONObject postsData, HttpServletR
                         writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + TOPIC + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
                         if(post != null){
                             SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("id")).setParameter("postUri", post.getURI()).setParameter("currentTab", tabSuffix);
-                                writer.write("<a href=\"#\" title=\"" + "Reclasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                                writer.write("<a href=\"#\" title=\"" + "Tema actual: " +  post.getSocialTopic().getTitle() + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
                                 + "Reclasificar post'); return false;\">Reclasificar</a>");
                         }else{
                             SWBResourceURL clasifybyTopic = renderURL.setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("id")).setParameter("currentTab", tabSuffix);
@@ -661,13 +658,3 @@ public static void doPrintPost(Writer writer, JSONObject postsData, HttpServletR
     <label id="<%=objUri%>morePostsLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMorePosts").setParameter("until", untilPost).setParameter("scope", "newsFeed")%>','<%=objUri%>getMorePosts', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;">More posts</a></label>
 </div>
 </div>
-
-
-<!--socialDialog-->
-<!--
-<div dojoType="dijit.Dialog" style="display:none;" id="swbSocialDialog" title="Agregar" onFocus="hideApplet(true);" onBlur="if(!this.open)hideApplet(false);" onHide="hideSocialDialog();" onCancel="hideSocialDialog();">
-     <div dojoType="dojox.layout.ContentPane" id="swbSocialDialogImp" executeScripts="true">
-        Cargando...
-     </div>
-</div>
--->
