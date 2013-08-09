@@ -27,8 +27,7 @@
     }
     SemanticObject semObj=SemanticObject.getSemanticObject(suri);
     if(semObj==null) return;
-    Stream stream=(Stream)semObj.getGenericInstance();
-    WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName()); 
+    WebSite wsite=WebSite.ClassMgr.getWebSite(semObj.getModel().getName());  
     User user=paramRequest.getUser(); 
     
     String stateMsg=SWBSocialUtil.Util.getStringFromGenericLocale("state", user.getLanguage());
@@ -46,7 +45,7 @@
     <title>SWBSocial Sentiment Analysis Map</title>
     <!--AIzaSyA_8bWaWXaKlJV2XgZt-RYwRAsp6S0J7iw-->
     <script type="text/javascript"
-      src="http://maps.googleapis.com/maps/api/js?sensor=false&key="+apiKey> 
+      src="http://maps.googleapis.com/maps/api/js?sensor=false&key="+apiKey>  
     </script>
     <script type="text/javascript">
       document.write('<script type="text/javascript" src="<%=SWBPortal.getContextPath()%>/swbadmin/js/markermanager.js"><' + '/script>');
@@ -78,7 +77,16 @@
       <%
         ArrayList aPostInsNotInStates=new ArrayList();
         HashMap<String, HashMap> hmapPoints=new HashMap();
-        Iterator <PostIn> itPostIns=stream.listPostInStreamInvs();  
+        Iterator <PostIn> itPostIns=null;  
+        if(semObj.getGenericInstance() instanceof Stream) 
+        {
+            Stream stream=(Stream)semObj.getGenericInstance();
+            itPostIns=stream.listPostInStreamInvs();  
+        }else if(semObj.getGenericInstance() instanceof SocialTopic) {
+            SocialTopic socialTopic=(SocialTopic) semObj.getGenericInstance();
+            itPostIns=PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
+        }
+        
         while(itPostIns.hasNext())
         {
             PostIn postIn=itPostIns.next();

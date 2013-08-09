@@ -22,10 +22,15 @@ String suri=request.getParameter("suri");
 if(suri==null) return;
 SemanticObject semObj=SemanticObject.getSemanticObject(suri);
 if(semObj==null) return;
-Stream stream=(Stream)semObj.getGenericInstance();
-String args="?streamUri="+semObj.getEncodedURI();
+String args="?objUri="+semObj.getEncodedURI();
 String lang=paramRequest.getUser().getLanguage();
 args+="&lang="+lang;
+
+String title="";
+if(semObj.getGenericInstance() instanceof Descriptiveable)
+{
+    title=((Descriptiveable)semObj.getGenericInstance()).getDisplayTitle(lang); 
+}
 %>
 
 <!DOCTYPE html>
@@ -43,7 +48,7 @@ body {
 </style>
 <body>
 
-    <h1><%=SWBSocialUtil.Util.getStringFromGenericLocale("sentimentProm", lang)%>: <%=stream.getTitle()%></h1>
+    <h1><%=SWBSocialUtil.Util.getStringFromGenericLocale("sentimentProm", lang)%>: <%=title%></h1>
     
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
@@ -66,7 +71,7 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/streamSentimentData.jsp<%=args%>", function(error, data) {
+d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/ObjsentimentData.jsp<%=args%>", function(error, data) {
 
   var g = svg.selectAll(".arc")
       .data(pie(data))
