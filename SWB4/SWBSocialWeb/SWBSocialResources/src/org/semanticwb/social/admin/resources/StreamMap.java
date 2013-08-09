@@ -28,7 +28,6 @@ public class StreamMap extends GenericAdmResource{
     
      @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-       System.out.println("Entra a StreamMap/doView Jorge-1");
        if(request.getParameter("doView")==null) {
            doEdit(request, response, paramRequest);
            return;
@@ -37,7 +36,6 @@ public class StreamMap extends GenericAdmResource{
         RequestDispatcher dis = request.getRequestDispatcher(myPath);
         if (dis != null) {
             try {
-                System.out.println("Entra a StreamMap/doView Jorge-2");
                 request.setAttribute("paramRequest", paramRequest);
                 dis.include(request, response);
             } catch (Exception ex) {
@@ -49,7 +47,6 @@ public class StreamMap extends GenericAdmResource{
      @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
        PrintWriter out=response.getWriter();
-       System.out.println("Entra a StreamMap/doEdit Jorge-1/suri:"+request.getParameter("suri"));
        out.println("<iframe width=\"100%\" height=\"100%\" src=\""+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW).setParameter("doView", "1").setParameter("suri", request.getParameter("suri")) +"\"></iframe> ");
     }
    
