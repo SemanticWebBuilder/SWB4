@@ -649,7 +649,30 @@ public class SocialTopicInBox extends GenericResource {
 
                 //Show Message
                 out.println("<td>");
-                out.println(postIn.getMsg_Text());
+                if(postIn.getMsg_Text()!=null){
+                    if(postIn.getMsg_Text().length()>200)
+                    {
+                        out.println(postIn.getMsg_Text().substring(0, 200));
+                    }else{
+                        out.println(postIn.getMsg_Text());
+                    }
+                }else if(postIn.getDescription()!=null){
+                    if(postIn.getDescription().length()>200)
+                    {
+                        out.println(postIn.getDescription().substring(0, 200));
+                    }else{
+                        out.println(postIn.getDescription());
+                    }
+                }else if(postIn.getTags()!=null){
+                    if(postIn.getTags().length()>200)
+                    {
+                        out.println(postIn.getTags().substring(0, 200));
+                    }else{
+                        out.println(postIn.getTags());
+                    }
+                }else{
+                     out.println("---");
+                }
                 out.println("</td>");
 
 
