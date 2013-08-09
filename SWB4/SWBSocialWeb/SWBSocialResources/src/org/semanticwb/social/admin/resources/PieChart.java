@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -29,7 +27,6 @@ public class PieChart extends GenericResource{
 
      @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-       System.out.println("Entra a PieChart/doView Jorge-1:"+request.getParameter("suri"));
        if(request.getParameter("doView")==null) {
            doEdit(request, response, paramRequest);
            return;
@@ -38,7 +35,6 @@ public class PieChart extends GenericResource{
         RequestDispatcher dis = request.getRequestDispatcher(myPath);
         if (dis != null) {
             try {
-                System.out.println("Entra a PieChart/PieChart Jorge-2:"+request.getParameter("suri"));
                 request.setAttribute("paramRequest", paramRequest);
                 dis.include(request, response);
             } catch (Exception ex) {
@@ -50,7 +46,6 @@ public class PieChart extends GenericResource{
      @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
        PrintWriter out=response.getWriter();
-       System.out.println("Entra a PieChart/doEdit Jorge-1/suri:"+request.getParameter("suri"));
        out.println("<iframe width=\"100%\" height=\"100%\" src=\""+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW).setParameter("doView", "1").setParameter("suri", request.getParameter("suri")) +"\"></iframe> ");
     }
     

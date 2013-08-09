@@ -674,8 +674,18 @@ public class SocialTopicInBox extends GenericResource {
                 out.println("</td>");
 
                 //Sentiment
-                out.println("<td>");
-                out.println(postIn.getPostSentimentalType()==0?paramRequest.getLocaleString("neutral"):postIn.getPostSentimentalType()==1?paramRequest.getLocaleString("positive"):postIn.getPostSentimentalType()==2?paramRequest.getLocaleString("negative"):"---");
+                 //Sentiment
+                out.println("<td align=\"center\">");
+                if(postIn.getPostSentimentalType()==0)
+                {
+                    out.println("---");
+                }else if(postIn.getPostSentimentalType()==1)
+                {
+                    out.println("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/feelpos.png"+"\">");
+                }else if(postIn.getPostSentimentalType()==2)
+                {
+                    out.println("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/feelneg.png"+"\">");
+                }
                 out.println("</td>");
 
                 //Intensity
