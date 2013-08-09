@@ -373,6 +373,8 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                                                 external.setCountryCode(status.getPlace().getCountryCode().toUpperCase());
                                             }
                                         }
+                                    }else if(status.getUser().getLocation()!=null){
+                                        external.setUserGeoLocation(status.getUser().getLocation());
                                     }
                                     
                                     external.setSocialNetwork(this);
