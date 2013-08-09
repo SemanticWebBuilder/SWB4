@@ -44,6 +44,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Dns;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
+import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticMgr;
@@ -104,9 +105,19 @@ public class LinkedData implements InternalServlet {
             if(st.hasMoreTokens())m = st.nextToken();
             if(st.hasMoreTokens())sid = st.nextToken();
                 
-            if(m==null)response.sendError(404, path);
+            if(m==null)
+            {
+                response.sendError(404, path);
+                return;
+            }
             SemanticModel site=SWBPlatform.getSemanticMgr().getModel(m);
 
+            if(site.getModelObject().instanceOf(UserRepository.sclass))
+            {
+                response.sendError(404, path);
+                return;
+            }
+                
             SemanticObject obj=null;
             if(sid==null)obj=site.getModelObject();
             else
