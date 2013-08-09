@@ -4,8 +4,13 @@
  */
 package org.semanticwb.social.util;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.net.SocketException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -974,6 +979,52 @@ public class SWBSocialUtil implements SWBAppObject {
     
     
     public static class Util {
+        
+        
+        /**
+	 * Descarga un fichero jpeg y lo guarda en e:/foto.jpg
+	 *
+	 * @param args
+	 */
+	public static File downloadWebFile(String fileUrl, String localPath2save)
+        {
+            try {
+                    // Url con la foto
+                    //http://mas.lne.es/fotos/img/2007/10/62/203093470447035b9bc5a095.43783284-foto_verano.jpg
+                    URL url = new URL(fileUrl);
+                
+                    // establecemos conexion
+                    URLConnection urlCon = url.openConnection();
+
+                    // Sacamos por pantalla el tipo de fichero
+                    System.out.println(urlCon.getContentType());
+
+                    // Se obtiene el inputStream de la foto web y se abre el fichero
+                    // local.
+                    InputStream is = urlCon.getInputStream();
+                    File newLocalFile=new File(localPath2save);
+                    
+                    newLocalFile.createNewFile();
+                    FileOutputStream fos = new FileOutputStream(newLocalFile, true);
+
+                    // Lectura de la foto de la web y escritura en fichero local
+                    byte[] array = new byte[1000]; // buffer temporal de lectura.
+                    int leido = is.read(array);
+                    while (leido > 0) {
+                            fos.write(array, 0, leido);
+                            leido = is.read(array);
+                    }
+
+                    // cierre de conexion y fichero.
+                    is.close();
+                    fos.close();
+                    return newLocalFile;
+                } catch (Exception e) {
+                        e.printStackTrace();
+                }
+            return null;
+        }
+        
         
         
         public static boolean isPointInsideCoodinates(double latitude, double longitude, GeoLocation[] geolocation)

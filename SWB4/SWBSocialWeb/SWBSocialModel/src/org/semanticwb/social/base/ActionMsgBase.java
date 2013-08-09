@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que agrupa acciónes que contienen un mesaje a escribir en cada una de las instancias 
    */
-public abstract class ActionMsgBase extends org.semanticwb.social.Action implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.PostDataable,org.semanticwb.model.Traceable,org.semanticwb.social.PostTextable
+public abstract class ActionMsgBase extends org.semanticwb.social.Action implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable,org.semanticwb.model.Traceable
 {
    /**
    * Clase que agrupa acciónes que contienen un mesaje a escribir en cada una de las instancias

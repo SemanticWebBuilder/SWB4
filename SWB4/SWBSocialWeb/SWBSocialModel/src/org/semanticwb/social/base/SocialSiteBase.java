@@ -4,12 +4,24 @@ package org.semanticwb.social.base;
    /**
    * Clase que hereda de swb:WebSite. Es un tipo de website Social. De esta manera se puede contar con todos los elementos en el arbol de navegación en la administración, y otros elementos utiles para Social Site. 
    */
-public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Localeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Countryable,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Trashable
+public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Activeable,org.semanticwb.model.Indexable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Trashable,org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Countryable
 {
    /**
    * Acción específica mediante la cual se envía un correo electrónico
    */
     public static final org.semanticwb.platform.SemanticClass social_SendEmail=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SendEmail");
+   /**
+   * Las Plantillas son documentos HTML que sirven de base a SemanticWebBuilder para poder mostrar el "look & feel" del sitio, así como la distribución de todos los elementos en la pagina.
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_Template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Template");
+   /**
+   * Objeto que define un Grupo de plantillas
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_TemplateGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateGroup");
+   /**
+   * Página Social
+   */
+    public static final org.semanticwb.platform.SemanticClass social_SocialWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialWebPage");
    /**
    * Catalogo de temas de un modelo (Marca)
    */
@@ -42,6 +54,10 @@ public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implem
    * Clase principal para manejo de reglas en swbSocial
    */
     public static final org.semanticwb.platform.SemanticClass social_SocialRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialRule");
+   /**
+   * Referencia a un objeto de tipo Template
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_TemplateRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef");
    /**
    * Clase que hereda de swb:WebSite. Es un tipo de website Social. De esta manera se puede contar con todos los elementos en el arbol de navegación en la administración, y otros elementos utiles para Social Site.
    */
@@ -430,6 +446,90 @@ public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implem
         return org.semanticwb.social.SendEmail.ClassMgr.hasSendEmail(id, this);
     }
 
+    public org.semanticwb.model.Template getTemplate(String id)
+    {
+        return org.semanticwb.model.Template.ClassMgr.getTemplate(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.Template> listTemplates()
+    {
+        return org.semanticwb.model.Template.ClassMgr.listTemplates(this);
+    }
+
+    public org.semanticwb.model.Template createTemplate(String id)
+    {
+        return org.semanticwb.model.Template.ClassMgr.createTemplate(id,this);
+    }
+
+    public org.semanticwb.model.Template createTemplate()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_Template);
+        return org.semanticwb.model.Template.ClassMgr.createTemplate(String.valueOf(id),this);
+    } 
+
+    public void removeTemplate(String id)
+    {
+        org.semanticwb.model.Template.ClassMgr.removeTemplate(id, this);
+    }
+    public boolean hasTemplate(String id)
+    {
+        return org.semanticwb.model.Template.ClassMgr.hasTemplate(id, this);
+    }
+
+    public org.semanticwb.model.TemplateGroup getTemplateGroup(String id)
+    {
+        return org.semanticwb.model.TemplateGroup.ClassMgr.getTemplateGroup(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.TemplateGroup> listTemplateGroups()
+    {
+        return org.semanticwb.model.TemplateGroup.ClassMgr.listTemplateGroups(this);
+    }
+
+    public org.semanticwb.model.TemplateGroup createTemplateGroup(String id)
+    {
+        return org.semanticwb.model.TemplateGroup.ClassMgr.createTemplateGroup(id,this);
+    }
+
+    public org.semanticwb.model.TemplateGroup createTemplateGroup()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_TemplateGroup);
+        return org.semanticwb.model.TemplateGroup.ClassMgr.createTemplateGroup(String.valueOf(id),this);
+    } 
+
+    public void removeTemplateGroup(String id)
+    {
+        org.semanticwb.model.TemplateGroup.ClassMgr.removeTemplateGroup(id, this);
+    }
+    public boolean hasTemplateGroup(String id)
+    {
+        return org.semanticwb.model.TemplateGroup.ClassMgr.hasTemplateGroup(id, this);
+    }
+
+    public org.semanticwb.social.SocialWebPage getSocialWebPage(String id)
+    {
+        return org.semanticwb.social.SocialWebPage.ClassMgr.getSocialWebPage(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.social.SocialWebPage> listSocialWebPages()
+    {
+        return org.semanticwb.social.SocialWebPage.ClassMgr.listSocialWebPages(this);
+    }
+
+    public org.semanticwb.social.SocialWebPage createSocialWebPage(String id)
+    {
+        return org.semanticwb.social.SocialWebPage.ClassMgr.createSocialWebPage(id,this);
+    }
+
+    public void removeSocialWebPage(String id)
+    {
+        org.semanticwb.social.SocialWebPage.ClassMgr.removeSocialWebPage(id, this);
+    }
+    public boolean hasSocialWebPage(String id)
+    {
+        return org.semanticwb.social.SocialWebPage.ClassMgr.hasSocialWebPage(id, this);
+    }
+
     public org.semanticwb.social.SocialTopic getSocialTopic(String id)
     {
         return org.semanticwb.social.SocialTopic.ClassMgr.getSocialTopic(id, this);
@@ -662,5 +762,35 @@ public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implem
     public boolean hasSocialRule(String id)
     {
         return org.semanticwb.social.SocialRule.ClassMgr.hasSocialRule(id, this);
+    }
+
+    public org.semanticwb.model.TemplateRef getTemplateRef(String id)
+    {
+        return org.semanticwb.model.TemplateRef.ClassMgr.getTemplateRef(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.TemplateRef> listTemplateRefs()
+    {
+        return org.semanticwb.model.TemplateRef.ClassMgr.listTemplateRefs(this);
+    }
+
+    public org.semanticwb.model.TemplateRef createTemplateRef(String id)
+    {
+        return org.semanticwb.model.TemplateRef.ClassMgr.createTemplateRef(id,this);
+    }
+
+    public org.semanticwb.model.TemplateRef createTemplateRef()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_TemplateRef);
+        return org.semanticwb.model.TemplateRef.ClassMgr.createTemplateRef(String.valueOf(id),this);
+    } 
+
+    public void removeTemplateRef(String id)
+    {
+        org.semanticwb.model.TemplateRef.ClassMgr.removeTemplateRef(id, this);
+    }
+    public boolean hasTemplateRef(String id)
+    {
+        return org.semanticwb.model.TemplateRef.ClassMgr.hasTemplateRef(id, this);
     }
 }
