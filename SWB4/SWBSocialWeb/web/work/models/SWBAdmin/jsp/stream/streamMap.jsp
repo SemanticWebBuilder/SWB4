@@ -209,6 +209,7 @@
       
       //Traer el resto de PostIns, es decir, los que no tienen una instancia de CountryState asociada
       <%
+        int cont1=0, cont2=0;        
         Iterator<PostIn> restOfPostIns=aPostInsNotInStates.iterator();
         while(restOfPostIns.hasNext())
         {
@@ -217,7 +218,7 @@
              //Para los PostIns que tienen un sentimiento positivo o negativo y ademas tienen latitud y longitud asociada
             if(postIn.getLatitude()!=0 && postIn.getLongitude()!=0 && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==4))
             {
-                 //System.out.println("Entra G1");
+                 cont1++;
                  String msg=replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false);
             
                 %>
@@ -236,7 +237,7 @@
                         }else if(postIn.getPostSentimentalType()==0)
                         {
                         %>
-                                tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/whiteGMapMarker.jpg');
+                                tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/whiteGMapMarker.png');
                         <%
                         } 
                         %>
@@ -248,7 +249,7 @@
                     );  
                 <%         
             }else if(postIn.getPostInSocialNetworkUser()!=null && postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation()!=null && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==4)){ 
-                System.out.println("Entro a UserProfile Geo");
+                cont2++; 
                 %>
                         var tmpIcon;
                         <%        
@@ -265,7 +266,7 @@
                         }else if(postIn.getPostSentimentalType()==0)
                         {
                         %>
-                                tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/whiteGMapMarker.jpg');
+                                tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/whiteGMapMarker.png');
                         <%
                         } 
                         %>
@@ -288,6 +289,7 @@
                 <%        
             }
         }
+        System.out.println("cont1:"+cont1+",cont2:"+cont2);
       %>          
       //
       
