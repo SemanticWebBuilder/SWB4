@@ -212,7 +212,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 SocialNetStreamSearch socialStreamSerch=SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
                 if (socialStreamSerch!=null && socialStreamSerch.getNextDatetoSearch() != null && !"".equals(socialStreamSerch.getNextDatetoSearch())) {
                     String[] phraseElements = socialStreamSerch.getNextDatetoSearch().split(":");
-                    for (int i = 0; i < phrase.length; i++) {
+                    for (int i = 0; i < phraseElements.length; i++) {
                         String[] pair = phraseElements[i].split("=");
                         //Se quita de la frase el sufijo: search_ o feed_ correspondiente a cada tipo de busqueda
                         String key = null;
