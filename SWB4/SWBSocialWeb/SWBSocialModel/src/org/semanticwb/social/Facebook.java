@@ -364,6 +364,14 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                         external.setPostShared(postsData.getJSONObject(k).getJSONObject("likes").getInt("count"));
                                     }
                                 }
+                                if (postsData.getJSONObject(k).has("place")) {
+                                   external.setLatitude(postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").getDouble("latitude"));
+                                    external.setLongitude(postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").getDouble("longitude"));
+
+                                    if (postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").has("country")) {//TODO: ver si en twitter es solo un codigo de 2 letras
+                                       external.setCountryCode(postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").getString("country"));
+                                    }
+                                }
                                 
                                 if (postsData.getJSONObject(k).has("type")) {
                                     if(postsData.getJSONObject(k).getString("type").equals("status")){//Status -> message
@@ -404,17 +412,16 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                             continue;
                                         }
                                     }
-                                    //external.setPostType(postsData.getJSONObject(k).getString("type"));
-                                    
                                 }else {//Do not process data without "type"
                                     continue;
                                 }
+                                external.setSocialNetwork(this);
                                 aListExternalPost.add(external);
                             }
                             //Si el ArrayList tiene tamaño mayor a 0, entonces es que existen mensajes para enviar al clasificador
                             if(aListExternalPost.size()>0)
                             {
-                                new Classifier(aListExternalPost, stream, this, false);
+                                new Classifier(aListExternalPost, stream, this, true);
                             }
                             if (cont == Facebook.QUERYLIMIT) {
                                 isThereMoreMsgs = true;  //Esto indica la posibilidad de que en una consulta siguiente, se obtengan más mensajes
