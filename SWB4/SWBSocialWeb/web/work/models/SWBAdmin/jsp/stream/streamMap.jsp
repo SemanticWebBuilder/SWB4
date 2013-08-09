@@ -82,7 +82,7 @@
         while(itPostIns.hasNext())
         {
             PostIn postIn=itPostIns.next();
-            if(postIn.getGeoStateMap()!=null && (streamMapView==1 || streamMapView==3))
+            if(postIn.getGeoStateMap()!=null && (streamMapView==1 || streamMapView==3 || streamMapView==4))
             {
                 if(!hmapPoints.containsKey(postIn.getGeoStateMap().getId())) 
                 {
@@ -137,7 +137,7 @@
                         }
                     }
                 }
-                if(streamMapView==3)
+                if(streamMapView==3 || streamMapView==4)
                 {
                     aPostInsNotInStates.add(postIn);
                 }
@@ -213,11 +213,11 @@
         while(restOfPostIns.hasNext())
         {
             PostIn postIn=restOfPostIns.next();
-            System.out.println("postIn Msg Todos:"+postIn.getMsg_Text()+":"+postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation());
+            //System.out.println("postIn Msg Todos:"+postIn.getMsg_Text()+":"+postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation());
              //Para los PostIns que tienen un sentimiento positivo o negativo y ademas tienen latitud y longitud asociada
-            if(postIn.getPostSentimentalType()>0 && postIn.getLatitude()!=0 && postIn.getLongitude()!=0)
+            if(postIn.getLatitude()!=0 && postIn.getLongitude()!=0 && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==4))
             {
-                 System.out.println("Entra G1");
+                 //System.out.println("Entra G1");
                  String msg=replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false);
             
                 %>
@@ -228,21 +228,27 @@
                             %>
                                tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/greenGMapMarker.png');
                             <%
-                        }else{
+                        }else if(postIn.getPostSentimentalType()==2)
+                        { 
                             %>
                                 tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/redGMapMarker.png');
                             <%
-                        }
+                        }else if(postIn.getPostSentimentalType()==0)
+                        {
                         %>
-               
+                                tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/whiteGMapMarker.jpg');
+                        <%
+                        } 
+                        %>
                        batch.push(new google.maps.Marker({
                        position: new google.maps.LatLng(<%=postIn.getLatitude()%>,<%=postIn.getLongitude()%>),
-                       icon: tmpIcon,
+                       icon: tmpIcon, 
                        title: '<%=msg%>'  
                     })
                     );  
                 <%         
-            }else if(postIn.getPostInSocialNetworkUser()!=null && postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation()!=null && postIn.getPostSentimentalType()>0){ 
+            }else if(postIn.getPostInSocialNetworkUser()!=null && postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation()!=null && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==4)){ 
+                System.out.println("Entro a UserProfile Geo");
                 %>
                         var tmpIcon;
                         <%        
@@ -251,14 +257,21 @@
                             %>
                                tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/greenGMapMarker.png');
                             <%
-                        }else{
+                        }else if(postIn.getPostSentimentalType()==2)
+                        {
                             %>
                                 tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/redGMapMarker.png');
                             <%
-                        }
+                        }else if(postIn.getPostSentimentalType()==0)
+                        {
                         %>
-                        var postLocation='<%=postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation()%>';
-                        var title='<%=postIn.getMsg_Text()!=null?postIn.getMsg_Text():postIn.getDescription()!=null?postIn.getDescription():postIn.getTags()!=null?postIn.getTags():"Sin Mensaje.."%>';
+                                tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/whiteGMapMarker.jpg');
+                        <%
+                        } 
+                        %>
+                        var postLocation='<%=replaceSpecialCharacters(postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation().replaceAll("'", ""), false)%>';
+                        var title='<%=postIn.getMsg_Text()!=null?replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false):postIn.getDescription()!=null?
+                            replaceSpecialCharacters(postIn.getDescription().replaceAll("'", ""), false):postIn.getTags()!=null?replaceSpecialCharacters(postIn.getTags().replaceAll("'", ""), false):"Sin Mensaje.."%>';
                         geocoder.geocode( { 'address': postLocation}, function(results, status) { 
                             if(status==google.maps.GeocoderStatus.OK){
                                 batch.push(new google.maps.Marker({
@@ -268,9 +281,9 @@
                                 title: 'By GeoUser Profile:'+title
                                  })
                                 );  
-                            }else{
-                                alert("Esa dirección no existe:"+postLocation);
-                            }
+                            }//else{
+                               // alert("Esa dirección no existe:"+postLocation);
+                            //}
                         });
                 <%        
             }
