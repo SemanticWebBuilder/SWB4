@@ -17,15 +17,24 @@
 
 
 <%!
-    JSONArray getObject(Stream stream, String lang) throws Exception 
+    JSONArray getObject(SemanticObject semObj, String lang) throws Exception 
     {
         //WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
         System.out.println("Entra 3");
         int neutrals=0, positives=0, negatives=0;
-        Iterator<PostIn> itStreamPostIns=stream.listPostInStreamInvs(); 
-        while(itStreamPostIns.hasNext())
+        Iterator<PostIn> itObjPostIns=null;
+        if(semObj.getGenericInstance() instanceof Stream) 
         {
-            PostIn postIn=itStreamPostIns.next();
+            Stream stream=(Stream) semObj.getGenericInstance();
+            itObjPostIns=stream.listPostInStreamInvs();
+        }else if(semObj.getGenericInstance() instanceof SocialTopic) 
+        {
+            SocialTopic socialTopic=(SocialTopic) semObj.getGenericInstance();
+            itObjPostIns=PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
+        }        
+        while(itObjPostIns.hasNext())
+        {
+            PostIn postIn=itObjPostIns.next();
             if(postIn.getPostSentimentalType()==0){
                 neutrals++; 
             }else if(postIn.getPostSentimentalType()==1){
@@ -82,6 +91,17 @@
             node3.put("color", "#eae8e3");
             node.put(node3);
         }
+        
+        if(positives==0 && negatives==0 && neutrals==0)
+        {
+            System.out.println("Entra a ObSentData TODOS 0");
+            JSONObject node3=new JSONObject();
+            node3.put("label", "Neutros"); 
+            node3.put("value1", "0");
+            node3.put("value2", "100");
+            node3.put("color", "#eae8e3");
+            node.put(node3);
+        }
         return node;
     }
 
@@ -91,14 +111,13 @@
     }
 %>
 <%
-    System.out.println("Entra 0");
-    if(request.getParameter("streamUri")!=null)
+    System.out.println("Entra 0jjjjjjjjjjj");
+    if(request.getParameter("objUri")!=null)
     {
-        System.out.println("Entra 1:"+request.getParameter("streamUri"));
-        SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("streamUri"));
-        Stream stream=(Stream) semObj.getGenericInstance();
+        System.out.println("Entra 1:"+request.getParameter("objUri"));
+        SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("objUri"));
         String lang=request.getParameter("lang");
         System.out.println("Entra 2:"+lang);
-        out.println(getObject(stream, lang));
+        out.println(getObject(semObj, lang));
     }
 %>
