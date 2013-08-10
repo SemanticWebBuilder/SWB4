@@ -62,7 +62,7 @@
     params.put("access_token", facebookBean.getAccessToken());
     //System.out.println("AccessToken:\n" + facebookBean.getAccessToken());
     SWBModel model=WebSite.ClassMgr.getWebSite(facebookBean.getSemanticObject().getModel().getName());
-    params.put("limit", "25");    
+    params.put("limit", "50");    
     String since = (String)session.getAttribute("since");
     System.out.println("session.getAttribute(since):" + session.getAttribute("since"));
 

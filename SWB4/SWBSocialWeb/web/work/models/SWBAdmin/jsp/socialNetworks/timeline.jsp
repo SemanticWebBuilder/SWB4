@@ -34,125 +34,6 @@
 
 <%@page contentType="text/html" pageEncoding="x-iso-8859-11"%>
 
-<script type="text/javascript" id="appends">
-    appendHtmlAt = function(url, tagid, location){
-     dojo.xhrPost({
-        url: url,
-        load: function(response)
-        {
-            var tag=dojo.byId(tagid);
-            if(tag){
-                var pan=dijit.byId(tagid);
-                if(pan && pan.attr)
-                {
-                    if(location == "bottom"){
-                       pan.attr('content', tag.innerHTML + response);
-                    }else if(location == "top"){
-                       pan.attr('content', response + tag.innerHTML);
-                    }
-                }else
-                {
-                    if(location == "bottom"){
-                       tag.innerHTML = tag.innerHTML + response;
-                    }else if(location == "top"){
-                       tag.innerHTML = response + tag.innerHTML;
-                    }
-                }
-            }else {
-                //alert("No existe ningun elemento con id " + tagid);
-            }
-            return response;
-        },
-        error: function(response)
-        {
-            if(dojo.byId(tagid)) {
-                //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
-            }else {
-                //alert("No existe ningun elemento con id " + tagid);
-            }
-            return response;
-        },
-        handleAs: "text"
-    });
-    }
-        
-    postSocialHtml = function(url, tagid)
-      {
-          dojo.xhrPost({
-              url: url,
-              load: function(response)
-              {
-                  var tag=dojo.byId(tagid);
-                  if(tag){
-                      var pan=dijit.byId(tagid);
-                      if(pan && pan.attr)
-                      {
-                          pan.attr('content',response);
-                      }else
-                      {
-                          tag.innerHTML = response;
-                      }
-                  }else {
-                      console.log('Tag not found: ' + tagid);
-                  }
-                  return response;
-              },
-              error: function(response)
-              {
-                  if(dojo.byId(tagid)) {
-                      //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
-                  }else {
-                      console.log('Tag not found: ' + tagid);
-                  }
-                  return response;
-              },
-              handleAs: "text"
-          });
-      }
-      
-      
-    stopListener = function (url)
-      {
-          
-          dojo.xhrGet({
-              url: url,
-              load: function(response, ioArgs)
-              {
-                  console.log('Listener stoped:' + response)
-                  return response;
-              },
-              error: function(response, ioArgs){
-                  console.log("Error Stoping listener!");
-              },
-              handleAs: "text"
-          });
-      }
-      
-      showHideConversation = function (id){
-        if (document.getElementById(id)){
-            var el = document.getElementById(id);
-            if(el.style.display == 'none'){
-                el.removeAttribute('style');
-            }else{
-                el.setAttribute('style','display:none;');
-            }
-        }
-      }
-      
-      
-      resetTabTitle = function (objUri, tabId, title){
-        var tabId = objUri + tabId;
-        var pane = dijit.byId(tabId);                   
-        try{
-            var aux=title;
-            pane.title = aux;
-            pane.controlButton.containerNode.innerHTML = aux;
-        }catch(noe){
-            console.log('Error setting title to default value: ' + noe);
-        }
-      }
-</script>
-
 <style type="text/css">
     div.bar{
       background-color: #F5F5F5;
@@ -179,9 +60,8 @@
 <div dojoType="dojox.layout.ContentPane">
     <script type="dojo/method">
         var interval = setInterval(function(){ postSocialHtml('<%=renderURL.setMode("newTweets")%>','<%=objUri%>' + '/newTweetsAvailable'); },10000);
-        eval(document.getElementById("appends").innerHTML);
         console.log('Value of Interval:' + interval);
-        
+
         //Change the default onClose method of the parent Tab
         var tabId =  '<%=objUri%>' + '/tab';
         var cPane = dijit.byId(tabId);
@@ -194,13 +74,17 @@
     try {
             //gets Twitter4j instance with account credentials
             System.out.println("Showing @" + twitterBean.getScreenName() +  "'s home timeline.");
-            out.println("<div align=\"center\"><h2>Showing @" + twitterBean.getScreenName() +  "'s home timeline. </h2><br/></div>");
+            out.println("<div align=\"center\"><h2>Showing Showing @" + twitterBean.getScreenName() +  "'s home timeline. </h2><br/></div>");
             out.println("<div class=\"bar\" id=\"" + objUri + "/newTweetsAvailable\" dojoType=\"dojox.layout.ContentPane\"></div>");
             out.println("<div id=\"" + objUri + "/stream\" dojoType=\"dojox.layout.ContentPane\"></div>");           
             
             Paging paging = new Paging(); //used to set maxId and count
             paging.count(20);//Gets a number of tweets of timeline. Max value is 200           
             int i = 0;
+            System.out.println("consumer K:" + twitterBean.getConfiguration().getOAuthConsumerKey());
+            System.out.println("consumer S:" + twitterBean.getConfiguration().getOAuthConsumerSecret());
+            System.out.println("Access T:" + twitterBean.getConfiguration().getOAuthAccessToken());
+            System.out.println("Access S:" + twitterBean.getConfiguration().getOAuthAccessTokenSecret());
             SocialNetwork socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
             SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
             SocialNetworkUser socialNetUser = null;// = SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(""+status.getUser().getId(), socialNetwork, model);

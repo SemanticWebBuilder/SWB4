@@ -3,6 +3,8 @@
     Created on : 7/06/2013, 06:54:00 PM
     Author     : francisco.jimenez
 --%>
+<%@page import="java.util.regex.Pattern"%>
+<%@page import="java.util.regex.Matcher"%>
 <%@page import="org.semanticwb.model.WebSite"%>
 <%@page import="org.semanticwb.model.SWBModel"%>
 <%@page import="org.semanticwb.social.PostIn"%>
@@ -29,7 +31,7 @@
 <!DOCTYPE html>
 
 <%!
-
+/*
     public static String getTagsFromPost(JSONObject objectTags, String postContent, SWBResourceURL renderURL){
         String postContentWithUrl = postContent;
         Iterator<?> keyTags = objectTags.keys();
@@ -110,10 +112,16 @@
                     System.out.println("\n\n\n\nTHIS IS NOT SUPOSSED TO HAPPEN!!!!!!!!!!!!!!!!!" + postsData.getJSONObject(k).getLong("actor_id")  );
                     return null;
                 }
-                
                 createdTime = printPicture(out,  postsData.getJSONObject(k), profileID, request, paramRequest, MEDIA_TAB, facebook, model);
+                
+                //Only include the param in session when the page loads the first time and when 
+                if(includeSinceParam && k==0){//Only save the most recent picture id(the first), then use this id to ask if new pictures available
+                    HttpSession session = request.getSession(true);
+                    System.out.println("\n\n\n\t\tReemplazando viejo parametro PICTURE:" + session.getAttribute(objUri + MEDIA_TAB + "since"));
+                    session.setAttribute(objUri + MEDIA_TAB + "since", createdTime);
+                }
             }
-            
+                        
             System.out.println("TOTAL PICTURE POSTS RECEIVED:" + postsData.length());
         } catch (Exception jsone) {
             System.out.println("Problemas al parsear respuesta de Facebook" + jsone);
@@ -407,6 +415,7 @@
         }
         return fbResponse;
     }
+ */
 %>
 
 <%
