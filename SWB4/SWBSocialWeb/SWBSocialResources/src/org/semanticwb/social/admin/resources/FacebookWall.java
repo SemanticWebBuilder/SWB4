@@ -19,6 +19,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -898,12 +899,17 @@ public class FacebookWall extends GenericResource {
         if(mode!= null && mode.equals("getMorePosts")){//Gets older posts
             System.out.println("brings more POSTS - OLDER");
             doGetMorePosts(request, response, paramRequest);
+        }else if(mode.equals("moreComments")){
+            doGetMoreComments(request, response, paramRequest);            
         }else if(mode!= null && mode.equals("newPostsAvailable")){//Gets the number of new posts if available
             System.out.println("brings more posts - NUMBER OF NEW POSTS");
             doAskIfNewPosts(request, response, paramRequest);
         }else if(mode!= null && mode.equals("doGetStreamUser")){//Gets the new posts of the user and don't reload the page
             System.out.println("brings more posts - NEWER");
             doGetNewPosts(request, response, paramRequest);
+        }else if(mode!= null && mode.equals("doGetStreamPictures")){//Gets the new posts of the user and don't reload the page
+            System.out.println("brings more PICTURES - NEWER");
+            doGetNewPictures(request, response, paramRequest);
         }else if(mode!= null && mode.equals("getMorePictures")){//Gets older pictures
             System.out.println("brings more PICTURES - OLDER");
             doGetMorePictures(request, response, paramRequest);
@@ -1143,6 +1149,7 @@ public class FacebookWall extends GenericResource {
         SWBResourceURL renderURL = paramRequest.getRenderUrl();
         SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
         Facebook facebook = (Facebook)semanticObject.createGenericInstance();
+        SWBModel model=WebSite.ClassMgr.getWebSite(facebook.getSemanticObject().getModel().getName());
         if(objUri!= null){
             renderURL.setParameter("suri", objUri);
         }
@@ -1160,10 +1167,100 @@ public class FacebookWall extends GenericResource {
         fbResponse = getRequest(params, "https://graph.facebook.com/fql",
                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
 //s
-        String createdTime = picture(fbResponse, out, true, request, paramRequest);
+        String createdTime = picture(fbResponse, out, false, request, paramRequest,model);
         out.println("<label id=\"" +objUri + "morePicturesLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMorePictures").setParameter("createdTime", createdTime) + "','" + objUri +"getMorePictures','bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">More Pictures</a></label>");
     }
-    
+    //get the next comments of a post
+    public void doGetMoreComments(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String postId = request.getParameter("postId");
+        String objUri = request.getParameter("suri");
+        String after = request.getParameter("after");
+        String currentTab = request.getParameter("currentTab");
+        PrintWriter out = response.getWriter();
+        
+        if(postId == null || objUri == null || after == null || objUri == null){//If error don't show 'View more comments'
+            return;
+        }
+
+        SWBResourceURL renderURL = paramRequest.getRenderUrl();
+        renderURL.setParameter("suri", objUri);
+
+        SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
+        Facebook facebook = (Facebook)semanticObject.createGenericInstance();
+        
+        HashMap<String, String> params = new HashMap<String, String>(3);
+        params.put("access_token", facebook.getAccessToken());
+        params.put("after", after);
+        params.put("limit", "10");
+        
+        String fbResponse = postRequest(params, "https://graph.facebook.com/" + postId +"/comments",
+                "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
+
+        try{
+            JSONObject commentsObj = new JSONObject(fbResponse);
+
+            if(commentsObj.has("data")){
+                JSONArray comments = commentsObj.getJSONArray("data");
+                out.write("<table>");
+                for(int k = 0; k < comments.length(); k++){
+                    out.write("<tr>");
+                    out.write("  <td rowspan=\"3\">");
+                    out.write("<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type","noType").setParameter("id",comments.getJSONObject(k).getJSONObject("from").getLong("id")+"") + "','" + comments.getJSONObject(k).getJSONObject("from").getString("name") + "'); return false;\"><img src=\"http://graph.facebook.com/" + comments.getJSONObject(k).getJSONObject("from").getLong("id") +"/picture?width=30&height=30\"/></a>");
+
+                    out.write("  </td>");
+                    out.write("</tr>");
+
+                    out.write("<tr>");
+                    out.write("  <td>");
+                    out.write("<b><a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type","noType").setParameter("id", comments.getJSONObject(k).getJSONObject("from").getLong("id")+"") + "','" + comments.getJSONObject(k).getJSONObject("from").getString("name") + "'); return false;\">" + comments.getJSONObject(k).getJSONObject("from").getString("name") + "</a></b>:");
+                    out.write(       comments.getJSONObject(k).getString("message").replace("\n", "</br>") + "</br>");
+                    out.write("  </td>");
+                    out.write("</tr>");
+
+                    DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:SSz");    
+                    formatter.setTimeZone(TimeZone.getTimeZone("GMT-6"));
+                    Date commentTime = formatter.parse(comments.getJSONObject(k).getString("created_time"));
+
+                    out.write("<tr>");
+                    out.write("<td>");
+                    out.write("<div id=\"" +facebook.getId() + comments.getJSONObject(k).getString("id") + "_" + postId + "\" dojoType=\"dojox.layout.ContentPane\">");
+
+                    out.write(facebookHumanFriendlyDate(commentTime));
+                    if(comments.getJSONObject(k).has("like_count")){
+                        out.write(" Likes: " + comments.getJSONObject(k).getInt("like_count") );
+                    }
+                    out.write("</div>");
+                    out.write("</td>");
+                    out.write("</tr>");
+                }
+                out.write("   </table>");
+
+                if(commentsObj.has("paging")){//get link to view additional comments if available
+                    JSONObject pagingComments = commentsObj.getJSONObject("paging");
+                    if(pagingComments.has("cursors") && pagingComments.has("next")){
+                        out.write("<div align=\"left\" id=\"" + postId + "/" + currentTab + "/comments\" dojoType=\"dojox.layout.ContentPane\">");
+                        SWBResourceURL commentsURL = paramRequest.getRenderUrl().setMode("moreComments").setParameter("suri", request.getParameter("suri")).setParameter("postId", postId);
+                        commentsURL = commentsURL.setParameter("after", pagingComments.getJSONObject("cursors").getString("after")).setParameter("currentTab", currentTab);
+                        out.write("<label id=\"morePostsLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + commentsURL
+                                + "','" + postId + "/" + currentTab +"/comments', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">View more comments</a></label>");
+                        out.write("</div>");
+                    }
+                }
+
+                out.write("   </td>");
+                out.write("</tr>");
+            }
+        }catch(Exception e){//If an exception is thrown return the original message
+            out.write("<div align=\"left\" id=\"" + postId + "/" + currentTab + "/comments\" dojoType=\"dojox.layout.ContentPane\">");
+            SWBResourceURL commentsURL = paramRequest.getRenderUrl().setMode("moreComments").setParameter("suri", request.getParameter("suri")).setParameter("postId", postId);
+            commentsURL = commentsURL.setParameter("after", after).setParameter("currentTab", currentTab);
+            out.write("<label id=\"morePostsLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + commentsURL
+                    + "','" + postId + "/" + currentTab +"/comments', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">View more comments</a></label>");
+            out.write("</div>");
+            
+            log.error("Unable to get additional comments: ", e);
+        }
+    }
     
     /**
      * Analiza la respuesta de Facebook y obtiene la informaci&oacute;n de los mensajes publicados en el muro del usuario actual
@@ -1198,7 +1295,6 @@ public class FacebookWall extends GenericResource {
                         doPrintPost(out,  postsData.getJSONObject(k), request, paramRequest, tabSuffix, facebook, model);
                     }
                     if(phraseResp.has("paging")){
-                        System.out.println("pagination information:\n" + phraseResp.getJSONObject("paging"));
                         JSONObject pagingData = phraseResp.getJSONObject("paging");
                         String nextPage = pagingData.getString("next"); // get until param to get OLDER posts
                         Pattern pattern = Pattern.compile("until=[0-9]+");
@@ -1222,7 +1318,7 @@ public class FacebookWall extends GenericResource {
                             if(!sinceParam.isEmpty()){
                                 since = sinceParam.substring(sinceParam.indexOf("=") + 1);//gets only the value of since param in paging object
                                 HttpSession session = request.getSession(true);
-                                System.out.println("\n\n\n\t\tReemplazando viejo parametro:" + session.getAttribute(objUri + tabSuffix + "since"));
+                                System.out.println("\n\n\n\t\tReemplazando viejo parametro " + tabSuffix + ":" + session.getAttribute(objUri + tabSuffix + "since"));
                                 session.setAttribute(objUri + tabSuffix + "since", since);
                             }
                         }
@@ -1234,7 +1330,7 @@ public class FacebookWall extends GenericResource {
         return until;
     }
     
-    public static String picture(String response, Writer out, boolean includeSinceParam, HttpServletRequest request, SWBParamRequest paramRequest) {
+    public static String picture(String response, Writer out, boolean includeSinceParam, HttpServletRequest request, SWBParamRequest paramRequest, SWBModel model) {
         
         String  createdTime="";
         
@@ -1282,10 +1378,16 @@ public class FacebookWall extends GenericResource {
                     System.out.println("\n\n\n\nTHIS IS NOT SUPOSSED TO HAPPEN!!!!!!!!!!!!!!!!!" + postsData.getJSONObject(k).getLong("actor_id")  );
                     return null;
                 }
+                createdTime = printPicture(out,  postsData.getJSONObject(k), profileID, request, paramRequest, MEDIA_TAB, facebook, model);
                 
-                createdTime = printPicture(out,  postsData.getJSONObject(k), profileID, request, paramRequest, MEDIA_TAB, facebook );
+                //Only include the param in session when the page loads the first time and when 
+                if(includeSinceParam && k==0){//Only save the most recent picture id(the first), then use this id to ask if new pictures available
+                    HttpSession session = request.getSession(true);
+                    System.out.println("\n\n\n\t\tReemplazando viejo parametro PICTURE:" + session.getAttribute(objUri + MEDIA_TAB + "since"));
+                    session.setAttribute(objUri + MEDIA_TAB + "since", createdTime);
+                }
             }
-            
+                        
             System.out.println("TOTAL PICTURE POSTS RECEIVED:" + postsData.length());
         } catch (Exception jsone) {
             System.out.println("Problemas al parsear respuesta de Facebook" + jsone);
@@ -1513,21 +1615,24 @@ public class FacebookWall extends GenericResource {
                     if(story.contains("likes a photo")){
                         photoLike = getPostFromId(postsData.getString("id"), "id,from,name,name_tags,picture,source,link,tags", facebook);
                         isAPhotoLike = true;
+                        return;
                         //System.out.println("THE RECOVERED OBJECT:" + jSONObject);
                     }else if(story.contains("likes a link")){//Do not print the posts when 'User X likes a link'
                         linkLike = getPostFromId(postsData.getString("id"), "id,from,name,picture,link,tags,message", facebook);
                         System.out.println("\n\n\nLINKED LIKED:" +  linkLike);
                         isALinkLike = true;
                         return;
-                    }
-                    if(story.contains("likes a status")){
+                    }else if(story.contains("likes a status")){
                         statusLike = getPostFromId(postsData.getString("id"), null, facebook);
                         isAStatusLike = true;
                         System.out.println("\n\n\nSTATUS LIKED:" +  statusLike);
                         if(statusLike.has("message")){
                             message = statusLike.getString("message");
                         }
-                    }                    
+                        return;
+                    }else if(story.contains("commented on a")){
+                        return;
+                    }    
                 }else{
                      return;
                 }
@@ -1634,29 +1739,29 @@ public class FacebookWall extends GenericResource {
                 writer.write("   <tr>");
                 writer.write("   <td rowspan=\"3\">");
                 if(postType.equals("video") || postType.equals("swf")){
-                    writer.write("      <div id=\"vid" + tabSuffix + facebook.getId() +postsData.getString("id") + "\" style=\"width: 250px; height: 250px; border: thick #666666; overflow: hidden; position: relative;\">");
+                    writer.write("      <div id=\"vid" + tabSuffix + facebook.getId() + postsData.getString("id") + "\" style=\"width: 250px; height: 250px; border: thick #666666; overflow: hidden; position: relative;\">");
                     writer.write("      <a href=\"#\" onclick=\"showSocialDialog('"+ renderURL.setMode("displayVideo").setParameter("videoUrl", URLEncoder.encode(postsData.getString("source"), "UTF-8")) +
-                            "','Video from " + postsData.getJSONObject("from").getString("name") + "'); return false;\"><img src=\"" + picture + "\" style=\"position: relative;\" onload=\"imageLoad(" + "this, 'vid" + tabSuffix + facebook.getId() + postsData.getString("id") + "');\"/></a>");
+                            "','Video from " + postsData.getJSONObject("from").getString("name") + "'); return false;\"><img src=\"" + picture + "\" style=\"position: relative;\" onerror=\"this.src ='" + picture.replace("_n.", "_s.") + "'\" onload=\"imageLoad(" + "this, 'vid" + tabSuffix + facebook.getId() + postsData.getString("id") + "');\"/></a>");
                     writer.write("      </div>");
                 }else{
                     if(isALinkLike){//If the post is a link -> it has link and name
                         if(linkLike.has("link") && linkLike.has("picture")){
                             writer.write("IMAGEN de LIKES  ALINK");
                             writer.write("      <div id=\"img" + tabSuffix + facebook.getId() + postsData.getString("id") + "\" style=\"width: 250px; height: 250px; border: thick #666666; overflow: hidden; position: relative;\">");
-                            writer.write("      <a href=\"" + linkLike.getString("link") + "\" target=\"_blank\">" + "<img src=\"" + picture + "\" style=\"position: relative;\" onload=\"imageLoad(" + "this, 'img" + tabSuffix +facebook.getId() + postsData.getString("id") + "');\"/></a>");
+                            writer.write("      <a href=\"" + linkLike.getString("link") + "\" target=\"_blank\">" + "<img src=\"" + picture + "\" style=\"position: relative;\" onerror=\"this.src ='" + picture.replace("_n.", "_s.") + "'\" onload=\"imageLoad(" + "this, 'img" + tabSuffix +facebook.getId() + postsData.getString("id") + "');\"/></a>");
                             writer.write("      </div>");
                         }
                     }else if(postType.equals("link")){//If the post is a link -> it has link and name
                         if(postsData.has("name") && postsData.has("link")){
                             writer.write("IS A LINK");
                             writer.write("      <div id=\"img" + tabSuffix + facebook.getId() + postsData.getString("id") + "\" style=\"width: 250px; height: 250px; border: thick #666666; overflow: hidden; position: relative;\">");
-                            writer.write("      <a href=\"" + postsData.getString("link") + "\" target=\"_blank\">" + "<img src=\"" + picture + "\" style=\"position: relative;\" onload=\"imageLoad(" + "this, 'img" + tabSuffix +facebook.getId() + postsData.getString("id") + "');\"/></a>");
+                            writer.write("      <a href=\"" + postsData.getString("link") + "\" target=\"_blank\">" + "<img src=\"" + picture + "\" style=\"position: relative;\" onerror=\"this.src ='" + picture.replace("_n.", "_s.") + "'\" onerror=\"this.src ='" + picture.replace("_n.", "_s.") + "'\" onload=\"imageLoad(" + "this, 'img" + tabSuffix +facebook.getId() + postsData.getString("id") + "');\"/></a>");
                             writer.write("      </div>");
                         }
                     }else{
                         writer.write("      <div id=\"img" + tabSuffix + facebook.getId() + postsData.getString("id") + "\" style=\"width: 250px; height: 250px; border: thick #666666; overflow: hidden; position: relative;\">");
                         writer.write("      <a href=\"#\" onclick=\"showSocialDialog('" + renderURL.setMode("displayPicture").setParameter("pictureUrl", URLEncoder.encode(picture, "UTF-8")) +
-                                "','Picture from " + postsData.getJSONObject("from").getString("name") + "'); return false;\"><img src=\"" + picture + "\" style=\"position: relative;\" onload=\"imageLoad(" + "this, 'img" + tabSuffix +facebook.getId() + postsData.getString("id") + "');\"/></a>");
+                                "','Picture from " + postsData.getJSONObject("from").getString("name") + "'); return false;\"><img src=\"" + picture + "\" style=\"position: relative;\" onerror=\"this.src ='" + picture.replace("_n.", "_s.") + "'\" onload=\"imageLoad(" + "this, 'img" + tabSuffix +facebook.getId() + postsData.getString("id") + "');\"/></a>");
                         writer.write("      </div>");
                     }
                 }
@@ -1709,7 +1814,7 @@ public class FacebookWall extends GenericResource {
             }
             //Picture if exists, end
             
-            
+
             //Comments,start
             if(postsData.has("comments")){
                 if(postsData.getJSONObject("comments").has("data")){
@@ -1755,6 +1860,19 @@ public class FacebookWall extends GenericResource {
                         writer.write("</tr>");
                     }
                     writer.write("   </table>");
+                    
+                    if(postsData.getJSONObject("comments").has("paging")){//Link to get more comments
+                        JSONObject pagingComments = postsData.getJSONObject("comments").getJSONObject("paging");
+
+                        if(pagingComments.has("next") && pagingComments.has("cursors")){
+                            writer.write("<div align=\"left\" id=\"" + postsData.getString("id") + "/" + tabSuffix + "/comments\" dojoType=\"dojox.layout.ContentPane\">");
+                            SWBResourceURL commentsURL = paramRequest.getRenderUrl().setMode("moreComments").setParameter("suri", request.getParameter("suri")).setParameter("postId", postsData.getString("id"));
+                            commentsURL = commentsURL.setParameter("after", pagingComments.getJSONObject("cursors").getString("after")).setParameter("currentTab", tabSuffix);
+                            writer.write("<label id=\"morePostsLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + commentsURL
+                                    + "','" + postsData.getString("id") + "/" + tabSuffix +"/comments', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">View more comments</a></label>");
+                            writer.write("</div>");                            
+                        }
+                    }
                     
                     writer.write("   </td>");
                     writer.write("</tr>");
@@ -1807,7 +1925,7 @@ public class FacebookWall extends GenericResource {
                         writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + TOPIC + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
                         if(post != null){
                             SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("id")).setParameter("postUri", post.getURI()).setParameter("currentTab", tabSuffix);
-                                writer.write("<a href=\"#\" title=\"" + "Reclasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                                writer.write("<a href=\"#\" title=\"" + "Tema actual: " +  post.getSocialTopic().getTitle() + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
                                 + "Reclasificar post'); return false;\">Reclasificar</a>");
                         }else{
                             SWBResourceURL clasifybyTopic = renderURL.setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("id")).setParameter("currentTab", tabSuffix);
@@ -1847,7 +1965,7 @@ public class FacebookWall extends GenericResource {
         }
     }
     
-    public static String printPicture(Writer writer, JSONObject postsData, JSONObject profileData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook){
+    public static String printPicture(Writer writer, JSONObject postsData, JSONObject profileData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model){
         String createdTime="";
         
         try{
@@ -1962,9 +2080,8 @@ public class FacebookWall extends GenericResource {
                     writer.write("   <td width=\"90%\">");
 
                     JSONArray comments = postsData.getJSONObject("comments").getJSONArray("comment_list");
-                    if(comments.length()>0){
-                        writer.write("<table>");
-                    }
+                    if(comments.length()>0)
+                    writer.write("<table>");
                     for (int k = 0; k < comments.length(); k++){
                         writer.write("<tr>");
                         writer.write("  <td rowspan=\"3\">");
@@ -1995,11 +2112,12 @@ public class FacebookWall extends GenericResource {
                         writer.write("</div>");
                         //writer.write("<div dojoType=\"dijit.Tooltip\" connectId=\"ss\" position=\"below\">");
                         writer.write("</td>");
-                        writer.write("</tr>");                        
+                        writer.write("</tr>");
+                        //writer.write("<div style=\"float:left\"><b>" + comments.getJSONObject(k).getJSONObject("from").getString("name") + "</b>: </div>");
+                        //writer.write(comments.getJSONObject(k).getString("message").replace("\n", "</br>") + "</br><span>Hora y Fecha</span></br></br>");                        
                     }
-                    if(comments.length()>0){
-                        writer.write("   </table>");
-                    }
+                    if(comments.length()>0)
+                    writer.write("   </table>");
 
                     writer.write("   </td>");
                     writer.write("</tr>");
@@ -2010,7 +2128,8 @@ public class FacebookWall extends GenericResource {
             
             writer.write("<tr>");
             writer.write("   <td colspan=\"2\">");
-            ///////writer.write("<div id=\"" + postsData.getString("id") + postsData.getString("created_time") + "\" dojoType=\"dijit.layout.ContentPane\">");        
+            ///////writer.write("<div id=\"" + postsData.getString("id") + postsData.getString("created_time") + "\" dojoType=\"dijit.layout.ContentPane\">");
+            //writer.write("<div id=\"" + postsData.getString("id") + "\" dojoType=\"dijit.layout.ContentPane\">");
             
             Date postTime = new java.util.Date((long)postsData.getLong("created_time")*1000);
             createdTime = String.valueOf(postsData.getLong("created_time"));
@@ -2048,6 +2167,21 @@ public class FacebookWall extends GenericResource {
                     writer.write("   <span class=\"inline\" id=\"" + postsData.getString("post_id") + REPLY + MEDIA_TAB + "\" dojoType=\"dojox.layout.ContentPane\">");
                         writer.write(" <a href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyPost").setParameter("commentID", postsData.getString("post_id")) + "','Reply to " + "" + "');return false;\">Reply</a>  ");
                     writer.write("   </span>");
+                    //**ini                                                
+                    ///////////////////////If I can post I can Classify it to answer it later
+                    PostIn post = PostIn.getPostInbySocialMsgId(model, postsData.getString("post_id"));
+                    writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("post_id") + TOPIC + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
+                    if(post != null){
+                        SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("post_id")).setParameter("postUri", post.getURI()).setParameter("currentTab", tabSuffix);
+                            writer.write("<a href=\"#\" title=\"" + "Tema actual: " +  post.getSocialTopic().getTitle() + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                            + "Reclasificar post'); return false;\">Reclasificar(" + post.getSocialTopic().getTitle()+ ")</a>");
+                    }else{
+                        SWBResourceURL clasifybyTopic = renderURL.setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("post_id")).setParameter("currentTab", tabSuffix);
+                        writer.write("<a href=\"#\" title=\"" + "Clasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                        + "Clasificar Post'); return false;\">Clasificar</a>");
+                    }
+                    writer.write("   </span>");
+                    //**fin
                 }else{
                     writer.write("CAN'T POST");
                 }
@@ -2097,8 +2231,6 @@ public class FacebookWall extends GenericResource {
             JSONObject phraseResp = new JSONObject(fbResponse);
             JSONArray postsData = phraseResp.getJSONArray("data");
             System.out.println("ARREGLO DE DATOS:" + postsData.length());
-            //session.setAttribute(objUri + currentTab + "processing", "true");
-            //session.getAttribute(objUri + currentTab + "processing").equals("false")
             if(postsData.length()>0){
                 out.println("<a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("doGetStreamUser").setParameter("currentTab", currentTab) + "','" + objUri + "facebookStream','top'); try{dojo.byId(this.parentNode.id).innerHTML = '';}catch(noe){}; return false;\">You have <b>" + postsData.length() +  "</b> new post" + (postsData.length() > 1 ? "s" : "") +  "</a>");
             }
@@ -2145,28 +2277,40 @@ public class FacebookWall extends GenericResource {
         String sinceIdPicture = (String)session.getAttribute(objUri + MEDIA_TAB + "since");
         if(sinceIdPicture != null){
             params.put("since", sinceIdPicture);
-            String fbResponseWall = postRequest(params, "https://graph.facebook.com/me/feed",
-                        "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
+            params.put("q", "{\"pictures\": \"SELECT actor_id, created_time, like_info, post_id, attachment, message, description, description_tags, type, comments FROM stream WHERE filter_key IN " + 
+                "( SELECT filter_key FROM stream_filter WHERE uid = me() AND name = 'Photos') AND created_time >" + sinceIdPicture + " LIMIT 50\", \"usernames\": \"SELECT uid, name FROM user WHERE uid IN (SELECT actor_id FROM #pictures)\", \"pages\":\"SELECT page_id, name FROM page WHERE page_id IN (SELECT actor_id FROM #pictures)\"}");
+            String fbResponsePic = getRequest(params, "https://graph.facebook.com/fql",
+                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
             try{
-                JSONObject phraseResp = new JSONObject(fbResponseWall);
-                JSONArray postsData = phraseResp.getJSONArray("data");
+                JSONObject phraseResp = new JSONObject(fbResponsePic);
+                JSONArray postsData = null;
+
+                //Get only the size of pictures array
+                for(int i = 0; i < phraseResp.getJSONArray("data").length(); i++){
+                    if(phraseResp.getJSONArray("data").getJSONObject(i).getString("name").equals("pictures")){//All the posts
+                        postsData = phraseResp.getJSONArray("data").getJSONObject(i).getJSONArray("fql_result_set");
+                        break;
+                    }
+                }
+            
+            
                 System.out.println("ARREGLO DE DATOS IN PICTURES:" + postsData.length());
-                if(postsData.length() > 0){
+                if(postsData != null && postsData.length() > 0){
                     System.out.println("hay posts in PICTURE:" + postsData.length() );
                     out.println("<script type=\"text/javascript\">");
                     out.println("   var tabId = '" +objUri + MEDIA_TAB + "';");
                     out.println("   var pane = dijit.byId(tabId);");                   
                     out.println("   try{");
-                    out.println("       var aux='New posts (" + postsData.length() + ")';");
+                    out.println("       var aux='New pictures (" + postsData.length() + ")';");
                     out.println("       pane.title = aux;");
                     out.println("       pane.controlButton.containerNode.innerHTML = aux;");
                     out.println("   }catch(noe){");
                     out.println("       alert('Error setting title: ' + noe);");
                     out.println("   }");
                    
-                    out.println("   var wall = '" + objUri + "newPostsWallAvailable';");
-                    out.println("   var hrefVal='<a href=\"#\" onclick=\"appendHtmlAt(\\'" + renderURL.setMode("doGetStreamUser").setParameter("suri", objUri).setParameter("currentTab", MEDIA_TAB)
-                            + "\\',\\'" + objUri +"facebookWallStream\\',\\'top\\'); try{dojo.byId(this.parentNode.id).innerHTML = \\'\\';}catch(noe){}; resetTabTitle(\\'" + objUri + "\\', \\'" + MEDIA_TAB +  "\\', \\'Media\\'); return false;\">You have <b>"
+                    out.println("   var wall = '" + objUri + "newPicturesAvailable';");
+                    out.println("   var hrefVal='<a href=\"#\" onclick=\"appendHtmlAt(\\'" + renderURL.setMode("doGetStreamPictures").setParameter("suri", objUri).setParameter("currentTab", MEDIA_TAB)
+                            + "\\',\\'" + objUri +"picturesStream\\',\\'top\\'); try{dojo.byId(this.parentNode.id).innerHTML = \\'\\';}catch(noe){}; resetTabTitle(\\'" + objUri + "\\', \\'" + MEDIA_TAB +  "\\', \\'Media\\'); return false;\">You have <b>"
                             + postsData.length() +  "</b> new picture" + (postsData.length() > 1 ? "s" : "") +  "</a>';");
                     out.println("   try{");
                     out.println("      document.getElementById(wall).innerHTML = hrefVal;");
@@ -2213,6 +2357,36 @@ public class FacebookWall extends GenericResource {
         session.setAttribute(objUri + currentTab + "processing", "false");
     }
         
+    
+    public void doGetNewPictures(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        String objUri = request.getParameter("suri");
+        String currentTab = request.getParameter("currentTab") == null ? "" : request.getParameter("currentTab");
+        SWBResourceURL actionURL = paramRequest.getActionUrl();
+        SWBResourceURL renderURL = paramRequest.getRenderUrl();
+        SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
+        Facebook facebook = (Facebook)semanticObject.createGenericInstance();
+        SWBModel model=WebSite.ClassMgr.getWebSite(facebook.getSemanticObject().getModel().getName());
+        if(objUri!= null){
+            actionURL.setParameter("suri", objUri);
+            renderURL.setParameter("suri", objUri);
+        }
+        
+        HttpSession session = request.getSession(true);
+        session.setAttribute(objUri + currentTab + "processing", "true");
+        HashMap<String, String> params = new HashMap<String, String>(2);
+        params.put("access_token", facebook.getAccessToken());
+        
+        String sinceIdPicture = (String)session.getAttribute(objUri + MEDIA_TAB + "since");
+        if(sinceIdPicture != null){
+            params.put("since", sinceIdPicture);
+            params.put("q", "{\"pictures\": \"SELECT actor_id, created_time, like_info, post_id, attachment, message, description, description_tags, type, comments FROM stream WHERE filter_key IN " + 
+                "( SELECT filter_key FROM stream_filter WHERE uid = me() AND name = 'Photos') AND created_time >" + sinceIdPicture + " LIMIT 50\", \"usernames\": \"SELECT uid, name FROM user WHERE uid IN (SELECT actor_id FROM #pictures)\", \"pages\":\"SELECT page_id, name FROM page WHERE page_id IN (SELECT actor_id FROM #pictures)\"}");
+            String fbResponsePic = getRequest(params, "https://graph.facebook.com/fql",
+                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
+            String createdTime = picture(fbResponsePic, out, true, request, paramRequest, model);//Gets the newest post and saves the ID of the last one
+        }
+    }
 
     //SELECT id, name, type FROM profile where id =
     //Only need the id, name and user type from 'id' 
