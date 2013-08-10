@@ -219,6 +219,31 @@
         img.style.top = result.targettop + 'px';
     }
     
+    function showHideConversation(id){
+        if (document.getElementById(id)){
+            var el = document.getElementById(id);
+            if(el.style.display == 'none'){
+                el.removeAttribute('style');
+            }else{
+                el.setAttribute('style','display:none;');
+            }
+        }
+    }
+    
+    function stopListener(url){
+        dojo.xhrGet({
+            url: url,
+            load: function(response, ioArgs)
+            {
+                console.log('Listener stoped:' + response)
+                return response;
+            },
+            error: function(response, ioArgs){
+                console.log("Error Stoping listener!");
+            },
+            handleAs: "text"
+        });
+    }
       function changeClassT(objUri, sourceCall) {
           var divId = objUri +  sourceCall +'Txt';
           console.log('DIV:' + divId);
