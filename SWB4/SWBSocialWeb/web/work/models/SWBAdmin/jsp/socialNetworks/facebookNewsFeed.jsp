@@ -55,7 +55,7 @@
     }
     span.inline { display:inline; }
 </style>    
-<%!
+<%!/*
     public static JSONObject getPostFromId(String postId, String fields, Facebook facebook){
         HashMap<String, String> params = new HashMap<String, String>(2);
         params.put("access_token", facebook.getAccessToken());
@@ -121,7 +121,7 @@
                             if(!sinceParam.isEmpty()){
                                 since = sinceParam.substring(sinceParam.indexOf("=") + 1);//gets only the value of since param in paging object
                                 HttpSession session = request.getSession(true);
-                                System.out.println("\n\n\n\t\tReemplazando viejo parametro:" + session.getAttribute(objUri + tabSuffix + "since"));
+                                System.out.println("\n\n\n\t\tReemplazando viejo parametro FEED:" + session.getAttribute(objUri + tabSuffix + "since"));
                                 session.setAttribute(objUri + tabSuffix + "since", since);
                             }
                         }
@@ -149,11 +149,12 @@
             }
         }catch(JSONException jSonException){
             System.out.println("Problem parsing associated users");
+            return postContent;
         }
         return postContentWithUrl;    
     }
     
-public static void doPrintPost(Writer writer, JSONObject postsData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model){
+    public static void doPrintPost(Writer writer, JSONObject postsData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model){
         try{
             SWBResourceURL actionURL = paramRequest.getActionUrl();                        
             SWBResourceURL renderURL = paramRequest.getRenderUrl();
@@ -609,7 +610,7 @@ public static void doPrintPost(Writer writer, JSONObject postsData, HttpServletR
                 
             }            
         }
-    }
+    }*/
 
 %>
 <%
@@ -648,9 +649,12 @@ public static void doPrintPost(Writer writer, JSONObject postsData, HttpServletR
             if(since != null){
                 System.out.println("Calling the funtion!");
         %>
-            //setInterval(function(){ postSocialHtml('<%=renderURL.setMode("newPostsAvailable")%>','<%=objUri%>newPostsAvailable'); },20000);
+            var interval = setInterval(function(){ postSocialHtml('<%=renderURL.setMode("newPostsAvailable")%>','<%=objUri%>newPostsAvailable'); },20000);
+            var tabId =  '<%=objUri%>' + '/tab';
+            var cPane = dijit.byId(tabId);
+            cPane.attr('onClose', function callStopPooling(){ clearInterval(interval); return true;});
         <%
-            }
+            }            
         %>
    </script>
 </div>
