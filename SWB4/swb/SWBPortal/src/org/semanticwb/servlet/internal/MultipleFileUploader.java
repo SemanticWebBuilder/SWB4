@@ -93,7 +93,6 @@ public class MultipleFileUploader implements InternalServlet
         String path = uri.substring(cntx.length());
         String iserv = "";
 
-        //System.out.println("url:"+request.getRequestURL());
 
         if (path == null || path.length() == 0)
         {
@@ -115,18 +114,21 @@ public class MultipleFileUploader implements InternalServlet
         //System.out.println("cad:"+cad+" auri:"+auri+" user:"+dparams.getUser().getLogin());
         //DistributorParams dparam = null;
         String smodel = auri.substring(1, auri.indexOf("/", 2));
-        //System.out.println("model:"+smodel);
         SWBModel model=SWBContext.getSWBModel(smodel);
         //System.out.println("model:"+model);
         WebSite website=null;
         if(!(model instanceof WebSite))
-        {            
+        {        
             website=model.getParentWebSite();
         }else
         {
             website=(WebSite)model;
         }
-        //System.out.println("website:"+website);
+        //Agregado Jorge Jiménez para SWBSocial-12/Agosto/2013, ya que se quedaba nula la variable website y marcaba error en SWBUser
+        if(website==null)
+        {
+            website=SWBContext.getAdminWebSite();
+        }
         
         User user=SWBPortal.getUserMgr().getUser(request, website);
         if (!user.isSigned()){
