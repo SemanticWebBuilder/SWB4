@@ -8,6 +8,9 @@ border-radius:2px; /*opera y CSS3*/
 -khtml-border-radius:2px; /* Linux browers */
 }
 
+form.oculto {display:none;}
+
+/*REPOSITORIO*/
 #repositorio *  { margin:0; padding:0; font-family:Arial, Helvetica, sans-serif;}
 #repositorio 	{ border:solid 1px #ccc; width:100%;
 border-radius:5px; /*opera y CSS3*/ 
@@ -26,12 +29,14 @@ background: #efefef;
 background: -webkit-linear-gradient(#fff, #e1e1e1);
 background: -moz-linear-gradient(#fff, #e1e1e1);}
 
+/*DIR FILE*/
 #dir, #file     { display:inline-table; vertical-align:top;}
 #dir *, #file * { font-size:14px}
 #dir p, #file p { font-weight:bold; font-size:14px}
 #dir  { width:24%; border-right:solid 1px #ccc;}
 #file { width:70%; padding:25px 0 0 20px;}
 
+/*DIRECTORIO*/
 #dir	{ background:#f8fbfc;
 background: -webkit-linear-gradient(#fefefe, #f7f8f9);
 background: -moz-linear-gradient(#fefefe, #f7f8f9);}
@@ -48,7 +53,7 @@ border-radius:3px; /*opera y CSS3*/
 -khtml-border-radius:3px;}
 
 #diropcion   { border-bottom:1px solid #CCCCCC; padding:10px 20px; background:#fafafa;}
-#diropcion a { color:#FFF; text-shadow:1px 1px 0px #666; padding:3px 7px; text-transform:capitalize; margin-right:10px; font-weight:bold;
+#diropcion a { color:#FFF; text-shadow:1px 1px 0px #666; padding:5px 12px; text-transform:capitalize; margin-right:10px; font-weight:bold;
 background:#3079b2;
 background: -webkit-linear-gradient(#7eb3dd, #3079b2, #216499);
 background: -moz-linear-gradient(#7eb3dd, #3079b2, #216499);
@@ -62,7 +67,9 @@ background: -webkit-linear-gradient(#216499, #3079b2, #7eb3dd);
 background: -moz-linear-gradient(#216499, #3079b2, #7eb3dd);}
 #diropcion a.inactivo { background:#e1e1e1 !important; cursor:default; text-shadow:none; color:#F6F6F6;}
 
+/*TABLE*/
 #file p		{ color: #3079b2;}
+#file p	em	{ color: #666; font-weight:normal; font-style:normal; margin-top:7px; display:block;}
 #file table { border:solid 1px #999; border-collapse:collapse; width:100%;}
 #file caption { color: #3079b2; font-size:14px; font-weight:bold; text-align:left; margin-bottom:10px;}
 #file caption a { float:right; display:block; width:20px; height:20px; margin:0 10px;}
@@ -78,6 +85,7 @@ background: -moz-linear-gradient(#216499, #3079b2, #7eb3dd);}
 #file tr    {}
 #file th:first-child { border-left:none !important;}
 #file th    { border-left: solid 1px #FFF; padding:7px; text-align:center;}
+#file th a  { color:#FFF;}
 #file td    { border: solid 1px #ccc; padding:7px; text-align:center;}
 #file td, #file td a { color:#666 !important;}
 #file td.archivo   { text-align:left !important;}
@@ -85,6 +93,67 @@ background: -moz-linear-gradient(#216499, #3079b2, #7eb3dd);}
 #file a     { text-decoration:none;}
 #file span  {}
 #file tfoot td	{ text-align:left !important; background:#f4f4f4;}
+
+/*FORM*/
+#file form  { margin-top:10px; padding:10px 20px; background:#fafafa;
+border:1px solid #CCC;
+border-radius:3px; /*opera y CSS3*/ 
+-moz-border-radius:3px; /*FireFox*/
+-webkit-border-radius:3px; /*Safari Chrome*/
+-khtml-border-radius:3px;}
+#file form p { padding:10px 0;}
+#file label { color:#666 !important; font-weight:normal !important; display:inline-block; }
+#file #creardir label { width:166px;}
+#file #agregar label, #file #checkin label { padding-top:5px; vertical-align:top; width:85px;}
+#file input[type="text"], #file textarea   { color:#666; border:1px solid #CCCCCC; padding:8px 5px; width:50%;
+border-radius:2px; /*opera y CSS3*/ 
+-moz-border-radius:2px; /*FireFox*/
+-webkit-border-radius:2px; /*Safari Chrome*/
+-khtml-border-radius:2px;}
+#filexx input[type="file"] { color:#666; border:1px solid #CCCCCC; padding:8px 5px; width:50%; background:#FFF;
+border-radius:2px; /*opera y CSS3*/ 
+-moz-border-radius:2px; /*FireFox*/
+-webkit-border-radius:2px; /*Safari Chrome*/
+-khtml-border-radius:2px;}
+#file input[type="button"], #file input[type="submit"] { color:#FFF; cursor:pointer; text-shadow:1px 1px 0px #666; padding:7px 12px; text-transform:capitalize; margin-right:20px; font-weight:bold;
+border-radius:3px; /*opera y CSS3*/ 
+-moz-border-radius:3px; /*FireFox*/
+-webkit-border-radius:3px; /*Safari Chrome*/
+-khtml-border-radius:3px;}
+#file input.aceptar {   
+background:#3079b2;
+background: -webkit-linear-gradient(#7eb3dd, #3079b2, #216499);
+background: -moz-linear-gradient(#7eb3dd, #3079b2, #216499);
+border:1px outset #369;}
+#file input.aceptar:hover { border:1px inset #369;
+background:#7eb3dd;
+background: -webkit-linear-gradient(#216499, #3079b2, #7eb3dd);
+background: -moz-linear-gradient(#216499, #3079b2, #7eb3dd);}
+#file input.cancelar {  
+background:#666;
+background: -webkit-linear-gradient(#CCC, #666);
+background: -moz-linear-gradient(#CCC, #666);
+border:1px outset #999;}
+#file input.cancelar:hover { border:1px inset #999;
+background:#CCC;
+background: -webkit-linear-gradient(#666, #CCC);
+background: -moz-linear-gradient(#666, #CCC);}
+#file #creardir .botones { padding-left:170px;}
+#file #suscribir .botones { padding-left:75px;}
+#file #agregar .botones { padding-left:90px;}
+#file #checkin .botones { padding-left:90px;}
+#file #informacion .botones { padding-left:135px;}
+
+#file #suscribir label		 { font-weight:bold !important; margin:0 50px 0 5px;}
+#file #suscribir form p      { color:#666666;}
+#file #suscribir form strong { display:inline-block; font-weight:normal; width:70px;}
+
+#file #informacion label	   { font-weight:normal !important; margin:0 50px 0 5px; width:75px;}
+#file #informacion form p      { color:#666666;}
+#file #informacion form strong { display:inline-block; font-weight:normal; width:135px;}
+#file #informacion a   		   { text-align:center;}
+#file #informacion  p.acciones { padding-left:135px; margin:10px 0;}
+#file #informacion  p.acciones a { margin-right:20px !important;}
 
 #file .info a		{ background:url(images/info.png) no-repeat; display:block; height:20px; margin:auto; width:20px;}
 #file .info a:hover { background:url(images/info2.png) no-repeat; display:block; height:20px; margin:auto; width:20px;}
@@ -139,29 +208,38 @@ background: -moz-linear-gradient(#216499, #3079b2, #7eb3dd);}
 
 #file .fecha        {}
 #file .marcar       {}
-#file .marcar .in, #file .marcar .out, #file .marcar .undo, #file .marcar .reser { display:inline-block; margin:auto; color:#FFF !important; font-weight:bold; text-shadow:1px 1px 0px #666;
+#file .in, 
+#file .out, 
+#file .undo, 
+#file .reser
+{ display:inline-block; margin:auto; color:#FFF !important; font-weight:bold; text-shadow:1px 1px 0px #666;
 border-radius:3px; /*opera y CSS3*/ 
 -moz-border-radius:3px; /*FireFox*/
 -webkit-border-radius:3px; /*Safari Chrome*/
 -khtml-border-radius:3px;}
-#file .marcar .in          { background:#090; width:50px;}
-#file .marcar .in:hover    { background:#0C0; width:50px;}
-#file .marcar .out         { background:#C60; width:50px;}
-#file .marcar .out:hover   { background:#F60; width:50px;}
-#file .marcar .undo        { background:#999; width:50px;}
-#file .marcar .undo:hover  { background:#CCC; width:50px;}
-#file .marcar .reser       { background:#C00; width:80px;}
-#file .marcar .reser:hover { background:#F00; width:80px;}
+#file .in          { background:#090; width:50px;}
+#file .in:hover    { background:#0C0; width:50px;}
+#file .out         { background:#C60; width:50px;}
+#file .out:hover   { background:#F60; width:50px;}
+#file .undo        { background:#999; width:50px;}
+#file .undo:hover  { background:#CCC; width:50px;}
+#file .reser       { background:#C00; width:80px;}
+#file .reser:hover { background:#F00; width:80px;}
 
 #file .accion a     { padding:2px 0 2px 20px; color:#368dcd !important; margin:0 5px;}
 #file .accion span  { display:none;}
-#file .accion .suscribir { background:url(images/accion-suscribir.png) no-repeat;}
-#file .accion .nosuscribir { background:url(images/accion-nosuscribir.png) no-repeat;}
+#file .accion .suscribir, #file #informacion .suscribir     { background:url(images/accion-suscribir.png) no-repeat;}
+#file .accion .nosuscribir, #file #informacion .nosuscribir { background:url(images/accion-nosuscribir.png) no-repeat;}
 #file .accion .mover     { background:url(images/accion-mover.png) no-repeat;}
 #file .accion .eliminar  { background:url(images/accion-eliminar.png) no-repeat;}
-#file .accion .ver       { background:url(images/accion-ver.png) no-repeat;}
-#file .accion .suscribir:hover { background:url(images/accion-suscribir2.png) no-repeat;}
-#file .accion .nosuscribir:hover { background:url(images/accion-nosuscribir2.png) no-repeat;}
+#file .accion .ver, #file #informacion .ver                 { background:url(images/accion-ver.png) no-repeat;}
+
+#file .accion .suscribir:hover, #file #informacion .suscribir:hover  { background:url(images/accion-suscribir2.png) no-repeat;}
+#file .accion .nosuscribir:hover, #file #informacion .nosuscribir:hover { background:url(images/accion-nosuscribir2.png) no-repeat;}
 #file .accion .mover:hover     { background:url(images/accion-mover2.png) no-repeat;}
 #file .accion .eliminar:hover  { background:url(images/accion-eliminar2.png) no-repeat;}
-#file .accion .ver:hover       { background:url(images/accion-ver2.png) no-repeat;}
+#file .accion .ver:hover, #file #informacion .ver:hover       { background:url(images/accion-ver2.png) no-repeat;}
+
+#file #informacion .suscribir, #file #informacion .nosuscribir, #file #informacion .ver { padding:2px 0 2px 20px; color:#368dcd !important; margin:0 5px;}
+#file #informacion .suscribir span, #file #informacion .nosuscribir span, #file #informacion .ver span { display:none;}
+
