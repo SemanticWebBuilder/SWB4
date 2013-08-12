@@ -16,74 +16,47 @@
 <%@page import="org.semanticwb.*"%>
 <%@page import="org.semanticwb.social.util.*"%>
 <%@page import="java.util.*"%>
-<%@page import="twitter4j.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
 <%
     org.semanticwb.model.User user=paramRequest.getUser(); 
-    System.out.println("postOut-Jorgito:"+request.getAttribute("postOut"));
     if(request.getAttribute("postOut")==null) return;
     
     SemanticObject semObj=(SemanticObject)request.getAttribute("postOut");
     if(semObj==null) return; 
-    System.out.println("postOut-Jorgito-1");
     WebSite wsite=WebSite.ClassMgr.getWebSite(semObj.getModel().getName());
     if(wsite==null) return;
     
     PostOut postOut=(PostOut)semObj.getGenericInstance();
-    System.out.println("postOut-Jorgito-2:"+postOut);
     //Un mensaje de entrada siempre debe estar atachado a un usuario de la red social de la que proviene, de esta manera, es como desde swbsocial
     //se respondería a un mensaje
-    System.out.println("postOut.getCreator():"+postOut.getCreator());
     
-    org.semanticwb.model.User userCreator=postOut.getCreator(); 
-    String userPhoto=null; //Sacar la foto de la redSocial;
+    User userCreator=postOut.getCreator(); 
+    String userPhoto=userCreator.getPhoto(); 
     if(userPhoto==null) userPhoto="/swbadmin/css/images/profileDefImg.jpg";
-    System.out.println("postOut-Jorgito-3:"+userCreator);
+    else{
+        userPhoto=SWBPortal.getWebWorkPath()+user.getWorkPath()+"/"+User.swb_usrPhoto.getName()+"_"+userCreator.getId()+"_"+userPhoto;
+    }
     //Un mensaje de entrada siempre debe estar atachado a un usuar
     PostIn postInSource=null;
-    SocialNetworkUser socialNetworkUser=null; 
     if(postOut.getPostInSource()!=null)
     {
         postInSource=postOut.getPostInSource();
-        if(postInSource.getPostInSocialNetworkUser()!=null)
-        {
-            socialNetworkUser=postInSource.getPostInSocialNetworkUser();
-        }
-    }
-    System.out.println("postInSource:"+postInSource+",socialNetworkUser:"+socialNetworkUser);
+    }    
  %>
 
 
 <div class="swbform" style="width: 500px">
-    <div align="center"><img src="<%=userPhoto%>"/></div>
+    <div align="center"><img src="<%=userPhoto%>" width="150" height="150"/></div>
     <table style="width: 100%">
-        <%
-         if(socialNetworkUser!=null) 
-         {
-        %>
         <tr>
             <td align="center" colspan="5">
-                <%=socialNetworkUser.getSnu_name()%>
+                <%=userCreator.getFullName()%> 
             </td>
         </tr>
         <tr>
             <td colspan="5">&nbsp;</td>
         </tr>
-        <tr>
-            <td align="center">
-                <%=SWBSocialUtil.Util.getStringFromGenericLocale("followers", user.getLanguage())%>: <b><%=socialNetworkUser.getFollowers()%></b>
-            </td>
-            <td align="center">
-                <%=SWBSocialUtil.Util.getStringFromGenericLocale("friends", user.getLanguage())%>: <b><%=socialNetworkUser.getFriends()%></b>
-            </td>
-            <td align="center">
-                Klout: <b><%=socialNetworkUser.getSnu_klout()%>
-            </td>          
-        </tr>
-        <%
-        }
-        %>
         
         <tr>
             <td colspan="5"><hr><hr></td>
