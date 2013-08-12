@@ -125,6 +125,7 @@ public class MultipleFileUploader implements InternalServlet
             website=(WebSite)model;
         }
         //Agregado Jorge Jiménez para SWBSocial-12/Agosto/2013, ya que se quedaba nula la variable website y marcaba error en SWBUser
+        //Se utiliza este componente desde la edición de un usuario en el repositorio de Admin y al final llega Nulo el website hasta este paso.
         if(website==null)
         {
             website=SWBContext.getAdminWebSite();
