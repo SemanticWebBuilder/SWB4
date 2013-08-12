@@ -11,6 +11,10 @@ public abstract class SentimentalLearningPhraseBase extends org.semanticwb.model
    */
     public static final org.semanticwb.platform.SemanticProperty social_Phrase=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#Phrase");
    /**
+   * Frase original introducida por los usuarios administradores
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_originalPhrase=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#originalPhrase");
+   /**
    * Calor sentimental que le dan los usuarios al clasificar los mensajes, este valor se lo dan a las palabras o secuencia de palabras que se guardan en este objeto. 1=Positivo, 2=Negativo
    */
     public static final org.semanticwb.platform.SemanticProperty social_SentimentType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#SentimentType");
@@ -128,6 +132,24 @@ public abstract class SentimentalLearningPhraseBase extends org.semanticwb.model
     public void setPhrase(String value)
     {
         getSemanticObject().setProperty(social_Phrase, value);
+    }
+
+/**
+* Gets the OriginalPhrase property
+* @return String with the OriginalPhrase
+*/
+    public String getOriginalPhrase()
+    {
+        return getSemanticObject().getProperty(social_originalPhrase);
+    }
+
+/**
+* Sets the OriginalPhrase property
+* @param value long with the OriginalPhrase
+*/
+    public void setOriginalPhrase(String value)
+    {
+        getSemanticObject().setProperty(social_originalPhrase, value);
     }
 
 /**
