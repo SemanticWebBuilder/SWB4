@@ -20,14 +20,11 @@
  *
  *                                          http://www.webbuilder.org.mx
  */
-
-
 /*
  * AdmTopics.java
  *
  * Created on 19 de abril de 2004, 01:08 PM
  */
-
 package com.infotec.wb.resources.repository;
 
 import javax.servlet.http.*;
@@ -43,7 +40,9 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-/** Administraci�n de las carpetas del repositorio, agrega sub carpetas,
+
+/**
+ * Administraci�n de las carpetas del repositorio, agrega sub carpetas,
  * actualiza su nombre y nombre de ordenamiento, as� como, elimina la sub
  * carpeta seleccionada.
  *
@@ -53,22 +52,27 @@ import org.semanticwb.portal.api.SWBResourceURL;
  * @author Javier Solis Gonzalez
  */
 public class AdmTopics {
-    org.semanticwb.model.Resource base=null;
 
-    /** Creates a new instance of AdmTopics */
+    org.semanticwb.model.Resource base = null;
+
+    /**
+     * Creates a new instance of AdmTopics
+     */
     public AdmTopics() {
     }
 
     /**
      * Load the resource information
+     *
      * @param base Resource object
      */
     public void setResourceBase(org.semanticwb.model.Resource base) {
-        this.base=base;
+        this.base = base;
     }
 
     /**
      * Shows the form for creates a new folder
+     *
      * @param request Input parameters
      * @param response the answer to the user request
      * @param user User object in session
@@ -79,49 +83,41 @@ public class AdmTopics {
      * @throws AFException An exception of type AF (Applicatioon Framework)
      * @return a create form to show to the user
      */
-    public String create(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap arguments, WebPage dir, SWBParamRequest paramsRequest) throws  SWBResourceException, IOException {
+    public String create(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap arguments, WebPage dir, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer();
-        String path = SWBPlatform.getContextPath()+"/swbadmin/images/Repository/";
         SWBResourceURL url = paramsRequest.getRenderUrl();
-        url.setParameter("repobj","AdmTopics");
-        url.setParameter("repacc","createUpd");
-        url.setParameter("reptp",dir.getId());
-        ret.append("<b>");
+        url.setParameter("repobj", "AdmTopics");
+        url.setParameter("repacc", "createUpd");
+        url.setParameter("reptp", dir.getId());
+        ret.append("<p>");
         ret.append(paramsRequest.getLocaleString("msgCreateDirectory"));
-        ret.append("</b>\n<BR>");
-        if(user.isSigned()) ret.append("<form action=\""+url+"\" method=\"post\">\n");
-        ret.append("<table border=0 width=\"100%\">\n");
-        ret.append("<tr><td colspan=2>");
-        ret.append("<img src=\""+path+"line.gif\" width=\"100%\" height=\"5\" />");
-        ret.append("</td>");
-        ret.append("</tr>");
-        ret.append("<tr><td width=200>");
-        ret.append("<font face=\"Verdana, Arial, Helvetica, sans-serif\">"+paramsRequest.getLocaleString("msgDirectoryName")+":</font>");
-        ret.append("</td><td  align=left>");
-        ret.append("<input type=\"text\" name=\"name\" value=\"\">\n");
-        ret.append("</td></tr>");
-        ret.append("<tr><td width=200>");
-        ret.append("<font face=\"Verdana, Arial, Helvetica, sans-serif\">"+paramsRequest.getLocaleString("msgOrderName")+":</font>");
-        ret.append("</td><td  align=left>");
-        ret.append("<input type=\"text\" name=\"orderid\" value=\"\">\n");
-        ret.append("</td></tr>");
-        ret.append("<tr><td colspan=2>");
-        ret.append("<img src=\""+path+"line.gif\" width=\"100%\" height=\"5\">");
-        ret.append("</td>");
-        ret.append("</tr>");
-        ret.append("<tr><td colspan=2 align=center>\n");
-        SWBResourceURL urlBack = paramsRequest.getRenderUrl();
-        urlBack.setParameter("reptp",dir.getId());
-        if(user.isSigned())  ret.append("<input type=\"submit\" name=\"accept\" value=\""+paramsRequest.getLocaleString("msgBTNAccept")+"\" >\n");
-        if(user.isSigned())  ret.append("<input type=\"button\" name=\"cancel\" value=\""+paramsRequest.getLocaleString("msgBTNCancel")+"\" onclick=\"javascript:window.location='"+urlBack.toString()+"';\" >\n");
-        ret.append("</td></tr>\n");
-        ret.append("</table>\n");
-        if(user.isSigned())  ret.append("</form>\n");
+        ret.append("</p>");
+        ret.append("\n<div id=\"creardir\">");
+        if (user.isSigned()) {
+            ret.append("<form action=\"" + url + "\" method=\"post\">\n");
+        }
+        ret.append("\n<p><label for=\"dirnom\">" + paramsRequest.getLocaleString("msgDirectoryName") + ": </label>");
+        ret.append("<input type=\"text\" name=\"name\" value=\"\" id=\"dirnom\" />\n");
+        ret.append("</p>");
+        ret.append("\n<p><label for=\"dirord\">" + paramsRequest.getLocaleString("msgOrderName") + ": </label>");
+        ret.append("<input type=\"text\" name=\"orderid\" value=\"\" id=\"dirord\" />\n");
+        ret.append("</p>");
+        if (user.isSigned()) {
+            ret.append(" \n<p class=\"botones\">\n");
+            SWBResourceURL urlBack = paramsRequest.getRenderUrl();
+            urlBack.setParameter("reptp", dir.getId());
+            ret.append("<input type=\"submit\" name=\"accept\" value=\"" + paramsRequest.getLocaleString("msgBTNAccept") + "\" class=\"aceptar\" />\n");
+            ret.append("<input type=\"button\" name=\"cancel\" value=\"" + paramsRequest.getLocaleString("msgBTNCancel") + "\" onclick=\"javascript:window.location='" + urlBack.toString() + "';\" class=\"cancelar\" />\n");
+            ret.append("</p>\n");
+            ret.append("</form>\n");
+        }
+        ret.append("</div>\n");
         return ret.toString();
     }
 
     /**
      * Changes the folder information
+     *
      * @param request Input parameters
      * @param response the answer to the user request
      * @param user User object in session
@@ -132,48 +128,39 @@ public class AdmTopics {
      * @throws AFException An exception of type AF (Applicatioon Framework)
      * @return a edit form to change the name of the folder
      */
-    public String changeName(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap arguments, WebPage dir, SWBParamRequest paramsRequest) throws  SWBResourceException, IOException {
+    public String changeName(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap arguments, WebPage dir, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer();
-        String path = SWBPlatform.getContextPath()+"/swbadmin/images/Repository/";
         SWBResourceURL url = paramsRequest.getRenderUrl();
-        ret.append("<b>");
+        ret.append("<p>");
         ret.append(paramsRequest.getLocaleString("msgRenameDirectory"));
-        ret.append("</b>\n<br/>");
-        if(user.isSigned())  ret.append("<form action=\""+url+"?repobj=AdmTopics&repacc=changeNameUpd&reptp="+dir.getId()+"\" method=\"post\" >\n");
-        ret.append("<table border=0 width=\"100%\">\n");
-        ret.append("<tr><td colspan=2>");
-        ret.append("<img src=\""+path+"line.gif\" width=\"100%\" height=\"5\" />");
-        ret.append("</td>");
-        ret.append("</tr>");
-        ret.append("<tr><td width=200>");
-        ret.append("<font face=\"Verdana, Arial, Helvetica, sans-serif\">"+paramsRequest.getLocaleString("msgDirectoryName")+":</font>");
-        ret.append("</td><td align=left>");
-        ret.append("<input type=\"text\" name=\"name\" value=\""+dir.getDisplayName()+"\">\n");
-        ret.append("</td></tr>");
-        ret.append("<tr><td width=200>");
-        ret.append("<font face=\"Verdana, Arial, Helvetica, sans-serif\">"+paramsRequest.getLocaleString("msgOrderName")+":</font>");
-        ret.append("</td><td  align=left>");
-        String sortName = dir.getSortName() !=null?dir.getSortName():"";
-        ret.append("<input type=\"text\" name=\"orderid\" value=\"" + sortName +"\">\n");
-        ret.append("</td></tr>");
-        ret.append("<tr><td colspan=2>");
-        ret.append("<img src=\""+path+"line.gif\" width=\"100%\" height=\"5\" />");
-        ret.append("</td>");
-        ret.append("</tr>");
-        ret.append("<tr><td colspan=2 align=center>");
-        SWBResourceURL urlBack = paramsRequest.getRenderUrl();
-        urlBack.setParameter("reptp",dir.getId());
-        if(user.isSigned())  ret.append("<input type=\"submit\" name=\"accept\" value=\""+paramsRequest.getLocaleString("msgBTNAccept")+"\"  />\n");
-        if(user.isSigned())  ret.append("<input type=\"button\" name=\"cancel\" value=\""+paramsRequest.getLocaleString("msgBTNCancel")+"\" onclick=\"javascript:window.location='"+urlBack.toString()+"';\" />\n");
-        ret.append("</td></tr>\n");
-        ret.append("</table>\n");
-        if(user.isSigned()) ret.append("</form>\n");
+        ret.append("</p>\n");
+        ret.append("<div id=\"creardir\">\n");
+        if (user.isSigned()) {
+            ret.append("<form action=\"" + url + "?repobj=AdmTopics&repacc=changeNameUpd&reptp=" + dir.getId() + "\" method=\"post\" >\n");
+        }
+        ret.append("<p><label for=\"dirnom\">" + paramsRequest.getLocaleString("msgDirectoryName") + ": </label>");
+        ret.append("<input type=\"text\" name=\"name\" value=\"" + dir.getDisplayName() + "\" id=\"dirnom\">\n");
+        ret.append("</p>\n");
+        ret.append("<p><label for=\"dirord\">" + paramsRequest.getLocaleString("msgOrderName") + ":</label>");
+        String sortName = dir.getSortName() != null ? dir.getSortName() : "";
+        ret.append("<input type=\"text\" name=\"orderid\" value=\"" + sortName + "\" id=\"dirord\">\n");
+        ret.append("</p>\n");
+        if (user.isSigned()) {
+            ret.append(" \n<p class=\"botones\">\n");
+            SWBResourceURL urlBack = paramsRequest.getRenderUrl();
+            urlBack.setParameter("reptp", dir.getId());
+            ret.append("<input type=\"submit\"  class=\"aceptar\" name=\"accept\" value=\"" + paramsRequest.getLocaleString("msgBTNAccept") + "\"  />\n");
+            ret.append("<input type=\"button\" class=\"cancelar\" name=\"cancel\" value=\"" + paramsRequest.getLocaleString("msgBTNCancel") + "\" onclick=\"javascript:window.location='" + urlBack.toString() + "';\" />\n");
+            ret.append("</p>\n");
+            ret.append("</form>\n");
+        }
+        ret.append("\n</div>");
         return ret.toString();
     }
 
-
     /**
      * Creates new folder folder
+     *
      * @param request Input parameters
      * @param response the answer to the user request
      * @param user User object in session
@@ -184,7 +171,7 @@ public class AdmTopics {
      * @throws AFException An exception of type AF (Applicatioon Framework)
      * @return a create folder action
      */
-    public String createUpd(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap arguments, WebPage dir, SWBParamRequest paramsRequest) throws  SWBResourceException, IOException{
+    public String createUpd(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap arguments, WebPage dir, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         StringBuffer ret = null;
         String name = null;
         String s_id = null;
@@ -196,49 +183,32 @@ public class AdmTopics {
         rd = dir;
         name = request.getParameter("name");
         s_id = request.getParameter("orderid");
-        if(name!=null){
-            try{
+        if (name != null) {
+            try {
 
                 long lid = ws.getSemanticModel().getCounter(WebPage.swb_WebPage);
                 String str_lid = name + lid;
-                
 
-                WebPage aux= ws.createWebPage(SWBPlatform.getIDGenerator().getID(str_lid, ws.getId()));
+                WebPage aux = ws.createWebPage(SWBPlatform.getIDGenerator().getID(str_lid, ws.getId()));
                 aux.setTitle(name);
                 aux.setLanguage(ws.getLanguage());
                 aux.setParent(dir);
                 aux.addVirtualParent(dir);
-                
-                
-                //aux.setId(TopicMgr.getInstance().getIdGenerator().getID(name, dir.getMap().getId()));
 
-                //aux.setSubjectIdentity(new SubjectIdentity(paramsRequest.getTopic().getUrl(aux)));
-
-//                BaseName bn=new BaseName(name);
-//                aux.addBaseName(bn);
-//                bn.setScope(new Scope(dir.getMap().getlang()));
-//                aux.addType(dir);
-                if(s_id != null){
-//                    BaseName sn=new BaseName(s_id);
-//                    sn.setScope(new Scope(aux.getMap().getTopic("CNF_WBSortName")));
-//                    aux.addBaseName(sn);
+                if (s_id != null) {
                     aux.setSortName(s_id);
                 }
                 aux.setActive(true);
                 aux.setIndexable(false);
-                
-//                dir.getMap().addTopic(aux);
-//                dir.getMap().update2DB();
-                rd=aux;
-                saveLog("create",user,0,dir,"Create a directory",0);
-                msg=paramsRequest.getLocaleString("msgDirectoryCreatedSuccessfully")+"...";
+
+                rd = aux;
+                saveLog("create", user, 0, dir, "Create a directory", 0);
+                msg = paramsRequest.getLocaleString("msgDirectoryCreatedSuccessfully") + "...";
+            } catch (Exception e) {
+                msg = paramsRequest.getLocaleString("msgErrorCreatingDirectory") + "...";
             }
-            catch(Exception e){
-                msg=paramsRequest.getLocaleString("msgErrorCreatingDirectory")+"...";
-            }
-        }
-        else{
-            msg=paramsRequest.getLocaleString("msgErrorCreatingDirectoryWrongName")+"...";
+        } else {
+            msg = paramsRequest.getLocaleString("msgErrorCreatingDirectoryWrongName") + "...";
         }
 
         ret = new StringBuffer();
@@ -247,14 +217,14 @@ public class AdmTopics {
         ret.append(msg);
         ret.append("');");
         SWBResourceURL url = paramsRequest.getRenderUrl();
-        ret.append("window.location='"+url+"';");
+        ret.append("window.location='" + url + "';");
         ret.append("</script>\n");
         return ret.toString();
     }
 
-
     /**
      * Update the folder information
+     *
      * @param request Input parameters
      * @param response the answer to the user request
      * @param user User object in session
@@ -265,36 +235,27 @@ public class AdmTopics {
      * @throws AFException An exception of type AF (Applicatioon Framework)
      * @return a update action for the folder information
      */
-    public String changeNameUpd(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap arguments, WebPage dir, SWBParamRequest paramsRequest) throws  SWBResourceException, IOException{
+    public String changeNameUpd(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap arguments, WebPage dir, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         String s_id = request.getParameter("orderid");
-        String name=request.getParameter("name");
-        String msg="";
-        WebPage rd=dir;
-        if(name!=null){
-            try{
+        String name = request.getParameter("name");
+        String msg = "";
+        WebPage rd = dir;
+        if (name != null) {
+            try {
                 dir.setTitle(name);
                 dir.setSortName(s_id);
                 WebPage parent = dir.getParent();
-                if(parent!=null&&!dir.hasVirtualParent(parent)) dir.addVirtualParent(parent);
-                
-//                dir.getBaseNames().clear();
-//                BaseName bn=new BaseName(name);
-//                dir.addBaseName(bn);
-//                bn.setScope(new Scope(dir.getMap().getlang()));
-//                if(s_id != null){
-//                    BaseName sn=new BaseName(s_id);
-//                    sn.setScope(new Scope(dir.getMap().getTopic("CNF_WBSortName")));
-//                    dir.addBaseName(sn);
-//                }
-                //dir.getWebSite();
+                if (parent != null && !dir.hasVirtualParent(parent)) {
+                    dir.addVirtualParent(parent);
+                }
 
-                saveLog("rename",user,0,dir,"Rename a directory",0);
-                msg=paramsRequest.getLocaleString("msgDirectoryUpdatedSuccessfully")+"...";
-            }catch(Exception e) {
-                msg=paramsRequest.getLocaleString("msgErrorChangingNameDirectory")+"...";
+                saveLog("rename", user, 0, dir, "Rename a directory", 0);
+                msg = paramsRequest.getLocaleString("msgDirectoryUpdatedSuccessfully") + "...";
+            } catch (Exception e) {
+                msg = paramsRequest.getLocaleString("msgErrorChangingNameDirectory") + "...";
             }
-        }else {
-            msg=paramsRequest.getLocaleString("msgErrorChangingNameDirectoryWrongName")+"...";
+        } else {
+            msg = paramsRequest.getLocaleString("msgErrorChangingNameDirectoryWrongName") + "...";
         }
 
         StringBuffer ret = new StringBuffer();
@@ -302,15 +263,15 @@ public class AdmTopics {
         ret.append("alert('");
         ret.append(msg);
         ret.append("');");
-       SWBResourceURL url = paramsRequest.getRenderUrl();
-        ret.append("window.location='"+url+"';");
+        SWBResourceURL url = paramsRequest.getRenderUrl();
+        ret.append("window.location='" + url + "';");
         ret.append("</script>\n");
         return ret.toString();
     }
 
-
     /**
      * Removes a folder
+     *
      * @param request Input parameters
      * @param response the answer to the user request
      * @param user User object in session
@@ -321,177 +282,179 @@ public class AdmTopics {
      * @throws AFException An exception of type AF (Applicatioon Framework)
      * @return the action for removes a folder
      */
-    public String remove(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap arguments, WebPage dir, SWBParamRequest paramsRequest) throws  SWBResourceException, IOException{
+    public String remove(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap arguments, WebPage dir, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer();
-        WebPage rd=dir;
-        WebPage aux=dir.getParent();
-        String msg="";
-        if(RemoveDirFiles(dir)){
-            try{
+        WebPage rd = dir;
+        WebPage aux = dir.getParent();
+        String msg = "";
+        if (RemoveDirFiles(dir)) {
+            try {
                 // se deben de revisar si los t�picos tienen ag�n archivo borrado haciendo referencia a este o alg�n otro t�pico
-                Connection conn = SWBUtils.DB.getDefaultConnection();
+                String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+                Connection conn = SWBUtils.DB.getConnection(tmp_conn, "AdmTopics.remove()");
                 PreparedStatement pst = conn.prepareStatement("select * from resrepository where idtm=? and topic=?");
                 pst.setString(1, dir.getWebSiteId());
                 pst.setString(2, dir.getId());
                 ResultSet rs = pst.executeQuery();
                 boolean flag = false;
-                if(rs.next()){
-                    flag=true;
+                if (rs.next()) {
+                    flag = true;
                 }
                 rs.close();
                 pst.close();
                 conn.close();
-                rs=null;
-                pst=null;
-                conn=null;
+                rs = null;
+                pst = null;
+                conn = null;
                 // si no tiene ning�n subfolder o archivo haciendo referencia a este entonces el folder (t�pico) se puede eliminar.
-                if(!dir.listChilds().hasNext()&&!flag){
+                if (!dir.listChilds().hasNext() && !flag) {
                     dir.getWebSite().removeWebPage(dir.getId());
-                }
-                //si tiene alg�n t�pico hijo o folder eliminado dentro de este s�lo se marca el t�pico como borrado
-                else{
+                } //si tiene alg�n t�pico hijo o folder eliminado dentro de este s�lo se marca el t�pico como borrado
+                else {
                     dir.setDeleted(Boolean.TRUE);
-                    //dir.getDbdata().update();
                 }
-                //aux.getMap().update2DB();
-                rd=aux;
-                saveLog("Remove",user,0,dir,"Remove a directory",0);
-                msg=paramsRequest.getLocaleString("msgDirectoryRemovedSuccessfully")+"...";
+                rd = aux;
+                saveLog("Remove", user, 0, dir, "Remove a directory", 0);
+                msg = paramsRequest.getLocaleString("msgDirectoryRemovedSuccessfully") + "...";
+            } catch (Exception e) {
+                msg = paramsRequest.getLocaleString("msgErrorRemovingDirectory") + "...";
             }
-            catch(Exception e){
-                msg=paramsRequest.getLocaleString("msgErrorRemovingDirectory")+"...";
-            }
-        }
-        else{
-            msg=paramsRequest.getLocaleString("msgCannotRemoveDirectory")+"...";
+        } else {
+            msg = paramsRequest.getLocaleString("msgCannotRemoveDirectory") + "...";
         }
         ret.append("<script type=\"text/javascript\">");
         ret.append("alert('");
         ret.append(msg);
         ret.append("');");
         SWBResourceURL url = paramsRequest.getRenderUrl();
-        url.setParameter("reptp",aux.getId());
-        ret.append("window.location='"+url+"';");
+        url.setParameter("reptp", aux.getId());
+        ret.append("window.location='" + url + "';");
         ret.append("</script>\n");
 
         return ret.toString();
     }
 
-
     /**
      * Remove files from the directory
+     *
      * @param dir A topic object that represents a directory
      * @return True or false if the files was removed
      */
-    private boolean RemoveDirFiles(WebPage dir){
-        boolean regresa=false;
-        Connection con=null;
-        PreparedStatement ps=null;
-        ResultSet rs=null;
-        long repdocid=-1;
-        long resid=-1;
-        boolean flagC=false;
-        try{
-            con=SWBUtils.DB.getDefaultConnection();
-            Iterator iteDirChilds=dir.listChilds();
+    private boolean RemoveDirFiles(WebPage dir) {
+        boolean regresa = false;
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        long repdocid = -1;
+        long resid = -1;
+        boolean flagC = false;
+        try {
+            String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+            con = SWBUtils.DB.getConnection(tmp_conn, "AdmTopics.RemoveDirFiles()");
+            Iterator iteDirChilds = dir.listChilds();
             // Verifies if exists subdirectory
-            if(iteDirChilds.hasNext()){
+            if (iteDirChilds.hasNext()) {
                 return false;
             }
             // Verifies if exists subdirectory
-            while(iteDirChilds.hasNext()){
-                flagC=true;
-                RemoveDirFiles((WebPage)iteDirChilds.next());
+            while (iteDirChilds.hasNext()) {
+                flagC = true;
+                RemoveDirFiles((WebPage) iteDirChilds.next());
             }
-            ps=con.prepareStatement("select rep_docid,resid from resrepository where idtm=? and topic=? and rep_deleted = 0");
-            ps.setString(1,dir.getWebSiteId());
-            ps.setString(2,dir.getId());
-            rs=ps.executeQuery();
+            ps = con.prepareStatement("select rep_docid,resid from resrepository where idtm=? and topic=? and rep_deleted = 0");
+            ps.setString(1, dir.getWebSiteId());
+            ps.setString(2, dir.getId());
+            rs = ps.executeQuery();
             // Verifies if exists subdirectory
-            if(rs.next()){
+            if (rs.next()) {
                 return false;
             }
-            while(rs.next()){
-                repdocid=rs.getLong("rep_docid");
-                resid=rs.getLong("resid");
-                RemoveFilesFromDB(repdocid,resid,dir);
+            while (rs.next()) {
+                repdocid = rs.getLong("rep_docid");
+                resid = rs.getLong("resid");
+                RemoveFilesFromDB(repdocid, resid, dir);
             }
             rs.close();
             ps.close();
             con.close();
-            regresa=true;
-        }
-        catch(Exception e){
-            Repository.log.error("Error in AdmTopics:RemoveTopicFiles",e);
-        }
-        finally{
-            try{
-                if(rs!=null)rs.close();
-                if(ps!=null)ps.close();
-                if(con!=null)con.close();
-            }
-            catch(Exception e){
-                Repository.log.error("Error while trying to close connections, AdmTopics:RemoveDirFiles",e);
+            regresa = true;
+        } catch (Exception e) {
+            Repository.log.error("Error in AdmTopics:RemoveTopicFiles", e);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+                Repository.log.error("Error while trying to close connections, AdmTopics:RemoveDirFiles", e);
             }
         }
         return regresa;
     }
 
-
     /**
      * Removes file from the data base
+     *
      * @param id File identifier
      * @param resid Resource identifier
      * @param dir Topic object that represent a directory or a folder
      * @return True or false if the file was removed from the data base
      */
-    private boolean RemoveFilesFromDB(long id,long resid,WebPage dir){
-        boolean regresa=false;
-        Connection con=null;
-        PreparedStatement ps=null;
+    private boolean RemoveFilesFromDB(long id, long resid, WebPage dir) {
+        boolean regresa = false;
+        Connection con = null;
+        PreparedStatement ps = null;
         //Resource wbRes = SWBPortal.getResourceMgr().getResource(""+resid,dir.getWebSite());
         //Rmgr=ResourceMgr.getInstance();
-        try{
-            org.semanticwb.model.Resource wbRes = dir.getWebSite().getResource(""+resid); //Rmgr.getResource(dir.getWebSiteId(),resid);
-            org.semanticwb.model.Resource resource=wbRes; //.getResourceBase();
-            con=SWBUtils.DB.getDefaultConnection();
-            ps=con.prepareStatement("delete from resrepository where rep_docId=? and idtm=?");
-            ps.setLong(1,id);
-            ps.setString(2,dir.getWebSiteId());
+        try {
+            org.semanticwb.model.Resource wbRes = dir.getWebSite().getResource("" + resid); //Rmgr.getResource(dir.getWebSiteId(),resid);
+            org.semanticwb.model.Resource resource = wbRes; //.getResourceBase();
+            String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+            con = SWBUtils.DB.getConnection(tmp_conn, "AdmTopics.RemoveFilesFromDB()");
+            ps = con.prepareStatement("delete from resrepository where rep_docId=? and idtm=?");
+            ps.setLong(1, id);
+            ps.setString(2, dir.getWebSiteId());
             ps.execute();
             ps.close();
-            ps=con.prepareStatement("delete from resrepositoryversions where rep_docId=? and idtm=?");
-            ps.setLong(1,id);
-            ps.setString(2,dir.getWebSiteId());
+            ps = con.prepareStatement("delete from resrepositoryversions where rep_docId=? and idtm=?");
+            ps.setLong(1, id);
+            ps.setString(2, dir.getWebSiteId());
             ps.execute();
             ps.close();
-            ps=con.prepareStatement("delete from resrepositorynotify where topic=? and idtm=?");
-            ps.setString(1,dir.getId());
-            ps.setString(2,dir.getWebSiteId());
+            ps = con.prepareStatement("delete from resrepositorynotify where topic=? and idtm=?");
+            ps.setString(1, dir.getId());
+            ps.setString(2, dir.getWebSiteId());
             ps.execute();
             ps.close();
-            File fdir=new File(SWBPortal.getWorkPath()+"/"+resource.getWorkPath()+"/");
-            String filestarts=id+"_";
-            File[] files=fdir.listFiles();
-            for(int i=0;i<files.length;i++){
-                File f=files[i];
-                if(f.getName().startsWith(filestarts)){
+            File fdir = new File(SWBPortal.getWorkPath() + "/" + resource.getWorkPath() + "/");
+            String filestarts = id + "_";
+            File[] files = fdir.listFiles();
+            for (int i = 0; i < files.length; i++) {
+                File f = files[i];
+                if (f.getName().startsWith(filestarts)) {
                     f.delete();
                 }
             }
             con.close();
-            regresa=true;
-        }
-        catch(Exception e){
-            Repository.log.error("Error in AdmTopics:RemoveFilesFromDB",e);
-        }
-        finally{
-            try{
-                if(ps!=null)ps.close();
-                if(con!=null)con.close();
-            }
-            catch(Exception e){
-                Repository.log.error("Error while trying to close connections, AdmTopics:RemoveDirFiles",e);
+            regresa = true;
+        } catch (Exception e) {
+            Repository.log.error("Error in AdmTopics:RemoveFilesFromDB", e);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+                Repository.log.error("Error while trying to close connections, AdmTopics:RemoveDirFiles", e);
             }
         }
         return regresa;
@@ -499,6 +462,7 @@ public class AdmTopics {
 
     /**
      * Save the user action in the data base
+     *
      * @param p_action The user action
      * @param user User object
      * @param p_fileid File identifier
@@ -506,37 +470,41 @@ public class AdmTopics {
      * @param p_description Description of the action
      * @param p_isfile A flag to indicate if is a file or not
      */
-    public void saveLog(String p_action, User user, long p_fileid, WebPage p_topic, String p_description, int p_isfile){
+    public void saveLog(String p_action, User user, long p_fileid, WebPage p_topic, String p_description, int p_isfile) {
 
         Connection con = null;
-        PreparedStatement ps= null;
+        PreparedStatement ps = null;
         ResultSet rs = null;
         String str_name = null;
         String str_title = "";
         String str_topicmapid = null;
         String str_topicid = null;
-        try{
-            con=SWBUtils.DB.getDefaultConnection();
-            if(p_isfile == 1){
+        try {
+            String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+            con = SWBUtils.DB.getConnection(tmp_conn, "AdmTopics.saveLog()");
+            if (p_isfile == 1) {
                 ps = con.prepareStatement("select rep_title from resrepository where rep_docId=? and idtm=?");
                 ps.setLong(1, p_fileid);
-                ps.setString(2,p_topic.getWebSiteId());
+                ps.setString(2, p_topic.getWebSiteId());
                 rs = ps.executeQuery();
-                if(rs.next()){
+                if (rs.next()) {
                     str_title = rs.getString("rep_title");
                 }
-            }
-            else{
+            } else {
                 str_title = p_topic.getDisplayName();
             }
-            if(user.getFirstName() != null) str_name = user.getFirstName();
-            if(user.getLastName() != null) str_name = str_name + " " + user.getLastName();
+            if (user.getFirstName() != null) {
+                str_name = user.getFirstName();
+            }
+            if (user.getLastName() != null) {
+                str_name = str_name + " " + user.getLastName();
+            }
             str_topicid = p_topic.getId();
             str_topicmapid = p_topic.getWebSiteId();
 
-            ps=con.prepareStatement("insert into resrepositorylog "+
-            "(rep_email,rep_user,rep_docId,rep_action,rep_name,rep_topicid,rep_topicmapid,rep_objectid,rep_description,rep_dateaction,rep_isfile,rep_ipuser) "+
-            "values(?,?,?,?,?,?,?,?,?,?,?,?)");
+            ps = con.prepareStatement("insert into resrepositorylog "
+                    + "(rep_email,rep_user,rep_docId,rep_action,rep_name,rep_topicid,rep_topicmapid,rep_objectid,rep_description,rep_dateaction,rep_isfile,rep_ipuser) "
+                    + "values(?,?,?,?,?,?,?,?,?,?,?,?)");
             ps.setString(1, user.getId());
             ps.setString(2, str_name);
             ps.setLong(3, p_fileid);
@@ -546,20 +514,17 @@ public class AdmTopics {
             ps.setString(7, str_topicmapid);
             ps.setString(8, base.getId());
             ps.setString(9, p_description);
-            ps.setTimestamp(10,new Timestamp(System.currentTimeMillis()));
+            ps.setTimestamp(10, new Timestamp(System.currentTimeMillis()));
             ps.setInt(11, 0);
             ps.setString(12, user.getIp());
             ps.execute();
             ps.close();
             con.close();
-        }
-        catch(Exception e){
-            Repository.log.error("Error while create a record of the resource in RepositoryFile:saveLog",e);
-        }
-        finally{
+        } catch (Exception e) {
+            Repository.log.error("Error while create a record of the resource in RepositoryFile:saveLog", e);
+        } finally {
             ps = null;
             con = null;
         }
     }
-
 }

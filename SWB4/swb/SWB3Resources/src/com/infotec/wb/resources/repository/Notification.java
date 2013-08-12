@@ -127,33 +127,36 @@ public class Notification {
      */
     public String subscribeToDirectory(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap arguments, WebPage tp, SWBParamRequest paramsRequest) throws  SWBResourceException, IOException {
         StringBuffer sbfRet = new StringBuffer();
-        sbfRet.append("<p align=center class=Estilo6><font size=2 face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgSubscribe2Dir") + "</font></p>");
+        sbfRet.append("<p>" + paramsRequest.getLocaleString("msgSubscribe2Dir") + "</p>");
         if (user == null || (user != null && user.getEmail() == null)) {
-            sbfRet.append("<p align=center><font size=2 face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgMustSign2Subscribe") + ".</font></p>");
+            sbfRet.append("<p>" + paramsRequest.getLocaleString("msgMustSign2Subscribe") + ".</p>");
             return sbfRet.toString();
         }
         String strReptp = request.getParameter("reptp");
         if (strReptp == null || (strReptp != null && strReptp.trim().equals(""))) {
-            sbfRet.append("<p align=center><font size=2 face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgSelectDir2Subscribe") + ".</font></p>");
+            sbfRet.append("<p>" + paramsRequest.getLocaleString("msgSelectDir2Subscribe") + ".</p>");
             return sbfRet.toString();
         }
 
+        sbfRet.append("\n<div id=\"suscribir\">");
         SWBResourceURL urlBack = paramsRequest.getRenderUrl();
         urlBack.setParameter("reptp", strReptp);
         sbfRet.append("\n<form method=\"get\">");
-        sbfRet.append("\n<table border=0 width=\"100%\"><tr><td align=center><font size=1 face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgEmailNotify") + "</font></td></tr></table>");
+        sbfRet.append("\n<p><em>" + paramsRequest.getLocaleString("msgEmailNotify") + "</em></p>");
         sbfRet.append(showNotification(request, response, user, tp, paramsRequest, false));
 
-        sbfRet.append("\n<table border=0 width=\"100%\"><tr><td align=center>");
+
         if (getLevelUser(user) == 3) {
             sbfRet.append(getRepositoryRoles(tp, request, paramsRequest, false));
         }
+         sbfRet.append("\n <p class=\"botones\">");
         sbfRet.append("\n<input type=\"hidden\" name=\"repacc\" value=\"create\">");
         sbfRet.append("\n<input type=\"hidden\" name=\"repobj\" value=\"Notification\">");
         sbfRet.append("\n<input type=\"hidden\" name=\"reptp\" value=\"" + strReptp + "\">");
         sbfRet.append("\n<input type=\"submit\" value=\"" + paramsRequest.getLocaleString("msgBTNSuscribe") + "\" >");
         sbfRet.append("\n<input type=\"button\" value=\"" + paramsRequest.getLocaleString("msgBTNCancel") + "\" onclick=\"javascript:window.location='" + urlBack.toString() + "';\" >");
-        sbfRet.append("\n</td></tr></table></form>");
+        sbfRet.append("\n </p>");
+         sbfRet.append("\n</div>");
         return sbfRet.toString();
     }
 
@@ -238,7 +241,8 @@ public class Notification {
 
         try {
             if (request.getParameter("suscribe") != null && request.getParameter("suscribe").equals("1")) {
-                conn = SWBUtils.DB.getDefaultConnection();
+                String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+                conn = SWBUtils.DB.getConnection(tmp_conn, "Notification.create()");
                 st = conn.prepareStatement("INSERT INTO resrepositorynotify (rep_docid, idtm, topic, rep_email, rep_role) VALUES (?,?,?,?,?)");
                 id = 0;
                 try {
@@ -257,7 +261,8 @@ public class Notification {
                 st.close();
                 conn.close();
             } else {
-                conn = SWBUtils.DB.getDefaultConnection();
+                String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+                conn = SWBUtils.DB.getConnection(tmp_conn, "Notification.create() -else-");
                 st = conn.prepareStatement("DELETE from resrepositorynotify where rep_docid=? and idtm=? and topic=? and rep_email=?");
                 id = 0;
                 try {
@@ -431,7 +436,8 @@ public class Notification {
         try {
             int count = 0;
             if (request.getParameter("suscribe") == null) {
-                conn = SWBUtils.DB.getDefaultConnection();
+                String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+                conn = SWBUtils.DB.getConnection(tmp_conn, "Notification.remove()");
                 pst = conn.prepareStatement("DELETE FROM resrepositorynotify WHERE rep_email=? and rep_docid=? and idtm=? and topic=?");
 
                 long id = 0;
@@ -504,11 +510,12 @@ public class Notification {
             strbloqueado = " disabled ";
         }
 
-        sbfRet.append("\n<table border=0 width=\"100%\">");
+
         if (request.getParameter("repdocid") == null || (request.getParameter("repdocid") != null && request.getParameter("repdocid").trim().length() == 0)) {
             try {
 
-                conn = SWBUtils.DB.getDefaultConnection();
+                String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+                conn = SWBUtils.DB.getConnection(tmp_conn, "Notification.showNotification()");
                 String strQuery = "select * from resrepositorynotify where idtm=? and topic=? and rep_email=? and rep_docId=?";
                 pst = conn.prepareStatement(strQuery);
                 pst.setString(1, tp.getWebSiteId());
@@ -523,13 +530,10 @@ public class Notification {
                 rs.close();
                 pst.close();
                 conn.close();
-
-                sbfRet.append("\n<tr><td width=200><font size=2 face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgUser") + ":</font></td>");
-                sbfRet.append("\n<td><font size=2 face=\"Verdana, Arial, Helvetica, sans-serif\"><input type=checkbox name=suscribe value=1 " + strSelect + " " + strbloqueado + ">" + user.getEmail() + "</font></td></tr>");
-                sbfRet.append("\n<tr><td width=200><font size=2 face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgDirectory") + ":</font></td>");
-                sbfRet.append("\n<td><font size=2 face=\"Verdana, Arial, Helvetica, sans-serif\">" + tp.getDisplayName() + "</font></td></tr>");
-
-
+                sbfRet.append("\n<p><strong>" + paramsRequest.getLocaleString("msgUser") + ":</strong>");
+                sbfRet.append("\n<input type=\"checkbox\" name=\"suscribe\" value=\"1\" " + strSelect + " " + strbloqueado + " id=\"" + user.getEmail() + "\" /><label for=\"" + user.getEmail() + "\">" + user.getEmail() + "</label></p>");
+                sbfRet.append("\n<p><strong>" + paramsRequest.getLocaleString("msgDirectory") + ":</strong>");
+                sbfRet.append("\n"+ tp.getDisplayName() + "</p>");
             } catch (Exception e) {
                 Repository.log.error("Error while check the user directory suscription. ",e);
             }
@@ -537,7 +541,8 @@ public class Notification {
         if (request.getParameter("repdocid") != null && request.getParameter("repdocid").trim().length() > 0) {
             try {
 
-                conn = SWBUtils.DB.getDefaultConnection();
+                String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+                conn = SWBUtils.DB.getConnection(tmp_conn, "Notification.showNotification() -2-");
                 pst = conn.prepareStatement("select * from resrepositorynotify where rep_docId=? and idtm=? and topic=? and rep_email=? ");
                 pst.setInt(1, Integer.parseInt(request.getParameter("repdocid")));
                 pst.setString(2, tp.getWebSiteId());
@@ -566,12 +571,12 @@ public class Notification {
                 pst.close();
                 conn.close();
 
-                sbfRet.append("\n<tr><td width=200><font size=2 face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgUser") + ":</font></td>");
-                sbfRet.append("\n<td><font size=2 face=\"Verdana, Arial, Helvetica, sans-serif\"><input type=checkbox name=suscribe value=1 " + strSelect + " " + strbloqueado + ">" + user.getEmail() + "</font></td></tr>");
-                sbfRet.append("\n<tr><td width=200><font size=2 face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgDirectory") + ":</font></td>");
-                sbfRet.append("\n<td><font size=2 face=\"Verdana, Arial, Helvetica, sans-serif\">" + tp.getDisplayName() + "</font></td></tr>");
+                sbfRet.append("\n<p><strong>" + paramsRequest.getLocaleString("msgUser") + ":</strong>");
+                sbfRet.append("\n<input type=\"checkbox\" name=\"suscribe\" value=\"1\" " + strSelect + " " + strbloqueado + "  id=\"" + user.getEmail() + "\" /><label for=\"" + user.getEmail() + "\">" + user.getEmail() + "</label></p>");
+                sbfRet.append("\n<p><strong>" + paramsRequest.getLocaleString("msgDirectory") + ":</strong>");
+                sbfRet.append("\n" + tp.getDisplayName() + "</p>");
                 if (titledoc.trim().length() > 0) {
-                    sbfRet.append("\n<tr><td width=200><font size=2 face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgDocTitle") + ":</font></td><td><font size=2 face=\"Verdana, Arial, Helvetica, sans-serif\">" + titledoc + "</font></td></tr>");
+                    sbfRet.append("\n<p><strong>" + paramsRequest.getLocaleString("msgDocTitle") + ":</strong>" + titledoc + "</p>");
                 }
 
             } catch (Exception e) {
@@ -604,7 +609,8 @@ public class Notification {
             return arr;
         }
         try {
-            Connection conn = SWBUtils.DB.getDefaultConnection();
+            String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+            Connection conn = SWBUtils.DB.getConnection(tmp_conn, "Notification.getSubscriptions()");
             PreparedStatement pst = conn.prepareStatement("SELECT rep_docId FROM resrepositorynotify WHERE rep_email=? AND idtm=? AND topic=?");
             pst.setString(1, user.getId());
             pst.setString(2, dir.getWebSiteId());
@@ -643,12 +649,10 @@ public class Notification {
         Iterator<Role> enuRoles = Role.ClassMgr.listRoles((SWBModel)usrRep);
         try {
             if (!readonly) {
-                ret.append("\n<table border=0 width=\"100%\"><tr><td align=center><HR noshade size=1><font size=1 face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgRoleEmailNotify") + "<br>");
-                ret.append("\n" + paramsRequest.getLocaleString("msgCancelRoleEmailNotify") + ".</font></td></tr></table>");
+                ret.append("\n<p><strong>" + paramsRequest.getLocaleString("msgRoleEmailNotify") + "<br/>");
+                ret.append("\n" + paramsRequest.getLocaleString("msgCancelRoleEmailNotify") + ".</strong></p>");
             }
-            ret.append("\n<table border=0 width=\"100%\">");
-            ret.append("\n<tr><td colspan=2><HR size=\"1\" noshade></td></tr>");
-            ret.append("\n<tr><td width=200><font size=2 face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgSelectRoles") + ": </font></td><td align=left>");
+            ret.append("\n<p><strong>" + paramsRequest.getLocaleString("msgSelectRoles") + ": </strong></p>");
         } catch (Exception e) {
             Repository.log.error(e);
         }
@@ -662,11 +666,8 @@ public class Notification {
             if (hmroles.get(rRol.getId()) != null) {
                 strSelect = " checked ";
             }
-            ret.append("\n<input name=\"roleid" + rRol.getId() + "\" type=checkbox value=\"" + rRol.getId() + "\" " + strSelect + " " + blocked + "> &nbsp;<font size=2 face=\"Verdana, Arial, Helvetica, sans-serif\">" + rRol.getDisplayTitle(usr.getLanguage()) + "</font><br>");
+            ret.append("\n<p><input name=\"roleid" + rRol.getId() + "\" type=\"checkbox\" value=\"" + rRol.getId() + "\" " + strSelect + " " + blocked + "  id=\"" + rRol.getId() + "\"> <label for=\"" + rRol.getId() + "\">" + rRol.getDisplayTitle(usr.getLanguage()) + "</label></p>");
         }
-        ret.append("\n</td></tr>");
-        ret.append("\n<tr><td colspan=2><HR size=\"1\" noshade></td></tr>");
-        ret.append("\n</table>");
         return ret.toString();
     }
 
@@ -688,7 +689,8 @@ public class Notification {
         }
         long ldocid = Long.parseLong(docid);
         try {
-            conn = SWBUtils.DB.getDefaultConnection();
+            String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+            conn = SWBUtils.DB.getConnection(tmp_conn, "Notification.getDirRoles()");
             st = conn.prepareStatement("SELECT rep_role FROM resrepositorynotify WHERE idtm=? and topic=? and rep_role<>? and rep_docid=?");
             st.setString(1, dir.getWebSiteId());
             st.setString(2, dir.getId());
@@ -733,7 +735,8 @@ public class Notification {
         }
         long ldocid = Long.parseLong(docid);
         try {
-            conn = SWBUtils.DB.getDefaultConnection();
+            String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+            conn = SWBUtils.DB.getConnection(tmp_conn, "Notification.updateRoleList()");
             st = conn.prepareStatement("DELETE from resrepositorynotify where rep_docid=? and idtm=? and topic=? and rep_role<>?");
             st.setLong(1, ldocid);
             st.setString(2, dir.getWebSiteId());
@@ -873,7 +876,8 @@ public class Notification {
 
             // encontrando usuarios suscritos al directorio o documento para notificaci�n
 
-            Connection conn = SWBUtils.DB.getDefaultConnection();
+            String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+            Connection conn = SWBUtils.DB.getConnection(tmp_conn, "Notification.sendNotification()");
             PreparedStatement pst = conn.prepareStatement("select rep_email from resrepositorynotify where idtm=? and topic=? and (rep_docid=0 or rep_docid=?) and rep_role=? group by rep_email");
             pst.setString(1, dir.getWebSiteId());
             pst.setString(2, dir.getId());
@@ -896,7 +900,8 @@ public class Notification {
             conn.close();
 
             // se revisa si hereda notificaci�n de una carpeta padre
-            conn = SWBUtils.DB.getDefaultConnection();
+
+            conn = SWBUtils.DB.getConnection(tmp_conn, "Notification.sendNotification() -2-");
             pst = conn.prepareStatement("select idtm, topic, rep_email from resrepositorynotify where (rep_docid=0 or rep_docid=?) and rep_role=? and idtm=?");
             pst.setLong(1, docid);
             pst.setInt(2, 0);
@@ -923,7 +928,8 @@ public class Notification {
 
             // encontrando roles suscritos al directorio o documento para enviar la notificaci�n
             encontrados = 0;
-            conn = SWBUtils.DB.getDefaultConnection();
+
+            conn = SWBUtils.DB.getConnection(tmp_conn, "Notification.sendNotification() -3-");
             pst = conn.prepareStatement("select rep_role from resrepositorynotify where idtm=? and topic=? and (rep_docid=0 or rep_docid=?) and rep_email=? group by rep_role");
             pst.setString(1, dir.getWebSiteId());
             pst.setString(2, dir.getId());
@@ -955,7 +961,7 @@ public class Notification {
 
             // encontrando roles suscritos al directorio o documento para enviar la notificaci�n, HEREDADOS
 
-            conn = SWBUtils.DB.getDefaultConnection();
+            conn = SWBUtils.DB.getConnection(tmp_conn, "Notification.sendNotification() -4-");
             pst = conn.prepareStatement("select rep_role, topic  from resrepositorynotify where (rep_docid=0 or rep_docid=?) and rep_email=? and idtm=? group by rep_role, topic");
 
             pst.setLong(1, docid);
