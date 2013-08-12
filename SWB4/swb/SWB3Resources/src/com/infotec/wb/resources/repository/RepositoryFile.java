@@ -228,7 +228,7 @@ public class RepositoryFile {
                     // indexar cambio
 
 
-                    ret.append("<form name=\"frmupdatetitle\" action=\"" + url1.toString() + "\" method=\"post\">");
+                    ret.append("<form class=\"oculto\" name=\"frmupdatetitle\" action=\"" + url1.toString() + "\" method=\"post\">");
                     ret.append("<input type=\"hidden\" name=\"repfop\" value=\"info\"><input type=\"hidden\" name=\"updated\" value=\"1\"><input type=\"hidden\" name=\"reptp\" value=\"" + dir.getId() + "\"><input type=\"hidden\" name=\"repfiddoc\" value=\"" + id + "\">");
                     ret.append("</form>");
                     ret.append("<script type='text/javascript'>\r\n");
@@ -237,7 +237,7 @@ public class RepositoryFile {
                 } else if (op.equals("mod")) {
                     long id = Integer.parseInt(fup.getValue("repfiddoc"));
                     this.newversion(request, response, user, topic, hashMap, dir, this.resource, nivel, paramsRequest, fup);
-                    ret.append("<form name=\"frmnewversion\" action=\"" + url1.toString() + "\" method=\"post\">");
+                    ret.append("<form class=\"oculto\" name=\"frmnewversion\" action=\"" + url1.toString() + "\" method=\"post\">");
                     ret.append("<input type=\"hidden\" name=\"repfop\" value=\"history\" /><input type=\"hidden\" name=\"reptp\" value=\"" + dir.getId() + "\" /><input type=\"hidden\" name=\"repfiddoc\" value=\"" + id + "\" />");
                     ret.append("</form>");
                     ret.append("<script type='text/javascript'>\r\n");
@@ -306,7 +306,9 @@ public class RepositoryFile {
             long id = Long.parseLong(request.getParameter("repfiddoc"));
             Connection con = null;
             try {
-                con = SWBUtils.DB.getDefaultConnection();
+                String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+                con = SWBUtils.DB.getConnection(tmp_conn, "RepositoryFile.undocheckout()");
+                
                 boolean cancheckin = false;
                 if (nivel == 3) {
                     cancheckin = true;
@@ -425,7 +427,9 @@ public class RepositoryFile {
                         fileName = request.getRequestURL().toString();///MapaSitio.xslt?repfop=view&reptp=CNFWB_Rep11&repfiddoc=1&repinline=true
                         if (null != fileName) {
                             fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
-                            con = SWBUtils.DB.getDefaultConnection();
+                            String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+                            con = SWBUtils.DB.getConnection(tmp_conn, "RepositoryFile.view()");
+                            
                             String sqlID = "select rrep.rep_docId as idDoc, rver.rep_fileName as fileName from resrepository rrep, resrepositoryversions rver "
                                     + " where rrep.topic=? and rrep.resId = ? and rrep.rep_docId = rver.rep_docId and rver.rep_fileName = ?";
                             pstID = con.prepareStatement(sqlID);
@@ -483,7 +487,9 @@ public class RepositoryFile {
             String sversion = request.getParameter("repfversion");
             int version = 1;
             try {
-                con = SWBUtils.DB.getDefaultConnection();
+                String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+                con = SWBUtils.DB.getConnection(tmp_conn, "Repository.view() -2-");
+                
                 if (sversion == null) {
                     PreparedStatement psversion = con.prepareStatement("select rep_lastVersion from resrepository where rep_docId=? and idtm=?");
                     psversion.setLong(1, id);
@@ -577,7 +583,9 @@ public class RepositoryFile {
             long id = Long.parseLong(request.getParameter("repfiddoc"));
             Connection con = null;
             try {
-                con = SWBUtils.DB.getDefaultConnection();
+                String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+                con = SWBUtils.DB.getConnection(tmp_conn, "Repository.view -3-()");
+                
                 PreparedStatement ps = con.prepareStatement("select rep_email from resrepository where rep_docId=? and idtm=?");
                 ps.setLong(1, id);
                 ps.setString(2, dir.getWebSiteId());
@@ -713,7 +721,9 @@ public class RepositoryFile {
             String description = "";
             byte[] bcont = fup.getFileData("repfdoc");
             try {
-                con = SWBUtils.DB.getDefaultConnection();
+                String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+                con = SWBUtils.DB.getConnection(tmp_conn, "RepositoryFile.newversion()");
+                
                 boolean cancheckin = false;
                 PreparedStatement psuser = con.prepareStatement("select rep_title,rep_emailCheckOut, rep_description from resrepository where rep_docId=? and idtm=?");
                 psuser.setLong(1, id);
@@ -845,7 +855,9 @@ public class RepositoryFile {
             long id = Long.parseLong(request.getParameter("repfiddoc"));
             Connection con = null;
             try {
-                con = SWBUtils.DB.getDefaultConnection();
+                String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+                con = SWBUtils.DB.getConnection(tmp_conn, "RepositoryFile.checkin()");
+                
                 boolean cancheckin = false;
                 PreparedStatement psuser = con.prepareStatement("select rep_emailCheckOut from resrepository where rep_docId=? and idtm=?");
                 psuser.setLong(1, id);
@@ -899,6 +911,8 @@ public class RepositoryFile {
                     rsFileName.close();
                     psFileName.close();
 
+                    ret.append("\n<p>" + paramsRequest.getLocaleString("msgEditFileStatus") + ": " + title + "</p>");
+                    ret.append("\n<div id=\"checkin\">");
                     ret.append("<form name='frmnewdoc' method='POST' enctype='multipart/form-data'>");
                     ret.append("<input type='hidden' name='repfop' value='mod'>");
                     ret.append("<input type='hidden' name='repfiddoc' value='" + id + "'>");
@@ -906,41 +920,22 @@ public class RepositoryFile {
                     String tp = dir.getId();
                     ret.append("<input type='hidden' name='reptp' value='" + tp + "'>");
 
-                    ret.append("<table width='100%'  border='0' cellspacing='0' cellpadding='1'>");
-                    ret.append("<tr>");
-                    ret.append("<td>&nbsp;&nbsp;&nbsp;&nbsp; <B><font face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgEditFileStatus") + "...</font></B></td>");
-                    ret.append("</tr>");
-                    ret.append("<tr>");
+                    ret.append("\n<p><label for=\"checkcom\">" + paramsRequest.getLocaleString("msgComments") + ": </label>");
+                    ret.append("<textarea name='repfdescription' cols='50' rows='3' onKeyDown='textCounter(this.form.repfdescription,255);' onKeyUp='textCounter(this.form.repfdescription,255);'  id=\"checkcom\"></textarea>");
+                    ret.append("</p>\n");
 
-                    ret.append("<td bgcolor='#999933'><font color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'><img src='" + path + "file.gif' width='20' height='14'>" + title + "</font></td>");
-                    ret.append("</tr>");
-
-                    ret.append("<tr>");
-                    ret.append("<td align='center'>");
-                    ret.append("<font face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgComments") + "</font><BR>");
-                    ret.append("<textarea name='repfdescription' cols='50' rows='3' onKeyDown='textCounter(this.form.repfdescription,255);' onKeyUp='textCounter(this.form.repfdescription,255);'></textarea>");
-                    ret.append("</td>");
-                    ret.append("</tr>");
-
-                    ret.append("<tr>");
-                    ret.append("<td align='center'>");
-                    ret.append("<input type='file' name='repfdoc' />");
+                    ret.append("<p><label for=\"agregafile\">Archivo: </label>");
+                    ret.append("<input type='file' name='repfdoc' id=\"agregafile\"  />");
                     ret.append("<input type='hidden' name='repfdocOri' value=\"" + fileName + "\" />");
-                    ret.append("</td>");
-                    ret.append("</tr>");
-                    ret.append("<tr>");
-                    ret.append("<td><img src='" + path + "line.gif' width='100%' height='5' /></td>");
-                    ret.append("</tr>");
-                    ret.append("<tr align='center'>");
-                    ret.append("<td>");
-                    ret.append("<input type='button'  name='Submit3' value='" + paramsRequest.getLocaleString("msgBTNSave") + "' onclick='javascript:valida();' />");
-                    ret.append("&nbsp;");
-                    ret.append("<input type='button'  name='Submit32' value='" + paramsRequest.getLocaleString("msgBTNCancel") + "' onclick='javascript:init();' />");
+                    ret.append("</p>");
+                    ret.append("<p class=\"botones\">");
 
-                    ret.append("</td>");
-                    ret.append("</tr>");
-                    ret.append("</table>");
+                    ret.append("<input type='button'  class=\"aceptar\" name='Submit3' value='" + paramsRequest.getLocaleString("msgBTNSave") + "' onclick='javascript:valida();' />");
+                    ret.append("&nbsp;");
+                    ret.append("<input type='button'  class=\"cancelar\" name='Submit32' value='" + paramsRequest.getLocaleString("msgBTNCancel") + "' onclick='javascript:init();' />");
+                    ret.append("</p>");
                     ret.append("</form>");
+                    ret.append("\n</div>");
 
                     ret.append("<script type='text/javascript'>\r\n");
                     ret.append("function textCounter(field,  maxlimit) {\r\n");
@@ -1024,7 +1019,9 @@ public class RepositoryFile {
             long id = Long.parseLong(request.getParameter("repfiddoc"));
             Connection con = null;
             try {
-                con = SWBUtils.DB.getDefaultConnection();
+                String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+                con = SWBUtils.DB.getConnection(tmp_conn, "RepositoryFile.checkout()");
+                
                 PreparedStatement psstatus = con.prepareStatement("select rep_status from resrepository where rep_docId=? and idtm=?");
                 psstatus.setLong(1, id);
                 psstatus.setString(2, dir.getWebSiteId());
@@ -1090,7 +1087,9 @@ public class RepositoryFile {
             long id = Long.parseLong(request.getParameter("repfiddoc"));
             Connection con = null;
             try {
-                con = SWBUtils.DB.getDefaultConnection();
+                String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+                con = SWBUtils.DB.getConnection(tmp_conn, "RepositoryFile.delete()");
+                
                 if (nivel >= 2) {
                     boolean candelete = false;
                     if (nivel == 3) {
@@ -1347,7 +1346,7 @@ public class RepositoryFile {
             ret.append("\n  }");
             ret.append("\n</script>");
 
-            ret.append("\n<form name=\"frmparameter\" method=\"post\" action=\"" + url.toString() + "\" >");
+            ret.append("\n<form class=\"oculto\" name=\"frmparameter\" method=\"post\" action=\"" + url.toString() + "\" >");
             ret.append("\n<input type=\"hidden\" name=\"repfop\" value=\"\">");
             ret.append("\n<input type=\"hidden\" name=\"repacc\" value=\"\">");
             ret.append("\n<input type=\"hidden\" name=\"reptp\" value=\"\">");
@@ -1356,6 +1355,8 @@ public class RepositoryFile {
             ret.append("\n<input type=\"hidden\" name=\"repfiddoc\" value=\"\">");
             ret.append("\n</form>");
 
+            ret.append("\n<p>Directorio: " + dir.getDisplayName() + "</p>");
+            ret.append("\n<div id=\"informacion\">");
             if (user.isSigned()) {
                 ret.append("<form name='frmnewdoc' method='GET' action='" + url.toString() + "'>");
             }
@@ -1363,15 +1364,9 @@ public class RepositoryFile {
             ret.append("<input type='hidden' name='repfiddoc' value='" + id + "' />");
             ret.append("<input type='hidden' name='reptp' value='" + tp + "' />");
 
-            ret.append("<table width='100%'  border='0' cellspacing='0' cellpadding='1'>");
-            ret.append("<tr>");
-            ret.append("<td colspan='10'><img src='" + path + "openfolder.gif' width='20' height='20' /> <B><font face='Verdana, Arial, Helvetica, sans-serif' size=\"2\">" + dir.getDisplayName() + "</font></B></td>");
-            ret.append("</tr>");
-            ret.append("<tr>");
-            ret.append("<td colspan='10'><img src='" + path + "line.gif' width='100%' height='5' /></td>");
-            ret.append("</tr>");
-
-            con = SWBUtils.DB.getDefaultConnection();
+            String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+            con = SWBUtils.DB.getConnection(tmp_conn, "RepositoryFile.info()");
+            
             ps = con.prepareStatement("select rep_docId, resId, rep_email, rep_title, rep_description, rep_lastVersion, rep_status, rep_emailCheckOut, rep_xml from resrepository where rep_docId=? and idtm=?");
             ps.setLong(1, id);
             ps.setString(2, dir.getWebSiteId());
@@ -1388,12 +1383,9 @@ public class RepositoryFile {
                 String repemailCOut = rs.getString("rep_emailCheckOut");
 
                 String repxml = rs.getAsciiStream("rep_xml") != null ? SWBUtils.IO.readInputStream(rs.getAsciiStream("rep_xml")) : null;
-                //String repxml = com.infotec.appfw.util.AFUtils.getInstance().readInputStream(rs.getAsciiStream("rep_xml")); //rs.getString("rep_xml");
 
-                ret.append("<tr>");
-                ret.append("<td bgcolor='#FFFFFF' width='150'><font color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgTitle") + ":</font></td>");
-                ret.append("</td>");
-                ret.append("<td>");
+                ret.append("<p><label for=\"infotit\">" + paramsRequest.getLocaleString("msgTitle") + ": </label>");
+
                 if (nivel == 3) {
                     canupdate = true;
                 } else {
@@ -1407,24 +1399,19 @@ public class RepositoryFile {
                 }
 
                 if (canupdate) {
-                    ret.append("<input  type='text' maxlength='99' name='repftitle' value='" + reptitle + "' />");
+                    ret.append("<input  type='text' maxlength='99' name='repftitle' value='" + reptitle + "' id=\"infotit\" />");
                 } else {
-                    ret.append("<font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + reptitle + "</font>");
+                    ret.append(reptitle);
                 }
-                ret.append("</td>");
-                ret.append("</tr>");
+                ret.append("</p>");
 
-                ret.append("<tr>");
-                ret.append("<td bgcolor='#FFFFFF' width='150'><font color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgDescription") + ":</font></td>");
-                ret.append("</td>");
-                ret.append("<td>");
+                ret.append("<p><label for=\"desctit\">" + paramsRequest.getLocaleString("msgDescription") + ": </label>");
                 if (canupdate) {
-                    ret.append("<textarea name='repfdescription' cols='50' rows='3' onKeyDown='textCounter(this.form.repfdescription,255);' onKeyUp='textCounter(this.form.repfdescription,255);'>" + repdescription + "</textarea>");
+                    ret.append("<textarea name='repfdescription' cols='50' rows='3' onKeyDown='textCounter(this.form.repfdescription,255);' onKeyUp='textCounter(this.form.repfdescription,255);' id=\"desctit\" >" + repdescription + "</textarea>");
                 } else {
-                    ret.append("<font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + repdescription + "</font>");
+                    ret.append(repdescription);
                 }
-                ret.append("</td>");
-                ret.append("</tr>");
+                ret.append("</p>");
 
                 PreparedStatement ps2 = con.prepareStatement("select * from resrepositoryversions where rep_docId=? and rep_fileVersion=? and idtm=?");
                 ps2.setLong(1, repdocid);
@@ -1437,18 +1424,10 @@ public class RepositoryFile {
 
                     DateFormat df = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT, Locale.getDefault());
                     date = df.format(new Date(repcreate.getTime()));
-                    ret.append("<tr>");
-                    ret.append("<td bgcolor='#FFFFFF' width='150'><font color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgLastUpdate") + ":</font></td>");
-                    ret.append("</td>");
-                    ret.append("<td>");
-                    ret.append("<font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + date + "</font>");
-                    ret.append("</td>");
-                    ret.append("</tr>");
+                    ret.append("<p><strong>" + paramsRequest.getLocaleString("msgLastUpdate") + ": </strong>");
+                    ret.append( date + "</p>");
 
-                    ret.append("<tr>");
-                    ret.append("<td bgcolor='#FFFFFF' width='150'><font color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgAuthor") + ":</font></td>");
-                    ret.append("</td>");
-                    ret.append("<td>");
+                    ret.append("<p><strong>" + paramsRequest.getLocaleString("msgAuthor") + ": </strong>");
                     if (s_author == null) {
                         s_author = "&nbsp;";
                     } else {
@@ -1469,57 +1448,28 @@ public class RepositoryFile {
                             Repository.log.error("Error on method info class RepositoryFile trying to create new user docId" + ": " + id, e);
                         }
                     }
-                    ret.append("<font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + s_author + "</font>");
-                    ret.append("</td>");
-                    ret.append("</tr>");
+                    ret.append(s_author + "</p>");
 
-                    ret.append("<tr>");
+                    ret.append("<p><strong>" + paramsRequest.getLocaleString("msgCurrentVersion") + ": </strong>");
+                    ret.append("<a href=\"javascript: doShowHistory(" + repdocid + ");\">" + replastversion + "</a></p>");
 
-                    ret.append("<td bgcolor='#FFFFFF' width='150'><font color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgCurrentVersion") + ":</font></td>");
-                    ret.append("</td>");
-                    ret.append("<td>");
-
-                    ret.append("<font size='2' face='Verdana, Arial, Helvetica, sans-serif'><a href=\"javascript: doShowHistory(" + repdocid + ");\">" + replastversion + "</a></font>");
-                    ret.append("</td>");
-                    ret.append("</tr>");
                     //////////////////////////////////////
-                    ret.append("<tr>");
-
-                    ret.append("<td bgcolor='#FFFFFF' width='150'><font color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgFileName") + ":</font></td>");
-                    ret.append("<td>");
-                    ret.append("<font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + rsversions.getString("rep_fileName") + "</font>");
-                    ret.append("</td>");
-                    ret.append("</tr>");
-
+                    ret.append("<p><strong>" + paramsRequest.getLocaleString("msgFileName") + ": </strong>");
+                    ret.append( rsversions.getString("rep_fileName") + "</p>");
                     /////////////////////////////////////
 
+                    ret.append("<p><strong>" + paramsRequest.getLocaleString("msgFileType") + ": </strong>");
+                    ret.append(getFileType(rsversions.getString("rep_fileName")) + "</p>");
 
-                    ret.append("<tr>");
-
-                    ret.append("<td bgcolor='#FFFFFF' width='150'><font color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgFileType") + ":</font></td>");
-                    ret.append("<td>");
-                    ret.append("<font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + getFileType(rsversions.getString("rep_fileName")) + "</font>");
-                    ret.append("</td>");
-                    ret.append("</tr>");
-                    ret.append("<tr>");
-
-                    ret.append("<td bgcolor='#FFFFFF' width='150'><font color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgSize") + ":</font></td>");
-                    ret.append("</td>");
-                    ret.append("<td>");
+                    ret.append("<p><strong>" + paramsRequest.getLocaleString("msgSize") + ": </strong>");
                     int size = rsversions.getInt("rep_fileSize") / 1024;
                     if (size == 0) {
                         size = 1;
                     }
-                    ret.append("<font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + size + "k</font>");
-                    ret.append("</td>");
-                    ret.append("</tr>");
-
+                    ret.append( size + "k</p>");
 
                     if (repstatus == 1 && repemailCOut != null) {
-                        ret.append("<tr>");
-                        ret.append("<td bgcolor='#FFFFFF' width='150'><font color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgReservedBy") + ":</font></td>");
-                        ret.append("</td>");
-                        ret.append("<td>");
+                        ret.append("<p><strong>" + paramsRequest.getLocaleString("msgReservedBy") + ": </strong>");
                         String usercheckout = repemailCOut;
 
                         if (DBUser.getInstance().getUserById(usercheckout) != null) {
@@ -1544,17 +1494,14 @@ public class RepositoryFile {
                         rs3.close();
                         ps3.close();
 
-                        ret.append("<font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + usercheckout + checkOutDate + "</font>");
-                        ret.append("</td>");
-                        ret.append("</tr>");
+                        ret.append(usercheckout + checkOutDate + "</p>");;
                     }
-                    ret.append("<tr>");
-                    ret.append("<td colspan='2' align='center'>");
 
                     if (nivel >= 2 && user.isSigned()) {
 
+                        ret.append("<p class=\"acciones\">");
                         if (repstatus == 0) {
-                            ret.append("<a href=\"javascript: doCheckout(" + i_log + "," + repdocid + ");\"><img src='" + path + "out.gif' height='14' width='25' alt='" + paramsRequest.getLocaleString("msgCOut") + "' border='0' />");
+                            ret.append("<a class=\"out\" href=\"javascript: doCheckout(" + i_log + "," + repdocid + ");\"><span>out</span></a>");
                         } else {
                             boolean cancheckin = false;
                             PreparedStatement psuser = con.prepareStatement("select rep_emailCheckOut from resrepository where rep_docId=? and idtm=?");
@@ -1577,13 +1524,13 @@ public class RepositoryFile {
                             psuser = null;
 
                             if (cancheckin) {
-                                ret.append("<a href=\"javascript: doCheckin(" + i_log + "," + repdocid + ");\"><img src='" + path + "in.gif' alt='" + paramsRequest.getLocaleString("msgCIn") + "' height='14' width='25' border='0' /></a>");
-                                ret.append("&nbsp;<a href=\"javascript: doUndocheckout(" + i_log + "," + repdocid + ");\"><img src='" + path + "undo.gif' alt='" + paramsRequest.getLocaleString("msgUndoCOut") + "' height='14' width='45' border='0' /></a>");
+                                ret.append("<a  class=\"in\" href=\"javascript: doCheckin(" + i_log + "," + repdocid + ");\"><span>in</span></a>");
+                                ret.append("&nbsp;<a  class=\"undo\" href=\"javascript: doUndocheckout(" + i_log + "," + repdocid + ");\"><span>undo</span></a>");
                             } else {
                                 if (nivel == 3) {
-                                    ret.append("<a href=\"javascript: doUndocheckout(" + i_log + "," + repdocid + ");\"><img src='" + path + "undo.gif' alt='" + paramsRequest.getLocaleString("msgUndoCOut") + "' height='14' width='45' border='0'></a>");
+                                    ret.append("<a class=\"undo\" href=\"javascript: doUndocheckout(" + i_log + "," + repdocid + ");\"><span>undo</span></a>");
                                 } else {
-                                    ret.append("<img src='" + path + paramsRequest.getLocaleString("img_Reserved") + ".gif' alt='" + paramsRequest.getLocaleString("msgReserved") + "' border='0'>");
+                                    ret.append("<a href=\"#\" class=\"reser\"><span>" + paramsRequest.getLocaleString("msgReserved") + "</span></a>");
                                 }
                             }
                         }
@@ -1592,9 +1539,9 @@ public class RepositoryFile {
                         if (!subcriptions.contains(new Long(0))) { //dir
 
                             if (!subcriptions.contains(new Long(repdocid))) {
-                                ret.append("<a href=\"javascript: doSuscribeDoc(" + i_log + "," + repdocid + ");\"><img src='" + path + "suscribe.gif' alt='" + paramsRequest.getLocaleString("msgSuscribe") + "' border='0'></a>");
+                                ret.append("<a class=\"suscribir\" href=\"javascript: doSuscribeDoc(" + i_log + "," + repdocid + ");\"><span>" + paramsRequest.getLocaleString("msgSuscribe") + "</span></a>");
                             } else {
-                                ret.append("<a href=\"javascript: doUnsuscribeDoc(" + i_log + "," + repdocid + ");\"><img src='" + path + "unsuscribe.gif' alt='" + paramsRequest.getLocaleString("msgUnSuscribe") + "' border='0'></a>");
+                                ret.append("<a  class=\"nosuscribir\" href=\"javascript: doUnsuscribeDoc(" + i_log + "," + repdocid + ");\"><span>" + paramsRequest.getLocaleString("msgUnSuscribe") + "</span></a>");
                             }
                         }
                     }
@@ -1619,9 +1566,9 @@ public class RepositoryFile {
                     if (candelete && user.isSigned()) {
                         if (repstatus == 0) {
                             if (resource.getAttribute("showdirectory", "true").equals("true")) {
-                                ret.append("<a href=\"javascript: doMoveDocDir(" + i_log + "," + repdocid + ");\"><img src='" + path + "folder.gif' alt='" + paramsRequest.getLocaleString("msgALTMove") + "' border='0'></a>");
+                                ret.append("<a class=\"mover\" href=\"javascript: doMoveDocDir(" + i_log + "," + repdocid + ");\"><span>" + paramsRequest.getLocaleString("msgALTMove") + "</span></a>");
                             }
-                            ret.append("<a href=\"javascript: doDelete(" + i_log + "," + repdocid + ");\"><img src='" + path + "delete.gif' alt='" + paramsRequest.getLocaleString("msgAltDelete") + "' border='0'></a>");
+                            ret.append("<a class=\"eliminar\" href=\"javascript: doDelete(" + i_log + "," + repdocid + ");\"><span>" + paramsRequest.getLocaleString("msgAltDelete") + "</span></a>");
                         }
                     }
                     if (nivel >= 1) {
@@ -1646,38 +1593,33 @@ public class RepositoryFile {
                             tmp = 1;
                         }
                         if (inline) {
-                            ret.append("<a href=\"javascript: doViewInLine(" + tmp + "," + repdocid + ");\"><img src='" + path + "preview.gif' alt='" + paramsRequest.getLocaleString("msgAltPreview") + "' border='0'></a>");
+                            ret.append("<a class=\"ver\" href=\"javascript: doViewInLine(" + tmp + "," + repdocid + ");\"><span>" + paramsRequest.getLocaleString("msgAltPreview") + "</span></a>");
                         } else {
-                            ret.append("<a href=\"javascript: doView(" + tmp + "," + repdocid + ");\"><img src='" + path + "preview.gif' alt='" + paramsRequest.getLocaleString("msgAltPreview") + "' border='0'></a>");
+                            ret.append("<a class=\"ver\" href=\"javascript: doView(" + tmp + "," + repdocid + ");\"><span>" + paramsRequest.getLocaleString("msgAltPreview") + "</span></a>");
                         }
                     }
-                    ret.append("</td>");
-                    ret.append("</tr>");
+                    ret.append("</p>");
 
-                    ret.append("<tr>");
-                    ret.append("<td colspan='2'>");
-                    ret.append("<img width=\"100%\" src=\"" + path + "line.gif\" height=5>");
-                    ret.append("</td>");
-                    ret.append("</tr>");
-                    ret.append("<tr>");
-                    ret.append("<td colspan='2' align='center'>");
+                    ret.append("<p class=\"botones\">");
                     if (canupdate && user.isSigned()) {
-                        ret.append("<input  type='button' name='s' value='" + paramsRequest.getLocaleString("msgBTNSubmit") + "' onClick='javascript:valida(" + i_log + ")' />&nbsp;&nbsp;&nbsp;");
+                        ret.append("<input  class=\"aceptar\" type='button' name='s' value='" + paramsRequest.getLocaleString("msgBTNSubmit") + "' onClick='javascript:valida(" + i_log + ")' />&nbsp;");
                     }
-                    ret.append("<input  type='button' name='n' value='" + paramsRequest.getLocaleString("msgBTNViewAllFiles") + "' onClick='javascript:init()' />&nbsp;&nbsp;&nbsp;");
+                    ret.append("<input  class=\"aceptar\" type='button' name='n' value='" + paramsRequest.getLocaleString("msgBTNViewAllFiles") + "' onClick='javascript:init()' />&nbsp;");
                     if (canupdate && user.isSigned()) {
-                        ret.append("<input  type='button' name='c' value='" + paramsRequest.getLocaleString("msgBTNCancel") + "' onClick='javascript:init()'>");
+                        ret.append("<input  class=\"cancelar\" type='button' name='c' value='" + paramsRequest.getLocaleString("msgBTNCancel") + "' onClick='javascript:init()'>");
                     }
-                    ret.append("</td>");
-                    ret.append("</tr>");
+                    ret.append("</p>");
+
                 }
             }
             ps.close();
 
-            ret.append("</table>");
             if (user.isSigned()) {
                 ret.append("</form>");
             }
+            
+            ret.append("\n</div>");
+            
             ret.append("<script type='text/javascript'>\r\n");
             ret.append("function textCounter(field,  maxlimit) {\r\n");
             ret.append("if (field.value.length > maxlimit)\r\n");
@@ -1770,7 +1712,9 @@ public class RepositoryFile {
         //i_log = 1;
         try {
             String topicid = dir != null ? dir.getId() : "";
-            con = SWBUtils.DB.getDefaultConnection();
+            String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+            con = SWBUtils.DB.getConnection(tmp_conn, "RepositoryFile.showFiles()");
+            
             s_sql = "select * from resrepository where idtm=? and topic=? and resId=? and rep_deleted = 0";
             // Display results sorted by title or date
             if (request.getParameter("repordid") != null) {
@@ -1958,7 +1902,7 @@ public class RepositoryFile {
             ret.append("\n  }");
             ret.append("\n</script>");
 
-            ret.append("\n<form name=\"frmparameter\" method=\"post\" action=\"" + url.toString() + "\">");
+            ret.append("\n<form class=\"oculto\" name=\"frmparameter\" method=\"post\" action=\"" + url.toString() + "\">");
 
             ret.append("\n<input type=\"hidden\" name=\"repfop\" value=\"\">");
             ret.append("\n<input type=\"hidden\" name=\"reptp\" value=\"\">");
@@ -2352,37 +2296,44 @@ public class RepositoryFile {
             id = Long.parseLong(request.getParameter("repfiddoc"));
             String topicid = dir.getId();
 
-            con = SWBUtils.DB.getDefaultConnection();
+            String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+            con = SWBUtils.DB.getConnection(tmp_conn, "RepositoryFile.history()");
+            
             ps = con.prepareStatement("select * from resrepositoryversions where rep_docId=? and idtm=?");
             ps.setLong(1, id);
             ps.setString(2, dir.getWebSiteId());
             ResultSet rs = ps.executeQuery();
 
+            int numcols=7;
             String tp = dir.getId();
-            ret.append("\n<table width='100%'  border='0' cellspacing='0' cellpadding='1'>");
+            ret.append("\n<div id=\"file\">");
+            ret.append("\n<table>");
+            ret.append("\n<caption>");
+            ret.append("\n<span>" + dir.getDisplayName() + "</span>");
+            ret.append("\n</caption>");
+             ret.append("\n<thead>");
             ret.append("\n<tr>");
-            ret.append("\n<td colspan='10'><img src='" + path + "openfolder.gif' width='20' height='20'> <B><font face='Verdana, Arial, Helvetica, sans-serif' size=\"2\">" + dir.getDisplayName() + "</font></B></td>");
-            ret.append("</tr>");
-            ret.append("\n<tr bgcolor='#589942'>");
-            ret.append("\n<td width='20'><font color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>&nbsp;</font></td>");
-            ret.append("\n<td width='55'><font color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgVersion") + "</font></td>");
-            ret.append("\n<td><font color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgAuthor") + "</font></td>");
-            ret.append("\n<td width='90'><font color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgComments") + "</font></td>");
-            ret.append("\n<td width='100'><font color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgFileName") + "</font></td>");
-            ret.append("\n<td width='100'><font color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgLastUpdate") + "</font></td>");
-            ret.append("\n<td width='55'><font color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgSize") + "</font></td>");
+            ret.append("\n<th class=\"accion\">&nbsp;</th>");
+            ret.append("\n<th class=\"info\">" + paramsRequest.getLocaleString("msgVersion") + "</th>");
+            ret.append("\n<th class=\"info\">" + paramsRequest.getLocaleString("msgAuthor") + "</th>");
+            ret.append("\n<th class=\"info\">" + paramsRequest.getLocaleString("msgComments") + "</th>");
+            ret.append("\n<th class=\"archivo\">" + paramsRequest.getLocaleString("msgFileName") + "</th>");
+            ret.append("\n<th class=\"fecha\">" + paramsRequest.getLocaleString("msgLastUpdate") + "</th>");
+            ret.append("\n<th class=\"info\">" + paramsRequest.getLocaleString("msgSize") + "</th>");
             if (nivel >= 1) {
-                ret.append("\n<td width='55' align='center'><font color='#FFFFFF' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgView") + "</font></td>");
+                ret.append("\n<th class=\"accion\">" + paramsRequest.getLocaleString("msgView") + "</th>");
+                numcols=8;
             }
             ret.append("\n</tr>");
-            ret.append("\n<tr><td colspan='10'><img src='" + path + "line.gif' width='100%' height='5' /></td></tr>");
+            ret.append("\n</thead>");
+            ret.append("\n<tbody>");
 
             while (rs.next()) {
                 file = "file.gif";
 
                 String repemail = rs.getString("rep_email");
-
-                if (rs.getString("rep_fileType") != null) {
+                String reptype = rs.getString("rep_fileType");
+                if (reptype != null) {
                     type = rs.getString("rep_fileName");
                     file = this.getFileName(type);
                 }
@@ -2406,27 +2357,27 @@ public class RepositoryFile {
                 SWBResourceURL urlrecdoc = paramsRequest.getRenderUrl();
                 urlrecdoc.setCallMethod(urlrecdoc.Call_DIRECT);
                 ret.append("\n<tr>");
-                ret.append("\n<td width='20'><a href='" + urlrecdoc.toString() + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + rs.getString("rep_docId") + "&repfversion=" + rs.getString("rep_fileVersion") + "'><img src='" + path + "" + file + "' border='0' /></a></td>");
-                ret.append("\n<td align='center' width='55'><font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + rs.getString("rep_fileVersion") + "</font></td>");
-                ret.append("\n<td width='55'><font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + s_author + "</font></td>");
-                ret.append("\n<td width='55'><font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + rs.getString("rep_comment") + "</font></td>");
-                ret.append("\n<td width='55'><font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + rs.getString("rep_fileName") + "</font></td>");
+                ret.append("\n<td class=\"archivo\"><a class=\""+getFileStyleClass(type)+"\" href='" + urlrecdoc.toString() + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + rs.getString("rep_docId") + "&repfversion=" + rs.getString("rep_fileVersion") + "'><span>&nbsp;</span></a></td>");
+                ret.append("\n<td class=\"archivo\"><span>" + rs.getString("rep_fileVersion") + "</span></td>");
+                ret.append("\n<td class=\"archivo\"><span>" + s_author + "</span></td>");
+                ret.append("\n<td class=\"archivo\"><span>" + rs.getString("rep_comment") + "</span></td>");
+                ret.append("\n<td class=\"archivo\"><span>" + rs.getString("rep_fileName") + "</span></td>");
                 Timestamp repcreate = rs.getTimestamp("rep_create");
                 date = repcreate.toString();
                 DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, new java.util.Locale("es"));
                 date = df.format(new Date(repcreate.getTime()));
 
-                ret.append("\n<td width='55'><font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + date + "</font></td>");
+                ret.append("\n<td class=\"fecha\">" + date + "</td>");
 
 
                 int size = rs.getInt("rep_fileSize") / 1024;
                 if (size == 0) {
                     size = 1;
                 }
-                ret.append("\n<td width='55'><font size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + size + " Kb</font></td>");
+                ret.append("\n<td class=\"archivo\"><span>" + size + " Kb</span></td>");
 
                 if (nivel >= 1) {
-                    ret.append("<td width='55' align='center'>");
+                    ret.append("<td class=\"accion\">");
                     boolean inline = false;
                     if (rs.getString("rep_fileType") != null) {
                         for (int i = 0; i < values.length; i++) {
@@ -2444,21 +2395,26 @@ public class RepositoryFile {
                     if (inline) {
                         SWBResourceURL urlrec = paramsRequest.getRenderUrl();
                         urlrec.setCallMethod(urlrec.Call_DIRECT);
-                        ret.append("\n<a target='_new' href='" + urlrec.toString() + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + rs.getString("rep_docId") + "&repfversion=" + rs.getString("rep_fileVersion") + "&repinline=true'><img src='" + path + "preview.gif' alt='" + paramsRequest.getLocaleString("msgALTPreview") + "' border='0' /></a>");
+                        ret.append("\n<a class=\"ver\" target='_new' href='" + urlrec.toString() + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + rs.getString("rep_docId") + "&repfversion=" + rs.getString("rep_fileVersion") + "&repinline=true' title='" + paramsRequest.getLocaleString("msgALTPreview") + "'><span>" + paramsRequest.getLocaleString("msgALTPreview") + "</span></a>");
                     } else {
                         SWBResourceURL urlrec = paramsRequest.getRenderUrl();
                         urlrec.setCallMethod(urlrec.Call_DIRECT);
-                        ret.append("\n<a href='" + urlrec.toString() + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + rs.getString("rep_docId") + "&repfversion=" + rs.getString("rep_fileVersion") + "'><img src='" + path + "preview.gif' alt='" + paramsRequest.getLocaleString("msgALTPreview") + "' border='0' /></a>");
+                        ret.append("\n<a class=\"ver\" href='" + urlrec.toString() + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + rs.getString("rep_docId") + "&repfversion=" + rs.getString("rep_fileVersion") + "' title='" + paramsRequest.getLocaleString("msgALTPreview") + "'><span>" + paramsRequest.getLocaleString("msgALTPreview") + "</span></a>");
                     }
                     ret.append("\n</td>");
                 }
                 ret.append("\n</tr>");
-                ret.append("\n<tr><td colspan='10'><img src='" + path + "line.gif' width='100%' height='5' /></td></tr>");
+                
             }
+            
             rs.close();
             ps.close();
-            ret.append("\n<tr><td colspan='10' align='center'><input  type='button' name='n' value='" + paramsRequest.getLocaleString("msgBTNViewAllFiles") + "' onClick='javascript:init()' /></td></tr>");
+             ret.append("\n</tbody>");
             ret.append("\n</table>");
+            
+            ret.append("\n<p class=\"botones\"><input  class=\"aceptar\" type='button' name='n' value='" + paramsRequest.getLocaleString("msgBTNViewAllFiles") + "' onClick='javascript:init()' /></p>");
+           
+            ret.append("\n</div>");
             ret.append("<script type='text/javascript'>\r\n");
             ret.append("function textCounter(field,  maxlimit) {\r\n");
             ret.append("if (field.value.length > maxlimit)\r\n");
@@ -2529,7 +2485,9 @@ public class RepositoryFile {
             }
             byte[] bcont = fup.getFileData("repfdoc");
 
-            con = SWBUtils.DB.getDefaultConnection();
+            String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+            con = SWBUtils.DB.getConnection(tmp_conn, "RepositoryFile.insert()");
+            
             if (con == null) {
                 return ret.toString();
             }
@@ -2685,49 +2643,30 @@ public class RepositoryFile {
         if (nivel < 2) {
             return "";
         }
+        
+        ret.append("\n<p>Subir archivo a " + dir.getDisplayName() + "</p>");
+        ret.append("\n<div id=\"agregar\">");
+        ret.append("\n");
         ret.append("\n<form name='frmnewdoc' method='POST' enctype='multipart/form-data' action='" + url.toString() + "'>");
         ret.append("\n<input type='hidden' name='repfop' value='insert'>");
-        ret.append("\n<table width='100%'  border='0' cellspacing='0' cellpadding='1'>");
-        ret.append("\n<tr>");
-        ret.append("\n<td colspan='2'><img src='" + path + "openfolder.gif' width='20' height='20' /> <B><font face='Verdana, Arial, Helvetica, sans-serif' size=\"2\">" + dir.getDisplayName() + "</font></B></td>");
-        ret.append("\n</tr>");
-        ret.append("\n<tr>");
-        ret.append("\n<td colspan='10'><img src='" + path + "line.gif' width='100%' height='5' /></td>");
-        ret.append("\n</tr>");
-        ret.append("\n<tr>");
-        ret.append("\n<td width=\"200\">");
-        ret.append("\n<font face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgTitleDocument") + "</font>");
-        ret.append("\n</td>");
-        ret.append("\n<td>");
-        ret.append("\n<input  type='text' maxlength='99' name='repftitle' />");
-        ret.append("\n</td>");
-        ret.append("\n</tr>");
-        ret.append("\n<tr>");
-        ret.append("\n<td width=\"200\">");
-        ret.append("\n<font face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgDescription") + "</font>");
-        ret.append("\n</td>");
-        ret.append("\n<td>");
-        ret.append("\n<textarea rows='5' name='repfdescription' cols='20' onKeyDown='textCounter(this.form.repfdescription,255);' onKeyUp='textCounter(this.form.repfdescription,255);'></textarea>");
-        ret.append("\n</td>");
-        ret.append("\n</tr>");
-        ret.append("\n<tr>");
-        ret.append("\n<td width=\"200\">");
-        ret.append("\n<font face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgFile") + "</font>");
-        ret.append("\n</td>");
-        ret.append("\n<td>");
-        ret.append("\n<input type='file'  name='repfdoc' />");
-        ret.append("\n</td>");
-        ret.append("\n</tr>");
-        ret.append("\n<tr>");
-        ret.append("\n<td colspan='2'><img src='" + path + "line.gif' width='100%' height='5' /></td>");
-        ret.append("\n</tr>");
-        ret.append("\n<tr>");
-        ret.append("\n<td colspan='2' align='center'>");
-        ret.append("\n<input type='button'  name='s' value='" + paramsRequest.getLocaleString("msgBTNSave") + "' onclick='javascript:valida();' />\r\n");
-        ret.append("\n<input type='button'  name='cancel' value='" + paramsRequest.getLocaleString("msgBTNCancel") + "' onclick='javascript:init();' />\r\n");
-        ret.append("\n</td>");
-        ret.append("\n</tr>");
-        ret.append("\n</table>");
+        
+        ret.append("\n<p><label for=\"agregatit\">" + paramsRequest.getLocaleString("msgTitleDocument") + ": </label>");
+        ret.append("\n<input  type='text' maxlength='99' name='repftitle' id=\"agregatit\" />");
+        ret.append("\n</p>");
+
+        ret.append("\n<p><label for=\"agregades\">" + paramsRequest.getLocaleString("msgDescription") + ": </label>");
+        ret.append("\n<textarea id=\"agregades\" rows='5' name='repfdescription' cols='20' onKeyDown='textCounter(this.form.repfdescription,255);' onKeyUp='textCounter(this.form.repfdescription,255);'></textarea>");
+        ret.append("\n</p>");
+
+        ret.append("\n<p><label for=\"agregafile\">Archivo:</label>" + paramsRequest.getLocaleString("msgFile") + ": </label>");
+        ret.append("\n<input type='file'  name='repfdoc' id=\"agregafile\" />");
+        ret.append("\n</p>");
+
+        ret.append("\n<p class=\"botones\">");
+        ret.append("\n<input class=\"aceptar\" type='button'  name='s' value='" + paramsRequest.getLocaleString("msgBTNSave") + "' onclick='javascript:valida();' />\r\n");
+        ret.append("\n<input class=\"cancelar\"  type='button'  name='cancel' value='" + paramsRequest.getLocaleString("msgBTNCancel") + "' onclick='javascript:init();' />\r\n");
+        ret.append("\n</p>");
+
         ret.append("\n</form>");
         ret.append("<script type='text/javascript'>\r\n");
         ret.append("function init(){\r\n");
@@ -2786,7 +2725,9 @@ public class RepositoryFile {
         String str_topicmapid = null;
         String str_topicid = null;
         try {
-            con = SWBUtils.DB.getDefaultConnection();
+            String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+            con = SWBUtils.DB.getConnection(tmp_conn, "RepositoryFile.saveLog()");
+            
             if (p_isfile == 1) {
                 ps = con.prepareStatement("select rep_title from resrepository where rep_docId=? and idtm=?");
                 ps.setLong(1, p_fileid);
@@ -2848,7 +2789,8 @@ public class RepositoryFile {
         PreparedStatement ps = null;
         if (!fromDir.getId().equals(toDir.getId())) {
             try {
-                conn = SWBUtils.DB.getDefaultConnection();
+                String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+                conn = SWBUtils.DB.getConnection(tmp_conn, "RepositoryFile.moveDoc2Dir()");
                 ps = conn.prepareStatement("update resrepository set topic=? where rep_docId=? and topic=? and idtm=?");
                 ps.setString(1, toDir.getId());
                 ps.setLong(2, id);

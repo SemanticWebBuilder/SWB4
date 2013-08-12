@@ -351,7 +351,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                         urlTopic.setMode(paramsRequest.Mode_VIEW);
 
                         // forma que se utiliza para cuando se quiere cambiar un archivo a un directorio diferente.
-                        ret.append("\n<form action=\"" + urlTopic.toString() + "\" method=post name=\"frmMoveDoc\">");
+                        ret.append("\n<form class=\"oculto\" action=\"" + urlTopic.toString() + "\" method=post name=\"frmMoveDoc\">");
                         ret.append("\n<input type=hidden name=\"repfop\" value=\"\">");
                         ret.append("\n<input type=hidden name=\"reptp_original\" value=\"\">");
                         ret.append("\n<input type=hidden name=\"reptp\" value=\"\">");
@@ -359,7 +359,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                         ret.append("\n<input type=hidden name=\"repiddoc\" value=\"\">");
                         ret.append("\n</form>");
 
-                        ret.append("\n<form name=\"frmadmtopic\" method=\"post\" action=\"" + urlTopic.toString() + "\">");
+                        ret.append("\n<form class=\"oculto\" name=\"frmadmtopic\" method=\"post\" action=\"" + urlTopic.toString() + "\">");
                         ret.append("\n<input type=\"hidden\" name=\"reptp\" value=\"\">");
                         ret.append("\n<input type=\"hidden\" name=\"repacc\" value=\"\">");
                         ret.append("\n<input type=\"hidden\" name=\"repobj\" value=\"\">");
@@ -993,7 +993,10 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                 while (itetopics.hasNext()) {
                     WebPage tpIter = itetopics.next();
                     try {
-                        conn = SWBUtils.DB.getDefaultConnection();
+                        
+                        tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+                        conn = SWBUtils.DB.getConnection(tmp_conn, "Repository.doAdmin() -- remove --");
+
                         String sql = "delete from resrepository where idtm=? and topic = ?";
                         pst = conn.prepareStatement(sql);
                         pst.setString(1, strTMId);
@@ -1406,10 +1409,10 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                     urlEdit.setMode(paramsRequest.Mode_ADMIN);
                     urlEdit.setAction("edit");
 
-                    out.println("<form name=\"frmredir\" action=\"" + urlEdit.toString() + "\" method=\"post\">");
+                    out.println("<form class=\"oculto\" name=\"frmredir\" action=\"" + urlEdit.toString() + "\" method=\"post\">");
                     out.println("<input type=\"hidden\" name=\"tm\" value=\"" + strTopicMap + "\"><input type=\"hidden\" name=\"topic\" value=\"" + strTopic + "\">");
                     out.println("</form>");
-                    out.println("<form name=\"frmrestore\" action=\"" + urlShowOld.toString() + "\" method=\"post\">");
+                    out.println("<form class=\"oculto\" name=\"frmrestore\" action=\"" + urlShowOld.toString() + "\" method=\"post\">");
                     out.println("<input type=\"hidden\" name=\"tm\" value=\"" + strTopicMap + "\"><input type=\"hidden\" name=\"topic\" value=\"" + strTopic + "\"><input type=\"hidden\" name=\"docid\" value=\"\"><input type=\"hidden\" name=\"resdir\" value=\"\">");
                     out.println("<input type=\"hidden\" name=\"idSub\" value=\"\">");
                     out.println("</form>");
@@ -1633,7 +1636,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                 out.println("      return true;");
                 out.println("  }");
                 out.println("</script>");
-                out.println("<form action=\"\" name=\"frmold\" method=POST>");
+                out.println("<form class=\"oculto\" action=\"\" name=\"frmold\" method=POST>");
                 out.println("<input type=\"hidden\" name=\"tm\" value=\"" + strTopicMap + "\"><input type=\"hidden\" name=\"topic\" value=\"" + strTopic + "\">");
                 out.println("</form>");
 
@@ -1929,7 +1932,10 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
         ResultSet rs = null;
         ResultSet rs1 = null;
         try {
-            conn = SWBUtils.DB.getDefaultConnection();
+            
+            String tmp_conn = SWBPlatform.getEnv("wb/db/nameconn", "wb");
+            conn = SWBUtils.DB.getConnection(tmp_conn, "Repository.doIndex()");
+
             pst = conn.prepareStatement("select topic,rep_title,rep_description,rep_docId,rep_lastVersion from resrepository where resId=? and idtm=?");
             pst.setString(1, resid);
             pst.setString(2, idtm);
