@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.StringTokenizer;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +33,7 @@ import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.PhotoIn;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.PostOut;
+import org.semanticwb.social.Prepositions;
 import org.semanticwb.social.SentimentalLearningPhrase;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
@@ -1021,47 +1023,55 @@ public class StreamInBox extends GenericResource {
             PostIn post=(PostIn)semObj.createGenericInstance();
             Stream stOld=post.getPostInStream();
             try {
-                String[] phrases = request.getParameter("fw").split(";");
-                ///System.out.println("Entra a processA/reValue-2:"+phrases);
-                int nv = Integer.parseInt(request.getParameter("nv"));
-                //System.out.println("Entra a processA/reValue-3:"+nv);
-                int dpth = Integer.parseInt(request.getParameter("dpth"));
-                //System.out.println("Entra a processA/reValue-4:"+dpth);
-                SentimentalLearningPhrase slp;
-                for (String phrase : phrases) {
-                    phrase = phrase.toLowerCase().trim();
-                    //System.out.println("Entra a processA/reValue-4.1:"+phrase);
-                    phrase = SWBSocialUtil.Classifier.normalizer(phrase).getNormalizedPhrase();
-                    //System.out.println("Entra a processA/reValue-4.2--J:"+phrase);
-                    phrase = SWBSocialUtil.Classifier.getRootPhrase(phrase);
-                    //System.out.println("Entra a processA/reValue-4.3--J:"+phrase);
-                    phrase = SWBSocialUtil.Classifier.phonematize(phrase);
-                    //System.out.println("Entra a processA/reValue-4.4:"+phrase);
-                    //Se Buscan y se crean las frases de aprendizaje del sistema en el sitio de Admin, para que el sistema aprenda independientemente del
-                    //sitio, así también si se elimina un sitio, las palabras aprendidas por el sistema para el clasificador, aun siguen sirviendo para los demas
-                    //sitios.
-                    slp = SentimentalLearningPhrase.getSentimentalLearningPhrasebyPhrase(phrase, SWBContext.getAdminWebSite());    
-                    if (slp == null) {
-                        //System.out.println("Entra a processA/reValue-5:"+phrase);
+                String inputTextValue=request.getParameter("fw");
+                
+                if(inputTextValue!=null)
+                {
+                    //System.out.println("Text Completo:"+inputTextValue);
+                    inputTextValue=SWBSocialUtil.Util.removePrepositions(inputTextValue);
+                    //System.out.println("Text Sin Prepo:"+inputTextValue);
+                    
+                    String[] phrases = inputTextValue.split(";");
+                    ///System.out.println("Entra a processA/reValue-2:"+phrases);
+                    int nv = Integer.parseInt(request.getParameter("nv"));
+                    //System.out.println("Entra a processA/reValue-3:"+nv);
+                    int dpth = Integer.parseInt(request.getParameter("dpth"));
+                    //System.out.println("Entra a processA/reValue-4:"+dpth);
+                    SentimentalLearningPhrase slp;
+                    for (String phrase : phrases) {
+                        phrase = phrase.toLowerCase().trim();
+                        //System.out.println("Entra a processA/reValue-4.1:"+phrase);
                         phrase = SWBSocialUtil.Classifier.normalizer(phrase).getNormalizedPhrase();
+                        //System.out.println("Entra a processA/reValue-4.2--J:"+phrase);
                         phrase = SWBSocialUtil.Classifier.getRootPhrase(phrase);
+                        //System.out.println("Entra a processA/reValue-4.3--J:"+phrase);
                         phrase = SWBSocialUtil.Classifier.phonematize(phrase);
-                        slp = SentimentalLearningPhrase.ClassMgr.createSentimentalLearningPhrase(SWBContext.getAdminWebSite());
-                        //System.out.println("Entra a processA/reValue-5-1:"+phrase);
-                        slp.setPhrase(phrase);
-                        slp.setSentimentType(nv);
-                        slp.setIntensityType(dpth);
-                    } else {
-                        //System.out.println("Entra a processA/reValue-6:"+slp);
-                        slp.setSentimentType(nv);
-                        slp.setIntensityType(dpth);
+                        //System.out.println("Entra a processA/reValue-4.4:"+phrase);
+                        //Se Buscan y se crean las frases de aprendizaje del sistema en el sitio de Admin, para que el sistema aprenda independientemente del
+                        //sitio, así también si se elimina un sitio, las palabras aprendidas por el sistema para el clasificador, aun siguen sirviendo para los demas
+                        //sitios.
+                        slp = SentimentalLearningPhrase.getSentimentalLearningPhrasebyPhrase(phrase, SWBContext.getAdminWebSite());    
+                        if (slp == null) {
+                            //phrase = SWBSocialUtil.Classifier.normalizer(phrase).getNormalizedPhrase();
+                            //phrase = SWBSocialUtil.Classifier.getRootPhrase(phrase);
+                            //phrase = SWBSocialUtil.Classifier.phonematize(phrase);
+                            slp = SentimentalLearningPhrase.ClassMgr.createSentimentalLearningPhrase(SWBContext.getAdminWebSite());
+                            //System.out.println("Guarda Frase J:"+phrase);
+                            slp.setPhrase(phrase);
+                            slp.setSentimentType(nv);
+                            slp.setIntensityType(dpth);
+                        } else {
+                            //System.out.println("Modifica Frase:"+slp);
+                            slp.setSentimentType(nv);
+                            slp.setIntensityType(dpth);
+                        }
                     }
-                }
-                response.setMode(SWBActionResponse.Mode_EDIT);
-                response.setRenderParameter("dialog","close");
-                response.setRenderParameter("statusMsg", response.getLocaleString("phrasesAdded"));
-                //response.setRenderParameter("reloadTap","1");
-                response.setRenderParameter("suri", stOld.getURI());
+                    response.setMode(SWBActionResponse.Mode_EDIT);
+                    response.setRenderParameter("dialog","close");
+                    response.setRenderParameter("statusMsg", response.getLocaleString("phrasesAdded"));
+                    //response.setRenderParameter("reloadTap","1");
+                    response.setRenderParameter("suri", stOld.getURI());
+            }
             } catch (Exception e) {
                 log.error(e);
             }
