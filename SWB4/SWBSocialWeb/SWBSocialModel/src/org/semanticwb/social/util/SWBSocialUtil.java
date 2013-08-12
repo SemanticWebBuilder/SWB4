@@ -601,12 +601,12 @@ public class SWBSocialUtil implements SWBAppObject {
                 //word2Find=SWBSocialUtil.Classifier.getRootWord(word2Find);
                 //Se fonematiza la palabra
                 //word2Find=SWBSocialUtil.Classifier.phonematize(word2Find);
-                //System.out.println("word Fonematizada:"+word2Find);
+                System.out.println("word Fonematizada:"+word2Find);
                 //SentimentWords sentimentalWordObj=SentimentWords.getSentimentalWordByWord(model, word2Find);
                 SentimentWords sentimentalWordObj=SentimentWords.ClassMgr.getSentimentWords(word2Find, socialAdminSite);
                 if(sentimentalWordObj!=null) //La palabra en cuestion ha sido encontrada en la BD
                 {
-                    //System.out.println("Palabra Encontrada:"+word2Find);
+                    System.out.println("Palabra Encontrada:"+word2Find);
                     wordsCont++;
                     IntensiveTweetValue+=sentimentalWordObj.getIntensityValue();
                     //Veo si la palabra cuenta con mas de dos caracteres(Normalmente el inicial de la palabra y talvez otro que
@@ -696,7 +696,7 @@ public class SWBSocialUtil implements SWBAppObject {
            while(itSntPhases.hasNext())
            {
                SentimentalLearningPhrase sntLPhrase=itSntPhases.next();
-               //System.out.println("Frase Learn:"+sntLPhrase.getPhrase());
+               System.out.println("Frase Learn:"+sntLPhrase.getPhrase());
                HashMap hmap=new HashMap();
                hmap.put("text", text);
                hmap.put("contOcurr", 0);
@@ -705,7 +705,7 @@ public class SWBSocialUtil implements SWBAppObject {
                text=(String)hmap.get("text");
                int contOcurr=((Integer)hmap.get("contOcurr")).intValue();
                //int contOcurr=findOccurrencesNumber(text, sntLPhrase.getPhrase(), 0);
-               //System.out.println("sntLPhrase:"+sntLPhrase.getPhrase()+",contOcurrJorge:"+contOcurr);
+               System.out.println("sntLPhrase:"+sntLPhrase.getPhrase()+",contOcurrJorge:"+contOcurr+", text:"+text);
                if(contOcurr>0)
                {
                    if(sntLPhrase.getSentimentType()==1) //la frase es positiva
@@ -1001,6 +1001,34 @@ public class SWBSocialUtil implements SWBAppObject {
     
     
     public static class Util {
+        
+        /**
+         * Metodo que elimina las preposiciones encontradas en un String
+         * @param text String en el que se buscaran y eliminaran preposiciones
+         * @return String sin preposiciones
+         */
+        public static String removePrepositions(String text)
+        {
+            boolean firstTime=true;
+            String text2Return="";
+            StringTokenizer st = new StringTokenizer(text);
+            while (st.hasMoreTokens())
+            {
+                String word2Find=st.nextToken();
+                if(Prepositions.ClassMgr.getPrepositions(word2Find, SWBContext.getAdminWebSite())!=null) //Elimino preposiciones
+                {
+                    continue;
+                }
+                if(firstTime)
+                {
+                    text2Return+=word2Find;
+                    firstTime=false;
+                }else{
+                    text2Return+=" "+word2Find;
+                }
+            }
+            return text2Return;
+        }
         
         
         /**

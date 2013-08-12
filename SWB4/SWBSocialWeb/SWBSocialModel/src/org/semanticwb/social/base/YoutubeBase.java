@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social YouTube. 
    */
-public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Activeable,org.semanticwb.social.SocialMonitorable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Tagable,org.semanticwb.model.Trashable,org.semanticwb.social.Secreteable,org.semanticwb.social.Oauthable,org.semanticwb.social.DeveloperKeyable,org.semanticwb.social.Listenerable,org.semanticwb.social.Videoable,org.semanticwb.model.Traceable,org.semanticwb.social.SocialNetPostable
+public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Videoable,org.semanticwb.social.SocialNetPostable,org.semanticwb.model.Trashable,org.semanticwb.social.DeveloperKeyable,org.semanticwb.model.Traceable,org.semanticwb.social.Oauthable,org.semanticwb.social.Listenerable,org.semanticwb.social.SocialMonitorable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.social.Secreteable,org.semanticwb.model.Tagable
 {
    /**
    * Categorias a llenar en una colección.
