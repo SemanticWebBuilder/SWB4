@@ -27,7 +27,9 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.social.Message;
 import org.semanticwb.social.MessageIn;
+import org.semanticwb.social.Photo;
 import org.semanticwb.social.PhotoIn;
 import org.semanticwb.social.Post;
 import org.semanticwb.social.PostIn;
@@ -37,9 +39,11 @@ import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialTopic;
+import org.semanticwb.social.Video;
 import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.util.SWBSocialComparator;
 import org.semanticwb.social.util.SWBSocialUtil;
+import org.semanticwb.social.util.SocialLoader;
 
 /**
  *
@@ -994,15 +998,25 @@ public class SocialTopicInBox extends GenericResource {
                         SocialPFlowRef socialPflowRef=itflowRefs.next();
                         socialPFlow=socialPflowRef.getPflow();
                     }**/
+                    
+                    String toPost = request.getParameter("toPost");
                     String socialFlow=request.getParameter("socialFlow");
                     SocialPFlow socialPFlow=null;
                     if(socialFlow!=null && socialFlow.trim().length()>0)
                     {
                         socialPFlow=(SocialPFlow)SemanticObject.createSemanticObject(socialFlow).createGenericInstance();
+                        //Revisa si el flujo de publicación soporte el tipo de postOut, de lo contrario, asinga null a spflow, para que no 
+                        //asigne flujo al mensaje de salida., Esto también esta validado desde el jsp typeOfContent
+                        if((toPost.equals("msg") && !SocialLoader.getPFlowManager().isManagedByPflow(socialPFlow, Message.sclass)) || 
+                                (toPost.equals("photo") && !SocialLoader.getPFlowManager().isManagedByPflow(socialPFlow, Photo.sclass)) ||
+                                (toPost.equals("video") && !SocialLoader.getPFlowManager().isManagedByPflow(socialPFlow, Video.sclass)))
+                        {
+                            socialPFlow=null;
+                        }
                     }
 
                     //System.out.println("Entra a InBox_processAction-4");
-                    SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, request.getParameter("toPost"), request, response);
+                    SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, toPost, request, response);
                     
                     //System.out.println("Entra a InBox_processAction-5");
                     response.setMode(SWBActionResponse.Mode_EDIT);

@@ -389,6 +389,7 @@ public class SocialPFlowRes extends GenericResource
                 String sLabel=semClass.getLabel("es");
                 if(semClass.getLabel(lang)!=null) sLabel=semClass.getLabel(lang);
                 Element erole = addNode("resourceType", "" + semClass.getClassId(), sLabel, res);     //Comentado Jorge 05/Mayo/2013
+                System.out.println("semClass Id:"+semClass.getClassId());
                 //Element erole = addNode("PostType", "" + semClass.getClassId(), sLabel, res);     //Agregado por el de arriba- Jorge 05/Mayo/2013
                 erole.setAttribute("topicmap", map.getId());
                 erole.setAttribute("topicmapname", map.getTitle());
