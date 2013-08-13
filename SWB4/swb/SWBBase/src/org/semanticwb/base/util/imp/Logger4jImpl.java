@@ -323,5 +323,21 @@ public class Logger4jImpl implements Logger
     {
         log.log(Level.OFF, null, t);
         SWBUtils.ERROR.addError(null, t, cls, Logger4jImpl.EVENT);
-    }       
+    }    
+    
+    
+    public boolean isDebugEnabled()
+    {
+        return log.isDebugEnabled();
+    }
+    
+    public boolean isTraceEnabled()
+    {
+        return log.isTraceEnabled();
+    }
+
+    public boolean isInfoEnabled()
+    {
+        return log.isInfoEnabled();
+    }
 }

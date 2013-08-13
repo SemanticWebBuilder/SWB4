@@ -223,4 +223,21 @@ public interface Logger
      */
     public void event(Throwable t);
     
+    /**
+     * Regresa true si el nivel de loggeo es debug
+     * @return 
+     */
+    public boolean isDebugEnabled();
+    
+    /**
+     * Regresa true si el nivel de loggeo es trace
+     * @return 
+     */
+    public boolean isTraceEnabled();
+
+    /**
+     * Regresa true si el nivel de loggeo es info
+     * @return 
+     */
+    public boolean isInfoEnabled();
 }
