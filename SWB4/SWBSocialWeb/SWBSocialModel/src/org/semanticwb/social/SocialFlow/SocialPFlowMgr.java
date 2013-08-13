@@ -14,12 +14,11 @@ import java.util.ResourceBundle;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
-import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.PFlowRef;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.social.PostOut;
 import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialPFlowInstance;
@@ -66,6 +65,33 @@ public class SocialPFlowMgr {
     public void init()
     {
         log.event("Initializing SocialPFlowMgr...");
+    }
+    
+    
+    /**
+     * Review if a socialpflow manages a type of PostOut
+     * 
+     * @param resource the resource
+     * @return the flows to send content
+     */
+    public static boolean isManagedByPflow(SocialPFlow pflow, SemanticClass semClass)
+    {
+       
+        String _xml = pflow.getXml();
+        Document docflow = SWBUtils.XML.xmlToDom(_xml);
+        Element workflow = (Element) docflow.getElementsByTagName("workflow").item(0);
+        NodeList resourceTypes = workflow.getElementsByTagName("resourceType");
+        for (int ires = 0; ires < resourceTypes.getLength(); ires++)
+        {
+            Element eres = (Element) resourceTypes.item(ires);
+            String iresw = eres.getAttribute("id");
+            if (semClass.getClassId().equals(iresw))
+            {
+                return true;
+            }
+        }
+            
+        return false;
     }
 
     /**

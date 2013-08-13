@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Página Social 
    */
-public abstract class SocialWebPageBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.MetaTagable,org.semanticwb.model.Localeable,org.semanticwb.model.Rankable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Viewable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Searchable,org.semanticwb.model.Countryable,org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Resourceable,org.semanticwb.model.Indexable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Expirable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Tagable
+public abstract class SocialWebPageBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Filterable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Viewable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Searchable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Expirable,org.semanticwb.model.Rankable,org.semanticwb.model.Indexable,org.semanticwb.model.Trashable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Tagable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Countryable,org.semanticwb.model.FilterableNode
 {
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
@@ -670,14 +670,5 @@ public abstract class SocialWebPageBase extends org.semanticwb.model.WebPage imp
     public void setSocialwpPhoto(String value)
     {
         getSemanticObject().setProperty(social_socialwpPhoto, value);
-    }
-
-   /**
-   * Gets the WebSite
-   * @return a instance of org.semanticwb.model.WebSite
-   */
-    public org.semanticwb.model.WebSite getWebSite()
-    {
-        return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }
