@@ -31,8 +31,8 @@ import org.semanticwb.platform.SemanticObject;
 /**
  * The Class Device.
  */
-public class Device extends DeviceBase {
-    
+public class Device extends DeviceBase 
+{    
     /**
      * Instantiates a new device.
      * 
