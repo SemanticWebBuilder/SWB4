@@ -25,6 +25,7 @@ package org.semanticwb.platform;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.util.iterator.ClosableIterator;
+import java.util.ArrayList;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBRuntimeException;
@@ -71,6 +72,7 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
     public SemanticIterator(Iterator iterator, boolean invert)
     {
         this.iterator=iterator;
+        if(this.iterator==null)this.iterator=new ArrayList().iterator();
         this.invert=invert;
         //System.out.println("  Create Iterator");
     }
@@ -78,6 +80,7 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
     public SemanticIterator(Iterator iterator, boolean invert, SemanticModel model, SemanticClass cls)
     {
         this.iterator=iterator;
+        if(this.iterator==null)this.iterator=new ArrayList().iterator();
         this.invert=invert;
         this.model=model;
         this.cls=cls;
