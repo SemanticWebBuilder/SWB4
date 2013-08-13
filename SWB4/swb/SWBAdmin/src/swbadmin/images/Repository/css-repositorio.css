@@ -230,16 +230,16 @@ border-radius:3px; /*opera y CSS3*/
 #file .accion span  { display:none;}
 #file .accion .suscribir, #file #informacion .suscribir     { background:url(images/accion-suscribir.png) no-repeat;}
 #file .accion .nosuscribir, #file #informacion .nosuscribir { background:url(images/accion-nosuscribir.png) no-repeat;}
-#file .accion .mover     { background:url(images/accion-mover.png) no-repeat;}
-#file .accion .eliminar  { background:url(images/accion-eliminar.png) no-repeat;}
+#file .accion .mover, #file #informacion .mover     { background:url(images/accion-mover.png) no-repeat;}
+#file .accion .eliminar, #file #informacion .eliminar  { background:url(images/accion-eliminar.png) no-repeat;}
 #file .accion .ver, #file #informacion .ver                 { background:url(images/accion-ver.png) no-repeat;}
 
 #file .accion .suscribir:hover, #file #informacion .suscribir:hover  { background:url(images/accion-suscribir2.png) no-repeat;}
 #file .accion .nosuscribir:hover, #file #informacion .nosuscribir:hover { background:url(images/accion-nosuscribir2.png) no-repeat;}
-#file .accion .mover:hover     { background:url(images/accion-mover2.png) no-repeat;}
-#file .accion .eliminar:hover  { background:url(images/accion-eliminar2.png) no-repeat;}
+#file .accion .mover:hover, #file #informacion .mover:hover     { background:url(images/accion-mover2.png) no-repeat;}
+#file .accion .eliminar:hover, #file #informacion .eliminar:hover  { background:url(images/accion-eliminar2.png) no-repeat;}
 #file .accion .ver:hover, #file #informacion .ver:hover       { background:url(images/accion-ver2.png) no-repeat;}
 
-#file #informacion .suscribir, #file #informacion .nosuscribir, #file #informacion .ver { padding:2px 0 2px 20px; color:#368dcd !important; margin:0 5px;}
-#file #informacion .suscribir span, #file #informacion .nosuscribir span, #file #informacion .ver span { display:none;}
+#file #informacion .suscribir, #file #informacion .nosuscribir, #file #informacion .ver, #file #informacion .mover, #file #informacion .eliminar { padding:2px 0 2px 20px; color:#368dcd !important; margin:0 5px;}
+#file #informacion .suscribir span, #file #informacion .nosuscribir span, #file #informacion .ver span, #file #informacion .mover span, #file #informacion .eliminar span  { display:none;}
 
