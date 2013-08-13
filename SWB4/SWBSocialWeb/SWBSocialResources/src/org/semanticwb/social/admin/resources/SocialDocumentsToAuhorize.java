@@ -174,7 +174,7 @@ public class SocialDocumentsToAuhorize extends GenericResource
             while (sites.hasNext())
             {
                 WebSite site = sites.next();
-                if (!(site.getId().equals(SWBContext.WEBSITE_ADMIN) || site.getId().equals(SWBContext.WEBSITE_GLOBAL) || site.getId().equals(SWBContext.WEBSITE_ONTEDITOR)))
+                if (!(site.getId().equals(SWBContext.WEBSITE_ADMIN) || site.getId().equals(SWBContext.WEBSITE_GLOBAL) || site.getId().equals(SWBContext.WEBSITE_ONTEDITOR)) && site.isValid())
                 {
                     /*
                     if (sitetoShow == null)

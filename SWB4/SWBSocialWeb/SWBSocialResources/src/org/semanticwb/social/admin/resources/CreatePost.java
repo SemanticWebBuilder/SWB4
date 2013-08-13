@@ -22,10 +22,14 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.social.Message;
+import org.semanticwb.social.Photo;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialTopic;
+import org.semanticwb.social.Video;
 import org.semanticwb.social.util.SWBSocialUtil;
+import org.semanticwb.social.util.SocialLoader;
 
 /**
  *
@@ -91,15 +95,23 @@ public class CreatePost extends GenericResource {
             SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
             SocialTopic socialTopic = (SocialTopic) semanticObject.createGenericInstance();
             
+            String toPost = request.getParameter("toPost");
             SocialPFlow spflow=null;
             System.out.println("processA/socialFlow:"+request.getParameter("socialFlow"));
             if(request.getParameter("socialFlow")!=null && request.getParameter("socialFlow").trim().length()>0)
             {
                 SemanticObject semObjSFlow=SemanticObject.getSemanticObject(request.getParameter("socialFlow"));
                 spflow=(SocialPFlow)semObjSFlow.createGenericInstance();
+                
+                //Revisa si el flujo de publicación soporte el tipo de postOut, de lo contrario, asinga null a spflow, para que no 
+                //asigne flujo al mensaje de salida., Esto también esta validado desde el jsp typeOfContent
+                if((toPost.equals("msg") && !SocialLoader.getPFlowManager().isManagedByPflow(spflow, Message.sclass)) || 
+                        (toPost.equals("photo") && !SocialLoader.getPFlowManager().isManagedByPflow(spflow, Photo.sclass)) ||
+                        (toPost.equals("video") && !SocialLoader.getPFlowManager().isManagedByPflow(spflow, Video.sclass)))
+                {
+                    spflow=null;
+                }
             }
-            
-            String toPost = request.getParameter("toPost");
             
             String socialUri = "";
             int j = 0;

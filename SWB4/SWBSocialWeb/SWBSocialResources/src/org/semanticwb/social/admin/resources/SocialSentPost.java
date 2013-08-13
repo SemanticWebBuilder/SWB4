@@ -810,7 +810,7 @@ public class SocialSentPost extends GenericResource {
                                    out.println("Rechazado("+sFlowRejected+")");
                                }
                                else if(isInFlow && needAuthorization && !isAuthorized){
-                                    out.println("En Flujo("+postOut.getPflowInstance().getPflow().getDisplayTitle(lang)+")");
+                                    out.println("En Flujo("+postOut.getPflowInstance().getPflow().getDisplayTitle(lang)+"/"+postOut.getPflowInstance().getStep()+")");
                                }
                             }
                        }
@@ -1248,8 +1248,11 @@ public class SocialSentPost extends GenericResource {
                 {
                     SWBSocialUtil.PostOutUtil.publishPost(postOut);
                     //TODOSOCIAL:Probar si con esto funciona
-                    postOut.getPflowInstance().setStatus(2);
-                    postOut.getPflowInstance().setStep(null);  
+                    if(postOut.getPflowInstance()!=null)
+                    {
+                        postOut.getPflowInstance().setStatus(2);
+                        postOut.getPflowInstance().setStep(null);  
+                    }
                     //Termina
                     //postOut.setPublished(true); 
                     //System.out.println("Post Publicado...");
