@@ -130,6 +130,7 @@ public class MultipleFileUploader implements InternalServlet
         {
             website=SWBContext.getAdminWebSite();
         }
+        //Termina agregado Jorge Jimenez
         
         User user=SWBPortal.getUserMgr().getUser(request, website);
         if (!user.isSigned()){
