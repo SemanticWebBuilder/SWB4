@@ -113,17 +113,15 @@
         <tr>
             <td colspan="5"><hr><hr></td>
         </tr>
-        
-    <tr>
-    
 <%    
    
     if(semObj.getGenericInstance() instanceof Message) 
     {
         Message message=(Message)semObj.getGenericInstance();
         %>
-        <td colspan="5"><%=SWBUtils.TEXT.encode(message.getMsg_Text(), "utf8")%>
-        </td>
+        <tr>
+            <td colspan="5"><%=SWBUtils.TEXT.encode(message.getMsg_Text(), "utf8")%></td>
+        </tr>
     <%    
     }else if(semObj.getGenericInstance() instanceof Photo)
     {
@@ -133,31 +131,41 @@
         //System.out.println("Canonical:"+Photo.social_Photo.getCanonicalName());
          //Puse ese tolowercase porque el nombre de la propiedad lo pone en mayuscula, quien sabe porque, si esta en minuscula
         %>
+        <tr>
         <td colspan="5">
+        <br><%=SWBUtils.TEXT.encode(photo.getMsg_Text(), "utf8")%>
+        </tr>
+        <tr>
+        <table>
+            <tr>
         <%
         Iterator<String> itPhotos=photo.listPhotos();
         while(itPhotos.hasNext())
         {
             String sphoto=itPhotos.next();
-        %>
-        <img src="<%=SWBPortal.getWebWorkPath()%><%=photo.getWorkPath()%>/<%=PostImageable.social_hasPhoto.getName()%>_<%=photo.getId()%>_<%=sphoto%>">
-        <%
+            %>
+                <td>
+                <img src="<%=SWBPortal.getWebWorkPath()%><%=photo.getWorkPath()%>/<%=sphoto%>">
+                </td>
+            <%
         }
-        %>
-        <br><br><br><%=SWBUtils.TEXT.encode(photo.getMsg_Text(), "utf8")%>
-        </td>
+            %>
+            </tr>
+        </table>  
+       </tr>
     <%    
     }else if(semObj.getGenericInstance() instanceof Video)
     {
         Video video=(Video)semObj.getGenericInstance(); 
     %>    
+       <tr>
         <td colspan="5">
         <%=video.getVideo()%>
         <br><br><br><%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
         </td>
+       </tr>  
     <%     
     }
     %>
-    </tr>
-    </table>
-
+</table>
+</div>
