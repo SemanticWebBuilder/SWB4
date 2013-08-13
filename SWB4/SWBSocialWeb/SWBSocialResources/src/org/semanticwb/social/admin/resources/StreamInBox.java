@@ -260,6 +260,8 @@ public class StreamInBox extends GenericResource {
         tagUrl.setParameter("suri", id);
         tagUrl.setMode(Mode_showTags);
 
+        String orderBy = request.getParameter("orderBy");
+        
         out.println("<div class=\"swbform\">");
 
         out.println("<fieldset>");
@@ -280,7 +282,7 @@ public class StreamInBox extends GenericResource {
             page = "1";
         }
         out.println("<span  class=\"spanFormat\">");
-        out.println("<form id=\"" + id + "/importCurrentPage\" name=\"" + id + "/importCurrentPage\" method=\"post\" action=\"" + urls.setMode("exportExcel").setParameter("pages", page).setCallMethod(SWBParamRequest.Call_DIRECT) + "\" >");
+        out.println("<form id=\"" + id + "/importCurrentPage\" name=\"" + id + "/importCurrentPage\" method=\"post\" action=\"" + urls.setMode("exportExcel").setParameter("pages", page).setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("orderBy", orderBy) + "\" >");
         out.println("<div align=\"right\">");
         out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("importCurrentPage") + "</button>"); //
         out.println("</div>");
@@ -288,7 +290,7 @@ public class StreamInBox extends GenericResource {
         out.println("</span>");
 
         out.println("<span  class=\"spanFormat\">");
-        out.println("<form id=\"" + id + "/importAll\" name=\"" + id + "/importAll\" method=\"post\" action=\"" + urls.setMode("exportExcel").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("pages", "0") + "\" >");
+        out.println("<form id=\"" + id + "/importAll\" name=\"" + id + "/importAll\" method=\"post\" action=\"" + urls.setMode("exportExcel").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("pages", "0").setParameter("orderBy", orderBy) + "\" >");
         out.println("<div align=\"right\">");
         out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("importAll") + "</button>"); //
         out.println("</div>");
