@@ -97,7 +97,7 @@ public class SWBSummary
         {
             log.event("Alert: No security permission to access Platform MBeanServer, local system info not available");
         } catch (Error err) {
-            log.event("Error starting the OperatingSystemMXBean", err);
+            log.event("OperatingSystemMXBean not found...");
         }
     }
 
