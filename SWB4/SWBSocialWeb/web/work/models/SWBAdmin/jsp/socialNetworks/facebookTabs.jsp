@@ -13,6 +13,7 @@
 <%
         String lang=paramRequest.getUser().getLanguage();
         String model = paramRequest.getWebPage().getWebSiteId();
+        String webPageId = paramRequest.getWebPage().getId();
         
         if(paramRequest.getUser()!=null)lang=paramRequest.getUser().getLanguage();
         response.setHeader("Cache-Control", "no-cache");
@@ -29,13 +30,13 @@
 
         out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style_=\"border:0px; width:100%; height:100%\" id=\""+objUri+"/tabs\" _tabPosition=\"bottom\" nested_=\"true\" _selectedChild=\"btab1\" onButtonClick_=\"alert('click');\" onLoad_=\"alert('Hola');\">");        
         
-        out.println("<div id=\""+ objUri + NEWS_FEED_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"News Feed"+"\" refreshOnShow=\""+"false"+"\" href=\""+"/es/SWBAdmin/Facebook_Wall"+"?" + param + "&contentTabId=newsFeed" +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
+        out.println("<div id=\""+ objUri + NEWS_FEED_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"News Feed"+"\" refreshOnShow=\""+"false"+"\" href=\""+"/es/SWBAdmin/" + webPageId +"?" + param + "&contentTabId=newsFeed" +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
         out.println("</div>");
         
-        out.println("<div id=\""+ objUri + WALL_TAB + "\" dojoType=\"dijit.layout.ContentPane\" title=\""+"My wall"+"\" refreshOnShow=\""+"false"+"\" href=\""+"/es/SWBAdmin/Facebook_Wall"+"?" + param + "&contentTabId=wall" +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
+        out.println("<div id=\""+ objUri + WALL_TAB + "\" dojoType=\"dijit.layout.ContentPane\" title=\""+"My wall"+"\" refreshOnShow=\""+"false"+"\" href=\""+"/es/SWBAdmin/" + webPageId +"?" + param + "&contentTabId=wall" +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
         out.println("</div>");                
         
-        out.println("<div id=\""+ objUri + MEDIA_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Media"+"\" refreshOnShow=\""+"false"+"\" href=\""+"/es/SWBAdmin/Facebook_Wall"+"?" + param + "&contentTabId=pictures" +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
+        out.println("<div id=\""+ objUri + MEDIA_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Media"+"\" refreshOnShow=\""+"false"+"\" href=\""+"/es/SWBAdmin/"+ webPageId + "?" + param + "&contentTabId=pictures" +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
         out.println("</div>");
         /*
         
