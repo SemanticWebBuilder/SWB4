@@ -4,7 +4,7 @@
     Author     : jorge.jimenez
 --%>
 
-<%@page import="org.semanticwb.SWBPortal"%>
+<%@page import="org.semanticwb.SWBPortal"%> 
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page contentType="text/html" pageEncoding="ISO-8859-1"%>
 <%@page import="org.semanticwb.social.*"%>
@@ -32,10 +32,11 @@
     //se respondería a un mensaje
     
     User userCreator=postOut.getCreator(); 
+    System.out.println("userCreator George:"+userCreator);
     String userPhoto=userCreator.getPhoto(); 
     if(userPhoto==null) userPhoto="/swbadmin/css/images/profileDefImg.jpg";
     else{
-        userPhoto=SWBPortal.getWebWorkPath()+user.getWorkPath()+"/"+User.swb_usrPhoto.getName()+"_"+userCreator.getId()+"_"+userPhoto;
+        userPhoto=SWBPortal.getWebWorkPath()+userCreator.getWorkPath()+"/"+User.swb_usrPhoto.getName()+"_"+userCreator.getId()+"_"+userPhoto;
     }
     //Un mensaje de entrada siempre debe estar atachado a un usuar
     PostIn postInSource=null;
