@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase en donde se almacenan todos los post de tipo Video y que entran por el Listener 
    */
-public abstract class VideoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable,org.semanticwb.model.Traceable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostVideoable
+public abstract class VideoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostVideoable,org.semanticwb.social.PostTextable,org.semanticwb.model.Traceable,org.semanticwb.model.Tagable
 {
    /**
    * Clase en donde se almacenan todos los post de tipo Video y que entran por el Listener

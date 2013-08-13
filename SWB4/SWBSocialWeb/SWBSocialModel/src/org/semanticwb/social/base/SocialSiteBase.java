@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que hereda de swb:WebSite. Es un tipo de website Social. De esta manera se puede contar con todos los elementos en el arbol de navegación en la administración, y otros elementos utiles para Social Site. 
    */
-public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Localeable,org.semanticwb.model.Indexable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Countryable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableNode
+public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Localeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Countryable,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Trashable
 {
    /**
    * Acción específica mediante la cual se envía un correo electrónico
@@ -38,6 +38,10 @@ public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implem
    * Acción específica mediante la cual se marca un mensaje como prioritario. Esto en la propiedad "IsPrioritary" de un mensaje (Post).
    */
     public static final org.semanticwb.platform.SemanticClass social_MarkMsgAsPrioritary=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#MarkMsgAsPrioritary");
+   /**
+   * Objeto utilizado para identificar una version de algun componente
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_VersionInfo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo");
    /**
    * Clase principal para manejo de reglas en swbSocial
    */
@@ -632,6 +636,36 @@ public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implem
     public boolean hasMarkMsgAsPrioritary(String id)
     {
         return org.semanticwb.social.MarkMsgAsPrioritary.ClassMgr.hasMarkMsgAsPrioritary(id, this);
+    }
+
+    public org.semanticwb.model.VersionInfo getVersionInfo(String id)
+    {
+        return org.semanticwb.model.VersionInfo.ClassMgr.getVersionInfo(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.VersionInfo> listVersionInfos()
+    {
+        return org.semanticwb.model.VersionInfo.ClassMgr.listVersionInfos(this);
+    }
+
+    public org.semanticwb.model.VersionInfo createVersionInfo(String id)
+    {
+        return org.semanticwb.model.VersionInfo.ClassMgr.createVersionInfo(id,this);
+    }
+
+    public org.semanticwb.model.VersionInfo createVersionInfo()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_VersionInfo);
+        return org.semanticwb.model.VersionInfo.ClassMgr.createVersionInfo(String.valueOf(id),this);
+    } 
+
+    public void removeVersionInfo(String id)
+    {
+        org.semanticwb.model.VersionInfo.ClassMgr.removeVersionInfo(id, this);
+    }
+    public boolean hasVersionInfo(String id)
+    {
+        return org.semanticwb.model.VersionInfo.ClassMgr.hasVersionInfo(id, this);
     }
 
     public org.semanticwb.social.SocialRule getSocialRule(String id)
