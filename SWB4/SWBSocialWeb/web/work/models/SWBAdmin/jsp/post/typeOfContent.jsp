@@ -4,12 +4,14 @@
     Author     : Jorge.Jimenez
     Modified by:Francisco.Jimenez
 --%>
+<%@page import="org.semanticwb.social.util.SocialLoader"%>
 <%@page import="org.semanticwb.social.util.SWBSocialUtil"%>
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
 <%@page import="org.semanticwb.social.*"%>
 <%@page import="org.semanticwb.SWBUtils"%>
 <%@page import="java.util.*"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
+<%@page import="org.semanticwb.social.SocialFlow.SocialPFlowMgr"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
@@ -86,6 +88,7 @@
     //urlAction.setParameter("wsite", brand);           
     urlAction.setParameter("wsite", wsite.getSemanticObject().getModel().getName());
 
+    SocialPFlowMgr pfmgr = SocialLoader.getPFlowManager();
 
     ///////////////////////////////POSTEO DE MENSAJES/////////////////////////////
 
@@ -142,14 +145,17 @@
                                 if (socialFlowRef.isActive()) {
                                     SocialPFlow socialPFlow = socialFlowRef.getPflow();
                                     if (socialPFlow.isActive()) {
-                                        boolean isChecked = false;
-                                        if (postOutPFlowUri != null && postOutPFlowUri.equals(socialPFlow.getURI())) {
-                                            isChecked = true;
+                                       if(pfmgr.isManagedByPflow(socialPFlow, Message.sclass))
+                                        {
+                                            boolean isChecked = false;
+                                            if (postOutPFlowUri != null && postOutPFlowUri.equals(socialPFlow.getURI())) {
+                                                isChecked = true;
+                                            }
+                                            noFlows = false;
+                                            %> 
+                                            <option value="<%=socialPFlow.getURI()%>" <%=isChecked ? "selected" : ""%>><%=socialPFlow.getDisplayTitle(lang)%> </option>
+                                            <%
                                         }
-                                        noFlows = false;
-                        %> 
-                        <option value="<%=socialPFlow.getURI()%>" <%=isChecked ? "selected" : ""%>><%=socialPFlow.getDisplayTitle(lang)%> </option>
-                        <%
                                     }
                                 }
                             }
@@ -283,12 +289,21 @@
                                 boolean noFlows = true;
                                 while (itSocialPFlowRefs.hasNext()) {
                                     SocialPFlowRef socialFlowRef = itSocialPFlowRefs.next();
-                                    SocialPFlow socialPFlow = socialFlowRef.getPflow();
-                                    if (socialPFlow.isActive()) {
-                                        noFlows = false;
-                            %>
-                            <option value="<%=socialPFlow.getURI()%>"><%=socialPFlow.getDisplayTitle(lang)%> </option>
-                            <%
+                                    if (socialFlowRef.isActive()) {
+                                        SocialPFlow socialPFlow = socialFlowRef.getPflow();
+                                        if (socialPFlow.isActive()) {
+                                           if(pfmgr.isManagedByPflow(socialPFlow, Photo.sclass))
+                                            {
+                                                boolean isChecked = false;
+                                                if (postOutPFlowUri != null && postOutPFlowUri.equals(socialPFlow.getURI())) {
+                                                    isChecked = true;
+                                                }
+                                                noFlows = false;
+                                                %> 
+                                                <option value="<%=socialPFlow.getURI()%>" <%=isChecked ? "selected" : ""%>><%=socialPFlow.getDisplayTitle(lang)%> </option>
+                                                <%
+                                            }
+                                        }
                                     }
                                 }
                                 if (noFlows) {
@@ -437,12 +452,21 @@
                         boolean noFlows = true;
                         while (itSocialPFlowRefs.hasNext()) {
                             SocialPFlowRef socialFlowRef = itSocialPFlowRefs.next();
-                            SocialPFlow socialPFlow = socialFlowRef.getPflow();
-                            if (socialPFlow.isActive()) {
-                                noFlows = false;
-                    %>
-                    <option value="<%=socialPFlow.getURI()%>"><%=socialPFlow.getDisplayTitle(lang)%> </option>
-                    <%
+                            if (socialFlowRef.isActive()) {
+                                SocialPFlow socialPFlow = socialFlowRef.getPflow();
+                                if (socialPFlow.isActive()) {
+                                   if(pfmgr.isManagedByPflow(socialPFlow, Video.sclass))
+                                    {
+                                        boolean isChecked = false;
+                                        if (postOutPFlowUri != null && postOutPFlowUri.equals(socialPFlow.getURI())) {
+                                            isChecked = true;
+                                        }
+                                        noFlows = false;
+                                        %> 
+                                        <option value="<%=socialPFlow.getURI()%>" <%=isChecked ? "selected" : ""%>><%=socialPFlow.getDisplayTitle(lang)%> </option>
+                                        <%
+                                    }
+                                }
                             }
                         }
                         if (noFlows) {
