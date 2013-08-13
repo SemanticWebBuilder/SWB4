@@ -303,7 +303,10 @@ public class SemanticMgr implements SWBInstanceObject
      * @param owlPath the owl path
      * @return the semantic model
      */
-    public SemanticModel addBaseOntology(String owlPath) {
+    public SemanticModel addBaseOntology(String owlPath) 
+    {
+        //System.out.println("BaseOntology:"+owlPath);
+        log.event("BaseOntology:"+owlPath);
         Model model = SWBPlatform.getSemanticMgr().loadRDFFileModel(owlPath);
         SemanticModel smodel = new SemanticModel(new File(owlPath).getName(), model);
         getSchema().addSubModel(smodel, false);
