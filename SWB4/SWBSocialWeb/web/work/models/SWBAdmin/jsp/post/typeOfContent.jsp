@@ -172,7 +172,7 @@
                 <%if (!noFlows && firstTime) {%>
                 <div class="etiqueta"><label for="socialFlowComment"><%=SWBSocialUtil.Util.getStringFromGenericLocale("comment", user.getLanguage())%></label></div>
                 <div class="campo">
-                    <textarea name="socialFlowComment"></textarea>
+                    <textarea name="socialFlowComment" cols="35" rows="5"></textarea>
                 </div>
                 <%
                         }
@@ -318,7 +318,7 @@
                     <p>
                     <div class="etiqueta"><label for="socialFlowComment"><%=SWBSocialUtil.Util.getStringFromGenericLocale("comment", user.getLanguage())%></label></div>
                     <div class="campo">
-                        <textarea name="socialFlowComment"></textarea>
+                        <textarea name="socialFlowComment" cols="35" rows="5"></textarea>
                     </div>
                     </p>
                     <%
@@ -482,7 +482,7 @@
                        <%if (!noFlows && firstTime) {%>
             <div class="etiqueta"><label for="socialFlowComment"><%=SWBSocialUtil.Util.getStringFromGenericLocale("comment", user.getLanguage())%></label></div>
             <div class="campo">
-                <textarea name="socialFlowComment"></textarea>
+                <textarea name="socialFlowComment" cols="35" rows="5"></textarea>
             </div>
             <%
                     }
