@@ -51,6 +51,8 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.servlet.internal.Login;
+import org.semanticwb.util.GetIterator;
+import org.semanticwb.util.SWBIteratorCache;
 
 
 // TODO: Auto-generated Javadoc
@@ -193,7 +195,16 @@ public class SWBUserMgr
                 Language l=site.getLanguage();
                 if(l==null)
                 {
-                    Iterator<Language> i=SWBUtils.Collections.copyIterator(site.listLanguages()).iterator();
+                    final WebSite fsite=site;
+                    Iterator<Language> i = SWBIteratorCache.getIterator(site.getId()+"_language",new GetIterator() 
+                    {
+                        @Override
+                        public Iterator getIterator()
+                        {
+                            return fsite.listLanguages();
+                        }
+                    } , 1000*120);                         
+                    //Iterator<Language> i=SWBUtils.Collections.copyIterator(site.listLanguages()).iterator();
                     if(i.hasNext())l=i.next();
                 }
                 if(l!=null)language=l.getId();
@@ -229,7 +240,16 @@ public class SWBUserMgr
 
                 if(c==null)
                 {
-                    Iterator<Country> i=SWBUtils.Collections.copyIterator(site.listCountries()).iterator();
+                    final WebSite fsite=site;
+                    Iterator<Country> i = SWBIteratorCache.getIterator(site.getId()+"_country",new GetIterator() 
+                    {
+                        @Override
+                        public Iterator getIterator()
+                        {
+                            return fsite.listCountries();
+                        }
+                    } , 1000*120);                    
+                    //Iterator<Country> i=SWBUtils.Collections.copyIterator(site.listCountries()).iterator();
                     if(i.hasNext())c=i.next();
                 }
             }
@@ -273,7 +293,16 @@ public class SWBUserMgr
         //System.out.println("User-Agent:"+useragent);
         if(useragent!=null)
         {            
-            Iterator<Device> listaDev = site.listDevices();
+            final WebSite fsite=site;
+            Iterator<Device> listaDev = SWBIteratorCache.getIterator(site.getId()+"_device",new GetIterator() 
+            {
+                @Override
+                public Iterator getIterator()
+                {
+                    return fsite.listDevices();
+                }
+            } , 1000*120);
+            
             int coincide = 0;
             while (listaDev.hasNext())
             {

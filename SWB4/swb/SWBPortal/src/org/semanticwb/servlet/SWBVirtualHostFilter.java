@@ -139,7 +139,7 @@ public class SWBVirtualHostFilter implements Filter
         {
             HttpServletRequest _request = new SWBBaseHttpServletRequestWrapper((HttpServletRequest) request);
             HttpServletResponse _response = (HttpServletResponse) response;
-            log.trace("VirtualHostFilter:doFilter()");
+            if(log.isTraceEnabled())log.trace("VirtualHostFilter:doFilter()");
 
             String lang=null;
             String country=null;
@@ -171,7 +171,7 @@ public class SWBVirtualHostFilter implements Filter
                 }else
                 {
                     _response.sendError(403, "No tiene permiso para accesar a la página " + _request.getRequestURI() + "... ");
-                    log.debug("Distributor: SendError 403");                
+                    if(log.isDebugEnabled())log.debug("Distributor: SendError 403");                
                     return;
                 }
             }
@@ -664,7 +664,7 @@ public class SWBVirtualHostFilter implements Filter
             throws ServletException, IOException
     {
         String modelid=dparams.getModelId();
-        log.debug("SendError " + err + ": " + errMsg);
+        if(log.isDebugEnabled())log.debug("SendError " + err + ": " + errMsg);
         String path = "/config/" + err;
         String msg = null;
         try

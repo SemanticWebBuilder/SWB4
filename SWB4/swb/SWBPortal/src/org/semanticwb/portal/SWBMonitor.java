@@ -65,7 +65,7 @@ public class SWBMonitor implements Serializable
     private transient long instanceHits=0;
     
     /** The instance hit time. */
-    private transient long instanceHitTime=15;
+    private transient long instanceHitTime=1000;
     
     /**
      * Instantiates a new sWB monitor.
@@ -106,7 +106,7 @@ public class SWBMonitor implements Serializable
         long freem=Runtime.getRuntime().freeMemory();
         int maxUsers=SWBPortal.getUserMgr().getNumberOfSessionObjects();
         long hits=instanceHits;     //WBAccessLog.getInstance().getInstanceHits();
-        long hitsTime=instanceHitTime/100;
+        long hitsTime=instanceHitTime;
         long resourceHits=0;//ResourceMgr.getInstance().getResourceCacheMgr().getResourceHits();
         long cacheResHits=0;//ResourceMgr.getInstance().getResourceCacheMgr().getCacheHits();
         long cacheResLoadHits=0;//ResourceMgr.getInstance().getResourceCacheMgr().getCacheLoadHits();      
@@ -292,7 +292,7 @@ public class SWBMonitor implements Serializable
      */
     public void addinstanceHit(long time)
     {
-        time=time*100;
+        time=time/1000;
         instanceHits++;
         instanceHitTime=(instanceHitTime*49+time)/50;
     }
