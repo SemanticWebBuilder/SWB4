@@ -97,10 +97,10 @@ public class Distributor implements InternalServlet
     @Override
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams)throws IOException 
     {
-        long time=System.currentTimeMillis();
+        long time=System.nanoTime();
         if(_doProcess(request, response, dparams))
         {
-            SWBPortal.getMonitor().addinstanceHit(System.currentTimeMillis()-time);
+            SWBPortal.getMonitor().addinstanceHit(System.nanoTime()-time);
         }
     }    
     
@@ -164,7 +164,7 @@ public class Distributor implements InternalServlet
             int ipfilter = dparams.getFiltered();
             boolean onlyContent = dparams.isOnlyContent();
 
-            if(!pageCache)
+            if(!pageCache && log.isTraceEnabled())
             {
                 log.trace("*********distributor**************");
                 log.trace("email:" + user.getEmail());
@@ -185,7 +185,7 @@ public class Distributor implements InternalServlet
             {
                 if (!request.isSecure()) 
                 {
-                    if(!pageCache)log.debug("Distributor: SendError 404");
+                    if(!pageCache && log.isDebugEnabled())log.debug("Distributor: SendError 404");
                     response.sendError(404, "Not https protocol...");
                     return false;
                 }
@@ -193,7 +193,7 @@ public class Distributor implements InternalServlet
 
             if (ipfilter > 0)  //1:no access: 2:only access
             {
-                if(!pageCache)log.debug("Distributor: SendError 404");
+                if(!pageCache && log.isDebugEnabled())log.debug("Distributor: SendError 404");
                 response.sendError(404, "No tiene permiso para accesar a la pagina " + request.getRequestURI() + ", (IP Filter)... ");
                 return false;
             }        
@@ -211,19 +211,19 @@ public class Distributor implements InternalServlet
             if (webpage == null || (!admin && webpage.getWebSite().getId().equals(admMap))) 
             {
                 response.sendError(404, "La pagina " + request.getRequestURI() + " no existe... ");
-                if(!pageCache)log.debug("Distributor: SendError 404");
+                if(!pageCache && log.isDebugEnabled())log.debug("Distributor: SendError 404");
                 return false;
             } else if (!webpage.getWebSite().isActive() || webpage.getWebSite().isDeleted() || !webpage.isValid())
             {
                 response.sendError(404, "La pagina " + request.getRequestURI() + " no esta disponible por el momento... ");
-                if(!pageCache)log.debug("Distributor: SendError 404");
+                if(!pageCache && log.isDebugEnabled())log.debug("Distributor: SendError 404");
                 return false;
             }
 
-            if(!pageCache)log.debug("User:"+user+" webpage:"+webpage);
+            if(!pageCache && log.isDebugEnabled())log.debug("User:"+user+" webpage:"+webpage);
             if (!user.haveAccess(webpage)) 
             {
-                if(!pageCache)log.debug("Distributor->Don't access");
+                if(!pageCache && log.isDebugEnabled())log.debug("Distributor->Don't access");
                 //TODO:validar acciones
 //                Iterator it = webpage.getConfigData(TopicMap.CNF_WBSecAction);
 //                if (it.hasNext()) {
@@ -240,7 +240,7 @@ public class Distributor implements InternalServlet
 //                            response.sendError(err);
 //                    }
 //                } else {
-                    if(!pageCache)log.debug("Distributor->send403");
+                    if(!pageCache && log.isDebugEnabled())log.debug("Distributor->send403");
                     sendError403(request, response);
 //                }
                 return false;
@@ -268,18 +268,18 @@ public class Distributor implements InternalServlet
                         if(base == null || !base.getResourceBase().isValid())
                         {
                             response.sendError(404, "No tiene permiso para accesar a la pagina " + request.getRequestURI() + ", (Control de IPs)... ");
-                            if(!pageCache)log.debug("Distributor: SendError 404");
+                            if(!pageCache && log.isDebugEnabled())log.debug("Distributor: SendError 404");
                             return false;
                         }else if(!user.haveAccess(base.getResourceBase()))
                         {
                             if(request.getMethod().equalsIgnoreCase("POST"))
                             {
                                 response.sendRedirect(webpage.getUrl());
-                                if(!pageCache)log.debug("Distributor: Resource "+base.getResourceBase().getId()+" restricted, send redirect to webpage:"+webpage.getUrl());
+                                if(!pageCache && log.isDebugEnabled())log.debug("Distributor: Resource "+base.getResourceBase().getId()+" restricted, send redirect to webpage:"+webpage.getUrl());
                             }else
                             {
                                 response.sendError(403, "No tiene permiso para accesar a la pagina " + request.getRequestURI() + ", (Control de IPs)... ");
-                                if(!pageCache)log.debug("Distributor: SendError 403");
+                                if(!pageCache && log.isDebugEnabled())log.debug("Distributor: SendError 403");
                             }
                             return false;
                         }
@@ -330,7 +330,7 @@ public class Distributor implements InternalServlet
                 } catch (Throwable e) 
                 {
                     if(!pageCache)log.error(e);
-                    if(!pageCache)log.debug("Distributor: SendError 500");
+                    if(!pageCache && log.isDebugEnabled())log.debug("Distributor: SendError 500");
                     response.sendError(500, "Error to process request:" + request.getRequestURI());
                     return false;
                 }
@@ -355,7 +355,7 @@ public class Distributor implements InternalServlet
                     }else if(!user.haveAccess(currResource.getResourceBase()))
                     {
                         response.sendError(403, "No tiene permiso para accesar a la pagina " + request.getRequestURI());
-                        if(!pageCache)log.debug("Distributor: SendError 403");
+                        if(!pageCache && log.isDebugEnabled())log.debug("Distributor: SendError 403");
                         return false;
                     }
                     SWBActionResponseImp resParams = new SWBActionResponseImp(response);
@@ -372,15 +372,15 @@ public class Distributor implements InternalServlet
                     resParams.setOnlyContent(onlyContent);
                     resParams.setUser(user);
                     //resParams.setUserLevel();
-                    if(!pageCache)log.debug("Invoke ProcessAcion");
+                    if(!pageCache && log.isDebugEnabled())log.debug("Invoke ProcessAcion");
                     currResource.processAction(request, resParams);
-                    if(!pageCache)log.debug("SendRedirect:"+resParams.toString());
+                    if(!pageCache && log.isDebugEnabled())log.debug("SendRedirect:"+resParams.toString());
                     response.sendRedirect(resParams.toString());
-                    if(!pageCache)log.debug("Exit Distributor");
+                    if(!pageCache && log.isDebugEnabled())log.debug("Exit Distributor");
                     return true;
                 } catch (Throwable e) {
                     log.error(e);
-                    if(!pageCache)log.debug("Distributor: SendError 500");
+                    if(!pageCache && log.isDebugEnabled())log.debug("Distributor: SendError 500");
                     response.sendError(500, "No es posible procesar el requerimiento:" + request.getRequestURI() + "<br/>" + e);
                     return false;
                 }
@@ -435,7 +435,7 @@ public class Distributor implements InternalServlet
                     {
                         if(!pageCache)log.warn("No se encontro template para la seccion:" + webpage.getId());
                         response.sendError(500, "La pagina " + request.getRequestURI() + " no esta disponible por el momento, no se encontro plantilla...");
-                        if(!pageCache)log.debug("Distributor: SendError 500");
+                        if(!pageCache && log.isDebugEnabled())log.debug("Distributor: SendError 500");
                         return false;
                     }
 
@@ -491,11 +491,11 @@ public class Distributor implements InternalServlet
                 response.setContentType(contentType);
                 //System.out.println("setContentType:"+contentType);
 
-                if(!pageCache)log.debug("dist: contentType:"+contentType);
+                if(!pageCache && log.isDebugEnabled())log.debug("dist: contentType:"+contentType);
 
                 String rescharset=SWBUtils.TEXT.getHomCharSet(response.getCharacterEncoding());
                 String defcharset=SWBUtils.TEXT.getHomCharSet(SWBUtils.TEXT.getDafaultEncoding());
-                if(!pageCache)log.debug("rescharset:"+rescharset+" default:"+defcharset);
+                if(!pageCache && log.isDebugEnabled())log.debug("rescharset:"+rescharset+" default:"+defcharset);
                 //System.out.println("rescharset:"+rescharset+" default:"+defcharset);
 
                 if(!gzip && supportSetCharEncoding)

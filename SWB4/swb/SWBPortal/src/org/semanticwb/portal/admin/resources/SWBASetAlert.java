@@ -51,7 +51,7 @@ public class SWBASetAlert extends GenericResource {
             aa.setAlertSistemStatus(false);
             aa.setAlertMailList("webbuilder@infotec.com.mx");
             aa.setAlertCPUTH(85.0f);
-            aa.setAlertTimeTH(250);
+            aa.setAlertTimeTH(250000);
             aa.setAlertPPSTH(50);
         }
         PrintWriter out=response.getWriter();
@@ -65,7 +65,7 @@ public class SWBASetAlert extends GenericResource {
             try
             {
                 fm.processForm(request);
-                Monitor.setAlertParameter(aa);
+                //Monitor.setAlertParameter(aa);
             }catch(FormValidateException e){log.error(e);}
             response.sendRedirect(paramRequest.getRenderUrl().setAction(null).setParameter("saved", "true").toString());
         }else

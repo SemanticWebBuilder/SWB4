@@ -113,7 +113,7 @@ public class Monitor implements InternalServlet
     private static Queue<Float> uso = new LinkedList<Float>();
     private static int cnt = 0;
     private static final int MAX_SIZE=10;
-    private static final int UP_LIMIT=5;
+    private static final int UP_LIMIT=1;
     private static long pps=0;
     private static long lastTime=0;
     private static int alerted_CPU=0;
@@ -291,6 +291,12 @@ public class Monitor implements InternalServlet
         }
         SWBMonitorData data = new SWBMonitorData(monitorbeans);
         buffer.add(data);
+        
+        AdminAlert aa = AdminAlert.ClassMgr.getAdminAlert("1", SWBContext.getAdminWebSite());
+        if(aa!=null && alertOn!=aa.isAlertSistemStatus())
+        {
+            setAlertParameter(aa);
+        }
         if (alertOn) {
             if (cnt>29){// System.out.println("Page Cache: "+Distributor.isPageCache());
                 if (alerted_CPU>0)alerted_CPU--;
@@ -298,7 +304,13 @@ public class Monitor implements InternalServlet
                 if (alerted_TIME>0)alerted_TIME--;
                 Vector<SWBMonitor.MonitorRecord> vec = SWBPortal.getMonitor().getMonitorRecords();
                 pps = (vec.get(vec.size()-1).getHits()-vec.get(vec.size()-2).getHits())/
-                        SWBPortal.getMonitor().getDelay();    
+                        SWBPortal.getMonitor().getDelay();   
+                
+                //System.out.println("MAX_SIZE:"+MAX_SIZE);
+                //System.out.println("UP_LIMIT:"+UP_LIMIT);
+                //System.out.println("THRESHOLD_PPS:"+THRESHOLD_PPS);
+                //System.out.println("pps:"+pps);
+                
                 if  (Distributor.isPageCache()) { 
                     if (pps<THRESHOLD_PPS){
                         Distributor.setPageCache(false);
@@ -311,7 +323,7 @@ public class Monitor implements InternalServlet
                         pages.clear();
                         uso.clear();
                         tiempos.clear();
-                       // System.out.println("***** Back to Normal");
+                        System.out.println("***** Back to Normal");
                     }
                 }
                 cnt = 0;
@@ -347,6 +359,11 @@ public class Monitor implements InternalServlet
                 for (Long ct:pages){
                     if (ct>THRESHOLD_PPS) oPages++;
                 }
+                
+                //System.out.println("oPages:"+oPages);
+                //System.out.println("oCPU:"+oCPU);
+                //System.out.println("oTime:"+oTime);
+                
                 if (UP_LIMIT<oCPU && alerted_CPU==0) {
                     try {
                         SWBUtils.EMAIL.sendBGEmail(alertEmail, 
@@ -391,7 +408,7 @@ public class Monitor implements InternalServlet
                                 + "\n\n\nThe inAttack mode has been activated");
                     } catch (Exception e) {log.error(e);
                     }
-                //    System.out.println("***** ALERTAR MODO ATAQUE *****");
+                    System.out.println("***** ALERTAR MODO ATAQUE *****");
                     Distributor.setPageCache(true);
                 }
             }

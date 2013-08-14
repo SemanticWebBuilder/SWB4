@@ -395,7 +395,7 @@ public class SWBAHitsMonitor extends GenericResource {
         while (en.hasMoreElements()) {
             y++;
             SWBMonitor.MonitorRecord mr = (SWBMonitor.MonitorRecord) en.nextElement();
-            long val = mr.getHitsTime();
+            long val = mr.getHitsTime()/1000;
             prom += val;
             if ((y % z) == 0) {
                 prom = prom / z;
