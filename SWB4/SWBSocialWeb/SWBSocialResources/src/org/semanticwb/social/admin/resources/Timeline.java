@@ -173,27 +173,27 @@ public class Timeline extends GenericResource{
         tweetsListener = (SocialUserStreamListener)session.getAttribute(objUri +"tweetsListener");
         
         //Each one of the tabs is loaded once, so when it loads should verify (and clean its own ArrayList)
-        if(contentTabId != null && contentTabId.equals("homeTimeline")){
+        if(contentTabId != null && contentTabId.equals(HOME_TAB)){
             tweetsListener.clearHomeStatus();
             jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/timeline.jsp";
-        }else if(contentTabId != null && contentTabId.equals("mentions")){
+        }else if(contentTabId != null && contentTabId.equals(MENTIONS_TAB)){
             tweetsListener.clearMentionsStatus();
             jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/twitterMentions.jsp";
-        }else if(contentTabId != null && contentTabId.equals("favorites")){
+        }else if(contentTabId != null && contentTabId.equals(FAVORITES_TAB)){
             tweetsListener.clearFavoritesStatus();
             jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/twitterFavorites.jsp";
-        }else if(contentTabId != null && contentTabId.equals("directMessages")){
+        }else if(contentTabId != null && contentTabId.equals(DIRECT_MESSAGES_TAB)){
             tweetsListener.clearDirectMStatus();
             jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/twitterDM.jsp";
-        }else if(contentTabId != null && contentTabId.equals("discover")){
+        }else if(contentTabId != null && contentTabId.equals(DISCOVER_TAB)){
             jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/twitterDiscover.jsp";
-        }else if(contentTabId != null && contentTabId.equals("userTweets")){
+        }else if(contentTabId != null && contentTabId.equals(USER_TWEETS_TAB)){
             jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/twitterMyTweets.jsp";
-        }else if(contentTabId != null && contentTabId.equals("showUserProfile")){
+        }/*else if(contentTabId != null && contentTabId.equals()){
             jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/twitterUserProfile.jsp";
         }else if(contentTabId != null && contentTabId.equals("wordNet")){
             jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/tagCloud.jsp";
-        }
+        }*/
         
         RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
         
@@ -733,9 +733,12 @@ public class Timeline extends GenericResource{
             HttpSession session = request.getSession(true);
             if(session.getAttribute(objUri + "tweetsListener")!=null){
                 SocialUserStreamListener tweetsListener = (SocialUserStreamListener)session.getAttribute(objUri +"tweetsListener");
-                System.out.println("El listener se va a detener inmediatamente");
-                out.println(tweetsListener.stopListener());
-                twitterUsers.remove(request.getParameter("suri"));
+                System.out.println("Stopping listener inmediatly:");
+                System.out.println(tweetsListener.stopListener());
+                twitterUsers.remove(objUri);
+                if(session.getAttribute(objUri + "pooling") != null){
+                    session.removeAttribute(objUri + "pooling");
+                }
             }
         }else if(mode!= null && mode.equals("favoriteSent")){//Displays updated data of favorited tweet
             SWBResourceURL renderURL = paramRequest.getRenderUrl();
@@ -854,6 +857,12 @@ public class Timeline extends GenericResource{
             out.println("   hideDialog(); ");
             out.println("   showStatus('El tema fue cambiado correctamente');");
             out.println("</script>");
+        }else if(mode.equals("storeInterval")){//Storing the interval for the current uri
+            System.out.println("suri:" + objUri + "---interval:" + request.getParameter("interval"));
+            if(request.getParameter("interval") != null){
+                HttpSession session = request.getSession(true);
+                session.setAttribute(objUri + "pooling", request.getParameter("interval"));
+            }
         }else{
             super.processRequest(request, response, paramRequest);
         }
