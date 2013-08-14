@@ -4,6 +4,7 @@
     Author     : francisco.jimenez
 --%>
 
+<%@page import="org.semanticwb.model.SWBContext"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="static org.semanticwb.social.admin.resources.FacebookWall.*"%>
@@ -12,14 +13,20 @@
 
 <%
         String lang=paramRequest.getUser().getLanguage();
-        String model = paramRequest.getWebPage().getWebSiteId();
+        String model = SWBContext.WEBSITE_ADMIN;
         String webPageId = paramRequest.getWebPage().getId();
-        
-        if(paramRequest.getUser()!=null)lang=paramRequest.getUser().getLanguage();
+
+
+        if(paramRequest.getUser() != null){
+            lang = paramRequest.getUser().getLanguage();
+        }else{
+            lang = "es";
+        }
+        String resourcePath = "/" + lang + "/" + model + "/" + webPageId + "?";
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");        
         String objUri=request.getParameter("suri");
-        String param = "suri=" + URLEncoder.encode(request.getParameter("suri"));
+        String param = "suri=" + URLEncoder.encode(request.getParameter("suri")) + "&contentTabId=";
         //System.out.println("parametro en tabs.jsp:" + param);
         String loading="<BR/><center><img src='"+SWBPlatform.getContextPath()+"/swbadmin/css/images/loading.gif'/><center>";
         
@@ -30,13 +37,13 @@
 
         out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style_=\"border:0px; width:100%; height:100%\" id=\""+objUri+"/tabs\" _tabPosition=\"bottom\" nested_=\"true\" _selectedChild=\"btab1\" onButtonClick_=\"alert('click');\" onLoad_=\"alert('Hola');\">");        
         
-        out.println("<div id=\""+ objUri + NEWS_FEED_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"News Feed"+"\" refreshOnShow=\""+"false"+"\" href=\""+"/es/SWBAdmin/" + webPageId +"?" + param + "&contentTabId=newsFeed" +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
+        out.println("<div id=\""+ objUri + NEWS_FEED_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"News Feed"+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + NEWS_FEED_TAB +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
         out.println("</div>");
         
-        out.println("<div id=\""+ objUri + WALL_TAB + "\" dojoType=\"dijit.layout.ContentPane\" title=\""+"My wall"+"\" refreshOnShow=\""+"false"+"\" href=\""+"/es/SWBAdmin/" + webPageId +"?" + param + "&contentTabId=wall" +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
+        out.println("<div id=\""+ objUri + WALL_TAB + "\" dojoType=\"dijit.layout.ContentPane\" title=\""+"My wall"+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + WALL_TAB +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
         out.println("</div>");                
         
-        out.println("<div id=\""+ objUri + MEDIA_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Media"+"\" refreshOnShow=\""+"false"+"\" href=\""+"/es/SWBAdmin/"+ webPageId + "?" + param + "&contentTabId=pictures" +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
+        out.println("<div id=\""+ objUri + MEDIA_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Media"+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + MEDIA_TAB +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
         out.println("</div>");
         /*
         
