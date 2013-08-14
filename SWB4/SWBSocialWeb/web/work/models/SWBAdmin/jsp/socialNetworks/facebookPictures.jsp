@@ -80,7 +80,7 @@
             JSONArray postsData = null;
             JSONArray userData = null;
             JSONArray pageData = null;
-            
+
             for(int i = 0; i < phraseResp.getJSONArray("data").length(); i++){
                 if(phraseResp.getJSONArray("data").getJSONObject(i).getString("name").equals("pictures")){//All the posts
                     postsData = phraseResp.getJSONArray("data").getJSONObject(i).getJSONArray("fql_result_set");
@@ -94,6 +94,7 @@
             for (int k = 0; k < postsData.length(); k++) {
                 cont++;
                 JSONObject profileID = null;
+                JSONObject postComments = null;
                 for(int userCount = 0 ; userCount < userData.length(); userCount++){
                     if(userData.getJSONObject(userCount).getLong("uid") == postsData.getJSONObject(k).getLong("actor_id")){
                         profileID = userData.getJSONObject(userCount);                        
@@ -112,7 +113,26 @@
                     System.out.println("\n\n\n\nTHIS IS NOT SUPOSSED TO HAPPEN!!!!!!!!!!!!!!!!!" + postsData.getJSONObject(k).getLong("actor_id")  );
                     return null;
                 }
-                createdTime = printPicture(out,  postsData.getJSONObject(k), profileID, request, paramRequest, MEDIA_TAB, facebook, model);
+                
+                if(postsData.getJSONObject(k).has("comment_info")){
+                    if(postsData.getJSONObject(k).getJSONObject("comment_info").has("comment_count")){
+                        if(postsData.getJSONObject(k).getJSONObject("comment_info").getLong("comment_count") > 0){//If post has are comments
+                            //make te request for comments of the current post
+                            HashMap<String, String> params = new HashMap<String, String>(3);
+                            params.put("access_token", facebook.getAccessToken());
+                            params.put("limit", "5");
+                            try{
+                                String fbResponse = postRequest(params, "https://graph.facebook.com/" + postsData.getJSONObject(k).getString("post_id") +"/comments",
+                                "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
+                                postComments = new JSONObject(fbResponse);
+                            }catch(Exception e){
+                                System.out.println("Error getting comments of post "+ e);
+                            }
+                        }
+                    }
+                }
+                
+                createdTime = printPicture(out,  postsData.getJSONObject(k), postComments, profileID, request, paramRequest, MEDIA_TAB, facebook, model);
                 
                 //Only include the param in session when the page loads the first time and when 
                 if(includeSinceParam && k==0){//Only save the most recent picture id(the first), then use this id to ask if new pictures available
@@ -129,7 +149,7 @@
         return createdTime;
     }
 
-    public static String printPicture(Writer writer, JSONObject postsData, JSONObject profileData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model){
+    public static String printPicture(Writer writer, JSONObject postsData, JSONObject commentsData, JSONObject profileData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model){
         String createdTime="";
         
         try{
@@ -197,7 +217,7 @@
             //White space at left
             writer.write("<tr>");
             writer.write("   <td  width=\"10%\">"); 
-            writer.write("  LINKPIC&nbsp;");
+            writer.write("  &nbsp;");
             writer.write("   </td>");
             
             writer.write("   <td  width=\"90%\">"); 
@@ -207,9 +227,9 @@
             //for (int k = 0; k < media.length(); k++) {
             for (int k = 0; k < 1; k++) {
                 //writer.write("   <td  width=\"5%\">"); 
-                writer.write("      <div id=\"img" + media.getJSONObject(k).getString("src") + "\" style=\"width: 150px; height: 150px; border: thick #666666; overflow: hidden; position: relative;\">");
+                writer.write("      <div id=\"img" + facebook.getId() + media.getJSONObject(k).getString("src") + "\" style=\"width: 150px; height: 150px; border: thick #666666; overflow: hidden; position: relative;\">");
                 writer.write("      <a href=\"#\" onclick=\"showSocialDialog('" + renderURL.setMode("displayPicture").setParameter("pictureUrl", media.getJSONObject(k).getString("src").replace("_s.", "_n.")) +
-                        "','Picture from " + "" + "'); return false;\"><img src=\"" + media.getJSONObject(k).getString("src") + "\" style=\"position: relative;\" onload=\"imageLoad(" + "this, 'img" + media.getJSONObject(k).getString("src") + "');\"/></a>");
+                        "','Picture from " + "" + "'); return false;\"><img src=\"" + media.getJSONObject(k).getString("src") + "\" style=\"position: relative;\" onload=\"imageLoad(" + "this, 'img" + facebook.getId() + media.getJSONObject(k).getString("src") + "');\"/></a>");
                 writer.write("      </div>");
                 //writer.write("   </td>"); 
                 //writer.write("<img src=\"" + media.getJSONObject(k).get("src") + "\"/>");                
@@ -219,13 +239,13 @@
             
             writer.write("<tr>");
             writer.write("  <td>");
-            writer.write(" LINK??");
+            writer.write(" &nbsp;");
             writer.write("  </td>");
             writer.write("</tr>"); 
             
             writer.write("<tr>");
             writer.write("  <td>");
-            writer.write(postsData.isNull("description") ? "DESCRIPTION" : postsData.getString("description"));
+            writer.write(postsData.isNull("description") ? "" : postsData.getString("description"));
             writer.write("  </td>");
             writer.write("</tr>"); 
                 
@@ -235,34 +255,33 @@
             
             
             //Comments,start
-            if(postsData.has("comments")){
-                if(postsData.getJSONObject("comments").has("comment_list")){
+            if(commentsData != null){
+                if(commentsData.has("data") && commentsData.getJSONArray("data").length() > 0 ){
                     writer.write("<tr>");
                     writer.write("   <td  width=\"10%\">"); 
                     writer.write("      &nbsp;");
                     writer.write("   </td>");
                     writer.write("   <td width=\"90%\">");
 
-                    JSONArray comments = postsData.getJSONObject("comments").getJSONArray("comment_list");
+                    JSONArray comments = commentsData.getJSONArray("data");
                     if(comments.length()>0)
                     writer.write("<table>");
                     for (int k = 0; k < comments.length(); k++){
                         writer.write("<tr>");
                         writer.write("  <td rowspan=\"3\">");
-                        JSONObject commentProfile = new JSONObject(getProfileFromId(comments.getJSONObject(k).getLong("fromid")+"", facebook));                
-                        commentProfile = commentProfile.getJSONArray("data").getJSONObject(0);
-                        writer.write("      <a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", commentProfile.getString("type")).setParameter("id", commentProfile.getLong("id")+"") + "','" + commentProfile.getString("name") + "'); return false;\"><img src=\"http://graph.facebook.com/" + commentProfile.getLong("id") +"/picture?width=30&height=30\"/></a>");
+                        JSONObject commentProfile = comments.getJSONObject(k).getJSONObject("from");
+                        writer.write("      <a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", "noType").setParameter("id", commentProfile.getLong("id")+"") + "','" + commentProfile.getString("name") + "'); return false;\"><img src=\"http://graph.facebook.com/" + commentProfile.getLong("id") +"/picture?width=30&height=30\"/></a>");
                         writer.write("  </td>");
                         writer.write("</tr>");
                         
                         writer.write("<tr>");
                         writer.write("  <td>");
-                        writer.write("      <b><a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", commentProfile.getString("type")).setParameter("id", commentProfile.getLong("id")+"") + "','" + commentProfile.getString("name") + "'); return false;\">" + commentProfile.getString("name") + "</a></b>:");
-                        writer.write(       comments.getJSONObject(k).getString("text").replace("\n", "</br>") + "</br>");
+                        writer.write("      <b><a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", "noType").setParameter("id", commentProfile.getLong("id")+"") + "','" + commentProfile.getString("name") + "'); return false;\">" + commentProfile.getString("name") + "</a></b>:");
+                        writer.write(       comments.getJSONObject(k).getString("message").replace("\n", "</br>") + "</br>");
                         writer.write("  </td>");
                         writer.write("</tr>");
 
-                        Date commentTime = new java.util.Date((long)comments.getJSONObject(k).getLong("time")*1000);
+                        Date commentTime = formatter.parse(comments.getJSONObject(k).getString("created_time"));
                         
                         writer.write("<tr>");
                         writer.write("<td>");
@@ -271,7 +290,7 @@
                         //writer.write("<a href=\"\" onMouseOver=\"dijit.Tooltip.defaultPosition=['above', 'below']\" id=\"TooltipButton\" onclick=\"return false;\"> LIKE/UNLIKE</a>");
                         //writer.write("<div class=\"dijitHidden\"><span data-dojo-type=\"dijit.Tooltip\" data-dojo-props=\"connectId:'TooltipButton'\">I am <strong>above</strong> the button</span></div>");
                         if(comments.getJSONObject(k).has("like_count")){
-                            writer.write(" Likes: " + comments.getJSONObject(k).getJSONObject("likes").getInt("count") );
+                            writer.write(" Likes: " + comments.getJSONObject(k).getInt("like_count") );
                         }
                         writer.write("</div>");
                         //writer.write("<div dojoType=\"dijit.Tooltip\" connectId=\"ss\" position=\"below\">");
@@ -283,6 +302,18 @@
                     if(comments.length()>0)
                     writer.write("   </table>");
 
+                    if(commentsData.has("paging")){//Link to get more comments
+                    JSONObject pagingComments = commentsData.getJSONObject("paging");
+
+                    if(pagingComments.has("next") && pagingComments.has("cursors")){
+                        writer.write("<div align=\"left\" id=\"" + facebook.getId() + postsData.getString("post_id") + tabSuffix + "/comments\" dojoType=\"dojox.layout.ContentPane\">");
+                        SWBResourceURL commentsURL = paramRequest.getRenderUrl().setMode("moreComments").setParameter("suri", request.getParameter("suri")).setParameter("postId", postsData.getString("post_id"));
+                        commentsURL = commentsURL.setParameter("after", pagingComments.getJSONObject("cursors").getString("after")).setParameter("currentTab", tabSuffix);
+                        writer.write("<label><a href=\"#\" onclick=\"appendHtmlAt('" + commentsURL
+                                + "','" + facebook.getId() +  postsData.getString("post_id") + tabSuffix +"/comments', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">View more comments</a></label>");
+                        writer.write("</div>");                            
+                    }
+                    }
                     writer.write("   </td>");
                     writer.write("</tr>");
                 }
@@ -297,10 +328,10 @@
             
             Date postTime = new java.util.Date((long)postsData.getLong("created_time")*1000);
             createdTime = String.valueOf(postsData.getLong("created_time"));
-            writer.write("<div id=\"" + createdTime + "\" dojoType=\"dijit.layout.ContentPane\">");
+            writer.write("<div dojoType=\"dijit.layout.ContentPane\">");
             
             writer.write("   <span class=\"inline\" id=\"" + facebook.getId() +  postsData.getString("post_id") + INFORMATION + MEDIA_TAB + "\" dojoType=\"dojox.layout.ContentPane\">");
-            writer.write(facebookHumanFriendlyDate(postTime));
+            writer.write(facebookHumanFriendlyDate(postTime) + "->" +postsData.getLong("created_time"));
 
             if(postsData.has("like_info")){
                 JSONObject likeInfo = postsData.getJSONObject("like_info");
@@ -316,22 +347,20 @@
                     }else{
                         writer.write(" <a href=\"\"  onclick=\"postSocialHtml('" + actionURL.setAction("doLike").setParameter("commentID", postsData.getString("post_id")).setParameter("currentTab", MEDIA_TAB) + "','" + facebook.getId() + postsData.getString("post_id") + INFORMATION + MEDIA_TAB + "');return false;" +"\">Like</a>");
                     }
-                }else{
-                    writer.write("CAN'T LIKE");
                 }
                 writer.write("   </span>");
             }else{
                 writer.write("   </span>");
             }
             
-            if(postsData.has("comments")){
-                JSONObject comments = postsData.getJSONObject("comments");
+            if(postsData.has("comment_info")){
+                JSONObject comments = postsData.getJSONObject("comment_info");
                 
-                if(comments.getBoolean("can_post")){
+                if(comments.getBoolean("can_comment")){
                     writer.write("   <span class=\"inline\" id=\"" + postsData.getString("post_id") + REPLY + MEDIA_TAB + "\" dojoType=\"dojox.layout.ContentPane\">");
                         writer.write(" <a href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyPost").setParameter("commentID", postsData.getString("post_id")) + "','Reply to " + "" + "');return false;\">Reply</a>  ");
                     writer.write("   </span>");
-                    //**ini                                                
+
                     ///////////////////////If I can post I can Classify it to answer it later
                     PostIn post = PostIn.getPostInbySocialMsgId(model, postsData.getString("post_id"));
                     writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("post_id") + TOPIC + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
@@ -345,9 +374,7 @@
                         + "Clasificar Post'); return false;\">Clasificar</a>");
                     }
                     writer.write("   </span>");
-                    //**fin
-                }else{
-                    writer.write("CAN'T POST");
+                    
                 }
             }
                    
@@ -415,7 +442,7 @@
         }
         return fbResponse;
     }
- */
+*/
 %>
 
 <%
@@ -430,8 +457,8 @@
     SWBModel model=WebSite.ClassMgr.getWebSite(facebookBean.getSemanticObject().getModel().getName());
     HashMap<String, String> params = new HashMap<String, String>(3);//SELECT uid, name, first_name, middle_name, last_name FROM user WHERE uid = 1921576442
     //TODO: it seems than 'likes' is deprecated and it must be replaced with like_info
-    params.put("q", "{\"pictures\": \"SELECT actor_id, created_time, like_info, post_id, attachment, message, description, description_tags, type, comments FROM stream WHERE filter_key IN " + 
-                "( SELECT filter_key FROM stream_filter WHERE uid = me() AND name = 'Photos') LIMIT 50\", \"usernames\": \"SELECT uid, name FROM user WHERE uid IN (SELECT actor_id FROM #pictures)\", \"pages\":\"SELECT page_id, name FROM page WHERE page_id IN (SELECT actor_id FROM #pictures)\"}");
+    params.put("q", "{\"pictures\": \"SELECT actor_id, created_time, like_info, post_id, attachment, message, description, description_tags, type, comment_info FROM stream WHERE filter_key IN " + 
+                "( SELECT filter_key FROM stream_filter WHERE uid = me() AND name = 'Photos') ORDER BY created_time DESC LIMIT 50\", \"usernames\": \"SELECT uid, name FROM user WHERE uid IN (SELECT actor_id FROM #pictures)\", \"pages\":\"SELECT page_id, name FROM page WHERE page_id IN (SELECT actor_id FROM #pictures)\"}");
     params.put("access_token", facebookBean.getAccessToken());
     
     //params1.put("access_token", "CAACEdEose0cBAKyWLxR6XedK1KrfMDVmqUQshOoZA2vGCnuqIyrekZCGQ9HZBc0FWKIXfNMexJGxxinNvtcvEnHGkBLpCCmEuPVgmUAddZCxcDWc1KigZCrYaDCSSoEUHIhda1G3y4tCZBq4ripHKZAw1steVi0NGYZD");    
