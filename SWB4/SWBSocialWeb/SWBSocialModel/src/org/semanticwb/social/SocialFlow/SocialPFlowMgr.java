@@ -1250,9 +1250,9 @@ public class SocialPFlowMgr {
             try {
                 ResourceBundle bundle = null;
                 try {
-                    bundle = ResourceBundle.getBundle("org/semanticwb/social/util/pflow/SocialPFlowMgr", locale);
+                    bundle = ResourceBundle.getBundle("org/semanticwb/social/SocialFlow/SocialPFlowMgr", locale);
                 } catch (Exception e) {
-                    bundle = ResourceBundle.getBundle("org/semanticwb/social/util/pflow/SocialPFlowMgr");
+                    bundle = ResourceBundle.getBundle("org/semanticwb/social/SocialFlow/SocialPFlowMgr");
                 }
                 if (postOut.getPflowInstance() != null) {
                     WebSite wsite=WebSite.ClassMgr.getWebSite(postOut.getSemanticObject().getModel().getName());
@@ -1271,39 +1271,42 @@ public class SocialPFlowMgr {
                                 }
                                 if (activity.getAttribute("name").equalsIgnoreCase(activityName)) {
                                     if (activity.getAttribute("type").equalsIgnoreCase("AuthorActivity")) {
+                                        System.out.println("mailToNotify--2");
                                         User user = postOut.getCreator();
                                         String msgMail = bundle.getString("msg1") + " " + postOut.getId() + " " + bundle.getString("msg2") + " '" + postOut.getMsg_Text() + "' " + bundle.getString("msg3") + ".";
 
-                                        msgMail += "\r\n" + bundle.getString("msg4") + ": " + wbuser.getFirstName() + " " + wbuser.getLastName();
-                                        msgMail += "\r\n" + bundle.getString("msg5") + ": " + wbuser.getLogin();
+                                        msgMail += "<br/><br/>" + bundle.getString("msg4") + ": " + wbuser.getFirstName() + " " + wbuser.getLastName();
+                                        msgMail += "<br/><br/>" + bundle.getString("msg5") + ": " + wbuser.getLogin();
 
-                                        msgMail += "\r\n" + bundle.getString("msg6") + ": " + message;
-                                        msgMail += "\r\n" + bundle.getString("sitio") + ": " + wsite.getTitle() + ".\r\n";
-                                        msgMail += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
+                                        msgMail += "<br/><br/>" + bundle.getString("msg6") + ": " + message;
+                                        msgMail += "<br/><br/>" + bundle.getString("sitio") + ": " + wsite.getTitle() + ".<br/><br/>";
+                                        msgMail += "<br/><br/>" + bundle.getString("paso") + ": " + activityName + ".<br/><br/>";
                                         if (activity.getAttribute("days") != null && activity.getAttribute("hours") != null) {
                                             if (!(activity.getAttribute("days").equals("0") && activity.getAttribute("hours").equals("0"))) {
-                                                msgMail += "\r\n" + bundle.getString("msgr1") + " " + activity.getAttribute("days") + " " + bundle.getString("days") + " " + bundle.getString("and") + " " + activity.getAttribute("hours") + " " + bundle.getString("hours") + " .";
+                                                msgMail += "<br/><br/>" + bundle.getString("msgr1") + " " + activity.getAttribute("days") + " " + bundle.getString("days") + " " + bundle.getString("and") + " " + activity.getAttribute("hours") + " " + bundle.getString("hours") + " .";
                                             }
                                         }
                                         SocialTopic socialTopic = (SocialTopic) postOut.getSocialTopic();
                                         HashMap args = new HashMap();
                                         args.put("language", Locale.getDefault().getLanguage());
-                                        msgMail += "\r\n" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".\r\n";
+                                        msgMail += "<br/><br/>" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".<br/><br/>";
                                         SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg8"), msgMail);
                                     } else if (activity.getAttribute("type").equalsIgnoreCase("EndActivity")) {
+                                        System.out.println("mailToNotify--3");
                                         User user = postOut.getCreator();
                                         String msgMail = bundle.getString("msg1") + " " + postOut.getId() + " " + bundle.getString("msg2") + " '" + postOut.getMsg_Text() + "' " + bundle.getString("msg9") + ".";
-                                        msgMail += "\r\n" + bundle.getString("sitio") + ": " + wsite.getTitle() + ".\r\n";
-                                        msgMail += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
+                                        msgMail += "<br/><br/>" + bundle.getString("sitio") + ": " + wsite.getTitle() + ".<br/><br/>";
+                                        msgMail += "<br/><br/>" + bundle.getString("paso") + ": " + activityName + ".<br/><br/>";
                                         if (messageType.equalsIgnoreCase("N") && message != null && !message.equalsIgnoreCase("")) {
-                                            msgMail += "\r\n" + bundle.getString("msg6") + ": " + message;
+                                            msgMail += "<br/><br/>" + bundle.getString("msg6") + ": " + message;
                                         }
                                         SocialTopic socialTopic = (SocialTopic) postOut.getSocialTopic();
                                         HashMap args = new HashMap();
                                         args.put("language", Locale.getDefault().getLanguage());
-                                        msgMail += "\r\n" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".\r\n";
+                                        msgMail += "<br/><br/>" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".<br/><br/>";
                                         SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg10") + "", msgMail);
                                     } else if (activity.getAttribute("type").equalsIgnoreCase("Activity")) {
+                                        System.out.println("mailToNotify--4");
                                         HashSet<User> husers = new HashSet<User>();
                                         NodeList users = activity.getElementsByTagName("user");
                                         for (int j = 0; j < users.getLength(); j++) {
@@ -1345,38 +1348,42 @@ public class SocialPFlowMgr {
                                             to = to.substring(0, to.length() - 1);
                                         }
                                         if (!to.equalsIgnoreCase("")) {
+                                            System.out.println("mailToNotify--5");
                                             String subject = bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg11");
-                                            String msg = bundle.getString("msg1") + " " + postOut.getId() + " " + bundle.getString("msg2") + " '" + postOut.getMsg_Text() + "' " + bundle.getString("msg12") + " '" + activityName + "'.\r\n";
-                                            msg += "\r\n" + bundle.getString("sitio") + ": " + wsite.getTitle() + ".\r\n";
-                                            msg += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
+                                            String msg = "<b>"+bundle.getString("msg1") + " " + postOut.getId() + " " + bundle.getString("msg2") + ":</b>"
+                                                    + "  '" + postOut.getMsg_Text() + "' <br/><br/>" 
+                                                    + bundle.getString("msg12") + ": '" + activityName + "'.<br/><br/>";
+                                            msg += "<b>"+bundle.getString("sitio") + ":</b> " + wsite.getTitle() + ".<br/><br/>";
+                                            msg += "<b>"+bundle.getString("paso") + ":</b> " + activityName + ".<br/><br/>";
                                             SocialTopic socialTopic = (SocialTopic) postOut.getSocialTopic();
                                             HashMap args = new HashMap();
                                             args.put("language", Locale.getDefault().getLanguage());
-                                            msg += "\r\n" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".\r\n";
+                                            msg += "<b>"+bundle.getString("socialTopic") + ":</b> " + socialTopic.getTitle() + ".<br/><br/>";
 
                                             if ((messageType.equalsIgnoreCase("I") || messageType.equalsIgnoreCase("N")) && message != null && !message.equalsIgnoreCase("")) {
-                                                msg += "\r\n" + bundle.getString("msg6") + ": " + message;
+                                                msg += "<br/><b>" + bundle.getString("msg6") + ":</b><br/><br/> " + message;
                                             }
                                             if (messageType.equalsIgnoreCase("A")) {
 
                                                 // envía correo al creador del contenido
                                                 User user = postOut.getCreator();
-                                                String msgMail = bundle.getString("sitio") + ": " + wsite.getTitle() + ".\r\n";
-                                                msgMail += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
+                                                String msgMail = bundle.getString("sitio") + ": " + wsite.getTitle() + ".<br/><br/>";
+                                                msgMail += "<br/><br/>" + bundle.getString("paso") + ": " + activityName + ".<br/><br/>";
                                                 //msgMail+=bundle.getString("url")+": "+ObjRes.getAdminUrl()+".\r\n";
-                                                msgMail += "\r\n" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".\r\n";
-                                                msgMail += "\r\n" + bundle.getString("msg13") + " " + postOut.getId() + " " + bundle.getString("msg14");
+                                                msgMail += "<br/><br/>" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".<br/><br/>";
+                                                msgMail += "<br/><br/>" + bundle.getString("msg13") + " " + postOut.getId() + " " + bundle.getString("msg14");
 
                                                 SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg13") + " " + postOut.getId() + " " + bundle.getString("msg14"), msgMail);
 
                                                 // avisa al los revisores de la expiración de la revisión delc ontenido
-                                                msg += "\r\n" + bundle.getString("msg13") + " " + postOut.getId() + " " + bundle.getString("msg14");
+                                                msg += "<br/><br/>" + bundle.getString("msg13") + " " + postOut.getId() + " " + bundle.getString("msg14");
                                             }
                                             if (activity.getAttribute("days") != null && activity.getAttribute("hours") != null) {
                                                 if (!(activity.getAttribute("days").equals("0") && activity.getAttribute("hours").equals("0"))) {
-                                                    msg += "\r\n" + bundle.getString("msgr1") + " " + activity.getAttribute("days") + " " + bundle.getString("days") + " " + bundle.getString("and") + " " + activity.getAttribute("hours") + " " + bundle.getString("hours") + " .";
+                                                    msg += "<br/><br/>" + bundle.getString("msgr1") + " " + activity.getAttribute("days") + " " + bundle.getString("days") + " " + bundle.getString("and") + " " + activity.getAttribute("hours") + " " + bundle.getString("hours") + " .";
                                                 }
                                             }
+                                            //System.out.println("msg:"+msg);
                                             SWBUtils.EMAIL.sendBGEmail(to, subject, msg);
                                         }
                                     }
