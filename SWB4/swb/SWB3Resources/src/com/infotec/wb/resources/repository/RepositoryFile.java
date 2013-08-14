@@ -27,6 +27,7 @@
  */
 package com.infotec.wb.resources.repository;
 
+import com.infotec.appfw.exception.AFException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.*;
@@ -47,7 +48,6 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.indexer.FileSearchWrapper;
-import org.semanticwb.portal.indexer.SWBIndexer;
 import org.semanticwb.portal.util.FileUpload;
 
 /**
@@ -1528,9 +1528,9 @@ public class RepositoryFile {
                                 ret.append("&nbsp;<a  class=\"undo\" href=\"javascript: doUndocheckout(" + i_log + "," + repdocid + ");\"><span>undo</span></a>");
                             } else {
                                 if (nivel == 3) {
-                                    ret.append("<a class=\"undo\" href=\"javascript: doUndocheckout(" + i_log + "," + repdocid + ");\"><span>undo</span></a>");
+                                    ret.append("<a  class=\"undo\"  href=\"javascript: doUndocheckout(" + i_log + "," + repdocid + ");\"><span>undo</span></a>");
                                 } else {
-                                    ret.append("<a href=\"#\" class=\"reser\"><span>" + paramsRequest.getLocaleString("msgReserved") + "</span></a>");
+                                    ret.append("<a href=\"#\"  class=\"reser\"  title=\"" + paramsRequest.getLocaleString("msgReserved") + "\" ><span>reservado</span></a>");
                                 }
                             }
                         }
@@ -1539,9 +1539,9 @@ public class RepositoryFile {
                         if (!subcriptions.contains(new Long(0))) { //dir
 
                             if (!subcriptions.contains(new Long(repdocid))) {
-                                ret.append("<a class=\"suscribir\" href=\"javascript: doSuscribeDoc(" + i_log + "," + repdocid + ");\"><span>" + paramsRequest.getLocaleString("msgSuscribe") + "</span></a>");
+                                ret.append("<a  class=\"suscribir\"  href=\"javascript: doSuscribeDoc(" + i_log + "," + repdocid + ");\" title=\"" + paramsRequest.getLocaleString("msgSuscribe") + "\"><span>suscribir</span></a>");
                             } else {
-                                ret.append("<a  class=\"nosuscribir\" href=\"javascript: doUnsuscribeDoc(" + i_log + "," + repdocid + ");\"><span>" + paramsRequest.getLocaleString("msgUnSuscribe") + "</span></a>");
+                                ret.append("<a  class=\"nosuscribir\"  href=\"javascript: doUnsuscribeDoc(" + i_log + "," + repdocid + ");\" title=\"" + paramsRequest.getLocaleString("msgUnSuscribe") + "\" ><span>no suscribir</span></a>");
                             }
                         }
                     }
@@ -1566,9 +1566,9 @@ public class RepositoryFile {
                     if (candelete && user.isSigned()) {
                         if (repstatus == 0) {
                             if (resource.getAttribute("showdirectory", "true").equals("true")) {
-                                ret.append("<a class=\"mover\" href=\"javascript: doMoveDocDir(" + i_log + "," + repdocid + ");\"><span>" + paramsRequest.getLocaleString("msgALTMove") + "</span></a>");
+                                ret.append("<a  class=\"mover\"  href=\"javascript: doMoveDocDir(" + i_log + "," + repdocid + ");\" title=\"" + paramsRequest.getLocaleString("msgALTMove") + "\" ><span>Mover</span></a>");
                             }
-                            ret.append("<a class=\"eliminar\" href=\"javascript: doDelete(" + i_log + "," + repdocid + ");\"><span>" + paramsRequest.getLocaleString("msgAltDelete") + "</span></a>");
+                            ret.append("<a  class=\"eliminar\"  href=\"javascript: doDelete(" + i_log + "," + repdocid + ");\" title=\"" + paramsRequest.getLocaleString("msgAltDelete") + "\" ><span>Eliminar</span></a>");
                         }
                     }
                     if (nivel >= 1) {
@@ -1593,9 +1593,9 @@ public class RepositoryFile {
                             tmp = 1;
                         }
                         if (inline) {
-                            ret.append("<a class=\"ver\" href=\"javascript: doViewInLine(" + tmp + "," + repdocid + ");\"><span>" + paramsRequest.getLocaleString("msgAltPreview") + "</span></a>");
+                            ret.append("<a class=\"ver\" href=\"javascript: doViewInLine(" + tmp + "," + repdocid + ");\" title=\"" + paramsRequest.getLocaleString("msgAltPreview") + "\" ><span>Ver</span></a>");
                         } else {
-                            ret.append("<a class=\"ver\" href=\"javascript: doView(" + tmp + "," + repdocid + ");\"><span>" + paramsRequest.getLocaleString("msgAltPreview") + "</span></a>");
+                            ret.append("<a class=\"ver\" href=\"javascript: doView(" + tmp + "," + repdocid + ");\" title=\"" + paramsRequest.getLocaleString("msgAltPreview") + "\" ><span>Ver</span></a>");
                         }
                     }
                     ret.append("</p>");
