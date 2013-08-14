@@ -363,27 +363,6 @@ public class SWBSocialUtil implements SWBAppObject {
             aux = ret.toString();
             return aux;
         }
-        
-        /**
-         * Replaces full urls with shorten urls.
-         * @param text with full urls
-         * @return text with shorten urls
-         */
-        public static String shortUrl(String urlLong) {
-            String parsedMessage = "";
-            if (urlLong != null && !urlLong.isEmpty()) {
-                String delimiter = " ";
-                String[] temp = urlLong.split(delimiter);
-                for (int i = 0; i < temp.length; i++) {
-                    if ((temp[i].startsWith("http://") || temp[i].startsWith("https://")) && ((temp[i].length() > 9))) {
-                        tinyURL tU = new tinyURL();
-                        temp[i] = tU.getTinyURL(temp[i]);
-                    }
-                    parsedMessage += temp[i] + " ";
-                }
-            }
-            return parsedMessage;
-        }
     }
     /*
     public static class words2Monitor {
@@ -1245,6 +1224,27 @@ public class SWBSocialUtil implements SWBAppObject {
                 }                
             }
             return null;
+        }
+        
+        /**
+         * Replaces full urls with shorten urls.
+         * @param text with full urls
+         * @return text with shorten urls
+         */
+        public static String shortUrl(String urlLong) {
+            String parsedMessage = "";
+            if (urlLong != null && !urlLong.isEmpty()) {
+                String delimiter = " ";
+                String[] temp = urlLong.split(delimiter);
+                for (int i = 0; i < temp.length; i++) {
+                    if ((temp[i].startsWith("http://") || temp[i].startsWith("https://")) && ((temp[i].length() > 9))) {
+                        tinyURL tU = new tinyURL();
+                        temp[i] = tU.getTinyURL(temp[i]);
+                    }
+                    parsedMessage += temp[i] + " ";
+                }
+            }
+            return parsedMessage;
         }
         
     }
