@@ -79,6 +79,7 @@
               },
               error: function(response)
               {
+                  alert(response.status);
                   if(dojo.byId(tagid)) {
                       //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
                   }else {
@@ -90,6 +91,47 @@
           });
       }
     
+    function postSocialHtmlListeners(url, tagid)
+      {
+          dojo.xhrPost({
+              url: url,
+              load: function(response)
+              {
+                  var tag=dojo.byId(tagid);
+                  if(tag){
+                      var pan=dijit.byId(tagid);
+                      if(pan && pan.attr)
+                      {
+                          pan.attr('content',response);
+                      }else
+                      {
+                          tag.innerHTML = response;
+                      }
+                  }else {
+                      console.log('Tag not found: ' + tagid);
+                  }
+                  return response;
+              },
+              error: function(response)
+              {
+                  //If server is down or session expired
+                  if(response.status == 0 || response.status == 403){
+                    //Clear all possible active intervals
+                    for(var i = 0;  i < 1000; i++){
+                        clearInterval(i);
+                    }
+                  }
+                  
+                  if(dojo.byId(tagid)) {
+                      //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
+                  }else {
+                      console.log('Tag not found: ' + tagid);
+                  }
+                  return response;
+              },
+              handleAs: "text"
+          });
+      }
     function imageLoad(imgObject, imgParam) {
         var tag = dojo.byId(imgParam);
         var img = new Image();
@@ -235,11 +277,25 @@
             url: url,
             load: function(response, ioArgs)
             {
-                console.log('Listener stoped:' + response)
+                //console.log('Listener stoped:' + response)
                 return response;
             },
             error: function(response, ioArgs){
                 console.log("Error Stoping listener!");
+            },
+            handleAs: "text"
+        });
+    }
+    
+    function saveInterval(url){
+        dojo.xhrGet({
+            url: url,
+            load: function(response, ioArgs)
+            {
+                //console.log('Saving interval:' + response)
+            },
+            error: function(response, ioArgs){
+                console.log("Error saving interval!");
             },
             handleAs: "text"
         });
