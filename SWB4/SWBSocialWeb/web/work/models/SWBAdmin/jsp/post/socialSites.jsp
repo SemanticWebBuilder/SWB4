@@ -50,9 +50,12 @@
                         while(itSocialSites.hasNext())
                         {
                             SocialSite socialSite=itSocialSites.next(); 
-                            %>
-                                <option value="<%=socialSite.getURI()%>"><%=socialSite.getDisplayTitle(user.getLanguage())%></option>
-                            <%
+                            if(socialSite.isValid())
+                            {    
+                                %>
+                                    <option value="<%=socialSite.getURI()%>"><%=socialSite.getDisplayTitle(user.getLanguage())%></option>
+                                <%
+                            }
                         }
                     %>
                 </select>
