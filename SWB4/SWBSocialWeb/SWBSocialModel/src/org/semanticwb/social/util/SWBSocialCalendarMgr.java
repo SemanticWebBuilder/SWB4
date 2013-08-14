@@ -17,9 +17,17 @@ import org.semanticwb.social.SocialCalendar;
 import org.semanticwb.social.SocialFlow.SocialPFlowMgr;
 
 /**
- *
+ * Clase controlada de los calendarios sociales en SWBSocial, esta clase ejecuta un proceso cada minuto el cual va a revisar todos
+ * los calendarios que esten creados en todas las marcas en SWBSocial y de ellos obtendar sus referencias (PostOut asociados), se 
+ * va ha ejecutar el metodo "SWBSocialUtil.PostOutUtil.publishPost(postOut)", solamente una vez durante el periodo de tiempo que el
+ * calendario este vigente (isOnSchedule), una vez que se haya ejecuta la primera vez durante su vigencia, se agregara el PostOut a 
+ * la lista de PostOut publicados por el calendario en cuestion (addPostOut_published(postOut)), para que mientras dura la vigencia
+ * (por ejemplo de las 10:00 am a las 15:00 pm o Todo el Lunes, ya no se vuelva a ejecutar, una vez que su vigencia termine, se 
+ * elimina el postOut del calendario en cuestion (sCalendar.removePostOut_published(postOut)) para que sea ejecutado nuevamente la
+ * siguiente vez que entre en vigencia. Y así sucesivamente...
  * @author jorge.jimenez
  */
+
 public class SWBSocialCalendarMgr {
 
     private static Logger log = SWBUtils.getLogger(SWBSocialCalendarMgr.class);
