@@ -39,12 +39,12 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.Message;
 import org.semanticwb.social.Photo;
-import org.semanticwb.social.PostIn;
 import org.semanticwb.social.PostOut;
 import org.semanticwb.social.PostOutNet;
 import org.semanticwb.social.SocialFlow.SocialPFlowMgr;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialPFlow;
+import org.semanticwb.social.SocialPFlowInstance;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.util.SWBSocialComparator;
@@ -520,7 +520,7 @@ public class SocialSentPost extends GenericResource {
                    needAuthorization = false;
                    send2Flow = false;
                    
-                   System.out.println("sobj PostOut..JJUri:"+postOut.getEncodedURI()+",Is Published:"+postOut.isPublished());
+                   //System.out.println("sobj PostOut..JJUri:"+postOut.getEncodedURI()+",Is Published:"+postOut.isPublished());
 
                    isInFlow = pfmgr.isInFlow(postOut);
 
@@ -763,11 +763,11 @@ public class SocialSentPost extends GenericResource {
                        while(itPostOutNets.hasNext())
                        {
                            PostOutNet postOutNet=itPostOutNets.next();
-                           System.out.println("postOutNet:"+postOutNet);
+                           //System.out.println("postOutNet:"+postOutNet);
                            postOutwithPostOutNets=true;
                            if(postOutNet.getStatus()==0) 
                            {
-                               System.out.println("postOutNet-1/status:"+postOutNet.getStatus());
+                               //System.out.println("postOutNet-1/status:"+postOutNet.getStatus());
                                someOneIsNotPublished=true;
                                break;
                            }
@@ -783,14 +783,14 @@ public class SocialSentPost extends GenericResource {
                        //Esto no es cierto, puede que si el flujo no manda a publicar durectamente, aun no haya ningun PostOutNet para un PostOut, y aunque no se haya enviado 
                        //a publicar aun, con la siguiente condición va a decir que ya esta publicado, revisar mañana, ya que ahorita ya estoy cansado.
                        
-                       System.out.println("Aver esto-isInFlow:"+isInFlow+", aver esto otro-someOneIsNotPublished:"+someOneIsNotPublished);
+                       //System.out.println("Aver esto-isInFlow:"+isInFlow+", aver esto otro-someOneIsNotPublished:"+someOneIsNotPublished);
                        if(!isInFlow && postOutwithPostOutNets && !someOneIsNotPublished) //Se supone que por lo menos, hay publicado un PostOutNet del Post                         
                        {
-                           System.out.println("SE SUPONE QUE ESTA PUBLICADO CARNAL...");
+                           //System.out.println("SE SUPONE QUE ESTA PUBLICADO...");
                            postOut.setPublished(true);
                            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">Publicado</a>");
                        }else{ 
-                            if (!needAuthorization) {
+                            if (!needAuthorization || postOut.getPflowInstance().getStatus()==3) { 
                                 SWBResourceURL urlu = paramRequest.getRenderUrl();
                                 urlu.setMode(Mode_Action);
                                 urlu.setParameter("suri", postOut.getURI());
@@ -798,25 +798,28 @@ public class SocialSentPost extends GenericResource {
                                 //out.println("J1");
                                 if(someOneIsNotPublished)
                                 {
-                                    out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">A Revisar</a>"); //No ha sido publicado en todas las redes sociales que debiera, abrir dialogo para mostrar todos los PostOutNtes del PostOut
-                                }else{
+                                    out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">"+paramRequest.getLocaleString("toReview")+"</a>"); //No ha sido publicado en todas las redes sociales que debiera, abrir dialogo para mostrar todos los PostOutNtes del PostOut
+                                }else if(postOut.getPflowInstance().getStatus()==3){
                                     out.println("<a href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />"+paramRequest.getLocaleString("publish")+"</a>");
+                                }else{
+                                    out.println(paramRequest.getLocaleString("publishing"));
                                 }
                             } else {    //El PostOut ya se envío
                                if(!isInFlow && needAuthorization && !isAuthorized)
                                {
                                    String sFlowRejected="---";
                                    if(postOut.getPflowInstance()!=null&&postOut.getPflowInstance().getPflow()!=null) sFlowRejected=postOut.getPflowInstance().getPflow().getDisplayTitle(lang);
-                                   out.println("Rechazado("+sFlowRejected+")");
+                                   out.println(paramRequest.getLocaleString("rejected")+"("+sFlowRejected+")");
                                }
                                else if(isInFlow && needAuthorization && !isAuthorized){
-                                    out.println("En Flujo("+postOut.getPflowInstance().getPflow().getDisplayTitle(lang)+"/"+postOut.getPflowInstance().getStep()+")");
+                                    //System.out.println("postOut.getPflowInstance().getStatus():"+postOut.getPflowInstance().getStatus());
+                                    out.println(paramRequest.getLocaleString("onFlow")+"("+postOut.getPflowInstance().getPflow().getDisplayTitle(lang)+"/"+postOut.getPflowInstance().getStep()+")");
                                }
                             }
                        }
                    }else{
                        //System.out.println("ESE POST ESTA PUBLICADO..");
-                       out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">Publicado</a>");
+                       out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">"+paramRequest.getLocaleString("published")+"</a>");
                    }
                    out.println("</td>");
 
@@ -1248,6 +1251,7 @@ public class SocialSentPost extends GenericResource {
                 {
                     SWBSocialUtil.PostOutUtil.publishPost(postOut);
                     //TODOSOCIAL:Probar si con esto funciona
+                    //System.out.println("En SocialSentPost/doAction-postOut:"+postOut+",postOut.getPflowInstance():"+postOut.getPflowInstance()+",status:"+postOut.getPflowInstance());
                     if(postOut.getPflowInstance()!=null)
                     {
                         postOut.getPflowInstance().setStatus(2);
@@ -1461,16 +1465,16 @@ public class SocialSentPost extends GenericResource {
         } else if ("remove".equals(action)) //suri, prop
         {
             String sval = request.getParameter("sval");
-            System.out.println("SocialSentPost-REMOVEj1:"+sval);
+            //System.out.println("SocialSentPost-REMOVEj1:"+sval);
             SemanticObject so = SemanticObject.createSemanticObject(sval);
             
             PostOut postOut=(PostOut)so.getGenericInstance();
             
-            System.out.println("SocialSentPost-REMOVEj2:"+postOut);
+            //System.out.println("SocialSentPost-REMOVEj2:"+postOut);
             
             postOut.remove();
             
-            System.out.println("SocialSentPost-REMOVEj3-LISTO");
+            //System.out.println("SocialSentPost-REMOVEj3-LISTO");
             
             response.setRenderParameter("dialog", "close");
             response.setRenderParameter("suri", request.getParameter("suri"));
@@ -1479,15 +1483,15 @@ public class SocialSentPost extends GenericResource {
         } else if ("send2flow".equals(action)) {
             String id = request.getParameter("suri");
             SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-            SemanticObject obj = SemanticObject.createSemanticObject(id); //WebPage
-            SemanticClass cls = obj.getSemanticClass();
             SocialPFlowMgr pfmgr = SocialLoader.getPFlowManager();
             String sval = request.getParameter("sval"); // id resource
             String pfid = request.getParameter("pfid"); // id pflow
             String usermessage = request.getParameter("usrmsg"); // mensaje del usuario
             SocialPFlow pf = (SocialPFlow) ont.getGenericObject(pfid);
             PostOut res = (PostOut) ont.getGenericObject(sval);
+            
             pfmgr.sendResourceToAuthorize(res, pf, usermessage);
+            
             response.setRenderParameter("dialog", "close");
             response.setMode(SWBActionResponse.Mode_EDIT);
             response.setRenderParameter("suri", id);
@@ -1498,10 +1502,7 @@ public class SocialSentPost extends GenericResource {
             SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
             SemanticObject obj = SemanticObject.createSemanticObject(id); //WebPage
             SemanticClass cls = obj.getSemanticClass();
-            //log.debug("processAction(deleteall)" + sprop);
-            //System.out.println("processAction(deleteall)");
             SemanticProperty sem_p = ont.getSemanticProperty(sprop);
-            SemanticObject so = obj.getObjectProperty(sem_p);
             Iterator<SemanticObject> itso = obj.listObjectProperties(sem_p);
             SemanticObject soc = null;
             while (itso.hasNext()) {
