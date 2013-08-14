@@ -56,25 +56,12 @@
     long maxTweetID = 0L;
 %>
 
-
-<div dojoType="dojox.layout.ContentPane">
-    <script type="dojo/method">
-        var interval = setInterval(function(){ postSocialHtml('<%=renderURL.setMode("newTweets")%>','<%=objUri%>' + '/newTweetsAvailable'); },10000);
-        console.log('Value of Interval:' + interval);
-
-        //Change the default onClose method of the parent Tab
-        var tabId =  '<%=objUri%>' + '/tab';
-        var cPane = dijit.byId(tabId);
-        cPane.attr('onClose', function callStopListener(){ clearInterval(interval); stopListener('<%=renderURL.setMode("stopListener")%>'); return true;});
-   </script>
-</div>   
-
 <div class="swbform">
 <%
     try {
             //gets Twitter4j instance with account credentials
             System.out.println("Showing @" + twitterBean.getScreenName() +  "'s home timeline.");
-            out.println("<div align=\"center\"><h2>Showing Showing @" + twitterBean.getScreenName() +  "'s home timeline. </h2><br/></div>");
+            out.println("<div align=\"center\"><h2>Showing @" + twitterBean.getScreenName() +  "'s home timeline. </h2><br/></div>");
             out.println("<div class=\"bar\" id=\"" + objUri + "/newTweetsAvailable\" dojoType=\"dojox.layout.ContentPane\"></div>");
             out.println("<div id=\"" + objUri + "/stream\" dojoType=\"dojox.layout.ContentPane\"></div>");           
             
@@ -87,27 +74,13 @@
             System.out.println("Access S:" + twitterBean.getConfiguration().getOAuthAccessTokenSecret());
             SocialNetwork socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
             SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
-            SocialNetworkUser socialNetUser = null;// = SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(""+status.getUser().getId(), socialNetwork, model);
+
             out.println("<div dojoType=\"dojox.layout.ContentPane\">");
-            String creatorId="";
             String postURI = null;
+            
             for (Status status : twitterBean.getHomeTimeline(paging)){
                 postURI = null;
-                maxTweetID = status.getId();                                    
-                //doPrintTweet(request, response, paramRequest, status, twitterBean, out, recoverConversations(maxTweetID, twitterBean));                
-                /*creatorId = status.getUser().getId() + "";
-                socialNetUser = SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(creatorId, socialNetwork, model);
-                if(socialNetUser != null){//User exists and might have posts or not
-                    Iterator<PostIn> userPosts = PostIn.ClassMgr.listPostInByPostInSocialNetworkUser(socialNetUser, model);
-                    while(userPosts.hasNext()){
-                        PostIn post = userPosts.next();
-                        if(post.getSocialNetMsgId().equals(status.getId()+"")){//Post have been saved before
-                            System.out.println( post.getSocialNetMsgId() +" = " + status.getId());
-                            postURI = post.getURI();
-                            break;
-                        }
-                    }
-                }*/
+                maxTweetID = status.getId();
                 PostIn post = PostIn.getPostInbySocialMsgId(model, status.getId()+"");
                 if(post != null){
                     postURI = post.getURI();
@@ -118,12 +91,53 @@
             }
             out.println("</div>");
             System.out.println("Total tweets:" + i);
-        } catch (Exception te) {
-            System.out.println("Se presento un error al mostrar el Timeline!!");
+        }catch (TwitterException te) {
+            if(te.getErrorCode() == 88){
+                out.println("<div align=\"center\"><h2>RATE LIMIT REACHED</h2><br/></div>");
+            }else{
+                out.println("<div align=\"center\"><h2>" + te.getErrorMessage() + "</h2><br/></div>");
+            }
+            System.out.println("Error displaying timeline:" + te.getErrorMessage());
             te.printStackTrace();
+        }catch(Exception e){
+            System.out.println("Error displaying timeline" + e.getMessage());
+            e.printStackTrace();
         }
 %>    
 <div align="center" id="<%=objUri%>/getMoreTweets" dojoType="dojox.layout.ContentPane">
     <label id="<%=objUri%>/moreTwitLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMoreTweets").setParameter("maxTweetID", maxTweetID+"")%>','<%=objUri%>' + '/getMoreTweets', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;">More tweets</a></label>
 </div>
+
+<div dojoType="dojox.layout.ContentPane">
+    <script type="dojo/method">
+    <%        
+        String intervalId = (String)session.getAttribute(objUri + "pooling");
+        System.out.println("\n\nSESSION VAR FOR CURRENT TAB:" + intervalId);
+        
+        if(intervalId == null){
+    %>
+            var interval = setInterval(function(){ postSocialHtmlListeners('<%=renderURL.setMode("newTweets")%>','<%=objUri%>' + '/newTweetsAvailable'); },10000);
+            console.log('Value of Interval:' + interval);
+            saveInterval('<%=paramRequest.getRenderUrl().setMode("storeInterval").setParameter("suri", objUri)+"&interval="%>' + interval);
+    <%
+        }else{
+    %>
+            console.log('Stoping interval for current uri ' + ':' + <%=intervalId%>);
+            clearInterval(<%=intervalId%>);
+            var interval = setInterval(function(){ postSocialHtmlListeners('<%=renderURL.setMode("newTweets")%>','<%=objUri%>' + '/newTweetsAvailable'); },10000);
+            console.log('Value of a NEW Interval:' + interval);
+            saveInterval('<%=paramRequest.getRenderUrl().setMode("storeInterval").setParameter("suri", objUri)+"&interval="%>' + interval);
+    <%
+        }
+        //In both cases an 'interval' variable is defined and is assigned to the onClose event
+        %>
+
+        //Change the default onClose method of the parent Tab
+        var tabId =  '<%=objUri%>' + '/tab';
+        var cPane = dijit.byId(tabId);        
+        cPane.attr('onClose', function callStopListener(){ clearInterval(interval); stopListener('<%=renderURL.setMode("stopListener")%>'); return true;});
+   </script>
 </div>
+   
+</div>
+
