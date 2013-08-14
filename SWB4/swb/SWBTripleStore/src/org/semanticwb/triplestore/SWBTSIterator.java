@@ -22,7 +22,6 @@
  */
 package org.semanticwb.triplestore;
 
-import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.graph.TripleMatch;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
@@ -97,6 +96,8 @@ public class SWBTSIterator implements ExtendedIterator<Triple>
                 if(query2.length()>0)query2 +=" and";
                 query2 += " obj=?";
             }
+            
+            //if(subj!=null)query2 += " order by timems desc";
 
             if(query2.length()>0)query+=" where"+query2;
 

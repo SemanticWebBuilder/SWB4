@@ -22,6 +22,7 @@
  */
 package org.semanticwb.triplestore;
 
+import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.graph.TripleMatch;
 import com.hp.hpl.jena.graph.impl.GraphBase;
@@ -171,7 +172,13 @@ public class SWBTSGraph extends GraphBase implements RGraph
             if(subj!=null)ps.setString(i++, subj);
             if(prop!=null)ps.setString(i++, prop);
             if(obj!=null)ps.setString(i++, obj);
-            ps.executeUpdate();            
+            int r=ps.executeUpdate();            
+            if(r==0 && subj!=null && prop!=null && obj!=null)
+            {
+                obj=SWBTSUtil.node2HashStringOld(t.getMatchObject(),"lgo");
+                ps.setString(3,obj);
+                ps.executeUpdate();
+            }            
             ps.close();
             con.close();
         } catch (Exception e2)
@@ -202,6 +209,42 @@ public class SWBTSGraph extends GraphBase implements RGraph
     public PrefixMapping getPrefixMapping()
     {
         return pmap;
+    }
+
+    @Override
+    public String encodeSubject(Node n)
+    {
+        return SWBTSUtil.node2HashString(n,"lgs");
+    }
+
+    @Override
+    public String encodeProperty(Node n)
+    {
+        return SWBTSUtil.node2HashString(n,"lgp");
+    }
+
+    @Override
+    public String encodeObject(Node n)
+    {
+        return SWBTSUtil.node2HashString(n,"lgo");
+    }
+
+    @Override
+    public Node decodeSubject(String sub, String ext)
+    {
+        return SWBTSUtil.string2Node(sub,ext);
+    }
+
+    @Override
+    public Node decodeProperty(String prop, String ext)
+    {
+        return SWBTSUtil.string2Node(prop,ext);
+    }
+
+    @Override
+    public Node decodeObject(String obj, String ext)
+    {
+        return SWBTSUtil.string2Node(obj,ext);
     }
 
 }
