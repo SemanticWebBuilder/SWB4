@@ -204,7 +204,8 @@
                                     <%=SWBSocialUtil.Util.getStringFromGenericLocale("published", user.getLanguage())%>
                              <%       
                                 }else{ 
-                                     if (!needAuthorization) {
+                                     System.out.println("postOut:"+postOut+",status:"+postOut.getPflowInstance().getStatus());
+                                     if (!needAuthorization || postOut.getPflowInstance().getStatus()==3) {
                                          if(someOneIsNotPublished)
                                          {
                                            if(firstError!=null)
@@ -219,10 +220,14 @@
                                                    <%=SWBSocialUtil.Util.getStringFromGenericLocale("toReview", user.getLanguage())%> 
                                               <%
                                            }
-                                         }else{
+                                         }else if(postOut.getPflowInstance().getStatus()==3){
                                          %>    
                                              <%=SWBSocialUtil.Util.getStringFromGenericLocale("publish", user.getLanguage())%> 
                                          <%    
+                                         }else {
+                                             %>
+                                                    <%=SWBSocialUtil.Util.getStringFromGenericLocale("publishing", user.getLanguage())%> 
+                                             <%
                                          }
                                      } else {    //El PostOut ya se envío
                                         if(!isInFlow && needAuthorization && !isAuthorized)
