@@ -44,6 +44,27 @@ public class SWBTSUtil
 
     public static final int MAX_NODE_TEXT=255;
 
+    public static String encodeTextOld(String str)
+    {
+        if(str==null)return "";
+        StringBuffer ret = new StringBuffer();
+        for (int x = 0; x < str.length(); x++)
+        {
+            char ch = str.charAt(x);
+            if (ch == '&')
+            {
+                ret.append("&#38;");
+            }else if (ch > 127)
+            {
+                ret.append("&#" + (int) ch + ";");
+            } else
+            {
+                ret.append(ch);
+            }
+        }
+        return ret.toString();
+    }
+    
     public static String encodeText(String str)
     {
         if(str==null)return "";
@@ -230,6 +251,20 @@ public class SWBTSUtil
             return null;
         }
     }
+    
+    /**
+     * Regresa la representacion en String del nodo de RDF,
+     * si es mayor a 255 regresa un Hash que identifica al String generado
+     * @param node
+     * @return
+     */
+    public static String node2HashStringOld(Node node, String prefix)//, StringBuilder comp)
+    {
+        String txt=node2StringOld(node);
+        String hash=getHashText(txt);
+        if(hash!=null)return prefix+"|"+hash;
+        return txt;
+    }
 
     /**
      * Regresa la representacion en String del nodo de RDF,
@@ -244,6 +279,40 @@ public class SWBTSUtil
         if(hash!=null)return prefix+"|"+hash;
         return txt;
     }
+    
+    /**
+     * Regresa la representacion en String del nodo de RDF
+     * @param node
+     * @return
+     */
+    public static String node2StringOld(Node node)//, StringBuilder comp)
+    {
+        if(node==null)return null;
+        if(node.isBlank())return "nid|"+node.getBlankNodeId().toString();
+        if(node.isURI())
+        {
+            //if(node.getURI().length()==0)new Exception().printStackTrace();
+            //if(node.getURI().length()==0)return null;
+            //System.out.println(node.getURI());
+            return "uri|"+node.getURI();
+        }
+        if(node.isLiteral())
+        {
+            LiteralLabel l=node.getLiteral();
+            String type=l.getDatatypeURI();
+            String lang=l.language();
+            String value=l.getValue().toString();
+            if(lang==null || lang.length()==0)lang="_";
+            if(type==null)
+            {
+                type = "_";
+                value=encodeTextOld(value);
+            }
+            //if(value==null)value="";
+            return "lit|"+type+"|"+lang+"|"+value;
+        }
+        return null;
+    }    
 
     /**
      * Regresa la representacion en String del nodo de RDF
