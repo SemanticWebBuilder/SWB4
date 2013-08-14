@@ -184,8 +184,8 @@ public class InstallZipThread extends java.lang.Thread {
                 }
                 istatus = 30;
                 SemanticModel model = SWBPlatform.getSemanticMgr().createDBModelByRDF(newId, newNs, io, "N-TRIPLE");
-                //System.out.println("model:"+model+" "+newId+" "+newNs+" "+io+" "+model.getName());
-                WebSite website = SWBContext.getWebSite(model.getName());
+                System.out.println("model:"+model+" "+newId+" "+newNs+" "+io+" "+model.getName());
+                WebSite website = (WebSite)model.getModelObject().createGenericInstance();//   SWBContext.getWebSite(model.getName());
                 //System.out.println("Site:"+website);
                 
                 wsiteUri = website.getURI();
@@ -212,13 +212,21 @@ public class InstallZipThread extends java.lang.Thread {
                             int pos = xmodelID.lastIndexOf("_usr");
                             if (pos > -1) {
                                 xmodelID = xmodelID.substring(0, pos);
-                                rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel, xmodelID, newId);
+                                //System.out.println("replace:"+xmodelID+" "+newId);
+                                rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel, "<http://user."+xmodelID+".swb#", "<http://user."+newId+".swb#");
+                                rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel, xmodelID+"_usr", newId+"_usr");
                                 io = SWBUtils.IO.getStreamFromString(rdfmodel);
                                 SemanticModel usermodel = SWBPlatform.getSemanticMgr().createDBModelByRDF(newId + "_usr", "http://user." + newId + ".swb#", io, "N-TRIPLE");
                                 if (usermodel != null) {
-                                    UserRepository userRep = SWBContext.getUserRepository(usermodel.getName());
-                                    userRep.setTitle("Repositorio de Usuarios (" + newWebSiteTitle + ")", "es");
-                                    userRep.setTitle("Users Repository (" + newWebSiteTitle + ")", "en");
+                                    UserRepository userRep = (UserRepository)usermodel.getModelObject().createGenericInstance();   //SWBContext.getUserRepository(usermodel.getName());
+                                    if(userRep!=null)
+                                    {
+                                        userRep.setTitle("Repositorio de Usuarios (" + newWebSiteTitle + ")", "es");
+                                        userRep.setTitle("Users Repository (" + newWebSiteTitle + ")", "en");
+                                    }else
+                                    {
+                                        log.error("Error creating user repository...");
+                                    }
                                 }
                             }
                         }
@@ -226,13 +234,22 @@ public class InstallZipThread extends java.lang.Thread {
                             int pos = xmodelID.lastIndexOf("_rep");
                             if (pos > -1) {
                                 xmodelID = xmodelID.substring(0, pos);
-                                rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel, xmodelID, newId);
+                                //System.out.println("replace:"+xmodelID+" "+newId);                                    
+                                rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel, "<http://repository."+xmodelID+".swb#", "<http://repository."+newId+".swb#");
+                                rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel, xmodelID+"_rep", newId+"_rep");
+                                
                                 io = SWBUtils.IO.getStreamFromString(rdfmodel);
                                 SemanticModel repomodel = SWBPlatform.getSemanticMgr().createDBModelByRDF(newId + "_rep", "http://repository." + newId + ".swb#", io, "N-TRIPLE");
                                 if (repomodel != null) {
-                                    Workspace repo = SWBContext.getWorkspace(repomodel.getName());
-                                    repo.setTitle("Repositorio de Documentos (" + newWebSiteTitle + ")", "es");
-                                    repo.setTitle("Documents Repository (" + newWebSiteTitle + ")", "en");
+                                    Workspace repo = (Workspace)repomodel.getModelObject().createGenericInstance();//SWBContext.getWorkspace(repomodel.getName());
+                                    if(repo!=null)
+                                    {
+                                        repo.setTitle("Repositorio de Documentos (" + newWebSiteTitle + ")", "es");
+                                        repo.setTitle("Documents Repository (" + newWebSiteTitle + ")", "en");
+                                    }else
+                                    {
+                                        log.error("Error creating document repository...");                                        
+                                    }
                                 }
                             }
                         }
