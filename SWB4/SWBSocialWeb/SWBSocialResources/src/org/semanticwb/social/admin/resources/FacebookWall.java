@@ -2237,7 +2237,7 @@ public class FacebookWall extends GenericResource {
             writer.write("<div dojoType=\"dijit.layout.ContentPane\">");
             
             writer.write("   <span class=\"inline\" id=\"" + facebook.getId() +  postsData.getString("post_id") + INFORMATION + MEDIA_TAB + "\" dojoType=\"dojox.layout.ContentPane\">");
-            writer.write(facebookHumanFriendlyDate(postTime) + "->" +postsData.getLong("created_time"));
+            writer.write(facebookHumanFriendlyDate(postTime));
 
             if(postsData.has("like_info")){
                 JSONObject likeInfo = postsData.getJSONObject("like_info");
