@@ -32,21 +32,21 @@
             //out.println("postOutContainer existente:"+postOutContainer);
         }
         
-        //out.println("\n\n\n\n\n postOutNet Site:"+wsite+", hay:"+PostOutNet.ClassMgr.listPostOutNets(wsite).hasNext());  
+        out.println("\n\n\n\n\n postOutNet Site:"+wsite+", hay:"+PostOutNet.ClassMgr.listPostOutNets(wsite).hasNext());  
         Iterator <PostOutNet> itPostOutNets=PostOutNet.ClassMgr.listPostOutNets(wsite);
         while(itPostOutNets.hasNext())
         {
             PostOutNet postOutNet=itPostOutNets.next();
-            out.println("postOutNet existente:"+postOutNet+"\n\n"); 
+            out.println("postOutNet existente Jorge:"+postOutNet+"\n\n"); 
             //postOutNet.remove(); 
         }
         
-        out.println("\n\n\n\n\n postOut Site:"+wsite+", hay:"+PostOut.ClassMgr.listPostOuts(wsite).hasNext());   
+        //out.println("\n\n\n\n\n postOut Site:"+wsite+", hay:"+PostOut.ClassMgr.listPostOuts(wsite).hasNext());   
         Iterator <PostOut> itPostOuts=PostOut.ClassMgr.listPostOuts(wsite);
         while(itPostOuts.hasNext())
         {
             PostOut postOut=itPostOuts.next();
-            out.println("postOut existente:"+postOut+"\n\n"); 
+            //out.println("postOut existente:"+postOut+"\n\n"); 
             //postOutNet.remove(); 
         }
         
