@@ -359,7 +359,14 @@ public class SWBATree extends GenericResource
                 String tmid=id.substring(0,id.indexOf('.'));
                 String tpid=id.substring(id.indexOf('.')+1);
                 WebPage tp=SWBContext.getWebSite(tmid).getWebPage(tpid);
-                addTopic(user, tp, res);
+                if(tp!=null)
+                {
+                    addTopic(user, tp, res);
+                }else
+                {
+                    log.error("SWBAtree: not found "+id);
+                    return getError(3);
+                }                    
             }
             else
             {
@@ -694,6 +701,7 @@ public class SWBATree extends GenericResource
      */
     protected void addTopic(User user, WebPage tp, Element res)
     {
+        if(tp==null)return;
         WebSite tma=SWBContext.getAdminWebSite();
         Element menu=null;
         Element option=null;
