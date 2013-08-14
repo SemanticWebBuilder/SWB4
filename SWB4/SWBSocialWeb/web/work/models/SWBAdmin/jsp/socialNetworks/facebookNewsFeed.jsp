@@ -4,6 +4,7 @@
     Author     : francisco.jimenez
 --%>
 
+<%@page import="org.semanticwb.social.util.SWBSocialUtil"%>
 <%@page import="org.semanticwb.social.PostIn"%>
 <%@page import="org.semanticwb.model.WebSite"%>
 <%@page import="org.semanticwb.model.SWBModel"%>
@@ -55,7 +56,8 @@
     }
     span.inline { display:inline; }
 </style>    
-<%!/*
+<%!
+/*
     public static JSONObject getPostFromId(String postId, String fields, Facebook facebook){
         HashMap<String, String> params = new HashMap<String, String>(2);
         params.put("access_token", facebook.getAccessToken());
@@ -94,7 +96,7 @@
                     System.out.println("ARREGLO DE DATOS:" + postsData.length());
                     for (int k = 0; k < postsData.length(); k++) {
                         cont++;
-                        System.out.println("\n\nPost de FACEBOOOK*********: " + postsData.getJSONObject(k));
+                        //System.out.println("\n\nPost de FACEBOOOK*********: " + postsData.getJSONObject(k));
                         doPrintPost(out,  postsData.getJSONObject(k), request, paramRequest, tabSuffix, facebook, model);
                     }
                     if(phraseResp.has("paging")){
@@ -143,12 +145,18 @@
                 if( objectTags.get(key) instanceof JSONArray ){
                     JSONArray tag = objectTags.getJSONArray(key);
                     String userUrl = "";
-                    userUrl = "<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", tag.getJSONObject(0).getString("type")).setParameter("id", tag.getJSONObject(0).getLong("id")+"") + "','" + tag.getJSONObject(0).getString("name") + "'); return false;\">" + tag.getJSONObject(0).getString("name") + "</a>";
+                    if(tag.getJSONObject(0).has("type")){
+                        userUrl = "<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", tag.getJSONObject(0).getString("type")).setParameter("id", tag.getJSONObject(0).getLong("id")+"") + "','" + tag.getJSONObject(0).getString("name") + "'); return false;\">" + tag.getJSONObject(0).getString("name") + "</a>";
+                    }else{
+                        userUrl = "<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", "noType").setParameter("id", tag.getJSONObject(0).getLong("id")+"") + "','" + tag.getJSONObject(0).getString("name") + "'); return false;\">" + tag.getJSONObject(0).getString("name") + "</a>";
+                    }
+                    //userUrl = "<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", tag.getJSONObject(0).getString("type")).setParameter("id", tag.getJSONObject(0).getLong("id")+"") + "','" + tag.getJSONObject(0).getString("name") + "'); return false;\">" + tag.getJSONObject(0).getString("name") + "</a>";
                     postContentWithUrl = postContentWithUrl.replace(tag.getJSONObject(0).getString("name"), userUrl);
                 }
             }
         }catch(JSONException jSonException){
-            System.out.println("Problem parsing associated users");
+            System.out.println("Problem parsing associated users:" + objectTags + "\n\n" + postContent);
+            jSonException.printStackTrace();
             return postContent;
         }
         return postContentWithUrl;    
@@ -186,6 +194,13 @@
             if(postsData.isNull("actions")){//You can't like or respond this post
                 return;                     //Must NOT be shown in wall
             }
+            
+            //If the posts is empty and is application-created don't show it
+            if(postsData.isNull("message") && postsData.isNull("story") && postsData.isNull("name") && postsData.isNull("picture") 
+                    && postsData.isNull("link") && postsData.isNull("description") && !postsData.isNull("application")){
+                return;
+            }
+            
             if(postType.equals("photo")){
                 if(!postsData.isNull("story")){
                     story = (!postsData.isNull("story")) ? postsData.getString("story").replace(postsData.getJSONObject("from").getString("name"), "") : "" ;
@@ -205,10 +220,12 @@
                 }
                 if(postsData.has("application")){
                     if(postsData.getJSONObject("application").getString("name").equals("Foursquare")){
-                        foursquareLink = getPostFromId(postsData.getString("id"), null, facebook);
-                        isFoursquare = true;
-                        System.out.println("\n\n\nFOURSQUARE CREATED:" +  foursquareLink);
-                        message = "Checked in";
+                        return;
+                        //foursquareLink = getPostFromId(postsData.getString("id"), null, facebook);
+                        //isFoursquare = true;
+                        //System.out.println("\n\n\nFOURSQUARE CREATED:" +  foursquareLink);
+                        //message = "Checked in";
+                        
                     }
                 }
                 //Story or message or both!!
@@ -222,9 +239,10 @@
                         story = getTagsFromPost(postsData.getJSONObject("story_tags"), story, renderURL);
                     }
                     if(story.contains("is going to an event") && postsData.has("link")){//If the link is an event
-                        message = "<a href=\"" + postsData.getString("link") + "\" target=\"_blank\">View event</a>";
+                        return;
+                        //message = "<a href=\"" + postsData.getString("link") + "\" target=\"_blank\">View event</a>";
                     }
-                }https://www.facebook.com/events/591036697601184
+                }
                 if(!postsData.isNull("message")){
                     message = postsData.getString("message");
                     if(!postsData.isNull("message_tags")){//Users tagged in story
@@ -233,12 +251,14 @@
                 }
 
                 if(postsData.has("application")){
-                    if(postsData.getJSONObject("application").getString("name").equals("Instagram")){
-                        applicationCreated = getPostFromId(postsData.getString("id"), null, facebook);
-                        isAppCreated = true;
-                        System.out.println("\n\n\nAPPLICATION CREATED:" +  applicationCreated);
-                        message = "Liked a picture in Instagram";
-                    }
+                    //return;
+                    
+                    //if(postsData.getJSONObject("application").getString("name").equals("Instagram")){
+//                        applicationCreated = getPostFromId(postsData.getString("id"), null, facebook);
+////                        isAppCreated = true;
+//                        System.out.println("\n\n\nAPPLICATION CREATED:" +  applicationCreated);
+//                        message = "Liked a picture in Instagram";
+//                    }
                 }
             }else if(postType.equals("status")){
                 
@@ -260,26 +280,31 @@
                         story = getTagsFromPost(storyTags, story, renderURL);
                     }
                     if(story.contains("likes a photo")){
-                        photoLike = getPostFromId(postsData.getString("id"), "id,from,name,name_tags,picture,source,link,tags", facebook);
-                        isAPhotoLike = true;
+                        //photoLike = getPostFromId(postsData.getString("id"), "id,from,name,name_tags,picture,source,link,tags", facebook);
+                        //isAPhotoLike = true;
                         return;
                         //System.out.println("THE RECOVERED OBJECT:" + jSONObject);
                     }else if(story.contains("likes a link")){//Do not print the posts when 'User X likes a link'
-                        linkLike = getPostFromId(postsData.getString("id"), "id,from,name,picture,link,tags,message", facebook);
-                        System.out.println("\n\n\nLINKED LIKED:" +  linkLike);
-                        isALinkLike = true;
+                        //linkLike = getPostFromId(postsData.getString("id"), "id,from,name,picture,link,tags,message", facebook);
+                        //System.out.println("\n\n\nLINKED LIKED:" +  linkLike);
+                        //isALinkLike = true;
                         return;
                     }else if(story.contains("likes a status")){
-                        statusLike = getPostFromId(postsData.getString("id"), null, facebook);
-                        isAStatusLike = true;
-                        System.out.println("\n\n\nSTATUS LIKED:" +  statusLike);
-                        if(statusLike.has("message")){
-                            message = statusLike.getString("message");
-                        }
+                        
+                        //statusLike = getPostFromId(postsData.getString("id"), null, facebook);
+                        //isAStatusLike = true;
+                        //System.out.println("\n\n\nSTATUS LIKED:" +  statusLike);
+                        //if(statusLike.has("message")){
+//                            message = statusLike.getString("message");
+                        //}
                         return;
-                    }else if(story.contains("commented on a")){
+                    }else if(story.contains("commented on")){
                         return;
-                    }    
+                    }else if(story.contains("likes")){//USER likes PAGE
+                        return;
+                    }else if(story.contains("is going to")){//events
+                        return;
+                    }
                 }else{
                      return;
                 }
@@ -335,7 +360,7 @@
 
             writer.write("   </td>");
             writer.write("   <td width=\"90%\">");
-            writer.write("MESSAGE:");
+            //writer.write("MESSAGE:");
             if(message.isEmpty()){
                 writer.write("&nbsp;");
             }else{                
@@ -345,11 +370,11 @@
             writer.write("   </td>");
             writer.write("</tr>");
             
-            if(postType.equals("link") && story.contains("like")){
-                writer.write("<tr>");
-                writer.write("<td>CUAL ES LA FUNCION DE ESTO?</td>");
-                writer.write("</tr>");
-            }
+            //if(postType.equals("link") && story.contains("like")){
+//                writer.write("<tr>");
+//                writer.write("<td>CUAL ES LA FUNCION DE ESTO?</td>");
+//                writer.write("</tr>");
+//            }
             
             //Picture if exists, start
             //if(postType.equals("link") && postsData.has("picture")){
@@ -378,7 +403,7 @@
                 }
                 writer.write("<tr>");
                 writer.write("   <td  width=\"10%\">"); 
-                writer.write("       LINKPIC&nbsp;");
+                writer.write("       &nbsp;");
                 writer.write("   </td>");
                 
                 writer.write("   <td width=\"90%\">");
@@ -393,14 +418,12 @@
                 }else{
                     if(isALinkLike){//If the post is a link -> it has link and name
                         if(linkLike.has("link") && linkLike.has("picture")){
-                            writer.write("IMAGEN de LIKES  ALINK");
                             writer.write("      <div id=\"img" + tabSuffix + facebook.getId() + postsData.getString("id") + "\" style=\"width: 250px; height: 250px; border: thick #666666; overflow: hidden; position: relative;\">");
                             writer.write("      <a href=\"" + linkLike.getString("link") + "\" target=\"_blank\">" + "<img src=\"" + picture + "\" style=\"position: relative;\" onerror=\"this.src ='" + picture.replace("_n.", "_s.") + "'\" onload=\"imageLoad(" + "this, 'img" + tabSuffix +facebook.getId() + postsData.getString("id") + "');\"/></a>");
                             writer.write("      </div>");
                         }
                     }else if(postType.equals("link")){//If the post is a link -> it has link and name
                         if(postsData.has("name") && postsData.has("link")){
-                            writer.write("IS A LINK");
                             writer.write("      <div id=\"img" + tabSuffix + facebook.getId() + postsData.getString("id") + "\" style=\"width: 250px; height: 250px; border: thick #666666; overflow: hidden; position: relative;\">");
                             writer.write("      <a href=\"" + postsData.getString("link") + "\" target=\"_blank\">" + "<img src=\"" + picture + "\" style=\"position: relative;\" onerror=\"this.src ='" + picture.replace("_n.", "_s.") + "'\" onerror=\"this.src ='" + picture.replace("_n.", "_s.") + "'\" onload=\"imageLoad(" + "this, 'img" + tabSuffix +facebook.getId() + postsData.getString("id") + "');\"/></a>");
                             writer.write("      </div>");
@@ -512,11 +535,11 @@
                         JSONObject pagingComments = postsData.getJSONObject("comments").getJSONObject("paging");
 
                         if(pagingComments.has("next") && pagingComments.has("cursors")){
-                            writer.write("<div align=\"left\" id=\"" + postsData.getString("id") + "/" + tabSuffix + "/comments\" dojoType=\"dojox.layout.ContentPane\">");
+                            writer.write("<div align=\"left\" id=\"" + facebook.getId() + postsData.getString("id") + tabSuffix + "/comments\" dojoType=\"dojox.layout.ContentPane\">");
                             SWBResourceURL commentsURL = paramRequest.getRenderUrl().setMode("moreComments").setParameter("suri", request.getParameter("suri")).setParameter("postId", postsData.getString("id"));
                             commentsURL = commentsURL.setParameter("after", pagingComments.getJSONObject("cursors").getString("after")).setParameter("currentTab", tabSuffix);
-                            writer.write("<label id=\"morePostsLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + commentsURL
-                                    + "','" + postsData.getString("id") + "/" + tabSuffix +"/comments', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">View more comments</a></label>");
+                            writer.write("<label><a href=\"#\" onclick=\"appendHtmlAt('" + commentsURL
+                                    + "','" + facebook.getId() + postsData.getString("id") + tabSuffix +"/comments', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">View more comments</a></label>");
                             writer.write("</div>");                            
                         }
                     }
@@ -538,18 +561,21 @@
             writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + INFORMATION + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
             writer.write(facebookHumanFriendlyDate(postTime));
             boolean iLikedPost = false;
-            if(postsData.has("likes")){                
+            writer.write(" Likes: <b>");
+            if(postsData.has("likes")){
                 JSONArray likes = postsData.getJSONObject("likes").getJSONArray("data");
-                writer.write(" Likes: <b>" + "NUMER");
+                writer.write(postsData.getJSONObject("likes").getLong("count") + "");
                 for (int k = 0; k < likes.length(); k++) {
-                    writer.write(likes.getJSONObject(k).getString("name") + ", ");
+                    //writer.write(likes.getJSONObject(k).getString("name") + ", ");
                     if(likes.getJSONObject(k).getString("id").equals(facebook.getFacebookUserId())){
                         //My User id is in 'the likes' of this post
                         iLikedPost = true;
                     }
                 }
-                writer.write("</b>");
+            }else{
+                writer.write("0");
             }
+            writer.write("   </b>");
             writer.write("   </span>");
             
             //Show like/unlike and reply (comment)
@@ -571,8 +597,12 @@
                         PostIn post = PostIn.getPostInbySocialMsgId(model, postsData.getString("id"));
                         writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + TOPIC + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
                         if(post != null){
+                            String socialT = "";
+                            if(post.getSocialTopic() != null){
+                                socialT = post.getSocialTopic().getTitle();
+                            }
                             SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("id")).setParameter("postUri", post.getURI()).setParameter("currentTab", tabSuffix);
-                                writer.write("<a href=\"#\" title=\"" + "Tema actual: " +  post.getSocialTopic().getTitle() + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                                writer.write("<a href=\"#\" title=\"" + "Tema actual: " +  socialT + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
                                 + "Reclasificar post'); return false;\">Reclasificar</a>");
                         }else{
                             SWBResourceURL clasifybyTopic = renderURL.setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("id")).setParameter("currentTab", tabSuffix);
@@ -610,8 +640,8 @@
                 
             }            
         }
-    }*/
-
+    }
+*/
 %>
 <%
     String objUri = (String) request.getParameter("suri");
@@ -627,11 +657,10 @@
     SWBModel model=WebSite.ClassMgr.getWebSite(facebookBean.getSemanticObject().getModel().getName());
     
     params.put("limit", "100");
-    params.put("fields", "id,from,to,message,message_tags,story,story_tags,picture,caption,link,object_id,application,source,name,description,properties,icon,actions,privacy,type,status_type,created_time,likes,comments.limit(5),place");    
+    params.put("fields", "id,from,to,message,message_tags,story,story_tags,picture,caption,link,object_id,application,source,name,description,properties,icon,actions,privacy,type,status_type,created_time,likes,comments.limit(5),place");
 
     //SELECT status_id, time, source, message FROM status WHERE uid = me() Filtering status only
     //POSTS WITH LOCATION https://graph.facebook.com/me/home?with=location
-    //GET  ALL THE POSTS FROM USER FEED
     String fbResponse = postRequest(params, "https://graph.facebook.com/me/home",
                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
         
@@ -646,15 +675,33 @@
         <%
             System.out.println("SINCE: " +  since);
             
-            if(since != null){
-                System.out.println("Calling the funtion!");
+            if(since != null){//Check what this is for
+                String intervalId = (String)session.getAttribute(objUri + "pooling");
+                System.out.println("\n\nSESSION VAR FOR CURRENT FACEBOOK TAB:" + intervalId);
+        
+                if(intervalId == null){
         %>
-            var interval = setInterval(function(){ postSocialHtml('<%=renderURL.setMode("newPostsAvailable")%>','<%=objUri%>newPostsAvailable'); },20000);
-            var tabId =  '<%=objUri%>' + '/tab';
-            var cPane = dijit.byId(tabId);
-            cPane.attr('onClose', function callStopPooling(){ clearInterval(interval); return true;});
+                    var interval = setInterval(function(){ postSocialHtmlListeners('<%=renderURL.setMode("newPostsAvailable")%>','<%=objUri%>newPostsAvailable'); },20000);
+                    console.log('Value of FB Interval:' + interval);
+                    saveInterval('<%=paramRequest.getRenderUrl().setMode("storeInterval").setParameter("suri", objUri)+"&interval="%>' + interval);
         <%
-            }            
+                }else{
+        %>
+                    console.log('Stoping interval for current uri ' + ':' + <%=intervalId%>);
+                    clearInterval(<%=intervalId%>);
+                    var interval = setInterval(function(){ postSocialHtmlListeners('<%=renderURL.setMode("newPostsAvailable")%>','<%=objUri%>newPostsAvailable'); },20000);
+                    console.log('Value of a NEW FB Interval:' + interval);
+                    saveInterval('<%=paramRequest.getRenderUrl().setMode("storeInterval").setParameter("suri", objUri)+"&interval="%>' + interval);
+        <%
+                }
+                //In both cases an 'interval' variable is defined and is assigned to the onClose event
+        %>
+                //Change the default onClose method of the parent Tab
+                var tabId =  '<%=objUri%>' + '/tab';
+                var cPane = dijit.byId(tabId);        
+                cPane.attr('onClose', function callStopListener(){ clearInterval(interval); return true;});
+        <%
+            }
         %>
    </script>
 </div>
