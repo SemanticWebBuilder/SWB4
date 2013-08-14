@@ -2,19 +2,105 @@
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
     <form name="frmAdmin" action="true" method="post" enctype="multipart/form-data" jsframework="dojo">
-    <admdbconnmgr defconn="true"/>
-    <fieldset>
-        <input type="checkbox" name="forward" label="Include(por defecto) / Forward" value="1" promptMessage="Marque la casilla para invocación Forward" />
-        <input type="text" name="jsppath" label="Ruta relativa del JSP" size="50" jspatron="[\w\/\-]+(\.jsp)$" jsrequired="true" invalidMessage="El archivo debe tener extensión jsp" promptMessage="Ruta relativa del archivo JSP. Por ejemplo /swbadmin/jsp/poll/poll.jsp" />
-    </fieldset>
-    <div title="Opciones avanzadas" open="false">
-        <fieldset legend="Configurar el ProcessAction">
-            <input type="text" name="jspactpath" label="Ruta del JSP de acción" size="50" jspatron="[\w\/\-]+(\.jsp)$" invalidMessage="El archivo debe tener extensión jsp" />
+        <admdbconnmgr defconn="true"/>
+        <fieldset>
+            <input type="checkbox" name="forward" label="Include(por defecto) / Forward" value="1" promptMessage="Marque la casilla para invocación Forward" />
+            <input type="text" name="jsppath" label="Ruta relativa del JSP" size="50" jspatron="[\w\/\-\{\}\.]+(\.jsp)$" jsrequired="true" invalidMessage="El archivo debe tener extensión jsp" promptMessage="Ruta relativa del archivo JSP. Por ejemplo /swbadmin/jsp/poll/poll.jsp" />
         </fieldset>
-    </div>
-    <fieldset>
-        <input type="submit" name="btnSave" id="btnSave" value="Guardar" />
-        <input type="reset"  name="btnReset" id="btnReset" value="Restablecer" />
-    </fieldset>
-</form>
+        <div title="Opciones avanzadas" open="false">
+            <fieldset legend="Configurar el ProcessAction">
+                <input type="text" name="jspactpath" label="Ruta del JSP de acción" size="50" jspatron="[\w\/\-\{\}\.]+(\.jsp)$" invalidMessage="El archivo debe tener extensión jsp" />
+            </fieldset>
+            <fieldset legend="Datos">
+                <statictext name="txtNotaUserLogin">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {user.login} Login de usuario
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaUserMail">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {user.email} Correo del usuario
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaUserLanguage">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {user.language} Código del Lenguaje del Usuario
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaUserCountry">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {user.country} Código del País del Usuario
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaWebPath">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {webpath} Ruta web (del contexto de la instancia de SWB)
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaDispath">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {distpath} Ruta del distribuidor de la instancia de SWB
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaWebWorkPath">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {webworkpath} Ruta web del directorio de trabajo para esta instancia de SWB
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaWorkPath">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {workpath} Ruta física del directorio de trabajo de la instancia de SWB
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaWebSiteId">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {websiteid} Identificador del sitio web
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaTopicUrl">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {topicurl} Url de la página en que se desplegará este texto
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaTopicId">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {topicid} Identificador de la página en que se desplegará este texto
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaTopicTitle">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {topic.title} Título de la página en que se desplegará este texto
+			</font>
+		]]>
+                </statictext>
+            </fieldset>    
+        </div>
+        <fieldset>
+            <input type="submit" name="btnSave" id="btnSave" value="Guardar" />
+            <input type="reset"  name="btnReset" id="btnReset" value="Restablecer" />
+        </fieldset>
+    </form>
 </admresource>
