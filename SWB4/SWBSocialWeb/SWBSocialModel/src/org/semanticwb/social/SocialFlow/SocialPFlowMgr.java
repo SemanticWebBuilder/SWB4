@@ -636,6 +636,7 @@ public class SocialPFlowMgr {
                                     }
                                     else if (serviceName.equals("noauthorize"))
                                     {
+                                        //System.out.println("ENTRA A SocialPFlowMgr/approveResource-noauthorizeContent");
                                         noauthorizeContent(resource);
                                         if (notification != null)
                                         {
@@ -651,14 +652,14 @@ public class SocialPFlowMgr {
                                     }
                                     else if (serviceName.equals("publish"))
                                     {
-                                        System.out.println("ESTA LISTO PARA PUBLICAR EL POSTOut en SocialPFlowMgr/approveResource,notification:"+notification);
+                                        //System.out.println("ESTA LISTO PARA PUBLICAR EL POSTOut en SocialPFlowMgr/approveResource,notification:"+notification);
                                         try
                                         {
                                             SWBSocialUtil.PostOutUtil.publishPost(resource);
                                             resource.setPublished(true);
                                             if (notification != null)
                                             {
-                                                System.out.println("En approveResource--13:"+notification);
+                                                //System.out.println("En approveResource--13:"+notification);
                                                 notification.publish(resource);
                                             }
                                         }catch(Exception se)
@@ -780,13 +781,14 @@ public class SocialPFlowMgr {
                             }
                             else if (serviceName.equals("noauthorize"))
                             {
+                                //System.out.println("ENTRA A SocialPFlowMgr/rejectContent-noauthorizeContent");
                                 noauthorizeContent(resource);
                             }
                             else if (serviceName.equals("publish"))
                             {
                                 try
                                 {
-                                    System.out.println("ESTA LISTO PARA PUBLICAR EL POSTOut en SocialPFlowMgr/rejectContent");
+                                    //System.out.println("ESTA LISTO PARA PUBLICAR EL POSTOut en SocialPFlowMgr/rejectContent");
                                     SWBSocialUtil.PostOutUtil.publishPost(resource);
                                     resource.setPublished(true);
                                     /*
@@ -905,7 +907,6 @@ public class SocialPFlowMgr {
                     log.error(e);
                 }
                 String messageType = "I";
-                System.out.println("InitContent--1");
                 mailToNotify(resource, activity, messageType, message);
             }
 
@@ -1040,14 +1041,20 @@ public class SocialPFlowMgr {
             String iresw = eres.getAttribute("id");
             if (iresw.equals(typeresource) && wsite.getId().equals(eres.getAttribute("topicmap")))
             {
-                int version = (int) Double.parseDouble(workflow.getAttribute("version"));
                 SocialPFlowInstance instance = SocialPFlowInstance.ClassMgr.createSocialPFlowInstance(wsite);
+                if(resource.getPflowInstance()!=null)
+                {
+                    //System.out.println("resource.getPflowInstance() ACTUAL Y ANTES DE CREAR OTRA:"+resource.getPflowInstance()+", status:"+resource.getPflowInstance().getStatus());
+                    instance=resource.getPflowInstance();
+                }else{
+                    instance = SocialPFlowInstance.ClassMgr.createSocialPFlowInstance(wsite);
+                }
+                int version = (int) Double.parseDouble(workflow.getAttribute("version"));
                 instance.setPflow(pflow);
                 resource.setPflowInstance(instance);
                 instance.setPfinstPostOut(resource);
                 instance.setStatus(1);
                 instance.setVersion(version);
-                System.out.println("sendResourceToAuthorize--1");
                 initContent(resource, pflow, message);
             }
         }
@@ -1124,14 +1131,12 @@ public class SocialPFlowMgr {
      */
     public static boolean needAnAuthorization(PostOut resource)
     {
-        //System.out.println("resource en needAnAuthorization:"+resource.getMsg_Text());
         SocialPFlow postOutFlow=null;
         if(resource.getPflowInstance()==null) return false;
         else
         {
             postOutFlow=resource.getPflowInstance().getPflow();
         }
-        //System.out.println("postOutFlow en needAnAuthorization:"+postOutFlow);
         SocialTopic socialTopic=resource.getSocialTopic();
         Iterator<SocialPFlowRef> refs = socialTopic.listInheritPFlowRefs();
         while (refs.hasNext())
@@ -1244,7 +1249,6 @@ public class SocialPFlowMgr {
          */
         public static void mailToNotify(PostOut postOut, String activityName, String messageType, String message) 
         {
-            System.out.println("mailToNotify--1");
             User wbuser = postOut.getCreator();
             Locale locale = Locale.getDefault();
             try {
@@ -1271,7 +1275,7 @@ public class SocialPFlowMgr {
                                 }
                                 if (activity.getAttribute("name").equalsIgnoreCase(activityName)) {
                                     if (activity.getAttribute("type").equalsIgnoreCase("AuthorActivity")) {
-                                        System.out.println("mailToNotify--2");
+                                        //System.out.println("mailToNotify--2");
                                         User user = postOut.getCreator();
                                         String msgMail = bundle.getString("msg1") + " " + postOut.getId() + " " + bundle.getString("msg2") + " '" + postOut.getMsg_Text() + "' " + bundle.getString("msg3") + ".";
 
@@ -1292,7 +1296,7 @@ public class SocialPFlowMgr {
                                         msgMail += "<br/><br/>" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".<br/><br/>";
                                         SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg8"), msgMail);
                                     } else if (activity.getAttribute("type").equalsIgnoreCase("EndActivity")) {
-                                        System.out.println("mailToNotify--3");
+                                        //System.out.println("mailToNotify--3");
                                         User user = postOut.getCreator();
                                         String msgMail = bundle.getString("msg1") + " " + postOut.getId() + " " + bundle.getString("msg2") + " '" + postOut.getMsg_Text() + "' " + bundle.getString("msg9") + ".";
                                         msgMail += "<br/><br/>" + bundle.getString("sitio") + ": " + wsite.getTitle() + ".<br/><br/>";
@@ -1306,7 +1310,7 @@ public class SocialPFlowMgr {
                                         msgMail += "<br/><br/>" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".<br/><br/>";
                                         SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg10") + "", msgMail);
                                     } else if (activity.getAttribute("type").equalsIgnoreCase("Activity")) {
-                                        System.out.println("mailToNotify--4");
+                                        //System.out.println("mailToNotify--4");
                                         HashSet<User> husers = new HashSet<User>();
                                         NodeList users = activity.getElementsByTagName("user");
                                         for (int j = 0; j < users.getLength(); j++) {
@@ -1348,7 +1352,7 @@ public class SocialPFlowMgr {
                                             to = to.substring(0, to.length() - 1);
                                         }
                                         if (!to.equalsIgnoreCase("")) {
-                                            System.out.println("mailToNotify--5");
+                                            //System.out.println("mailToNotify--5");
                                             String subject = bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg11");
                                             String msg = "<b>"+bundle.getString("msg1") + " " + postOut.getId() + " " + bundle.getString("msg2") + ":</b>"
                                                     + "  '" + postOut.getMsg_Text() + "' <br/><br/>" 
@@ -1433,6 +1437,7 @@ public class SocialPFlowMgr {
                             {
                                 if (activity.getAttribute("type").equalsIgnoreCase("AuthorActivity"))
                                 {
+                                    //System.out.println("ENTRA A NO AUTORIZA CONTENT Y PONE -1 A STATUS");
                                     instance.setStep(null);
                                     instance.setStatus(-1);
                                 }
