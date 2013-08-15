@@ -562,6 +562,7 @@ public class SocialPFlowMgr {
                                 ecurrentActivity = eactivity;
                             }
                         }
+                        //System.out.println("ecurrentActivity approveResource/Jorge :"+ecurrentActivity.getAttribute("name"));
                         NodeList links = workflow.getElementsByTagName("link");
                         for (int iLink = 0; iLink < links.getLength(); iLink++)
                         {
@@ -569,6 +570,7 @@ public class SocialPFlowMgr {
                             if (eLink.getAttribute("from").equals(ecurrentActivity.getAttribute("name")) && eLink.getAttribute("type").equals("authorized"))
                             {
                                 String newActivity = eLink.getAttribute("to");
+                                //System.out.println("Sigue Activity approveResource/Jorge :"+newActivity);
                                 for (int iActivity = 0; iActivity < activities.getLength(); iActivity++)
                                 {
                                     Element eactivity = (Element) activities.item(iActivity);
@@ -617,8 +619,17 @@ public class SocialPFlowMgr {
                                     }
                                     else if (serviceName.equals("authorize"))
                                     {
-                                        resource.getPflowInstance().setStatus(2);
-                                        resource.getPflowInstance().setStep(null);                                        
+                                        //No me gusta poner esto estatico y en español, pero como estoy reutilizando lo de swb
+                                        //y el Vic lo hizo así, pues ni modo, lo tuve que poner así
+                                        System.out.println("Entra a Approve/status:"+resource.getPflowInstance().getStatus()+",step:"+resource.getPflowInstance().getStep());
+                                        if(newActivity.equals("Terminar flujo"))    
+                                        {
+                                            resource.getPflowInstance().setStatus(3);
+                                        }else
+                                        {
+                                            resource.getPflowInstance().setStatus(2);
+                                            resource.getPflowInstance().setStep(null);                                        
+                                        }
                                         if (notification != null)
                                         {
                                             notification.autorize(resource);
@@ -656,7 +667,7 @@ public class SocialPFlowMgr {
                                         try
                                         {
                                             SWBSocialUtil.PostOutUtil.publishPost(resource);
-                                            resource.setPublished(true);
+                                            //resource.setPublished(true);
                                             if (notification != null)
                                             {
                                                 //System.out.println("En approveResource--13:"+notification);
@@ -790,7 +801,7 @@ public class SocialPFlowMgr {
                                 {
                                     //System.out.println("ESTA LISTO PARA PUBLICAR EL POSTOut en SocialPFlowMgr/rejectContent");
                                     SWBSocialUtil.PostOutUtil.publishPost(resource);
-                                    resource.setPublished(true);
+                                    //resource.setPublished(true);
                                     /*
                                     if (notification != null)
                                     {

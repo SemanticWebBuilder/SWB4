@@ -1519,45 +1519,52 @@ public class SWBSocialUtil implements SWBAppObject {
                 Iterator<SocialNetwork> itSocialNets = postOut.listSocialNetworks();
                 while (itSocialNets.hasNext()) {
                     SocialNetwork socialNet = itSocialNets.next();
-                    //SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri, wsite.getSemanticModel());
-                    //SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
-                    //Se agrega la red social de salida al post
-                    //postOut.addSocialNetwork(socialNet);
-                    //Se revisa si es de tipo mensaje, foto o video.
-                    if (postOut instanceof Message && socialNet instanceof Messageable) {
-                        System.out.println("MENSAJE!!");
-                        //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
-                        Messageable messageable = (Messageable) socialNet;
-                        //messageable.postMsg((Message) post, request, response);
-                        PostableObj postableObj = new PostableObj(messageable, postOut);
-                        SendPostThread sendPostThread = new SendPostThread();
-                        sendPostThread.addPostAble(postableObj);
-                        sendPostThread.start();
-                    } else if (postOut instanceof Photo && socialNet instanceof Photoable) {
-                        System.out.println("PHOTO!!");
-                        //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
-                        Photoable photoable = (Photoable) socialNet;
-                        //photoable.postPhoto((Photo) post, request, response);
-                        PostableObj postableObj = new PostableObj(photoable, postOut);
-                        SendPostThread sendPostThread = new SendPostThread();
-                        sendPostThread.addPostAble(postableObj);
-                        sendPostThread.start();
-                    } else if (postOut instanceof Video && socialNet instanceof Videoable) {
-                        System.out.println("VIDEO!!");
-                        //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
-                        Videoable videoable = (Videoable) socialNet;
-                        //videoable.postVideo((Video) post, request, response);
-                        PostableObj postableObj = new PostableObj(videoable, postOut);
-                        SendPostThread sendPostThread = new SendPostThread();
-                        sendPostThread.addPostAble(postableObj);
-                        sendPostThread.start();
-                    }
+                    publishPostOutNet(postOut, socialNet);
                 }
             }//catch(Exception e)
             {
                 //log.error(e);
             }
             
+        }
+        
+        
+        public static void publishPostOutNet(PostOut postOut, SocialNetwork socialNet)
+        {
+            try
+            {
+                if (postOut instanceof Message && socialNet instanceof Messageable) 
+                {
+                    System.out.println("MENSAJE!!");
+                    //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
+                    Messageable messageable = (Messageable) socialNet;
+                    //messageable.postMsg((Message) post, request, response);
+                    PostableObj postableObj = new PostableObj(messageable, postOut);
+                    SendPostThread sendPostThread = new SendPostThread();
+                    sendPostThread.addPostAble(postableObj);
+                    sendPostThread.start();
+                } else if (postOut instanceof Photo && socialNet instanceof Photoable) {
+                    System.out.println("PHOTO!!");
+                    //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
+                    Photoable photoable = (Photoable) socialNet;
+                    //photoable.postPhoto((Photo) post, request, response);
+                    PostableObj postableObj = new PostableObj(photoable, postOut);
+                    SendPostThread sendPostThread = new SendPostThread();
+                    sendPostThread.addPostAble(postableObj);
+                    sendPostThread.start();
+                } else if (postOut instanceof Video && socialNet instanceof Videoable) {
+                    System.out.println("VIDEO!!");
+                    //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
+                    Videoable videoable = (Videoable) socialNet;
+                    //videoable.postVideo((Video) post, request, response);
+                    PostableObj postableObj = new PostableObj(videoable, postOut);
+                    SendPostThread sendPostThread = new SendPostThread();
+                    sendPostThread.addPostAble(postableObj);
+                    sendPostThread.start();
+                }
+            }catch(Exception e){
+                log.error(e);
+            }
         }
         
         
