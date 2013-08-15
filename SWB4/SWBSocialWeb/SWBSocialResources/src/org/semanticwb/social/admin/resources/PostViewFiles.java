@@ -33,11 +33,11 @@ public class PostViewFiles extends GenericResource{
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        System.out.println("Entra a PostViewFiles/doView-1:"+request.getParameter("po"));
+        System.out.println("Entra a PostViewFiles/doView-1:"+request.getParameter("uri"));
         try {
             String jspResponse=null;
-            if(request.getParameter("po") != null) {
-                SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("po"));
+            if(request.getParameter("uri") != null) {
+                SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("uri"));
                 System.out.println("Entra a PostViewFiles/doView-2:"+semObj);
                 if(semObj!=null)
                 {
