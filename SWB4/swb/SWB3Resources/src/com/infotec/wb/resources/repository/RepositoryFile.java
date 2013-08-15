@@ -48,6 +48,7 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.indexer.FileSearchWrapper;
+import org.semanticwb.portal.indexer.SWBIndexer;
 import org.semanticwb.portal.util.FileUpload;
 
 /**
@@ -681,8 +682,7 @@ public class RepositoryFile {
                     Repository.log.error("Error while trying to index file.", ex_ind);
                 }
             }
-    }
-    
+    }  
     
     /**
      * Generates a new version of the file
@@ -1115,11 +1115,12 @@ public class RepositoryFile {
                 psdata.setLong(1, id);
                 psdata.setString(2, dir.getWebSiteId());
                 ResultSet rsdata = psdata.executeQuery();
+                int i_lastVer = 1;
                 if (rsdata.next()) {
                     String title = rsdata.getString("rep_title");
                     String description = rsdata.getString("rep_description");
                     String comment = fup.getValue("repfdescription");
-
+                    i_lastVer =  rsdata.getInt("rep_lastVersion");
                     String fileDate = "";
 
                     String action = "remove";
@@ -1127,11 +1128,43 @@ public class RepositoryFile {
                     String filename = "";
                     try {
                         notification.sendNotification(user, resource, id, title, description, filename, comment, fileDate, version, action, dir, paramsRequest, request);
+
                     } catch (Exception e) {
                     }
 
                     saveLog("delete", user, id, dir, "Description", 1);
                 }
+                
+                ////// Empieza quitar del indice documento eliminado
+                //System.out.println("Eliminando indice...version file "+i_lastVer);
+                SWBIndexer w_indx = SWBPortal.getIndexMgr().getDefaultIndexer();
+                PreparedStatement pst1 = con.prepareStatement("select rep_fileName from resrepositoryversions where rep_docId=? and rep_fileVersion=? and idtm=?");
+                pst1.setLong(1, id);
+                pst1.setInt(2, i_lastVer);
+                pst1.setString(3, dir.getWebSiteId());
+                ResultSet rs1 = pst1.executeQuery();
+                 while (rs1.next()) {
+                     
+                    String file_name = rs1.getString("rep_fileName");
+                    //System.out.println("Se encontró el documento a eliminar...."+file_name);
+                    int pos = file_name.lastIndexOf('.');
+                    if (pos != -1) {
+                        String file_db = id + "_" + i_lastVer + file_name.substring(pos);;
+                        File f = new File(SWBPortal.getWorkPath() + "/" + resource.getWorkPath() + "/" + file_db);
+                        if (f.exists()) {
+                            try {
+                                //System.out.println("Se encontró INDICE a eliminar....");
+                                w_indx.removeSearchable("file:" + f.getAbsolutePath());
+                            } catch (Exception ex) {
+                                Repository.log.error("Error while trying to remove a file from index. RepositoryFile.delete()", ex);
+                            } 
+                        }
+                    }
+                }
+                rs1.close();
+                pst1.close();
+                ////////////////////////////////////////////////////////  Termina quitar del indice el documento eliminado 
+                
                 PreparedStatement ps = con.prepareStatement("update resrepository set rep_deleted = 1 where rep_docId=? and idtm=?");
                 ps.setLong(1, id);
                 ps.setString(2, dir.getWebSiteId());

@@ -221,6 +221,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                 ws = topic.getWebSite();
                 dir = ws.createWebPage(reptp);
                 dir.setTitle(paramsRequest.getWebPage().getTitle());
+                dir.setIndexable(false);
             }
             String path = SWBPlatform.getContextPath() + "/swbadmin/images/Repository/";
 //            ret.append("\n<script type=\"text/javascript\" >");
