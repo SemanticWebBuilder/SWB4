@@ -165,7 +165,6 @@ public class SocialSentPost extends GenericResource {
         //Resource base = getResourceBase();
         //User user = paramRequest.getUser();
         
-        System.out.println("Edit1:"+id);
         out.println("<script type=\"javascript\">");
         if(request.getParameter("dialog")!=null && request.getParameter("dialog").equals("close"))
         {
@@ -180,8 +179,7 @@ public class SocialSentPost extends GenericResource {
             out.println(" reloadTab('" + id + "'); ");
         }
         out.println("</script>");
-        System.out.println("Edit2:"+id);
-
+        
         
         //Agregado busqueda
         /*
@@ -763,6 +761,7 @@ public class SocialSentPost extends GenericResource {
                    //System.out.println("msg..:"+postOut.getMsg_Text());
                    //System.out.println("Ya esta publicado..:"+postOut.isPublished());
 
+                   System.out.println("PostUri:"+postOut.getURI());
                    SWBResourceURL urlPostOutNets=paramRequest.getRenderUrl().setMode(Mode_ShowPostOutNets).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postOut", postOut.getURI());  
                    if(!postOut.isPublished())
                    {

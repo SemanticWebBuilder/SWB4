@@ -42,6 +42,11 @@ import org.semanticwb.social.util.SWBSocialUtil;
 /**
  *
  * @author jorge.jimenez
+ * 
+ * Clase que muestra todos los mensajes nuevos que tenga un usurio admistrador (que se encuentre en sesión en ese momento)
+ * en las diferentes marcas/temas.
+ * Los mensajes que se mustran son aquellos que concuerdan con los grupos de usuario que tenga asignados el 
+ * dicho usuario y que dichos grupos estes asignados a los temas (Pestaña Grupos).
  */
 public class AllNewPostInToUser extends GenericResource {
 
