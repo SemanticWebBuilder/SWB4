@@ -30,7 +30,7 @@ public class CodeGeneratorPIC {
         try
         {
             String path = getClass().getResource("/").getPath().replaceAll("%20", " ");
-            File dir = new File(path+"/../../../../../swbproys//swbproys/PIC/PIC/src");
+            File dir = new File(path+"/../../../../../swbproys/swbproys/PIC/PIC/src");
             CodeGenerator codeGeneration = new CodeGenerator();
             //codeGeneration.generateCode("lodp", false, dir);
             codeGeneration.generateCode("pic", false, dir);
