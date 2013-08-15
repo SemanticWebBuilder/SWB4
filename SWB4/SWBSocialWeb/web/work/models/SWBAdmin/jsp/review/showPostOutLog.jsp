@@ -16,6 +16,7 @@
 <%@page import="org.semanticwb.*"%>
 <%@page import="org.semanticwb.social.util.*"%>
 <%@page import="java.util.*"%>
+<%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
 <%
@@ -37,6 +38,7 @@
                     <th><%=paramRequest.getLocaleString("idOnSocialNet")%></th>
                     <th><%=paramRequest.getLocaleString("status")%></th>
                     <th><%=paramRequest.getLocaleString("errorMsg")%></th>
+                    <th><%=SWBUtils.TEXT.encode(paramRequest.getLocaleString("action"),"utf-8")%></th>
                 </tr>
             </thead>
     <%
@@ -51,7 +53,7 @@
                     <%=postOutNet.getSocialNetwork().getDisplayTitle(user.getLanguage())%>
                 </td>
                 <td>
-                    <%=postOutNet.getSocialNetMsgID()%>
+                    <%=postOutNet.getSocialNetMsgID()!=null?postOutNet.getSocialNetMsgID():""%>
                 </td>
                 <td>
                 <%
@@ -81,6 +83,20 @@
                 </td>
                 <td>
                     <%=postOutNet.getError()!=null?postOutNet.getError():"---"%>
+                </td>
+                <td>
+                    <%
+                        
+                        if(postOutNet.getError()!=null)
+                        {
+                            SWBResourceURL actionUrl=paramRequest.getActionUrl();
+                            actionUrl.setAction("publicByPostOut");
+                            actionUrl.setParameter("postOutUri", postOutNet.getURI());
+                            %>
+                                <a href="#" onclick="submitUrl('<%=actionUrl%>',this); return false;">Publicar</a>
+                            <%
+                        }
+                    %>
                 </td>
             </tr>
         <%
