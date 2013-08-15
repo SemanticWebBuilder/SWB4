@@ -95,18 +95,17 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 {
                     SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, String.valueOf(longStat), null);
                 }else{
-                    SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, null, "Hubo un error muy cañon");
+                    SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, null, "Problem encountered posting twitter message");
                 }
                 
                 // System.out.println("longStat: " + longStat + " texto: " + stat.getText());
                 //getPostContainer().getPost().setSocialNetPostId("");
-            } catch (UnsupportedEncodingException ex) {
-                log.error("Exception" + ex);
-            } catch (TwitterException ex) {
-                log.error("Exception" + ex);
-                if (401 == ex.getStatusCode()) {
-                    //getResourceBase().setAttribute("oauth", null);
-                }
+            }catch (TwitterException te) {
+                SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, null, te.getErrorMessage());
+                log.error("Twitter exception posting twitter message" + te);
+            }catch(Exception e ){
+                SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, null, e.getMessage());
+                log.error("Exception posting twitter message" + e);
             }
         }
     }
@@ -171,17 +170,16 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 {
                      SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, String.valueOf(longStat), null);
                 }else{
-                    SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, null, "Hubo un error muy cañon");
+                    SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, null, "Problem encountered posting twitter photo");
                 }
                 
                 
-            } catch (UnsupportedEncodingException ex) {
-                log.error("Exception" + ex);
-            } catch (TwitterException ex) {
-                log.error("Exception" + ex);
-                if (401 == ex.getStatusCode()) {
-                    //getResourceBase().setAttribute("oauth", null);
-                }
+            }catch (TwitterException te) {
+                SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, null, te.getErrorMessage());
+                log.error("Twitter exception posting twitter message" + te);
+            }catch(Exception e ){
+                SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, null, e.getMessage());
+                log.error("Exception posting twitter message" + e);
             }
             //System.out.println("Mensaje de Photo de Twitter:" + description);
             //System.out.println("Photo de Twitter:" + photoSend);
