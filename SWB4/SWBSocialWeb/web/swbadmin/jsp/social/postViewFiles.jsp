@@ -21,7 +21,6 @@
 if(request.getParameter("uri") != null) 
 {
     SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("uri"));
-    System.out.println("Entra a PostViewFiles/doView-2:"+semObj);
     if(semObj!=null)
     {
         ArrayList aPostImages=new ArrayList();
