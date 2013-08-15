@@ -38,17 +38,19 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.Message;
+import org.semanticwb.social.Messageable;
 import org.semanticwb.social.Photo;
 import org.semanticwb.social.PostOut;
 import org.semanticwb.social.PostOutNet;
 import org.semanticwb.social.SocialFlow.SocialPFlowMgr;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialPFlow;
-import org.semanticwb.social.SocialPFlowInstance;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Video;
+import org.semanticwb.social.util.PostableObj;
 import org.semanticwb.social.util.SWBSocialComparator;
 import org.semanticwb.social.util.SWBSocialUtil;
+import org.semanticwb.social.util.SendPostThread;
 import org.semanticwb.social.util.SocialLoader;
 
 /**
@@ -163,14 +165,22 @@ public class SocialSentPost extends GenericResource {
         //Resource base = getResourceBase();
         //User user = paramRequest.getUser();
         
-  
-        if (request.getParameter("dialog") != null && request.getParameter("dialog").equals("close")) {
-            out.println("<script type=\"javascript\">");
+        System.out.println("Edit1:"+id);
+        out.println("<script type=\"javascript\">");
+        if(request.getParameter("dialog")!=null && request.getParameter("dialog").equals("close"))
+        {
             out.println(" hideDialog(); ");
-            out.println(" reloadTab('" + id + "'); ");
-            out.println("</script>");
-            return;
         }
+        if(request.getParameter("statusMsg")!=null) 
+        {
+            out.println("   showStatus('" + request.getParameter("statusMsg") + "');");
+        }
+        if(request.getParameter("reloadTap")!=null)
+        {
+            out.println(" reloadTab('" + id + "'); ");
+        }
+        out.println("</script>");
+        System.out.println("Edit2:"+id);
 
         
         //Agregado busqueda
@@ -790,21 +800,29 @@ public class SocialSentPost extends GenericResource {
                            postOut.setPublished(true);
                            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">Publicado</a>");
                        }else{ 
+                           //System.out.println("SOCIALSENTPOST1");
                             if (!needAuthorization || postOut.getPflowInstance().getStatus()==3) { 
                                 SWBResourceURL urlu = paramRequest.getRenderUrl();
                                 urlu.setMode(Mode_Action);
                                 urlu.setParameter("suri", postOut.getURI());
                                 urlu.setParameter("act", "updstatus");
-                                //out.println("J1");
+                                /*
+                                if(postOut.getPflowInstance()!=null)
+                                {
+                                    System.out.println("postOut.getPflowInstance():"+postOut.getPflowInstance()+",step:"+postOut.getPflowInstance().getStep()+",status:"+postOut.getPflowInstance().getStatus());
+                                }else{
+                                    System.out.println("postOut.getPflowInstance()==NULL");
+                                }*/
                                 if(someOneIsNotPublished)
                                 {
                                     out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">"+paramRequest.getLocaleString("toReview")+"</a>"); //No ha sido publicado en todas las redes sociales que debiera, abrir dialogo para mostrar todos los PostOutNtes del PostOut
-                                }else if(postOut.getPflowInstance().getStatus()==3){
+                                }else if(postOut.getPflowInstance()!=null && postOut.getPflowInstance().getStatus()==3){
                                     out.println("<a href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />"+paramRequest.getLocaleString("publish")+"</a>");
                                 }else{
                                     out.println(paramRequest.getLocaleString("publishing"));
                                 }
                             } else {    //El PostOut ya se envío
+                               //System.out.println("SOCIALSENTPOST2");
                                if(!isInFlow && needAuthorization && !isAuthorized)
                                {
                                    String sFlowRejected="---";
@@ -1555,6 +1573,27 @@ public class SocialSentPost extends GenericResource {
             response.setMode(SWBActionResponse.Mode_EDIT);
             response.setRenderParameter("suri", id);
             response.setRenderParameter("sprop", sprop);
+        }else if(action.equals("publicByPostOut"))
+        {
+            if(request.getParameter("postOutUri")!=null)
+            {
+                SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("postOutUri"));
+                if(semObj!=null)
+                {
+                    PostOutNet postOutNet=(PostOutNet)semObj.getGenericInstance();
+                    PostOut postOut=postOutNet.getSocialPost();
+                    SocialNetwork socialNet=postOutNet.getSocialNetwork();
+                    if(postOut!=null && socialNet!=null)
+                    {
+                        SWBSocialUtil.PostOutUtil.publishPostOutNet(postOut, socialNet);
+                    }
+                    response.setMode(SWBResourceURL.Mode_EDIT);
+                    response.setRenderParameter("dialog", "close");
+                    response.setRenderParameter("statusMsg", SWBUtils.TEXT.encode(response.getLocaleLogString("postOutPublished"),"utf8"));
+                    response.setRenderParameter("reloadTab", postOut.getSocialTopic().getURI());
+                    response.setRenderParameter("suri", postOut.getSocialTopic().getURI());
+                }
+            }
         }
     }
 
