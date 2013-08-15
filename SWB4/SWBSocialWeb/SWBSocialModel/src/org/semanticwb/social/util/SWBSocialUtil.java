@@ -1453,8 +1453,14 @@ public class SWBSocialUtil implements SWBAppObject {
                     {
                         System.out.println("Entra a Clasificar mensaje de Salida...");
                         String text2Classify=null;
-                        if(postOut.getTitle()!=null) text2Classify=postOut.getTitle();
-                        if(postOut.getDescription()!=null) text2Classify+=" " + postOut.getDescription();
+                        if(postOut instanceof Video) {
+                            Video video=(Video)postOut;
+                            if(video.getTitle()!=null)
+                            {
+                                text2Classify=video.getTitle();
+                            }
+                            if(video.getDescription()!=null) text2Classify+=" " + video.getDescription();
+                        }
                         if(postOut.getMsg_Text()!=null) text2Classify+=" " + postOut.getMsg_Text();    
                         if(postOut.getTags()!=null) text2Classify+=" " + postOut.getTags();
                         if(text2Classify!=null)
