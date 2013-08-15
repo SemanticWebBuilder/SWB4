@@ -495,10 +495,15 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 //addPost(message, "IDpuestoxFacebook", this);
                 //this.msg = message;
             }else{
-                if(jsonResponse.has("message")){
-                    SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, null, jsonResponse.getString("message"));
+                if(jsonResponse.has("error")){
+                    JSONObject error = jsonResponse.getJSONObject("error");
+                    if(error.has("message")){
+                        SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, null, error.getString("message"));
+                    }
+                }else if(jsonResponse.has("message")){
+                        SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, null, jsonResponse.getString("message"));
                 }
-                log.error("Unable to post facebook message:" + facebookResponse);
+                log.error("Unable to post facebook message:" + jsonResponse);
             }
         } catch (IOException ioe) {
             try {
@@ -601,8 +606,13 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 //addSentPost(photo, jsonResponse.getString("id"), this);
                 //this.photo = photo;
             }else{
-                if(jsonResponse.has("message")){
-                    SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, null, jsonResponse.getString("message"));
+                if(jsonResponse.has("error")){
+                    JSONObject error = jsonResponse.getJSONObject("error");
+                    if(error.has("message")){
+                        SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, null, error.getString("message"));
+                    }
+                }else if(jsonResponse.has("message")){
+                        SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, null, jsonResponse.getString("message"));
                 }
                 log.error("Unable to post facebook photo:" + jsonResponse);
             }
@@ -670,8 +680,13 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 //Para que ahi se almacenen por mes y año y despues pueda ser mas facil y optimo hacer busquedas sobre PostOuts
                 //addSentPost(video, jsonResponse.getString("id"), this);
             }else{
-                if(jsonResponse.has("message")){
-                    SWBSocialUtil.PostOutUtil.savePostOutNetID(video, this, null, jsonResponse.getString("message"));
+                if(jsonResponse.has("error")){
+                    JSONObject error = jsonResponse.getJSONObject("error");
+                    if(error.has("message")){
+                        SWBSocialUtil.PostOutUtil.savePostOutNetID(video, this, null, error.getString("message"));
+                    }
+                }else if(jsonResponse.has("message")){
+                        SWBSocialUtil.PostOutUtil.savePostOutNetID(video, this, null, jsonResponse.getString("message"));
                 }
                 log.error("Unable to post facebook video:" + jsonResponse);
             }
