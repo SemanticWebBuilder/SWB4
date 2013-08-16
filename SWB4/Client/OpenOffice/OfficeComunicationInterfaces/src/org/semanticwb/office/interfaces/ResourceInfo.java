@@ -53,7 +53,7 @@ public class ResourceInfo {
     public String repository;
     public String type;
     public String lastversion;
-
+    public String[] idiomas;
     @Override
     public String toString()
     {
