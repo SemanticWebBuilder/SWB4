@@ -621,10 +621,12 @@ public class SocialPFlowMgr {
                                     {
                                         //No me gusta poner esto estatico y en español, pero como estoy reutilizando lo de swb
                                         //y el Vic lo hizo así, pues ni modo, lo tuve que poner así
-                                        System.out.println("Entra a Approve/status:"+resource.getPflowInstance().getStatus()+",step:"+resource.getPflowInstance().getStep());
+                                        //System.out.println("Entra a Approve/status--JG:"+resource.getPflowInstance().getStatus()+",step:"+resource.getPflowInstance().getStep()+",notification:"+notification);
                                         if(newActivity.equals("Terminar flujo"))    
                                         {
                                             resource.getPflowInstance().setStatus(3);
+                                            //System.out.println("Va mensaje a Autor de Contenido J/resource:"+resource+",activityName:"+activityName+",serviceName:"+serviceName+", msg:"+msg);
+                                            mailToNotify(resource, activityName, serviceName, msg);
                                         }else
                                         {
                                             resource.getPflowInstance().setStatus(2);
@@ -1310,15 +1312,13 @@ public class SocialPFlowMgr {
                                         //System.out.println("mailToNotify--3");
                                         User user = postOut.getCreator();
                                         String msgMail = bundle.getString("msg1") + " " + postOut.getId() + " " + bundle.getString("msg2") + " '" + postOut.getMsg_Text() + "' " + bundle.getString("msg9") + ".";
-                                        msgMail += "<br/><br/>" + bundle.getString("sitio") + ": " + wsite.getTitle() + ".<br/><br/>";
-                                        msgMail += "<br/><br/>" + bundle.getString("paso") + ": " + activityName + ".<br/><br/>";
-                                        if (messageType.equalsIgnoreCase("N") && message != null && !message.equalsIgnoreCase("")) {
-                                            msgMail += "<br/><br/>" + bundle.getString("msg6") + ": " + message;
-                                        }
+                                        msgMail += "<br/><br/><b>" + bundle.getString("sitio") + ":</b> " + wsite.getTitle() + ".<br/><br/>";
+                                        msgMail += "<br/><br/><b>" + bundle.getString("paso") + ":</b> " + activityName + ".<br/><br/>";
                                         SocialTopic socialTopic = (SocialTopic) postOut.getSocialTopic();
-                                        HashMap args = new HashMap();
-                                        args.put("language", Locale.getDefault().getLanguage());
-                                        msgMail += "<br/><br/>" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".<br/><br/>";
+                                        msgMail += "<br/><br/><b>" + bundle.getString("socialTopic") + ":</b> " + socialTopic.getTitle() + ".<br/><br/>";
+                                        if (messageType.equalsIgnoreCase("N") && message != null && !message.equalsIgnoreCase("")) {
+                                            msgMail += "<br/><br/><b>" + bundle.getString("msg6") + ":</b> " + message;
+                                        }
                                         SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg10") + "", msgMail);
                                     } else if (activity.getAttribute("type").equalsIgnoreCase("Activity")) {
                                         //System.out.println("mailToNotify--4");
