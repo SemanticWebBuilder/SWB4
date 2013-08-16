@@ -100,16 +100,14 @@ createPiUrl.setMode(UserTaskInboxResource.MODE_CREATEPI);
 
 if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
 %>
-<div class="lateral">
-    <p class="lat-iniciar"><a onclick="showDialog('<%=createPiUrl%>','Crear instancia'); return false;" href="">Iniciar proceso</a></p>
+<p class="lat-iniciar"><a onclick="showDialog('<%=createPiUrl%>','<%=paramRequest.getLocaleString("createCase")%>'); return false;" href=""><%=paramRequest.getLocaleString("createCase")%></a></p>
     <ul class="lat-lista1">
-        <li class="lat-pend"><a href="<%=optsUrl%>">Tareas pendientes</a></li>
+        <li class="lat-pend"><a href="<%=optsUrl%>"><%=paramRequest.getLocaleString("pendingTasks")%></a></li>
         <%optsUrl.setParameter("sFilter", String.valueOf(FlowNodeInstance.STATUS_CLOSED));%>
-        <li class="lat-term"><a href="<%=optsUrl%>">Tareas terminadas</a></li>
+        <li class="lat-term"><a href="<%=optsUrl%>"><%=paramRequest.getLocaleString("closedTasks")%></a></li>
         <%optsUrl.setParameter("sFilter", String.valueOf(FlowNodeInstance.STATUS_ABORTED));%>
-        <li class="lat-term"><a href="<%=optsUrl%>">Tareas abortadas</a></li>
+        <li class="lat-term"><a href="<%=optsUrl%>"><%=paramRequest.getLocaleString("abortedTasks")%></a></li>
     </ul>
-</div>
 <%
 } else {
 %>
@@ -122,17 +120,17 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
                     optsUrl.setParameter("pFilter", pFilter);
                 }
                 optsUrl.setParameter("sFilter", sFilter);%>
-                <b>Ordenamiento&nbsp;</b>
+                <b><%=paramRequest.getLocaleString("sortLabel")%>&nbsp;</b>
                 <select onchange="loadPageUrl('<%=optsUrl%>', 'sort', this.options[this.selectedIndex].value)">
-                    <option value="date" <%=sortType.equals("date")?"selected":""%>>Por fecha</option>
-                    <option value="name" <%=sortType.equals("name")?"selected":""%>>Por proceso</option>
+                    <option value="date" <%=sortType.equals("date")?"selected":""%>><%=paramRequest.getLocaleString("sortDate")%></option>
+                    <option value="name" <%=sortType.equals("name")?"selected":""%>><%=paramRequest.getLocaleString("sortProcess")%></option>
                 </select>
             </li>
             <li>
-                <b>Filtrado&nbsp;</b>
+                <b><%=paramRequest.getLocaleString("filteringLabel")%>&nbsp;</b>
                 <%optsUrl = paramRequest.getRenderUrl(); optsUrl.setParameter("sort", sortType); optsUrl.setParameter("sFilter", sFilter);%>
                 <select onchange="loadPageUrl('<%=optsUrl%>', 'pFilter', this.options[this.selectedIndex].value)">
-                    <option value="" <%=pFilter.equals("")?"selected":""%>>Todos los procesos</option>
+                    <option value="" <%=pFilter.equals("")?"selected":""%>><%=paramRequest.getLocaleString("allProcesses")%></option>
                     <%
                     Iterator<ProcessGroup> itgroups = SWBComparator.sortByDisplayName(ProcessGroup.ClassMgr.listProcessGroups(paramRequest.getWebPage().getWebSite()), lang);
                     while (itgroups.hasNext()) {
@@ -175,9 +173,9 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
                 }
                 %>
                 <select onchange="loadPageUrl('<%=optsUrl%>', 'sFilter', this.options[this.selectedIndex].value)">
-                    <option value="<%=ProcessInstance.STATUS_PROCESSING%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_PROCESSING))?"selected":""%>>Tareas Pendientes</option>
-                    <option value="<%=ProcessInstance.STATUS_CLOSED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_CLOSED))?"selected":""%>>Tareas Terminadas</option>
-                    <option value="<%=ProcessInstance.STATUS_ABORTED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_ABORTED))?"selected":""%>>Tareas Abortadas</option>
+                    <option value="<%=ProcessInstance.STATUS_PROCESSING%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_PROCESSING))?"selected":""%>><%=paramRequest.getLocaleString("pendingTasks")%></option>
+                    <option value="<%=ProcessInstance.STATUS_CLOSED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_CLOSED))?"selected":""%>><%=paramRequest.getLocaleString("closedTasks")%></option>
+                    <option value="<%=ProcessInstance.STATUS_ABORTED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_ABORTED))?"selected":""%>><%=paramRequest.getLocaleString("abortedTasks")%></option>
                 </select>
             </li>
         </ul>
@@ -248,7 +246,7 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
                                                 }
                                                 %><td class="tban-cerrada"><%=ended%><%
                                             } else if (conf[0].equals(UserTaskInboxResource.COL_CREATORPROCESS)) {
-                                                String screator = "Creado automáticamente";
+                                                String screator = paramRequest.getLocaleString("autoCreate");
                                                 User creator = instance.getProcessInstance().getCreator();
                                                 if (creator != null) {
                                                     if (creator.getFullName() != null && !creator.getFullName().trim().equals("")) {
@@ -259,7 +257,7 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
                                                 }
                                                 %><td class="tban-tarea"><%=screator%><%
                                             } else if (conf[0].equals(UserTaskInboxResource.COL_CREATORTASK)) {
-                                                String screator = "Creado automáticamente";
+                                                String screator = paramRequest.getLocaleString("autoCreate");
                                                 User creator = instance.getCreator();
                                                 if (creator != null) {
                                                     if (creator.getFullName() != null && !creator.getFullName().trim().equals("")) {
@@ -272,43 +270,43 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
                                             } else if (conf[0].equals(UserTaskInboxResource.COL_STATUSPROCESS)) {
                                                 int st = instance.getProcessInstance().getStatus();
                                                 if (st == Instance.STATUS_ABORTED) {
-                                                    status = "Abortado";
+                                                    status = paramRequest.getLocaleString("pStatusAborted");
                                                 } else if (st == Instance.STATUS_CLOSED) {
-                                                    status = "Cerrado";
+                                                    status = paramRequest.getLocaleString("pStatusClosed");
                                                 } if (st == Instance.STATUS_INIT) {
-                                                    status = "Iniciado";
+                                                    status = paramRequest.getLocaleString("pStatusInit");
                                                 } if (st == Instance.STATUS_OPEN || st == Instance.STATUS_PROCESSING) {
-                                                    status = "En proceso";
+                                                    status = paramRequest.getLocaleString("pStatusPending");
                                                 } if (st == Instance.STATUS_STOPED) {
-                                                    status = "Detenido";
+                                                    status = paramRequest.getLocaleString("pStatusStopped");
                                                 }
                                                 %><td class="tban-tarea"><%=status%><%
                                             } else if (conf[0].equals(UserTaskInboxResource.COL_STATUSTASK)) {
                                                 int st = instance.getStatus();
                                                 if (st == Instance.STATUS_ABORTED) {
-                                                    status = "Abortada";
+                                                    status = paramRequest.getLocaleString("tStatusAborted");
                                                 } else if (st == Instance.STATUS_CLOSED) {
-                                                    status = "Cerrada";
+                                                    status = paramRequest.getLocaleString("tStatusClosed");
                                                 } if (st == Instance.STATUS_INIT) {
-                                                    status = "Iniciada";
+                                                    status = paramRequest.getLocaleString("tStatusInit");
                                                 } if (st == Instance.STATUS_OPEN || st == Instance.STATUS_PROCESSING) {
-                                                    status = "En proceso";
+                                                    status = paramRequest.getLocaleString("tStatusPending");
                                                 } if (st == Instance.STATUS_STOPED) {
-                                                    status = "Detenida";
+                                                    status = paramRequest.getLocaleString("tStatusStopped");
                                                 }
                                                 %><td class="tban-tarea"><%=status%><%
                                             } else if (conf[0].equals(UserTaskInboxResource.COL_ACTIONS)) {%>
                                                 <td class="tban-accion">
                                                     <%UserTask utask = (UserTask) instance.getFlowNodeType();
                                                     if (instance.getStatus() == ProcessInstance.STATUS_PROCESSING) {%>
-                                                        <a title="Atender" class="acc-atender" href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>">Atender</a>
+                                                        <a title="<%=paramRequest.getLocaleString("actTake")%>" class="acc-atender" href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>"><%=paramRequest.getLocaleString("actTake")%></a>
                                                         <%if (allowForward && instance.getAssignedto() != null) {
                                                             SWBResourceURL forward = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(UserTaskInboxResource.MODE_FWD);
-                                                            %><a title="Reasignar" class="acc-delegar" onclick="showDialog('<%=forward%>?suri=<%=instance.getEncodedURI()%>', 'Reasignar tarea'); return false;" href="">Reasignar</a><%
+                                                            %><a title="<%=paramRequest.getLocaleString("actFwd")%>" class="acc-delegar" onclick="showDialog('<%=forward%>?suri=<%=instance.getEncodedURI()%>', 'Reasignar tarea'); return false;" href=""><%=paramRequest.getLocaleString("actFwd")%></a><%
                                                         }
                                                     }
                                                     if (statusWp != null) {%>
-                                                        <a title="Ver mapa" class="acc-mapa" href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessInstance().getProcessType().getEncodedURI()%>">Ver mapa</a><%
+                                                        <a title="<%=paramRequest.getLocaleString("actMap")%>" class="acc-mapa" href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessInstance().getProcessType().getEncodedURI()%>"><%=paramRequest.getLocaleString("actMap")%></a><%
                                                     }%>
                                                 </td>
                                                 <%
@@ -322,14 +320,14 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
                                                 UserTask utask = (UserTask)instance.getFlowNodeType();
                                                 int delay = utask.getNotificationTime();
                                                 String delayed = "/work/models/"+paramRequest.getWebPage().getWebSiteId()+"/css/images/icono-retraso1.png";
-                                                String delayTitle = "A tiempo";
+                                                String delayTitle = paramRequest.getLocaleString("lblOntime");
                                                         
                                                 if (delay > 0) {
                                                     long today = System.currentTimeMillis();
                                                     long cr = instance.getCreated().getTime();
                                                     if (today - cr > (1000*60*delay)) {
                                                         delayed = "/work/models/"+paramRequest.getWebPage().getWebSiteId()+"/css/images/icono-retraso2.png";
-                                                        delayTitle = "Retrasada";
+                                                        delayTitle = paramRequest.getLocaleString("lblDelayed");
                                                     }
                                                 }
                                                 %><td class="tban-inicia"><img title="<%=delayTitle%>" alt="<%=delayTitle%>" src="<%=delayed%>"/></td><%
@@ -346,7 +344,7 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
             </table>
         </div>
         <div class="paginado">
-            <div class="pagtotal">P&aacute;gina <%=pageNum%> de <%=maxPages%></div>
+            <div class="pagtotal"><%=paramRequest.getLocaleString("pagPage")%> <%=pageNum%> <%=paramRequest.getLocaleString("pagDelim")%> <%=maxPages%></div>
             <div class="pagLista">
             <%if (pageNum-1 > 0) {
                 SWBResourceURL back = paramRequest.getRenderUrl();
@@ -356,7 +354,7 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
                 back.setParameter("sFilter", sFilter);
                 back.setParameter("sort", sortType);
                 back.setParameter("page", String.valueOf(pageNum-1));
-                %><span class="pagant"><a href="<%=back%>">Anterior</a></span><%
+                %><span class="pagant"><a href="<%=back%>"><%=paramRequest.getLocaleString("pagPrev")%></a></span><%
             }
             if (pageNum+1 <= maxPages) {
                 SWBResourceURL forward = paramRequest.getRenderUrl();
@@ -366,12 +364,12 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
                 forward.setParameter("sFilter", sFilter);
                 forward.setParameter("sort", sortType);
                 forward.setParameter("page", String.valueOf(pageNum+1));
-                %><span class="pagsig"><a href="<%=forward%>">Siguiente</a></span><%
+                %><span class="pagsig"><a href="<%=forward%>"><%=paramRequest.getLocaleString("pagNext")%></a></span><%
             }%>
             </div>
         </div>
     <%} else {
-        %>No hay tareas<%
+        %><%=paramRequest.getLocaleString("noTasks")%><%
     }%>
 <%if (null != request.getSession(true).getAttribute("msg")) {
     String message = (String) request.getSession(true).getAttribute("msg");
