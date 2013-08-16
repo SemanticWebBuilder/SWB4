@@ -58,18 +58,18 @@ if (showResponse) {
             var h = d3.select("#performanceGraph").style("height").replace("px","");
             var data = [
                 {
-                    key:"Instancias de Proceso",
+                    key:"<%=paramRequest.getLocaleString("lblInstances")%>",
                     values: [
                         {
-                            "label":"En proceso",
+                            "label":"<%=paramRequest.getLocaleString("lblProcessing")%>",
                             "value":<%=processing%>
                         },
                         {
-                            "label":"Cerrados",
+                            "label":"<%=paramRequest.getLocaleString("lblClosed")%>",
                             "value":<%=closed%>
                         },
                         {
-                            "label":"Abortados",
+                            "label":"<%=paramRequest.getLocaleString("lblAborted")%>",
                             "value":<%=aborted%>
                         }
                     ]
@@ -94,7 +94,7 @@ if (showResponse) {
 
             d3.select("#performanceGraph svg")
                 .append("svg:text")
-                .text("Instancias de proceso (<%=total%>)")
+                .text("<%=paramRequest.getLocaleString("lblInstances")%> (<%=total%>)")
                 .attr("x",function() {
                     return ""+(w/2);
                 })
@@ -120,18 +120,18 @@ if (showResponse) {%>
             var h = d3.select("#responseTime").style("height").replace("px","");
             var data = [
                 {
-                    key:"Tiempo de respuesta",
+                    key:"<%=paramRequest.getLocaleString("lblResponsetime")%>",
                     values: [
                         {
-                            "label":"Mínimo",
+                            "label":"<%=paramRequest.getLocaleString("lblMin")%>",
                             "value":<%=minTime%>
                         },
                         {
-                            "label":"Máximo",
+                            "label":"<%=paramRequest.getLocaleString("lblMax")%>",
                             "value":<%=maxTime%>
                         },
                         {
-                            "label":"Promedio",
+                            "label":"<%=paramRequest.getLocaleString("lblAvg")%>",
                             "value":<%=avgTime%>
                         }
                     ]
@@ -156,7 +156,7 @@ if (showResponse) {%>
 
             d3.select("#responseTime svg")
                 .append("svg:text")
-                .text("Tiempo de respuesta (minutos)")
+                .text("<%=paramRequest.getLocaleString("lblResponsetime")%> (minutos)")
                 .attr("x",function() {
                     return ""+(w/2);
                 })
@@ -182,14 +182,14 @@ if (showStatus) {%>
             var h = d3.select("#overdueGraph").style("height").replace("px","");
             var data = [
                 {
-                    key:"Estatus de ejecución",
+                    key:"<%=paramRequest.getLocaleString("lblOverdue")%>",
                     values: [
                         {
-                            "label":"A tiempo",
+                            "label":"<%=paramRequest.getLocaleString("lblOntime")%>",
                             "value":<%=ontime%>
                         },
                         {
-                            "label":"Retrasados",
+                            "label":"<%=paramRequest.getLocaleString("lblDelayed")%>",
                             "value":<%=delayed%>
                         }
                     ]
@@ -214,7 +214,7 @@ if (showStatus) {%>
 
             d3.select("#overdueGraph svg")
                 .append("svg:text")
-                .text("Estatus de ejecución")
+                .text("<%=paramRequest.getLocaleString("lblOverdue")%>")
                 .attr("x",function() {
                     return ""+(w/2);
                 })
