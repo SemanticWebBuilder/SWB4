@@ -2324,6 +2324,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     }
                     info = new ResourceInfo(officeResource.getId(), page.getId());
                     info.idiomas=langs.toArray(new String[langs.size()]);
+                    info.context=SWBPortal.getContextPath();
                     info.active = officeResource.getResourceBase().isActive();
                     info.description = officeResource.getResourceBase().getDescription();
                     info.title = officeResource.getResourceBase().getTitle();
