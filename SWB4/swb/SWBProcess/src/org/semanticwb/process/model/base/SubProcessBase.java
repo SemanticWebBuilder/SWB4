@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class SubProcessBase extends org.semanticwb.process.model.Activity implements org.semanticwb.process.model.Containerable,org.semanticwb.model.Traceable,org.semanticwb.model.TemplateRefable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable
+public abstract class SubProcessBase extends org.semanticwb.process.model.Activity implements org.semanticwb.model.RuleRefable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Traceable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Referensable,org.semanticwb.process.model.BPMNSerializable,org.semanticwb.model.RoleRefable,org.semanticwb.process.model.Containerable
 {
     public static final org.semanticwb.platform.SemanticClass swp_SubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#SubProcess");
    /**
@@ -606,6 +606,42 @@ public abstract class SubProcessBase extends org.semanticwb.process.model.Activi
              ret=(org.semanticwb.process.model.LoopCharacteristics)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Format property
+* @return String with the Format
+*/
+    public String getFormat()
+    {
+        return getSemanticObject().getProperty(swp_serializationFormat);
+    }
+
+/**
+* Sets the Format property
+* @param value long with the Format
+*/
+    public void setFormat(String value)
+    {
+        getSemanticObject().setProperty(swp_serializationFormat, value);
+    }
+
+/**
+* Gets the Data property
+* @return String with the Data
+*/
+    public String getData()
+    {
+        return getSemanticObject().getProperty(swp_serializationData);
+    }
+
+/**
+* Sets the Data property
+* @param value long with the Data
+*/
+    public void setData(String value)
+    {
+        getSemanticObject().setProperty(swp_serializationData, value);
     }
 
    /**
