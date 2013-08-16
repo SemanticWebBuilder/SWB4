@@ -304,7 +304,8 @@ public class GateWayOffice implements InternalServlet
 
             String workpath = SWBPortal.getWebWorkPath() + dir;
             String htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath);
-
+            htmlOut=htmlOut.replace("<![if !vml]>", "");
+            htmlOut=htmlOut.replace("<![endif]>", "");
             out.write(htmlOut);
             out.close();
         }
