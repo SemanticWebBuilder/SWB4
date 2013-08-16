@@ -246,7 +246,7 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
                                                 }
                                                 %><td class="tban-cerrada"><%=ended%><%
                                             } else if (conf[0].equals(UserTaskInboxResource.COL_CREATORPROCESS)) {
-                                                String screator = paramRequest.getLocaleString("autoCreate");
+                                                String screator = paramRequest.getLocaleString("autoCreation");
                                                 User creator = instance.getProcessInstance().getCreator();
                                                 if (creator != null) {
                                                     if (creator.getFullName() != null && !creator.getFullName().trim().equals("")) {
@@ -257,7 +257,7 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
                                                 }
                                                 %><td class="tban-tarea"><%=screator%><%
                                             } else if (conf[0].equals(UserTaskInboxResource.COL_CREATORTASK)) {
-                                                String screator = paramRequest.getLocaleString("autoCreate");
+                                                String screator = paramRequest.getLocaleString("autoCreation");
                                                 User creator = instance.getCreator();
                                                 if (creator != null) {
                                                     if (creator.getFullName() != null && !creator.getFullName().trim().equals("")) {
