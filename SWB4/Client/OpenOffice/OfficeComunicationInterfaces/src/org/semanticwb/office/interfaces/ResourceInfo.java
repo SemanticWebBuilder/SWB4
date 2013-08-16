@@ -54,6 +54,7 @@ public class ResourceInfo {
     public String type;
     public String lastversion;
     public String[] idiomas;
+    public String context;
     @Override
     public String toString()
     {
