@@ -35,6 +35,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
@@ -2313,7 +2314,16 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 if (resourceable != null && resourceable instanceof WebPage)
                 {
                     WebPage page = (WebPage) resourceable;
+                    List<String> langs=new ArrayList<String>();
+                    Iterator<Language> languages=Language.ClassMgr.listLanguages(page.getWebSite());
+                    while(languages.hasNext())
+                    {
+                        Language lang=languages.next();
+                        String lang_=lang.getId()+"|"+lang.getTitle();
+                        langs.add(lang_);
+                    }
                     info = new ResourceInfo(officeResource.getId(), page.getId());
+                    info.idiomas=langs.toArray(new String[langs.size()]);
                     info.active = officeResource.getResourceBase().isActive();
                     info.description = officeResource.getResourceBase().getDescription();
                     info.title = officeResource.getResourceBase().getTitle();
