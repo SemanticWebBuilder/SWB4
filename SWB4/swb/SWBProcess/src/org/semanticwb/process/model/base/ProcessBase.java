@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.process.model.Containerable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.process.model.OwnerPropertyable,org.semanticwb.model.Resourceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.TemplateRefable,org.semanticwb.process.model.Callable,org.semanticwb.model.Expirable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Referensable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable
+public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Expirable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.process.model.Callable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Trashable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Resourceable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Referensable,org.semanticwb.process.model.BPMNSerializable,org.semanticwb.model.Filterable,org.semanticwb.model.RoleRefable,org.semanticwb.process.model.OwnerPropertyable,org.semanticwb.process.model.Containerable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.FilterableClass
 {
    /**
    * Objeto que define un Role dentro de un repositorio de usuarios aplicable a un Usuario para filtrar componente, seccion, plantillas, etc.
@@ -1334,6 +1334,24 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
          }
          return ret;
     }
+
+/**
+* Gets the Format property
+* @return String with the Format
+*/
+    public String getFormat()
+    {
+        return getSemanticObject().getProperty(swp_serializationFormat);
+    }
+
+/**
+* Sets the Format property
+* @param value long with the Format
+*/
+    public void setFormat(String value)
+    {
+        getSemanticObject().setProperty(swp_serializationFormat, value);
+    }
    /**
    * Gets all the org.semanticwb.model.RoleRef
    * @return A GenericIterator with all the org.semanticwb.model.RoleRef
@@ -1472,6 +1490,24 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
              ret=(org.semanticwb.model.CalendarRef)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Data property
+* @return String with the Data
+*/
+    public String getData()
+    {
+        return getSemanticObject().getProperty(swp_serializationData);
+    }
+
+/**
+* Sets the Data property
+* @param value long with the Data
+*/
+    public void setData(String value)
+    {
+        getSemanticObject().setProperty(swp_serializationData, value);
     }
 
    /**
