@@ -61,19 +61,19 @@ createPiUrl.setMode(UserTaskInboxResource.MODE_CREATEPI);
 SWBResourceURL optsUrl = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW);
 if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
     <div class="lateral">
-        <p class="lat-iniciar"><a onclick="showDialog('<%=createPiUrl%>','Crear instancia'); return false;" href="">Iniciar proceso</a></p>
+        <p class="lat-iniciar"><a onclick="showDialog('<%=createPiUrl%>','<%=paramRequest.getLocaleString("createCase")%>'); return false;" href=""><%=paramRequest.getLocaleString("createCase")%></a></p>
         <ul class="lat-lista1">
             <%optsUrl.setParameter("sFilter", String.valueOf(FlowNodeInstance.STATUS_PROCESSING));%>
-            <li class="lat-pend"><a href="<%=optsUrl%>">Tareas pendientes</a></li>
+            <li class="lat-pend"><a href="<%=optsUrl%>"><%=paramRequest.getLocaleString("pendingTasks")%></a></li>
             <%optsUrl.setParameter("sFilter", String.valueOf(FlowNodeInstance.STATUS_CLOSED));%>
-            <li class="lat-term"><a href="<%=optsUrl%>">Tareas terminadas</a></li>
+            <li class="lat-term"><a href="<%=optsUrl%>"><%=paramRequest.getLocaleString("closedTasks")%></a></li>
             <%optsUrl.setParameter("sFilter", String.valueOf(FlowNodeInstance.STATUS_ABORTED));
             
             optsUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(UserTaskInboxResource.MODE_GETDATA);
             optsUrl.setParameter("suri", suri);
             optsUrl.setParameter("tu", "min");
             %>
-            <li class="lat-term"><a href="<%=optsUrl%>">Tareas abortadas</a></li>
+            <li class="lat-term"><a href="<%=optsUrl%>"><%=paramRequest.getLocaleString("abortedTasks")%></a></li>
         </ul>
     </div>
     <%
@@ -100,7 +100,7 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
         <p>&nbsp;</p> 
         <%if (tinstances != null && !tinstances.isEmpty()) {
             if (showGraphs) {
-                %><div class="bandeja-combo"><strong><span style="font-size: medium">Desempe&ntilde;o</span></strong></div><%
+                %><div class="bandeja-combo"><strong><span style="font-size: medium"><%=paramRequest.getLocaleString("lblPerformance")%></span></strong></div><%
                 
                 if (engine.equals("google")) {
                     %><jsp:include page="/swbadmin/jsp/process/userTaskInboxGoogleGraphs.jsp" flush="true"/><%
@@ -226,7 +226,7 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
                                 .attr("dy", ".15em")
                                 .text(function(d,i) {
                                     if (d.participa && d.participa !== null) {
-                                        return d.participa +" participaciones";
+                                        return d.participa +" <%=paramRequest.getLocaleString("lblPartTooltip")%>";
                                     } else {
                                         return d.name;
                                     }
@@ -293,7 +293,7 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
                             .attr("height", h);
 
                         vis.append("svg:text")
-                            .text("Grafo de participación")
+                            .text("<%=paramRequest.getLocaleString("lblParticipation")%>")
                             .attr("x","67")
                             .attr("y","22.85")
                             .attr("font-family", "Arial")
@@ -309,7 +309,7 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
                 }
             }
             %>
-            <div class="bandeja-combo"><strong><span style="font-size: medium">Instancias del proceso</span></strong></div>
+            <div class="bandeja-combo"><strong><span style="font-size: medium"><%=paramRequest.getLocaleString("lblInstances")%></span></strong></div>
             <div>
                 <table class="tabla-bandeja">
                     <thead>
@@ -328,9 +328,9 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
                             ProcessInstance pi = it.next();
                             String status = "--";
 
-                            if (pi.getStatus() == ProcessInstance.STATUS_PROCESSING) status = "En proceso";
-                            if (pi.getStatus() == ProcessInstance.STATUS_ABORTED) status = "Abortado";
-                            if (pi.getStatus() == ProcessInstance.STATUS_CLOSED) status = "Cerrado";
+                            if (pi.getStatus() == ProcessInstance.STATUS_PROCESSING) status = paramRequest.getLocaleString("pStatusPending");
+                            if (pi.getStatus() == ProcessInstance.STATUS_ABORTED) status = paramRequest.getLocaleString("pStatusAborted");
+                            if (pi.getStatus() == ProcessInstance.STATUS_CLOSED) status = paramRequest.getLocaleString("pStatusClosed");
                             %>
                             <tr>
                                 <td class="tban-id"><%=pi.getId()%></td>
@@ -379,19 +379,19 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
                 </table>
             </div>
             <div class="paginado">
-                <div class="pagtotal">P&aacute;gina <%=pageNum%> de <%=maxPages%></div>
+                <div class="pagtotal"><%=paramRequest.getLocaleString("pagPage")%> <%=pageNum%> <%=paramRequest.getLocaleString("pagDelim")%> <%=maxPages%></div>
                 <div class="pagLista">
                 <%if (pageNum-1 > 0) {
                     SWBResourceURL back = paramRequest.getRenderUrl();
                     back.setParameter("page", String.valueOf(pageNum-1));
                     back.setParameter("suri", suri);
-                    %><span class="pagant"><a href="<%=back%>">Anterior</a></span><%
+                    %><span class="pagant"><a href="<%=back%>"><%=paramRequest.getLocaleString("pagPrev")%></a></span><%
                 }
                 if (pageNum+1 <= maxPages) {
                     SWBResourceURL forward = paramRequest.getRenderUrl();
                     forward.setParameter("page", String.valueOf(pageNum+1));
                     forward.setParameter("suri", suri);
-                    %><span class="pagsig"><a href="<%=forward%>">Siguiente</a></span><%
+                    %><span class="pagsig"><a href="<%=forward%>"><%=paramRequest.getLocaleString("pagNext")%></a></span><%
                 }%>
                 </div>
             </div>
