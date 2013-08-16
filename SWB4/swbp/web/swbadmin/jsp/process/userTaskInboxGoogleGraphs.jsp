@@ -51,7 +51,7 @@ if (showResponse) {
     google.setOnLoadCallback(drawChart);
     function drawChart() {
         var options = {
-          title: 'Instancias de proceso (<%=total%>)',
+          title: '<%=paramRequest.getLocaleString("lblInstances")%> (<%=total%>)',
           backgroundColor: {fill:'none'}
         };
 
@@ -60,9 +60,9 @@ if (showResponse) {
             %>
             var data = google.visualization.arrayToDataTable([
                 ['Estatus', 'Unidades'],
-                ['En proceso',     <%=processing%>],
-                ['Cerrados',     <%=closed%>],
-                ['Abortados',      <%=aborted%>]
+                ['<%=paramRequest.getLocaleString("lblProcessing")%>',     <%=processing%>],
+                ['<%=paramRequest.getLocaleString("lblClosed")%>',     <%=closed%>],
+                ['<%=paramRequest.getLocaleString("lblAborted")%>',      <%=aborted%>]
             ]);
             var chart = new google.visualization.PieChart(document.getElementById('performanceGraph'));
             chart.draw(data, options);
@@ -73,13 +73,13 @@ if (showResponse) {
             %>
             var data2 = google.visualization.arrayToDataTable([
                 ['Tiempo de respuesta', 'Horas'],
-                ['Mínimo',     <%=minTime%>],
-                ['Máximo',     <%=maxTime%>],
-                ['Promedio',      <%=avgTime%>]
+                ['<%=paramRequest.getLocaleString("lblMin")%>',     <%=minTime%>],
+                ['<%=paramRequest.getLocaleString("lblMax")%>',     <%=maxTime%>],
+                ['<%=paramRequest.getLocaleString("lblAvg")%>',      <%=avgTime%>]
             ]);
 
             var chart2 = new google.visualization.PieChart(document.getElementById('responseTime'));
-            options.title = "Tiempo de respuesta (minutos)";
+            options.title = "<%=paramRequest.getLocaleString("lblResponsetime")%> (minutos)";
             options.pieSliceText = "value";
             chart2.draw(data2, options);
             <%
@@ -89,12 +89,12 @@ if (showResponse) {
             %>
             var data3 = google.visualization.arrayToDataTable([
                 ['Estado', 'Valor'],
-                ['Retrasados', <%=delayed%>],
-                ['A tiempo', <%=ontime%>]
+                ['<%=paramRequest.getLocaleString("lblDelayed")%>', <%=delayed%>],
+                ['<%=paramRequest.getLocaleString("lblOntime")%>', <%=ontime%>]
             ]);
 
             var chart3 = new google.visualization.PieChart(document.getElementById('overdueGraph'));
-            options.title = "Estatus de ejecución";
+            options.title = "<%=paramRequest.getLocaleString("lblOverdue")%>";
             options.pieSliceText = "percent";
             chart3.draw(data3, options);
             <%
