@@ -504,12 +504,12 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         sb.append("  <fieldset>");
         sb.append("    <table>");
         sb.append("      <tr>");
-        sb.append("        <td width=\"200px\" align=\"right\">").append("Identificador:&nbsp;").append("</td>");
+        sb.append("        <td width=\"200px\" align=\"right\">").append(paramRequest.getLocaleString("admLblID")).append("&nbsp;").append("</td>");
         sb.append("        <td>").append(getId()).append("</td>");
         sb.append("      </tr>");
         sb.append("    </table>");
         sb.append("  </fieldset>");
-        sb.append("  <fieldset><legend>Datos Generales</legend>");
+        sb.append("  <fieldset><legend>").append(paramRequest.getLocaleString("admLblGeneral")).append("</legend>");
         sb.append("    <table>");
         sb.append("      <tr>");
         sb.append("        <td width=\"200px\" align=\"right\">");
@@ -560,7 +560,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         sb.append("        </td>");
         sb.append("      </tr>");
         sb.append("    </table>");
-        sb.append("    <button type=\"submit\" dojoType=\"dijit.form.Button\">Guardar</button>");
+        sb.append("    <button type=\"submit\" dojoType=\"dijit.form.Button\">").append(paramRequest.getLocaleString("admLblSave")).append("</button>");
         sb.append("  </fieldset>");
         sb.append("</form>");
         
@@ -590,7 +590,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                 sb.append("      <option value=\"").append(key).append("\">").append(availableCols.get(key)).append("</option>");
             }
             sb.append("    </select>");
-            sb.append("    <button type=\"submit\" dojoType=\"dijit.form.Button\">Agregar columna</button><br/>");
+            sb.append("    <button type=\"submit\" dojoType=\"dijit.form.Button\">").append(paramRequest.getLocaleString("admLblAddCol")).append("</button><br/>");
         }
         sb.append("  </fieldset>");
         sb.append("</form>");
@@ -601,12 +601,12 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             SWBResourceURL editUrl = paramRequest.getActionUrl().setAction(ACT_CONFIG);
             sb.append("<form class=\"swbform\" id=\"").append(getId()).append("/table\" method=\"post\" action=\"").append(editUrl).append("\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('").append(getId()).append("/table'); return false;\">");
             sb.append("<div class=\"swbform\">");
-            sb.append("  <fieldset><legend>Configuración de despliegue</legend>");
+            sb.append("  <fieldset><legend>").append(paramRequest.getLocaleString("admLblDisplay")).append("</legend>");
             sb.append("    <table>");
             sb.append("      <tr>");
-            sb.append("        <th>Ordenamiento</th>");
-            sb.append("        <th>Dato a mostrar</th>");
-            sb.append("        <th>Título de columna</th>");
+            sb.append("        <th>").append(paramRequest.getLocaleString("admLblSort")).append("</th>");
+            sb.append("        <th>").append(paramRequest.getLocaleString("admLblColData")).append("</th>");
+            sb.append("        <th>").append(paramRequest.getLocaleString("admLblColTitle")).append("</th>");
             sb.append("      </tr>");
 
             while(!base.getAttribute(ATT_COLS+i, "").equals("")) {
@@ -619,25 +619,25 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                 SWBResourceURL delUrl = paramRequest.getActionUrl().setAction(ACT_DELCOL).setParameter(PARAM_INDEX, String.valueOf(i));
                 if (i != 1) {
                     swapUrl.setParameter(PARAM_DIR, "up");
-                    sb.append("          <a href=\"#\" onclick=\"submitUrl('").append(swapUrl).append("', this);\" title=\"Subir\"><img src=\"").append(SWBPlatform.getContextPath()).append("/swbadmin/images/up.jpg\" /></a>");
+                    sb.append("          <a href=\"#\" onclick=\"submitUrl('").append(swapUrl).append("', this);\" title=\"").append(paramRequest.getLocaleString("admLblUp")).append("\"><img src=\"").append(SWBPlatform.getContextPath()).append("/swbadmin/images/up.jpg\" /></a>");
                 }
                 if (!base.getAttribute(ATT_COLS+(i+1), "").equals("")) {
                     swapUrl.setParameter(PARAM_DIR, "down");
-                    sb.append("          <a href=\"#\" onclick=\"submitUrl('").append(swapUrl).append("', this);\" title=\"Bajar\"><img src=\"").append(SWBPlatform.getContextPath()).append("/swbadmin/images/down.jpg\" /></a>");
+                    sb.append("          <a href=\"#\" onclick=\"submitUrl('").append(swapUrl).append("', this);\" title=\"").append(paramRequest.getLocaleString("admLblDown")).append("\"><img src=\"").append(SWBPlatform.getContextPath()).append("/swbadmin/images/down.jpg\" /></a>");
                 }
                 sb.append("        </td>");
                 sb.append("        <td>").append(colNames.get(cfg[0])).append("</td>");
                 sb.append("        <td>");
                 //sb.append("          <input onkeyup=\"console.log(event); if (event.keyCode==13) {console.log(event); alert(event)}; return false;\" type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"lbl_").append(i).append("\" name=\"lbl_").append(i).append("\" value=\"").append(cfg[1]).append("\" />");
                 sb.append("          <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"lbl_").append(i).append("\" name=\"lbl_").append(i).append("\" value=\"").append(cfg[1]).append("\" />");
-                sb.append("          <a href=\"#\" title=\"Eliminar propiedad\" onclick=\"submitUrl('").append(delUrl).append("',this);\"><img src=\"").append(SWBPlatform.getContextPath()).append("/swbadmin/images/delete.gif\"/></a>");
+                sb.append("          <a href=\"#\" title=\"").append(paramRequest.getLocaleString("admLblDel")).append("\" onclick=\"submitUrl('").append(delUrl).append("',this);\"><img src=\"").append(SWBPlatform.getContextPath()).append("/swbadmin/images/delete.gif\"/></a>");
                 sb.append("        </td>");
                 sb.append("      </tr>");
                 i++;
             }
             sb.append("    </table>");
         }
-        sb.append("    <button type=\"submit\" dojoType=\"dijit.form.Button\">Actualizar columnas</button>");
+        sb.append("    <button type=\"submit\" dojoType=\"dijit.form.Button\">").append(paramRequest.getLocaleString("admLblUpdCols")).append("</button>");
         sb.append("  </fieldset>");
         sb.append("</form>");
         
@@ -649,32 +649,32 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         }
         sb.append("<form class=\"swbform\" id=\"").append(getId()).append("/detail\" method=\"post\" action=\"").append(setGraphUrl).append("\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('").append(getId()).append("/detail'); return false;\">");
         sb.append("<div class=\"swbform\">");
-        sb.append("  <fieldset><legend>Configuración de detalle de procesos</legend>");
+        sb.append("  <fieldset><legend>").append(paramRequest.getLocaleString("admLblDetail")).append("</legend>");
         sb.append("    <table>");
         sb.append("      <tr>");
-        sb.append("        <td width=\"200px\" align=\"right\">").append("Mostrar desempeño:&nbsp;").append("</td>");
+        sb.append("        <td width=\"200px\" align=\"right\">").append("").append(paramRequest.getLocaleString("admLblShowPerformance")).append(":&nbsp;").append("</td>");
         sb.append("        <td>");
-        sb.append("          <input dojoType=\"dijit.form.CheckBox\" ").append(base.getAttribute(ATT_SHOWPERFORMANCE,"").equals("yes")?"checked":"").append(" type=\"checkbox\" name=\"").append(ATT_SHOWPERFORMANCE).append("\" />Mostrar desempeño");
+        sb.append("          <input dojoType=\"dijit.form.CheckBox\" ").append(base.getAttribute(ATT_SHOWPERFORMANCE,"").equals("yes")?"checked":"").append(" type=\"checkbox\" name=\"").append(ATT_SHOWPERFORMANCE).append("\" />");
         sb.append("        <td>");
         sb.append("      </tr>");
         sb.append("      <tr>");
-        sb.append("        <td width=\"200px\" align=\"right\">").append("Motor de gráficas:&nbsp;").append("</td>");
+        sb.append("        <td width=\"200px\" align=\"right\">").append("").append(paramRequest.getLocaleString("admLblEngine")).append(":&nbsp;").append("</td>");
         sb.append("        <td>");
         sb.append("          <input dojoType=\"dijit.form.RadioButton\" ").append(disableControls).append(base.getAttribute(ATT_GRAPHSENGINE,"").equals("google")?"checked":"").append(" type=\"radio\" name=\"").append(ATT_GRAPHSENGINE).append("\" value=\"google\" id=\"radioGoogle\"/><label for=\"radioGoogle\">Google Graphs</label><br>");
         sb.append("          <input dojoType=\"dijit.form.RadioButton\" ").append(disableControls).append(base.getAttribute(ATT_GRAPHSENGINE,"").equals("d3")?"checked":"").append(" type=\"radio\" name=\"").append(ATT_GRAPHSENGINE).append("\" value=\"d3\" id=\"radioD3\"/><label for=\"radioD3\">D3</label>");
         sb.append("        <td>");
         sb.append("      </tr>");
         sb.append("      <tr>");
-        sb.append("        <td width=\"200px\" align=\"right\">").append("Gráficas visibles:&nbsp;").append("</td>");
+        sb.append("        <td width=\"200px\" align=\"right\">").append("").append(paramRequest.getLocaleString("admLblVisible")).append(":&nbsp;").append("</td>");
         sb.append("        <td>");
-        sb.append("          <input dojoType=\"dijit.form.CheckBox\" type=\"checkbox\" ").append(disableControls).append(base.getAttribute(ATT_INSTANCEGRAPH,"").equals("use")?"checked":"").append(" name=\"").append(ATT_INSTANCEGRAPH).append("\"/>Instancias<br>");
-        sb.append("          <input dojoType=\"dijit.form.CheckBox\" type=\"checkbox\" ").append(disableControls).append(base.getAttribute(ATT_RESPONSEGRAPH,"").equals("use")?"checked":"").append(" name=\"").append(ATT_RESPONSEGRAPH).append("\"/>Tiempos de respuesta<br>");
-        sb.append("          <input dojoType=\"dijit.form.CheckBox\" type=\"checkbox\" ").append(disableControls).append(base.getAttribute(ATT_STATUSGRAPH,"").equals("use")?"checked":"").append(" name=\"").append(ATT_STATUSGRAPH).append("\"/>Estatus de procesos<br>");
-        sb.append("          <input dojoType=\"dijit.form.CheckBox\" type=\"checkbox\" ").append(disableControls).append(base.getAttribute(ATT_PARTGRAPH,"").equals("use")?"checked":"").append(" name=\"").append(ATT_PARTGRAPH).append("\"/>Participación<br>");
+        sb.append("          <input dojoType=\"dijit.form.CheckBox\" type=\"checkbox\" ").append(disableControls).append(base.getAttribute(ATT_INSTANCEGRAPH,"").equals("use")?"checked":"").append(" name=\"").append(ATT_INSTANCEGRAPH).append("\"/>").append(paramRequest.getLocaleString("admLblGInstances")).append("<br>");
+        sb.append("          <input dojoType=\"dijit.form.CheckBox\" type=\"checkbox\" ").append(disableControls).append(base.getAttribute(ATT_RESPONSEGRAPH,"").equals("use")?"checked":"").append(" name=\"").append(ATT_RESPONSEGRAPH).append("\"/>").append(paramRequest.getLocaleString("admLblGResponsetime")).append("<br>");
+        sb.append("          <input dojoType=\"dijit.form.CheckBox\" type=\"checkbox\" ").append(disableControls).append(base.getAttribute(ATT_STATUSGRAPH,"").equals("use")?"checked":"").append(" name=\"").append(ATT_STATUSGRAPH).append("\"/>").append(paramRequest.getLocaleString("admLblGStatus")).append("<br>");
+        sb.append("          <input dojoType=\"dijit.form.CheckBox\" type=\"checkbox\" ").append(disableControls).append(base.getAttribute(ATT_PARTGRAPH,"").equals("use")?"checked":"").append(" name=\"").append(ATT_PARTGRAPH).append("\"/>").append(paramRequest.getLocaleString("admLblGPart")).append("<br>");
         sb.append("        </td>");
         sb.append("      </tr>");
         sb.append("    </table>");
-        sb.append("    <button type=\"submit\" dojoType=\"dijit.form.Button\">Guardar</button>");
+        sb.append("    <button type=\"submit\" dojoType=\"dijit.form.Button\">").append(paramRequest.getLocaleString("admLblSave")).append("</button>");
         sb.append("  </fieldset>");
         sb.append("</div>");
         sb.append("</form>");
@@ -727,7 +727,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         Iterator<String> keys = groups.keySet().iterator();
         if (keys.hasNext()) {
             sb.append("<form method=\"post\" action=\"").append(createUrl.toString()).append("\" onsubmit=\"")
-                    .append("setDialogLoading(true, 'Creando instancia...'); return true;").append("\">");
+                    .append("setDialogLoading(true, '").append(paramRequest.getLocaleString("msgCreating")).append("'); return true;").append("\">");
             sb.append("  <select name=\"pid\">");
             while(keys.hasNext()) {
                 String key = keys.next();
@@ -741,11 +741,11 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             }
             sb.append("  </select>");
             sb.append("  <div>");
-            sb.append("    <br/><input type=\"submit\" value=\"Aceptar\" class=\"btn1\">");
+            sb.append("    <br/><input type=\"submit\" value=\"").append(paramRequest.getLocaleString("btnOk")).append("\" class=\"btn1\">");
             sb.append("  </div>");
             sb.append("</form>");
         } else {
-            sb.append("<span>No hay procesos disponibles</span>");
+            sb.append("<span>").append(paramRequest.getLocaleString("msgNoProcess")).append("</span>");
         }
         out.println(sb.toString());
     }
@@ -822,7 +822,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                         .append("submitFormPortal('fwd/").append(getResourceBase().getId()).append("'); hideDialog(); return false;").append("\">");
                 sb.append("  <input type=\"hidden\" name=\"suri\" value=\"").append(suri).append("\"/>");
                 sb.append("  <select name=\"owner\">");
-                sb.append("    <option value=\"--\">Liberar tarea</option>");
+                sb.append("    <option value=\"--\">").append(paramRequest.getLocaleString("freeTask")).append("</option>");
                 while(tPartners.hasNext()) {
                     User _user = tPartners.next();
                     if (!_user.equals(fni.getAssignedto())) {
@@ -831,11 +831,11 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                 }
                 sb.append("  </select>");
                 sb.append("  <div>");
-                sb.append("    <br/><input type=\"submit\" value=\"Aceptar\" class=\"btn1\">");
+                sb.append("    <br/><input type=\"submit\" value=\"").append(paramRequest.getLocaleString("btnOk")).append("\" class=\"btn1\">");
                 sb.append("  </div>");
                 sb.append("</form>");
             } else {
-                sb.append("<span>Esta tarea no puede ser reasignada a otro usuario</span>");
+                sb.append("<span>").append(paramRequest.getLocaleString("msgFwdFail")).append("</span>");
             }
         }
         out.println(sb.toString());
