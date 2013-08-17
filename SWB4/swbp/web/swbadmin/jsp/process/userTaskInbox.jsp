@@ -302,7 +302,7 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
                                                         <a title="<%=paramRequest.getLocaleString("actTake")%>" class="acc-atender" href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>"><%=paramRequest.getLocaleString("actTake")%></a>
                                                         <%if (allowForward && instance.getAssignedto() != null) {
                                                             SWBResourceURL forward = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(UserTaskInboxResource.MODE_FWD);
-                                                            %><a title="<%=paramRequest.getLocaleString("actFwd")%>" class="acc-delegar" onclick="showDialog('<%=forward%>?suri=<%=instance.getEncodedURI()%>', 'Reasignar tarea'); return false;" href=""><%=paramRequest.getLocaleString("actFwd")%></a><%
+                                                            %><a title="<%=paramRequest.getLocaleString("actFwd")%>" class="acc-delegar" onclick="showDialog('<%=forward%>?suri=<%=instance.getEncodedURI()%>', '<%=paramRequest.getLocaleString("actFwd")%>'); return false;" href=""><%=paramRequest.getLocaleString("actFwd")%></a><%
                                                         }
                                                     }
                                                     if (statusWp != null) {%>
