@@ -288,6 +288,17 @@ public class UserRepository extends UserRepositoryBase {
 
         return ret;
     }
+    
+    /**
+     * Gets the user by login.
+     * 
+     * @param login the login
+     * @return the user by login
+     */
+    public User getUserByLogin(String login) 
+    {
+        return getUserByLogin(login, true);
+    }    
 
     /**
      * Gets the user by login.
@@ -295,7 +306,7 @@ public class UserRepository extends UserRepositoryBase {
      * @param login the login
      * @return the user by login
      */
-    public User getUserByLogin(String login) {
+    public User getUserByLogin(String login, boolean syncExternal) {
         User ret = null;
         log.debug("Login a buscar: " + login + " External:" + EXTERNAL);
         if (null != login) {
@@ -304,11 +315,12 @@ public class UserRepository extends UserRepositoryBase {
             if (it.hasNext()) {
                 ret = (User) it.next();
             }
-            if (EXTERNAL)
+            if (EXTERNAL && syncExternal)
             {
                 boolean sync=bridge.syncUser(login, ret);
-                if (sync && null == ret) {
-                    aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrLogin.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(login));
+                if (sync && null == ret) 
+                {
+                    aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrLogin.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(login));                    
                     it = new GenericIterator(SWBUtils.Collections.copyIterator(aux).iterator(), true);
                     if (it.hasNext()) {
                         ret = (User) it.next();
