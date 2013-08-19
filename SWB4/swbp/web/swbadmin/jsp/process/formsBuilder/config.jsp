@@ -49,13 +49,13 @@ if (ProcessForm.ACT_UPDPROP.equals(action)) {
             <fieldset>
             <table>
                 <tr>
-                    <td><label>Etiqueta: </label></td>
+                    <td><label><%=paramRequest.getLocaleString("lblLabel")%>: </label></td>
                     <td>
                         <input dojoType="dijit.form.TextBox" type="text" name="<%=ProcessForm.PARAM_PROPLBL%>" style="width:300px;" value="<%=propsMap.get("label")==null?prop.getDisplayName(lang):propsMap.get("label")%>"/>
                     </td>
                 </tr>
                 <tr>
-                    <td><label>FormElement: </label></td>
+                    <td><label><%=paramRequest.getLocaleString("lblFE")%>: </label></td>
                     <td>
                         <select name="<%=ProcessForm.PARAM_PROPFE%>" style="width:300px;">
                             <%=ProcessForm.getFESelect(propsMap.get("fe"), paramRequest, prop) %>
@@ -63,14 +63,14 @@ if (ProcessForm.ACT_UPDPROP.equals(action)) {
                     </td>
                 </tr>
                 <tr>
-                    <td><label>Modo: </label></td>
+                    <td><label><%=paramRequest.getLocaleString("lblMode")%>: </label></td>
                     <td>
-                        <input type="radio" <%=propsMap.get("mode").equals("view")?"checked":""%> name="<%=ProcessForm.PARAM_PROPMODE%>" value="view"/><label>Vista</label>
-                        <input type="radio" <%=propsMap.get("mode").equals("edit")?"checked":""%> name="<%=ProcessForm.PARAM_PROPMODE%>" value="edit"/><label>Edición</label>
+                        <input type="radio" <%=propsMap.get("mode").equals("view")?"checked":""%> name="<%=ProcessForm.PARAM_PROPMODE%>" value="view"/><label><%=paramRequest.getLocaleString("lblView")%></label>
+                        <input type="radio" <%=propsMap.get("mode").equals("edit")?"checked":""%> name="<%=ProcessForm.PARAM_PROPMODE%>" value="edit"/><label><%=paramRequest.getLocaleString("lblEdit")%></label>
                     </td>
                 </tr>
                 <tr>
-                    <td><label>Roles: </label></td>
+                    <td><label><%=paramRequest.getLocaleString("lblRoles")%>: </label></td>
                     <td>
                         <select multiple name="<%=ProcessForm.PARAM_ROLES%>" style="width:300px;">
                             <%
@@ -100,13 +100,13 @@ if (ProcessForm.ACT_UPDPROP.equals(action)) {
             </fieldset>
             <fieldset>
                 <button type="submit" dojoType="dijit.form.Button">Aceptar</button>
-                <button dojoType="dijit.form.Button" onclick="hideDialog('configDialog');">Cancelar</button>
+                <button dojoType="dijit.form.Button" onclick="hideDialog('configDialog');"><%=paramRequest.getLocaleString("cancel")%></button>
             </fieldset>
         </form>
         <!--a href="#" onclick="submitUrl('<%=actUrl%>',this); hideDialog('editDialog'); return false;">Ir a procesar</a-->
         <%
     } else {
-        %>Ha ocurrido un error al obtener la propiedad.<%
+        %><%=paramRequest.getLocaleString("msgNoPropDef")%><%
     }
 } else if (ProcessForm.ACT_UPDBTNLABEL.equals(action)) {
     String btn = request.getParameter(ProcessForm.PARAM_BTNID);
@@ -125,8 +125,8 @@ if (ProcessForm.ACT_UPDPROP.equals(action)) {
                 </table>
             </fieldset>
             <fieldset>
-                <button type="submit" dojoType="dijit.form.Button">Aceptar</button>
-                <button dojoType="dijit.form.Button" onclick="hideDialog('configDialog');">Cancelar</button>
+                <button type="submit" dojoType="dijit.form.Button"><%=paramRequest.getLocaleString("accept")%></button>
+                <button dojoType="dijit.form.Button" onclick="hideDialog('configDialog');"><%=paramRequest.getLocaleString("cancel")%></button>
             </fieldset>
         </form>
         <%
