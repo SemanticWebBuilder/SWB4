@@ -663,6 +663,7 @@
     <rdfs:range rdf:resource="#SocialNetwork"/>
     <rdfs:domain>
       <swb:Class rdf:ID="PostIn">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
         <rdfs:subClassOf>
           <swb:Class rdf:ID="Post">
             <rdfs:subClassOf rdf:resource="#PostTextable"/>
@@ -672,7 +673,6 @@
             >true</swb:autogenId>
             <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
             <rdfs:comment>Clase a Cambiar despues por "Relacional", esta y todas sus hijas. Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta..</rdfs:comment>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
             <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
           </swb:Class>
         </rdfs:subClassOf>
@@ -1153,12 +1153,6 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:comment>Error en la publicación del PostOut en una determimada red social., Este error podría desplegarse para que vieran los usuarios del sistema cual fué la causa de porque no se publicó el mensaje (PostOut).</rdfs:comment>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="pfiTime">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >time</swb:propertyCodeName>
-    <rdfs:domain rdf:resource="#SocialPFlowInstance"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="socialwpPhoto">
     <rdfs:domain rdf:resource="#SocialWebPage"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -1186,6 +1180,12 @@
         <swbxf:propGroup rdf:resource="#publish_Grp"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="pfiTime">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >time</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="#SocialPFlowInstance"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="latitude">
     <rdfs:comment>Latitude de donde se envía el mensaje</rdfs:comment>
@@ -1220,6 +1220,28 @@
     <rdfs:comment>Propiedad que indica si el mensaje de salida (PostOut) se origina de un mensaje que estamos solamente compartiendo de otro mensaje que llego desde PostIn, es decir, desde la red social Twitter, sería como darle a un mensaje de otra persona "retweet" y desde facebook, sería como darle a un mensaje de otra persona "Share".</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#PostOut"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="userCanReValueMsg">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_userCanReValueMsg">
+        <swbxf:propGroup>
+          <swbxf:PropertyGroup rdf:ID="SocialUserGroup">
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >100</swb:index>
+            <rdfs:label xml:lang="en">Acctions in Messages</rdfs:label>
+            <rdfs:label xml:lang="es">Acciones en Mensajes</rdfs:label>
+            <rdfs:comment>Grupo para administrar los permisos específicos para un usuario en SWBSocial</rdfs:comment>
+          </swbxf:PropertyGroup>
+        </swbxf:propGroup>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >130</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Puede revaluar mensajes</rdfs:label>
+    <rdfs:label xml:lang="en">Is Autorized to revalue messages</rdfs:label>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment>Indica si un usuario puede reevaluar los mensajes de entrada.</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="west">
     <rdfs:domain rdf:resource="#GeoMapable"/>
@@ -1325,6 +1347,20 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:comment>Fecha o id siguiente para busqueda en una red social.</rdfs:comment>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="userCanRespondMsg">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_userCanRespondMsg">
+        <swbxf:propGroup rdf:resource="#SocialUserGroup"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >110</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Puede responder mensajes</rdfs:label>
+    <rdfs:label xml:lang="en">Is Autorized to respond messages</rdfs:label>
+    <rdfs:comment>Indica si un usuario puede o no responder mensajes, en la pantalla que se encuentra que soporte esa opción.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="SentimentType">
     <rdfs:domain>
       <swb:Class rdf:ID="SentimentalLearningPhrase">
@@ -1390,20 +1426,6 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="capitalLongitude">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_capitalLongitude">
-        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >60</swb:index>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:label xml:lang="es">Longitud de Capital</rdfs:label>
-    <rdfs:label xml:lang="en">Capital Longitude</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-    <rdfs:domain rdf:resource="#GeoMapable"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="geoDistanceUnit">
     <rdfs:comment>Unidad de medida para la distancia entre el centro y el radio. Ej. KM, MI</rdfs:comment>
     <swb:displayProperty>
@@ -1419,6 +1441,20 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Geolocable"/>
     <rdfs:label>Unidad de medida</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="capitalLongitude">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_capitalLongitude">
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Longitud de Capital</rdfs:label>
+    <rdfs:label xml:lang="en">Capital Longitude</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="#GeoMapable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="longitude">
     <rdfs:comment>Longitud de donde se envía el mensaje</rdfs:comment>
@@ -1467,6 +1503,20 @@
     <rdfs:comment>Developer Key</rdfs:comment>
     <rdfs:label>Developer key</rdfs:label>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="userCanRemoveMsg">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_userCanRemoveMsg">
+        <swbxf:propGroup rdf:resource="#SocialUserGroup"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Is Autorized to remove messages</rdfs:label>
+    <rdfs:label xml:lang="es">Puede eliminar mensajes</rdfs:label>
+    <rdfs:comment>Propiedad que indica si un determinado usuario puede o no eliminar mensajes, ya sea de entrada o de salida, es decir a donde tenga permisos mediante los filtros de administración</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="north">
     <rdfs:domain rdf:resource="#GeoMapable"/>
     <rdfs:label xml:lang="en">North</rdfs:label>
@@ -1513,6 +1563,19 @@
     >phrase</swb:propertyCodeName>
     <rdfs:label xml:lang="es">Frase</rdfs:label>
     <rdfs:label xml:lang="en">Phrase</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="userCanReTopicMsg">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_userCanReTopicMsg">
+        <swbxf:propGroup rdf:resource="#SocialUserGroup"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >140</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Puede re-clasificar por tema los mensajes</rdfs:label>
+    <rdfs:label xml:lang="en">Is Autorized to re-classify by topic the messages</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="accessToken">
     <rdfs:domain rdf:resource="#Oauthable"/>
@@ -1985,6 +2048,7 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
   <swb:Class rdf:ID="Video">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
     <rdfs:comment xml:lang="es">Clase que sera creada cuando un post sea de tipo video, como lo es para youtube y facebook (cuando se envia un video a facebook).</rdfs:comment>
     <rdfs:label xml:lang="es">Video</rdfs:label>
     <rdfs:subClassOf rdf:resource="#PostVideoable"/>
