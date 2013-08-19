@@ -125,16 +125,16 @@ addPropsUrl.setParameter(ProcessForm.ATT_TASK, task.getEncodedURI());
 <div dojoType="dijit.layout.BorderContainer" id="mainContainer" style="width:100%; height:1300px;">
     <div dojoType="dijit.Toolbar" region="top">
         <form action="<%=toggle%>" method="post">
-            <button iconClass="propIcon" <%=disabled%> dojoType="dijit.form.Button" onclick="showDialog('<%=addPropsUrl%>','Agregad propiedad'); return false;">Propiedad</button>
-            <button name="btns" <%=disabled%> iconClass="headerIcon" onclick="window.location='<%=toggle%>?btns=showHeader'; return false;" <%=showHeader?"checked":""%> dojoType="dijit.form.ToggleButton">Mostrar encabezado</button>
+            <button iconClass="propIcon" <%=disabled%> dojoType="dijit.form.Button" onclick="showDialog('<%=addPropsUrl%>','<%=paramRequest.getLocaleString("addDlgTitle")%>'); return false;"><%=paramRequest.getLocaleString("toolAddProp")%></button>
+            <button name="btns" <%=disabled%> iconClass="headerIcon" onclick="window.location='<%=toggle%>?btns=showHeader'; return false;" <%=showHeader?"checked":""%> dojoType="dijit.form.ToggleButton"><%=paramRequest.getLocaleString("toolShowHead")%></button>
             <span dojoType="dijit.ToolbarSeparator"></span>
-            <button name="btns" <%=disabled%> iconClass="acceptIcon" onclick="window.location='<%=toggle%>?btns=accept'; return false;" <%=btnAccept?"checked":""%> dojoType="dijit.form.ToggleButton">Bot&oacute;n concluir</button>
-            <button name="btns" <%=disabled%> iconClass="rejectIcon" onclick="window.location='<%=toggle%>?btns=reject'; return false;" <%=btnReject?"checked":""%> dojoType="dijit.form.ToggleButton">Bot&oacute;n rechazar</button>
-            <button name="btns" <%=disabled%> iconClass="cancelIcon" onclick="window.location='<%=toggle%>?btns=cancel'; return false;" <%=btnCancel?"checked":""%> dojoType="dijit.form.ToggleButton">Bot&oacute;n regresar</button>
-            <button name="btns" <%=disabled%> iconClass="saveIcon" onclick="window.location='<%=toggle%>?btns=save'; return false;" <%=btnSave?"checked":""%> dojoType="dijit.form.ToggleButton">Bot&oacute;n guardar</button>
+            <button name="btns" <%=disabled%> iconClass="acceptIcon" onclick="window.location='<%=toggle%>?btns=accept'; return false;" <%=btnAccept?"checked":""%> dojoType="dijit.form.ToggleButton"><%=paramRequest.getLocaleString("toolCloseButton")%></button>
+            <button name="btns" <%=disabled%> iconClass="rejectIcon" onclick="window.location='<%=toggle%>?btns=reject'; return false;" <%=btnReject?"checked":""%> dojoType="dijit.form.ToggleButton"><%=paramRequest.getLocaleString("toolRejectButton")%></button>
+            <button name="btns" <%=disabled%> iconClass="cancelIcon" onclick="window.location='<%=toggle%>?btns=cancel'; return false;" <%=btnCancel?"checked":""%> dojoType="dijit.form.ToggleButton"><%=paramRequest.getLocaleString("toolBackButton")%></button>
+            <button name="btns" <%=disabled%> iconClass="saveIcon" onclick="window.location='<%=toggle%>?btns=save'; return false;" <%=btnSave?"checked":""%> dojoType="dijit.form.ToggleButton"><%=paramRequest.getLocaleString("toolSaveButton")%></button>
             <span dojoType="dijit.ToolbarSeparator"></span>
-            <button name="btns" iconClass="signIcon" onclick="window.location='<%=toggle%>?btns=sign'; return false;" <%=base.getAttribute("useSign") != null ? "checked" : ""%> dojoType="dijit.form.ToggleButton">Usar firmado</button>
-            <button iconClass="advancedIcon" onclick="window.location='<%=updMode%>'" <%=admMode.equals(ProcessForm.ADM_MODEADVANCED) ? "checked" : ""%> dojoType="dijit.form.ToggleButton">Modo avanzado</button>
+            <button name="btns" iconClass="signIcon" onclick="window.location='<%=toggle%>?btns=sign'; return false;" <%=base.getAttribute("useSign") != null ? "checked" : ""%> dojoType="dijit.form.ToggleButton"><%=paramRequest.getLocaleString("toolUseSign")%></button>
+            <button iconClass="advancedIcon" onclick="window.location='<%=updMode%>'" <%=admMode.equals(ProcessForm.ADM_MODEADVANCED) ? "checked" : ""%> dojoType="dijit.form.ToggleButton"><%=paramRequest.getLocaleString("toolAdvanced")%></button>
         </form>
     </div>
     <div dojoType="dijit.layout.ContentPane" region="center" id="workspace">
@@ -201,13 +201,13 @@ addPropsUrl.setParameter(ProcessForm.ATT_TASK, task.getEncodedURI());
                                                     <%
                                                     if (max != 1) {
                                                         %>
-                                                        <a href="#" onclick="window.location='<%=urlmove%>'; return false;" title="Subir"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/up.jpg"/></a>
+                                                        <a href="#" onclick="window.location='<%=urlmove%>'; return false;" title="<%=paramRequest.getLocaleString("lblUp")%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/up.jpg"/></a>
                                                         <%
                                                     }
                                                     if (max < baseProps.size()) {
                                                         urlmove.setParameter(ProcessForm.PARAM_DIR, "down");
                                                         %>
-                                                        <a href="#" onclick="window.location='<%=urlmove%>'; return false;" title="Bajar"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/down.jpg"/></a>
+                                                        <a href="#" onclick="window.location='<%=urlmove%>'; return false;" title="<%=paramRequest.getLocaleString("lblDown")%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/down.jpg"/></a>
                                                         <%
                                                     }
                                                     %>
@@ -260,8 +260,8 @@ addPropsUrl.setParameter(ProcessForm.ATT_TASK, task.getEncodedURI());
                                                     editUrl.setAction(ProcessForm.ACT_UPDPROP);
                                                     %>
                                                 <td>
-                                                    <a href="#" title="Eliminar propiedad" onclick="window.location='<%=delUrl%>';return false;"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/delete.gif"/></a>
-                                                    <a href="#" title="Editar Configuración" onclick="showDialog('<%=editUrl%>','Editar'); return false;"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/editar_1.gif"/></a>
+                                                    <a href="#" title="<%=paramRequest.getLocaleString("lblDelete")%>" onclick="window.location='<%=delUrl%>';return false;"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/delete.gif"/></a>
+                                                    <a href="#" title="<%=paramRequest.getLocaleString("lblEdit")%>" onclick="showDialog('<%=editUrl%>','<%=paramRequest.getLocaleString("lblEdit")%>'); return false;"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/editar_1.gif"/></a>
                                                 </td>
                                             </tr>
                                         <%
@@ -290,25 +290,25 @@ addPropsUrl.setParameter(ProcessForm.ATT_TASK, task.getEncodedURI());
                 if (btnSave) {
                     editUrl.setParameter(ProcessForm.PARAM_BTNID , "btnSave");
                     %>
-                    <button dojoType="dijit.form.Button"><%=base.getAttribute("btnSaveLabel","Guardar")%></button><a href="#" onclick="showDialog('<%=editUrl%>','Editar botón guardar'); return false;" title="Editar Configuración"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/editar_1.gif"/></a>
+                    <button dojoType="dijit.form.Button"><%=base.getAttribute("btnSaveLabel",paramRequest.getLocaleString("btnSaveTask"))%></button><a href="#" onclick="showDialog('<%=editUrl%>','<%=paramRequest.getLocaleString("lblEdit")%>'); return false;" title="<%=paramRequest.getLocaleString("lblEdit")%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/editar_1.gif"/></a>
                     <%
                 }
                 if (btnAccept) {
                     editUrl.setParameter(ProcessForm.PARAM_BTNID , "btnAccept");
                     %>
-                    <button dojoType="dijit.form.Button"><%=base.getAttribute("btnAcceptLabel","Concluir Tarea")%></button><a href="#" onclick="showDialog('<%=editUrl%>','Editar botón concluir'); return false;" title="Editar Configuración"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/editar_1.gif"/></a>
+                    <button dojoType="dijit.form.Button"><%=base.getAttribute("btnAcceptLabel",paramRequest.getLocaleString("btnCloseTask"))%></button><a href="#" onclick="showDialog('<%=editUrl%>','<%=paramRequest.getLocaleString("lblEdit")%>'); return false;" title="<%=paramRequest.getLocaleString("lblEdit")%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/editar_1.gif"/></a>
                     <%
                 }
                 if (btnReject) {
                     editUrl.setParameter(ProcessForm.PARAM_BTNID , "btnReject");
                     %>
-                    <button dojoType="dijit.form.Button"><%=base.getAttribute("btnRejectLabel","Rechazar Tarea")%></button><a href="#" onclick="showDialog('<%=editUrl%>','Editar botón rechazar'); return false;" title="Editar Configuración"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/editar_1.gif"/></a>
+                    <button dojoType="dijit.form.Button"><%=base.getAttribute("btnRejectLabel",paramRequest.getLocaleString("btnRejectTask"))%></button><a href="#" onclick="showDialog('<%=editUrl%>','<%=paramRequest.getLocaleString("lblEdit")%>'); return false;" title="<%=paramRequest.getLocaleString("lblEdit")%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/editar_1.gif"/></a>
                     <%
                 }
                 if (btnCancel) {
                     editUrl.setParameter(ProcessForm.PARAM_BTNID , "btnCancel");
                     %>
-                    <button dojoType="dijit.form.Button"><%=base.getAttribute("btnCancelLabel","Regresar")%></button><a href="#" onclick="showDialog('<%=editUrl%>','Editar botón regresar'); return false;" title="Editar Configuración"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/editar_1.gif"/></a>
+                    <button dojoType="dijit.form.Button"><%=base.getAttribute("btnCancelLabel",paramRequest.getLocaleString("btnBack"))%></button><a href="#" onclick="showDialog('<%=editUrl%>','<%=paramRequest.getLocaleString("lblEdit")%>'); return false;" title="<%=paramRequest.getLocaleString("lblEdit")%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/editar_1.gif"/></a>
                     <%
                 }
                 
@@ -326,7 +326,7 @@ addPropsUrl.setParameter(ProcessForm.ATT_TASK, task.getEncodedURI());
             SWBResourceURL urladd = paramRequest.getActionUrl().setAction(ProcessForm.ACT_UPDATEXML);
             %>
             <form dojoType="dijit.form.Form" action="<%=urladd%>" method="post">
-                <button dojoType="dijit.form.Button" onclick="if (confirm('Se volverá a generar el XML.\nLos cambios que haya hecho se perderán. ¿Desea continuar?')) {window.location='<%=urladd%>';} else {return false;}">Generar XML</button>
+                <button dojoType="dijit.form.Button" onclick="if (confirm('<%=paramRequest.getLocaleString("msgXMLReload")%>')) {window.location='<%=urladd%>';} else {return false;}"><%=paramRequest.getLocaleString("lblGenerateXML")%></button>
                 <hr>
             </form>
             <%
@@ -364,7 +364,7 @@ addPropsUrl.setParameter(ProcessForm.ATT_TASK, task.getEncodedURI());
         %>
     </div>
 </div>
-<div dojoType="dijit.Dialog" style="display:none;" id="configDialog" title="Agregar">
+<div dojoType="dijit.Dialog" style="display:none;" id="configDialog" title="<%=paramRequest.getLocaleString("lblAdd")%>">
     <div dojoType="dojox.layout.ContentPane" id="configDialogImp" executeScripts="true">
         Cargando...
     </div>
@@ -470,7 +470,7 @@ addPropsUrl.setParameter(ProcessForm.ATT_TASK, task.getEncodedURI());
             });
         }else
         {
-            alert("Datos Inválidos...");
+            alert("<%=paramRequest.getLocaleString("msgInvalidData")%>");
         }
     }
 
