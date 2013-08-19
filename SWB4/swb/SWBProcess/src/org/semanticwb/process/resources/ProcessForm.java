@@ -54,7 +54,6 @@ import org.semanticwb.process.model.FlowNodeInstance;
 import org.semanticwb.process.model.Instance;
 import org.semanticwb.process.model.ItemAware;
 import org.semanticwb.process.model.ItemAwareReference;
-import org.semanticwb.process.model.SWBPClassMgr;
 import org.semanticwb.process.model.SWBProcessFormMgr;
 import org.semanticwb.process.model.SWBProcessMgr;
 import org.semanticwb.process.model.UserTask;
@@ -716,15 +715,15 @@ public class ProcessForm extends GenericResource {
                 sb.append("    </select>");
                 sb.append("  </fieldset>");
                 sb.append("  <fieldset>");
-                sb.append("    <button dojoType=\"dijit.form.Button\" type=\"submit\">Agregar seleccionadas</button>");
-                sb.append("    <button dojoType=\"dijit.form.Button\" onclick=\"hideDialog('configDialog');\">Cancelar</button>");
+                sb.append("    <button dojoType=\"dijit.form.Button\" type=\"submit\">").append(paramRequest.getLocaleString("addSelected")).append("</button>");
+                sb.append("    <button dojoType=\"dijit.form.Button\" onclick=\"hideDialog('configDialog');\">").append(paramRequest.getLocaleString("cancel")).append("</button>");
                 sb.append("  </fieldset>");
                 sb.append("</form>");
             } else {
-                sb.append("<span>No hay más propiedades disponibles.</span>");
+                sb.append("<span>").append(paramRequest.getLocaleString("msgNoProps")).append("</span>");
             }
         } else {
-            sb.append("<span>Ocurrió un error al obtener la tarea.</span>");
+            sb.append("<span>").append(paramRequest.getLocaleString("msgNoTask")).append("</span>");
         }
         out.print(sb.toString());
     }
@@ -765,7 +764,7 @@ public class ProcessForm extends GenericResource {
         
         if (suri == null) {
             out.println("<script type=\"text/javascript\">"
-                    + " alert('No ha sido posible recuperar la instancia en ejecución.');"
+                    + " alert('"+paramRequest.getLocaleString("msgNoInstance")+"');"
                     + "</script>");
             return;
         }
@@ -777,7 +776,7 @@ public class ProcessForm extends GenericResource {
         User asigned = foi.getAssignedto();
         if (asigned != null && !asigned.equals(user)) {
             out.println("<script type=\"text/javascript\">"
-                    + " alert('Esta tarea ya ha sido asignada a otro usuario');"
+                    + " alert('"+paramRequest.getLocaleString("msgAssigned")+"');"
                     + "window.location='" + viewUrl + "';"
                     + "</script>");
             return;
@@ -785,7 +784,7 @@ public class ProcessForm extends GenericResource {
 
         if (foi.getStatus() == Instance.STATUS_CLOSED || foi.getStatus() == Instance.STATUS_ABORTED || foi.getStatus() == Instance.STATUS_STOPED) {
             out.println("<script type=\"text/javascript\">"
-                    + " alert('Esta tarea ya ha sido concluida.');"
+                    + " alert('"+paramRequest.getLocaleString("cancel")+"');"
                     + "window.location='" + viewUrl + "';"
                     + "</script>");
             return;
@@ -829,7 +828,7 @@ public class ProcessForm extends GenericResource {
             out.println(SWBForms.DOJO_REQUIRED);
             
             boolean showHeader = base.getAttribute("showHeader", "").equals("use")?true:false;
-            out.println("<script type=\"text/javascript\">function validateForm" + foi.getId() + "(form) {var frm = dijit.byId(form); if (frm.isValid()) {return true;} else {alert('Algunos de los datos no son válidos. Verifique la información proporcionada.'); return false;}}</script>");
+            out.println("<script type=\"text/javascript\">function validateForm" + foi.getId() + "(form) {var frm = dijit.byId(form); if (frm.isValid()) {return true;} else {alert('"+paramRequest.getLocaleString("cancel")+"'); return false;}}</script>");
             if (showHeader) {
                 out.println("<h1>"+foi.getFlowNodeType().getTitle()+"</h1>");
             }
@@ -929,16 +928,16 @@ public class ProcessForm extends GenericResource {
                 out.println("<p class=\"submit\"><span align=\"center\">");
             }
             if (btnSave) {
-                out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">"+base.getAttribute("btnSaveLabel","Guardar")+"</button>");
+                out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">"+base.getAttribute("btnSaveLabel",paramRequest.getLocaleString("btnSaveTask"))+"</button>");
             }
             if (btnAccept) {
-                out.println("<button dojoType=\"dijit.form.Button\" name=\"accept\" type=\"submit\">"+base.getAttribute("btnAcceptLabel","Concluir Tarea")+"</button>");
+                out.println("<button dojoType=\"dijit.form.Button\" name=\"accept\" type=\"submit\">"+base.getAttribute("btnAcceptLabel",paramRequest.getLocaleString("btnCloseTask"))+"</button>");
             }
             if (btnReject) {
-                out.println("<button dojoType=\"dijit.form.Button\" name=\"reject\" type=\"submit\">"+base.getAttribute("btnRejectLabel","Rechazar Tarea")+"</button>");
+                out.println("<button dojoType=\"dijit.form.Button\" name=\"reject\" type=\"submit\">"+base.getAttribute("btnRejectLabel",paramRequest.getLocaleString("btnRejectTask"))+"</button>");
             }
             if (btnCancel) {
-                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getUserTaskInboxUrl() + "?suri=" + suri + "'\">"+base.getAttribute("btnCancelLabel","Regresar")+"</button>");
+                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getUserTaskInboxUrl() + "?suri=" + suri + "'\">"+base.getAttribute("btnCancelLabel",paramRequest.getLocaleString("btnBack"))+"</button>");
             }
             if (btnSave || btnAccept || btnReject || btnCancel) {
                 out.println("</span></p>");
@@ -980,13 +979,13 @@ public class ProcessForm extends GenericResource {
         }
     }
     
-    public static String getFESelect(String FEsel, SWBParamRequest paramRequest, SemanticProperty sprop) {
+    public static String getFESelect(String FEsel, SWBParamRequest paramRequest, SemanticProperty sprop) throws SWBResourceException {
     
         User usr = paramRequest.getUser();
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getSchema();
         SemanticVocabulary sv = SWBPlatform.getSemanticMgr().getVocabulary();
         StringBuilder ret = new StringBuilder();
-        ret.append("\n<optgroup label=\"Genérico\">");
+        ret.append("\n<optgroup label=\"").append(paramRequest.getLocaleString("lblGenericFE")).append("\">");
         ret.append("\n<option value=\"generico\" selected >GenericFormElement</option>");
         ret.append("\n</optgroup>");
 
@@ -1181,10 +1180,10 @@ public class ProcessForm extends GenericResource {
             ret.append("\n          <Button type=\"savebtn\"/>");
         }
         if (base.getAttribute("btnAccept") != null) {
-            ret.append("\n          <Button type=\"submit\" name=\"accept\" title=\"Concluir Tarea\" isBusyButton=\"true\" />");
+            ret.append("\n          <Button type=\"submit\" name=\"accept\" title=\"").append(response.getLocaleString("btnCloseTask")).append("\" isBusyButton=\"true\" />");
         }
         if (base.getAttribute("btnReject") != null) {
-            ret.append("\n          <Button isBusyButton=\"true\" name=\"reject\" title=\"Rechazar Tarea\" type=\"submit\" />");
+            ret.append("\n          <Button isBusyButton=\"true\" name=\"reject\" title=\"").append(response.getLocaleString("btnRejectTask")).append("\" type=\"submit\" />");
         }
         if (base.getAttribute("btnCancel") != null) {
             ret.append("\n          <Button type=\"cancelbtn\"/>");
@@ -1207,7 +1206,7 @@ public class ProcessForm extends GenericResource {
         
         if (suri == null) {
             out.println("<script type=\"text/javascript\">"
-                    + " alert('No ha sido posible recuperar la instancia en ejecución.');"
+                    + " alert('"+paramRequest.getLocaleString("msgNoInstance")+"');"
                     + "window.location='" + viewUrl + "';"
                     + "</script>");
             return;
@@ -1227,14 +1226,14 @@ public class ProcessForm extends GenericResource {
         if(!canSign)
         {
             out.println("<script type=\"text/javascript\">"
-                    + " alert('No existe un certificado registrado para poder firmar esta tarea. Por favor contacte al administrador del sitio.');"
+                    + " alert('"+paramRequest.getLocaleString("msgNoCert")+"');"
                     + "window.location='" + viewUrl + "';"
                     + "</script>");
             return;
         }
         if(request.getParameter("err")!=null)
         {
-            out.println("<script type=\"text/javascript\">alert('Ocurrió un problema al procesar la firma del documento. La firma proporcionada es invalida.'); window.location='" + viewUrl + "';</script>");
+            out.println("<script type=\"text/javascript\">alert('"+paramRequest.getLocaleString("msgNoSign")+"'); window.location='" + viewUrl + "';</script>");
         }
 
         String SigCad = getStringToSign(foi); 
@@ -1248,7 +1247,7 @@ public class ProcessForm extends GenericResource {
         User asigned = foi.getAssignedto();
         if (asigned != null && !asigned.equals(user)) {
             out.println("<script type=\"text/javascript\">"
-                    + " alert('Esta tarea ya ha sido asignada a otro usuario');"
+                    + " alert('"+paramRequest.getLocaleString("msgAssigned")+"');"
                     + "window.location='" + viewUrl + "';"
                     + "</script>");
             return;
@@ -1256,7 +1255,7 @@ public class ProcessForm extends GenericResource {
 
         if (foi.getStatus() == Instance.STATUS_CLOSED || foi.getStatus() == Instance.STATUS_ABORTED || foi.getStatus() == Instance.STATUS_STOPED) {
             out.println("<script type=\"text/javascript\">"
-                    + " alert('Esta tarea ya ha sido concluida.');"
+                    + " alert('"+paramRequest.getLocaleString("msgClosed")+"');"
                     + "window.location='" + viewUrl + "';"
                     + "</script>");
             return;
@@ -1267,8 +1266,8 @@ public class ProcessForm extends GenericResource {
        
         out.println(SWBForms.DOJO_REQUIRED);
         
-        out.println("<script type=\"text/javascript\">function validateForm" + foi.getId() + "(form) {if (form.validate()) {return true;} else {alert('Algunos de los datos no son válidos. Verifique la información proporcionada.'); return false;}}");
-        out.println("function setSignature(data){ dataElement = document.getElementById('hiddenSign'); dataElement.value=data; form = document.getElementById('" + foi.getId() + "/form'); alert('Documento Firmado');form.submit();}</script>");
+        out.println("<script type=\"text/javascript\">function validateForm" + foi.getId() + "(form) {if (form.validate()) {return true;} else {alert('"+paramRequest.getLocaleString("msgInvalidData")+"'); return false;}}");
+        out.println("function setSignature(data){ dataElement = document.getElementById('hiddenSign'); dataElement.value=data; form = document.getElementById('" + foi.getId() + "/form'); alert('"+paramRequest.getLocaleString("msgSignedForm")+"');form.submit();}</script>");
         out.println("<div id=\"processForm\">");
         out.println("<form id=\"" + foi.getId() + "/form\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlact + "\" method=\"post\" onSubmit=\"return validateForm" + foi.getId() + "(this);\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\"/>");
@@ -1278,7 +1277,7 @@ public class ProcessForm extends GenericResource {
         out.println("<table>");
         
         out.println("<tr>");
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Firmar documento:</label></td>");
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">"+paramRequest.getLocaleString("signForm")+":</label></td>");
         out.println("<td>");
         out.println("<applet code=\"signatureapplet.SignatureApplet.class\" codebase=\"/swbadmin/lib\" archive=\""
                     + SWBPlatform.getContextPath()
@@ -1291,7 +1290,7 @@ public class ProcessForm extends GenericResource {
         out.println("<fieldset><span align=\"center\">");
        // out.println("<button dojoType=\"dijit.form.Button\" name=\"btn_signed\" type=\"submit\">Concluir Tarea</button>");
         if (base.getAttribute("btnCancel", "").equals("use")) {
-            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getUserTaskInboxUrl() + "?suri=" + suri + "'\">Regresar</button>");
+            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getUserTaskInboxUrl() + "?suri=" + suri + "'\">"+paramRequest.getLocaleString("cancel")+"</button>");
         }
         out.println("</span></fieldset>");
         out.println("</form>");
@@ -1303,13 +1302,13 @@ public class ProcessForm extends GenericResource {
         
         String suri = request.getParameter("suri");
         if (suri == null) {
-            out.println("Parámetro no definido...");
+            out.println(paramRequest.getLocaleString("msgNoInstance"));
             return;
         }
         
         String x509 = request.getParameter("sg");
         if (x509 == null) {
-            out.println("Parámetro no definido...");
+            out.println(paramRequest.getLocaleString("msgNoInstance"));
             return;
         }
 
@@ -1318,49 +1317,49 @@ public class ProcessForm extends GenericResource {
         X509SingInstance x509SingInstance = (X509SingInstance) ont.getGenericObject(x509);
         
         if (null==x509SingInstance){
-            out.println("El objeto no se encontró...");
+            out.println(paramRequest.getLocaleString("msgNoCert"));
             return;
         }
         
         out.println(SWBForms.DOJO_REQUIRED);
         
         out.println("<div id=\"processForm\" class=\"swbform\">");
-        out.println("<h2>Acuse de Firma</h2>");
+        out.println("<h2>"+paramRequest.getLocaleString("signRecpt")+"</h2>");
         out.println("<fieldset>");
         out.println("<table>");
         
         out.println("<tr>");
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Valor Firmado:</label></td>");
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">"+paramRequest.getLocaleString("signValue")+":</label></td>");
         out.println("<td><div id=\"code\">");
         out.println(htmlwrap(x509SingInstance.getOriginalString(), 50));
         out.println("</div></td></tr>");
         
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Firma:</label></td>");
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">"+paramRequest.getLocaleString("signCode")+":</label></td>");
         out.println("<td><div id=\"code\">");
         out.println(htmlwrap(x509SingInstance.getSignedString(), 50));
         out.println("<div></td></tr>");
         
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Instancia de proceso:</label></td>");
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">"+paramRequest.getLocaleString("signPInstance")+":</label></td>");
         out.println("<td>");
         out.println(x509SingInstance.getFlowNodeInstance().getProcessInstance().getProcessType().getDisplayTitle(paramRequest.getUser().getLanguage()));
         out.println("</td></tr>");
         
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Instancia de Tarea:</label></td>");
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">"+paramRequest.getLocaleString("signTInstance")+":</label></td>");
         out.println("<td>");
         out.println(x509SingInstance.getFlowNodeInstance().getFlowNodeType().getDisplayTitle(paramRequest.getUser().getLanguage()));
         out.println("</td></tr>");
 
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Firmada por:</label></td>");
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">"+paramRequest.getLocaleString("signUser")+":</label></td>");
         out.println("<td>");
         out.println(x509SingInstance.getCertificate().getName());
         out.println("</td></tr>");
         
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">RFC:</label></td>");
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">"+paramRequest.getLocaleString("signId")+":</label></td>");
         out.println("<td>");
         out.println(x509SingInstance.getCertificate().getSerial());
         out.println("</td></tr>");
         
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Fecha:</label></td>");
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">"+paramRequest.getLocaleString("signDate")+":</label></td>");
         out.println("<td>");
         out.println(x509SingInstance.getCreated());
         out.println("</td></tr>");
@@ -1370,7 +1369,7 @@ public class ProcessForm extends GenericResource {
         out.println("<fieldset><span align=\"center\">");
        // out.println("<button dojoType=\"dijit.form.Button\" name=\"btn_signed\" type=\"submit\">Concluir Tarea</button>");
         
-        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getUserTaskInboxUrl() + "?suri=" + suri + "'\">Salir</button>");
+        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getUserTaskInboxUrl() + "?suri=" + suri + "'\">"+paramRequest.getLocaleString("signExit")+"</button>");
         
         out.println("</span></fieldset>");
         out.println("</div>");
