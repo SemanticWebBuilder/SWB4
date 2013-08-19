@@ -42,7 +42,7 @@ import org.semanticwb.social.util.SWBSocialUtil;
  * @author jorge.jimenez
  */
 public class StreamInBoxNoTopic extends GenericResource {
-    
+
      /** The log. */
     private Logger log = SWBUtils.getLogger(StreamInBoxNoTopic.class);
     /** The webpath. */
@@ -63,19 +63,28 @@ public class StreamInBoxNoTopic extends GenericResource {
     public static final String Mode_REVAL = "rv";
     public static final String Mode_RECLASSBYTOPIC="reclassByTopic";
     public static final String Mode_ShowUsrHistory="showUsrHistory";
-    
+
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         final String mode = paramRequest.getMode();
         if(Mode_REVAL.equals(mode)) {
             doRevalue(request, response, paramRequest);
         }else if(Mode_ShowUsrHistory.equals(mode)){
-             doShowUserHistory(request, response, paramRequest);
+            doShowUserHistory(request, response, paramRequest);
         }else if(Mode_RECLASSBYTOPIC.equals(mode)) {
             doReClassifyByTopic(request, response, paramRequest);
         }else if(Mode_showTags.equals(mode)){
             doShowTags(request, response, paramRequest);
-        }else{
+        } else if (paramRequest.getMode().equals("exportExcel")) {
+            try {
+                String idSurvey = request.getParameter("idSurvey");
+                String pages = request.getParameter("pages");
+                int page = Integer.parseInt(pages);
+                doGenerateReport(request, response, paramRequest, idSurvey, paramRequest.getWebPage().getWebSite(), page);
+            } catch (Exception e) {
+                System.out.println("Error reprt:" + e);
+            }
+        } else {
             super.processRequest(request, response, paramRequest);
         }
     }
@@ -119,15 +128,15 @@ public class StreamInBoxNoTopic extends GenericResource {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         log.debug("doEdit()");
-        
+
         String id = request.getParameter("suri");
         if(id==null) return;
 
         Stream stream = (Stream)SemanticObject.getSemanticObject(id).getGenericInstance();    
         WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-        
+
         PrintWriter out = response.getWriter();
-        
+
         if (request.getParameter("dialog") != null && request.getParameter("dialog").equals("close")) {
             out.println("<script type=\"javascript\">");
             out.println(" hideDialog(); ");
@@ -143,7 +152,7 @@ public class StreamInBoxNoTopic extends GenericResource {
             }
             out.println("</script>");
         }
-        
+
         out.println("<style type=\"text/css\">");
         out.println(".spanFormat");
         out.println("{");
@@ -153,11 +162,11 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("  padding-right: 10px;");
         out.println("}");
         out.println("</style>");
-        
+
         //System.out.println("search word que llega sin:"+request.getParameter("search"));
         String searchWord = request.getParameter("search");
         String swbSocialUser=request.getParameter("swbSocialUser");
-        
+
         String page = request.getParameter("page");
         if(page==null && request.getParameter("noSaveSess")==null)  //Cuando venga page!=null no se mete nada a session, ni tampoco se manda return.
         {
@@ -177,24 +186,24 @@ public class StreamInBoxNoTopic extends GenericResource {
                 {
                     swbSocialUser = (String)session.getAttribute(id + this.getClass().getName() +"swbSocialUser");
                     session.removeAttribute(id + this.getClass().getName() +"swbSocialUser");
-            }
+                }
             }else{//Add word to session var
                 session.setAttribute(id + this.getClass().getName() +"swbSocialUser", swbSocialUser);//Save the word in the session var
                 return;
             }
         }
-        
+
         SWBResourceURL urls = paramRequest.getRenderUrl();
         urls.setParameter("act", "");
         urls.setParameter("suri", id);
-        
+
         SWBResourceURL tagUrl = paramRequest.getRenderUrl();
         tagUrl.setParameter("suri", id);
         tagUrl.setParameter("noTopic", "true");
         tagUrl.setMode(Mode_showTags);
-        
+
         out.println("<div class=\"swbform\">");
-      
+
         out.println("<fieldset>");
         out.println("<span  class=\"spanFormat\">");
         out.println("<form id=\"" + id + "/fsearchNoTopic\" name=\"" + id + "/fsearchNoTopic\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearchNoTopic');return false;\">");
@@ -209,39 +218,58 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("<span  class=\"spanFormat\">");
         out.println("<button dojoType='dijit.form.Button'  onclick=\"showDialog('" + tagUrl + "','" + paramRequest.getLocaleString("tagLabel") + "'); return false;\">" + paramRequest.getLocaleString("btnCloud") + "</button>");
         out.println("</span>");
+        if (page == null) {
+            page = "1";
+        }
+        String orderBy = request.getParameter("orderBy");
+        out.println("<span  class=\"spanFormat\">");
+        out.println("<form id=\"" + id + "/importCurrentPage\" name=\"" + id + "/importCurrentPage\" method=\"post\" action=\"" + urls.setMode("exportExcel").setParameter("pages", page).setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("orderBy", orderBy) + "\" >");
+        out.println("<div align=\"right\">");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("importCurrentPage") + "</button>"); //
+        out.println("</div>");
+        out.println("</form>");
+        out.println("</span>");
+
+        out.println("<span  class=\"spanFormat\">");
+        out.println("<form id=\"" + id + "/importAll\" name=\"" + id + "/importAll\" method=\"post\" action=\"" + urls.setMode("exportExcel").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("pages", "0").setParameter("orderBy", orderBy) + "\" >");
+        out.println("<div align=\"right\">");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("importAll") + "</button>"); //
+        out.println("</div>");
+        out.println("</form>");
+        out.println("</span>");
         out.println("</fieldset>");
-        
-        
+
+
         out.println("<fieldset>");
         out.println("<table width=\"98%\" >");
         out.println("<thead>");
-        
+
         out.println("<th>");
         out.println(paramRequest.getLocaleString("action"));
         out.println("</th>");
-        
-        
+
+
         out.println("<th>");
         out.println(paramRequest.getLocaleString("post"));
         out.println("</th>");
-        
+
         SWBResourceURL urlOderby = paramRequest.getRenderUrl();
         urlOderby.setParameter("act", "");
         urlOderby.setParameter("suri", id);
-        
+
         urlOderby.setParameter("orderBy", "PostTypeUp");
         out.println("<th>");
         out.println("<table><tr><td>");
-        out.print(paramRequest.getLocaleString("postType")); 
+        out.print(paramRequest.getLocaleString("postType"));
         out.print("</td><td>");
         out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_down.png\" height=\"16\"/></a>");
-        urlOderby.setParameter("orderBy", "PostTypeDown"); 
+        urlOderby.setParameter("orderBy", "PostTypeDown");
         out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_up.png\" height=\"16\"/></a>");
         out.print("</td></tr></table>");
         //out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getWebWorkPath()+"models/"+SWBContext.getAdminWebSite().getId()+"/css/images/ARW01UP.png"+"\"></a>");
         //out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getWebWorkPath()+"models/"+SWBContext.getAdminWebSite().getId()+"/css/images/ARROW9B.png"+"\"></a>");
         out.println("</th>");
-        
+
         urlOderby.setParameter("orderBy", "networkUp");
         out.println("<th>");
         out.println("<table><tr><td>");
@@ -252,7 +280,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_up.png\" height=\"16\"/></a>");
         out.print("</td></tr></table>");
         out.println("</th>");
-        
+
         urlOderby.setParameter("orderBy", "cretedUp");
         out.println("<th>");
         out.println("<table><tr><td>");
@@ -263,7 +291,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_up.png\" height=\"16\"/></a>");
         out.print("</td></tr></table>");
         out.println("</th>");
-        
+
         urlOderby.setParameter("orderBy", "sentimentUp");
         out.println("<th>");
         out.println("<table><tr><td>");
@@ -274,7 +302,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_up.png\" height=\"16\"/></a>");
         out.print("</td></tr></table>");
         out.println("</th>");
-        
+
         urlOderby.setParameter("orderBy", "intensityUp");
         out.println("<th>");
         out.println("<table><tr><td>");
@@ -285,7 +313,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_up.png\" height=\"16\"/></a>");
         out.print("</td></tr></table>");
         out.println("</th>");
-        
+
         urlOderby.setParameter("orderBy", "emoticonUp");
         out.println("<th>");
         out.println("<table><tr><td>");
@@ -296,8 +324,8 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_up.png\" height=\"16\"/></a>");
         out.print("</td></tr></table>");
         out.println("</th>");
-        
-        
+
+
         urlOderby.setParameter("orderBy", "repliesUp");
         out.println("<th>");
         out.println("<table><tr><td>");
@@ -308,7 +336,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_up.png\" height=\"16\"/></a>");
         out.print("</td></tr></table>");
         out.println("</th>");
-       
+
         urlOderby.setParameter("orderBy", "userUp");
         out.println("<th>");
         out.println("<table width=\"1\"><tr><td>");
@@ -319,7 +347,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_up.png\" height=\"16\"/></a>");
         out.print("</td></tr></table>");
         out.println("</th>");
-        
+
         urlOderby.setParameter("orderBy", "followersUp");
         out.println("<th>");
         out.println("<table><tr><td>");
@@ -330,7 +358,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_up.png\" height=\"16\"/></a>");
         out.print("</td></tr></table>");
         out.println("</th>");
-        
+
         urlOderby.setParameter("orderBy", "friendsUp");
         out.println("<th>");
         out.println("<table><tr><td>");
@@ -341,7 +369,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_up.png\" height=\"16\"/></a>");
         out.print("</td></tr></table>");
         out.println("</th>");
-        
+
         urlOderby.setParameter("orderBy", "kloutUp");
         out.println("<th>");
         out.println("<table><tr><td>");
@@ -352,7 +380,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_up.png\" height=\"16\"/></a>");
         out.print("</td></tr></table>");
         out.println("</th>");
-        
+
         urlOderby.setParameter("orderBy", "placeUp");
         out.println("<th>");
         out.println("<table><tr><td>");
@@ -363,7 +391,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_up.png\" height=\"16\"/></a>");
         out.print("</td></tr></table>");
         out.println("</th>");
-        
+
         urlOderby.setParameter("orderBy", "prioritaryUp");
         out.println("<th>");
         out.println("<table><tr><td>");
@@ -374,171 +402,50 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/arrow_up.png\" height=\"16\"/></a>");
         out.print("</td></tr></table>");
         out.println("</th>");
-        
-        
+
+
         out.println("</thead>");
         out.println("<tbody>");
-        
-        
+
+
         Iterator<PostIn> itposts = null;
-        
-        
+
+        Set<PostIn> setso = null;
+
+        setso = filtros(swbSocialUser, wsite, itposts, searchWord, request, setso, stream, paramRequest);
+
         //Filtros
-        ArrayList<PostIn> aListFilter=new ArrayList();
-        if(swbSocialUser!=null)
-        {
-            SocialNetworkUser socialNetUser=SocialNetworkUser.ClassMgr.getSocialNetworkUser(swbSocialUser, wsite);
-            itposts=socialNetUser.listPostInInvs();
-        }else
-        {
-            itposts=PostIn.ClassMgr.listPostInByPostInStream(stream);
-            if(searchWord!=null)
-            {
-                while(itposts.hasNext())
-                {
-                    PostIn postIn=itposts.next();
-                    if(postIn.getTags()!=null && postIn.getTags().toLowerCase().indexOf(searchWord.toLowerCase())>-1)
-                    {
-                        aListFilter.add(postIn);
-                    }else if(postIn.getMsg_Text()!=null && postIn.getMsg_Text().toLowerCase().indexOf(searchWord.toLowerCase())>-1)
-                    {
-                        aListFilter.add(postIn);
-                    }
-                }
-            }
-        }
-        //Termina Filtros
-        
-        if(aListFilter.size()>0) 
-        {
-            itposts=aListFilter.iterator();
-        }
-        
-        
-        //Ordenamientos
-        //System.out.println("orderBy Llega:"+request.getParameter("orderBy"));
-        Set<PostIn> setso=null;
-        if(request.getParameter("orderBy")!=null)
-        {
-            if(request.getParameter("orderBy").equals("PostTypeUp"))
-            {
-                setso = SWBSocialComparator.sortByPostType(itposts, true);
-            }if(request.getParameter("orderBy").equals("PostTypeDown"))
-            {
-                setso = SWBSocialComparator.sortByPostType(itposts, false);
-            }else if(request.getParameter("orderBy").equals("networkUp"))
-            {
-                setso = SWBSocialComparator.sortByNetwork(itposts, true);
-            }else if(request.getParameter("orderBy").equals("networkDown"))
-            {
-                setso = SWBSocialComparator.sortByNetwork(itposts, false);
-            }else if(request.getParameter("orderBy").equals("topicUp"))
-            {
-                setso = SWBSocialComparator.sortByTopic(itposts, true);
-            }else if(request.getParameter("orderBy").equals("topicDown"))
-            {
-                setso = SWBSocialComparator.sortByTopic(itposts, false);
-            }else if(request.getParameter("orderBy").equals("cretedUp"))
-            {
-                setso = SWBComparator.sortByCreatedSet(itposts,true);
-            }else if(request.getParameter("orderBy").equals("cretedDown"))
-            {
-                setso = SWBComparator.sortByCreatedSet(itposts,false);
-            }else if(request.getParameter("orderBy").equals("sentimentUp"))
-            {
-                setso = SWBSocialComparator.sortBySentiment(itposts, false);
-            }else if(request.getParameter("orderBy").equals("sentimentDown"))
-            {
-                setso = SWBSocialComparator.sortBySentiment(itposts, true);
-            }else if(request.getParameter("orderBy").equals("intensityUp"))
-            {
-                setso = SWBSocialComparator.sortByIntensity(itposts, true);
-            }else if(request.getParameter("orderBy").equals("intensityDown"))
-            {
-                setso = SWBSocialComparator.sortByIntensity(itposts, false);
-            }else if(request.getParameter("orderBy").equals("emoticonUp"))
-            {
-                setso = SWBSocialComparator.sortByEmoticon(itposts, false);
-            }else if(request.getParameter("orderBy").equals("emoticonDown"))
-            {
-                setso = SWBSocialComparator.sortByEmoticon(itposts, true);
-            }else if(request.getParameter("orderBy").equals("userUp"))
-            {
-                setso = SWBSocialComparator.sortByUser(itposts, true);
-            }else if(request.getParameter("orderBy").equals("userDown"))
-            {
-                setso = SWBSocialComparator.sortByUser(itposts, false);
-            }else if(request.getParameter("orderBy").equals("followersUp"))
-            {
-                setso = SWBSocialComparator.sortByFollowers(itposts, true);
-            }else if(request.getParameter("orderBy").equals("followersDown"))
-            {
-                setso = SWBSocialComparator.sortByFollowers(itposts, false);
-            }else if(request.getParameter("orderBy").equals("repliesUp"))
-            {
-                setso = SWBSocialComparator.sortByReplies(itposts, true);
-            }else if(request.getParameter("orderBy").equals("repliesDown"))
-            {
-                setso = SWBSocialComparator.sortByReplies(itposts, false);
-            }else if(request.getParameter("orderBy").equals("friendsUp"))
-            {
-                setso = SWBSocialComparator.sortByFriends(itposts, true);
-            }else if(request.getParameter("orderBy").equals("friendsDown"))
-            {
-                setso = SWBSocialComparator.sortByFriends(itposts, false);
-            }else if(request.getParameter("orderBy").equals("kloutUp"))
-            {
-                setso = SWBSocialComparator.sortByKlout(itposts, true);
-            }else if(request.getParameter("orderBy").equals("kloutDown"))
-            {
-                setso = SWBSocialComparator.sortByKlout(itposts, false);
-            }else if(request.getParameter("orderBy").equals("placeUp"))
-            {
-                setso = SWBSocialComparator.sortByPlace(itposts, true);
-            }else if(request.getParameter("orderBy").equals("placeDown"))
-            {
-                setso = SWBSocialComparator.sortByPlace(itposts, false);
-            }else if(request.getParameter("orderBy").equals("prioritaryUp"))
-            {
-                setso = SWBSocialComparator.sortByPrioritary(itposts, true);
-            }else if(request.getParameter("orderBy").equals("prioritaryDown"))
-            {
-                setso = SWBSocialComparator.sortByPrioritary(itposts, false);
-            }
-            
-        }else
-        {
-            setso = SWBComparator.sortByCreatedSet(itposts, false);
-        }
-        
+
+
+      
+
         //Aquí hago una iteración para sacar los elementos que no tienen SocialTopic, esto para que al momento de la páginación
         //ya se tenga exactamente cuantos elementos son.
-        
+
         //System.out.println("setso Jorge:"+setso+", size:"+setso.size());
-        ArrayList<PostIn> setsoFinal=new ArrayList();;
-        Iterator<PostIn> itTmp=setso.iterator();
-        while (itTmp.hasNext()) 
-        {
+        ArrayList<PostIn> setsoFinal = new ArrayList();;
+        Iterator<PostIn> itTmp = setso.iterator();
+        while (itTmp.hasNext()) {
             PostIn postIn = itTmp.next();
-            if(postIn.getSocialTopic()==null) {
+            if (postIn.getSocialTopic() == null) {
                 setsoFinal.add(postIn);
-            }       
+            }
         }
-        
-        
+
+
         itposts = null;
-        
-        
+
+
         int recPerPage=20;//if(resBase.getItemsbyPage()>0) recPerPage=resBase.getItemsbyPage();            
         int nRec = 0;
         int nPage;
         try {
             nPage = Integer.parseInt(request.getParameter("page"));
         } catch (Exception ignored) {
-             nPage = 1;
+            nPage = 1;
         }
         boolean paginate = false;
-        
+
 
         //Una vez que ya se cuantos elementos son, ya que ya se hizo una primera iteración sobre todos los PostIn, hago una segunda
         //iteración ya para mostrar esos ultimos elementos, esto de hacer 2 iteraciones no es muy bueno, TODO: ver con Javier si vemos
@@ -548,19 +455,19 @@ public class StreamInBoxNoTopic extends GenericResource {
         {
             PostIn postIn = itposts.next();
             /*
-            if(postIn.getSocialTopic()!=null) {
-                //Tengo el problema con la paginación porque los resto al vuelo, entonces conforme se va acercando a la ultima página es como se hace 
-                //exacto, lo que tendría que hacer es saber el tamaño desde el principio de "l", para que lo pusiera exacto en la páginación desde un inicio.
-                l=l-1;                      
-                continue;
-            } //Es decir, se listarían solo los que no tengan aun un SocialTopic asociado.
-            * */
-            
-           nRec++;
+             if(postIn.getSocialTopic()!=null) {
+             //Tengo el problema con la paginación porque los resto al vuelo, entonces conforme se va acercando a la ultima página es como se hace 
+             //exacto, lo que tendría que hacer es saber el tamaño desde el principio de "l", para que lo pusiera exacto en la páginación desde un inicio.
+             l=l-1;                      
+             continue;
+             } //Es decir, se listarían solo los que no tengan aun un SocialTopic asociado.
+             * */
+
+            nRec++;
            if ((nRec > (nPage - 1) * recPerPage) && (nRec <= (nPage) * recPerPage)) 
            {
-                paginate = true;  
-            
+                paginate = true;
+
                 out.println("<tr>");
 
                 //Show Actions
@@ -584,11 +491,11 @@ public class StreamInBoxNoTopic extends GenericResource {
                         paramRequest.getLocaleString("reclasifyByTopic") + "'); return false;\">ReT</a>");
 
                 /*
-                //Respond
-                SWBResourceURL urlresponse=paramRequest.getRenderUrl().setMode(Mode_RESPONSE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());  
-                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("respond") + "\" onclick=\"showDialog('" + urlresponse + "','" + paramRequest.getLocaleString("respond") 
-                        + "'); return false;\">R</a>");
-                        * */
+                 //Respond
+                 SWBResourceURL urlresponse=paramRequest.getRenderUrl().setMode(Mode_RESPONSE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());  
+                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("respond") + "\" onclick=\"showDialog('" + urlresponse + "','" + paramRequest.getLocaleString("respond") 
+                 + "'); return false;\">R</a>");
+                 * */
 
                 out.println("</td>");
 
@@ -674,7 +581,7 @@ public class StreamInBoxNoTopic extends GenericResource {
                 out.println(postIn.getPostInSocialNetworkUser()!=null?postIn.getPostInSocialNetworkUser().getFriends():"---");
                 out.println("</td>");
 
-                 //Klout
+                //Klout
                 out.println("<td align=\"center\">");
                 out.println(postIn.getPostInSocialNetworkUser()!=null?postIn.getPostInSocialNetworkUser().getSnu_klout():"---");
                 out.println("</td>");
@@ -690,18 +597,18 @@ public class StreamInBoxNoTopic extends GenericResource {
                 out.println("</td>");
 
 
-              out.println("</tr>");
-           }
+                out.println("</tr>");
+            }
         }
-        out.println("</tbody>");  
-        out.println("</table>");  
+        out.println("</tbody>");
+        out.println("</table>");
         out.println("</fieldset>");
-        
-        
+
+
         //System.out.println("J-P:"+p);
         //System.out.println("J-X:"+x);
         //System.out.println("J-L:"+l);
-        
+
         if (paginate) 
         {
             out.println("<div id=\"pagination\">");
@@ -721,12 +628,12 @@ public class StreamInBoxNoTopic extends GenericResource {
             }
             out.println("</div>");
         }
-        
-        
-        out.println("</div>");  
-     
+
+
+        out.println("</div>");
+
     }
-    
+
     /*
      * Reclasifica por SocialTopic un PostIn
      */
@@ -745,7 +652,7 @@ public class StreamInBoxNoTopic extends GenericResource {
             }
         }
     }
-    
+
     /*
      * Reevalua un PostIn en cuanto a sentimiento e intensidad
      */
@@ -768,7 +675,7 @@ public class StreamInBoxNoTopic extends GenericResource {
             }
         }
     }
-    
+
     private void doShowUserHistory(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
     {
         final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/userHistory.jsp";
@@ -785,7 +692,7 @@ public class StreamInBoxNoTopic extends GenericResource {
             }
         }
     }
-    
+
     
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
@@ -818,37 +725,37 @@ public class StreamInBoxNoTopic extends GenericResource {
             }
         }else if (SWBResourceURL.Action_EDIT.equals(action)) 
             {
-                WebSite wsite = base.getWebSite();
-                try {
-                    String[] phrases = request.getParameter("fw").split(";");
-                    int nv = Integer.parseInt(request.getParameter("nv"));
-                    int dpth = Integer.parseInt(request.getParameter("dpth"));
-                    SentimentalLearningPhrase slp;
-                    for (String phrase : phrases) {
-                        phrase = phrase.toLowerCase().trim();
-                        slp = SentimentalLearningPhrase.getSentimentalLearningPhrasebyPhrase(phrase, wsite);
-                        if (slp == null) {
-                            phrase = SWBSocialUtil.Classifier.normalizer(phrase).getNormalizedPhrase();
-                            phrase = SWBSocialUtil.Classifier.getRootWord(phrase);
-                            phrase = SWBSocialUtil.Classifier.phonematize(phrase);
-                            slp = SentimentalLearningPhrase.ClassMgr.createSentimentalLearningPhrase(wsite);
-                            slp.setPhrase(phrase);
-                            slp.setSentimentType(nv);
-                            slp.setIntensityType(dpth);
-                        } else {
-                            slp.setSentimentType(nv);
-                            slp.setIntensityType(dpth);
-                        }
+            WebSite wsite = base.getWebSite();
+            try {
+                String[] phrases = request.getParameter("fw").split(";");
+                int nv = Integer.parseInt(request.getParameter("nv"));
+                int dpth = Integer.parseInt(request.getParameter("dpth"));
+                SentimentalLearningPhrase slp;
+                for (String phrase : phrases) {
+                    phrase = phrase.toLowerCase().trim();
+                    slp = SentimentalLearningPhrase.getSentimentalLearningPhrasebyPhrase(phrase, wsite);
+                    if (slp == null) {
+                        phrase = SWBSocialUtil.Classifier.normalizer(phrase).getNormalizedPhrase();
+                        phrase = SWBSocialUtil.Classifier.getRootWord(phrase);
+                        phrase = SWBSocialUtil.Classifier.phonematize(phrase);
+                        slp = SentimentalLearningPhrase.ClassMgr.createSentimentalLearningPhrase(wsite);
+                        slp.setPhrase(phrase);
+                        slp.setSentimentType(nv);
+                        slp.setIntensityType(dpth);
+                    } else {
+                        slp.setSentimentType(nv);
+                        slp.setIntensityType(dpth);
                     }
-                    response.setRenderParameter("alertmsg", "Revaluación correcta");
-                } catch (Exception e) {
-                    response.setRenderParameter("alertmsg", "Inténtalo de nuevo");
-                    log.error(e);
                 }
+                response.setRenderParameter("alertmsg", "Revaluación correcta");
+            } catch (Exception e) {
+                response.setRenderParameter("alertmsg", "Inténtalo de nuevo");
+                log.error(e);
             }
-         
+        }
+
     }
-    
+
     public void doShowTags(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/tagCloud.jsp";        
         RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
@@ -858,5 +765,124 @@ public class StreamInBoxNoTopic extends GenericResource {
         } catch (Exception e) {
             log.error("Error in doShowTags() for requestDispatcher" , e);
         }
+    }
+
+    private void doGenerateReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String idSurvey, WebSite webSite, int page) {
+
+        String searchWord = request.getParameter("search");
+        String swbSocialUser = request.getParameter("swbSocialUser");
+        String id = request.getParameter("suri");
+        Stream stream = (Stream) SemanticObject.getSemanticObject(id).getGenericInstance();
+        Set<PostIn> setso = null;
+        Iterator<PostIn> itposts = null;
+
+        setso = filtros(swbSocialUser, webSite, itposts, searchWord, request, setso, stream, paramRequest);
+
+
+        try {
+
+            StreamInBox sb = new StreamInBox();
+            sb.createExcel(setso, paramRequest, page, response, stream);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Set<PostIn> filtros(String swbSocialUser, WebSite wsite, Iterator<PostIn> itposts, String searchWord, HttpServletRequest request, Set<PostIn> setso, Stream stream, SWBParamRequest paramRequest) {
+        //Filtros
+        ArrayList<PostIn> aListFilter = new ArrayList();
+        if (swbSocialUser != null) {
+            SocialNetworkUser socialNetUser = SocialNetworkUser.ClassMgr.getSocialNetworkUser(swbSocialUser, wsite);
+            itposts = socialNetUser.listPostInInvs();
+        } else {
+            itposts = PostIn.ClassMgr.listPostInByPostInStream(stream);
+            if (searchWord != null) {
+                while (itposts.hasNext()) {
+                    PostIn postIn = itposts.next();
+                    if (postIn.getTags() != null && postIn.getTags().toLowerCase().indexOf(searchWord.toLowerCase()) > -1) {
+                        aListFilter.add(postIn);
+                    } else if (postIn.getMsg_Text() != null && postIn.getMsg_Text().toLowerCase().indexOf(searchWord.toLowerCase()) > -1) {
+                        aListFilter.add(postIn);
+                    }
+                }
+            }
+        }
+        //Termina Filtros
+
+        if (aListFilter.size() > 0) {
+            itposts = aListFilter.iterator();
+        }
+
+
+        //Ordenamientos
+        //System.out.println("orderBy Llega:"+request.getParameter("orderBy"));
+
+        if (request.getParameter("orderBy") != null) {
+            if (request.getParameter("orderBy").equals("PostTypeUp")) {
+                setso = SWBSocialComparator.sortByPostType(itposts, true);
+            }
+            if (request.getParameter("orderBy").equals("PostTypeDown")) {
+                setso = SWBSocialComparator.sortByPostType(itposts, false);
+            } else if (request.getParameter("orderBy").equals("networkUp")) {
+                setso = SWBSocialComparator.sortByNetwork(itposts, true);
+            } else if (request.getParameter("orderBy").equals("networkDown")) {
+                setso = SWBSocialComparator.sortByNetwork(itposts, false);
+            } else if (request.getParameter("orderBy").equals("topicUp")) {
+                setso = SWBSocialComparator.sortByTopic(itposts, true);
+            } else if (request.getParameter("orderBy").equals("topicDown")) {
+                setso = SWBSocialComparator.sortByTopic(itposts, false);
+            } else if (request.getParameter("orderBy").equals("cretedUp")) {
+                setso = SWBComparator.sortByCreatedSet(itposts, true);
+            } else if (request.getParameter("orderBy").equals("cretedDown")) {
+                setso = SWBComparator.sortByCreatedSet(itposts, false);
+            } else if (request.getParameter("orderBy").equals("sentimentUp")) {
+                setso = SWBSocialComparator.sortBySentiment(itposts, false);
+            } else if (request.getParameter("orderBy").equals("sentimentDown")) {
+                setso = SWBSocialComparator.sortBySentiment(itposts, true);
+            } else if (request.getParameter("orderBy").equals("intensityUp")) {
+                setso = SWBSocialComparator.sortByIntensity(itposts, true);
+            } else if (request.getParameter("orderBy").equals("intensityDown")) {
+                setso = SWBSocialComparator.sortByIntensity(itposts, false);
+            } else if (request.getParameter("orderBy").equals("emoticonUp")) {
+                setso = SWBSocialComparator.sortByEmoticon(itposts, false);
+            } else if (request.getParameter("orderBy").equals("emoticonDown")) {
+                setso = SWBSocialComparator.sortByEmoticon(itposts, true);
+            } else if (request.getParameter("orderBy").equals("userUp")) {
+                setso = SWBSocialComparator.sortByUser(itposts, true);
+            } else if (request.getParameter("orderBy").equals("userDown")) {
+                setso = SWBSocialComparator.sortByUser(itposts, false);
+            } else if (request.getParameter("orderBy").equals("followersUp")) {
+                setso = SWBSocialComparator.sortByFollowers(itposts, true);
+            } else if (request.getParameter("orderBy").equals("followersDown")) {
+                setso = SWBSocialComparator.sortByFollowers(itposts, false);
+            } else if (request.getParameter("orderBy").equals("repliesUp")) {
+                setso = SWBSocialComparator.sortByReplies(itposts, true);
+            } else if (request.getParameter("orderBy").equals("repliesDown")) {
+                setso = SWBSocialComparator.sortByReplies(itposts, false);
+            } else if (request.getParameter("orderBy").equals("friendsUp")) {
+                setso = SWBSocialComparator.sortByFriends(itposts, true);
+            } else if (request.getParameter("orderBy").equals("friendsDown")) {
+                setso = SWBSocialComparator.sortByFriends(itposts, false);
+            } else if (request.getParameter("orderBy").equals("kloutUp")) {
+                setso = SWBSocialComparator.sortByKlout(itposts, true);
+            } else if (request.getParameter("orderBy").equals("kloutDown")) {
+                setso = SWBSocialComparator.sortByKlout(itposts, false);
+            } else if (request.getParameter("orderBy").equals("placeUp")) {
+                setso = SWBSocialComparator.sortByPlace(itposts, true);
+            } else if (request.getParameter("orderBy").equals("placeDown")) {
+                setso = SWBSocialComparator.sortByPlace(itposts, false);
+            } else if (request.getParameter("orderBy").equals("prioritaryUp")) {
+                setso = SWBSocialComparator.sortByPrioritary(itposts, true);
+            } else if (request.getParameter("orderBy").equals("prioritaryDown")) {
+                setso = SWBSocialComparator.sortByPrioritary(itposts, false);
+            }
+
+        } else {
+            setso = SWBComparator.sortByCreatedSet(itposts, false);
+        }
+
+        return setso;
     }
 }
