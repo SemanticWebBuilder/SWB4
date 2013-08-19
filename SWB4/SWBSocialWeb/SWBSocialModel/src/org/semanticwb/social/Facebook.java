@@ -365,12 +365,23 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                     }
                                 }
                                 if (postsData.getJSONObject(k).has("place")) {
+                                   String country="";
                                    external.setLatitude(postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").getDouble("latitude"));
-                                    external.setLongitude(postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").getDouble("longitude"));
-
+                                   external.setLongitude(postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").getDouble("longitude"));
+                                    
                                     if (postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").has("country")) {//TODO: ver si en twitter es solo un codigo de 2 letras
-                                       external.setCountryCode(postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").getString("country"));
+                                        country = postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").getString("country");
+                                     
+                                        if(country.equals("Mexico")){                                        
+                                        country = "MX";  
+                                        }
+                                        if(country.equals("United States")){
+                                            country = "US";                                        
+                                        }
+                                                                             
+                                        external.setCountryCode(country);
                                     }
+                                    external.setPlace(country);
                                 }
                                 
                                 if (postsData.getJSONObject(k).has("type")) {
