@@ -1142,3 +1142,49 @@ border-radius: 2px; /*IE */
 -khtml-border-radius:2px; /* Linux browers */
 }
 
+/*REDES*/
+.clear { clear:both;}
+.timelinefacebook p:first-child { margin-top:0; padding:10px; border-bottom:solid 1px #e1e1e1;}
+.timeline a { color:#FF6600;}
+.timeline   { border:solid 1px #CCC; background:#fafafa;}
+.timeline img     { margin-right:5px;}
+.timelineusr	  { min-height:55px; margin-left:15px;}
+.timelineusr a    { float:left; }
+.timelineusr img  { border:solid 1px #CCC; }
+.timelineusr p	  { margin:0 0 10px 60px;}
+.timeline ul      { margin-left:17px; border-top:dotted 1px #e1e1e1; padding:10px 0 0 60px;}
+.timeline li      { list-style-type:none; margin-bottom:15px;}
+.timeline li a	  { font-weight:bold;}
+.timeline li img  { float:left; border:solid 1px #CCC;}
+.timeline li p	  { margin:0 0 3px 40px;}
+.timeline li em,
+.timelineresume em{ font-style:normal; margin-right:15px;}
+.timelinedate	  { color: #666; }
+.timelinedate strong,
+.timelinefacebook .timelineresume strong { background:url(images/like.png) no-repeat; font-weight:normal; padding-left:21px;}
+.timelinetweeter .timelineresume strong { background:url(images/retweet1.png) no-repeat; font-weight:normal; padding-left:21px;}
+.timelinedate strong span,
+.timelineresume strong span { display:none;}
+.timelinemore a { font-weight:normal !important; padding-left:40px;}
+.timelinemore a span { background:#F60; color:#FFFFFF !important; display:inline-block; font-weight:bold; height:13px; line-height:12px; margin-right:5px; position:relative; text-align:center; top:-2px; width:13px;
+border-radius:2px; -moz-border-radius:2px; -webkit-border-radius:2px; -khtml-border-radius:2px;}
+
+.timelineresume { border-top:solid 1px #e1e1e1; padding:6px 10px 4px; color:#666;}
+.timelineresume a { margin:0 10px;}
+.timelineresume .like { background:url(images/like2.png) no-repeat; padding-left:20px;}
+.timelineresume .retweet { background:url(images/retweet2.png) no-repeat; padding-left:20px;}
+
+
+.timelineimg	 { margin:5px 15px 10px 77px;}
+.timelineimg a	 {}
+.timelineimg img { float:left;}
+.timelineimg p	 { margin:0 0 10px 0;}
+.imgtitle		 { font-weight:bold;}
+.imgdesc		 {}
+.imgfoot		 { font-style:italic; color:#666;}
+
+.timelinetweeter p { margin-left:10px;}
+.timelinetweeter a img { }
+.retweeted {}
+.tweeter   { margin:10px 5px 5px 20px !important; font-weight:bold;}
+.tweet     { margin: 5px 5px 10px 20px !important;}
