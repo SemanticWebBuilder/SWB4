@@ -1142,6 +1142,45 @@ border-radius: 2px; /*IE */
 -khtml-border-radius:2px; /* Linux browers */
 }
 
+/*TABLA 1*/
+.tabla1  { border-collapse:collapse; margin:auto;font-size:12px; font-family:Arial, Helvetica, sans-serif;}
+.tabla1 caption      { display:none;}
+.tabla1 th           { color:#CC6600; padding:0px; border-left:1px solid #FFF; border-right: 1px solid #FFF;}
+.tabla1 th a		 { display:block; width:100%; height:2.2em; background:#FFC46A; color:#CC6600; text-decoration:none;}
+.tabla1 th a:hover   { background:#FFBA50;}
+.tabla1 th a:active  { background:#FFD38F;}
+.tabla1 th span	     { /*float:left;*/ margin:0.3em 0.5em;}
+.tabla1 th small     { display:none;}
+.tabla1 td 			 { border-bottom:solid 1px #eaeaea; vertical-align:top; text-align:center; padding:5px 0; }
+.tabla1 td p		 { margin:0; text-align:left;}
+.tabla1 td a		 { color:#CC6600}
+.tabla1 td a span    { display:none;}
+.tabla1 td.accion	 { text-align:center;}
+.tabla1 td.accion a	 { width:25px; height:25px; display: inline-block; /*float:left;*/ margin:5px 2px 0 0; }
+.tabla1 td img		 { margin-top:3px}
+.tabla1 td.mensaje	 { width:20%;}
+th.accion, th.mensaje { background:#FFC46A;}
+th.accion span, th.mensaje span 		 { margin:0 !important; position:relative; top:-6px; }
+
+.ascen, .ascen:hover, .ascen:active, 
+.descen, .descen:hover, .descen:active { background-repeat:no-repeat !important; background-position:center 16px !important;}
+
+.ascen, .ascen:hover, .ascen:active    { background-image:url(images/descen.png) !important;}
+.descen, .descen:hover, .descen:active { background-image:url(images/ascen.png) !important;}
+
+.ascen, .descen               { }
+.ascen:hover, .descen:hover   { }
+.ascen:active, .descen:active { }
+
+.retema       { background: url(images/ico-retema1.png)}
+.retema:hover { background: url(images/ico-retema2.png)}
+.reevaluar       { background: url(images/ico-reevaluar1.png)}
+.reevaluar:hover { background: url(images/ico-reevaluar2.png)}
+.ver       { background: url(images/ico-ver1.png)}
+.ver:hover { background: url(images/ico-ver2.png)}
+.eliminar       { background: url(images/ico-eliminar1.png)}
+.eliminar:hover { background: url(images/ico-eliminar2.png)}
+
 /*REDES*/
 .clear { clear:both;}
 .timelinefacebook p:first-child { margin-top:0; padding:10px; border-bottom:solid 1px #e1e1e1;}
