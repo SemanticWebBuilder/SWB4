@@ -266,7 +266,7 @@ public class StreamInBox extends GenericResource {
         SWBResourceURL tagUrl = paramRequest.getRenderUrl();
         tagUrl.setParameter("suri", id);
         tagUrl.setMode(Mode_showTags);
-
+        
         String orderBy = request.getParameter("orderBy");
 
         out.println("<div class=\"swbform\">");
@@ -1152,7 +1152,7 @@ public class StreamInBox extends GenericResource {
 
         try {
 
-            createExcel(setso, paramRequest, page, response);
+            createExcel(setso, paramRequest, page, response, stream);
 
 
         } catch (Exception e) {
@@ -1160,16 +1160,17 @@ public class StreamInBox extends GenericResource {
         }
     }
 
-    private void createExcel(Set<PostIn> setso, SWBParamRequest paramRequest, int page, HttpServletResponse response) {
+    public void createExcel(Set<PostIn> setso, SWBParamRequest paramRequest, int page, HttpServletResponse response, Stream stream) {
         try {
             // Defino el Libro de Excel
             Iterator v = setso.iterator();
-
+            String title=  stream.getTitle();
+          
 
             HSSFWorkbook wb = new HSSFWorkbook();
 
             // Creo la Hoja en Excel
-            Sheet sheet = wb.createSheet("Mensajes");
+            Sheet sheet = wb.createSheet("Mensajes "+title);
 
 
             sheet.setDisplayGridlines(false);
@@ -1178,7 +1179,7 @@ public class StreamInBox extends GenericResource {
             // creo una nueva fila
             Row trow = sheet.createRow((short) 0);
             createTituloCell(wb, trow, 0, CellStyle.ALIGN_CENTER,
-                    CellStyle.VERTICAL_CENTER, "Mensajes");
+                    CellStyle.VERTICAL_CENTER, "Mensajes "+title);
 
             // Creo la cabecera de mi listado en Excel
             Row row = sheet.createRow((short) 2);
@@ -1237,33 +1238,33 @@ public class StreamInBox extends GenericResource {
 
                     if (postIn.getMsg_Text() != null) {
                         if (postIn.getMsg_Text().length() > 200) {
-                            createCell(wb, troww, 0, CellStyle.ALIGN_CENTER,
+                            createCell(wb, troww, 0, CellStyle.ALIGN_LEFT,
                                     CellStyle.VERTICAL_CENTER, postIn.getMsg_Text().substring(0, 200), true, false);
 
                         } else {
-                            createCell(wb, troww, 0, CellStyle.ALIGN_CENTER,
+                            createCell(wb, troww, 0, CellStyle.ALIGN_LEFT,
                                     CellStyle.VERTICAL_CENTER, postIn.getMsg_Text(), true, false);
                         }
                     } else if (postIn.getDescription() != null) {
                         if (postIn.getDescription().length() > 200) {
-                            createCell(wb, troww, 0, CellStyle.ALIGN_CENTER,
+                            createCell(wb, troww, 0, CellStyle.ALIGN_LEFT,
                                     CellStyle.VERTICAL_CENTER, postIn.getDescription().substring(0, 200), true, false);
 
                         } else {
-                            createCell(wb, troww, 0, CellStyle.ALIGN_CENTER,
+                            createCell(wb, troww, 0, CellStyle.ALIGN_LEFT,
                                     CellStyle.VERTICAL_CENTER, postIn.getDescription(), true, false);
                         }
                     } else if (postIn.getTags() != null) {
                         if (postIn.getTags().length() > 200) {
-                            createCell(wb, troww, 0, CellStyle.ALIGN_CENTER,
+                            createCell(wb, troww, 0, CellStyle.ALIGN_LEFT,
                                     CellStyle.VERTICAL_CENTER, postIn.getTags().substring(0, 200), true, false);
 
                         } else {
-                            createCell(wb, troww, 0, CellStyle.ALIGN_CENTER,
+                            createCell(wb, troww, 0, CellStyle.ALIGN_LEFT,
                                     CellStyle.VERTICAL_CENTER, postIn.getTags(), true, false);
                         }
                     } else {
-                        createCell(wb, troww, 0, CellStyle.ALIGN_CENTER,
+                        createCell(wb, troww, 0, CellStyle.ALIGN_LEFT,
                                 CellStyle.VERTICAL_CENTER, "---", true, false);
 
                     }
@@ -1289,26 +1290,23 @@ public class StreamInBox extends GenericResource {
                             createCell(wb, troww, 5, CellStyle.ALIGN_CENTER,
                                     CellStyle.VERTICAL_CENTER, "----", true, false);
                         } else if (postIn.getPostSentimentalType() == 1) {
-                            path = SWBUtils.getApplicationPath() + "/swbadmin/css/images/feelpos.png";
-                            createImage(wb, troww, 5, CellStyle.ALIGN_CENTER,
-                                    CellStyle.VERTICAL_CENTER, true, sheet, path);
+                            createCell(wb, troww, 5, CellStyle.ALIGN_CENTER,
+                                    CellStyle.VERTICAL_CENTER, "Positivo", true, false);
                         } else if (postIn.getPostSentimentalType() == 2) {
-                            path = SWBUtils.getApplicationPath() + "/swbadmin/css/images/feelneg.png";
-                            createImage(wb, troww, 5, CellStyle.ALIGN_CENTER,
-                                    CellStyle.VERTICAL_CENTER, true, sheet, path);
+                          createCell(wb, troww, 5, CellStyle.ALIGN_CENTER,
+                                    CellStyle.VERTICAL_CENTER, "Negativo", true, false);
                         }
+                        
                         createCell(wb, troww, 6, CellStyle.ALIGN_CENTER,
                                 CellStyle.VERTICAL_CENTER, postIn.getPostIntesityType() == 0 ? paramRequest.getLocaleString("low") : postIn.getPostIntesityType() == 1 ? paramRequest.getLocaleString("medium") : postIn.getPostIntesityType() == 2 ? paramRequest.getLocaleString("high") : "---", true, false);
 
                         if (postIn.getPostSentimentalEmoticonType() == 1) {
-                            path = SWBUtils.getApplicationPath() + "/swbadmin/css/images/emopos.png";
-                            createImage(wb, troww, 7, CellStyle.ALIGN_CENTER,
-                                    CellStyle.VERTICAL_CENTER, true, sheet, path);
+                            createCell(wb, troww, 7, CellStyle.ALIGN_CENTER,
+                                    CellStyle.VERTICAL_CENTER, "Positivo", true, false);
 
                         } else if (postIn.getPostSentimentalEmoticonType() == 2) {
-                            path = SWBUtils.getApplicationPath() + "/swbadmin/css/images/emoneg.png";
-                            createImage(wb, troww, 7, CellStyle.ALIGN_CENTER,
-                                    CellStyle.VERTICAL_CENTER, true, sheet, path);
+                            createCell(wb, troww, 7, CellStyle.ALIGN_CENTER,
+                                    CellStyle.VERTICAL_CENTER, "Negativo", true, false);
                         } else if (postIn.getPostSentimentalEmoticonType() == 0) {
 
                             createCell(wb, troww, 7, CellStyle.ALIGN_CENTER,
@@ -1342,7 +1340,7 @@ public class StreamInBox extends GenericResource {
                     if ((nRec > (nPage - 1) * recPerPage) && (nRec <= (nPage) * recPerPage)) {
                         Row troww = sheet.createRow((short) i);
 
-                        createCell(wb, troww, 0, CellStyle.ALIGN_CENTER,
+                        createCell(wb, troww, 0, CellStyle.ALIGN_LEFT,
                                 CellStyle.VERTICAL_CENTER, postIn.getMsg_Text(), true, false);
                         createCell(wb, troww, 1, CellStyle.ALIGN_CENTER,
                                 CellStyle.VERTICAL_CENTER, postIn instanceof MessageIn ? paramRequest.getLocaleString("message") : postIn instanceof PhotoIn ? paramRequest.getLocaleString("photo") : postIn instanceof VideoIn ? paramRequest.getLocaleString("video") : "---", true, false);
@@ -1364,26 +1362,22 @@ public class StreamInBox extends GenericResource {
                             createCell(wb, troww, 5, CellStyle.ALIGN_CENTER,
                                     CellStyle.VERTICAL_CENTER, "----", true, false);
                         } else if (postIn.getPostSentimentalType() == 1) {
-                            path = SWBUtils.getApplicationPath() + "/swbadmin/css/images/feelpos.png";
-                            createImage(wb, troww, 5, CellStyle.ALIGN_CENTER,
-                                    CellStyle.VERTICAL_CENTER, true, sheet, path);
+                           createCell(wb, troww, 5, CellStyle.ALIGN_CENTER,
+                                    CellStyle.VERTICAL_CENTER, "Positivo", true, false);
                         } else if (postIn.getPostSentimentalType() == 2) {
-                            path = SWBUtils.getApplicationPath() + "/swbadmin/css/images/feelneg.png";
-                            createImage(wb, troww, 5, CellStyle.ALIGN_CENTER,
-                                    CellStyle.VERTICAL_CENTER, true, sheet, path);
+                           createCell(wb, troww, 5, CellStyle.ALIGN_CENTER,
+                                    CellStyle.VERTICAL_CENTER, "Negativo", true, false);
                         }
                         createCell(wb, troww, 6, CellStyle.ALIGN_CENTER,
                                 CellStyle.VERTICAL_CENTER, postIn.getPostIntesityType() == 0 ? paramRequest.getLocaleString("low") : postIn.getPostIntesityType() == 1 ? paramRequest.getLocaleString("medium") : postIn.getPostIntesityType() == 2 ? paramRequest.getLocaleString("high") : "---", true, false);
 
                         if (postIn.getPostSentimentalEmoticonType() == 1) {
-                            path = SWBUtils.getApplicationPath() + "/swbadmin/css/images/emopos.png";
-                            createImage(wb, troww, 7, CellStyle.ALIGN_CENTER,
-                                    CellStyle.VERTICAL_CENTER, true, sheet, path);
+                                createCell(wb, troww, 7, CellStyle.ALIGN_CENTER,
+                                    CellStyle.VERTICAL_CENTER, "Positivo", true, false);
 
                         } else if (postIn.getPostSentimentalEmoticonType() == 2) {
-                            path = SWBUtils.getApplicationPath() + "/swbadmin/css/images/emoneg.png";
-                            createImage(wb, troww, 7, CellStyle.ALIGN_CENTER,
-                                    CellStyle.VERTICAL_CENTER, true, sheet, path);
+                                createCell(wb, troww, 7, CellStyle.ALIGN_CENTER,
+                                    CellStyle.VERTICAL_CENTER, "Negativo", true, false);
                         } else if (postIn.getPostSentimentalEmoticonType() == 0) {
 
                             createCell(wb, troww, 7, CellStyle.ALIGN_CENTER,
@@ -1448,7 +1442,7 @@ public class StreamInBox extends GenericResource {
         }
     }
 
-    private static void createTituloCell(HSSFWorkbook wb, Row row, int column, short halign, short valign, String strContenido) {
+    public static void createTituloCell(HSSFWorkbook wb, Row row, int column, short halign, short valign, String strContenido) {
 
 
         CreationHelper ch = wb.getCreationHelper();
@@ -1470,7 +1464,7 @@ public class StreamInBox extends GenericResource {
 
     }
 
-    private static void createCell(Workbook wb, Row row, int column, short halign, short valign, String strContenido, boolean booBorde, boolean booCabecera) {
+    public static void createCell(Workbook wb, Row row, int column, short halign, short valign, String strContenido, boolean booBorde, boolean booCabecera) {
         CreationHelper ch = wb.getCreationHelper();
         Cell cell = row.createCell(column);
 
