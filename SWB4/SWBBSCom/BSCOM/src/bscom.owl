@@ -87,6 +87,10 @@
     >Los temas estratégicos agrupan objetivos con fines en común. A su vez, los temas están agrupados dentro de las perspectivas.</rdfs:comment>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_Theme">
+        <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >2</swbxf:dropMatchLevel>
+        <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:dragSupport>
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >swbstrgyIconTheme</swb:iconClass>
         <rdfs:label xml:lang="es">Tema estratégico</rdfs:label>
