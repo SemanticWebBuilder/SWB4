@@ -1,0 +1,674 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg class="modeler" height="1080" width="1920" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" id="modeler">
+        <style type="text/css">
+            /*.resizeBox {
+                stroke:#008000;
+                fill:url(#linearGradientStartEvent);
+                stroke-width:1.5;  
+            }*/
+            .task {
+                stroke:#79adc8;
+                fill:url(#linearGradientTask);
+                stroke-width:2;
+                cursor:pointer;
+            }
+            .task_o {
+                stroke:#2cff20;
+                fill:url(#linearGradientTask);
+                stroke-width:2;
+                cursor:pointer;
+            }
+            .callactivity {
+                stroke:#79adc8;
+                fill:url(#linearGradientTask);
+                stroke-width:4;
+                cursor:pointer;
+            }
+
+            .callactivity_o {
+                stroke:#2cff20;
+                fill:url(#linearGradientTask);
+                stroke-width:4;
+                cursor:pointer;
+            }
+            .eventsubTask {
+                stroke:#79adc8;
+                fill:url(#linearGradientTask);
+                stroke-width:2;
+                cursor:pointer;
+                stroke-dasharray:6,4;
+            }
+
+            .eventsubTask_o {
+                stroke:#2cff20;
+                fill:url(#linearGradientTask);
+                stroke-width:2;
+                cursor:pointer;
+                stroke-dasharray:6,4;
+            }
+            .startEvent
+            {
+                stroke:#008000;
+                fill:url(#linearGradientStartEvent);
+                stroke-width:1.5;
+                cursor:pointer;
+            }
+
+            .startEvent_o
+            {
+                stroke:#2cff20;
+                fill:url(#linearGradientStartEvent);
+                stroke-width:1.5;
+                cursor: pointer;
+            }
+ 
+            .intermediateInterruptingEvent
+            {
+                stroke:#2c5aa0;
+                fill:url(#linearGradientIntermediateEvent);
+                fill-opacity:1;
+                stroke-width:1.5;
+                stroke-dasharray: 3,3;
+                /*stroke-dashoffset: 5;*/
+            }
+            
+            .intermediateInterruptingEvent_o
+            {
+                stroke:#2cff20;
+                fill:url(#linearGradientIntermediateEvent);
+                fill-opacity:1;
+                stroke-width:1.5;
+                stroke-dasharray: 3,3;
+                /*stroke-dashoffset: 5;*/
+            }
+            
+            .intermediateEvent
+            {
+                stroke:#2c5aa0;
+                fill:url(#linearGradientIntermediateEvent);
+                fill-opacity:1;
+                stroke-width:1.5;
+                cursor:pointer;
+            }
+
+            .intermediateEvent_o
+            {
+                stroke:#2cff20;
+                fill:url(#linearGradientIntermediateEvent);
+                fill-opacity:1;
+                stroke-width:1.5;
+            cursor:pointer;
+            }
+            .endEvent
+            {
+                stroke:#550000;
+                fill:url(#linearGradientEndEvent);
+                stroke-width:2.5;
+                cursor:pointer;
+            }
+
+            .endEvent_o
+            {
+                stroke:#2cff20;
+                fill:url(#linearGradientEndEvent);
+                stroke-width:2.5;
+                cursor:pointer;
+            }    
+
+            .gateway
+            {
+                stroke:#d4aa00;
+                fill:url(#linearGradientGateway);
+                stroke-width:2;
+                cursor:pointer;
+            }
+
+            .gateway_o
+            {
+                stroke:#2cff20;
+                fill:url(#linearGradientGateway);
+                stroke-width:2;
+                cursor:pointer;
+            }
+            
+            .sequenceFlowSubLine {
+                fill:none;
+                stroke:#ffffff;
+                stroke-opacity:0.1;
+                stroke-width:8;
+                cursor: pointer;
+            }
+
+            .sequenceFlowSubLine_o {
+                fill:none;
+                stroke:#2cff20;
+                stroke-width:8;
+                cursor:pointer;
+            }
+            
+            .swimlane
+            {
+                fill: #E8E8FF;
+                stroke-width:2;
+                stroke: #ADADAE;
+                fill-opacity:1;
+                cursor:pointer;
+            }
+
+            .swimlane_o
+            {
+                stroke:#2cff20;
+                fill: #E8E8FF;
+                stroke-width:2;
+                fill-opacity:1;
+                cursor: pointer;
+            }
+            
+            .sequenceFlowLine {
+                fill: none;
+                stroke-width: 2;
+                stroke: #000000;
+                cursor:pointer;
+            }
+            
+            .sequenceFlowLine_o {
+                fill: none;
+                stroke-width: 2;
+                stroke: #2cff20;
+                cursor:pointer;
+            }
+
+            .intermediateEvent1
+            {
+                stroke:#2c5aa0;
+                fill:none;
+                stroke-width:1;
+            }
+            
+            .itemAware {
+                fill:url(#linearGradientDataObject);
+                stroke:#666666;
+                stroke-width:2;
+                cursor:pointer;
+            }
+
+            .itemAware_o {
+                fill:url(#linearGradientDataObject);
+                stroke:#2cff20;
+                stroke-width:2;
+                cursor:pointer;
+            }
+            
+            .transactionSquare {
+                stroke:#2c5aa0;
+                cursor:pointer;
+                fill:none;
+                stroke-width:1.5;
+            }
+
+            .group {
+                stroke:#2c5aa0;
+                cursor:pointer;
+                fill:none;
+                stroke-width:1.5;
+            }
+
+            .annotationArtifact {
+                fill:none;
+                stroke:#000000;
+                stroke-width:1.5px;
+                cursor:pointer;
+            }
+
+            .annotationArtifactRect {
+                fill:none;
+                stroke:none;
+                fill:#E6E6E6;
+                fill-opacity:0.2;
+                cursor:pointer;
+            }
+
+            .annotationArtifactRect_o {
+                fill:none;
+                fill:#E6E6E6;
+                stroke:#2cff20;
+                fill-opacity:0.2;
+                cursor:pointer;
+            }
+
+            .group_o {
+                stroke:#2cff20;
+                cursor:pointer;
+                fill:none;
+                stroke-width:1.5;
+            }
+
+            .taskMarker
+            {
+                stroke:#2c5aa0;
+                cursor:pointer;
+            }
+            
+            .pathMarker{
+                fill:none;
+                stroke-width:1;
+            }
+            
+            .startMarker{
+                stroke:#008000;
+                fill:none;
+                stroke-width:2.5;                        
+            }
+            
+            .startMarker{
+                stroke:#008000;
+                fill:none;
+                stroke-width:2.5;                        
+            }
+            
+            .startFilledMarker{
+                fill:#008000;
+                stroke:none;
+                stroke-width:1;
+            }
+            
+            .intermediateMarker{
+                stroke:#2c5aa0;
+                fill:#ffffff;
+                fill-opacity:0.1;
+                stroke-width:2.5;
+                cursor:pointer;
+            }
+            
+            .intermediateFilledMarker {
+                fill:#2c5aa0;
+                stroke:#2c5aa0;
+                stroke-width:1;
+                cursor:pointer;
+            }
+            
+            .endFilledMarked
+            {
+                fill:#550000;   
+                stroke:#550000;
+                stroke-width:1;
+                cursor:pointer;
+            }
+            
+            .navPath {
+                fill:#e7e7e7;
+                stroke:gray;
+                stroke-width:1;
+            }
+
+            .navPathHidden {
+                fill:#e7e7e7;
+                stroke:gray;
+                stroke-width:1;
+                display:none;
+            }
+        </style>
+        <defs id="globalDef">
+            <!--Definición de gradientes para las figuras-->
+            <linearGradient y2="100%" x2="100%" y1="0%" x1="0%" id="linearGradientStartEvent">
+                <stop style="stop-color:#ffffff;stop-opacity:1" offset="10%"/>
+                <stop style="stop-color:#ccffaa;stop-opacity:1" offset="90%"/>
+            </linearGradient>
+            <linearGradient y2="100%" x2="100%" y1="0%" x1="0%" id="linearGradientEndEvent">
+                <stop style="stop-color:#ffffff;stop-opacity:1" offset="10%"/>
+                <stop style="stop-color:#e7c1c1;stop-opacity:1" offset="90%"/>
+            </linearGradient>
+            <linearGradient y2="100%" x2="100%" y1="0%" x1="100%" id="linearGradientTask">
+                <stop style="stop-color:#ffffff;stop-opacity:1" offset="10%"/>
+                <stop style="stop-color:#c1d3e1;stop-opacity:1" offset="100%"/>
+            </linearGradient>
+            <linearGradient y2="100%" x2="100%" y1="0%" x1="0%" id="linearGradientIntermediateEvent">
+                <stop style="stop-color:#ffffff;stop-opacity:1" offset="10%"/>
+                <stop style="stop-color:#87aade;stop-opacity:1" offset="100%"/>
+            </linearGradient>
+            <linearGradient y2="100%" x2="100%" y1="0%" x1="0%" id="linearGradientGateway">
+                <stop style="stop-color:#FFFDE2;stop-opacity:1" offset="10%"/>
+                <stop style="stop-color:#FFFAA6;stop-opacity:1" offset="100%"/>
+            </linearGradient>
+            <linearGradient y2="100%" x2="100%" y1="0%" x1="0%" id="linearGradientDataObject">
+                <stop style="stop-color:#ffffff;stop-opacity:1" offset="10%"/>
+                <stop style="stop-color:#afbac7;stop-opacity:1" offset="100%"/>
+            </linearGradient>
+            <circle class="resizeBox" r="5" cy="0" cx="0" id="resizeBox"/>
+            <!--definición de marcadores para las figuras-->
+            <path transform="scale(0.35,0.35) translate(-26, -1030)" d="m 0.5,1051.8622 17.0774,-39.6847 15.0444,21.9792 19.5171,-27.474 L 34.8582,1048.199 19.8137,1029.6795 0.5,1051.8622 z" id="errorMarker"/>
+            <g id="ruleMarker">
+                <path transform="scale(0.32,0.32) translate(-23.5,-23.5)" d="m 0,0 0,43.9063 46.75,0 0,-43.9063 z m 4.25,9.875 18.5,0 0,4.8438 -18.5,0 z m 20,0 18.5,0 0,4.8438 -18.5,0 z m -20,8 18.5,0 0,4.8438 -18.5,0 z m 20,0 18.5,0 0,4.8438 -18.5,0 z m -20,8 18.5,0 0,4.8438 -18.5,0 z m 20,0 18.5,0 0,4.8438 -18.5,0 z m -20,8 18.5,0 0,4.8438 -18.5,0 z m 20,0 18.5,0 0,4.8438 -18.5,0 z"/>
+            </g>
+            <g class="intermediateFilledMarker" id="taskRuleMarker">
+                <path transform="scale(0.32,0.32) translate(-23.5,-23.5)" d="m 0,0 0,43.9063 46.75,0 0,-43.9063 z m 4.25,9.875 18.5,0 0,4.8438 -18.5,0 z m 20,0 18.5,0 0,4.8438 -18.5,0 z m -20,8 18.5,0 0,4.8438 -18.5,0 z m 20,0 18.5,0 0,4.8438 -18.5,0 z m -20,8 18.5,0 0,4.8438 -18.5,0 z m 20,0 18.5,0 0,4.8438 -18.5,0 z m -20,8 18.5,0 0,4.8438 -18.5,0 z m 20,0 18.5,0 0,4.8438 -18.5,0 z"/>
+            </g>
+            <path transform="scale(0.35,0.35) translate(17,23)" d="m 0,0 -33.73973,0.37343 -10.78131,-31.973 27.07653,-20.13383 27.51552,19.52961 z" id="multipleMarker"/>
+            <path transform="scale(0.35,0.35) translate(-5, -25)" d="m 0,0 0,19.4788 -19.45519,0 0,10.5627 19.45519,0 0,19.4787 10.58626,0 0,-19.4787 19.47871,0 0,-10.5627 -19.47871,0 0,-19.4788 z" id="parallelMarker"/>
+            <path transform="scale(0.35,0.35) translate(23,0)" d="m 0,0 -20.432,-24.2007 0,16.9761 -25.0594,0 0,14.1289 25.0594,0 0,17.332 z" id="linkMarker"/>
+            <path transform="translate(-1, -20)" d="m 0,0 0,15.875 -11.25,-11.2187 -2.34375,2.3125 11.25,11.25 -15.90625,0 0,3.3125 15.90625,0 -11.25,11.2187 2.34375,2.3438 11.25,-11.2188 0,15.875 3.28125,0 0,-15.9062 11.25,11.25 2.3125,-2.3438 -11.21875,-11.2187 15.875,0 0,-3.3125 -15.875,0 11.21875,-11.2188 -2.3125,-2.3437 -11.25,11.25 0,-15.9063 z" id="complexMarker"/>
+            <path transform="scale(0.35,0.35) translate(24,14)" d="m 0,0 -23.59924,0 -23.59925,0 11.79962,-20.43755 11.79963,-20.43755 11.79962,20.43755 z" id="signalMarker"/>
+            <path d="m 0,0 -21.34041,47.167 21.34041,-17.3811 21.340402,17.3811 -21.340402,-47.167 z" transform="scale(0.35,0.35) translate(0,-26)" id="scalationMarker"/>
+            <path transform="scale(0.35,0.35) translate(18, -22)" d="m 0,0 -18.3627,18.3627 -18.3848004,-18.3848 -3.3366,3.3367 18.3847004,18.3847 -18.3847004,18.3848 3.3366,3.3367 18.3848004,-18.3848 18.3627,18.3627 3.3366,-3.3367 -18.3626,-18.3627 18.3626,-18.3626 z" id="cancelMarker"/>
+            <g transform="scale(0.65)" class="taskMarker" id="manualMarker">
+                <path class="pathMarker" d="m 0,0 c -0.27155,0 -0.5225,0.072 -0.75179,0.1792 -0.007,0 -0.0189,0 -0.0259,0 -1.25518,0.3798 -2.16186,4.1013 -2.9035,6.1425 -0.22877,0.5536 -0.36294,1.1549 -0.36294,1.7916 l 0,4.7861 c 0,2.6228 2.13932,4.7348 4.79597,4.7348 l 5.0552,0 5.69034,0 7.72539,0 c 0.97664,0 1.76284,-0.7762 1.76284,-1.7404 0,-0.9641 -0.7862,-1.7403 -1.76284,-1.7403 l -3.11089,0 c 0.0118,-0.043 0.0283,-0.085 0.0389,-0.128 l 4.16081,0 c 0.97664,0 1.76285,-0.7762 1.76285,-1.7404 0,-0.9642 -2.73949,-1.7404 -1.76285,-1.7404 l -4.01823,0 0,-0.064 5.23667,0 c 0.97664,0 1.76284,-0.7762 1.76284,-1.7404 0,-0.9641 -0.7862,-1.7403 -1.76284,-1.7403 l -5.39221,0 c -0.0116,-0.046 -0.0132,-0.095 -0.0259,-0.1408 l 7.56984,0 c 0.97663,0 1.76284,-0.7762 1.76284,-1.7404 0,-0.9642 -0.78621,-1.7404 -1.76284,-1.7404 l -12.18433,0 -0.92031,0 c 0.69854,-0.2311 1.20547,-0.8686 1.20547,-1.638 0,-0.9642 -0.7862,-1.7404 -1.76284,-1.7404 l -10.01967,0 z"/>
+            </g>
+            <g transform="scale(1.3,1.3) translate(-7.5,-4.5)" id="messageThrowMarker">
+                <path style="stroke:#ffffff;stroke-opacity:0.4" d="m 0,0 0,9.175062 14.84706,0 0,-9.175062 -0.0245,0 -7.40716,4.648917 -7.41535,-4.648917 z"/>
+                <path style="stroke:#ffffff;stroke-opacity:0.4" d="m 0.6,0 6.88839,4.318911 6.88838,-4.318911"/>
+            </g>
+            <g class="intermediateFilledMarker" transform="scale(1.3,1.3) translate(-7.5,-4.5)" id="taskMessageThrowMarker">
+                <path style="stroke:#ffffff;stroke-opacity:0.4" d="m 0,0 0,9.175062 14.84706,0 0,-9.175062 -0.0245,0 -7.40716,4.648917 -7.41535,-4.648917 z"/>
+                <path style="stroke:#ffffff;stroke-opacity:0.4" d="m 0.6,0 6.88839,4.318911 6.88838,-4.318911"/>
+            </g>
+            <g transform="scale(0.35,0.35) translate(-27,-17)" id="messageCatchMarker">
+                <rect y="0" x="0" height="32.573116" width="52.704407"/>
+                <path d="m 0,0 26.30906,16.49536 26.30905,-16.49536"/>
+            </g>
+            <g class="intermediateMarker" transform="scale(0.35,0.35) translate(-27,-17)" id="taskMessageCatchMarker">
+                <rect y="0" x="0" height="32.573116" width="52.704407"/>
+                <path d="m 0,0 26.30906,16.49536 26.30905,-16.49536"/>
+            </g>
+            <g transform="scale(0.35,0.35) translate(-2,-13)" id="compensaMarker">
+                <path transform="matrix(0,-1,1,0,0,0)" d="m 0,0 -28.36636,0 14.18318,-24.56599 z"/>
+                <path transform="matrix(0,-1,1,0,23,0)" d="m 0,0 -28.36636,0 14.18318,-24.56599 z"/>
+            </g>
+            <filter height="130%" id="dropshadow">
+                <feGaussianBlur stdDeviation="3" in="SourceAlpha"/> 
+                <feOffset result="offsetblur" dy="0" dx="0"/>
+                <feComponentTransfer>
+                    <feFuncA slope="0.5" type="linear"/>
+                </feComponentTransfer>
+                <feMerge> 
+                    <feMergeNode/>
+                    <feMergeNode in="SourceGraphic"/> 
+                </feMerge>
+            </filter>
+            <g transform="scale(0.35,0.35) translate(-396,-219)" id="timerMarker">
+                <path transform="matrix(0.6346099,0,0,0.6346099,274.19065,81.345956)" d="m 232.18784,217.1541 a 40.089989,40.089989 0 1 1 -80.17997,0 40.089989,40.089989 0 1 1 80.17997,0 z"/>
+                <path d="m 421.49964,219.1541 -8.76968,0"/>
+                <path d="m 396.40906,193.78618 -0.0964,8.76915"/>
+                <path d="m 370.76392,218.75252 8.76858,0.13882"/>
+                <path d="m 396.04976,244.52342 0.0278,-8.76963"/>
+                <path d="m 408.75323,219.1541 -12.86938,0"/>
+                <path d="m 401.39526,204.36536 -4.8964,14.70678"/>
+                <path d="m 414.26521,201.41346 -6.26889,6.13256"/>
+                <path d="m 413.87083,237.28912 -6.13256,-6.26889"/>
+                <path d="m 377.99517,236.89474 6.26889,-6.13256"/>
+                <path d="m 378.38955,201.01908 6.13256,6.26889"/>
+            </g>
+            <g transform="scale(0.8) translate(0,-1042)" class="taskMarker" id="userMarker">
+                <path class="pathMarker" d="m 0,1039 c -3.3158023,0 -6,2.8058 -6,6.25 0,2.0045 0.9288788,3.7654 2.34375,4.9062 -3.3002786,1.7745 -5.6842907,5.8793 -6,10.75 l 19.3125,0 c -0.3158218,-4.8705 -2.7074728,-8.9755 -6,-10.75 C 5.0711212,1049.0154 6,1047.2545 6,1045.25 6,1041.8058 3.3158023,1039 0,1039 z"/>
+                <path class="pathMarker" transform="matrix(0.6398828,0,0,0.66465394,245.76439,734.73647)" d="m -377.4453,473.79996 a 9.3826418,9.3826418 0 0 1 -12.52292,0.66553"/>
+                <path class="pathMarker" d="m -5.1190626,1060.732 0,-3.8413"/>
+                <path class="pathMarker" d="m 5.1190626,1060.732 0,-3.8413"/>
+                <path style="fill:#2c5aa0;stroke-width:1;" d="m 0.06204402,1039.6046 c -3.10856302,0 -5.66539592,2.4352 -5.68305502,5.5312 0.8963285,-1.0836 1.7094089,-1.6888 3.0835319,-1.6888 2.07094865,0 4.4437605,1.0758 6.2188589,0.7688 0.570252,-0.099 1.2624582,-0.3804 1.939646,-0.7272 -0.6073258,-2.271 -3.0493799,-3.884 -5.55898178,-3.884 z"/>
+            </g>
+            <g transform="scale(0.8)" class="taskMarker" id="serviceMarker">
+                <path class="pathMarker" d="m 0,0 1.478093,-2.5912 c -0.762317,-0.4662 -1.601697,-0.8229 -2.495483,-1.0366 l -0.767843,2.8793 -2.495483,0 -0.787044,-2.8793 c -0.895236,0.2142 -1.733065,0.5691 -2.495483,1.0366 l 1.487693,2.5721 -1.766033,1.7659 -2.581869,-1.478 c -0.467511,0.7623 -0.822527,1.6003 -1.036583,2.4952 l 2.86981,0.7678 0,2.5048 -2.860209,0.7775 c 0.21606,0.8875 0.562993,1.7267 1.026982,2.4856 l 2.562669,-1.478"/>
+                <path class="pathMarker" d="m 0,0 c -0.989621,0.2366 -1.915788,0.629 -2.758588,1.1457 l 1.644541,2.8433 -1.952235,1.9521 -2.85408,-1.6338 c -0.516803,0.8427 -0.909247,1.769 -1.145882,2.7583 l 3.172388,0.8488 0,2.769 -3.161774,0.8593 c 0.238849,0.9811 0.622356,1.9088 1.135268,2.7477 l 2.832859,-1.6337 1.952235,1.952 -1.633935,2.8539 c 0.84654,0.5219 1.774518,0.918 2.769203,1.1564 l 0.848804,-3.1828 2.758588,0 0.870025,3.1828 c 0.988288,-0.238 1.914849,-0.6289 2.758588,-1.1459 l -1.644542,-2.8431 1.952236,-1.9521 2.864694,1.6337 c 0.515612,-0.8389 0.908032,-1.7642 1.145874,-2.7477 l -3.182994,-0.8593 0,-2.769 3.182994,-0.87 c -0.237717,-0.9884 -0.628065,-1.9158 -1.145874,-2.7583 l -2.854088,1.655 -1.952235,-1.9521 1.633935,-2.8645 c -0.842691,-0.5152 -1.77056,-0.9096 -2.758588,-1.1457 l -0.848804,3.1828 -2.758588,0 z m 2.238708,5.697 c 1.994007,0 3.607392,1.6133 3.607392,3.6072 0,1.9938 -1.613385,3.6176 -3.607392,3.6176 -1.994007,0 -3.607392,-1.6238 -3.607392,-3.6176 0,-1.9939 1.613385,-3.6072 3.607392,-3.6072 z"/>
+            </g>
+            <g transform="scale(0.7)" class="taskMarker" id="scriptMarker">
+                <path class="pathMarker" d="m 0,0 c 3.5628793,2.98 3.5212524,7.9199 0,10.8403 l 0,0.1186 13.5952063,-10e-4 c 4.246065,-3.0502 4.698752,-8.6843 0.03211,-12.4597 -1.719778,-1.441 -2.097829,-3.2691 -2.297848,-5.5453 0,-1.9186 0.795633,-3.6321 2.05209,-4.7945 l -9.1791045,0 c -7.65536286,-0.3702 -8.7288909,8.3174 -4.2024826,11.8414 z"/>
+                <path class="pathMarker" d="m 0,-8 9.5315769,0"/>
+                <path class="pathMarker" d="m -0.5,-4.1568 9.5315769,0"/>
+                <path class="pathMarker" d="m 2.5,0 9.5315769,0"/>
+                <path class="pathMarker" d="m 4.5,4 9.5315768,0"/>
+                <path class="pathMarker" d="m 4,8 9.5315768,0"/>
+            </g>
+            <g class="taskMarker" id="subProcessMarker">
+                <rect style="fill:#ffffff;fill-opacity:0.1;" height="14" width="14" y="-7" x="-7"/>
+            <path d="M-5 0 L5 0 M0 -5 L0 5"/>
+            </g>
+            <marker stroke-dasharray="0" stroke="none" fill="black" orient="auto" markerHeight="10" markerWidth="10" markerUnits="userSpaceOnUse" refY="5" refX="0" viewBox="0 0 12 12" id="sequenceArrow">
+                <path d="M 0 0 L 10 5 L 0 10"/>
+            </marker>
+            <marker stroke-dasharray="0" stroke-width="1.5" stroke="black" fill="none" orient="auto" markerHeight="10" markerWidth="10" markerUnits="userSpaceOnUse" refY="5" refX="7" viewBox="0 0 12 12" id="messageArrow">
+                <path d="M 0 0 L 10 5 L 0 10"/>
+            </marker>
+            <marker stroke-dasharray="0" stroke-width="1.5" stroke="black" fill="none" orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="0" refX="3" viewBox="-6 -6 12 12" id="conditionTail">
+                <rect transform="rotate(-45)" height="6" width="6" y="-3" x="-3"/>
+            </marker>
+            <marker stroke-dasharray="0" stroke-width="2" stroke="black" fill="none" orient="auto" markerHeight="10" markerWidth="10" markerUnits="userSpaceOnUse" refY="5" refX="-3" viewBox="0 0 12 12" id="defaultTail">
+                <path d="M 5 0 L 0 10"/>
+            </marker>
+            <marker stroke-dasharray="0" stroke-width="1.5" stroke="black" fill="none" orient="auto" markerHeight="10" markerWidth="10" markerUnits="userSpaceOnUse" refY="0" refX="3" viewBox="-5 -5 12 12" id="messageTail">
+                <circle r="3"/>
+            </marker>
+            <!--Definición de eventos iniciales-->
+            <circle oclass="startEvent_o" bclass="startEvent" r="15" id="startEvent"/>
+            <g oclass="startEvent_o" bclass="startEvent" id="messageStartEvent">
+                <use y="0" x="0" xlink:href="#startEvent"/>
+                <use class="startMarker" y="0" x="0" xlink:href="#messageCatchMarker"/>
+            </g>
+            <g oclass="startEvent_o" bclass="startEvent" id="timerStartEvent">
+                <use y="0" x="0" xlink:href="#startEvent"/>
+                <use class="startMarker" y="0" x="0" xlink:href="#timerMarker"/>
+            </g>
+            <g oclass="startEvent_o" bclass="startEvent" id="ruleStartEvent">
+                <use y="0" x="0" xlink:href="#startEvent"/>
+                <use transform="scale(1.1)" class="startFilledMarker" y="0" x="0" xlink:href="#ruleMarker"/>
+            </g>
+            <g oclass="startEvent_o" bclass="startEvent" id="signalStartEvent">
+                <use y="0" x="0" xlink:href="#startEvent"/>
+                <use class="startMarker" y="0" x="0" xlink:href="#signalMarker"/>
+            </g>
+            <g oclass="startEvent_o" bclass="startEvent" id="multipleStartEvent">
+                <use y="0" x="0" xlink:href="#startEvent"/>
+                <use class="startMarker" y="0" x="0" xlink:href="#multipleMarker"/>
+            </g>
+            <g oclass="startEvent_o" bclass="startEvent" id="parallelStartEvent">
+                <use y="0" x="0" xlink:href="#startEvent"/>
+                <use class="startMarker" y="0" x="0" xlink:href="#parallelMarker"/>
+            </g>
+            <g oclass="startEvent_o" bclass="startEvent" id="scalationStartEvent">
+                <use y="0" x="0" xlink:href="#startEvent"/>
+                <use class="startMarker" y="0" x="0" xlink:href="#scalationMarker"/>
+            </g>
+            <g oclass="startEvent_o" bclass="startEvent" id="errorStartEvent">
+                <use y="0" x="0" xlink:href="#startEvent"/>
+                <use class="startMarker" y="0" x="0" xlink:href="#errorMarker"/>
+            </g>
+            <g oclass="startEvent_o" bclass="startEvent" id="compensationStartEvent">
+                <use y="0" x="0" xlink:href="#startEvent"/>
+                <use class="startMarker" y="0" x="0" xlink:href="#compensaMarker"/>
+            </g>
+            <!--Definición de eventos intermedios-->
+            <g oclass="intermediateEvent_o" bclass="intermediateEvent" id="intermediateEvent">
+                <circle r="15"/>
+                <circle class="intermediateEvent1" r="12"/>
+            </g>
+            <g oclass="intermediateEvent_o" bclass="intermediateEvent" id="messageIntermediateCatchEvent">
+                <use y="0" x="0" xlink:href="#intermediateEvent"/>
+                <use class="intermediateMarker" y="0" x="0" xlink:href="#messageCatchMarker"/>
+            </g>
+            <g oclass="intermediateEvent_o" bclass="intermediateEvent" id="messageIntermediateThrowEvent">
+                <use y="0" x="0" xlink:href="#intermediateEvent"/>
+                <use class="intermediateFilledMarker" y="0" x="0" xlink:href="#messageThrowMarker"/>
+            </g>
+            <g oclass="intermediateEvent_o" bclass="intermediateEvent" id="timerIntermediateEvent">
+                <use y="0" x="0" xlink:href="#intermediateEvent"/>
+                <use class="intermediateMarker" y="0" x="0" xlink:href="#timerMarker"/>
+            </g>
+            <g oclass="intermediateEvent_o" bclass="intermediateEvent" id="errorIntermediateEvent">
+                <use y="0" x="0" xlink:href="#intermediateEvent"/>
+                <use class="intermediateMarker" y="0" x="0" xlink:href="#errorMarker"/>
+            </g>
+            <g oclass="intermediateEvent_o" bclass="intermediateEvent" id="cancelIntermediateEvent">
+                <use y="0" x="0" xlink:href="#intermediateEvent"/>
+                <use class="intermediateFilledMarker" y="0" x="0" xlink:href="#cancelMarker"/>
+            </g>
+            <g oclass="intermediateEvent_o" bclass="intermediateEvent" id="compensationIntermediateCatchEvent">
+                <use y="0" x="0" xlink:href="#intermediateEvent"/>
+                <use class="intermediateMarker" y="0" x="0" xlink:href="#compensaMarker"/>
+            </g>
+            <g oclass="intermediateEvent_o" bclass="intermediateEvent" id="compensationIntermediateThrowEvent">
+                <use y="0" x="0" xlink:href="#intermediateEvent"/>
+                <use class="intermediateFilledMarker" y="0" x="0" xlink:href="#compensaMarker"/>
+            </g>
+            <g oclass="intermediateEvent_o" bclass="intermediateEvent" id="ruleIntermediateEvent">
+                <use y="0" x="0" xlink:href="#intermediateEvent"/>
+                <use class="intermediateFilledMarker" y="0" x="0" xlink:href="#ruleMarker"/>
+            </g>
+            <g oclass="intermediateEvent_o" bclass="intermediateEvent" id="linkIntermediateCatchEvent">
+                <use y="0" x="0" xlink:href="#intermediateEvent"/>
+                <use class="intermediateMarker" y="0" x="0" xlink:href="#linkMarker"/>
+            </g>
+            <g oclass="intermediateEvent_o" bclass="intermediateEvent" id="linkIntermediateThrowEvent">
+                <use y="0" x="0" xlink:href="#intermediateEvent"/>
+                <use class="intermediateFilledMarker" y="0" x="0" xlink:href="#linkMarker"/>
+            </g>
+            <g oclass="intermediateEvent_o" bclass="intermediateEvent" id="signalIntermediateCatchEvent">
+                <use y="0" x="0" xlink:href="#intermediateEvent"/>
+                <use class="intermediateMarker" y="0" x="0" xlink:href="#signalMarker"/>
+            </g>
+            <g oclass="intermediateEvent_o" bclass="intermediateEvent" id="signalIntermediateThrowEvent">
+                <use y="0" x="0" xlink:href="#intermediateEvent"/>
+                <use class="intermediateFilledMarker" y="0" x="0" xlink:href="#signalMarker"/>
+            </g>
+            <g oclass="intermediateEvent_o" bclass="intermediateEvent" id="multipleIntermediateCatchEvent">
+                <use y="0" x="0" xlink:href="#intermediateEvent"/>
+                <use class="intermediateMarker" y="0" x="0" xlink:href="#multipleMarker"/>
+            </g>
+            <g oclass="intermediateEvent_o" bclass="intermediateEvent" id="multipleIntermediateThrowEvent">
+                <use y="0" x="0" xlink:href="#intermediateEvent"/>
+                <use class="intermediateFilledMarker" y="0" x="0" xlink:href="#multipleMarker"/>
+            </g>
+            <g oclass="intermediateEvent_o" bclass="intermediateEvent" id="scalationIntermediateCatchEvent">
+                <use y="0" x="0" xlink:href="#intermediateEvent"/>
+                <use class="intermediateMarker" y="0" x="0" xlink:href="#scalationMarker"/>
+            </g>
+            <g oclass="intermediateEvent_o" bclass="intermediateEvent" id="scalationIntermediateThrowEvent">
+                <use y="0" x="0" xlink:href="#intermediateEvent"/>
+                <use class="intermediateFilledMarker" y="0" x="0" xlink:href="#scalationMarker"/>
+            </g>
+            <g oclass="intermediateEvent_o" bclass="intermediateEvent" id="parallelIntermediateEvent">
+                <use y="0" x="0" xlink:href="#intermediateEvent"/>
+                <use class="intermediateMarker" y="0" x="0" xlink:href="#parallelMarker"/>
+            </g>
+            <!--Definición de eventos finales-->
+            <circle oclass="endEvent_o" bclass="endEvent" r="15" id="endEvent"/>
+
+            <g oclass="endEvent_o" bclass="endEvent" id="messageEndEvent">
+                <use y="0" x="0" xlink:href="#endEvent"/>
+                <use class="endFilledMarked" y="0" x="0" xlink:href="#messageThrowMarker"/>
+            </g>
+            <g oclass="endEvent_o" bclass="endEvent" id="signalEndEvent">
+                <use y="0" x="0" xlink:href="#endEvent"/>
+                <use class="endFilledMarked" y="0" x="0" xlink:href="#signalMarker"/>
+            </g>
+            <g oclass="endEvent_o" bclass="endEvent" id="scalationEndEvent">
+                <use y="0" x="0" xlink:href="#endEvent"/>
+                <use class="endFilledMarked" y="0" x="0" xlink:href="#scalationMarker"/>
+            </g>
+            <g oclass="endEvent_o" bclass="endEvent" id="errorEndEvent">
+                <use y="0" x="0" xlink:href="#endEvent"/>
+                <use class="endFilledMarked" y="0" x="0" xlink:href="#errorMarker"/>
+            </g>
+            <g oclass="endEvent_o" bclass="endEvent" id="multipleEndEvent">
+                <use y="0" x="0" xlink:href="#endEvent"/>
+                <use class="endFilledMarked" y="0" x="0" xlink:href="#multipleMarker"/>
+            </g>
+            <g oclass="endEvent_o" bclass="endEvent" id="cancelationEndEvent">
+                <use y="0" x="0" xlink:href="#endEvent"/>
+                <use class="endFilledMarked" y="0" x="0" xlink:href="#cancelMarker"/>
+            </g>
+            <g oclass="endEvent_o" bclass="endEvent" id="terminationEndEvent">
+                <use y="0" x="0" xlink:href="#endEvent"/>
+                <circle class="endFilledMarked" r="8"/>
+            </g>
+            <g oclass="endEvent_o" bclass="endEvent" id="compensationEndEvent">
+                <use y="0" x="0" xlink:href="#endEvent"/>
+                <use class="endFilledMarked" y="0" x="0" xlink:href="#compensaMarker"/>
+            </g>
+            <!--Definición de compuertas-->
+            <rect transform="rotate(45,0,0)" oclass="gateway_o" bclass="gateway" height="35" width="35" y="-17.5" x="-17.5" id="gateway"/>
+            <g oclass="gateway_o" bclass="gateway" id="exclusiveDataGateway">
+                <use y="0" x="0" xlink:href="#gateway"/>
+                <use transform="scale(1.3,1.3)" style="stroke:none;fill:#d4aa00" y="0" x="0" xlink:href="#cancelMarker"/>
+            </g>
+            <g oclass="gateway_o" bclass="gateway" id="inclusiveDataGateway">
+                <use y="0" x="0" xlink:href="#gateway"/>
+                <circle style="fill:none;stroke:#d4aa00;stroke-width:2;" r="14"/>
+            </g>
+            <g oclass="gateway_o" bclass="gateway" id="exclusiveStartGateway">
+                <use y="0" x="0" xlink:href="#gateway"/>
+                <circle style="fill:none;stroke:#d4aa00;stroke-width:2;" r="14"/>
+                <use transform="scale(0.9,0.9)" style="fill:none;stroke:#d4aa00;stroke-width:4.5;" y="0" x="0" xlink:href="#multipleMarker"/>
+            </g>
+            <g oclass="gateway_o" bclass="gateway" id="eventGateway">
+                <use y="0" x="0" xlink:href="#gateway"/>
+                <circle style="fill:none;stroke:#d4aa00;stroke-width:2;" r="14"/>
+                <circle style="fill:none;stroke:#d4aa00;stroke-width:2;" r="10"/>
+                <use transform="scale(0.75,0.75)" style="fill:none;stroke:#d4aa00;stroke-width:6;" y="0" x="0" xlink:href="#multipleMarker"/>
+            </g>
+            <g oclass="gateway_o" bclass="gateway" id="parallelGateway">
+                <use y="0" x="0" xlink:href="#gateway"/>
+                <use transform="scale(1.5,1.5)" style="stroke:none;fill:#d4aa00" y="0" x="0" xlink:href="#parallelMarker"/>
+            </g>
+            <g oclass="gateway_o" bclass="gateway" id="parallelStartGateway">
+                <use y="0" x="0" xlink:href="#gateway"/>
+                <circle style="fill:none;stroke:#d4aa00;stroke-width:2;" r="14"/>
+                <use style="stroke:#d4aa00;fill:none;stroke-width:3.5;" y="0" x="0" xlink:href="#parallelMarker"/>
+            </g>
+            <g oclass="gateway_o" bclass="gateway" id="complexGateway">
+                <use y="0" x="0" xlink:href="#gateway"/>
+                <use transform="scale(0.7,0.7)" style="stroke:none;fill:#d4aa00" y="0" x="0" xlink:href="#complexMarker"/>
+            </g>
+            <!--Definición de objetos de datos-->
+            <g oclass="itemaware_o" bclass="itemaware" id="data">
+                <path d="m -25,-25 0,74.61135 58.22841,0 0,-55.2509 -19.88426,-19.36045 -38.34415,0 z" transform="scale(0.7,0.7) translate(-3,-10)"/>
+                <path d="m 12.5,-24 0,19.5625 20.0601,0" transform="scale(0.7,0.7) translate(-2,-10)"/>
+            </g>
+            <g transform="translate(-12,-10)" oclass="itemaware_o" bclass="itemaware" id="dataStore">
+                <path transform="scale(0.6,0.6) translate(22,-24)" d="m 0,0 c -27.75868,0 -50.28125,5.6228 -50.28125,12.5625 0,0.1516 0.0412,0.2871 0.0625,0.4375 l -0.0625,0 0,61.5624 0,0.3125 0.0312,0 c 0.68314,6.7909 22.92187,12.25 50.25,12.25 27.3249498,0 49.53067,-5.4602 50.21875,-12.25 l 0.0312,0 0,-0.3125 0,-61.5624 -0.0312,0 c 0.0212,-0.1501 0.0312,-0.2862 0.0312,-0.4375 0,-6.9397 -22.4913202,-12.5625 -50.25,-12.5625 z"/>
+                <path transform="scale(0.6,0.6) translate(72,-12)" d="m 0,0 c 0,6.9397 -22.5028602,12.5654 -50.26153,12.5654 -27.39179,0 -49.73975,-5.4833 -50.25272,-12.33"/>
+            </g>	
+            <g oclass="itemaware_o" bclass="itemaware" id="dataInput">
+                <use y="0" x="0" xlink:href="#data"/>
+                <use transform="scale(0.8,0.8)" style="fill:none;stroke:#666666;stroke-width:2.5;" y="-17" x="-12" xlink:href="#linkMarker"/>
+            </g>
+            <g oclass="itemaware_o" bclass="itemaware" id="dataOutput">
+                <use y="0" x="0" xlink:href="#data"/>
+                <use transform="scale(0.8,0.8)" style="fill:#666666;stroke:none;stroke-width:2.5;" y="-17" x="-12" xlink:href="#linkMarker"/>
+            </g>
+            <!--Definición de tareas-->
+            <g styled="stroke:#2c5aa0" id="task">
+                <rect class="task" height="60" width="100" ry="10" rx="10" y="-30" x="-50"/>
+            </g>
+            <g styled="stroke:#2c5aa0" id="userTask">
+                <use y="0" x="0" xlink:href="#task"/>
+                <use transform="scale(0.8,0.8) translate(-45, -30)" xlink:href="#userMarker"/>
+            </g>
+            <g styled="stroke:#2c5aa0" id="serviceTask">
+                <use y="0" x="0" xlink:href="#task"/>
+                <use transform="scale(0.8,0.8) translate(-43, -27)" xlink:href="#serviceMarker"/>
+            </g>
+            <g styled="stroke:#2c5aa0" id="scriptTask">
+                <use y="0" x="0" xlink:href="#task"/>
+                <use transform="scale(0.7,0.7) translate(-60, -24)" xlink:href="#scriptMarker"/>
+            </g>
+            <g styled="stroke:#2c5aa0" id="ruleTask">
+                <use y="0" x="0" xlink:href="#task"/>
+                <use style="fill:#2c5aa0;" transform="translate(-35, -17)" xlink:href="#ruleMarker"/>
+            </g>
+            <g styled="stroke:#2c5aa0" id="sendTask">
+                <use y="0" x="0" xlink:href="#task"/>
+                <use style="fill:#2c5aa0;" transform="translate(-35, -19)" xlink:href="#messageThrowMarker"/>
+            </g>
+            <g styled="stroke:#2c5aa0" id="receiveTask">
+                <use y="0" x="0" xlink:href="#task"/>
+                <use style="fill:none;stroke:#2c5aa0;stroke-width:3;" transform="translate(-35, -19)" xlink:href="#messageCatchMarker"/>
+            </g>
+            <g styled="stroke:#2c5aa0" id="manualTask">
+                <use y="0" x="0" xlink:href="#task"/>
+                <use style="fill:none;stroke:#2c5aa0;stroke-width:4;" transform="scale(0.7,0.7) translate(-60, -35)" xlink:href="#manualMarker"/>
+            </g>
+            <!--Definición de swimlanes-->
+            <g oclass="swimlane_o" bclass="swimlane" id="pool">
+                <rect style="fill:#E8E8FF;stroke-width:2" height="200" y="-100" x="-300" width="600"/>
+                <path style="fill:none;stroke-width:2;" d="m -280,-100 l 0,200"/>
+            </g>
+        </defs>
+    <g><rect rx="10" ry="10" width="500" height="50" class="navPath" transform="translate(-250,-25)" x="759" y="25" style="display: none;"/></g><rect width="1534" height="946" bclass="swimlane" oclass="swimlane_o" class="swimlane" id="http://www.eworkplace.swb#swp_Pool:159" transform="translate(-767,-473)" x="850" y="500"/><path width="0" height="0" d="M103.01666259765625 27 L103.01666259765625 973" bclass="swimlane" oclass="swimlane_o" class="swimlane"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="500" x="95.50833129882812" transform="rotate(-90 95.50833129882812,500)"><tspan x="95.50833129882812">Baja de recursos</tspan></text><rect bclass="swimlane" oclass="swimlane_o" class="swimlane" width="1513.9833374023438" height="368" id="http://www.eworkplace.swb#swp_Lane:320" transform="translate(-756.9916687011719,-184)" x="860.0083312988281" y="211"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="211" x="115.5250015258789" transform="rotate(-90 115.5250015258789,211)"><tspan x="115.5250015258789">Solicitante</tspan></text><rect bclass="swimlane" oclass="swimlane_o" class="swimlane" width="1513.9833374023438" height="578" id="http://www.eworkplace.swb#swp_Lane:319" transform="translate(-756.9916687011719,-289)" x="860.0083312988281" y="684"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="684" x="115.5250015258789" transform="rotate(-90 115.5250015258789,684)"><tspan x="115.5250015258789">Analísta de Recursos Humanos</tspan></text><use xlink:href="#startEvent" class="startEvent" width="30" height="30" id="http://www.eworkplace.swb#swp_StartEvent:426" x="125" y="15"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="45" x="125"><tspan x="125">Inicio</tspan><tspan x="125" dy="10">normal</tspan></text><use xlink:href="#endEvent" class="endEvent" width="30" height="30" id="http://www.eworkplace.swb#swp_EndEvent:611" x="800" y="300" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="330" x="800" style="display: none;"><tspan x="800">Fin normal</tspan></text><use xlink:href="#startEvent" class="startEvent" width="30" height="30" id="http://www.eworkplace.swb#swp_StartEvent:494" x="300" y="300" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="330" x="300" style="display: none;"><tspan x="300">Inicio</tspan><tspan x="300" dy="10">normal</tspan></text><path d="M625,399.75 L625,408.625 L625,408.625 L625,417.5" class="sequenceFlowSubLine"/><path d="M449.75,275 L506.375,275 L506.375,125 L563,125" class="sequenceFlowSubLine"/><path d="M425,299.75 L425,361.625 L425,361.625 L425,423.5" class="sequenceFlowSubLine"/><path d="M875,674.75 L875,720.625 L875,720.625 L875,766.5" class="sequenceFlowSubLine"/><path d="M875,625.25 L875,570.125 L875,570.125 L875,515" class="sequenceFlowSubLine"/><path d="M200,90 L200,100 L200,100 L200,110" class="sequenceFlowSubLine"/><path d="M600.25,726 L580.125,726 L580.125,650 L560,650" class="sequenceFlowSubLine"/><path d="M649.75,726 L668.875,726 L668.875,650 L688,650" class="sequenceFlowSubLine"/><path d="M425,155 L425,197.625 L425,197.625 L425,240.25" class="sequenceFlowSubLine"/><path d="M450,650 L425,650 L425,650 L400,650" class="sequenceFlowSubLine"/><path d="M300,177 L320,177 L320,177 L340,177" class="sequenceFlowSubLine" style="display: none;"/><path d="M450,177 L470,177 L470,177 L490,177" class="sequenceFlowSubLine" style="display: none;"/><path d="M600,177 L637.5,177 L637.5,177 L675,177" class="sequenceFlowSubLine" style="display: none;"/><path d="M140,177 L165,177 L165,177 L190,177" class="sequenceFlowSubLine" style="display: none;"/><path d="M625,522.5 L625,606.875 L625,606.875 L625,691.25" class="sequenceFlowSubLine"/><path d="M724.75,200 L749.125,200 L749.125,200 L773.5,200" class="sequenceFlowSubLine" style="display: none;"/><path d="M275,175.25 L275,145.125 L275,145.125 L275,115" class="sequenceFlowSubLine" style="display: none;"/><path d="M275,224.75 L275,254.875 L275,254.875 L275,285" class="sequenceFlowSubLine" style="display: none;"/><path d="M916.5,200 L933.25,200 L933.25,200 L950,200" class="sequenceFlowSubLine" style="display: none;"/><path d="M190,200 L215.125,200 L215.125,200 L240.25,200" class="sequenceFlowSubLine" style="display: none;"/><path d="M325,325 L370,325 L370,325 L415,325" class="sequenceFlowSubLine" style="display: none;"/><path d="M325,75 L370,75 L370,75 L415,75" class="sequenceFlowSubLine" style="display: none;"/><path d="M525,325 L582.5,325 L582.5,325 L640,325" class="sequenceFlowSubLine" style="display: none;"/><path d="M700,105 L700,135.125 L700,135.125 L700,165.25" class="sequenceFlowSubLine" style="display: none;"/><path d="M525,75 L582.5,75 L582.5,75 L640,75" class="sequenceFlowSubLine" style="display: none;"/><path d="M700,295 L700,264.875 L700,264.875 L700,234.75" class="sequenceFlowSubLine" style="display: none;"/><path d="M925,475 L945,475 L945,475 L965,475" class="sequenceFlowSubLine"/><path d="M200,180 L200,207.25 L200,207.25 L200,234.5" class="sequenceFlowSubLine"/><path d="M1350,775 L1387.5,775 L1387.5,775 L1425,775" class="sequenceFlowSubLine"/><path d="M650,300 L712.5,300 L712.5,300 L775,300" class="sequenceFlowSubLine" style="display: none;"/><path d="M475,300 L507.5,300 L507.5,300 L540,300" class="sequenceFlowSubLine" style="display: none;"/><path d="M315,300 L340,300 L340,300 L365,300" class="sequenceFlowSubLine" style="display: none;"/><path d="M1175,505 L1175,560.125 L1175,560.125 L1175,615.25" class="sequenceFlowSubLine"/><path d="M625,280 L625,310.125 L625,310.125 L625,340.25" class="sequenceFlowSubLine"/><path d="M1199.75,650 L1219.88,650 L1219.88,650 L1240,650" class="sequenceFlowSubLine"/><path d="M798,650 L819.125,650 L819.125,650 L840.25,650" class="sequenceFlowSubLine"/><path d="M475,475 L532.625,475 L532.625,375 L590.25,375" class="sequenceFlowSubLine"/><path d="M925,825 L1032.62,825 L1032.62,650 L1140.25,650" class="sequenceFlowSubLine"/><path d="M263.5,275 L314.25,275 L314.25,125 L365,125" class="sequenceFlowSubLine"/><path d="M625,168 L625,189 L625,189 L625,210" class="sequenceFlowSubLine"/><path d="M268,305 L284,305 L284,300 L300,300" class="sequenceFlowSubLine"/><path d="M1075,475 L1095,475 L1095,475 L1115,475" class="sequenceFlowSubLine"/><path d="M1300,680 L1300,707.5 L1300,707.5 L1300,735" class="sequenceFlowSubLine"/><use xlink:href="#parallelGateway" class="gateway" width="49.5" height="49.5" id="http://www.eworkplace.swb#swp_ParallelGateway:115" x="625" y="375"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="414.75" x="625"><tspan x="625">Paralela</tspan></text><use xlink:href="#parallelGateway" class="gateway" width="49.5" height="49.5" id="http://www.eworkplace.swb#swp_ParallelGateway:116" x="425" y="275"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="314.75" x="425"><tspan x="425">Paralela</tspan></text><use xlink:href="#exclusiveDataGateway" class="gateway" width="49.5" height="49.5" id="http://www.eworkplace.swb#swp_ExclusiveGateway:676" x="875" y="650"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="689.75" x="875"><tspan x="875">06 ¿El</tspan><tspan x="875" dy="10">contrato es</tspan><tspan x="875" dy="10">de nomina</tspan><tspan x="875" dy="10">o eventual?</tspan></text><use xlink:href="#startEvent" class="startEvent" width="30" height="30" id="http://www.eworkplace.swb#swp_StartEvent:425" x="200" y="75"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="105" x="200"><tspan x="200">Inicio</tspan><tspan x="200" dy="10">normal</tspan></text><use xlink:href="#exclusiveDataGateway" class="gateway" width="49.5" height="49.5" id="http://www.eworkplace.swb#swp_ExclusiveGateway:885" x="625" y="726"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="765.75" x="625"><tspan x="625">¿Error en</tspan><tspan x="625" dy="10">Directorio</tspan><tspan x="625" dy="10">Activo?</tspan></text><rect width="100" height="60" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_ScriptTask:432" transform="translate(-50,-30)" x="425" y="125"/><use xlink:href="#scriptMarker" width="13.74609375" height="15.96875" x="382" y="108"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="125" x="425"><tspan x="425">01.2 Busca</tspan><tspan x="425" dy="10">datos faltantes</tspan></text><path d="M425,155 L425,197.625 L425,197.625 L425,240.25" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2509"/><rect width="100" height="60" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_SubProcess:348" transform="translate(-50,-30)" x="500" y="650"/><use xlink:href="#subProcessMarker" width="14" height="14" x="499" y="668"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="645" x="500"><tspan x="500">06 Manejo de</tspan><tspan x="500" dy="10">directorio</tspan><tspan x="500" dy="10">activo</tspan></text><path d="M600.25,726 L580.125,726 L580.125,650 L560,650" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_ConditionalFlow:795"/><rect width="100" height="60" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_ScriptTask:636" transform="translate(-50,-30)" x="250" y="177" style="display: none;"/><use xlink:href="#scriptMarker" width="13.74609375" height="15.96875" x="207" y="160" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="167" x="250" style="display: none;"><tspan x="250">06.0.1 Genera</tspan><tspan x="250" dy="10">correo a MSI</tspan><tspan x="250" dy="10">para el manejo</tspan><tspan x="250" dy="10">de DA</tspan></text><use xlink:href="#endEvent" class="endEvent" width="30" height="30" id="http://www.eworkplace.swb#swp_EndEvent:631" x="700" y="177" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="207" x="700" style="display: none;"><tspan x="700">Fin normal</tspan></text><rect width="100" height="60" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_UserTask:1793" transform="translate(-50,-30)" x="400" y="177" style="display: none;"/><use xlink:href="#userMarker" width="15.453125" height="17.5234375" x="363" y="155" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="177" x="400" style="display: none;"><tspan x="400">06.0.2  Muestra</tspan><tspan x="400" dy="10">información</tspan></text><path d="M300,177 L320,177 L320,177 L340,177" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:3031" style="display: none;"/><rect width="100" height="60" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_ServiceTask:1018" transform="translate(-50,-30)" x="550" y="177" style="display: none;"/><use xlink:href="#serviceMarker" width="18.41015625" height="17.796875" x="513" y="155" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="177" x="550" style="display: none;"><tspan x="550">06.0.3 Envía</tspan><tspan x="550" dy="10">correo</tspan></text><path d="M450,177 L470,177 L470,177 L490,177" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:3037" style="display: none;"/><path d="M600,177 L637.5,177 L637.5,177 L675,177" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:3032" style="display: none;"/><use xlink:href="#startEvent" class="startEvent" width="30" height="30" id="http://www.eworkplace.swb#swp_StartEvent:518" x="125" y="177" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="207" x="125" style="display: none;"><tspan x="125">Inicio</tspan><tspan x="125" dy="10">normal</tspan></text><path d="M140,177 L165,177 L165,177 L190,177" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:3030" style="display: none;"/><use xlink:href="#data" class="itemaware" width="40.9921875" height="52.2265625" id="http://www.eworkplace.swb#swp_DataObject:1699" x="1575" y="475"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="516.11328125" x="1575"><tspan x="1575">Numero de</tspan><tspan x="1575" dy="10">recurso</tspan></text><rect width="128" height="95" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_SubProcess:296" transform="translate(-64,-47.5)" x="625" y="475"/><use xlink:href="#subProcessMarker" width="14" height="14" x="624" y="510.5"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="470" x="625"><tspan x="625">04 Notifica baja de</tspan><tspan x="625" dy="10">recurso a las áreas</tspan><tspan x="625" dy="10">involucradas</tspan></text><path d="M625,399.75 L625,408.625 L625,408.625 L625,417.5" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2337"/><path d="M625,522.5 L625,606.875 L625,606.875 L625,691.25" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2182"/><use xlink:href="#parallelGateway" class="gateway" width="49.5" height="49.5" id="http://www.eworkplace.swb#swp_ParallelGateway:111" x="700" y="200" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="239.75" x="700" style="display: none;"><tspan x="700">Paralela</tspan></text><use xlink:href="#parallelGateway" class="gateway" width="49.5" height="49.5" id="http://www.eworkplace.swb#swp_ParallelGateway:112" x="275" y="200" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="239.75" x="275" style="display: none;"><tspan x="275">Paralela</tspan></text><rect width="133" height="66" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_ScriptTask:630" transform="translate(-66.5,-33)" x="850" y="200" style="display: none;"/><use xlink:href="#scriptMarker" width="13.74609375" height="15.96875" x="790.5" y="180" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="200" x="850" style="display: none;"><tspan x="850">05.3 Baja del</tspan><tspan x="850" dy="10">Directorio Activo</tspan></text><path d="M724.75,200 L749.125,200 L749.125,200 L773.5,200" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2169" style="display: none;"/><use xlink:href="#startEvent" class="startEvent" width="30" height="30" id="http://www.eworkplace.swb#swp_StartEvent:428" x="175" y="200" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="230" x="175" style="display: none;"><tspan x="175">Inicio</tspan><tspan x="175" dy="10">normal</tspan></text><path d="M190,200 L215.125,200 L215.125,200 L240.25,200" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2168" style="display: none;"/><rect width="100" height="60" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_ScriptTask:270" transform="translate(-50,-30)" x="275" y="325" style="display: none;"/><use xlink:href="#scriptMarker" width="13.74609375" height="15.96875" x="232" y="308" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="325" x="275" style="display: none;"><tspan x="275">05.1 Inicializa</tspan><tspan x="275" dy="10">correo</tspan></text><path d="M275,224.75 L275,254.875 L275,254.875 L275,285" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2221" style="display: none;"/><rect width="100" height="60" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_ScriptTask:269" transform="translate(-50,-30)" x="275" y="75" style="display: none;"/><use xlink:href="#scriptMarker" width="13.74609375" height="15.96875" x="232" y="58" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="75" x="275" style="display: none;"><tspan x="275">04.1 Inicializa</tspan><tspan x="275" dy="10">correo</tspan></text><path d="M275,175.25 L275,145.125 L275,145.125 L275,115" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2167" style="display: none;"/><rect width="100" height="84" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_UserTask:1517" transform="translate(-50,-42)" x="475" y="325" style="display: none;"/><use xlink:href="#userMarker" width="15.453125" height="17.5234375" x="438" y="291" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="320" x="475" style="display: none;"><tspan x="475">05 Notifica baja</tspan><tspan x="475" dy="10">de Recurso a</tspan><tspan x="475" dy="10">Área de pagos</tspan></text><path d="M325,325 L370,325 L370,325 L415,325" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2242" style="display: none;"/><use xlink:href="#data" class="itemaware" width="40.9921875" height="52.2265625" id="http://www.eworkplace.swb#swp_DataObject:2006" x="675" y="450" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="491.11328125" x="675" style="display: none;"><tspan x="675">Destinatario</tspan><tspan x="675" dy="10">msi</tspan></text><use xlink:href="#data" class="itemaware" width="40.9921875" height="52.2265625" id="http://www.eworkplace.swb#swp_DataObject:1673" x="575" y="450" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="491.11328125" x="575" style="display: none;"><tspan x="575">Contenido</tspan><tspan x="575" dy="10">correo</tspan><tspan x="575" dy="10">Pagos</tspan></text><use xlink:href="#data" class="itemaware" width="40.9921875" height="52.2265625" id="http://www.eworkplace.swb#swp_DataObject:2007" x="800" y="450" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="491.11328125" x="800" style="display: none;"><tspan x="800">Destinatario</tspan><tspan x="800" dy="10">pagos</tspan></text><use xlink:href="#endEvent" class="endEvent" width="30" height="30" id="http://www.eworkplace.swb#swp_EndEvent:529" x="975" y="200" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="230" x="975" style="display: none;"><tspan x="975">Fin normal</tspan></text><path d="M916.5,200 L933.25,200 L933.25,200 L950,200" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:3025" style="display: none;"/><rect width="100" height="60" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_ServiceTask:785" transform="translate(-50,-30)" x="700" y="75" style="display: none;"/><use xlink:href="#serviceMarker" width="18.41015625" height="17.796875" x="663" y="53" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="75" x="700" style="display: none;"><tspan x="700">04.2 Envía</tspan><tspan x="700" dy="10">correo</tspan></text><path d="M700,105 L700,135.125 L700,135.125 L700,165.25" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2170" style="display: none;"/><use xlink:href="#data" class="itemaware" width="40.9921875" height="52.2265625" id="http://www.eworkplace.swb#swp_DataObject:1651" x="450" y="450" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="491.11328125" x="450" style="display: none;"><tspan x="450">Contenido</tspan><tspan x="450" dy="10">correo MSI</tspan></text><use xlink:href="#data" class="itemaware" width="40.9921875" height="52.2265625" id="http://www.eworkplace.swb#swp_DataObject:2035" x="250" y="450" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="491.11328125" x="250" style="display: none;"><tspan x="250">Asunto</tspan><tspan x="250" dy="10">pagos</tspan></text><use xlink:href="#data" class="itemaware" width="40.9921875" height="52.2265625" id="http://www.eworkplace.swb#swp_DataObject:2034" x="325" y="450" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="491.11328125" x="325" style="display: none;"><tspan x="325">Asunto MSI</tspan></text><rect width="100" height="72" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_UserTask:1462" transform="translate(-50,-36)" x="475" y="75" style="display: none;"/><use xlink:href="#userMarker" width="15.453125" height="17.5234375" x="438" y="47" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="70" x="475" style="display: none;"><tspan x="475">04 Notifica baja</tspan><tspan x="475" dy="10">de Recurso a</tspan><tspan x="475" dy="10">MSI</tspan></text><path d="M325,75 L370,75 L370,75 L415,75" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2241" style="display: none;"/><path d="M525,75 L582.5,75 L582.5,75 L640,75" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2173" style="display: none;"/><rect width="100" height="60" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_ServiceTask:802" transform="translate(-50,-30)" x="700" y="325" style="display: none;"/><use xlink:href="#serviceMarker" width="18.41015625" height="17.796875" x="663" y="303" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="325" x="700" style="display: none;"><tspan x="700">05.2 Envía</tspan><tspan x="700" dy="10">correo</tspan></text><path d="M525,325 L582.5,325 L582.5,325 L640,325" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2222" style="display: none;"/><path d="M700,295 L700,264.875 L700,264.875 L700,234.75" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2223" style="display: none;"/><use xlink:href="#dataStore" class="itemaware" width="60.4609375" height="52.2734375" id="http://www.eworkplace.swb#swp_DataStore:511" x="1175" y="75"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="116.13671875" x="1175"><tspan x="1175">Solicitud de</tspan><tspan x="1175" dy="10">baja</tspan></text><rect width="100" height="60" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_ScriptTask:478" transform="translate(-50,-30)" x="875" y="475"/><use xlink:href="#scriptMarker" width="13.74609375" height="15.96875" x="832" y="458"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="475" x="875"><tspan x="875">08.1 Inicializa</tspan><tspan x="875" dy="10">correo</tspan></text><path d="M875,625.25 L875,570.125 L875,570.125 L875,515" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_ConditionalFlow:658"/><use xlink:href="#endEvent" class="endEvent" width="30" height="30" id="http://www.eworkplace.swb#swp_EndEvent:630" x="375" y="650"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="680" x="375"><tspan x="375">Fin normal</tspan></text><path d="M450,650 L425,650 L425,650 L400,650" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:3033"/><rect width="100" height="60" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_ScriptTask:264" transform="translate(-50,-30)" x="200" y="150"/><use xlink:href="#scriptMarker" width="13.74609375" height="15.96875" x="157" y="133"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="150" x="200"><tspan x="200">01.1 Inicializa</tspan><tspan x="200" dy="10">variables</tspan></text><path d="M200,90 L200,100 L200,100 L200,110" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2501"/><rect width="100" height="60" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_SubProcess:336" transform="translate(-50,-30)" x="1300" y="775"/><use xlink:href="#subProcessMarker" width="14" height="14" x="1299" y="793"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="775" x="1300"><tspan x="1300">10 Generación</tspan><tspan x="1300" dy="10">de informacón</tspan></text><rect width="100" height="60" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_ServiceTask:1002" transform="translate(-50,-30)" x="600" y="300" style="display: none;"/><use xlink:href="#serviceMarker" width="18.41015625" height="17.796875" x="563" y="278" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="295" x="600" style="display: none;"><tspan x="600">10.2</tspan><tspan x="600" dy="10">Generación de</tspan><tspan x="600" dy="10">información</tspan></text><path d="M650,300 L712.5,300 L712.5,300 L775,300" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2952" style="display: none;"/><rect width="100" height="60" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_ScriptTask:606" transform="translate(-50,-30)" x="425" y="300" style="display: none;"/><use xlink:href="#scriptMarker" width="13.74609375" height="15.96875" x="382" y="283" style="display: none;"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="295" x="425" style="display: none;"><tspan x="425">10.1</tspan><tspan x="425" dy="10">Generación de</tspan><tspan x="425" dy="10">inforamción</tspan></text><path d="M315,300 L340,300 L340,300 L365,300" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2951" style="display: none;"/><path d="M475,300 L507.5,300 L507.5,300 L540,300" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2953" style="display: none;"/><use xlink:href="#data" class="itemaware" width="40.9921875" height="52.2265625" id="http://www.eworkplace.swb#swp_DataObject:1685" x="1575" y="275"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="316.11328125" x="1575"><tspan x="1575">Nombre</tspan><tspan x="1575" dy="10">solicitante</tspan></text><use xlink:href="#data" class="itemaware" width="40.9921875" height="52.2265625" id="http://www.eworkplace.swb#swp_DataObject:2801" x="1075" y="75"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="116.11328125" x="1075"><tspan x="1075">Tipo</tspan><tspan x="1075" dy="10">contratacion</tspan></text><use xlink:href="#data" class="itemaware" width="40.9921875" height="52.2265625" id="http://www.eworkplace.swb#swp_DataObject:1684" x="1575" y="375"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="416.11328125" x="1575"><tspan x="1575">Área de</tspan><tspan x="1575" dy="10">adscripción</tspan><tspan x="1575" dy="10">solicitante</tspan></text><use xlink:href="#data" class="itemaware" width="40.9921875" height="52.2265625" id="http://www.eworkplace.swb#swp_DataObject:2739" x="1575" y="900"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="941.11328125" x="1575"><tspan x="1575">Error baja</tspan></text><use xlink:href="#data" class="itemaware" width="40.9921875" height="52.2265625" id="http://www.eworkplace.swb#swp_DataObject:2733" x="1575" y="800"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="841.11328125" x="1575"><tspan x="1575">Mensaje de</tspan><tspan x="1575" dy="10">baja en el</tspan><tspan x="1575" dy="10">DA</tspan></text><use xlink:href="#endEvent" class="endEvent" width="30" height="30" id="http://www.eworkplace.swb#swp_EndEvent:657" x="325" y="300"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="330" x="325"><tspan x="325">Fin normal</tspan></text><use xlink:href="#dataStore" class="itemaware" width="60.4609375" height="52.2734375" id="http://www.eworkplace.swb#swp_DataStore:741" x="1300" y="75"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="116.13671875" x="1300"><tspan x="1300">Contador</tspan><tspan x="1300" dy="10">solicitud de</tspan><tspan x="1300" dy="10">baja</tspan></text><use xlink:href="#data" class="itemaware" width="40.9921875" height="52.2265625" id="http://www.eworkplace.swb#swp_DataObject:1679" x="1575" y="175"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="216.11328125" x="1575"><tspan x="1575">Texto</tspan><tspan x="1575" dy="10">correo hoja </tspan><tspan x="1575" dy="10">Liberacion</tspan></text><rect width="100" height="60" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_ServiceTask:792" transform="translate(-50,-30)" x="1175" y="475"/><use xlink:href="#serviceMarker" width="18.41015625" height="17.796875" x="1138" y="453"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="475" x="1175"><tspan x="1175">08.2 Envía</tspan><tspan x="1175" dy="10">coreo</tspan></text><rect width="100" height="60" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_ServiceTask:790" transform="translate(-50,-30)" x="625" y="250"/><use xlink:href="#serviceMarker" width="18.41015625" height="17.796875" x="588" y="228"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="250" x="625"><tspan x="625">02.2 Envía</tspan><tspan x="625" dy="10">correo</tspan></text><path d="M625,280 L625,310.125 L625,310.125 L625,340.25" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2340"/><use xlink:href="#endEvent" class="endEvent" width="30" height="30" id="http://www.eworkplace.swb#swp_EndEvent:527" x="1450" y="775"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="805" x="1450"><tspan x="1450">Fin normal</tspan></text><path d="M1350,775 L1387.5,775 L1387.5,775 L1425,775" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2950"/><use xlink:href="#exclusiveDataGateway" class="gateway" width="49.5" height="49.5" id="http://www.eworkplace.swb#swp_ExclusiveGateway:779" x="1175" y="650"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="689.75" x="1175"><tspan x="1175">C fin</tspan></text><path d="M1175,505 L1175,560.125 L1175,560.125 L1175,615.25" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2325"/><rect width="100" height="60" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_UserTask:1579" transform="translate(-50,-30)" x="748" y="650"/><use xlink:href="#userMarker" width="15.453125" height="17.5234375" x="711" y="628"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="645" x="748"><tspan x="748">06 Verifica</tspan><tspan x="748" dy="10">solicitud de</tspan><tspan x="748" dy="10">baja</tspan></text><path d="M649.75,726 L668.875,726 L668.875,650 L688,650" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_ConditionalFlow:796"/><path d="M798,650 L819.125,650 L819.125,650 L840.25,650" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2335"/><use xlink:href="#data" class="itemaware" width="40.9921875" height="52.2265625" id="http://www.eworkplace.swb#swp_DataObject:2483" x="1475" y="175"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="216.11328125" x="1475"><tspan x="1475">solicitud</tspan><tspan x="1475" dy="10">baja</tspan></text><rect width="100" height="83" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_UserTask:1452" transform="translate(-50,-41.5)" x="425" y="475"/><use xlink:href="#userMarker" width="15.453125" height="17.5234375" x="388" y="441.5"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="470" x="425"><tspan x="425">03 Recibe</tspan><tspan x="425" dy="10">solicitud de</tspan><tspan x="425" dy="10">baja</tspan></text><path d="M425,299.75 L425,361.625 L425,361.625 L425,423.5" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2339"/><path d="M475,475 L532.625,475 L532.625,375 L590.25,375" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2338"/><rect width="100" height="97" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_UserTask:1453" transform="translate(-50,-48.5)" x="875" y="825"/><use xlink:href="#userMarker" width="15.453125" height="17.5234375" x="838" y="784.5"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="805" x="875"><tspan x="875">07 Notifica a</tspan><tspan x="875" dy="10">Jurídico para</tspan><tspan x="875" dy="10">que elabore</tspan><tspan x="875" dy="10">Convenio de</tspan><tspan x="875" dy="10">Terminación</tspan><tspan x="875" dy="10">Anticipada</tspan></text><path d="M875,674.75 L875,720.625 L875,720.625 L875,766.5" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_ConditionalFlow:657"/><path d="M925,825 L1032.62,825 L1032.62,650 L1140.25,650" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2588"/><use xlink:href="#data" class="itemaware" width="40.9921875" height="52.2265625" id="http://www.eworkplace.swb#swp_DataObject:2039" x="1375" y="175"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="216.11328125" x="1375"><tspan x="1375">Asunto</tspan><tspan x="1375" dy="10">Solicitud</tspan></text><use xlink:href="#data" class="itemaware" width="40.9921875" height="52.2265625" id="http://www.eworkplace.swb#swp_DataObject:2038" x="1275" y="175"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="216.11328125" x="1275"><tspan x="1275">Destinatario</tspan><tspan x="1275" dy="10">solicitud</tspan></text><rect width="127" height="61" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_UserTask:1447" transform="translate(-63.5,-30.5)" x="200" y="275"/><use xlink:href="#userMarker" width="15.453125" height="17.5234375" x="149.5" y="252.5"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="275" x="200"><tspan x="200">01 Registra solicitud</tspan><tspan x="200" dy="10">de baja</tspan></text><path d="M200,180 L200,207.25 L200,207.25 L200,234.5" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2226"/><path d="M263.5,275 L314.25,275 L314.25,125 L365,125" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2332"/><rect width="104" height="86" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_UserTask:1449" transform="translate(-52,-43)" x="625" y="125"/><use xlink:href="#userMarker" width="15.453125" height="17.5234375" x="586" y="90"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="110" x="625"><tspan x="625">02 Solicita a</tspan><tspan x="625" dy="10">Recurso Hoja de</tspan><tspan x="625" dy="10">Liberación y</tspan><tspan x="625" dy="10">Entrevista de</tspan><tspan x="625" dy="10">salida</tspan></text><path d="M449.75,275 L506.375,275 L506.375,125 L563,125" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2176"/><path d="M625,168 L625,189 L625,189 L625,210" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2177"/><use xlink:href="#timerIntermediateEvent" class="intermediateEvent" width="30" height="30" id="http://www.eworkplace.swb#swp_TimerIntermediateCatchEvent:18" x="253" y="305"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="335" x="253"><tspan x="253">Temporizador</tspan></text><path d="M268,305 L284,305 L284,300 L300,300" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:3145"/><use xlink:href="#data" class="itemaware" width="40.9921875" height="52.2265625" id="http://www.eworkplace.swb#swp_DataObject:1641" x="1575" y="600"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="641.11328125" x="1575"><tspan x="1575">Rol /</tspan><tspan x="1575" dy="10">Función</tspan><tspan x="1575" dy="10">recurso</tspan></text><use xlink:href="#data" class="itemaware" width="40.9921875" height="52.2265625" id="http://www.eworkplace.swb#swp_DataObject:1648" x="1573" y="80"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="121.11328125" x="1573"><tspan x="1573">Texto</tspan><tspan x="1573" dy="10">correo</tspan></text><rect width="100" height="94" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_UserTask:1456" transform="translate(-50,-47)" x="1025" y="475"/><use xlink:href="#userMarker" width="15.453125" height="17.5234375" x="988" y="436"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="450" x="1025"><tspan x="1025">08 Solicita</tspan><tspan x="1025" dy="10">firma de</tspan><tspan x="1025" dy="10">Convenio de</tspan><tspan x="1025" dy="10">Terminación</tspan><tspan x="1025" dy="10">Anticipada y/o</tspan><tspan x="1025" dy="10">documentos de</tspan><tspan x="1025" dy="10">salida</tspan></text><path d="M925,475 L945,475 L945,475 L965,475" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2587"/><path d="M1075,475 L1095,475 L1095,475 L1115,475" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2181"/><use xlink:href="#data" class="itemaware" width="40.9921875" height="52.2265625" id="http://www.eworkplace.swb#swp_DataObject:1649" x="1500" y="65"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="106.11328125" x="1500"><tspan x="1500">Destinatario</tspan><tspan x="1500" dy="10">correo</tspan></text><use xlink:href="#data" class="itemaware" width="40.9921875" height="52.2265625" id="http://www.eworkplace.swb#swp_DataObject:1647" x="1421" y="69"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="110.11328125" x="1421"><tspan x="1421">Asunto</tspan><tspan x="1421" dy="10">correo</tspan></text><use xlink:href="#data" class="itemaware" width="40.9921875" height="52.2265625" id="http://www.eworkplace.swb#swp_DataObject:1642" x="1575" y="700"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="741.11328125" x="1575"><tspan x="1575">Area de</tspan><tspan x="1575" dy="10">adscripción</tspan><tspan x="1575" dy="10">recurso</tspan></text><rect width="100" height="60" bclass="task" oclass="task_o" rx="10" ry="10" class="task" id="http://www.eworkplace.swb#swp_UserTask:1459" transform="translate(-50,-30)" x="1300" y="650"/><use xlink:href="#userMarker" width="15.453125" height="17.5234375" x="1263" y="628"/><text text-anchor="middle" font-size="11" font-family="Verdana, Geneva, sans-serif" width="0" height="0" class="textLabel" y="650" x="1300"><tspan x="1300">09 Carga de</tspan><tspan x="1300" dy="10">expediente</tspan></text><path d="M1199.75,650 L1219.88,650 L1219.88,650 L1240,650" marker-start="url(#defaultTail)" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_DefaultFlow:187"/><path d="M1300,680 L1300,707.5 L1300,707.5 L1300,735" marker-end="url(#sequenceArrow)" class="sequenceFlowLine" id="http://www.eworkplace.swb#swp_SequenceFlow:2949"/></svg>
