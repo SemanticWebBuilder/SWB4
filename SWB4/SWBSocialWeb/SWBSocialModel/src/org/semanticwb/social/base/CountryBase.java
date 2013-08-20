@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class CountryBase extends org.semanticwb.social.GeoCatalog implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.GeoMapable
+public abstract class CountryBase extends org.semanticwb.social.GeoCatalog implements org.semanticwb.social.GeoMapable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass social_CountryState=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#CountryState");
     public static final org.semanticwb.platform.SemanticProperty social_hasStatesInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasStatesInv");
