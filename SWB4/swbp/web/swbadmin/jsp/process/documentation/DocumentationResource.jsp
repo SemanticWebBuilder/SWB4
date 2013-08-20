@@ -4,6 +4,15 @@
     Author     : carlos.alvarez
 --%>
 
+<%@page import="org.semanticwb.model.SWBComparator"%>
+<%@page import="org.semanticwb.process.model.Event"%>
+<%@page import="org.semanticwb.process.model.Activity"%>
+<%@page import="org.semanticwb.process.model.Lane"%>
+<%@page import="org.semanticwb.process.model.Gateway"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.semanticwb.SWBUtils"%>
+<%@page import="org.semanticwb.SWBPortal"%>
+<%@page import="org.semanticwb.model.SWBContext"%>
 <%@page import="org.semanticwb.process.model.GraphicalElement"%>
 <%@page import="org.semanticwb.process.model.FlowNode"%>
 <%@page import="org.semanticwb.process.model.ProcessElement"%>
@@ -18,116 +27,250 @@
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false, locale: 'es'" ></script>
+<link rel="stylesheet" href="/swbadmin/jsp/process/formsBuilder.css" type="text/css"/>
 <!DOCTYPE html>
-<%
-    SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-    WebSite wsite = (WebSite) paramRequest.getWebPage().getWebSite();
-    String suri = request.getAttribute("suri") != null ? request.getAttribute("suri").toString() : "";
-    String idDocumentation = request.getAttribute("idDocumentation") != null ? request.getAttribute("idDocumentation").toString() : "";
-    Documentation documentation = Documentation.ClassMgr.getDocumentation(idDocumentation, wsite);
-    ProcessElement pe = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
-    SWBResourceURL urlUpdate = paramRequest.getRenderUrl().setMode(DocumentationResource.MOD_UPDATETEXT).setCallMethod(SWBParamRequest.Call_DIRECT);
-%>
-<script type="text/javascript" src="/swbadmin/jsp/process/tinymce/tinymce.min.js"></script>
-<%
-    if (pe instanceof org.semanticwb.process.model.Process) {
-        out.println("<h2>Documentación de Proceso " + pe.getTitle() + "</h2>");
-    } else {
-        out.println("<h2>Documentación de Elemento " + pe.getTitle() + "</h2>");
-    }
-%>
-<form method="post" style="width: 100%;">
-    <div class="editable" style="width:100%; height:100%;" id="idDocumentation/<%=idDocumentation%>">
-        <%
-            if (documentation != null) {
-                out.println(documentation.getText() != null ? documentation.getText() : "");
-            }%>
-    </div>
-</form>
-
-
-<script type="text/javascript">
-    tinymce.init({
-        selector: "div.editable",
-        inline: true,
-        language: '<%=paramRequest.getUser().getLanguage()%>',
-        theme: "modern",
-        force_br_newlines: false,
-        force_p_newlines: false,
-        forced_root_block: '',
-        plugins: [
-            "save advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker",
-            "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-            "table contextmenu directionality emoticons template textcolor paste fullpage textcolor"
-        ],
-        save_onsavecallback: function(ed) {
-            //alert(ed.getContent());
-            submitUrl('<%=urlUpdate%>', ed.getContent(), ed.id);
-        },
-        toolbar: "save",
-        save_enablewhendirty: true,
-        toolbar1: "save bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect",
-        toolbar2: "cut copy paste | searchreplace | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor code | inserttime preview | forecolor backcolor",
-        toolbar3: "table | hr removeformat | subscript superscript | charmap | print fullscreen | ltr rtl | spellchecker | visualchars visualblocks nonbreaking template pagebreak restoredraft",
-        menubar: false,
-        toolbar_items_size: 'big',
-        style_formats: [
-            {title: 'Bold text', inline: 'b'},
-            {title: 'Red text', inline: 'span', styles: {color: '#ff0000'}},
-            {title: 'Red header', block: 'h1', styles: {color: '#ff0000'}},
-            {title: 'Example 1', inline: 'span', classes: 'example1'},
-            {title: 'Example 2', inline: 'span', classes: 'example2'},
-            {title: 'Table styles'},
-            {title: 'Table row 1', selector: 'tr', classes: 'tablerow1'}
-        ]
-    });
-    function submitUrl(url, data, id) {
-        dojo.xhrPost({
-            url: url,
-            contentType: "application/x-www-form-urlencoded; charset=utf-8",
-            content: {txt: data.toString().trim(), idDocumentation: id.replace("idDocumentation/", ""), suri: '<%=suri%>'},
-            load: function(response, ioArgs)
-            {
-                alert('Se guardaron datos');
-                return response;
-            },
-            error: function(response, ioArgs) {
-                //console.log('error');
-                return response;
-            },
-            handleAs: "text"
-        });
-    }
-</script>
-<%
-    if (pe instanceof org.semanticwb.process.model.Process) {
-        SemanticObject semObj = SemanticObject.createSemanticObject(suri);
-        org.semanticwb.process.model.Process process = (org.semanticwb.process.model.Process) semObj.createGenericInstance();
-        if (process != null) {
-            Iterator<GraphicalElement> iterator = process.listAllContaineds();
-            while (iterator.hasNext()) {
-                GraphicalElement ge = iterator.next();
-                out.println("<h3>Elemento ::: " + ge.getTitle() + " :::</h3>");
+<div id="workspace">
+    <!--<div id="toast" style="right: 60%; top: 5%; display: none; position: fixed; border: 1px solid #CCCCCC;background-color: #01DF01;padding: 10px 10px ;text-align:center;opacity: 0.1;border-radius:8px 8px 8px 8px;-webkit-transition: opacity 0.1s ease-out;  /* Saf3.2+, Chrome */-moz-transition: opacity 0.1s ease-out;  /* FF4+ */-ms-transition: opacity 0.1s ease-out;  /* IE10? */-o-transition: opacity 0.1s ease-out;  /* Opera 10.5+ */transition: opacity 0.5s ease-out;"></div>-->
+    <div id="toast" style="background: #B40404; color: white; padding: 10px 40px 10px 40px; right: 40%; top: 5%; display: none; position: fixed; text-align:center; border-radius:8px 8px 8px 8px;"></div>
+    <%
+        SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+        WebSite wsite = (WebSite) paramRequest.getWebPage().getWebSite();
+        String suri = request.getAttribute("suri") != null ? request.getAttribute("suri").toString() : "";
+        String idDocumentation = request.getAttribute("idDocumentation") != null ? request.getAttribute("idDocumentation").toString() : "";
+        Documentation documentation = Documentation.ClassMgr.getDocumentation(idDocumentation, wsite);
+        ProcessElement pe = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
+        SWBResourceURL urlUpdate = paramRequest.getRenderUrl().setMode(DocumentationResource.MOD_UPDATETEXT).setCallMethod(SWBParamRequest.Call_DIRECT);
+        SWBResourceURL urlGenerate = paramRequest.getRenderUrl().setMode("viewDocumentation");
+        urlGenerate.setParameter("suri", suri);
+        String text = "Aquí documenta";
+        if (pe instanceof org.semanticwb.process.model.Process) {
+    %><a id="html" title="Generar html" onclick="window.location = '<%=urlGenerate%>'" style="cursor: pointer;"><img title="Generar html" src="/swbadmin/jsp/process/documentation/styles/css/images/html.png"/></a><%
+        }
+        %>
+    <script type="text/javascript" src="/swbadmin/jsp/process/tinymce/tinymce.min.js"></script>
+    <%
+        if (pe instanceof org.semanticwb.process.model.Process) {
+            out.println("<h2>Documentación de Proceso " + pe.getTitle() + "</h2>");
+        } else {
+            out.println("<h2>Documentación de Elemento " + pe.getTitle() + "</h2>");
+        }
+    %>
+    <form method="post" style="width: 100%;">
+        <div class="editable" style="width:100%; height:100%;" id="idDocumentation/<%=idDocumentation%>">
+            <%
+                if (documentation != null) {
+                    if (documentation.getText().replace("&nbsp;", "").trim().length() < 62) {
+                        text = "Aquí documenta";
+                    } else {
+                        text = documentation.getText();
+                    }
+                    out.println(text);
+                }%>
+        </div>
+        <input type="hidden" id="pe/<%=documentation.getId()%>" name="pe/<%=documentation.getId()%>" value="<%=pe.getTitle()%>"/>
+    </form>
+    <%
+        if (pe instanceof org.semanticwb.process.model.Process) {
+            SemanticObject semObj = SemanticObject.createSemanticObject(suri);
+            org.semanticwb.process.model.Process process = (org.semanticwb.process.model.Process) semObj.createGenericInstance();
+            if (process != null) {
+                Iterator<GraphicalElement> iterator = process.listAllContaineds();
+                ArrayList lane = new ArrayList();
+                ArrayList activity = new ArrayList();
+                ArrayList gateway = new ArrayList();
+                ArrayList event = new ArrayList();
+                GraphicalElement ge = null;
                 Documentation doc = null;
-                if (ge.listDocumentations().hasNext()) {
-                    doc = ge.listDocumentations().next();
-                } else {
-                    doc = Documentation.ClassMgr.createDocumentation(paramRequest.getWebPage().getWebSite());
-                    doc.setText("Aquí la documentación");
-                    doc.setTextFormat("text/html");
-                    ge.addDocumentation(doc);
+                while (iterator.hasNext()) {
+                    ge = iterator.next();
+                    if (ge instanceof Lane) {
+                        lane.add(ge);
+                    }
+                    if (ge instanceof Activity) {
+                        activity.add(ge);
+                    }
+                    if (ge instanceof Gateway) {
+                        gateway.add(ge);
+                    }
+                    if (ge instanceof Event) {
+                        event.add(ge);
+                    }
+                    if (!ge.listDocumentations().hasNext()) {
+                        doc = Documentation.ClassMgr.createDocumentation(paramRequest.getWebPage().getWebSite());
+                        doc.setText("Aquí documenta");
+                        doc.setTextFormat("text/html");
+                        ge.addDocumentation(doc);
+                    }
                 }
-%>
-<form method="post">
-    <div class="editable" style="width:100%; " id="idDocumentation/<%=doc.getId()%>">
-        <%
-            if (doc != null) {
-                out.println(doc.getText() != null ? doc.getText() : "");
-            }%>
-    </div>
-</form>
-<%
+                //Lane
+                iterator = SWBComparator.sortByDisplayName(lane.iterator(), paramRequest.getUser().getLanguage());
+                if (lane.size() > 0) {
+                    out.print("<h1>Lane</h1>");
+                }
+                while (iterator.hasNext()) {
+                    ge = iterator.next();
+                    doc = ge.getDocumentation();
+                    out.println("<h3>::: Elemento " + ge.getTitle() + " :::</h3>");
+                    out.println("<form method=\"post\">");
+                    out.println("<div class=\"editable\" style=\"width:100%; border: 2px;\" id=\"idDocumentation/" + doc.getId() + "\">");
+                    if (doc.getText().replace("&nbsp;", "").trim().length() < 62) {
+                        text = "Aquí documenta";
+                    } else {
+                        text = doc.getText();
+                    }
+                    out.println(text);
+                    out.println("</div>");
+                    out.println("<input type=\"hidden\" id=\"pe/" + doc.getId() + "\" name=\"pe/" + doc.getId() + "\" value=\"" + ge.getTitle() + "\"/>");
+                    out.println("</form>");
+                }
+                //Activity
+                iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
+                if (lane.size() > 0) {
+                    out.print("<h1>Activity</h1>");
+                }
+                while (iterator.hasNext()) {
+                    ge = iterator.next();
+                    doc = ge.getDocumentation();
+                    out.println("<h3>::: Elemento " + ge.getTitle() + " :::</h3>");
+                    out.println("<form method=\"post\">");
+                    out.println("<div class=\"editable\" style=\"width:100%; border: 2px;\" id=\"idDocumentation/" + doc.getId() + "\">");
+                    if (doc.getText().replace("&nbsp;", "").trim().length() < 62) {
+                        text = "Aquí documenta";
+                    } else {
+                        text = doc.getText();
+                    }
+                    out.println(text);
+                    out.println("</div>");
+                    out.println("<input type=\"hidden\" id=\"pe/" + doc.getId() + "\" name=\"pe/" + doc.getId() + "\" value=\"" + ge.getTitle() + "\"/>");
+                    out.println("</form>");
+                }
+                //Gateway
+                iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
+                if (lane.size() > 0) {
+                    out.print("<h1>Gateway</h1>");
+                }
+                while (iterator.hasNext()) {
+                    ge = iterator.next();
+                    doc = ge.getDocumentation();
+                    out.println("<h3>::: Elemento " + ge.getTitle() + " :::</h3>");
+                    out.println("<form method=\"post\">");
+                    out.println("<div class=\"editable\" style=\"width:100%; border: 2px;\" id=\"idDocumentation/" + doc.getId() + "\">");
+                    if (doc.getText().replace("&nbsp;", "").trim().length() < 62) {
+                        text = "Aquí documenta";
+                    } else {
+                        text = doc.getText();
+                    }
+                    out.println(text);
+                    out.println("</div>");
+                    out.println("<input type=\"hidden\" id=\"pe/" + doc.getId() + "\" name=\"pe/" + doc.getId() + "\" value=\"" + ge.getTitle() + "\"/>");
+                    out.println("</form>");
+                }
+                //Gateway
+                iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
+                if (lane.size() > 0) {
+                    out.print("<h1>Event</h1>");
+                }
+                while (iterator.hasNext()) {
+                    ge = iterator.next();
+                    doc = ge.getDocumentation();
+                    out.println("<h3>::: Elemento " + ge.getTitle() + " :::</h3>");
+                    out.println("<form method=\"post\">");
+                    out.println("<div class=\"editable\" style=\"width:100%; border: 2px;\" id=\"idDocumentation/" + doc.getId() + "\">");
+                    if (doc.getText().replace("&nbsp;", "").trim().length() < 62) {
+                        text = "Aquí documenta";
+                    } else {
+                        text = doc.getText();
+                    }
+                    out.println(text);
+                    out.println("</div>");
+                    out.println("<input type=\"hidden\" id=\"pe/" + doc.getId() + "\" name=\"pe/" + doc.getId() + "\" value=\"" + ge.getTitle() + "\"/>");
+                    out.println("</form>");
+                }
             }
         }
-    }
-%>
+    %>
+    <script type="text/javascript">
+        tinymce.init({
+            selector: "div.editable",
+            inline: true,
+            language: '<%=paramRequest.getUser().getLanguage()%>',
+            theme: "modern",
+            force_br_newlines: false,
+            force_p_newlines: false,
+            forced_root_block: '',
+            plugins: [
+                "save advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker",
+                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+                "table contextmenu directionality emoticons template textcolor paste fullpage textcolor"
+            ],
+            save_onsavecallback: function(ed) {
+                var id = ed.id.replace("idDocumentation/", "");
+                var title = document.getElementById('pe/' + id).value;
+                //alert("contenido: " + tinyMCE.trim(ed.getWin));
+                submitUrl('<%=urlUpdate%>', ed.getContent(), ed.id, title);
+            },
+            toolbar: "save",
+            save_enablewhendirty: true,
+            toolbar1: "save bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect",
+            toolbar2: "cut copy paste | searchreplace | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor code | inserttime preview | forecolor backcolor",
+            toolbar3: "table | hr removeformat | subscript superscript | charmap | print fullscreen | ltr rtl | spellchecker | visualchars visualblocks nonbreaking template pagebreak restoredraft",
+            menubar: false,
+            toolbar_items_size: 'big',
+            style_formats: [
+                {title: 'Bold text', inline: 'b'},
+                {title: 'Red text', inline: 'span', styles: {color: '#ff0000'}},
+                {title: 'Red header', block: 'h1', styles: {color: '#ff0000'}},
+                {title: 'Example 1', inline: 'span', classes: 'example1'},
+                {title: 'Example 2', inline: 'span', classes: 'example2'},
+                {title: 'Table styles'},
+                {title: 'Table row 1', selector: 'tr', classes: 'tablerow1'}
+            ]
+        });
+        function submitUrl(url, data, id, title) {
+            dojo.xhrPost({
+                url: url,
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                content: {txt: data.toString().trim(), idDocumentation: id.replace("idDocumentation/", ""), suri: '<%=suri%>'},
+                load: function(response, ioArgs)
+                {
+                    showToast("Se guardo información de " + title);
+                    return response;
+                },
+                error: function(response, ioArgs) {
+                    return response;
+                },
+                handleAs: "text"
+            });
+        }
+        function generateHtml(url) {
+            dojo.xhrPost({
+                url: url,
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                content: {suri: '<%=suri%>'},
+                load: function(response, ioArgs)
+                {
+                    return response;
+                },
+                error: function(response, ioArgs) {
+                    return response;
+                },
+                handleAs: "text"
+            });
+        }
+        var intCounterToast = 0;
+        function showToast(msg) {
+            var toast = document.getElementById("toast");
+            toast.style.display = "block";
+            //toast.style.opacity = 0.5;
+            toast.style.visibility = "visible";
+            toast.innerHTML = "<b>" + msg + "</b>";
+            intCounterToast = setInterval("hideToast()", 2500);
+        }
+        function hideToast() {
+            var toast = document.getElementById("toast");
+            toast.style.display = "none";
+            clearInterval(intCounterToast);
+            //toast.style.opacity = 0;
+        }
+    </script>
+</div>
