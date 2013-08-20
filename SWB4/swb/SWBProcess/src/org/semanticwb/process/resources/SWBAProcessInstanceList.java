@@ -96,7 +96,7 @@ public class SWBAProcessInstanceList extends GenericResource {
                 out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
                 out.println("<legend>");
-                out.println("Lista de instancias del proceso.");
+                out.println(paramRequest.getLocaleString("listTitle"));
                 out.println("</legend>");
                 //out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlnpi + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btnNewProcessInst") + "</button>"); //
 
@@ -107,28 +107,28 @@ public class SWBAProcessInstanceList extends GenericResource {
                 out.println("&nbsp;");
                 out.println("</th>");
                 out.println("<th>");
-                out.println("Id");
+                out.println(paramRequest.getLocaleString("id"));
                 out.println("</th>");
                 out.println("<th>");
-                out.println("Titulo");
+                out.println(paramRequest.getLocaleString("title"));
                 out.println("</th>");
                 out.println("<th>");
-                out.println("Estatus");
+                out.println(paramRequest.getLocaleString("estatus"));
                 out.println("</th>");
                 out.println("<th>");
-                out.println("Creador");
+                out.println(paramRequest.getLocaleString("creator"));
                 out.println("</th>");
                 out.println("<th>");
-                out.println("Asignado");
+                out.println(paramRequest.getLocaleString("assigned"));
                 out.println("</th>");
                 out.println("<th>");
-                out.println("Inicio");
+                out.println(paramRequest.getLocaleString("started"));
                 out.println("</th>");
                 out.println("<th>");
-                out.println("Finalizo");
+                out.println(paramRequest.getLocaleString("ended"));
                 out.println("</th>");
                 out.println("<th>");
-                out.println("Artefactos");
+                out.println(paramRequest.getLocaleString("artifacts"));
                 out.println("</th>");
                 out.println("</tr>");
                 out.println("</thead>");
@@ -163,7 +163,7 @@ public class SWBAProcessInstanceList extends GenericResource {
                     //out.println(pi.getProcessType().getTitle());
                     out.println("</td>");
                     out.println("<td>");
-                    out.println(getStatusName(pi.getStatus()));
+                    out.println(getStatusName(pi.getStatus(), paramRequest));
                     out.println("</td>");
                     User usrtmp = pi.getCreator();
                     out.println("<td>");
@@ -171,7 +171,7 @@ public class SWBAProcessInstanceList extends GenericResource {
                     out.println("</td>");
                     out.println("<td>");
                     usrtmp = pi.getAssignedto();
-                    out.println((usrtmp!=null?usrtmp.getFullName():"No asignado"));
+                    out.println((usrtmp!=null?usrtmp.getFullName():paramRequest.getLocaleString("notAssigned")));
                     out.println("</td>");
                     out.println("<td>");
                     out.println(pi.getCreated());
@@ -217,7 +217,7 @@ public class SWBAProcessInstanceList extends GenericResource {
                 out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
                 out.println("<legend>");
-                out.println("Artefactos");
+                out.println(paramRequest.getLocaleString("docs"));
                 out.println("</legend>");
 
                 out.println("<ul>");
@@ -266,22 +266,22 @@ public class SWBAProcessInstanceList extends GenericResource {
                 out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
                 out.println("<legend>");
-                out.println("Detalle de Proceso");
+                out.println(paramRequest.getLocaleString("procInstDetail"));
                 out.println("</legend>");
 
                 out.println("<table width=\"100%\">");
 
                 out.println("<tr>");
-                out.print("<th>ID</th>");
-                out.print("<th>Activity</th>");
-                out.print("<th>Class</th>");
-                out.print("<th>Creator</th>");
-                out.print("<th>Created</th>");
-                out.print("<th>Assigned to</th>");
-                out.print("<th>Ended by</th>");
-                out.print("<th>Ended</th>");
-                out.print("<th>Action</th>");
-                out.print("<th>Status</th>");
+                out.print("<th>"+paramRequest.getLocaleString("ID")+"</th>");
+                out.print("<th>"+paramRequest.getLocaleString("activity")+"</th>");
+                out.print("<th>"+paramRequest.getLocaleString("class")+"</th>");
+                out.print("<th>"+paramRequest.getLocaleString("creator")+"</th>");
+                out.print("<th>"+paramRequest.getLocaleString("started")+"</th>");
+                out.print("<th>"+paramRequest.getLocaleString("assigned")+"</th>");
+                out.print("<th>"+paramRequest.getLocaleString("endedby")+"</th>");
+                out.print("<th>"+paramRequest.getLocaleString("ended")+"</th>");
+                out.print("<th>"+paramRequest.getLocaleString("action")+"</th>");
+                out.print("<th>"+paramRequest.getLocaleString("estatus")+"</th>");
                 out.print("<th>&nbsp;</th>");
                 out.println("</tr>");
 
@@ -306,40 +306,39 @@ public class SWBAProcessInstanceList extends GenericResource {
         }
     }
 
-    public String getStatusName(int status)
+    public String getStatusName(int status, SWBParamRequest paramRequest) throws SWBResourceException
     {
-        String ret = "estatus incorrecto";
+        String ret = "--";
         if(status==ProcessInstance.STATUS_INIT)
         {
-            ret="Iniciado";
+            ret=paramRequest.getLocaleString("stStarted");
         }
         else if(status==ProcessInstance.STATUS_ABORTED)
         {
-            ret="Abortado";
+            ret=paramRequest.getLocaleString("stAborted");
         }
         else if(status==ProcessInstance.STATUS_CLOSED)
         {
-            ret="Cerrado";
+            ret=paramRequest.getLocaleString("stClosed");
         }
         else if(status==ProcessInstance.STATUS_OPEN)
         {
-            ret="Abierto";
+            ret=paramRequest.getLocaleString("stOpen");
         }
         else if(status==ProcessInstance.STATUS_PROCESSING)
         {
-            ret="En proceso";
+            ret=paramRequest.getLocaleString("stProcessing");
         }
         else if(status==ProcessInstance.STATUS_STOPED)
         {
-            ret="Detenido";
+            ret=paramRequest.getLocaleString("stStopped");
         }
-
 
         return ret;
     }
 
 
-    public void printActivityInstance(FlowNodeInstance ai, PrintWriter out, SWBParamRequest paramRequest,int espacios) throws IOException {
+    public void printActivityInstance(FlowNodeInstance ai, PrintWriter out, SWBParamRequest paramRequest,int espacios) throws IOException, SWBResourceException {
         out.println("<tr>");
 
         String space = "";
@@ -394,22 +393,22 @@ public class SWBAProcessInstanceList extends GenericResource {
         switch(ai.getStatus())
         {
             case FlowNodeInstance.STATUS_ABORTED:
-                out.print("Aborted");
+                out.print(paramRequest.getLocaleString("stAborted"));
                 break;
             case FlowNodeInstance.STATUS_CLOSED:
-                out.print("Closed");
+                out.print(paramRequest.getLocaleString("stClosed"));
                 break;
             case FlowNodeInstance.STATUS_INIT:
-                out.print("Init");
+                out.print(paramRequest.getLocaleString("stStarted"));
                 break;
             case FlowNodeInstance.STATUS_OPEN:
-                out.print("Open");
+                out.print(paramRequest.getLocaleString("stOpen"));
                 break;
             case FlowNodeInstance.STATUS_PROCESSING:
-                out.print("Processing");
+                out.print(paramRequest.getLocaleString("stProcessing"));
                 break;
             case FlowNodeInstance.STATUS_STOPED:
-                out.print("Stoped");
+                out.print(paramRequest.getLocaleString("stStopped"));
                 break;
         }
         out.println("</b></td>");
@@ -434,7 +433,7 @@ public class SWBAProcessInstanceList extends GenericResource {
             urlreject.setParameter("suripi", ai.getProcessInstance().getURI());
             urlreject.setParameter("ract", "pidetail");
 
-            out.println(" <a href=\"#\" onclick=\"submitUrl('" + urlaccept + "',this); return false;\">accept</a> <a href=\"#\" onclick=\"submitUrl('"+ urlreject + "',this); return false;\">reject</a></li>");
+            out.println(" <a href=\"#\" onclick=\"submitUrl('" + urlaccept + "',this); return false;\">"+paramRequest.getLocaleString("accept")+"</a> <a href=\"#\" onclick=\"submitUrl('"+ urlreject + "',this); return false;\">"+paramRequest.getLocaleString("reject")+"</a></li>");
         }
         out.println("</td>");
         out.println("</tr>");
