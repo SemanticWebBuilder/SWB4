@@ -524,29 +524,6 @@ public class FileUpload
 
         return null;
     }
-    
-        /**
-     * Gets the value.
-     * 
-     * @param s the s
-     * @return the value
-     * @throws IOException Signals that an I/O exception has occurred.
-     */
-    public String[] getValues(String s)
-            throws IOException
-    {
-        String[] arr = null;
-        int j=0;
-        for (int i = 0; i < parametros.size(); i++)
-        {
-            CParameter cparameter = (CParameter) parametros.elementAt(i);
-            if (cparameter.parametro.trim().equals(s.trim()))
-                 arr[j] = cparameter.Valor.trim();
-                 j++;
-        }
-
-        return arr;
-    }
 
     /**
      * Parses the multi.
@@ -633,8 +610,15 @@ public class FileUpload
                 return hashtable;
             s3 = new String(abyte0, 0, 0, k);
             CParameter cparameter = new CParameter();
-            cparameter.parametro = s9.trim();
-            cparameter.Valor = s3;
+            String paramValue = getValue(s9.trim());
+            if(paramValue==null){
+                cparameter.parametro = s9.trim();
+                cparameter.Valor = s3;
+            } else {
+                paramValue = paramValue +","+s3;
+                cparameter.parametro = s9.trim();
+                cparameter.Valor = paramValue;
+            }
             System.out.println(s9.trim()+" = "+s3);
             if (!s3.startsWith(s1))
             {
