@@ -42,7 +42,8 @@
         SWBResourceURL urlUpdate = paramRequest.getRenderUrl().setMode(DocumentationResource.MOD_UPDATETEXT).setCallMethod(SWBParamRequest.Call_DIRECT);
         SWBResourceURL urlGenerate = paramRequest.getRenderUrl().setMode("viewDocumentation");
         urlGenerate.setParameter("suri", suri);
-        String text = "Aquí documenta";
+        String text = paramRequest.getLocaleString("hereDoc");
+        String element = paramRequest.getLocaleString("element");
         if (pe instanceof org.semanticwb.process.model.Process) {
     %><a id="html" title="Generar html" onclick="window.location = '<%=urlGenerate%>'" style="cursor: pointer;"><img title="Generar html" src="/swbadmin/jsp/process/documentation/styles/css/images/html.png"/></a><%
         }
@@ -50,18 +51,16 @@
     <script type="text/javascript" src="/swbadmin/jsp/process/tinymce/tinymce.min.js"></script>
     <%
         if (pe instanceof org.semanticwb.process.model.Process) {
-            out.println("<h2>Documentación de Proceso " + pe.getTitle() + "</h2>");
+            out.println("<h2>" + paramRequest.getLocaleString("docFromPro") + " " + pe.getTitle() + "</h2>");
         } else {
-            out.println("<h2>Documentación de Elemento " + pe.getTitle() + "</h2>");
+            out.println("<h2>" + paramRequest.getLocaleString("docFromSub") + " " + pe.getTitle() + "</h2>");
         }
     %>
     <form method="post" style="width: 100%;">
         <div class="editable" style="width:100%; height:100%;" id="idDocumentation/<%=idDocumentation%>">
             <%
                 if (documentation != null) {
-                    if (documentation.getText().replace("&nbsp;", "").trim().length() < 62) {
-                        text = "Aquí documenta";
-                    } else {
+                    if (documentation.getText().replace("&nbsp;", "").trim().length() > 61) {
                         text = documentation.getText();
                     }
                     out.println(text);
@@ -97,7 +96,7 @@
                     }
                     if (!ge.listDocumentations().hasNext()) {
                         doc = Documentation.ClassMgr.createDocumentation(paramRequest.getWebPage().getWebSite());
-                        doc.setText("Aquí documenta");
+                        doc.setText(text);
                         doc.setTextFormat("text/html");
                         ge.addDocumentation(doc);
                     }
@@ -105,17 +104,15 @@
                 //Lane
                 iterator = SWBComparator.sortByDisplayName(lane.iterator(), paramRequest.getUser().getLanguage());
                 if (lane.size() > 0) {
-                    out.print("<h1>Lane</h1>");
+                    out.print("<h1>" + paramRequest.getLocaleString("lane") + "</h1>");
                 }
                 while (iterator.hasNext()) {
                     ge = iterator.next();
                     doc = ge.getDocumentation();
-                    out.println("<h3>::: Elemento " + ge.getTitle() + " :::</h3>");
+                    out.println("<h3>::: " + element + " " + ge.getTitle() + " :::</h3>");
                     out.println("<form method=\"post\">");
                     out.println("<div class=\"editable\" style=\"width:100%; border: 2px;\" id=\"idDocumentation/" + doc.getId() + "\">");
-                    if (doc.getText().replace("&nbsp;", "").trim().length() < 62) {
-                        text = "Aquí documenta";
-                    } else {
+                    if (doc.getText().replace("&nbsp;", "").trim().length() > 61) {
                         text = doc.getText();
                     }
                     out.println(text);
@@ -125,18 +122,16 @@
                 }
                 //Activity
                 iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
-                if (lane.size() > 0) {
-                    out.print("<h1>Activity</h1>");
+                if (activity.size() > 0) {
+                    out.print("<h1>" + paramRequest.getLocaleString("activity") + "</h1>");
                 }
                 while (iterator.hasNext()) {
                     ge = iterator.next();
                     doc = ge.getDocumentation();
-                    out.println("<h3>::: Elemento " + ge.getTitle() + " :::</h3>");
+                    out.println("<h3>::: " + element + " " + ge.getTitle() + " :::</h3>");
                     out.println("<form method=\"post\">");
                     out.println("<div class=\"editable\" style=\"width:100%; border: 2px;\" id=\"idDocumentation/" + doc.getId() + "\">");
-                    if (doc.getText().replace("&nbsp;", "").trim().length() < 62) {
-                        text = "Aquí documenta";
-                    } else {
+                    if (doc.getText().replace("&nbsp;", "").trim().length() > 61) {
                         text = doc.getText();
                     }
                     out.println(text);
@@ -146,18 +141,16 @@
                 }
                 //Gateway
                 iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
-                if (lane.size() > 0) {
-                    out.print("<h1>Gateway</h1>");
+                if (gateway.size() > 0) {
+                    out.print("<h1>" + paramRequest.getLocaleString("gateway") + "</h1>");
                 }
                 while (iterator.hasNext()) {
                     ge = iterator.next();
                     doc = ge.getDocumentation();
-                    out.println("<h3>::: Elemento " + ge.getTitle() + " :::</h3>");
+                    out.println("<h3>::: " + element + " " + ge.getTitle() + " :::</h3>");
                     out.println("<form method=\"post\">");
                     out.println("<div class=\"editable\" style=\"width:100%; border: 2px;\" id=\"idDocumentation/" + doc.getId() + "\">");
-                    if (doc.getText().replace("&nbsp;", "").trim().length() < 62) {
-                        text = "Aquí documenta";
-                    } else {
+                    if (doc.getText().replace("&nbsp;", "").trim().length() > 61) {
                         text = doc.getText();
                     }
                     out.println(text);
@@ -167,18 +160,16 @@
                 }
                 //Gateway
                 iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
-                if (lane.size() > 0) {
-                    out.print("<h1>Event</h1>");
+                if (event.size() > 0) {
+                    out.print("<h1>" + paramRequest.getLocaleString("event") + "</h1>");
                 }
                 while (iterator.hasNext()) {
                     ge = iterator.next();
                     doc = ge.getDocumentation();
-                    out.println("<h3>::: Elemento " + ge.getTitle() + " :::</h3>");
+                    out.println("<h3>::: " + element + " " + ge.getTitle() + " :::</h3>");
                     out.println("<form method=\"post\">");
                     out.println("<div class=\"editable\" style=\"width:100%; border: 2px;\" id=\"idDocumentation/" + doc.getId() + "\">");
-                    if (doc.getText().replace("&nbsp;", "").trim().length() < 62) {
-                        text = "Aquí documenta";
-                    } else {
+                    if (doc.getText().replace("&nbsp;", "").trim().length() > 61) {
                         text = doc.getText();
                     }
                     out.println(text);
@@ -201,7 +192,7 @@
             plugins: [
                 "save advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker",
                 "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-                "table contextmenu directionality emoticons template textcolor paste fullpage textcolor"
+                "directionality emoticons template textcolor paste fullpage textcolor"
             ],
             save_onsavecallback: function(ed) {
                 var id = ed.id.replace("idDocumentation/", "");
@@ -213,7 +204,7 @@
             save_enablewhendirty: true,
             toolbar1: "save bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect",
             toolbar2: "cut copy paste | searchreplace | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor code | inserttime preview | forecolor backcolor",
-            toolbar3: "table | hr removeformat | subscript superscript | charmap | print fullscreen | ltr rtl | spellchecker | visualchars visualblocks nonbreaking template pagebreak restoredraft",
+            toolbar3: "thr removeformat | subscript superscript | charmap | print fullscreen | ltr rtl | spellchecker | visualchars visualblocks nonbreaking template pagebreak restoredraft",
             menubar: false,
             toolbar_items_size: 'big',
             style_formats: [
@@ -233,10 +224,11 @@
                 content: {txt: data.toString().trim(), idDocumentation: id.replace("idDocumentation/", ""), suri: '<%=suri%>'},
                 load: function(response, ioArgs)
                 {
-                    showToast("Se guardo información de " + title);
+                    showToast("<%=paramRequest.getLocaleString("save")%> " + title);
                     return response;
                 },
                 error: function(response, ioArgs) {
+                    showToast("<%=paramRequest.getLocaleString("error")%> " + title);
                     return response;
                 },
                 handleAs: "text"
