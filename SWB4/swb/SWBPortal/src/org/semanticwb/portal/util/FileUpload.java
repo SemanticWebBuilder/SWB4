@@ -524,6 +524,29 @@ public class FileUpload
 
         return null;
     }
+    
+        /**
+     * Gets the value.
+     * 
+     * @param s the s
+     * @return the value
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public String[] getValues(String s)
+            throws IOException
+    {
+        String[] arr = null;
+        int j=0;
+        for (int i = 0; i < parametros.size(); i++)
+        {
+            CParameter cparameter = (CParameter) parametros.elementAt(i);
+            if (cparameter.parametro.trim().equals(s.trim()))
+                 arr[j] = cparameter.Valor.trim();
+                 j++;
+        }
+
+        return arr;
+    }
 
     /**
      * Parses the multi.
