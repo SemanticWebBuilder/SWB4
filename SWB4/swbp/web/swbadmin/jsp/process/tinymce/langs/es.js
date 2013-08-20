@@ -171,5 +171,6 @@ tinymce.addI18n('es',{
 "View": "Ver",
 "Table": "Tabla",
 "Format": "Formato",
-"Font Family": "Tipo de fuente"
+"Font Family": "Tipo de Fuente",
+"Font Size":"Tamaño de Fuente"
 });
