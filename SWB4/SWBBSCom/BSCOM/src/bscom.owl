@@ -425,34 +425,6 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </swb:hasClass>
-    <swb:hasClass>
-      <swb:Class rdf:ID="Distinctive">
-        <rdfs:subClassOf>
-          <owl:Restriction>
-            <owl:allValuesFrom>
-              <owl:Class rdf:ID="DistinctiveTheme"/>
-            </owl:allValuesFrom>
-            <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
-          </owl:Restriction>
-        </rdfs:subClassOf>
-        <swb:displayObject>
-          <swbxf:DisplayObject rdf:ID="do_Distinctive">
-            <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swbxf:dragSupport>
-            <rdfs:comment xml:lang="es">Diferenciador</rdfs:comment>
-            <rdfs:comment xml:lang="en">Distinctive</rdfs:comment>
-            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbIconWebPage</swb:iconClass>
-          </swbxf:DisplayObject>
-        </swb:displayObject>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="#BSCElement"/>
-        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.bsc.element</swb:classCodePackage>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </swb:hasClass>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Countries"/>
     <swb:hasClass>
       <owl:Class rdf:about="#Objective"/>
@@ -621,14 +593,6 @@
     <rdfs:subClassOf rdf:resource="#Help"/>
     <rdfs:subClassOf rdf:resource="#Serializable"/>
     <rdfs:subClassOf rdf:resource="#Recognizable"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:allValuesFrom>
-          <owl:Class rdf:about="#DistinctiveTheme"/>
-        </owl:allValuesFrom>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
-      </owl:Restriction>
-    </rdfs:subClassOf>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.element</swb:classCodePackage>
     <rdfs:subClassOf rdf:resource="#Sortable"/>
@@ -705,6 +669,12 @@
     >org.semanticwb.bsc.formelement</swb:classCodePackage>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FormElement"/>
   </owl:Class>
+  <owl:Class rdf:ID="SelectOneUserByRoleGroup">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne"/>
+    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.bsc.formelement</swb:classCodePackage>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FormElement"/>
+  </owl:Class>
   <owl:Class rdf:about="#BSCTracing">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableNode"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
@@ -717,41 +687,11 @@
     >org.semanticwb.bsc.tracing</swb:classCodePackage>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="SelectOneUserByRoleGroup">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne"/>
-    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.bsc.formelement</swb:classCodePackage>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FormElement"/>
-  </owl:Class>
   <owl:Class rdf:about="#Updateable">
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Cualquier elemento BSC que se pueda actualizar periodicamente</rdfs:comment>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
-  </owl:Class>
-  <owl:Class rdf:about="#DistinctiveTheme">
-    <rdfs:subClassOf rdf:resource="#BSCElement"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:allValuesFrom rdf:resource="#Perspective"/>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <swb:displayObject>
-      <swbxf:DisplayObject rdf:ID="do_DistintictiveTheme">
-        <rdfs:label xml:lang="es">Temas para distintivos</rdfs:label>
-        <rdfs:label xml:lang="en">Distinctive for themes</rdfs:label>
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconWebPage</swb:iconClass>
-      </swbxf:DisplayObject>
-    </swb:displayObject>
-    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.bsc.element</swb:classCodePackage>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Los temas para distintivos agrupan distintivos con fines en común. A su vez, los temas para distintivos están agrupados dentro de las perspectivas.</rdfs:comment>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:ObjectProperty rdf:ID="parent">
     <swb:displayProperty>
@@ -931,12 +871,6 @@
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Persiste información de un facilitador de champion en una indicador. Este facilitador se encarga de facilitarte a los champions la actualización de datos en el indicador</rdfs:comment>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasDistinctive">
-    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:herarquicalRelation>
-    <rdfs:range rdf:resource="#Distinctive"/>
-    <rdfs:domain rdf:resource="#DistinctiveTheme"/>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#indicatorInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >indicator</swb:propertyCodeName>
@@ -1046,12 +980,6 @@
     >Representa el conjunto de propiedades que conforman la vista resumen.</rdfs:comment>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasDistinctiveTheme">
-    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:herarquicalRelation>
-    <rdfs:range rdf:resource="#DistinctiveTheme"/>
-    <rdfs:domain rdf:resource="#Perspective"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasSeasonableInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -1806,6 +1734,12 @@
     >150</swb:index>
     <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
   </swbxf:DisplayProperty>
+  <swbxf:DisplayObject rdf:ID="do_DistintictiveTheme">
+    <rdfs:label xml:lang="es">Temas para distintivos</rdfs:label>
+    <rdfs:label xml:lang="en">Distinctive for themes</rdfs:label>
+    <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swbIconWebPage</swb:iconClass>
+  </swbxf:DisplayObject>
   <swbxf:HerarquicalNode rdf:ID="hn_Objetives">
     <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >swbIconWebPage</swb:iconClass>
@@ -1855,6 +1789,14 @@
     <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc</swb:package>
   </swb:CodePackage>
+  <swbxf:DisplayObject rdf:ID="do_Distinctive">
+    <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swbxf:dragSupport>
+    <rdfs:comment xml:lang="es">Diferenciador</rdfs:comment>
+    <rdfs:comment xml:lang="en">Distinctive</rdfs:comment>
+    <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swbIconWebPage</swb:iconClass>
+  </swbxf:DisplayObject>
   <swbxf:DisplayProperty rdf:ID="dp_measurementFrequency">
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >120</swb:index>
