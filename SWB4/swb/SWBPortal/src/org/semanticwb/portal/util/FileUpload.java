@@ -635,6 +635,7 @@ public class FileUpload
             CParameter cparameter = new CParameter();
             cparameter.parametro = s9.trim();
             cparameter.Valor = s3;
+            System.out.println(s9.trim()+" = "+s3);
             if (!s3.startsWith(s1))
             {
                 System.arraycopy(abyte0, 0, abyte1, 0, k);
