@@ -99,7 +99,7 @@ if (ProcessForm.ACT_UPDPROP.equals(action)) {
             </table>
             </fieldset>
             <fieldset>
-                <button type="submit" dojoType="dijit.form.Button">Aceptar</button>
+                <button type="submit" dojoType="dijit.form.Button"><%=paramRequest.getLocaleString("accept") %></button>
                 <button dojoType="dijit.form.Button" onclick="hideDialog('configDialog');"><%=paramRequest.getLocaleString("cancel")%></button>
             </fieldset>
         </form>
