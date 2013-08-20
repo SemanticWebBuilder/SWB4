@@ -1,0 +1,224 @@
+HTML
+{
+    /*overflow: hidden;*/ 
+    height: auto;
+}
+BODY
+{
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    height:100%; 
+    width: 100%;
+    margin:0px; 
+    text-align:center;
+    background-color:#fff;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    /*color: white;*/
+} 
+img{
+    border: 0px;
+}
+#contenedor{
+    height: 100%;
+    width: 100%;
+    text-align:center;
+    margin-right: auto;
+    margin-left: auto;
+    /*background-color: blue;*/
+}
+#header{
+    height: 12%;
+    width: 100%;
+    text-align: center;
+    /*background-color: #339933;*/
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    line-height: 50px;
+    background-image: url(images/menu-fondo.jpg);
+    background-repeat: repeat;
+    background-position: right;
+    border-radius: 8px 8px 0 0;
+}
+#header img {
+    float: right;
+}
+
+#menu{
+    white-space: nowrap;
+    display: block;
+    height: 85%;
+    width: 15%;
+    float: left;
+    /*background-color: #99cc99;*/
+    text-align: left;
+    overflow: scroll;
+    font-size: 15px;
+    /*padding-top: 20px;*/
+    font-weight: bold;
+    text-indent:20px;
+    background: url("images/lateral-linea.png") no-repeat scroll right top transparent;
+
+}
+#menu ul{
+    /*width: 500px;*/
+    float: left;
+    margin-left: -40px;
+}
+#menu ul li a{
+    color: black;
+    /*background-color: #66cc66;*/
+    /*background: url("images/fondoTableThead.jpg");*/
+    /*width: 500px;*/
+    height: 24px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    line-height: 23px;
+    font-size: 12px;
+    font-weight: bold;
+    text-indent:10px;
+    /*border: solid 1px #99cc99;*/
+    overflow-x: visible;
+    margin: 0 8px;
+
+}
+#menu ul li a:hover{
+    /*color: #fff;*/
+    /*background-color: */
+    /*border: .01px outset green;*/
+    border-radius: 4px 4px 4px 4px;
+    background-color: #36c136;;
+    margin: 0 8px;
+    color: white;
+}
+#contenido{
+    float: left;
+    height: 85%;
+    width: 85%;
+    background-color: #fff;
+    overflow: scroll;
+    overflow-x: hidden;
+    text-align:left;
+}
+#ruta{
+    width: 100%;
+    height: auto;
+    float: left;
+    background-color: #fff;
+    padding-left: 1%;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    /*font-style: italic;*/
+    color: #29abe2;
+    font-weight: bold;
+}
+#ruta a{
+    color: #29abe2;
+    font-weight: bold;
+    text-decoration: none;
+    padding-left: 3px;
+}
+#ruta label{
+    color: grey;
+}
+
+#imprimir {
+    width:auto;
+    height: auto;
+    background: url(images/ico_imprimir.png) no-repeat;
+    padding-right: 2%;
+    text-decoration: none;
+    text-indent: 26px;
+    float: right;
+    padding-top: 3px;
+    display: block;
+    color: #808080;
+    margin-right: 5px;
+    background-color: #fff;
+}
+#diagrama{
+    height: auto;
+    width: 100%;
+    float: left; 
+    background-color: #fff;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+}
+#diagrama img{
+    width: 500px;
+    height: 250px;
+    text-align: center;
+}
+#texto{
+    height: auto;
+    width: 98%;
+    float: left;
+    background-color: #fff;
+    text-align: left;
+    padding-top: 20px;
+    padding-left: 1%;
+    font-size: 12px;
+    padding-bottom: 20px;
+    padding-right: 1%;
+}
+#pdf {
+    width:auto;
+    height: auto;
+    background: url(images/pdf.png) no-repeat;
+    padding-right: 2%;
+    text-decoration: none;
+    text-indent: 26px;
+    float: right;
+    padding-top: 3px;
+    display: block;
+    color: #808080;
+    margin-right: 5px;
+    background-color: #fff;
+}
+#html{
+    width:auto;
+    height: auto;
+    background: url(images/html.png) no-repeat;
+    padding-right: 2%;
+    text-decoration: none;
+    text-indent: 26px;
+    float: right;
+    padding-top: 3px;
+    display: block;
+    color: #808080;
+    margin-right: 5px;
+    background-color: #fff;
+}
+
+/*BANDEJA ENTRADA*/
+.bandeja-combo { margin-bottom:15px; background:url(images/fondoOrdena.jpg) #f1f1f1 repeat-x; padding:5px; border:solid 1px #CCC; border-radius:5px; -ms-border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; -khtml-border-radius:5px;}
+.bandeja-combo select { border:1px solid #CCC; }
+.bandeja-combo option { border:none;}
+.bandeja-combo ul { margin:0px !important; padding:0px;}
+.bandeja-combo li { display:inline; padding:5px 10px; margin:0px !important; background:url(images/ordena-div.png) right no-repeat;  }
+.lateral {
+    background: url("images/lateral-linea.png") no-repeat scroll right top transparent;
+    border-right: 0 solid #999999;
+    float: left;
+    padding: 0;
+    width: 190px;
+}
+.activity{
+    border: 1px outset green;
+    border-radius: 5px 5px 5px 5px;
+    color: #FFFFFF;
+    display: block;
+    margin: 0 8px;
+    padding: 5px;
+    text-align: left;
+    width: 140px;
+    font-weight: bold;
+    background: green;
+}
