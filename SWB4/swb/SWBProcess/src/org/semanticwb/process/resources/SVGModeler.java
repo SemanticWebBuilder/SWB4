@@ -175,22 +175,22 @@ public class SVGModeler extends GenericAdmResource {
                     if (pJson != null) {
                         json = pJson.toString();
                     } else {
-                        json = ERRORSTRING.replace("_JSONERROR_", "No se ha podido obtener el JSON del modelo");
+                        json = ERRORSTRING.replace("_JSONERROR_", paramRequest.getLocaleString("msgJSONPError"));
                     }
                     outs.write(json.getBytes("UTF-8"));
                 } else {
                     log.error("Error to create JSON: Process not found");
-                    outs.write(ERRORSTRING.replace("_JSONERROR_", "No se ha podido obtener el proceso especificado").getBytes("UTF-8"));
+                    outs.write(ERRORSTRING.replace("_JSONERROR_", paramRequest.getLocaleString("msgNoProcess")).getBytes("UTF-8"));
                 }
             } catch (Exception e) {
                 log.error("Error to create JSON...", e);
-                outs.write(ERRORSTRING.replace("_JSONERROR_", "No se ha podido obtener el JSON del modelo").getBytes("UTF-8"));
+                outs.write(ERRORSTRING.replace("_JSONERROR_", paramRequest.getLocaleString("msgJSONPError")).getBytes("UTF-8"));
             }
         } else if (ACT_LOADFILE.equals(action)) { //Carga de modelo desde archivo swp
             response.setContentType("text/html");
             String json = processFile(request);
             if (json == null) {
-                json =  ERRORSTRING.replace("_JSONERROR_", "No se ha podido cargar el JSON del modelo");
+                json =  ERRORSTRING.replace("_JSONERROR_", paramRequest.getLocaleString("msgJSONPError"));
             }
             outs.write(json.getBytes("UTF-8"));
         } else if (ACT_STOREPROCESS.equals(action)) { //Persistir modelo del proceso
@@ -239,7 +239,7 @@ public class SVGModeler extends GenericAdmResource {
                 }
             } else {
                 log.error("Error to create JSON: Process not found");
-                outs.write(ERRORSTRING.replace("_JSONERROR_", "No se ha podido obtener el modelo especificado").getBytes());
+                outs.write(ERRORSTRING.replace("_JSONERROR_", paramRequest.getLocaleString("msgNoProcess")).getBytes());
             }
         }
     }
@@ -957,7 +957,7 @@ public class SVGModeler extends GenericAdmResource {
                 if (pJson != null) {
                     json = pJson.toString();
                 } else {
-                    json = ERRORSTRING.replace("_JSONERROR_", "No se ha podido obtener el JSON del modelo");
+                    json = ERRORSTRING.replace("_JSONERROR_", paramRequest.getLocaleString("msgJSONPError"));
                 }
             } else {
                 if (data != null && data.length() > 0) {
