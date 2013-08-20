@@ -48,11 +48,11 @@ import org.semanticwb.process.model.SubProcess;
  * @author Hasdai Pacheco <ebenezer.sanchez@infotec.com.mx>
  */
 public class DocumentationResource extends GenericAdmResource {
-    
+
     public static String MOD_UPDATETEXT = "updateText";
     public static String PARAM_TEXT = "txt";
     private static Logger log = SWBUtils.getLogger(DocumentationResource.class);
-    
+
     void doUpdate(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String suri = request.getParameter("suri");
         String idDocumentation = request.getParameter("idDocumentation");
@@ -75,7 +75,7 @@ public class DocumentationResource extends GenericAdmResource {
         }
         doView(request, response, paramRequest);
     }
-    
+
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String suri = request.getParameter("suri");
@@ -86,13 +86,13 @@ public class DocumentationResource extends GenericAdmResource {
                 //TODO: Desplegar editor
                 SWBResourceURL url = paramRequest.getRenderUrl();
                 url.setMode("documentation");
-                url.setCallMethod(SWBResourceURL.Call_DIRECT);
+                url.setCallMethod(SWBResourceURL.Call_DIRECT);                
                 url.setParameter("suri", request.getParameter("suri"));
                 out.println("<iframe dojoType_=\"dijit.layout.ContentPane\" src=\"" + url + "\" style=\"width:100%; height:100%;\" frameborder=\"0\"></iframe>");
             }
         }
     }
-    
+
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
@@ -112,7 +112,7 @@ public class DocumentationResource extends GenericAdmResource {
             log.error("Error on processRequest: , " + ex.getMessage());
         }
     }
-    
+
     public void doProcessDocumentation(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String path = "/swbadmin/jsp/process/documentation/DocumentationResource.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(path);
@@ -130,6 +130,8 @@ public class DocumentationResource extends GenericAdmResource {
                     //Si no existe documentación, crearla
                     doc = Documentation.ClassMgr.createDocumentation(paramRequest.getWebPage().getWebSite());
                     //Agregar la documentación al elemento
+                    doc.setTextFormat("text/html");
+                    doc.setText("<p>" + paramRequest.getLocaleString("hereDoc") + "</p>");
                     pe.addDocumentation(doc);
                 }
                 request.setAttribute("idDocumentation", doc.getId());
@@ -137,13 +139,18 @@ public class DocumentationResource extends GenericAdmResource {
             rd.include(request, response);
         } catch (Exception ex) {
             log.error("Error doProcessDocumentation.jsp, " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
-    
+
     void doExportDocument(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, ServletException, DocumentException, Exception {
         response.setContentType("text/html; charset=UTF-8");
         String suri = request.getParameter("suri") != null ? request.getParameter("suri").toString() : "";
         String format = request.getParameter("format") != null ? request.getParameter("format").toString() : "";
+        String laneT = paramRequest.getLocaleString("lane") != null ? paramRequest.getLocaleString("lane") : "Lane";
+        String activityT = paramRequest.getLocaleString("activity") != null ? paramRequest.getLocaleString("activity") : "Activity";
+        String gatewayT = paramRequest.getLocaleString("gateway") != null ? paramRequest.getLocaleString("gateway") : "Gateway";
+        String eventT = paramRequest.getLocaleString("event") != null ? paramRequest.getLocaleString("event") : "Event";
         if (!format.equals("") && !suri.equals("")) {
             ProcessElement pe = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
             if (pe != null) {
@@ -185,7 +192,7 @@ public class DocumentationResource extends GenericAdmResource {
                         doc.addCreator(paramRequest.getUser().getFullName());
                         doc.addCreationDate();
                         doc.addTitle(process.getTitle());
-                        
+
                         Image header = Image.getInstance(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/documentation/styles/css/images/logoprocess.png");
                         if (header != null) {
                             header.setAlignment(Chunk.ALIGN_LEFT);
@@ -197,16 +204,16 @@ public class DocumentationResource extends GenericAdmResource {
                         hw.parse(new StringReader(process.getDocumentation().getText()));
                         //Lane
                         iterator = SWBComparator.sortByDisplayName(lane.iterator(), paramRequest.getUser().getLanguage());
-                        hw.parse(new StringReader("<br><h1>Lane</h1>"));
+                        hw.parse(new StringReader("<br><h1>" + laneT + "</h1>"));
                         while (iterator.hasNext()) {
                             ge = iterator.next();
                             hw.parse(new StringReader("<br><h3>" + ge.getTitle() + "</h3>"));
                             hw.parse(new StringReader(ge.getDocumentation().getText()));
-                            
+
                         }
                         //Activity
                         iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
-                        hw.parse(new StringReader("<br><h1>Activity</h1>"));
+                        hw.parse(new StringReader("<br><h1>" + activityT + "</h1>"));
                         while (iterator.hasNext()) {
                             ge = iterator.next();
                             hw.parse(new StringReader("<br><h3>" + ge.getTitle() + "</h3>"));
@@ -214,7 +221,7 @@ public class DocumentationResource extends GenericAdmResource {
                         }
                         //Gateway
                         iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
-                        hw.parse(new StringReader("<br><h1>Gateway</h1>"));
+                        hw.parse(new StringReader("<br><h1>" + gatewayT + "</h1>"));
                         while (iterator.hasNext()) {
                             ge = iterator.next();
                             hw.parse(new StringReader("<br><h3>" + ge.getTitle() + "</h3>"));
@@ -222,7 +229,7 @@ public class DocumentationResource extends GenericAdmResource {
                         }
                         //Event
                         iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
-                        hw.parse(new StringReader("<br><h1>Event</h1>"));
+                        hw.parse(new StringReader("<br><h1>" + eventT + "</h1>"));
                         while (iterator.hasNext()) {
                             ge = iterator.next();
                             hw.parse(new StringReader("<br><h3>" + ge.getTitle() + "</h3>"));
@@ -267,12 +274,12 @@ public class DocumentationResource extends GenericAdmResource {
                         html += "<link href=\"css/process.css\" rel=\"stylesheet\" type=\"text/css\"/>";
                         html += "<div id=\"contenedor\">"; //Begin contenedor
                         html += "<div id=\"header\" title=\"" + pe.getTitle() + "\">" + pe.getTitle() + "<img src=\"css/images/logoprocess.png\"></div>";
-                        
+
                         html += "<div id=\"menu\">";//Begin menú
                         html += "<ul>";
-                        html += "<li><a href=\"#ruta\" title=\"Inicio\">Inicio</a></li>";
+                        html += "<li><a href=\"#ruta\" title=\"" + paramRequest.getLocaleString("home") + "\">" + paramRequest.getLocaleString("home") + "</a></li>";
                         if (lane.size() > 0) {
-                            html += "<li class=\"activity\" title=\"Lane\">Lane</li>";
+                            html += "<li class=\"activity\" title=\"" + laneT + "\">" + laneT + "</li>";
                         }
                         String ref = "";
                         iterator = SWBComparator.sortByDisplayName(lane.iterator(), paramRequest.getUser().getLanguage());
@@ -285,7 +292,7 @@ public class DocumentationResource extends GenericAdmResource {
                             html += "<li><a href=\"" + ref + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</a></li>";
                         }
                         if (activity.size() > 0) {
-                            html += "<li class=\"activity\" title=\"Activity\">Activity</li>";
+                            html += "<li class=\"activity\" title=\"" + activityT + "\">" + activityT + "</li>";
                         }
                         iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
                         while (iterator.hasNext()) {
@@ -297,7 +304,7 @@ public class DocumentationResource extends GenericAdmResource {
                             html += "<li><a href=\"" + ref + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</a></li>";
                         }
                         if (gateway.size() > 0) {
-                            html += "<li class=\"activity\" title=\"Gateway\">Gateway</li>";
+                            html += "<li class=\"activity\" title=\"" + gatewayT + "\">" + gatewayT + "</li>";
                         }
                         iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
                         while (iterator.hasNext()) {
@@ -309,7 +316,7 @@ public class DocumentationResource extends GenericAdmResource {
                             html += "<li><a href=\"" + ref + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</a></li>";
                         }
                         if (event.size() > 0) {
-                            html += "<li class=\"activity\" title=\"Event\">Event</li>";
+                            html += "<li class=\"activity\" title=\"" + eventT + "\">" + eventT + "</li>";
                         }
                         iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
                         while (iterator.hasNext()) {
@@ -324,7 +331,7 @@ public class DocumentationResource extends GenericAdmResource {
                         html += "</div>";//End menú
                         html += "<div id=\"contenido\">";//Begin contenido
                         html += "<div id=\"ruta\">";//Begin ruta
-                        html += "<label>Estás en:</label>";
+                        html += "<label>" + paramRequest.getLocaleString("theseIn") + ":</label>";
                         html += "<a title=\"" + pe.getTitle() + "\" style=\"cursor: pointer;\" href=\"#\">" + pe.getTitle() + "</a>";
                         html += "</div>";//End ruta
                         String data = process.getData() != null ? process.getData() : "No se ha generado imagen";
@@ -332,7 +339,7 @@ public class DocumentationResource extends GenericAdmResource {
                         html += "<div id=\"texto\">";//Begin texto
                         html += pe.getDocumentation().getText();
                         if (lane.size() > 0) {
-                            html += "<div class=\"bandeja-combo\" title=\"Lane\"><strong>Lane</strong></div>";//Contains Lane
+                            html += "<div class=\"bandeja-combo\" title=\"" + laneT + "\"><strong>" + laneT + "</strong></div>";//Contains Lane
                         }
                         iterator = SWBComparator.sortByDisplayName(lane.iterator(), paramRequest.getUser().getLanguage());
                         while (iterator.hasNext()) {
@@ -341,7 +348,7 @@ public class DocumentationResource extends GenericAdmResource {
                             html += ge.getDocumentation().getText();
                         }
                         if (activity.size() > 0) {
-                            html += "<div class=\"bandeja-combo\" title=\"Activity\"><strong>Activity</strong></div>";//Contains Activity
+                            html += "<div class=\"bandeja-combo\" title=\"" + activityT + "\"><strong>" + activityT + "</strong></div>";//Contains Activity
                         }
                         iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
                         while (iterator.hasNext()) {
@@ -350,7 +357,7 @@ public class DocumentationResource extends GenericAdmResource {
                             html += ge.getDocumentation().getText();
                         }
                         if (gateway.size() > 0) {
-                            html += "<div class=\"bandeja-combo\" title=\"Gateway\"><strong>Gateway</strong></div>";//Contains Gateway
+                            html += "<div class=\"bandeja-combo\" title=\"" + gatewayT + "\"><strong>" + gatewayT + "</strong></div>";//Contains Gateway
                         }
                         iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
                         while (iterator.hasNext()) {
@@ -359,7 +366,7 @@ public class DocumentationResource extends GenericAdmResource {
                             html += ge.getDocumentation().getText();
                         }
                         if (event.size() > 0) {
-                            html += "<div class=\"bandeja-combo\" title=\"Event\"><strong>Event</strong></div>";//Contains Event
+                            html += "<div class=\"bandeja-combo\" title=\"" + eventT + "\"><strong>" + eventT + "</strong></div>";//Contains Event
                         }
                         iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
                         while (iterator.hasNext()) {
@@ -387,14 +394,17 @@ public class DocumentationResource extends GenericAdmResource {
             }
         }
     }
-    
-    public static void createHtmlSubProcess(org.semanticwb.process.model.Process process, SubProcess subProcess, SWBParamRequest paramRequest, String basePath) throws FileNotFoundException, IOException {
+
+    public static void createHtmlSubProcess(org.semanticwb.process.model.Process process, SubProcess subProcess, SWBParamRequest paramRequest, String basePath) throws FileNotFoundException, IOException, SWBResourceException {
         ArrayList activity = new ArrayList();
         ArrayList gateway = new ArrayList();
         ArrayList event = new ArrayList();
         Iterator<GraphicalElement> iterator = subProcess.listContaineds();
         GraphicalElement ge = null;
         Containerable con = null;
+        String activityT = paramRequest.getLocaleString("activity") != null ? paramRequest.getLocaleString("activity") : "Activity";
+        String gatewayT = paramRequest.getLocaleString("gateway") != null ? paramRequest.getLocaleString("gateway") : "Gateway";
+        String eventT = paramRequest.getLocaleString("event") != null ? paramRequest.getLocaleString("event") : "Event";
         String path = "";
         while (iterator.hasNext()) {
             ge = iterator.next();
@@ -414,10 +424,10 @@ public class DocumentationResource extends GenericAdmResource {
         html += "<div id=\"header\" title=\"" + subProcess.getTitle() + "\">" + subProcess.getTitle() + "<img src=\"css/images/logoprocess.png\"></div>";
         html += "<div id=\"menu\">";//Begin menú
         html += "<ul>";
-        html += "<li><a href=\"#ruta\" title=\"Inicio\">Inicio</a></li>";
+        html += "<li><a href=\"#ruta\" title=\"" + paramRequest.getLocaleString("home") + "\">" + paramRequest.getLocaleString("home") + "</a></li>";
         String ref = "";
         if (activity.size() > 0) {
-            html += "<li class=\"activity\" title=\"Activity\">Activity</li>";
+            html += "<li class=\"activity\" title=\"" + activityT + "\">" + activityT + "</li>";
         }
         iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
         while (iterator.hasNext()) {
@@ -429,7 +439,7 @@ public class DocumentationResource extends GenericAdmResource {
             html += "<li><a href=\"" + ref + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</a></li>";
         }
         if (gateway.size() > 0) {
-            html += "<li class=\"activity\" title=\"Gateway\">Gateway</li>";
+            html += "<li class=\"activity\" title=\"" + gatewayT + "\">" + gatewayT + "</li>";
         }
         iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
         while (iterator.hasNext()) {
@@ -441,7 +451,7 @@ public class DocumentationResource extends GenericAdmResource {
             html += "<li><a href=\"" + ref + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</a></li>";
         }
         if (event.size() > 0) {
-            html += "<li class=\"activity\" title=\"Event\">Event</li>";
+            html += "<li class=\"activity\" title=\"" + eventT + "\">" + eventT + "</li>";
         }
         iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
         while (iterator.hasNext()) {
@@ -456,7 +466,7 @@ public class DocumentationResource extends GenericAdmResource {
         html += "</div>";//End menú
         html += "<div id=\"contenido\">";//Begin contenido
         html += "<div id=\"ruta\">";//Begin ruta
-        html += "<label>Estás en:</label>";
+        html += "<label>" + paramRequest.getLocaleString("theseIn") + ":</label>";
         con = subProcess.getContainer();
         while (con != null) {
             path = ((ProcessElement) con).getURI() + "|" + path;
@@ -482,12 +492,12 @@ public class DocumentationResource extends GenericAdmResource {
         }
         html += "<a title=\"" + subProcess.getTitle() + "\" style=\"cursor: pointer;\" href=\"#\">" + subProcess.getTitle() + "</a>";
         html += "</div>";//End ruta
-        String data = subProcess.getData() != null ? subProcess.getData() : "No se ha generado imagen";
+        String data = subProcess.getData() != null ? subProcess.getData() : paramRequest.getLocaleString("noImage");
         html += "<div>" + data + "</div>";
         html += "<div id=\"texto\">";//Begin texto
         html += subProcess.getDocumentation().getText();
         if (activity.size() > 0) {
-            html += "<div class=\"bandeja-combo\" title=\"Activity\"><strong>Activity</strong></div>";//Contains Activity
+            html += "<div class=\"bandeja-combo\" title=\"" + activityT + "\"><strong>" + activityT + "</strong></div>";//Contains Activity
         }
         iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
         while (iterator.hasNext()) {
@@ -496,7 +506,7 @@ public class DocumentationResource extends GenericAdmResource {
             html += ge.getDocumentation().getText();
         }
         if (gateway.size() > 0) {
-            html += "<div class=\"bandeja-combo\" title=\"Gateway\"><strong>Gateway</strong></div>";//Contains Gateway
+            html += "<div class=\"bandeja-combo\" title=\"" + gatewayT + "\"><strong>" + gatewayT + "</strong></div>";//Contains Gateway
         }
         iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
         while (iterator.hasNext()) {
@@ -505,7 +515,7 @@ public class DocumentationResource extends GenericAdmResource {
             html += ge.getDocumentation().getText();
         }
         if (event.size() > 0) {
-            html += "<div class=\"bandeja-combo\" title=\"Event\"><strong>Event</strong></div>";//Contains Event
+            html += "<div class=\"bandeja-combo\" title=\"" + eventT + "\"><strong>" + eventT + "</strong></div>";//Contains Event
         }
         iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
         while (iterator.hasNext()) {
@@ -521,7 +531,7 @@ public class DocumentationResource extends GenericAdmResource {
         out.flush();
         out.close();
     }
-    
+
     public static void deleteDerectory(File dir) {
         File[] files = dir.listFiles();
         for (int i = 0; i < files.length; i++) {
@@ -535,7 +545,7 @@ public class DocumentationResource extends GenericAdmResource {
         }
         dir.delete();
     }
-    
+
     void doViewDocumentation(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, ServletException {
         String path = "/swbadmin/jsp/process/documentation/ViewDocumentation.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(path);
