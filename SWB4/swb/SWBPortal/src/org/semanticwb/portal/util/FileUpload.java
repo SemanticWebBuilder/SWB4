@@ -525,6 +525,38 @@ public class FileUpload
         return null;
     }
 
+        /**
+     * Gets the value.
+     * 
+     * @param s the s
+     * @return the value
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public String getValues(String s)
+            throws IOException
+    {
+            String params9 = s; 
+            String valTmp = null;
+            CParameter cparam = null;
+            for (int x = 0; x < parametros.size(); x++)
+            {
+                cparam = (CParameter) parametros.elementAt(x);
+                String valparam = cparam.Valor;
+                if (cparam.parametro.trim().equals(params9)){
+                    if(valparam!=null&&valparam.trim().length()>0&&!valparam.equals("null")){
+                        if(valTmp==null){
+                            valTmp = valparam;
+                        } else {
+                            valTmp = valTmp+","+valparam;
+                        }
+                    }
+                }
+            }
+        
+        return valTmp;
+    }
+    
+    
     /**
      * Parses the multi.
      * 
@@ -609,30 +641,10 @@ public class FileUpload
             if (k == -1)
                 return hashtable;
             s3 = new String(abyte0, 0, 0, k);
-            CParameter cparameter = null;
-            String paramValue = null;
-            /////////////////////////////////////////////////////////////////////////////////////////
-            for (int x = 0; x < parametros.size(); x++)
-            {
-                cparameter = (CParameter) parametros.elementAt(x);
-                if (cparameter.parametro.trim().equals(s9.trim())){
-                    paramValue =  cparameter.Valor.trim();
-                    break;
-                }
-            }
-
-            if(paramValue==null){
-                cparameter = new CParameter();
-                cparameter.parametro = s9.trim();
-                cparameter.Valor = s3;
-                System.out.println(s9.trim()+" = "+s3);
-            } else {
-                paramValue = paramValue +","+s3;
-                cparameter.Valor = paramValue;
-                System.out.println(s9.trim()+" = "+paramValue);
-            }
             
-            ///////////////////////////////////////////////////////////////////////////////////////////
+            CParameter cparameter = new CParameter();
+            cparameter.parametro = s9.trim();
+            cparameter.Valor = s3;
             
             if (!s3.startsWith(s1))
             {
