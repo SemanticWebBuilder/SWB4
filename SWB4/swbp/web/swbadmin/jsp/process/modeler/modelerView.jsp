@@ -51,49 +51,49 @@ if (!isViewMode) {
                 <span class="toolbarHeader"></span>
             </div>
             <div class="toolbarItem">
-                <span title="Archivo" class="fileItem" onclick="ToolBar.showSubBar('fileBar',this)"></span>
+                <span title="<%=paramRequest.getLocaleString("itemFile")%>" class="fileItem" onclick="ToolBar.showSubBar('fileBar',this)"></span>
             </div>
             <div class="toolbarItem">
-                <span title="Eventos de inicio" class="startEventItem" onclick="ToolBar.showSubBar('startEventsBar', this)"></span>
+                <span title="<%=paramRequest.getLocaleString("itemStartEvents")%>" class="startEventItem" onclick="ToolBar.showSubBar('startEventsBar', this)"></span>
             </div>
             <div class="toolbarItem">
-                <span title="Eventos intermedios" class="intereventItem" onclick="ToolBar.showSubBar('interEventsBar', this)"></span>
+                <span title="<%=paramRequest.getLocaleString("itemInterEvents")%>" class="intereventItem" onclick="ToolBar.showSubBar('interEventsBar', this)"></span>
             </div>
             <div class="toolbarItem">
-                <span title="Eventos finales" class="endeventItem" onclick="ToolBar.showSubBar('endEventsBar', this)"></span>
-            </div>
-            <div class="toolbarItem">
-                <span class="toolbarSeparator"></span>
-            </div>
-            <div class="toolbarItem">
-                <span title="Tareas" class="taskItem" onclick="ToolBar.showSubBar('tasksBar', this)"></span>
-            </div>
-            <div class="toolbarItem">
-                <span title="Subprocesos" class="subtaskItem" onclick="ToolBar.showSubBar('subtasksBar', this)"></span>
-            </div>
-            <div class="toolbarItem">
-                <span title="Tareas llamadas" class="taskcallItem" onclick="ToolBar.showSubBar('calltasksBar', this)"></span>
-            </div>
-            <div class="toolbarItem">
-                <span title="Compuertas" class="gatewayItem" onclick="ToolBar.showSubBar('gatewaysBar', this)"></span>
+                <span title="<%=paramRequest.getLocaleString("itemEndEvents")%>" class="endeventItem" onclick="ToolBar.showSubBar('endEventsBar', this)"></span>
             </div>
             <div class="toolbarItem">
                 <span class="toolbarSeparator"></span>
             </div>
             <div class="toolbarItem">
-                <span title="Objetos de conexión" class="flowItem" onclick="ToolBar.showSubBar('connectionsBar', this)"></span>
+                <span title="<%=paramRequest.getLocaleString("itemTasks")%>" class="taskItem" onclick="ToolBar.showSubBar('tasksBar', this)"></span>
             </div>
             <div class="toolbarItem">
-                <span title="Artefactos" class="artifactItem" onclick="ToolBar.showSubBar('artifactsBar', this)"></span>
+                <span title="<%=paramRequest.getLocaleString("itemSubprocesses")%>" class="subtaskItem" onclick="ToolBar.showSubBar('subtasksBar', this)"></span>
             </div>
             <div class="toolbarItem">
-                <span title="Objetos de datos" class="dataobjectItem" onclick="ToolBar.showSubBar('dataobjectsBar', this)"></span>
+                <span title="<%=paramRequest.getLocaleString("itemCallTasks")%>" class="taskcallItem" onclick="ToolBar.showSubBar('calltasksBar', this)"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="<%=paramRequest.getLocaleString("itemGateways")%>" class="gatewayItem" onclick="ToolBar.showSubBar('gatewaysBar', this)"></span>
             </div>
             <div class="toolbarItem">
                 <span class="toolbarSeparator"></span>
             </div>
             <div class="toolbarItem">
-                <span title="Swimlanes" class="poolItem" onclick="ToolBar.showSubBar('swimlanesBar', this)"></span>
+                <span title="<%=paramRequest.getLocaleString("itemConnObjects")%>" class="flowItem" onclick="ToolBar.showSubBar('connectionsBar', this)"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="<%=paramRequest.getLocaleString("itemArtifacts")%>" class="artifactItem" onclick="ToolBar.showSubBar('artifactsBar', this)"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="<%=paramRequest.getLocaleString("itemDataObjects")%>" class="dataobjectItem" onclick="ToolBar.showSubBar('dataobjectsBar', this)"></span>
+            </div>
+            <div class="toolbarItem">
+                <span class="toolbarSeparator"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="<%=paramRequest.getLocaleString("itemSwimlanes")%>" class="poolItem" onclick="ToolBar.showSubBar('swimlanesBar', this)"></span>
             </div>
             <div class="toolbarItem">
                 <span class="toolbarFooter"></span>
@@ -101,136 +101,136 @@ if (!isViewMode) {
 
             <div id="fileBar" class="subbarHidden" style="width: 385px;">
                 <span class="subbarStart"></span>
-                <span class="newProcess" title="Nuevo modelo" onclick="if (confirm('Se perderán todos los cambios no guardados. ¿Desea continuar?')){Modeler.clearCanvas();}"></span>
-                <span class="openProcess" title="Abrir modelo existente" onclick="showLoadDialog();"></span>
+                <span class="newProcess" title="<%=paramRequest.getLocaleString("itemNew")%>" onclick="if (confirm('<%=paramRequest.getLocaleString("msgClearCanvas")%>')){Modeler.clearCanvas();}"></span>
+                <span class="openProcess" title="<%=paramRequest.getLocaleString("itemOpen")%>" onclick="showLoadDialog();"></span>
                 <%if (SWBContext.getAdminWebSite().equals(paramRequest.getWebPage().getWebSite())) {
                     %>
-                    <span class="storeProcess" title="Enviar modelo" onclick="storeProcess();"></span>
+                    <span class="storeProcess" title="<%=paramRequest.getLocaleString("itemSend")%>" onclick="storeProcess();"></span>
                     <%
                 }
                 %>
-                <span class="saveProcess" title="Guardar modelo" onclick="submit_download_form('swp')"></span>
-                <span class="saveAsImage" title="Guardar como imagen" onclick="submit_download_form('svg')"></span>
+                <span class="saveProcess" title="<%=paramRequest.getLocaleString("itemSave")%>" onclick="submit_download_form('swp')"></span>
+                <span class="saveAsImage" title="<%=paramRequest.getLocaleString("itemSaveImage")%>" onclick="submit_download_form('svg')"></span>
                 <!--span class="saveAsImage" title="Guardar como imagen" onclick="submit_download_form('png')"></span-->
                 <span class="subbarEnd"></span>
             </div>
             <div id="startEventsBar" class="subbarHidden" style="width: 385px;">
                 <span class="subbarStart"></span>
-                <span class="normalStartEvent" cId ="StartEvent" title="Inicio normal" onclick="Modeler.creationStart(this)"></span>
-                <span class="messageStartEvent" cId ="MessageStartEvent" title="Inicio por mensaje" onclick="Modeler.creationStart(this)"></span>
-                <span class="timerStartEvent" cId ="TimerStartEvent" title="Inicio temporizado"  onclick="Modeler.creationStart(this)"></span>
-                <span class="ruleStartEvent" cId ="RuleStartEvent" title="Inicio por regla de negocio" onclick="Modeler.creationStart(this)"></span>
-                <span class="signalStartEvent" cId ="SignalStartEvent" title="Inicio por señal" onclick="Modeler.creationStart(this)"></span>
-                <span class="multiStartEvent" cId ="MultipleStartEvent" title="Inicio por eventos múltiples" onclick="Modeler.creationStart(this)"></span>
-                <span class="parallelStartEvent" cId ="ParallelStartEvent" title="Inicio paralelo" onclick="Modeler.creationStart(this)"></span>
-                <span class="scalaStartEvent" cId ="ScalationStartEvent" title="Inicio por escalamiento" onclick="Modeler.creationStart(this)"></span>
-                <span class="errorStartEvent" cId ="ErrorStartEvent" title="Inicio por error" onclick="Modeler.creationStart(this)"></span>
-                <span class="compensaStartEvent" cId ="CompensationStartEvent" title="Inicio por compensación"  onclick="Modeler.creationStart(this)"></span>
+                <span class="normalStartEvent" cId ="StartEvent" title="<%=paramRequest.getLocaleString("itemStartNormal")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="messageStartEvent" cId ="MessageStartEvent" title="<%=paramRequest.getLocaleString("itemStartMsg")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="timerStartEvent" cId ="TimerStartEvent" title="<%=paramRequest.getLocaleString("itemStartTimer")%>"  onclick="Modeler.creationStart(this)"></span>
+                <span class="ruleStartEvent" cId ="RuleStartEvent" title="<%=paramRequest.getLocaleString("itemStartRule")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="signalStartEvent" cId ="SignalStartEvent" title="<%=paramRequest.getLocaleString("itemStartSignal")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="multiStartEvent" cId ="MultipleStartEvent" title="<%=paramRequest.getLocaleString("itemStartMultiple")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="parallelStartEvent" cId ="ParallelStartEvent" title="<%=paramRequest.getLocaleString("itemStartParallel")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="scalaStartEvent" cId ="ScalationStartEvent" title="<%=paramRequest.getLocaleString("itemStartScala")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="errorStartEvent" cId ="ErrorStartEvent" title="<%=paramRequest.getLocaleString("itemStartError")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="compensaStartEvent" cId ="CompensationStartEvent" title="<%=paramRequest.getLocaleString("itemStartCompensa")%>"  onclick="Modeler.creationStart(this)"></span>
                 <span class="subbarEnd"></span>
             </div>
             <div id="interEventsBar" class="subbarHidden" style="width: 645px;">
                 <span class="subbarStart"></span>
-                <span class="messageInterCatchEvent" cId ="MessageIntermediateCatchEvent" title="Recepción de mensaje" onclick="Modeler.creationStart(this)"></span>
-                <span class="messageInterThrowEvent" cId ="MessageIntermediateThrowEvent" title="Disparo de mensaje" onclick="Modeler.creationStart(this)"></span>
-                <span class="timerInterEvent" cId ="TimerIntermediateCatchEvent" title="Temporizador" onclick="Modeler.creationStart(this)"></span>
-                <span class="errorInterEvent" cId ="ErrorIntermediateCatchEvent" title="Error" onclick="Modeler.creationStart(this)"></span>
-                <span class="cancelInterEvent" cId ="CancelationIntermediateCatchEvent" title="Cancelación" onclick="Modeler.creationStart(this)"></span>
-                <span class="compensaInterCatchEvent" cId ="CompensationIntermediateCatchEvent" title="Recepción de compensación" onclick="Modeler.creationStart(this)"></span>
-                <span class="compensaInterThrowEvent" cId ="CompensationIntermediateThrowEvent" title="Disparo de compensación" onclick="Modeler.creationStart(this)"></span>
-                <span class="ruleInterEvent" cId ="RuleIntermediateCatchEvent" title="Regla de negocio" onclick="Modeler.creationStart(this)"></span>
-                <span class="linkInterCatchEvent" cId ="LinkIntermediateCatchEvent" title="Continuación de enlace" onclick="Modeler.creationStart(this)"></span>
-                <span class="linkInterThrowEvent" cId ="LinkIntermediateThrowEvent" title="Inicio de enlace" onclick="Modeler.creationStart(this)"></span>
-                <span class="signalInterCatchEvent" cId ="SignalIntermediateCatchEvent" title="Recepción de señal" onclick="Modeler.creationStart(this)"></span>
-                <span class="signalInterThrowEvent" cId ="SignalIntermediateThrowEvent" title="Disparo de señal" onclick="Modeler.creationStart(this)"></span>
-                <span class="multipleInterCatchEvent" cId ="MultipleIntermediateCatchEvent" title="Recepción múltiple" onclick="Modeler.creationStart(this)"></span>
-                <span class="multipleInterThrowEvent" cId ="MultipleIntermediateThrowEvent" title="Disparo múltiple" onclick="Modeler.creationStart(this)"></span>
-                <span class="scalaInterCatchEvent" cId ="ScalationIntermediateCatchEvent" title="Recepción de escalamiento" onclick="Modeler.creationStart(this)"></span>
-                <span class="scalaInterThrowEvent" cId ="ScalationIntermediateThrowEvent" title="Disparo de escalamiento" onclick="Modeler.creationStart(this)"></span>
-                <span class="parallelInterEvent" cId ="ParallelIntermediateCatchEvent" title="Paralelo" onclick="Modeler.creationStart(this)"></span>
+                <span class="messageInterCatchEvent" cId ="MessageIntermediateCatchEvent" title="<%=paramRequest.getLocaleString("itemInterCatchMsg")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="messageInterThrowEvent" cId ="MessageIntermediateThrowEvent" title="<%=paramRequest.getLocaleString("itemInterThrowMsg")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="timerInterEvent" cId ="TimerIntermediateCatchEvent" title="<%=paramRequest.getLocaleString("itemInterCatchTimer")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="errorInterEvent" cId ="ErrorIntermediateCatchEvent" title="<%=paramRequest.getLocaleString("itemInterCatchError")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="cancelInterEvent" cId ="CancelationIntermediateCatchEvent" title="<%=paramRequest.getLocaleString("itemInterCatchCancel")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="compensaInterCatchEvent" cId ="CompensationIntermediateCatchEvent" title="<%=paramRequest.getLocaleString("itemInterCatchCompensa")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="compensaInterThrowEvent" cId ="CompensationIntermediateThrowEvent" title="<%=paramRequest.getLocaleString("itemInterThrowCompensa")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="ruleInterEvent" cId ="RuleIntermediateCatchEvent" title="<%=paramRequest.getLocaleString("itemInterCatchRule")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="linkInterCatchEvent" cId ="LinkIntermediateCatchEvent" title="<%=paramRequest.getLocaleString("itemInterCatchLink")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="linkInterThrowEvent" cId ="LinkIntermediateThrowEvent" title="<%=paramRequest.getLocaleString("itemInterThrowLink")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="signalInterCatchEvent" cId ="SignalIntermediateCatchEvent" title="<%=paramRequest.getLocaleString("itemInterCatchSignal")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="signalInterThrowEvent" cId ="SignalIntermediateThrowEvent" title="<%=paramRequest.getLocaleString("itemInterThrowSignal")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="multipleInterCatchEvent" cId ="MultipleIntermediateCatchEvent" title="<%=paramRequest.getLocaleString("itemInterCatchMultiple")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="multipleInterThrowEvent" cId ="MultipleIntermediateThrowEvent" title="<%=paramRequest.getLocaleString("itemInterThrowMultiple")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="scalaInterCatchEvent" cId ="ScalationIntermediateCatchEvent" title="<%=paramRequest.getLocaleString("itemInterCatchScala")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="scalaInterThrowEvent" cId ="ScalationIntermediateThrowEvent" title="<%=paramRequest.getLocaleString("itemInterThrowScala")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="parallelInterEvent" cId ="ParallelIntermediateCatchEvent" title="<%=paramRequest.getLocaleString("itemInterCatchParallel")%>" onclick="Modeler.creationStart(this)"></span>
                 <span class="subbarEnd"></span>
             </div>
             <div id="endEventsBar" class="subbarHidden" style="width: 348px;">
                 <span class="subbarStart"></span>
-                <span class="normalEndEvent" cId ="EndEvent" title="Fin normal" onclick="Modeler.creationStart(this)"></span>
-                <span class="messageEndEvent" cId ="MessageEndEvent" title="Fin con mensaje"  onclick="Modeler.creationStart(this)"></span>
-                <span class="errorEndEvent" cId ="ErrorEndEvent" title="Fin con error"  onclick="Modeler.creationStart(this)"></span>
-                <span class="cancelEndEvent" cId ="CancelationEndEvent" title="Fin con cancelación" onclick="Modeler.creationStart(this)"></span>
-                <span class="compensaEndEvent" cId ="CompensationEndEvent" title="Fin con compensación"  onclick="Modeler.creationStart(this)"></span>
-                <span class="signalEndEvent" cId ="SignalEndEvent" title="Fin con señal" onclick="Modeler.creationStart(this)"></span>
-                <span class="multiEndEvent" cId ="MultipleEndEvent" title="Fin múltiple"  onclick="Modeler.creationStart(this)"></span>
-                <span class="escalaEndEvent" cId ="ScalationEndEvent" title="Fin con escalamiento" onclick="Modeler.creationStart(this)"></span>
-                <span class="terminalEndEvent" cId ="TerminationEndEvent" title="Terminación" onclick="Modeler.creationStart(this)"></span>
+                <span class="normalEndEvent" cId ="EndEvent" title="<%=paramRequest.getLocaleString("itemEndNormal")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="messageEndEvent" cId ="MessageEndEvent" title="<%=paramRequest.getLocaleString("itemEndMsg")%>"  onclick="Modeler.creationStart(this)"></span>
+                <span class="errorEndEvent" cId ="ErrorEndEvent" title="<%=paramRequest.getLocaleString("itemEndError")%>"  onclick="Modeler.creationStart(this)"></span>
+                <span class="cancelEndEvent" cId ="CancelationEndEvent" title="<%=paramRequest.getLocaleString("itemEndCancela")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="compensaEndEvent" cId ="CompensationEndEvent" title="<%=paramRequest.getLocaleString("itemEndCompensa")%>"  onclick="Modeler.creationStart(this)"></span>
+                <span class="signalEndEvent" cId ="SignalEndEvent" title="<%=paramRequest.getLocaleString("itemEndSignal")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="multiEndEvent" cId ="MultipleEndEvent" title="<%=paramRequest.getLocaleString("itemEndMultiple")%>"  onclick="Modeler.creationStart(this)"></span>
+                <span class="escalaEndEvent" cId ="ScalationEndEvent" title="<%=paramRequest.getLocaleString("itemEndScala")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="terminalEndEvent" cId ="TerminationEndEvent" title="<%=paramRequest.getLocaleString("itemEndTermina")%>" onclick="Modeler.creationStart(this)"></span>
                 <span class="subbarEnd"></span>
             </div>
             <div id="tasksBar" class="subbarHidden" style="width: 311px;">
                 <span class="subbarStart"></span>
-                <span class="abstractTask" cId ="Task" title="Tarea abstracta" onclick="Modeler.creationStart(this)"></span>
-                <span class="userTask" cId ="UserTask" title="Tarea de usuario" onclick="Modeler.creationStart(this)"></span>
-                <span class="serviceTask" cId ="ServiceTask" title="Tarea de servicio" onclick="Modeler.creationStart(this)"></span>
-                <span class="scriptTask" cId ="ScriptTask" title="Tarea de script" onclick="Modeler.creationStart(this)"></span>
-                <span class="ruleTask" cId ="BusinessRuleTask" title="Tarea de regla de negocio" onclick="Modeler.creationStart(this)"></span>
-                <span class="manualTask" cId ="ManualTask" title="Tarea manual" onclick="Modeler.creationStart(this)"></span>
-                <span class="sendTask" cId ="SendTask" title="Tarea de envío de mensaje" onclick="Modeler.creationStart(this)"></span>
-                <span class="receiveTask" cId ="ReceiveTask" title="Tarea de recepción de mensaje" onclick="Modeler.creationStart(this)"></span>
+                <span class="abstractTask" cId ="Task" title="<%=paramRequest.getLocaleString("itemTaskAbstract")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="userTask" cId ="UserTask" title="<%=paramRequest.getLocaleString("itemTaskUser")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="serviceTask" cId ="ServiceTask" title="<%=paramRequest.getLocaleString("itemTaskService")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="scriptTask" cId ="ScriptTask" title="<%=paramRequest.getLocaleString("itemTaskScript")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="ruleTask" cId ="BusinessRuleTask" title="<%=paramRequest.getLocaleString("itemTaskRule")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="manualTask" cId ="ManualTask" title="<%=paramRequest.getLocaleString("itemTaskManual")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="sendTask" cId ="SendTask" title="<%=paramRequest.getLocaleString("itemTaskSend")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="receiveTask" cId ="ReceiveTask" title="<%=paramRequest.getLocaleString("itemTaskReceive")%>" onclick="Modeler.creationStart(this)"></span>
                 <span class="subbarEnd"></span>
             </div>
             <div id="subtasksBar" class="subbarHidden" style="width: 163px;">
                 <span class="subbarStart"></span>
-                <span class="subProcess" cId ="SubProcess" title="Subproceso" onclick="Modeler.creationStart(this)"></span>
-                <span class="adhocsubProcess" cId ="AdhocSubProcess" title="Subproceso adhoc" onclick="Modeler.creationStart(this)"></span>
-                <span class="eventsubProcess" cId ="EventSubProcess" title="Subproceso de evento" onclick="Modeler.creationStart(this)"></span>
-                <span class="transactionsubProcess" cId ="TransactionSubProcess" title="Transacción" onclick="Modeler.creationStart(this)"></span>
+                <span class="subProcess" cId ="SubProcess" title="<%=paramRequest.getLocaleString("itemSubprocess")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="adhocsubProcess" cId ="AdhocSubProcess" title="<%=paramRequest.getLocaleString("itemSubprocessAdhoc")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="eventsubProcess" cId ="EventSubProcess" title="<%=paramRequest.getLocaleString("itemSubprocessEvent")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="transactionsubProcess" cId ="TransactionSubProcess" title="<%=paramRequest.getLocaleString("itemTransaction")%>" onclick="Modeler.creationStart(this)"></span>
                 <span class="subbarEnd"></span>
             </div>
             <div id="calltasksBar" class="subbarHidden" style="width: 237px;">
                 <span class="subbarStart"></span>
-                <span class="callTask" cId ="CallTask" title="Tarea llamada" onclick="Modeler.creationStart(this)"></span>
-                <span class="callmanualTask" cId ="CallManualTask" title="Tarea manual llamada" onclick="Modeler.creationStart(this)"></span>
-                <span class="callruleTask" cId ="CallBusinessRuleTask" title="Tarea de regla de negocio llamada" onclick="Modeler.creationStart(this)"></span>
-                <span class="callscriptTask" cId ="CallScriptTask" title="Tarea de script llamada" onclick="Modeler.creationStart(this)"></span>
-                <span class="calluserTask" cId ="CallUserTask" title="Tarea de usuario llamada" onclick="Modeler.creationStart(this)"></span>
-                <span class="callsubProcess" cId ="CallSubProcess" title="Subproceso llamado" onclick="Modeler.creationStart(this)"></span>
+                <span class="callTask" cId ="CallTask" title="<%=paramRequest.getLocaleString("itemCallTask")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="callmanualTask" cId ="CallManualTask" title="<%=paramRequest.getLocaleString("itemCallTaskManual")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="callruleTask" cId ="CallBusinessRuleTask" title="<%=paramRequest.getLocaleString("itemCallTaskRule")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="callscriptTask" cId ="CallScriptTask" title="<%=paramRequest.getLocaleString("itemCallTaskScript")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="calluserTask" cId ="CallUserTask" title="<%=paramRequest.getLocaleString("itemCallTaskUser")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="callsubProcess" cId ="CallSubProcess" title="<%=paramRequest.getLocaleString("itemCallSubprocess")%>" onclick="Modeler.creationStart(this)"></span>
                 <span class="subbarEnd"></span>
             </div>
             <div id="gatewaysBar" class="subbarHidden" style="width: 274px;">
                 <span class="subbarStart"></span>
-                <span class="exclusiveDataGateway" cId ="ExclusiveGateway" title="Exclusiva (datos)" onclick="Modeler.creationStart(this)"></span>
-                <span class="inclusiveDataGateway" cId ="InclusiveGateway" title="Inclusiva (datos)" onclick="Modeler.creationStart(this)"></span>
-                <span class="exclusiveStartEventGateway" cId ="ExclusiveStartEventGateway" title="Exclusiva de inicio" onclick="Modeler.creationStart(this)"></span>
-                <span class="exclusiveEventGateway" cId="ExclusiveIntermediateEventGateway" title="Exclusiva (eventos)" onclick="Modeler.creationStart(this)"></span>
-                <span class="parallelGateway" cId ="ParallelGateway" title="Paralela" onclick="Modeler.creationStart(this)"></span>
-                <span class="parallelStartGateway" cId ="ParallelStartEventGateway" title="Paralela de inicio" onclick="Modeler.creationStart(this)"></span>
-                <span class="complexGateway" cId ="ComplexGateway" title="Compleja" onclick="Modeler.creationStart(this)"></span>
+                <span class="exclusiveDataGateway" cId ="ExclusiveGateway" title="<%=paramRequest.getLocaleString("itemGatewayExData")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="inclusiveDataGateway" cId ="InclusiveGateway" title="<%=paramRequest.getLocaleString("itemGatewayIncData")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="exclusiveStartEventGateway" cId ="ExclusiveStartEventGateway" title="<%=paramRequest.getLocaleString("itemGatewayExStart")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="exclusiveEventGateway" cId="ExclusiveIntermediateEventGateway" title="<%=paramRequest.getLocaleString("itemGatewayExEvt")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="parallelGateway" cId ="ParallelGateway" title="<%=paramRequest.getLocaleString("itemGatewayParallel")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="parallelStartGateway" cId ="ParallelStartEventGateway" title="<%=paramRequest.getLocaleString("itemGatewayParallelStart")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="complexGateway" cId ="ComplexGateway" title="<%=paramRequest.getLocaleString("itemGatewayComplex")%>" onclick="Modeler.creationStart(this)"></span>
                 <span class="subbarEnd"></span>
             </div>
             <div id="connectionsBar" class="subbarHidden" style="width: 237px;">
                 <span class="subbarStart"></span>
-                <span class="sequenceFlow" cId ="SequenceFlow" title="Flujo de secuencia" onclick="Modeler.creationStart(this)"></span>
-                <span class="conditionalFlow" cId ="ConditionalFlow" title="Flujo condicional" onclick="Modeler.creationStart(this)"></span>
-                <span class="defaultFlow" cId ="DefaultFlow" title="Flujo por defecto" onclick="Modeler.creationStart(this)"></span>
-                <span class="messageFlow" cId ="MessageFlow" title="Flujo de mensaje" onclick="Modeler.creationStart(this)"></span>
-                <span class="associationFlow" cId ="AssociationFlow" title="Asociación" onclick="Modeler.creationStart(this)"></span>
-                <span class="directionalassociationFlow" cId ="DirectionalAssociation" title="Asociación direccional" onclick="Modeler.creationStart(this)"></span>
+                <span class="sequenceFlow" cId ="SequenceFlow" title="<%=paramRequest.getLocaleString("itemConnSequence")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="conditionalFlow" cId ="ConditionalFlow" title="<%=paramRequest.getLocaleString("itemConnCond")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="defaultFlow" cId ="DefaultFlow" title="<%=paramRequest.getLocaleString("itemConnDefault")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="messageFlow" cId ="MessageFlow" title="<%=paramRequest.getLocaleString("itemConnMsg")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="associationFlow" cId ="AssociationFlow" title="<%=paramRequest.getLocaleString("itemConnAssoc")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="directionalassociationFlow" cId ="DirectionalAssociation" title="<%=paramRequest.getLocaleString("itemConnDirAssoc")%>" onclick="Modeler.creationStart(this)"></span>
                 <span class="subbarEnd"></span>
             </div>
             <div id="artifactsBar" class="subbarHidden" style="width: 89px;">
                 <span class="subbarStart"></span>
-                <span class="annotation" cId ="AnnotationArtifact" title="Anotación" onclick="Modeler.creationStart(this)"></span>
-                <span class="group" cId ="Group" title="Grupo" onclick="Modeler.creationStart(this)"></span>
+                <span class="annotation" cId ="AnnotationArtifact" title="<%=paramRequest.getLocaleString("itemAnnotation")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="group" cId ="Group" title="<%=paramRequest.getLocaleString("itemGroup")%>" onclick="Modeler.creationStart(this)"></span>
                 <span class="subbarEnd"></span>
             </div>
             <div id="dataobjectsBar" class="subbarHidden" style="width: 163px;">
                 <span class="subbarStart"></span>
-                <span class="dataObject" cId ="DataObject" title="Dato" onclick="Modeler.creationStart(this)"></span>
-                <span class="dataInput" cId ="DataInput" title="Dato de entrada" onclick="Modeler.creationStart(this)"></span>
-                <span class="dataOutput" cId ="DataOutput" title="Dato de salida" onclick="Modeler.creationStart(this)"></span>
-                <span class="dataStore" cId ="DataStore" title="Almacén de datos" onclick="Modeler.creationStart(this)"></span>
+                <span class="dataObject" cId ="DataObject" title="<%=paramRequest.getLocaleString("itemData")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="dataInput" cId ="DataInput" title="<%=paramRequest.getLocaleString("itemDataInput")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="dataOutput" cId ="DataOutput" title="<%=paramRequest.getLocaleString("itemDataOutput")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="dataStore" cId ="DataStore" title="<%=paramRequest.getLocaleString("itemDataStore")%>" onclick="Modeler.creationStart(this)"></span>
                 <span class="subbarEnd"></span>
             </div>
             <div id="swimlanesBar" class="subbarHidden" style="width: 89px;">
                 <span class="subbarStart"></span>
-                <span class="pool" cId ="Pool" title="Pool" onclick="Modeler.creationStart(this)"></span>
-                <span class="lane" cId ="Lane" title="Lane" onclick="Modeler.creationStart(this)"></span>
+                <span class="pool" cId ="Pool" title="<%=paramRequest.getLocaleString("itemPool")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="lane" cId ="Lane" title="<%=paramRequest.getLocaleString("itemLane")%>" onclick="Modeler.creationStart(this)"></span>
                 <span class="subbarEnd"></span>
             </div>
         </div>
@@ -240,7 +240,7 @@ if (!isViewMode) {
     Process p = (Process)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
     if (isViewMode && p != null) {
         %>
-        <h1><%=p.getTitle()%>&nbsp;<a href="" onclick="window.history.go(-1); return false;"><img alt="volver" src="/work/models/<%=paramRequest.getWebPage().getWebSiteId()%>/css/images/icono-atras.png"/></a></h1>
+        <h1><%=p.getTitle()%>&nbsp;<a href="" onclick="window.history.go(-1); return false;"><img alt="<%=paramRequest.getLocaleString("back")%>" src="/work/models/<%=paramRequest.getWebPage().getWebSiteId()%>/css/images/icono-atras.png"/></a></h1>
         <%
     }
     %>
@@ -929,9 +929,9 @@ if (!isViewMode) {
 %>
 <div class="overlay" id="overlayBackground">
     <div class="loadDialog">
-        <p class="titleBar">Cargar modelo</p>
+        <p class="titleBar"><%=paramRequest.getLocaleString("lblLoadModel")%></p>
         <span class="loadDialogCloseButton">
-            <a href="#" onclick="hideLoadDialog(); return false;">Cerrar</a>
+            <a href="#" onclick="hideLoadDialog(); return false;"><%=paramRequest.getLocaleString("lblClose")%></a>
         </span>
         <form action="<%=uploadUrl%>" method="post">
             <iframe id='target_upload_swpFile' name='target_upload_swpFile' src='' style='display: none'></iframe>
@@ -999,7 +999,7 @@ if (!isViewMode) {
                                     swFormat=swFormat.substring(swFormat.indexOf("|")+1);
                                 }
                                 while(pExt.indexOf("|")!==-1) pExt=pExt.replace('|',',');
-                                alert("El archivo no es válido.");
+                                alert("<%=paramRequest.getLocaleString("msgBadFile")%>");
                                 return false;
                             } else {
                                 return true;
@@ -1009,8 +1009,8 @@ if (!isViewMode) {
                     </p>
             </div>
             <div class='buttonRibbon'>
-                <input type="submit" value="Enviar" onclick="uploadjs_swpFile(this.form);return false;"/>
-                <input type="button" value="Cancelar" onclick="hideLoadDialog();return false;"/>
+                <input type="submit" value="<%=paramRequest.getLocaleString("lblSend")%>" onclick="uploadjs_swpFile(this.form);return false;"/>
+                <input type="button" value="<%=paramRequest.getLocaleString("lblCancel")%>" onclick="hideLoadDialog();return false;"/>
             </div>
         </form>
     </div>
@@ -1080,7 +1080,7 @@ if (!isViewMode) {
             %>      
             function loadProcess() {
                 if (ToolKit && ToolKit !== null) {
-                    ToolKit.showTooltip(0, "Cargando modelo, por favor espere...", 200, "Warning");
+                    ToolKit.showTooltip(0, "<%=paramRequest.getLocaleString("loading")%>", 200, "Warning");
                 }
                 Modeler.submitCommand('<%=commandUrl%>', null, callbackLoad);
             };
@@ -1096,7 +1096,7 @@ if (!isViewMode) {
                 var json = Modeler.getProcessJSON();
                 var jsonString = "JSONSTART"+JSON.stringify(json)+"JSONEND";
                 if (ToolKit && ToolKit !== null) {
-                    ToolKit.showTooltip(0, "Enviando modelo, por favor espere...", 200, "Warning");
+                    ToolKit.showTooltip(0, "<%=paramRequest.getLocaleString("sending")%>", 200, "Warning");
                 }
                 Modeler.submitCommand('<%=commandUrl%>',jsonString, loadProcess);
             };
