@@ -609,17 +609,31 @@ public class FileUpload
             if (k == -1)
                 return hashtable;
             s3 = new String(abyte0, 0, 0, k);
-            CParameter cparameter = new CParameter();
-            String paramValue = getValue(s9.trim());
+            CParameter cparameter = null;
+            String paramValue = null;
+            /////////////////////////////////////////////////////////////////////////////////////////
+            for (int x = 0; x < parametros.size(); x++)
+            {
+                cparameter = (CParameter) parametros.elementAt(x);
+                if (cparameter.parametro.trim().equals(s9.trim())){
+                    paramValue =  cparameter.Valor.trim();
+                    break;
+                }
+            }
+
             if(paramValue==null){
+                cparameter = new CParameter();
                 cparameter.parametro = s9.trim();
                 cparameter.Valor = s3;
+                System.out.println(s9.trim()+" = "+s3);
             } else {
                 paramValue = paramValue +","+s3;
-                cparameter.parametro = s9.trim();
                 cparameter.Valor = paramValue;
+                System.out.println(s9.trim()+" = "+paramValue);
             }
-            System.out.println(s9.trim()+" = "+s3);
+            
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            
             if (!s3.startsWith(s1))
             {
                 System.arraycopy(abyte0, 0, abyte1, 0, k);
