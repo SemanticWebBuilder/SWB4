@@ -128,7 +128,7 @@ public class SWBAProcessInstanceList extends GenericResource {
                 out.println(paramRequest.getLocaleString("ended"));
                 out.println("</th>");
                 out.println("<th>");
-                out.println(paramRequest.getLocaleString("artifacts"));
+                out.println(paramRequest.getLocaleString("docs"));
                 out.println("</th>");
                 out.println("</tr>");
                 out.println("</thead>");
