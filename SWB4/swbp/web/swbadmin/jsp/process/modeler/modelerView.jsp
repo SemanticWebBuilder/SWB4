@@ -937,7 +937,7 @@ if (!isViewMode) {
             <iframe id='target_upload_swpFile' name='target_upload_swpFile' src='' style='display: none'></iframe>
             <div class="loadDialogContent">
                 <div id="dropArea" class="dropArea">
-                    <p>Arrastra un archivo aqu&iacute;</p>
+                    <p><%=paramRequest.getLocaleString("msgDragFile")%></p>
                 </div>
                 <p>
                     <input id="swpFile" name="swpFile" type="file" onChange="javascript:validFileType(this);">
