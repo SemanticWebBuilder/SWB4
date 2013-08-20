@@ -38,6 +38,10 @@
     ArrayList activity = new ArrayList();
     ArrayList gateway = new ArrayList();
     ArrayList event = new ArrayList();
+    String laneT = paramRequest.getLocaleString("lane") != null ? paramRequest.getLocaleString("lane") : "Lane";
+    String activityT = paramRequest.getLocaleString("activity") != null ? paramRequest.getLocaleString("activity") : "Activity";
+    String gatewayT = paramRequest.getLocaleString("gateway") != null ? paramRequest.getLocaleString("gateway") : "Gateway";
+    String eventT = paramRequest.getLocaleString("event") != null ? paramRequest.getLocaleString("event") : "Event";
     Iterator<GraphicalElement> iterator = null;
     GraphicalElement ge = null;
     org.semanticwb.process.model.Process process = null;
@@ -53,6 +57,7 @@
             subProcess = (SubProcess) pe;
             iterator = subProcess.listContaineds();
             con = subProcess.getContainer();
+            path = pe.getURI() + "|" + path;
             while (con != null) {
                 path = ((ProcessElement) con).getURI() + "|" + path;
                 if (con instanceof SubProcess) {
@@ -61,7 +66,6 @@
                     con = null;
                 }
             }
-            path = pe.getURI() + "|" + path;
         }
         while (iterator.hasNext()) {
             ge = iterator.next();
@@ -86,11 +90,11 @@
     <div id="menu">
         <!--ACTIVIDADES-->
         <ul>
-            <li><a href="#ruta" title="Inicio">Inicio</a></li>
+            <li><a href="#ruta" title="<%=paramRequest.getLocaleString("home")%>"><%out.println(paramRequest.getLocaleString("home"));%></a></li>
                 <%
                     iterator = SWBComparator.sortByDisplayName(lane.iterator(), paramRequest.getUser().getLanguage());
                     if (lane.size() > 0) {
-                        out.print("<li class=\"activity\" title=\"Lane\">Lane</li>");
+                        out.print("<li class=\"activity\" title=\"" + laneT + "\">" + laneT + "</li>");
                     }
                     while (iterator.hasNext()) {
                         ge = iterator.next();
@@ -100,7 +104,7 @@
                     }
                     iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
                     if (activity.size() > 0) {
-                        out.print("<li class=\"activity\" title=\"Activity\">Activity</li>");
+                        out.print("<li class=\"activity\" title=\"" + activityT + "\">" + activityT + "</li>");
                     }
                     while (iterator.hasNext()) {
                         ge = iterator.next();
@@ -110,7 +114,7 @@
                     }
                     iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
                     if (gateway.size() > 0) {
-                        out.print("<li class=\"activity\" title=\"Gateway\">Gateway</li>");
+                        out.print("<li class=\"activity\" title=\"" + gatewayT + "\">" + gatewayT + "</li>");
                     }
                     while (iterator.hasNext()) {
                         ge = iterator.next();
@@ -120,7 +124,7 @@
                     }
                     iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
                     if (event.size() > 0) {
-                        out.print("<li class=\"activity\" title=\"Event\">Event</li>");
+                        out.print("<li class=\"activity\" title=\"" + eventT + "\">" + eventT + "</li>");
                     }
                     while (iterator.hasNext()) {
 
@@ -134,7 +138,7 @@
     </div>
     <div id="contenido">
         <div id="ruta">
-            <label>Estás en:</label>
+            <label><%out.print(paramRequest.getLocaleString("theseIn"));%>:</label>
             <%
                 String[] urls = path.split("\\|");
                 int cont = urls.length;
@@ -156,23 +160,22 @@
         </div>
         <a onclick="exportDocument('<%=urlExport%>', 'html');" style="cursor: pointer;" title="HTML" id="html">HTML</a>
         <a onclick="exportDocument('<%=urlExport%>', 'pdf');" style="cursor: pointer;" title="PDF" id="pdf" >PDF</a>
-        <a title="imprimir" id="imprimir" href="javascript:print()">Imprimir</a>
+        <a title="<%=paramRequest.getLocaleString("print")%>" id="imprimir" href="javascript:print()"><%out.print(paramRequest.getLocaleString("print"));%></a>
         <div >
             <%String data = "";
                 if (process != null) {
-                    data = process.getData() != null ? process.getData() : "No se ha generado imagen";
+                    data = process.getData() != null ? process.getData() : paramRequest.getLocaleString("noImage");
                 } else {
-                    data = subProcess.getData() != null ? subProcess.getData() : "No se ha generado imagen";
+                    data = subProcess.getData() != null ? subProcess.getData() : paramRequest.getLocaleString("noImage");
                 }
                 out.println(data);%>
-            <!--<img src="/work/models/SWBAdmin/images/image.svg" width="100%" height="100%"/>-->
         </div>
         <div id="texto"> 
             <%
                 out.print(pe.getDocumentation().getText());
                 iterator = SWBComparator.sortByDisplayName(lane.iterator(), paramRequest.getUser().getLanguage());
                 if (lane.size() > 0) {
-                    out.print("<div class=\"bandeja-combo\" title=\"Lane\"><strong>Lane</strong></div>");
+                    out.print("<div class=\"bandeja-combo\" title=\"" + laneT + "\"><strong>" + laneT + "</strong></div>");
                 }
                 while (iterator.hasNext()) {
                     ge = iterator.next();
@@ -181,7 +184,7 @@
                 }
                 iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
                 if (activity.size() > 0) {
-                    out.print("<div class=\"bandeja-combo\" title=\"Avtivity\"><strong>Activity</strong></div>");
+                    out.print("<div class=\"bandeja-combo\" title=\"" + activityT + "\"><strong>" + activityT + "</strong></div>");
                 }
                 while (iterator.hasNext()) {
                     ge = iterator.next();
@@ -190,7 +193,7 @@
                 }
                 iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
                 if (gateway.size() > 0) {
-                    out.print("<div class=\"bandeja-combo\" title=\"Gateway\"><strong>Gateway</strong></div>");
+                    out.print("<div class=\"bandeja-combo\" title=\"" + gatewayT + "\"><strong>" + gatewayT + "</strong></div>");
                 }
                 while (iterator.hasNext()) {
                     ge = iterator.next();
@@ -199,7 +202,7 @@
                 }
                 iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
                 if (event.size() > 0) {
-                    out.print("<div class=\"bandeja-combo\" title=\"Event\"><strong>Event</strong></div>");
+                    out.print("<div class=\"bandeja-combo\" title=\"" + eventT + "\"><strong>" + eventT + "</strong></div>");
                 }
                 while (iterator.hasNext()) {
                     ge = iterator.next();
@@ -217,20 +220,18 @@
 <%}
 %>
 <script type="text/javascript">
-                function exportDocument(url, form) {
-                    //alert("Se envía información " + form + url);
+                function exportDocument(url, format) {
                     dojo.xhrPost({
                         url: url,
                         contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                        content: {format: form, suri: '<%=suri%>'},
+                        content: {format: format, suri: '<%=suri%>'},
                         load: function(response, ioArgs)
                         {
-                            //alert('se exportó');
-                            showToast("Se generó " + form);
+                            showToast("<%=paramRequest.getLocaleString("save")%> " + format);
                             return response;
                         },
                         error: function(response, ioArgs) {
-                            alert('error al exportar');
+                            showToast("<%=paramRequest.getLocaleString("error")%> " + format);
                             return response;
                         },
                         handleAs: "text"
