@@ -52,7 +52,7 @@ public class StreamInBoxNoTopic extends GenericResource {
     /** The Mode_ action. */
     //String Mode_Action = "paction";
     String Mode_PFlowMsg="doPflowMsg";
-    String Mode_PreView="preview";
+    //String Mode_PreView="preview";
     String Mode_showTags="showTags";
     /**
      * Creates a new instance of SWBAWebPageContents.
@@ -63,11 +63,14 @@ public class StreamInBoxNoTopic extends GenericResource {
     public static final String Mode_REVAL = "rv";
     public static final String Mode_RECLASSBYTOPIC="reclassByTopic";
     public static final String Mode_ShowUsrHistory="showUsrHistory";
+    public static final String Mode_PREVIEW = "preview";
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         final String mode = paramRequest.getMode();
-        if(Mode_REVAL.equals(mode)) {
+        if (Mode_PREVIEW.equals(mode)) {
+            doPreview(request, response, paramRequest);
+        }else if(Mode_REVAL.equals(mode)) {
             doRevalue(request, response, paramRequest);
         }else if(Mode_ShowUsrHistory.equals(mode)){
             doShowUserHistory(request, response, paramRequest);
@@ -485,10 +488,22 @@ public class StreamInBoxNoTopic extends GenericResource {
                         + "<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("remove") + "\"></a>");
 
 
+                //Preview
+                SWBResourceURL urlPrev = paramRequest.getRenderUrl().setMode(Mode_PREVIEW).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
+                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" onclick=\"showDialog('" + urlPrev + "','" + paramRequest.getLocaleString("previewdocument")
+                        + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("previewdocument") + "\"></a>");
+                
+                
                 //ReClasifyByTpic
                 SWBResourceURL urlreClasifybyTopic=paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());  
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reclasifyByTopic") + "\" onclick=\"showDialog('" + urlreClasifybyTopic + "','" + 
                         paramRequest.getLocaleString("reclasifyByTopic") + "'); return false;\">ReT</a>");
+                
+                
+                //ReClasyfyBySentiment & Intensity
+                SWBResourceURL urlrev = paramRequest.getRenderUrl().setMode(Mode_REVAL).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
+                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reeval") + "\" onclick=\"showDialog('" + urlrev + "','" + paramRequest.getLocaleString("reeval")
+                        + "'); return false;\">RV</a>");
 
                 /*
                  //Respond
@@ -661,12 +676,15 @@ public class StreamInBoxNoTopic extends GenericResource {
         response.setContentType("text/html;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        final String myPath = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/stream/revalue.jsp";
-        if (request != null) {
+        final String myPath = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/stream/reValue.jsp";
+        System.out.println("doRevalue/myPath:"+myPath);
+        if (request != null && request.getParameter("postUri")!=null) {
             RequestDispatcher dis = request.getRequestDispatcher(myPath);
             if(dis != null) {
                 try {
+                    SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("postUri"));
                     request.setAttribute("paramRequest", paramRequest);
+                    request.setAttribute("postUri", semObj); 
                     dis.include(request, response);
                 } catch (Exception e) {
                     log.error(e);
@@ -754,6 +772,42 @@ public class StreamInBoxNoTopic extends GenericResource {
             }
         }
 
+    }
+    
+    
+    /**
+     * Shows the preview of the content.
+     *
+     * @param request , this holds the parameters
+     * @param response , an answer to the user request
+     * @param paramRequest , a list of objects like user, webpage, Resource, ...
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public void doPreview(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String postUri = request.getParameter("postUri");
+        try {
+            final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostIn.jsp";
+            if (request != null) {
+                RequestDispatcher dis = request.getRequestDispatcher(path);
+                if (dis != null) {
+                    try {
+                        SemanticObject semObject = SemanticObject.createSemanticObject(postUri);
+                        request.setAttribute("postIn", semObject);
+                        request.setAttribute("paramRequest", paramRequest);
+                        dis.include(request, response);
+                    } catch (Exception e) {
+                        log.error(e);
+                        e.printStackTrace(System.out);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            log.error("Error while getting content string ,id:" + postUri, e);
+        }
     }
 
     public void doShowTags(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
