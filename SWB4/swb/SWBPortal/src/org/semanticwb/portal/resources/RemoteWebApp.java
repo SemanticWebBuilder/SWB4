@@ -239,7 +239,8 @@ public class RemoteWebApp extends GenericAdmResource
                 }else
                 {
                     //bloque de error duplicado
-                    String err = "Error:" + acode + " " + ares.getResponseMessage();
+                    String err = "";//"Error:" + acode + " " + ares.getResponseMessage();
+                    log.warn("Resource "+getResourceBase().getId()+" Error:" + acode + " " + ares.getResponseMessage());
 
                     String errm=ares.getErrorMessage();
                     if(errm!=null)err+="\n"+errm;
@@ -492,7 +493,8 @@ public class RemoteWebApp extends GenericAdmResource
                 }else
                 {
                     //bloque de error duplicado
-                    String err = "Error:" + acode + " " + ares.getResponseMessage();
+                    String err = "";//"Error:" + acode + " " + ares.getResponseMessage();
+                    log.warn("Resource "+getResourceBase().getId()+" Error:" + acode + " " + ares.getResponseMessage());
 
                     String errm=ares.getErrorMessage();
                     if(errm!=null)err+="\n"+errm;
@@ -512,7 +514,8 @@ public class RemoteWebApp extends GenericAdmResource
             }else
             {
                 //bloque de error duplicado
-                String err = "Error:" + code + " " + res.getResponseMessage();
+                String err = "";//"Error:" + code + " " + res.getResponseMessage();
+                log.warn("Resource "+getResourceBase().getId()+" Error:" + code + " " + res.getResponseMessage());
 
                 String errm=res.getErrorMessage();
                 if(errm!=null)err+="\n"+errm;

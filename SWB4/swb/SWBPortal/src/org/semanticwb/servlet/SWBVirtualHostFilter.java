@@ -146,8 +146,14 @@ public class SWBVirtualHostFilter implements Filter
 
             if (fistCall)
             {
-                swbPortal.setContextPath(_request.getContextPath());
-                fistCall = false;
+                synchronized(this)
+                {
+                    if (fistCall)
+                    {
+                        fistCall = false;
+                        swbPortal.setContextPath(_request.getContextPath());
+                    }
+                }
             }
 
             String uri = _request.getRequestURI();
