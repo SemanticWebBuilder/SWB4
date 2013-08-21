@@ -33,6 +33,7 @@
     SWBResourceURL urlDocumentation = paramRequest.getRenderUrl().setMode("viewDocumentation");
     SWBResourceURL urlExport = paramRequest.getRenderUrl().setMode("doExportDocument");
     String suri = request.getAttribute("suri") != null ? request.getAttribute("suri").toString() : "";
+    urlExport.setParameter("suri", suri);
     ProcessElement pe = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
     ArrayList lane = new ArrayList();
     ArrayList activity = new ArrayList();
@@ -83,7 +84,6 @@
             }
         }
 %>
-<!--<div id="toast" style="color: white; right: 60%; top: 5%; display: none; position: fixed; border: 1px solid #CCCCCC;background-color: green;padding: 10px 10px ;text-align:center;opacity: 0.1;border-radius:8px 8px 8px 8px;-webkit-transition: opacity 0.1s ease-out;  /* Saf3.2+, Chrome */-moz-transition: opacity 0.1s ease-out;  /* FF4+ */-ms-transition: opacity 0.1s ease-out;  /* IE10? */-o-transition: opacity 0.1s ease-out;  /* Opera 10.5+ */transition: opacity 0.5s ease-out;"></div>-->
 <div id="toast" style="background: #B40404; color: white; padding: 10px 40px 10px 40px; right: 40%; top: 5%; display: none; position: fixed; text-align:center; border-radius:8px 8px 8px 8px;"></div>
 <div id="contenedor">
     <div id="header" title="<%out.print(pe.getTitle());%>"><%out.print(pe.getTitle());%><img src="/swbadmin/jsp/process/documentation/styles/css/images/logoprocess.png"></div>
@@ -158,8 +158,9 @@
                     }
                 %>
         </div>
-        <a onclick="exportDocument('<%=urlExport%>', 'html');" style="cursor: pointer;" title="HTML" id="html">HTML</a>
-        <a onclick="exportDocument('<%=urlExport%>', 'pdf');" style="cursor: pointer;" title="PDF" id="pdf" >PDF</a>
+        <!--<a onclick="exportDocument('//urlExport%>', 'html');" style="cursor: pointer;" title="HTML" id="html">HTML</a>-->
+        <a href="<%=urlExport.setParameter("format","html")%>" style="cursor: pointer;" title="HTML" id="html">HTML</a>
+        <a href="<%=urlExport.setParameter("format","pdf")%>" style="cursor: pointer;" title="PDF" id="pdf" >PDF</a>
         <a title="<%=paramRequest.getLocaleString("print")%>" id="imprimir" href="javascript:print()"><%out.print(paramRequest.getLocaleString("print"));%></a>
         <div >
             <%String data = "";
