@@ -254,7 +254,13 @@ public class SemanticObject
     {
         if(m_propsInv==null)
         {
-            reloadInvProps();
+            synchronized(this)
+            {
+                if(m_propsInv==null)
+                {
+                    reloadInvProps();
+                }
+            }
         }
         return m_propsInv;
     }
