@@ -11,14 +11,19 @@ import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.pdf.PdfWriter;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -85,8 +90,13 @@ public class DocumentationResource extends GenericAdmResource {
             if (pe != null) {
                 //TODO: Desplegar editor
                 SWBResourceURL url = paramRequest.getRenderUrl();
-                url.setMode("documentation");
-                url.setCallMethod(SWBResourceURL.Call_DIRECT);                
+                String despliege = getResourceBase().getAttribute("despliegue") != null ? getResourceBase().getAttribute("despliegue") : "Edición";
+                if (despliege.equals("Vista")) {
+                    url.setMode("viewDocumentation");
+                } else {
+                    url.setMode("documentation");
+                }
+                url.setCallMethod(SWBResourceURL.Call_DIRECT);
                 url.setParameter("suri", request.getParameter("suri"));
                 out.println("<iframe dojoType_=\"dijit.layout.ContentPane\" src=\"" + url + "\" style=\"width:100%; height:100%;\" frameborder=\"0\"></iframe>");
             }
@@ -145,6 +155,7 @@ public class DocumentationResource extends GenericAdmResource {
 
     void doExportDocument(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, ServletException, DocumentException, Exception {
         response.setContentType("text/html; charset=UTF-8");
+        OutputStream ou = response.getOutputStream();
         String suri = request.getParameter("suri") != null ? request.getParameter("suri").toString() : "";
         String format = request.getParameter("format") != null ? request.getParameter("format").toString() : "";
         String laneT = paramRequest.getLocaleString("lane") != null ? paramRequest.getLocaleString("lane") : "Lane";
@@ -163,6 +174,8 @@ public class DocumentationResource extends GenericAdmResource {
                 if (pe instanceof org.semanticwb.process.model.Process) {
                     org.semanticwb.process.model.Process process = (org.semanticwb.process.model.Process) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
                     if (format.equals("pdf")) { // is pdf
+                        response.setContentType("application/pdf");
+                        response.setHeader("Content-Disposition", "attachment; filename=\"" + pe.getTitle() + ".pdf\";");
                         iterator = process.listAllContaineds();
                         while (iterator.hasNext()) {
                             ge = iterator.next();
@@ -186,7 +199,10 @@ public class DocumentationResource extends GenericAdmResource {
                             file = new File(SWBPortal.getWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/Resource/" + process.getTitle() + ".pdf");
                         }
                         FileOutputStream fileOut = new FileOutputStream(file);
+                        //Save on server
                         PdfWriter.getInstance(doc, fileOut);
+                        //Show on response
+                        PdfWriter.getInstance(doc, ou);
                         doc.open();
                         doc.addAuthor(paramRequest.getUser().getFullName());
                         doc.addCreator(paramRequest.getUser().getFullName());
@@ -381,19 +397,29 @@ public class DocumentationResource extends GenericAdmResource {
                         out.write(html.getBytes());
                         out.flush();
                         out.close();
-                        File zip = new File(SWBPortal.getWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/Resource/" + pe.getTitle() + ".zip");
-                        if (zip.exists()) {
-                            zip.delete();
-                        }
-                        ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zip));
+                        //In response for save or view
+                        response.setContentType("application/zip");
+                        response.setHeader("Content-Disposition", "attachment; filename=\"" + pe.getTitle() + ".zip\"");
+                        //For create file on server
+//                        File zip = new File(SWBPortal.getWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/Resource/" + pe.getTitle() + ".zip");
+//                        if (zip.exists()) {
+//                            zip.delete();
+//                        }
+//                        ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zip));
+                        //Show on response
+                        ZipOutputStream zos = new ZipOutputStream(ou);
                         SWBUtils.IO.zip(dest, new File(basePath), zos);
+                        zos.flush();
                         zos.close();
-                        DocumentationResource.deleteDerectory(dest);
+                        deleteDerectory(dest);
                     }
+                    ou.flush();
+                    ou.close();
                 }
             }
         }
     }
+    public static final String FILE_SEPARATOR = System.getProperty("file.separator");
 
     public static void createHtmlSubProcess(org.semanticwb.process.model.Process process, SubProcess subProcess, SWBParamRequest paramRequest, String basePath) throws FileNotFoundException, IOException, SWBResourceException {
         ArrayList activity = new ArrayList();
