@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
+        <admdbconnmgr defconn="true"/>
+        <fieldset legend="Modo de despliegue">
+            <select name="despliegue" id="despliegue">
+                <option value="Edición"/>
+                <option value="Vista"/>
+            </select>
+        </fieldset>
+        <fieldset>
+            <input type="submit" name="btnSave" id="btnSave" value="Guardar" />
+            <input type="reset"  name="btnReset" id="btnReset" value="Restablecer" />
+        </fieldset>
+    </form>
+</admresource>
