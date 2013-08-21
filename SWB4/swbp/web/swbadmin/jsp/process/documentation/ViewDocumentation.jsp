@@ -35,54 +35,55 @@
     String suri = request.getAttribute("suri") != null ? request.getAttribute("suri").toString() : "";
     urlExport.setParameter("suri", suri);
     ProcessElement pe = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
-    ArrayList lane = new ArrayList();
-    ArrayList activity = new ArrayList();
-    ArrayList gateway = new ArrayList();
-    ArrayList event = new ArrayList();
-    String laneT = paramRequest.getLocaleString("lane") != null ? paramRequest.getLocaleString("lane") : "Lane";
-    String activityT = paramRequest.getLocaleString("activity") != null ? paramRequest.getLocaleString("activity") : "Activity";
-    String gatewayT = paramRequest.getLocaleString("gateway") != null ? paramRequest.getLocaleString("gateway") : "Gateway";
-    String eventT = paramRequest.getLocaleString("event") != null ? paramRequest.getLocaleString("event") : "Event";
-    Iterator<GraphicalElement> iterator = null;
-    GraphicalElement ge = null;
-    org.semanticwb.process.model.Process process = null;
-    SubProcess subProcess = null;
-    Containerable con = null;
-    String path = "";
-    if (pe != null) {
-        if (pe instanceof org.semanticwb.process.model.Process) {
-            process = (org.semanticwb.process.model.Process) pe;
-            iterator = process.listContaineds();
-        }
-        if (pe instanceof SubProcess) {
-            subProcess = (SubProcess) pe;
-            iterator = subProcess.listContaineds();
-            con = subProcess.getContainer();
-            path = pe.getURI() + "|" + path;
-            while (con != null) {
-                path = ((ProcessElement) con).getURI() + "|" + path;
-                if (con instanceof SubProcess) {
-                    con = ((SubProcess) con).getContainer();
-                } else {
-                    con = null;
+    if (pe.listDocumentations().hasNext()) {
+        ArrayList lane = new ArrayList();
+        ArrayList activity = new ArrayList();
+        ArrayList gateway = new ArrayList();
+        ArrayList event = new ArrayList();
+        String laneT = paramRequest.getLocaleString("lane") != null ? paramRequest.getLocaleString("lane") : "Lane";
+        String activityT = paramRequest.getLocaleString("activity") != null ? paramRequest.getLocaleString("activity") : "Activity";
+        String gatewayT = paramRequest.getLocaleString("gateway") != null ? paramRequest.getLocaleString("gateway") : "Gateway";
+        String eventT = paramRequest.getLocaleString("event") != null ? paramRequest.getLocaleString("event") : "Event";
+        Iterator<GraphicalElement> iterator = null;
+        GraphicalElement ge = null;
+        org.semanticwb.process.model.Process process = null;
+        SubProcess subProcess = null;
+        Containerable con = null;
+        String path = "";
+        if (pe != null) {
+            if (pe instanceof org.semanticwb.process.model.Process) {
+                process = (org.semanticwb.process.model.Process) pe;
+                iterator = process.listContaineds();
+            }
+            if (pe instanceof SubProcess) {
+                subProcess = (SubProcess) pe;
+                iterator = subProcess.listContaineds();
+                con = subProcess.getContainer();
+                path = pe.getURI() + "|" + path;
+                while (con != null) {
+                    path = ((ProcessElement) con).getURI() + "|" + path;
+                    if (con instanceof SubProcess) {
+                        con = ((SubProcess) con).getContainer();
+                    } else {
+                        con = null;
+                    }
                 }
             }
-        }
-        while (iterator.hasNext()) {
-            ge = iterator.next();
-            if (ge instanceof Lane) {
-                lane.add(ge);
+            while (iterator.hasNext()) {
+                ge = iterator.next();
+                if (ge instanceof Lane) {
+                    lane.add(ge);
+                }
+                if (ge instanceof Activity) {
+                    activity.add(ge);
+                }
+                if (ge instanceof Gateway) {
+                    gateway.add(ge);
+                }
+                if (ge instanceof Event) {
+                    event.add(ge);
+                }
             }
-            if (ge instanceof Activity) {
-                activity.add(ge);
-            }
-            if (ge instanceof Gateway) {
-                gateway.add(ge);
-            }
-            if (ge instanceof Event) {
-                event.add(ge);
-            }
-        }
 %>
 <div id="toast" style="background: #B40404; color: white; padding: 10px 40px 10px 40px; right: 40%; top: 5%; display: none; position: fixed; text-align:center; border-radius:8px 8px 8px 8px;"></div>
 <div id="contenedor">
@@ -159,8 +160,8 @@
                 %>
         </div>
         <!--<a onclick="exportDocument('//urlExport%>', 'html');" style="cursor: pointer;" title="HTML" id="html">HTML</a>-->
-        <a href="<%=urlExport.setParameter("format","html")%>" style="cursor: pointer;" title="HTML" id="html">HTML</a>
-        <a href="<%=urlExport.setParameter("format","pdf")%>" style="cursor: pointer;" title="PDF" id="pdf" >PDF</a>
+        <a href="<%=urlExport.setParameter("format", "html")%>" style="cursor: pointer;" title="HTML" id="html">HTML</a>
+        <a href="<%=urlExport.setParameter("format", "pdf")%>" style="cursor: pointer;" title="PDF" id="pdf" >PDF</a>
         <a title="<%=paramRequest.getLocaleString("print")%>" id="imprimir" href="javascript:print()"><%out.print(paramRequest.getLocaleString("print"));%></a>
         <div >
             <%String data = "";
@@ -254,3 +255,6 @@
                     //toast.style.opacity = 0;
                 }
 </script>
+<%} else {
+        out.println("<h1>" + paramRequest.getLocaleString("hereDoc") + "</h1>");
+    }%>
