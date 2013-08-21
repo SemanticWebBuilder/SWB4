@@ -1,3 +1,5 @@
+  4.2.6.1
+    - Mejora de sistema de cache para alta concurrencia (Jei)
   4.2.6.0
     - Se agregó posiblidad de pasar parametros de configuración en la administración del recursos JSPResource (Jei)
     - Mejora en cache de instancias en de Dispositivos, lenguajes y paises al crear secion de usuarios (Jei)
