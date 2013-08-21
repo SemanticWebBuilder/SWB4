@@ -91,7 +91,7 @@
       <form id="<%=semObjPost.getSemanticClass().getClassId()%>/classbTopicForm" dojoType="dijit.form.Form" class="swbform" method="post" action="<%=actionUrl%>" method="post" onsubmit="submitForm('<%=semObjPost.getSemanticClass().getClassId()%>/classbTopicForm');return false;"> 
       <table width="98%" >
         <thead>
-        <th>
+        <th colspan="3">
             <%=paramRequest.getLocaleString("classifyMsg")%>
         </th>
         </thead>
@@ -131,7 +131,7 @@
         </tr>    
         
         <tr>
-            <td>
+            <td colspan="3" align="center">
                 <button dojoType="dijit.form.Button" type="submit" ><%=paramRequest.getLocaleString("btnSend")%></button>
                 <button dojoType="dijit.form.Button" onclick="hideDialog(); return false;"><%=paramRequest.getLocaleString("btnCancel")%></button>
             </td>
