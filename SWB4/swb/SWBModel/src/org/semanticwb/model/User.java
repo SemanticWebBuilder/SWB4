@@ -918,5 +918,5 @@ public class User extends UserBase implements Principal
             return getSemanticObject().getObjectProperty(prop);
         }
     }    
-
+    
 }
