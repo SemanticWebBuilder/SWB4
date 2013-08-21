@@ -111,13 +111,18 @@ public class SWBResourceCachedMgr
                 {
                     if (mrulist.size() >= cachesize)
                     {
-                        cache.remove(mrulist.getLast());
-                        mrulist.removeLast();
+                        cache.remove(mrulist.removeLast());
                     }
                     mrulist.addFirst(key);
                 }
-                ret = new SWBResourceCached(res);
-                cache.put(key, ret);
+                synchronized (res)
+                {
+                    if((ret=(SWBResource)cache.get(key))==null)
+                    {
+                        ret = new SWBResourceCached(res);                    
+                        cache.put(key, ret);
+                    }
+                }
             } else
             {
                 //System.out.println("cache found:"+key);
