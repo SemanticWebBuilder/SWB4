@@ -36,6 +36,7 @@ public class PasswordUpdate extends PasswordUpdateBase {
     
     /** The Constant passphrase. */
     private static final String passphrase = "{MD5}tq5RXfs6DGIXD6dlHUgeQA==";
+    private static int cont=0;
 
     /**
      * Instantiates a new password update.
@@ -147,13 +148,15 @@ public class PasswordUpdate extends PasswordUpdateBase {
         if (value == null) {
             value = "";
         }
+        
+        cont++;
 
         if (mode.equals("edit") || mode.equals("create")) {
             String localValue = mode.equals("create")
                                 ? ""
                                 : passphrase;
 
-            ret = "<input name=\"" + name + "\" id=\"" + name + "\" type=\"password\" " + " dojoType=\"dijit.form.ValidationTextBox\""
+            ret = "<input name=\"" + name + "\" id=\"" + name+cont+ "\" type=\"password\" " + " dojoType=\"dijit.form.ValidationTextBox\""
                   + " required=\"" + required + "\""    // + " propercase=\"true\""
                   + " promptMessage=\"" + pmsg + "\"" + " invalidMessage=\"" + imsg + "\"" + " trim=\"true\""
                   + " value=\"" + localValue + "\"" + "isValid=\"return validateElement('" + propName + "','" + getValidateURL(obj, prop)
@@ -161,7 +164,7 @@ public class PasswordUpdate extends PasswordUpdateBase {
             ret += "<br/><input name=\"pwd_verify\" type=\"password\" " + " dojoType=\"dijit.form.ValidationTextBox\""
                    + " required=\"" + required + "\""    // + " propercase=\"true\""
                    + " promptMessage=\"" + pmsg + "\"" + " invalidMessage=\"" + imsg + "\"" + " trim=\"true\""
-                   + " value=\"" + localValue + "\" isValid=\"return this.textbox.value==dijit.byId('"+name+"').textbox.value;\" " + ">";
+                   + " value=\"" + localValue + "\" isValid=\"return this.textbox.value==dijit.byId('"+name+cont+"').textbox.value;\" " + ">";
         } else if (mode.equals("view")) {
             ret = "<span _id=\"" + name + "\" name=\"" + name + "\">" + value + "</span>";
         }
