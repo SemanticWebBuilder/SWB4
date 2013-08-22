@@ -56,6 +56,16 @@
             <th>
                 <%=SWBSocialUtil.Util.getStringFromGenericLocale("updated", user.getLanguage())%>
             </th>
+            <%
+            if(classifyBySentiment!=null && classifyBySentiment.equalsIgnoreCase("true"))
+            {
+                %>
+                    <th>
+                        <%=SWBSocialUtil.Util.getStringFromGenericLocale("sentiment", user.getLanguage())%>
+                    </th>
+                <%
+            }
+            %>
             <th>
                 <%=SWBSocialUtil.Util.getStringFromGenericLocale("status", user.getLanguage())%>
             </th>
