@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales. 
    */
-public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.Activeable,org.semanticwb.social.Secreteable,org.semanticwb.model.Tagable,org.semanticwb.model.Traceable,org.semanticwb.social.Listenerable
+public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.social.Secreteable,org.semanticwb.model.Trashable,org.semanticwb.model.Tagable,org.semanticwb.social.Listenerable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Clase a Cambiar despues por "Relacional".  En esta clase se guardan todos los post que lleguan por el listener, se estima que toda la info. que se guarde en este objeto debe de eliminarse aproximadamente c/mes, siendo este parametro configurable de acuerdo al tiempo que la organización quiera guardar  la información sobre los mensajes que lleguen por el listener. Se almacenan por mes y año, de esta manera sera mucho mas rapido hacer las busquedas sobre las instancias de esta clase.
@@ -50,10 +50,6 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
    * Con esta inversa, Cuando se elimine una red social, se eliminaran todos los objetos de tipo PostOutNet que este asociados a la misma.
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasSocialPostInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasSocialPostInv");
-   /**
-   * Código de pais que servira como filtro, es decir, solo se guardaran los mensajes que se hayan generado en el pais que pertenesca al mismo código de pais que se capture en esta propiedad, esto podría ser para cada instancia (cuenta) de cada red social.
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_countryCodetoSearch=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#countryCodetoSearch");
    /**
    * Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales. Esta clase no se relaciona con una red social (con la clase SocialNetwork) porque un post de salida (desde la herramienta) podría ser enviado a diferentes redes sociales, sin embargo, es el mismo post de salida. Donde esta a que red social se envía esta en las instancias de la clase PostContainer.
    */
@@ -746,24 +742,6 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
     public void setActive(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb_active, value);
-    }
-
-/**
-* Gets the CountryCodetoSearch property
-* @return String with the CountryCodetoSearch
-*/
-    public String getCountryCodetoSearch()
-    {
-        return getSemanticObject().getProperty(social_countryCodetoSearch);
-    }
-
-/**
-* Sets the CountryCodetoSearch property
-* @param value long with the CountryCodetoSearch
-*/
-    public void setCountryCodetoSearch(String value)
-    {
-        getSemanticObject().setProperty(social_countryCodetoSearch, value);
     }
    /**
    * Gets all the org.semanticwb.social.PostOut
