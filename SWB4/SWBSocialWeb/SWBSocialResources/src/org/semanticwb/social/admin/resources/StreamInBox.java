@@ -714,9 +714,13 @@ public class StreamInBox extends GenericResource {
                 urlr.setParameter("sval", postIn.getURI());
                 urlr.setParameter("page", "" + nPage);
                 urlr.setAction("remove");
-
-                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " "
-                        + SWBUtils.TEXT.scape4Script(postIn.getMsg_Text()) + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
+                
+                String text=SWBUtils.TEXT.scape4Script(postIn.getMsg_Text());
+                
+                text=SWBSocialUtil.Util.replaceSpecialCharacters(text, false);
+                
+                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + ": "
+                        + text + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
 
                 //Preview
                 /*
@@ -1010,9 +1014,7 @@ public class StreamInBox extends GenericResource {
         RequestDispatcher dis = request.getRequestDispatcher(path);
         if (dis != null) {
             try {
-                System.out.println("doShowResponses/postUri:" + request.getParameter("postUri"));
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
-                System.out.println("doShowResponses/semObject:" + semObject);
                 request.setAttribute("postUri", semObject);
                 request.setAttribute("paramRequest", paramRequest);
                 dis.include(request, response);
@@ -1080,9 +1082,7 @@ public class StreamInBox extends GenericResource {
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        final Resource base = getResourceBase();
         String action = response.getAction();
-        //System.out.println("Entra a StreamInBox/processAJ-1:"+action);
         if (action.equals("changeSocialTopic")) {
             if (request.getParameter("postUri") != null && request.getParameter("newSocialTopic") != null) {
                 SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postUri"));
