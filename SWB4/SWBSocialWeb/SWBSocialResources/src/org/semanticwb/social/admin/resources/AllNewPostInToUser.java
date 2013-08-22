@@ -283,20 +283,20 @@ public class AllNewPostInToUser extends GenericResource {
             System.out.println("DoEdit-6:" + setso);
             itposts = null;
 
-            ps = 20;
-            l = setso.size();
-
-            //System.out.println("num cont: "+l);
-
-            p = 0;
-            String page = request.getParameter("page");
-            if (page != null) {
-                p = Integer.parseInt(page);
+            int recPerPage = 20;//if(resBase.getItemsbyPage()>0) recPerPage=resBase.getItemsbyPage();            
+            int nRec = 0;
+            int nPage;
+            try {
+                nPage = Integer.parseInt(request.getParameter("page"));
+            } catch (Exception ignored) {
+                nPage = 1;
             }
+            boolean paginate = false;
 
-            x = 0;
 
             itposts = setso.iterator();
+
+            
             while (itposts.hasNext()) {
 
                 if (x < p * ps) {
