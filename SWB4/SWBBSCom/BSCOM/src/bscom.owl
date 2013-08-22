@@ -685,9 +685,9 @@
     <rdfs:subClassOf rdf:resource="#Serializable"/>
     <rdfs:subClassOf>
       <swb:Interface rdf:ID="PeriodStatusAssignable">
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
         <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Cualquier elemento BSC al que se le puedan agregar mediciones</rdfs:comment>
+        >Interface que permite asignar más de un objeto de tipo "PeriodStatus" a un elemento.</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:subClassOf>
