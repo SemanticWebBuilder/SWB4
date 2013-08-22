@@ -550,8 +550,12 @@
     <swb:hasClass>
       <swb:Class rdf:ID="PeriodStatus">
         <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.bsc.element</swb:classCodePackage>
-        <rdfs:subClassOf rdf:resource="#BSCElement"/>
+        >org.semanticwb.bsc.tracing</swb:classCodePackage>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Clase que define el valor de un estado en un periodo. Ejemplo: Para el periodo "Enero 2013" - Estado "En Riesgo"</rdfs:comment>
+        <rdfs:subClassOf>
+          <owl:Class rdf:about="#BSCTracing"/>
+        </rdfs:subClassOf>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
