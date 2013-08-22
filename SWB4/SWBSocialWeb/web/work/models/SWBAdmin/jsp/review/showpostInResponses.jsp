@@ -35,7 +35,7 @@
     
     String classifyBySentiment=SWBSocialUtil.Util.getModelPropertyValue(wsite, SWBSocialUtil.CLASSIFYSENTMGS_PROPNAME);
     %>
-    <div class="swbform" style="width: 500px">
+    <div class="swbform" style="width: 900px">
     <table style="width: 100%">
         <tr>
             <th>
@@ -62,6 +62,9 @@
                 %>
                     <th>
                         <%=SWBSocialUtil.Util.getStringFromGenericLocale("sentiment", user.getLanguage())%>
+                    </th>
+                    <th>
+                        <%=SWBSocialUtil.Util.getStringFromGenericLocale("intensity", user.getLanguage())%>
                     </th>
                 <%
             }
@@ -169,7 +172,7 @@
                     %>    
                         </td>
                         <!--Intensity-->
-                        <td>
+                        <td align="center">
                             <%=postOut.getPostIntesityType()==0?SWBSocialUtil.Util.getStringFromGenericLocale("low", user.getLanguage()):postOut.getPostIntesityType()==1?SWBSocialUtil.Util.getStringFromGenericLocale("medium", user.getLanguage()):postOut.getPostIntesityType()==2?SWBSocialUtil.Util.getStringFromGenericLocale("high", user.getLanguage()):"---"%>
                         </td>
                     <%
