@@ -80,7 +80,7 @@
                 
             </td>
             <td>
-                <%=postOut.getMsg_Text()!=null?postOut.getMsg_Text():postOut.getTitle()!=null?postOut.getTitle():postOut.getDescription()!=null?postOut.getDescription():"---"%>
+                <%=postOut.getMsg_Text()!=null?postOut.getMsg_Text():"---"%>
             </td>
             <td>
                 <%
