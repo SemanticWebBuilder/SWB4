@@ -1728,19 +1728,6 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:comment>Preposición</rdfs:comment>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="countryCodetoSearch">
-    <rdfs:label xml:lang="en">Country Code to reduce the search</rdfs:label>
-    <rdfs:label xml:lang="es">Código de País a reducir la busqueda</rdfs:label>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_countryCodetoSearch">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
-        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:comment>Código de pais que servira como filtro, es decir, solo se guardaran los mensajes que se hayan generado en el pais que pertenesca al mismo código de pais que se capture en esta propiedad, esto podría ser para cada instancia (cuenta) de cada red social.</rdfs:comment>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#SocialNetwork"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="geoRadio">
     <rdfs:comment>Distancia del centro (punto de latitud y longitud) a buscar mensajes</rdfs:comment>
     <rdfs:domain rdf:resource="#Geolocable"/>
@@ -2101,6 +2088,10 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Interface>
+  <swbxf:DisplayProperty rdf:ID="dp_countryCodetoSearch">
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+    <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+  </swbxf:DisplayProperty>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org/swb4/ontology#usrPhoto">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_userPhoto">
