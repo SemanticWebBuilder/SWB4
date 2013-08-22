@@ -231,7 +231,7 @@
             if(postIn.getLatitude()!=0 && postIn.getLongitude()!=0 && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==2 || streamMapView==4))
             {
                  cont1++;
-                 String msg=replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false);
+                 String msg=SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false);
             
                 %>
                        var tmpIcon;
@@ -284,9 +284,9 @@
                         <%
                         } 
                         %>
-                        var postLocation='<%=replaceSpecialCharacters(postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation().replaceAll("'", ""), false)%>';
-                        var title='<%=postIn.getMsg_Text()!=null?replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false):postIn.getDescription()!=null?
-                            replaceSpecialCharacters(postIn.getDescription().replaceAll("'", ""), false):postIn.getTags()!=null?replaceSpecialCharacters(postIn.getTags().replaceAll("'", ""), false):"Sin Mensaje.."%>';
+                        var postLocation='<%=SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation().replaceAll("'", ""), false)%>';
+                        var title='<%=postIn.getMsg_Text()!=null?SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false):postIn.getDescription()!=null?
+                            SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getDescription().replaceAll("'", ""), false):postIn.getTags()!=null?SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getTags().replaceAll("'", ""), false):"Sin Mensaje.."%>';
                          geocoder.geocode( { 'address': postLocation}, function(results, status) { 
                             if(status==google.maps.GeocoderStatus.OK){
                                 var marker =new google.maps.Marker({
@@ -367,6 +367,7 @@
   *  SWBUtils, solo que esta función si deja los espacios en blanco, cosa que la 
   *  del SWBUtils no hace., de hecho me parece que es un bug., decirle a Javier despues.
   */
+/*
   public static String replaceSpecialCharacters(String txt, boolean replaceSpaces)
         {
             StringBuffer ret = new StringBuffer();
@@ -457,6 +458,7 @@
             aux = ret.toString();
             return aux;
         }
+ * */
 %>     
 
 
