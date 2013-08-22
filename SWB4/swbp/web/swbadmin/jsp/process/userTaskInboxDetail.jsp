@@ -315,11 +315,11 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
                     <thead>
                         <tr>
                             <th class="tban-id">ID</th>
-                            <th class="tban-id">Creador</th>
-                            <th class="tban-id">Estatus</th>
-                            <th class="tban-id">Iniciado</th>
-                            <th class="tban-id">Cerrado</th>
-                            <th class="tban-id">Tareas activas</th>
+                            <th class="tban-id"><%=paramRequest.getLocaleString("lblCreator")%></th>
+                            <th class="tban-id"><%=paramRequest.getLocaleString("lblStatus")%></th>
+                            <th class="tban-id"><%=paramRequest.getLocaleString("pStatusInit")%></th>
+                            <th class="tban-id"><%=paramRequest.getLocaleString("pStatusClosed")%></th>
+                            <th class="tban-id"><%=paramRequest.getLocaleString("lblActiveTasks")%></th>
                         </tr>
                     </thead>
                     <tbody>
