@@ -156,7 +156,7 @@ if (showResponse) {%>
 
             d3.select("#responseTime svg")
                 .append("svg:text")
-                .text("<%=paramRequest.getLocaleString("lblResponsetime")%> (minutos)")
+                .text("<%=paramRequest.getLocaleString("lblResponsetime")%> (<%=paramRequest.getLocaleString("lblMinutes")%>)")
                 .attr("x",function() {
                     return ""+(w/2);
                 })
