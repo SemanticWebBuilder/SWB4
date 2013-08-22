@@ -982,6 +982,102 @@ public class SWBSocialUtil implements SWBAppObject {
     public static class Util {
         
         /**
+        *  Reemplaza caracteres especiales, tal como lo hace la misma función desde el 
+        *  SWBUtils, solo que esta función si deja los espacios en blanco, cosa que la 
+        *  del SWBUtils no hace., de hecho me parece que es un bug., decirle a Javier despues.
+        */
+        public static String replaceSpecialCharacters(String txt, boolean replaceSpaces)
+        {
+              StringBuffer ret = new StringBuffer();
+              String aux = txt;
+              //aux = aux.toLowerCase();
+              aux = aux.replace('Á', 'A');
+              aux = aux.replace('Ä', 'A');
+              aux = aux.replace('Å', 'A');
+              aux = aux.replace('Â', 'A');
+              aux = aux.replace('À', 'A');
+              aux = aux.replace('Ã', 'A');
+
+              aux = aux.replace('É', 'E');
+              aux = aux.replace('Ê', 'E');
+              aux = aux.replace('È', 'E');
+              aux = aux.replace('Ë', 'E');
+
+              aux = aux.replace('Í', 'I');
+              aux = aux.replace('Î', 'I');
+              aux = aux.replace('Ï', 'I');
+              aux = aux.replace('Ì', 'I');
+
+              aux = aux.replace('Ó', 'O');
+              aux = aux.replace('Ö', 'O');
+              aux = aux.replace('Ô', 'O');
+              aux = aux.replace('Ò', 'O');
+              aux = aux.replace('Õ', 'O');
+
+              aux = aux.replace('Ú', 'U');
+              aux = aux.replace('Ü', 'U');
+              aux = aux.replace('Û', 'U');
+              aux = aux.replace('Ù', 'U');
+
+              aux = aux.replace('Ñ', 'N');
+
+
+              aux = aux.replace('Ç', 'C');
+              aux = aux.replace('Ý', 'Y');
+
+              aux = aux.replace('á', 'a');
+              aux = aux.replace('à', 'a');
+              aux = aux.replace('ã', 'a');
+              aux = aux.replace('â', 'a');
+              aux = aux.replace('ä', 'a');
+              aux = aux.replace('å', 'a');
+
+              aux = aux.replace('é', 'e');
+              aux = aux.replace('è', 'e');
+              aux = aux.replace('ê', 'e');
+              aux = aux.replace('ë', 'e');
+
+              aux = aux.replace('í', 'i');
+              aux = aux.replace('ì', 'i');
+              aux = aux.replace('î', 'i');
+              aux = aux.replace('ï', 'i');
+
+              aux = aux.replace('ó', 'o');
+              aux = aux.replace('ò', 'o');
+              aux = aux.replace('ô', 'o');
+              aux = aux.replace('ö', 'o');
+              aux = aux.replace('õ', 'o');
+
+              aux = aux.replace('ú', 'u');
+              aux = aux.replace('ù', 'u');
+              aux = aux.replace('ü', 'u');
+              aux = aux.replace('û', 'u');
+
+              aux = aux.replace('ñ', 'n');
+
+              aux = aux.replace('ç', 'c');
+              aux = aux.replace('ÿ', 'y');
+              aux = aux.replace('ý', 'y');
+
+              if (replaceSpaces)
+              {
+                  aux = aux.replace(' ', '_');
+              }
+              int l = aux.length();
+              for (int x = 0; x < l; x++)
+              {
+                  char ch = aux.charAt(x);
+                  if ((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z')
+                          || (ch >= 'A' && ch <= 'Z') || ch == '_' || ch == ' ')
+                  {
+                      ret.append(ch);
+                  }
+              }
+              aux = ret.toString();
+              return aux;
+         }
+
+        /**
          * Metodo que elimina las preposiciones encontradas en un String
          * @param text String en el que se buscaran y eliminaran preposiciones
          * @return String sin preposiciones
