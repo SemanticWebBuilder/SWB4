@@ -79,7 +79,7 @@ if (showResponse) {
             ]);
 
             var chart2 = new google.visualization.PieChart(document.getElementById('responseTime'));
-            options.title = "<%=paramRequest.getLocaleString("lblResponsetime")%> (minutos)";
+            options.title = "<%=paramRequest.getLocaleString("lblResponsetime")%> (<%=paramRequest.getLocaleString("lblMinutes")%>)";
             options.pieSliceText = "value";
             chart2.draw(data2, options);
             <%
