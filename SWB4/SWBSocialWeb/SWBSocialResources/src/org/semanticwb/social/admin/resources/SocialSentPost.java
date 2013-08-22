@@ -605,7 +605,9 @@ public class SocialSentPost extends GenericResource {
                 String msgText = postOut.getURI();
                 if (postOut.getMsg_Text() != null) {
                     msgText = SWBUtils.TEXT.scape4Script(postOut.getMsg_Text());
+                    msgText=SWBSocialUtil.Util.replaceSpecialCharacters(msgText, false);
                 }
+                
 
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + msgText + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
 

@@ -654,9 +654,13 @@ public class StreamInBoxNoTopic extends GenericResource {
                 urlr.setParameter("sval", postIn.getURI());
                 urlr.setParameter("page", "" + nPage);
                 urlr.setAction("remove");
+                
+                String text=SWBUtils.TEXT.scape4Script(postIn.getMsg_Text());
+                
+                text=SWBSocialUtil.Util.replaceSpecialCharacters(text, false);
 
                 out.println("<a href=\"#\" class=\"eliminar\" title=\"" + paramRequest.getLocaleString("remove") + "\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + 
-                        SWBUtils.TEXT.scape4Script(postIn.getMsg_Text()) + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
+                        text + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
 
 
                 //Preview

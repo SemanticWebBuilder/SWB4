@@ -724,10 +724,12 @@ public class SocialTopicInBox extends GenericResource {
                 urlr.setParameter("page", "" + nPage);
                 urlr.setAction(SWBResourceURL.Action_REMOVE);
 
-
+                String text=SWBUtils.TEXT.scape4Script(postIn.getMsg_Text());
+                
+                text=SWBSocialUtil.Util.replaceSpecialCharacters(text, false);
 
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " "
-                        + SWBUtils.TEXT.scape4Script(postIn.getMsg_Text()) + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
+                        + text + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
 
 
                 //Preview

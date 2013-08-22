@@ -423,7 +423,7 @@ public class StreamInBox extends GenericResource {
 
 
         String nameClassSentiment = "ascen";
-         String typeOrderSentiment = "Ordenar Ascendente";
+        String typeOrderSentiment = "Ordenar Ascendente";
         urlOderby.setParameter("orderBy", "sentimentDown");
         if (request.getParameter("orderBy") != null) {
             if (request.getParameter("orderBy").equals("sentimentUp") || request.getParameter("orderBy").equals("sentimentDown")) {
