@@ -86,7 +86,24 @@
                 long sizeItPostIns=SWBUtils.Collections.sizeOf(itPostIns); 
             %>
             <td>
-                Mensajes de entrada:<a href="#" onclick="submitUrl('<%=url.setParameter("swbSocialUser", socialNetUser.getId())%>',this); return false;"><%=sizeItPostIns%></a>
+                Mensajes de entrada:
+                <%
+                if(!paramRequest.getResourceBase().getTitle().equals("StreamMap")) 
+                {
+                %>    
+                    <a href="#" onclick="submitUrl('<%=url.setParameter("swbSocialUser", socialNetUser.getId())%>',this); return false;">
+                <%
+                }
+                %>
+                    <%=sizeItPostIns%>
+                <%
+                if(!paramRequest.getResourceBase().getTitle().equals("StreamMap")) 
+                {
+                    %>
+                    </a>
+                    <%
+                }
+                %>
             </td> 
         </tr>
         

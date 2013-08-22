@@ -36,6 +36,9 @@
     
     int streamMapView=Integer.parseInt(paramRequest.getResourceBase().getAttribute("streamMapView", "1"));
     
+    SWBResourceURL urlDetails = paramRequest.getRenderUrl().setMode("showMarkDet");
+    urlDetails.setCallMethod(SWBResourceURL.Call_DIRECT);
+    
 %>
 
 
@@ -250,12 +253,14 @@
                         <%
                         } 
                         %>
-                       batch.push(new google.maps.Marker({
+                       var marker = new google.maps.Marker({
                        position: new google.maps.LatLng(<%=postIn.getLatitude()%>,<%=postIn.getLongitude()%>),
                        icon: tmpIcon, 
-                       title: '<%=msg%>'  
-                    })
-                    );  
+                       title: '<%=msg%>',
+                       map: map
+                       });
+                       associateInfoWindows(marker, '<%=postIn.getEncodedURI()%>');
+                       batch.push(marker);  
                 <%         
             }else if(postIn.getPostInSocialNetworkUser()!=null && postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation()!=null && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==2 || streamMapView==4)){ 
                 cont2++; 
@@ -282,15 +287,16 @@
                         var postLocation='<%=replaceSpecialCharacters(postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation().replaceAll("'", ""), false)%>';
                         var title='<%=postIn.getMsg_Text()!=null?replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false):postIn.getDescription()!=null?
                             replaceSpecialCharacters(postIn.getDescription().replaceAll("'", ""), false):postIn.getTags()!=null?replaceSpecialCharacters(postIn.getTags().replaceAll("'", ""), false):"Sin Mensaje.."%>';
-                        geocoder.geocode( { 'address': postLocation}, function(results, status) { 
+                         geocoder.geocode( { 'address': postLocation}, function(results, status) { 
                             if(status==google.maps.GeocoderStatus.OK){
-                                batch.push(new google.maps.Marker({
+                                var marker =new google.maps.Marker({
                                 map: map,
                                 position: new google.maps.LatLng(results[0].geometry.location.lat(),results[0].geometry.location.lng()),
                                 icon: tmpIcon,
                                 title: 'By GeoUser Profile:'+title
-                                 })
-                                );  
+                                 });
+                                associateInfoWindows(marker, '<%=postIn.getEncodedURI()%>');
+                                batch.push(marker);  
                             }//else{
                                // alert("Esa dirección no existe:"+postLocation);
                             //}
@@ -303,6 +309,32 @@
       //
       
       return batch;
+    }
+    
+    //Crea los escuchas de los eventos "click", para cada marcador del mapa
+    function associateInfoWindows(marker, postInUri) {
+        google.maps.event.addListener(marker, 'click', function() {
+            var infoWin = null;
+            var request = false;
+            if (window.XMLHttpRequest) {
+                request = new XMLHttpRequest();
+            } else if (window.ActiveXObject) {
+                request = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            var url = "<%=urlDetails%>";
+            url += "?postUri=" + postInUri;
+            request.open('POST', url, true);
+            request.onreadystatechange = function() {
+                if ((request.readyState == 4) && (request.status == 200)) {
+                    infoWin = new google.maps.InfoWindow({
+                        content: request.responseText
+                    });
+                    infoWin.open(map, marker);
+                }
+            }
+            request.send();
+        });
+
     }
 
     function showMarkers() {
@@ -329,6 +361,7 @@
       
       
 <%!
+
   /**
   *  Reemplaza caracteres especiales, tal como lo hace la misma función desde el 
   *  SWBUtils, solo que esta función si deja los espacios en blanco, cosa que la 

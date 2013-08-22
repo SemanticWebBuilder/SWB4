@@ -71,6 +71,7 @@
             node1.put("value1", ""+positives);
             node1.put("value2", ""+round(intPorcentajePositive));
             node1.put("color", "#86c440");
+            node1.put("chartclass", "possClass");
             node.put(node1);
         }
         if(intPorcentajeNegative>0)
@@ -80,6 +81,7 @@
             node2.put("value1", ""+negatives);
             node2.put("value2", ""+round(intPorcentajeNegative));
             node2.put("color", "#990000");
+            node2.put("chartclass", "negClass");
             node.put(node2);
         }
         if(intPorcentajeNeutral>0)
@@ -89,6 +91,7 @@
             node3.put("value1", ""+neutrals);
             node3.put("value2", ""+round(intPorcentajeNeutral));
             node3.put("color", "#eae8e3");
+            node3.put("chartclass", "neuClass");
             node.put(node3);
         }
         
@@ -100,6 +103,7 @@
             node3.put("value1", "0");
             node3.put("value2", "100");
             node3.put("color", "#eae8e3");
+            node3.put("chartclass", "neuClass");
             node.put(node3);
         }
         return node;

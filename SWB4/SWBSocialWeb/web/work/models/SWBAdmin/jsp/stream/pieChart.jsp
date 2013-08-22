@@ -76,7 +76,7 @@ d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWeb
   var g = svg.selectAll(".arc")
       .data(pie(data))
     .enter().append("g")
-      .attr("class", "arc");
+      .attr("class", function(d) { return d.data.chartclass; }); 
 
   g.append("path")
       .attr("d", arc)
