@@ -145,13 +145,13 @@ public class AllNewPostInToUser extends GenericResource {
         if (socialSiteUri == null) {
             return;
         }
-
+        
         SemanticObject semObj = SemanticObject.getSemanticObject(socialSiteUri);
         if (semObj == null) {
             return;
         }
         WebSite wsite = (WebSite) semObj.createGenericInstance();
-
+        
         PrintWriter out = response.getWriter();
 
         if (request.getParameter("statusMsg") != null) {
@@ -181,8 +181,6 @@ public class AllNewPostInToUser extends GenericResource {
         SWBResourceURL urls = paramRequest.getRenderUrl();
         urls.setParameter("act", "");
         urls.setParameter("suri", wsite.getId());
-
-        System.out.println("DoEdit-1");
 
         out.println("<div class=\"swbform\">");
         
@@ -256,19 +254,14 @@ public class AllNewPostInToUser extends GenericResource {
         out.println("</thead>");
         out.println("<tbody>");
 
-        System.out.println("DoEdit-2");
-
         Iterator<PostIn> itposts = null;
         Iterator<UserGroupRef> itUserGroupRef = UserGroupRef.ClassMgr.listUserGroupRefs(wsite);
         while (itUserGroupRef.hasNext()) {
             UserGroupRef userGroupRef = itUserGroupRef.next();
-            System.out.println("DoEdit-3:" + userGroupRef);
             if (userGroupRef.getUserGroup().hasUser(user)) {
-                System.out.println("DoEdit-4:" + user.getId());
                 Iterator<SocialTopic> itSocialTopics = SocialTopic.ClassMgr.listSocialTopicByUserGroupRef(userGroupRef);
                 while (itSocialTopics.hasNext()) {
                     SocialTopic socialTopic = itSocialTopics.next();
-                    System.out.println("DoEdit-5:" + socialTopic);
                     //Extraigo cuales son los mensajes de un SocialTopic
                     itposts = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic);
                 }
@@ -280,7 +273,6 @@ public class AllNewPostInToUser extends GenericResource {
         if (itposts != null && itposts.hasNext()) {
 
             Set<PostIn> setso = SWBComparator.sortByCreatedSet(itposts, false);
-            System.out.println("DoEdit-6:" + setso);
             itposts = null;
 
             int recPerPage = 20;//if(resBase.getItemsbyPage()>0) recPerPage=resBase.getItemsbyPage();            
@@ -298,21 +290,13 @@ public class AllNewPostInToUser extends GenericResource {
 
             
             while (itposts.hasNext()) {
-
-                if (x < p * ps) {
-                    x++;
-                    continue;
-                }
-                if (x == (p * ps + ps) || x == l) {
-                    break;
-                }
-                x++;
-
                 PostIn postIn = itposts.next();
+                
+                nRec++;
+                if ((nRec > (nPage - 1) * recPerPage) && (nRec <= (nPage) * recPerPage)) {
+                paginate = true;
 
-                System.out.println("DoEdit-7:" + postIn);
-
-
+                
                 out.println("<tr>");
 
                 //Show Actions
@@ -430,44 +414,42 @@ public class AllNewPostInToUser extends GenericResource {
 
 
                 out.println("</tr>");
+                
             }
+
         }
 
         out.println("</tbody>");
         out.println("</table>");
         out.println("</fieldset>");
 
-        if (p > 0 || x < l) //Requiere paginacion
-        {
-            out.println("<fieldset>");
-            out.println("<center>");
-
-            //int pages=(int)(l+ps/2)/ps;
-
-            int pages = (int) (l / ps);
-            if ((l % ps) > 0) {
-                pages++;
-            }
-
-            for (int z = 0; z < pages; z++) {
-                if (z == 0 && p == 0) {
-                    continue;
-                }
-                SWBResourceURL urlNew = paramRequest.getRenderUrl();
-                urlNew.setParameter("suri", wsite.getId());
-                urlNew.setParameter("page", "" + z);
-                if (z != p) {
-                    out.println("<a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">" + (z + 1) + "</a> ");
+        if (paginate) {
+            out.println("<div id=\"pagination\">");
+            out.println("<span>P&aacute;ginas:</span>");
+            for (int countPage = 1; countPage < (Math.ceil((double) nRec / (double) recPerPage) + 1); countPage++) {
+                SWBResourceURL pageURL = paramRequest.getRenderUrl();
+                pageURL.setParameter("page", "" + (countPage));
+                pageURL.setParameter("socialSite", socialSiteUri);
+                
+                //pageURL.setParameter("suri", id);
+                //pageURL.setParameter("search", (searchWord.trim().length() > 0 ? searchWord : ""));
+                //pageURL.setParameter("swbSocialUser", swbSocialUser);
+                /*
+                if (request.getParameter("orderBy") != null) {
+                    pageURL.setParameter("orderBy", request.getParameter("orderBy"));
+                }*/
+                if (countPage != nPage) {
+                    out.println("<a href=\"#\" onclick=\"submitUrl('" + pageURL + "',this); return false;\">" + countPage + "</a> ");
                 } else {
-                    out.println((z + 1) + " ");
+                    out.println(countPage + " ");
                 }
             }
-            out.println("</center>");
-            out.println("</fieldset>");
+            out.println("</div>");
         }
 
+      }
 
-        out.println("</div>");
+      out.println("</div>");
     }
 
     private void doReClassifyByTopic(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
@@ -507,11 +489,6 @@ public class AllNewPostInToUser extends GenericResource {
         request.setAttribute("objUri", request.getParameter("objUri"));
         request.setAttribute("paramRequest", paramRequest);
 
-        System.out.println("doCreatePost/1:" + request.getParameter("valor"));
-        System.out.println("doCreatePost/2:" + request.getParameter("wsite"));
-        System.out.println("doCreatePost/3:" + request.getParameter("objUri"));
-
-
         try {
             rd.include(request, response);
         } catch (ServletException ex) {
@@ -523,10 +500,8 @@ public class AllNewPostInToUser extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         final Resource base = getResourceBase();
         String action = response.getAction();
-        System.out.println("Entra a InBox_processAction-1:" + action);
         if (action.equals("changeSocialTopic")) {
             if (request.getParameter("postUri") != null && request.getParameter("newSocialTopic") != null && request.getParameter("wsite")!=null) {
-                System.out.println("processAction/1");
                 SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postUri"));
                 Post post = (Post) semObj.createGenericInstance();
                 if (request.getParameter("newSocialTopic").equals("none")) {
@@ -544,9 +519,7 @@ public class AllNewPostInToUser extends GenericResource {
                 response.setRenderParameter("socialSite", request.getParameter("wsite"));
             }
         } else if (action.equals("postMessage")) {
-            System.out.println("Entra a InBox_processAction-2:" + request.getParameter("objUri"));
             if (request.getParameter("objUri") != null && request.getParameter("wsite")!=null) {
-                System.out.println("Entra a InBox_processAction-3");
                 PostIn postIn = (PostIn) SemanticObject.getSemanticObject(request.getParameter("objUri")).createGenericInstance();
                 SocialNetwork socialNet = (SocialNetwork) SemanticObject.getSemanticObject(request.getParameter("socialNetUri")).createGenericInstance();
                 ArrayList aSocialNets = new ArrayList();
@@ -560,10 +533,8 @@ public class AllNewPostInToUser extends GenericResource {
                     socialPFlow = (SocialPFlow) SemanticObject.createSemanticObject(socialFlow).createGenericInstance();
                 }
 
-                System.out.println("Entra a InBox_processAction-4:"+request.getParameter("wsite"));
                 SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, request.getParameter("toPost"), request, response);
 
-                System.out.println("Entra a InBox_processAction-5");
                 response.setMode(SWBActionResponse.Mode_EDIT);
                 response.setRenderParameter("dialog", "close");
                 response.setRenderParameter("statusMsg", response.getLocaleString("msgResponseCreated"));
