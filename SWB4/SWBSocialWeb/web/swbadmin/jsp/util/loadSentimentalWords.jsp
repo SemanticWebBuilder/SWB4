@@ -30,7 +30,7 @@ Inicia...
         out.println("sentimentWord:"+sentimentWord);
         //sentimentWord.remove();
     }
-/*
+
     //Inserta detos en la clase SentimentWords
     BufferedReader bf = null;
     try {
@@ -93,7 +93,7 @@ Inicia...
         //if(cont==10) break;
     }
     System.out.println("cont:"+cont);
- * */
+ 
 %>
 
 <%!
