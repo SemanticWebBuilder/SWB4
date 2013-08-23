@@ -483,7 +483,7 @@ public class Timeline extends GenericResource{
                 out.println("<span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
                 out.println("<script type=\"dojo/method\">");
                 out.println("   var spanId = dijit.byId('" + semTwitter.getId() + originalId + RETWEET + currentTab +  "');");
-                out.println("   spanId.attr('content', '" + "<a href=\"\"  onclick=\"try{dojo.byId(this.parentNode).innerHTML = \\'<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>\\';}catch(noe){} postSocialHtml(\\'" + actionURL.setParameter("retweetId", retweetId+"").setParameter("id", originalId+"").setParameter("currentTab", currentTab) + "\\',\\'" + semTwitter.getId() + originalStatus.getId() + INFORMATION + currentTab + "\\');return false;" +"\">Undo Retweet</a>" +"')");
+                out.println("   spanId.attr('content', '" + "<a href=\"\" class=\"retweet\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = \\'<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>\\';}catch(noe){} postSocialHtml(\\'" + actionURL.setParameter("retweetId", retweetId+"").setParameter("id", originalId+"").setParameter("currentTab", currentTab) + "\\',\\'" + semTwitter.getId() + originalStatus.getId() + INFORMATION + currentTab + "\\');return false;" +"\"><span>Undo Retweet</span></a>" +"')");
                 out.println("   showStatus('Retweeted sent successfully');");
                 out.println("</script>");
                 out.println("</span>");
@@ -509,7 +509,7 @@ public class Timeline extends GenericResource{
                 out.println("<span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
                 out.println("<script type=\"dojo/method\">");
                 out.println("   var spanId = dijit.byId('" + semTwitter.getId() + originalId + RETWEET + currentTab + "');");
-                out.println("   spanId.attr('content', '" + "<a href=\"#\"  onclick=\"try{dojo.byId(this.parentNode).innerHTML = \\'<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>\\';}catch(noe){} postSocialHtml(\\'" + actionURL.setParameter("id", originalId+"").setParameter("currentTab", currentTab) + "\\',\\'" + originalId + INFORMATION + currentTab + "\\');return false;" +"\">Retweet</a>" +"')");
+                out.println("   spanId.attr('content', '" + "<a href=\"#\" class=\"retweet\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = \\'<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>\\';}catch(noe){} postSocialHtml(\\'" + actionURL.setParameter("id", originalId+"").setParameter("currentTab", currentTab) + "\\',\\'" + originalId + INFORMATION + currentTab + "\\');return false;" +"\"><span>Retweet</a></span>" +"')");
                 out.println("   showStatus('Unretweet sent successfully');");
                 out.println("</script>");
                 out.println("</span>");
@@ -1083,57 +1083,48 @@ public class Timeline extends GenericResource{
         }
 
         try {
-                writer.write("<fieldset>");
-                writer.write("<table style=\"width: 100%; border: 0px\">");
+                writer.write("<div class=\"timeline timelinetweeter\">");
                 if(status.isRetweet()){
-                    writer.write("<tr>");
-                    writer.write("  <td colspan=\"2\"><b>Retweeted  by ");
-                    writer.write("       <a href=\"#\" onclick=\"showDialog('" + renderURL.setMode("showUserProfile").setParameter("targetUser", status.getUser().getScreenName()) + "','" + status.getUser().getName() + " - @" + status.getUser().getScreenName() + "');return false;\">@"+ status.getUser().getScreenName() + "</a></b> ");
-                    writer.write("  </td>");
-                    writer.write("</tr>");
+                    writer.write("  <p class=\"retweeted\">Retweeted  by ");
+                    writer.write("       <a href=\"#\" onclick=\"showDialog('" + renderURL.setMode("showUserProfile").setParameter("targetUser", status.getUser().getScreenName()) + "','" + status.getUser().getName() + " - @" + status.getUser().getScreenName() + "');return false;\">@"+ status.getUser().getScreenName() + "</a>");
+                    writer.write("  </p>");
                 }
-                writer.write("<tr>");
-                writer.write("   <td colspan=\"2\">");
-                writer.write("   " + twitterUser.getName() + " <b><a href=\"#\" onclick=\"showDialog('" +
+
+                writer.write("<p class=\"tweeter\">");
+                writer.write(twitterUser.getName() + " <a href=\"#\" onclick=\"showDialog('" +
                     renderURL.setMode("showUserProfile").setParameter("targetUser", twitterUser.getScreenName()) + "','" +
-                    twitterUser.getName() + " - @" + twitterUser.getScreenName() + "'); return false;\">" + twitterUser.getScreenName() + "</a></b>");
-                writer.write("   </td>");
-                writer.write("</tr>");
-                writer.write("<tr>");
-                writer.write("   <td  width=\"10%\">");
-                writer.write("       <a href=\"#\" onclick=\"showDialog('" + renderURL.setMode("showUserProfile").setParameter("targetUser", twitterUser.getScreenName()) + "','" + twitterUser.getName() + " - @" + twitterUser.getScreenName() + "');return false;\"><img src=\"" + twitterUser.getProfileImageURL() + "\"/></a>  ");
-                writer.write("   </td>");
-                writer.write("   <td width=\"90%\">");
+                    twitterUser.getName() + " - @" + twitterUser.getScreenName() + "'); return false;\">" + twitterUser.getScreenName() + "</a>");
+                writer.write("</p>");
+
+                writer.write("<p class=\"tweet\">");
+                writer.write("       <a href=\"#\" onclick=\"showDialog('" + renderURL.setMode("showUserProfile").setParameter("targetUser", twitterUser.getScreenName()) + "','" + twitterUser.getName() + " - @" + twitterUser.getScreenName() + "');return false;\"><img src=\"" + twitterUser.getProfileImageURL() + "\"/></a>");
+
                 String statusText = status.getText();
                 if(status.isRetweet()){// Remove 'RT @username: ' and show only the text when is a RT
                     statusText = statusText.substring(statusText.indexOf(":") + 2);
                 }                                
                 statusText = lookForEntities(statusText, renderURL, status.getURLEntities(), status.getMediaEntities(), status.getHashtagEntities(), status.getUserMentionEntities()); 
                 writer.write(        statusText);
-                writer.write("   </td>");
-                writer.write("</tr>");
-                writer.write("<tr>");
-                writer.write("   <td colspan=\"2\">");
-                
+                writer.write("</p>");
+
+                writer.write("<div class=\"timelineresume\">");
                 /*creates isolated spans to identify and update only the elemente where the action affects*/
                 writer.write("   <span class=\"inline\" id=\"" + semTwitter.getId() +  status.getId() + INFORMATION + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
                 updateStatusInformation(status, renderURL, objUri, writer);                
-                writer.write("   </span>");
+                writer.write("   </span>");                
                 
                 writer.write("   <span class=\"inline\" id=\"" + semTwitter.getId() + status.getId() + TOPIC + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
                 if(postURI != null){//If post already exists
                     SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", status.getId()+"").setParameter("postUri", postURI).setParameter("currentTab", tabSuffix);
                     writer.write("<a href=\"#\" title=\"" + "Reclasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
-                        + "Reclasificar tweet'); return false;\">Reclasificar</a>");
+                        + "Reclasificar tweet'); return false;\"><span>Reclasificar</span></a>");
                 }else{//If posts does not exists 
                     SWBResourceURL clasifybyTopic = renderURL.setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", status.getId()+"").setParameter("currentTab", tabSuffix);
                     writer.write("<a href=\"#\" title=\"" + "Clasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
-                        + "Clasificar tweet'); return false;\">Clasificar</a>");
+                        + "Clasificar tweet'); return false;\"><span>Clasificar</span></a>");
                 }
                 writer.write("   </span>");
-                writer.write("   <span class=\"inline\" id=\"" + semTwitter.getId() + status.getId() + RETWEET + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
-                updateStatusRT(status, renderURL, actionURL, objUri, writer, twitter.getId(), tabSuffix, semTwitter);
-                writer.write("   </span>");                
+                
                 writer.write("   <span class=\"inline\" id=\"" + semTwitter.getId() + status.getId() + FAVORITE + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
                 if(status.isRetweet()){//Apparently there's a bug in Twitter4j. isFavorite() is always false unless the status is obtained with showStatus()
                     try{
@@ -1145,6 +1136,10 @@ public class Timeline extends GenericResource{
                 writer.write(checkIfFavorite(status, actionURL, writer,tabSuffix, semTwitter));
                 }
                 writer.write("   </span>");
+                writer.write("   <span class=\"inline\" id=\"" + semTwitter.getId() + status.getId() + RETWEET + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
+                updateStatusRT(status, renderURL, actionURL, objUri, writer, twitter.getId(), tabSuffix, semTwitter);
+                writer.write("   </span>");
+                writer.write("</div>");
                 
                 if(conversations != null && !conversations.isEmpty()){
                     writer.write("   <span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
@@ -1152,8 +1147,6 @@ public class Timeline extends GenericResource{
                     writer.write("   </span>");
                                         
                 }
-                writer.write("   </td>");
-                writer.write("</tr>");
                 
                 if(conversations != null && !conversations.isEmpty()){
                     writer.write("<tr>");
@@ -1202,8 +1195,8 @@ public class Timeline extends GenericResource{
                     writer.write("</tr>");
                     
                 }
-                writer.write("</table>");
-                writer.write("</fieldset>");             
+                //writer.write("</table>");
+                writer.write("</div>");             
         } catch (Exception te) {
             log.error("Error when getting timeline: ", te);
         }        
@@ -1340,10 +1333,10 @@ public class Timeline extends GenericResource{
         String favorite;
         if(originalStatus.isFavorited()){
             actionURL.setAction("undoFavorite");
-            favorite = "<a href=\"#\"  onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + actionURL.setParameter("id", originalStatus.getId()+"").setParameter("currentTab", tabSuffix) + "','" + semTwitter.getId() + originalStatus.getId() + INFORMATION + tabSuffix + "'); return false;" +"\">Unfavorite</a> ";    
+            favorite = "<a href=\"#\"  onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + actionURL.setParameter("id", originalStatus.getId()+"").setParameter("currentTab", tabSuffix) + "','" + semTwitter.getId() + originalStatus.getId() + INFORMATION + tabSuffix + "'); return false;" +"\"><span>Unfavorite</span></a> ";
         }else{
             actionURL.setAction("doFavorite");
-            favorite = "<a href=\"#\"  onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + actionURL.setParameter("id", originalStatus.getId()+"").setParameter("currentTab", tabSuffix) + "','" + semTwitter.getId() + originalStatus.getId() + INFORMATION + tabSuffix +  "'); return false;" +"\">Favorite</a> ";
+            favorite = "<a href=\"#\"  onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + actionURL.setParameter("id", originalStatus.getId()+"").setParameter("currentTab", tabSuffix) + "','" + semTwitter.getId() + originalStatus.getId() + INFORMATION + tabSuffix +  "'); return false;" +"\"><span>Favorite</span></a> ";
         }
         return favorite;
     }
@@ -1359,10 +1352,10 @@ public class Timeline extends GenericResource{
      */
     public static void updateStatusInformation(Status originalStatus, SWBResourceURL renderURL, String objUri, java.io.Writer out){
         try{
-            out.write("Created:<b>" + twitterHumanFriendlyDate(originalStatus.getCreatedAt()) + "</b> - - Retweeted: <b>" + originalStatus.getRetweetCount() + "</b> times ");
+            out.write("<em>" + twitterHumanFriendlyDate(originalStatus.getCreatedAt()) + "</em> <strong><span>Retweeted: </span>" + originalStatus.getRetweetCount() + " times </strong>");
             out.write("<a href=\"#\" onclick=\"showDialog('" + renderURL.setMode("replyTweet").setParameter("id", originalStatus.getId()+"").setParameter("userName", "@" +
                     originalStatus.getUser().getScreenName()).setParameter("suri", objUri) +
-                    "','Reply to @"  + originalStatus.getUser().getScreenName() + "');return false;\">Reply</a> ");            
+                    "','Reply to @"  + originalStatus.getUser().getScreenName() + "');return false;\"><span>Reply</span></a> ");            
         }catch(IOException ex){
             System.out.println("Error checking updating Tweet Status!" + ex.getMessage());
         }
@@ -1374,14 +1367,14 @@ public class Timeline extends GenericResource{
                 System.out.println("SI es RT by ME inside update Status!!");
                 //actionURL.setAction("undoRT");
                 //out.write("<a href=\"#\"  onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + actionURL.setParameter("id", originalStatus.getId()+"").setParameter("currentTab", tabSuffix) + "','" + originalStatus.getId() + INFORMATION + tabSuffix + "'); return false;" +"\">Undo Retweet</a>");
-                out.write("<a href=\"#\"  onclick=\"return false;" +"\">Undo Retweet</a>");
+                out.write("<a class=\"retweet\" href=\"#\"  onclick=\"return false;" +"\"><span>Undo Retweet</span></a>");
             }else if(originalStatus.getUser().getId() == currentUser){ //User cannot retweet its own tweet
                 System.out.println(" Is My Tweet ");
-                out.write("My tweet");
+                out.write("<span>My tweet</span>");
             }else{
                 System.out.println("Vamos a hacer RT");
                 actionURL.setAction("doRT");
-                out.write("<a href=\"#\"  onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + actionURL.setParameter("id", originalStatus.getId()+"").setParameter("currentTab", tabSuffix) + "','" + semTwitter.getId() + originalStatus.getId() + INFORMATION + tabSuffix +  "'); return false;" +"\">Retweet</a> ");
+                out.write("<a class=\"retweet\" href=\"#\"  onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + actionURL.setParameter("id", originalStatus.getId()+"").setParameter("currentTab", tabSuffix) + "','" + semTwitter.getId() + originalStatus.getId() + INFORMATION + tabSuffix +  "'); return false;" +"\"><span>Retweet</span></a> ");
             }
         }catch(IOException ex){
             System.out.println("Error checking updating RT Status!" + ex.getMessage());
