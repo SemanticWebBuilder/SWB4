@@ -104,7 +104,7 @@
             e.printStackTrace();
         }
 %>    
-<div align="center" id="<%=objUri%>/getMoreTweets" dojoType="dojox.layout.ContentPane">
+<div class="timeline timelinetweeter" id="<%=objUri%>/getMoreTweets" dojoType="dojox.layout.ContentPane">
     <label id="<%=objUri%>/moreTwitLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMoreTweets").setParameter("maxTweetID", maxTweetID+"")%>','<%=objUri%>' + '/getMoreTweets', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;">More tweets</a></label>
 </div>
 
