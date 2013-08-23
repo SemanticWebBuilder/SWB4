@@ -384,7 +384,7 @@ public class SocialSentPost extends GenericResource {
 
          String nameClassUpdate = "ascen";
          String typeOrderUpdate = "Ordenar Ascendente";
-        urlOderby.setParameter("orderBy", "updatedUp");
+        urlOderby.setParameter("orderBy", "updatedDown");
         if (request.getParameter("orderBy") != null) {
             if (request.getParameter("orderBy").equals("updatedUp") || request.getParameter("orderBy").equals("updatedDown")) {
                 if (request.getParameter("nameClassUpdate") != null) {
@@ -392,7 +392,7 @@ public class SocialSentPost extends GenericResource {
                         nameClassUpdate = "ascen";
                     } else {
                         nameClassUpdate = "descen";
-                        urlOderby.setParameter("orderBy", "updatedDown");
+                        urlOderby.setParameter("orderBy", "updatedUp");
                         typeOrderUpdate ="Ordenar Descendente";
                     }
                 }
@@ -408,32 +408,75 @@ public class SocialSentPost extends GenericResource {
 
         if(classifyBySentiment!=null && classifyBySentiment.equalsIgnoreCase("true"))
         {
-            urlOderby.setParameter("orderBy", "sentimentUp");
-            out.println("<th>");
-            out.println("<a href=\"#\" class=\"ascen\" title=\"" + paramRequest.getLocaleString("sentiment") + "\" onclick=\"submitUrl('" + urlOderby + "',this); return false;\">");
-            out.println("<span>" + paramRequest.getLocaleString("sentiment") + "</span>");
-            out.println("<small>Descendente</small>");
-            out.println("</a>");
-            urlOderby.setParameter("orderBy", "sentimentDown");
-            out.println("</th>");
-
-            urlOderby.setParameter("orderBy", "intensityUp");
-            out.println("<th>");
-            out.println("<a href=\"#\" class=\"ascen\" title=\"" + paramRequest.getLocaleString("intensity") + "\" onclick=\"submitUrl('" + urlOderby + "',this); return false;\">");
-            out.println("<span>" + paramRequest.getLocaleString("intensity") + "</span>");
-            out.println("<small>Descendente</small>");
-            out.println("</a>");
-            urlOderby.setParameter("orderBy", "intensityDown");
-            out.println("</th>");
+            String nameClassSentiment = "ascen";
+         String typeOrderSentiment = "Ordenar Ascendente";
+        urlOderby.setParameter("orderBy", "sentimentDown");
+        if (request.getParameter("orderBy") != null) {
+            if (request.getParameter("orderBy").equals("sentimentUp") || request.getParameter("orderBy").equals("sentimentDown")) {
+                if (request.getParameter("nameClassSentiment") != null) {
+                    if (request.getParameter("nameClassSentiment").equals("descen")) {
+                        nameClassSentiment = "ascen";
+                    } else {
+                        nameClassSentiment = "descen";
+                        urlOderby.setParameter("orderBy", "sentimentUp");
+                        typeOrderSentiment ="Ordenar Descendente";
+                    }
+                }
+            }
         }
-
-        urlOderby.setParameter("orderBy", "statusUp");
         out.println("<th>");
-        out.println("<a href=\"#\" class=\"ascen\" title=\"" + paramRequest.getLocaleString("status") + "\" onclick=\"submitUrl('" + urlOderby + "',this); return false;\">");
-        out.println("<span>" + paramRequest.getLocaleString("status") + "</span>");
+        urlOderby.setParameter("nameClassSentiment", nameClassSentiment);
+        out.println("<a  href=\"#\" class=\"" + nameClassSentiment + "\" title=\"" + typeOrderSentiment + "\" onclick=\"submitUrl('" + urlOderby + "',this); return false;\">");
+        out.println("<span>" + paramRequest.getLocaleString("sentiment") + "</span>");
+        out.println("</a>");
+        out.println("</th>");
+
+        String nameClassIntensity = "ascen";
+        String typeOrderIntensity  = "Ordenar Ascendente";
+        urlOderby.setParameter("orderBy", "intensityDown");
+        if (request.getParameter("orderBy") != null) {
+            if (request.getParameter("orderBy").equals("intensityUp") || request.getParameter("orderBy").equals("intensityDown")) {
+                if (request.getParameter("nameClassIntensity") != null) {
+                    if (request.getParameter("nameClassIntensity").equals("descen")) {
+                        nameClassIntensity = "ascen";
+                    } else {
+                        nameClassIntensity = "descen";
+                        urlOderby.setParameter("orderBy", "intensityUp");
+                        typeOrderIntensity ="Ordenar Descendente";
+                    }
+                }
+            }
+        }
+        out.println("<th>");
+        urlOderby.setParameter("nameClassIntensity", nameClassIntensity);
+        out.println("<a href=\"#\" class=\"" + nameClassIntensity + "\" title=\"" + typeOrderIntensity + "\" onclick=\"submitUrl('" + urlOderby + "',this); return false;\">");
+        out.println("<span>" + paramRequest.getLocaleString("intensity") + "</span>");
         out.println("<small>Descendente</small>");
         out.println("</a>");
-        urlOderby.setParameter("orderBy", "statusDown");
+        out.println("</th>");
+        }
+
+        String nameClassStatus = "ascen";
+        String  typeOrderSentiment = "Ordenar Ascendente";
+        urlOderby.setParameter("orderBy", "statusUp");
+        if (request.getParameter("orderBy") != null) {
+            if (request.getParameter("orderBy").equals("statusUp") || request.getParameter("orderBy").equals("statusDown")) {
+                if (request.getParameter("nameClassStatus") != null) {
+                    if (request.getParameter("nameClassStatus").equals("descen")) {
+                        nameClassStatus = "ascen";
+                    } else {
+                        nameClassStatus = "descen";
+                         urlOderby.setParameter("orderBy", "statusDown");
+                        typeOrderSentiment ="Ordenar Descendente";
+                    }
+                }
+            }
+        }
+        out.println("<th>");
+        urlOderby.setParameter("nameClassStatus", nameClassStatus);
+        out.println("<a href=\"#\" class=\""+nameClassStatus+"\" title=\"" + typeOrderSentiment+ "\" onclick=\"submitUrl('" + urlOderby + "',this); return false;\">");
+        out.println("<span>" + paramRequest.getLocaleString("status") + "</span>");
+        out.println("</a>");       
         out.println("</th>");
 
 
@@ -512,6 +555,7 @@ public class SocialSentPost extends GenericResource {
         //System.out.println("searchWord en SentPost:"+searchWord);
 
         //Filtros
+       
         Set<PostOut> setso = null;
         String swbSocialUser = request.getParameter("swbSocialUser");
 
