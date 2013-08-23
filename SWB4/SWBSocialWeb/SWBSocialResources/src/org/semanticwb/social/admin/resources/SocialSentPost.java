@@ -384,7 +384,7 @@ public class SocialSentPost extends GenericResource {
 
          String nameClassUpdate = "ascen";
          String typeOrderUpdate = "Ordenar Ascendente";
-        urlOderby.setParameter("orderBy", "updatedDown");
+        urlOderby.setParameter("orderBy", "updatedUp");
         if (request.getParameter("orderBy") != null) {
             if (request.getParameter("orderBy").equals("updatedUp") || request.getParameter("orderBy").equals("updatedDown")) {
                 if (request.getParameter("nameClassUpdate") != null) {
@@ -392,7 +392,7 @@ public class SocialSentPost extends GenericResource {
                         nameClassUpdate = "ascen";
                     } else {
                         nameClassUpdate = "descen";
-                        urlOderby.setParameter("orderBy", "updatedUp");
+                        urlOderby.setParameter("orderBy", "updatedDown");
                         typeOrderUpdate ="Ordenar Descendente";
                     }
                 }
