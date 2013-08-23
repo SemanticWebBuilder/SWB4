@@ -656,7 +656,7 @@
     params.put("access_token", facebookBean.getAccessToken());
     SWBModel model=WebSite.ClassMgr.getWebSite(facebookBean.getSemanticObject().getModel().getName());
     
-    params.put("limit", "100");
+    params.put("limit", "50");
     params.put("fields", "id,from,to,message,message_tags,story,story_tags,picture,caption,link,object_id,application,source,name,description,properties,icon,actions,privacy,type,status_type,created_time,likes,comments.limit(5),place");
 
     //SELECT status_id, time, source, message FROM status WHERE uid = me() Filtering status only
@@ -705,7 +705,7 @@
         %>
    </script>
 </div>
-<div align="center" id="<%=objUri%>getMorePosts" dojoType="dijit.layout.ContentPane">
+<div id="<%=objUri%>getMorePosts" dojoType="dijit.layout.ContentPane">
     <label id="<%=objUri%>morePostsLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMorePosts").setParameter("until", untilPost).setParameter("scope", "newsFeed")%>','<%=objUri%>getMorePosts', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;">More posts</a></label>
 </div>
 </div>
