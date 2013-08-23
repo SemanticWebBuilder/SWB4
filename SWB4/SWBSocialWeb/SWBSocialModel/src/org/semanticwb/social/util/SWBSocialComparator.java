@@ -567,6 +567,208 @@ public class SWBSocialComparator implements Comparator {
     }
     
     
+    
+    /**
+     * Sort by sortBySentiment name set.
+     *
+     * @param it the it
+     * @return the sets the
+     */
+    public static Set sortBySentimentPostOut(Iterator it, boolean firstPositive) {
+        TreeSet set = null;
+        try {
+            if (it == null) {
+                return null;
+            }
+            if (firstPositive) {
+                set = new TreeSet(new Comparator() {
+                    public int compare(Object o1, Object o2) {
+                        if (o1 instanceof Post && o2 instanceof Post) {
+                            PostOut postOut1 = (PostOut) o1;
+                            PostOut postOut2 = (PostOut) o2;
+
+                            int sentimentValuePost1 = postOut1.getPostSentimentalType();
+                            int sentimentValuePost2 = postOut2.getPostSentimentalType();
+
+                            if (sentimentValuePost1 == 1 && (sentimentValuePost2 == 0 || sentimentValuePost2 == 2)) {
+                                return 1;
+                            }
+                            if (sentimentValuePost1 == 0 && (sentimentValuePost2 == 2)) {
+                                return 1;
+                            } else if (sentimentValuePost1 == sentimentValuePost2) {
+                                Date d1 = postOut1.getSemanticObject().getDateProperty(Traceable.swb_created);
+                                Date d2 = postOut2.getSemanticObject().getDateProperty(Traceable.swb_created);
+
+                                if (d1 == null && d2 != null) {
+                                    return -1;
+                                }
+                                if (d1 != null && d2 == null) {
+                                    return 1;
+                                }
+                                if (d1 == null && d2 == null) {
+                                    return -1;
+                                } else {
+                                    int ret = d1.getTime() > d2.getTime() ? 1 : -1;
+                                    return ret;
+                                }
+
+                            } else {
+                                return -1;
+                            }
+                        } else {
+                            return -1;
+                        }
+                    }
+                });
+            } else {
+                set = new TreeSet(new Comparator() {
+                    public int compare(Object o1, Object o2) {
+                        if (o1 instanceof Post && o2 instanceof Post) {
+                            PostOut postOut1 = (PostOut) o1;
+                            PostOut postOut2 = (PostOut) o2;
+
+                            int sentimentValuePost1 = postOut1.getPostSentimentalType();
+                            int sentimentValuePost2 = postOut2.getPostSentimentalType();
+
+                            if (sentimentValuePost1 == 2 && (sentimentValuePost2 == 0 || sentimentValuePost2 == 1)) {
+                                return 1;
+                            }
+                            if (sentimentValuePost1 == 0 && (sentimentValuePost2 == 1)) {
+                                return 1;
+                            } else if (sentimentValuePost1 == sentimentValuePost2) {
+                                Date d1 = postOut1.getSemanticObject().getDateProperty(Traceable.swb_created);
+                                Date d2 = postOut2.getSemanticObject().getDateProperty(Traceable.swb_created);
+
+                                if (d1 == null && d2 != null) {
+                                    return -1;
+                                }
+                                if (d1 != null && d2 == null) {
+                                    return 1;
+                                }
+                                if (d1 == null && d2 == null) {
+                                    return -1;
+                                } else {
+                                    int ret = d1.getTime() > d2.getTime() ? 1 : -1;
+                                    return ret;
+                                }
+
+                            } else {
+                                return -1;
+                            }
+                        } else {
+                            return -1;
+                        }
+                    }
+                });
+            }
+
+            while (it.hasNext()) {
+                set.add(it.next());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return set;
+    }
+
+    /**
+     * Sort by sortByIntensity name set.
+     *
+     * @param it the it
+     * @return the sets the
+     */
+    public static Set sortByIntensityPostOut(Iterator it, boolean firstHigh) {
+        TreeSet set = null;
+        try {
+            if (it == null) {
+                return null;
+            }
+            if (firstHigh) {
+                set = new TreeSet(new Comparator() {
+                    public int compare(Object o1, Object o2) {
+                        if (o1 instanceof PostOut && o2 instanceof PostOut) {
+                            PostOut postOut1 = (PostOut) o1;
+                            PostOut postOut2 = (PostOut) o2;
+
+                            int intensityValuePost1 = postOut1.getPostIntesityType();
+                            int intensityValuePost2 = postOut2.getPostIntesityType();
+
+                            if (intensityValuePost1 > intensityValuePost2) {
+                                return -1;
+                            } else if (intensityValuePost1 == intensityValuePost2) {
+                                Date d1 = postOut1.getSemanticObject().getDateProperty(Traceable.swb_created);
+                                Date d2 = postOut2.getSemanticObject().getDateProperty(Traceable.swb_created);
+
+                                if (d1 == null && d2 != null) {
+                                    return -1;
+                                }
+                                if (d1 != null && d2 == null) {
+                                    return 1;
+                                }
+                                if (d1 == null && d2 == null) {
+                                    return -1;
+                                } else {
+                                    int ret = d1.getTime() > d2.getTime() ? 1 : -1;
+                                    return ret;
+                                }
+
+                            } else {
+                                return 1;
+                            }
+                        } else {
+                            return 1;
+                        }
+                    }
+                });
+            } else {
+                set = new TreeSet(new Comparator() {
+                    public int compare(Object o1, Object o2) {
+                        if (o1 instanceof Post && o2 instanceof Post) {
+                            PostOut postOut1 = (PostOut) o1;
+                            PostOut postOut2 = (PostOut) o2;
+
+                            int intensityValuePost1 = postOut1.getPostIntesityType();
+                            int intensityValuePost2 = postOut2.getPostIntesityType();
+
+                            if (intensityValuePost1 < intensityValuePost2) {
+                                return -1;
+                            } else if (intensityValuePost1 == intensityValuePost2) {
+                                Date d1 = postOut1.getSemanticObject().getDateProperty(Traceable.swb_created);
+                                Date d2 = postOut2.getSemanticObject().getDateProperty(Traceable.swb_created);
+
+                                if (d1 == null && d2 != null) {
+                                    return -1;
+                                }
+                                if (d1 != null && d2 == null) {
+                                    return 1;
+                                }
+                                if (d1 == null && d2 == null) {
+                                    return -1;
+                                } else {
+                                    int ret = d1.getTime() > d2.getTime() ? 1 : -1;
+                                    return ret;
+                                }
+
+                            } else {
+                                return 1;
+                            }
+                        } else {
+                            return 1;
+                        }
+                    }
+                });
+            }
+
+            while (it.hasNext()) {
+                set.add(it.next());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return set;
+    }
+    
+    
     /**
      * Sort by sortBySentiment name set.
      *
