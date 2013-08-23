@@ -1678,13 +1678,13 @@ public class SocialSentPost extends GenericResource {
             } else if (request.getParameter("orderBy").equals("updatedDown")) {
                 setso = SWBComparator.sortByCreatedSet(itposts, false);
             } else if (request.getParameter("orderBy").equals("sentimentUp")) {
-                setso = SWBSocialComparator.sortBySentiment(itposts, false);
+                setso = SWBSocialComparator.sortBySentimentPostOut(itposts, false);
             } else if (request.getParameter("orderBy").equals("sentimentDown")) {
-                setso = SWBSocialComparator.sortBySentiment(itposts, true);
+                setso = SWBSocialComparator.sortBySentimentPostOut(itposts, true);
             } else if (request.getParameter("orderBy").equals("intensityUp")) {
-                setso = SWBSocialComparator.sortByIntensity(itposts, true);
+                setso = SWBSocialComparator.sortByIntensityPostOut(itposts, true);
             } else if (request.getParameter("orderBy").equals("intensityDown")) {
-                setso = SWBSocialComparator.sortByIntensity(itposts, false);
+                setso = SWBSocialComparator.sortByIntensityPostOut(itposts, false);
             } else if (request.getParameter("orderBy").equals("statusUp")) {
                 setso = SWBSocialComparator.sortByPostOutStatus(itposts, true);
             } else if (request.getParameter("orderBy").equals("statusDown")) {
