@@ -739,6 +739,13 @@ public class Timeline extends GenericResource{
                 if(session.getAttribute(objUri + "pooling") != null){
                     session.removeAttribute(objUri + "pooling");
                 }
+                if(session.getAttribute(objUri + "tweetsListener") != null){
+                    session.removeAttribute(objUri + "tweetsListener");
+                }
+                if(session.getAttribute(objUri + "twitterStream") != null){
+                    session.removeAttribute(objUri + "twitterStream");
+                }
+                
             }
         }else if(mode!= null && mode.equals("favoriteSent")){//Displays updated data of favorited tweet
             SWBResourceURL renderURL = paramRequest.getRenderUrl();
