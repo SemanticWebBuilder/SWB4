@@ -80,7 +80,7 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String path = "/swbadmin/jsp/process/reports/ReportResource.jsp";
+        String path = "/swbadmin/jsp/process/reports/images/ReportResource.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(path);
         request.setAttribute("paramRequest", paramRequest);
         request.setAttribute("pageElements", getPageElements());
@@ -113,7 +113,7 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
     }
 
     public void doViewReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, ParseException {
-        String path = "/swbadmin/jsp/process/reports/ReportResourceView.jsp";
+        String path = "/swbadmin/jsp/process/reports/images/ReportResourceView.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(path);
         request.setAttribute("paramRequest", paramRequest);
         request.setAttribute("idReport", request.getParameter("idReport"));
@@ -186,7 +186,7 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
                 cellStyle.setFont(fontTitle);
                 cellTitle.setCellStyle(cellStyle);
                 worksheet.addMergedRegion(new Region(3, (short) 0, 3, (short) (i - 1)));
-                InputStream is = new FileInputStream(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/reports/cabecera-logo.jpg");
+                InputStream is = new FileInputStream(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/reports/images/cabecera-logo.jpg");
                 byte[] bytes = IOUtils.toByteArray(is);
                 int pictureIdx = workbook.addPicture(bytes, workbook.PICTURE_TYPE_JPEG);
                 is.close();
@@ -297,12 +297,12 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
                     log.error("error to create " + ou + " -- " + ex.getMessage());
                 }
                 document.open();
-                Image header = Image.getInstance(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/reports/cabecera-logo.jpg");
+                Image header = Image.getInstance(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/reports/images/cabecera-logo.jpg");
                 header.setAlignment(Chunk.ALIGN_LEFT);
                 header.rectangle(230, 20);
                 document.add(header);
 
-                Image foto = Image.getInstance(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/reports/bar.png");
+                Image foto = Image.getInstance(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/reports/images/bar.png");
                 foto.setAlignment(Chunk.ALIGN_CENTER);
                 foto.rectangle(230, 10);
                 document.add(foto);
@@ -621,7 +621,7 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
     };
 
     public void doAdd(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, ServletException {
-        String path = "/swbadmin/jsp/process/reports/ReportResourceAdd.jsp";
+        String path = "/swbadmin/jsp/process/reports/images/ReportResourceAdd.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(path);
         request.setAttribute("paramRequest", paramRequest);
         try {
@@ -633,7 +633,7 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
 
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String path = "/swbadmin/jsp/process/reports/ReportResourceEdit.jsp";
+        String path = "/swbadmin/jsp/process/reports/images/ReportResourceEdit.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(path);
         request.setAttribute("paramRequest", paramRequest);
         request.setAttribute("idReport", request.getParameter("idReport"));
