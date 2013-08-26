@@ -30,7 +30,7 @@
 
     StringBuilder address = new StringBuilder(128);
     address.append("http://").append(request.getServerName()).append(":").append(request.getServerPort()).append("/").append(paramRequest.getUser().getLanguage()).append("/").append(paramRequest.getResourceBase().getWebSiteId()).append("/" + paramRequest.getWebPage().getId() + "/_rid/").append(paramRequest.getResourceBase().getId()).append("/_mod/").append(paramRequest.getMode()).append("/_lang/").append(paramRequest.getUser().getLanguage());
-    address.append(description);
+  
 
       SWBResourceURL urlAction = paramRequest.getActionUrl();
       urlAction.setParameter("toPost", "photo");
@@ -63,7 +63,10 @@
 
                     <tr>
                         <td>
-                            <img src="<%=SWBPortal.getContextPath() + "/work" + swb.getWorkPath() + "/socialwpPhoto_Pagina_Social_" + swb.getSocialwpPhoto()%>">
+                                         
+                             <img src="<%=SWBPortal.getContextPath() + "/work" + swb.getWorkPath()+"/" + SocialWebPage.social_socialwpPhoto.getName()+"_"+swb.getId()+"_"+swb.getSocialwpPhoto()%>">
+                             <!--<img src="<%= SWBPortal.getWorkPath() + swb.getWorkPath() + "/" + SocialWebPage.social_socialwpPhoto.getName()+"_"+swb.getId()+"_" + swb.getSocialwpPhoto()%>">-->
+                        
                         </td>
                     </tr>
                     
