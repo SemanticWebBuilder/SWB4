@@ -1,5 +1,5 @@
 <%-- 
-    Document   : editReport
+    Document   : ReportResourceEdit
     Created on : 11/03/2013, 05:23:28 PM
     Author     : carlos.alvarez
 --%>
@@ -75,11 +75,10 @@
             <%try {
                     while (ia.hasNext()) {
                         ItemAware iaw = ia.next();
-                        //System.out.println("el iaw: " + iaw);
+                        if(iaw.getItemSemanticClass() != null) {
                         Iterator<SemanticProperty> sp = iaw.getItemSemanticClass().listProperties();
                         while (sp.hasNext()) {
                             SemanticProperty spr = sp.next();
-                            //System.out.println("getPropId: " + spr.getPropId() + "\tgetName: " + spr.getName());
                             if (!propiedades.contains(iaw.getId() + "|" + spr.getPropId())) {
                                 if (!spr.getPropId().equals("swb:valid")) {
                                     control++;
@@ -90,6 +89,7 @@
                                 }
                             }
                         }
+                    }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -122,12 +122,12 @@
             <tr>
                 <td style="text-align: center;"><input type="checkbox" name="delete<%=colu.getURI()%>"/></td>
                 <td style="text-align: center;"><%if (contador == 1 && total > 1) {%>
-                    <a href="<%=urlAction.setAction("moveDown").setParameter("idColumn", colu.getId())%>" title="Bajar"><img src="/swbadmin/jsp/process/reports/down.png"></a>
+                    <a href="<%=urlAction.setAction("moveDown").setParameter("idColumn", colu.getId())%>" title="Bajar"><img src="/swbadmin/jsp/process/reports/images/down.png"></a>
                         <%} else if (contador < total && total > 1) {%>
-                    <a href="<%=urlAction.setAction("moveUp").setParameter("idColumn", colu.getId())%>" title="Subir"><img src="/swbadmin/jsp/process/reports/up.png"></a>
-                    <a href="<%=urlAction.setAction("moveDown").setParameter("idColumn", colu.getId())%>" title="Bajar"><img src="/swbadmin/jsp/process/reports/down.png"></a>
+                    <a href="<%=urlAction.setAction("moveUp").setParameter("idColumn", colu.getId())%>" title="Subir"><img src="/swbadmin/jsp/process/reports/images/up.png"></a>
+                    <a href="<%=urlAction.setAction("moveDown").setParameter("idColumn", colu.getId())%>" title="Bajar"><img src="/swbadmin/jsp/process/reports/images/down.png"></a>
                         <%} else if (contador == total && total > 1) {%>
-                    <a href="<%=urlAction.setAction("moveUp").setParameter("idColumn", colu.getId())%>" title="Subir"><img src="/swbadmin/jsp/process/reports/up.png"></a><%}%></td>
+                    <a href="<%=urlAction.setAction("moveUp").setParameter("idColumn", colu.getId())%>" title="Subir"><img src="/swbadmin/jsp/process/reports/images/up.png"></a><%}%></td>
                 <td><%=objeto + "." + sp.getName()%></td>
                 <td><input type="text" name="title<%=colu.getURI()%>" value="<%=colu.getTitleColumn() == null ? sp.getDisplayName(lang) : colu.getTitleColumn()%>"></input></td>
                 <td style="text-align: center;">
@@ -135,6 +135,12 @@
                 <td style="text-align: center;">
                     <input name="columnVisible<%=colu.getURI()%>" type="checkbox" <%if (colu.isColumnVisible()) {%> checked="true"<%}%>/></td>
                 <td style="text-align: center;">
+                    <%
+                    
+                    
+                    %>
+                    
+                    
                     <%if(sp.isDataTypeProperty()){%>
                     <input name="defaultValue<%=colu.getURI()%>" type="text"  value="<%=colu.getDefaultValue() == null ? "" : colu.getDefaultValue()%>"/>
                     <%if(sp.isNumeric() || sp.isDate()) {%>
