@@ -3,6 +3,9 @@
     Created on : 8/08/2013, 06:04:05 PM
     Author     : carlos.alvarez
 --%>
+<%@page import="org.semanticwb.process.model.SequenceFlow"%>
+<%@page import="org.semanticwb.process.model.ConnectionObject"%>
+<%@page import="org.semanticwb.process.model.DataObject"%>
 <%@page import="org.semanticwb.SWBUtils"%>
 <%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.process.model.Containerable"%>
@@ -40,10 +43,12 @@
         ArrayList activity = new ArrayList();
         ArrayList gateway = new ArrayList();
         ArrayList event = new ArrayList();
+        ArrayList dataob = new ArrayList();
         String laneT = paramRequest.getLocaleString("lane") != null ? paramRequest.getLocaleString("lane") : "Lane";
         String activityT = paramRequest.getLocaleString("activity") != null ? paramRequest.getLocaleString("activity") : "Activity";
         String gatewayT = paramRequest.getLocaleString("gateway") != null ? paramRequest.getLocaleString("gateway") : "Gateway";
         String eventT = paramRequest.getLocaleString("event") != null ? paramRequest.getLocaleString("event") : "Event";
+        String dataOBT = paramRequest.getLocaleString("data") != null ? paramRequest.getLocaleString("data") : "Data";
         Iterator<GraphicalElement> iterator = null;
         GraphicalElement ge = null;
         org.semanticwb.process.model.Process process = null;
@@ -83,6 +88,9 @@
                 if (ge instanceof Event) {
                     event.add(ge);
                 }
+                if (ge instanceof DataObject) {
+                    dataob.add(ge);
+                }
             }
 %>
 <div id="toast" style="background: #B40404; color: white; padding: 10px 40px 10px 40px; right: 40%; top: 5%; display: none; position: fixed; text-align:center; border-radius:8px 8px 8px 8px;"></div>
@@ -119,7 +127,14 @@
                     }
                     while (iterator.hasNext()) {
                         ge = iterator.next();
-                %>
+                        //Connections
+                        Iterator<ConnectionObject> itConObj = SWBComparator.sortByDisplayName(((Gateway) ge).listOutputConnectionObjects(), paramRequest.getUser().getLanguage());
+                        while (itConObj.hasNext()) {
+                            ConnectionObject connectionObj = itConObj.next();
+                            if (connectionObj instanceof SequenceFlow) {%>
+            <li><a href="#<%=connectionObj.getURI()%>" title="<%=connectionObj.getTitle()%>"><%out.print("IS CONNECTION: " + connectionObj.getTitle());%></a></li>
+                <%}
+                    }%>
             <li><a href="#<%=ge.getURI()%>" title="<%=ge.getTitle()%>"><%out.print(ge.getTitle());%></a></li>
                 <%
                     }
@@ -128,7 +143,16 @@
                         out.print("<li class=\"activity\" title=\"" + eventT + "\">" + eventT + "</li>");
                     }
                     while (iterator.hasNext()) {
-
+                        ge = iterator.next();
+                %>
+            <li><a href="#<%=ge.getURI()%>" title="<%=ge.getTitle()%>"><%out.print(ge.getTitle());%></a></li>
+                <%
+                    }
+                    iterator = SWBComparator.sortByDisplayName(dataob.iterator(), paramRequest.getUser().getLanguage());
+                    if (dataob.size() > 0) {
+                        out.print("<li class=\"activity\" title=\"" + dataOBT + "\">" + dataOBT + "</li>");
+                    }
+                    while (iterator.hasNext()) {
                         ge = iterator.next();
                 %>
             <li><a href="#<%=ge.getURI()%>" title="<%=ge.getTitle()%>"><%out.print(ge.getTitle());%></a></li>
@@ -161,7 +185,7 @@
         </div>
         <!--<a onclick="exportDocument('//urlExport%>', 'html');" style="cursor: pointer;" title="HTML" id="html">HTML</a>-->
         <a href="<%=urlExport.setParameter("format", "html")%>" style="cursor: pointer;" title="HTML" id="html">HTML</a>
-        <a href="<%=urlExport.setParameter("format", "pdf")%>" style="cursor: pointer;" title="PDF" id="pdf" >PDF</a>
+        <!--<a href="<%//urlExport.setParameter("format", "pdf")%>" style="cursor: pointer;" title="PDF" id="pdf" >PDF</a>-->
         <a title="<%=paramRequest.getLocaleString("print")%>" id="imprimir" href="javascript:print()"><%out.print(paramRequest.getLocaleString("print"));%></a>
         <div >
             <%String data = "";
@@ -201,10 +225,28 @@
                     ge = iterator.next();
                     out.println("<h3 id=\"" + ge.getURI() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h3>");
                     out.println(ge.getDocumentation().getText());
+                    //Connections
+                    Iterator<ConnectionObject> itConObj = SWBComparator.sortByDisplayName(((Gateway) ge).listOutputConnectionObjects(), paramRequest.getUser().getLanguage());
+                    while (itConObj.hasNext()) {
+                        ConnectionObject connectionObj = itConObj.next();
+                        if (connectionObj instanceof SequenceFlow) {
+                            out.println("<h3 id=\"" + connectionObj.getURI() + "\" title=\"" + connectionObj.getTitle() + "\">" + connectionObj.getTitle() + "</h3>");
+                            out.println(connectionObj.getDocumentation().getText());
+                        }
+                    }
                 }
                 iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
                 if (event.size() > 0) {
                     out.print("<div class=\"bandeja-combo\" title=\"" + eventT + "\"><strong>" + eventT + "</strong></div>");
+                }
+                while (iterator.hasNext()) {
+                    ge = iterator.next();
+                    out.println("<h3 id=\"" + ge.getURI() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h3>");
+                    out.println(ge.getDocumentation().getText());
+                }
+                iterator = SWBComparator.sortByDisplayName(dataob.iterator(), paramRequest.getUser().getLanguage());
+                if (dataob.size() > 0) {
+                    out.print("<div class=\"bandeja-combo\" title=\"" + dataOBT + "\"><strong>" + dataOBT + "</strong></div>");
                 }
                 while (iterator.hasNext()) {
                     ge = iterator.next();
