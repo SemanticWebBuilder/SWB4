@@ -22,93 +22,63 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
 <%
-    org.semanticwb.model.User user=paramRequest.getUser(); 
-    if(request.getAttribute("swbSocialUser")==null) return; 
-    
-    SemanticObject semObj=(SemanticObject)request.getAttribute("swbSocialUser");
-    if(semObj==null) return;
-    
-    WebSite wsite=WebSite.ClassMgr.getWebSite(semObj.getModel().getName());
-    if(wsite==null) return;
-    
-    SocialNetworkUser socialNetUser=(SocialNetworkUser)semObj.getGenericInstance();
+    org.semanticwb.model.User user = paramRequest.getUser();
+    if (request.getAttribute("swbSocialUser") == null) {
+        return;
+    }
+
+    SemanticObject semObj = (SemanticObject) request.getAttribute("swbSocialUser");
+    if (semObj == null) {
+        return;
+    }
+
+    WebSite wsite = WebSite.ClassMgr.getWebSite(semObj.getModel().getName());
+    if (wsite == null) {
+        return;
+    }
+
+    SocialNetworkUser socialNetUser = (SocialNetworkUser) semObj.getGenericInstance();
     //Un mensaje de entrada siempre debe estar atachado a un usuario de la red social de la que proviene, de esta manera, es como desde swbsocial
     //se respondería a un mensaje
-    if(socialNetUser==null) return;   
-    
-    String userPhoto=socialNetUser.getSnu_photoUrl(); //Sacar la foto de la redSocial;
-    if(userPhoto==null) userPhoto="/swbadmin/css/images/profileDefImg.jpg";
-    
- %>
+    if (socialNetUser == null) {
+        return;
+    }
 
+    String userPhoto = socialNetUser.getSnu_photoUrl(); //Sacar la foto de la redSocial;
+    if (userPhoto == null) {
+        userPhoto = "/swbadmin/css/images/profileDefImg.jpg";
+    }
 
-<div class="swbform" style="width: 500px">
-    <div align="center"><img src="<%=userPhoto%>"/></div>
-    <table style="width: 100%">
-        <tr>
-            <td align="center" colspan="5">
+%>
+
+<div class="swbform swbpopup usr-pop">
+    <div class="perfilgral">
+        <div class="perfil">
+            <img src="<%=userPhoto%>"/>        
+            <p>
                 <%=socialNetUser.getSnu_name()%>
-            </td>
-        </tr>
-        <tr>
-            <td align="center" colspan="5">
-                <%=socialNetUser.getSnu_SocialNetworkObj()!=null?socialNetUser.getSnu_SocialNetworkObj().getId():"---"%>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="5">&nbsp;</td>
-        </tr>
-        <tr>
-            <td align="center">
-                <%=SWBSocialUtil.Util.getStringFromGenericLocale("followers", user.getLanguage())%>: <b><%=socialNetUser.getFollowers()%></b>
-            </td>
-            <td align="center">
-                <%=SWBSocialUtil.Util.getStringFromGenericLocale("friends", user.getLanguage())%>: <b><%=socialNetUser.getFriends()%></b>
-            </td>
-            <td align="center">
-                Klout: <b><%=socialNetUser.getSnu_klout()%>
-            </td>          
-        </tr>
-        
-        <tr>
-            <td colspan="5"><hr><hr></td>
-        </tr>
-        
-        <tr>
+                <!-- <%=socialNetUser.getSnu_SocialNetworkObj() != null ? socialNetUser.getSnu_SocialNetworkObj().getId() : "---"%>-->
+            </p>
+        </div>
+        <p><strong><%=socialNetUser.getFollowers()%></strong> <%=SWBSocialUtil.Util.getStringFromGenericLocale("followers", user.getLanguage())%></p>
+        <p><strong><%=socialNetUser.getFriends()%></strong> <%=SWBSocialUtil.Util.getStringFromGenericLocale("friends", user.getLanguage())%></p>
+        <p><strong><%=socialNetUser.getSnu_klout()%></strong> Klout</p>
+        <p>   
             <%
-                SWBResourceURL url=paramRequest.getRenderUrl();
+                SWBResourceURL url = paramRequest.getRenderUrl();
                 url.setMode(SWBResourceURL.Action_EDIT);
                 url.setParameter("swbSocialUser", socialNetUser.getId());
                 url.setParameter("dialog", "close");
-                url.setParameter("suri", (String)request.getAttribute("suri")); 
+                url.setParameter("suri", (String) request.getAttribute("suri"));
                 url.setParameter("reloadTap", "true");
-                Iterator <PostIn> itPostIns=socialNetUser.listPostInInvs(); 
-                long sizeItPostIns=SWBUtils.Collections.sizeOf(itPostIns); 
+                Iterator<PostIn> itPostIns = socialNetUser.listPostInInvs();
+                long sizeItPostIns = SWBUtils.Collections.sizeOf(itPostIns);
             %>
-            <td>
-                Mensajes de entrada:
-                <%
-                if(!paramRequest.getResourceBase().getTitle().equals("StreamMap")) 
-                {
-                %>    
-                    <a href="#" onclick="submitUrl('<%=url.setParameter("swbSocialUser", socialNetUser.getId())%>',this); return false;">
-                <%
-                }
-                %>
-                    <%=sizeItPostIns%>
-                <%
-                if(!paramRequest.getResourceBase().getTitle().equals("StreamMap")) 
-                {
-                    %>
-                    </a>
-                    <%
-                }
-                %>
-            </td> 
-        </tr>
-        
-        <tr>
-            <td colspan="5"><hr><hr></td>
-        </tr>
-    
-    </table>
+            <strong><a href="#" onclick="submitUrl('<%=url.setParameter("swbSocialUser", socialNetUser.getId())%>',this); return false;"><%=sizeItPostIns%></a></strong>  Mensajes de entrada
+        </p>
+        <div class="clear"></div>
+    </div>
+</div>
+
+
+
