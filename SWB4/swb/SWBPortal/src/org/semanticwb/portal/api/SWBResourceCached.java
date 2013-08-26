@@ -58,7 +58,7 @@ public class SWBResourceCached implements SWBResource, SWBResourceWindow
     /** The lasttime. */
     volatile long lasttime = 0;
     
-    volatile Thread uthread=null;
+    volatile boolean caching=false;
     
     /** The cache mgr. */
     SWBResourceCachedMgr cacheMgr;
@@ -137,81 +137,38 @@ public class SWBResourceCached implements SWBResource, SWBResourceWindow
             } else
             {
                 cacheMgr.incCacheHits();
-                //if (request.getParameterNames().hasMoreElements())
-                //{
-                //    resource.render(request, response, resReq);
-                //} else
                 {
-                    if (cache == null || (System.currentTimeMillis() - lasttime > cachetime))
+                    if (!caching && (cache == null || (System.currentTimeMillis() - lasttime > cachetime)))
                     {
-                        if(uthread==null)
+                        synchronized(this)
                         {
-                            synchronized(this)
+                            if(!caching && (cache == null || (System.currentTimeMillis() - lasttime > cachetime)))
                             {
-                                if(uthread==null)
+                                caching=true;
+                                cacheMgr.incCacheLoadHits();
+                                lasttime = System.currentTimeMillis();
+                                SWBHttpServletResponseWrapper res=new SWBHttpServletResponseWrapper(response);
+                                try
                                 {
-                                    final Thread curr=Thread.currentThread();
-                                    uthread=new Thread(new Runnable() {
-                                        @Override
-                                        public void run()
-                                        {
-                                            cacheMgr.incCacheLoadHits();
-                                            lasttime = System.currentTimeMillis();
-                                            SWBHttpServletResponseWrapper res=new SWBHttpServletResponseWrapper(response);
-                                            try
-                                            {
-                                                resource.render(request, res, paramsRequest);
-                                                String ret = res.toString();
-                                                if(ret!=null && ret.length() > 0)
-                                                {
-                                                    cache=ret;
-                                                }
-                                            }catch(Exception e)
-                                            {
-                                                log.error(e);
-                                            }
-                                            curr.interrupt();
-                                            uthread=null;
-                                            //System.out.println("cache carcado:"+(cache!=null));
-                                        }
-                                    });
-                                    uthread.start();
-                                    
-                                    try
+                                    resource.render(request, res, paramsRequest);
+                                    String tmp = res.toString();
+                                    if(tmp!=null && tmp.length() > 0)
                                     {
-                                        wait(100);
-                                        System.out.println("Tiempo terminado:"+(cache!=null));
-                                    }catch(InterruptedException e){}
-                                } 
-                            }
+                                        cache=tmp;
+                                    }
+                                }catch(Exception e)
+                                {
+                                    log.error(e);
+                                }
+                                caching=false;
+                                //System.out.println("cache carcado:"+(cache!=null));
+                            } 
                         }
-//                        synchronized(this)
-//                        {
-//                            if (cache == null || (System.currentTimeMillis() - lasttime > cachetime))
-//                            {
-//                                cacheMgr.incCacheLoadHits();
-//                                lasttime = System.currentTimeMillis();
-//                                SWBHttpServletResponseWrapper res=new SWBHttpServletResponseWrapper(response);
-//                                resource.render(request, res, paramsRequest);
-//                                ret = res.toString();
-//                                
-//                                if(ret!=null && ret.length() > 0)
-//                                {
-//                                    cache=ret;
-//                                }
-//                            }
-//                        }
                     }
                     ret = cache;
                     if(ret!=null)response.getWriter().print(ret);
                 }
             }
-            /*
-            if (ret == null || ret.length() == 0)
-            {
-                ret = "Temporalmente fuera de servicio..";
-            }
-             */
             //System.out.println("resource:"+getResourceBase().getId()+" cached");
         }else
         {
@@ -230,6 +187,13 @@ public class SWBResourceCached implements SWBResource, SWBResourceWindow
     {
         resource.setResourceBase(base);
         cache = null;
+        try
+        {
+            cachetime = resource.getResourceBase().getResourceType().getResourceCache() * 1000;
+        } catch (Exception e)
+        {
+            log.error(e);
+        }
     }
 
     /**
