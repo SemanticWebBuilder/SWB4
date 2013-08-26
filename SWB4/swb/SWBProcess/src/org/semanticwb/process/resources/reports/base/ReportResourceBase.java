@@ -1,25 +1,27 @@
 package org.semanticwb.process.resources.reports.base;
 
 
-public abstract class ResourceReportsBase extends org.semanticwb.portal.api.GenericSemResource 
+public abstract class ReportResourceBase extends org.semanticwb.portal.api.GenericSemResource 
 {
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
+    public static final org.semanticwb.platform.SemanticProperty rep_saveOnSystem=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.process.resources/Reports#saveOnSystem");
     public static final org.semanticwb.platform.SemanticProperty rep_pageElements=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.process.resources/Reports#pageElements");
     public static final org.semanticwb.platform.SemanticClass rep_Report=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.process.resources/Reports#Report");
     public static final org.semanticwb.platform.SemanticProperty rep_hasReport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.process.resources/Reports#hasReport");
-    public static final org.semanticwb.platform.SemanticClass rep_ResourceReports=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.process.resources/Reports#ResourceReports");
-    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.process.resources/Reports#ResourceReports");
+    public static final org.semanticwb.platform.SemanticProperty rep_modeExport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.process.resources/Reports#modeExport");
+    public static final org.semanticwb.platform.SemanticClass rep_ReportResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.process.resources/Reports#ReportResource");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.process.resources/Reports#ReportResource");
 
-    public ResourceReportsBase()
+    public ReportResourceBase()
     {
     }
 
    /**
-   * Constructs a ResourceReportsBase with a SemanticObject
-   * @param base The SemanticObject with the properties for the ResourceReports
+   * Constructs a ReportResourceBase with a SemanticObject
+   * @param base The SemanticObject with the properties for the ReportResource
    */
-    public ResourceReportsBase(org.semanticwb.platform.SemanticObject base)
+    public ReportResourceBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
@@ -79,6 +81,24 @@ public abstract class ResourceReportsBase extends org.semanticwb.portal.api.Gene
              ret=(org.semanticwb.model.Resource)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the SaveOnSystem property
+* @return boolean with the SaveOnSystem
+*/
+    public boolean isSaveOnSystem()
+    {
+        return getSemanticObject().getBooleanProperty(rep_saveOnSystem);
+    }
+
+/**
+* Sets the SaveOnSystem property
+* @param value long with the SaveOnSystem
+*/
+    public void setSaveOnSystem(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(rep_saveOnSystem, value);
     }
 
 /**
@@ -162,5 +182,23 @@ public abstract class ResourceReportsBase extends org.semanticwb.portal.api.Gene
              ret=(org.semanticwb.process.resources.reports.Report)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the ModeExport property
+* @return int with the ModeExport
+*/
+    public int getModeExport()
+    {
+        return getSemanticObject().getIntProperty(rep_modeExport);
+    }
+
+/**
+* Sets the ModeExport property
+* @param value long with the ModeExport
+*/
+    public void setModeExport(int value)
+    {
+        getSemanticObject().setIntProperty(rep_modeExport, value);
     }
 }
