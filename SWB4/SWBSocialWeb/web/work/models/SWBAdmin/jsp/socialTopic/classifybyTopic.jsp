@@ -14,108 +14,83 @@
 <%@page import="org.semanticwb.portal.api.*"%>
 <%@page import="java.util.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
-    
+
 <%
-    if(request.getAttribute("postUri")==null) return;
-    
-    SemanticObject semObjPost=(SemanticObject)request.getAttribute("postUri");
-    
-    WebSite wsite=WebSite.ClassMgr.getWebSite(semObjPost.getModel().getName());
-    if(wsite==null) return; 
-    
-    Post post=(Post)semObjPost.getGenericInstance();
-    
-    SocialTopic socialTopic=post.getSocialTopic();
-    
-    User user=paramRequest.getUser(); 
-    
+    if (request.getAttribute("postUri") == null) {
+        return;
+    }
+
+    SemanticObject semObjPost = (SemanticObject) request.getAttribute("postUri");
+
+    WebSite wsite = WebSite.ClassMgr.getWebSite(semObjPost.getModel().getName());
+    if (wsite == null) {
+        return;
+    }
+
+    Post post = (Post) semObjPost.getGenericInstance();
+
+    SocialTopic socialTopic = post.getSocialTopic();
+
+    User user = paramRequest.getUser();
+
     SWBResourceURL actionUrl = paramRequest.getActionUrl();
     actionUrl.setAction("changeSocialTopic");
     actionUrl.setParameter("postUri", post.getURI());
     actionUrl.setParameter("wsite", wsite.getURI());
-    %>
-    <div class="swbform">
-    <fieldset>
-      <table width="98%" >
-        <thead>
-        <th>
-            <%=paramRequest.getLocaleString("actualTopic")%>
-        </th>
-        </thead>
-        <tbody>
-        
-        <tr>
-        <%        
-        if(socialTopic==null)
-        {
-            System.out.println("postUri-5");
-            %>
-            <td align="center">
-                ---
-            </td>
-            <%
-        }else
-        {
-            System.out.println("postUri-6");
-            %>
-            <td align="center">
-                <%=socialTopic.getDisplayTitle(user.getLanguage())%>  
-            </td>
-            <%
-        }
+%>
+
+<div class="swbform swbpopup retema-pop">   
+
+    <p>
+        <span>
+            <%=paramRequest.getLocaleString("actualTopic")%>:
+        </span>
+
+        <%
+            if (socialTopic == null) {
+                System.out.println("postUri-5");
         %>
-        </tr>
-      </tbody>
-      </table>
-    </fieldset>
-        
-    <fieldset>
-      <form id="<%=semObjPost.getSemanticClass().getClassId()%>/classbTopicForm" dojoType="dijit.form.Form" class="swbform" method="post" action="<%=actionUrl%>" method="post" onsubmit="submitForm('<%=semObjPost.getSemanticClass().getClassId()%>/classbTopicForm');return false;"> 
-      <table width="98%" >
-        <thead>
-        <th>
-            <%=paramRequest.getLocaleString("chooseTopic")%>
-        </th>
-        </thead>
-        <tbody>
-        
-        <tr>    
-            <td align="center">
-                <select name="newSocialTopic">
-                    <option value="none"><%=paramRequest.getLocaleString("none")%></option>
-                   <%
-                        System.out.println("postUri-7");
-                        Iterator<SocialTopic> itSocialTopics=SocialTopic.ClassMgr.listSocialTopics(wsite);
-                        while(itSocialTopics.hasNext())
-                        {
-                           System.out.println("postUri-8"); 
-                           SocialTopic siteSocialTopic=itSocialTopics.next();  
-                           if((socialTopic==null || !siteSocialTopic.getURI().equals(socialTopic.getURI())))
-                           {
-                               %>
-                                    <option value="<%=siteSocialTopic.getURI()%>"><%=siteSocialTopic.getDisplayTitle(user.getLanguage())%></option>
-                               <%
-                           }else if(socialTopic!=null && siteSocialTopic.getURI().equals(socialTopic.getURI()))
-                           {
-                                %>
-                                    <option value="<%=siteSocialTopic.getURI()%>" selected="true"><%=siteSocialTopic.getDisplayTitle(user.getLanguage())%></option>  
-                                <%
-                           } 
+        ---           
+        <%
+        } else {
+            System.out.println("postUri-6");
+        %>  
+
+        <%=socialTopic.getDisplayTitle(user.getLanguage())%>  
+
+    </p>
+    <%
+        }
+    %>
+    <form id="<%=semObjPost.getSemanticClass().getClassId()%>/classbTopicForm" dojoType="dijit.form.Form" class="swbform" method="post" action="<%=actionUrl%>" method="post" onsubmit="submitForm('<%=semObjPost.getSemanticClass().getClassId()%>/classbTopicForm');return false;"> 
+        <p>
+            <span><%=paramRequest.getLocaleString("chooseTopic")%>:</span>
+            <select name="newSocialTopic">
+                <option value="none"><%=paramRequest.getLocaleString("none")%></option>
+                <%
+                    System.out.println("postUri-7");
+                    Iterator<SocialTopic> itSocialTopics = SocialTopic.ClassMgr.listSocialTopics(wsite);
+                    while (itSocialTopics.hasNext()) {
+                        System.out.println("postUri-8");
+                        SocialTopic siteSocialTopic = itSocialTopics.next();
+                        if ((socialTopic == null || !siteSocialTopic.getURI().equals(socialTopic.getURI()))) {
+                %>
+                <option value="<%=siteSocialTopic.getURI()%>"><%=siteSocialTopic.getDisplayTitle(user.getLanguage())%></option>
+                <%
+                } else if (socialTopic != null && siteSocialTopic.getURI().equals(socialTopic.getURI())) {
+                %>
+                <option value="<%=siteSocialTopic.getURI()%>" selected="true"><%=siteSocialTopic.getDisplayTitle(user.getLanguage())%></option>  
+                <%
                         }
-                   %> 
-                </select>
-            </td> 
-        </tr>
-        <tr>
-            <td>
-                <button dojoType="dijit.form.Button" type="submit" ><%=paramRequest.getLocaleString("btnSend")%></button>
-                <button dojoType="dijit.form.Button" onclick="hideDialog(); return false;"><%=paramRequest.getLocaleString("btnCancel")%></button>
-            </td>
-        </tr>
-        </tbody>
-      </table>
-     </form>
-    </fieldset>
-  </div>
- 
+                    }
+                %> 
+            </select>
+        </p>
+        <button dojoType="dijit.form.Button" type="submit" ><%=paramRequest.getLocaleString("btnSend")%></button>
+        <button dojoType="dijit.form.Button" onclick="hideDialog(); return false;"><%=paramRequest.getLocaleString("btnCancel")%></button>
+    </form>
+</div>
+
+
+
 
