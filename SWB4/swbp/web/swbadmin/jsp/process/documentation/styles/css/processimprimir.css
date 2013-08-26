@@ -17,12 +17,12 @@ img{
 border: 0px;
 }
 #contenedor{
-height: 792px;
+height: auto;
 width: 612px;
 text-align:center;
 margin-right: auto;
 margin-left: auto;
-//background-color: blue;
+/*background-color: blue;*/
 }
 #header{
 height: 40px;
