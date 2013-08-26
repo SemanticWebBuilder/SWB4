@@ -1,5 +1,5 @@
 <%-- 
-    Document   : addReport
+    Document   : ReportResourceAdd
     Created on : 11/03/2013, 05:23:28 PM
     Author     : carlos.alvarez
 --%>
