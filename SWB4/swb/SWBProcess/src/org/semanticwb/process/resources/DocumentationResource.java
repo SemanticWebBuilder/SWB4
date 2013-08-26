@@ -11,10 +11,7 @@ import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.pdf.PdfWriter;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,7 +20,6 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -39,13 +35,16 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.process.model.Activity;
+import org.semanticwb.process.model.ConnectionObject;
 import org.semanticwb.process.model.Containerable;
+import org.semanticwb.process.model.DataObject;
 import org.semanticwb.process.model.Documentation;
 import org.semanticwb.process.model.Event;
 import org.semanticwb.process.model.Gateway;
 import org.semanticwb.process.model.GraphicalElement;
 import org.semanticwb.process.model.Lane;
 import org.semanticwb.process.model.ProcessElement;
+import org.semanticwb.process.model.SequenceFlow;
 import org.semanticwb.process.model.SubProcess;
 
 /**
@@ -162,6 +161,7 @@ public class DocumentationResource extends GenericAdmResource {
         String activityT = paramRequest.getLocaleString("activity") != null ? paramRequest.getLocaleString("activity") : "Activity";
         String gatewayT = paramRequest.getLocaleString("gateway") != null ? paramRequest.getLocaleString("gateway") : "Gateway";
         String eventT = paramRequest.getLocaleString("event") != null ? paramRequest.getLocaleString("event") : "Event";
+        String dataT = paramRequest.getLocaleString("data") != null ? paramRequest.getLocaleString("data") : "Data";
         if (!format.equals("") && !suri.equals("")) {
             ProcessElement pe = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
             if (pe != null) {
@@ -169,6 +169,7 @@ public class DocumentationResource extends GenericAdmResource {
                 ArrayList activity = new ArrayList();
                 ArrayList gateway = new ArrayList();
                 ArrayList event = new ArrayList();
+                ArrayList dataob = new ArrayList();
                 Iterator<GraphicalElement> iterator = null;
                 GraphicalElement ge = null;
                 if (pe instanceof org.semanticwb.process.model.Process) {
@@ -190,6 +191,9 @@ public class DocumentationResource extends GenericAdmResource {
                             }
                             if (ge instanceof Event) {
                                 event.add(ge);
+                            }
+                            if (ge instanceof DataObject) {
+                                dataob.add(ge);
                             }
                         }
                         Document doc = new Document(PageSize.A4);
@@ -242,9 +246,26 @@ public class DocumentationResource extends GenericAdmResource {
                             ge = iterator.next();
                             hw.parse(new StringReader("<br><h3>" + ge.getTitle() + "</h3>"));
                             hw.parse(new StringReader(ge.getDocumentation().getText()));
+                            //ConnectionObject
+                            Iterator<ConnectionObject> itConObj = SWBComparator.sortByDisplayName(((Gateway) ge).listOutputConnectionObjects(), paramRequest.getUser().getLanguage());
+                            while (itConObj.hasNext()) {
+                                ConnectionObject connectionObj = itConObj.next();
+                                if (connectionObj instanceof SequenceFlow) {
+                                    hw.parse(new StringReader("<br><h3>" + connectionObj.getTitle() + "</h3>"));
+                                    hw.parse(new StringReader(connectionObj.getDocumentation().getText()));
+                                }
+                            }
                         }
                         //Event
                         iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
+                        hw.parse(new StringReader("<br><h1>" + eventT + "</h1>"));
+                        while (iterator.hasNext()) {
+                            ge = iterator.next();
+                            hw.parse(new StringReader("<br><h3>" + ge.getTitle() + "</h3>"));
+                            hw.parse(new StringReader(ge.getDocumentation().getText()));
+                        }
+                        //Data
+                        iterator = SWBComparator.sortByDisplayName(dataob.iterator(), paramRequest.getUser().getLanguage());
                         hw.parse(new StringReader("<br><h1>" + eventT + "</h1>"));
                         while (iterator.hasNext()) {
                             ge = iterator.next();
@@ -282,6 +303,9 @@ public class DocumentationResource extends GenericAdmResource {
                                 }
                                 if (ge instanceof Event) {
                                     event.add(ge);
+                                }
+                                if (ge instanceof DataObject) {
+                                    dataob.add(ge);
                                 }
                             }
                         }
@@ -330,11 +354,32 @@ public class DocumentationResource extends GenericAdmResource {
                                 ref = ((SubProcess) ge).getTitle() + ".html";
                             }
                             html += "<li><a href=\"" + ref + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</a></li>";
+                            //Begin ConnectionObject
+                            Iterator<ConnectionObject> itConObj = SWBComparator.sortByDisplayName(((Gateway) ge).listOutputConnectionObjects(), paramRequest.getUser().getLanguage());
+                            while (itConObj.hasNext()) {
+                                ConnectionObject connectionObj = itConObj.next();
+                                if (connectionObj instanceof SequenceFlow) {
+                                    html += "<li><a href=\"#" + connectionObj.getURI() + "\" title=\"" + connectionObj.getTitle() + "\">" + connectionObj.getTitle() + "</a></li>";
+                                }
+                            }
+                            //End ConnectionObject
                         }
                         if (event.size() > 0) {
                             html += "<li class=\"activity\" title=\"" + eventT + "\">" + eventT + "</li>";
                         }
                         iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
+                        while (iterator.hasNext()) {
+                            ge = iterator.next();
+                            ref = "#" + ge.getURI();
+                            if (ge instanceof SubProcess) {
+                                ref = ((SubProcess) ge).getTitle() + ".html";
+                            }
+                            html += "<li><a href=\"" + ref + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</a></li>";
+                        }
+                        if (dataob.size() > 0) {
+                            html += "<li class=\"activity\" title=\"" + dataT + "\">" + dataT + "</li>";
+                        }
+                        iterator = SWBComparator.sortByDisplayName(dataob.iterator(), paramRequest.getUser().getLanguage());
                         while (iterator.hasNext()) {
                             ge = iterator.next();
                             ref = "#" + ge.getURI();
@@ -380,11 +425,30 @@ public class DocumentationResource extends GenericAdmResource {
                             ge = iterator.next();
                             html += "<h3 id=\"" + ge.getURI() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h3>";
                             html += ge.getDocumentation().getText();
+                            //Begin ConnectionObject
+                            Iterator<ConnectionObject> itConObj = SWBComparator.sortByDisplayName(((Gateway) ge).listOutputConnectionObjects(), paramRequest.getUser().getLanguage());
+                            while (itConObj.hasNext()) {
+                                ConnectionObject connectionObj = itConObj.next();
+                                if (connectionObj instanceof SequenceFlow) {
+                                    html += "<h3 id=\"" + connectionObj.getURI() + "\" title=\"" + connectionObj.getTitle() + "\">" + connectionObj.getTitle() + "</h3>";
+                                    html += connectionObj.getDocumentation().getText();
+                                }
+                            }
+                            //End ConnectionObject
                         }
                         if (event.size() > 0) {
                             html += "<div class=\"bandeja-combo\" title=\"" + eventT + "\"><strong>" + eventT + "</strong></div>";//Contains Event
                         }
                         iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
+                        while (iterator.hasNext()) {
+                            ge = iterator.next();
+                            html += "<h3 id=\"" + ge.getURI() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h3>";
+                            html += ge.getDocumentation().getText();
+                        }
+                        if (dataob.size() > 0) {
+                            html += "<div class=\"bandeja-combo\" title=\"" + dataT + "\"><strong>" + dataT + "</strong></div>";//Contains Event
+                        }
+                        iterator = SWBComparator.sortByDisplayName(dataob.iterator(), paramRequest.getUser().getLanguage());
                         while (iterator.hasNext()) {
                             ge = iterator.next();
                             html += "<h3 id=\"" + ge.getURI() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h3>";
@@ -425,12 +489,14 @@ public class DocumentationResource extends GenericAdmResource {
         ArrayList activity = new ArrayList();
         ArrayList gateway = new ArrayList();
         ArrayList event = new ArrayList();
+        ArrayList dataO = new ArrayList();
         Iterator<GraphicalElement> iterator = subProcess.listContaineds();
         GraphicalElement ge = null;
         Containerable con = null;
         String activityT = paramRequest.getLocaleString("activity") != null ? paramRequest.getLocaleString("activity") : "Activity";
         String gatewayT = paramRequest.getLocaleString("gateway") != null ? paramRequest.getLocaleString("gateway") : "Gateway";
         String eventT = paramRequest.getLocaleString("event") != null ? paramRequest.getLocaleString("event") : "Event";
+        String dataT = paramRequest.getLocaleString("data") != null ? paramRequest.getLocaleString("data") : "Data";
         String path = "";
         while (iterator.hasNext()) {
             ge = iterator.next();
@@ -442,6 +508,9 @@ public class DocumentationResource extends GenericAdmResource {
             }
             if (ge instanceof Event) {
                 event.add(ge);
+            }
+            if (ge instanceof DataObject) {
+                dataO.add(ge);
             }
         }
         String html = "";
@@ -475,11 +544,32 @@ public class DocumentationResource extends GenericAdmResource {
                 ref = ((SubProcess) ge).getTitle() + ".html";
             }
             html += "<li><a href=\"" + ref + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</a></li>";
+            //Begin ConnectionObject
+            Iterator<ConnectionObject> itConObj = SWBComparator.sortByDisplayName(((Gateway) ge).listOutputConnectionObjects(), paramRequest.getUser().getLanguage());
+            while (itConObj.hasNext()) {
+                ConnectionObject connectionObj = itConObj.next();
+                if (connectionObj instanceof SequenceFlow) {
+                    html += "<li><a href=\"#" + connectionObj.getURI() + "\" title=\"" + connectionObj.getTitle() + "\">" + connectionObj.getTitle() + "</a></li>";
+                }
+            }
+            //End ConnectionObject
         }
         if (event.size() > 0) {
             html += "<li class=\"activity\" title=\"" + eventT + "\">" + eventT + "</li>";
         }
         iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
+        while (iterator.hasNext()) {
+            ge = iterator.next();
+            ref = "#" + ge.getURI();
+            if (ge instanceof SubProcess) {
+                ref = ((SubProcess) ge).getTitle() + ".html";
+            }
+            html += "<li><a href=\"" + ref + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</a></li>";
+        }
+        if (dataO.size() > 0) {
+            html += "<li class=\"activity\" title=\"" + dataT + "\">" + dataT + "</li>";
+        }
+        iterator = SWBComparator.sortByDisplayName(dataO.iterator(), paramRequest.getUser().getLanguage());
         while (iterator.hasNext()) {
             ge = iterator.next();
             ref = "#" + ge.getURI();
@@ -539,6 +629,16 @@ public class DocumentationResource extends GenericAdmResource {
             ge = iterator.next();
             html += "<h3 id=\"" + ge.getURI() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h3>";
             html += ge.getDocumentation().getText();
+            //Begin ConnectionObject
+            Iterator<ConnectionObject> itConObj = SWBComparator.sortByDisplayName(((Gateway) ge).listOutputConnectionObjects(), paramRequest.getUser().getLanguage());
+            while (itConObj.hasNext()) {
+                ConnectionObject connectionObj = itConObj.next();
+                if (connectionObj instanceof SequenceFlow) {
+                    html += "<h3 id=\"" + connectionObj.getURI() + "\" title=\"" + connectionObj.getTitle() + "\">" + connectionObj.getTitle() + "</h3>";
+                    html += connectionObj.getDocumentation().getText();
+                }
+            }
+            //End ConnectionObject
         }
         if (event.size() > 0) {
             html += "<div class=\"bandeja-combo\" title=\"" + eventT + "\"><strong>" + eventT + "</strong></div>";//Contains Event
