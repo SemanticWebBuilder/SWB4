@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Language;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -719,5 +720,41 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     public void stopListen(Stream stream) {
         System.out.println("Entra a Twitter/stopListen");
     }
+
+    
+    public void postPhotoSocialNets(Twitter t, SocialWebPage swp, Language l, StringBuilder address) {
+   
+        String photoToPublish = "";
+        String additionalPhotos = "";
+        String urlShort = SWBSocialUtil.Util.shortUrl(address.toString());
+   
+
+        photoToPublish = SWBPortal.getWorkPath() + swp.getWorkPath() + "/" + "socialwpPhoto_Pagina_Social_" + swp.getSocialwpPhoto();
+        twitter4j.Twitter twitter = new TwitterFactory().getInstance();
+        twitter.setOAuthConsumer(t.getAppKey(), t.getSecretKey());
+        AccessToken accessToken = new AccessToken(t.getAccessToken(), t.getAccessTokenSecret());
+        String description = swp.getDescription(l.getId()) != null ? swp.getDescription(l.getId()) : "";
+        twitter.setOAuthAccessToken(accessToken);
+
+        try {
+            twitter.setOAuthAccessToken(accessToken);
+            StatusUpdate sup = null;// new StatusUpdate(new String(shortUrl(description).getBytes(), "ISO-8859-1"));
+            Status stat = null;
+
+            description = description + (additionalPhotos.trim().length() > 0 ? " " + additionalPhotos : ""); //
+            sup = new StatusUpdate(new String((description+urlShort).getBytes(), "ISO-8859-1"));
+            //sup.setMedia(new File(photoSend));
+            sup.setMedia(new File(photoToPublish));
+            stat = twitter.updateStatus(sup);
+       } catch (UnsupportedEncodingException ex) {
+            log.error("Exception" + ex);
+        } catch (TwitterException ex) {
+            log.error("Exception" + ex);
+            if (401 == ex.getStatusCode()) {
+                
+            }
+        }
+    }
+    
 
 }
