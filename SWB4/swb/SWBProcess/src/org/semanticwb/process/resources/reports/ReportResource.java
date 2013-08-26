@@ -80,7 +80,7 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String path = "/swbadmin/jsp/process/reports/images/ReportResource.jsp";
+        String path = "/swbadmin/jsp/process/reports/ReportResource.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(path);
         request.setAttribute("paramRequest", paramRequest);
         request.setAttribute("pageElements", getPageElements());
@@ -113,7 +113,7 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
     }
 
     public void doViewReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, ParseException {
-        String path = "/swbadmin/jsp/process/reports/images/ReportResourceView.jsp";
+        String path = "/swbadmin/jsp/process/reports/ReportResourceView.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(path);
         request.setAttribute("paramRequest", paramRequest);
         request.setAttribute("idReport", request.getParameter("idReport"));
@@ -621,7 +621,7 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
     };
 
     public void doAdd(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, ServletException {
-        String path = "/swbadmin/jsp/process/reports/images/ReportResourceAdd.jsp";
+        String path = "/swbadmin/jsp/process/reports/ReportResourceAdd.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(path);
         request.setAttribute("paramRequest", paramRequest);
         try {
@@ -633,7 +633,7 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
 
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String path = "/swbadmin/jsp/process/reports/images/ReportResourceEdit.jsp";
+        String path = "/swbadmin/jsp/process/reports/ReportResourceEdit.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(path);
         request.setAttribute("paramRequest", paramRequest);
         request.setAttribute("idReport", request.getParameter("idReport"));
