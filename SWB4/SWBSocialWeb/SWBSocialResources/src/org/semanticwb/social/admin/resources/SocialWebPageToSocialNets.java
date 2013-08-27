@@ -17,6 +17,8 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Language;
+import org.semanticwb.model.WebPage;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
@@ -77,7 +79,6 @@ public class SocialWebPageToSocialNets extends GenericResource {
         RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/post/Preview.jsp");
         request.setAttribute("suri", request.getParameter("suri"));
         request.setAttribute("suriSite", request.getParameter("suriSite"));
-        request.setAttribute("source", "RedSocial");
         request.setAttribute("paramRequest", paramRequest);
 
         
@@ -95,18 +96,17 @@ public class SocialWebPageToSocialNets extends GenericResource {
             String idSWB = URLDecoder.decode(request.getParameter("swb"));
             SocialWebPage swb = (SocialWebPage) SemanticObject.createSemanticObject(idSWB).createGenericInstance();
             SocialNetwork socialNetwork = null;
-            Iterator i = swb.listSocialNetses();          
+            Iterator i = swb.listSocialNetses();              
             
-            String photoToPublish = SWBPortal.getWorkPath() + swb.getWorkPath() + "/" + SocialWebPage.social_socialwpPhoto.getName()+"_"+swb.getId()+"_" + swb.getSocialwpPhoto();
-            System.out.println("phtoopublsh" + photoToPublish);
-           
             String suri = request.getParameter("suri");
             Language l = (Language) SemanticObject.createSemanticObject(suri).createGenericInstance();
 
+            WebPage ws = (WebPage) swb ; 
             StringBuilder address = new StringBuilder(128);
-            address.append("http://").append(request.getServerName()).append(":").append(request.getServerPort()).append("/").append(response.getUser().getLanguage()).append("/").append(response.getResourceBase().getWebSiteId()).append("/" + response.getWebPage().getId() + "/_rid/").append(response.getResourceBase().getId()).append("/_mod/").append(response.getMode()).append("/_lang/").append(response.getUser().getLanguage());
-            System.out.println("adress_______"+address);
-            
+            address.append("http://").append(request.getServerName()).append(":").append(request.getServerPort()).append(ws.getUrl());
+       
+           
+           
             while (i.hasNext()) {
 
                 socialNetwork = (SocialNetwork) i.next();
