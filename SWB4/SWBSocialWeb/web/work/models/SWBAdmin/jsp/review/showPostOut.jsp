@@ -161,6 +161,8 @@
        <tr>
         <td colspan="5">
         <%=video.getVideo()%>
+        <br/><br/><embed src="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" width="195" height="150" autostart="false">    
+        <!--object src="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" type="video/mpeg" width="195" height="150"></object-->
         <br><br><br><%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
         </td>
        </tr>  
