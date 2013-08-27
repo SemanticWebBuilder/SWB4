@@ -712,22 +712,24 @@ div.sitesectiontree ul.treeres {
 .soria .dijitToolbar .dijitArrowButtonInner:hover {background: url(images/spriteArrows.png) no-repeat 0px -10px !important; position:relative; top:15px;}
 .soria .dijitToolbar .dijitButtonText { position:relative; top:15px;}
 
-#mnu_File			   { background:url(images/iconToolBar.png) no-repeat -750px 7px;}
-#Publish         	   { background:url(images/iconToolBar.png) no-repeat   16px 7px;}
-#authorize 	     	   { background:url(images/iconToolBar.png) no-repeat  -90px 7px;}
-#analysis   	 	   { background:url(images/iconToolBar.png) no-repeat -200px 7px;}
-#WBAd_mnui_Tools 	   { background:url(images/iconToolBar.png) no-repeat -300px 7px;}
-#Configurar		 	   { background:url(images/iconToolBar.png) no-repeat -412px 7px;}
-#WBAd_mnui_Users       { background:url(images/iconToolBar.png) no-repeat -530px 7px;}
-#WBAd_mnui_Help   	   { background:url(images/iconToolBar.png) no-repeat -641px 7px;}
-#mnu_File:hover		   { background:url(images/iconToolBar.png) no-repeat -750px -53px;}
-#Publish:hover         { background:url(images/iconToolBar.png) no-repeat   16px -53px;}
-#authorize:hover 	   { background:url(images/iconToolBar.png) no-repeat  -90px -53px;}
-#analysis:hover  	   { background:url(images/iconToolBar.png) no-repeat -200px -53px;}
-#WBAd_mnui_Tools:hover { background:url(images/iconToolBar.png) no-repeat -300px -53px;}
-#Configurar:hover	   { background:url(images/iconToolBar.png) no-repeat -412px -53px;}
-#WBAd_mnui_Users:hover { background:url(images/iconToolBar.png) no-repeat -530px -53px;}
-#WBAd_mnui_Help:hover  { background:url(images/iconToolBar.png) no-repeat -641px -53px;}
+#mnu_File			     { background:url(images/iconToolBar.png) no-repeat -750px 7px;}
+#Publish         	     { background:url(images/iconToolBar.png) no-repeat   16px 7px;}
+#authorize 	     	     { background:url(images/iconToolBar.png) no-repeat  -90px 7px;}
+#analysis   	 	     { background:url(images/iconToolBar.png) no-repeat -200px 7px;}
+#WBAd_mnui_Tools 	     { background:url(images/iconToolBar.png) no-repeat -300px 7px;}
+#Configurar		 	     { background:url(images/iconToolBar.png) no-repeat -412px 7px;}
+#WBAd_mnui_Users         { background:url(images/iconToolBar.png) no-repeat -530px 7px;}
+#WBAd_mnui_Help   	     { background:url(images/iconToolBar.png) no-repeat -641px 7px;}
+#SWBSocialMenuItem	     { background:url(images/iconToolBar.png) no-repeat -860px 7px;}
+#mnu_File:hover		     { background:url(images/iconToolBar.png) no-repeat -750px -53px;}
+#Publish:hover           { background:url(images/iconToolBar.png) no-repeat   16px -53px;}
+#authorize:hover 	     { background:url(images/iconToolBar.png) no-repeat  -90px -53px;}
+#analysis:hover  	     { background:url(images/iconToolBar.png) no-repeat -200px -53px;}
+#WBAd_mnui_Tools:hover   { background:url(images/iconToolBar.png) no-repeat -300px -53px;}
+#Configurar:hover	     { background:url(images/iconToolBar.png) no-repeat -412px -53px;}
+#WBAd_mnui_Users:hover   { background:url(images/iconToolBar.png) no-repeat -530px -53px;}
+#WBAd_mnui_Help:hover    { background:url(images/iconToolBar.png) no-repeat -641px -53px;}
+#SWBSocialMenuItem:hover { background:url(images/iconToolBar.png) no-repeat -860px -53px;}
 #Publish, #authorize, #analysis, #WBAd_mnui_Tools, #Configurar, #WBAd_mnui_Users, #WBAd_mnui_Help { margin:0px 10px;}
 
 
@@ -751,7 +753,7 @@ background:none !important; border:none !important; padding:0 !important;}
 
 .soria .dijitAccordionTitle-selected { display:none;} /* pleca MARCAS*/
 .soria .dijitTreeNodeSelected .dijitTreeLabel { background:none;} /*Seleccionado*/
-.soria .dijitAccordionContainer-dijitContentPane { background-color:#EAEAEA; padding:0px !important; width:100% !important;} /*FONDO donde viene el árbol*/
+.soria .dijitAccordionContainer-dijitContentPane { background-color:#EAEAEA; padding:0px !important; width:100% !important;} /*FONDO donde viene el ?rbol*/
 .soria .dijitTreeIsRoot { background: url(images/bg-dijitTreeIsRoot.gif) !important; margin-bottom:1px;} /*MARCA*/
 .soria .dijitTreeLabel { font-weight:bold !important;}
 
@@ -762,6 +764,11 @@ background:none !important; border:none !important; padding:0 !important;}
 
 .dijitTreeIsRoot .dijitTreeContainer { background:#f2f3f4;}
 .soria .dijitTreeContent { color:#505B5F !important;}
+
+/*TABLAS*/
+.dijitContentPane fieldset table	{ border-collapse:collapse;}
+.dijitContentPane fieldset table th { background:#ffc46a !important; background-image:none !important; color:#C60; border:1px #FFF solid;}
+.dijitContentPane fieldset table td { }
 
 /*-----------------*/
 .soria .dijitTabInnerDiv {
@@ -777,7 +784,10 @@ background:none !important; border:none !important; padding:0 !important;}
 	background: url(images/tabContainerSprite.gif) no-repeat 0 -300px;
 	color: #BC8534;
 	border-bottom: 1px #ffc56e solid;
-}	
+}
+.soria .dijitTabHover {
+	color:#6b3a08 !important;
+}
 .soria .dijitTabInnerDiv .dijitTabContent {
 	padding:5px 3px 4px 4px;
 	background: url(images/tabContainerSprite.gif) repeat-x 0 -350px;
@@ -804,7 +814,7 @@ background:none !important; border:none !important; padding:0 !important;}
 }
 .soria .dijitTabChecked .dijitTabInnerDiv .dijitTabContent {
 	background: url(images/tabContainerSprite.gif) repeat-x 0 -50px;
-	color: #87490a !important;
+	color: #6b3a08 !important;
 }
 .soria .dijitTabContainerTabListNested {
 	background: #F0F4FC;
@@ -975,15 +985,20 @@ background: #FFA51E !important;}
 .soria .dijitToolbar .dijitComboButtonHover .dijitButtonContents, 
 .soria .dijitToolbar .dijitComboButtonDownArrowHover .dijitDownArrowButton, 
 .soria .dijitToolbar .dijitComboBoxHover .dijitDownArrowButton, .soria .dijitSpinnerUpArrowHover .dijitUpArrowButton, 
-.soria .dijitToolbar .dijitSpinnerDownArrowHover .dijitDownArrowButton 
-{
-	background: none;
-	color:#87490A ;
-}
+.soria .dijitToolbar .dijitSpinnerDownArrowHover .dijitDownArrowButton { background:none; color:#87490A ;}
 
 .soria .dijitTabContainerTop-container { border-color:#ffb13D !important;}
 
+/*POP UP */
+.soria .dijitDialog 		{ border:solid 1px #6B3A08;}
+.soria .dijitDialogTitleBar { background:url(images/titleBar.png) repeat-x}
+.soria .dijitDialog .dijitDialogTitle { color:#6B3A08;}
+.dijitDialogUnderlay { background:#000;}
+
 /*NUEVOS ICONOS*/
+.swbIconSocialCalendarGrp,
+.swbIconSocialCalendarU,
+.swbIconSocialCalendar,
 .swbIconSocialAdminSite,
 .swbIconSocialAdminSiteU,
 .swbIconSocialSite,
@@ -1071,9 +1086,14 @@ background-image: url(images/iconos-swbSocial.png) !important; }
 .swbIconActionPost		 { background-position: -100px -54px;}
 .swbIconActionPrioritary { background-position: -100px -72px;}
 
-.swbSocialIconPFlows	{ background-position: -120px 0px;}
-.swbSocialIconPFlow		{ background-position: -120px -18px;}
-.swbSocialIconPFlowU	{ background-position: -120px -36px;}
+.swbSocialIconPFlows	 { background-position: -120px 0px;}
+.swbSocialIconPFlow		 { background-position: -120px -18px;}
+.swbSocialIconPFlowU	 { background-position: -120px -36px;}
+
+.swbIconSocialCalendarGrp { background-position: -140px 0px;}
+.swbIconSocialCalendar    { background-position: -140px -18px;}
+.swbIconSocialCalendarU   { background-position: -140px -36px;}
+
 
 /*PUBLICAR */
 #publicar {width:762px; margin-left:1em;}
@@ -1130,7 +1150,7 @@ border-radius: 4px; /*IE */
 .ico-fcb span { background: url(images/iconos-swbSocial.png) no-repeat -20px -108px;}
 .ico-ytb span { background: url(images/iconos-swbSocial.png) no-repeat -20px -126px;}
 
-.submit { margin:auto; border:#FFF solid 1px; padding:0.4em 0.9em; color:#FFF;
+.boton { margin:auto; border:#FFF solid 1px; padding:0.4em 0.9em; color:#FFF;
 box-shadow: 0 0 1px #666666;
 background:#eb8602;
 background: -webkit-linear-gradient(#f68800, #d76d00);
@@ -1142,10 +1162,11 @@ border-radius: 2px; /*IE */
 -khtml-border-radius:2px; /* Linux browers */
 }
 
+
 /*TABLA 1*/
-.tabla1  { border-collapse:collapse; margin:auto;font-size:12px; font-family:Arial, Helvetica, sans-serif;}
+.tabla1  { border-collapse:collapse; margin:auto;font-size:12px; font-family:Arial, Helvetica, sans-serif; width:100%;}
 .tabla1 caption      { display:none;}
-.tabla1 th           { color:#CC6600; padding:0px; border-left:1px solid #FFF; border-right: 1px solid #FFF;}
+.tabla1 th           { color:#CC6600; padding:0px; border-left:1px solid #FFF; border-right: 1px solid #FFF; background:#FFC46A}
 .tabla1 th a		 { display:block; width:100%; height:2.2em; background:#FFC46A; color:#CC6600; text-decoration:none;}
 .tabla1 th a:hover   { background:#FFBA50;}
 .tabla1 th a:active  { background:#FFD38F;}
@@ -1155,7 +1176,7 @@ border-radius: 2px; /*IE */
 .tabla1 td p		 { margin:0; text-align:left;}
 .tabla1 td a		 { color:#CC6600}
 .tabla1 td a span    { display:none;}
-.tabla1 td.accion	 { text-align:center;}
+.tabla1 td.accion	 { text-align:left;}
 .tabla1 td.accion a	 { width:25px; height:25px; display: inline-block; /*float:left;*/ margin:5px 2px 0 0; }
 .tabla1 td img		 { margin-top:3px}
 .tabla1 td.mensaje	 { width:20%;}
@@ -1180,6 +1201,11 @@ th.accion span, th.mensaje span 		 { margin:0 !important; position:relative; top
 .ver:hover { background: url(images/ico-ver2.png)}
 .eliminar       { background: url(images/ico-eliminar1.png)}
 .eliminar:hover { background: url(images/ico-eliminar2.png)}
+.answ       { background: url(images/ico-answ1.png)}
+.answ:hover { background: url(images/ico-answ2.png)}
+.answver       { background: url(images/ico-answver1.png)}
+.answver:hover { background: url(images/ico-answver2.png)}
+
 
 /*REDES*/
 .clear { clear:both;}
@@ -1227,3 +1253,35 @@ border-radius:2px; -moz-border-radius:2px; -webkit-border-radius:2px; -khtml-bor
 .retweeted {}
 .tweeter   { margin:10px 5px 5px 20px !important; font-weight:bold;}
 .tweet     { margin: 5px 5px 10px 20px !important;}
+
+/*NUEVO*/
+.swbpopup        { border:solid 2px red; margin:auto; width:700px;}
+.swbpopup p      { margin: 15px 0; }
+/*.swbpopup span   { display:inline-block; font-weight:bold;}*/
+.swbpopup select {}
+.swbpopup table  { border:solid 1px #ccc;}
+.swbpopup th 	 { border-color:#CCC;}
+.swbpopup .tit	 { text-align:center; border:solid 1px #efefef; padding:5px; background:#fafafa;}
+
+.retema-pop			  { padding:5px;}
+.retema-pop-span 	  { width:85px; display:inline-block; font-weight:bold;}
+.reevaluar-pop		  { }
+.reevaluar-pop form	  { }
+.reevaluar-pop form p { }
+.reevaluar-pop td	  { padding:5px;}
+.reevaluar-pop td:first-child	{ text-align:left;}
+.reevaluar-pop label	{ display:inline-block; width:145px;}
+.reevaluar-pop label em	{ color:red}
+.reevaluar-pop label, .reevaluar-pop textarea, .reevaluar-pop select { display:inline-block; vertical-align:top;}
+
+.answver-pop	{}
+.answver-pop .tabla1 a	 { width:25px; height:25px; display: inline-block; /*float:left;*/ margin:5px 2px 0 0; }
+
+.usr-pop 			 { padding:10px; text-align:center;}
+.usr-pop  p          { margin:0 0 10px 0; text-align:left;}
+.usr-pop  p strong 	 { color:#FF6600;}
+.usr-pop .perfil     { background:#FAFAFA; border:1px solid #CCCCCC; float:left; padding:5px; margin-right:10px; text-align:center;}
+.usr-pop .perfil img { }
+.usr-pop .perfil p   { margin:5px 0 0 0 !important;}
+.usr-pop .perfilgral { margin:auto; width:330px;}
+
