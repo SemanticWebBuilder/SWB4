@@ -725,7 +725,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     public void postPhotoSocialNets(Twitter t, SocialWebPage swp, Language l, StringBuilder address) {
    
         String photoToPublish = "";
-        String additionalPhotos = "";
+        //String additionalPhotos = "";
         String urlShort = SWBSocialUtil.Util.shortUrl(address.toString());
    
 
@@ -741,8 +741,8 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             StatusUpdate sup = null;// new StatusUpdate(new String(shortUrl(description).getBytes(), "ISO-8859-1"));
             Status stat = null;
 
-            description = description + (additionalPhotos.trim().length() > 0 ? " " + additionalPhotos : ""); //
-            sup = new StatusUpdate(new String((description+urlShort).getBytes(), "ISO-8859-1"));
+            description = description+" "+urlShort; // + (additionalPhotos.trim().length() > 0 ? " " + additionalPhotos : ""); //
+            sup = new StatusUpdate(new String((description).getBytes(), "ISO-8859-1"));
             //sup.setMedia(new File(photoSend));
             sup.setMedia(new File(photoToPublish));
             stat = twitter.updateStatus(sup);
