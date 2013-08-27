@@ -338,5 +338,5 @@
                 });
             }
     </script>
-    <%} else{out.println("<h1>"+ paramRequest.getLocaleLogString("no")+"</h1>");}%>
+    <%} else{out.println("<h1>"+ paramRequest.getLocaleLogString("noDocumentation")+"</h1>");}%>
 </div>
