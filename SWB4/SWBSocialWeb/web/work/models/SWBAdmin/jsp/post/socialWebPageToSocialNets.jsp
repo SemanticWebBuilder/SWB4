@@ -35,9 +35,6 @@
     }
     SocialWebPage swb = (SocialWebPage) SemanticObject.createSemanticObject(suri).createGenericInstance();
     Iterator i = swb.listSocialNetses();
-
-
-
 %>
 
 
