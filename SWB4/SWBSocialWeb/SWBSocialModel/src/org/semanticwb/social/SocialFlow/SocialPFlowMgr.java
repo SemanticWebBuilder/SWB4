@@ -1348,7 +1348,7 @@ public class SocialPFlowMgr {
                                         HashMap args = new HashMap();
                                         args.put("language", Locale.getDefault().getLanguage());
                                         msgMail += "<br/><br/>" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".<br/><br/>";
-                                        SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg8"), msgMail);
+                                        SWBUtils.EMAIL.sendBGEmail(user.getEmail(),bundle.getString("msg0")+":"+ bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg8"), msgMail);
                                     } else if (activity.getAttribute("type").equalsIgnoreCase("EndActivity")) {
                                         System.out.println("mailToNotify--3");
                                         User user = postOut.getCreator();
@@ -1360,7 +1360,7 @@ public class SocialPFlowMgr {
                                         if (messageType.equalsIgnoreCase("N") && message != null && !message.equalsIgnoreCase("")) {
                                             msgMail += "<br/><br/><b>" + bundle.getString("msg6") + ":</b> " + message;
                                         }
-                                        SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg10") + "", msgMail);
+                                        SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg0")+":" + bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg10") + "", msgMail);
                                     } else if (activity.getAttribute("type").equalsIgnoreCase("Activity")) {
                                         System.out.println("mailToNotify--4");
                                         HashSet<User> husers = new HashSet<User>();
@@ -1405,7 +1405,7 @@ public class SocialPFlowMgr {
                                         }
                                         if (!to.equalsIgnoreCase("")) {
                                             System.out.println("mailToNotify--5");
-                                            String subject = bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg11");
+                                            String subject = bundle.getString("msg0")+":"+bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg11");
                                             String msg = "<b>"+bundle.getString("msg1") + " " + postOut.getId() + " " + bundle.getString("msg2") + ":</b>"
                                                     + "  '" + postOut.getMsg_Text() + "' <br/><br/>" 
                                                     + bundle.getString("msg12") + ": '" + activityName + "'.<br/><br/>";
@@ -1429,7 +1429,7 @@ public class SocialPFlowMgr {
                                                 msgMail += "<br/><br/>" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".<br/><br/>";
                                                 msgMail += "<br/><br/>" + bundle.getString("msg13") + " " + postOut.getId() + " " + bundle.getString("msg14");
 
-                                                SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg13") + " " + postOut.getId() + " " + bundle.getString("msg14"), msgMail);
+                                                SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg0")+":"+bundle.getString("msg13") + " " + postOut.getId() + " " + bundle.getString("msg14"), msgMail);
 
                                                 // avisa al los revisores de la expiración de la revisión delc ontenido
                                                 msg += "<br/><br/>" + bundle.getString("msg13") + " " + postOut.getId() + " " + bundle.getString("msg14");
