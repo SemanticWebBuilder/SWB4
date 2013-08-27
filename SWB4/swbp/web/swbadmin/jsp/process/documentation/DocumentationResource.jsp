@@ -34,8 +34,6 @@
 <link rel="stylesheet" href="/swbadmin/jsp/process/formsBuilder.css" type="text/css"/>
 <!DOCTYPE html>
 <div id="workspace">
-    <!--<div id="toast" style="right: 60%; top: 5%; display: none; position: fixed; border: 1px solid #CCCCCC;background-color: #01DF01;padding: 10px 10px ;text-align:center;opacity: 0.1;border-radius:8px 8px 8px 8px;-webkit-transition: opacity 0.1s ease-out;  /* Saf3.2+, Chrome */-moz-transition: opacity 0.1s ease-out;  /* FF4+ */-ms-transition: opacity 0.1s ease-out;  /* IE10? */-o-transition: opacity 0.1s ease-out;  /* Opera 10.5+ */transition: opacity 0.5s ease-out;"></div>-->
-    <div id="toast" style="background: #B40404; color: white; padding: 10px 40px 10px 40px; right: 40%; top: 5%; display: none; position: fixed; text-align:center; border-radius:8px 8px 8px 8px;"></div>
     <%
         SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
         WebSite wsite = (WebSite) paramRequest.getWebPage().getWebSite();
@@ -54,8 +52,15 @@
         GraphicalElement graEle = null;
         Containerable container = null;
         if (pe instanceof org.semanticwb.process.model.Process) {%><a id="html" title="Generar html" onclick="window.location = '<%=urlGenerate%>'" style="cursor: pointer;"><img title="Generar html" src="/swbadmin/jsp/process/documentation/styles/css/images/html.png"/></a><%}%>
-    <script type="text/javascript" src="/swbadmin/jsp/process/tinymce/tinymce.min.js"></script>
+    <script type="text/javascript" src="<%=SWBPlatform.getContextPath() + "/swbadmin/jsp/process/tinymce/tinymce.min.js"%>"></script>
     <%
+        if(pe instanceof org.semanticwb.process.model.Process
+                || pe instanceof Lane
+                || pe instanceof Activity
+                || pe instanceof Gateway
+                || pe instanceof ConnectionObject
+                || pe instanceof Gateway
+                || pe instanceof DataObject){
         if (pe instanceof org.semanticwb.process.model.Process) {
             out.println("<h2>" + paramRequest.getLocaleString("docFromPro") + " " + pe.getTitle() + "</h2>");
         } else {
@@ -306,13 +311,12 @@
                     content: {txt: data.toString().trim(), idDocumentation: id.replace("idDocumentation/", ""), suri: '<%=suri%>'},
                     load: function(response, ioArgs)
                     {
-                        showToast("<%=paramRequest.getLocaleString("save")%> " + title);
                         parent.reloadTab("" + suriProcess + "");
+                        parent.showStatus("<%=paramRequest.getLocaleString("save")%> " + title, '#12345');
                         return response;
                     },
                     error: function(response, ioArgs) {
-                        alert(response);
-                        showToast("<%=paramRequest.getLocaleString("error")%> " + title);
+                        parent.showError("<%=paramRequest.getLocaleString("error")%>");
                         return response;
                     },
                     handleAs: "text"
@@ -333,23 +337,6 @@
                     handleAs: "text"
                 });
             }
-            var intCounterToast = 0;
-            function showToast(msg) {
-                var toast = document.getElementById("toast");
-                toast.style.display = "block";
-                //toast.style.opacity = 0.5;
-                toast.style.visibility = "visible";
-                toast.innerHTML = "<b>" + msg + "</b>";
-                intCounterToast = setInterval("hideToast()", 2500);
-            }
-            function hideToast() {
-                var toast = document.getElementById("toast");
-                toast.style.display = "none";
-                clearInterval(intCounterToast);
-                //toast.style.opacity = 0;
-            }
     </script>
-    <script type="dojo/method">
-        di
-    </script>
+    <%} else{out.println("<h1>"+ paramRequest.getLocaleLogString("no")+"</h1>");}%>
 </div>
