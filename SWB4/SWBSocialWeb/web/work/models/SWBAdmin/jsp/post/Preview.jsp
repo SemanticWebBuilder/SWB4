@@ -22,21 +22,20 @@
 
 <%
     String suri = request.getParameter("suri");
+
     String suriSite = request.getParameter("suriSite");
     SocialWebPage swb = (SocialWebPage) SemanticObject.createSemanticObject(suriSite).createGenericInstance();
     Language l = (Language) SemanticObject.createSemanticObject(suri).createGenericInstance();
     String description = swb.getDescription(l.getId()) == null ? "" : swb.getDescription(l.getId());
-    WebPage wp = paramRequest.getWebPage();
-
+     WebPage ws = (WebPage) swb ; 
     StringBuilder address = new StringBuilder(128);
-    address.append("http://").append(request.getServerName()).append(":").append(request.getServerPort()).append("/").append(paramRequest.getUser().getLanguage()).append("/").append(paramRequest.getResourceBase().getWebSiteId()).append("/" + paramRequest.getWebPage().getId() + "/_rid/").append(paramRequest.getResourceBase().getId()).append("/_mod/").append(paramRequest.getMode()).append("/_lang/").append(paramRequest.getUser().getLanguage());
-  
+    address.append("http://").append(request.getServerName()).append(":").append(request.getServerPort()).append(ws.getUrl());
+    
+    SWBResourceURL urlAction = paramRequest.getActionUrl();
+    urlAction.setParameter("toPost", "photo");
+    WebSite wsite = paramRequest.getWebPage().getWebSite();
+    urlAction.setParameter("wsite", wsite.getSemanticObject().getModel().getName());
 
-      SWBResourceURL urlAction = paramRequest.getActionUrl();
-      urlAction.setParameter("toPost", "photo");
-      WebSite wsite = paramRequest.getWebPage().getWebSite();
-      urlAction.setParameter("wsite", wsite.getSemanticObject().getModel().getName());
-      
 %>
 
 
@@ -44,7 +43,7 @@
     <div id="pub-detalle">
         <span class="sel-imgdiv"></span>
         <div class="swbform">
-            <form dojoType="dijit.form.Form" id="frmUploadPhoto" action="<%=urlAction.setAction("uploadPhoto").setParameter("swb", URLEncoder.encode(swb.getURI())).setParameter("suri", suri) %>" method="post" onsubmit="submitForm('frmUploadPhoto'); return false;">
+            <form dojoType="dijit.form.Form" id="frmUploadPhoto" action="<%=urlAction.setAction("uploadPhoto").setParameter("swb", URLEncoder.encode(swb.getURI())).setParameter("suri", suri)%>" method="post" onsubmit="submitForm('frmUploadPhoto'); return false;">
                 <table width="100%">
                     <tr>
                         <td colspan="3" style="text-align: left;" class="titulo">Previsualización:</td>        
@@ -63,16 +62,16 @@
 
                     <tr>
                         <td>
-                                         
-                             <img src="<%=SWBPortal.getContextPath() + "/work" + swb.getWorkPath()+"/" + SocialWebPage.social_socialwpPhoto.getName()+"_"+swb.getId()+"_"+swb.getSocialwpPhoto()%>">
-                             <!--<img src="<%= SWBPortal.getWorkPath() + swb.getWorkPath() + "/" + SocialWebPage.social_socialwpPhoto.getName()+"_"+swb.getId()+"_" + swb.getSocialwpPhoto()%>">-->
-                        
+
+                            <img src="<%=SWBPortal.getContextPath() + "/work" + swb.getWorkPath() + "/" + SocialWebPage.social_socialwpPhoto.getName() + "_" + swb.getId() + "_" + swb.getSocialwpPhoto()%>">
+                            <!--<img src="<%= SWBPortal.getWorkPath() + swb.getWorkPath() + "/" + SocialWebPage.social_socialwpPhoto.getName() + "_" + swb.getId() + "_" + swb.getSocialwpPhoto()%>">-->
+
                         </td>
                     </tr>
-                    
+
                     <tr>
                         <td colspan="3" style="text-align: left;">
-                             <button class="submit" type="" onclick="">Publicar</button>
+                            <button class="submit" type="" onclick="">Publicar</button>
                         </td>
                     </tr>
                 </table>                
@@ -81,7 +80,7 @@
     </div>
     <div id="preview" dojoType="dijit.layout.ContentPane">
     </div>
-  
-        
+
+
 
 </body>
