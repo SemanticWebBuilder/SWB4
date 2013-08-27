@@ -1144,10 +1144,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
         try {
             String photoToPublish = "";
-            String additionalPhotos = "";
+            //String additionalPhotos = "";
             String urlShort = SWBSocialUtil.Util.shortUrl(address.toString());
             String description = swb.getDescription(l.getId()) == null ? "" : swb.getDescription(l.getId());
-            params.put("message", (description + urlShort) + " " + additionalPhotos);
+            params.put("message", (description) + " " + urlShort);
 
             photoToPublish = SWBPortal.getWorkPath() + swb.getWorkPath() + "/" + "socialwpPhoto_Pagina_Social_" + swb.getSocialwpPhoto();
             SWBFile photoFile = new SWBFile(photoToPublish);
