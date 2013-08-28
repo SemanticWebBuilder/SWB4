@@ -113,7 +113,7 @@
                         while (itPhotos.hasNext()) {
                             String sphoto = itPhotos.next();
                     %>    
-                    <img src="<%=SWBPortal.getWebWorkPath()%><%=photo.getWorkPath()%>/<%=Photo.social_hasPhoto.getName().toLowerCase()%>_<%=photo.getId()%>_<%=sphoto%>">
+                    <img src="<%=sphoto%>">
                     <%
                         }
                     %>     
