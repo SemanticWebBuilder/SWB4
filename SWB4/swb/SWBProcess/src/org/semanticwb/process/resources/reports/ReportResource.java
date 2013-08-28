@@ -70,8 +70,7 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
     /**
      * Constructs a ReportResource with a SemanticObject
      *
-     * @param base The SemanticObject with the properties for the
-     * ReportResource
+     * @param base The SemanticObject with the properties for the ReportResource
      */
     public ReportResource(org.semanticwb.platform.SemanticObject base) {
         super(base);
@@ -109,6 +108,7 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
             }
         } catch (Exception ex) {
             log.error("Error on processRequest, " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
@@ -124,6 +124,7 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
             rd.include(request, response);
         } catch (ServletException ex) {
             log.error("Error to load " + path + ", " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
@@ -493,63 +494,66 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
         ColumnReport column = ColumnReport.ClassMgr.getColumnReport(idColumn, paramRequest.getWebPage().getWebSite());
         boolean filter = false;
         SemanticProperty spt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(column.getNameProperty().substring(column.getNameProperty().indexOf("|") + 1));
-        if (spt.isInt()) {//Integer
-            try {
-                if (!column.getDefaultValue().equals("") && !column.getDefaultValueMax().equals("")) {
-                    if ((pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getIntProperty(spt) >= Integer.parseInt(column.getDefaultValue())
-                            && pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getIntProperty(spt) <= Integer.parseInt(column.getDefaultValueMax()))
-                            || (pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getIntProperty(spt) >= Integer.parseInt(column.getDefaultValueMax())
-                            && pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getIntProperty(spt) <= Integer.parseInt(column.getDefaultValue()))) {
-                        filter = true;
+        if (pInstance.getItemAwareReference() != null) {
+            if (spt.isInt()) {//Integer
+                try {
+                    if (!column.getDefaultValue().equals("") && !column.getDefaultValueMax().equals("")) {
+                        if ((pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getIntProperty(spt) >= Integer.parseInt(column.getDefaultValue())
+                                && pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getIntProperty(spt) <= Integer.parseInt(column.getDefaultValueMax()))
+                                || (pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getIntProperty(spt) >= Integer.parseInt(column.getDefaultValueMax())
+                                && pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getIntProperty(spt) <= Integer.parseInt(column.getDefaultValue()))) {
+                            filter = true;
+                        }
+                    } else if (!column.getDefaultValue().equals("") && column.getDefaultValueMax().equals("")) {
+                        if (Integer.parseInt(column.getDefaultValue()) == pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getIntProperty(spt)) {
+                            filter = true;
+                        }
+                    } else if (!column.getDefaultValueMax().equals("") && column.getDefaultValue().equals("")) {
+                        if (Integer.parseInt(column.getDefaultValueMax()) == pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getIntProperty(spt)) {
+                            filter = true;
+                        }
                     }
-                } else if (!column.getDefaultValue().equals("") && column.getDefaultValueMax().equals("")) {
-                    if (Integer.parseInt(column.getDefaultValue()) == pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getIntProperty(spt)) {
-                        filter = true;
-                    }
-                } else if (!column.getDefaultValueMax().equals("") && column.getDefaultValue().equals("")) {
-                    if (Integer.parseInt(column.getDefaultValueMax()) == pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getIntProperty(spt)) {
+                } catch (NumberFormatException ex) {
+                    column.setDefaultValue("");
+                }
+            } else if (spt.isString()) {//String
+                if (pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getProperty(spt) != null) {
+                    if (column.getDefaultValue().equals(pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getProperty(spt))) {
                         filter = true;
                     }
                 }
-            } catch (NumberFormatException ex) {
-                column.setDefaultValue("");
-            }
-        } else if (spt.isString()) {//String
-            if (column.getDefaultValue().equals(pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getProperty(spt))) {
-                filter = true;
-            }
-        } else if (spt.isBoolean()) {//Boolean
-            if (Boolean.parseBoolean(column.getDefaultValue()) == pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getBooleanProperty(spt)) {
-                filter = true;
-            }
-        } else if (spt.isDate()) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            if (!column.getDefaultValue().equals("") && !column.getDefaultValueMax().equals("")) {
-                if (pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getDateProperty(spt) != null
-                        && pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getDateProperty(spt) != null) {
-                    int start = dateFormat.format(pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getDateProperty(spt)).compareTo(dateFormat.format(dateFormat.parse(column.getDefaultValue())));
-                    int end = dateFormat.format(pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getDateProperty(spt)).compareTo(dateFormat.format(dateFormat.parse(column.getDefaultValueMax())));
-                    if ((start >= 0 && end <= 0) || (start <= 0 && end >= 0)) {
-                        filter = true;
-                    }
+            } else if (spt.isBoolean()) {//Boolean
+                if (Boolean.parseBoolean(column.getDefaultValue()) == pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getBooleanProperty(spt)) {
+                    filter = true;
                 }
-            } else if (!column.getDefaultValue().equals("") && column.getDefaultValueMax().equals("")) {
+            } else if (spt.isDate()) {
                 if (pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getDateProperty(spt) != null) {
-                    if (dateFormat.format(pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getDateProperty(spt)).equals(dateFormat.format(dateFormat.parse(column.getDefaultValue())))) {
-                        filter = true;
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    if (!column.getDefaultValue().equals("") && !column.getDefaultValueMax().equals("")) {
+                        int start = dateFormat.format(pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getDateProperty(spt)).compareTo(dateFormat.format(dateFormat.parse(column.getDefaultValue())));
+                        int end = dateFormat.format(pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getDateProperty(spt)).compareTo(dateFormat.format(dateFormat.parse(column.getDefaultValueMax())));
+                        if ((start >= 0 && end <= 0) || (start <= 0 && end >= 0)) {
+                            filter = true;
+                        }
+                    } else if (!column.getDefaultValue().equals("") && column.getDefaultValueMax().equals("")) {
+                        if (dateFormat.format(pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getDateProperty(spt)).equals(dateFormat.format(dateFormat.parse(column.getDefaultValue())))) {
+                            filter = true;
+                        }
+                    } else if (!column.getDefaultValueMax().equals("") && column.getDefaultValue().equals("")) {
+                        if (pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getDateProperty(spt) != null) {
+                            if (dateFormat.format(pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getDateProperty(spt)).equals(dateFormat.format(dateFormat.parse(column.getDefaultValueMax())))) {
+                                filter = true;
+                            }
+                        }
                     }
                 }
-            } else if (!column.getDefaultValueMax().equals("") && column.getDefaultValue().equals("")) {
-                if (dateFormat.format(pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getDateProperty(spt)).equals(dateFormat.format(dateFormat.parse(column.getDefaultValueMax())))) {
-                    filter = true;
-                }
-            }
-        } else if (spt.isDateTime()) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        } else if (spt.isObjectProperty()) {
-            if (pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getObjectProperty(spt) != null) {
-                if (column.getDefaultValue().equals(pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getObjectProperty(spt).getDisplayName())) {
-                    filter = true;
+            } else if (spt.isDateTime()) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            } else if (spt.isObjectProperty()) {
+                if (pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getObjectProperty(spt) != null) {
+                    if (column.getDefaultValue().equals(pInstance.getItemAwareReference().getProcessObject().getSemanticObject().getObjectProperty(spt).getDisplayName())) {
+                        filter = true;
+                    }
                 }
             }
         }
@@ -674,9 +678,13 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
             Report report = Report.ClassMgr.getReport(request.getParameter("idReport"), response.getWebPage().getWebSite());
             SWBFormMgr reportMgr = new SWBFormMgr(report.getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
             try {
-                reportMgr.addProperty(Report.rep_processName);
+                reportMgr.clearProperties();
+                Iterator<SemanticProperty> propReport = Report.sclass.listProperties();
+                while (propReport.hasNext()) {
+                    SemanticProperty semProp = propReport.next();
+                    reportMgr.addProperty(semProp);
+                }
                 reportMgr.processForm(request);
-                report.setTitle(report.getTitle());
                 response.setRenderParameter("idReport", report.getId());
                 response.setMode(SWBResourceURL.Mode_EDIT);
             } catch (FormValidateException ex) {
