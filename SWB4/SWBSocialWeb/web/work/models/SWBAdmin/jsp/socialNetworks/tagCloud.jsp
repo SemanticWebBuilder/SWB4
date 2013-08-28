@@ -3,6 +3,8 @@
     Created on : 14/06/2013, 09:53:02 AM
     Author     : francisco.jimenez
 --%>
+<%@page import="org.jsoup.safety.Whitelist"%>
+<%@page import="org.jsoup.Jsoup"%>
 <%@page import="org.semanticwb.social.SocialTopic"%>
 <%@page import="java.util.Random"%>
 <%@page import="java.util.List"%>
@@ -63,6 +65,7 @@
     System.out.println("suri in tagsCloud:" + request.getParameter("suri"));
     String suri = request.getParameter("suri");
     String noTopic = request.getParameter("noTopic");
+    System.out.println("noTopic:" + noTopic);
     Stream stream = null;
     SocialTopic socialT = null;
     Iterator <PostIn> itPostIns = null;//The posts
@@ -71,18 +74,18 @@
     try{
     if(suri != null) {
         SemanticObject semObj = SemanticObject.getSemanticObject(suri);
-        if(semObj.createGenericInstance() instanceof Stream){
+        if(semObj.createGenericInstance() instanceof Stream){//Tag Cloud for stream
             System.out.println("is stream");
             stream = (Stream)semObj.getGenericInstance();
             itPostIns=stream.listPostInStreamInvs();//The posts
             itPostIns = SWBComparator.sortByCreatedSet(itPostIns, false).iterator();
-            SWBUtils.Collections.sizeOf(stream.listPostInStreamInvs());//Number of recovered posts
-        }else if(semObj.createGenericInstance() instanceof SocialTopic){
-            System.out.println("is stream");
+            //SWBUtils.Collections.sizeOf(stream.listPostInStreamInvs());//Number of recovered posts
+        }else if(semObj.createGenericInstance() instanceof SocialTopic){//Tag Cloud for social topic
+            System.out.println("is social topic");
             socialT = (SocialTopic)semObj.getGenericInstance();
             itPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialT, socialT.getSocialSite());//The posts
             itPostIns = SWBComparator.sortByCreatedSet(itPostIns, false).iterator();
-            SWBUtils.Collections.sizeOf(PostIn.ClassMgr.listPostInBySocialTopic(socialT, socialT.getSocialSite()));//Number of recovered posts
+            //SWBUtils.Collections.sizeOf(PostIn.ClassMgr.listPostInBySocialTopic(socialT, socialT.getSocialSite()));//Number of recovered posts
         }else{
             return;
         }
@@ -95,7 +98,7 @@
     }
     
     SWBResourceURL renderURL = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_EDIT);
-    if(stream!=null){
+    if(stream != null){
         renderURL.setParameter("sID", stream.getId());
         renderURL.setParameter("wsite", stream.getSemanticObject().getModel().getName());
     }
@@ -112,21 +115,21 @@
     
     //SWBUtils.Collections.sizeOf(stream.listPostInStreamInvs());//Number of recovered posts
         
-    int posts = 0;
+    //int posts = 0;
     int randomId = randomId();
     long startTime = System.currentTimeMillis();
 
-    int percent = (int)(noOfPosts*0.6);//Only process 60% of stream
+    //int percent = (int)(noOfPosts*0.6);//Only process 60% of stream
     //System.out.println("Size of sample: " + percent);
     while(itPostIns.hasNext()){        
         if(cloudTags.size() >= 4000){
             System.out.println("Too large Word List");
             break;        
-        }else if( posts > percent){
+        }/*else if( posts > percent){
             System.out.println("Has reached the %");
             break;
-        }
-        PostIn postIn=itPostIns.next();
+        }*/
+        PostIn postIn = itPostIns.next();
         
         if(noTopic != null && noTopic.equals("true")){
             if(postIn.getSocialTopic() != null){//Don't process posts with Social topics
@@ -135,7 +138,7 @@
         }
         
         if(postIn.getTags() != null){//If post has tags
-            String[] tags=postIn.getTags().split("\\s+");  //Dividir valores
+            String[] tags=postIn.getTags().split("\\s+");//Dividir valores
             for(int i=0;i<tags.length;i++)
             {
                String word=tags[i]; 
@@ -155,12 +158,14 @@
         }
         
         if(postIn.getMsg_Text()!=null){//If post has message
-            String msg=postIn.getMsg_Text();
+            String msg=postIn.getMsg_Text().toLowerCase();
             //TODO:ver si mejor desde que se clasifica el mensaje, se guarda en alguna nueva propiedad
             //el mensaje normalizado, replaceSpecialCharacters y removePuntualSigns.
             //msg=SWBSocialUtil.Classifier.normalizer(msg).getNormalizedPhrase();
-            msg=SWBSocialUtil.Strings.replaceSpecialCharacters(msg);
-            msg=SWBSocialUtil.Strings.removePuntualSigns(msg, socialAdminSite);
+            msg = SWBSocialUtil.Util.removePrepositions(msg);
+            msg = Jsoup.clean(msg, Whitelist.simpleText());
+            msg = SWBSocialUtil.Util.replaceSpecialCharactersAndHtmlCodes(msg, false);
+            msg = SWBSocialUtil.Strings.removePuntualSigns(msg, socialAdminSite);
             
             String[] mgsWords=msg.split("\\s+");  //Dividir valores
             for(int i=0;i<mgsWords.length;i++)
@@ -204,25 +209,13 @@ try{
             Map.Entry tag = (Map.Entry)itSorted.next();//entry
             //System.out.println(i + " : " + tag);
 
-            if(i==1){//The word at the top is the most frequent, so it must have 100
-                //submitUrlreportContainer
-                //out.println("<li><a href=\"" +renderURL.setParameter("word", (String)tag.getKey()) + "\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\">" + tag.getKey() + "</a></li>");
-                //out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"postHtml('" + renderURL.setParameter("search", (String)tag.getKey()) + "','" + suri + "/reportContainer'); return false;\">" + tag.getKey() + "</a></li>");
-                //out.println("<form id=\"id" + i + "\" name=\"id" + i + "\" method=\"post\" action=\"" + renderURL.setParameter("search", (String)tag.getKey()) + "\" onsubmit=\"submitForm('id" + i + "'); return false;\"></form>");
-                //out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"submitUrl('" + renderURL.setParameter("search", (String)tag.getKey()) + "',this); return false;\">" + tag.getKey() + "</a></li>");
-                
-                //out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"document.getElementById('" +  suri +"_searchwp').value='chica'; document.getElementById('" +suri + "/fsearchwp').submit(); return false;\">" + tag.getKey() + "</a></li>");
-                
+            if(i==1){//The word at the top is the most frequent, so it must have 100                
                 out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"submitUrl('" + renderURL.setParameter("search", (String)tag.getKey()) + "',this); return false;\">" + tag.getKey() + "</a></li>");
             }else{
                 if(lastValue.equals(tag.getValue())){//If several words have the same frequency, use the same mappingValue
-                    //out.println("<li><a href=\"" +renderURL.setParameter("word", (String)tag.getKey()) + "\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\">" + tag.getKey() + "</a></li>");
-                    //out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"submitUrl('" + renderURL.setParameter("search", (String)tag.getKey()) + "',this); return false;\">" + tag.getKey() + "</a></li>");
                     out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"submitUrl('" + renderURL.setParameter("search", (String)tag.getKey()) + "',this); return false;\">" + tag.getKey() + "</a></li>");
                 }else{//If current word is different from the word before, use a lower value
                     mappingValue--;
-                    //out.println("<li><a href=\"" +renderURL.setParameter("word", (String)tag.getKey()) + "\" title=\"" +  mappingValue + "\" data-weight=\"" + mappingValue +"\">" + tag.getKey() + "</a></li>");
-                    //out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"submitUrl('" + renderURL.setParameter("search", (String)tag.getKey()) + "',this); return false;\">" + tag.getKey() + "</a></li>");
                     out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"submitUrl('" + renderURL.setParameter("search", (String)tag.getKey()) + "',this); return false;\">" + tag.getKey() + "</a></li>");
                 }
             }
