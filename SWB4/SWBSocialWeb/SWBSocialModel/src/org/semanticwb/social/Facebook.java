@@ -26,50 +26,48 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.social.listener.Classifier;
 import org.semanticwb.social.util.SWBSocialUtil;
 
-
 public class Facebook extends org.semanticwb.social.base.FacebookBase {
-
     
     private final static String ALPHABETH = "abcdefghijklmnopqrstuvwxyz1234567890";
-    
     private static final String CRLF = "\r\n";
-    
-    /** Cadena utilizada en la construccion de peticiones HTTP POST al servidor de Facebook */
+    /**
+     * Cadena utilizada en la construccion de peticiones HTTP POST al servidor
+     * de Facebook
+     */
     private static final String PREF = "--";
-    
-    /** Inicio de la URL utilizada para las peticiones de informacion a Facebook */
+    /**
+     * Inicio de la URL utilizada para las peticiones de informacion a Facebook
+     */
     //private static final String FACEBOOKGRAPH = "https://graph-video.facebook.com/";
     private static final String FACEBOOKGRAPH = "https://graph.facebook.com/";
-    
     private static final String FACEBOOKGRAPH_VIDEO = "https://graph-video.facebook.com/";
-    
-    
-    /** Indica el numero de mensajes maximo a extraer en cada busqueda */
+    /**
+     * Indica el numero de mensajes maximo a extraer en cada busqueda
+     */
     private static final short QUERYLIMIT = 100;
-    
     private Logger log = SWBUtils.getLogger(Facebook.class);
-
     
     public Facebook(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
 
     /**
-     * Ejecuta las operaciones para extraer informaci&oacute;n de Facebook, 
-     * en base a los criterios especificados en el stream indicado.
-     * @param stream Indica el objeto {@code Stream} del que se obtienen los criterios de
-     *          b&uacute;squeda de informaci&oacute;n
+     * Ejecuta las operaciones para extraer informaci&oacute;n de Facebook, en
+     * base a los criterios especificados en el stream indicado.
+     *
+     * @param stream Indica el objeto {@code Stream} del que se obtienen los
+     * criterios de b&uacute;squeda de informaci&oacute;n
      */
     @Override
     public void listen(Stream stream) {
-
+        
         HashMap<String, String> params = new HashMap<String, String>(2);
         params.put("access_token", this.getAccessToken());
         boolean canGetMoreResults = true;
         String phrasesInStream = stream.getPhrase() != null ? stream.getPhrase() : "";
         int queriesNumber = phrasesInStream.split(",").length * 2;//int queriesNumber = phrasesInStream.split("\\|").length * 2;
         HashMap<String, String>[] queriesArray = new HashMap[queriesNumber];
-
+        
         try {
             //Como Facebook proporciona los datos de un conjunto definido de 
             //mensajes a la vez, se necesita pedir esta información por bloques
@@ -79,7 +77,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
                 //printMap(queriesArray);
                 if (queriesArray != null && queriesArray[0].containsKey("relative_url")) {
-
+                    
                     params.put("batch", renderFacebookQueries(queriesArray));
                     String fbResponse = postRequest(params, Facebook.FACEBOOKGRAPH,
                             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "POST");
@@ -87,12 +85,12 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     //Se analiza la respuesta de Facebook y se extraen los datos de los mensajes
                     canGetMoreResults = parseResponse(fbResponse, stream, queriesArray);
                 }
-
+                
             } while (canGetMoreResults);
 
             //Almacena los nuevos limites para las busquedas posteriores en Facebook
             storeSearchLimits(queriesArray, stream);
-
+            
         } catch (JSONException jsone) {
             log.error("JSON al usar queries construidos", jsone);
             jsone.printStackTrace();
@@ -103,17 +101,20 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             log.error("Exception, al ejecutar generateBatchQuery", e);
             e.printStackTrace();
         }
-
+        
     }
 
     /**
      * Forma las consultas a realizar en Facebook en formato JSON, de acuerdo a
      * lo especificado en el API de Facebook.
-     * @param queriesArray la coleccion que contiene los datos de las busquedas a realizar
-     * @return un {@code String} que representa las busquedas a solicitar a Facebook en formato JSON.
+     *
+     * @param queriesArray la coleccion que contiene los datos de las busquedas
+     * a realizar
+     * @return un {@code String} que representa las busquedas a solicitar a
+     * Facebook en formato JSON.
      */
     private String renderFacebookQueries(HashMap<String, String>[] queriesArray) {
-
+        
         JSONArray batch = new JSONArray(); //Conjunto de consultas a ejecutar como batch en Facebook
         for (int i = 0; i < queriesArray.length; i++) {
             //Se crean consultas a Facebook por cada frase capturada
@@ -126,26 +127,29 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 log.error("Al integrar consulta batch con siguiente consulta", jsone);
             }
         }
-
+        
         return batch.toString();
     }
 
     /**
-     * Almacena los nuevos l&iacute;mites a utilizar en las b&uacute;squedas posteriores en Facebook.
-     * Para cada frase en el {@code Stream} indicado, se almacena el valor del l&iacute;mite que indica a partir
-     * de qu&eacute; registro se har&aacute;n las b&uacute;squedas de nueva informaci&oacute;n en Facebook.
-     * @param queriesArray contiene tanto los queryStrings a ejecutar en FB, como los
-     *        url's devueltos por FB para las siguientes consultas
+     * Almacena los nuevos l&iacute;mites a utilizar en las b&uacute;squedas
+     * posteriores en Facebook. Para cada frase en el {@code Stream} indicado,
+     * se almacena el valor del l&iacute;mite que indica a partir de qu&eacute;
+     * registro se har&aacute;n las b&uacute;squedas de nueva informaci&oacute;n
+     * en Facebook.
+     *
+     * @param queriesArray contiene tanto los queryStrings a ejecutar en FB,
+     * como los url's devueltos por FB para las siguientes consultas
      */
     private void storeSearchLimits(HashMap<String, String>[] queriesArray, Stream stream) {
-
+        
         StringBuilder limits = new StringBuilder(64);
         try {
             for (int i = 0; i < queriesArray.length; i++) {
-
+                
                 String newQuery = queriesArray[i].containsKey("nextQuery")
                         ? queriesArray[i].get("nextQuery") : "";
-
+                
                 String[] params = null;
 
                 //Si se obtuvieron mensajes, hay un nuevo valor para el último mensaje leído, indicado en "nextQuery"
@@ -180,9 +184,8 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 }
             }
             if (limits.length() > 0) {
-                SocialNetStreamSearch socialStreamSerch=SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
-                if(socialStreamSerch!=null)
-                {
+                SocialNetStreamSearch socialStreamSerch = SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
+                if (socialStreamSerch != null) {
                     socialStreamSerch.setNextDatetoSearch(limits.toString());
                 }
                 //this.setNextDatetoSearch(limits.toString());
@@ -194,24 +197,26 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
     /**
      * Genera las url's de las siguientes consultas a ejecutar en Facebook.
-     * @param streamPhrase objeto del que se extrae la fecha del &uacute;ltimo post obtenido de Facebook
-     * @param queriesArray contiene tanto los queryStrings a ejecutar en FB, como los
-     *        url's devueltos por FB para las siguientes consultas, as&iacute; como el n&uacute;mero 
-     *        de post obtenidos en la b&uacute;squeda de la iteraci&oacute;n anterior
+     *
+     * @param streamPhrase objeto del que se extrae la fecha del &uacute;ltimo
+     * post obtenido de Facebook
+     * @param queriesArray contiene tanto los queryStrings a ejecutar en FB,
+     * como los url's devueltos por FB para las siguientes consultas, as&iacute;
+     * como el n&uacute;mero de post obtenidos en la b&uacute;squeda de la
+     * iteraci&oacute;n anterior
      */
-    private void generateBatchQuery(String streamPhrase, HashMap<String,
-                                    String>[] queriesArray, Stream stream) throws Exception {
+    private void generateBatchQuery(String streamPhrase, HashMap<String, String>[] queriesArray, Stream stream) throws Exception {
 
         //TODO: Acordar que las frases almacenadas no contengan el simbolo =.
         String[] phrase = streamPhrase.split(",");//String[] phrase = streamPhrase.split("\\|");
         HashMap<String, String> searchLimits = new HashMap<String, String>((phrase.length * 2));  //es doble para busquedas globales y del muro
 
         if (queriesArray.length == 0 || (queriesArray.length > 0 && queriesArray[0] == null)) {
-
+            
             try {
                 //Se obtienen los limites desde los cuales se haran consultas en Facebook
-                SocialNetStreamSearch socialStreamSerch=SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
-                if (socialStreamSerch!=null && socialStreamSerch.getNextDatetoSearch() != null && !"".equals(socialStreamSerch.getNextDatetoSearch())) {
+                SocialNetStreamSearch socialStreamSerch = SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
+                if (socialStreamSerch != null && socialStreamSerch.getNextDatetoSearch() != null && !"".equals(socialStreamSerch.getNextDatetoSearch())) {
                     String[] phraseElements = socialStreamSerch.getNextDatetoSearch().split(":");
                     for (int i = 0; i < phraseElements.length; i++) {
                         String[] pair = phraseElements[i].split("=");
@@ -228,7 +233,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 e.printStackTrace();
                 throw new Exception(e.getCause());
             }
-
+            
             for (int i = 0; i < phrase.length; i++) {
                 //Se crean consultas a Facebook por cada frase capturada
                 String publicQuery = null;
@@ -237,7 +242,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 String untilPrivate = null;
                 HashMap<String, String> queryPublic = new HashMap<String, String>(6);
                 HashMap<String, String> queryWall = new HashMap<String, String>(6);
-
+                
                 try {
                     if (searchLimits.containsKey("search_" + phrase[i]) && searchLimits.get("search_" + phrase[i]) != null) {
                         untilPublic = searchLimits.get("search_" + phrase[i]);
@@ -251,7 +256,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     // Y las url de las consultas privadas
                     wallQuery = "me/feed?q=" + phrase[i] + "&type=post&limit="
                             + Facebook.QUERYLIMIT + (untilPrivate != null ? "&until=" + untilPrivate : "");
-
+                    
                     queryPublic.put("method", "GET");
                     queryPublic.put("relative_url", publicQuery);
                     queryPublic.put("phrase", phrase[i]);
@@ -260,19 +265,19 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     queryWall.put("relative_url", wallQuery);
                     queryWall.put("phrase", phrase[i]);
                     queriesArray[(i * 2) + 1] = queryWall;
-
+                    
                 } catch (Exception e) {
                     log.error("Al integrar consulta batch con siguiente consulta", e);
                 }
             }
-
+            
         } else if (queriesArray.length > 0 && queriesArray[0] != null) {
             //En la segunda y posteriores iteraciones de este proceso, se usan las consultas "nextQuery" 
             //que se extraen de las respuestas obtenidas de Facebook:
             for (int i = 0; i < queriesArray.length; i++) {
                 String newQuery = queriesArray[i].get("nextQuery");
                 int msgsObtained = Integer.parseInt(queriesArray[i].get("msgCounted"));
-
+                
                 if (msgsObtained > 0) {
                     //Si se obtuvieron mensajes, hay un nuevo valor para el ultimo mensaje leido, indicado en "nextQuery"
                     if (newQuery.indexOf("search?") > 0) {
@@ -286,21 +291,27 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     }
 
     /**
-     * Analiza la respuesta de Facebook y obtiene la informaci&oacute;n de los mensajes publicados en la red social.
-     * En base a la estructura del objeto JSON devuelto por Facebook, se revisa que se haya podido responder
-     * la petici&oacute;n, se obtiene la informaci&oacute;n de los mensajes publicados y se obtiene las url's de las 
-     * siguientes consultas a ejecutar.
-     * @param response representa la respuesta obtenida de Facebook en formato JSON
+     * Analiza la respuesta de Facebook y obtiene la informaci&oacute;n de los
+     * mensajes publicados en la red social. En base a la estructura del objeto
+     * JSON devuelto por Facebook, se revisa que se haya podido responder la
+     * petici&oacute;n, se obtiene la informaci&oacute;n de los mensajes
+     * publicados y se obtiene las url's de las siguientes consultas a ejecutar.
+     *
+     * @param response representa la respuesta obtenida de Facebook en formato
+     * JSON
      * @param queries contiene tanto los queryStrings a ejecutar en FB, como los
-     *        url's devueltos por FB para las siguientes consultas
-     * @param stream objeto al que el clasificador relacionar&aacute; los mensajes obtenidos de las b&uacute;squedas ejecutadas
-     * @return un booleano que indica si es posible que haya m&aacute;s mensajes publicados en la red al momento
-     *         en que se contest&oacute; la petici&oacute;n, lo que indica que se tiene que realizar otra iteraci&oacute;n
+     * url's devueltos por FB para las siguientes consultas
+     * @param stream objeto al que el clasificador relacionar&aacute; los
+     * mensajes obtenidos de las b&uacute;squedas ejecutadas
+     * @return un booleano que indica si es posible que haya m&aacute;s mensajes
+     * publicados en la red al momento en que se contest&oacute; la
+     * petici&oacute;n, lo que indica que se tiene que realizar otra
+     * iteraci&oacute;n
      */
     private boolean parseResponse(String response, Stream stream, HashMap<String, String>[] queriesArray) {
-
+        
         boolean isThereMoreMsgs = false;
-
+        
         try {
             JSONArray mainObject = new JSONArray(response);
             if (mainObject != null) {
@@ -314,13 +325,13 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                             errorMsg.append("Error en la extracción de datos de Facebook (");
                             errorMsg.append(queriesArray[j].get("phrase"));
                             errorMsg.append("): ");
-
+                            
                             JSONObject jsonError = new JSONObject(phraseResp.getString("body"));
-
+                            
                             errorMsg.append(jsonError.getJSONObject("error").getString("type"));
                             errorMsg.append(".- ");
                             errorMsg.append(jsonError.getJSONObject("error").getString("message"));
-
+                            
                             log.error(errorMsg.toString());
                             continue;
                         } else if (phraseResp.getString("body").length() > 9) {
@@ -328,7 +339,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                             int cont = 0;
                             JSONObject dataOnBody = new JSONObject(phraseResp.getString("body"));
                             JSONArray postsData = dataOnBody.getJSONArray("data");
-                            ArrayList <ExternalPost> aListExternalPost=new ArrayList();
+                            ArrayList<ExternalPost> aListExternalPost = new ArrayList();
                             for (int k = 0; k < postsData.length(); k++) {
                                 cont++;
                                 ExternalPost external = new ExternalPost();
@@ -359,80 +370,92 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                 if (postsData.getJSONObject(k).has("name")) {
                                     external.setPostName(postsData.getJSONObject(k).getString("name"));
                                 }
-
-                                if(postsData.getJSONObject(k).has("likes")){
-                                    if(postsData.getJSONObject(k).getJSONObject("likes").has("count")){
+                                
+                                if (postsData.getJSONObject(k).has("likes")) {
+                                    if (postsData.getJSONObject(k).getJSONObject("likes").has("count")) {
                                         external.setPostShared(postsData.getJSONObject(k).getJSONObject("likes").getInt("count"));
                                     }
                                 }
-                                if (postsData.getJSONObject(k).has("place")) {
-                                   String country="";
-                                    external.setLatitude(postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").getDouble("latitude"));
-                                    external.setLongitude(postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").getDouble("longitude"));
-
-                                    if (postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").has("country")) {//TODO: ver si en twitter es solo un codigo de 2 letras
-                                        country = postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").getString("country");
-
-                                        if(country.equals("Mexico")){                                        
-                                            country = "MX";
+                                
+                                
+                                if (postsData.getJSONObject(k).has("place")) {                                    
+                                    if (!postsData.getJSONObject(k).isNull("place")) {
+                                        if (postsData.getJSONObject(k).getJSONObject("place").has("location")) {
+                                            if (!postsData.getJSONObject(k).getJSONObject("place").isNull("location")) {
+                                                String country = "";
+                                                
+                                                external.setLatitude(postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").getDouble("latitude"));
+                                                external.setLongitude(postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").getDouble("longitude"));
+                                                
+                                                if (postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").has("country")) {//TODO: ver si en twitter es solo un codigo de 2 letras
+                                                   if(!postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").isNull("country")){
+                                                    country = postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").getString("country");
+                                                    
+                                                    if (country.equals("Mexico")) {
+                                                        country = "MX";
+                                                    }
+                                                    if (country.equals("United States")) {
+                                                        country = "US";
+                                                    }
+                                                    
+                                                    external.setCountryCode(country);
+                                                }
+                                                external.setPlace(country);
+                                                }
+                                            }
                                         }
-                                        if(country.equals("United States")){
-                                            country = "US";
-                                        }
-
-                                        external.setCountryCode(country);
                                     }
-                                    external.setPlace(country);
                                 }
-
+                                                      
+                                
+                                
                                 if (postsData.getJSONObject(k).has("type")) {
-                                    if(postsData.getJSONObject(k).getString("type").equals("status")){//Status -> message
-                                        if(postsData.getJSONObject(k).has("message")){
+                                    if (postsData.getJSONObject(k).getString("type").equals("status")) {//Status -> message
+                                        if (postsData.getJSONObject(k).has("message")) {
                                             external.setPostType(SWBSocialUtil.MESSAGE);
-                                        }else{
+                                        } else {
                                             continue;
                                         }
-                                    }else if(postsData.getJSONObject(k).getString("type").equals("photo")){//Photo
+                                    } else if (postsData.getJSONObject(k).getString("type").equals("photo")) {//Photo
                                         if (postsData.getJSONObject(k).has("picture")) {
                                             //external.setPicture(postsData.getJSONObject(k).getString("picture"));
                                             ArrayList pictures = new ArrayList();
                                             pictures.add(postsData.getJSONObject(k).getString("picture"));
                                             external.setPictures(pictures);
                                             external.setPostType(SWBSocialUtil.PHOTO);
-                                        }else{//If has message, create it as message
-                                            if(postsData.getJSONObject(k).has("message")){
+                                        } else {//If has message, create it as message
+                                            if (postsData.getJSONObject(k).has("message")) {
                                                 external.setPostType(SWBSocialUtil.MESSAGE);
-                                            }else{
+                                            } else {
                                                 continue;
                                             }
                                         }
-                                    }else if(postsData.getJSONObject(k).getString("type").equals("video")){
-                                        if(postsData.getJSONObject(k).has("source")){
+                                    } else if (postsData.getJSONObject(k).getString("type").equals("video")) {
+                                        if (postsData.getJSONObject(k).has("source")) {
                                             external.setVideo(postsData.getJSONObject(k).getString("source"));
                                             external.setPostType(SWBSocialUtil.VIDEO);
-                                        }else{//If has message, create it as message
-                                            if(postsData.getJSONObject(k).has("message")){
+                                        } else {//If has message, create it as message
+                                            if (postsData.getJSONObject(k).has("message")) {
                                                 external.setPostType(SWBSocialUtil.MESSAGE);
-                                            }else{
+                                            } else {
                                                 continue;
                                             }
                                         }
-                                    }else if(postsData.getJSONObject(k).getString("type").equals("link")){
-                                        if(postsData.getJSONObject(k).has("message")){
+                                    } else if (postsData.getJSONObject(k).getString("type").equals("link")) {
+                                        if (postsData.getJSONObject(k).has("message")) {
                                             external.setPostType(SWBSocialUtil.MESSAGE);
-                                        }else{
+                                        } else {
                                             continue;
                                         }
                                     }
-                                }else {//Do not process data without "type"
+                                } else {//Do not process data without "type"
                                     continue;
                                 }
                                 external.setSocialNetwork(this);
                                 aListExternalPost.add(external);
                             }
                             //Si el ArrayList tiene tamaño mayor a 0, entonces es que existen mensajes para enviar al clasificador
-                            if(aListExternalPost.size()>0)
-                            {
+                            if (aListExternalPost.size() > 0) {
                                 new Classifier(aListExternalPost, stream, this, true);
                             }
                             if (cont == Facebook.QUERYLIMIT) {
@@ -452,7 +475,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                     nextPage = Facebook.FACEBOOKGRAPH + nextPage;
                                 }
                             }
-
+                            
                             queriesArray[j].put("nextQuery", nextPage);
                             queriesArray[j].put("msgCounted", Integer.toString(cont));
                         }
@@ -462,12 +485,12 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         } catch (JSONException jsone) {
             log.error("Problemas al parsear respuesta de Facebook", jsone);
         }
-
+        
         return isThereMoreMsgs;
     }
-
+    
     public void postMsg(Message message) {
-
+        
         Map<String, String> params = new HashMap<String, String>(2);
         params.put("access_token", this.getAccessToken());
         params.put("message", message.getMsg_Text());
@@ -477,11 +500,11 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
         //TODO:REVISAR COMO HACER UN POST A ALGUNO O VARIOS USUARIOS
         try {
-            if(message.getPostInSource() != null && message.getPostInSource().getSocialNetMsgId() != null){//is a response
+            if (message.getPostInSource() != null && message.getPostInSource().getSocialNetMsgId() != null) {//is a response
                 System.out.println("1ST OPTION: RESPONDING TO SOMEONE:" + message.getPostInSource().getSocialNetMsgId());
-                facebookResponse = postRequest(params, "https://graph.facebook.com/" + message.getPostInSource().getSocialNetMsgId() + "/comments" ,
+                facebookResponse = postRequest(params, "https://graph.facebook.com/" + message.getPostInSource().getSocialNetMsgId() + "/comments",
                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "POST");
-            }else{//is a single post to my wall
+            } else {//is a single post to my wall
                 System.out.println("2ND OPTION: MAKING SINGLE POST");
                 facebookResponse = postRequest(params, url,
                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95",
@@ -492,12 +515,12 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
              "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95",
              "POST");
              */
-
+            
             jsonResponse = new JSONObject(facebookResponse);
-            System.out.println("THIS IS THE RESPONSE MSG:" + jsonResponse );
-            if (jsonResponse != null && jsonResponse.has("id")){
-                SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, jsonResponse.get("id").toString(),null);
-                System.out.println("SAVING MSG SENT WITH POST ID: "  + jsonResponse.get("id").toString());
+            System.out.println("THIS IS THE RESPONSE MSG:" + jsonResponse);
+            if (jsonResponse != null && jsonResponse.has("id")) {
+                SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, jsonResponse.get("id").toString(), null);
+                System.out.println("SAVING MSG SENT WITH POST ID: " + jsonResponse.get("id").toString());
                 //message.setSocialNetPostId(jsonResponse.getString("id"));
                 //addPost(message);
                 //--TODO:Ver si se agrega esta línea despues(addSentPost(message, jsonResponse.getString("id"), this); )
@@ -506,13 +529,13 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 //addSentPost(message, jsonResponse.getString("id"), this); 
                 //addPost(message, "IDpuestoxFacebook", this);
                 //this.msg = message;
-            }else{
-                if(jsonResponse.has("error")){
+            } else {
+                if (jsonResponse.has("error")) {
                     JSONObject error = jsonResponse.getJSONObject("error");
-                    if(error.has("message")){
+                    if (error.has("message")) {
                         SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, null, error.getString("message"));
                     }
-                }else if(jsonResponse.has("message")){
+                } else if (jsonResponse.has("message")) {
                     SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, null, jsonResponse.getString("message"));
                 }
                 log.error("Unable to post facebook message:" + jsonResponse);
@@ -521,57 +544,59 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             try {
                 jsonResponse = new JSONObject("{\"errorMessage\" : \"Problemas con el envio/recepcion de la peticion/respuesta, detail: "
                         + ioe.getMessage() + "\"}");
-            } catch (JSONException jsone2) {}
+            } catch (JSONException jsone2) {
+            }
             log.error("Problemas con el envio/recepcion de la peticion/respuesta con Facebook", ioe);
         } catch (JSONException jsone) {
             try {
                 jsonResponse = new JSONObject("{\"errorMessage\" : \"La operacion no se pudo realizar, detail: "
                         + jsone.getMessage() + "\"}");
-            } catch (JSONException jsone2) {}
+            } catch (JSONException jsone2) {
+            }
             log.error("La operacion no se pudo realizar, objeto JSON mal formado debido a la respuesta de Facebook: "
                     + facebookResponse, jsone);
         }
     }
-
+    
     public void postPhoto(Photo photo) {
-
+        
         Map<String, String> params = new HashMap<String, String>(2);
         if (this.getAccessToken() != null) {
             params.put("access_token", this.getAccessToken());
         }
-
+        
         String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/photos";
         JSONObject jsonResponse = null;
         //String urlLocalPost = SWBSocialUtil.Strings.shortUrl("http://mysocial.com.mx:8080/swbadmin/jsp/social/postViewFiles.jsp?uri="+ photo.getURI());
-        String urlLocalPost = "http://localhost:8080/swbadmin/jsp/social/postViewFiles.jsp?uri="+ photo.getEncodedURI();
+        String urlLocalPost = "http://localhost:8080/swbadmin/jsp/social/postViewFiles.jsp?uri=" + photo.getEncodedURI();
         try {
-            String photoToPublish="";
-            String additionalPhotos="";
+            String photoToPublish = "";
+            String additionalPhotos = "";
             int photoNumber = 0;
-
+            
             Iterator<String> photos = photo.listPhotos();
-            while(photos.hasNext()){
-                String sPhoto =photos.next();
-                if(++photoNumber == 1){//post the first Photo
+            while (photos.hasNext()) {
+                String sPhoto = photos.next();
+                if (++photoNumber == 1) {//post the first Photo
                     photoToPublish = SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + sPhoto;
                 }/*else{
                  additionalPhotos += SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + sPhoto + " ";
                  }*/
             }
-            if(photoNumber == 0){
+            if (photoNumber == 0) {
                 log.error("No photo(s) found!");
                 System.out.println("No Photos FOUND");
                 return;
-            }else if (photoNumber > 1){
+            } else if (photoNumber > 1) {
                 additionalPhotos = urlLocalPost;
             }
-
+            
             System.out.println("The photo to be published FACEBOOK:" + photoToPublish);
             System.out.println("Additional Photos FACEBOOK: " + additionalPhotos);
 
 
             //if text is not null, add it to the message. Always include additionalPhotos it may be empty if only one picture was found.
-            params.put("message", (photo.getMsg_Text()==null ? "" : photo.getMsg_Text()) + " " +additionalPhotos );
+            params.put("message", (photo.getMsg_Text() == null ? "" : photo.getMsg_Text()) + " " + additionalPhotos);
             /*
              if (photo.getMsg_Text() != null) {
              if(!additionalPhotos.isEmpty()){//Msg and photos
@@ -584,32 +609,32 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
              }else {//Empty msg
              params.put("message", "");
              }*/
-
+            
             SWBFile photoFile = new SWBFile(photoToPublish);
-
+            
             if (photoFile.exists()) {
                 SWBFileInputStream fileStream = new SWBFileInputStream(photoFile);
-                String facebookResponse="";
+                String facebookResponse = "";
 
                 //if it's a response to a post and a photo is included don't upload the photo, only the url to the local site
-                if(photo.getPostInSource() != null && photo.getPostInSource().getSocialNetMsgId() != null){
-                    params.put("message", (photo.getMsg_Text()==null ? "" : photo.getMsg_Text()) + " " +  urlLocalPost );
-                    facebookResponse = postRequest(params, "https://graph.facebook.com/" + photo.getPostInSource().getSocialNetMsgId() + "/comments" ,
+                if (photo.getPostInSource() != null && photo.getPostInSource().getSocialNetMsgId() != null) {
+                    params.put("message", (photo.getMsg_Text() == null ? "" : photo.getMsg_Text()) + " " + urlLocalPost);
+                    facebookResponse = postRequest(params, "https://graph.facebook.com/" + photo.getPostInSource().getSocialNetMsgId() + "/comments",
                             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "POST");
                     System.out.println("1ST OPTION: RESPONDING TO SOMEONE WITH PICTURE:" + photo.getPostInSource().getSocialNetMsgId());
-
-                }else{//is a single post to my wall
+                    
+                } else {//is a single post to my wall
                     facebookResponse = postFileRequest(params, url,
                             photoToPublish, fileStream, "POST", "photo");
                     System.out.println("2ND OPTION: MAKING SINGLE POST WITH PICTURE");
                 }
                 jsonResponse = new JSONObject(facebookResponse);
             }
-
-            System.out.println("THIS IS THE RESPONSE PHOTO:" + jsonResponse );
+            
+            System.out.println("THIS IS THE RESPONSE PHOTO:" + jsonResponse);
             if (jsonResponse != null && jsonResponse.has("id")) {
-                SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, jsonResponse.get("id").toString(),null);
-                System.out.println("SAVING PHOTO SENT WITH POST ID: "  + jsonResponse.get("id").toString());
+                SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, jsonResponse.get("id").toString(), null);
+                System.out.println("SAVING PHOTO SENT WITH POST ID: " + jsonResponse.get("id").toString());
                 //photo.setSocialNetPostId(jsonResponse.getString("id"));
                 //this.addPost(photo);
                 //--TODO:Ver si se agrega esta línea despues(addSentPost(message, jsonResponse.getString("id"), this); )
@@ -617,13 +642,13 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 //Para que ahi se almacenen por mes y año y despues pueda ser mas facil y optimo hacer busquedas sobre PostOuts
                 //addSentPost(photo, jsonResponse.getString("id"), this);
                 //this.photo = photo;
-            }else{
-                if(jsonResponse.has("error")){
+            } else {
+                if (jsonResponse.has("error")) {
                     JSONObject error = jsonResponse.getJSONObject("error");
-                    if(error.has("message")){
+                    if (error.has("message")) {
                         SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, null, error.getString("message"));
                     }
-                }else if(jsonResponse.has("message")){
+                } else if (jsonResponse.has("message")) {
                     SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, null, jsonResponse.getString("message"));
                 }
                 log.error("Unable to post facebook photo:" + jsonResponse);
@@ -631,26 +656,28 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         } catch (FileNotFoundException fnfe) {
             try {
                 jsonResponse = new JSONObject("{\"errorMessage\" : \"Archivo no encontrado\"}");
-            } catch (JSONException jsone) {}
             } catch (JSONException jsone) {
+            }
+        } catch (JSONException jsone) {
             try {
                 jsonResponse = new JSONObject("{\"errorMessage\" : \"La operacion no se pudo realizar\"}");
-            } catch (JSONException jsone2) {}
+            } catch (JSONException jsone2) {
+            }
         } catch (IOException ioe) {
             try {
                 jsonResponse = new JSONObject("{\"errorMessage\" : \"Problemas con el envio/recepcion de la peticion/respuesta\"}");
-            } catch (JSONException jsone2) {}
+            } catch (JSONException jsone2) {
             }
         }
-
-    public void postVideo(Video video) 
-    {
+    }
+    
+    public void postVideo(Video video) {
         Map<String, String> params = new HashMap<String, String>(3);
         if (this.getAccessToken() != null) {
             params.put("access_token", this.getAccessToken());
         }
-
-        if(video.getTitle() != null) {
+        
+        if (video.getTitle() != null) {
             params.put("title", video.getTitle());    //TODO:Estoy enviando esto como título a la red social, ver como lo pone en la misma
         }
         if (video.getMsg_Text() != null) {
@@ -659,45 +686,45 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         //String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/videos";
         String url = Facebook.FACEBOOKGRAPH_VIDEO + this.getFacebookUserId() + "/videos";
         JSONObject jsonResponse = null;
-        String urlLocalPost = "http://localhost:8080/swbadmin/jsp/social/postViewFiles.jsp?uri="+ video.getEncodedURI();
-
+        String urlLocalPost = "http://localhost:8080/swbadmin/jsp/social/postViewFiles.jsp?uri=" + video.getEncodedURI();
+        
         try {
             String videoPath = SWBPortal.getWorkPath() + video.getWorkPath() + "/" + video.getVideo();
             SWBFile videoFile = new SWBFile(videoPath);
-
+            
             if (videoFile.exists()) {
                 String facebookResponse;
-                if(video.getPostInSource() != null && video.getPostInSource().getSocialNetMsgId() != null){
-                    params.put("message", (video.getMsg_Text()==null ? "" : video.getMsg_Text()) + " " +  urlLocalPost );
-                    facebookResponse = postRequest(params, "https://graph.facebook.com/" + video.getPostInSource().getSocialNetMsgId() + "/comments" ,
+                if (video.getPostInSource() != null && video.getPostInSource().getSocialNetMsgId() != null) {
+                    params.put("message", (video.getMsg_Text() == null ? "" : video.getMsg_Text()) + " " + urlLocalPost);
+                    facebookResponse = postRequest(params, "https://graph.facebook.com/" + video.getPostInSource().getSocialNetMsgId() + "/comments",
                             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "POST");
                     System.out.println("1ST OPTION: RESPONDING TO SOMEONE WITH VIDEO:" + video.getPostInSource().getSocialNetMsgId());
-
-                }else{//is a single post to my wall
+                    
+                } else {//is a single post to my wall
                     SWBFileInputStream fileStream = new SWBFileInputStream(videoFile);
                     facebookResponse = postFileRequest(params, url, video.getVideo(), fileStream, "POST", "video");
                     System.out.println("2ND OPTION: MAKING SINGLE POST WITH VIDEO");
                 }
                 jsonResponse = new JSONObject(facebookResponse);
             }
-
-            System.out.println("THIS IS THE RESPONSE VIDEO:" + jsonResponse );
+            
+            System.out.println("THIS IS THE RESPONSE VIDEO:" + jsonResponse);
             if (jsonResponse != null && jsonResponse.has("id")) {
-                SWBSocialUtil.PostOutUtil.savePostOutNetID(video, this, jsonResponse.get("id").toString(),null);
-                System.out.println("SAVING VIDEO SENT WITH POST ID: "  + jsonResponse.get("id").toString());
+                SWBSocialUtil.PostOutUtil.savePostOutNetID(video, this, jsonResponse.get("id").toString(), null);
+                System.out.println("SAVING VIDEO SENT WITH POST ID: " + jsonResponse.get("id").toString());
                 //video.setSocialNetPostId(jsonResponse.getString("id"));
                 //this.addPost(video);
                 //--TODO:Ver si se agrega esta línea despues(addSentPost(message, jsonResponse.getString("id"), this); )
                 //, es para agregar el Post enviado a la clase PostOutContainer
                 //Para que ahi se almacenen por mes y año y despues pueda ser mas facil y optimo hacer busquedas sobre PostOuts
                 //addSentPost(video, jsonResponse.getString("id"), this);
-            }else{
-                if(jsonResponse.has("error")){
+            } else {
+                if (jsonResponse.has("error")) {
                     JSONObject error = jsonResponse.getJSONObject("error");
-                    if(error.has("message")){
+                    if (error.has("message")) {
                         SWBSocialUtil.PostOutUtil.savePostOutNetID(video, this, null, error.getString("message"));
                     }
-                }else if(jsonResponse.has("message")){
+                } else if (jsonResponse.has("message")) {
                     SWBSocialUtil.PostOutUtil.savePostOutNetID(video, this, null, jsonResponse.getString("message"));
                 }
                 log.error("Unable to post facebook video:" + jsonResponse);
@@ -705,35 +732,44 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         } catch (FileNotFoundException fnfe) {
             try {
                 jsonResponse = new JSONObject("{\"errorMessage\" : \"Archivo no encontrado\"}");
-            } catch (JSONException jsone) {}
-         } catch (JSONException jsone) {
+            } catch (JSONException jsone) {
+            }
+        } catch (JSONException jsone) {
             try {
                 jsonResponse = new JSONObject("{\"errorMessage\" : \"La operacion no se pudo realizar\"}");
-            } catch (JSONException jsone2) {}
+            } catch (JSONException jsone2) {
+            }
         } catch (IOException ioe) {
             try {
                 jsonResponse = new JSONObject("{\"errorMessage\" : \"Problemas con el envio/recepcion de la peticion/respuesta\"}");
-            } catch (JSONException jsone2) {}
+            } catch (JSONException jsone2) {
             }
         }
+    }
 
     /**
-     * Realiza una petici&oacute;n al grafo de Facebook, de acuerdo a la url recibida
-     * @param urlString especifica el objeto del grafo de Facebook con el que se desea interactuar
-     * @param userAgent indica el navegador de Internet utilizado en la petici&oacute;n a realizar
-     * @return un {@code String} que representa la respuesta generada por el grafo de Facebook
-     * @throws java.net.MalformedURLException si la url especificada a trav&eacute;s
-     *          de {@literal urlString} no est&aacute; correctamente formada
-     * @throws java.io.IOException en caso de que se produzca un error al generar la petici&oacute;n
-     *          o recibir la respuesta del grafo de Facebook
+     * Realiza una petici&oacute;n al grafo de Facebook, de acuerdo a la url
+     * recibida
+     *
+     * @param urlString especifica el objeto del grafo de Facebook con el que se
+     * desea interactuar
+     * @param userAgent indica el navegador de Internet utilizado en la
+     * petici&oacute;n a realizar
+     * @return un {@code String} que representa la respuesta generada por el
+     * grafo de Facebook
+     * @throws java.net.MalformedURLException si la url especificada a
+     * trav&eacute;s de {@literal urlString} no est&aacute; correctamente
+     * formada
+     * @throws java.io.IOException en caso de que se produzca un error al
+     * generar la petici&oacute;n o recibir la respuesta del grafo de Facebook
      */
     public static String graphRequest(String urlString, String userAgent)
             throws java.net.MalformedURLException, java.io.IOException {
-
+        
         URL pagina = new URL(urlString);
         URLConnection conex = null;
         String answer = null;
-
+        
         try {
             //Se realiza la peticion a la página externa
             conex = pagina.openConnection();
@@ -757,27 +793,34 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     }
 
     /**
-     * Realiza peticiones al grafo de Facebook que deban ser enviadas por alg&uacute;n m&eacute;todo en particular
-     * @param params contiene los par&aacute;metros a enviar a Facebook para realizar la operaci&oacute;n deseada
-     * @param url especifica el objeto del grafo de Facebook con el que se desea interactuar
-     * @param userAgent indica el navegador de Internet utilizado en la petici&oacute;n a realizar
-     * @param method indica el m&eacute;todo de la petici&oacute; HTTP requerido por Facebook para realizar
-     *          una operaci&oacute;n, como: {@literal POST} o {@literal DELETE}
-     * @return un {@code String} que representa la respuesta generada por el grafo de Facebook
-     * @throws IOException en caso de que se produzca un error al generar la petici&oacute;n
-     *          o recibir la respuesta del grafo de Facebook
+     * Realiza peticiones al grafo de Facebook que deban ser enviadas por
+     * alg&uacute;n m&eacute;todo en particular
+     *
+     * @param params contiene los par&aacute;metros a enviar a Facebook para
+     * realizar la operaci&oacute;n deseada
+     * @param url especifica el objeto del grafo de Facebook con el que se desea
+     * interactuar
+     * @param userAgent indica el navegador de Internet utilizado en la
+     * petici&oacute;n a realizar
+     * @param method indica el m&eacute;todo de la petici&oacute; HTTP requerido
+     * por Facebook para realizar una operaci&oacute;n, como: {@literal POST} o
+     * {@literal DELETE}
+     * @return un {@code String} que representa la respuesta generada por el
+     * grafo de Facebook
+     * @throws IOException en caso de que se produzca un error al generar la
+     * petici&oacute;n o recibir la respuesta del grafo de Facebook
      */
     private String postRequest(Map<String, String> params, String url,
             String userAgent, String method) throws IOException {
-
+        
         URL serverUrl = new URL(url);
         CharSequence paramString = (null == params) ? "" : delimit(params.entrySet(), "&", "=", true);
-
+        
         HttpURLConnection conex = null;
         OutputStream out = null;
         InputStream in = null;
         String response = null;
-
+        
         if (method == null) {
             method = "POST";
         }
@@ -812,20 +855,28 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     }
 
     /**
-     * Realiza peticiones al grafo de Facebook que deban ser enviadas por alg&uacute;n m&eacute;todo
-     * en particular, en las que adem&aacute;, es necesaria la inclusi&oacute;n de un archivo
-     * @param params contiene los par&aacute;metros a enviar a Facebook para realizar la operaci&oacute;n deseada
-     * @param url especifica el objeto del grafo de Facebook con el que se desea interactuar
-     * @param fileName indica el nombre del archivo a incluir en la petici&oacute; a Facebook
-     * @param fileStream representa el contenido del archivo, para incluirlo en la petici&oacute; a Facebook
-     * @param method indica el m&eacute;todo de la petici&oacute; HTTP requerido por Facebook para realizar
-     *          una operaci&oacute;n, como: {@literal POST}
-     * @param itemToPost indica si el elemento a publicar en Facebook es una foto o un video.
-     *          Los valores aceptados por este parametro son: {@literal photo} o {@literal video}
-     * @return un {@code String} que representa la respuesta generada por el grafo de Facebook, o la 
-     *          representaci&oacute;n de un objeto JSON con el resultado de la ejecuci&oacute;n del metodo.
-     * @throws IOException en caso de que se produzca un error al generar la petici&oacute;n
-     *          o recibir la respuesta del grafo de Facebook
+     * Realiza peticiones al grafo de Facebook que deban ser enviadas por
+     * alg&uacute;n m&eacute;todo en particular, en las que adem&aacute;, es
+     * necesaria la inclusi&oacute;n de un archivo
+     *
+     * @param params contiene los par&aacute;metros a enviar a Facebook para
+     * realizar la operaci&oacute;n deseada
+     * @param url especifica el objeto del grafo de Facebook con el que se desea
+     * interactuar
+     * @param fileName indica el nombre del archivo a incluir en la
+     * petici&oacute; a Facebook
+     * @param fileStream representa el contenido del archivo, para incluirlo en
+     * la petici&oacute; a Facebook
+     * @param method indica el m&eacute;todo de la petici&oacute; HTTP requerido
+     * por Facebook para realizar una operaci&oacute;n, como: {@literal POST}
+     * @param itemToPost indica si el elemento a publicar en Facebook es una
+     * foto o un video. Los valores aceptados por este parametro son:
+     * {@literal photo} o {@literal video}
+     * @return un {@code String} que representa la respuesta generada por el
+     * grafo de Facebook, o la representaci&oacute;n de un objeto JSON con el
+     * resultado de la ejecuci&oacute;n del metodo.
+     * @throws IOException en caso de que se produzca un error al generar la
+     * petici&oacute;n o recibir la respuesta del grafo de Facebook
      */
     private String postFileRequest(Map<String, String> params, String url, String fileName,
             InputStream fileStream, String method, String itemToPost) {
@@ -834,11 +885,11 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         InputStream in = null;
         URL serverUrl = null;
         String facebookResponse = "{\"response\" : \"Sin procesar\"}";
-
+        
         if (method == null) {
             method = "POST";
         }
-
+        
         try {
             serverUrl = new URL(url);
             String boundary = "---MyFacebookFormBoundary" + Long.toString(System.currentTimeMillis(), 16);
@@ -881,9 +932,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         } catch (IOException ioe) {
             //facebookResponse = "{\"errorMsg\":\"Ocurrio un problema en la peticion a Facebook "
             //        + ioe.getMessage() + "\"}";
-            try{
+            try {
                 facebookResponse = getResponse(conex.getErrorStream());
-            }catch(Exception e){}
+            } catch (Exception e) {
+            }
         } finally {
             close(urlOut);
             close(in);
@@ -895,28 +947,34 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     }
 
     /**
-     * En base al contenido de la colecci&oacute;n recibida, arma una secuencia de caracteres compuesta de los pares:
-     * <p>{@code Entry.getKey()} {@code equals} {@code Entry.getKey()} </p>
-     * Si en la colecci&oacute;n hay m&aacute;s de una entrada, los pares (como el anterior), se separan por {@code delimiter}.
+     * En base al contenido de la colecci&oacute;n recibida, arma una secuencia
+     * de caracteres compuesta de los pares:
+     * <p>{@code Entry.getKey()} {@code equals} {@code Entry.getKey()} </p> Si
+     * en la colecci&oacute;n hay m&aacute;s de una entrada, los pares (como el
+     * anterior), se separan por {@code delimiter}.
+     *
      * @param entries la colecci&oacute;n con la que se van a formar los pares
-     * @param delimiter representa el valor con que se van a separar los pares a representar
-     * @param equals representa el valor con el que se van a relacionar los elementos de cada par a representar
-     * @param doEncode indica si el valor representado en cada par, debe ser codificado (UTF-8) o no
+     * @param delimiter representa el valor con que se van a separar los pares a
+     * representar
+     * @param equals representa el valor con el que se van a relacionar los
+     * elementos de cada par a representar
+     * @param doEncode indica si el valor representado en cada par, debe ser
+     * codificado (UTF-8) o no
      * @return la secuencia de caracteres que representa el conjunto de pares
-     * @throws UnsupportedEncodingException en caso de ocurrir algun problema en la codificaci&oacute;n a UTF-8 del valor
-     *      de alg&uacute;n par, si as&iacute; se indica en {@code doEncode}
+     * @throws UnsupportedEncodingException en caso de ocurrir algun problema en
+     * la codificaci&oacute;n a UTF-8 del valor de alg&uacute;n par, si
+     * as&iacute; se indica en {@code doEncode}
      */
     private CharSequence delimit(Collection<Map.Entry<String, String>> entries,
             String delimiter, String equals, boolean doEncode)
             throws UnsupportedEncodingException {
-
+        
         if (entries == null || entries.isEmpty()) {
             return null;
         }
-        StringBuilder buffer
-                = new StringBuilder(64);
+        StringBuilder buffer = new StringBuilder(64);
         boolean notFirst = false;
-        for (Map.Entry<String, String> entry : entries ) {
+        for (Map.Entry<String, String> entry : entries) {
             if (notFirst) {
                 buffer.append(delimiter);
             } else {
@@ -931,13 +989,17 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     }
 
     /**
-     * Codifica el valor de {@code target} de acuerdo al c&oacute;digo de caracteres UTF-8
+     * Codifica el valor de {@code target} de acuerdo al c&oacute;digo de
+     * caracteres UTF-8
+     *
      * @param target representa el texto a codificar
-     * @return un {@code String} que representa el valor de {@code target} de acuerdo al c&oacute;digo de caracteres UTF-8
-     * @throws UnsupportedEncodingException en caso de ocurrir algun problema en la codificaci&oacute;n a UTF-8
+     * @return un {@code String} que representa el valor de {@code target} de
+     * acuerdo al c&oacute;digo de caracteres UTF-8
+     * @throws UnsupportedEncodingException en caso de ocurrir algun problema en
+     * la codificaci&oacute;n a UTF-8
      */
     private String encode(CharSequence target) throws UnsupportedEncodingException {
-
+        
         String result = "";
         if (target != null) {
             result = target.toString();
@@ -947,13 +1009,17 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     }
 
     /**
-     * Lee un flujo de datos y lo convierte en un {@code String} con su contenido codificado en UTF-8
+     * Lee un flujo de datos y lo convierte en un {@code String} con su
+     * contenido codificado en UTF-8
+     *
      * @param data el flujo de datos a convertir
-     * @return un {@code String} que representa el contenido del flujo de datos especificado, codificado en UTF-8
-     * @throws IOException si ocurre un problema en la lectura del flujo de datos
+     * @return un {@code String} que representa el contenido del flujo de datos
+     * especificado, codificado en UTF-8
+     * @throws IOException si ocurre un problema en la lectura del flujo de
+     * datos
      */
     private static String getResponse(InputStream data) throws IOException {
-
+        
         Reader in = new BufferedReader(new InputStreamReader(data, "UTF-8"));
         StringBuilder response = new StringBuilder(256);
         char[] buffer = new char[1000];
@@ -968,50 +1034,46 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
     /**
      * Cierra el objeto recibido
+     *
      * @param c cualquier objeto que tenga la factultad de cerrarse
      */
-    private void close( Closeable c ) {
-        if ( c != null ) {
+    private void close(Closeable c) {
+        if (c != null) {
             try {
                 c.close();
-            }
-            catch ( IOException ex ) {
+            } catch (IOException ex) {
                 log.error("Error at closing object: " + c.getClass().getName(),
                         ex);
             }
         }
     }
-
+    
     @Override
-    public void authenticate(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+    public void authenticate(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String code = request.getParameter("code");
         String state = request.getParameter("state");
         String error = request.getParameter("error");
         HttpSession session = request.getSession(true);
         //System.out.println("Facebook.autenticate.............");
-        if(code==null)
-        {
+        if (code == null) {
             //System.out.println("Facebook----paso 1");
             String url = doRequestPermissions(request, paramRequest);
             PrintWriter out = response.getWriter();
             out.println("<script type=\"text/javascript\">");
             out.println(" function ioauth() {");
-            out.println("  mywin = window.open("+url+",'_blank','width=840,height=680',true);");
+            out.println("  mywin = window.open(" + url + ",'_blank','width=840,height=680',true);");
             out.println("  mywin.focus();");
             out.println(" }");
             out.println(" if(confirm('¿Autenticar la cuenta en Facebook?')) {");
             out.println("  ioauth();");
             out.println(" }");
             out.println("</script>");
-        }
-        else if( state!=null && state.equals(session.getAttribute("state")) && error==null  )
-        {
+        } else if (state != null && state.equals(session.getAttribute("state")) && error == null) {
             //System.out.println("Facebook----2");
             session.removeAttribute("state");
             String accessToken = null;
 //            long secsToExpiration = 0L;
-            String token_url = "https://graph.facebook.com/oauth/access_token?" + "client_id="+getAppKey()+"&redirect_uri=" + URLEncoder.encode(getRedirectUrl(request, paramRequest), "utf-8") + "&client_secret="+getSecretKey()+"&code=" + code;
+            String token_url = "https://graph.facebook.com/oauth/access_token?" + "client_id=" + getAppKey() + "&redirect_uri=" + URLEncoder.encode(getRedirectUrl(request, paramRequest), "utf-8") + "&client_secret=" + getSecretKey() + "&code=" + code;
 //            if(accessToken == null) {
             //System.out.println("Facebook----2.1");
             URL pagina = new URL(token_url);
@@ -1019,23 +1081,23 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             try {
                 //Se realiza la peticion a la página externa
                 conex = pagina.openConnection();
-                if(request.getHeader("user-agent")!=null) {
+                if (request.getHeader("user-agent") != null) {
                     conex.setRequestProperty("user-agent", request.getHeader("user-agent"));
                 }
-                if(pagina.getHost()!=null) {
+                if (pagina.getHost() != null) {
                     conex.setRequestProperty("host", pagina.getHost());
                 }
                 conex.setConnectTimeout(5000);
-            }catch(Exception nexc) {
+            } catch (Exception nexc) {
                 conex = null;
                 //System.out.println("error error error error error error error error 1");
                 //System.out.println("error........"+nexc);
             }
             if (conex != null) {
                 String answer;
-                try{
+                try {
                     answer = SWBUtils.IO.readInputStream(conex.getInputStream());
-                }catch(Exception e) {
+                } catch (Exception e) {
                     //System.out.println("error error error error error error error error 3\n"+e);
                     answer = "";
                 }
@@ -1052,7 +1114,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 }
             }
 //            }
-            if(accessToken != null) {
+            if (accessToken != null) {
                 //System.out.println("Facebook----2.2");
                 String graph_url = "https://graph.facebook.com/me?access_token=" + accessToken;
                 String me = Facebook.graphRequest(graph_url, request.getHeader("user-agent"));
@@ -1064,13 +1126,13 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     setFacebookUserId(userId);
                     setAccessToken(accessToken);
                     setSn_authenticated(true);
-
+                    
                     request.setAttribute("msg", userId);
                     PrintWriter out = response.getWriter();
                     out.println("<script type=\"text/javascript\">");
                     out.println("  window.close();");
                     out.println("</script>");
-                }catch(JSONException e) {
+                } catch (JSONException e) {
                     log.error(e);
                     request.setAttribute("msg", "hubo problemas. contacta a tu administrador para revisar el visor de errores");
                     PrintWriter out = response.getWriter();
@@ -1080,9 +1142,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     //System.out.println("error error error error error error error error 2");
                 }
             }
-        }
-        else
-        {
+        } else {
             //System.out.println("problemas");
             session.removeAttribute("state");
             //System.out.println("ERROR:Se ha encontrado un problema con la respuesta obtenida, se considera no aut&eacute;ntica.");
@@ -1093,20 +1153,18 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             request.setAttribute("msg", "Se ha encontrado un problema con la respuesta obtenida, tu cuenta se considera no aut&eacute;ntica.");
         }
     }
-
-    private String getRedirectUrl(HttpServletRequest request, SWBParamRequest paramRequest)
-    {
+    
+    private String getRedirectUrl(HttpServletRequest request, SWBParamRequest paramRequest) {
         StringBuilder address = new StringBuilder(128);
-        address.append("http://").append(request.getServerName()).append(":").append(request.getServerPort()).append("/").append(paramRequest.getUser().getLanguage()).append("/").append(paramRequest.getResourceBase().getWebSiteId()).append("/"+paramRequest.getWebPage().getId()+"/_rid/").append(paramRequest.getResourceBase().getId()).append("/_mod/").append(paramRequest.getMode()).append("/_lang/").append(paramRequest.getUser().getLanguage());
+        address.append("http://").append(request.getServerName()).append(":").append(request.getServerPort()).append("/").append(paramRequest.getUser().getLanguage()).append("/").append(paramRequest.getResourceBase().getWebSiteId()).append("/" + paramRequest.getWebPage().getId() + "/_rid/").append(paramRequest.getResourceBase().getId()).append("/_mod/").append(paramRequest.getMode()).append("/_lang/").append(paramRequest.getUser().getLanguage());
         return address.toString();
     }
-
-    public String doRequestPermissions(HttpServletRequest request, SWBParamRequest paramRequest )
-    {
+    
+    public String doRequestPermissions(HttpServletRequest request, SWBParamRequest paramRequest) {
         StringBuilder url = new StringBuilder(128);
         String state = SWBPortal.UTIL.getRandString(7, ALPHABETH);
         request.getSession(true).setAttribute("state", state);
-
+        
         url.append("'https://www.facebook.com/dialog/oauth?'+");
         url.append("'client_id='+");
         url.append("'").append(getAppKey()).append("'+");
@@ -1120,46 +1178,46 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         return url.toString();
         //heroku pass admin12345678
     }
-
+    
     @Override
     public String doRequestPermissions() {
         //System.out.println("Facebook.doRequestPermissions()");
         return null;
     }
-
+    
     @Override
     public String doRequestAccess() {
         return null;
     }
-
+    
     public void postPhotoSocialNets(Facebook facebook, SocialWebPage swb, Language l, StringBuilder address) {
-
+        
         Map<String, String> params = new HashMap<String, String>(2);
         if (facebook.getAccessToken() != null) {
             params.put("access_token", facebook.getAccessToken());
         }
-
+        
         String url = "https://graph.facebook.com/" + facebook.getFacebookUserId() + "/photos";
-
-
+        
+        
         try {
             String photoToPublish = "";
             //String additionalPhotos = "";
             String urlShort = SWBSocialUtil.Util.shortUrl(address.toString());
             String description = swb.getDescription(l.getId()) == null ? "" : swb.getDescription(l.getId());
             params.put("message", (description) + " " + urlShort);
-
+            
             photoToPublish = SWBPortal.getWorkPath() + swb.getWorkPath() + "/" + "socialwpPhoto_Pagina_Social_" + swb.getSocialwpPhoto();
             SWBFile photoFile = new SWBFile(photoToPublish);
-
+            
             if (photoFile.exists()) {
                 SWBFileInputStream fileStream = new SWBFileInputStream(photoFile);
                 String facebookResponse = "";
                 facebookResponse = postFileRequest(params, url,
                         photoToPublish, fileStream, "POST", "photo");
             }
-
-
+            
+            
         } catch (FileNotFoundException fnfe) {
         } catch (IOException ioe) {
         }
