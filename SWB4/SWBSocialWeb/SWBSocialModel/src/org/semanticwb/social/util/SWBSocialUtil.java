@@ -98,6 +98,8 @@ public class SWBSocialUtil implements SWBAppObject {
     static public final String CLASSIFYSENTMGS_PROPNAME="classifySentMgs";
     static public double EART_RADIUS_KM = 6371.01;   //Kilometros
     static public double EART_RADIUS_MI = 3958.762079; //Millas
+    static private ArrayList<String> aPrepositions=new ArrayList();
+    static private ArrayList<String> aSentimentWords=new ArrayList();
     
     
     //private static Properties prop = new Properties();
@@ -106,28 +108,26 @@ public class SWBSocialUtil implements SWBAppObject {
      * Creates a new object of this class.
      */
     public SWBSocialUtil() {
-        System.out.println("Entra a SWBSocialUtil/createInstance");
-        //createInstance();
+        System.out.println("Entra a SWBSocialUtil/createInstance-Jorge");
         init();
     }
 
-    /**
+   /**
      * Retrieves a reference to the only one existing object of this class.
-     * <p>Obtiene una referencia al &uacute;nico objeto existente de esta
-     * clase.</p>
-     *
-     * @param applicationPath a string representing the path for this
-     * application
+     * <p>Obtiene una referencia al &uacute;nico objeto existente de esta clase.</p>
+     * @param applicationPath a string representing the path for this application
      * @return a reference to the only one existing object of this class
      */
-    /*
-    static public synchronized SWBSocialUtil createInstance() {
-        //System.out.println("Entra a SWBSocialUtil/createInstance");
-        if (instance == null) {
-            instance = new SWBSocialUtil();
+    static public synchronized SWBSocialUtil createInstance()
+    {
+        if (SWBSocialUtil.instance == null)
+        {
+            System.out.println("Entra a SWBSocialUtil/createInstance-Jorge-1");
+            SWBSocialUtil.instance = new SWBSocialUtil();
         }
-        return instance;
-    }*/
+        System.out.println("Entra a SWBSocialUtil/createInstance-Jorge-2");
+        return SWBSocialUtil.instance;
+    }
     
     
     public ArrayList getDoublesArray() {
@@ -196,7 +196,36 @@ public class SWBSocialUtil implements SWBAppObject {
         hmapChanges.put("bb", "b");
         hmapChanges.put("c", "k");
         
+        //Carga preposiciones a memoría
+        loadPrepositions();
+        
+        //Carga Palabras sentimentales a memoría
+        loadSentimentWords();
     }
+    
+    //Carga las preposiciones que estan en BD a memoria
+    public static void loadPrepositions()
+    {
+        Iterator<Prepositions> itPreps=Prepositions.ClassMgr.listPrepositionses(SWBContext.getAdminWebSite());
+        while(itPreps.hasNext())
+        {
+            Prepositions prep=itPreps.next();
+            aPrepositions.add(prep.getId());
+        }
+    }
+    
+    //Carga las palabras sentimentales a memoría
+    public static void loadSentimentWords()
+    {
+        Iterator<SentimentWords> itSentWords=SentimentWords.ClassMgr.listSentimentWordses(SWBContext.getAdminWebSite());
+        while(itSentWords.hasNext())
+        {
+            SentimentWords sentWord=itSentWords.next();
+            aSentimentWords.add(sentWord.getId());
+        }
+    }
+    
+    
 
     public static class Strings {
 
@@ -565,7 +594,7 @@ public class SWBSocialUtil implements SWBAppObject {
                 String word2Find=st.nextToken();
                 //System.out.println("Palabra monitorear:"+word2Find);
 
-                if(Prepositions.ClassMgr.getPrepositions(word2Find, socialAdminSite)!=null) //Elimino preposiciones
+                if(aPrepositions.contains(word2Find)) //Elimino preposiciones
                 {
                     continue;
                 }
@@ -581,10 +610,10 @@ public class SWBSocialUtil implements SWBAppObject {
                 //Se fonematiza la palabra
                 //word2Find=SWBSocialUtil.Classifier.phonematize(word2Find);
                 System.out.println("word Fonematizada:"+word2Find);
-                //SentimentWords sentimentalWordObj=SentimentWords.getSentimentalWordByWord(model, word2Find);
-                SentimentWords sentimentalWordObj=SentimentWords.ClassMgr.getSentimentWords(word2Find, socialAdminSite);
-                if(sentimentalWordObj!=null) //La palabra en cuestion ha sido encontrada en la BD
+                //SentimentWords sentimentalWordObj=SentimentWords.ClassMgr.getSentimentWords(word2Find, socialAdminSite);
+                if(aSentimentWords.contains(word2Find)) //La palabra en cuestion ha sido encontrada en la BD
                 {
+                    SentimentWords sentimentalWordObj=SentimentWords.ClassMgr.getSentimentWords(word2Find, socialAdminSite);
                     System.out.println("Palabra Encontrada:"+word2Find);
                     wordsCont++;
                     IntensiveTweetValue+=sentimentalWordObj.getIntensityValue();
@@ -1090,7 +1119,7 @@ public class SWBSocialUtil implements SWBAppObject {
             while (st.hasMoreTokens())
             {
                 String word2Find=st.nextToken();
-                if(Prepositions.ClassMgr.getPrepositions(word2Find, SWBContext.getAdminWebSite())!=null) //Elimino preposiciones
+                if(aPrepositions.contains(word2Find)) //Elimino preposiciones
                 {
                     continue;
                 }

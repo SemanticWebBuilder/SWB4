@@ -41,7 +41,7 @@ public class SocialLoader implements SWBAppObject {
             new SWBSocialCalendarMgr(); //Se dispara un solo thread c/minuto + los threads que se disparen en c/listener en ese minuto (si aplicara)
             new ListenerMgr();  //Trae un Thread
             new MonitorMgr();   //Trae un Thread
-            new SWBSocialUtil(); //Sin threads
+            new SWBSocialUtil().createInstance(); //Sin threads
             
              //Charges the unique PostMonitor instance
             if(PostMonitor.ClassMgr.listPostMonitors(SWBContext.getAdminWebSite()).hasNext())
