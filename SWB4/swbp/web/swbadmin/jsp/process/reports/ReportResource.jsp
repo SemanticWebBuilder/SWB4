@@ -70,7 +70,7 @@
                 %>
                 <a <%if (fr.isActive()) {%> href="<%=path%>"<%}%> title="<%=fr.getTitle()%>"><%=fr.getTitle()%></a>
                 <%if (fr.isActive()) {%><a onclick="if (!confirm('Eliminar archivo?'))
-                                return false;" href="<%=urlAction.setAction("removeFileReport").setParameter("idFileReport", fr.getId())%>" title="Eliminar"><img src="/swbadmin/jsp/process/reports/images/remove.png"></a><%}%>
+                                return false;" href="<%=urlAction.setAction("removeFileReport").setParameter("idFileReport", fr.getId())%>" title="Eliminar"><img src="/swbadmin/jsp/process/reports/images/delete.png"></a><%}%>
                 <br/>
                 <%}
                 %></td>
