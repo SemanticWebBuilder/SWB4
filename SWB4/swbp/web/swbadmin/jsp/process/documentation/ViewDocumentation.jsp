@@ -132,7 +132,7 @@
                         while (itConObj.hasNext()) {
                             ConnectionObject connectionObj = itConObj.next();
                             if (connectionObj instanceof SequenceFlow) {%>
-            <li><a href="#<%=connectionObj.getURI()%>" title="<%=connectionObj.getTitle()%>"><%out.print("IS CONNECTION: " + connectionObj.getTitle());%></a></li>
+            <li><a href="#<%=connectionObj.getURI()%>" title="<%=connectionObj.getTitle()%>"><%out.print(connectionObj.getTitle());%></a></li>
                 <%}
                     }%>
             <li><a href="#<%=ge.getURI()%>" title="<%=ge.getTitle()%>"><%out.print(ge.getTitle());%></a></li>
