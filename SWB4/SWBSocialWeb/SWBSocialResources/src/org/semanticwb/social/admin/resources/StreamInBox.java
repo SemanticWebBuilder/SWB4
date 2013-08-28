@@ -769,7 +769,9 @@ public class StreamInBox extends GenericResource {
                 out.println("<td class=\"mensaje\">");
                 if (postIn.getMsg_Text() != null) {
                     if (postIn.getMsg_Text().length() > 200) {
-                        out.println(postIn.getMsg_Text().substring(0, 200));
+                        String msg2Show=postIn.getMsg_Text().substring(0, 200);
+                        msg2Show=SWBSocialUtil.Util.createHttpLink(msg2Show);
+                        out.println(msg2Show);
                     } else {
                         out.println(postIn.getMsg_Text());
                     }
