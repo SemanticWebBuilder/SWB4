@@ -124,8 +124,8 @@
                     VideoIn video = (VideoIn) semObj.getGenericInstance();
                 %>    
                 <td>
-                    <%=video.getVideo()%>
-                    <%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
+                    <br/><br/><embed src="<%=video.getVideo()%>" width="195" height="150" autostart="false">    
+                    <br/><br/><%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
                 </td>
                 <%
                     }
