@@ -228,7 +228,8 @@ public class SWBSocialUtil implements SWBAppObject {
     
 
     public static class Strings {
-
+        
+       
         /**
          * Lee una string y devuelve las palabras que se encuentren dentro.
          *
@@ -1009,6 +1010,33 @@ public class SWBSocialUtil implements SWBAppObject {
     
     
     public static class Util {
+        
+         /*
+         * Reemplaza un String http:// por un <a href= y el valor
+         */
+        public static String createHttpLink(String text)
+        {
+            //System.out.println("SWBSocialUtil/replaceHref");
+            int pos=0;
+            int f = text.indexOf("http://", pos);
+            int space=text.indexOf(" ", f);
+            if(space==-1) {
+              space=text.length();
+            }
+            //System.out.println("f:"+f+",space:"+space);
+            while (f >= 0 && space>0)
+            {
+                //System.out.println("ENTRA WHILE F:"+f+",space:"+space);
+                text=text.substring(0, f)+"<a target=\"_new\" href=\""+text.substring(f, space)+"\">"+text.substring(f, space)+"</a>"+text.substring(space);
+                pos = f + 24+text.substring(f, space).length()+2+text.substring(f, space).length();
+                f = text.indexOf("http://", pos);
+                space=text.indexOf(" ", f);
+                if(space==-1) {
+                    space=text.length();
+                }
+            }
+            return text;
+        }
         
         /**
         *  Reemplaza caracteres especiales, tal como lo hace la misma función desde el 
