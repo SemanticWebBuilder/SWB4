@@ -820,11 +820,11 @@ public class SentimentalDataClassifier {
                 Listenerable listenerAble=(Listenerable)socialNetwork;
                 JSONObject userData = listenerAble.getUserInfobyId(socialNetUser.getSnu_id());
                 //System.out.println("Sentimental/userDataToString:"+userData.toString());
-                if(!userData.toString().equals("{}"))
+                if(userData!=null && !userData.toString().equals("{}"))
                 {
-                    long followers = userData != null && userData.getLong("followers") >0 ? userData.getLong("followers") : 0;
+                    long followers=userData != null && userData.getLong("followers") >0 ? userData.getLong("followers") : 0; 
                     long friends = userData != null && userData.getLong("friends") >0 ? userData.getLong("friends") : 0;
-                    socialNetUser.setFollowers(((Long)followers).intValue());
+                    socialNetUser.setFollowers(((Long)followers).intValue()); 
                     socialNetUser.setFriends(((Long)friends).intValue());
                     //User profile geoLocation
                     if(!userData.isNull("place_name"))
