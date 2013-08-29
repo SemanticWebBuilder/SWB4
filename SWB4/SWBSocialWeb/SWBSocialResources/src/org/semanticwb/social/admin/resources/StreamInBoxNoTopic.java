@@ -490,7 +490,7 @@ public class StreamInBoxNoTopic extends GenericResource {
                         nameClassFriends = "ascen";
                     } else {
                         nameClassFriends = "descen";
-                        urlOderby.setParameter("orderBy", "friendsDown");
+                        urlOderby.setParameter("orderBy", "friendsUp");
                         typeOrderFriends ="Ordenar Descendente";
                     }
                 }
