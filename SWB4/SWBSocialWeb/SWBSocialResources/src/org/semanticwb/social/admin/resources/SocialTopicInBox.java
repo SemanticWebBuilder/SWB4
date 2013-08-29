@@ -724,9 +724,9 @@ public class SocialTopicInBox extends GenericResource {
                 urlr.setParameter("page", "" + nPage);
                 urlr.setAction(SWBResourceURL.Action_REMOVE);
 
-                String text=SWBUtils.TEXT.scape4Script(postIn.getMsg_Text());
-                
-                text=SWBSocialUtil.Util.replaceSpecialCharacters(text, false);
+                String text = SWBUtils.TEXT.scape4Script(postIn.getMsg_Text());
+
+                text = SWBSocialUtil.Util.replaceSpecialCharacters(text, false);
 
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " "
                         + text + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
@@ -771,8 +771,8 @@ public class SocialTopicInBox extends GenericResource {
                 out.println("<td class=\"mensaje\">");
                 if (postIn.getMsg_Text() != null) {
                     if (postIn.getMsg_Text().length() > 200) {
-                        String msg2Show=postIn.getMsg_Text().substring(0, 200);
-                        msg2Show=SWBSocialUtil.Util.createHttpLink(msg2Show);
+                        String msg2Show = postIn.getMsg_Text().substring(0, 200);
+                        msg2Show = SWBSocialUtil.Util.createHttpLink(msg2Show);
                         out.println(msg2Show);
                     } else {
                         out.println(postIn.getMsg_Text());
@@ -1184,6 +1184,9 @@ public class SocialTopicInBox extends GenericResource {
         }
     }
 
+    /*
+     * Method which calls a jsp to generate a report based on the result of registers in this class
+     */
     private void doGenerateReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String idSurvey, WebSite webSite, int page) {
 
         String searchWord = request.getParameter("search");
@@ -1207,6 +1210,9 @@ public class SocialTopicInBox extends GenericResource {
         }
     }
 
+    /*
+     * Method which controls the filters allowed in this class
+     */
     private Set<PostIn> filtros(String swbSocialUser, WebSite wsite, Iterator<PostIn> itposts, String searchWord, HttpServletRequest request, Set<PostIn> setso, SocialTopic socialTopic, SWBParamRequest paramRequest) {
 
         ArrayList<PostIn> aListFilter = new ArrayList();
