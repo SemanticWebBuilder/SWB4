@@ -60,7 +60,7 @@
     %>
     <a href="#" onclick="showDialog('<%=obj.getId()%>');
             return false;" title="Exportar reporte <%=obj.getTitle()%>">
-        <img src="/swbadmin/jsp/process/reports/images/generate.png">Reporte: <%=obj.getTitle()%></a>
+        <img src="<%=SWBPlatform.getContextPath() + "/swbadmin/jsp/process/reports/images/generate.png"%>">Reporte: <%=obj.getTitle()%></a>
     <br/>
     <br/>
     <table class="tabla-bandeja">
@@ -88,7 +88,7 @@
                 %>
                 <th class="tban-id" title="<%=colu.getTitleColumn() == null ? sp.getDisplayName(lang) : colu.getTitleColumn()%>">
                     <a <%if (colu.isEnabledOrder()) {%>href="<%=order%>" style="color: white; text-decoration: none;">
-                        <img src="/swbadmin/jsp/process/reports/images/arrows.png">
+                        <img src="<%=SWBPlatform.getContextPath() + "/swbadmin/jsp/process/reports/images/arrows.png"%>">
                         <%}%>
                         <label style="color: white; text-decoration: none;cursor: pointer;"><%=colu.getTitleColumn() == null ? sp.getDisplayName(lang) : colu.getTitleColumn()%></label>
                     </a>
