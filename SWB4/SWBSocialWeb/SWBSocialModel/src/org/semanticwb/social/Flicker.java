@@ -7,6 +7,7 @@ import com.flickr4java.flickr.photos.PhotosInterface;
 import com.flickr4java.flickr.photos.SearchParameters;
 import java.io.IOException;
 import java.util.Arrays;
+import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.WebPage;
@@ -230,4 +231,10 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
     }
      *
      */
+    
+    @Override
+    public JSONObject getUserInfobyId(String userId) {
+        return null;
+    }
+    
 }

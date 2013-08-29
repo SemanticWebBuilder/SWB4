@@ -755,6 +755,11 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             }
         }
     }
+
+    @Override 
+    public JSONObject getUserInfobyId(String userId) {
+        return null;
+    }
     
 
 }

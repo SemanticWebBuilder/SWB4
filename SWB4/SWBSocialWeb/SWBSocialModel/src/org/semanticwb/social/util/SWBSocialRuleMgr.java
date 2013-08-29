@@ -189,7 +189,7 @@ public class SWBSocialRuleMgr {
                 //System.out.println("En SocialRuleMgr/exp_:"+KLOUT_VALUE+",cond:"+cond);
                 try
                 {
-                    if(cond.equals(">"))
+                    if(cond.equals(">") && value!=null && postIn!=null && postIn.getPostInSocialNetworkUser()!=null)
                     {
                         
                         //System.out.println("Klout de user:"+postIn.getPostInSocialNetworkUser().getSnu_id()+",klout:"+postIn.getPostInSocialNetworkUser().getSnu_klout());
