@@ -122,10 +122,10 @@ public class SWBSocialUtil implements SWBAppObject {
     {
         if (SWBSocialUtil.instance == null)
         {
-            System.out.println("Entra a SWBSocialUtil/createInstance-Jorge-1");
+            //System.out.println("Entra a SWBSocialUtil/createInstance-Jorge-1");
             SWBSocialUtil.instance = new SWBSocialUtil();
         }
-        System.out.println("Entra a SWBSocialUtil/createInstance-Jorge-2");
+        //System.out.println("Entra a SWBSocialUtil/createInstance-Jorge-2");
         return SWBSocialUtil.instance;
     }
     
@@ -153,7 +153,7 @@ public class SWBSocialUtil implements SWBAppObject {
 
     @Override
     public void init() {
-        System.out.println("Init de SWBSocialUtil-Jorge");
+        //System.out.println("Init de SWBSocialUtil-Jorge");
         //Carga Valores a ArrayList
         aDoubles.add("b");
         aDoubles.add("p");
@@ -610,12 +610,12 @@ public class SWBSocialUtil implements SWBAppObject {
                 //word2Find=SWBSocialUtil.Classifier.getRootWord(word2Find);
                 //Se fonematiza la palabra
                 //word2Find=SWBSocialUtil.Classifier.phonematize(word2Find);
-                System.out.println("word Fonematizada:"+word2Find);
+                //System.out.println("word Fonematizada:"+word2Find);
                 //SentimentWords sentimentalWordObj=SentimentWords.ClassMgr.getSentimentWords(word2Find, socialAdminSite);
                 if(aSentimentWords.contains(word2Find)) //La palabra en cuestion ha sido encontrada en la BD
                 {
                     SentimentWords sentimentalWordObj=SentimentWords.ClassMgr.getSentimentWords(word2Find, socialAdminSite);
-                    System.out.println("Palabra Encontrada:"+word2Find);
+                    //System.out.println("Palabra Encontrada:"+word2Find);
                     wordsCont++;
                     IntensiveTweetValue+=sentimentalWordObj.getIntensityValue();
                     //Veo si la palabra cuenta con mas de dos caracteres(Normalmente el inicial de la palabra y talvez otro que
@@ -705,7 +705,7 @@ public class SWBSocialUtil implements SWBAppObject {
            while(itSntPhases.hasNext())
            {
                SentimentalLearningPhrase sntLPhrase=itSntPhases.next();
-               System.out.println("Frase Learn:"+sntLPhrase.getPhrase());
+               //System.out.println("Frase Learn:"+sntLPhrase.getPhrase());
                HashMap hmap=new HashMap();
                hmap.put("text", text);
                hmap.put("contOcurr", 0);
@@ -714,7 +714,7 @@ public class SWBSocialUtil implements SWBAppObject {
                text=(String)hmap.get("text");
                int contOcurr=((Integer)hmap.get("contOcurr")).intValue();
                //int contOcurr=findOccurrencesNumber(text, sntLPhrase.getPhrase(), 0);
-               System.out.println("sntLPhrase:"+sntLPhrase.getPhrase()+",contOcurrJorge:"+contOcurr+", text:"+text);
+               //System.out.println("sntLPhrase:"+sntLPhrase.getPhrase()+",contOcurrJorge:"+contOcurr+", text:"+text);
                if(contOcurr>0)
                {
                    if(sntLPhrase.getSentimentType()==1) //la frase es positiva
@@ -1284,7 +1284,7 @@ public class SWBSocialUtil implements SWBAppObject {
                     URLConnection urlCon = url.openConnection();
 
                     // Sacamos por pantalla el tipo de fichero
-                    System.out.println(urlCon.getContentType());
+                    //System.out.println(urlCon.getContentType());
 
                     // Se obtiene el inputStream de la foto web y se abre el fichero
                     // local.
@@ -1518,28 +1518,28 @@ public class SWBSocialUtil implements SWBAppObject {
          */
         public static PostOutNet savePostOutNetID(PostOut postOut, SocialNetwork socialNet, String socialNetMsgId, String error)
         {
-            System.out.println("Entra a savePostOutNetID-1");
+            //System.out.println("Entra a savePostOutNetID-1");
             PostOutNet postOutNet=null;
             try
             {
                 if(postOut==null || socialNet==null) return null;
                 WebSite wsite=WebSite.ClassMgr.getWebSite(postOut.getSemanticObject().getModel().getName());
-                System.out.println("Entra a savePostOutNetID-2:"+wsite);
+                //System.out.println("Entra a savePostOutNetID-2:"+wsite);
                 postOutNet=PostOutNet.ClassMgr.createPostOutNet(wsite);
-                System.out.println("Entra a savePostOutNetID-3:"+postOutNet);
+                //System.out.println("Entra a savePostOutNetID-3:"+postOutNet);
                 postOutNet.setSocialPost(postOut);
                 postOutNet.setSocialNetwork(socialNet);
                 if(socialNetMsgId!=null)  {
                     postOutNet.setSocialNetMsgID(socialNetMsgId);
                 }
                 postOutNet.setPo_created(new Date());
-                System.out.println("Entra a savePostOutNetID-4:"+postOutNet);
+                //System.out.println("Entra a savePostOutNetID-4:"+postOutNet);
                 //Si la red social es de tipo SocialMonitorable, se pone a monitorear el PostOutNet creado.
                 if(socialNet instanceof SocialMonitorable)
                 {
-                    System.out.println("Entra a savePostOutNetID-5:"+socialNet);
+                    //System.out.println("Entra a savePostOutNetID-5:"+socialNet);
                     SWBSocialUtil.PostOutUtil.savePostOutNetToMonitor(postOutNet);
-                    System.out.println("Entra a savePostOutNetID-6:"+socialNet);
+                    //System.out.println("Entra a savePostOutNetID-6:"+socialNet);
                 }else if(socialNetMsgId!=null && error ==null){
                     postOutNet.setStatus(1);
                 }else if(error!=null){
@@ -1548,10 +1548,10 @@ public class SWBSocialUtil implements SWBAppObject {
                 }
             }catch(Exception e)
             {
-                System.out.println(e.getMessage());
+                //System.out.println(e.getMessage());
                 log.error(e);
             }
-            System.out.println("Entra a savePostOutNetID-7:"+postOutNet);
+            //System.out.println("Entra a savePostOutNetID-7:"+postOutNet);
             return postOutNet;
         }
         
@@ -1587,7 +1587,7 @@ public class SWBSocialUtil implements SWBAppObject {
         
         public static void editPostOut(PostOut postout, SocialPFlow socialPFlow, ArrayList<SocialNetwork> aSocialNets, WebSite wsite, String toPost, HttpServletRequest request, SWBActionResponse response) 
         {
-            System.out.println("editPostOut-1");
+            //System.out.println("editPostOut-1");
             try {
                 SWBFormMgr mgr = null;
                 if (toPost.equals("msg")) {
@@ -1597,7 +1597,7 @@ public class SWBSocialUtil implements SWBAppObject {
                 } else if (toPost.equals("video")) {
                     mgr = new SWBFormMgr(postout.getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
                 }
-                System.out.println("editPostOut-2/mgr:"+mgr);
+                //System.out.println("editPostOut-2/mgr:"+mgr);
                 if (mgr != null) {
                     mgr.setFilterRequired(false);
                     SemanticObject sobj = mgr.processForm(request);
@@ -1623,12 +1623,12 @@ public class SWBSocialUtil implements SWBAppObject {
                             postOut.addSocialNetwork(socialNet);
                         }
                     }
-                    System.out.println("editPostOut-3/socialPFlow:"+socialPFlow);
+                    //System.out.println("editPostOut-3/socialPFlow:"+socialPFlow);
                     
                     //SocialPFlow al que se va ha enviar el nuevo post, si no tiene(que llegue Nulo), entonces se envía el PostOut sin pasar por flujo
                     if (socialPFlow != null) {
                         postOut.getPflowInstance().setPflow(socialPFlow);
-                        System.out.println("editPostOut-4");
+                        //System.out.println("editPostOut-4");
                     }
                 }
             } catch (Exception e) {
@@ -1650,7 +1650,7 @@ public class SWBSocialUtil implements SWBAppObject {
                 } else if (toPost.equals("video")) {
                     mgr = new SWBFormMgr(Video.sclass, wsite.getSemanticObject(), null);
                 }
-                System.out.println("sendNewPost/mgr:"+mgr);
+                //System.out.println("sendNewPost/mgr:"+mgr);
                 if (mgr != null) {
                     mgr.setFilterRequired(false);
                     SemanticObject sobj = mgr.processForm(request);
@@ -1664,11 +1664,11 @@ public class SWBSocialUtil implements SWBAppObject {
                         postOut.setPostInSource(postIn);
                     }
                     
-                    System.out.println("sendNewPost-1");
+                    //System.out.println("sendNewPost-1");
                     if (toPost.equals("video"))
                     {
                         //Guardado de Categorias
-                        System.out.println("sendNewPost-2");
+                        //System.out.println("sendNewPost-2");
                         if(request.getParameterValues(Video.social_category.getName())!=null)
                         {
                                 String values=null;
@@ -1676,7 +1676,7 @@ public class SWBSocialUtil implements SWBAppObject {
                                 for(int i=0;i<categories.length;i++)
                                 {
                                     String value=categories[i];
-                                    System.out.println("sendNewPost-3:"+value);
+                                    //System.out.println("sendNewPost-3:"+value);
                                     if(value!=null && value.trim().length()>0)
                                     {
                                         if(i>0)
@@ -1687,7 +1687,7 @@ public class SWBSocialUtil implements SWBAppObject {
                                         }
                                     }
                                 }
-                                System.out.println("sendNewPost-4:"+values);
+                                //System.out.println("sendNewPost-4:"+values);
                                 ((Video)postOut).setCategory(values);
                         }
                         
@@ -1709,7 +1709,7 @@ public class SWBSocialUtil implements SWBAppObject {
                     String isSentMgstoClassify=SWBSocialUtil.Util.getModelPropertyValue(wsite, SWBSocialUtil.CLASSIFYSENTMGS_PROPNAME);
                     if(isSentMgstoClassify!=null && isSentMgstoClassify.equalsIgnoreCase("true")) //Los mensajes de salida si se deben clasificar por sentimientos e intensidad, tal como los de entrada.
                     {
-                        System.out.println("Entra a Clasificar mensaje de Salida...");
+                        //System.out.println("Entra a Clasificar mensaje de Salida...");
                         String text2Classify=null;
                         if(postOut instanceof Video) {
                             Video video=(Video)postOut;
@@ -1729,10 +1729,10 @@ public class SWBSocialUtil implements SWBAppObject {
                             float promIntensityValue=((Float)hmapValues.get("promIntensityValue")).floatValue();
                             int intensityTweetValueType=((Integer)hmapValues.get("intensityTweetValueType")).intValue();
 
-                            System.out.println("SentimentalData../promSentimentalValue:"+promSentimentalValue);
-                            System.out.println("SentimentalData../sentimentalTweetValueType:"+sentimentalTweetValueType);
-                            System.out.println("SentimentalData../promIntensityValue:"+promIntensityValue);
-                            System.out.println("SentimentalData../intensityTweetValueType:"+intensityTweetValueType);
+                            //System.out.println("SentimentalData../promSentimentalValue:"+promSentimentalValue);
+                            //System.out.println("SentimentalData../sentimentalTweetValueType:"+sentimentalTweetValueType);
+                            //System.out.println("SentimentalData../promIntensityValue:"+promIntensityValue);
+                            //System.out.println("SentimentalData../intensityTweetValueType:"+intensityTweetValueType);
                             
                             //Guarda valores sentimentales en el PostOut (mensaje de Salida)
                             postOut.setPostSentimentalValue(promSentimentalValue);
@@ -1747,7 +1747,7 @@ public class SWBSocialUtil implements SWBAppObject {
                     
                     //SocialPFlow al que se va ha enviar el nuevo post, si no tiene(que llegue Nulo), entonces se envía el PostOut sin pasar por flujo
                     if (socialPFlow != null) {
-                        System.out.println("Se publicaJ-2");
+                        //System.out.println("Se publicaJ-2");
                         String strMessage=request.getParameter("socialFlowComment");
                         if(strMessage==null) strMessage="";
                         SocialLoader.getPFlowManager().sendResourceToAuthorize(postOut, socialPFlow, strMessage);
@@ -1755,7 +1755,7 @@ public class SWBSocialUtil implements SWBAppObject {
                     } else {
                         //Revisa las redes sociales a las cuales se tiene que enviar el Post
                         //String[] socialUris = socialUri.split("\\|");  //Dividir valores
-                        System.out.println("Se publicaJ-3");
+                        //System.out.println("Se publicaJ-3");
                         publishPost(postOut);
                     }
                 }
