@@ -4,6 +4,7 @@
     Author     : gabriela.rosales
 --%>
 
+<%@page import="org.semanticwb.social.Photo"%>
 <%@page import="org.semanticwb.model.SWBContext"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="org.semanticwb.model.WebSite"%>
@@ -35,7 +36,7 @@
     urlAction.setParameter("toPost", "photo");
     WebSite wsite = paramRequest.getWebPage().getWebSite();
     urlAction.setParameter("wsite", wsite.getSemanticObject().getModel().getName());
-
+    String sphoto = swb.getSocialwpPhoto();
 %>
 
 
@@ -62,9 +63,7 @@
 
                     <tr>
                         <td>
-
-                            <img src="<%=SWBPortal.getContextPath() + "/work" + swb.getWorkPath() + "/" + SocialWebPage.social_socialwpPhoto.getName() + "_" + swb.getId() + "_" + swb.getSocialwpPhoto()%>">
-                            <!--<img src="<%= SWBPortal.getWorkPath() + swb.getWorkPath() + "/" + SocialWebPage.social_socialwpPhoto.getName() + "_" + swb.getId() + "_" + swb.getSocialwpPhoto()%>">-->
+                            <img src="<%=SWBPortal.getWebWorkPath()%><%=swb.getWorkPath()%>/<%=SocialWebPage.social_socialwpPhoto.getName()%>_<%=swb.getId()%>_<%=sphoto%>">
 
                         </td>
                     </tr>
