@@ -51,37 +51,37 @@
         ConnectionObject conObj = null;
         GraphicalElement graEle = null;
         Containerable container = null;
-        if (pe instanceof org.semanticwb.process.model.Process) {%><a id="html" title="Generar html" onclick="window.location = '<%=urlGenerate%>'" style="cursor: pointer;"><img title="Generar html" src="/swbadmin/jsp/process/documentation/styles/css/images/html.png"/></a><%}%>
+        if (pe instanceof org.semanticwb.process.model.Process) {%><a id="html" title="Generar html" onclick="window.location = '<%=urlGenerate%>'" style="cursor: pointer;"><img title="Generar html" src="<%=SWBPlatform.getContextPath() + "/swbadmin/jsp/process/documentation/styles/css/images/html.png"%>"/></a><%}%>
     <script type="text/javascript" src="<%=SWBPlatform.getContextPath() + "/swbadmin/jsp/process/tinymce/tinymce.min.js"%>"></script>
     <%
-        if(pe instanceof org.semanticwb.process.model.Process
+        if (pe instanceof org.semanticwb.process.model.Process
                 || pe instanceof Lane
                 || pe instanceof Activity
                 || pe instanceof Gateway
                 || pe instanceof ConnectionObject
                 || pe instanceof Gateway
-                || pe instanceof DataObject){
-        if (pe instanceof org.semanticwb.process.model.Process) {
-            out.println("<h2>" + paramRequest.getLocaleString("docFromPro") + " " + pe.getTitle() + "</h2>");
-        } else {
-            out.println("<h2>" + paramRequest.getLocaleString("docFromSub") + " " + pe.getTitle() + "</h2>");
-            if (pe instanceof GraphicalElement) {
-                graEle = (GraphicalElement) pe;
-            }
-            if (pe instanceof ConnectionObject) {
-                conObj = (ConnectionObject) pe;
-                graEle = (GraphicalElement) conObj.getSource();
-            }
-            container = graEle.getContainer();
-            while (container != null) {
-                if (container instanceof GraphicalElement) {
-                    container = ((GraphicalElement) container).getContainer();
-                } else {
-                    suriProcess = ((org.semanticwb.process.model.Process) container).getURI();
-                    container = null;
+                || pe instanceof DataObject) {
+            if (pe instanceof org.semanticwb.process.model.Process) {
+                out.println("<h2>" + paramRequest.getLocaleString("docFromPro") + " " + pe.getTitle() + "</h2>");
+            } else {
+                out.println("<h2>" + paramRequest.getLocaleString("docFromSub") + " " + pe.getTitle() + "</h2>");
+                if (pe instanceof GraphicalElement) {
+                    graEle = (GraphicalElement) pe;
+                }
+                if (pe instanceof ConnectionObject) {
+                    conObj = (ConnectionObject) pe;
+                    graEle = (GraphicalElement) conObj.getSource();
+                }
+                container = graEle.getContainer();
+                while (container != null) {
+                    if (container instanceof GraphicalElement) {
+                        container = ((GraphicalElement) container).getContainer();
+                    } else {
+                        suriProcess = ((org.semanticwb.process.model.Process) container).getURI();
+                        container = null;
+                    }
                 }
             }
-        }
     %>
     <form method="post" style="width: 100%;">
         <div class="editable" style="width:100%; height:100%;" id="idDocumentation/<%=idDocumentation%>">
@@ -338,5 +338,7 @@
                 });
             }
     </script>
-    <%} else{out.println("<h1>"+ paramRequest.getLocaleLogString("noDocumentation")+"</h1>");}%>
+    <%} else {
+            out.println("<h1>" + paramRequest.getLocaleLogString("noDocumentation") + "</h1>");
+        }%>
 </div>
