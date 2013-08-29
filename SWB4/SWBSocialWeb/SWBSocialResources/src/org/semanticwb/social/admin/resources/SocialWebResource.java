@@ -127,7 +127,14 @@ public class SocialWebResource extends GenericAdmResource
     {
         final String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/admin/jsp/components/" + this.getClass().getSimpleName() + "/";
         String objUri = (String)request.getAttribute("objUri");
-        final SocialSite wsite = (SocialSite)WebSite.ClassMgr.getWebSite(request.getParameter("wsid"));        
+        WebSite wsite = null;// = (SocialSite)WebSite.ClassMgr.getWebSite(request.getParameter("wsid"));
+
+        if(WebSite.ClassMgr.getWebSite(request.getParameter("wsid")) instanceof WebSite){
+            wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsid"));
+        }else if(WebSite.ClassMgr.getWebSite(request.getParameter("wsid")) instanceof SocialSite){
+            wsite = (SocialSite)WebSite.ClassMgr.getWebSite(request.getParameter("wsid"));
+        }
+        
         HttpSession session = request.getSession(true);
         if(session.getAttribute("sw")==null)
         {
