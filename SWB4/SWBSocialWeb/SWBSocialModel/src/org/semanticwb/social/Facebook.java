@@ -1276,9 +1276,9 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
      *         {friends, followers, latitude, longitude, country_code, place_name}
      *         all the values might or might not be present in the JSONObject.
      */
-    public JSONObject getUserInfoFromId(String id){
+    public JSONObject getUserInfoFromId(String userId){
         HashMap<String, String> params = new HashMap<String, String>(2);
-        params.put("q", "SELECT friend_count, subscriber_count, current_location FROM user WHERE uid = " + id);
+        params.put("q", "SELECT friend_count, subscriber_count, current_location FROM user WHERE uid = " + userId);
         params.put("access_token", this.getAccessToken());
     
         JSONObject userInfo = new JSONObject();        
