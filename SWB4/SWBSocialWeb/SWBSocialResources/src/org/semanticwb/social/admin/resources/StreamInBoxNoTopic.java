@@ -43,26 +43,34 @@ import org.semanticwb.social.util.SWBSocialUtil;
  */
 public class StreamInBoxNoTopic extends GenericResource {
 
-     /** The log. */
+    /**
+     * The log.
+     */
     private Logger log = SWBUtils.getLogger(StreamInBoxNoTopic.class);
-    /** The webpath. */
+    /**
+     * The webpath.
+     */
     String webpath = SWBPlatform.getContextPath();
-    /** The distributor. */
+    /**
+     * The distributor.
+     */
     String distributor = SWBPlatform.getEnv("wb/distributor");
-    /** The Mode_ action. */
+    /**
+     * The Mode_ action.
+     */
     //String Mode_Action = "paction";
-    String Mode_PFlowMsg="doPflowMsg";
+    String Mode_PFlowMsg = "doPflowMsg";
     //String Mode_PreView="preview";
-    String Mode_showTags="showTags";
+    String Mode_showTags = "showTags";
+
     /**
      * Creates a new instance of SWBAWebPageContents.
      */
     public StreamInBoxNoTopic() {
     }
-    
     public static final String Mode_REVAL = "rv";
-    public static final String Mode_RECLASSBYTOPIC="reclassByTopic";
-    public static final String Mode_ShowUsrHistory="showUsrHistory";
+    public static final String Mode_RECLASSBYTOPIC = "reclassByTopic";
+    public static final String Mode_ShowUsrHistory = "showUsrHistory";
     public static final String Mode_PREVIEW = "preview";
 
     @Override
@@ -70,13 +78,13 @@ public class StreamInBoxNoTopic extends GenericResource {
         final String mode = paramRequest.getMode();
         if (Mode_PREVIEW.equals(mode)) {
             doPreview(request, response, paramRequest);
-        }else if(Mode_REVAL.equals(mode)) {
+        } else if (Mode_REVAL.equals(mode)) {
             doRevalue(request, response, paramRequest);
-        }else if(Mode_ShowUsrHistory.equals(mode)){
+        } else if (Mode_ShowUsrHistory.equals(mode)) {
             doShowUserHistory(request, response, paramRequest);
-        }else if(Mode_RECLASSBYTOPIC.equals(mode)) {
+        } else if (Mode_RECLASSBYTOPIC.equals(mode)) {
             doReClassifyByTopic(request, response, paramRequest);
-        }else if(Mode_showTags.equals(mode)){
+        } else if (Mode_showTags.equals(mode)) {
             doShowTags(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("exportExcel")) {
             try {
@@ -113,7 +121,8 @@ public class StreamInBoxNoTopic extends GenericResource {
     }
 
     /**
-     * User edit view of the resource, this show a list of contents related to a webpage, user can add, remove, activate, deactivate contents.
+     * User edit view of the resource, this show a list of contents related to a
+     * webpage, user can add, remove, activate, deactivate contents.
      *
      * @param request , this holds the parameters
      * @param response , an answer to the user request
@@ -124,30 +133,30 @@ public class StreamInBoxNoTopic extends GenericResource {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
-    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
-    {
-        String lang=paramRequest.getUser().getLanguage(); 
+    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String lang = paramRequest.getUser().getLanguage();
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         log.debug("doEdit()");
 
         String id = request.getParameter("suri");
-        if(id==null) return;
+        if (id == null) {
+            return;
+        }
 
-        Stream stream = (Stream)SemanticObject.getSemanticObject(id).getGenericInstance();    
-        WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+        Stream stream = (Stream) SemanticObject.getSemanticObject(id).getGenericInstance();
+        WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
 
         PrintWriter out = response.getWriter();
 
         if (request.getParameter("dialog") != null && request.getParameter("dialog").equals("close")) {
             out.println("<script type=\"javascript\">");
             out.println(" hideDialog(); ");
-            if(request.getParameter("statusMsg")!=null) {
+            if (request.getParameter("statusMsg") != null) {
                 out.println("   showStatus('" + request.getParameter("statusMsg") + "');");
             }
-            if(request.getParameter("reloadTap")!=null)
-            {
+            if (request.getParameter("reloadTap") != null) {
                 //out.println("var tabId =  '" +id  + "/bh_StreamInBoxNoTopic';");
                 //out.println("alert(dijit.byId(tabId));");
                 //out.println(" reloadTab(tabId);");
@@ -168,30 +177,29 @@ public class StreamInBoxNoTopic extends GenericResource {
 
         //System.out.println("search word que llega sin:"+request.getParameter("search"));
         String searchWord = request.getParameter("search");
-        String swbSocialUser=request.getParameter("swbSocialUser");
+        String swbSocialUser = request.getParameter("swbSocialUser");
 
         String page = request.getParameter("page");
-        if(page==null && request.getParameter("noSaveSess")==null)  //Cuando venga page!=null no se mete nada a session, ni tampoco se manda return.
+        if (page == null && request.getParameter("noSaveSess") == null) //Cuando venga page!=null no se mete nada a session, ni tampoco se manda return.
         {
             HttpSession session = request.getSession(true);
             if (null == searchWord) {
                 searchWord = "";
-                if(session.getAttribute(id + this.getClass().getName() +"search") != null){
-                    searchWord = (String)session.getAttribute(id + this.getClass().getName() +"search");
-                    session.removeAttribute(id + this.getClass().getName() +"search");
+                if (session.getAttribute(id + this.getClass().getName() + "search") != null) {
+                    searchWord = (String) session.getAttribute(id + this.getClass().getName() + "search");
+                    session.removeAttribute(id + this.getClass().getName() + "search");
                 }
-            }else{//Add word to session var
-                session.setAttribute(id + this.getClass().getName() +"search", searchWord);//Save the word in the session var
+            } else {//Add word to session var
+                session.setAttribute(id + this.getClass().getName() + "search", searchWord);//Save the word in the session var
                 return;
             }
             if (null == swbSocialUser) {
-                if(session.getAttribute(id + this.getClass().getName() +"swbSocialUser")!=null)
-                {
-                    swbSocialUser = (String)session.getAttribute(id + this.getClass().getName() +"swbSocialUser");
-                    session.removeAttribute(id + this.getClass().getName() +"swbSocialUser");
+                if (session.getAttribute(id + this.getClass().getName() + "swbSocialUser") != null) {
+                    swbSocialUser = (String) session.getAttribute(id + this.getClass().getName() + "swbSocialUser");
+                    session.removeAttribute(id + this.getClass().getName() + "swbSocialUser");
                 }
-            }else{//Add word to session var
-                session.setAttribute(id + this.getClass().getName() +"swbSocialUser", swbSocialUser);//Save the word in the session var
+            } else {//Add word to session var
+                session.setAttribute(id + this.getClass().getName() + "swbSocialUser", swbSocialUser);//Save the word in the session var
                 return;
             }
         }
@@ -246,10 +254,10 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("<fieldset>");
         out.println("<table class=\"tabla1\" >");
         out.println("<thead>");
-         out.println("<tr>");
+        out.println("<tr>");
 
         out.println("<th class=\"accion\">");
-        out.println("<span>"+paramRequest.getLocaleString("action")+"</span>");
+        out.println("<span>" + paramRequest.getLocaleString("action") + "</span>");
         out.println("</th>");
 
 
@@ -285,7 +293,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("</a>");
         out.println("</th>");
 
-       String nameClassNetwork = "ascen";
+        String nameClassNetwork = "ascen";
         String typeOrderNetwork = "Ordenar Ascendente";
         urlOderby.setParameter("orderBy", "networkDown");
         if (request.getParameter("orderBy") != null) {
@@ -321,7 +329,7 @@ public class StreamInBoxNoTopic extends GenericResource {
                     } else {
                         nameClassCreted = "descen";
                         urlOderby.setParameter("orderBy", "cretedUp");
-                        typeOrderCreted ="Ordenar Descendente";
+                        typeOrderCreted = "Ordenar Descendente";
                     }
                 }
             }
@@ -332,10 +340,10 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("<span>" + paramRequest.getLocaleString("created") + "</span>");
         out.println("</a>");
         out.println("</th>");
-        
+
 
         String nameClassSentiment = "ascen";
-         String typeOrderSentiment = "Ordenar Ascendente";
+        String typeOrderSentiment = "Ordenar Ascendente";
         urlOderby.setParameter("orderBy", "sentimentDown");
         if (request.getParameter("orderBy") != null) {
             if (request.getParameter("orderBy").equals("sentimentUp") || request.getParameter("orderBy").equals("sentimentDown")) {
@@ -345,7 +353,7 @@ public class StreamInBoxNoTopic extends GenericResource {
                     } else {
                         nameClassSentiment = "descen";
                         urlOderby.setParameter("orderBy", "sentimentUp");
-                        typeOrderSentiment ="Ordenar Descendente";
+                        typeOrderSentiment = "Ordenar Descendente";
                     }
                 }
             }
@@ -358,7 +366,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("</th>");
 
         String nameClassIntensity = "ascen";
-        String typeOrderIntensity  = "Ordenar Ascendente";
+        String typeOrderIntensity = "Ordenar Ascendente";
         urlOderby.setParameter("orderBy", "intensityDown");
         if (request.getParameter("orderBy") != null) {
             if (request.getParameter("orderBy").equals("intensityUp") || request.getParameter("orderBy").equals("intensityDown")) {
@@ -368,7 +376,7 @@ public class StreamInBoxNoTopic extends GenericResource {
                     } else {
                         nameClassIntensity = "descen";
                         urlOderby.setParameter("orderBy", "intensityUp");
-                        typeOrderIntensity ="Ordenar Descendente";
+                        typeOrderIntensity = "Ordenar Descendente";
                     }
                 }
             }
@@ -380,10 +388,10 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("<small>Descendente</small>");
         out.println("</a>");
         out.println("</th>");
-        
+
 
         String nameClassEmoticon = "ascen";
-        String typeOrderEmoticon  = "Ordenar Ascendente";
+        String typeOrderEmoticon = "Ordenar Ascendente";
         urlOderby.setParameter("orderBy", "emoticonDown");
         if (request.getParameter("orderBy") != null) {
             if (request.getParameter("orderBy").equals("emoticonUp") || request.getParameter("orderBy").equals("emoticonDown")) {
@@ -393,7 +401,7 @@ public class StreamInBoxNoTopic extends GenericResource {
                     } else {
                         nameClassEmoticon = "descen";
                         urlOderby.setParameter("orderBy", "emoticonUp");
-                        typeOrderEmoticon ="Ordenar Descendente";
+                        typeOrderEmoticon = "Ordenar Descendente";
                     }
                 }
             }
@@ -408,7 +416,7 @@ public class StreamInBoxNoTopic extends GenericResource {
 
 
         String nameClassReplies = "ascen";
-        String typeOrderReplies  = "Ordenar Ascendente";
+        String typeOrderReplies = "Ordenar Ascendente";
         urlOderby.setParameter("orderBy", "repliesDown");
         if (request.getParameter("orderBy") != null) {
             if (request.getParameter("orderBy").equals("repliesUp") || request.getParameter("orderBy").equals("repliesDown")) {
@@ -418,7 +426,7 @@ public class StreamInBoxNoTopic extends GenericResource {
                     } else {
                         nameClassReplies = "descen";
                         urlOderby.setParameter("orderBy", "repliesUp");
-                        typeOrderReplies ="Ordenar Descendente";
+                        typeOrderReplies = "Ordenar Descendente";
                     }
                 }
             }
@@ -432,7 +440,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("</th>");
 
         String nameClassUser = "ascen";
-        String typeOrderUser  = "Ordenar Ascendente";
+        String typeOrderUser = "Ordenar Ascendente";
         urlOderby.setParameter("orderBy", "userUp");
         if (request.getParameter("orderBy") != null) {
             if (request.getParameter("orderBy").equals("userUp") || request.getParameter("orderBy").equals("userDown")) {
@@ -442,8 +450,8 @@ public class StreamInBoxNoTopic extends GenericResource {
                     } else {
                         nameClassUser = "descen";
                         urlOderby.setParameter("orderBy", "userDown");
-                        typeOrderUser ="Ordenar Descendente";
-                        
+                        typeOrderUser = "Ordenar Descendente";
+
                     }
                 }
             }
@@ -456,8 +464,8 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("</a>");
         out.println("</th>");
 
-         String nameClassFollowers = "ascen";
-        String typeOrderFollowers  = "Ordenar Ascendente";
+        String nameClassFollowers = "ascen";
+        String typeOrderFollowers = "Ordenar Ascendente";
         urlOderby.setParameter("orderBy", "followersDown");
         if (request.getParameter("orderBy") != null) {
             if (request.getParameter("orderBy").equals("followersUp") || request.getParameter("orderBy").equals("followersDown")) {
@@ -467,7 +475,7 @@ public class StreamInBoxNoTopic extends GenericResource {
                     } else {
                         nameClassFollowers = "descen";
                         urlOderby.setParameter("orderBy", "followersUp");
-                        typeOrderFollowers ="Ordenar Descendente";
+                        typeOrderFollowers = "Ordenar Descendente";
                     }
                 }
             }
@@ -481,7 +489,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("</th>");
 
         String nameClassFriends = "ascen";
-        String typeOrderFriends  = "Ordenar Ascendente";
+        String typeOrderFriends = "Ordenar Ascendente";
         urlOderby.setParameter("orderBy", "friendsDown");
         if (request.getParameter("orderBy") != null) {
             if (request.getParameter("orderBy").equals("friendsUp") || request.getParameter("orderBy").equals("friendsDown")) {
@@ -491,7 +499,7 @@ public class StreamInBoxNoTopic extends GenericResource {
                     } else {
                         nameClassFriends = "descen";
                         urlOderby.setParameter("orderBy", "friendsUp");
-                        typeOrderFriends ="Ordenar Descendente";
+                        typeOrderFriends = "Ordenar Descendente";
                     }
                 }
             }
@@ -505,7 +513,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("</th>");
 
         String nameClassKlout = "ascen";
-        String typeOrderKlout  = "Ordenar Ascendente";
+        String typeOrderKlout = "Ordenar Ascendente";
         urlOderby.setParameter("orderBy", "kloutDown");
         if (request.getParameter("orderBy") != null) {
             if (request.getParameter("orderBy").equals("kloutUp") || request.getParameter("orderBy").equals("kloutDown")) {
@@ -515,7 +523,7 @@ public class StreamInBoxNoTopic extends GenericResource {
                     } else {
                         nameClassKlout = "descen";
                         urlOderby.setParameter("orderBy", "kloutUp");
-                        typeOrderKlout ="Ordenar Descendente";
+                        typeOrderKlout = "Ordenar Descendente";
                     }
                 }
             }
@@ -529,7 +537,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("</th>");
 
         String nameClassPlace = "ascen";
-        String typeOrderPlace  = "Ordenar Ascendente";
+        String typeOrderPlace = "Ordenar Ascendente";
         urlOderby.setParameter("orderBy", "placeDown");
         if (request.getParameter("orderBy") != null) {
             if (request.getParameter("orderBy").equals("placeUp") || request.getParameter("orderBy").equals("placeDown")) {
@@ -539,7 +547,7 @@ public class StreamInBoxNoTopic extends GenericResource {
                     } else {
                         nameClassPlace = "descen";
                         urlOderby.setParameter("orderBy", "placeUp");
-                        typeOrderPlace ="Ordenar Descendente"; 
+                        typeOrderPlace = "Ordenar Descendente";
                     }
                 }
             }
@@ -553,7 +561,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("</th>");
 
         String nameClassPrioritary = "ascen";
-        String typeOrderPrioritary  = "Ordenar Ascendente";
+        String typeOrderPrioritary = "Ordenar Ascendente";
         urlOderby.setParameter("orderBy", "prioritaryDown");
         if (request.getParameter("orderBy") != null) {
             if (request.getParameter("orderBy").equals("prioritaryUp") || request.getParameter("orderBy").equals("prioritaryDown")) {
@@ -563,7 +571,7 @@ public class StreamInBoxNoTopic extends GenericResource {
                     } else {
                         nameClassPrioritary = "descen";
                         urlOderby.setParameter("orderBy", "prioritaryUp");
-                        typeOrderPrioritary ="Ordenar Descendente";
+                        typeOrderPrioritary = "Ordenar Descendente";
                     }
                 }
             }
@@ -592,7 +600,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         //Filtros
 
 
-      
+
 
         //Aquí hago una iteración para sacar los elementos que no tienen SocialTopic, esto para que al momento de la páginación
         //ya se tenga exactamente cuantos elementos son.
@@ -611,7 +619,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         itposts = null;
 
 
-        int recPerPage=20;//if(resBase.getItemsbyPage()>0) recPerPage=resBase.getItemsbyPage();            
+        int recPerPage = 20;//if(resBase.getItemsbyPage()>0) recPerPage=resBase.getItemsbyPage();            
         int nRec = 0;
         int nPage;
         try {
@@ -625,9 +633,8 @@ public class StreamInBoxNoTopic extends GenericResource {
         //Una vez que ya se cuantos elementos son, ya que ya se hizo una primera iteración sobre todos los PostIn, hago una segunda
         //iteración ya para mostrar esos ultimos elementos, esto de hacer 2 iteraciones no es muy bueno, TODO: ver con Javier si vemos
         //otra mejor opción.
-        itposts=setsoFinal.iterator();
-        while (itposts.hasNext()) 
-        {
+        itposts = setsoFinal.iterator();
+        while (itposts.hasNext()) {
             PostIn postIn = itposts.next();
             /*
              if(postIn.getSocialTopic()!=null) {
@@ -639,8 +646,7 @@ public class StreamInBoxNoTopic extends GenericResource {
              * */
 
             nRec++;
-           if ((nRec > (nPage - 1) * recPerPage) && (nRec <= (nPage) * recPerPage)) 
-           {
+            if ((nRec > (nPage - 1) * recPerPage) && (nRec <= (nPage) * recPerPage)) {
                 paginate = true;
 
                 out.println("<tr>");
@@ -654,27 +660,27 @@ public class StreamInBoxNoTopic extends GenericResource {
                 urlr.setParameter("sval", postIn.getURI());
                 urlr.setParameter("page", "" + nPage);
                 urlr.setAction("remove");
-                
-                String text=SWBUtils.TEXT.scape4Script(postIn.getMsg_Text());
-                
-                text=SWBSocialUtil.Util.replaceSpecialCharacters(text, false);
 
-                out.println("<a href=\"#\" class=\"eliminar\" title=\"" + paramRequest.getLocaleString("remove") + "\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + 
-                        text + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
+                String text = SWBUtils.TEXT.scape4Script(postIn.getMsg_Text());
+
+                text = SWBSocialUtil.Util.replaceSpecialCharacters(text, false);
+
+                out.println("<a href=\"#\" class=\"eliminar\" title=\"" + paramRequest.getLocaleString("remove") + "\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " "
+                        + text + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
 
 
                 //Preview
                 SWBResourceURL urlPrev = paramRequest.getRenderUrl().setMode(Mode_PREVIEW).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" class=\"ver\" onclick=\"showDialog('" + urlPrev + "','" + paramRequest.getLocaleString("previewdocument")
                         + "'); return false;\"></a>");
-                
-                
+
+
                 //ReClasifyByTpic
-                SWBResourceURL urlreClasifybyTopic=paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());  
-                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reclasifyByTopic") + "\" class=\"retema\"  onclick=\"showDialog('" + urlreClasifybyTopic + "','" + 
-                        paramRequest.getLocaleString("reclasifyByTopic") + "'); return false;\"></a>");
-                
-                
+                SWBResourceURL urlreClasifybyTopic = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
+                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reclasifyByTopic") + "\" class=\"retema\"  onclick=\"showDialog('" + urlreClasifybyTopic + "','"
+                        + paramRequest.getLocaleString("reclasifyByTopic") + "'); return false;\"></a>");
+
+
                 //ReClasyfyBySentiment & Intensity
                 SWBResourceURL urlrev = paramRequest.getRenderUrl().setMode(Mode_REVAL).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reeval") + "\" class=\"reevaluar\" onclick=\"showDialog('" + urlrev + "','" + paramRequest.getLocaleString("reeval")
@@ -693,8 +699,8 @@ public class StreamInBoxNoTopic extends GenericResource {
                 out.println("<td class=\"mensaje\">");
                 if (postIn.getMsg_Text() != null) {
                     if (postIn.getMsg_Text().length() > 200) {
-                        String msg2Show=postIn.getMsg_Text().substring(0, 200);
-                        msg2Show=SWBSocialUtil.Util.createHttpLink(msg2Show);
+                        String msg2Show = postIn.getMsg_Text().substring(0, 200);
+                        msg2Show = SWBSocialUtil.Util.createHttpLink(msg2Show);
                         out.println(msg2Show);
                     } else {
                         out.println(postIn.getMsg_Text());
@@ -719,7 +725,7 @@ public class StreamInBoxNoTopic extends GenericResource {
 
                 //Show PostType
                 out.println("<td>");
-                out.println(postIn instanceof MessageIn?paramRequest.getLocaleString("message"):postIn instanceof PhotoIn?paramRequest.getLocaleString("photo"):postIn instanceof VideoIn?paramRequest.getLocaleString("video"):"---");
+                out.println(postIn instanceof MessageIn ? paramRequest.getLocaleString("message") : postIn instanceof PhotoIn ? paramRequest.getLocaleString("photo") : postIn instanceof VideoIn ? paramRequest.getLocaleString("video") : "---");
                 out.println("</td>");
 
                 //SocialNetwork
@@ -734,17 +740,13 @@ public class StreamInBoxNoTopic extends GenericResource {
 
                 //Sentiment
                 out.println("<td align=\"center\">");
-                if(postIn.getPostSentimentalType()==0)
-                {
+                if (postIn.getPostSentimentalType() == 0) {
                     out.println("---");
-                }else if(postIn.getPostSentimentalType()==1)
-                {
-                    out.println("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/pos.png"+"\">");
-                }else if(postIn.getPostSentimentalType()==2)
-                {
-                    out.println("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/neg.png"+"\">");
-                }else 
-                {
+                } else if (postIn.getPostSentimentalType() == 1) {
+                    out.println("<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/css/images/pos.png" + "\">");
+                } else if (postIn.getPostSentimentalType() == 2) {
+                    out.println("<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/css/images/neg.png" + "\">");
+                } else {
                     out.println("XXX");
                 }
                 out.println("</td>");
@@ -756,16 +758,13 @@ public class StreamInBoxNoTopic extends GenericResource {
 
                 //Emoticon
                 out.println("<td align=\"center\">");
-                if(postIn.getPostSentimentalEmoticonType()==1)
-                {
-                    out.println("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/emopos.png"+"\"/>");
-                }else if(postIn.getPostSentimentalEmoticonType()==2)
-                {
-                    out.println("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/css/images/emoneg.png"+"\"/>");
-                }else if(postIn.getPostSentimentalEmoticonType()==0)
-                {
+                if (postIn.getPostSentimentalEmoticonType() == 1) {
+                    out.println("<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/css/images/emopos.png" + "\"/>");
+                } else if (postIn.getPostSentimentalEmoticonType() == 2) {
+                    out.println("<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/css/images/emoneg.png" + "\"/>");
+                } else if (postIn.getPostSentimentalEmoticonType() == 0) {
                     out.println("---");
-                }else{
+                } else {
                     out.println("XXX");
                 }
                 out.println("</td>");
@@ -779,23 +778,23 @@ public class StreamInBoxNoTopic extends GenericResource {
 
                 //User
                 out.println("<td>");
-                SWBResourceURL urlshowUsrHistory=paramRequest.getRenderUrl().setMode(Mode_ShowUsrHistory).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("suri", id);  
-                out.println(postIn.getPostInSocialNetworkUser()!=null?"<a href=\"#\" onclick=\"showDialog('" + urlshowUsrHistory.setParameter("swbSocialUser", postIn.getPostInSocialNetworkUser().getURI()) + "','" + paramRequest.getLocaleString("userHistory") + "'); return false;\">"+postIn.getPostInSocialNetworkUser().getSnu_name()+"</a>":paramRequest.getLocaleString("withoutUser"));
+                SWBResourceURL urlshowUsrHistory = paramRequest.getRenderUrl().setMode(Mode_ShowUsrHistory).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("suri", id);
+                out.println(postIn.getPostInSocialNetworkUser() != null ? "<a href=\"#\" onclick=\"showDialog('" + urlshowUsrHistory.setParameter("swbSocialUser", postIn.getPostInSocialNetworkUser().getURI()) + "','" + paramRequest.getLocaleString("userHistory") + "'); return false;\">" + postIn.getPostInSocialNetworkUser().getSnu_name() + "</a>" : paramRequest.getLocaleString("withoutUser"));
                 out.println("</td>");
 
                 //Followers
                 out.println("<td align=\"center\">");
-                out.println(postIn.getPostInSocialNetworkUser()!=null?postIn.getPostInSocialNetworkUser().getFollowers():"---");
+                out.println(postIn.getPostInSocialNetworkUser() != null ? postIn.getPostInSocialNetworkUser().getFollowers() : "---");
                 out.println("</td>");
 
                 //Friends
                 out.println("<td align=\"center\">");
-                out.println(postIn.getPostInSocialNetworkUser()!=null?postIn.getPostInSocialNetworkUser().getFriends():"---");
+                out.println(postIn.getPostInSocialNetworkUser() != null ? postIn.getPostInSocialNetworkUser().getFriends() : "---");
                 out.println("</td>");
 
                 //Klout
                 out.println("<td align=\"center\">");
-                out.println(postIn.getPostInSocialNetworkUser()!=null?postIn.getPostInSocialNetworkUser().getSnu_klout():"---");
+                out.println(postIn.getPostInSocialNetworkUser() != null ? postIn.getPostInSocialNetworkUser().getSnu_klout() : "---");
                 out.println("</td>");
 
                 //Place
@@ -821,8 +820,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         //System.out.println("J-X:"+x);
         //System.out.println("J-L:"+l);
 
-        if (paginate) 
-        {
+        if (paginate) {
             out.println("<div id=\"pagination\">");
             out.println("<span>P&aacute;ginas:</span>");
             for (int countPage = 1; countPage < (Math.ceil((double) nRec / (double) recPerPage) + 1); countPage++) {
@@ -831,11 +829,13 @@ public class StreamInBoxNoTopic extends GenericResource {
                 pageURL.setParameter("suri", id);
                 pageURL.setParameter("search", (searchWord.trim().length() > 0 ? searchWord : ""));
                 pageURL.setParameter("swbSocialUser", swbSocialUser);
-                if(request.getParameter("orderBy")!=null) pageURL.setParameter("orderBy", request.getParameter("orderBy"));
+                if (request.getParameter("orderBy") != null) {
+                    pageURL.setParameter("orderBy", request.getParameter("orderBy"));
+                }
                 if (countPage != nPage) {
-                    out.println("<a href=\"#\" onclick=\"submitUrl('" + pageURL + "',this); return false;\">"+countPage+"</a> ");
+                    out.println("<a href=\"#\" onclick=\"submitUrl('" + pageURL + "',this); return false;\">" + countPage + "</a> ");
                 } else {
-                    out.println(countPage+ " ");
+                    out.println(countPage + " ");
                 }
             }
             out.println("</div>");
@@ -849,8 +849,7 @@ public class StreamInBoxNoTopic extends GenericResource {
     /*
      * Reclasifica por SocialTopic un PostIn
      */
-    private void doReClassifyByTopic(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
-    {
+    private void doReClassifyByTopic(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
         final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/classifybyTopic.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         if (dis != null) {
@@ -868,20 +867,19 @@ public class StreamInBoxNoTopic extends GenericResource {
     /*
      * Reevalua un PostIn en cuanto a sentimiento e intensidad
      */
-    
     public void doRevalue(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        final String myPath = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/stream/reValue.jsp";
-        System.out.println("doRevalue/myPath:"+myPath);
-        if (request != null && request.getParameter("postUri")!=null) {
+        final String myPath = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/stream/reValue.jsp";
+        System.out.println("doRevalue/myPath:" + myPath);
+        if (request != null && request.getParameter("postUri") != null) {
             RequestDispatcher dis = request.getRequestDispatcher(myPath);
-            if(dis != null) {
+            if (dis != null) {
                 try {
-                    SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("postUri"));
+                    SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postUri"));
                     request.setAttribute("paramRequest", paramRequest);
-                    request.setAttribute("postUri", semObj); 
+                    request.setAttribute("postUri", semObj);
                     dis.include(request, response);
                 } catch (Exception e) {
                     log.error(e);
@@ -891,8 +889,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         }
     }
 
-    private void doShowUserHistory(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
-    {
+    private void doShowUserHistory(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
         final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/userHistory.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         if (dis != null) {
@@ -908,38 +905,32 @@ public class StreamInBoxNoTopic extends GenericResource {
         }
     }
 
-    
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         final Resource base = getResourceBase();
         String action = response.getAction();
         //System.out.println("Entra a InBox_processAction-1:"+action);
-        if(action.equals("changeSocialTopic"))
-        {
-            if(request.getParameter("postUri")!=null && request.getParameter("newSocialTopic")!=null)
-            {
+        if (action.equals("changeSocialTopic")) {
+            if (request.getParameter("postUri") != null && request.getParameter("newSocialTopic") != null) {
                 //System.out.println("processAction/1");
-                SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("postUri"));
-                PostIn post=(PostIn)semObj.createGenericInstance();
-                Stream stOld=post.getPostInStream();
-                if(request.getParameter("newSocialTopic").equals("none"))
-                {
+                SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postUri"));
+                PostIn post = (PostIn) semObj.createGenericInstance();
+                Stream stOld = post.getPostInStream();
+                if (request.getParameter("newSocialTopic").equals("none")) {
                     post.setSocialTopic(null);
-                }else {
-                    SemanticObject semObjSocialTopic=SemanticObject.getSemanticObject(request.getParameter("newSocialTopic"));
-                    if(semObjSocialTopic!=null)
-                    {
-                        SocialTopic socialTopic=(SocialTopic)semObjSocialTopic.createGenericInstance();
+                } else {
+                    SemanticObject semObjSocialTopic = SemanticObject.getSemanticObject(request.getParameter("newSocialTopic"));
+                    if (semObjSocialTopic != null) {
+                        SocialTopic socialTopic = (SocialTopic) semObjSocialTopic.createGenericInstance();
                         post.setSocialTopic(socialTopic);
                     }
                 }
                 response.setMode(SWBActionResponse.Mode_EDIT);
-                response.setRenderParameter("dialog","close");
-                response.setRenderParameter("reloadTap","1");
+                response.setRenderParameter("dialog", "close");
+                response.setRenderParameter("reloadTap", "1");
                 response.setRenderParameter("suri", stOld.getURI());
             }
-        }else if (SWBResourceURL.Action_EDIT.equals(action)) 
-            {
+        } else if (SWBResourceURL.Action_EDIT.equals(action)) {
             WebSite wsite = base.getWebSite();
             try {
                 String[] phrases = request.getParameter("fw").split(";");
@@ -970,8 +961,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         }
 
     }
-    
-    
+
     /**
      * Shows the preview of the content.
      *
@@ -1008,16 +998,19 @@ public class StreamInBoxNoTopic extends GenericResource {
     }
 
     public void doShowTags(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/tagCloud.jsp";        
+        String jspResponse = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialNetworks/tagCloud.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
         try {
             request.setAttribute("paramRequest", paramRequest);
             dis.include(request, response);
         } catch (Exception e) {
-            log.error("Error in doShowTags() for requestDispatcher" , e);
+            log.error("Error in doShowTags() for requestDispatcher", e);
         }
     }
 
+    /*
+     * Method which calls a jsp to generate a report based on the result of registers in this class
+     */
     private void doGenerateReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String idSurvey, WebSite webSite, int page) {
 
         String searchWord = request.getParameter("search");
@@ -1041,6 +1034,9 @@ public class StreamInBoxNoTopic extends GenericResource {
         }
     }
 
+    /*
+     * Method which controls the filters allowed in this class
+     */
     private Set<PostIn> filtros(String swbSocialUser, WebSite wsite, Iterator<PostIn> itposts, String searchWord, HttpServletRequest request, Set<PostIn> setso, Stream stream, SWBParamRequest paramRequest) {
         //Filtros
         ArrayList<PostIn> aListFilter = new ArrayList();
