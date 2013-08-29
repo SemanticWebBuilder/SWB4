@@ -78,44 +78,53 @@ import org.semanticwb.social.util.SocialLoader;
  */
 public class SocialSentPost extends GenericResource {
 
-    /** The log. */
+    /**
+     * The log.
+     */
     private Logger log = SWBUtils.getLogger(SocialSentPost.class);
-    /** The webpath. */
+    /**
+     * The webpath.
+     */
     String webpath = SWBPlatform.getContextPath();
-    /** The distributor. */
+    /**
+     * The distributor.
+     */
     String distributor = SWBPlatform.getEnv("wb/distributor");
-    /** The Mode_ action. */
+    /**
+     * The Mode_ action.
+     */
     String Mode_Action = "paction";
-    String Mode_PFlowMsg="doPflowMsg";
-    String Mode_PreView="preview";
+    String Mode_PFlowMsg = "doPflowMsg";
+    String Mode_PreView = "preview";
 
     /**
      * Creates a new instance of SWBAWebPageContents.
      */
     public SocialSentPost() {
     }
-    /** The MOD e_ id request. */
+    /**
+     * The MOD e_ id request.
+     */
     static String MODE_IdREQUEST = "FORMID";
     public static final String Mode_SOURCE = "source";
     public static final String Mode_EDITWindow = "editWindow";
     public static final String Mode_PREVIEW = "preview";
-    public static final String Mode_ShowPostOutNets="postOutLog";
+    public static final String Mode_ShowPostOutNets = "postOutLog";
 
-    
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         final String mode = paramRequest.getMode();
         if (Mode_SOURCE.equals(mode)) {
             doShowSource(request, response, paramRequest);
-        }else if(Mode_PREVIEW.equals(mode)) {
+        } else if (Mode_PREVIEW.equals(mode)) {
             doPreview(request, response, paramRequest);
-        }else if (Mode_EDITWindow.equals(mode)) {
+        } else if (Mode_EDITWindow.equals(mode)) {
             doEditPost(request, response, paramRequest);
-        }else if(Mode_PFlowMsg.equals(mode)){
+        } else if (Mode_PFlowMsg.equals(mode)) {
             doPFlowMessage(request, response, paramRequest);
-        }else if(Mode_Action.equals(mode)){
+        } else if (Mode_Action.equals(mode)) {
             doAction(request, response, paramRequest);
-        }else if(Mode_ShowPostOutNets.equals(mode)){
+        } else if (Mode_ShowPostOutNets.equals(mode)) {
             doShowPostOutLog(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("exportExcel")) {
             try {
@@ -152,7 +161,8 @@ public class SocialSentPost extends GenericResource {
     }
 
     /**
-     * User edit view of the resource, this show a list of contents related to a webpage, user can add, remove, activate, deactivate contents.
+     * User edit view of the resource, this show a list of contents related to a
+     * webpage, user can add, remove, activate, deactivate contents.
      *
      * @param request , this holds the parameters
      * @param response , an answer to the user request
@@ -163,9 +173,8 @@ public class SocialSentPost extends GenericResource {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
-    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
-    {
-        String lang=paramRequest.getUser().getLanguage(); 
+    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String lang = paramRequest.getUser().getLanguage();
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -174,9 +183,11 @@ public class SocialSentPost extends GenericResource {
 
         String id = request.getParameter("suri");
         //System.out.println("SocialSentPost/Edit/id:"+id);
-        if(id==null) return;
+        if (id == null) {
+            return;
+        }
 
-        SocialTopic socialTopic = (SocialTopic)SemanticObject.getSemanticObject(id).getGenericInstance();    
+        SocialTopic socialTopic = (SocialTopic) SemanticObject.getSemanticObject(id).getGenericInstance();
 
         /*
          Iterator<SocialPFlowRef> itSocialPFlowRefs=socialTopic.listInheritPFlowRefs();
@@ -186,24 +197,21 @@ public class SocialSentPost extends GenericResource {
          }*/
 
 
-        WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-        String classifyBySentiment=SWBSocialUtil.Util.getModelPropertyValue(wsite, SWBSocialUtil.CLASSIFYSENTMGS_PROPNAME);
+        WebSite wsite = WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+        String classifyBySentiment = SWBSocialUtil.Util.getModelPropertyValue(wsite, SWBSocialUtil.CLASSIFYSENTMGS_PROPNAME);
 
         PrintWriter out = response.getWriter();
         //Resource base = getResourceBase();
         //User user = paramRequest.getUser();
 
         out.println("<script type=\"javascript\">");
-        if(request.getParameter("dialog")!=null && request.getParameter("dialog").equals("close"))
-        {
+        if (request.getParameter("dialog") != null && request.getParameter("dialog").equals("close")) {
             out.println(" hideDialog(); ");
         }
-        if(request.getParameter("statusMsg")!=null) 
-        {
+        if (request.getParameter("statusMsg") != null) {
             out.println("   showStatus('" + request.getParameter("statusMsg") + "');");
         }
-        if(request.getParameter("reloadTap")!=null)
-        {
+        if (request.getParameter("reloadTap") != null) {
             out.println(" reloadTab('" + id + "'); ");
         }
         out.println("</script>");
@@ -323,20 +331,20 @@ public class SocialSentPost extends GenericResource {
         out.println("<a href=\"#\" class=\"" + nameClass + "\" title=\"" + typeOrder + "\" onclick=\"submitUrl('" + urlOderby + "',this); return false;\">");
         out.println("<span>" + paramRequest.getLocaleString("postType") + "</span>");
         out.println("</a>");
-        out.println("</th>");   
+        out.println("</th>");
 
-        
-            
-            
+
+
+
         out.println("<th class=\"mensaje\">");
         out.println(paramRequest.getLocaleString("networks"));
         out.println("</th>");
 
-        
-         String nameClassOrigen = "ascen";
+
+        String nameClassOrigen = "ascen";
         String typeOrderOrigen = "Ordenar Ascendente";
         urlOderby.setParameter("orderBy", "origenUp");
-          if (request.getParameter("orderBy") != null) {
+        if (request.getParameter("orderBy") != null) {
             if (request.getParameter("orderBy").equals("origenUp") || request.getParameter("orderBy").equals("origenDown")) {
 
                 if (request.getParameter("nameClassOrigen") != null) {
@@ -345,19 +353,19 @@ public class SocialSentPost extends GenericResource {
                     } else {
                         nameClassOrigen = "descen";
                         urlOderby.setParameter("orderBy", "origenDown");
-                        typeOrderOrigen ="Ordenar Descendente";
+                        typeOrderOrigen = "Ordenar Descendente";
                     }
                 }
             }
-          }
+        }
         out.println("<th>");
         urlOderby.setParameter("nameClassOrigen", nameClassOrigen);
-        out.println("<a href=\"#\" class=\""+nameClassOrigen+"\" title=\"" + typeOrderOrigen + "\" onclick=\"submitUrl('" + urlOderby + "',this); return false;\">");
+        out.println("<a href=\"#\" class=\"" + nameClassOrigen + "\" title=\"" + typeOrderOrigen + "\" onclick=\"submitUrl('" + urlOderby + "',this); return false;\">");
         out.println("<span>" + paramRequest.getLocaleString("source") + "</span>");
-        out.println("</a>");        
+        out.println("</a>");
         out.println("</th>");
 
-       String nameClassCreted = "ascen";
+        String nameClassCreted = "ascen";
         String typeOrderCreted = "Ordenar Ascendente";
         urlOderby.setParameter("orderBy", "cretedDown");
         if (request.getParameter("orderBy") != null) {
@@ -369,7 +377,7 @@ public class SocialSentPost extends GenericResource {
                     } else {
                         nameClassCreted = "descen";
                         urlOderby.setParameter("orderBy", "cretedUp");
-                        typeOrderCreted ="Ordenar Descendente";
+                        typeOrderCreted = "Ordenar Descendente";
                     }
                 }
             }
@@ -380,10 +388,10 @@ public class SocialSentPost extends GenericResource {
         out.println("<span>" + paramRequest.getLocaleString("created") + "</span>");
         out.println("</a>");
         out.println("</th>");
-        
 
-         String nameClassUpdate = "ascen";
-         String typeOrderUpdate = "Ordenar Ascendente";
+
+        String nameClassUpdate = "ascen";
+        String typeOrderUpdate = "Ordenar Ascendente";
         urlOderby.setParameter("orderBy", "updatedDown");
         if (request.getParameter("orderBy") != null) {
             if (request.getParameter("orderBy").equals("updatedUp") || request.getParameter("orderBy").equals("updatedDown")) {
@@ -393,7 +401,7 @@ public class SocialSentPost extends GenericResource {
                     } else {
                         nameClassUpdate = "descen";
                         urlOderby.setParameter("orderBy", "updatedUp");
-                        typeOrderUpdate ="Ordenar Descendente";
+                        typeOrderUpdate = "Ordenar Descendente";
                     }
                 }
             }
@@ -406,58 +414,57 @@ public class SocialSentPost extends GenericResource {
         out.println("</a>");
         out.println("</th>");
 
-        if(classifyBySentiment!=null && classifyBySentiment.equalsIgnoreCase("true"))
-        {
+        if (classifyBySentiment != null && classifyBySentiment.equalsIgnoreCase("true")) {
             String nameClassSentiment = "ascen";
-         String typeOrderSentiment = "Ordenar Ascendente";
-        urlOderby.setParameter("orderBy", "sentimentDown");
-        if (request.getParameter("orderBy") != null) {
-            if (request.getParameter("orderBy").equals("sentimentUp") || request.getParameter("orderBy").equals("sentimentDown")) {
-                if (request.getParameter("nameClassSentiment") != null) {
-                    if (request.getParameter("nameClassSentiment").equals("descen")) {
-                        nameClassSentiment = "ascen";
-                    } else {
-                        nameClassSentiment = "descen";
-                        urlOderby.setParameter("orderBy", "sentimentUp");
-                        typeOrderSentiment ="Ordenar Descendente";
+            String typeOrderSentiment = "Ordenar Ascendente";
+            urlOderby.setParameter("orderBy", "sentimentDown");
+            if (request.getParameter("orderBy") != null) {
+                if (request.getParameter("orderBy").equals("sentimentUp") || request.getParameter("orderBy").equals("sentimentDown")) {
+                    if (request.getParameter("nameClassSentiment") != null) {
+                        if (request.getParameter("nameClassSentiment").equals("descen")) {
+                            nameClassSentiment = "ascen";
+                        } else {
+                            nameClassSentiment = "descen";
+                            urlOderby.setParameter("orderBy", "sentimentUp");
+                            typeOrderSentiment = "Ordenar Descendente";
+                        }
                     }
                 }
             }
-        }
-        out.println("<th>");
-        urlOderby.setParameter("nameClassSentiment", nameClassSentiment);
-        out.println("<a  href=\"#\" class=\"" + nameClassSentiment + "\" title=\"" + typeOrderSentiment + "\" onclick=\"submitUrl('" + urlOderby + "',this); return false;\">");
-        out.println("<span>" + paramRequest.getLocaleString("sentiment") + "</span>");
-        out.println("</a>");
-        out.println("</th>");
+            out.println("<th>");
+            urlOderby.setParameter("nameClassSentiment", nameClassSentiment);
+            out.println("<a  href=\"#\" class=\"" + nameClassSentiment + "\" title=\"" + typeOrderSentiment + "\" onclick=\"submitUrl('" + urlOderby + "',this); return false;\">");
+            out.println("<span>" + paramRequest.getLocaleString("sentiment") + "</span>");
+            out.println("</a>");
+            out.println("</th>");
 
-        String nameClassIntensity = "ascen";
-        String typeOrderIntensity  = "Ordenar Ascendente";
-        urlOderby.setParameter("orderBy", "intensityDown");
-        if (request.getParameter("orderBy") != null) {
-            if (request.getParameter("orderBy").equals("intensityUp") || request.getParameter("orderBy").equals("intensityDown")) {
-                if (request.getParameter("nameClassIntensity") != null) {
-                    if (request.getParameter("nameClassIntensity").equals("descen")) {
-                        nameClassIntensity = "ascen";
-                    } else {
-                        nameClassIntensity = "descen";
-                        urlOderby.setParameter("orderBy", "intensityUp");
-                        typeOrderIntensity ="Ordenar Descendente";
+            String nameClassIntensity = "ascen";
+            String typeOrderIntensity = "Ordenar Ascendente";
+            urlOderby.setParameter("orderBy", "intensityDown");
+            if (request.getParameter("orderBy") != null) {
+                if (request.getParameter("orderBy").equals("intensityUp") || request.getParameter("orderBy").equals("intensityDown")) {
+                    if (request.getParameter("nameClassIntensity") != null) {
+                        if (request.getParameter("nameClassIntensity").equals("descen")) {
+                            nameClassIntensity = "ascen";
+                        } else {
+                            nameClassIntensity = "descen";
+                            urlOderby.setParameter("orderBy", "intensityUp");
+                            typeOrderIntensity = "Ordenar Descendente";
+                        }
                     }
                 }
             }
-        }
-        out.println("<th>");
-        urlOderby.setParameter("nameClassIntensity", nameClassIntensity);
-        out.println("<a href=\"#\" class=\"" + nameClassIntensity + "\" title=\"" + typeOrderIntensity + "\" onclick=\"submitUrl('" + urlOderby + "',this); return false;\">");
-        out.println("<span>" + paramRequest.getLocaleString("intensity") + "</span>");
-        out.println("<small>Descendente</small>");
-        out.println("</a>");
-        out.println("</th>");
+            out.println("<th>");
+            urlOderby.setParameter("nameClassIntensity", nameClassIntensity);
+            out.println("<a href=\"#\" class=\"" + nameClassIntensity + "\" title=\"" + typeOrderIntensity + "\" onclick=\"submitUrl('" + urlOderby + "',this); return false;\">");
+            out.println("<span>" + paramRequest.getLocaleString("intensity") + "</span>");
+            out.println("<small>Descendente</small>");
+            out.println("</a>");
+            out.println("</th>");
         }
 
         String nameClassStatus = "ascen";
-        String  typeOrderSentiment = "Ordenar Ascendente";
+        String typeOrderSentiment = "Ordenar Ascendente";
         urlOderby.setParameter("orderBy", "statusUp");
         if (request.getParameter("orderBy") != null) {
             if (request.getParameter("orderBy").equals("statusUp") || request.getParameter("orderBy").equals("statusDown")) {
@@ -466,17 +473,17 @@ public class SocialSentPost extends GenericResource {
                         nameClassStatus = "ascen";
                     } else {
                         nameClassStatus = "descen";
-                         urlOderby.setParameter("orderBy", "statusDown");
-                        typeOrderSentiment ="Ordenar Descendente";
+                        urlOderby.setParameter("orderBy", "statusDown");
+                        typeOrderSentiment = "Ordenar Descendente";
                     }
                 }
             }
         }
         out.println("<th>");
         urlOderby.setParameter("nameClassStatus", nameClassStatus);
-        out.println("<a href=\"#\" class=\""+nameClassStatus+"\" title=\"" + typeOrderSentiment+ "\" onclick=\"submitUrl('" + urlOderby + "',this); return false;\">");
+        out.println("<a href=\"#\" class=\"" + nameClassStatus + "\" title=\"" + typeOrderSentiment + "\" onclick=\"submitUrl('" + urlOderby + "',this); return false;\">");
         out.println("<span>" + paramRequest.getLocaleString("status") + "</span>");
-        out.println("</a>");       
+        out.println("</a>");
         out.println("</th>");
 
 
@@ -555,7 +562,7 @@ public class SocialSentPost extends GenericResource {
         //System.out.println("searchWord en SentPost:"+searchWord);
 
         //Filtros
-       
+
         Set<PostOut> setso = null;
         String swbSocialUser = request.getParameter("swbSocialUser");
 
@@ -573,13 +580,11 @@ public class SocialSentPost extends GenericResource {
         boolean paginate = false;
 
         itposts = setso.iterator();
-        while (itposts.hasNext()) 
-        {
-            PostOut postOut = (PostOut)itposts.next();
+        while (itposts.hasNext()) {
+            PostOut postOut = (PostOut) itposts.next();
 
             nRec++;
-            if ((nRec > (nPage - 1) * recPerPage) && (nRec <= (nPage) * recPerPage)) 
-            {
+            if ((nRec > (nPage - 1) * recPerPage) && (nRec <= (nPage) * recPerPage)) {
                 paginate = true;
 
 
@@ -625,10 +630,9 @@ public class SocialSentPost extends GenericResource {
 
                 // fin validación de botones en relacion a flujos
 
-                   boolean readyToPublish=false; 
-                   if(!postOut.isPublished() && !needAuthorization)
-                   {
-                       readyToPublish=true; 
+                boolean readyToPublish = false;
+                if (!postOut.isPublished() && !needAuthorization) {
+                    readyToPublish = true;
                 }
 
                 //System.out.println("isInFlow:"+isInFlow);
@@ -649,9 +653,9 @@ public class SocialSentPost extends GenericResource {
                 String msgText = postOut.getURI();
                 if (postOut.getMsg_Text() != null) {
                     msgText = SWBUtils.TEXT.scape4Script(postOut.getMsg_Text());
-                    msgText=SWBSocialUtil.Util.replaceSpecialCharacters(msgText, false);
+                    msgText = SWBSocialUtil.Util.replaceSpecialCharacters(msgText, false);
                 }
-                
+
 
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + msgText + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
 
@@ -731,8 +735,8 @@ public class SocialSentPost extends GenericResource {
 
                 //Show PostType
                 out.println("<td>");
-                 out.println(postOut instanceof Message ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-txt.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("message") + "  \">" : postOut instanceof Photo ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-img.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("photo") + "  \">" : postOut instanceof Video ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-vid.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("video") + "  \">" : "---");
-                
+                out.println(postOut instanceof Message ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-txt.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("message") + "  \">" : postOut instanceof Photo ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-img.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("photo") + "  \">" : postOut instanceof Video ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-vid.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("video") + "  \">" : "---");
+
                 out.println("</td>");
 
                 //Show Networks
@@ -1638,6 +1642,9 @@ public class SocialSentPost extends GenericResource {
 
     }
 
+    /*
+     * Method which calls a jsp to generate a report based on the result of registers in this class
+     */
     private void doGenerateReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String idSurvey, WebSite webSite, int page) {
 
         String searchWord = request.getParameter("search");
@@ -1657,16 +1664,17 @@ public class SocialSentPost extends GenericResource {
 
 
         try {
-            System.out.println("se envia setos" + setso);
 
             createExcel(setso, paramRequest, page, response, socialTopic);
-
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    /*
+     * Method which controls the filters allowed in this class
+     */
     private Set<PostOut> filtros(String swbSocialUser, WebSite wsite, Iterator<PostOut> itposts, String searchWord, HttpServletRequest request, Set<PostOut> setso, SocialTopic socialTopic, SWBParamRequest paramRequest) {
         ArrayList<PostOut> aListFilter = new ArrayList();
 
