@@ -191,8 +191,8 @@
     }
 	  
     function hideSocialDialog(){
-        dijit.byId('swbSocialDialog').hide();
-        dijit.byId('swbSocialDialogImp').attr('content','');        
+        dijit.byId('swbDialog').hide();
+        dijit.byId('swbDialogImp').attr('content','');        
     }
     
     function scaleImage(srcwidth, srcheight, targetwidth, targetheight, fLetterBox) {
