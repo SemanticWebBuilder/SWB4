@@ -32,7 +32,7 @@
         <h2 style="color: red;">No creó reporte</h2>
     </div>
     <div style="text-align: right;">
-        <a href="<%=url.setMode("add")%>" title="Agregar reporte"><img src="/swbadmin/jsp/process/reports/images/add.png"></a>
+        <a href="<%=url.setMode("add")%>" title="Agregar reporte"><img src="<%=SWBPlatform.getContextPath() + "/swbadmin/jsp/process/reports/images/add.png"%>"></a>
     </div>
     <table class="tabla-bandeja">
         <thead>
@@ -70,24 +70,24 @@
                 %>
                 <a <%if (fr.isActive()) {%> href="<%=path%>"<%}%> title="<%=fr.getTitle()%>"><%=fr.getTitle()%></a>
                 <%if (fr.isActive()) {%><a onclick="if (!confirm('Eliminar archivo?'))
-                                return false;" href="<%=urlAction.setAction("removeFileReport").setParameter("idFileReport", fr.getId())%>" title="Eliminar"><img src="/swbadmin/jsp/process/reports/images/delete.png"></a><%}%>
+                                return false;" href="<%=urlAction.setAction("removeFileReport").setParameter("idFileReport", fr.getId())%>" title="Eliminar"><img src="<%=SWBPlatform.getContextPath() + "/swbadmin/jsp/process/reports/images/delete.png"%>"></a><%}%>
                 <br/>
                 <%}
                 %></td>
             <td style="text-align: center;" class="tban-tarea">
-                <a href="<%=url.setMode(SWBResourceURL.Mode_EDIT).setParameter("idReport", rp.getId())%>" title="Editar"><img src="/swbadmin/jsp/process/reports/images/edit.png"></a>  
+                <a href="<%=url.setMode(SWBResourceURL.Mode_EDIT).setParameter("idReport", rp.getId())%>" title="Editar"><img src="<%=SWBPlatform.getContextPath() + "/swbadmin/jsp/process/reports/images/edit.png"%>"></a>  
                 --
                 <%if (modeExport == 2) {%>
                 <a href="<%=urlViewReport.setMode("viewReport").setParameter("idReport", rp.getId())%>" 
                    title="Visualizar reporte">
-                    <img src="/swbadmin/jsp/process/reports/images/detail.png"></a>
+                    <img src="<%=SWBPlatform.getContextPath() + "/swbadmin/jsp/process/reports/images/detail.png"%>"></a>
                     <%} else {%>
                 <a href="#" onclick="showDialog('<%=rp.getId()%>');
-                            return false;" title="Generar reporte"><img src="/swbadmin/jsp/process/reports/images/generate.png"></a>
+                            return false;" title="Generar reporte"><img src="<%=SWBPlatform.getContextPath() + "/swbadmin/jsp/process/reports/images/generate.png"%>"></a>
                     <%}%>
                 -- 
                 <a onclick="if (!confirm('Eliminar reporte?'))
-                                return false;" href="<%=urlAction.setAction(SWBResourceURL.Action_REMOVE).setParameter("idReport", rp.getId())%>" title="Eliminar"><img src="/swbadmin/jsp/process/reports/images/delete.png"></a></td>
+                                return false;" href="<%=urlAction.setAction(SWBResourceURL.Action_REMOVE).setParameter("idReport", rp.getId())%>" title="Eliminar"><img src="<%=SWBPlatform.getContextPath() + "/swbadmin/jsp/process/reports/images/delete.png"%>"></a></td>
         </tr>
         <%}%>
     </table>
