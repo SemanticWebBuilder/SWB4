@@ -994,13 +994,16 @@ public class SWBSocialUtil implements SWBAppObject {
             while(itUserGrpRef.hasNext())
             {
                 UserGroupRef userGrpRef=itUserGrpRef.next();
-                Iterator<GenericObject> itGenObjs=userGrpRef.getUserGroup().listRelatedObjects();
-                while(itGenObjs.hasNext())
+                if(userGrpRef.isActive())
                 {
-                    GenericObject genObj=itGenObjs.next();
-                    if(genObj instanceof User)
+                    Iterator<GenericObject> itGenObjs=userGrpRef.getUserGroup().listRelatedObjects();
+                    while(itGenObjs.hasNext())
                     {
-                        aListUsers.add((User)genObj);
+                        GenericObject genObj=itGenObjs.next();
+                        if(genObj instanceof User)
+                        {
+                            aListUsers.add((User)genObj);
+                        }
                     }
                 }
             }

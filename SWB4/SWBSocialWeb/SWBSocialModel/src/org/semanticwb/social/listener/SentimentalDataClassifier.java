@@ -31,12 +31,12 @@ import org.semanticwb.social.PhotoIn;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SendEmail;
 import org.semanticwb.social.SendPost;
-import org.semanticwb.social.SentimentalLearningPhrase;
 import org.semanticwb.social.SocialAdmin;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialRule;
 import org.semanticwb.social.SocialRuleRef;
+import org.semanticwb.social.SocialSite;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.VideoIn;
@@ -44,7 +44,6 @@ import org.semanticwb.social.YouTubeCategory;
 import org.semanticwb.social.Youtube;
 import org.semanticwb.social.util.SWBSocialRuleMgr;
 import org.semanticwb.social.util.SWBSocialUtil;
-import twitter4j.GeoLocation;
 
 /**
  *
@@ -489,6 +488,7 @@ public class SentimentalDataClassifier {
      */
     public void clasifyMsgbySocialTopic(PostIn post, String text)
     {
+        SocialSite socialSite=SocialSite.ClassMgr.getSocialSite(post.getSemanticObject().getModel().getName());
         //System.out.println("Asocialcion de socialTopic-23-1");
          //Elimino Caracteres especiales (acentuados)
         String externalMsgTMP=SWBSocialUtil.Strings.replaceSpecialCharacters(text);
@@ -510,7 +510,7 @@ public class SentimentalDataClassifier {
                 
         //System.out.println("Asocialcion de socialTopic-23");
                 
-        Iterator <SocialTopic> itSocialTopics=SocialTopic.ClassMgr.listSocialTopics();
+        Iterator <SocialTopic> itSocialTopics=SocialTopic.ClassMgr.listSocialTopics(socialSite);
         while(itSocialTopics.hasNext())
         {
             SocialTopic socialTopic=itSocialTopics.next();
