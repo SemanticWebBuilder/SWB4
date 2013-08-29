@@ -95,7 +95,7 @@
 %>
 <div id="toast" style="background: #B40404; color: white; padding: 10px 40px 10px 40px; right: 40%; top: 5%; display: none; position: fixed; text-align:center; border-radius:8px 8px 8px 8px;"></div>
 <div id="contenedor">
-    <div id="header" title="<%out.print(pe.getTitle());%>"><%out.print(pe.getTitle());%><img src="/swbadmin/jsp/process/documentation/styles/css/images/logoprocess.png"></div>
+    <div id="header" title="<%out.print(pe.getTitle());%>"><%out.print(pe.getTitle());%><img src="<%=SWBPlatform.getContextPath() + "/swbadmin/jsp/process/documentation/styles/css/images/logoprocess.png"%>"></div>
     <div id="menu">
         <!--ACTIVIDADES-->
         <ul>
