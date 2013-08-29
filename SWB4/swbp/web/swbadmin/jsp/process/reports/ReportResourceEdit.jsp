@@ -122,12 +122,12 @@
             <tr>
                 <td style="text-align: center;"><input type="checkbox" name="delete<%=colu.getURI()%>"/></td>
                 <td style="text-align: center;"><%if (contador == 1 && total > 1) {%>
-                    <a href="<%=urlAction.setAction("moveDown").setParameter("idColumn", colu.getId())%>" title="Bajar"><img src="/swbadmin/jsp/process/reports/images/down.png"></a>
+                    <a href="<%=urlAction.setAction("moveDown").setParameter("idColumn", colu.getId())%>" title="Bajar"><img src="<%=SWBPlatform.getContextPath() + "/swbadmin/jsp/process/reports/images/down.png"%>"></a>
                         <%} else if (contador < total && total > 1) {%>
-                    <a href="<%=urlAction.setAction("moveUp").setParameter("idColumn", colu.getId())%>" title="Subir"><img src="/swbadmin/jsp/process/reports/images/up.png"></a>
-                    <a href="<%=urlAction.setAction("moveDown").setParameter("idColumn", colu.getId())%>" title="Bajar"><img src="/swbadmin/jsp/process/reports/images/down.png"></a>
+                    <a href="<%=urlAction.setAction("moveUp").setParameter("idColumn", colu.getId())%>" title="Subir"><img src="<%=SWBPlatform.getContextPath() + "/swbadmin/jsp/process/reports/images/up.png"%>"></a>
+                    <a href="<%=urlAction.setAction("moveDown").setParameter("idColumn", colu.getId())%>" title="Bajar"><img src="<%=SWBPlatform.getContextPath() + "/swbadmin/jsp/process/reports/images/down.png"%>"></a>
                         <%} else if (contador == total && total > 1) {%>
-                    <a href="<%=urlAction.setAction("moveUp").setParameter("idColumn", colu.getId())%>" title="Subir"><img src="/swbadmin/jsp/process/reports/images/up.png"></a><%}%></td>
+                    <a href="<%=urlAction.setAction("moveUp").setParameter("idColumn", colu.getId())%>" title="Subir"><img src="<%=SWBPlatform.getContextPath() + "/swbadmin/jsp/process/reports/images/up.png"%>"></a><%}%></td>
                 <td><%=objeto + "." + sp.getName()%></td>
                 <td><input type="text" name="title<%=colu.getURI()%>" value="<%=colu.getTitleColumn() == null ? sp.getDisplayName(lang) : colu.getTitleColumn()%>"></input></td>
                 <td style="text-align: center;">
