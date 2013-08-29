@@ -1222,4 +1222,121 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         } catch (IOException ioe) {
         }
     }
+    
+     /**
+     * Realiza una peticion get a la URL especificada
+     * @param params arreglo de nombres de parámetro-valor
+     * @param url url destino
+     * @param userAgent user agent
+     * @return la respuesta del servidor o el mensaje de error obtenido de la petición
+     * @throws IOException 
+     */
+    private String getRequest(Map<String, String> params, String url,
+            String userAgent) throws IOException {
+        
+        CharSequence paramString = (null == params) ? "" : delimit(params.entrySet(), "&", "=", true);
+        URL serverUrl = new URL(url + "?" +  paramString);
+        
+        HttpURLConnection conex = null;
+        InputStream in = null;
+        String response = null;
+       
+        try {
+            conex = (HttpURLConnection) serverUrl.openConnection();
+            if (userAgent != null) {
+                conex.setRequestProperty("user-agent", userAgent);
+            }
+            conex.setConnectTimeout(30000);
+            conex.setReadTimeout(60000);
+            conex.setRequestMethod("GET");
+            conex.setDoOutput(true);
+            conex.connect();
+            in = conex.getInputStream();
+            response = getResponse(in);
+                        
+        } catch (java.io.IOException ioe) {
+                response = getResponse(conex.getErrorStream());
+                ioe.printStackTrace();
+        } finally {
+            close(in);
+            if (conex != null) {
+                conex.disconnect();
+            }
+        }
+        if (response == null) {
+            response = "";
+        }
+        return response;
+    }
+    
+    /**
+     * 
+     * @param id identifier of the facebook user
+     * @return returns a JSONObject containing the requested fields with a valid value
+     *         {friends, followers, latitude, longitude, country_code, place_name}
+     *         all the values might or might not be present in the JSONObject.
+     */
+    public JSONObject getUserInfoFromId(String id){
+        HashMap<String, String> params = new HashMap<String, String>(2);
+        params.put("q", "SELECT friend_count, subscriber_count, current_location FROM user WHERE uid = " + id);
+        params.put("access_token", this.getAccessToken());
+    
+        JSONObject userInfo = new JSONObject();        
+        try{
+            String fbResponse = getRequest(params, "https://graph.facebook.com/fql",
+                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
+         try{
+            JSONObject parseUsrInf = new JSONObject(fbResponse);
+            JSONArray usrData = parseUsrInf.getJSONArray("data");
+            if(usrData.length() == 1){
+                parseUsrInf = usrData.getJSONObject(0);
+                
+                //Check if fields exists and if they're not null
+                //Friends
+                if(parseUsrInf.has("friend_count") && !parseUsrInf.isNull("friend_count")){
+                    userInfo.put("friends", parseUsrInf.getLong("friend_count"));
+                }else{
+                    userInfo.put("friends", 0);
+                }
+                //Followers
+                if(parseUsrInf.has("subscriber_count") && !parseUsrInf.isNull("subscriber_count")){
+                    userInfo.put("followers", parseUsrInf.getLong("subscriber_count"));
+                }else{
+                    userInfo.put("followers", 0);
+                }
+                
+                if(parseUsrInf.has("current_location") && !parseUsrInf.isNull("current_location")){
+                    JSONObject location = parseUsrInf.getJSONObject("current_location");
+                    //Latitude
+                    if(location.has("latitude") && !location.isNull("latitude")){
+                        userInfo.put("latitude", location.getDouble("latitude"));
+                    }
+                    //Longitude
+                    if(location.has("longitude") && !location.isNull("longitude")){
+                        userInfo.put("longitude", location.getDouble("longitude"));
+                    }
+                    //Country Code
+                    if(location.has("country") && !location.isNull("country")){
+                        if(location.getString("country").toLowerCase().contains("mexico")){
+                            userInfo.put("country_code", "MX");
+                        }else if(location.getString("country").toLowerCase().contains("united states")){
+                            userInfo.put("country_code", "US");
+                        }
+                    }
+                    //Name of the place
+                    if(location.has("name") && !location.isNull("name")){
+                        userInfo.put("place_name", location.getString("name"));
+                    }
+                }
+            }
+            //if(parseUsrInf.has(id))
+         }catch(JSONException jsone){
+            log.error("Error parsing json response from facebook ", jsone);
+         }
+
+        }catch(IOException e){
+            System.out.println("Error getting user information"  + e.getMessage());
+        }
+        return userInfo;
+    }
 }
