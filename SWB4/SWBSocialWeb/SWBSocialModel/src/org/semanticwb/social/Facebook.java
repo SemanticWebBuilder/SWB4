@@ -1206,10 +1206,11 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             String urlShort = SWBSocialUtil.Util.shortUrl(address.toString());
             String description = swb.getDescription(l.getId()) == null ? "" : swb.getDescription(l.getId());
             params.put("message", (description) + " " + urlShort);
-            
-            photoToPublish = SWBPortal.getWorkPath() + swb.getWorkPath() + "/" + "socialwpPhoto_Pagina_Social_" + swb.getSocialwpPhoto();
+
+            photoToPublish = SWBPortal.getWorkPath() + swb.getWorkPath() + "/" +SocialWebPage.social_socialwpPhoto.getName()+"_"+swb.getId()+"_"+ swb.getSocialwpPhoto();
             SWBFile photoFile = new SWBFile(photoToPublish);
             
+            System.out.println("photoToPublish"+photoToPublish);
             if (photoFile.exists()) {
                 SWBFileInputStream fileStream = new SWBFileInputStream(photoFile);
                 String facebookResponse = "";
