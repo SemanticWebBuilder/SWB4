@@ -729,7 +729,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         String urlShort = SWBSocialUtil.Util.shortUrl(address.toString());
    
 
-        photoToPublish = SWBPortal.getWorkPath() + swp.getWorkPath() + "/" + "socialwpPhoto_Pagina_Social_" + swp.getSocialwpPhoto();
+        photoToPublish = SWBPortal.getWorkPath() + swp.getWorkPath() + "/" +SocialWebPage.social_socialwpPhoto.getName()+"_"+swp.getId()+"_"+ swp.getSocialwpPhoto();
         twitter4j.Twitter twitter = new TwitterFactory().getInstance();
         twitter.setOAuthConsumer(t.getAppKey(), t.getSecretKey());
         AccessToken accessToken = new AccessToken(t.getAccessToken(), t.getAccessTokenSecret());
