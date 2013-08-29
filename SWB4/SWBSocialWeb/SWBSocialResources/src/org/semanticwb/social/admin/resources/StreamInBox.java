@@ -23,7 +23,6 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebSite;
@@ -1229,6 +1228,9 @@ public class StreamInBox extends GenericResource {
 
     }
 
+    /*
+     * Method which controls the filters allowed in this class
+     */
     private Set<PostIn> filtros(String swbSocialUser, WebSite wsite, Iterator<PostIn> itposts, String searchWord, HttpServletRequest request, Set<PostIn> setso, Stream stream, SWBParamRequest paramRequest) {
         ArrayList<PostIn> aListFilter = new ArrayList();
         if (swbSocialUser != null) {
@@ -1325,6 +1327,9 @@ public class StreamInBox extends GenericResource {
 
     }
 
+    /*
+     * Method which calls a jsp to generate a report based on the result of registers in this class
+     */
     private void doGenerateReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String idSurvey, WebSite webSite, int page) {
 
         String searchWord = request.getParameter("search");
