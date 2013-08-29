@@ -926,4 +926,10 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
           }
           return exit;
     } 
+    
+    @Override
+    public JSONObject getUserInfobyId(String userId) {
+        return null;
+    }
+    
 }

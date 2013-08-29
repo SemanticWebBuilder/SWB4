@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
@@ -23,6 +24,7 @@ import org.semanticwb.social.Country;
 import org.semanticwb.social.CountryState;
 import org.semanticwb.social.ExternalPost;
 import org.semanticwb.social.Kloutable;
+import org.semanticwb.social.Listenerable;
 import org.semanticwb.social.MarkMsgAsPrioritary;
 import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.PhotoIn;
@@ -92,7 +94,7 @@ public class SentimentalDataClassifier {
         //System.out.println("En SentimentalDataClassifier:"+this.externalPost);
         //System.out.println("En stream:"+this.stream);
         ////System.out.println("En socialNetwork:"+this.socialNetwork);
-        System.out.println("Creator id:"+externalPost.getCreatorId());
+        //System.out.println("Creator id:"+externalPost.getCreatorId());
         //System.out.println("Creator name:"+externalPost.getCreatorName());
         
         getExternalPostData();
@@ -214,14 +216,14 @@ public class SentimentalDataClassifier {
         }
         */
         
-        System.out.println("externalString2Clasify:"+externalString2Clasify);
+        //System.out.println("externalString2Clasify:"+externalString2Clasify);
         
         if(externalString2Clasify==null) return;
         
         //Para el caso de Streaming Api que no se le puede enviar un bounding box, ni una latitud, longitud y radio para que solo me traiga tweets de una región
         if(stream.getGeoCenterLatitude()!=0 && stream.getGeoCenterLongitude()!=0 && classifyGeoLocation)
         {
-            System.out.println("Geo-1");
+            //System.out.println("Geo-1");
             if(externalPost.getLatitude()!=0 && externalPost.getLongitude()!=0) 
             {
                 double eart_Radio=SWBSocialUtil.EART_RADIUS_KM; //Por defecto se mide en Kilometros
@@ -234,23 +236,23 @@ public class SentimentalDataClassifier {
                 {
                     distance=stream.getGeoRadio();
                 }
-                System.out.println("Geo-2");
+                //System.out.println("Geo-2");
                 org.semanticwb.social.util.GeoLocation myLocation = org.semanticwb.social.util.GeoLocation.fromDegrees(stream.getGeoCenterLatitude(), stream.getGeoCenterLongitude());
                 org.semanticwb.social.util.GeoLocation[] boundingCoordinates =myLocation.boundingCoordinates(distance, eart_Radio);
                 if(!SWBSocialUtil.Util.isPointInsideCoodinates(externalPost.getLatitude(), externalPost.getLongitude(), boundingCoordinates))
                 {
-                    System.out.println("Geo-3");
+                    //System.out.println("Geo-3");
                     externalPost=null;  //Destruyo el objeto ExternalPost, para que no consuma memoria.
                     return; //Regresa sin hacer nada.
                 }
             }else{  //Si en el stream se indica que es mandatorio que se tomen los tweets de una cierta región y el tweet que llega no tiene localización (latitud y longitud) pues No se hace nada con ese externalPost;
-                System.out.println("Geo-4");
+                //System.out.println("Geo-4");
                 externalPost=null;  //Destruyo el objeto ExternalPost, para que no consuma memoria.
                 return; //Regresa sin hacer nada.
             }
         }
         //Pasó filtrado por región.
-        System.out.println("Geo-Fin");
+        //System.out.println("Geo-Fin");
                 
         HashMap hmapValues=SWBSocialUtil.Classifier.classifyText(externalString2Clasify);
         float promSentimentalValue=((Float)hmapValues.get("promSentimentalValue")).floatValue();
@@ -318,6 +320,11 @@ public class SentimentalDataClassifier {
             socialNetUser=SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(""+creatorId, socialNetwork, model);
             boolean createPostbyKlout=false;
             boolean upDateSocialUserNetworkData=false;
+            int days=0;
+            if(socialNetUser!=null)
+            {
+                days=SWBSocialUtil.Util.Datediff(socialNetUser.getUpdated(), Calendar.getInstance().getTime());
+            }
             int userKloutScore=0;
             {
                 //Filtro de Klout
@@ -337,7 +344,6 @@ public class SentimentalDataClassifier {
                                 userKloutScore=socialNetUser.getSnu_klout();
                                 //System.out.println("Usuario:"+socialNetUser+", SI existe, su Klout es:"+userKloutScore);
                                 //System.out.println("userKloutScore:"+userKloutScore);
-                                int days=SWBSocialUtil.Util.Datediff(socialNetUser.getUpdated(), Calendar.getInstance().getTime());
                                 /*
                                 String patron = "yyyy/MM/dd:hh:mm:ss:SSS:a";
                                 SimpleDateFormat formato = new SimpleDateFormat(patron);
@@ -393,7 +399,7 @@ public class SentimentalDataClassifier {
             if(createPostbyKlout)   //Si pasa el filtro de Klout del usuario, entonces ya persite el mensaje en BD
             {
                 //System.out.println("Paso filtro de sentimientos, intensidad y klout---vamos a persistir el msg...");
-                PostIn post=createPostInObj(socialNetUser, userKloutScore, upDateSocialUserNetworkData);
+                PostIn post=createPostInObj(socialNetUser, userKloutScore, upDateSocialUserNetworkData, days);
 
                 //Guarda valores sentimentales en el PostIn (mensaje de entrada)
                 post.setPostSentimentalValue(promSentimentalValue);
@@ -587,7 +593,7 @@ public class SentimentalDataClassifier {
      * Crea objeto PostIn, de acuerdo a los datos que contenga el objeto
      * @return 
      */
-    private PostIn createPostInObj(SocialNetworkUser socialNetUser, int userKloutScore, boolean upDateSocialUserNetworkData)
+    private PostIn createPostInObj(SocialNetworkUser socialNetUser, int userKloutScore, boolean upDateSocialUserNetworkData, int days)
     {
         PostIn postIn=null;
         try
@@ -724,29 +730,46 @@ public class SentimentalDataClassifier {
                         socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject());
                         socialNetUser.setCreated(externalPost.getUsercreation());
                         socialNetUser.setSnu_klout(userKloutScore);
-                        socialNetUser.setFollowers(externalPost.getFollowers());
-                        socialNetUser.setFriends(externalPost.getFriendsNumber());
+                        
+                        if(externalPost.getFollowers()>0 && externalPost.getFriendsNumber()>0)
+                        {
+                            //System.out.println("SocialNet em Sentimental JAJS-1:"+socialNetwork);
+                            socialNetUser.setFollowers(externalPost.getFollowers());
+                            socialNetUser.setFriends(externalPost.getFriendsNumber());
+                        }else
+                        {
+                           getUserData(socialNetUser, days, true);
+                        }
                     }else if(upDateSocialUserNetworkData)
                     {
                         socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject());
-                        socialNetUser.setFollowers(externalPost.getFollowers());
-                        socialNetUser.setFriends(externalPost.getFriendsNumber());
                         socialNetUser.setSnu_klout(userKloutScore);
                         if(externalPost.getCreatorPhotoUrl()!=null)
                         {
                             socialNetUser.setSnu_photoUrl(externalPost.getCreatorPhotoUrl());
                         }
+                        
+                        if(externalPost.getFollowers()>0 && externalPost.getFriendsNumber()>0)
+                        {
+                            //System.out.println("SocialNet em Sentimental JAJS-1:"+socialNetwork);
+                            socialNetUser.setFollowers(externalPost.getFollowers());
+                            socialNetUser.setFriends(externalPost.getFriendsNumber());
+                        }else
+                        {
+                           getUserData(socialNetUser, days, false);
+                        }
+                        
                         socialNetUser.setUpdated(new Date());
                     }
                     
-                    System.out.println("Poner en UserGe-0");
+                    //System.out.println("Poner en UserGe-0");
                     if(socialNetUser!=null)
                     {
                         postIn.setPostInSocialNetworkUser(socialNetUser);
-                        System.out.println("Poner en UserGe-1");
+                        //System.out.println("Poner en UserGe-1");
                         if(externalPost.getUserGeoLocation()!=null)
                         {
-                            System.out.println("Poner en UserGeo:"+externalPost.getUserGeoLocation());
+                            //System.out.println("Poner en UserGeo:"+externalPost.getUserGeoLocation());
                             socialNetUser.setSnu_profileGeoLocation(externalPost.getUserGeoLocation());
                         }
                     }
@@ -776,6 +799,61 @@ public class SentimentalDataClassifier {
         }
                 
                 return postIn;
+    }
+    
+    /*
+     * Method which review the user information in a specific SocialNetWork and update his(her)
+     * information (data) if it has passed more than 5 days since last time that user was updated
+     * @param socialNetUser User that will be reviewed in a specific SocialNetWork
+     * @param days Days that have passed since the last days the user was updated in the system
+     * 
+     */
+    private void getUserData(SocialNetworkUser socialNetUser, int days, boolean isNewUser)
+    {
+        try
+        {
+            //Este 5 si lo pongo estatico, normalmente un usuario no aumenta tan rapido sus amigos o seguidores
+            //Despues ver si lo hacemos dinamico, como para revisión de Klout
+            //Si es usuario nuevo o si No es usuario nuevo pero han pasado + de 5 días de su ultima actualización, entonces se envía a buscar los datos del usuario a la red social 
+            if(isNewUser || days>5) 
+            {
+                Listenerable listenerAble=(Listenerable)socialNetwork;
+                JSONObject userData = listenerAble.getUserInfobyId(socialNetUser.getSnu_id());
+                //System.out.println("Sentimental/userDataToString:"+userData.toString());
+                if(!userData.toString().equals("{}"))
+                {
+                    long followers = userData != null && userData.getLong("followers") >0 ? userData.getLong("followers") : 0;
+                    long friends = userData != null && userData.getLong("friends") >0 ? userData.getLong("friends") : 0;
+                    socialNetUser.setFollowers(((Long)followers).intValue());
+                    socialNetUser.setFriends(((Long)friends).intValue());
+                    //User profile geoLocation
+                    if(!userData.isNull("place_name"))
+                    {
+                        String profileGeoLoc = userData != null && userData.getString("place_name")!=null ? userData.getString("place_name") : null;
+                        if(profileGeoLoc!=null)
+                        {
+                            socialNetUser.setSnu_profileGeoLocation(profileGeoLoc);
+                        }
+                    }
+                    //Quiere decir que el mensaje no trae posición, entonces tomar las coordenadas del usuario, si estan en el json
+                    /*
+                    if(externalPost.getLatitude()==0 || externalPost.getLongitude()==0)
+                    {
+                        Double latitude = userData != null && userData.getDouble("latitude") >0 ? userData.getDouble("latitude") : 0;
+                        Double longitude = userData != null && userData.getDouble("longitude") >0 ? userData.getDouble("longitude") : 0;
+                        if(latitude>0 && longitude>0)
+                        {
+                            postIn.setLatitude(IntensiveTweetValue);
+                            postIn.setLongitude(IntensiveTweetValue);
+                        }
+                    }
+                    * **/
+                }
+            }
+        }catch(Exception e)
+        {
+            log.error(e);
+        }
     }
     
     
