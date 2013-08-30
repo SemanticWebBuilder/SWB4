@@ -49,6 +49,8 @@
         userPhoto = "/swbadmin/css/images/profileDefImg.jpg";
     }
 
+
+
 %>
 
 
@@ -106,13 +108,14 @@
                     //System.out.println("ClassID:"+Photo.social_Photo.getClassId()); 
                     //System.out.println("Canonical:"+Photo.social_Photo.getCanonicalName());
                     //Puse ese tolowercase porque el nombre de la propiedad lo pone en mayuscula, quien sabe porque, si esta en minuscula 
-                %>
+%>
                 <td>
                     <%
                         Iterator<String> itPhotos = photo.listPhotos();
                         while (itPhotos.hasNext()) {
                             String sphoto = itPhotos.next();
-                    %>    
+                    %>   
+
                     <img src="<%=sphoto%>">
                     <%
                         }
@@ -122,7 +125,33 @@
                 <%
                 } else if (semObj.getGenericInstance() instanceof VideoIn) {
                     VideoIn video = (VideoIn) semObj.getGenericInstance();
+                    String videoFormat = "";
+                    String videoUrl = video.getVideo();
+
+                    System.out.println("VIDEO URL:" + videoUrl);
+                    if (videoUrl.toLowerCase().contains("www.youtube.com")) {//show player from youtube
+                        videoFormat = "youtube";
+                    } else if (videoUrl.toLowerCase().contains(".mp4")) {
+                        videoFormat = "video/mp4";
+                    } else if (videoUrl.toLowerCase().contains(".3gp")) {
+                    } else if (videoUrl.toLowerCase().contains(".swf")) {
+                        videoFormat = "flash";
+                    }
                 %>    
+
+                <%
+                    if (videoFormat.equals("youtube")) {
+                        System.out.println("Displaing Youtube Video");
+                %>
+                <td>
+
+                    <iframe id="ytplayer" type="text/html" width="195" height="150"
+                            src="<%=videoUrl%>" frameborder="0"></iframe>
+                </td>
+
+                <%
+                } else {
+                %>
                 <td>
                     <br/><br/><embed src="<%=video.getVideo()%>" width="195" height="150" autostart="false">    
                     <br/><br/><%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
@@ -130,16 +159,19 @@
                 <%
                     }
                 %>
-
-
-
+                <!--<br/><br/><embed src="<%=video.getVideo()%>" width="195" height="150" autostart="false">    
+                <br/><br/><%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
+            </td>-->
+                <%
+                    }
+                %>
                 <td>
 
                     <%
                         if (postIn.getPostSentimentalType() == 0) {
                     %>
                     ---
-                    <%                    } else if (postIn.getPostSentimentalType() == 1) {
+                    <% } else if (postIn.getPostSentimentalType() == 1) {
                     %>
                     <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/feelpos.png">
                     <%
@@ -181,8 +213,6 @@
                 </td> 
             </tr>
 
-
-
             <!--  <tr>
               
             <%
@@ -199,8 +229,8 @@
                 //System.out.println("ClassID:"+Photo.social_Photo.getClassId()); 
                 //System.out.println("Canonical:"+Photo.social_Photo.getCanonicalName());
                 //Puse ese tolowercase porque el nombre de la propiedad lo pone en mayuscula, quien sabe porque, si esta en minuscula 
-            %>
-                            <td colspan="5">
+%>
+                                        <td colspan="5">
             <%
                 Iterator<String> itPhotos = photo.listPhotos();
                 while (itPhotos.hasNext()) {
