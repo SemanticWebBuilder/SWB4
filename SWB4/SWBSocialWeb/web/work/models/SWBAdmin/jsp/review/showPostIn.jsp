@@ -128,15 +128,12 @@
                     String videoFormat = "";
                     String videoUrl = video.getVideo();
 
-                    System.out.println("VIDEO URL:" + videoUrl);
                     if (videoUrl.toLowerCase().contains("www.youtube.com")) {//show player from youtube
                         videoFormat = "youtube";
-                    } else if (videoUrl.toLowerCase().contains(".mp4")) {
-                        videoFormat = "video/mp4";
-                    } else if (videoUrl.toLowerCase().contains(".3gp")) {
-                    } else if (videoUrl.toLowerCase().contains(".swf")) {
-                        videoFormat = "flash";
-                    }
+                    } else {
+                        videoFormat = "otro";
+                    } 
+                   
                 %>    
 
                 <%
