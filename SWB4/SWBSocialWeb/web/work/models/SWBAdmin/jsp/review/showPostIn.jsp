@@ -125,40 +125,14 @@
                 <%
                 } else if (semObj.getGenericInstance() instanceof VideoIn) {
                     VideoIn video = (VideoIn) semObj.getGenericInstance();
-                    String videoFormat = "";
-                    String videoUrl = video.getVideo();
-
-                    if (videoUrl.toLowerCase().contains("www.youtube.com")) {//show player from youtube
-                        videoFormat = "youtube";
-                    } else {
-                        videoFormat = "otro";
-                    } 
                    
                 %>    
 
-                <%
-                    if (videoFormat.equals("youtube")) {
-                        System.out.println("Displaing Youtube Video");
-                %>
                 <td>
-
-                    <iframe id="ytplayer" type="text/html" width="195" height="150"
-                            src="<%=videoUrl%>" frameborder="0"></iframe>
-                </td>
-
-                <%
-                } else {
-                %>
-                <td>
-                    <br/><br/><embed src="<%=video.getVideo()%>" width="195" height="150" autostart="false">    
+                    <br/><embed src="<%=video.getVideo()%>" width="195" height="150" autostart="false">    
                     <br/><br/><%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
                 </td>
-                <%
-                    }
-                %>
-                <!--<br/><br/><embed src="<%=video.getVideo()%>" width="195" height="150" autostart="false">    
-                <br/><br/><%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
-            </td>-->
+
                 <%
                     }
                 %>
@@ -209,49 +183,6 @@
                     <%=postIn.isIsPrioritary() ? SWBSocialUtil.Util.getStringFromGenericLocale("yes", user.getLanguage()) : SWBSocialUtil.Util.getStringFromGenericLocale("not", user.getLanguage())%>
                 </td> 
             </tr>
-
-            <!--  <tr>
-              
-            <%
-
-                if (semObj.getGenericInstance() instanceof MessageIn) {
-                    MessageIn message = (MessageIn) semObj.getGenericInstance();
-            %>
-            <td colspan="5"><%=SWBUtils.TEXT.encode(message.getMsg_Text(), "utf8")%>
-            </td>
-            <%
-            } else if (semObj.getGenericInstance() instanceof PhotoIn) {
-                PhotoIn photo = (PhotoIn) semObj.getGenericInstance();
-                //System.out.println("Name:"+Photo.social_Photo.getName()); 
-                //System.out.println("ClassID:"+Photo.social_Photo.getClassId()); 
-                //System.out.println("Canonical:"+Photo.social_Photo.getCanonicalName());
-                //Puse ese tolowercase porque el nombre de la propiedad lo pone en mayuscula, quien sabe porque, si esta en minuscula 
-%>
-                                        <td colspan="5">
-            <%
-                Iterator<String> itPhotos = photo.listPhotos();
-                while (itPhotos.hasNext()) {
-                    String sphoto = itPhotos.next();
-            %>    
-                    <img src="<%=SWBPortal.getWebWorkPath()%><%=photo.getWorkPath()%>/<%=Photo.social_hasPhoto.getName().toLowerCase()%>_<%=photo.getId()%>_<%=sphoto%>">
-            <%
-                }
-            %>        
-            <br><br><br><%=SWBUtils.TEXT.encode(photo.getMsg_Text(), "utf8")%>
-            </td>
-            <%
-            } else if (semObj.getGenericInstance() instanceof VideoIn) {
-                VideoIn video = (VideoIn) semObj.getGenericInstance();
-            %>    
-                <td colspan="5">
-            <%=video.getVideo()%>
-            <br/><br/><embed src="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" width="195" height="150" autostart="false">
-            <br><br><br><%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
-            </td>
-            <%
-                }
-            %>
-            </tr>-->
         </tbody>
     </table>
 </div>
