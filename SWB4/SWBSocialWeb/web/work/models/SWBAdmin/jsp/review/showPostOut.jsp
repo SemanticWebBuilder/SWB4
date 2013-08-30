@@ -71,7 +71,9 @@
         <%
             if (postInSource != null) {
         %>    
-       
+        
+        <table><tr>
+                <td>
                 <%=SWBSocialUtil.Util.getStringFromGenericLocale("sentiment", user.getLanguage())%>:
                 <%
                     if (postInSource.getPostSentimentalType() == 0) {
@@ -101,6 +103,7 @@
                 <%=SWBSocialUtil.Util.getStringFromGenericLocale("priority", user.getLanguage())%>:<%=postInSource.isIsPrioritary() ? SWBSocialUtil.Util.getStringFromGenericLocale("yes", user.getLanguage()) : SWBSocialUtil.Util.getStringFromGenericLocale("not", user.getLanguage())%>
             </td> 
         </tr>
+        </table>
         <%
             }
         %>
