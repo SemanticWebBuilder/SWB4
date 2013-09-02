@@ -60,6 +60,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.util.IOUtils;
+import org.semanticwb.platform.SemanticModel;
 
 /**
  *
@@ -1238,6 +1239,9 @@ public class StreamInBox extends GenericResource {
             itposts = socialNetUser.listPostInInvs();
         } else {
             itposts = PostIn.ClassMgr.listPostInByPostInStream(stream);
+            //System.out.println("stream:"+stream+",filtros/Counter:"+wsite.getSemanticModel().getCounter(stream.getSemanticObject().getSemanticClass()));
+            //new SemanticModel("xxx",wsite.getSemanticObject().get);
+            
             if (searchWord != null) {
                 while (itposts.hasNext()) {
                     PostIn postIn = itposts.next();
