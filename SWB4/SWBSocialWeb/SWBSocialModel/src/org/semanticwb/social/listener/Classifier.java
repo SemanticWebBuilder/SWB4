@@ -15,6 +15,9 @@ import org.semanticwb.social.Stream;
 /**
  *
  * @author jorge.jimenez
+ * 
+ * Class which creates a ClassifierThread (Thread) to classify all messages retrieving from a SocialNetwork.
+ * 
  */
 
 /*
@@ -41,6 +44,9 @@ public class Classifier {
     }
     * */
     
+    /*
+     * Method that creates 
+     */
     public Classifier (ArrayList <ExternalPost> aListExternalPost, Stream stream, SocialNetwork socialNetwork, boolean classifyGeoLocation)
     {
         try{
