@@ -33,6 +33,8 @@ import org.w3c.dom.NodeList;
  *
  * @author jorge.jimenez
  * 
+ * Class which controls the message socialFlows in the system.
+ * 
  */
 
 // TODO: Auto-generated Javadoc
