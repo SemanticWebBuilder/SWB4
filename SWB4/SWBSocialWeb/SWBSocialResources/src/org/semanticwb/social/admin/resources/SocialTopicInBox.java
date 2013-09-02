@@ -252,7 +252,7 @@ public class SocialTopicInBox extends GenericResource {
         String page = request.getParameter("page");
         if (page == null && request.getParameter("noSaveSess") == null) //Cuando venga page!=null no se mete nada a session, ni tampoco se manda return.
         {
-            System.out.println("Entra a Cuestiones de Sesión-Jorge---");
+            //System.out.println("Entra a Cuestiones de Sesión-Jorge---");
             HttpSession session = request.getSession(true);
             if (null == searchWord) {
                 searchWord = "";
