@@ -830,13 +830,13 @@ public class ProcessForm extends GenericResource {
             boolean showHeader = base.getAttribute("showHeader", "").equals("use")?true:false;
             out.println("<script type=\"text/javascript\">function validateForm" + foi.getId() + "(form) {var frm = dijit.byId(form); if (frm.isValid()) {return true;} else {alert('"+paramRequest.getLocaleString("cancel")+"'); return false;}}</script>");
             if (showHeader) {
-                out.println("<h1>"+foi.getFlowNodeType().getTitle()+"</h1>");
+                out.println("<h3>"+foi.getFlowNodeType().getTitle()+"</h3>");
             }
-            out.println("<div id=\"processForm\">");
+            out.println("<div class=\"panel panel-default\" id=\"processForm\">");
             out.println("<form name=\""+foi.getId()+"\" id=\"" + foi.getId() + "/form\" dojoType=\"dijit.form.Form\" action=\"" + urlact + "\" method=\"post\" onSubmit=\"return validateForm"+foi.getId()+"('"+foi.getId()+"/form');\">");
             out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\"/>");
             out.println("<input type=\"hidden\" name=\"smode\" value=\"edit\"/>");
-
+            out.println("<div class=\"panel-body\">");
             boolean printHeaders = false;
             int max = 1;
             if (!base.getAttribute("prop" + max, "").equals("")) {
@@ -926,8 +926,9 @@ public class ProcessForm extends GenericResource {
             boolean btnReject = base.getAttribute("btnReject", "").equals("use")?true:false;
             boolean btnCancel = base.getAttribute("btnCancel", "").equals("use")?true:false;
             
+            out.println("</div>");
             if (btnSave || btnAccept || btnReject || btnCancel) {
-                out.println("<p class=\"submit\"><span align=\"center\">");
+                out.println("<div class=\"panel-footer\">");
             }
             if (btnSave) {
                 out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">"+base.getAttribute("btnSaveLabel",paramRequest.getLocaleString("btnSaveTask"))+"</button>");
@@ -942,7 +943,7 @@ public class ProcessForm extends GenericResource {
                 out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getUserTaskInboxUrl() + "?suri=" + suri + "'\">"+base.getAttribute("btnCancelLabel",paramRequest.getLocaleString("btnBack"))+"</button>");
             }
             if (btnSave || btnAccept || btnReject || btnCancel) {
-                out.println("</span></p>");
+                out.println("</div>");
             }
             out.println("</form>");
             out.println("</div>");
