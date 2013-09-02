@@ -1,17 +1,26 @@
 package org.semanticwb.bsc.accessory;
 
-import org.semanticwb.SWBPortal;
 
-
-public class State extends org.semanticwb.bsc.accessory.base.StateBase 
+public class State extends org.semanticwb.bsc.accessory.base.StateBase implements Comparable<State>
 {
     public State(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
+//    @Override
+//    public String getIcon() {
+//        if(super.getIcon()==null) {
+//            return SWBPlatform.getContextPath()+"/org/semanticwb/bsc/admin/images/icons/icon_outtime.gif";
+//        }else {
+//            return SWBPortal.getWebWorkPath()+this.getWorkPath()+"/"+super.getIcon();
+//        }
+//    }
+    
     @Override
-    public String getIcon() {
-        return SWBPortal.getWebWorkPath()+this.getWorkPath()+"/"+getIcon();
+    public int compareTo(State anotherState) {
+        int compare = 0;
+        compare = getOrden() > anotherState.getOrden() ? 1 : -1;
+        return compare;
     }
 }
