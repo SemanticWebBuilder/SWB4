@@ -895,10 +895,12 @@ public class ProcessForm extends GenericResource {
                                 }
                             }
                             if (ele == null) {
-                                out.println("<tr><td width=\"200px\" align=\"right\"><label for=\"title\">" + fmgr.renderLabel(request, semprop, propsMap.get("varName"), propsMap.get("mode")) + "</label></td>");
+                                //out.println("<tr><td width=\"200px\" align=\"right\"><label for=\"title\">" + fmgr.renderLabel(request, semprop, propsMap.get("varName"), propsMap.get("mode")) + "</label></td>");
+                                out.println("<tr><td width=\"200px\" align=\"right\">" + fmgr.renderLabel(request, semprop, propsMap.get("varName"), propsMap.get("mode")) + "</td>");
                             } else {
                                 //ele.setLabel(propsMap.get("label"));
-                                out.println("<tr><td width=\"200px\" align=\"right\"><label for=\"title\">" + ele.renderLabel(request, null, semprop, propsMap.get("varName") + "." + semprop.getName(), SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang, propsMap.get("label")) + "</label></td>");
+                                //out.println("<tr><td width=\"200px\" align=\"right\"><label for=\"title\">" + ele.renderLabel(request, null, semprop, propsMap.get("varName") + "." + semprop.getName(), SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang, propsMap.get("label")) + "</label></td>");
+                                out.println("<tr><td width=\"200px\" align=\"right\">" + ele.renderLabel(request, null, semprop, propsMap.get("varName") + "." + semprop.getName(), SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang, propsMap.get("label")) + "</td>");
                             }
                             out.println("<td>");
                             if (null != sofe) {
@@ -1277,7 +1279,7 @@ public class ProcessForm extends GenericResource {
         out.println("<table>");
         
         out.println("<tr>");
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">"+paramRequest.getLocaleString("signForm")+":</label></td>");
+        out.println("<td width=\"200px\" align=\"right\"><label>"+paramRequest.getLocaleString("signForm")+":</label></td>");
         out.println("<td>");
         out.println("<applet code=\"signatureapplet.SignatureApplet.class\" codebase=\"/swbadmin/lib\" archive=\""
                     + SWBPlatform.getContextPath()
@@ -1329,37 +1331,37 @@ public class ProcessForm extends GenericResource {
         out.println("<table>");
         
         out.println("<tr>");
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">"+paramRequest.getLocaleString("signValue")+":</label></td>");
+        out.println("<td width=\"200px\" align=\"right\"><label>"+paramRequest.getLocaleString("signValue")+":</label></td>");
         out.println("<td><div id=\"code\">");
         out.println(htmlwrap(x509SingInstance.getOriginalString(), 50));
         out.println("</div></td></tr>");
         
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">"+paramRequest.getLocaleString("signCode")+":</label></td>");
+        out.println("<td width=\"200px\" align=\"right\"><label>"+paramRequest.getLocaleString("signCode")+":</label></td>");
         out.println("<td><div id=\"code\">");
         out.println(htmlwrap(x509SingInstance.getSignedString(), 50));
         out.println("<div></td></tr>");
         
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">"+paramRequest.getLocaleString("signPInstance")+":</label></td>");
+        out.println("<td width=\"200px\" align=\"right\"><label>"+paramRequest.getLocaleString("signPInstance")+":</label></td>");
         out.println("<td>");
         out.println(x509SingInstance.getFlowNodeInstance().getProcessInstance().getProcessType().getDisplayTitle(paramRequest.getUser().getLanguage()));
         out.println("</td></tr>");
         
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">"+paramRequest.getLocaleString("signTInstance")+":</label></td>");
+        out.println("<td width=\"200px\" align=\"right\"><label>"+paramRequest.getLocaleString("signTInstance")+":</label></td>");
         out.println("<td>");
         out.println(x509SingInstance.getFlowNodeInstance().getFlowNodeType().getDisplayTitle(paramRequest.getUser().getLanguage()));
         out.println("</td></tr>");
 
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">"+paramRequest.getLocaleString("signUser")+":</label></td>");
+        out.println("<td width=\"200px\" align=\"right\"><label>"+paramRequest.getLocaleString("signUser")+":</label></td>");
         out.println("<td>");
         out.println(x509SingInstance.getCertificate().getName());
         out.println("</td></tr>");
         
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">"+paramRequest.getLocaleString("signId")+":</label></td>");
+        out.println("<td width=\"200px\" align=\"right\"><label>"+paramRequest.getLocaleString("signId")+":</label></td>");
         out.println("<td>");
         out.println(x509SingInstance.getCertificate().getSerial());
         out.println("</td></tr>");
         
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">"+paramRequest.getLocaleString("signDate")+":</label></td>");
+        out.println("<td width=\"200px\" align=\"right\"><label>"+paramRequest.getLocaleString("signDate")+":</label></td>");
         out.println("<td>");
         out.println(x509SingInstance.getCreated());
         out.println("</td></tr>");
