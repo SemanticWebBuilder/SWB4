@@ -53,7 +53,7 @@ import org.semanticwb.social.util.SWBSocialUtil;
 /*
  * Clase cuya funcionalidad, es la de clasificar los mensajes que llegan por el listener.
  * Esta clase es llamada por cada thread levantado cuando llegan los mensajes del listener.
- *
+ * 
  */
 
 public class SentimentalDataClassifier {
