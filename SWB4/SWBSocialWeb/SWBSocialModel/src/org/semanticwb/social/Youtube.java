@@ -217,8 +217,9 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                 try {
                     Map<String, String> params = new HashMap<String, String>();
                     //Temporalmente comentado por que ya se habia autenticado mi cuenta sin pedir el refresh token
-                    //params.put("refresh_token", this.getAccessTokenSecret());
-                    params.put("refresh_token", "1/WY53_4yVfdnoCZ9WATEjVdvt8GgZOobQ9YC5T77PjwY");
+                    //params.put("refresh_token", "1/WY53_4yVfdnoCZ9WATEjVdvt8GgZOobQ9YC5T77PjwY");//Ana
+                    //params.put("refresh_token", "1/EBI7ANgfHcp7CHm3acP5hGoFZ29XhZzIzT2jv_h-3so");//Paco
+                    params.put("refresh_token", this.getRefreshToken());
                     params.put("client_id", this.getAppKey());
                     params.put("client_secret", this.getSecretKey());
                     params.put("grant_type", "refresh_token");
@@ -238,8 +239,9 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             System.out.println("Error: " + ex);
         }
 
-        System.out.println("el token de acceso es: " + this.getAccessToken());
+        /*System.out.println("el token de acceso es: " + this.getAccessToken());
         System.out.println("la developerkey es: " + this.getDeveloperKey());
+        System.out.println("El refresh token:" + this.getRefreshToken());*/
 
         String base = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String boundary = "";
@@ -540,7 +542,8 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         if (code == null) {
             out.println("<script type=\"text/javascript\">");
             out.println(" function ioauth() {");
-            out.println("  mywin = window.open('https://accounts.google.com/o/oauth2/auth?client_id=" + clientId + "&redirect_uri=" + uriTemp + "&response_type=code&scope=https://gdata.youtube.com&access_type=offline','_blank','width=840,height=680',true);");
+            //out.println("  mywin = window.open('https://accounts.google.com/o/oauth2/auth?client_id=" + clientId + "&redirect_uri=" + uriTemp + "&response_type=code&scope=https://gdata.youtube.com&access_type=offline','_blank','width=840,height=680',true);");
+            out.println("  mywin = window.open('https://accounts.google.com/o/oauth2/auth?client_id=" + clientId + "&redirect_uri=" + uriTemp + "&response_type=code&scope=https://gdata.youtube.com+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile&access_type=offline&state=/profile','_blank','width=840,height=680',true);");
             out.println("  mywin.focus();");
             out.println(" }");
             out.println(" if(confirm('¿Autenticar la cuenta en YouTube?')) {");
@@ -565,10 +568,9 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                 String refresh_token = userData.getString("refresh_token");
 
 
-                setAccessToken(tokenAccess);
-                //Temporalmente guardando el token Refresh:
-                //setRefreshToken(code);
+                setAccessToken(tokenAccess);                
                 setAccessTokenSecret(refresh_token);
+                setRefreshToken(refresh_token);
                 setSn_authenticated(true);
                 System.out.println("refresh token: " + refresh_token);
                 System.out.println("token access:  " + tokenAccess);
@@ -645,9 +647,11 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
          String category = "";
         
         Iterator<YouTubeCategory> it = listYoutubeCategories();
-        category = it.next().getId();
+        if(it.hasNext()){//The first category
+            category = it.next().getId();
+        }
    
-        if(it.hasNext()){
+        if(it.hasNext()){//More categories
             System.out.println("Tiene mas de una categoria...");
             category = category + "|" + it.next().getId();
         }     
@@ -669,8 +673,8 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             params.put("max-results", String.valueOf(maxResults));
             params.put("alt", "jsonc");
             params.put("orderby", "published");
-            if(category != ""){
-            params.put("category", category);
+            if(!category.isEmpty()){
+                params.put("category", category);
             }
             
             try {
