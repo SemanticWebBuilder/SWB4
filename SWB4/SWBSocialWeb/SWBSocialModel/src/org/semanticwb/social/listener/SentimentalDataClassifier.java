@@ -259,6 +259,9 @@ public class SentimentalDataClassifier {
         float promIntensityValue=((Float)hmapValues.get("promIntensityValue")).floatValue();
         int intensityTweetValueType=((Integer)hmapValues.get("intensityTweetValueType")).intValue();
         
+        //long tfinTMP1=System.currentTimeMillis() - tini;
+        //System.out.println("\n<!--Total Time to Classify--TMP1: " + tfinTMP1 + "ms - SWBSocial--> ");
+        
         //System.out.println("SentimentalData../promSentimentalValue:"+promSentimentalValue);
         //System.out.println("SentimentalData../sentimentalTweetValueType:"+sentimentalTweetValueType);
         //System.out.println("SentimentalData../promIntensityValue:"+promIntensityValue);
@@ -308,7 +311,8 @@ public class SentimentalDataClassifier {
                 if(filtrarIntensityLow) createPostInbyIntensity=true;
             }
         }
-
+        //long tfinTMP2=System.currentTimeMillis() - tini;
+        //System.out.println("\n<!--Total Time to Classify--TMP2: " + tfinTMP2 + "ms - SWBSocial--> ");
         
         if(createPostInbySentiment && createPostInbyIntensity)    //Si pasa los filtros, entonces se crea el mensaje, de lo contrario el mensaje de la red social nunca se persiste.
         {
@@ -394,6 +398,8 @@ public class SentimentalDataClassifier {
                     createPostbyKlout=true;
                 }
             }
+            //long tfinTMP3=System.currentTimeMillis() - tini;
+            //System.out.println("\n<!--Total Time to Classify--TMP3: " + tfinTMP3 + "ms - SWBSocial--> ");
             //System.out.println("Klout de usuario del mensaje, lo crea o no??:"+createPostbyKlout);
             if(createPostbyKlout)   //Si pasa el filtro de Klout del usuario, entonces ya persite el mensaje en BD
             {
