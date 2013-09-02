@@ -193,7 +193,7 @@
                     Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
                     while (it.hasNext()) {
                         SocialNetwork socialNetwork = (SocialNetwork) it.next();
-                        if (socialNetwork instanceof Messageable && socialNetwork.isActive() && socialNetwork.isValid()) {
+                        if (socialNetwork instanceof Messageable && socialNetwork.isActive()) {
                             boolean isSelected = false;
                             System.out.println("Las Redes:" + socialNetwork);
                             if (apostOutNets.contains(socialNetwork.getURI())) {
@@ -339,7 +339,7 @@
                     Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
                     while (it.hasNext()) {
                         SocialNetwork socialNetwork = (SocialNetwork) it.next();
-                        if (socialNetwork instanceof Photoable && socialNetwork.isActive() && socialNetwork.isValid()) {
+                        if (socialNetwork instanceof Photoable && socialNetwork.isActive()) {
                             String typeClass = "";
                              if (socialNetwork instanceof Youtube){
                                  typeClass = "ico-ytb";
@@ -502,7 +502,7 @@
                 Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
                 while (it.hasNext()) {
                     SocialNetwork socialNetwork = (SocialNetwork) it.next();
-                    if (socialNetwork instanceof Videoable && socialNetwork.isActive() && socialNetwork.isValid()) {
+                    if (socialNetwork instanceof Videoable && socialNetwork.isActive()) {
                     String typeClass = "";
                              if (socialNetwork instanceof Youtube){
                                  typeClass = "ico-ytb";
