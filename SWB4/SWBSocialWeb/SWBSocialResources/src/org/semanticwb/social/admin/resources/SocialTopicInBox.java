@@ -4,10 +4,7 @@
  */
 package org.semanticwb.social.admin.resources;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -26,14 +23,10 @@ import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.ss.usermodel.Drawing;
-import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.util.IOUtils;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
@@ -90,6 +83,8 @@ public class SocialTopicInBox extends GenericResource {
     String Mode_PFlowMsg = "doPflowMsg";
     String Mode_PreView = "preview";
     String Mode_showTags = "showTags";
+    private static final int RECPERPAGE=20; //Number of records by Page, could be dynamic later
+
 
     /**
      * Creates a new instance of SWBAWebPageContents.
