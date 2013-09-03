@@ -129,7 +129,7 @@
                 %>    
 
                 <td>
-                    <br/><embed src="<%=video.getVideo()%>" width="195" height="150" autostart="false">    
+                    <br/><embed src="<%=video.getVideo()%>" width="250" height="195" autostart="false" type="application/x-shockwave-flash">    
                     <br/><br/><%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
                 </td>
 
