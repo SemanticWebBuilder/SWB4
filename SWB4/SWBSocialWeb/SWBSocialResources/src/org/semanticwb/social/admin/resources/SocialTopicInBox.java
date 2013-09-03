@@ -1212,10 +1212,10 @@ public class SocialTopicInBox extends GenericResource {
             hampResult.put("countResult", Long.valueOf(StreamPostIns));
             itposts=new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, socialNetUser.social_hasPostInInv.getRDFProperty(), socialNetUser.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((nPage*RECPERPAGE)).longValue(), Integer.valueOf((nPage*RECPERPAGE)-RECPERPAGE).longValue(), "timems desc"),true));
         } else {
-            System.out.println("socialTopic.getSocialSite() George:" + socialTopic.getSocialSite());
+            //System.out.println("socialTopic.getSocialSite() George:" + socialTopic.getSocialSite());
             //itposts = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());social_socialTopic
             long SocialTopicPostIns=wsite.getSemanticModel().countStatements(null, PostIn.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), null);
-            System.out.println("StreamPostIns:"+SocialTopicPostIns+", PostInGrp:"+PostIn.sclass.getClassGroupId());
+            //System.out.println("StreamPostIns:"+SocialTopicPostIns+", PostInGrp:"+PostIn.sclass.getClassGroupId());
             
             hampResult.put("countResult", Long.valueOf(SocialTopicPostIns));
         
