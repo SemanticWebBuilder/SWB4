@@ -606,8 +606,6 @@ public class StreamInBoxNoTopic extends GenericResource {
         long nRec=((Long)hmapResult.get("countResult")).longValue();
         Set<PostIn> setso=((Set)hmapResult.get("itResult"));
 
-        Iterator<PostIn> itposts = setso.iterator();
-
         //Filtros
 
 
@@ -631,7 +629,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         //Una vez que ya se cuantos elementos son, ya que ya se hizo una primera iteración sobre todos los PostIn, hago una segunda
         //iteración ya para mostrar esos ultimos elementos, esto de hacer 2 iteraciones no es muy bueno, TODO: ver con Javier si vemos
         //otra mejor opción.
-        itposts = setsoFinal.iterator();
+        Iterator<PostIn> itposts = setsoFinal.iterator();
         while (itposts.hasNext()) {
             PostIn postIn = itposts.next();
             /*
