@@ -7,6 +7,7 @@ package org.semanticwb.social.admin.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 import javax.servlet.RequestDispatcher;
@@ -17,9 +18,11 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticIterator;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
@@ -62,6 +65,7 @@ public class StreamInBoxNoTopic extends GenericResource {
     String Mode_PFlowMsg = "doPflowMsg";
     //String Mode_PreView="preview";
     String Mode_showTags = "showTags";
+    private static final int RECPERPAGE=20; //Number of records by Page, could be dynamic later
 
     /**
      * Creates a new instance of SWBAWebPageContents.
@@ -88,10 +92,9 @@ public class StreamInBoxNoTopic extends GenericResource {
             doShowTags(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("exportExcel")) {
             try {
-                String idSurvey = request.getParameter("idSurvey");
                 String pages = request.getParameter("pages");
                 int page = Integer.parseInt(pages);
-                doGenerateReport(request, response, paramRequest, idSurvey, paramRequest.getWebPage().getWebSite(), page);
+                doGenerateReport(request, response, paramRequest,paramRequest.getWebPage().getWebSite(), page);
             } catch (Exception e) {
                 System.out.println("Error reprt:" + e);
             }
@@ -591,11 +594,19 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("<tbody>");
 
 
-        Iterator<PostIn> itposts = null;
+        int nPage;
+        try {
+            nPage = Integer.parseInt(request.getParameter("page"));
+        } catch (Exception ignored) {
+            nPage = 1;
+        }
+        
+        HashMap hmapResult=filtros(swbSocialUser, wsite, searchWord, request, stream, nPage);
+        
+        long nRec=((Long)hmapResult.get("countResult")).longValue();
+        Set<PostIn> setso=((Set)hmapResult.get("itResult"));
 
-        Set<PostIn> setso = null;
-
-        setso = filtros(swbSocialUser, wsite, itposts, searchWord, request, setso, stream, paramRequest);
+        Iterator<PostIn> itposts = setso.iterator();
 
         //Filtros
 
@@ -616,19 +627,6 @@ public class StreamInBoxNoTopic extends GenericResource {
         }
 
 
-        itposts = null;
-
-
-        int recPerPage = 20;//if(resBase.getItemsbyPage()>0) recPerPage=resBase.getItemsbyPage();            
-        int nRec = 0;
-        int nPage;
-        try {
-            nPage = Integer.parseInt(request.getParameter("page"));
-        } catch (Exception ignored) {
-            nPage = 1;
-        }
-        boolean paginate = false;
-
 
         //Una vez que ya se cuantos elementos son, ya que ya se hizo una primera iteración sobre todos los PostIn, hago una segunda
         //iteración ya para mostrar esos ultimos elementos, esto de hacer 2 iteraciones no es muy bueno, TODO: ver con Javier si vemos
@@ -645,171 +643,167 @@ public class StreamInBoxNoTopic extends GenericResource {
              } //Es decir, se listarían solo los que no tengan aun un SocialTopic asociado.
              * */
 
-            nRec++;
-            if ((nRec > (nPage - 1) * recPerPage) && (nRec <= (nPage) * recPerPage)) {
-                paginate = true;
+           
+            out.println("<tr>");
 
-                out.println("<tr>");
+            //Show Actions
+            out.println("<td class=\"accion\">");
 
-                //Show Actions
-                out.println("<td class=\"accion\">");
+            //Remove
+            SWBResourceURL urlr = paramRequest.getActionUrl();
+            urlr.setParameter("suri", id);
+            urlr.setParameter("sval", postIn.getURI());
+            urlr.setParameter("page", "" + nPage);
+            urlr.setAction("remove");
 
-                //Remove
-                SWBResourceURL urlr = paramRequest.getActionUrl();
-                urlr.setParameter("suri", id);
-                urlr.setParameter("sval", postIn.getURI());
-                urlr.setParameter("page", "" + nPage);
-                urlr.setAction("remove");
+            String text = SWBUtils.TEXT.scape4Script(postIn.getMsg_Text());
 
-                String text = SWBUtils.TEXT.scape4Script(postIn.getMsg_Text());
+            text = SWBSocialUtil.Util.replaceSpecialCharacters(text, false);
 
-                text = SWBSocialUtil.Util.replaceSpecialCharacters(text, false);
-
-                out.println("<a href=\"#\" class=\"eliminar\" title=\"" + paramRequest.getLocaleString("remove") + "\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " "
-                        + text + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
+            out.println("<a href=\"#\" class=\"eliminar\" title=\"" + paramRequest.getLocaleString("remove") + "\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " "
+                    + text + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
 
 
-                //Preview
-                SWBResourceURL urlPrev = paramRequest.getRenderUrl().setMode(Mode_PREVIEW).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
-                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" class=\"ver\" onclick=\"showDialog('" + urlPrev + "','" + paramRequest.getLocaleString("previewdocument")
-                        + "'); return false;\"></a>");
+            //Preview
+            SWBResourceURL urlPrev = paramRequest.getRenderUrl().setMode(Mode_PREVIEW).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
+            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" class=\"ver\" onclick=\"showDialog('" + urlPrev + "','" + paramRequest.getLocaleString("previewdocument")
+                    + "'); return false;\"></a>");
 
 
-                //ReClasifyByTpic
-                SWBResourceURL urlreClasifybyTopic = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
-                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reclasifyByTopic") + "\" class=\"retema\"  onclick=\"showDialog('" + urlreClasifybyTopic + "','"
-                        + paramRequest.getLocaleString("reclasifyByTopic") + "'); return false;\"></a>");
+            //ReClasifyByTpic
+            SWBResourceURL urlreClasifybyTopic = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
+            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reclasifyByTopic") + "\" class=\"retema\"  onclick=\"showDialog('" + urlreClasifybyTopic + "','"
+                    + paramRequest.getLocaleString("reclasifyByTopic") + "'); return false;\"></a>");
 
 
-                //ReClasyfyBySentiment & Intensity
-                SWBResourceURL urlrev = paramRequest.getRenderUrl().setMode(Mode_REVAL).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
-                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reeval") + "\" class=\"reevaluar\" onclick=\"showDialog('" + urlrev + "','" + paramRequest.getLocaleString("reeval")
-                        + "'); return false;\"></a>");
+            //ReClasyfyBySentiment & Intensity
+            SWBResourceURL urlrev = paramRequest.getRenderUrl().setMode(Mode_REVAL).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
+            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reeval") + "\" class=\"reevaluar\" onclick=\"showDialog('" + urlrev + "','" + paramRequest.getLocaleString("reeval")
+                    + "'); return false;\"></a>");
 
-                /*
-                 //Respond
-                 SWBResourceURL urlresponse=paramRequest.getRenderUrl().setMode(Mode_RESPONSE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());  
-                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("respond") + "\" onclick=\"showDialog('" + urlresponse + "','" + paramRequest.getLocaleString("respond") 
-                 + "'); return false;\">R</a>");
-                 * */
+            /*
+             //Respond
+             SWBResourceURL urlresponse=paramRequest.getRenderUrl().setMode(Mode_RESPONSE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());  
+             out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("respond") + "\" onclick=\"showDialog('" + urlresponse + "','" + paramRequest.getLocaleString("respond") 
+             + "'); return false;\">R</a>");
+             * */
 
-                out.println("</td>");
+            out.println("</td>");
 
-                //Show Message
-                out.println("<td class=\"mensaje\">");
-                if (postIn.getMsg_Text() != null) {
-                    if (postIn.getMsg_Text().length() > 200) {
-                        String msg2Show = postIn.getMsg_Text().substring(0, 200);
-                        msg2Show = SWBSocialUtil.Util.createHttpLink(msg2Show);
-                        out.println(msg2Show);
-                    } else {
-                        out.println(postIn.getMsg_Text());
-                    }
-                } else if (postIn.getDescription() != null) {
-                    if (postIn.getDescription().length() > 200) {
-                        out.println(postIn.getDescription().substring(0, 200));
-                    } else {
-                        out.println(postIn.getDescription());
-                    }
-                } else if (postIn.getTags() != null) {
-                    if (postIn.getTags().length() > 200) {
-                        out.println(postIn.getTags().substring(0, 200));
-                    } else {
-                        out.println(postIn.getTags());
-                    }
+            //Show Message
+            out.println("<td class=\"mensaje\">");
+            if (postIn.getMsg_Text() != null) {
+                if (postIn.getMsg_Text().length() > 200) {
+                    String msg2Show = postIn.getMsg_Text().substring(0, 200);
+                    msg2Show = SWBSocialUtil.Util.createHttpLink(msg2Show);
+                    out.println(msg2Show);
                 } else {
-                    out.println("---");
+                    out.println(postIn.getMsg_Text());
                 }
-                out.println("</td>");
-
-
-                //Show PostType
-                out.println("<td>");
-                out.println(postIn instanceof MessageIn ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-txt.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("message") + "  \">" : postIn instanceof PhotoIn ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-img.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("photo") + "  \">" : postIn instanceof VideoIn ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-vid.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("video") + "  \">" : "---");
-                out.println("</td>");
-
-                //SocialNetwork
-                out.println("<td>");
-                out.println(postIn.getPostInSocialNetwork().getDisplayTitle(lang));
-                out.println("</td>");
-
-                //Show Creation Time
-                out.println("<td>");
-                out.println(SWBUtils.TEXT.getTimeAgo(postIn.getCreated(), lang));
-                out.println("</td>");
-
-                //Sentiment
-                out.println("<td align=\"center\">");
-                if (postIn.getPostSentimentalType() == 0) {
-                    out.println("---");
-                } else if (postIn.getPostSentimentalType() == 1) {
-                    out.println("<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/css/images/pos.png" + "\">");
-                } else if (postIn.getPostSentimentalType() == 2) {
-                    out.println("<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/css/images/neg.png" + "\">");
+            } else if (postIn.getDescription() != null) {
+                if (postIn.getDescription().length() > 200) {
+                    out.println(postIn.getDescription().substring(0, 200));
                 } else {
-                    out.println("XXX");
+                    out.println(postIn.getDescription());
                 }
-                out.println("</td>");
-
-                //Intensity
-                out.println("<td>");
-                out.println(postIn.getPostIntesityType() == 0 ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/ibaja.png\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("low") + "  \">" : postIn.getPostIntesityType() == 1 ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/imedia.png\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("medium") + "  \">" : postIn.getPostIntesityType() == 2 ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/ialta.png\" border=\"0\" alt=\" " + paramRequest.getLocaleString("high") + "  \">" : "---");
-                out.println("</td>");
-
-                //Emoticon
-                out.println("<td align=\"center\">");
-                if (postIn.getPostSentimentalEmoticonType() == 1) {
-                    out.println("<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/css/images/emopos.png" + "\"/>");
-                } else if (postIn.getPostSentimentalEmoticonType() == 2) {
-                    out.println("<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/css/images/emoneg.png" + "\"/>");
-                } else if (postIn.getPostSentimentalEmoticonType() == 0) {
-                    out.println("---");
+            } else if (postIn.getTags() != null) {
+                if (postIn.getTags().length() > 200) {
+                    out.println(postIn.getTags().substring(0, 200));
                 } else {
-                    out.println("XXX");
+                    out.println(postIn.getTags());
                 }
-                out.println("</td>");
-
-
-                //Replicas
-                out.println("<td align=\"center\">");
-                out.println(postIn.getPostShared());
-                out.println("</td>");
-
-
-                //User
-                out.println("<td>");
-                SWBResourceURL urlshowUsrHistory = paramRequest.getRenderUrl().setMode(Mode_ShowUsrHistory).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("suri", id);
-                out.println(postIn.getPostInSocialNetworkUser() != null ? "<a href=\"#\" onclick=\"showDialog('" + urlshowUsrHistory.setParameter("swbSocialUser", postIn.getPostInSocialNetworkUser().getURI()) + "','" + paramRequest.getLocaleString("userHistory") + "'); return false;\">" + postIn.getPostInSocialNetworkUser().getSnu_name() + "</a>" : paramRequest.getLocaleString("withoutUser"));
-                out.println("</td>");
-
-                //Followers
-                out.println("<td align=\"center\">");
-                out.println(postIn.getPostInSocialNetworkUser() != null ? postIn.getPostInSocialNetworkUser().getFollowers() : "---");
-                out.println("</td>");
-
-                //Friends
-                out.println("<td align=\"center\">");
-                out.println(postIn.getPostInSocialNetworkUser() != null ? postIn.getPostInSocialNetworkUser().getFriends() : "---");
-                out.println("</td>");
-
-                //Klout
-                out.println("<td align=\"center\">");
-                out.println(postIn.getPostInSocialNetworkUser() != null ? postIn.getPostInSocialNetworkUser().getSnu_klout() : "---");
-                out.println("</td>");
-
-                //Place
-                out.println("<td>");
-                out.println(postIn.getPostPlace() == null ? "---" : postIn.getPostPlace());
-                out.println("</td>");
-
-                //Priority
-                out.println("<td align=\"center\">");
-                out.println(postIn.isIsPrioritary() ? "SI" : "NO");
-                out.println("</td>");
-
-
-                out.println("</tr>");
+            } else {
+                out.println("---");
             }
+            out.println("</td>");
+
+
+            //Show PostType
+            out.println("<td>");
+            out.println(postIn instanceof MessageIn ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-txt.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("message") + "  \">" : postIn instanceof PhotoIn ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-img.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("photo") + "  \">" : postIn instanceof VideoIn ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-vid.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("video") + "  \">" : "---");
+            out.println("</td>");
+
+            //SocialNetwork
+            out.println("<td>");
+            out.println(postIn.getPostInSocialNetwork().getDisplayTitle(lang));
+            out.println("</td>");
+
+            //Show Creation Time
+            out.println("<td>");
+            out.println(SWBUtils.TEXT.getTimeAgo(postIn.getCreated(), lang));
+            out.println("</td>");
+
+            //Sentiment
+            out.println("<td align=\"center\">");
+            if (postIn.getPostSentimentalType() == 0) {
+                out.println("---");
+            } else if (postIn.getPostSentimentalType() == 1) {
+                out.println("<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/css/images/pos.png" + "\">");
+            } else if (postIn.getPostSentimentalType() == 2) {
+                out.println("<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/css/images/neg.png" + "\">");
+            } else {
+                out.println("XXX");
+            }
+            out.println("</td>");
+
+            //Intensity
+            out.println("<td>");
+            out.println(postIn.getPostIntesityType() == 0 ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/ibaja.png\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("low") + "  \">" : postIn.getPostIntesityType() == 1 ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/imedia.png\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("medium") + "  \">" : postIn.getPostIntesityType() == 2 ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/ialta.png\" border=\"0\" alt=\" " + paramRequest.getLocaleString("high") + "  \">" : "---");
+            out.println("</td>");
+
+            //Emoticon
+            out.println("<td align=\"center\">");
+            if (postIn.getPostSentimentalEmoticonType() == 1) {
+                out.println("<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/css/images/emopos.png" + "\"/>");
+            } else if (postIn.getPostSentimentalEmoticonType() == 2) {
+                out.println("<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/css/images/emoneg.png" + "\"/>");
+            } else if (postIn.getPostSentimentalEmoticonType() == 0) {
+                out.println("---");
+            } else {
+                out.println("XXX");
+            }
+            out.println("</td>");
+
+
+            //Replicas
+            out.println("<td align=\"center\">");
+            out.println(postIn.getPostShared());
+            out.println("</td>");
+
+
+            //User
+            out.println("<td>");
+            SWBResourceURL urlshowUsrHistory = paramRequest.getRenderUrl().setMode(Mode_ShowUsrHistory).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("suri", id);
+            out.println(postIn.getPostInSocialNetworkUser() != null ? "<a href=\"#\" onclick=\"showDialog('" + urlshowUsrHistory.setParameter("swbSocialUser", postIn.getPostInSocialNetworkUser().getURI()) + "','" + paramRequest.getLocaleString("userHistory") + "'); return false;\">" + postIn.getPostInSocialNetworkUser().getSnu_name() + "</a>" : paramRequest.getLocaleString("withoutUser"));
+            out.println("</td>");
+
+            //Followers
+            out.println("<td align=\"center\">");
+            out.println(postIn.getPostInSocialNetworkUser() != null ? postIn.getPostInSocialNetworkUser().getFollowers() : "---");
+            out.println("</td>");
+
+            //Friends
+            out.println("<td align=\"center\">");
+            out.println(postIn.getPostInSocialNetworkUser() != null ? postIn.getPostInSocialNetworkUser().getFriends() : "---");
+            out.println("</td>");
+
+            //Klout
+            out.println("<td align=\"center\">");
+            out.println(postIn.getPostInSocialNetworkUser() != null ? postIn.getPostInSocialNetworkUser().getSnu_klout() : "---");
+            out.println("</td>");
+
+            //Place
+            out.println("<td>");
+            out.println(postIn.getPostPlace() == null ? "---" : postIn.getPostPlace());
+            out.println("</td>");
+
+            //Priority
+            out.println("<td align=\"center\">");
+            out.println(postIn.isIsPrioritary() ? "SI" : "NO");
+            out.println("</td>");
+
+
+            out.println("</tr>");
         }
         out.println("</tbody>");
         out.println("</table>");
@@ -820,10 +814,10 @@ public class StreamInBoxNoTopic extends GenericResource {
         //System.out.println("J-X:"+x);
         //System.out.println("J-L:"+l);
 
-        if (paginate) {
+        if (nRec>0) {
             out.println("<div id=\"pagination\">");
             out.println("<span>P&aacute;ginas:</span>");
-            for (int countPage = 1; countPage < (Math.ceil((double) nRec / (double) recPerPage) + 1); countPage++) {
+            for (int countPage = 1; countPage < (Math.ceil((double) nRec / (double) RECPERPAGE) + 1); countPage++) {
                 SWBResourceURL pageURL = paramRequest.getRenderUrl();
                 pageURL.setParameter("page", "" + (countPage));
                 pageURL.setParameter("suri", id);
@@ -1009,25 +1003,25 @@ public class StreamInBoxNoTopic extends GenericResource {
     }
 
     /*
-     * Method which calls a jsp to generate a report based on the result of registers in this class
+     * Method which calls a jsp to generate a report based on the result of records in this class
      */
-    private void doGenerateReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String idSurvey, WebSite webSite, int page) {
+    private void doGenerateReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, WebSite webSite, int page) {
 
         String searchWord = request.getParameter("search");
         String swbSocialUser = request.getParameter("swbSocialUser");
         String id = request.getParameter("suri");
         Stream stream = (Stream) SemanticObject.getSemanticObject(id).getGenericInstance();
-        Set<PostIn> setso = null;
-        Iterator<PostIn> itposts = null;
+        
+        
 
-        setso = filtros(swbSocialUser, webSite, itposts, searchWord, request, setso, stream, paramRequest);
-
+        HashMap hmapResult=filtros(swbSocialUser, webSite, searchWord, request, stream, page);
+        
+        long nRec=((Long)hmapResult.get("countResult")).longValue();
+        Set<PostIn> setso=((Set)hmapResult.get("itResult"));
 
         try {
 
-            StreamInBox sb = new StreamInBox();
-            sb.createExcel(setso, paramRequest, page, response, stream);
-
+            //createExcel(setso, paramRequest, page, response, stream, nRec);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -1037,14 +1031,35 @@ public class StreamInBoxNoTopic extends GenericResource {
     /*
      * Method which controls the filters allowed in this class
      */
-    private Set<PostIn> filtros(String swbSocialUser, WebSite wsite, Iterator<PostIn> itposts, String searchWord, HttpServletRequest request, Set<PostIn> setso, Stream stream, SWBParamRequest paramRequest) {
-        //Filtros
+    private HashMap filtros(String swbSocialUser, WebSite wsite, String searchWord, HttpServletRequest request, Stream stream, int nPage) {
+        Set<PostIn> setso=null;
         ArrayList<PostIn> aListFilter = new ArrayList();
+        HashMap hampResult=new HashMap();
+        Iterator<PostIn> itposts=null;
         if (swbSocialUser != null) {
             SocialNetworkUser socialNetUser = SocialNetworkUser.ClassMgr.getSocialNetworkUser(swbSocialUser, wsite);
-            itposts = socialNetUser.listPostInInvs();
+            //itposts = socialNetUser.listPostInInvs();
+            long StreamPostIns=wsite.getSemanticModel().countStatements(null, socialNetUser.social_hasPostInInv.getRDFProperty(), socialNetUser.getSemanticObject().getRDFResource(), null);
+            hampResult.put("countResult", Long.valueOf(StreamPostIns));
+            itposts=new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, socialNetUser.social_hasPostInInv.getRDFProperty(), socialNetUser.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((nPage*RECPERPAGE)).longValue(), Integer.valueOf((nPage*RECPERPAGE)-RECPERPAGE).longValue(), "timems desc"),true));
         } else {
-            itposts = PostIn.ClassMgr.listPostInByPostInStream(stream);
+            //itposts = PostIn.ClassMgr.listPostInByPostInStream(stream);
+            
+            long StreamPostIns=wsite.getSemanticModel().countStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), null);
+            System.out.println("StreamPostIns:"+StreamPostIns+", PostInGrp:"+PostIn.sclass.getClassGroupId());
+            
+            hampResult.put("countResult", Long.valueOf(StreamPostIns));
+        
+            
+            //itposts=new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((20).longValue(), Integer.valueOf(0).longValue(), "timems desc"),true));
+            
+            itposts=new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((RECPERPAGE)).longValue(), Integer.valueOf((nPage*RECPERPAGE)-RECPERPAGE).longValue(), "timems desc"),true));
+            
+            
+            //itposts=new GenericIterator(stmtIt);
+
+            System.out.println("itposts J:"+itposts.hasNext()+",searchWord:"+searchWord);
+            
             if (searchWord != null) {
                 while (itposts.hasNext()) {
                     PostIn postIn = itposts.next();
@@ -1056,80 +1071,83 @@ public class StreamInBoxNoTopic extends GenericResource {
                 }
             }
         }
+
+
         //Termina Filtros
 
         if (aListFilter.size() > 0) {
             itposts = aListFilter.iterator();
         }
 
-
         //Ordenamientos
-        //System.out.println("orderBy Llega:"+request.getParameter("orderBy"));
-
-        if (request.getParameter("orderBy") != null) {
-            if (request.getParameter("orderBy").equals("PostTypeUp")) {
-                setso = SWBSocialComparator.sortByPostType(itposts, true);
-            }
-            if (request.getParameter("orderBy").equals("PostTypeDown")) {
-                setso = SWBSocialComparator.sortByPostType(itposts, false);
-            } else if (request.getParameter("orderBy").equals("networkUp")) {
-                setso = SWBSocialComparator.sortByNetwork(itposts, true);
-            } else if (request.getParameter("orderBy").equals("networkDown")) {
-                setso = SWBSocialComparator.sortByNetwork(itposts, false);
-            } else if (request.getParameter("orderBy").equals("topicUp")) {
-                setso = SWBSocialComparator.sortByTopic(itposts, true);
-            } else if (request.getParameter("orderBy").equals("topicDown")) {
-                setso = SWBSocialComparator.sortByTopic(itposts, false);
-            } else if (request.getParameter("orderBy").equals("cretedUp")) {
-                setso = SWBComparator.sortByCreatedSet(itposts, true);
-            } else if (request.getParameter("orderBy").equals("cretedDown")) {
+        //System.out.println("orderBy k Llega:"+request.getParameter("orderBy"));
+        if(itposts!=null)
+        {
+            if (request.getParameter("orderBy") != null) {
+                if (request.getParameter("orderBy").equals("PostTypeUp")) {
+                    setso = SWBSocialComparator.sortByPostType(itposts, true);
+                }
+                if (request.getParameter("orderBy").equals("PostTypeDown")) {
+                    setso = SWBSocialComparator.sortByPostType(itposts, false);
+                } else if (request.getParameter("orderBy").equals("networkUp")) {
+                    setso = SWBSocialComparator.sortByNetwork(itposts, true);
+                } else if (request.getParameter("orderBy").equals("networkDown")) {
+                    setso = SWBSocialComparator.sortByNetwork(itposts, false);
+                } else if (request.getParameter("orderBy").equals("topicUp")) {
+                    setso = SWBSocialComparator.sortByTopic(itposts, true);
+                } else if (request.getParameter("orderBy").equals("topicDown")) {
+                    setso = SWBSocialComparator.sortByTopic(itposts, false);
+                } else if (request.getParameter("orderBy").equals("cretedUp")) {
+                    setso = SWBComparator.sortByCreatedSet(itposts, true);
+                } else if (request.getParameter("orderBy").equals("cretedDown")) {
+                    setso = SWBComparator.sortByCreatedSet(itposts, false);
+                } else if (request.getParameter("orderBy").equals("sentimentUp")) {
+                    setso = SWBSocialComparator.sortBySentiment(itposts, false);
+                } else if (request.getParameter("orderBy").equals("sentimentDown")) {
+                    setso = SWBSocialComparator.sortBySentiment(itposts, true);
+                } else if (request.getParameter("orderBy").equals("intensityUp")) {
+                    setso = SWBSocialComparator.sortByIntensity(itposts, true);
+                } else if (request.getParameter("orderBy").equals("intensityDown")) {
+                    setso = SWBSocialComparator.sortByIntensity(itposts, false);
+                } else if (request.getParameter("orderBy").equals("emoticonUp")) {
+                    setso = SWBSocialComparator.sortByEmoticon(itposts, true);
+                } else if (request.getParameter("orderBy").equals("emoticonDown")) {
+                    setso = SWBSocialComparator.sortByEmoticon(itposts, false);
+                } else if (request.getParameter("orderBy").equals("userUp")) {
+                    setso = SWBSocialComparator.sortByUser(itposts, true);
+                } else if (request.getParameter("orderBy").equals("userDown")) {
+                    setso = SWBSocialComparator.sortByUser(itposts, false);
+                } else if (request.getParameter("orderBy").equals("followersUp")) {
+                    setso = SWBSocialComparator.sortByFollowers(itposts, true);
+                } else if (request.getParameter("orderBy").equals("followersDown")) {
+                    setso = SWBSocialComparator.sortByFollowers(itposts, false);
+                } else if (request.getParameter("orderBy").equals("repliesUp")) {
+                    setso = SWBSocialComparator.sortByReplies(itposts, true);
+                } else if (request.getParameter("orderBy").equals("repliesDown")) {
+                    setso = SWBSocialComparator.sortByReplies(itposts, false);
+                } else if (request.getParameter("orderBy").equals("friendsUp")) {
+                    setso = SWBSocialComparator.sortByFriends(itposts, true);
+                } else if (request.getParameter("orderBy").equals("friendsDown")) {
+                    setso = SWBSocialComparator.sortByFriends(itposts, false);
+                } else if (request.getParameter("orderBy").equals("kloutUp")) {
+                    setso = SWBSocialComparator.sortByKlout(itposts, true);
+                } else if (request.getParameter("orderBy").equals("kloutDown")) {
+                    setso = SWBSocialComparator.sortByKlout(itposts, false);
+                } else if (request.getParameter("orderBy").equals("placeUp")) {
+                    setso = SWBSocialComparator.sortByPlace(itposts, true);
+                } else if (request.getParameter("orderBy").equals("placeDown")) {
+                    setso = SWBSocialComparator.sortByPlace(itposts, false);
+                } else if (request.getParameter("orderBy").equals("prioritaryUp")) {
+                    setso = SWBSocialComparator.sortByPrioritary(itposts, true);
+                } else if (request.getParameter("orderBy").equals("prioritaryDown")) {
+                    setso = SWBSocialComparator.sortByPrioritary(itposts, false);
+                }
+            } else {
                 setso = SWBComparator.sortByCreatedSet(itposts, false);
-            } else if (request.getParameter("orderBy").equals("sentimentUp")) {
-                setso = SWBSocialComparator.sortBySentiment(itposts, false);
-            } else if (request.getParameter("orderBy").equals("sentimentDown")) {
-                setso = SWBSocialComparator.sortBySentiment(itposts, true);
-            } else if (request.getParameter("orderBy").equals("intensityUp")) {
-                setso = SWBSocialComparator.sortByIntensity(itposts, true);
-            } else if (request.getParameter("orderBy").equals("intensityDown")) {
-                setso = SWBSocialComparator.sortByIntensity(itposts, false);
-            } else if (request.getParameter("orderBy").equals("emoticonUp")) {
-                setso = SWBSocialComparator.sortByEmoticon(itposts, false);
-            } else if (request.getParameter("orderBy").equals("emoticonDown")) {
-                setso = SWBSocialComparator.sortByEmoticon(itposts, true);
-            } else if (request.getParameter("orderBy").equals("userUp")) {
-                setso = SWBSocialComparator.sortByUser(itposts, true);
-            } else if (request.getParameter("orderBy").equals("userDown")) {
-                setso = SWBSocialComparator.sortByUser(itposts, false);
-            } else if (request.getParameter("orderBy").equals("followersUp")) {
-                setso = SWBSocialComparator.sortByFollowers(itposts, true);
-            } else if (request.getParameter("orderBy").equals("followersDown")) {
-                setso = SWBSocialComparator.sortByFollowers(itposts, false);
-            } else if (request.getParameter("orderBy").equals("repliesUp")) {
-                setso = SWBSocialComparator.sortByReplies(itposts, true);
-            } else if (request.getParameter("orderBy").equals("repliesDown")) {
-                setso = SWBSocialComparator.sortByReplies(itposts, false);
-            } else if (request.getParameter("orderBy").equals("friendsUp")) {
-                setso = SWBSocialComparator.sortByFriends(itposts, true);
-            } else if (request.getParameter("orderBy").equals("friendsDown")) {
-                setso = SWBSocialComparator.sortByFriends(itposts, false);
-            } else if (request.getParameter("orderBy").equals("kloutUp")) {
-                setso = SWBSocialComparator.sortByKlout(itposts, true);
-            } else if (request.getParameter("orderBy").equals("kloutDown")) {
-                setso = SWBSocialComparator.sortByKlout(itposts, false);
-            } else if (request.getParameter("orderBy").equals("placeUp")) {
-                setso = SWBSocialComparator.sortByPlace(itposts, true);
-            } else if (request.getParameter("orderBy").equals("placeDown")) {
-                setso = SWBSocialComparator.sortByPlace(itposts, false);
-            } else if (request.getParameter("orderBy").equals("prioritaryUp")) {
-                setso = SWBSocialComparator.sortByPrioritary(itposts, true);
-            } else if (request.getParameter("orderBy").equals("prioritaryDown")) {
-                setso = SWBSocialComparator.sortByPrioritary(itposts, false);
             }
-
-        } else {
-            setso = SWBComparator.sortByCreatedSet(itposts, false);
         }
+        hampResult.put("itResult", setso);
+        return hampResult;
 
-        return setso;
     }
 }
