@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
@@ -33,6 +34,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Activeable;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.PFlowInstance;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
@@ -41,6 +43,7 @@ import org.semanticwb.model.Trashable;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticIterator;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
@@ -110,6 +113,7 @@ public class SocialSentPost extends GenericResource {
     public static final String Mode_EDITWindow = "editWindow";
     public static final String Mode_PREVIEW = "preview";
     public static final String Mode_ShowPostOutNets = "postOutLog";
+    private static final int RECPERPAGE=20; //Number of records by Page, could be dynamic later
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -557,341 +561,334 @@ public class SocialSentPost extends GenericResource {
 
 
         //Funcionan bien sin busqueda
-        Iterator<PostOut> itposts = PostOut.ClassMgr.listPostOutBySocialTopic(socialTopic);
+        //Iterator<PostOut> itposts = PostOut.ClassMgr.listPostOutBySocialTopic(socialTopic);
 
         //System.out.println("searchWord en SentPost:"+searchWord);
 
         //Filtros
 
-        Set<PostOut> setso = null;
         String swbSocialUser = request.getParameter("swbSocialUser");
 
-        setso = filtros(swbSocialUser, wsite, itposts, searchWord, request, setso, socialTopic, paramRequest);
-
-
-        int recPerPage = 20;//if(resBase.getItemsbyPage()>0) recPerPage=resBase.getItemsbyPage();            
-        int nRec = 0;
         int nPage;
         try {
             nPage = Integer.parseInt(request.getParameter("page"));
         } catch (Exception ignored) {
             nPage = 1;
         }
-        boolean paginate = false;
+        
+        HashMap hmapResult=filtros(swbSocialUser, wsite, searchWord, request, socialTopic, nPage);
+        
+        long nRec=((Long)hmapResult.get("countResult")).longValue();
+        Set<PostOut> setso=((Set)hmapResult.get("itResult"));
 
-        itposts = setso.iterator();
+        Iterator<PostOut> itposts = setso.iterator();
         while (itposts.hasNext()) {
             PostOut postOut = (PostOut) itposts.next();
 
-            nRec++;
-            if ((nRec > (nPage - 1) * recPerPage) && (nRec <= (nPage) * recPerPage)) {
-                paginate = true;
+           
+            // revisando contenido en flujo de publicación
+            // validacion de botones en relación a los flujos
+
+            isInFlow = false;
+            isAuthorized = false;
+            needAuthorization = false;
+            send2Flow = false;
+
+            //System.out.println("sobj PostOut..JJUri:"+postOut.getEncodedURI()+",Is Published:"+postOut.isPublished());
+
+            isInFlow = pfmgr.isInFlow(postOut);
 
 
-                // revisando contenido en flujo de publicación
-                // validacion de botones en relación a los flujos
+            //System.out.println("Recurso esta en flujo: "+isInFlow);
 
-                isInFlow = false;
-                isAuthorized = false;
-                needAuthorization = false;
-                send2Flow = false;
+            needAuthorization = pfmgr.needAnAuthorization(postOut);
 
-                //System.out.println("sobj PostOut..JJUri:"+postOut.getEncodedURI()+",Is Published:"+postOut.isPublished());
+            //System.out.println("Necesita autorización: "+needAuthorization);
 
-                isInFlow = pfmgr.isInFlow(postOut);
-
-
-                //System.out.println("Recurso esta en flujo: "+isInFlow);
-
-                needAuthorization = pfmgr.needAnAuthorization(postOut);
-
-                //System.out.println("Necesita autorización: "+needAuthorization);
-
-                /*
-                 if (!isInFlow && !needAuthorization) {
-                 activeButton = true;
-                 }*/
-                if (!isInFlow && needAuthorization) {
-                    //activeButton = false;
-                    send2Flow = true;
-                }
-
-                if (isInFlow) {
-                    isAuthorized = pfmgr.isAuthorized(postOut);
-                    /*
-                     SocialPFlowInstance instance = sobj.getPflowInstance();
-                     if (!isAuthorized || instance.getStatus()==3) { //rechazado
-                     activeButton = false;
-                     }
-                     if (isAuthorized) {
-                     activeButton = true;
-                     }**/
-                }
-
-                // fin validación de botones en relacion a flujos
-
-                boolean readyToPublish = false;
-                if (!postOut.isPublished() && !needAuthorization) {
-                    readyToPublish = true;
-                }
-
-                //System.out.println("isInFlow:"+isInFlow);
-                //System.out.println("needAuthorization:"+needAuthorization);
-                //System.out.println("isAuthorized:"+isAuthorized);
-
-                out.println("<tr>");
-
-                //Show Actions
-                out.println("<td class=\"accion\">");
-
-                SWBResourceURL urlr = paramRequest.getActionUrl();
-                urlr.setParameter("suri", id);
-                urlr.setParameter("sval", postOut.getURI());
-                urlr.setParameter("page", "" + nPage);
-                urlr.setAction("remove");
-
-                String msgText = postOut.getURI();
-                if (postOut.getMsg_Text() != null) {
-                    msgText = SWBUtils.TEXT.scape4Script(postOut.getMsg_Text());
-                    msgText = SWBSocialUtil.Util.replaceSpecialCharacters(msgText, false);
-                }
-
-
-                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + msgText + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
-
-                /*
-                 SWBResourceURL urlpre = paramRequest.getRenderUrl();
-                 urlpre.setParameter("suri", id);
-                 urlpre.setParameter("page", "" + p);
-                 urlpre.setParameter("sval", postOut.getURI());
-                 urlpre.setParameter("preview", "true");
-                 urlpre.setParameter("orderBy", (request.getParameter("orderBy")!=null && request.getParameter("orderBy").trim().length() > 0 ? request.getParameter("orderBy") : ""));
-
-                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" onclick=\"submitUrl('" + urlpre + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("previewdocument") + "\"></a>");
-                 */
-
-                SWBResourceURL urlPrev = paramRequest.getRenderUrl().setMode(Mode_PREVIEW).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postOut.getURI());
-                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" class=\"ver\" onclick=\"showDialog('" + urlPrev + "','" + paramRequest.getLocaleString("previewdocument")
-                        + "'); return false;\"></a>");
-
-                if (!postOut.isPublished()) {
-                    if (send2Flow) {    //Social:Solo cuando se puede enviar el documento a flujo, se muestra la opción de editar, si el documento esta en flujo no se muestra.
-                        //if (canEdit) {
-                        SWBResourceURL urlEdit = paramRequest.getRenderUrl().setMode(Mode_EDITWindow).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postOut", postOut.getURI()).setParameter("wsite", postOut.getSemanticObject().getModel().getName());
-                        out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("documentAdmin") + "\" onclick=\"showDialog('" + urlEdit + "','" + paramRequest.getLocaleString("source") + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\"></a>");
-
-                        //out.println("<a href=\"#\"  title=\"" + paramRequest.getLocaleString("documentAdmin") + "\" onclick=\"\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\"></a>");
-                        //} else {
-                        //    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\">");
-                        //}
-
-                        boolean canSend2Flow = Boolean.TRUE;
-                        String pfid = null;
-                        SocialPFlow[] arrPf = pfmgr.getFlowsToSendContent(postOut);
-                        if (arrPf.length == 1) {
-                            pfid = arrPf[0].getId();
-                        }
-
-                        /*
-                         GenericObject gores = sobj.createGenericInstance();
-                         if (gores != null && gores instanceof Versionable) {
-                         Versionable vgo = (Versionable) gores;
-                         if (vgo.getActualVersion() == null || vgo.getLastVersion() == null) {
-                         canSend2Flow = Boolean.FALSE;
-                         }
-                         }**/
-
-                        if (canSend2Flow) {
-                            SWBResourceURL url2flow = paramRequest.getRenderUrl();
-                            url2flow.setParameter("suri", id);
-                            url2flow.setMode(Mode_PFlowMsg);
-                            url2flow.setParameter("sval", postOut.getURI());
-                            url2flow.setParameter("page", "" + nPage);
-                            url2flow.setParameter("pfid", pfid);
-                            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("senddocument2flow") + "\" onclick=\"showDialog('" + url2flow + "','" + paramRequest.getLocaleString("comentary") + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("senddocument2flow") + "\"></a>");
-                        } else {    //TODOSOCIAL:VER CUANDO PUEDE PASAR ESTA OPCIÓN (ELSE).
-                            out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("senddocument2flow") + "\" title=\"" + paramRequest.getLocaleString("canNOTsenddocument2flow") + "\">");
-                        }
-                    } else if (isInFlow && !isAuthorized) {
-                        if (!readyToPublish) {
-                            out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/espera_autorizacion.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("documentwaiting") + "\">");
-                        }
-                    } else if (isInFlow && isAuthorized) {
-                        out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enlinea.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("Caccepted") + "\">");
-                    }
-                }
-
-
-                out.println("</td>");
-
-                //Show 30 firsts characters of Msg PostOut
-                out.println("<td>");
-                //out.println(SWBUtils.TEXT.cropText(sobj.getMsg_Text(), 30));
-                if (postOut.getMsg_Text() != null) {
-                    msgText = SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(postOut.getMsg_Text()), 25);
-                }
-                out.println("<a href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + msgText + "');return false;\" title=\"" + getDisplaySemObj(postOut.getSemanticObject(), lang) + "\">" + msgText + "</a>");
-                out.println("</td>");
-
-                //Show PostType
-                out.println("<td>");
-                out.println(postOut instanceof Message ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-txt.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("message") + "  \">" : postOut instanceof Photo ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-img.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("photo") + "  \">" : postOut instanceof Video ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-vid.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("video") + "  \">" : "---");
-
-                out.println("</td>");
-
-                //Show Networks
-                out.println("<td>");
-                String nets = "---";
-                //System.out.println("socialNet:"+postOut.getSocialNetwork()+",redes:"+postOut.listSocialNetworks().hasNext());
-                boolean firstTime = true;
-                Iterator<SocialNetwork> itPostSocialNets = postOut.listSocialNetworks();
-                while (itPostSocialNets.hasNext()) {
-                    SocialNetwork socialNet = itPostSocialNets.next();
-                    //System.out.println("socialNet-1:"+socialNet);
-                    String sSocialNet = socialNet.getDisplayTitle(lang);
-                    //System.out.println("socialNet-2:"+sSocialNet);
-                    if (sSocialNet != null && sSocialNet.trim().length() > 0) {
-                        //System.out.println("socialNet-3:"+sSocialNet);
-                        if (firstTime) {
-                            nets = "" + sSocialNet;
-                            firstTime = false;
-                        } else {
-                            nets += "|" + sSocialNet;
-                        }
-                    }
-                }
-                out.println(nets);
-                out.println("</td>");
-
-                //PostIn Source 
-                out.println("<td>");
-                if (postOut.getPostInSource() != null) {
-                    SWBResourceURL url = paramRequest.getRenderUrl().setMode(Mode_SOURCE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postOut.getPostInSource().getURI());
-                    out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("source") + "\" onclick=\"showDialog('" + url + "','" + paramRequest.getLocaleString("source") + "'); return false;\">Origen(Image)</a>");
-
-                    /*
-                     SWBResourceURL url=paramRequest.getRenderUrl().setMode(Mode_SOURCE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postOut.getPostInSource().getURI());  
-                     out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("source") + "\" onclick=\"showDialog('" + url + "','" + paramRequest.getLocaleString("source") 
-                     + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("source") + "\"></a>");
-                     * */
-
-                } else {
-                    out.println("---");
-                }
-                out.println("</td>");
-
-                //PostOut creation
-                out.println("<td>");
-                out.println(SWBUtils.TEXT.getTimeAgo(postOut.getCreated(), lang));
-                out.println("</td>");
-
-                //PostOut lastUpdate
-                out.println("<td>");
-                out.println(SWBUtils.TEXT.getTimeAgo(postOut.getUpdated(), lang));
-                out.println("</td>");
-
-                if (classifyBySentiment != null && classifyBySentiment.equalsIgnoreCase("true")) {
-                    //Sentiment
-                    out.println("<td align=\"center\">");
-                    if (postOut.getPostSentimentalType() == 0) {
-                        out.println("---");
-                    } else if (postOut.getPostSentimentalType() == 1) {
-                        out.println("<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/css/images/pos.png" + "\">");
-                    } else if (postOut.getPostSentimentalType() == 2) {
-                        out.println("<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/css/images/neg.png" + "\">");
-                    }
-                    out.println("</td>");
-
-                    //Intensity
-                    out.println("<td>");
-                    out.println(postOut.getPostIntesityType() == 0 ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/ibaja.png\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("low") + "  \">" : postOut.getPostIntesityType() == 1 ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/imedia.png\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("medium") + "  \">" : postOut.getPostIntesityType() == 2 ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/ialta.png\" border=\"0\" alt=\" " + paramRequest.getLocaleString("high") + "  \">" : "---");
-                    out.println("</td>");
-                }
-
-
-
-                out.println("<td>");
-                //El PostOut No se ha enviado, aqui se daría la posibilidad de que un usuario lo envíe.
-                //System.out.println("msg..:"+postOut.getMsg_Text());
-                //System.out.println("Ya esta publicado..:"+postOut.isPublished());
-
-                System.out.println("PostUri:" + postOut.getURI());
-                SWBResourceURL urlPostOutNets = paramRequest.getRenderUrl().setMode(Mode_ShowPostOutNets).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postOut", postOut.getURI());
-                if (!postOut.isPublished()) {
-
-                    boolean postOutwithPostOutNets = false;
-                    boolean someOneIsNotPublished = false;
-                    Iterator<PostOutNet> itPostOutNets = PostOutNet.ClassMgr.listPostOutNetBySocialPost(postOut, wsite);
-                    while (itPostOutNets.hasNext()) {
-                        PostOutNet postOutNet = itPostOutNets.next();
-                        //System.out.println("postOutNet:"+postOutNet);
-                        postOutwithPostOutNets = true;
-                        if (postOutNet.getStatus() == 0) {
-                            //System.out.println("postOutNet-1/status:"+postOutNet.getStatus());
-                            someOneIsNotPublished = true;
-                            break;
-                        }
-                    }
-
-                    //Si todos los PostOutNet referentes al PostOut estan con estatus de 1 o simplemente diferente de 0, quiere decir que ya estan publicados, 
-                    //probablente se revisaron desde el MonitorMgr y en el metodo isPublished de c/red social de tipo MonitorAble se reviso el estatus en la red socal
-                    // y la misma respondio que ya estaba publicado, por lo cual se le colocó en dicho metodo el estatus 1 (publicado) al PostOutNet de dicho PostOut,
-                    //por lo tanto, ya podemos aqui poner el estatus de dicho PostOut como publicado en todas las redes sociales a las que se envíó, esto lo hacemos solo
-                    //con colocar la porpiedad published del mismo=true, de esta manera la proxima vez entrara al if de los publicados y ya no se revisara en sus PostOutNets.
-
-
-                    //Esto no es cierto, puede que si el flujo no manda a publicar durectamente, aun no haya ningun PostOutNet para un PostOut, y aunque no se haya enviado 
-                    //a publicar aun, con la siguiente condición va a decir que ya esta publicado, revisar mañana, ya que ahorita ya estoy cansado.
-
-                    //System.out.println("Aver esto-isInFlow:"+isInFlow+", aver esto otro-someOneIsNotPublished:"+someOneIsNotPublished);
-                    if (!isInFlow && postOutwithPostOutNets && !someOneIsNotPublished) //Se supone que por lo menos, hay publicado un PostOutNet del Post                         
-                    {
-                        //System.out.println("SE SUPONE QUE ESTA PUBLICADO...");
-                        postOut.setPublished(true);
-                        out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">Publicado</a>");
-                    } else {
-                        //System.out.println("SOCIALSENTPOST1");
-                        if (!needAuthorization || postOut.getPflowInstance().getStatus() == 3) {
-                            SWBResourceURL urlu = paramRequest.getRenderUrl();
-                            urlu.setMode(Mode_Action);
-                            urlu.setParameter("suri", postOut.getURI());
-                            urlu.setParameter("act", "updstatus");
-                            /*
-                             if(postOut.getPflowInstance()!=null)
-                             {
-                             System.out.println("postOut.getPflowInstance():"+postOut.getPflowInstance()+",step:"+postOut.getPflowInstance().getStep()+",status:"+postOut.getPflowInstance().getStatus());
-                             }else{
-                             System.out.println("postOut.getPflowInstance()==NULL");
-                             }*/
-                            if (someOneIsNotPublished) {
-                                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">" + paramRequest.getLocaleString("toReview") + "</a>"); //No ha sido publicado en todas las redes sociales que debiera, abrir dialogo para mostrar todos los PostOutNtes del PostOut
-                            } else if (postOut.getPflowInstance() != null && postOut.getPflowInstance().getStatus() == 3) {
-                                out.println("<a href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />" + paramRequest.getLocaleString("publish") + "</a>");
-                            } else {
-                                out.println(paramRequest.getLocaleString("publishing"));
-                            }
-                        } else {    //El PostOut ya se envío
-                            //System.out.println("SOCIALSENTPOST2");
-                            if (!isInFlow && needAuthorization && !isAuthorized) {
-                                String sFlowRejected = "---";
-                                if (postOut.getPflowInstance() != null && postOut.getPflowInstance().getPflow() != null) {
-                                    sFlowRejected = postOut.getPflowInstance().getPflow().getDisplayTitle(lang);
-                                }
-                                out.println(paramRequest.getLocaleString("rejected") + "(" + sFlowRejected + ")");
-                            } else if (isInFlow && needAuthorization && !isAuthorized) {
-                                //System.out.println("postOut.getPflowInstance().getStatus():"+postOut.getPflowInstance().getStatus());
-                                out.println(paramRequest.getLocaleString("onFlow") + "(" + postOut.getPflowInstance().getPflow().getDisplayTitle(lang) + "/" + postOut.getPflowInstance().getStep() + ")");
-                            }
-                        }
-                    }
-                } else {
-                    //System.out.println("ESE POST ESTA PUBLICADO..");
-                    out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">" + paramRequest.getLocaleString("published") + "</a>");
-                }
-                out.println("</td>");
-
-                out.println("</tr>");
+            /*
+             if (!isInFlow && !needAuthorization) {
+             activeButton = true;
+             }*/
+            if (!isInFlow && needAuthorization) {
+                //activeButton = false;
+                send2Flow = true;
             }
+
+            if (isInFlow) {
+                isAuthorized = pfmgr.isAuthorized(postOut);
+                /*
+                 SocialPFlowInstance instance = sobj.getPflowInstance();
+                 if (!isAuthorized || instance.getStatus()==3) { //rechazado
+                 activeButton = false;
+                 }
+                 if (isAuthorized) {
+                 activeButton = true;
+                 }**/
+            }
+
+            // fin validación de botones en relacion a flujos
+
+            boolean readyToPublish = false;
+            if (!postOut.isPublished() && !needAuthorization) {
+                readyToPublish = true;
+            }
+
+            //System.out.println("isInFlow:"+isInFlow);
+            //System.out.println("needAuthorization:"+needAuthorization);
+            //System.out.println("isAuthorized:"+isAuthorized);
+
+            out.println("<tr>");
+
+            //Show Actions
+            out.println("<td class=\"accion\">");
+
+            SWBResourceURL urlr = paramRequest.getActionUrl();
+            urlr.setParameter("suri", id);
+            urlr.setParameter("sval", postOut.getURI());
+            urlr.setParameter("page", "" + nPage);
+            urlr.setAction("remove");
+
+            String msgText = postOut.getURI();
+            if (postOut.getMsg_Text() != null) {
+                msgText = SWBUtils.TEXT.scape4Script(postOut.getMsg_Text());
+                msgText = SWBSocialUtil.Util.replaceSpecialCharacters(msgText, false);
+            }
+
+
+            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + msgText + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
+
+            /*
+             SWBResourceURL urlpre = paramRequest.getRenderUrl();
+             urlpre.setParameter("suri", id);
+             urlpre.setParameter("page", "" + p);
+             urlpre.setParameter("sval", postOut.getURI());
+             urlpre.setParameter("preview", "true");
+             urlpre.setParameter("orderBy", (request.getParameter("orderBy")!=null && request.getParameter("orderBy").trim().length() > 0 ? request.getParameter("orderBy") : ""));
+
+             out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" onclick=\"submitUrl('" + urlpre + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("previewdocument") + "\"></a>");
+             */
+
+            SWBResourceURL urlPrev = paramRequest.getRenderUrl().setMode(Mode_PREVIEW).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postOut.getURI());
+            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" class=\"ver\" onclick=\"showDialog('" + urlPrev + "','" + paramRequest.getLocaleString("previewdocument")
+                    + "'); return false;\"></a>");
+
+            if (!postOut.isPublished()) {
+                if (send2Flow) {    //Social:Solo cuando se puede enviar el documento a flujo, se muestra la opción de editar, si el documento esta en flujo no se muestra.
+                    //if (canEdit) {
+                    SWBResourceURL urlEdit = paramRequest.getRenderUrl().setMode(Mode_EDITWindow).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postOut", postOut.getURI()).setParameter("wsite", postOut.getSemanticObject().getModel().getName());
+                    out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("documentAdmin") + "\" onclick=\"showDialog('" + urlEdit + "','" + paramRequest.getLocaleString("source") + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\"></a>");
+
+                    //out.println("<a href=\"#\"  title=\"" + paramRequest.getLocaleString("documentAdmin") + "\" onclick=\"\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\"></a>");
+                    //} else {
+                    //    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\">");
+                    //}
+
+                    boolean canSend2Flow = Boolean.TRUE;
+                    String pfid = null;
+                    SocialPFlow[] arrPf = pfmgr.getFlowsToSendContent(postOut);
+                    if (arrPf.length == 1) {
+                        pfid = arrPf[0].getId();
+                    }
+
+                    /*
+                     GenericObject gores = sobj.createGenericInstance();
+                     if (gores != null && gores instanceof Versionable) {
+                     Versionable vgo = (Versionable) gores;
+                     if (vgo.getActualVersion() == null || vgo.getLastVersion() == null) {
+                     canSend2Flow = Boolean.FALSE;
+                     }
+                     }**/
+
+                    if (canSend2Flow) {
+                        SWBResourceURL url2flow = paramRequest.getRenderUrl();
+                        url2flow.setParameter("suri", id);
+                        url2flow.setMode(Mode_PFlowMsg);
+                        url2flow.setParameter("sval", postOut.getURI());
+                        url2flow.setParameter("page", "" + nPage);
+                        url2flow.setParameter("pfid", pfid);
+                        out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("senddocument2flow") + "\" onclick=\"showDialog('" + url2flow + "','" + paramRequest.getLocaleString("comentary") + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("senddocument2flow") + "\"></a>");
+                    } else {    //TODOSOCIAL:VER CUANDO PUEDE PASAR ESTA OPCIÓN (ELSE).
+                        out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("senddocument2flow") + "\" title=\"" + paramRequest.getLocaleString("canNOTsenddocument2flow") + "\">");
+                    }
+                } else if (isInFlow && !isAuthorized) {
+                    if (!readyToPublish) {
+                        out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/espera_autorizacion.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("documentwaiting") + "\">");
+                    }
+                } else if (isInFlow && isAuthorized) {
+                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enlinea.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("Caccepted") + "\">");
+                }
+            }
+
+
+            out.println("</td>");
+
+            //Show 30 firsts characters of Msg PostOut
+            out.println("<td>");
+            //out.println(SWBUtils.TEXT.cropText(sobj.getMsg_Text(), 30));
+            if (postOut.getMsg_Text() != null) {
+                msgText = SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(postOut.getMsg_Text()), 25);
+            }
+            out.println("<a href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + msgText + "');return false;\" title=\"" + getDisplaySemObj(postOut.getSemanticObject(), lang) + "\">" + msgText + "</a>");
+            out.println("</td>");
+
+            //Show PostType
+            out.println("<td>");
+            out.println(postOut instanceof Message ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-txt.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("message") + "  \">" : postOut instanceof Photo ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-img.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("photo") + "  \">" : postOut instanceof Video ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-vid.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("video") + "  \">" : "---");
+
+            out.println("</td>");
+
+            //Show Networks
+            out.println("<td>");
+            String nets = "---";
+            //System.out.println("socialNet:"+postOut.getSocialNetwork()+",redes:"+postOut.listSocialNetworks().hasNext());
+            boolean firstTime = true;
+            Iterator<SocialNetwork> itPostSocialNets = postOut.listSocialNetworks();
+            while (itPostSocialNets.hasNext()) {
+                SocialNetwork socialNet = itPostSocialNets.next();
+                //System.out.println("socialNet-1:"+socialNet);
+                String sSocialNet = socialNet.getDisplayTitle(lang);
+                //System.out.println("socialNet-2:"+sSocialNet);
+                if (sSocialNet != null && sSocialNet.trim().length() > 0) {
+                    //System.out.println("socialNet-3:"+sSocialNet);
+                    if (firstTime) {
+                        nets = "" + sSocialNet;
+                        firstTime = false;
+                    } else {
+                        nets += "|" + sSocialNet;
+                    }
+                }
+            }
+            out.println(nets);
+            out.println("</td>");
+
+            //PostIn Source 
+            out.println("<td>");
+            if (postOut.getPostInSource() != null) {
+                SWBResourceURL url = paramRequest.getRenderUrl().setMode(Mode_SOURCE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postOut.getPostInSource().getURI());
+                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("source") + "\" onclick=\"showDialog('" + url + "','" + paramRequest.getLocaleString("source") + "'); return false;\">Origen(Image)</a>");
+
+                /*
+                 SWBResourceURL url=paramRequest.getRenderUrl().setMode(Mode_SOURCE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postOut.getPostInSource().getURI());  
+                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("source") + "\" onclick=\"showDialog('" + url + "','" + paramRequest.getLocaleString("source") 
+                 + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("source") + "\"></a>");
+                 * */
+
+            } else {
+                out.println("---");
+            }
+            out.println("</td>");
+
+            //PostOut creation
+            out.println("<td>");
+            out.println(SWBUtils.TEXT.getTimeAgo(postOut.getCreated(), lang));
+            out.println("</td>");
+
+            //PostOut lastUpdate
+            out.println("<td>");
+            out.println(SWBUtils.TEXT.getTimeAgo(postOut.getUpdated(), lang));
+            out.println("</td>");
+
+            if (classifyBySentiment != null && classifyBySentiment.equalsIgnoreCase("true")) {
+                //Sentiment
+                out.println("<td align=\"center\">");
+                if (postOut.getPostSentimentalType() == 0) {
+                    out.println("---");
+                } else if (postOut.getPostSentimentalType() == 1) {
+                    out.println("<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/css/images/pos.png" + "\">");
+                } else if (postOut.getPostSentimentalType() == 2) {
+                    out.println("<img src=\"" + SWBPortal.getContextPath() + "/swbadmin/css/images/neg.png" + "\">");
+                }
+                out.println("</td>");
+
+                //Intensity
+                out.println("<td>");
+                out.println(postOut.getPostIntesityType() == 0 ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/ibaja.png\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("low") + "  \">" : postOut.getPostIntesityType() == 1 ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/imedia.png\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("medium") + "  \">" : postOut.getPostIntesityType() == 2 ? "<img src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/ialta.png\" border=\"0\" alt=\" " + paramRequest.getLocaleString("high") + "  \">" : "---");
+                out.println("</td>");
+            }
+
+
+
+            out.println("<td>");
+            //El PostOut No se ha enviado, aqui se daría la posibilidad de que un usuario lo envíe.
+            //System.out.println("msg..:"+postOut.getMsg_Text());
+            //System.out.println("Ya esta publicado..:"+postOut.isPublished());
+
+            System.out.println("PostUri:" + postOut.getURI());
+            SWBResourceURL urlPostOutNets = paramRequest.getRenderUrl().setMode(Mode_ShowPostOutNets).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postOut", postOut.getURI());
+            if (!postOut.isPublished()) {
+
+                boolean postOutwithPostOutNets = false;
+                boolean someOneIsNotPublished = false;
+                Iterator<PostOutNet> itPostOutNets = PostOutNet.ClassMgr.listPostOutNetBySocialPost(postOut, wsite);
+                while (itPostOutNets.hasNext()) {
+                    PostOutNet postOutNet = itPostOutNets.next();
+                    //System.out.println("postOutNet:"+postOutNet);
+                    postOutwithPostOutNets = true;
+                    if (postOutNet.getStatus() == 0) {
+                        //System.out.println("postOutNet-1/status:"+postOutNet.getStatus());
+                        someOneIsNotPublished = true;
+                        break;
+                    }
+                }
+
+                //Si todos los PostOutNet referentes al PostOut estan con estatus de 1 o simplemente diferente de 0, quiere decir que ya estan publicados, 
+                //probablente se revisaron desde el MonitorMgr y en el metodo isPublished de c/red social de tipo MonitorAble se reviso el estatus en la red socal
+                // y la misma respondio que ya estaba publicado, por lo cual se le colocó en dicho metodo el estatus 1 (publicado) al PostOutNet de dicho PostOut,
+                //por lo tanto, ya podemos aqui poner el estatus de dicho PostOut como publicado en todas las redes sociales a las que se envíó, esto lo hacemos solo
+                //con colocar la porpiedad published del mismo=true, de esta manera la proxima vez entrara al if de los publicados y ya no se revisara en sus PostOutNets.
+
+
+                //Esto no es cierto, puede que si el flujo no manda a publicar durectamente, aun no haya ningun PostOutNet para un PostOut, y aunque no se haya enviado 
+                //a publicar aun, con la siguiente condición va a decir que ya esta publicado, revisar mañana, ya que ahorita ya estoy cansado.
+
+                //System.out.println("Aver esto-isInFlow:"+isInFlow+", aver esto otro-someOneIsNotPublished:"+someOneIsNotPublished);
+                if (!isInFlow && postOutwithPostOutNets && !someOneIsNotPublished) //Se supone que por lo menos, hay publicado un PostOutNet del Post                         
+                {
+                    //System.out.println("SE SUPONE QUE ESTA PUBLICADO...");
+                    postOut.setPublished(true);
+                    out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">Publicado</a>");
+                } else {
+                    //System.out.println("SOCIALSENTPOST1");
+                    if (!needAuthorization || postOut.getPflowInstance().getStatus() == 3) {
+                        SWBResourceURL urlu = paramRequest.getRenderUrl();
+                        urlu.setMode(Mode_Action);
+                        urlu.setParameter("suri", postOut.getURI());
+                        urlu.setParameter("act", "updstatus");
+                        /*
+                         if(postOut.getPflowInstance()!=null)
+                         {
+                         System.out.println("postOut.getPflowInstance():"+postOut.getPflowInstance()+",step:"+postOut.getPflowInstance().getStep()+",status:"+postOut.getPflowInstance().getStatus());
+                         }else{
+                         System.out.println("postOut.getPflowInstance()==NULL");
+                         }*/
+                        if (someOneIsNotPublished) {
+                            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">" + paramRequest.getLocaleString("toReview") + "</a>"); //No ha sido publicado en todas las redes sociales que debiera, abrir dialogo para mostrar todos los PostOutNtes del PostOut
+                        } else if (postOut.getPflowInstance() != null && postOut.getPflowInstance().getStatus() == 3) {
+                            out.println("<a href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />" + paramRequest.getLocaleString("publish") + "</a>");
+                        } else {
+                            out.println(paramRequest.getLocaleString("publishing"));
+                        }
+                    } else {    //El PostOut ya se envío
+                        //System.out.println("SOCIALSENTPOST2");
+                        if (!isInFlow && needAuthorization && !isAuthorized) {
+                            String sFlowRejected = "---";
+                            if (postOut.getPflowInstance() != null && postOut.getPflowInstance().getPflow() != null) {
+                                sFlowRejected = postOut.getPflowInstance().getPflow().getDisplayTitle(lang);
+                            }
+                            out.println(paramRequest.getLocaleString("rejected") + "(" + sFlowRejected + ")");
+                        } else if (isInFlow && needAuthorization && !isAuthorized) {
+                            //System.out.println("postOut.getPflowInstance().getStatus():"+postOut.getPflowInstance().getStatus());
+                            out.println(paramRequest.getLocaleString("onFlow") + "(" + postOut.getPflowInstance().getPflow().getDisplayTitle(lang) + "/" + postOut.getPflowInstance().getStep() + ")");
+                        }
+                    }
+                }
+            } else {
+                //System.out.println("ESE POST ESTA PUBLICADO..");
+                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">" + paramRequest.getLocaleString("published") + "</a>");
+            }
+            out.println("</td>");
+
+            out.println("</tr>");
         }
 
 
@@ -899,10 +896,10 @@ public class SocialSentPost extends GenericResource {
         out.println("</table>");
         out.println("</fieldset>");
 
-        if (paginate) {
+        if (nRec>0) {
             out.println("<div id=\"pagination\">");
             out.println("<span>P&aacute;ginas:</span>");
-            for (int countPage = 1; countPage < (Math.ceil((double) nRec / (double) recPerPage) + 1); countPage++) {
+            for (int countPage = 1; countPage < (Math.ceil((double) nRec / (double) RECPERPAGE) + 1); countPage++) {
                 SWBResourceURL pageURL = paramRequest.getRenderUrl();
                 pageURL.setParameter("page", "" + (countPage));
                 pageURL.setParameter("suri", id);
@@ -1654,13 +1651,12 @@ public class SocialSentPost extends GenericResource {
         String swbSocialUser = request.getParameter("swbSocialUser");
         String id = request.getParameter("suri");
 
-        Set<PostOut> setso = null;
-        Iterator<PostOut> itposts = null;
-
         SocialTopic socialTopic = (SocialTopic) SemanticObject.getSemanticObject(id).getGenericInstance();
-
-
-        setso = filtros(swbSocialUser, webSite, itposts, searchWord, request, setso, socialTopic, paramRequest);
+        
+        HashMap hmapResult=filtros(swbSocialUser, webSite, searchWord, request, socialTopic, page);
+        
+        long nRec=((Long)hmapResult.get("countResult")).longValue();
+        Set<PostOut> setso=((Set)hmapResult.get("itResult"));
 
 
         try {
@@ -1675,17 +1671,26 @@ public class SocialSentPost extends GenericResource {
     /*
      * Method which controls the filters allowed in this class
      */
-    private Set<PostOut> filtros(String swbSocialUser, WebSite wsite, Iterator<PostOut> itposts, String searchWord, HttpServletRequest request, Set<PostOut> setso, SocialTopic socialTopic, SWBParamRequest paramRequest) {
+    private HashMap filtros(String swbSocialUser, WebSite wsite, String searchWord, HttpServletRequest request, SocialTopic socialTopic, int nPage) {
+        Set<PostIn> setso=null;
         ArrayList<PostOut> aListFilter = new ArrayList();
-
+        HashMap hampResult=new HashMap();
+        Iterator<PostOut> itposts=null;
         if (swbSocialUser != null) {
             SocialNetworkUser socialNetUser = SocialNetworkUser.ClassMgr.getSocialNetworkUser(swbSocialUser, wsite);
-            itposts = socialNetUser.listPostInInvs();
-
+            //itposts = socialNetUser.listPostInInvs();
+            long StreamPostIns=wsite.getSemanticModel().countStatements(null, PostOut.swb_creator.getRDFProperty(), socialNetUser.getSemanticObject().getRDFResource(), null);
+            hampResult.put("countResult", Long.valueOf(StreamPostIns));
+            itposts=new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostOut.swb_creator.getRDFProperty(), socialNetUser.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId(), Integer.valueOf((nPage*RECPERPAGE)).longValue(), Integer.valueOf((nPage*RECPERPAGE)-RECPERPAGE).longValue(), "timems desc"),true));
         } else {
-            System.out.println("socialTopic.getSocialSite() George:" + socialTopic.getSocialSite());
-            itposts = PostOut.ClassMgr.listPostOutBySocialTopic(socialTopic, socialTopic.getSocialSite());
-
+            System.out.println("socialTopic.getSocialSite() filtro-George24:"+socialTopic+",getSocialSite():"+socialTopic.getSocialSite());
+            //itposts = PostOut.ClassMgr.listPostOutBySocialTopic(socialTopic, socialTopic.getSocialSite());
+            long SocialTopicPostOut=wsite.getSemanticModel().countStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), null);
+            System.out.println("SocialTopicPostOut/FiltrosJJ:"+SocialTopicPostOut);
+            hampResult.put("countResult", Long.valueOf(SocialTopicPostOut));
+            itposts=new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId(), Integer.valueOf((RECPERPAGE)).longValue(), Integer.valueOf((nPage*RECPERPAGE)-RECPERPAGE).longValue(), "timems desc"),true));
+            System.out.println("SocialTopicPostOut/FiltrosJJ/itposts:"+itposts.hasNext());
+            
             if (searchWord != null) {
                 while (itposts.hasNext()) {
                     PostOut postOut = itposts.next();
@@ -1746,7 +1751,8 @@ public class SocialSentPost extends GenericResource {
             setso = SWBComparator.sortByCreatedSet(itposts, false);
         }
 
-        return setso;
+        hampResult.put("itResult", setso);
+        return hampResult;
 
     }
 
