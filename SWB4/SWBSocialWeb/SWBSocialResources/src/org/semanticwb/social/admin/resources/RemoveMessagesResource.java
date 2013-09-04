@@ -44,7 +44,7 @@ public class RemoveMessagesResource extends GenericResource {
             long noOfMessages = SWBUtils.Collections.sizeOf(itPostIn);
             out.println("<div class=\"swbform\">");
             //out.println("<form type=\"dijit.form.Form\" id=\"del\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"submitForm('del'); return false;\">");            
-            out.println("<form type=\"dijit.form.Form\" id=\"del\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes serán eliminados.')){submitForm('del'); return false;}else{return false;}\">");            
+            out.println("<form type=\"dijit.form.Form\" id=\"del" + stream.getId() +"\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes serán eliminados.')){submitForm('del" + stream.getId() + "'); return false;}else{return false;}\">");            
             out.println("<table width=\"100%\" border=\"0px\">");            
             out.println("   <tr>");
             out.println("       <td style=\"text-align: center;\">El Stream <b>" + stream.getDisplayTitle(paramRequest.getUser().getLanguage())  + "</b> actualmente contiene en total <b>" + noOfMessages +  "</b> mensajes</td>");        
@@ -74,7 +74,7 @@ public class RemoveMessagesResource extends GenericResource {
             
             out.println("<div class=\"swbform\">");
             //out.println("<form type=\"dijit.form.Form\" id=\"del\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"submitForm('del'); return false;\">");            
-            out.println("<form type=\"dijit.form.Form\" id=\"delwotopic\" action=\"" +  paramRequest.getActionUrl().setAction(Action_REMOVEWOTOPIC).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes serán eliminados.')){submitForm('delwotopic'); return false;}else{return false;}\">");            
+            out.println("<form type=\"dijit.form.Form\" id=\"delwotopic" + stream.getId() + "\" action=\"" +  paramRequest.getActionUrl().setAction(Action_REMOVEWOTOPIC).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes serán eliminados.')){submitForm('delwotopic" + stream.getId() + "'); return false;}else{return false;}\">");            
             out.println("<table width=\"100%\" border=\"0px\">");            
             out.println("   <tr>");
             out.println("       <td style=\"text-align: center;\">El Stream <b>" + stream.getDisplayTitle(paramRequest.getUser().getLanguage())  + "</b> actualmente contiene <b>" + aList.size() +  "</b> mensajes sin Tema</td>");        
