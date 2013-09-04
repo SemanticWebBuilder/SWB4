@@ -405,11 +405,12 @@ if (!user.isSigned()) {
                                                     <td class="swbp-status">
                                                     <%
                                                     if (delayed) {
-                                                        %><span class="swbp-ontime"><%
-                                                    } else {
                                                         %><span class="swbp-delayed"><%
+                                                    } else {
+                                                        %><span class="swbp-ontime"><%
                                                     }
-                                                    %><i class="icon-time"></i></span></td><%
+                                                    %><i class="icon-time"></i></span>
+                                                    </td><%
                                                 }
                                             }
                                         }
