@@ -1039,9 +1039,9 @@ public class StreamInBoxNoTopic extends GenericResource {
         if (swbSocialUser != null) {
             SocialNetworkUser socialNetUser = SocialNetworkUser.ClassMgr.getSocialNetworkUser(swbSocialUser, wsite);
             //itposts = socialNetUser.listPostInInvs();
-            long StreamPostIns=wsite.getSemanticModel().countStatements(null, socialNetUser.social_hasPostInInv.getRDFProperty(), socialNetUser.getSemanticObject().getRDFResource(), null);
+            long StreamPostIns=wsite.getSemanticModel().countStatements(null, PostIn.social_postInSocialNetworkUser.getRDFProperty(), socialNetUser.getSemanticObject().getRDFResource(), null);
             hampResult.put("countResult", Long.valueOf(StreamPostIns));
-            itposts=new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, socialNetUser.social_hasPostInInv.getRDFProperty(), socialNetUser.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((nPage*RECPERPAGE)).longValue(), Integer.valueOf((nPage*RECPERPAGE)-RECPERPAGE).longValue(), "timems desc"),true));
+            itposts=new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInSocialNetworkUser.getRDFProperty(), socialNetUser.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((nPage*RECPERPAGE)).longValue(), Integer.valueOf((nPage*RECPERPAGE)-RECPERPAGE).longValue(), "timems desc"),true));
         } else {
             //itposts = PostIn.ClassMgr.listPostInByPostInStream(stream);
             
