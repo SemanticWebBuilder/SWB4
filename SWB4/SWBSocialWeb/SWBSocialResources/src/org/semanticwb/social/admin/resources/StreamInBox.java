@@ -4,10 +4,7 @@
  */
 package org.semanticwb.social.admin.resources;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -35,7 +32,6 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.PhotoIn;
-import org.semanticwb.social.PostIn;
 import org.semanticwb.social.PostOut;
 import org.semanticwb.social.SentimentalLearningPhrase;
 import org.semanticwb.social.SocialNetwork;
@@ -53,16 +49,13 @@ import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.ss.usermodel.Drawing;
-import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.util.IOUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.platform.SemanticIterator;
+import org.semanticwb.social.Kloutable;
 import org.semanticwb.social.PostIn;
 
 /**
@@ -670,6 +663,15 @@ public class StreamInBox extends GenericResource {
 
         out.println("</thead>");
         out.println("<tbody>");
+        
+        //Revisa si el sitio indica que se revise el Klout, por defecto si lo hace.
+        boolean checkKlout=false; 
+        try{
+            checkKlout=Boolean.parseBoolean(SWBSocialUtil.Util.getModelPropertyValue(wsite, "checkKlout"));
+        }catch(Exception ignored)
+        {
+            checkKlout=false;
+        }
 
 
         int nPage;
@@ -855,10 +857,31 @@ public class StreamInBox extends GenericResource {
             out.println(postIn.getPostInSocialNetworkUser() != null ? postIn.getPostInSocialNetworkUser().getFriends() : paramRequest.getLocaleString("withoutUser"));
             out.println("</td>");
 
+            
+            //Retrieving user Klout data
             //Klout
             out.println("<td align=\"center\">");
-            out.println(postIn.getPostInSocialNetworkUser() != null ? postIn.getPostInSocialNetworkUser().getSnu_klout() : paramRequest.getLocaleString("withoutUser"));
-            out.println("</td>");
+            int userKloutScore=0;
+            SocialNetworkUser socialNetUser=postIn.getPostInSocialNetworkUser();
+            if(socialNetUser!=null)
+            {
+                System.out.println("checkKlout--J:"+checkKlout);
+                //Looking for user klout
+                if(postIn.getPostInSocialNetwork().getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable) && socialNetUser.getSnu_klout()==0 && checkKlout)
+                {
+                    System.out.println("checkKlout--J1:"+checkKlout+",socialNetUser:"+socialNetUser+",id:"+socialNetUser.getId()+",socialNetUser:"+socialNetUser.getSnu_id());
+                    HashMap userKloutDat=SWBSocialUtil.Classifier.classifybyKlout(postIn.getPostInSocialNetwork(), stream, socialNetUser, socialNetUser.getSnu_id(), true);
+                    userKloutScore=((Integer)userKloutDat.get("userKloutScore")).intValue();
+                    socialNetUser.setSnu_klout(userKloutScore);
+                    out.println(userKloutScore);
+                    System.out.println("checkKlout--J2:"+userKloutScore+", NO VOLVERA A PONER KLOUT PARA ESTE USER:"+socialNetUser);
+                }else{
+                    out.println(socialNetUser.getSnu_klout());
+                }
+            }
+            else{
+                out.println(paramRequest.getLocaleString("withoutUser"));
+            }
 
             //Place
             out.println("<td>");
@@ -1240,10 +1263,8 @@ public class StreamInBox extends GenericResource {
 
             if (nPage != 0) {
                 itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((RECPERPAGE)).longValue(), Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), "timems desc"), true));
-            } else {
+            } else { 
                 itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), StreamPostIns, 2L, "timems desc"), true));
-
-
             }
 
             //itposts=new GenericIterator(stmtIt);
