@@ -14,6 +14,7 @@ import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -39,6 +40,7 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.social.CountryState;
+import org.semanticwb.social.Kloutable;
 import org.semanticwb.social.Message;
 import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.Messageable;
@@ -55,6 +57,7 @@ import org.semanticwb.social.SentimentalLearningPhrase;
 import org.semanticwb.social.SocialAdmin;
 import org.semanticwb.social.SocialMonitorable;
 import org.semanticwb.social.SocialNetwork;
+import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialSite;
 import org.semanticwb.social.Stream;
@@ -100,6 +103,7 @@ public class SWBSocialUtil implements SWBAppObject {
     static public double EART_RADIUS_MI = 3958.762079; //Millas
     static private ArrayList<String> aPrepositions=new ArrayList();
     static private ArrayList<String> aSentimentWords=new ArrayList();
+    static private int NUMDAYS2REFRESH_USERDATA=5;
     
     
     //private static Properties prop = new Properties();
@@ -195,6 +199,18 @@ public class SWBSocialUtil implements SWBAppObject {
         hmapChanges.put("gi", "ji");
         hmapChanges.put("bb", "b");
         hmapChanges.put("c", "k");
+
+        //Revisión de propiedad de sitio Admin que indica el número de días que se mantendra en cache datos del usuario
+        if(SWBSocialUtil.Util.getModelPropertyValue(SWBContext.getAdminWebSite(), "numDaysToCheckKlout")!=null)
+        {
+            try
+            {
+                NUMDAYS2REFRESH_USERDATA=Integer.parseInt(SWBSocialUtil.Util.getModelPropertyValue(SWBContext.getAdminWebSite(), "numDaysToCheckKlout"));
+            }catch(NumberFormatException ignored){
+                NUMDAYS2REFRESH_USERDATA=5;
+            }
+        }
+        
         
         //Carga preposiciones a memoría
         loadPrepositions();
@@ -545,6 +561,82 @@ public class SWBSocialUtil implements SWBAppObject {
      * Metodo que normaliza una palabra, esto de acuerdo a definición realizada internamente en el área
      */
     public static class Classifier {
+        
+        /*
+         * Functions which returns the value (number of days) set up in numDaysToCheckKlout Admin site property
+         */
+        public static int getDaysToRefreshData()
+        {
+            return NUMDAYS2REFRESH_USERDATA;
+        }
+        
+        /*
+         * funtion which reviews the klout of specific user.
+         * This funtions looks in klout user data if upDateSocialUserNetworkData=true or looks in Klout service
+         * @return hmapResult which contains userKloutScore, that is the klout of the user and createPostbyKlout, that
+         * indicates if a postIn can be created based in its klout versus the stream klout.
+         * 
+         */
+        public static HashMap classifybyKlout(SocialNetwork socialNetwork, Stream stream, SocialNetworkUser socialNetUser, String creatorId, boolean upDateSocialUserNetworkData)
+        {
+            System.out.println();
+            HashMap hmapResult=new HashMap();
+            boolean createPostbyKlout=false;
+            int userKloutScore=0;
+            //if(socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable))
+            {
+                //Revisar si existe el usuario en nuestra BD y si ya paso mas de 5 días en mi cache.
+                if(socialNetUser!=null)
+                {
+                    //creatorId=socialNetUser.getId();
+                    userKloutScore=socialNetUser.getSnu_klout();
+                    //System.out.println("Usuario:"+socialNetUser+", SI existe, su Klout es:"+userKloutScore);
+                    //System.out.println("userKloutScore:"+userKloutScore);
+
+//                                    String patron = "yyyy/MM/dd:hh:mm:ss:SSS:a";
+//                                    SimpleDateFormat formato = new SimpleDateFormat(patron);
+//                                    // formateo
+//                                    System.out.println("Fecha Klout Registrada de usuario:"+formato.format(socialNetUser.getUpdated()));
+//                                    System.out.println("days Dif:"+days);
+
+
+                    //System.out.println("days:"+days+",numDaysToCheckKlout:"+numDaysToCheckKlout);
+                    if(!upDateSocialUserNetworkData) //Si aun no pasan 5 días de la ultima actualización de los datos del usuario (incluyendo su klout), entonces toma el valor de klout que tiene guardado en BD
+                    {
+                        if(userKloutScore>=stream.getStream_KloutValue())
+                        {
+                            createPostbyKlout=true;
+                        }
+                    }else{  //Si ya pasaron 5 o mas días de que se actualizó la info del usuario, entonces busca su score en Klout
+                        System.out.println("Entra a SWBSocialUtil/1:"+creatorId);
+                        Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
+                        userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
+                        System.out.println("NO Existe usuario en BD, userKloutScore K TRAJO-1:"+userKloutScore);
+                        if(userKloutScore>=stream.getStream_KloutValue())
+                        {
+                            createPostbyKlout=true;
+                            //upDateSocialUserNetworkData=true;
+                        }
+                    }
+                }else { //No existe en la BD, debo revisar su klout
+                    Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
+                    userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
+                    //System.out.println("No existe usuario, userKloutScore K TRAJO-2:"+userKloutScore);
+                    if(userKloutScore>=stream.getStream_KloutValue())
+                    {
+                        createPostbyKlout=true;
+                    }
+                    //System.out.println("createPostbyKlout:"+createPostbyKlout);
+                }
+               //Termina de revisar si existe el usuario en nuestra BD y si ya paso mas de 5 días en mi cache.
+            }//else{
+            //    createPostbyKlout=true;
+            //}
+            hmapResult.put("createPostbyKlout", createPostbyKlout);
+            hmapResult.put("userKloutScore", userKloutScore);
+            
+            return hmapResult;
+       }
         
         
         public static HashMap classifyText(String text)

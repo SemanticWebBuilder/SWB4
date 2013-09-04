@@ -73,7 +73,8 @@ public class SentimentalDataClassifier {
     Stream stream=null;
     SocialNetwork socialNetwork=null;
     boolean classifyGeoLocation=false;
-
+    boolean checkKlout=false;
+    
     /*
     public SentimentalDataClassifier(PostIn post, String postData)
     {
@@ -82,13 +83,14 @@ public class SentimentalDataClassifier {
         initAnalysis();
     }
     * */
-    public SentimentalDataClassifier(ExternalPost externalPost, Stream stream, SocialNetwork socialNetwork, boolean classifyGeoLocation)
+    public SentimentalDataClassifier(ExternalPost externalPost, Stream stream, SocialNetwork socialNetwork, boolean classifyGeoLocation, boolean checkKlout)
     {
         this.externalPost=externalPost;
         this.stream=stream;
         this.socialNetwork=socialNetwork;
         this.classifyGeoLocation=classifyGeoLocation;
-    
+        this.checkKlout=checkKlout;
+        
         
         //System.out.println("En SentimentalDataClassifier:"+this.externalPost);
         //System.out.println("En stream:"+this.stream);
@@ -327,13 +329,25 @@ public class SentimentalDataClassifier {
             if(socialNetUser!=null)
             {
                 days=SWBSocialUtil.Util.Datediff(socialNetUser.getUpdated(), Calendar.getInstance().getTime());
+                if(days>=SWBSocialUtil.Classifier.getDaysToRefreshData())
+                {
+                    upDateSocialUserNetworkData=true;
+                }
             }
+            
+            System.out.println("checkKlout en Clasificador..:"+checkKlout);
             int userKloutScore=0;
+            if(checkKlout && stream.getStream_KloutValue()>0 && socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable))
             {
+                System.out.println("creatorId en Sentimental:"+creatorId);
+                HashMap userKloutDat=SWBSocialUtil.Classifier.classifybyKlout(socialNetwork, stream, socialNetUser, creatorId, upDateSocialUserNetworkData);
+                createPostbyKlout=((Boolean)userKloutDat.get("createPostbyKlout")).booleanValue();
+                userKloutScore=((Integer)userKloutDat.get("userKloutScore")).intValue();
                 //Filtro de Klout
                 //stream.setStream_KloutValue(10);
                 //Si se requiere filtrar por Klout, esto es porque exista un valo de klout para el stream>0
                 //System.out.println("creatorId:"+creatorId+"socialNetUser:"+socialNetUser+",Klout-0, stream k:"+stream.getStream_KloutValue()+",boolean:"+socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable));
+                /*
                 if(socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable))
                 {
                     //System.out.println("Klout-1");
@@ -347,13 +361,13 @@ public class SentimentalDataClassifier {
                                 userKloutScore=socialNetUser.getSnu_klout();
                                 //System.out.println("Usuario:"+socialNetUser+", SI existe, su Klout es:"+userKloutScore);
                                 //System.out.println("userKloutScore:"+userKloutScore);
-                                /*
-                                String patron = "yyyy/MM/dd:hh:mm:ss:SSS:a";
-                                SimpleDateFormat formato = new SimpleDateFormat(patron);
-                                // formateo
-                                System.out.println("Fecha Klout Registrada de usuario:"+formato.format(socialNetUser.getUpdated()));
-                                System.out.println("days Dif:"+days);
-                                * */
+
+//                                    String patron = "yyyy/MM/dd:hh:mm:ss:SSS:a";
+//                                    SimpleDateFormat formato = new SimpleDateFormat(patron);
+//                                    // formateo
+//                                    System.out.println("Fecha Klout Registrada de usuario:"+formato.format(socialNetUser.getUpdated()));
+//                                    System.out.println("days Dif:"+days);
+
                                 int numDaysToCheckKlout=5;
                                 if(SWBSocialUtil.Util.getModelPropertyValue(SWBContext.getAdminWebSite(), "numDaysToCheckKlout")!=null)
                                 {
@@ -396,8 +410,11 @@ public class SentimentalDataClassifier {
                     }
                 }else{
                     createPostbyKlout=true;
-                }
+                }*/
+            }else{
+                createPostbyKlout=true;
             }
+            
             //long tfinTMP3=System.currentTimeMillis() - tini;
             //System.out.println("\n<!--Total Time to Classify--TMP3: " + tfinTMP3 + "ms - SWBSocial--> ");
             //System.out.println("Klout de usuario del mensaje, lo crea o no??:"+createPostbyKlout);
