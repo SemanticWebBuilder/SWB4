@@ -1015,16 +1015,15 @@ public class StreamInBoxNoTopic extends GenericResource {
 
         HashMap hmapResult=filtros(swbSocialUser, webSite, searchWord, request, stream, page);
         
-        long nRec=((Long)hmapResult.get("countResult")).longValue();
         Set<PostIn> setso=((Set)hmapResult.get("itResult"));
 
         try {
 
             StreamInBox sInBox = new StreamInBox();
-            sInBox.createExcel(setso, paramRequest, page, response, stream, nRec);
+            sInBox.createExcel(setso, paramRequest, page, response, stream);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 
@@ -1057,8 +1056,7 @@ public class StreamInBoxNoTopic extends GenericResource {
              if (nPage != 0) {
                 itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((RECPERPAGE)).longValue(), Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), "timems desc"), true));
             } else {
-                itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), StreamPostIns, 2L, "timems desc"), true));
-
+                itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), StreamPostIns, 0L, "timems desc"), true));
 
             }
             
