@@ -30,8 +30,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
@@ -43,12 +41,15 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.ResourceType;
+import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.RoleRef;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.UserRepository;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormButton;
@@ -59,7 +60,6 @@ import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.ProcessSite;
 import org.semanticwb.process.model.SWBProcessMgr;
-import org.semanticwb.process.model.StartEvent;
 import org.semanticwb.process.model.UserTask;
 
 /***
@@ -121,6 +121,17 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         @Override
         public int compare(Object t, Object t1) {
             return ((FlowNodeInstance)t).getFlowNodeType().getDisplayTitle(lang).compareTo(((FlowNodeInstance)t1).getFlowNodeType().getDisplayTitle(lang));
+        }
+    };
+    private Comparator taskNameComparatorDesc = new Comparator() {
+        String lang = "es";
+        public void Comparator (String lng) {
+            lang = lng;
+        }
+
+        @Override
+        public int compare(Object t, Object t1) {
+            return ((FlowNodeInstance)t1).getFlowNodeType().getDisplayTitle(lang).compareTo(((FlowNodeInstance)t).getFlowNodeType().getDisplayTitle(lang));
         }
     };
     /*private Comparator taskPriorityComparator = new Comparator() {
@@ -424,20 +435,25 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             User user = response.getUser();
             String pid = request.getParameter(PARAM_PID);
             ProcessInstance inst = null;
+            List<FlowNodeInstance> arr = new ArrayList<FlowNodeInstance>();
             
             if (pid != null && !pid.trim().equals("")) {
                 Process process = Process.ClassMgr.getProcess(pid, response.getWebPage().getWebSite());
                 if (process != null)  {
                     inst = SWBProcessMgr.createSynchProcessInstance(process, user);
-                    List<FlowNodeInstance> arr = SWBProcessMgr.getActiveUserTaskInstances(inst,response.getUser());                        
+                    arr = SWBProcessMgr.getActiveUserTaskInstances(inst,response.getUser());                        
                     if(arr.size() > 0) {
                         response.sendRedirect(arr.get(0).getUserTaskUrl());
                         return;
-                    }                    
+                    }
                 }
-            }
-            if (inst != null) {
-                request.getSession(true).setAttribute("msg", "OK"+inst.getId());
+                
+                if (arr.isEmpty()) {
+                    if (inst != null) {
+                        request.getSession(true).setAttribute("msg", "OK"+inst.getId());
+                    }
+                    response.sendRedirect(getUserTaskInboxUrl(process));
+                }
             }
         } else if (MODE_FWD.equals(act)) {
             String suri = request.getParameter("suri");
@@ -683,71 +699,15 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     }
     
     public void doCreateProcessInstance(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        PrintWriter out = response.getWriter();
-        StringBuilder sb = new StringBuilder();
-        User user = paramRequest.getUser();
-        String lang = "es";
-        
-        if (user != null && user.getLanguage() != null) {
-            lang = user.getLanguage();
-        }
-        
-        Map<String, ArrayList<Process>> groups = new TreeMap<String, ArrayList<Process>>();
-        SWBResourceURL createUrl = paramRequest.getActionUrl().setAction(UserTaskInboxResource.ACT_CREATE);
-        ArrayList<Process> pccs = null;
-        
-        //Obtener los eventos de inicio
-        Iterator<StartEvent> startEvents = StartEvent.ClassMgr.listStartEvents(paramRequest.getWebPage().getWebSite());
-        while(startEvents.hasNext()) {
-            StartEvent sevt = startEvents.next();
-            //Si el usuario tiene permisos en el evento
-            if (sevt.getContainer() != null && sevt.getContainer() instanceof Process && user.haveAccess(sevt)) {
-                Process itp = sevt.getProcess();
-                //Si el proceso al que pertenece el evento y es válido
-                if (itp != null && itp.isValid()) {
-                    if(itp.getProcessGroup() != null) {
-                        String pg = itp.getProcessGroup().getDisplayTitle(lang);
-                        //Si ya existe el grupo de procesos en el treemap
-                        if(groups.get(pg) != null) {
-                            pccs = groups.get(pg);
-                            if (!pccs.contains(itp)) {
-                                pccs.add(itp);
-                            }
-                            groups.put(pg, pccs);
-                        } else { //Si no existe el grupo de procesos en el treemap
-                            pccs = new ArrayList<Process>();
-                            pccs.add(itp);
-                            groups.put(pg, pccs);
-                        }
-                    }
-                }
-            }
-        }
+        String jsp = "/swbadmin/jsp/process/userTaskInboxNewCase.jsp";
 
-        Iterator<String> keys = groups.keySet().iterator();
-        if (keys.hasNext()) {
-            sb.append("<form method=\"post\" action=\"").append(createUrl.toString()).append("\" onsubmit=\"")
-                    .append("setDialogLoading(true, '").append(paramRequest.getLocaleString("msgCreating")).append("'); return true;").append("\">");
-            sb.append("  <select name=\"pid\">");
-            while(keys.hasNext()) {
-                String key = keys.next();
-                sb.append("    <optgroup label=\"").append(key).append("\">");
-                Iterator<Process> it_pccs = SWBComparator.sortByDisplayName(groups.get(key).iterator(), lang);
-                while(it_pccs.hasNext()) {
-                    Process pcc = it_pccs.next();
-                    sb.append("      <option value=\"").append(pcc.getId()).append("\">").append(pcc.getDisplayTitle(lang)).append("</option>");
-                }
-                sb.append("    </optgroup>");
-            }
-            sb.append("  </select>");
-            sb.append("  <div>");
-            sb.append("    <br/><input type=\"submit\" value=\"").append(paramRequest.getLocaleString("btnOk")).append("\" class=\"btn1\">");
-            sb.append("  </div>");
-            sb.append("</form>");
-        } else {
-            sb.append("<span>").append(paramRequest.getLocaleString("msgNoProcess")).append("</span>");
+        try {
+            RequestDispatcher rd = request.getRequestDispatcher(jsp);
+            request.setAttribute("paramRequest", paramRequest);
+            rd.include(request, response);
+        } catch (Exception e) {
+            log.error("Error including jsp in new case", e);
         }
-        out.println(sb.toString());
     }
     
     public void doDetail(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -1060,16 +1020,16 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         Process p = null;
         int page = 1;
 
-        if (request.getParameter("sFilter") != null && !request.getParameter("sFilter").trim().equals("")) {
-            statusFilter = Integer.valueOf(request.getParameter("sFilter"));
+        if (request.getParameter("sf") != null && !request.getParameter("sf").trim().equals("")) {
+            statusFilter = Integer.valueOf(request.getParameter("sf"));
         }
         
         if (request.getParameter("asFilter") != null && request.getParameter("asFilter").equals("true")) {
             onlyAssigned = true;
         }
 
-        if (request.getParameter("pFilter") != null && !request.getParameter("pFilter").trim().equals("")) {
-            p = Process.ClassMgr.getProcess(request.getParameter("pFilter"), site);
+        if (request.getParameter("pf") != null && !request.getParameter("pf").trim().equals("")) {
+            p = Process.ClassMgr.getProcess(request.getParameter("pf"), site);
         }
         
         //Obtener todas las tareas de usuario por el estatus solicitado
@@ -1094,21 +1054,25 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
 
         //Realizar Ordenamiento de instancias
         if (sortType == null || sortType.trim().equals("")) {
-            sortType = "date";
+            sortType = "1";
         } else {
             sortType = sortType.trim();
         }
         
-        if (sortType.equals("date")) {
+        if (sortType.equals("1")) {
             unpaged = (ArrayList<FlowNodeInstance>)SWBUtils.Collections.copyIterator(SWBComparator.sortByCreated(unpaged.iterator(), false));
-        } else if (sortType.equals("name")) {
+        } else if (sortType.equals("2")) {
+            unpaged = (ArrayList<FlowNodeInstance>)SWBUtils.Collections.copyIterator(SWBComparator.sortByCreated(unpaged.iterator(), true));
+        } else if (sortType.equals("3")) {
             Collections.sort(unpaged, taskNameComparator);
-        } 
+        } else if (sortType.equals("4")) {
+            Collections.sort(unpaged, taskNameComparatorDesc);
+        }
         
         //Realizar paginado de instancias
         int maxPages = 1;
-        if (request.getParameter("page") != null && !request.getParameter("page").trim().equals("")) {
-            page = Integer.valueOf(request.getParameter("page"));
+        if (request.getParameter("p") != null && !request.getParameter("p").trim().equals("")) {
+            page = Integer.valueOf(request.getParameter("p"));
             if (page < 0) page = 1;
         }
 
@@ -1176,5 +1140,25 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             }
         }
         return canAccess && (hasGroup && hasStatus);
+    }
+    
+    /**
+     * Obtiene la URL de la página Web asociada a la Bandeja de tareas del sitio.
+     * @return URL de la bandeja de tareas o URL del proceso en su defecto.
+     */
+    public String getUserTaskInboxUrl(Process process) {
+        String url = process.getProcessSite().getHomePage().getUrl();
+        ResourceType rtype = ResourceType.ClassMgr.getResourceType("ProcessTaskInbox", process.getProcessSite());
+
+        if (rtype != null) {
+            Resource res = rtype.getResource();
+            if(res != null) {
+                Resourceable resable = res.getResourceable();
+                if(resable instanceof WebPage) {
+                    url = ((WebPage)resable).getUrl();
+                }
+            }
+        }
+        return url;
     }
 }
