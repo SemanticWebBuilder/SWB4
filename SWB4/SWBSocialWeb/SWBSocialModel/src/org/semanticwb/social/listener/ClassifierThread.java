@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.social.ExternalPost;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.Stream;
+import org.semanticwb.social.util.SWBSocialUtil;
 import org.semanticwb.social.util.SendPostThread;
 
 /**
@@ -57,13 +59,21 @@ public class ClassifierThread extends java.lang.Thread {
     @Override
     public void run()
     {
+        boolean checkKlout=false; 
+        try{
+           WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName()); 
+           checkKlout=Boolean.parseBoolean(SWBSocialUtil.Util.getModelPropertyValue(wsite, "checkKlout"));
+        }catch(Exception ignored)
+        {
+           checkKlout=false;
+        }
         try
         {
           Iterator<ExternalPost> itExternalThreads=aListExternalPost.iterator();  
           while(itExternalThreads.hasNext())
           {
               ExternalPost externalPost=itExternalThreads.next();
-              new SentimentalDataClassifier(externalPost, stream, socialNetwork, classifyGeoLocation);
+              new SentimentalDataClassifier(externalPost, stream, socialNetwork, classifyGeoLocation, checkKlout);
           }
            /*
             String words2classify = null;
