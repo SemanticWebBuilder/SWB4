@@ -127,6 +127,8 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="Measure">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdfs:subClassOf>
       <owl:Class rdf:ID="BSCTracing"/>
     </rdfs:subClassOf>
@@ -282,16 +284,23 @@
       <owl:Restriction>
         <owl:allValuesFrom>
           <swb:Class rdf:ID="Series">
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
+            <rdfs:subClassOf>
+              <owl:Class rdf:about="#Committable"/>
+            </rdfs:subClassOf>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
             <rdfs:subClassOf>
               <owl:Class rdf:about="#Sortable"/>
             </rdfs:subClassOf>
-            <rdfs:subClassOf>
-              <owl:Class rdf:about="#BSCTracing"/>
-            </rdfs:subClassOf>
-            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swb:autogenId>
             <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >org.semanticwb.bsc.tracing</swb:classCodePackage>
+            <rdfs:subClassOf>
+              <owl:Restriction>
+                <owl:allValuesFrom rdf:resource="#Indicator"/>
+                <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+              </owl:Restriction>
+            </rdfs:subClassOf>
             <swb:displayObject>
               <swbxf:DisplayObject rdf:ID="do_Series">
                 <swb:displayMode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -307,15 +316,16 @@
               </swbxf:DisplayObject>
             </swb:displayObject>
             <rdfs:subClassOf>
-              <owl:Restriction>
-                <owl:allValuesFrom rdf:resource="#Indicator"/>
-                <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
-              </owl:Restriction>
+              <swb:Interface rdf:ID="Measurable">
+                <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >Comportamiento que presentan las instancias de Series para capturar valores de mediciones de los períodos de medición correspondientes del indicador.</rdfs:comment>
+                <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </swb:Interface>
             </rdfs:subClassOf>
             <rdfs:subClassOf>
-              <owl:Class rdf:about="#Committable"/>
+              <owl:Class rdf:about="#BSCTracing"/>
             </rdfs:subClassOf>
-            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
           </swb:Class>
         </owl:allValuesFrom>
         <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
@@ -1708,7 +1718,6 @@
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Especifica el número de períodos que abarca esta frecuencia de medición</rdfs:comment>
     <rdfs:domain rdf:resource="#MeasurementFrequency"/>
-    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="hasAttachments">
     <rdfs:domain rdf:resource="#Attachment"/>
