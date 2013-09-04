@@ -235,7 +235,6 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
             <a href="<%=createPiUrl%>" class="btn btn-default hidden-lg" data-toggle="modal" data-target="#modalDialog"><i class="icon-play-sign"></i> <%=paramRequest.getLocaleString("createCase")%></a>
         </li>
     </ul>
-    <!--div id="toast" style="border: 1px solid #CCCCCC;background-color: #FFF49C;padding: 10px 0 ;text-align:center;opacity: 0.9;border-radius:5px 5px 5px 5px;-webkit-transition: opacity 0.5s ease-out;  /* Saf3.2+, Chrome */-moz-transition: opacity 0.5s ease-out;  /* FF4+ */-ms-transition: opacity 0.5s ease-out;  /* IE10? */-o-transition: opacity 0.5s ease-out;  /* Opera 10.5+ */transition: opacity 0.5s ease-out;"></div-->
     <% if (tinstances != null && tinstances.size() > 0) { %>
         <div class="table-responsive">
             <table class="table table-hover swbp-table">
