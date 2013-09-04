@@ -188,15 +188,17 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
     public void postVideo(Video video) {
 
         System.out.println("Entra al metodo postVideo de YouTube....");
-        
-        YouTubeCategory youTubeCat;
+        if(video.getVideo() == null || video.getTitle() == null){//Required fields
+            return;
+        }
+        /*YouTubeCategory youTubeCat;
         String allCategories=video.getCategory();
         String[] arrayCat=allCategories.split(";");
         for(int i=0;i<arrayCat.length;i++)
         {
             String category=arrayCat[i];
-            youTubeCat=YouTubeCategory.ClassMgr.getYouTubeCategory(category, SWBContext.getAdminWebSite());
-        }
+            youTubeCat = YouTubeCategory.ClassMgr.getYouTubeCategory(category, SWBContext.getAdminWebSite());
+        }*/
         
         
        
@@ -278,14 +280,13 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             "xmlns:media=\"http://search.yahoo.com/mrss/\"\r\n" +
             "xmlns:yt=\"http://gdata.youtube.com/schemas/2007\"> \r\n" +
             " <media:group> \r\n" +
-            " <media:title type=\"plain\">"+video.getTitle()+"</media:title> \r\n" +
-            " <media:description type=\"plain\"> \r\n" +
-            video.getMsg_Text()+"\r\n" +
+            " <media:title type=\"plain\">" + video.getTitle()+"</media:title> \r\n" +
+            " <media:description type=\"plain\"> \r\n" + (video.getMsg_Text() == null ? "" : video.getMsg_Text()) + "\r\n" +
             " </media:description> \r\n" +
             " <media:category\r\n" +
-            "scheme=\"http://gdata.youtube.com/schemas/2007/categories.cat\"> "+video.getCategory()+" \r\n" +
+            "scheme=\"http://gdata.youtube.com/schemas/2007/categories.cat\"> " + (video.getCategory() == null ? "People" : video.getCategory()) + " \r\n" +
             " </media:category> \r\n" +
-            " <media:keywords>"+video.getTags()+"</media:keywords> \r\n" +
+            " <media:keywords>" + (video.getTags() == null ? "" : video.getTags()) + "</media:keywords> \r\n" +
             " </media:group> \r\n" +
             " </entry> \r\n";
             writer.write(xml.getBytes("UTF-8"));
@@ -533,7 +534,8 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         String developerKey = getDeveloperKey();
         String uri = getRedirectUrl(request, paramRequest);
         //YouTube no permite enviarle una url dinamica por lo cual se envia a un jsp y nuevamnete se redirecciona
-        String uriTemp = "http://localhost:8080/work/models/SWBAdmin/jsp/oauth/callback.jsp";
+        //String uriTemp = "http://localhost:8080/work/models/SWBAdmin/jsp/oauth/callback.jsp";
+        String uriTemp = "http://" + request.getServerName() + ":" + request.getServerPort() + SWBPortal.getWebWorkPath() + "/models/SWBAdmin/jsp/oauth/callback.jsp" ;       
         //Se crea una variable de sesion para recuperar en el jsp la url dinamica
         HttpSession session = request.getSession(true);
         session.setAttribute("redirectYouTube", uri);
@@ -565,12 +567,18 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                 JSONObject userData = new JSONObject(res);
                 String tokenAccess = userData.getString("access_token");
                 String token_type = userData.getString("token_type");
-                String refresh_token = userData.getString("refresh_token");
-
+                String refresh_token = "";
+                if(userData.has("refresh_token") && !userData.isNull("refresh_token")){
+                    userData.getString("refresh_token");
+                }
 
                 setAccessToken(tokenAccess);                
                 setAccessTokenSecret(refresh_token);
-                setRefreshToken(refresh_token);
+                if(!refresh_token.isEmpty()){
+                    setRefreshToken(refresh_token);
+                }else{//Si ya no viene el refresh token entonces hay que validar si esa cuenta ya esta dada de alta
+                      //en social. Se puede ver a quien pertenece un token usando el endpoint 'tokeninfo'
+                }
                 setSn_authenticated(true);
                 System.out.println("refresh token: " + refresh_token);
                 System.out.println("token access:  " + tokenAccess);
