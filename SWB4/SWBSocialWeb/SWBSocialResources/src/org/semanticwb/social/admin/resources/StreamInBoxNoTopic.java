@@ -92,11 +92,9 @@ public class StreamInBoxNoTopic extends GenericResource {
             doShowTags(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("exportExcel")) {
             try {
-                String pages = request.getParameter("pages");
-                int page = Integer.parseInt(pages);
-                doGenerateReport(request, response, paramRequest,paramRequest.getWebPage().getWebSite(), page);
+               doGenerateReport(request, response, paramRequest);
             } catch (Exception e) {
-                System.out.println("Error reprt:" + e);
+                log.error(e);
             }
         } else {
             super.processRequest(request, response, paramRequest);
@@ -1003,13 +1001,16 @@ public class StreamInBoxNoTopic extends GenericResource {
     /*
      * Method which calls a jsp to generate a report based on the result of records in this class
      */
-    private void doGenerateReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, WebSite webSite, int page) {
+    private void doGenerateReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
 
-        String searchWord = request.getParameter("search");
+        String pages = request.getParameter("pages");
+        int page = Integer.parseInt(pages);
+        String searchWord = request.getParameter("search") == null ? "" : request.getParameter("search");
         String swbSocialUser = request.getParameter("swbSocialUser");
         String id = request.getParameter("suri");
         Stream stream = (Stream) SemanticObject.getSemanticObject(id).getGenericInstance();
-        
+        WebSite webSite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+
         
 
         HashMap hmapResult=filtros(swbSocialUser, webSite, searchWord, request, stream, page);
@@ -1019,7 +1020,8 @@ public class StreamInBoxNoTopic extends GenericResource {
 
         try {
 
-            //createExcel(setso, paramRequest, page, response, stream, nRec);
+            StreamInBox sInBox = new StreamInBox();
+            sInBox.createExcel(setso, paramRequest, page, response, stream, nRec);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -1051,8 +1053,14 @@ public class StreamInBoxNoTopic extends GenericResource {
             
             //itposts=new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((20).longValue(), Integer.valueOf(0).longValue(), "timems desc"),true));
             
-            itposts=new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((RECPERPAGE)).longValue(), Integer.valueOf((nPage*RECPERPAGE)-RECPERPAGE).longValue(), "timems desc"),true));
-            
+            //original itposts=new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((RECPERPAGE)).longValue(), Integer.valueOf((nPage*RECPERPAGE)-RECPERPAGE).longValue(), "timems desc"),true));
+             if (nPage != 0) {
+                itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((RECPERPAGE)).longValue(), Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), "timems desc"), true));
+            } else {
+                itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), StreamPostIns, 2L, "timems desc"), true));
+
+
+            }
             
             //itposts=new GenericIterator(stmtIt);
 
