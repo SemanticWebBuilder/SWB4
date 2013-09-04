@@ -1261,7 +1261,7 @@ public class StreamInBox extends GenericResource {
                 itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((RECPERPAGE)).longValue(), Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), "timems desc"), true));
             } else { 
                 //System.out.println("Toma Todo...Jorge");
-                itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), StreamPostIns, 2L, "timems desc"), true));
+                itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), StreamPostIns, 0L, "timems desc"), true));
             }
 
             //itposts=new GenericIterator(stmtIt);
@@ -1382,14 +1382,14 @@ public class StreamInBox extends GenericResource {
 
         try {
 
-            createExcel(setso, paramRequest, page, response, stream, nRec);
+            createExcel(setso, paramRequest, page, response, stream);
 
         } catch (Exception e) {
             log.error(e);
         }
     }
 
-    public void createExcel(Set<PostIn> setso, SWBParamRequest paramRequest, int page, HttpServletResponse response, Stream stream, long nRec) {
+    public void createExcel(Set<PostIn> setso, SWBParamRequest paramRequest, int page, HttpServletResponse response, Stream stream) {
         try {
             // Defino el Libro de Excel
             Iterator v = setso.iterator();
