@@ -11,7 +11,7 @@ function setDialogLoading(show, msg) {
 
 function loadPageUrl(url, paramName, paramValue) {
     var dest = url;
-    if (paramName != null && paramValue != null && paramValue != "") {
+    if (paramName !== null && paramValue !== null && paramValue !== "") {
         dest+="&"+paramName+"="+paramValue;
     }
     window.location = dest;
