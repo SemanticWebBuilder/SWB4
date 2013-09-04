@@ -56,7 +56,7 @@
         <div class="perfil">
             <img src="<%=userPhoto%>"/>        
             <p>
-                <%=socialNetUser.getSnu_name()%>
+                <%=SWBUtils.TEXT.encode(socialNetUser.getSnu_name(), "utf-8")%>
                 <!-- <%=socialNetUser.getSnu_SocialNetworkObj() != null ? socialNetUser.getSnu_SocialNetworkObj().getId() : "---"%>-->
             </p>
         </div>
