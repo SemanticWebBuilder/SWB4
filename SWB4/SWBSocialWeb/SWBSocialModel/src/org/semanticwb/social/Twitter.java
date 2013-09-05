@@ -123,10 +123,9 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 String sPhoto =photos.next();
                 if(++photoNumber == 1){//post the first Photo
                     photoToPublish = SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + sPhoto;
-                }else{
+                }/*else{
                     additionalPhotos += SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + sPhoto + " ";
-                }         
-               
+                }*/
             }
             if(photoNumber == 0){
                 log.error("No photo(s) found!");
@@ -136,11 +135,9 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
                 additionalPhotos = absolutePath + "/swbadmin/jsp/social/postViewFiles.jsp?uri=" + photo.getEncodedURI();
                 System.out.println("Path form multiple photos:" + additionalPhotos);
-                ///additionalPhotos = "http://mysocial.com.mx:8080/swbadmin/jsp/social/postViewFiles.jsp?uri="+ photo.getEncodedURI();
             }
             
-            System.out.println("The photo to be published TWITTER:" + photoToPublish);
-            System.out.println("Additional Photos TWITTER: " + additionalPhotos);
+            //System.out.println("The photo to be published TWITTER:" + photoToPublish);            
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
             twitter.setOAuthConsumer(this.getAppKey(), this.getSecretKey());
             AccessToken accessToken = new AccessToken(this.getAccessToken(), this.getAccessTokenSecret());
@@ -172,7 +169,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 
                 if(longStat>0)
                 {
-                     SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, String.valueOf(longStat), null);
+                    SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, String.valueOf(longStat), null);
                 }else{
                     SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, null, "Problem encountered posting twitter photo");
                 }
@@ -268,6 +265,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 socialStreamSerch.setNextDatetoSearch(tweetID.toString());
             }else{
                 //System.out.println("NO ESTÁ GUARDANDO NADA PORQUE EL VALOR ALMACENADO YA ES IGUAL O MAYOR AL ACTUAL");
+                log.error("Do not save the Tweet ID because stored value is equal or greater than the received");
             }
         }catch(NumberFormatException nfe){
             log.error("Error in setLastTweetID():"  +nfe);
