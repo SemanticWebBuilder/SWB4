@@ -91,15 +91,15 @@ public class ListenerMgr implements SWBAppObject {
      */
     public static boolean createUpdateTimers(Stream stream)
     {
-        System.out.println("createUpdateTimers/STREAM:"+stream);
+        //System.out.println("createUpdateTimers/STREAM:"+stream);
         try
         {
             synchronized(stream)
             {
-              System.out.println("createUpdateTimers-1");  
+              //System.out.println("createUpdateTimers-1");  
               if(canEnter)
               {
-                  System.out.println("createUpdateTimers-2");  
+                  //System.out.println("createUpdateTimers-2");  
                   canEnter=false;
                   createUpdateTimersReBind(stream);
               }
@@ -116,7 +116,7 @@ public class ListenerMgr implements SWBAppObject {
      */
     private static void createUpdateTimersReBind(Stream stream)
     {
-        System.out.println("Entra a Listener/createUpdateTimersReBind-1");
+        //System.out.println("Entra a Listener/createUpdateTimersReBind-1");
         
         /*
         Iterator<SocialNetwork> itNets=stream.listSocialNetworks();
@@ -164,7 +164,7 @@ public class ListenerMgr implements SWBAppObject {
             if(createTimer(stream))
             {
                 //Se arranca un timer que se ejecutara cada tantos segundos configurados en el stream
-                System.out.println("Levanta Timer George:"+stream.getPoolTime());
+                System.out.println("Levanta Timer:"+stream.getPoolTime());
                 Timer timer = new Timer();
                 int time=stream.getPoolTime();
                 //Este número es por defecto, ya que si el stream maneja solo una red tipo listenAlive, es posible que no le hayan puesto un 
