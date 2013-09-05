@@ -905,8 +905,6 @@ public class StreamInBox extends GenericResource {
         if (nRec > 0) {
             out.println("<div id=\"pagSumary\">"+nPage+" de "+nRec+"</div>");
             
-            
-            
             SWBResourceURL pageURL = paramRequest.getRenderUrl();
             //pageURL.setParameter("page", "" + (countPage));
             pageURL.setParameter("suri", id);
