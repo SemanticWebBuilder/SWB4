@@ -21,6 +21,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.io.SWBFile;
 import org.semanticwb.io.SWBFileInputStream;
 import org.semanticwb.model.Language;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.social.listener.Classifier;
@@ -567,8 +568,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         
         String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/photos";
         JSONObject jsonResponse = null;
-        //String urlLocalPost = SWBSocialUtil.Strings.shortUrl("http://mysocial.com.mx:8080/swbadmin/jsp/social/postViewFiles.jsp?uri="+ photo.getURI());
-        String urlLocalPost = "http://localhost:8080/swbadmin/jsp/social/postViewFiles.jsp?uri=" + photo.getEncodedURI();
+        //String urlLocalPost = "http://localhost:8080/swbadmin/jsp/social/postViewFiles.jsp?uri=" + photo.getEncodedURI();
+        //String uriTemp = "http://" + request.getServerName() + ":" + request.getServerPort() + SWBPortal.getWebWorkPath() + "/models/SWBAdmin/jsp/oauth/callback.jsp";
+        String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
+        String urlLocalPost = absolutePath + "/swbadmin/jsp/social/postViewFiles.jsp?uri=" + photo.getEncodedURI();
         try {
             String photoToPublish = "";
             String additionalPhotos = "";
@@ -686,7 +689,9 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         //String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/videos";
         String url = Facebook.FACEBOOKGRAPH_VIDEO + this.getFacebookUserId() + "/videos";
         JSONObject jsonResponse = null;
-        String urlLocalPost = "http://localhost:8080/swbadmin/jsp/social/postViewFiles.jsp?uri=" + video.getEncodedURI();
+        //String urlLocalPost = "http://localhost:8080/swbadmin/jsp/social/postViewFiles.jsp?uri=" + video.getEncodedURI();
+        String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
+        String urlLocalPost = absolutePath + "/swbadmin/jsp/social/postViewFiles.jsp?uri=" + video.getEncodedURI();
         
         try {
             String videoPath = SWBPortal.getWorkPath() + video.getWorkPath() + "/" + video.getVideo();
