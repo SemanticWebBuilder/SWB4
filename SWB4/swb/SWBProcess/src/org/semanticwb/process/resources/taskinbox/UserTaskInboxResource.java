@@ -729,76 +729,15 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     }
     
     public void doForward(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        User user = paramRequest.getUser();
-        WebSite site = paramRequest.getWebPage().getWebSite();
-        PrintWriter out = response.getWriter();
-        StringBuilder sb = new StringBuilder();
-        String suri = request.getParameter("suri");
-        Iterator<User> tPartners = null;
-        
-        SemanticObject sobj = SemanticObject.createSemanticObject(suri);
-        if (sobj != null) {
-            FlowNodeInstance fni = (FlowNodeInstance) sobj.createGenericInstance();
-            if (fni != null) {
-                User owner = fni.getAssignedto();
-                if (owner.equals(user)) {
-                    
-                    UserRepository ur = site.getUserRepository();
-                    UserTask task = (UserTask) fni.getFlowNodeType();
-                    ArrayList<Role> taskRoles = new ArrayList<Role>();
+        String jsp = "/swbadmin/jsp/process/userTaskInboxFwd.jsp";
 
-                    Iterator<RoleRef> refs = task.listRoleRefs();
-                    while (refs.hasNext()) {
-                        RoleRef roleRef = refs.next();
-                        if (roleRef.getRole() != null && roleRef.isActive()) {
-                            taskRoles.add(roleRef.getRole());
-                        }
-                    }
-                    
-                    if (taskRoles.isEmpty()) {
-                        tPartners = ur.listUsers();
-                    } else {
-                        ArrayList<User> _users = new ArrayList<User>();
-                        Iterator<Role> tRoles = taskRoles.iterator();
-                        while (tRoles.hasNext()) {
-                            Role role = tRoles.next();
-                            Iterator<User> users = User.ClassMgr.listUserByRole(role);
-                            while (users.hasNext()) {
-                                User user1 = users.next();
-                                if (!_users.contains(user1) && !user1.equals(owner)) {
-                                    _users.add(user1);
-                                }
-                            }
-                        }
-                        tPartners = _users.iterator();
-                    }
-                }
-            }
-            
-            if (tPartners != null && tPartners.hasNext() && fni != null) {
-                SWBResourceURL forward = paramRequest.getActionUrl().setAction(MODE_FWD);
-                sb.append("<form id=\"fwd/").append(getResourceBase().getId()).append("\" method=\"post\" action=\"")
-                        .append(forward.toString()).append("\" onsubmit=\"")
-                        .append("submitFormPortal('fwd/").append(getResourceBase().getId()).append("'); hideDialog(); return false;").append("\">");
-                sb.append("  <input type=\"hidden\" name=\"suri\" value=\"").append(suri).append("\"/>");
-                sb.append("  <select name=\"owner\">");
-                sb.append("    <option value=\"--\">").append(paramRequest.getLocaleString("freeTask")).append("</option>");
-                while(tPartners.hasNext()) {
-                    User _user = tPartners.next();
-                    if (!_user.equals(fni.getAssignedto())) {
-                        sb.append("    <option value=\"").append(_user.getId()).append("\">").append((_user.getFullName()==null||_user.getFullName().trim().equals(""))?_user.getId():_user.getFullName()).append("</option>");
-                    }
-                }
-                sb.append("  </select>");
-                sb.append("  <div>");
-                sb.append("    <br/><input type=\"submit\" value=\"").append(paramRequest.getLocaleString("btnOk")).append("\" class=\"btn1\">");
-                sb.append("  </div>");
-                sb.append("</form>");
-            } else {
-                sb.append("<span>").append(paramRequest.getLocaleString("msgFwdFail")).append("</span>");
-            }
+        try {
+            RequestDispatcher rd = request.getRequestDispatcher(jsp);
+            request.setAttribute("paramRequest", paramRequest);
+            rd.include(request, response);
+        } catch (Exception e) {
+            log.error("Error including jsp in forward mode", e);
         }
-        out.println(sb.toString());
     }
     
     public ArrayList<ProcessInstance> getProcessInstances(HttpServletRequest request, SWBParamRequest paramRequest) {
@@ -936,8 +875,8 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         
             //Realizar paginado de instancias
             int maxPages = 1;
-            if (request.getParameter("page") != null && !request.getParameter("page").trim().equals("")) {
-                page = Integer.valueOf(request.getParameter("page"));
+            if (request.getParameter("p") != null && !request.getParameter("p").trim().equals("")) {
+                page = Integer.valueOf(request.getParameter("p"));
                 if (page < 0) page = 1;
             }
 
