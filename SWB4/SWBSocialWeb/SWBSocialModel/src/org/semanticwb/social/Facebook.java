@@ -491,7 +491,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     }
     
     public void postMsg(Message message) {
-        
+        if(message.getMsg_Text() == null){
+            log.error("Not message found, nothing to post");
+            return;
+        }
         Map<String, String> params = new HashMap<String, String>(2);
         params.put("access_token", this.getAccessToken());
         params.put("message", message.getMsg_Text());
@@ -560,6 +563,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     }
     
     public void postPhoto(Photo photo) {
+        if(photo.listPhotos().hasNext() == false){
+            log.error("Not photos found, nothing to post");
+            return;
+        }
         
         Map<String, String> params = new HashMap<String, String>(2);
         if (this.getAccessToken() != null) {
@@ -675,6 +682,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     }
     
     public void postVideo(Video video) {
+        if(video.getVideo() == null){
+            log.error("Not video found, nothing to post.");
+            return;
+        }
         Map<String, String> params = new HashMap<String, String>(3);
         if (this.getAccessToken() != null) {
             params.put("access_token", this.getAccessToken());
@@ -1294,6 +1305,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
          try{
             JSONObject parseUsrInf = new JSONObject(fbResponse);
+            if(!parseUsrInf.has("data")){
+                log.error("Not data found for id:" + userId);
+                return null;
+            }
             JSONArray usrData = parseUsrInf.getJSONArray("data");
             if(usrData.length() == 1){
                 parseUsrInf = usrData.getJSONObject(0);
