@@ -51,7 +51,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <textarea><%=description%></textarea>
+                            <textarea readonly><%=description%></textarea>
                         <td>
                     </tr>
 
