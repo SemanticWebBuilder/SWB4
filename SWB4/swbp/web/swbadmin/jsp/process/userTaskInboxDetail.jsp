@@ -21,7 +21,6 @@
 <%@page import="org.semanticwb.process.model.Process"%>
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<script type="text/javascript" charset="utf-8" src="/swbadmin/jsp/process/userTaskInboxUtils.js"></script>
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
 WebSite site = paramRequest.getWebPage().getWebSite();
@@ -29,16 +28,11 @@ User user = paramRequest.getUser();
 Resource base = (Resource) request.getAttribute("base");
 
 String lang = "es";
-String pNum = request.getParameter("page");
+String pNum = request.getParameter("p");
 String suri = request.getParameter("suri");
 boolean showGraphs = false;
 if (base != null && base.getAttribute(UserTaskInboxResource.ATT_SHOWPERFORMANCE,"").equals("yes")) {
     showGraphs = true;
-}
-
-boolean showParticipation  = false;
-if (base != null && base.getAttribute(UserTaskInboxResource.ATT_PARTGRAPH,"").equals("use")) {
-    showParticipation = true;
 }
 
 String engine = "google";
@@ -47,361 +41,213 @@ if (base != null && base.getAttribute(UserTaskInboxResource.ATT_GRAPHSENGINE, ""
 }
 
 int pageNum = 1;
-
 if (user != null && user.getLanguage() != null) {
     lang = user.getLanguage();
 }
-
-SWBResourceURL viewUrl = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW);
 SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
 
-SWBResourceURL createPiUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
-createPiUrl.setMode(UserTaskInboxResource.MODE_CREATEPI);
-
-SWBResourceURL optsUrl = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW);
-if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
-    <div class="lateral">
-        <p class="lat-iniciar"><a onclick="showDialog('<%=createPiUrl%>','<%=paramRequest.getLocaleString("createCase")%>'); return false;" href=""><%=paramRequest.getLocaleString("createCase")%></a></p>
-        <ul class="lat-lista1">
-            <%optsUrl.setParameter("sFilter", String.valueOf(FlowNodeInstance.STATUS_PROCESSING));%>
-            <li class="lat-pend"><a href="<%=optsUrl%>"><%=paramRequest.getLocaleString("pendingTasks")%></a></li>
-            <%optsUrl.setParameter("sFilter", String.valueOf(FlowNodeInstance.STATUS_CLOSED));%>
-            <li class="lat-term"><a href="<%=optsUrl%>"><%=paramRequest.getLocaleString("closedTasks")%></a></li>
-            <%optsUrl.setParameter("sFilter", String.valueOf(FlowNodeInstance.STATUS_ABORTED));
-            
-            optsUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(UserTaskInboxResource.MODE_GETDATA);
-            optsUrl.setParameter("suri", suri);
-            optsUrl.setParameter("tu", "min");
-            %>
-            <li class="lat-term"><a href="<%=optsUrl%>"><%=paramRequest.getLocaleString("abortedTasks")%></a></li>
-        </ul>
-    </div>
-    <%
-} else {
-    ArrayList<ProcessInstance> tinstances = (ArrayList<ProcessInstance>) request.getAttribute("instances");
-    int maxPages = (Integer) request.getAttribute("maxPages");
-    
-    if (pNum != null && !pNum.trim().equals("")) {
-        pageNum = Integer.valueOf(request.getParameter("page"));
-        if (pageNum > maxPages) {
-            pageNum = maxPages;
-        }
+if (!user.isSigned()) {
+    if (paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT) {
+        %>
+        <div class="alert alert-block alert-danger fade in">
+            <h4><i class="icon-ban-circle"></i> <%=paramRequest.getLocaleString("msgNoAccessTitle")%></h4>
+            <p><%=paramRequest.getLocaleString("msgNoAccess")%></p>
+            <p>
+                <a class="btn btn-default" href="/login/<%=site.getId()%>/<%=paramRequest.getWebPage().getId()%>"><%=paramRequest.getLocaleString("btnLogin")%></a>
+            </p>
+        </div>
+        <%
     }
-    
-    String processInfo = (String)request.getAttribute("participation");
-    Process p = (Process)ont.getGenericObject(suri);
-    if (p == null) {%>
-        <script>
-            window.location='<%=viewUrl%>';
-        </script>
-    <%} else {%>
-        <h1><%=p.getTitle()%>&nbsp;<a href="<%=viewUrl%>"><img alt="volver" src="/work/models/<%=site.getId()%>/css/images/icono-atras.png"/></a></h1>
-        <p><%=p.getDescription()==null?"":p.getDescription()%></p>
-        <p>&nbsp;</p> 
-        <%if (tinstances != null && !tinstances.isEmpty()) {
-            if (showGraphs) {
-                %><div class="bandeja-combo"><strong><span style="font-size: medium"><%=paramRequest.getLocaleString("lblPerformance")%></span></strong></div><%
-                
-                if (engine.equals("google")) {
-                    %><jsp:include page="/swbadmin/jsp/process/userTaskInboxGoogleGraphs.jsp" flush="true"/><%
-                } else {
-                    %><jsp:include page="/swbadmin/jsp/process/userTaskInboxD3Graphs.jsp" flush="true"/><%
-                }
-            
-                if (showParticipation) {%>
-                    <div class="processChartPie" id="participationGraph"></div>
-                    <script src="/swbadmin/jsp/process/d3.v3.min.js" charset="utf-8"></script>
-                    <script type="text/javascript">
-                        var theJson = JSON.parse('<%=processInfo%>');
-                        var w = d3.select("#participationGraph").style("width").replace("px","");
-                        var h = d3.select("#participationGraph").style("height").replace("px","");
+} else {
+    if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
+        SWBResourceURL createPiUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
+        createPiUrl.setMode(UserTaskInboxResource.MODE_CREATEPI);
+        SWBResourceURL optsUrl = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW);
+        %>
+        <a href="<%=createPiUrl%>" class="btn btn-sm btn-success swbp-btn-start" data-toggle="modal" data-target="#modalDialog"><i class="icon-play-sign"></i> <%=paramRequest.getLocaleString("createCase")%></a>
+        <div class="swbp-left-menu">
+            <ul class="list-unstyled">
+                <li>
+                    <a href="<%=optsUrl%>"><%=paramRequest.getLocaleString("pendingTasks")%></a>
+                </li>
+                <li>
+                    <a href="<%=optsUrl.setParameter("sf", String.valueOf(FlowNodeInstance.STATUS_CLOSED))%>"><%=paramRequest.getLocaleString("closedTasks")%></a>
+                </li>
+                <li>
+                    <a href="<%=optsUrl.setParameter("sf", String.valueOf(FlowNodeInstance.STATUS_ABORTED))%>"><%=paramRequest.getLocaleString("abortedTasks")%></a>
+                </li>
+            </ul>
+        </div>
+        <%
+    } else {
+        ArrayList<ProcessInstance> tinstances = (ArrayList<ProcessInstance>) request.getAttribute("instances");
+        SWBResourceURL viewUrl = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW);
+        int maxPages = (Integer) request.getAttribute("maxPages"); //Sólo viene si se invoca como contenido
 
-                        function updateD3Chart () {
-                            var nodes = flatten(root);
-                            var links = d3.layout.tree().links(nodes);
-                            var max = root['max'];
-
-                            root.fixed = true;
-                            root.x = w/2;
-                            root.y = h/2;
-
-                            var linkScale = d3.scale.linear()
-                                .domain([1,max])
-                                .range([1,5]);
-
-                            force.nodes(nodes)
-                                .links(links)
-                                .start();
-
-                            var link = vis.selectAll("line.link")
-                                .data(links, function(d) {
-                                    return d.target.id;
-                                });
-
-                            link.enter().insert("svg:line", ".node")
-                                .attr("class", "link")
-                                .attr("x1", function(d) {
-                                    return d.source.x;
-                                })
-                                .attr("y1", function(d) {
-                                    return d.source.y;
-                                })
-                                .attr("x2", function(d) {
-                                    return d.target.x;
-                                })
-                                .attr("y2", function(d) {
-                                    return d.target.y;
-                                })
-                                .attr("stroke-width", function(d) {
-                                    return linkScale(d.target.participa)+"px";
-                                })
-                                .attr("stroke", "#BFBFCF")
-                                .attr("fill", "none");
-
-                            link.exit().remove();
-
-                            var node = vis.selectAll("g.node")
-                                .data(nodes, function(d) {
-                                    return d.id;
-                                });
-
-                            var nodeEnter = node.enter().append("svg:g")
-                                .attr("class", "node")
-                                .attr("transform", function(d) {
-                                    return "translate(" + d.x + "," + d.y + ")";
-                                })
-                                .call(force.drag);
-
-                            /*nodeEnter.append("svg:circle")
-                                .attr("r", function(d) {
-                                    return  d.size;
-                                })
-                                .on("click", click)
-                                .on("mouseover", function(d) {
-                                    d3.select(this)
-                                    //.transition()
-                                    .attr("r", function(d) {
-                                        console.log("on selected "+d.size);
-                                        return d.size * 2;
-                                    });
-                                    console.log("over "+d.name);
-                                })
-                                .on("mouseout", function(d) {
-                                    d3.select(this)
-                                    .attr("r", function(d) {
-                                        console.log("on unselected "+d.size);
-                                        return d.size;
-                                    });
-                                    console.log("out "+d.name);
-                                })
-                                .style("fill", color);*/
-
-                            nodeEnter.append("svg:image")
-                                .attr("xlink:href", function(d) {
-                                    if (d.type && d.type==="process") {
-                                        return "<%="/work/models/"+site.getId()+"/css/images/icono-iniciado.gif"%>";
-                                    } else {
-                                        return "<%="/work/models/"+site.getId()+"/css/images/colaborador.png"%>";
-                                    }
-                                })
-                                .attr("x", -10)
-                                .attr("y", -10)
-                                .attr("width", 20)
-                                .attr("height", 20);
-
-                            nodeEnter.append("svg:text")
-                                .attr("font-family", "Arial")
-                                .attr("font-size", "11")
-                                .attr("stroke", "none")
-                                .attr("fill", "#000000")
-                                .attr("text-anchor", "middle")
-                                .attr("dy", "2em")
-                                .text(function(d) {
-                                    return d.name;
-                                });
-
-                            nodeEnter.append("svg:title")
-                                .attr("class", "nodetext")
-                                .attr("text-anchor", "middle")
-                                .attr("dy", ".15em")
-                                .text(function(d,i) {
-                                    if (d.participa && d.participa !== null) {
-                                        return d.participa +" <%=paramRequest.getLocaleString("lblPartTooltip")%>";
-                                    } else {
-                                        return d.name;
-                                    }
-                                });
-
-                            node.exit().remove();
-
-                            link = vis.selectAll("line.link");
-                            node = vis.selectAll("g.node");
-
-                            force.on("tick", function() {
-                                link.attr("x1", function(d) {
-                                    return d.source.x;
-                                })
-                                .attr("y1", function(d) {
-                                    return d.source.y;
-                                })
-                                .attr("x2", function(d) {
-                                    return d.target.x;
-                                })
-                                .attr("y2", function(d) {
-                                    return d.target.y;
-                                });
-
-                                node.attr("transform", function(d) {
-                                    return "translate(" + d.x + "," + d.y + ")";
-                                });
-                            });
-                        }
-
-                        function click(d) {
-                            if (d.children) {
-                                d._children = d.children;
-                                d.children = null;
-                            } else {
-                                d.children = d._children;
-                                d._children = null;
-                            }
-                            updateD3Chart();
-                        }
-
-                        function flatten(root) {
-                            var nodes = [], i = 0;
-                            function recurse(node) {
-                                if (node.children)
-                                    node.children.forEach(recurse);
-                                if (!node.id)
-                                    node.id = ++i;
-                                nodes.push(node);
-                            }
-                            recurse(root);
-                            return nodes;
-                        }
-
-                        var force = d3.layout.force()
-                            .charge(-60)
-                            .distance(80)
-                            .gravity(.05)
-                            //.linkDistance(50)
-                            .size([w, h]);
-
-                        var vis = d3.select("#participationGraph").append("svg:svg")
-                            .attr("width", w)
-                            .attr("height", h);
-
-                        vis.append("svg:text")
-                            .text("<%=paramRequest.getLocaleString("lblParticipation")%>")
-                            .attr("x","67")
-                            .attr("y","22.85")
-                            .attr("font-family", "Arial")
-                            .attr("font-size", "11")
-                            .attr("font-weight", "bold")
-                            .attr("stroke", "none")
-                            .attr("fill", "#000000");
-
-                        var root = theJson;
-                        updateD3Chart();
-                    </script>
-                <%
-                }
+        if (pNum != null && !pNum.trim().equals("")) {
+            pageNum = Integer.valueOf(pNum);
+            if (pageNum > maxPages) {
+                pageNum = maxPages;
             }
+        }
+
+        Process p = (Process)ont.getGenericObject(suri);
+        if (p == null) {
+            %><script>window.location='<%=viewUrl%>';</script><%
+        } else {
             %>
-            <div class="bandeja-combo"><strong><span style="font-size: medium"><%=paramRequest.getLocaleString("lblInstances")%></span></strong></div>
-            <div>
-                <table class="tabla-bandeja">
-                    <thead>
-                        <tr>
-                            <th class="tban-id">ID</th>
-                            <th class="tban-id"><%=paramRequest.getLocaleString("lblCreator")%></th>
-                            <th class="tban-id"><%=paramRequest.getLocaleString("lblStatus")%></th>
-                            <th class="tban-id"><%=paramRequest.getLocaleString("pStatusInit")%></th>
-                            <th class="tban-id"><%=paramRequest.getLocaleString("pStatusClosed")%></th>
-                            <th class="tban-id"><%=paramRequest.getLocaleString("lblActiveTasks")%></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <%Iterator<ProcessInstance> it = tinstances.iterator();
-                        while (it.hasNext()) {
-                            ProcessInstance pi = it.next();
-                            String status = "--";
+            <h2><a class="btn" data-toggle="tooltip" data-placement="bottom" title="Back to inbox" href="<%=viewUrl%>"><i class="icon-reply"></i></a><%=p.getTitle()%></h2>
+            <%
+            if (tinstances != null && !tinstances.isEmpty()) {
+                if (showGraphs) {
+                    %>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><strong><%=paramRequest.getLocaleString("lblPerformance")%></strong></h3>
+                        </div>
+                        <div class="panel-body">
+                        <%
+                        if (engine.equals("google")) {
+                            %><jsp:include page="/swbadmin/jsp/process/userTaskInboxGoogleGraphs.jsp" flush="true"/><%
+                        } else {
+                            %><jsp:include page="/swbadmin/jsp/process/userTaskInboxD3Graphs.jsp" flush="true"/><%
+                        }
+                }
+                %>
+                        </div>
+                    </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><strong><%=paramRequest.getLocaleString("lblInstances")%></strong></h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover swbp-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th><%=paramRequest.getLocaleString("lblCreator")%></th>
+                                        <th><%=paramRequest.getLocaleString("lblStatus")%></th>
+                                        <th><%=paramRequest.getLocaleString("pStatusInit")%></th>
+                                        <th><%=paramRequest.getLocaleString("pStatusClosed")%></th>
+                                        <th><%=paramRequest.getLocaleString("lblActiveTasks")%></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <%Iterator<ProcessInstance> it = tinstances.iterator();
+                                    while (it.hasNext()) {
+                                        ProcessInstance pi = it.next();
+                                        String status = "--";
 
-                            if (pi.getStatus() == ProcessInstance.STATUS_PROCESSING) status = paramRequest.getLocaleString("pStatusPending");
-                            if (pi.getStatus() == ProcessInstance.STATUS_ABORTED) status = paramRequest.getLocaleString("pStatusAborted");
-                            if (pi.getStatus() == ProcessInstance.STATUS_CLOSED) status = paramRequest.getLocaleString("pStatusClosed");
-                            %>
-                            <tr>
-                                <td class="tban-id"><%=pi.getId()%></td>
-                                <td class="tban-tarea"><%=pi.getCreator()==null?"--":pi.getCreator().getFullName()%></td>
-                                <td class="tban-tarea"><%=status%></td>
-                                <td class="tban-inicia"><%=SWBUtils.TEXT.getStrDate(pi.getCreated(), lang, "dd/mm/yy - hh:%m:ss")%></td>
-                                <td class="tban-cerrada"><%=pi.getEnded()==null?"--":SWBUtils.TEXT.getStrDate(pi.getEnded(), lang, "dd/mm/yy - hh:%m:ss")%></td>
-                                <td class="tban-tarea">
-                                    <%
-                                    if (pi.getStatus() == ProcessInstance.STATUS_PROCESSING) {
-                                        Iterator<FlowNodeInstance> actit = pi.listAllFlowNodeInstance();
-                                        ArrayList<FlowNodeInstance> activities = new ArrayList<FlowNodeInstance>();
-                                        if (actit.hasNext()) {
-                                            while(actit.hasNext()) {
-                                                FlowNodeInstance fni = actit.next();
-                                                if (fni.getFlowNodeType() instanceof Activity && fni.getStatus() == FlowNodeInstance.STATUS_PROCESSING) {
-                                                    activities.add(fni);
-                                                }
-                                            }
-                                        }
+                                        if (pi.getStatus() == ProcessInstance.STATUS_PROCESSING) status = paramRequest.getLocaleString("pStatusPending");
+                                        if (pi.getStatus() == ProcessInstance.STATUS_ABORTED) status = paramRequest.getLocaleString("pStatusAborted");
+                                        if (pi.getStatus() == ProcessInstance.STATUS_CLOSED) status = paramRequest.getLocaleString("pStatusClosed");
+                                        %>
+                                        <tr>
+                                            <td><%=pi.getId()%></td>
+                                            <td><%=pi.getCreator()==null?"--":pi.getCreator().getFullName()%></td>
+                                            <td><%=status%></td>
+                                            <td><%=SWBUtils.TEXT.getStrDate(pi.getCreated(), lang, "dd/mm/yy - hh:%m:ss")%></td>
+                                            <td><%=pi.getEnded()==null?"--":SWBUtils.TEXT.getStrDate(pi.getEnded(), lang, "dd/mm/yy - hh:%m:ss")%></td>
+                                            <td>
+                                                <%
+                                                if (pi.getStatus() == ProcessInstance.STATUS_PROCESSING) {
+                                                    Iterator<FlowNodeInstance> actit = pi.listAllFlowNodeInstance();
+                                                    ArrayList<FlowNodeInstance> activities = new ArrayList<FlowNodeInstance>();
+                                                    if (actit.hasNext()) {
+                                                        while(actit.hasNext()) {
+                                                            FlowNodeInstance fni = actit.next();
+                                                            if (fni.getFlowNodeType() instanceof Activity && fni.getStatus() == FlowNodeInstance.STATUS_PROCESSING) {
+                                                                activities.add(fni);
+                                                            }
+                                                        }
+                                                    }
 
-                                        if (!activities.isEmpty()) {
-                                            actit = activities.iterator();
-                                            %>
-                                            <ul>
-                                                <%while(actit.hasNext()) {
-                                                    FlowNodeInstance fni = actit.next();
-                                                    %><li><%=fni.getFlowNodeType().getTitle()%></li><%
+                                                    if (!activities.isEmpty()) {
+                                                        actit = activities.iterator();
+                                                        %>
+                                                        <ul>
+                                                            <%while(actit.hasNext()) {
+                                                                FlowNodeInstance fni = actit.next();
+                                                                %><li><%=fni.getFlowNodeType().getTitle()%></li><%
+                                                            }
+                                                            %>
+                                                        </ul>
+                                                      <%
+                                                    } else {
+                                                        %>--<%
+                                                    }
+                                                } else {
+                                                    %>--<%
                                                 }
                                                 %>
-                                            </ul>
-                                          <%
-                                        } else {
-                                            %>--<%
-                                        }
-                                    } else {
-                                        %>--<%
-                                    }
+                                            </td>
+                                        </tr>
+                                        <%
+                                    } 
                                     %>
-                                </td>
-                            </tr>
-                            <%
-                        } 
-                        %>
-                    </tbody>
-                </table>
-            </div>
-            <div class="paginado">
-                <div class="pagtotal"><%=paramRequest.getLocaleString("pagPage")%> <%=pageNum%> <%=paramRequest.getLocaleString("pagDelim")%> <%=maxPages%></div>
-                <div class="pagLista">
-                <%if (pageNum-1 > 0) {
-                    SWBResourceURL back = paramRequest.getRenderUrl();
-                    back.setParameter("page", String.valueOf(pageNum-1));
-                    back.setParameter("suri", suri);
-                    %><span class="pagant"><a href="<%=back%>"><%=paramRequest.getLocaleString("pagPrev")%></a></span><%
-                }
-                if (pageNum+1 <= maxPages) {
-                    SWBResourceURL forward = paramRequest.getRenderUrl();
-                    forward.setParameter("page", String.valueOf(pageNum+1));
-                    forward.setParameter("suri", suri);
-                    %><span class="pagsig"><a href="<%=forward%>"><%=paramRequest.getLocaleString("pagNext")%></a></span><%
-                }%>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="swbp-pagination">
+                            <span class="swbp-pagination-info pull-left"><%=paramRequest.getLocaleString("pagPage")%> <%=pageNum%> <%=paramRequest.getLocaleString("pagDelim")%> <%=maxPages%></span>
+                            <%if (maxPages > 1) {%>
+                              <div class="swbp-pagination-nav pull-right">
+                                  <ul class="pagination pagination-sm">
+                                    <%
+                                      int pagSlice = 5;
+                                      int sliceIdx = 1;
+                                      int start = 1;
+                                      int end = pagSlice * sliceIdx;
+
+                                      if (pageNum > end) {
+                                          do {
+                                              sliceIdx++;
+                                              end = pagSlice * sliceIdx;
+                                          } while(pageNum > end);
+                                      }
+                                      end = pagSlice * sliceIdx;
+
+                                      if (end > maxPages) {
+                                          end = maxPages;
+                                      }
+
+                                      start = (end-pagSlice)+1;
+                                      if (start < 1) {
+                                          start = 1;
+                                      }
+
+                                      SWBResourceURL nav = paramRequest.getRenderUrl();
+                                      nav.setParameter("suri", suri);
+
+                                      if (sliceIdx != 1) {
+                                          %><li><a href="<%=nav.setParameter("p", String.valueOf(pageNum-1))%>">&laquo;</a></li><%
+                                      }
+
+                                      for(int k = start; k <= end; k++) {
+                                          %>
+                                          <li <%=(k==pageNum?"class=\"active\"":"")%>><a href="<%=nav.setParameter("p", String.valueOf(k))%>"><%=k%></a></li>
+                                          <%
+                                      }
+
+                                      if (end < maxPages) {
+                                          %><li><a href="<%=nav.setParameter("p", String.valueOf(pageNum+1))%>">&raquo;</a></li><%
+                                      }
+                                  }%>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        <%
+            <%
+            } else {
+                %>
+                <div class="alert alert-warning">
+                    <i class="icon-warning-sign"></i> <strong><%=paramRequest.getLocaleString("msgNoInstances")%></strong>
+                </div>
+                <%
+            }
         }
     }
-    %>
-    <script type="text/javascript">
-        hideDialog();
-    </script>
-    <%
 }
 %>
