@@ -63,8 +63,6 @@ Iterator<String> keys = groups.keySet().iterator();
             <h4><%=paramRequest.getLocaleString("createCase")%></h4>
         </div>
         <%if (keys.hasNext()) {%>
-            <div class="text-center">
-            </div>
             <form method="post" action="<%=createUrl%>" onsubmit="setDialogLoading(true, '<%=paramRequest.getLocaleString("msgCreating")%>'); return true;">
                 <div class="modal-body">
                     <label for="pid"><%=paramRequest.getLocaleString("promptCreate")%></label>
