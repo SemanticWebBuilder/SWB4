@@ -324,80 +324,132 @@
         }
     }
     function showListCategory(objUri,sourceCall) {
-                var frm = document.getElementById(objUri+sourceCall+'frmUploadVideo');
-                var div = document.getElementById(objUri+sourceCall+'divCategory');
+        var frm = document.getElementById(objUri+sourceCall+'frmUploadVideo');
+        var div = document.getElementById(objUri+sourceCall+'divCategory');
 
-                for (i = 0; i < frm.checkYT.length; ++i) {
-                    if (frm.checkYT[i].checked)
-                    {
-                        div.removeAttribute('style');
-                        break;
-                    }
-                    if (frm.checkYT[i].checked == false)
-                    {
-                        div.setAttribute('style', 'display:none;');
-                    }
+        if(frm.checkYT.length == null){//when there is only one Youtube account
+            if(frm.checkYT.checked){
+                div.removeAttribute('style');
+            }else{
+                div.setAttribute('style', 'display:none;');
+            }
+        }else{//Has length method, then it's an array
+            var isChecked = false;
+            for (i = 0; i < frm.checkYT.length; i++) {
+                if(frm.checkYT[i].checked){//When a checkbox is checked
+                    isChecked = true;
+                    break;
                 }
             }
+            if(isChecked){
+                div.removeAttribute('style');
+            }else{
+                div.setAttribute('style', 'display:none;');
+            }
+        }
+    }
+            
      function checksRedesPhoto(objUri,sourceCall){
           var frm = document.getElementById(objUri+sourceCall+'frmUploadPhoto');
           var checkRed = false;
-           for (i = 0; i < frm.checkRedes.length; i++) {
-                    if (frm.checkRedes[i].checked)
-                    {
+          
+          if(frm.checkRedes == null){//No networks
+              alert("Debes crear primero una red en donde publicar");
+              return false;
+          }
+          
+          if(frm.checkRedes.length == null){
+              if(frm.checkRedes.checked){//there is only one network
+                  checkRed = true;
+              }
+          }else{
+                for (i = 0; i < frm.checkRedes.length; i++) {
+                    if (frm.checkRedes[i].checked){
                         checkRed = true;
                         break;
                     }
-           }
-           if(checkRed == false){
-                  alert("Debes seleccionar al menos una red");
-                   return false;
                 }
-                else{
-                    return true;
-                }
+          }
+          if(checkRed == false){
+              alert("Debes seleccionar al menos una red");
+              return false;
+          }
+          else{
+              return true;
+          }
      }
      function checksRedesText(objUri,sourceCall){
           var frm = document.getElementById(objUri+sourceCall+'frmUploadText');
           var checkRed = false;
-           for (i = 0; i < frm.checkRedes.length; i++) {
-                    if (frm.checkRedes[i].checked)
-                    {
-                        checkRed = true;
-                        break;
-                    }
-           }
-           if(checkRed == false){
-                  alert("Debes seleccionar al menos una red");
-                   return false;
+          
+          if(frm.checkRedes == null){//No networks
+              alert("Debes crear primero una red en donde publicar");
+              return false;
+          }
+          
+          if(frm.checkRedes.length == null){
+              if(frm.checkRedes.checked){
+                  checkRed = true;
+              }
+          }else{
+            for (i = 0; i < frm.checkRedes.length; i++) {
+                if(frm.checkRedes[i].checked){
+                    checkRed = true;
+                    break;
                 }
-                else{
-                    return true;
-                }
+            }
+          }
+          if(checkRed == false){
+              alert("Debes seleccionar al menos una red.");
+              return false;
+          }else{
+              return true;
+          }
      }
      function validateChecks(objUri,sourceCall){
           var frm = document.getElementById(objUri+sourceCall+'frmUploadVideo');
           var checkYT = false;
           var checkRed = false;
-           for (i = 0; i < frm.checkYT.length; i++) {
-                    if (frm.checkYT[i].checked)
-                    {
+          
+          if(frm.checkRedes == null && frm.checkYT == null){//No networks found for facebook or youtube
+              alert("Debes crear primero una red en donde publicar");
+              return false;
+          }
+          if(frm.checkYT != null){
+                if(frm.checkYT.length == null){
+                    if(frm.checkYT.checked){
                         checkYT = true;
-                        break;
                     }
-           }
-           for (j = 0; j < frm.checkRedes.length; j++) {
-                    if (frm.checkRedes[j].checked)
-                    {
+                }else{
+                    for (i = 0; i < frm.checkYT.length; i++) {
+                      if (frm.checkYT[i].checked){
+                          checkYT = true;
+                          break;
+                      }
+                    }
+                }
+          }
+          
+          if(frm.checkRedes != null){
+                if(frm.checkRedes.length == null){
+                    if(frm.checkRedes.checked){
                         checkRed = true;
-                        break;
                     }
-           }
-                if((checkYT == false) && (checkRed == false)){
-                    alert("Debes seleccionar al menos una red");
-                    return false;
+                }else{
+                  for (j = 0; j < frm.checkRedes.length; j++) {
+                      if (frm.checkRedes[j].checked){
+                          checkRed = true;
+                          break;
+                      }
+                  }
                 }
-                else{
-                    return true;
-                }
-            }
+          }
+        
+          if(checkYT == false && checkRed == false){
+              alert("Debes seleccionar al menos una red");
+              return false;
+          }
+          else{
+              return true;
+          }
+      }
