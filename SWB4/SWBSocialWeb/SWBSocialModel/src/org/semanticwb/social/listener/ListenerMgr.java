@@ -69,7 +69,11 @@ public class ListenerMgr implements SWBAppObject {
                         Stream stream = itStreams.next();
                         if (createTimer(stream))
                         {
-                            int periodTime = stream.getPoolTime()*MILISEG_IN_SEGUNDO;
+                            int time=stream.getPoolTime();
+                            //Este número es por defecto, ya que si el stream maneja solo una red tipo listenAlive, es posible que no le hayan puesto un 
+                            //valor a stream.getPoolTime(), por lo cual, en la línea de abajo que crea el timer marcaría un error (Non-positive period).
+                            if(time<1) time=900; 
+                            int periodTime = time*MILISEG_IN_SEGUNDO;
                             Timer timer = new Timer();
                             timer.schedule(new ListenerTask(stream), 0,periodTime);
                             htTimers.put(stream.getURI(), timer);
@@ -141,7 +145,11 @@ public class ListenerMgr implements SWBAppObject {
                     System.out.println("ListerJ2");
                     Timer timer=removeTimer(stream, true);
                     timer=new Timer();
-                    timer.schedule(new ListenerTask(stream), 3*MILISEG_IN_SEGUNDO,stream.getPoolTime()*MILISEG_IN_SEGUNDO);
+                    int time=stream.getPoolTime();
+                    //Este número es por defecto, ya que si el stream maneja solo una red tipo listenAlive, es posible que no le hayan puesto un 
+                    //valor a stream.getPoolTime(), por lo cual, en la línea de abajo que crea el timer marcaría un error (Non-positive period).
+                    if(time<1) time=900; 
+                    timer.schedule(new ListenerTask(stream), 3*MILISEG_IN_SEGUNDO,time*MILISEG_IN_SEGUNDO);
                     htTimers.put(stream.getURI(), timer);
                     return;
                 }
@@ -156,9 +164,13 @@ public class ListenerMgr implements SWBAppObject {
             if(createTimer(stream))
             {
                 //Se arranca un timer que se ejecutara cada tantos segundos configurados en el stream
-                System.out.println("Levanta Timer");
+                System.out.println("Levanta Timer George:"+stream.getPoolTime());
                 Timer timer = new Timer();
-                timer.schedule(new ListenerTask(stream), 3*MILISEG_IN_SEGUNDO,stream.getPoolTime()*MILISEG_IN_SEGUNDO); 
+                int time=stream.getPoolTime();
+                //Este número es por defecto, ya que si el stream maneja solo una red tipo listenAlive, es posible que no le hayan puesto un 
+                //valor a stream.getPoolTime(), por lo cual, en la línea de abajo que crea el timer marcaría un error (Non-positive period).
+                if(time<1) time=900; 
+                timer.schedule(new ListenerTask(stream), 3*MILISEG_IN_SEGUNDO,time*MILISEG_IN_SEGUNDO); 
                 htTimers.put(stream.getURI(), timer);
                 return;
             }
@@ -232,9 +244,16 @@ public class ListenerMgr implements SWBAppObject {
     private static boolean createTimer(Stream stream)
     {
         System.out.println("ListerJ5");
-        if(stream!=null && stream.isActive() && !stream.isDeleted() && stream.getPoolTime() > 0 && stream.getPhrase()!=null && stream.getPhrase().trim().length()>0 && stream.listSocialNetworks().hasNext())
+        if(stream!=null && stream.isActive() && !stream.isDeleted() && stream.getPhrase()!=null && stream.getPhrase().trim().length()>0 && stream.listSocialNetworks().hasNext())
         {
-            return true;
+            //Si es isKeepAliveManager==true, no importaría si no le ponen un tiempo para que este llamandose el thread, 
+            //ya que este es llamado internamente desde cada red social que maneje esta caracteristica
+            if(stream.isKeepAliveManager())
+            {
+                return true;
+            }else if(stream.getPoolTime() > 0) { //si es stream.isKeepAliveManager()=false, entonces para crear el thread debe haber un tiepo para estarse llamando
+                return true;
+            }
             //Revisa si en el Stream esta indicado (Active) si se va a manejar KeepAlive en las redes sociales que así lo permitan y que esten
             //asociadas a dicho Stream
             /*
