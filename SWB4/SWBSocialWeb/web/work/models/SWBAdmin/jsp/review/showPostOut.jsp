@@ -63,17 +63,17 @@
         <div class="clear"></div>      
     </div>
     <div class="msj-div"></div>
-    
-    
-    
-    
 
-        <%
-            if (postInSource != null) {
-        %>    
-        
-        <table><tr>
-                <td>
+
+
+
+
+    <%
+        if (postInSource != null) {
+    %>    
+
+    <table><tr>
+            <td>
                 <%=SWBSocialUtil.Util.getStringFromGenericLocale("sentiment", user.getLanguage())%>:
                 <%
                     if (postInSource.getPostSentimentalType() == 0) {
@@ -103,56 +103,98 @@
                 <%=SWBSocialUtil.Util.getStringFromGenericLocale("priority", user.getLanguage())%>:<%=postInSource.isIsPrioritary() ? SWBSocialUtil.Util.getStringFromGenericLocale("yes", user.getLanguage()) : SWBSocialUtil.Util.getStringFromGenericLocale("not", user.getLanguage())%>
             </td> 
         </tr>
-        </table>
-        <%
-            }
-        %>
-     
-        <%
+    </table>
+    <%
+        }
+    %>
 
-            if (semObj.getGenericInstance() instanceof Message) {
-                Message message = (Message) semObj.getGenericInstance();
-        %>
-        <div class="msj-inf">
-            <p>
+    <%
+
+        if (semObj.getGenericInstance() instanceof Message) {
+            Message message = (Message) semObj.getGenericInstance();
+    %>
+    <div class="msj-inf">
+        <p>
             <%=SWBUtils.TEXT.encode(message.getMsg_Text(), "utf8")%>
         </p>
-        </div>
-        <%
-        } else if (semObj.getGenericInstance() instanceof Photo) {
-            Photo photo = (Photo) semObj.getGenericInstance();
-            //System.out.println("Name:"+Photo.social_Photo.getName()); 
-            //System.out.println("ClassID:"+Photo.social_Photo.getClassId()); 
-            //System.out.println("Canonical:"+Photo.social_Photo.getCanonicalName());
-            //Puse ese tolowercase porque el nombre de la propiedad lo pone en mayuscula, quien sabe porque, si esta en minuscula
+    </div>
+    <%
+    } else if (semObj.getGenericInstance() instanceof Photo) {
+        Photo photo = (Photo) semObj.getGenericInstance();
+        //System.out.println("Name:"+Photo.social_Photo.getName()); 
+        //System.out.println("ClassID:"+Photo.social_Photo.getClassId()); 
+        //System.out.println("Canonical:"+Photo.social_Photo.getCanonicalName());
+        //Puse ese tolowercase porque el nombre de la propiedad lo pone en mayuscula, quien sabe porque, si esta en minuscula
 %>
-       
-                <br><%=SWBUtils.TEXT.encode(photo.getMsg_Text(), "utf8")%>
-      
-                <%
-                    Iterator<String> itPhotos = photo.listPhotos();
-                    while (itPhotos.hasNext()) {
-                        String sphoto = itPhotos.next();
-                %>
-              
-                    <img src="<%=SWBPortal.getWebWorkPath()%><%=photo.getWorkPath()%>/<%=sphoto%>">
-                
-                <%
-                    }
-                %>
-       
-        <%
-        } else if (semObj.getGenericInstance() instanceof Video) {
-            Video video = (Video) semObj.getGenericInstance();
-        %>    
-        <div class="video">
-            <br><br><br><%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
-                <br/><br/><embed src="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" width="195" height="150" autostart="false">    
 
-                
-        </div>
-        <%
-            }
-        %>
-    </table>
+    <br><%=SWBUtils.TEXT.encode(photo.getMsg_Text(), "utf8")%>
+
+    <%
+        Iterator<String> itPhotos = photo.listPhotos();
+        while (itPhotos.hasNext()) {
+            String sphoto = itPhotos.next();
+    %>
+
+    <img src="<%=SWBPortal.getWebWorkPath()%><%=photo.getWorkPath()%>/<%=sphoto%>">
+
+    <%
+        }
+    %>
+
+    <%
+    } else if (semObj.getGenericInstance() instanceof Video) {
+        Video video = (Video) semObj.getGenericInstance();
+        String videoFormat = "";
+        String videoUrl = video.getVideo();
+        if (videoUrl.toLowerCase().contains("www.youtube.com")) {//show player from youtube
+            videoFormat = "youtube";
+        } else if (videoUrl.toLowerCase().contains(".mp4")) {
+            videoFormat = "video/mp4";
+        } else if (videoUrl.toLowerCase().contains(".swf")) {
+            videoFormat = "flash";
+        }
+    %>    
+
+    <%
+        if (videoFormat.equals("youtube")) {
+    %>
+
+    <%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
+    <br>
+    <embed src="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" width="500" height="390" autostart="false">    
+
+    <%
+    } else if (videoFormat.equals("flash")) {
+    %>
+    <div class="swbform">
+        <fieldset>
+            <%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
+            <br>
+            <object type="application/x-shockwave-flash" data="<%=videoUrl%>">
+                <param name="movie" value="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" />
+            </object>
+        </fieldset>
+    </div>
+    <%} else {
+    %>
+    <div class="video">
+        <%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
+        <br>
+        <video width="400" height="200" controls>
+            <source src="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" type="video/mp4">
+            <object data="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" width="400" height="200">
+                <embed src="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" width="400" height="200" autostart="false">    
+            </object>
+        </video>
+
+    </div>
+    <%
+        }
+    %>
+
+
+    <%
+        }
+    %>
+</table>
 </div>
