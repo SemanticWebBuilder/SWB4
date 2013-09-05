@@ -88,7 +88,8 @@ public class SocialTopicInBox extends GenericResource {
     String Mode_PreView = "preview";
     String Mode_showTags = "showTags";
     private static final int RECPERPAGE = 20; //Number of records by Page, could be dynamic later
-
+    private static final int PAGES2VIEW = 15; //Number of pages 2 display in pagination.
+    
     /**
      * Creates a new instance of SWBAWebPageContents.
      */
@@ -875,7 +876,18 @@ public class SocialTopicInBox extends GenericResource {
 
 
         if (nRec > 0) {
-            int totalPages=Double.valueOf(nRec/20).intValue();
+            System.out.println("nRec SocialTopicInBox/Jorge:"+nRec+",RECPERPAGE:"+RECPERPAGE);
+            int totalPages=1;
+            if(nRec>RECPERPAGE)
+            {
+                totalPages=Double.valueOf(nRec/20).intValue();
+                System.out.println("totalPages SocialTopicInBox/totalPages-1:"+totalPages);
+                if((nRec % RECPERPAGE)>0){
+                    totalPages=Double.valueOf(nRec/20).intValue()+1;
+                    System.out.println("totalPages SocialTopicInBox/totalPages-2:"+totalPages);
+                }
+            }
+            System.out.println("totalPages SocialTopicInBox/Jorge-3:"+totalPages);
             out.println("<div id=\"pagSumary\">"+paramRequest.getLocaleString("page")+":"+nPage+" "+paramRequest.getLocaleString("of") +" "+totalPages+"</div>");
             
             SWBResourceURL pageURL = paramRequest.getRenderUrl();
@@ -905,7 +917,7 @@ public class SocialTopicInBox extends GenericResource {
             out.println("</div>");
             * */
             
-            out.println(SWBSocialUtil.Util.getContentByPage(nRec, nPage, 15, paramRequest.getLocaleString("pageBefore"), paramRequest.getLocaleString("pageNext"), pageURL));
+            out.println(SWBSocialUtil.Util.getContentByPage(totalPages, nPage, PAGES2VIEW, paramRequest.getLocaleString("pageBefore"), paramRequest.getLocaleString("pageNext"), pageURL));
         }
 
 
