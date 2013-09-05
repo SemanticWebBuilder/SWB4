@@ -31,6 +31,22 @@
 <link href="/swbadmin/jsp/process/documentation/styles/css/process.css" rel="stylesheet" type="text/css"/>
 <link rel="stylesheet" href="/swbadmin/jsp/process/documentation/styles/css/processimprimir.css" type="text/css" media="print"/>
 <link rel="stylesheet" href="/swbadmin/jsp/process/formsBuilder.css" type="text/css"/>
+<!--IMPORT BOOTSTRAP-->
+<link href="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/bootstrap/css/font-awesome.min.css" rel="stylesheet">
+<link href="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/bootstrap/css/swbp2.css" rel="stylesheet">
+<script type="text/javascript" src="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/bootstrap/js/jquery.min.js"></script>
+<script src="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/bootstrap/js/bootstrap.min.js"></script>
+<script src="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/bootstrap/js/holder.js"></script>
+<script type='text/javascript'> //Activate tooltips
+    $(document).ready(function() {
+        if ($("[data-toggle=tooltip]").length) {
+            $("[data-toggle=tooltip]").tooltip();
+        }
+        $('body').off('.data-api');
+    });
+</script>
+<!-- END IMPORT BOOTSTRAP -->
 <%
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
     SWBResourceURL urlDocumentation = paramRequest.getRenderUrl().setMode("viewDocumentation");
@@ -113,7 +129,7 @@
                     }
                     iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
                     if (activity.size() > 0) {
-                        out.print("<li class=\"activity\" title=\"" + activityT + "\">" + activityT + "</li>");
+                        out.print("<li class=\"activity\">" + activityT + "</li>");
                     }
                     while (iterator.hasNext()) {
                         ge = iterator.next();
@@ -123,7 +139,7 @@
                     }
                     iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
                     if (gateway.size() > 0) {
-                        out.print("<li class=\"activity\" title=\"" + gatewayT + "\">" + gatewayT + "</li>");
+                        out.print("<li class=\"activity\">" + gatewayT + "</li>");
                     }
                     while (iterator.hasNext()) {
                         ge = iterator.next();
@@ -184,9 +200,10 @@
                 %>
         </div>
         <!--<a onclick="exportDocument('//urlExport%>', 'html');" style="cursor: pointer;" title="HTML" id="html">HTML</a>-->
-        <a href="<%=urlExport.setParameter("format", "html")%>" style="cursor: pointer;" title="HTML" id="html">HTML</a>
+        <a class="btn btn-default" href="<%=urlExport.setParameter("format", "html")%>" data-placement="bottom" data-toggle="tooltip" data-original-title="HTML" id="html"><li class="icon-html5 icon-large"></li></a>
         <!--<a href="<%//urlExport.setParameter("format", "pdf")%>" style="cursor: pointer;" title="PDF" id="pdf" >PDF</a>-->
-        <a title="<%=paramRequest.getLocaleString("print")%>" id="imprimir" href="javascript:print()"><%out.print(paramRequest.getLocaleString("print"));%></a>
+        <a class="btn btn-default" title="<%=paramRequest.getLocaleString("print")%>" id="imprimir" href="javascript:print()"
+           data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("print")%>"><li class="icon-print icon-large"></li></a>
         <div >
             <%String data = "";
                 if (process != null) {
