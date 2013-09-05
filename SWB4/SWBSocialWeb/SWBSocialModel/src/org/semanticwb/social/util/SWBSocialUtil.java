@@ -39,6 +39,7 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.SWBActionResponse;
+import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.CountryState;
 import org.semanticwb.social.Kloutable;
 import org.semanticwb.social.Message;
@@ -1105,6 +1106,78 @@ public class SWBSocialUtil implements SWBAppObject {
     
     
     public static class Util {
+     
+     /*
+      * Controls pagination
+      */
+     public static String getContentByPage(long totPages, int npage,int snpages, String stxtant, String stxtsig, SWBResourceURL pageURL)
+     {
+        StringBuilder strb1 = new StringBuilder();
+        try {
+            System.out.println("Entra a nRec SI HAY PAGINACIÓN-2");
+            
+            strb1.append("<div id=\"pagination\">");
+            //href=\"#\" onclick=\"submitUrl('" + pageURL + "',this); return false;\"
+            if (npage > 1) {
+               pageURL.setParameter("page", ""+(npage - 1));
+               strb1.append("<a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">"+ stxtant + "</a> ");
+            }
+            long ini = 1;
+            long fin = snpages;
+            //int dif = 0;
+            if ((totPages < snpages)) {
+                fin = totPages;
+            }else if (totPages > snpages) {
+                int numMin=Double.valueOf(snpages/2).intValue();
+                if(totPages>=(npage + numMin+1))
+                {
+                    if((npage-numMin)>=1)
+                    {
+                        fin=npage + numMin+1;
+                        ini=npage - numMin;
+                    }
+                }else{
+                    fin=totPages;
+                    if((npage-numMin)>=1)
+                    {
+                        ini = npage-numMin;
+                    }
+                }
+                
+            }
+                /*
+            if (totPages > snpages && npage > 1) {
+                dif = npage - 1;
+                if (totPages >= (snpages + dif)) {
+                    fin = snpages + dif;
+                    ini = 1 + dif;
+                } else {
+                    fin = totPages;
+                    ini = totPages - snpages + 1;
+                }
+            }*/
+
+            for (long i = ini; i <= fin; i++) {
+                if (i != npage) {
+                   pageURL.setParameter("page", ""+i); 
+                   strb1.append("<a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">" + String.valueOf(i) + "</a> ");
+                } else {
+                   strb1.append("<font color=\"RED\">" + String.valueOf(i) + " </font>");
+                }
+            }
+            if (npage < totPages) {
+                    pageURL.setParameter("page", ""+(npage + 1));
+                    strb1.append("<a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">" + stxtsig + "</a>");
+            }
+
+            strb1.append("</div>");
+
+        } catch (Exception e) {
+            log.error(e);
+        }
+        System.out.println("Entra a nRec SI HAY PAGINACIÓN-3:"+strb1.toString());
+        return strb1.toString();
+      }
         
          /*
          * Reemplaza un String http:// por un <a href= y el valor
