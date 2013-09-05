@@ -367,7 +367,7 @@ if (!user.isSigned()) {
                                                             <a href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="<%=paramRequest.getLocaleString("actTake")%>" title="<%=paramRequest.getLocaleString("actTake")%>"><i class="icon-external-link-sign"></i></a>
                                                             <%if (allowForward && instance.getAssignedto() != null) {
                                                                 SWBResourceURL forward = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(UserTaskInboxResource.MODE_FWD);
-                                                                %><a class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="<%=paramRequest.getLocaleString("actFwd")%>" data-original-title="<%=paramRequest.getLocaleString("actFwd")%>" onclick="showDialog('<%=forward%>?suri=<%=instance.getEncodedURI()%>', '<%=paramRequest.getLocaleString("actFwd")%>'); return false;"><i class="icon-exchange"></i></a><%
+                                                                %><a href="<%=forward.setParameter("suri", instance.getEncodedURI())%>" class="btn btn-default" data-toggle="modal" data-target="#modalDialog" data-toggle="tooltip" data-placement="bottom" title="<%=paramRequest.getLocaleString("actFwd")%>" data-original-title="<%=paramRequest.getLocaleString("actFwd")%>"><i class="icon-exchange"></i></a><%
                                                             }
                                                         }
                                                         if (statusWp != null) {%>
