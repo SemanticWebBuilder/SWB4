@@ -811,6 +811,18 @@ public class StreamInBoxNoTopic extends GenericResource {
         //System.out.println("J-L:"+l);
 
         if (nRec>0) {
+            int totalPages=Double.valueOf(nRec/20).intValue();
+            out.println("<div id=\"pagSumary\">"+paramRequest.getLocaleString("page")+":"+nPage+" "+paramRequest.getLocaleString("of") +" "+totalPages+"</div>");
+            
+            SWBResourceURL pageURL = paramRequest.getRenderUrl();
+            //pageURL.setParameter("page", "" + (countPage));
+            pageURL.setParameter("suri", id);
+            pageURL.setParameter("search", (searchWord.trim().length() > 0 ? searchWord : ""));
+            pageURL.setParameter("swbSocialUser", swbSocialUser);
+            if (request.getParameter("orderBy") != null) {
+                pageURL.setParameter("orderBy", request.getParameter("orderBy"));
+            }
+            /*
             out.println("<div id=\"pagination\">");
             out.println("<span>P&aacute;ginas:</span>");
             for (int countPage = 1; countPage < (Math.ceil((double) nRec / (double) RECPERPAGE) + 1); countPage++) {
@@ -829,6 +841,9 @@ public class StreamInBoxNoTopic extends GenericResource {
                 }
             }
             out.println("</div>");
+            * */
+          
+            out.println(SWBSocialUtil.Util.getContentByPage(nRec, nPage, 15, paramRequest.getLocaleString("pageBefore"), paramRequest.getLocaleString("pageNext"), pageURL));
         }
 
 

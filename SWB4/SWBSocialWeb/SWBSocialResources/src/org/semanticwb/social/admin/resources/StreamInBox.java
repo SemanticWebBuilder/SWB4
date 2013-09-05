@@ -903,7 +903,8 @@ public class StreamInBox extends GenericResource {
         out.println("</fieldset>");
 
         if (nRec > 0) {
-            out.println("<div id=\"pagSumary\">"+nPage+" de "+nRec+"</div>");
+            int totalPages=Double.valueOf(nRec/20).intValue();
+            out.println("<div id=\"pagSumary\">"+paramRequest.getLocaleString("page")+":"+nPage+" "+paramRequest.getLocaleString("of") +" "+totalPages+"</div>");
             
             SWBResourceURL pageURL = paramRequest.getRenderUrl();
             //pageURL.setParameter("page", "" + (countPage));
@@ -937,10 +938,8 @@ public class StreamInBox extends GenericResource {
             //stxtsig=Texto para siguiente
             //stfont=Algun font, pero yo creo que hay que poner en lugar de td una div (como esta ahorita arriba) y con un class
             //position=Posición en (arriba, abajo, ambos), esto no aplicaría para este uso
-            String stxtant="Anterior";
-            String stxtsig="Siguiente";
-            System.out.println("Entra a nRec SI HAY PAGINACIÓN-1");
-            out.println(SWBSocialUtil.Util.getContentByPage(nRec, nPage, 15, stxtant, stxtsig, pageURL));
+            
+            out.println(SWBSocialUtil.Util.getContentByPage(nRec, nPage, 15, paramRequest.getLocaleString("pageBefore"), paramRequest.getLocaleString("pageNext"), pageURL));
         }
 
 
