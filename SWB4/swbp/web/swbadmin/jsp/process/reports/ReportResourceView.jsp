@@ -26,239 +26,256 @@
 <%@page import="org.semanticwb.platform.SemanticClass"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
-<div class="bandeja-combo">
-    <%
-        SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-        boolean isSaveOnSystem = Boolean.parseBoolean(request.getAttribute("isSaveOnSystem").toString());
-        SWBResourceURL urlReport = paramRequest.getRenderUrl().setMode("generate").setCallMethod(SWBParamRequest.Call_DIRECT);
-        Integer contador = 0;
-        String lang = null;
-        if (paramRequest.getUser() != null) {
-            lang = paramRequest.getUser().getLanguage();
-            if (lang == null) {
-                lang = "es";
-            }
+<%
+    SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+    boolean isSaveOnSystem = Boolean.parseBoolean(request.getAttribute("isSaveOnSystem").toString());
+    SWBResourceURL urlReport = paramRequest.getRenderUrl().setMode("generate").setCallMethod(SWBParamRequest.Call_DIRECT);
+    SWBResourceURL url = paramRequest.getRenderUrl();
+    Integer contador = 0;
+    String lang = null;
+    if (paramRequest.getUser() != null) {
+        lang = paramRequest.getUser().getLanguage();
+        if (lang == null) {
+            lang = "es";
         }
-        Report obj = Report.ClassMgr.getReport(request.getParameter("idReport"), paramRequest.getWebPage().getWebSite());
-        int pageNum = 1;
-        int maxPages = (Integer) request.getAttribute("maxPages");
-        if (request.getParameter("page") != null && !request.getParameter("page").trim().equals("")) {
-            pageNum = Integer.valueOf(request.getParameter("page"));
-        }
-        String sortType = null;
-        if (request.getAttribute("sort") != null) {
-            sortType = request.getAttribute("sort").toString();
-        }
-        String dataType = null;
-        if (request.getAttribute("dataType") != null) {
-            dataType = request.getAttribute("dataType").toString();
-        }
-        String des = "";
-        if (request.getAttribute("des") != null) {
-            des = request.getAttribute("des").toString();
-        }
-    %>
-    <a href="#" onclick="showDialog('<%=obj.getId()%>');
-            return false;" title="Exportar reporte <%=obj.getTitle()%>">
-        <img src="<%=SWBPlatform.getContextPath() + "/swbadmin/jsp/process/reports/images/generate.png"%>">Reporte: <%=obj.getTitle()%></a>
+    }
+    Report obj = Report.ClassMgr.getReport(request.getParameter("idReport"), paramRequest.getWebPage().getWebSite());
+    int pageNum = 1;
+    int maxPages = (Integer) request.getAttribute("maxPages");
+    if (request.getParameter("page") != null && !request.getParameter("page").trim().equals("")) {
+        pageNum = Integer.valueOf(request.getParameter("page"));
+    }
+    String sortType = null;
+    if (request.getAttribute("sort") != null) {
+        sortType = request.getAttribute("sort").toString();
+    }
+    String dataType = null;
+    if (request.getAttribute("dataType") != null) {
+        dataType = request.getAttribute("dataType").toString();
+    }
+    String des = "";
+    if (request.getAttribute("des") != null) {
+        des = request.getAttribute("des").toString();
+    }
+    SWBResourceURL urlDialog = paramRequest.getRenderUrl().setMode("dialog").setCallMethod(SWBResourceURL.Call_DIRECT);
+    urlDialog.setParameter("idReport", obj.getId());
+    urlDialog.setParameter("action", "export");
+%>
+<div id="out" style="display: none; width: 100%; alignment-adjust: central;">
+    <%url = paramRequest.getRenderUrl();
+        url.setMode(SWBResourceURL.Mode_VIEW);%>
+    <a id="a" href="<%=url%>"
+       data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("reports") + " " + paramRequest.getLocaleString("saved")%>">
+        <%=paramRequest.getLocaleString("reports") + " " + paramRequest.getLocaleString("saved")%> <span id="count" class="badge"></span></a>
     <br/>
     <br/>
-    <table class="tabla-bandeja">
-        <thead>
-            <tr>
-                <%
-                    Iterator<ColumnReport> colum = SWBComparator.sortSortableObject(obj.listColumnReports());
-                    while (colum.hasNext()) {
-                        ColumnReport colu = colum.next();
-                        SemanticProperty sp = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(colu.getNameProperty().substring(colu.getNameProperty().indexOf("|") + 1));
-                        SWBResourceURL order = paramRequest.getRenderUrl();
-                        order.setParameter("idReport", obj.getId());
-                        order.setParameter("sort", colu.getNameProperty());
-                        if (sp.isDataTypeProperty()) {
-                            order.setParameter("dataType", "isDataTypeProperty");
-                        } else {
-                            order.setParameter("dataType", "isObjectProperty");
-                        }
-                        if (des.equals("des")) {
-                            order.setParameter("des", "asc");
-                        } else {
-                            order.setParameter("des", "des");
-                        }
-                        if (colu.isColumnVisible()) {
-                %>
-                <th class="tban-id" title="<%=colu.getTitleColumn() == null ? sp.getDisplayName(lang) : colu.getTitleColumn()%>">
-                    <a <%if (colu.isEnabledOrder()) {%>href="<%=order%>" style="color: white; text-decoration: none;">
-                        <img src="<%=SWBPlatform.getContextPath() + "/swbadmin/jsp/process/reports/images/arrows.png"%>">
+</div>
+<div class="row">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <table style="width: 100%;">
+                <tr><td>
+                        <div class="panel-title"><strong><%=paramRequest.getLocaleString("report") + " " + obj.getTitle()%></strong></div>  
+                    </td>
+                    <td style="text-align: right;">
+                        <a class="btn btn-default btn-sm"
+                           onclick="javascript:document.back.submit();"
+                           data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("back")%>">
+                            <li class="icon-mail-reply icon-large"></li>
+                        </a>
+                        <%
+                            if (isSaveOnSystem) {
+                        %>
+                        <a href="<%=urlDialog%>" data-toggle="modal" data-target="#modalDialog"
+                           class="btn btn-default btn-sm" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("save") + " " + paramRequest.getLocaleString("report") + " " + obj.getTitle()%>">
+                            <li class="icon-save icon-large"></li>
+                        </a>
+                        <%} else {%>
+                        <a href="<%=urlDialog%>" data-toggle="modal" data-target="#modalDialog" class="btn btn-default btn-sm"
+                           data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("generate") + " " + paramRequest.getLocaleString("report") + " " + obj.getTitle()%>">
+                            <li class="icon-file icon-large"></li>
+                        </a>
                         <%}%>
-                        <label style="color: white; text-decoration: none;cursor: pointer;"><%=colu.getTitleColumn() == null ? sp.getDisplayName(lang) : colu.getTitleColumn()%></label>
-                    </a>
-                </th>
-                <%}
-                    }%>
-            </tr>
-        </thead>
-        <%
-            ArrayList<ProcessInstance> pinstances = (ArrayList<ProcessInstance>) request.getAttribute("pi");
-            Iterator<ProcessInstance> pi = pinstances.iterator();
-            while (pi.hasNext()) {
-        %>
-        <tr>
-            <%
-                ProcessInstance pins = (ProcessInstance) pi.next();
-                Iterator<ColumnReport> columna = SWBComparator.sortSortableObject(obj.listColumnReports());
-                while (columna.hasNext()) {
-                    ColumnReport cr = columna.next();
-                    if (cr.isColumnVisible()) {
-                        String[] array = cr.getNameProperty().split("\\|");
-                        ItemAware ite = (ItemAware) SWBPlatform.getSemanticMgr().getOntology().getSemanticObject(array[0]).createGenericInstance();
-                        Iterator<ItemAwareReference> iar = pins.listAllItemAwareReferences();
-                        while (iar.hasNext()) {
-                            ItemAwareReference iarr = (ItemAwareReference) iar.next();
-                            if (iarr.getItemAware() != null  && pins.getItemAwareReference().getProcessObject() != null) {
-                                contador++;
-                                if (iarr.getItemAware().equals(ite)) {
-                                    SemanticProperty spt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(array[1]);
-            %>
-            <td>
-                <%
-                    SWBFormMgr forMgr = new SWBFormMgr(iarr.getProcessObject().getSemanticObject(), null, SWBFormMgr.MODE_VIEW);
-                    forMgr.setType(SWBFormMgr.TYPE_DOJO);
-                    if (!spt.isInverseOf() && spt.isDataTypeProperty()) {
-                        if (iarr.getProcessObject().getSemanticObject().getProperty(spt) != null) {
-                            out.print(forMgr.renderElement(request, spt, SWBFormMgr.MODE_VIEW));
-                        } else {
-                            out.print("--");
-                        }
-                    } else if (!spt.isInverseOf() && spt.isObjectProperty()) {
-                        if (iarr.getProcessObject().getSemanticObject().getObjectProperty(spt) != null) {
-                            out.print(forMgr.renderElement(request, spt, SWBFormMgr.MODE_VIEW));
-                        } else {
-                            out.print("--");
-                        }
-                    }
-                %></td><%
+                        <a class="btn btn-default btn-sm" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("configureReport") + " " + obj.getTitle()%>" href="<%=url.setMode(SWBResourceURL.Mode_EDIT).setParameter("idReport", obj.getId())%>">
+                            <li class="icon-wrench icon-large"></li>
+                        </a>  
+                    </td></tr>
+            </table>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-hover swbp-table">
+                    <thead>
+                        <tr>
+                            <%
+                                Iterator<ColumnReport> colum = SWBComparator.sortSortableObject(obj.listColumnReports());
+                                while (colum.hasNext()) {
+                                    ColumnReport colu = colum.next();
+                                    SemanticProperty sp = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(colu.getNameProperty().substring(colu.getNameProperty().indexOf("|") + 1));
+                                    SWBResourceURL order = paramRequest.getRenderUrl();
+                                    order.setParameter("idReport", obj.getId());
+                                    order.setParameter("sort", colu.getNameProperty());
+                                    if (sp.isDataTypeProperty()) {
+                                        order.setParameter("dataType", "isDataTypeProperty");
+                                    } else {
+                                        order.setParameter("dataType", "isObjectProperty");
+                                    }
+                                    if (des.equals("des")) {
+                                        order.setParameter("des", "asc");
+                                    } else {
+                                        order.setParameter("des", "des");
+                                    }
+                                    if (colu.isColumnVisible()) {
+                            %>
+                            <th class="tban-id" title="<%=colu.getTitleColumn() == null ? sp.getDisplayName(lang) : colu.getTitleColumn()%>">
+                                <a <%if (colu.isEnabledOrder()) {%>href="<%=order%>" style="color: white; text-decoration: none;">
+                                    <%if (des.equals("des")) {%>
+                                    <li class="icon-sort-by-alphabet"></li>
+                                        <%} else {%>
+                                    <li class="icon-sort-by-alphabet-alt"></li>
+                                        <%}%>
+                                        <%}%>
+                                    <label style="color: white; text-decoration: none;cursor: pointer;"><%=colu.getTitleColumn() == null ? sp.getDisplayName(lang) : colu.getTitleColumn()%></label>
+                                </a>
+                            </th>
+                            <%}
+                                }%>
+                        </tr>
+                    </thead>
+                    <%
+                        ArrayList<ProcessInstance> pinstances = (ArrayList<ProcessInstance>) request.getAttribute("pi");
+                        Iterator<ProcessInstance> pi = pinstances.iterator();
+                        while (pi.hasNext()) {
+                    %>
+                    <tr>
+                        <%
+                            ProcessInstance pins = (ProcessInstance) pi.next();
+                            Iterator<ColumnReport> columna = SWBComparator.sortSortableObject(obj.listColumnReports());
+                            while (columna.hasNext()) {
+                                ColumnReport cr = columna.next();
+                                if (cr.isColumnVisible()) {
+                                    String[] array = cr.getNameProperty().split("\\|");
+                                    ItemAware ite = (ItemAware) SWBPlatform.getSemanticMgr().getOntology().getSemanticObject(array[0]).createGenericInstance();
+                                    Iterator<ItemAwareReference> iar = pins.listAllItemAwareReferences();
+                                    while (iar.hasNext()) {
+                                        ItemAwareReference iarr = (ItemAwareReference) iar.next();
+                                        if (iarr.getItemAware() != null && pins.getItemAwareReference().getProcessObject() != null) {
+                                            contador++;
+                                            if (iarr.getItemAware().equals(ite)) {
+                                                SemanticProperty spt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(array[1]);
+                        %>
+                        <td>
+                            <%
+                                SWBFormMgr forMgr = new SWBFormMgr(iarr.getProcessObject().getSemanticObject(), null, SWBFormMgr.MODE_VIEW);
+                                forMgr.setType(SWBFormMgr.TYPE_DOJO);
+                                if (!spt.isInverseOf() && spt.isDataTypeProperty()) {
+                                    if (iarr.getProcessObject().getSemanticObject().getProperty(spt) != null) {
+                                        out.print(forMgr.renderElement(request, spt, SWBFormMgr.MODE_VIEW));
+                                    } else {
+                                        out.print("--");
+                                    }
+                                } else if (!spt.isInverseOf() && spt.isObjectProperty()) {
+                                    if (iarr.getProcessObject().getSemanticObject().getObjectProperty(spt) != null) {
+                                        out.print(forMgr.renderElement(request, spt, SWBFormMgr.MODE_VIEW));
+                                    } else {
+                                        out.print("--");
                                     }
                                 }
-                            }
-                        }
-                    }
-                %>
-        </tr>
-        <%}%>
-    </table>
-
-    <%
-        if (contador == 0) {%>
-    <h3>Sin columnas</h3>
-    <%} else {%>
-
-    <div class="paginado">
-        <table class="tabla-bandeja">
-            <tbody>
-                <tr>
-                    <td style="width:60%;">
-                        P&aacute;gina: <%=pageNum%> de <%=maxPages%>
-                    </td>
-                    <td style="text-align:right;">
+                            %></td><%
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            %>
+                    </tr>
+                    <%}%>
+                </table>
+            </div>
+            <!--/BEGIN PAGINATION-->
+            <div class="swbp-pagination">
+                <span class="swbp-pagination-info pull-left"><%=paramRequest.getLocaleString("page")%>: <%=pageNum%> <%=paramRequest.getLocaleString("of")%> <%=maxPages%></span>
+                <%if (maxPages > 1) {%>
+                <div class="swbp-pagination-nav pull-right">
+                    <ul class="pagination pagination-sm">
                         <%
-                            if (maxPages > 1) {
-                                SWBResourceURL first = paramRequest.getRenderUrl();
-                                first.setParameter("sort", sortType);
-                                first.setParameter("des", des);
-                                first.setParameter("dataType", dataType);
-                                first.setParameter("idReport", obj.getId());
-                                first.setParameter("page", "1");
-                        %><a href="<%=first%>">Primer p&aacute;gina</a><%
-                            }
-                            if (pageNum - 1 > 0) {
-                                SWBResourceURL back = paramRequest.getRenderUrl();
-                                back.setParameter("des", des);
-                                back.setParameter("dataType", dataType);
-                                back.setParameter("sort", sortType);
-                                back.setParameter("idReport", obj.getId());
-                                back.setParameter("page", String.valueOf(pageNum - 1));
-                        %><a href="<%=back%>">Anterior</a><%
-                            }
-                            if (pageNum + 1 <= maxPages) {
-                                SWBResourceURL forward = paramRequest.getRenderUrl();
-                                forward.setParameter("des", des);
-                                forward.setParameter("dataType", dataType);
-                                forward.setParameter("sort", sortType);
-                                forward.setParameter("idReport", obj.getId());
-                                forward.setParameter("page", String.valueOf(pageNum + 1));
-                        %><a href="<%=forward%>">Siguiente</a><%
-                            }
-                            if (maxPages > 1 && pageNum < maxPages) {
-                                SWBResourceURL last = paramRequest.getRenderUrl();
-                                last.setParameter("des", des);
-                                last.setParameter("dataType", dataType);
-                                last.setParameter("sort", sortType);
-                                last.setParameter("idReport", obj.getId());
-                                last.setParameter("page", String.valueOf(maxPages));
-                        %><a href="<%=last%>">&Uacute;ltima p&aacute;gina</a><%
-                            }
-                        %>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <%}%>
-</div>
+                            int pagSlice = 5;
+                            int sliceIdx = 1;
+                            int start = 1;
+                            int end = pagSlice * sliceIdx;
 
-<div dojoType="dijit.Dialog" style="display:none;" id="configDialog" title="Generar reporte">
-    <div dojoType="dijit.layout.ContentPane" id="configDialogImp" executeScripts="true">
-        <form method="post" <%if (!isSaveOnSystem) {%>action="<%=urlReport%>"<%}%>>
-            <input type="hidden" id="idReport" name="idReport" value="<%=obj.getId()%>"/>
-            Nombre de archivo:
-            <input type="text" id="reportName" name="reportName" dojoType="dijit.form.ValidationTextBox" 
-                   required="true" trim="true" promptMessage="Nombre de archivo"
-                   regExp="[a-zA-Z0-9_\ %-]+[a-zA-Z0-9_\ %-]" />
-            <br/>
-            Formato:
-            <select id="extension" name="extension" style="width: 200px;">
-                <option value="xls" selected="true">Excel</option>
-                <option value="pdf">PDF</option>
-            </select>
-            <br/>
-            <input type="submit" dojoType="dijit.form.Button" label="Generar" <%if (isSaveOnSystem) {%>onclick="submitUrl('<%=urlReport%>', this);
-            return false;"<%} else {%> onclick="close();"<%}%> title="Generar"/>
-        </form>
+                            if (pageNum > end) {
+                                do {
+                                    sliceIdx++;
+                                    end = pagSlice * sliceIdx;
+                                } while (pageNum > end);
+                            }
+                            end = pagSlice * sliceIdx;
+
+                            if (end > maxPages) {
+                                end = maxPages;
+                            }
+
+                            start = (end - pagSlice) + 1;
+                            if (start < 1) {
+                                start = 1;
+                            }
+
+                            SWBResourceURL nav = paramRequest.getRenderUrl();
+                            nav.setParameter("sort", sortType);
+                            nav.setParameter("page", String.valueOf(start - 1));
+
+                            nav.setParameter("des", des);
+                            nav.setParameter("dataType", dataType);
+                            nav.setParameter("idReport", obj.getId());
+                            if (sliceIdx != 1) {
+                                nav.setParameter("page", String.valueOf(pageNum - 1));
+                        %><li><a href="<%=nav%>">&laquo;</a></li><%
+                            }
+                            for (int k = start; k <= end; k++) {
+                                nav.setParameter("page", String.valueOf(k));
+                            %>
+                        <li <%=(k == pageNum ? "class=\"active\"" : "")%>><a href="<%=nav%>"><%=k%></a></li>
+                            <%
+                                }
+                                if (end < maxPages) {
+                                    nav.setParameter("page", String.valueOf(pageNum + 1));
+                            %><li><a href="<%=nav%>">&raquo;</a></li><%
+                                    }
+                                }%>
+                </div>
+            </div>
+            <!--/END PAGINATION-->
+        </div>
+
     </div>
 </div>
+<form method="post" action="<%=paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW)%>" name="back"></form>  
 <script type="text/javascript">
-        var count = 0;
-        function showDialog(idReport) {
-            document.getElementById('idReport').setAttribute("value", "" + idReport);
-            dijit.byId('configDialog').show();
-        }
-        function close() {
-            dijit.byId('configDialog').hide();
-        }
-        function submitUrl(url, reference) {
-            var extension = document.getElementById("extension");
-            dijit.byId('configDialog').hide();
-            url = url + '?idReport=' + document.getElementById('idReport').value + '&extension=' + extension.options[extension.selectedIndex].value + '&reportName=' + document.getElementById('reportName').value;
-            dojo.xhrGet({
-                url: url,
-                load: function(response, ioArgs)
-                {
-                    count++;
-                    document.getElementById('out').style.display = 'block';
-                    //alert(count);
-                    document.getElementById('a').innerHTML = "Reportes nuevos: " + count;
-                    //setInterval(function(){myTimer()},2000);
-                    return response;
-                },
-                error: function(response, ioArgs) {
-                    setInterval(function() {
-                        myTimer2()
-                    }, 2000);
-                    return response;
-                },
-                handleAs: "text"
-            });
-        }
+                               var count = 0;
+                               function submitUrl(url, reference) {
+                                   var extension = document.getElementById("extension");
+                                   url = url + '?idReport=' + document.getElementById('idReport').value + '&extension=' + extension.options[extension.selectedIndex].value + '&reportName=' + document.getElementById('reportName').value;
+                                   dojo.xhrGet({
+                                       url: url,
+                                       load: function(response, ioArgs)
+                                       {
+                                           count++;
+                                           document.getElementById('out').style.display = 'block';
+                                           //alert(count);
+                                           document.getElementById('count').innerHTML = count;
+                                           //setInterval(function(){myTimer()},2000);
+                                           return response;
+                                       },
+                                       error: function(response, ioArgs) {
+                                           setInterval(function() {
+                                               myTimer2()
+                                           }, 2000);
+                                           return response;
+                                       },
+                                       handleAs: "text"
+                                   });
+                               }
 </script>
 <script type="text/javascript">
     dojo.require("dijit.Dialog");
