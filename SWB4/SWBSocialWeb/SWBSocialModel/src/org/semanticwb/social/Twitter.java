@@ -133,7 +133,10 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 System.out.println("No Photos FOUND");
                 return;
             }else if (photoNumber > 1){
-                additionalPhotos = "http://mysocial.com.mx:8080/swbadmin/jsp/social/postViewFiles.jsp?uri="+ photo.getEncodedURI();
+                String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
+                additionalPhotos = absolutePath + "/swbadmin/jsp/social/postViewFiles.jsp?uri=" + photo.getEncodedURI();
+                System.out.println("Path form multiple photos:" + additionalPhotos);
+                ///additionalPhotos = "http://mysocial.com.mx:8080/swbadmin/jsp/social/postViewFiles.jsp?uri="+ photo.getEncodedURI();
             }
             
             System.out.println("The photo to be published TWITTER:" + photoToPublish);
