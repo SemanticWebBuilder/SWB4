@@ -10,6 +10,7 @@
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
 Resource base = (Resource) request.getAttribute("base");
+String processInfo = (String)request.getAttribute("participation");
 
 int aborted = (Integer)request.getAttribute("aborted");
 int processing = (Integer)request.getAttribute("processing");
@@ -43,21 +44,196 @@ if (showResponse) {
         showResponse = false;
     }
 }
-%>
 
+boolean showParticipation  = base.getAttribute(UserTaskInboxResource.ATT_PARTGRAPH,"").equals("use");
+if (showParticipation) {
+    if (processInfo == null) {
+        showParticipation = false;
+    }
+}
+
+if (showInstances) {%>
+    <div class="col-xs-6 col-sm-6 col-md-3">
+        <div id="performanceGraph"></div>
+    </div>
+<%}
+if (showResponse) {%>
+    <div class="col-xs-6 col-sm-6 col-md-3">
+        <div class="processChartPie" id="responseTime"></div>
+    </div>
+<%}
+if (showStatus) {%>
+    <div class="col-xs-6 col-sm-6 col-md-3">
+        <div class="processChartPie" id="overdueGraph"></div>
+    </div>
+<%}
+if (showParticipation) {%>
+    <div class="col-xs-6 col-sm-6 col-md-3">
+        <div class="processChartPie" id="participationGraph"></div>
+    </div>
+    <script>
+        var theJson = JSON.parse('<%=processInfo%>');
+        var root = theJson;
+        var w=200, h=200;
+        
+        function flatten(root) {
+            var nodes = [], i = 0;
+            function recurse(node) {
+                if (node.children) node.children.forEach(recurse);
+                if (!node.id) node.id = ++i;
+                nodes.push(node);
+            }
+            recurse(root);
+            return nodes;
+        }
+        
+        function updatePartChart(chartContainer) {
+            var nodes = flatten(root);
+            var links = d3.layout.tree().links(nodes);
+            var max = root['max'];
+
+            w = h = $(chartContainer).parent().width();
+
+            root.fixed = true;
+            root.x = w/2;
+            root.y = h/2;
+
+            var force = d3.layout.force()
+                .size([w,h])
+                .charge(-60)
+                .linkDistance(80)
+                .gravity(.05);
+
+            $(chartContainer).html("<svg xmlns='http://www.w3.org/2000/svg'></svg>");
+
+            var svg = d3.select(chartContainer+" svg")
+                .attr("width", w)
+                .attr("height", h)
+                .append("g");
+
+            var linkScale = d3.scale.linear()
+                .domain([1,max])
+                .range([1,5]);
+
+            force.nodes(nodes)
+                .links(links)
+                .start();
+
+            var link = svg.selectAll("line.link")
+                .data(links, function(d) {
+                    return d.target.id;
+                });
+
+            link.enter().insert("svg:line", ".node")
+                .attr("class", "link")
+                .attr("x1", function(d) {
+                    return d.source.x;
+                })
+                .attr("y1", function(d) {
+                    return d.source.y;
+                })
+                .attr("x2", function(d) {
+                    return d.target.x;
+                })
+                .attr("y2", function(d) {
+                    return d.target.y;
+                })
+                .attr("stroke-width", function(d) {
+                    return linkScale(d.target.participa)+"px";
+                })
+                .attr("stroke", "#BFBFCF")
+                .attr("fill", "none");
+
+            link.exit().remove();
+
+            var node = svg.selectAll("g.node")
+                .data(nodes, function(d) {
+                    return d.id;
+                });
+
+            var nodeEnter = node.enter().append("svg:g")
+                .attr("class", "node")
+                .attr("transform", function(d) {
+                    return "translate(" + d.x + "," + d.y + ")";
+                })
+                .call(force.drag);
+
+            nodeEnter.append("svg:image")
+                .attr("xlink:href", function(d) {
+                    if (d.type && d.type==="process") {
+                        return "/work/models/demo/css/images/icono-iniciado.gif";
+                    } else {
+                        return "/work/models/demo/css/images/colaborador.png";
+                    }
+                })
+                .attr("x", -10)
+                .attr("y", -10)
+                .attr("width", 20)
+                .attr("height", 20);
+
+            nodeEnter.append("svg:text")
+                .attr("font-family", "Arial")
+                .attr("font-size", "11")
+                .attr("stroke", "none")
+                .attr("fill", "#000000")
+                .attr("text-anchor", "middle")
+                .attr("dy", "2em")
+                .text(function(d) {
+                    return d.name;
+                });
+
+            node.exit().remove();
+
+            link = svg.selectAll("line.link");
+            node = svg.selectAll("g.node");
+
+            force.on("tick", function() {
+                link.attr("x1", function(d) {
+                    return d.source.x;
+                })
+                .attr("y1", function(d) {
+                    return d.source.y;
+                })
+                .attr("x2", function(d) {
+                    return d.target.x;
+                })
+                .attr("y2", function(d) {
+                    return d.target.y;
+                });
+
+                node.attr("transform", function(d) {
+                    return "translate(" + d.x + "," + d.y + ")";
+                });
+            });
+
+            svg.append("svg:text")
+                .text("<%=paramRequest.getLocaleString("lblParticipation")%>")
+                .attr("x",w/2)
+                .attr("y","22.85")
+                .style("text-anchor","middle")
+                .style("fill","black")
+                .style("font-size","10pt")
+                .style("font-weight","bold")
+        }
+        updatePartChart("#participationGraph");
+    </script>
+<%
+}
+if (showInstances || showResponse || showStatus) {%>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
     google.load("visualization", "1", {packages:["corechart"]});
     google.setOnLoadCallback(drawChart);
+    
     function drawChart() {
         var options = {
-          title: '<%=paramRequest.getLocaleString("lblInstances")%> (<%=total%>)',
-          backgroundColor: {fill:'none'}
+            backgroundColor: {fill:'none'},
+            chartArea: {top:30, width:"80%", height:"80%"},
+            legend: {position:"none"}
         };
 
-        <%
-        if (showInstances) {
-            %>
+        <%if (showInstances) {%>
+            options.title = '<%=paramRequest.getLocaleString("lblInstances")%> (<%=total%>)';
             var data = google.visualization.arrayToDataTable([
                 ['Estatus', 'Unidades'],
                 ['<%=paramRequest.getLocaleString("lblProcessing")%>',     <%=processing%>],
@@ -68,9 +244,7 @@ if (showResponse) {
             chart.draw(data, options);
         <%
         }
-
-        if (showResponse) {
-            %>
+        if (showResponse) {%>
             var data2 = google.visualization.arrayToDataTable([
                 ['Tiempo de respuesta', 'Horas'],
                 ['<%=paramRequest.getLocaleString("lblMin")%>',     <%=minTime%>],
@@ -84,9 +258,7 @@ if (showResponse) {
             chart2.draw(data2, options);
             <%
         }
-
-        if (showStatus) {
-            %>
+        if (showStatus) {%>
             var data3 = google.visualization.arrayToDataTable([
                 ['Estado', 'Valor'],
                 ['<%=paramRequest.getLocaleString("lblDelayed")%>', <%=delayed%>],
@@ -101,14 +273,13 @@ if (showResponse) {
         }
         %>
     }
+<%}%>    
+    function updateCharts() {
+        <%if (showInstances || showResponse || showStatus) {%>
+        drawChart();
+        <%}
+        if (showParticipation) {%>
+        updatePartChart("#participationGraph");
+        <%}%>
+    }
 </script>
-<%if (showInstances) {%>
-    <div class="processChartPie" id="performanceGraph"></div>
-<%}
-if (showResponse) {%>
-    <div class="processChartPie" id="responseTime"></div>
-<%}
-if (showStatus) {%>
-    <div class="processChartPie" id="overdueGraph"></div>
-<%}
-%>
