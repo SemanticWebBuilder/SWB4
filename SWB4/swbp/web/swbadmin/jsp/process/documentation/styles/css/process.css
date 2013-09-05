@@ -61,7 +61,7 @@ img{
     font-size: 15px;
     /*padding-top: 20px;*/
     font-weight: bold;
-    text-indent:20px;
+    /*text-indent:20px;*/
     background: url("images/lateral-linea.png") no-repeat scroll right top transparent;
 
 }
@@ -93,9 +93,9 @@ img{
     /*background-color: */
     /*border: .01px outset green;*/
     border-radius: 4px 4px 4px 4px;
-    background-color: #36c136;;
+    /*background-color: #36c136;;*/
     margin: 0 8px;
-    color: white;
+    /*color: white;*/
 }
 #contenido{
     float: left;
@@ -129,17 +129,17 @@ img{
 }
 
 #imprimir {
-    width:auto;
-    height: auto;
-    background: url(images/ico_imprimir.png) no-repeat;
-    padding-right: 2%;
+/*    width:auto;
+    height: auto;*/
+    /*background: url(images/ico_imprimir.png) no-repeat;*/
+    /*padding-right: 2%;*/
     text-decoration: none;
-    text-indent: 26px;
+/*    text-indent: 26px;*/
     float: right;
-    padding-top: 3px;
+    /*padding-top: 3px;*/
     display: block;
     color: #808080;
-    margin-right: 5px;
+    /*margin-right: 5px;*/
     background-color: #fff;
 }
 #diagrama{
@@ -183,17 +183,17 @@ img{
     background-color: #fff;
 }
 #html{
-    width:auto;
-    height: auto;
-    background: url(images/html.png) no-repeat;
-    padding-right: 2%;
+    /*width:auto;*/
+    /*height: auto;*/
+    /*background: url(images/html.png) no-repeat;*/
+    /*padding-right: 2%;*/
     text-decoration: none;
-    text-indent: 26px;
+    /*text-indent: 26px;*/
     float: right;
-    padding-top: 3px;
+    /*padding-top: 3px;*/
     display: block;
     color: #808080;
-    margin-right: 5px;
+    /*margin-right: 5px;*/
     background-color: #fff;
 }
 
