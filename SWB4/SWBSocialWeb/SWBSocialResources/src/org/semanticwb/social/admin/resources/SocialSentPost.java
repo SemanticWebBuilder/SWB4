@@ -113,7 +113,7 @@ public class SocialSentPost extends GenericResource {
     public static final String Mode_EDITWindow = "editWindow";
     public static final String Mode_PREVIEW = "preview";
     public static final String Mode_ShowPostOutNets = "postOutLog";
-    private static final int RECPERPAGE=20; //Number of records by Page, could be dynamic later
+    private static final int RECPERPAGE = 20; //Number of records by Page, could be dynamic later
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -132,10 +132,7 @@ public class SocialSentPost extends GenericResource {
             doShowPostOutLog(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("exportExcel")) {
             try {
-                String idSurvey = request.getParameter("idSurvey");
-                String pages = request.getParameter("pages");
-                int page = Integer.parseInt(pages);
-                doGenerateReport(request, response, paramRequest, idSurvey, paramRequest.getWebPage().getWebSite(), page);
+                doGenerateReport(request, response, paramRequest);
             } catch (Exception e) {
                 System.out.println("Error reprt:" + e);
             }
@@ -575,17 +572,17 @@ public class SocialSentPost extends GenericResource {
         } catch (Exception ignored) {
             nPage = 1;
         }
-        
-        HashMap hmapResult=filtros(swbSocialUser, wsite, searchWord, request, socialTopic, nPage);
-        
-        long nRec=((Long)hmapResult.get("countResult")).longValue();
-        Set<PostOut> setso=((Set)hmapResult.get("itResult"));
+
+        HashMap hmapResult = filtros(swbSocialUser, wsite, searchWord, request, socialTopic, nPage);
+
+        long nRec = ((Long) hmapResult.get("countResult")).longValue();
+        Set<PostOut> setso = ((Set) hmapResult.get("itResult"));
 
         Iterator<PostOut> itposts = setso.iterator();
         while (itposts.hasNext()) {
             PostOut postOut = (PostOut) itposts.next();
 
-           
+
             // revisando contenido en flujo de publicación
             // validacion de botones en relación a los flujos
 
@@ -896,7 +893,7 @@ public class SocialSentPost extends GenericResource {
         out.println("</table>");
         out.println("</fieldset>");
 
-        if (nRec>0) {
+        if (nRec > 0) {
             out.println("<div id=\"pagination\">");
             out.println("<span>P&aacute;ginas:</span>");
             for (int countPage = 1; countPage < (Math.ceil((double) nRec / (double) RECPERPAGE) + 1); countPage++) {
@@ -1642,8 +1639,10 @@ public class SocialSentPost extends GenericResource {
     /*
      * Method which calls a jsp to generate a report based on the result of registers in this class
      */
-    private void doGenerateReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String idSurvey, WebSite webSite, int page) {
+    private void doGenerateReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
 
+        String pages = request.getParameter("pages");
+        int page = Integer.parseInt(pages);
         String searchWord = request.getParameter("search");
         if (null == searchWord) {
             searchWord = "";
@@ -1652,19 +1651,23 @@ public class SocialSentPost extends GenericResource {
         String id = request.getParameter("suri");
 
         SocialTopic socialTopic = (SocialTopic) SemanticObject.getSemanticObject(id).getGenericInstance();
-        
-        HashMap hmapResult=filtros(swbSocialUser, webSite, searchWord, request, socialTopic, page);
-        
-        long nRec=((Long)hmapResult.get("countResult")).longValue();
-        Set<PostOut> setso=((Set)hmapResult.get("itResult"));
+        WebSite webSite = WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
 
+        HashMap hmapResult = filtros(swbSocialUser, webSite, searchWord, request, socialTopic, page);
 
+        //long nRec = ((Long) hmapResult.get("countResult")).longValue();
+        Set<PostOut> setso = ((Set) hmapResult.get("itResult"));
+
+        
+        String classifyBySentiment = SWBSocialUtil.Util.getModelPropertyValue(webSite, SWBSocialUtil.CLASSIFYSENTMGS_PROPNAME);
+
+        
         try {
 
-            createExcel(setso, paramRequest, page, response, socialTopic);
+            createExcel(setso, paramRequest, classifyBySentiment, response, socialTopic);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 
@@ -1672,25 +1675,32 @@ public class SocialSentPost extends GenericResource {
      * Method which controls the filters allowed in this class
      */
     private HashMap filtros(String swbSocialUser, WebSite wsite, String searchWord, HttpServletRequest request, SocialTopic socialTopic, int nPage) {
-        Set<PostIn> setso=null;
+        Set<PostIn> setso = null;
         ArrayList<PostOut> aListFilter = new ArrayList();
-        HashMap hampResult=new HashMap();
-        Iterator<PostOut> itposts=null;
+        HashMap hampResult = new HashMap();
+        Iterator<PostOut> itposts = null;
         if (swbSocialUser != null) {
             SocialNetworkUser socialNetUser = SocialNetworkUser.ClassMgr.getSocialNetworkUser(swbSocialUser, wsite);
             //itposts = socialNetUser.listPostInInvs();
-            long StreamPostIns=wsite.getSemanticModel().countStatements(null, PostOut.swb_creator.getRDFProperty(), socialNetUser.getSemanticObject().getRDFResource(), null);
+            long StreamPostIns = wsite.getSemanticModel().countStatements(null, PostOut.swb_creator.getRDFProperty(), socialNetUser.getSemanticObject().getRDFResource(), null);
             hampResult.put("countResult", Long.valueOf(StreamPostIns));
-            itposts=new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostOut.swb_creator.getRDFProperty(), socialNetUser.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId(), Integer.valueOf((nPage*RECPERPAGE)).longValue(), Integer.valueOf((nPage*RECPERPAGE)-RECPERPAGE).longValue(), "timems desc"),true));
+            itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostOut.swb_creator.getRDFProperty(), socialNetUser.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId(), Integer.valueOf((nPage * RECPERPAGE)).longValue(), Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), "timems desc"), true));
         } else {
-            System.out.println("socialTopic.getSocialSite() filtro-George24:"+socialTopic+",getSocialSite():"+socialTopic.getSocialSite());
+            System.out.println("socialTopic.getSocialSite() filtro-George24:" + socialTopic + ",getSocialSite():" + socialTopic.getSocialSite());
             //itposts = PostOut.ClassMgr.listPostOutBySocialTopic(socialTopic, socialTopic.getSocialSite());
-            long SocialTopicPostOut=wsite.getSemanticModel().countStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), null);
-            System.out.println("SocialTopicPostOut/FiltrosJJ:"+SocialTopicPostOut);
+            long SocialTopicPostOut = wsite.getSemanticModel().countStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), null);
+            System.out.println("SocialTopicPostOut/FiltrosJJ:" + SocialTopicPostOut);
             hampResult.put("countResult", Long.valueOf(SocialTopicPostOut));
-            itposts=new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId(), Integer.valueOf((RECPERPAGE)).longValue(), Integer.valueOf((nPage*RECPERPAGE)-RECPERPAGE).longValue(), "timems desc"),true));
-            System.out.println("SocialTopicPostOut/FiltrosJJ/itposts:"+itposts.hasNext());
-            
+            if (nPage != 0) {
+                itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId(), Integer.valueOf((RECPERPAGE)).longValue(), Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), "timems desc"), true));
+            } else {
+                itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId(), SocialTopicPostOut , 0L, "timems desc"), true));
+
+            }
+
+
+            System.out.println("SocialTopicPostOut/FiltrosJJ/itposts:" + itposts.hasNext());
+
             if (searchWord != null) {
                 while (itposts.hasNext()) {
                     PostOut postOut = itposts.next();
@@ -1756,16 +1766,13 @@ public class SocialSentPost extends GenericResource {
 
     }
 
-    private void createExcel(Set<PostOut> setso, SWBParamRequest paramRequest, int page, HttpServletResponse response, SocialTopic socialTopic) {
+    private void createExcel(Set<PostOut> setso, SWBParamRequest paramRequest, String classifyBySentiment, HttpServletResponse response, SocialTopic socialTopic) {
         try {
-            System.out.println("entra a create");
-            System.out.println("setso.iterator()" + setso.iterator());
+        
             // Defino el Libro de Excel
             Iterator v = setso.iterator();
-            System.out.println("v" + v);
             String title = socialTopic.getTitle();
-            System.out.println("tiele" + title);
-
+            
             HSSFWorkbook wb = new HSSFWorkbook();
 
             // Creo la Hoja en Excel
@@ -1784,214 +1791,47 @@ public class SocialSentPost extends GenericResource {
             Row row = sheet.createRow((short) 2);
 
             // Creo las celdas de mi fila, se puede poner un diseño a la celda
-            createCell(wb, row, 0, CellStyle.ALIGN_CENTER,
-                    CellStyle.VERTICAL_CENTER, "Post", true, true);
-            createCell(wb, row, 1, CellStyle.ALIGN_CENTER,
-                    CellStyle.VERTICAL_CENTER, "Tipo", true, true);
-            createCell(wb, row, 2, CellStyle.ALIGN_CENTER,
-                    CellStyle.VERTICAL_CENTER, "Redes", true, true);
-            createCell(wb, row, 3, CellStyle.ALIGN_CENTER,
-                    CellStyle.VERTICAL_CENTER, "Origen", true, true);
-            createCell(wb, row, 4, CellStyle.ALIGN_CENTER,
-                    CellStyle.VERTICAL_CENTER, "Creación", true, true);
-            createCell(wb, row, 5, CellStyle.ALIGN_CENTER,
-                    CellStyle.VERTICAL_CENTER, "Última actualización", true, true);
-            createCell(wb, row, 6, CellStyle.ALIGN_CENTER,
-                    CellStyle.VERTICAL_CENTER, "Sentimiento", true, true);
-            createCell(wb, row, 7, CellStyle.ALIGN_CENTER,
-                    CellStyle.VERTICAL_CENTER, "Intensidad", true, true);
-            createCell(wb, row, 8, CellStyle.ALIGN_CENTER,
-                    CellStyle.VERTICAL_CENTER, "Estatus", true, true);
+            createHead(wb, row, 0, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Post");
+            createHead(wb, row, 1, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Tipo");
+            createHead(wb, row, 2, CellStyle.ALIGN_CENTER,CellStyle.VERTICAL_CENTER, "Redes");
+            createHead(wb, row, 3, CellStyle.ALIGN_CENTER,CellStyle.VERTICAL_CENTER, "Origen");
+            createHead(wb, row, 4, CellStyle.ALIGN_CENTER,CellStyle.VERTICAL_CENTER, "Creación");
+            createHead(wb, row, 5, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Última actualización");
+            if (classifyBySentiment != null && classifyBySentiment.equalsIgnoreCase("true")) {
+            createHead(wb, row, 6, CellStyle.ALIGN_CENTER,CellStyle.VERTICAL_CENTER, "Sentimiento");
+            createHead(wb, row, 7, CellStyle.ALIGN_CENTER,CellStyle.VERTICAL_CENTER, "Intensidad");
+            createHead(wb, row, 8, CellStyle.ALIGN_CENTER,CellStyle.VERTICAL_CENTER, "Estatus");
+            }else{
+            
+            createHead(wb, row, 6, CellStyle.ALIGN_CENTER,CellStyle.VERTICAL_CENTER, "Estatus");
+            }
+            
 
 
 
             String lang = paramRequest.getUser().getLanguage();
-            int recPerPage = 20;//if(resBase.getItemsbyPage()>0) recPerPage=resBase.getItemsbyPage();            
-            int nRec = 0;
-            int nPage;
-            nPage = page;
+          
 
             //Número de filas
             int i = 3;
+             CellStyle cellStyle = wb.createCellStyle();
+             
             SocialPFlowMgr pfmgr = SocialLoader.getPFlowManager();
             boolean isInFlow = false;
             boolean isAuthorized = false;
             boolean needAuthorization = false;
-            boolean send2Flow = false;
-
-
+            //boolean send2Flow = false;
 
             while (v.hasNext()) {
                 PostOut postIn = (PostOut) v.next();
-                nRec++;
-
-                if (nPage == 0) {
-
-                    isInFlow = false;
-                    isAuthorized = false;
-                    needAuthorization = false;
-                    send2Flow = false;
-
-                    // System.out.println("sobj PostOut..JJUri:" + postOut.getEncodedURI() + ",Is Published:" + postOut.isPublished());
-
-                    isInFlow = pfmgr.isInFlow(postIn);
-
-                    Row troww = sheet.createRow((short) i);
-
-
-                    if (postIn.getMsg_Text() != null) {
-
-                        createCell(wb, troww, 0, CellStyle.ALIGN_LEFT,
-                                CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(postIn.getMsg_Text()), 25), true, false);
-                    }
-
-                    createCell(wb, troww, 1, CellStyle.ALIGN_CENTER,
-                            CellStyle.VERTICAL_CENTER, postIn instanceof Message ? paramRequest.getLocaleString("message") : postIn instanceof Photo ? paramRequest.getLocaleString("photo") : postIn instanceof Video ? paramRequest.getLocaleString("video") : "---", true, false);
-
-                    String nets = "---";
-                    boolean firstTime = true;
-                    Iterator<SocialNetwork> itPostSocialNets = postIn.listSocialNetworks();
-                    while (itPostSocialNets.hasNext()) {
-                        SocialNetwork socialNet = itPostSocialNets.next();
-                        //System.out.println("socialNet-1:"+socialNet);
-                        String sSocialNet = socialNet.getDisplayTitle(lang);
-                        //System.out.println("socialNet-2:"+sSocialNet);
-                        if (sSocialNet != null && sSocialNet.trim().length() > 0) {
-                            //System.out.println("socialNet-3:"+sSocialNet);
-                            if (firstTime) {
-                                nets = "" + sSocialNet;
-                                firstTime = false;
-                            } else {
-                                nets += "|" + sSocialNet;
-                            }
-                        }
-                    }
-
-                    createCell(wb, troww, 2, CellStyle.ALIGN_CENTER,
-                            CellStyle.VERTICAL_CENTER, nets, true, false);
-
-                    if (postIn.getPostInSource() != null) {
-                        createCell(wb, troww, 3, CellStyle.ALIGN_CENTER,
-                                CellStyle.VERTICAL_CENTER, "Origen(Image)", true, false);
-
-                    } else {
-                        createCell(wb, troww, 3, CellStyle.ALIGN_CENTER,
-                                CellStyle.VERTICAL_CENTER, "----", true, false);
-                    }
-
-
-                    createCell(wb, troww, 4, CellStyle.ALIGN_CENTER,
-                            CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getCreated(), lang), true, false);
-
-                    createCell(wb, troww, 5, CellStyle.ALIGN_CENTER,
-                            CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getUpdated(), lang), true, false);
-
-
-
-                    //Sentiment
-
-                    if (postIn.getPostSentimentalType() == 0) {
-                        createCell(wb, troww, 6, CellStyle.ALIGN_CENTER,
-                                CellStyle.VERTICAL_CENTER, "----", true, false);
-                    } else if (postIn.getPostSentimentalType() == 1) {
-                        createCell(wb, troww, 6, CellStyle.ALIGN_CENTER,
-                                CellStyle.VERTICAL_CENTER, "Positivo", true, false);
-                    } else if (postIn.getPostSentimentalType() == 2) {
-                        createCell(wb, troww, 6, CellStyle.ALIGN_CENTER,
-                                CellStyle.VERTICAL_CENTER, "Negativo", true, false);
-                    }
-
-
-
-                    if (postIn.getPostIntesityType() == 1) {
-                        createCell(wb, troww, 7, CellStyle.ALIGN_CENTER,
-                                CellStyle.VERTICAL_CENTER, "Medium", true, false);
-
-                    } else if (postIn.getPostIntesityType() == 2) {
-                        createCell(wb, troww, 7, CellStyle.ALIGN_CENTER,
-                                CellStyle.VERTICAL_CENTER, "High", true, false);
-                    } else if (postIn.getPostIntesityType() == 0) {
-
-                        createCell(wb, troww, 7, CellStyle.ALIGN_CENTER,
-                                CellStyle.VERTICAL_CENTER, "---", true, false);
-                    }
-
-
-                    // copiar
-
-                    //SWBResourceURL urlPostOutNets = paramRequest.getRenderUrl().setMode(Mode_ShowPostOutNets).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postOut", postOut.getURI());
-
-                    if (!postIn.isPublished()) {
-
-                        boolean postOutwithPostOutNets = false;
-                        boolean someOneIsNotPublished = false;
-                        Iterator<PostOutNet> itPostOutNets = PostOutNet.ClassMgr.listPostOutNetBySocialPost(postIn, paramRequest.getWebPage().getWebSite());
-                        while (itPostOutNets.hasNext()) {
-                            PostOutNet postOutNet = itPostOutNets.next();
-                            System.out.println("postOutNet:" + postOutNet);
-                            postOutwithPostOutNets = true;
-                            if (postOutNet.getStatus() == 0) {
-                                System.out.println("postOutNet-1/status:" + postOutNet.getStatus());
-                                someOneIsNotPublished = true;
-                                break;
-                            }
-                        }
-                        if (!isInFlow && postOutwithPostOutNets && !someOneIsNotPublished) //Se supone que por lo menos, hay publicado un PostOutNet del Post                         
-                        {
-                            createCell(wb, troww, 8, CellStyle.ALIGN_CENTER,
-                                    CellStyle.VERTICAL_CENTER, "Publicado", true, false);
-                        } else {
-                            if (!needAuthorization) {
-
-
-                                if (someOneIsNotPublished) {
-                                    createCell(wb, troww, 8, CellStyle.ALIGN_CENTER,
-                                            CellStyle.VERTICAL_CENTER, "A revisar", true, false);
-                                } else {
-                                    createCell(wb, troww, 8, CellStyle.ALIGN_CENTER,
-                                            CellStyle.VERTICAL_CENTER, "Publicar", true, false);
-                                }
-                            } else {    //El PostOut ya se envío
-                                if (!isInFlow && needAuthorization && !isAuthorized) {
-                                    String sFlowRejected = "---";
-                                    if (postIn.getPflowInstance() != null && postIn.getPflowInstance().getPflow() != null) {
-                                        sFlowRejected = postIn.getPflowInstance().getPflow().getDisplayTitle(lang);
-                                    }
-                                    createCell(wb, troww, 8, CellStyle.ALIGN_CENTER,
-                                            CellStyle.VERTICAL_CENTER, "Rechazado", true, false);
-                                } else if (isInFlow && needAuthorization && !isAuthorized) {
-                                    createCell(wb, troww, 8, CellStyle.ALIGN_CENTER,
-                                            CellStyle.VERTICAL_CENTER, "En flujo", true, false);
-                                }
-                            }
-                        }
-                    } else {
-                        //System.out.println("ESE POST ESTA PUBLICADO..");
-                        createCell(wb, troww, 8, CellStyle.ALIGN_CENTER,
-                                CellStyle.VERTICAL_CENTER, "Publicado", true, false);
-                    }
-
-
-
-
-                    i++;
-
-                } else {
-
-
-                    if ((nRec > (nPage - 1) * recPerPage) && (nRec <= (nPage) * recPerPage)) {
+                   
                         Row troww = sheet.createRow((short) i);
 
-
                         if (postIn.getMsg_Text() != null) {
-                            createCell(wb, troww, 0, CellStyle.ALIGN_LEFT,
-                                    CellStyle.VERTICAL_CENTER, postIn.getMsg_Text(), true, false);
+                            createCell(cellStyle,wb, troww, 0, CellStyle.ALIGN_LEFT,CellStyle.VERTICAL_CENTER, postIn.getMsg_Text());
 
                         }
-
-
-                        createCell(wb, troww, 1, CellStyle.ALIGN_CENTER,
-                                CellStyle.VERTICAL_CENTER, postIn instanceof Message ? paramRequest.getLocaleString("message") : postIn instanceof Photo ? paramRequest.getLocaleString("photo") : postIn instanceof Video ? paramRequest.getLocaleString("video") : "---", true, false);
+                        createCell(cellStyle,wb, troww, 1, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, postIn instanceof Message ? paramRequest.getLocaleString("message") : postIn instanceof Photo ? paramRequest.getLocaleString("photo") : postIn instanceof Video ? paramRequest.getLocaleString("video") : "---");
 
                         String nets = "---";
                         boolean firstTime = true;
@@ -2012,53 +1852,45 @@ public class SocialSentPost extends GenericResource {
                             }
                         }
 
-                        createCell(wb, troww, 2, CellStyle.ALIGN_CENTER,
-                                CellStyle.VERTICAL_CENTER, nets, true, false);
+                        createCell(cellStyle,wb, troww, 2, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, nets);
 
                         if (postIn.getPostInSource() != null) {
-                            createCell(wb, troww, 3, CellStyle.ALIGN_CENTER,
-                                    CellStyle.VERTICAL_CENTER, "Origen(Image)", true, false);
+                            createCell(cellStyle, wb, troww, 3, CellStyle.ALIGN_CENTER,CellStyle.VERTICAL_CENTER, "Origen(Image)" );
 
                         } else {
-                            createCell(wb, troww, 3, CellStyle.ALIGN_CENTER,
-                                    CellStyle.VERTICAL_CENTER, "----", true, false);
+                            createCell(cellStyle, wb, troww, 3, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "----");
                         }
 
 
-                        createCell(wb, troww, 4, CellStyle.ALIGN_CENTER,
-                                CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getCreated(), lang), true, false);
+                        createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER,CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getCreated(), lang));
 
-                        createCell(wb, troww, 5, CellStyle.ALIGN_CENTER,
-                                CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getUpdated(), lang), true, false);
+                        createCell(cellStyle, wb, troww, 5, CellStyle.ALIGN_CENTER,CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getUpdated(), lang));
 
 
-
+                        if (classifyBySentiment != null && classifyBySentiment.equalsIgnoreCase("true")) {
                         //Sentiment
 
                         if (postIn.getPostSentimentalType() == 0) {
-                            createCell(wb, troww, 6, CellStyle.ALIGN_CENTER,
-                                    CellStyle.VERTICAL_CENTER, "----", true, false);
+                            createCell(cellStyle,wb, troww, 6, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "----");
                         } else if (postIn.getPostSentimentalType() == 1) {
-                            createCell(wb, troww, 6, CellStyle.ALIGN_CENTER,
-                                    CellStyle.VERTICAL_CENTER, "Positivo", true, false);
+                            createCell(cellStyle,wb, troww, 6, CellStyle.ALIGN_CENTER,CellStyle.VERTICAL_CENTER, "Positivo");
                         } else if (postIn.getPostSentimentalType() == 2) {
-                            createCell(wb, troww, 6, CellStyle.ALIGN_CENTER,
-                                    CellStyle.VERTICAL_CENTER, "Negativo", true, false);
+                            createCell(cellStyle,wb, troww, 6, CellStyle.ALIGN_CENTER,CellStyle.VERTICAL_CENTER, "Negativo");
                         }
 
 
 
                         if (postIn.getPostIntesityType() == 1) {
-                            createCell(wb, troww, 7, CellStyle.ALIGN_CENTER,
-                                    CellStyle.VERTICAL_CENTER, "Medium", true, false);
+                            createCell(cellStyle,wb, troww, 7, CellStyle.ALIGN_CENTER,
+                                    CellStyle.VERTICAL_CENTER, "Medium");
 
                         } else if (postIn.getPostIntesityType() == 2) {
-                            createCell(wb, troww, 7, CellStyle.ALIGN_CENTER,
-                                    CellStyle.VERTICAL_CENTER, "High", true, false);
+                            createCell(cellStyle,wb, troww, 7, CellStyle.ALIGN_CENTER,
+                                    CellStyle.VERTICAL_CENTER, "High");
                         } else if (postIn.getPostIntesityType() == 0) {
 
-                            createCell(wb, troww, 7, CellStyle.ALIGN_CENTER,
-                                    CellStyle.VERTICAL_CENTER, "---", true, false);
+                            createCell(cellStyle,wb, troww, 7, CellStyle.ALIGN_CENTER,
+                                    CellStyle.VERTICAL_CENTER, "---");
                         }
 
                         if (!postIn.isPublished()) {
@@ -2078,18 +1910,18 @@ public class SocialSentPost extends GenericResource {
                             }
                             if (!isInFlow && postOutwithPostOutNets && !someOneIsNotPublished) //Se supone que por lo menos, hay publicado un PostOutNet del Post                         
                             {
-                                createCell(wb, troww, 8, CellStyle.ALIGN_CENTER,
-                                        CellStyle.VERTICAL_CENTER, "Publicado", true, false);
+                                createCell(cellStyle,wb, troww, 8, CellStyle.ALIGN_CENTER,
+                                        CellStyle.VERTICAL_CENTER, "Publicado");
                             } else {
                                 if (!needAuthorization) {
 
 
                                     if (someOneIsNotPublished) {
-                                        createCell(wb, troww, 8, CellStyle.ALIGN_CENTER,
-                                                CellStyle.VERTICAL_CENTER, "A revisar", true, false);
+                                        createCell(cellStyle,wb, troww, 8, CellStyle.ALIGN_CENTER,
+                                                CellStyle.VERTICAL_CENTER, "A revisar");
                                     } else {
-                                        createCell(wb, troww, 8, CellStyle.ALIGN_CENTER,
-                                                CellStyle.VERTICAL_CENTER, "Publicar", true, false);
+                                        createCell(cellStyle,wb, troww, 8, CellStyle.ALIGN_CENTER,
+                                                CellStyle.VERTICAL_CENTER, "Publicar");
                                     }
                                 } else {    //El PostOut ya se envío
                                     if (!isInFlow && needAuthorization && !isAuthorized) {
@@ -2097,25 +1929,77 @@ public class SocialSentPost extends GenericResource {
                                         if (postIn.getPflowInstance() != null && postIn.getPflowInstance().getPflow() != null) {
                                             sFlowRejected = postIn.getPflowInstance().getPflow().getDisplayTitle(lang);
                                         }
-                                        createCell(wb, troww, 8, CellStyle.ALIGN_CENTER,
-                                                CellStyle.VERTICAL_CENTER, "Rechazado", true, false);
+                                        createCell(cellStyle,wb, troww, 8, CellStyle.ALIGN_CENTER,
+                                                CellStyle.VERTICAL_CENTER, "Rechazado");
                                     } else if (isInFlow && needAuthorization && !isAuthorized) {
-                                        createCell(wb, troww, 8, CellStyle.ALIGN_CENTER,
-                                                CellStyle.VERTICAL_CENTER, "En flujo", true, false);
+                                        createCell(cellStyle,wb, troww, 8, CellStyle.ALIGN_CENTER,
+                                                CellStyle.VERTICAL_CENTER, "En flujo");
                                     }
                                 }
                             }
                         } else {
                             //System.out.println("ESE POST ESTA PUBLICADO..");
-                            createCell(wb, troww, 8, CellStyle.ALIGN_CENTER,
-                                    CellStyle.VERTICAL_CENTER, "Publicado", true, false);
+                            createCell(cellStyle,wb, troww, 8, CellStyle.ALIGN_CENTER,
+                                    CellStyle.VERTICAL_CENTER, "Publicado");
+                        }
+                        }else{
+                        
+                        
+                            if (!postIn.isPublished()) {
+
+                            boolean postOutwithPostOutNets = false;
+                            boolean someOneIsNotPublished = false;
+                            Iterator<PostOutNet> itPostOutNets = PostOutNet.ClassMgr.listPostOutNetBySocialPost(postIn, paramRequest.getWebPage().getWebSite());
+                            while (itPostOutNets.hasNext()) {
+                                PostOutNet postOutNet = itPostOutNets.next();
+                                System.out.println("postOutNet:" + postOutNet);
+                                postOutwithPostOutNets = true;
+                                if (postOutNet.getStatus() == 0) {
+                                    System.out.println("postOutNet-1/status:" + postOutNet.getStatus());
+                                    someOneIsNotPublished = true;
+                                    break;
+                                }
+                            }
+                            if (!isInFlow && postOutwithPostOutNets && !someOneIsNotPublished) //Se supone que por lo menos, hay publicado un PostOutNet del Post                         
+                            {
+                                createCell(cellStyle,wb, troww, 6, CellStyle.ALIGN_CENTER,
+                                        CellStyle.VERTICAL_CENTER, "Publicado");
+                            } else {
+                                if (!needAuthorization) {
+
+
+                                    if (someOneIsNotPublished) {
+                                        createCell(cellStyle,wb, troww, 6, CellStyle.ALIGN_CENTER,
+                                                CellStyle.VERTICAL_CENTER, "A revisar");
+                                    } else {
+                                        createCell(cellStyle,wb, troww, 6, CellStyle.ALIGN_CENTER,
+                                                CellStyle.VERTICAL_CENTER, "Publicar");
+                                    }
+                                } else {    //El PostOut ya se envío
+                                    if (!isInFlow && needAuthorization && !isAuthorized) {
+                                        String sFlowRejected = "---";
+                                        if (postIn.getPflowInstance() != null && postIn.getPflowInstance().getPflow() != null) {
+                                            sFlowRejected = postIn.getPflowInstance().getPflow().getDisplayTitle(lang);
+                                        }
+                                        createCell(cellStyle,wb, troww, 6, CellStyle.ALIGN_CENTER,
+                                                CellStyle.VERTICAL_CENTER, "Rechazado");
+                                    } else if (isInFlow && needAuthorization && !isAuthorized) {
+                                        createCell(cellStyle,wb, troww, 6, CellStyle.ALIGN_CENTER,
+                                                CellStyle.VERTICAL_CENTER, "En flujo");
+                                    }
+                                }
+                            }
+                        } else {
+                            //System.out.println("ESE POST ESTA PUBLICADO..");
+                            createCell(cellStyle,wb, troww, 6, CellStyle.ALIGN_CENTER,
+                                    CellStyle.VERTICAL_CENTER, "Publicado");
+                        }
+                        
+                        
                         }
 
-
-                        i++;
-
-                    }
-                }
+                        i++;                  
+                
 
             }
 
@@ -2145,9 +2029,8 @@ public class SocialSentPost extends GenericResource {
             ou.close();
 
 
-
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 
@@ -2173,38 +2056,59 @@ public class SocialSentPost extends GenericResource {
 
     }
 
-    public static void createCell(Workbook wb, Row row, int column, short halign, short valign, String strContenido, boolean booBorde, boolean booCabecera) {
+    public static void createHead(HSSFWorkbook wb, Row row, int column, short halign, short valign, String strContenido) {
+
+
+        CreationHelper ch = wb.getCreationHelper();
+        Cell cell = row.createCell(column);
+        cell.setCellValue(ch.createRichTextString(strContenido));
+
+        HSSFFont cellFont = wb.createFont();
+        cellFont.setFontHeightInPoints((short) 11);
+        cellFont.setFontName(HSSFFont.FONT_ARIAL);
+        cellFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+
+        CellStyle cellStyle = wb.createCellStyle();
+        cellStyle.setAlignment(halign);
+        cellStyle.setVerticalAlignment(valign);
+        cellStyle.setFont(cellFont);
+        cellStyle.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+        cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyle.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
+        cellStyle.setBottomBorderColor((short) 8);
+        cellStyle.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
+        cellStyle.setLeftBorderColor((short) 8);
+        cellStyle.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
+        cellStyle.setRightBorderColor((short) 8);
+        cellStyle.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
+        cellStyle.setTopBorderColor((short) 8);
+
+        cellStyle.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+        cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cell.setCellStyle(cellStyle);
+
+    }
+
+    public static void createCell(CellStyle cellStyle, Workbook wb, Row row, int column, short halign, short valign, String strContenido) {
+
+
         CreationHelper ch = wb.getCreationHelper();
         Cell cell = row.createCell(column);
 
         cell.setCellValue(ch.createRichTextString(strContenido));
-        CellStyle cellStyle = wb.createCellStyle();
         cellStyle.setAlignment(halign);
         cellStyle.setVerticalAlignment(valign);
-        if (booBorde) {
-            cellStyle.setBorderBottom(HSSFCellStyle.BORDER_DOTTED);
-            cellStyle.setBottomBorderColor((short) 8);
-            cellStyle.setBorderLeft(HSSFCellStyle.BORDER_DOTTED);
-            cellStyle.setLeftBorderColor((short) 8);
-            cellStyle.setBorderRight(HSSFCellStyle.BORDER_DOTTED);
-            cellStyle.setRightBorderColor((short) 8);
-            cellStyle.setBorderTop(HSSFCellStyle.BORDER_DOTTED);
-            cellStyle.setTopBorderColor((short) 8);
-        }
-        if (booCabecera) {
-            cellStyle.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
-            cellStyle.setBottomBorderColor((short) 8);
-            cellStyle.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
-            cellStyle.setLeftBorderColor((short) 8);
-            cellStyle.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
-            cellStyle.setRightBorderColor((short) 8);
-            cellStyle.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
-            cellStyle.setTopBorderColor((short) 8);
+        cellStyle.setBorderBottom(HSSFCellStyle.BORDER_DOTTED);
+        cellStyle.setBottomBorderColor((short) 8);
+        cellStyle.setBorderLeft(HSSFCellStyle.BORDER_DOTTED);
+        cellStyle.setLeftBorderColor((short) 8);
+        cellStyle.setBorderRight(HSSFCellStyle.BORDER_DOTTED);
+        cellStyle.setRightBorderColor((short) 8);
+        cellStyle.setBorderTop(HSSFCellStyle.BORDER_DOTTED);
+        cellStyle.setTopBorderColor((short) 8);
 
-            cellStyle.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
-            cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-        }
 
         cell.setCellStyle(cellStyle);
+
     }
 }
