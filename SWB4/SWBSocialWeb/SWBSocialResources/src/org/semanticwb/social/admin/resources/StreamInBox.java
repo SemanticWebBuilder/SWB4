@@ -84,6 +84,7 @@ public class StreamInBox extends GenericResource {
     String Mode_PreView = "preview";
     String Mode_showTags = "showTags";
     private static final int RECPERPAGE = 20; //Number of records by Page, could be dynamic later
+    private static final int PAGES2VIEW = 15; //Number of pages 2 display in pagination.
 
     /**
      * Creates a new instance of SWBAWebPageContents.
@@ -903,7 +904,15 @@ public class StreamInBox extends GenericResource {
         out.println("</fieldset>");
 
         if (nRec > 0) {
-            int totalPages=Double.valueOf(nRec/20).intValue();
+            int totalPages=1;
+            if(nRec>RECPERPAGE)
+            {
+                totalPages=Double.valueOf(nRec/20).intValue();
+                if((nRec % RECPERPAGE)>0){
+                    totalPages=Double.valueOf(nRec/20).intValue()+1;
+                }
+            }
+            System.out.println("StreamInBox/totalPages:"+totalPages);
             out.println("<div id=\"pagSumary\">"+paramRequest.getLocaleString("page")+":"+nPage+" "+paramRequest.getLocaleString("of") +" "+totalPages+"</div>");
             
             SWBResourceURL pageURL = paramRequest.getRenderUrl();
@@ -939,7 +948,7 @@ public class StreamInBox extends GenericResource {
             //stfont=Algun font, pero yo creo que hay que poner en lugar de td una div (como esta ahorita arriba) y con un class
             //position=Posición en (arriba, abajo, ambos), esto no aplicaría para este uso
             
-            out.println(SWBSocialUtil.Util.getContentByPage(nRec, nPage, 15, paramRequest.getLocaleString("pageBefore"), paramRequest.getLocaleString("pageNext"), pageURL));
+            out.println(SWBSocialUtil.Util.getContentByPage(totalPages, nPage, PAGES2VIEW, paramRequest.getLocaleString("pageBefore"), paramRequest.getLocaleString("pageNext"), pageURL));
         }
 
 

@@ -114,6 +114,7 @@ public class SocialSentPost extends GenericResource {
     public static final String Mode_PREVIEW = "preview";
     public static final String Mode_ShowPostOutNets = "postOutLog";
     private static final int RECPERPAGE = 20; //Number of records by Page, could be dynamic later
+    private static final int PAGES2VIEW = 15; //Number of pages 2 display in pagination.
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -894,7 +895,14 @@ public class SocialSentPost extends GenericResource {
         out.println("</fieldset>");
 
         if (nRec > 0) {
-            int totalPages=Double.valueOf(nRec/20).intValue();
+            int totalPages=1;
+            if(nRec>RECPERPAGE)
+            {
+                totalPages=Double.valueOf(nRec/20).intValue();
+                if((nRec % RECPERPAGE)>0){
+                    totalPages=Double.valueOf(nRec/20).intValue()+1;
+                }
+            }
             out.println("<div id=\"pagSumary\">"+paramRequest.getLocaleString("page")+":"+nPage+" "+paramRequest.getLocaleString("of") +" "+totalPages+"</div>");
             
             SWBResourceURL pageURL = paramRequest.getRenderUrl();
@@ -923,7 +931,7 @@ public class SocialSentPost extends GenericResource {
             }
             out.println("</div>");
             * */
-            out.println(SWBSocialUtil.Util.getContentByPage(nRec, nPage, 15, paramRequest.getLocaleString("pageBefore"), paramRequest.getLocaleString("pageNext"), pageURL));
+            out.println(SWBSocialUtil.Util.getContentByPage(totalPages, nPage, PAGES2VIEW, paramRequest.getLocaleString("pageBefore"), paramRequest.getLocaleString("pageNext"), pageURL));
         }
 
         out.println("</div>");
