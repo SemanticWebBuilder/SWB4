@@ -213,7 +213,7 @@ if (showParticipation) {%>
                 .style("text-anchor","middle")
                 .style("fill","black")
                 .style("font-size","10pt")
-                .style("font-weight","bold")
+                .style("font-weight","bold");
         }
         updatePartChart("#participationGraph");
     </script>
