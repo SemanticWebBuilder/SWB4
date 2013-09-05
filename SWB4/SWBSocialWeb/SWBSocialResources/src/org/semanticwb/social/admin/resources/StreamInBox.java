@@ -903,9 +903,9 @@ public class StreamInBox extends GenericResource {
         out.println("</fieldset>");
 
         if (nRec > 0) {
-            //System.out.println("Entra a nRec SI HAY PAGINACIÓN");
-            //out.println("<div id=\"pagination\">");
-            //out.println("<span>P&aacute;ginas:</span>");
+            out.println("<div id=\"pagSumary\">"+nPage+" de "+nRec+"</div>");
+            
+            
             
             SWBResourceURL pageURL = paramRequest.getRenderUrl();
             //pageURL.setParameter("page", "" + (countPage));
