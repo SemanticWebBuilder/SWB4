@@ -144,11 +144,11 @@
                     ---
                     <% } else if (postIn.getPostSentimentalType() == 1) {
                     %>
-                    <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/feelpos.png">
+                    <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/pos.png">
                     <%
                     } else if (postIn.getPostSentimentalType() == 2) {
                     %>
-                    <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/feelneg.png">
+                    <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/neg.png">
                     <%
                         }
                     %>
@@ -183,6 +183,7 @@
                     <%=postIn.isIsPrioritary() ? SWBSocialUtil.Util.getStringFromGenericLocale("yes", user.getLanguage()) : SWBSocialUtil.Util.getStringFromGenericLocale("not", user.getLanguage())%>
                 </td> 
             </tr>
+
         </tbody>
     </table>
 </div>
