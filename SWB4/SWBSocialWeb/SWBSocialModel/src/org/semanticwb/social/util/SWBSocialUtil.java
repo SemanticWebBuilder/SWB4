@@ -1114,10 +1114,7 @@ public class SWBSocialUtil implements SWBAppObject {
      {
         StringBuilder strb1 = new StringBuilder();
         try {
-            System.out.println("Entra a nRec SI HAY PAGINACIÓN-2");
-            
             strb1.append("<div id=\"pagination\">");
-            //href=\"#\" onclick=\"submitUrl('" + pageURL + "',this); return false;\"
             if (npage > 1) {
                pageURL.setParameter("page", ""+(npage - 1));
                strb1.append("<a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">"+ stxtant + "</a> ");
@@ -1175,7 +1172,6 @@ public class SWBSocialUtil implements SWBAppObject {
         } catch (Exception e) {
             log.error(e);
         }
-        System.out.println("Entra a nRec SI HAY PAGINACIÓN-3:"+strb1.toString());
         return strb1.toString();
       }
         
