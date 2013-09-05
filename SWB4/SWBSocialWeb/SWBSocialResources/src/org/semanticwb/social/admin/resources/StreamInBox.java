@@ -903,8 +903,19 @@ public class StreamInBox extends GenericResource {
         out.println("</fieldset>");
 
         if (nRec > 0) {
-            out.println("<div id=\"pagination\">");
-            out.println("<span>P&aacute;ginas:</span>");
+            //System.out.println("Entra a nRec SI HAY PAGINACIÓN");
+            //out.println("<div id=\"pagination\">");
+            //out.println("<span>P&aacute;ginas:</span>");
+            
+            SWBResourceURL pageURL = paramRequest.getRenderUrl();
+            //pageURL.setParameter("page", "" + (countPage));
+            pageURL.setParameter("suri", id);
+            pageURL.setParameter("search", (searchWord.trim().length() > 0 ? searchWord : ""));
+            pageURL.setParameter("swbSocialUser", swbSocialUser);
+            if (request.getParameter("orderBy") != null) {
+                pageURL.setParameter("orderBy", request.getParameter("orderBy"));
+            }
+            /*
             for (int countPage = 1; countPage < (Math.ceil((double) nRec / (double) RECPERPAGE) + 1); countPage++) {
                 SWBResourceURL pageURL = paramRequest.getRenderUrl();
                 pageURL.setParameter("page", "" + (countPage));
@@ -919,8 +930,19 @@ public class StreamInBox extends GenericResource {
                 } else {
                     out.println(countPage + " ");
                 }
-            }
-            out.println("</div>");
+            }*/
+            //out.println("</div>");
+            
+             //ipage=Pagina actual, osea nPage
+            //snpages=No. de Paginas maximas que quiero que aparezcan, tengo un 15 en content
+            //stxtant= Texto para "Anterior"
+            //stxtsig=Texto para siguiente
+            //stfont=Algun font, pero yo creo que hay que poner en lugar de td una div (como esta ahorita arriba) y con un class
+            //position=Posición en (arriba, abajo, ambos), esto no aplicaría para este uso
+            String stxtant="Anterior";
+            String stxtsig="Siguiente";
+            System.out.println("Entra a nRec SI HAY PAGINACIÓN-1");
+            out.println(SWBSocialUtil.Util.getContentByPage(nRec, nPage, 15, stxtant, stxtsig, pageURL));
         }
 
 
