@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -103,13 +104,24 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
                 doViewReport(request, response, paramRequest);
             } else if (paramRequest.getMode().equals("generate")) {
                 doGenerateReport(request, response, paramRequest);
+            } else if (paramRequest.getMode().equals("dialog")) {
+                doExportFile(request, response, paramRequest);
             } else {
                 super.processRequest(request, response, paramRequest);
             }
         } catch (Exception ex) {
             log.error("Error on processRequest, " + ex.getMessage());
-            ex.printStackTrace();
         }
+    }
+
+    public void doExportFile(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, ParseException, ServletException {
+        String path = SWBPlatform.getContextPath() + "/swbadmin/jsp/process/reports/ReportResourceDialog.jsp";
+        RequestDispatcher rd = request.getRequestDispatcher(path);
+        request.setAttribute("paramRequest", paramRequest);
+        request.setAttribute("isSaveOnSystem", isSaveOnSystem());
+        request.setAttribute("idReport", request.getParameter("idReport"));
+        request.setAttribute("action", request.getParameter("action"));
+        rd.include(request, response);
     }
 
     public void doViewReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, ParseException {
@@ -119,12 +131,12 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
         request.setAttribute("idReport", request.getParameter("idReport"));
         request.setAttribute("pi", getProcessInstances(request, paramRequest));
         request.setAttribute("isSaveOnSystem", isSaveOnSystem());
+        request.setAttribute("modeExport", getModeExport());
         pRequest = paramRequest;
         try {
             rd.include(request, response);
         } catch (ServletException ex) {
             log.error("Error to load " + path + ", " + ex.getMessage());
-            ex.printStackTrace();
         }
     }
 
@@ -394,6 +406,7 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
             }
         } catch (Exception e) {
             log.error("Error on doGenerateReport, " + e.getMessage());
+            e.printStackTrace();
         }
     }
     String[] array = null;
@@ -431,8 +444,8 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
                 page = 1;
             }
         }
-        if (pagingSize < 5) {
-            pagingSize = 5;
+        if (pagingSize < 1) {
+            pagingSize = 10000;
         }
         while (pi.hasNext()) {
             ProcessInstance processInstance = pi.next();
@@ -566,15 +579,18 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
             lang = lng;
         }
 
+        @Override
         public int compare(Object t, Object t1) {
             SemanticProperty spt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(array[1]);
             int it = 0;
             int it1 = 0;
-            if (((ProcessInstance) t).getItemAwareReference().getProcessObject().getSemanticObject().getObjectProperty(spt) != null) {
-                it = Integer.parseInt(((ProcessInstance) t).getItemAwareReference().getProcessObject().getSemanticObject().getObjectProperty(spt).getId());
-            }
-            if (((ProcessInstance) t1).getItemAwareReference().getProcessObject().getSemanticObject().getObjectProperty(spt) != null) {
-                it1 = Integer.parseInt(((ProcessInstance) t1).getItemAwareReference().getProcessObject().getSemanticObject().getObjectProperty(spt).getId());
+            if (((ProcessInstance) t).getItemAwareReference() != null && ((ProcessInstance) t1).getItemAwareReference() != null) {
+                if (((ProcessInstance) t).getItemAwareReference().getProcessObject().getSemanticObject().getObjectProperty(spt) != null) {
+                    it = Integer.parseInt(((ProcessInstance) t).getItemAwareReference().getProcessObject().getSemanticObject().getObjectProperty(spt).getId());
+                }
+                if (((ProcessInstance) t1).getItemAwareReference().getProcessObject().getSemanticObject().getObjectProperty(spt) != null) {
+                    it1 = Integer.parseInt(((ProcessInstance) t1).getItemAwareReference().getProcessObject().getSemanticObject().getObjectProperty(spt).getId());
+                }
             }
             int ret = 0;
             if (des.equals("des")) {
@@ -608,13 +624,15 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
         @Override
         public int compare(Object t, Object t1) {
             SemanticProperty spt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(array[1]);
-            String st = "";
-            String st1 = "";
-            if (((ProcessInstance) t).getItemAwareReference().getProcessObject().getSemanticObject().getProperty(spt) != null) {
-                st = ((ProcessInstance) t).getItemAwareReference().getProcessObject().getSemanticObject().getProperty(spt).toLowerCase();
-            }
-            if (((ProcessInstance) t1).getItemAwareReference().getProcessObject().getSemanticObject().getProperty(spt) != null) {
-                st1 = ((ProcessInstance) t1).getItemAwareReference().getProcessObject().getSemanticObject().getProperty(spt).toLowerCase();
+            String st = "--";
+            String st1 = "--";
+            if (((ProcessInstance) t).getItemAwareReference() != null && ((ProcessInstance) t1).getItemAwareReference() != null) {
+                if (((ProcessInstance) t).getItemAwareReference().getProcessObject().getSemanticObject().getProperty(spt) != null) {
+                    st = ((ProcessInstance) t).getItemAwareReference().getProcessObject().getSemanticObject().getProperty(spt).toLowerCase();
+                }
+                if (((ProcessInstance) t1).getItemAwareReference().getProcessObject().getSemanticObject().getProperty(spt) != null) {
+                    st1 = ((ProcessInstance) t1).getItemAwareReference().getProcessObject().getSemanticObject().getProperty(spt).toLowerCase();
+                }
             }
             if (des.equals("des")) {
                 return st.compareTo(st1);
@@ -640,7 +658,9 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
         String path = "/swbadmin/jsp/process/reports/ReportResourceEdit.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(path);
         request.setAttribute("paramRequest", paramRequest);
+        request.setAttribute("isSaveOnSystem", isSaveOnSystem());
         request.setAttribute("idReport", request.getParameter("idReport"));
+        request.setAttribute("modeExport", getModeExport());
         try {
             rd.include(request, response);
         } catch (ServletException ex) {
@@ -663,12 +683,24 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
             Iterator<SemanticProperty> propReport = Report.sclass.listProperties();
             while (propReport.hasNext()) {
                 SemanticProperty semProp = propReport.next();
-                reportMgr.addProperty(semProp);
+                if (semProp.isInt()) {
+                    try {
+                        Integer pagingSize = Integer.parseInt(request.getParameter("pagingSize"));
+                        reportMgr.addProperty(semProp);
+                    } catch (NumberFormatException nfe) {
+                    }
+                } else {
+                    reportMgr.addProperty(semProp);
+                }
             }
             try {
                 SemanticObject sem = reportMgr.processForm(request);
                 Report report = (Report) sem.createGenericInstance();
-                report.setTitle(report.getTitle());
+                if (report.getTitle() == null) {
+                    report.setTitle(report.getProcessName().getTitle().trim());
+                } else {
+                    report.setTitle(report.getTitle().trim());
+                }
                 response.setRenderParameter("idReport", report.getId());
                 response.setMode(SWBResourceURL.Mode_EDIT);
             } catch (FormValidateException ex) {
@@ -682,9 +714,20 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
                 Iterator<SemanticProperty> propReport = Report.sclass.listProperties();
                 while (propReport.hasNext()) {
                     SemanticProperty semProp = propReport.next();
-                    reportMgr.addProperty(semProp);
+                    if (semProp.isInt()) {
+                        try {
+                            Integer pagingSize = Integer.parseInt(request.getParameter("pagingSize"));
+                            reportMgr.addProperty(semProp);
+                        } catch (NumberFormatException nfe) {
+                        }
+                    } else {
+                        reportMgr.addProperty(semProp);
+                    }
                 }
                 reportMgr.processForm(request);
+                if (report.getTitle() == null) {
+                    report.setTitle(report.getProcessName().getTitle().trim());
+                }
                 response.setRenderParameter("idReport", report.getId());
                 response.setMode(SWBResourceURL.Mode_EDIT);
             } catch (FormValidateException ex) {
@@ -693,25 +736,27 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
         } else if (response.getAction().equals("addColumn")) {
             Report report = Report.ClassMgr.getReport(request.getParameter("idReport"), response.getWebPage().getWebSite());
             String[] items = request.getParameterValues("property");
-            for (int i = 0; i < items.length; i++) {
-                ColumnReport col = ColumnReport.ClassMgr.createColumnReport(response.getWebPage().getWebSite());
-                Iterator<ColumnReport> columna = SWBComparator.sortSortableObject(report.listColumnReports());
-                Integer indice = 0;
-                while (columna.hasNext()) {
-                    columna.next();
-                    indice++;
+            if (items != null) {
+                for (int i = 0; i < items.length; i++) {
+                    ColumnReport col = ColumnReport.ClassMgr.createColumnReport(response.getWebPage().getWebSite());
+                    Iterator<ColumnReport> columna = SWBComparator.sortSortableObject(report.listColumnReports());
+                    Integer indice = 0;
+                    while (columna.hasNext()) {
+                        columna.next();
+                        indice++;
+                    }
+                    if (indice != 0) {
+                        col.setIndex((indice + 1));
+                    } else {
+                        col.setIndex(1);
+                    }
+                    col.setReportName(report);
+                    col.setColumnVisible(true);
+                    col.setDefaultValue("");
+                    col.setDefaultValueMax("");
+                    report.addColumnReport(col);
+                    col.setNameProperty(items[i]);
                 }
-                if (indice != 0) {
-                    col.setIndex((indice + 1));
-                } else {
-                    col.setIndex(1);
-                }
-                col.setReportName(report);
-                col.setColumnVisible(true);
-                col.setDefaultValue("");
-                col.setDefaultValueMax("");
-                report.addColumnReport(col);
-                col.setNameProperty(items[i]);
             }
             response.setRenderParameter("idReport", report.getId());
             response.setMode(SWBResourceURL.Mode_EDIT);
