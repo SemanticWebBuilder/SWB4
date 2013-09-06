@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.tracing.base;
 
 
-public abstract class BSCTracingBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable
+public abstract class BSCTracingBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Help,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass bsc_BSCTracing=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#BSCTracing");
    /**
@@ -126,6 +126,11 @@ public abstract class BSCTracingBase extends org.semanticwb.model.SWBClass imple
         }
     }
 
+    public static BSCTracingBase.ClassMgr getBSCTracingClassMgr()
+    {
+        return new BSCTracingBase.ClassMgr();
+    }
+
    /**
    * Constructs a BSCTracingBase with a SemanticObject
    * @param base The SemanticObject with the properties for the BSCTracing
@@ -171,6 +176,24 @@ public abstract class BSCTracingBase extends org.semanticwb.model.SWBClass imple
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Help property
+* @return String with the Help
+*/
+    public String getHelp()
+    {
+        return getSemanticObject().getProperty(bsc_help);
+    }
+
+/**
+* Sets the Help property
+* @param value long with the Help
+*/
+    public void setHelp(String value)
+    {
+        getSemanticObject().setProperty(bsc_help, value);
     }
 
 /**
