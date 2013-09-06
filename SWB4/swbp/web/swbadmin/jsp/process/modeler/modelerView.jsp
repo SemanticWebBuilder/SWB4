@@ -3,6 +3,7 @@
     Created on : 7/05/2013, 12:09:42 PM
     Author     : Hasdai Pacheco <ebenezer.sanchez@infotec.com.mx>
 --%>
+<%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.model.SWBContext"%>
 <%@page import="org.semanticwb.process.resources.SVGModeler"%>
@@ -20,20 +21,19 @@ String suri = request.getParameter("suri");
 commandUrl.setMode(SVGModeler.MODE_GATEWAY);
 commandUrl.setAction(SVGModeler.ACT_GETPROCESSJSON);
 commandUrl.setParameter("suri", suri);
-
 SWBResourceURL exportUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
 exportUrl.setMode(SVGModeler.MODE_EXPORT);
 %>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7" >
-    <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false, locale: 'es'" ></script>
+    <script type="text/javascript" src="<%=SWBPortal.getContextPath()%>/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false, locale: 'es'" ></script>
     <!--
     <script src="/swbadmin/js/swb_admin.js"></script>
     <script src="/swbadmin/js/swb.js"></script>
     -->
-    <script type="text/javascript" src="/swbadmin/jsp/process/modeler/toolkit.js" charset="utf-8"></script>
-    <script type="text/javascript" src="/swbadmin/jsp/process/modeler/modeler.js" charset="utf-8"></script>
-    <link href="/swbadmin/jsp/process/modeler/images/modelerFrame.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="<%=SWBPortal.getContextPath()%>/swbadmin/jsp/process/modeler/toolkit.js" charset="utf-8"></script>
+    <script type="text/javascript" src="<%=SWBPortal.getContextPath()%>/swbadmin/jsp/process/modeler/modeler.js" charset="utf-8"></script>
+    <link href="<%=SWBPortal.getContextPath()%>/swbadmin/jsp/process/modeler/images/modelerFrame.css" rel="stylesheet" type="text/css">
 </head>
 <%if (!isViewMode) {
     %>
