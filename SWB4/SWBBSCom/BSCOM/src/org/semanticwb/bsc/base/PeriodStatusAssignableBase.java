@@ -1,25 +1,28 @@
 package org.semanticwb.bsc.base;
 
    /**
-   * Cualquier elemento BSC al que se le puedan agregar mediciones 
+   * Interface que permite asignar más de un objeto de tipo "PeriodStatus" a un elemento. 
    */
 public interface PeriodStatusAssignableBase extends org.semanticwb.model.GenericObject
 {
+   /**
+   * Clase que define el valor de un estado en un periodo. Ejemplo: Para el periodo "Enero 2013" - Estado "En Riesgo" 
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_PeriodStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#PeriodStatus");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasPeriodStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasPeriodStatus");
    /**
-   * Cualquier elemento BSC al que se le puedan agregar mediciones 
+   * Interface que permite asignar más de un objeto de tipo "PeriodStatus" a un elemento. 
    */
     public static final org.semanticwb.platform.SemanticClass bsc_PeriodStatusAssignable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#PeriodStatusAssignable");
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.PeriodStatus> listPeriodStatuses();
-    public boolean hasPeriodStatus(org.semanticwb.bsc.element.PeriodStatus value);
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.PeriodStatus> listPeriodStatuses();
+    public boolean hasPeriodStatus(org.semanticwb.bsc.tracing.PeriodStatus value);
 
    /**
    * Adds the PeriodStatus
-   * @param value An instance of org.semanticwb.bsc.element.PeriodStatus
+   * @param value An instance of org.semanticwb.bsc.tracing.PeriodStatus
    */
-    public void addPeriodStatus(org.semanticwb.bsc.element.PeriodStatus value);
+    public void addPeriodStatus(org.semanticwb.bsc.tracing.PeriodStatus value);
 
    /**
    * Remove all the values for the property PeriodStatus
@@ -28,13 +31,13 @@ public interface PeriodStatusAssignableBase extends org.semanticwb.model.Generic
 
    /**
    * Remove a value from the property PeriodStatus
-   * @param value An instance of org.semanticwb.bsc.element.PeriodStatus
+   * @param value An instance of org.semanticwb.bsc.tracing.PeriodStatus
    */
-    public void removePeriodStatus(org.semanticwb.bsc.element.PeriodStatus value);
+    public void removePeriodStatus(org.semanticwb.bsc.tracing.PeriodStatus value);
 
 /**
 * Gets the PeriodStatus
-* @return a instance of org.semanticwb.bsc.element.PeriodStatus
+* @return a instance of org.semanticwb.bsc.tracing.PeriodStatus
 */
-    public org.semanticwb.bsc.element.PeriodStatus getPeriodStatus();
+    public org.semanticwb.bsc.tracing.PeriodStatus getPeriodStatus();
 }

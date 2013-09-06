@@ -6,7 +6,7 @@ package org.semanticwb.bsc.base;
 public interface FixedMeasurableBase extends org.semanticwb.model.GenericObject
 {
    /**
-   * Las frecuencias de medición, definen bloques de períodos para determinar cuándo se requiere la captura de información. 
+   * Las frecuencias de medición, definen bloques de períodos para determinar cuándo se requiere la captura de información. Frecuencia de medición. 
    */
     public static final org.semanticwb.platform.SemanticClass bsc_MeasurementFrequency=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#MeasurementFrequency");
    /**
@@ -20,14 +20,14 @@ public interface FixedMeasurableBase extends org.semanticwb.model.GenericObject
 
    /**
    * Sets a value from the property Periodicity
-   * @param value An instance of org.semanticwb.bsc.accessory.MeasurementFrequency
+   * @param value An instance of org.semanticwb.bsc.tracing.MeasurementFrequency
    */
-    public void setPeriodicity(org.semanticwb.bsc.accessory.MeasurementFrequency value);
+    public void setPeriodicity(org.semanticwb.bsc.tracing.MeasurementFrequency value);
 
    /**
    * Remove the value from the property Periodicity
    */
     public void removePeriodicity();
 
-    public org.semanticwb.bsc.accessory.MeasurementFrequency getPeriodicity();
+    public org.semanticwb.bsc.tracing.MeasurementFrequency getPeriodicity();
 }
