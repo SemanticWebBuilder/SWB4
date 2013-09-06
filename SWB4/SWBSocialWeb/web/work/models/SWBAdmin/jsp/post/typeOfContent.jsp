@@ -29,6 +29,9 @@
 
     String objUri = request.getParameter("objUri");
     String sourceCall = request.getParameter("source");
+        if(sourceCall == null){ //When typeOfContent is called from Tema/Responder the param source is not being sent
+            sourceCall = "reply";
+        }
     System.out.println("****EL source es: " +sourceCall);
     
     SemanticObject semObj = null;
@@ -180,7 +183,7 @@
 
                 %>
             
-                    <button class="submit" type="submit" onclick="return checksRedesText('<%=objUri%>','<%=sourceCall%>');"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+                    <button class="submit" type="submit" onclick="return checksRedesText('<%=objUri%>','<%=sourceCall%>', <%=(postInSN == null ? "true" : "false")%>);"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
                
             </div>      
             <%
@@ -326,7 +329,7 @@
                         }
                     %>
 
-                        <button class="submit" type="submit" onclick="return checksRedesPhoto('<%=objUri%>','<%=sourceCall%>');"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+                        <button class="submit" type="submit" onclick="return checksRedesPhoto('<%=objUri%>','<%=sourceCall%>',<%=(postInSN == null ? "true" : "false")%>);"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
                 </div>
 
                 <%
@@ -489,7 +492,7 @@
                 }
             %>  
                     </p>
-             <button class="submit" type="submit" onclick="return validateChecks('<%=objUri%>','<%=sourceCall%>');"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+             <button class="submit" type="submit" onclick="return validateChecks('<%=objUri%>','<%=sourceCall%>',<%=(postInSN == null ? "true" : "false")%>);"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
              </div>
                 
             <%
