@@ -284,24 +284,24 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
         int page = 1;
 
         if (sortType == null || sortType.trim().equals("")) {
-            sortType = "date";
+            sortType = "1";
         } else {
             sortType = sortType.trim();
         }
 
-        if (request.getParameter("page") != null && !request.getParameter("page").trim().equals("")) {
-            page = Integer.valueOf(request.getParameter("page"));
+        if (request.getParameter("p") != null && !request.getParameter("p").trim().equals("")) {
+            page = Integer.valueOf(request.getParameter("p"));
             if (page < 0) page = 1;
         }
 
         if (itemsPerPage < 5) itemsPerPage = 5;
 
-        if (request.getParameter("sFilter") != null && !request.getParameter("sFilter").trim().equals("")) {
-            statusFilter = Integer.valueOf(request.getParameter("sFilter"));
+        if (request.getParameter("sF") != null && !request.getParameter("sF").trim().equals("")) {
+            statusFilter = Integer.valueOf(request.getParameter("sF"));
         }
         
-        if (request.getParameter("gFilter") != null && !request.getParameter("gFilter").trim().equals("")) {
-            group = ProcessGroup.ClassMgr.getProcessGroup(request.getParameter("gFilter"), site);
+        if (request.getParameter("gF") != null && !request.getParameter("gF").trim().equals("")) {
+            group = ProcessGroup.ClassMgr.getProcessGroup(request.getParameter("gF"), site);
         }
         
         Iterator<Process> processes = Process.ClassMgr.listProcesses(site);
@@ -319,12 +319,12 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
         }
 
         Iterator<ProcessInstance> it_ins = null;
-        if (sortType.equals("date")) {
+        if (sortType.equals("1")) {
             it_ins = SWBComparator.sortByCreated(t_instances.iterator(), false);
-        } else if (sortType.equals("name")) {
+        } else if (sortType.equals("2")) {
             Collections.sort(t_instances, processNameComparator);
             it_ins = t_instances.iterator();
-        } else if (sortType.equals("priority")) {
+        } else if (sortType.equals("3")) {
             Collections.sort(t_instances, processPriorityComparator);
             it_ins = t_instances.iterator();
         }        
