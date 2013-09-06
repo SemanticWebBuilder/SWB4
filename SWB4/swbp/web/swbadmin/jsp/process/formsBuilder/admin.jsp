@@ -478,7 +478,7 @@ addPropsUrl.setParameter(ProcessForm.ATT_TASK, task.getEncodedURI());
         var cssNode = document.createElement('link');
         cssNode.setAttribute("type","text/css");
         cssNode.setAttribute("rel","stylesheet");
-        cssNode.setAttribute("href","<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/formsBuilder.css");
+        cssNode.setAttribute("href","<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/formsBuilder/css/formsBuilder.css");
         document.getElementsByTagName("head")[0].appendChild(cssNode);
     }
     setCSS();
