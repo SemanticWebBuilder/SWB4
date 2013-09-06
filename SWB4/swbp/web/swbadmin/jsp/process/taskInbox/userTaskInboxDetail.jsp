@@ -108,9 +108,9 @@ if (!user.isSigned()) {
                         <div class="panel-body">
                         <%
                         if (engine.equals("google")) {
-                            %><jsp:include page="/swbadmin/jsp/process/userTaskInboxGoogleGraphs.jsp" flush="true"/><%
+                            %><jsp:include page="/swbadmin/jsp/process/taskInbox/userTaskInboxGoogleGraphs.jsp" flush="true"/><%
                         } else {
-                            %><jsp:include page="/swbadmin/jsp/process/userTaskInboxD3Graphs.jsp" flush="true"/><%
+                            %><jsp:include page="/swbadmin/jsp/process/taskInbox/userTaskInboxD3Graphs.jsp" flush="true"/><%
                         }
                 }
                 %>
