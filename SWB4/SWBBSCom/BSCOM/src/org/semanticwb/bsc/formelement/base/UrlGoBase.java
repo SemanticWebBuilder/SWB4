@@ -74,6 +74,11 @@ public abstract class UrlGoBase extends org.semanticwb.model.base.FormElementBas
         }
     }
 
+    public static UrlGoBase.ClassMgr getUrlGoClassMgr()
+    {
+        return new UrlGoBase.ClassMgr();
+    }
+
    /**
    * Constructs a UrlGoBase with a SemanticObject
    * @param base The SemanticObject with the properties for the UrlGo

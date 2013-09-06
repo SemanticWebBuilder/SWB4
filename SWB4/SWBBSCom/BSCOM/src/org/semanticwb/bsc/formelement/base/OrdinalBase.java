@@ -80,6 +80,11 @@ public abstract class OrdinalBase extends org.semanticwb.bsc.formelement.Number
         }
     }
 
+    public static OrdinalBase.ClassMgr getOrdinalClassMgr()
+    {
+        return new OrdinalBase.ClassMgr();
+    }
+
    /**
    * Constructs a OrdinalBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Ordinal

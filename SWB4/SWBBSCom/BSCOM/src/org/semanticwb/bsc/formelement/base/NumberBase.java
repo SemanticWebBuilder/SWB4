@@ -80,6 +80,11 @@ public abstract class NumberBase extends org.semanticwb.model.Text
         }
     }
 
+    public static NumberBase.ClassMgr getNumberClassMgr()
+    {
+        return new NumberBase.ClassMgr();
+    }
+
    /**
    * Constructs a NumberBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Number
