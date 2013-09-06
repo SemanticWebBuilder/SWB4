@@ -41,15 +41,16 @@ public class RemoveMessagesResource extends GenericResource {
             String wsiteId = stream.getSemanticObject().getModel().getName();
             WebSite wsite=WebSite.ClassMgr.getWebSite(wsiteId);
             Iterator<PostIn> itPostIn = PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
-            long noOfMessages = SWBUtils.Collections.sizeOf(itPostIn);
+            //long noOfMessages = SWBUtils.Collections.sizeOf(itPostIn);
+            long StreamPostIns = wsite.getSemanticModel().countStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), null);
             out.println("<div class=\"swbform\">");
             //out.println("<form type=\"dijit.form.Form\" id=\"del\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"submitForm('del'); return false;\">");            
             out.println("<form type=\"dijit.form.Form\" id=\"del" + stream.getId() +"\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes serán eliminados.')){submitForm('del" + stream.getId() + "'); return false;}else{return false;}\">");            
             out.println("<table width=\"100%\" border=\"0px\">");            
             out.println("   <tr>");
-            out.println("       <td style=\"text-align: center;\">El Stream <b>" + stream.getDisplayTitle(paramRequest.getUser().getLanguage())  + "</b> actualmente contiene en total <b>" + noOfMessages +  "</b> mensajes</td>");        
+            out.println("       <td style=\"text-align: center;\">El Stream <b>" + stream.getDisplayTitle(paramRequest.getUser().getLanguage())  + "</b> actualmente contiene en total <b>" + StreamPostIns +  "</b> mensajes</td>");        
             out.println("   </tr>");
-            if(noOfMessages >0L){
+            if(StreamPostIns >0L){
                 out.println("   <tr>");
                 out.println("       <td style=\"text-align: center;\">¿Eliminar todos los mensajes?</td>");
                 out.println("   </tr>");
@@ -64,6 +65,14 @@ public class RemoveMessagesResource extends GenericResource {
             out.println("</div>");
             
             //Solo mensajes sin Tema
+            /*
+            ArrayList aList=new ArrayList();
+            Iterator <PostIn> itPostInWOTopic=PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
+            while(itPostInWOTopic.hasNext())
+            {
+                PostIn postIn=itPostInWOTopic.next();
+                if(postIn.getSocialTopic()==null) aList.add(postIn.getURI());
+            }*/
             ArrayList aList=new ArrayList();
             Iterator <PostIn> itPostInWOTopic=PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
             while(itPostInWOTopic.hasNext())
@@ -79,7 +88,7 @@ public class RemoveMessagesResource extends GenericResource {
             out.println("   <tr>");
             out.println("       <td style=\"text-align: center;\">El Stream <b>" + stream.getDisplayTitle(paramRequest.getUser().getLanguage())  + "</b> actualmente contiene <b>" + aList.size() +  "</b> mensajes sin Tema</td>");        
             out.println("   </tr>");
-            if(noOfMessages >0L){
+            if(StreamPostIns >0L){
                 out.println("   <tr>");
                 out.println("       <td style=\"text-align: center;\">¿Eliminar todos los mensajes sin tema?</td>");
                 out.println("   </tr>");
