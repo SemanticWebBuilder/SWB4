@@ -25,6 +25,7 @@
 <%@page import="org.semanticwb.model.WebSite"%>
 <%@page import="org.semanticwb.portal.SWBFormMgr"%>
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute(ProcessForm.ATT_PARAMREQUEST);
 UserTask task = (UserTask) request.getAttribute(ProcessForm.ATT_TASK);
