@@ -43,12 +43,9 @@ import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.Resourceable;
-import org.semanticwb.model.Role;
-import org.semanticwb.model.RoleRef;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
-import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
@@ -479,7 +476,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         initTaskInbox();
-        String jsp = "/swbadmin/jsp/process/userTaskInbox.jsp";
+        String jsp = "/swbadmin/jsp/process/taskInbox/userTaskInbox.jsp";
         if (getViewJSP() != null && !getViewJSP().trim().equals("")) {
             jsp = getViewJSP();
         }
@@ -699,7 +696,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     }
     
     public void doCreateProcessInstance(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = "/swbadmin/jsp/process/userTaskInboxNewCase.jsp";
+        String jsp = "/swbadmin/jsp/process/taskInbox/userTaskInboxNewCase.jsp";
 
         try {
             RequestDispatcher rd = request.getRequestDispatcher(jsp);
@@ -711,7 +708,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     }
     
     public void doDetail(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = "/swbadmin/jsp/process/userTaskInboxDetail.jsp";
+        String jsp = "/swbadmin/jsp/process/taskInbox/userTaskInboxDetail.jsp";
 
         try {
             RequestDispatcher rd = request.getRequestDispatcher(jsp);
@@ -729,7 +726,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     }
     
     public void doForward(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = "/swbadmin/jsp/process/userTaskInboxFwd.jsp";
+        String jsp = "/swbadmin/jsp/process/taskInbox/userTaskInboxFwd.jsp";
 
         try {
             RequestDispatcher rd = request.getRequestDispatcher(jsp);
