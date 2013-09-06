@@ -730,7 +730,7 @@ public class ProcessForm extends GenericResource {
     
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = "/swbadmin/jsp/process/formsBuilder/admin.jsp";
+        String jsp = SWBPortal.getContextPath()+"/swbadmin/jsp/process/formsBuilder/admin.jsp";
         Resource base = getResourceBase();
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -963,7 +963,7 @@ public class ProcessForm extends GenericResource {
     }
     
     public void doConfig(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = "/swbadmin/jsp/process/formsBuilder/config.jsp";
+        String jsp = SWBPortal.getContextPath()+"/swbadmin/jsp/process/formsBuilder/config.jsp";
         Resource base = getResourceBase();
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
