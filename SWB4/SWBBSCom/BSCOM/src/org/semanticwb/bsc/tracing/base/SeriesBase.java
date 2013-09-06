@@ -1,19 +1,18 @@
 package org.semanticwb.bsc.tracing.base;
 
 
-public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Committable,org.semanticwb.model.Traceable
+public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.bsc.Help,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Measurable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Committable
 {
-    public static final org.semanticwb.platform.SemanticProperty bsc_value=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#value");
     public static final org.semanticwb.platform.SemanticProperty bsc_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#index");
     public static final org.semanticwb.platform.SemanticClass bsc_Format=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Format");
     public static final org.semanticwb.platform.SemanticProperty bsc_format=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#format");
+    public static final org.semanticwb.platform.SemanticClass bsc_Measure=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Measure");
+    public static final org.semanticwb.platform.SemanticProperty bsc_hasMeasure=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasMeasure");
    /**
    * Persiste los atributos de un indicador
    */
     public static final org.semanticwb.platform.SemanticClass bsc_Indicator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Indicator");
     public static final org.semanticwb.platform.SemanticProperty bsc_indicatorInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#indicatorInv");
-    public static final org.semanticwb.platform.SemanticClass bsc_PeriodStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#PeriodStatus");
-    public static final org.semanticwb.platform.SemanticProperty bsc_measure=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#measure");
     public static final org.semanticwb.platform.SemanticClass bsc_Series=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Series");
    /**
    * The semantic class that represents the currentObject
@@ -136,6 +135,29 @@ public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing i
             return it;
         }
        /**
+       * Gets all org.semanticwb.bsc.tracing.Series with a determined Measure
+       * @param value Measure of the type org.semanticwb.bsc.Measure
+       * @param model Model of the org.semanticwb.bsc.tracing.Series
+       * @return Iterator with all the org.semanticwb.bsc.tracing.Series
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.Series> listSeriesByMeasure(org.semanticwb.bsc.Measure value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Series> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasMeasure, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.tracing.Series with a determined Measure
+       * @param value Measure of the type org.semanticwb.bsc.Measure
+       * @return Iterator with all the org.semanticwb.bsc.tracing.Series
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.Series> listSeriesByMeasure(org.semanticwb.bsc.Measure value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Series> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasMeasure,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.bsc.tracing.Series with a determined Indicator
        * @param value Indicator of the type org.semanticwb.bsc.element.Indicator
        * @param model Model of the org.semanticwb.bsc.tracing.Series
@@ -156,29 +178,6 @@ public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing i
         public static java.util.Iterator<org.semanticwb.bsc.tracing.Series> listSeriesByIndicator(org.semanticwb.bsc.element.Indicator value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Series> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_indicatorInv,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.tracing.Series with a determined Measure
-       * @param value Measure of the type org.semanticwb.bsc.element.PeriodStatus
-       * @param model Model of the org.semanticwb.bsc.tracing.Series
-       * @return Iterator with all the org.semanticwb.bsc.tracing.Series
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Series> listSeriesByMeasure(org.semanticwb.bsc.element.PeriodStatus value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Series> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_measure, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.tracing.Series with a determined Measure
-       * @param value Measure of the type org.semanticwb.bsc.element.PeriodStatus
-       * @return Iterator with all the org.semanticwb.bsc.tracing.Series
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Series> listSeriesByMeasure(org.semanticwb.bsc.element.PeriodStatus value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Series> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_measure,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -218,24 +217,6 @@ public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing i
     public SeriesBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-/**
-* Gets the Value property
-* @return float with the Value
-*/
-    public float getValue()
-    {
-        return getSemanticObject().getFloatProperty(bsc_value);
-    }
-
-/**
-* Sets the Value property
-* @param value long with the Value
-*/
-    public void setValue(float value)
-    {
-        getSemanticObject().setFloatProperty(bsc_value, value);
     }
 
 /**
@@ -294,6 +275,71 @@ public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing i
          return ret;
     }
    /**
+   * Gets all the org.semanticwb.bsc.Measure
+   * @return A GenericIterator with all the org.semanticwb.bsc.Measure
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Measure> listMeasures()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Measure>(getSemanticObject().listObjectProperties(bsc_hasMeasure));
+    }
+
+   /**
+   * Gets true if has a Measure
+   * @param value org.semanticwb.bsc.Measure to verify
+   * @return true if the org.semanticwb.bsc.Measure exists, false otherwise
+   */
+    public boolean hasMeasure(org.semanticwb.bsc.Measure value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(bsc_hasMeasure,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a Measure
+   * @param value org.semanticwb.bsc.Measure to add
+   */
+
+    public void addMeasure(org.semanticwb.bsc.Measure value)
+    {
+        getSemanticObject().addObjectProperty(bsc_hasMeasure, value.getSemanticObject());
+    }
+   /**
+   * Removes all the Measure
+   */
+
+    public void removeAllMeasure()
+    {
+        getSemanticObject().removeProperty(bsc_hasMeasure);
+    }
+   /**
+   * Removes a Measure
+   * @param value org.semanticwb.bsc.Measure to remove
+   */
+
+    public void removeMeasure(org.semanticwb.bsc.Measure value)
+    {
+        getSemanticObject().removeObjectProperty(bsc_hasMeasure,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the Measure
+   * @return a org.semanticwb.bsc.Measure
+   */
+    public org.semanticwb.bsc.Measure getMeasure()
+    {
+         org.semanticwb.bsc.Measure ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasMeasure);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.Measure)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
    * Sets the value for the property Indicator
    * @param value Indicator to set
    */
@@ -328,44 +374,6 @@ public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing i
          if(obj!=null)
          {
              ret=(org.semanticwb.bsc.element.Indicator)obj.createGenericInstance();
-         }
-         return ret;
-    }
-   /**
-   * Sets the value for the property Measure
-   * @param value Measure to set
-   */
-
-    public void setMeasure(org.semanticwb.bsc.element.PeriodStatus value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(bsc_measure, value.getSemanticObject());
-        }else
-        {
-            removeMeasure();
-        }
-    }
-   /**
-   * Remove the value for Measure property
-   */
-
-    public void removeMeasure()
-    {
-        getSemanticObject().removeProperty(bsc_measure);
-    }
-
-   /**
-   * Gets the Measure
-   * @return a org.semanticwb.bsc.element.PeriodStatus
-   */
-    public org.semanticwb.bsc.element.PeriodStatus getMeasure()
-    {
-         org.semanticwb.bsc.element.PeriodStatus ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_measure);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.bsc.element.PeriodStatus)obj.createGenericInstance();
          }
          return ret;
     }
