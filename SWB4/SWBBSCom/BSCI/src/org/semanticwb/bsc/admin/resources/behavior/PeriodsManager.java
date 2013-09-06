@@ -72,6 +72,11 @@ public class PeriodsManager extends GenericResource {
             List objetivesCurrent = new ArrayList();
             Iterator<Period> itPeriods = null;
             GenericObject genericObject = semObj.createGenericInstance();
+if(genericObject instanceof Seasonable) {
+System.out.println("semObj "+semObj+" es seasonable");
+}else {
+System.out.println("semObj "+semObj+" NO es seasonable");
+}
             SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD);
 
             while (itObj.hasNext()) {
@@ -87,6 +92,7 @@ public class PeriodsManager extends GenericResource {
                 itPeriods = new GenericIterator<Period>(
                         objParent.listObjectProperties(Seasonable.bsc_hasPeriod));
             }
+            
             if (itPeriods != null && itPeriods.hasNext()) {
                 String data = semObj.getSemanticClass().getName() + semObj.getId();
 
@@ -99,10 +105,14 @@ public class PeriodsManager extends GenericResource {
                 out.println("<fieldset>\n");
                 out.println("<label>" + paramRequest.getLocaleString("selectPeriods") + "</label>");
                 out.println("<ul>");
+                
+                Seasonable seasonable = (Seasonable)semObj.createGenericInstance();
+                
                 while (itPeriods.hasNext()) {
                     Period period = itPeriods.next();
 
-                    if (period.isActive() && user.haveAccess(period)) {
+//                    if (period.isActive() && user.haveAccess(period)) {
+                    if (  (period.isActive() && user.haveAccess(period)) || (!period.isActive() && seasonable.hasPeriod(period) && user.haveAccess(period))  ) {
                         String select = "";
                         String title = period.getTitle(user.getLanguage()) == null ? period.getTitle()
                                 : period.getTitle(user.getLanguage());
