@@ -152,7 +152,7 @@ if (!user.isSigned()) {
                         <i class="icon-sort-by-attributes"></i> <%=paramRequest.getLocaleString("sortLabel")%> <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li class="dropdown-header" role="menuitem">By date</li>
+                        <li class="dropdown-header" role="menuitem"><%=paramRequest.getLocaleString("sortDate")%></li>
                         <%
                             optsUrl = paramRequest.getRenderUrl();
                             if (applyFilter) {
@@ -161,18 +161,18 @@ if (!user.isSigned()) {
                             optsUrl.setParameter("sf", sFilter);
                         %>
                         <li role="menuitem">
-                            <a href="<%=optsUrl.setParameter("sort", "1") %>"><i class="icon-sort-by-order"></i> <%=sortType.equals("1")?"<strong>":""%>Latest first<%=sortType.equals("1")?"</strong>":""%></a>
+                            <a href="<%=optsUrl.setParameter("sort", "1") %>"><i class="icon-sort-by-order"></i> <%=sortType.equals("1")?"<strong>":""%><%=paramRequest.getLocaleString("sortLatest")%><%=sortType.equals("1")?"</strong>":""%></a>
                         </li>
                         <li role="menuitem">
-                            <a href="<%=optsUrl.setParameter("sort", "2") %>"><i class="icon-sort-by-order-alt"></i> <%=sortType.equals("2")?"<strong>":""%>Oldest first<%=sortType.equals("2")?"</strong>":""%></a>
+                            <a href="<%=optsUrl.setParameter("sort", "2") %>"><i class="icon-sort-by-order-alt"></i> <%=sortType.equals("2")?"<strong>":""%><%=paramRequest.getLocaleString("sortOldest")%><%=sortType.equals("2")?"</strong>":""%></a>
                         </li>
                         <li class="divider" role="menuitem"></li>
-                        <li class="dropdown-header" role="menuitem">By process name</li>
+                        <li class="dropdown-header" role="menuitem"><%=paramRequest.getLocaleString("sortProcess")%></li>
                         <li role="menuitem">
-                            <a href="<%=optsUrl.setParameter("sort", "3") %>"><i class="icon-sort-by-alphabet"></i> <%=sortType.equals("3")?"<strong>":""%>Name ascending<%=sortType.equals("3")?"</strong>":""%></a>
+                            <a href="<%=optsUrl.setParameter("sort", "3") %>"><i class="icon-sort-by-alphabet"></i> <%=sortType.equals("3")?"<strong>":""%><%=paramRequest.getLocaleString("sortNameAsc")%><%=sortType.equals("3")?"</strong>":""%></a>
                         </li>
                         <li role="menuitem">
-                            <a href="<%=optsUrl.setParameter("sort", "4") %>"><i class="icon-sort-by-alphabet-alt"></i> <%=sortType.equals("4")?"<strong>":""%>Name descending<%=sortType.equals("4")?"</strong>":""%></a>
+                            <a href="<%=optsUrl.setParameter("sort", "4") %>"><i class="icon-sort-by-alphabet-alt"></i> <%=sortType.equals("4")?"<strong>":""%><%=paramRequest.getLocaleString("sortNameDes")%><%=sortType.equals("4")?"</strong>":""%></a>
                         </li>
                     </ul>
                 </div>
@@ -183,7 +183,7 @@ if (!user.isSigned()) {
                         <i class="icon-filter"></i> <%=paramRequest.getLocaleString("filteringLabel")%> <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li class="dropdown-header" role="menuitem">By status</li>
+                        <li class="dropdown-header" role="menuitem"><%=paramRequest.getLocaleString("sortStatus")%></li>
                         <%
                             optsUrl = paramRequest.getRenderUrl();
                             optsUrl.setParameter("sort", sortType);
@@ -364,19 +364,19 @@ if (!user.isSigned()) {
                                                     <td class="swbp-actions">
                                                         <%UserTask utask = (UserTask) instance.getFlowNodeType();
                                                         if (instance.getStatus() == ProcessInstance.STATUS_PROCESSING) {%>
-                                                            <a href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="<%=paramRequest.getLocaleString("actTake")%>" title="<%=paramRequest.getLocaleString("actTake")%>"><i class="icon-external-link-sign"></i></a>
+                                                            <a href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>" class="btn btn-default" title="<%=paramRequest.getLocaleString("actTake")%>"><i class="icon-external-link-sign"></i></a>
                                                             <%if (allowForward && instance.getAssignedto() != null) {
                                                                 SWBResourceURL forward = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(UserTaskInboxResource.MODE_FWD);
-                                                                %><a href="<%=forward.setParameter("suri", instance.getEncodedURI())%>" class="btn btn-default" data-toggle="modal" data-target="#modalDialog" data-toggle="tooltip" data-placement="bottom" title="<%=paramRequest.getLocaleString("actFwd")%>" data-original-title="<%=paramRequest.getLocaleString("actFwd")%>"><i class="icon-exchange"></i></a><%
+                                                                %><a href="<%=forward.setParameter("suri", instance.getEncodedURI())%>" class="btn btn-default" data-toggle="modal" data-target="#modalDialog" title="<%=paramRequest.getLocaleString("actFwd")%>" ><i class="icon-exchange"></i></a><%
                                                             }
                                                         }
                                                         if (statusWp != null) {%>
-                                                            <a href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessInstance().getProcessType().getEncodedURI()%>" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="<%=paramRequest.getLocaleString("actMap")%>" title="<%=paramRequest.getLocaleString("actMap")%>"><i class="icon-gears"></i></a><%
+                                                            <a href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessInstance().getProcessType().getEncodedURI()%>" class="btn btn-default" title="<%=paramRequest.getLocaleString("actMap")%>"><i class="icon-gears"></i></a><%
                                                         }
                                                         if(showPwpLink) {
                                                             SWBResourceURL detailUrl = paramRequest.getRenderUrl().setMode(UserTaskInboxResource.MODE_PROCESSDETAIL);
                                                             detailUrl.setParameter("suri", instance.getFlowNodeType().getProcess().getURI());%>
-                                                            <a href="<%=detailUrl%>" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="<%=paramRequest.getLocaleString("actDetail")%>" title="<%=paramRequest.getLocaleString("actDetail")%>"><i class="icon-bar-chart"></i></a><%
+                                                            <a href="<%=detailUrl%>" class="btn btn-default" title="<%=paramRequest.getLocaleString("actDetail")%>"><i class="icon-bar-chart"></i></a><%
                                                         }
                                                         %>
                                                     </td>
