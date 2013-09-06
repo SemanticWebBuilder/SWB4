@@ -4,12 +4,8 @@ package org.semanticwb.bsc.accessory.base;
    /**
    * Período de medición. 
    */
-public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Roleable,org.semanticwb.bsc.Blockable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Help,org.semanticwb.model.Activeable,org.semanticwb.bsc.Machinable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.bsc.Machinable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Blockable,org.semanticwb.bsc.Help,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Roleable
 {
-   /**
-   * Indica si el periodo se encuentra en estado de permitir capturas
-   */
-    public static final org.semanticwb.platform.SemanticProperty bsc_inTime=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#inTime");
    /**
    * Indica la fecha incial del periodo representado
    */
@@ -314,24 +310,6 @@ public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccesso
              ret=(org.semanticwb.bsc.Machinable)obj.createGenericInstance();
          }
          return ret;
-    }
-
-/**
-* Gets the InTime property
-* @return boolean with the InTime
-*/
-    public boolean isInTime()
-    {
-        return getSemanticObject().getBooleanProperty(bsc_inTime);
-    }
-
-/**
-* Sets the InTime property
-* @param value long with the InTime
-*/
-    public void setInTime(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(bsc_inTime, value);
     }
 
 /**
