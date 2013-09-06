@@ -312,7 +312,7 @@ public class GenericSWBFormsResource extends GenericResource{
         //Despliegue del editor
         ret.append("<script type=\"text/javascript\" src=\"");
         ret.append(SWBPlatform.getContextPath());
-        ret.append("/swbadmin/js/editarea/edit_area/edit_area_full.js\"></script>\n");
+        ret.append(SWBPortal.getContextPath()).append("/swbadmin/js/editarea/edit_area/edit_area_full.js\"></script>\n");
         ret.append("<script type=\"text/javascript\" charset=\"UTF-8\">\n");
         ret.append("editAreaLoader.init({\n");
         ret.append("    id : \"resource");
