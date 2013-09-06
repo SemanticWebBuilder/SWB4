@@ -4,15 +4,11 @@ package org.semanticwb.bsc.element.base;
    /**
    * Los temas estratégicos agrupan objetivos con fines en común. A su vez, los temas están agrupados dentro de las perspectivas. 
    */
-public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Traceable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Roleable,org.semanticwb.model.Activeable
+public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Referensable,org.semanticwb.bsc.Help,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.Hiddenable,org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupable,org.semanticwb.model.Roleable
 {
     public static final org.semanticwb.platform.SemanticClass bsc_Objective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Objective");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasObjective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasObjective");
     public static final org.semanticwb.platform.SemanticProperty bsc_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#index");
-   /**
-   * Atributo que definirá si el título del tema debe o no desplegarse en el mapa estratégico.
-   */
-    public static final org.semanticwb.platform.SemanticProperty bsc_hiddenTitle=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hiddenTitle");
     public static final org.semanticwb.platform.SemanticClass bsc_Perspective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Perspective");
     public static final org.semanticwb.platform.SemanticProperty bsc_perspectiveInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#perspectiveInv");
    /**
@@ -356,24 +352,6 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
     {
         getSemanticObject().setIntProperty(bsc_index, value);
     }
-
-/**
-* Gets the HiddenTitle property
-* @return boolean with the HiddenTitle
-*/
-    public boolean isHiddenTitle()
-    {
-        return getSemanticObject().getBooleanProperty(bsc_hiddenTitle);
-    }
-
-/**
-* Sets the HiddenTitle property
-* @param value long with the HiddenTitle
-*/
-    public void setHiddenTitle(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(bsc_hiddenTitle, value);
-    }
    /**
    * Sets the value for the property Perspective
    * @param value Perspective to set
@@ -411,5 +389,23 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
              ret=(org.semanticwb.bsc.element.Perspective)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Hidden property
+* @return boolean with the Hidden
+*/
+    public boolean isHidden()
+    {
+        return getSemanticObject().getBooleanProperty(swb_hidden);
+    }
+
+/**
+* Sets the Hidden property
+* @param value long with the Hidden
+*/
+    public void setHidden(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_hidden, value);
     }
 }
