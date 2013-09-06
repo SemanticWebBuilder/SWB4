@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Serializable,org.semanticwb.bsc.Status,org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.Preference,org.semanticwb.bsc.Committable,org.semanticwb.model.Sortable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.bsc.Seasonable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Help,org.semanticwb.bsc.PeriodStatusAssignable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Roleable
+public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Seasonable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.FilterableClass,org.semanticwb.model.UserGroupable,org.semanticwb.model.Roleable,org.semanticwb.model.Sortable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.bsc.Status,org.semanticwb.bsc.Serializable,org.semanticwb.bsc.Help,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.bsc.PeriodStatusAssignable,org.semanticwb.bsc.Preference,org.semanticwb.bsc.Committable,org.semanticwb.bsc.Recognizable
 {
    /**
    * Persiste los atributos de un indicador
@@ -242,23 +242,23 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
         }
        /**
        * Gets all org.semanticwb.bsc.element.Objective with a determined PeriodStatus
-       * @param value PeriodStatus of the type org.semanticwb.bsc.element.PeriodStatus
+       * @param value PeriodStatus of the type org.semanticwb.bsc.tracing.PeriodStatus
        * @param model Model of the org.semanticwb.bsc.element.Objective
        * @return Iterator with all the org.semanticwb.bsc.element.Objective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByPeriodStatus(org.semanticwb.bsc.element.PeriodStatus value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByPeriodStatus(org.semanticwb.bsc.tracing.PeriodStatus value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasPeriodStatus, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.bsc.element.Objective with a determined PeriodStatus
-       * @param value PeriodStatus of the type org.semanticwb.bsc.element.PeriodStatus
+       * @param value PeriodStatus of the type org.semanticwb.bsc.tracing.PeriodStatus
        * @return Iterator with all the org.semanticwb.bsc.element.Objective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByPeriodStatus(org.semanticwb.bsc.element.PeriodStatus value)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByPeriodStatus(org.semanticwb.bsc.tracing.PeriodStatus value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasPeriodStatus,value.getSemanticObject(),sclass));
             return it;
@@ -403,23 +403,23 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
         }
        /**
        * Gets all org.semanticwb.bsc.element.Objective with a determined Periodicity
-       * @param value Periodicity of the type org.semanticwb.bsc.accessory.MeasurementFrequency
+       * @param value Periodicity of the type org.semanticwb.bsc.tracing.MeasurementFrequency
        * @param model Model of the org.semanticwb.bsc.element.Objective
        * @return Iterator with all the org.semanticwb.bsc.element.Objective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByPeriodicity(org.semanticwb.bsc.accessory.MeasurementFrequency value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByPeriodicity(org.semanticwb.bsc.tracing.MeasurementFrequency value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_periodicity, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.bsc.element.Objective with a determined Periodicity
-       * @param value Periodicity of the type org.semanticwb.bsc.accessory.MeasurementFrequency
+       * @param value Periodicity of the type org.semanticwb.bsc.tracing.MeasurementFrequency
        * @return Iterator with all the org.semanticwb.bsc.element.Objective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByPeriodicity(org.semanticwb.bsc.accessory.MeasurementFrequency value)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByPeriodicity(org.semanticwb.bsc.tracing.MeasurementFrequency value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_periodicity,value.getSemanticObject(),sclass));
             return it;
@@ -568,24 +568,6 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
              ret=(org.semanticwb.bsc.element.Indicator)obj.createGenericInstance();
          }
          return ret;
-    }
-
-/**
-* Gets the Help property
-* @return String with the Help
-*/
-    public String getHelp()
-    {
-        return getSemanticObject().getProperty(bsc_help);
-    }
-
-/**
-* Sets the Help property
-* @param value long with the Help
-*/
-    public void setHelp(String value)
-    {
-        getSemanticObject().setProperty(bsc_help, value);
     }
    /**
    * Sets the value for the property Theme
@@ -792,21 +774,21 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
         getSemanticObject().setIntProperty(swb_index, value);
     }
    /**
-   * Gets all the org.semanticwb.bsc.element.PeriodStatus
-   * @return A GenericIterator with all the org.semanticwb.bsc.element.PeriodStatus
+   * Gets all the org.semanticwb.bsc.tracing.PeriodStatus
+   * @return A GenericIterator with all the org.semanticwb.bsc.tracing.PeriodStatus
    */
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.PeriodStatus> listPeriodStatuses()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.PeriodStatus> listPeriodStatuses()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.PeriodStatus>(getSemanticObject().listObjectProperties(bsc_hasPeriodStatus));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.PeriodStatus>(getSemanticObject().listObjectProperties(bsc_hasPeriodStatus));
     }
 
    /**
    * Gets true if has a PeriodStatus
-   * @param value org.semanticwb.bsc.element.PeriodStatus to verify
-   * @return true if the org.semanticwb.bsc.element.PeriodStatus exists, false otherwise
+   * @param value org.semanticwb.bsc.tracing.PeriodStatus to verify
+   * @return true if the org.semanticwb.bsc.tracing.PeriodStatus exists, false otherwise
    */
-    public boolean hasPeriodStatus(org.semanticwb.bsc.element.PeriodStatus value)
+    public boolean hasPeriodStatus(org.semanticwb.bsc.tracing.PeriodStatus value)
     {
         boolean ret=false;
         if(value!=null)
@@ -817,10 +799,10 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
     }
    /**
    * Adds a PeriodStatus
-   * @param value org.semanticwb.bsc.element.PeriodStatus to add
+   * @param value org.semanticwb.bsc.tracing.PeriodStatus to add
    */
 
-    public void addPeriodStatus(org.semanticwb.bsc.element.PeriodStatus value)
+    public void addPeriodStatus(org.semanticwb.bsc.tracing.PeriodStatus value)
     {
         getSemanticObject().addObjectProperty(bsc_hasPeriodStatus, value.getSemanticObject());
     }
@@ -834,25 +816,25 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
     }
    /**
    * Removes a PeriodStatus
-   * @param value org.semanticwb.bsc.element.PeriodStatus to remove
+   * @param value org.semanticwb.bsc.tracing.PeriodStatus to remove
    */
 
-    public void removePeriodStatus(org.semanticwb.bsc.element.PeriodStatus value)
+    public void removePeriodStatus(org.semanticwb.bsc.tracing.PeriodStatus value)
     {
         getSemanticObject().removeObjectProperty(bsc_hasPeriodStatus,value.getSemanticObject());
     }
 
    /**
    * Gets the PeriodStatus
-   * @return a org.semanticwb.bsc.element.PeriodStatus
+   * @return a org.semanticwb.bsc.tracing.PeriodStatus
    */
-    public org.semanticwb.bsc.element.PeriodStatus getPeriodStatus()
+    public org.semanticwb.bsc.tracing.PeriodStatus getPeriodStatus()
     {
-         org.semanticwb.bsc.element.PeriodStatus ret=null;
+         org.semanticwb.bsc.tracing.PeriodStatus ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasPeriodStatus);
          if(obj!=null)
          {
-             ret=(org.semanticwb.bsc.element.PeriodStatus)obj.createGenericInstance();
+             ret=(org.semanticwb.bsc.tracing.PeriodStatus)obj.createGenericInstance();
          }
          return ret;
     }
@@ -975,7 +957,7 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
    * @param value Periodicity to set
    */
 
-    public void setPeriodicity(org.semanticwb.bsc.accessory.MeasurementFrequency value)
+    public void setPeriodicity(org.semanticwb.bsc.tracing.MeasurementFrequency value)
     {
         if(value!=null)
         {
@@ -996,15 +978,15 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
 
    /**
    * Gets the Periodicity
-   * @return a org.semanticwb.bsc.accessory.MeasurementFrequency
+   * @return a org.semanticwb.bsc.tracing.MeasurementFrequency
    */
-    public org.semanticwb.bsc.accessory.MeasurementFrequency getPeriodicity()
+    public org.semanticwb.bsc.tracing.MeasurementFrequency getPeriodicity()
     {
-         org.semanticwb.bsc.accessory.MeasurementFrequency ret=null;
+         org.semanticwb.bsc.tracing.MeasurementFrequency ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_periodicity);
          if(obj!=null)
          {
-             ret=(org.semanticwb.bsc.accessory.MeasurementFrequency)obj.createGenericInstance();
+             ret=(org.semanticwb.bsc.tracing.MeasurementFrequency)obj.createGenericInstance();
          }
          return ret;
     }

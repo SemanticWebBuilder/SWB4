@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class DeliverableBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable
+public abstract class DeliverableBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Referensable,org.semanticwb.bsc.Help,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupable,org.semanticwb.model.Roleable
 {
     public static final org.semanticwb.platform.SemanticClass bsc_Deliverable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Deliverable");
    /**
@@ -96,6 +96,29 @@ public abstract class DeliverableBase extends org.semanticwb.bsc.element.BSCElem
             return it;
         }
        /**
+       * Gets all org.semanticwb.bsc.element.Deliverable with a determined UserGroup
+       * @param value UserGroup of the type org.semanticwb.model.UserGroup
+       * @param model Model of the org.semanticwb.bsc.element.Deliverable
+       * @return Iterator with all the org.semanticwb.bsc.element.Deliverable
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Deliverable> listDeliverableByUserGroup(org.semanticwb.model.UserGroup value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Deliverable> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroup, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Deliverable with a determined UserGroup
+       * @param value UserGroup of the type org.semanticwb.model.UserGroup
+       * @return Iterator with all the org.semanticwb.bsc.element.Deliverable
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Deliverable> listDeliverableByUserGroup(org.semanticwb.model.UserGroup value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Deliverable> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroup,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.bsc.element.Deliverable with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.bsc.element.Deliverable
@@ -118,6 +141,57 @@ public abstract class DeliverableBase extends org.semanticwb.bsc.element.BSCElem
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Deliverable> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.bsc.element.Deliverable with a determined Role
+       * @param value Role of the type org.semanticwb.model.Role
+       * @param model Model of the org.semanticwb.bsc.element.Deliverable
+       * @return Iterator with all the org.semanticwb.bsc.element.Deliverable
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Deliverable> listDeliverableByRole(org.semanticwb.model.Role value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Deliverable> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Deliverable with a determined Role
+       * @param value Role of the type org.semanticwb.model.Role
+       * @return Iterator with all the org.semanticwb.bsc.element.Deliverable
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Deliverable> listDeliverableByRole(org.semanticwb.model.Role value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Deliverable> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Deliverable with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @param model Model of the org.semanticwb.bsc.element.Deliverable
+       * @return Iterator with all the org.semanticwb.bsc.element.Deliverable
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Deliverable> listDeliverableByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Deliverable> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Deliverable with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @return Iterator with all the org.semanticwb.bsc.element.Deliverable
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Deliverable> listDeliverableByRuleRef(org.semanticwb.model.RuleRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Deliverable> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+    }
+
+    public static DeliverableBase.ClassMgr getDeliverableClassMgr()
+    {
+        return new DeliverableBase.ClassMgr();
     }
 
    /**
