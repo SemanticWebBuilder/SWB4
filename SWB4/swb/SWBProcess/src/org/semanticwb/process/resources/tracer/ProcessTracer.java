@@ -56,7 +56,7 @@ public class ProcessTracer extends org.semanticwb.process.resources.tracer.base.
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String jsp = "/swbadmin/jsp/process/listProcessInstances.jsp";
+        String jsp = "/swbadmin/jsp/process/monitor/listProcessInstances.jsp";
         
         if (getViewJSP() != null && !getViewJSP().trim().equals("")) {
             jsp = getViewJSP();
