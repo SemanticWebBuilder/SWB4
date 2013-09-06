@@ -184,9 +184,9 @@ if (showParticipation) {%>
             nodeEnter.append("svg:image")
                 .attr("xlink:href", function(d) {
                     if (d.type && d.type==="process") {
-                        return "/work/models/demo/css/images/icono-iniciado.gif";
+                        return "/work/models/<%=paramRequest.getWebPage().getWebSiteId()%>/css/images/icono-iniciado.gif";
                     } else {
-                        return "/work/models/demo/css/images/colaborador.png";
+                        return "/work/models/<%=paramRequest.getWebPage().getWebSiteId()%>/css/images/colaborador.png";
                     }
                 })
                 .attr("x", -10)
