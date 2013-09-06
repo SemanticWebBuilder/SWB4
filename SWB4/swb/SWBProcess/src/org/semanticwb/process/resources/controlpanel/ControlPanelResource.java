@@ -159,7 +159,7 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = "/swbadmin/jsp/process/businessControlPanel.jsp";
+        String jsp = "/swbadmin/jsp/process/monitor/businessControlPanel.jsp";
         if (getViewJSP() != null && !getViewJSP().trim().equals("")) {
             jsp = getViewJSP();
         }
@@ -185,7 +185,7 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
     }
     
     public void doConfig(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = "/swbadmin/jsp/process/businessControlPanelConfig.jsp";
+        String jsp = "/swbadmin/jsp/process/monitor/businessControlPanelConfig.jsp";
         if (getViewJSP() != null && !getViewJSP().trim().equals("")) {
             jsp = getViewJSP();
         }
@@ -202,7 +202,7 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
     }
     
     public void doShowObjects(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = "/swbadmin/jsp/process/businessControlPanelObjects.jsp";
+        String jsp = "/swbadmin/jsp/process/monitor/businessControlPanelObjects.jsp";
         if (getViewJSP() != null && !getViewJSP().trim().equals("")) {
             jsp = getViewJSP();
         }
@@ -230,7 +230,7 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
     }
     
     public void doShowFiles(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = "/swbadmin/jsp/process/businessControlPanelFiles.jsp";
+        String jsp = "/swbadmin/jsp/process/monitor/businessControlPanelFiles.jsp";
         if (getDocsJSP() != null && !getDocsJSP().trim().equals("")) {
             jsp = getDocsJSP();
         }
