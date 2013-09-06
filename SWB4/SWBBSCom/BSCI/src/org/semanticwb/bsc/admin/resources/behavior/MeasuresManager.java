@@ -51,7 +51,6 @@ public class MeasuresManager extends GenericResource {
                 Iterator<Period> measurablesPeriods = series.getIndicator().listMeasurablesPeriods(false);
                 if(measurablesPeriods != null && measurablesPeriods.hasNext())
                 {
-                    String action = SWBResourceURL.Action_EDIT;
                     SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD);
                     String data = semanticObj.getSemanticClass().getName() + semanticObj.getId();
                     
@@ -83,6 +82,9 @@ public class MeasuresManager extends GenericResource {
                     while(measurablesPeriods.hasNext())
                     {
                         period = measurablesPeriods.next();
+//                        if(!period.isActive()) {
+//                            continue;
+//                        }
                         
                         Measure measure = series.getMeasureByPeriod(period);
                         String value = measure==null?"":formatter.format(measure.getValue());
