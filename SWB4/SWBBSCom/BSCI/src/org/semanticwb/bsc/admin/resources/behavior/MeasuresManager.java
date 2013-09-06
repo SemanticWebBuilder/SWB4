@@ -19,7 +19,7 @@ import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -33,7 +33,8 @@ import org.semanticwb.portal.api.SWBResourceURL;
  * la frecuencia de medición a partir del período más antiguo asignado.
  * @author carlos.ramos
  */
-public class MeasuresManager extends GenericResource {
+public class MeasuresManager extends GenericAdmResource {
+    private final String defaultFormatPattern = "#,##0.0#";
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -76,8 +77,11 @@ public class MeasuresManager extends GenericResource {
                     }
                     NumberFormat numFormat = NumberFormat.getNumberInstance(locale);
                     DecimalFormat formatter = (DecimalFormat)numFormat;
-                    formatter.applyPattern(format.getFormatPattern());
-
+                    try {
+                        formatter.applyPattern(format.getFormatPattern());
+                    }catch(IllegalArgumentException iae) {
+                        formatter.applyPattern(getResourceBase().getAttribute("defaultFormatPattern", defaultFormatPattern));
+                    }
                     Period period;
                     while(measurablesPeriods.hasNext())
                     {
@@ -157,7 +161,11 @@ public class MeasuresManager extends GenericResource {
                 }
                 NumberFormat numFormat = NumberFormat.getNumberInstance(locale);
                 DecimalFormat formatter = (DecimalFormat)numFormat;
-                formatter.applyPattern(format.getFormatPattern());
+                try {
+                    formatter.applyPattern(format.getFormatPattern());
+                }catch(IllegalArgumentException iae) {
+                    formatter.applyPattern(getResourceBase().getAttribute("defaultFormatPattern", defaultFormatPattern));
+                }
                 
                 String pid, val;
                 BSC bsc = (BSC) semanticObj.getModel().getModelObject().createGenericInstance();
