@@ -348,10 +348,18 @@
             }
         }
     }
-            
-     function checksRedesPhoto(objUri,sourceCall){
+     /**
+      * selectNetwork - cuando se responde a un mensaje de entrada no se debe de validar
+      *                 porque ya hay una red hacia donde se va a responder
+      *                 true-> debe de seleccionar una red
+      *                 false-> ya hay una red seleccionada (la red que recibio el mensaje)
+      */       
+     function checksRedesPhoto(objUri, sourceCall, selectNetwork){
           var frm = document.getElementById(objUri+sourceCall+'frmUploadPhoto');
-          var checkRed = false;
+          var checkRed = false;          
+          if(selectNetwork == false){//Ya hay una red seleccionada porque se esta respondiendo
+              return true;
+          }
           
           if(frm.checkRedes == null){//No networks
               alert("Debes crear primero una red en donde publicar");
@@ -378,10 +386,13 @@
               return true;
           }
      }
-     function checksRedesText(objUri,sourceCall){
+     function checksRedesText(objUri, sourceCall, selectNetwork){
           var frm = document.getElementById(objUri+sourceCall+'frmUploadText');
           var checkRed = false;
           
+          if(selectNetwork == false){//Ya hay una red seleccionada porque se esta respondiendo
+              return true;
+          }
           if(frm.checkRedes == null){//No networks
               alert("Debes crear primero una red en donde publicar");
               return false;
@@ -406,11 +417,14 @@
               return true;
           }
      }
-     function validateChecks(objUri,sourceCall){
+     function validateChecks(objUri, sourceCall, selectNetwork){
           var frm = document.getElementById(objUri+sourceCall+'frmUploadVideo');
           var checkYT = false;
           var checkRed = false;
           
+          if(selectNetwork == false){//Ya hay una red seleccionada porque se esta respondiendo
+              return true;
+          }
           if(frm.checkRedes == null && frm.checkYT == null){//No networks found for facebook or youtube
               alert("Debes crear primero una red en donde publicar");
               return false;
