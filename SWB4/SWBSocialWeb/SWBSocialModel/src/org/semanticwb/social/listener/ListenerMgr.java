@@ -4,6 +4,7 @@
  */
 package org.semanticwb.social.listener;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Timer;
@@ -12,9 +13,9 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.social.KeepAliveListenerable;
+import org.semanticwb.social.SocialNetStreamSearch;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialSite;
 import org.semanticwb.social.Stream;
@@ -189,6 +190,7 @@ public class ListenerMgr implements SWBAppObject {
         public ListenerTask(Stream stream)
         {
             this.stream=stream;
+            doSomeTask(stream);
         }
 
         public void run() {
@@ -356,6 +358,42 @@ public class ListenerMgr implements SWBAppObject {
     public void refresh() {
         //throw new UnsupportedOperationException("Not supported yet.");
     }
+    
+    
+    private static void doSomeTask(Stream stream)
+    {
+        System.out.println("Entra a doSomeTask...-1");
+        //Revisar redes sociales que se encuentran en este momento en el stream
+        ArrayList asocialNetIDs=new ArrayList();    //White List -Lista buena-Lista que si esta en el stream
+        Iterator <SocialNetwork> itSn=stream.listSocialNetworks();
+        while(itSn.hasNext())
+        {
+            SocialNetwork socialNet=itSn.next();
+            System.out.println("doSomeTask/socialNet lista blanca:"+socialNet.getURI());
+            asocialNetIDs.add(socialNet.getURI());   //Se agrega el id de la red social a la lista blanca (asocialNetIDs)
+        }
+
+        //Si en la clase SocialNetStreamSearch existe alguna instancia de SocialNetwork para el stream que no este en la mismo Stream(Lista blanca de arriba), entonces se elimina
+        Iterator <SocialNetStreamSearch> itSocialNetStreamSearch=SocialNetStreamSearch.ClassMgr.listSocialNetStreamSearchByStream(stream, stream.getSocialSite());
+        while(itSocialNetStreamSearch.hasNext())
+        {
+            SocialNetStreamSearch socialNetStreamSearch=itSocialNetStreamSearch.next();
+            if(socialNetStreamSearch.getSocialNetwork()!=null)
+            {
+                //Si la red social del objeto socialNetStreamSearch, no se encuentra en la lista blanca, se eliminara dicho objeto
+                if(!asocialNetIDs.contains(socialNetStreamSearch.getSocialNetwork().getURI()))  
+                {
+                    System.out.println("doSomeTask/Se elimina SocialNet:"+socialNetStreamSearch.getSocialNetwork().getURI()+" de la clase:SocialNetStreamSearch, puesto que ya no esta en el strea:"+stream.getURI());
+                    socialNetStreamSearch.remove();
+                }
+            }
+        }
+        System.out.println("Entra a doSomeTask...-2");
+        //Se actualiza el Listener del stream
+    }
+    
+    
+    
 
     /*
      * Metodo de prueba
