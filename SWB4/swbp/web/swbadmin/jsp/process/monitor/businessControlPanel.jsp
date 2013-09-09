@@ -124,7 +124,6 @@ WebPage statusWp = (WebPage)request.getAttribute("statusWp");
 WebPage detailWp = (WebPage)request.getAttribute("trackWp");
 User user = paramRequest.getUser();
 WebSite site = paramRequest.getWebPage().getWebSite();
-String baseimg = SWBPortal.getWebWorkPath() + "/models/" + site.getId() + "/css/images/";
 String sortType = request.getParameter("sort");
 String gFilter = request.getParameter("gF");
 String sFilter = request.getParameter("sF");
@@ -161,7 +160,6 @@ if (sFilter == null || sFilter.trim().equals("")) {
     sFilter = String.valueOf(ProcessInstance.STATUS_PROCESSING);
 }
 ArrayList<ProcessInstance> pinstances = (ArrayList<ProcessInstance>) request.getAttribute("instances");
-SWBResourceURL configUrl = paramRequest.getRenderUrl().setMode("config");
 if (!user.isSigned()) {
     if (paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT) {
         %>
@@ -178,7 +176,7 @@ if (!user.isSigned()) {
 if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
     SWBResourceURL optsUrl = paramRequest.getRenderUrl();
     %>
-    <h2>Monitoreo de procesos</h2>
+    <h2><%=paramRequest.getLocaleString("titleMonitor")%></h2>
     <ul class="list-unstyled list-inline">
         <li>
             <div class="dropdown">
@@ -267,28 +265,28 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                     <tr>
                         <%
                         if (displayCols.contains("idCol")) {
-                            %><th>ID</th><%
+                            %><th><%=paramRequest.getLocaleString("lblColID")%></th><%
                         }
                         if (displayCols.contains("priorityCol")) {
-                            %><th>Prioridad</th><%
+                            %><th><%=paramRequest.getLocaleString("lblColPriority")%></th><%
                         }
                         if (displayCols.contains("nameCol")) {
-                            %><th>Proceso</th><%
+                            %><th><%=paramRequest.getLocaleString("lblColProcessName")%></th><%
                         }
                         if (displayCols.contains("sdateCol")) {
-                            %><th>Iniciado</th><%
+                            %><th><%=paramRequest.getLocaleString("lblColStarted")%></th><%
                         }
                         if (displayCols.contains("edateCol")) {
-                            %><th>Cerrado</th><%
+                            %><th><%=paramRequest.getLocaleString("lblColEnded")%></th><%
                         }
                         if (displayCols.contains("pendingCol")) {
-                            %><th>Actividades pendientes</th><%
+                            %><th><%=paramRequest.getLocaleString("lblColActivities")%></th><%
                         }
                         if (displayCols.contains("rolesCol")) {
-                            %><th>Responsables</th><%
+                            %><th><%=paramRequest.getLocaleString("lblColRoles")%></th><%
                         }
                         if (displayCols.contains("actionsCol")) {
-                            %><th>Acciones</th><%
+                            %><th><%=paramRequest.getLocaleString("lblColActions")%></th><%
                         }
                         %>
                     </tr>
@@ -298,18 +296,14 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                     Iterator<ProcessInstance> instances = pinstances.iterator();
                     while(instances.hasNext()) {
                         ProcessInstance instance = instances.next();
-                        String status = "<img src=\""+baseimg;
                         String Id = instance.getId();
                         String pName = instance.getProcessType().getDisplayTitle(lang);
                         String pCreated = SWBUtils.TEXT.getStrDate(instance.getCreated(), lang, "dd/mm/yy - hh:%m");
                         String pClosed = "--";
 
-                        if (instance.getStatus() == ProcessInstance.STATUS_PROCESSING) status += "icon_pending.png\">";
                         if (instance.getStatus() == ProcessInstance.STATUS_CLOSED) {
-                            status += "icon_closed.png\">";
                             pClosed = SWBUtils.TEXT.getStrDate(instance.getEnded(), lang, "dd/mm/yy - hh:%m");
                         }
-                        if (instance.getStatus() == ProcessInstance.STATUS_ABORTED) status += "icon_aborted.png\">";
                         %>
                         <tr>
                             <%
@@ -350,7 +344,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                                 }
                                             }
                                             if (!hasTasks) {
-                                                %>Proceso en espera<%
+                                                %>--<%
                                             }
                                             %>
                                         </ul>
@@ -424,15 +418,14 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                     <%
                                     }
                                     Role processAdmRole = instance.getProcessType().getAdministrationRole();
-                                    if (processAdmRole != null) {
-                                        if (user.hasRole(processAdmRole)) {
-                                            SWBResourceURL delUrl = paramRequest.getActionUrl().setAction(paramRequest.Action_REMOVE);
-                                            delUrl.setParameter("pid", instance.getId());
-                                            %>
-                                            <a class="acc-eliminar" href="<%=delUrl%>" onclick ="if (!confirm('¿Seguro que desea eliminar la instancia del proceso con ID <%=instance.getId()%>?')) return false;">Eliminar</a>
-                                            <%
-                                        }
+                                    if (processAdmRole != null && user.hasRole(processAdmRole)) {
+                                        SWBResourceURL delUrl = paramRequest.getActionUrl().setAction(paramRequest.Action_REMOVE);
+                                        delUrl.setParameter("pid", instance.getId());
+                                        %>
+                                        <a class="acc-eliminar" href="<%=delUrl%>" onclick ="if (!confirm('¿Seguro que desea eliminar la instancia del proceso con ID <%=instance.getId()%>?')) return false;">Eliminar</a>
+                                        <%
                                     }
+
                                     SWBResourceURL docsUrl = paramRequest.getRenderUrl().setMode("showFiles");
                                     docsUrl.setParameter("pid", instance.getId());
                                     docsUrl.setParameter("gF", request.getParameter("gF"));
@@ -505,7 +498,11 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
         </div>
     <%
     } else {
-        %><p>No hay procesos actualmente en ejecuci&oacute;n</p><%
+        %>
+        <div class="alert alert-warning">
+            <i class="icon-warning-sign"></i> <strong><%=paramRequest.getLocaleString("msgNoInfo")%></strong>
+        </div>
+        <%
     }
 }
 }
