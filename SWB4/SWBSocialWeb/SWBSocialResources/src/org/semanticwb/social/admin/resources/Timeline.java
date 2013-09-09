@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
@@ -37,6 +38,7 @@ import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialTopic;
+import org.semanticwb.social.SocialUserExtAttributes;
 import org.semanticwb.social.Twitter;
 import org.semanticwb.social.util.SWBSocialUtil;
 import twitter4j.*;
@@ -211,7 +213,14 @@ public class Timeline extends GenericResource{
         String action = response.getAction();
         String objUri = request.getParameter("suri");
         System.out.println("suri in processAction:" + objUri);
-        twitter4j.Twitter twitter = twitterUsers.get(objUri);        
+        twitter4j.Twitter twitter = twitterUsers.get(objUri);
+        if(twitter == null){//When executing an action if can't recover a valid twitter, create it
+            SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
+            Twitter semanticTwitter = (Twitter) semanticObject.createGenericInstance();
+            twitter = new TwitterFactory(configureOAuth(semanticTwitter).build()).getInstance();            
+            twitterUsers.put(objUri, twitter);
+            if(twitter == null){return;}//Unable to create twitter
+        }
         System.out.println("Action:" + response.getAction());
         if(action.equals("doRT")){ //Makes the retweet
             try {
@@ -476,7 +485,12 @@ public class Timeline extends GenericResource{
             
             try {
                 Status originalStatus =  twitter.showStatus(originalId);//get the original tweet
-                updateStatusInformation(originalStatus, renderURL, objUri, out);
+                org.semanticwb.model.User user = paramRequest.getUser();
+                SocialUserExtAttributes socialUserExtAttr = null;
+                if(user.isSigned()){
+                    socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+                }
+                updateStatusInformation(originalStatus, renderURL, objUri, out, socialUserExtAttr);
                 
                 actionURL.setAction("undoRT");
                 /* updates only the DOM of the 'Retweet' message to change it for 'Undo retweet' and change URL also*/
@@ -502,7 +516,12 @@ public class Timeline extends GenericResource{
             
             try {
                 Status originalStatus =  twitter.showStatus(originalId);//get the original tweet
-                updateStatusInformation(originalStatus, renderURL, objUri, out);
+                org.semanticwb.model.User user = paramRequest.getUser();
+                SocialUserExtAttributes socialUserExtAttr = null;
+                if(user.isSigned()){
+                    socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+                }
+                updateStatusInformation(originalStatus, renderURL, objUri, out, socialUserExtAttr);
                 
                 actionURL.setAction("doRT");
                 /* updates only the DOM of the 'Undo Retweet' message to change it for 'Retweet' and change URL also*/
@@ -573,10 +592,16 @@ public class Timeline extends GenericResource{
                 if(tweetsListener.getHomeStatusSize() > 0){
                     tweetsListener.setProcessing(true);
                     int i;
+                    org.semanticwb.model.User user = paramRequest.getUser();
+                    SocialUserExtAttributes socialUserExtAttr = null;
+                    if(user.isSigned()){
+                        socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+                    }
+                    
                     for(i = tweetsListener.getHomeStatusSize() - 1 ; i >= 0 ; i-- ){//Most recent status first
                          try{
                              //--doPrintTweet(request, response, paramRequest, tweetsListener.getHomeStatus(i), twitter, response.getWriter(), recoverConversations(tweetsListener.getHomeStatus(i).getId(), twitter));
-                             doPrintTweet(request, response, paramRequest, tweetsListener.getHomeStatus(i), twitter, out, null,HOME_TAB, null);
+                             doPrintTweet(request, response, paramRequest, tweetsListener.getHomeStatus(i), twitter, out, null,HOME_TAB, null, socialUserExtAttr);
                          }catch(Exception te){
                             log.error("Error when printing tweet:" , te);
                          }
@@ -596,10 +621,16 @@ public class Timeline extends GenericResource{
                 if(tweetsListener.getFavoritesSize() > 0){
                    tweetsListener.setProcessing(true);
                    int i;
+                   org.semanticwb.model.User user = paramRequest.getUser();
+                   SocialUserExtAttributes socialUserExtAttr = null;
+                   if(user.isSigned()){
+                       socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+                   }
+                   
                    for(i = tweetsListener.getFavoritesSize() - 1 ; i >= 0 ; i-- ){//Most recent status first
                        try{
                            //--doPrintTweet(request, response, paramRequest, tweetsListener.getFavoritesStatus(i), twitter, response.getWriter(), recoverConversations(tweetsListener.getFavoritesStatus(i).getId(), twitter));
-                           doPrintTweet(request, response, paramRequest, tweetsListener.getFavoritesStatus(i), twitter, response.getWriter(), null, FAVORITES_TAB, null);
+                           doPrintTweet(request, response, paramRequest, tweetsListener.getFavoritesStatus(i), twitter, response.getWriter(), null, FAVORITES_TAB, null, socialUserExtAttr);
                        }catch(Exception te){
                            log.error("Error when printing favorite:" , te);
                        }
@@ -618,10 +649,16 @@ public class Timeline extends GenericResource{
                 if(tweetsListener.getMentionsSize() > 0){
                    tweetsListener.setProcessing(true);
                    int i;
+                   org.semanticwb.model.User user = paramRequest.getUser();
+                   SocialUserExtAttributes socialUserExtAttr = null;
+                   if(user.isSigned()){
+                       socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+                   }
+                   
                    for(i = tweetsListener.getMentionsSize() - 1 ; i >= 0 ; i-- ){//Most recent status first
                        try{
                            //--doPrintTweet(request, response, paramRequest, tweetsListener.getMentionsStatus(i), twitter, response.getWriter(), recoverConversations(tweetsListener.getMentionsStatus(i).getId(), twitter));
-                           doPrintTweet(request, response, paramRequest, tweetsListener.getMentionsStatus(i), twitter, response.getWriter(), null,MENTIONS_TAB, null);
+                           doPrintTweet(request, response, paramRequest, tweetsListener.getMentionsStatus(i), twitter, response.getWriter(), null,MENTIONS_TAB, null, socialUserExtAttr);
                        }catch(Exception te){
                            log.error("Error when printing tweet:" , te);
                        }
@@ -759,8 +796,12 @@ public class Timeline extends GenericResource{
             
             try {
                 Status originalStatus = twitter.showStatus(id);
-                
-                updateStatusInformation(originalStatus, renderURL, objUri, out);
+                org.semanticwb.model.User user = paramRequest.getUser();
+                SocialUserExtAttributes socialUserExtAttr = null;
+                if(user.isSigned()){
+                    socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+                }
+                updateStatusInformation(originalStatus, renderURL, objUri, out, socialUserExtAttr);
                 out.println("<span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
                 out.println("<script type=\"dojo/method\">");
                 out.println("   try{");
@@ -780,8 +821,12 @@ public class Timeline extends GenericResource{
             
             try {
                 Status originalStatus = twitter.showStatus(id);
-                
-                updateStatusInformation(originalStatus, renderURL, objUri, out);
+                org.semanticwb.model.User user = paramRequest.getUser();
+                SocialUserExtAttributes socialUserExtAttr = null;
+                if(user.isSigned()){
+                    socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+                }
+                updateStatusInformation(originalStatus, renderURL, objUri, out, socialUserExtAttr);
                 out.println("<span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
                 out.println("<script type=\"dojo/method\">");
                 out.println("   showError('No fue posible procesar la solicitud');");
@@ -803,12 +848,14 @@ public class Timeline extends GenericResource{
             SWBResourceURL actionURL = paramRequest.getActionUrl();
             String targetUser = request.getParameter("targetUser");
             actionURL.setParameter("targetUser", targetUser);
+            actionURL.setParameter("suri", request.getParameter("suri"));
             actionURL.setAction("undoFollow");
             out.println("<b><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + actionURL + "','" + targetUser + "/relStat'); return false;\">Unfollow</a></b>");
         }else if(mode.equals("undoFollowSent")){
             SWBResourceURL actionURL = paramRequest.getActionUrl();
             String targetUser = request.getParameter("targetUser");
             actionURL.setParameter("targetUser", targetUser);
+            actionURL.setParameter("suri", request.getParameter("suri"));
             actionURL.setAction("doFollow");
             out.println("<b><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + actionURL + "','" + targetUser + "/relStat'); return false;\">Follow</a></b>");
         }else if(mode.equals("doShowTopic")){
@@ -896,15 +943,20 @@ public class Timeline extends GenericResource{
         try {
             System.out.println("Get the next 25 tweets!!");
             Paging paging = new Paging(); //used to set maxId, count
-            paging.count(10);
+            paging.count(20);
             if(maxTweetID >0L){
                 paging.setMaxId(maxTweetID-1);
             }
             int i = 0;
+            org.semanticwb.model.User user = paramRequest.getUser();
+            SocialUserExtAttributes socialUserExtAttr = null;
+            if(user.isSigned()){
+                socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+            }
             for (Status status : twitter.getHomeTimeline(paging)) {
                 maxTweetID = status.getId();
                 //--doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),recoverConversations(maxTweetID, twitter));
-                doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),null, HOME_TAB, null);
+                doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),null, HOME_TAB, null, socialUserExtAttr);
                 i++;
             }
             out.println("<label id=\"" + objUri + "/moreTwitLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreTweets").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreTweets','bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">More tweets</a></label>");
@@ -941,10 +993,15 @@ public class Timeline extends GenericResource{
                 paging.setMaxId(maxTweetID-1);
             }
             int i = 0;
+            org.semanticwb.model.User user = paramRequest.getUser();
+            SocialUserExtAttributes socialUserExtAttr = null;
+            if(user.isSigned()){
+                socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+            }
             for (Status status : twitter.getMentionsTimeline(paging)) {
                 maxTweetID = status.getId();
                 //--doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),recoverConversations(maxTweetID, twitter));
-                doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),null,MENTIONS_TAB, null);
+                doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),null,MENTIONS_TAB, null, socialUserExtAttr);
                 i++;
             }
             out.println("<label id=\"" + objUri + "/moreMentionLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreMentions").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreMentions','bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">More Mentions</a></label>");
@@ -980,10 +1037,15 @@ public class Timeline extends GenericResource{
                 paging.setMaxId(maxTweetID-1);
             }
             int i = 0;
+            org.semanticwb.model.User user = paramRequest.getUser();
+            SocialUserExtAttributes socialUserExtAttr = null;
+            if(user.isSigned()){
+                socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+            }
             for (Status status : twitter.getFavorites(paging)) {
                 maxTweetID = status.getId();
                 //--doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),recoverConversations(maxTweetID, twitter));
-                doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(), null, FAVORITES_TAB, null);
+                doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(), null, FAVORITES_TAB, null, socialUserExtAttr);
                 i++;
             }
             out.println("<label id=\"" + objUri + "/moreFavoritesLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreFavorites").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreFavorites','bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">More Favorites</a></label>");
@@ -1040,11 +1102,14 @@ public class Timeline extends GenericResource{
      * @param twitter the twitter object to retrieve additional information of a status 
      * @param writer the object where the status will be printed
      * @param conversations array of conversations or null
+     * @param tabSuffix id of the current tab
+     * @param postURI if the post has already been classified it has an URI
+     * @param socialUserExtAttr current user permissions over Timeline
      * @throws SWBResourceException
      * @throws IOException 
      */
     public static void doPrintTweet(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, Status status, 
-            twitter4j.Twitter twitter, java.io.Writer writer, List<Status> conversations, String tabSuffix, String postURI) throws SWBResourceException, IOException {
+            twitter4j.Twitter twitter, java.io.Writer writer, List<Status> conversations, String tabSuffix, String postURI, SocialUserExtAttributes socialUserExtAttr) throws SWBResourceException, IOException {
         String objUri = request.getParameter("suri");        
         SWBResourceURL actionURL = paramRequest.getActionUrl();
         SWBResourceURL renderURL = paramRequest.getRenderUrl();
@@ -1113,22 +1178,25 @@ public class Timeline extends GenericResource{
                 statusText = lookForEntities(statusText, renderURL, status.getURLEntities(), status.getMediaEntities(), status.getHashtagEntities(), status.getUserMentionEntities()); 
                 writer.write(        statusText);
                 writer.write("</p>");
-
                 writer.write("<div class=\"timelineresume\">");
                 /*creates isolated spans to identify and update only the elemente where the action affects*/
-                writer.write("   <span class=\"inline\" id=\"" + semTwitter.getId() +  status.getId() + INFORMATION + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
-                updateStatusInformation(status, renderURL, objUri, writer);                
+                writer.write("   <span class=\"inline\" id=\"" + semTwitter.getId() +  status.getId() + INFORMATION + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");                
+                updateStatusInformation(status, renderURL, objUri, writer,socialUserExtAttr);                
                 writer.write("   </span>");                
                 
                 writer.write("   <span class=\"inline\" id=\"" + semTwitter.getId() + status.getId() + TOPIC + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
-                if(postURI != null){//If post already exists
-                    SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", status.getId()+"").setParameter("postUri", postURI).setParameter("currentTab", tabSuffix);
-                    writer.write("<a href=\"#\" title=\"" + "Reclasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
-                        + "Reclasificar tweet'); return false;\"><span>Reclasificar</span></a>");
-                }else{//If posts does not exists 
-                    SWBResourceURL clasifybyTopic = renderURL.setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", status.getId()+"").setParameter("currentTab", tabSuffix);
-                    writer.write("<a href=\"#\" title=\"" + "Clasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
-                        + "Clasificar tweet'); return false;\"><span>Clasificar</span></a>");
+                if(socialUserExtAttr != null && socialUserExtAttr.isUserCanReTopicMsg()){
+                    if(postURI != null){//If post already exists
+                        SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", status.getId()+"").setParameter("postUri", postURI).setParameter("currentTab", tabSuffix);
+                        writer.write("<a href=\"#\" title=\"" + "Reclasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                            + "Reclasificar tweet'); return false;\"><span>Reclasificar</span></a>");
+                    }else{//If posts does not exists 
+                        SWBResourceURL clasifybyTopic = renderURL.setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", status.getId()+"").setParameter("currentTab", tabSuffix);
+                        writer.write("<a href=\"#\" title=\"" + "Clasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                            + "Clasificar tweet'); return false;\"><span>Clasificar</span></a>");
+                    }
+                }else{
+                    writer.write("&nbsp;");
                 }
                 writer.write("   </span>");
                 
@@ -1182,7 +1250,7 @@ public class Timeline extends GenericResource{
                                 writer.write("   <td colspan=\"2\">");
                                 
                                 writer.write("   <span class=\"inline\" id=\"" + semTwitter.getId() + st.getId() + INFORMATION + "\" dojoType=\"dojox.layout.ContentPane\">");
-                                updateStatusInformation(st, renderURL, objUri, writer);
+                                updateStatusInformation(st, renderURL, objUri, writer, socialUserExtAttr);
                                 writer.write("   </span>");
                                 writer.write("   <span class=\"inline\" id=\"" + semTwitter.getId() + st.getId() + RETWEET + "\" dojoType=\"dojox.layout.ContentPane\">");
                                 updateStatusRT(st, renderURL, actionURL, objUri, writer, twitter.getId(), tabSuffix, semTwitter);
@@ -1357,12 +1425,15 @@ public class Timeline extends GenericResource{
      * @param out
      * @param currentUser 
      */
-    public static void updateStatusInformation(Status originalStatus, SWBResourceURL renderURL, String objUri, java.io.Writer out){
+    public static void updateStatusInformation(Status originalStatus, SWBResourceURL renderURL, String objUri, java.io.Writer out, SocialUserExtAttributes socialUserExtAttr){
         try{
             out.write("<em>" + twitterHumanFriendlyDate(originalStatus.getCreatedAt()) + "</em> <strong><span>Retweeted: </span>" + originalStatus.getRetweetCount() + " times </strong>");
+            
+            if(socialUserExtAttr != null && socialUserExtAttr.isUserCanRespondMsg()){
             out.write("<a href=\"#\" onclick=\"showDialog('" + renderURL.setMode("replyTweet").setParameter("id", originalStatus.getId()+"").setParameter("userName", "@" +
                     originalStatus.getUser().getScreenName()).setParameter("suri", objUri) +
-                    "','Reply to @"  + originalStatus.getUser().getScreenName() + "');return false;\"><span>Reply</span></a> ");            
+                    "','Reply to @"  + originalStatus.getUser().getScreenName() + "');return false;\"><span>Reply</span></a> ");
+            }
         }catch(IOException ex){
             System.out.println("Error checking updating Tweet Status!" + ex.getMessage());
         }
