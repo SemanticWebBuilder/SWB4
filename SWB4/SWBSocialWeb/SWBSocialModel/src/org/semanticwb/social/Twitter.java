@@ -254,15 +254,16 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     /**
      * Sets the value to NextDatetoSearch. Verifies whether the passed value is greater than the stored or not.
      */
-    private void setLastTweetID(Long tweetID, Stream stream){        
+    private void setLastTweetID(Long tweetID, Stream stream){
         try{
             Long storedValue=0L;
-            SocialNetStreamSearch socialStreamSerch=SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
+            SocialNetStreamSearch socialStreamSerch=SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);           
             if(socialStreamSerch!=null && socialStreamSerch.getNextDatetoSearch()!=null) storedValue = Long.parseLong(socialStreamSerch.getNextDatetoSearch());
             
             if(tweetID > storedValue){ //Only stores tweetID if it's greater than the current stored value
                 //System.out.println("EL VALOR ALMACENADO ES:" +  tweetID.toString());
-                socialStreamSerch.setNextDatetoSearch(tweetID.toString());
+                socialStreamSerch.setNextDatetoSearch(String.valueOf(tweetID));
+                //System.out.println("SET VALUE:" + socialStreamSerch.getNextDatetoSearch());
             }else{
                 //System.out.println("NO ESTÁ GUARDANDO NADA PORQUE EL VALOR ALMACENADO YA ES IGUAL O MAYOR AL ACTUAL");
                 log.error("Do not save the Tweet ID because stored value is equal or greater than the received");
@@ -332,6 +333,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                         canGetMoreTweets = false;
                     }else{
                         for(Status status : result.getTweets()){
+                            System.out.println("Current ID:" + status.getId() + " stored ID:" + lastTweetID);
                             if(status.getId() <= lastTweetID){ //If value is ZERO then get all tweets available,
                                 canGetMoreTweets = false;      //If it's greater than ZERO, get tweets posted since the tweet with id lastTweetID
                                 //System.out.println("SINCEID LIMIT REACHED!!!");
