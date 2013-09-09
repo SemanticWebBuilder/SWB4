@@ -4,6 +4,9 @@
     Author     : francisco.jimenez
 --%>
 
+<%@page import="org.semanticwb.model.SWBContext"%>
+<%@page import="org.semanticwb.social.SocialUserExtAttributes"%>
+<%@page import="org.semanticwb.social.SocialUserExtAttributes"%>
 <%@page import="static org.semanticwb.social.admin.resources.Timeline.*"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.semanticwb.social.admin.resources.SocialUserStreamListener"%>
@@ -54,9 +57,14 @@
             Paging paging = new Paging(); //used to set maxId and count
             paging.count(5);//Gets a number of tweets of timeline. Max value is 200           
             int i = 0;
+            org.semanticwb.model.User user = paramRequest.getUser();
+            SocialUserExtAttributes socialUserExtAttr = null;
+            if(user.isSigned()){
+                socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+            }
             for (Status status : twitterBean.getFavorites(paging)){
                 //maxTweetID = status.getId();
-                doPrintTweet(request, response, paramRequest, status, twitterBean, out, null, FAVORITES_TAB, null);
+                doPrintTweet(request, response, paramRequest, status, twitterBean, out, null, FAVORITES_TAB, null, socialUserExtAttr);
                 i++;
             }
             System.out.println("Total Favorites" + i);
@@ -66,7 +74,7 @@
         }
             out.println("</div>");
 %>    
-<div align="center" id="<%=objUri%>/getMoreFavorites" dojoType="dojox.layout.ContentPane">
+<div id="<%=objUri%>/getMoreFavorites" dojoType="dojox.layout.ContentPane">
     <label id="<%=objUri%>/moreFavoritesLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMoreFavorites").setParameter("maxTweetID", maxTweetID+"")%>','<%=objUri%>/getMoreFavorites', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;">More Favorites</a></label>
 </div>
 </div>

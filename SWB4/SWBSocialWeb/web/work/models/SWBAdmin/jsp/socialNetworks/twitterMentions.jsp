@@ -4,6 +4,9 @@
     Author     : francisco.jimenez
 --%>
 
+<%@page import="org.semanticwb.model.SWBContext"%>
+<%@page import="org.semanticwb.social.SocialUserExtAttributes"%>
+<%@page import="org.semanticwb.social.SocialUserExtAttributes"%>
 <%@page import="static org.semanticwb.social.admin.resources.Timeline.*"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.semanticwb.social.admin.resources.SocialUserStreamListener"%>
@@ -51,11 +54,16 @@
             out.println("<div id=\"" + objUri + "/mentionsStream\" dojoType=\"dojox.layout.ContentPane\"></div>");
 
             Paging paging = new Paging(); //used to set maxId and count
-            paging.count(5);//Gets a number of tweets of timeline. Max value is 200           
+            paging.count(20);//Gets a number of tweets of timeline. Max value is 200           
             int i = 0;
+            org.semanticwb.model.User user = paramRequest.getUser();
+            SocialUserExtAttributes socialUserExtAttr = null;
+            if(user.isSigned()){
+                socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+            }
             for (Status status : twitterBean.getMentionsTimeline(paging)){
-                //maxTweetID = status.getId();
-                doPrintTweet(request, response, paramRequest, status, twitterBean, out,null,MENTIONS_TAB, null);
+                maxTweetID = status.getId();
+                doPrintTweet(request, response, paramRequest, status, twitterBean, out,null,MENTIONS_TAB, null,socialUserExtAttr);
                 i++;
             }
             System.out.println("Total Mentions:" + i);
@@ -65,7 +73,7 @@
         }
             out.println("</div>");
 %>    
-<div align="center" id="<%=objUri%>/getMoreMentions" dojoType="dojox.layout.ContentPane">
+<div id="<%=objUri%>/getMoreMentions" dojoType="dojox.layout.ContentPane">
     <label id="<%=objUri%>/moreMentionLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMoreMentions").setParameter("maxTweetID", maxTweetID+"")%>','<%=objUri%>/getMoreMentions', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;">More Mentions</a></label>
 </div>
 </div>

@@ -228,7 +228,7 @@
             for (int k = 0; k < 1; k++) {
                 //writer.write("   <td  width=\"5%\">"); 
                 writer.write("      <div id=\"img" + facebook.getId() + media.getJSONObject(k).getString("src") + "\" style=\"width: 150px; height: 150px; border: thick #666666; overflow: hidden; position: relative;\">");
-                writer.write("      <a href=\"#\" onclick=\"showSocialDialog('" + renderURL.setMode("displayPicture").setParameter("pictureUrl", media.getJSONObject(k).getString("src").replace("_s.", "_n.")) +
+                writer.write("      <a href=\"#\" onclick=\"showDialog('" + renderURL.setMode("displayPicture").setParameter("pictureUrl", media.getJSONObject(k).getString("src").replace("_s.", "_n.")) +
                         "','Picture from " + "" + "'); return false;\"><img src=\"" + media.getJSONObject(k).getString("src") + "\" style=\"position: relative;\" onload=\"imageLoad(" + "this, 'img" + facebook.getId() + media.getJSONObject(k).getString("src") + "');\"/></a>");
                 writer.write("      </div>");
                 //writer.write("   </td>"); 
@@ -492,7 +492,7 @@ I have listed down type codes I have found:
 373 - updated cover photo.
     */
 %>
-<div align="center" id="<%=objUri%>getMorePictures" dojoType="dijit.layout.ContentPane">
+<div id="<%=objUri%>getMorePictures" dojoType="dijit.layout.ContentPane">
     <label id="<%=objUri%>morePicturesLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMorePictures").setParameter("createdTime", createdTime).setParameter("currentTab", MEDIA_TAB)%>','<%=objUri%>getMorePictures', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;">More pictures</a></label>
 </div>
 </div>

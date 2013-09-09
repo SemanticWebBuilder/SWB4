@@ -3,6 +3,8 @@
     Created on : 21/03/2013, 01:55:45 PM
     Author     : francisco.jimenez
 --%>
+<%@page import="org.semanticwb.social.SocialUserExtAttributes"%>
+<%@page import="org.semanticwb.model.SWBContext"%>
 <%@page import="org.semanticwb.social.PostIn"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="org.semanticwb.social.SocialNetworkUser"%>
@@ -77,7 +79,13 @@
 
             out.println("<div dojoType=\"dojox.layout.ContentPane\">");
             String postURI = null;
-            
+            org.semanticwb.model.User user = paramRequest.getUser();
+            SocialUserExtAttributes socialUserExtAttr = null;
+            if(user.isSigned()){
+                System.out.println("logeado pero??:");
+                socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+            }
+            System.out.println("SocialUserExtAttributes:" + socialUserExtAttr);
             for (Status status : twitterBean.getHomeTimeline(paging)){
                 postURI = null;
                 maxTweetID = status.getId();
@@ -86,7 +94,7 @@
                     postURI = post.getURI();
                 }
                 
-                doPrintTweet(request, response, paramRequest, status, twitterBean, out, null,HOME_TAB, postURI);
+                doPrintTweet(request, response, paramRequest, status, twitterBean, out, null,HOME_TAB, postURI, socialUserExtAttr);
                 i++;
             }
             out.println("</div>");

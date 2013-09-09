@@ -73,7 +73,7 @@
     SWBResourceURL renderURL = paramRequest.getRenderUrl().setParameter("suri", objUri).setParameter("currentTab", WALL_TAB);
 %>
 
-<div align="center" id="<%=objUri%>getMorePostsWall" dojoType="dijit.layout.ContentPane">
+<div id="<%=objUri%>getMorePostsWall" dojoType="dijit.layout.ContentPane">
     <label id="<%=objUri%>morePostsWallLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMorePosts").setParameter("until", untilPost).setParameter("scope", "wall")%>','<%=objUri%>getMorePostsWall', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;">More posts</a></label>
 </div>
 </div>
