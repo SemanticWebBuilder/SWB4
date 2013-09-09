@@ -70,6 +70,16 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
             return ((ProcessInstance)t).getProcessType().getDisplayTitle(lang).compareTo(((ProcessInstance)t1).getProcessType().getDisplayTitle(lang));
         }
     };
+    private Comparator processNameComparatorDesc = new Comparator() {
+        String lang = "es";
+        public void Comparator (String lng) {
+            lang = lng;
+        }
+
+        public int compare(Object t, Object t1) {
+            return ((ProcessInstance)t1).getProcessType().getDisplayTitle(lang).compareTo(((ProcessInstance)t).getProcessType().getDisplayTitle(lang));
+        }
+    };
     private Comparator processPriorityComparator = new Comparator() {
         String lang = "es";
         
@@ -320,11 +330,16 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
 
         Iterator<ProcessInstance> it_ins = null;
         if (sortType.equals("1")) {
-            it_ins = SWBComparator.sortByCreated(t_instances.iterator(), false);
+            it_ins = SWBComparator.sortByCreated(t_instances.iterator(), true);
         } else if (sortType.equals("2")) {
+            it_ins = SWBComparator.sortByCreated(t_instances.iterator(), false);
+        } else if (sortType.equals("3")) {
             Collections.sort(t_instances, processNameComparator);
             it_ins = t_instances.iterator();
-        } else if (sortType.equals("3")) {
+        } else if (sortType.equals("4")) {
+            Collections.sort(t_instances, processNameComparatorDesc);
+            it_ins = t_instances.iterator();
+        } else if (sortType.equals("5")) {
             Collections.sort(t_instances, processPriorityComparator);
             it_ins = t_instances.iterator();
         }        
