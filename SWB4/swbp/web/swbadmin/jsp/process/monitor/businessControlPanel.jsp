@@ -239,7 +239,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
             optsUrl.setParameter("sort", sortType);
             optsUrl.setParameter("sF", sFilter);
             %>
-            <select class="form-control" onchange="loadPageUrl('<%=optsUrl.toString()%>', 'gF', this.options[this.selectedIndex].value)">
+            <select class="form-control" onchange="loadPageUrl('<%=optsUrl.toString()%>', 'gF', this.options[this.selectedIndex].value);">
                 <option value="" <%=gFilter.equals("")?"selected":""%>><%=paramRequest.getLocaleString("allGroups")%></option>
                 <%
                 Iterator<ProcessGroup> groups = ProcessGroup.ClassMgr.listProcessGroups(site);
