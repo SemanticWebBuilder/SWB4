@@ -19,7 +19,7 @@ public class SocialNetStreamSearch extends org.semanticwb.social.base.SocialNetS
         while(itSocialNetStreamSearch.hasNext())
         {
             SocialNetStreamSearch socialStreamSerch=itSocialNetStreamSearch.next();
-            if(socialStreamSerch.getSocialNetwork().getId().equals(socialNetwork.getId()))
+            if(socialStreamSerch.getSocialNetwork().getURI().equals(socialNetwork.getURI()))
             {
                
                 return socialStreamSerch;
