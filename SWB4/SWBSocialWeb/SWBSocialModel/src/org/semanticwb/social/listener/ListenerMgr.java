@@ -186,14 +186,19 @@ public class ListenerMgr implements SWBAppObject {
     private static class ListenerTask extends TimerTask
     {
         Stream stream=null;
+        boolean firstTime=true;
 
         public ListenerTask(Stream stream)
         {
             this.stream=stream;
-            doSomeTask(stream);
         }
 
         public void run() {
+            if(firstTime)
+            {
+                doSomeTask(stream);
+                firstTime=false;
+            }
             if(createTimer(stream))
             {
                 boolean isThereNoListenAliveNets=false;
