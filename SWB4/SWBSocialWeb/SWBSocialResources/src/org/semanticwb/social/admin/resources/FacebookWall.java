@@ -1311,21 +1311,17 @@ public class FacebookWall extends GenericResource {
             int cont = 0;
             JSONArray postsData = phraseResp.getJSONArray("data");
             System.out.println("ARREGLO DE DATOS:" + postsData.length());
-            
+                                    
             org.semanticwb.model.User user = paramRequest.getUser();
-            SocialUserExtAttributes socialUserExtAtt = null;
-            boolean canRetopic = false;
-            if(user != null){            
-                socialUserExtAtt = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
-                if(socialUserExtAtt != null && socialUserExtAtt.isUserCanReTopicMsg()){
-                    canRetopic = true;
-                }
+            SocialUserExtAttributes socialUserExtAttr = null;
+            if(user.isSigned()){
+                socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
             }
 
             for (int k = 0; k < postsData.length(); k++) {
                 cont++;
                 //System.out.println("\n\nPost de FACEBOOOK*********: " + postsData.getJSONObject(k));
-                doPrintPost(out,  postsData.getJSONObject(k), request, paramRequest, tabSuffix, facebook, model, true);
+                doPrintPost(out,  postsData.getJSONObject(k), request, paramRequest, tabSuffix, facebook, model, socialUserExtAttr);
             }
             if(phraseResp.has("paging")){
                 JSONObject pagingData = phraseResp.getJSONObject("paging");
@@ -1566,7 +1562,7 @@ public class FacebookWall extends GenericResource {
         return jsonObject;
     }
     
-    public static void doPrintPost(Writer writer, JSONObject postsData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model, boolean canClassify){
+    public static void doPrintPost(Writer writer, JSONObject postsData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model, SocialUserExtAttributes socialUserExtAttr){
         try{
             SWBResourceURL actionURL = paramRequest.getActionUrl();                        
             SWBResourceURL renderURL = paramRequest.getRenderUrl();
@@ -1834,7 +1830,7 @@ public class FacebookWall extends GenericResource {
                 writer.write("<div class=\"timelineimg\">");
                 if(postType.equals("video") || postType.equals("swf")){                    
                     writer.write("      <span id=\"vid" + tabSuffix + facebook.getId() + postsData.getString("id") + "\" style=\"width: 250px; height: 250px; border: thick #666666; overflow: hidden; position: relative;\">");
-                    writer.write("      <a href=\"#\" onclick=\"showSocialDialog('"+ renderURL.setMode("displayVideo").setParameter("videoUrl", URLEncoder.encode(postsData.getString("source"), "UTF-8")) +
+                    writer.write("      <a href=\"#\" onclick=\"showDialog('"+ renderURL.setMode("displayVideo").setParameter("videoUrl", URLEncoder.encode(postsData.getString("source"), "UTF-8")) +
                             "','Video from " + postsData.getJSONObject("from").getString("name") + "'); return false;\"><img src=\"" + picture + "\" style=\"position: relative;\" onerror=\"this.src ='" + picture.replace("_n.", "_s.") + "'\" onload=\"imageLoad(" + "this, 'vid" + tabSuffix + facebook.getId() + postsData.getString("id") + "');\"/></a>");
                     writer.write("      </span>");
                 }else{
@@ -1852,7 +1848,7 @@ public class FacebookWall extends GenericResource {
                         }
                     }else{
                         writer.write("      <span id=\"img" + tabSuffix + facebook.getId() + postsData.getString("id") + "\" style=\"width: 250px; height: 250px; border: thick #666666; overflow: hidden; position: relative;\">");
-                        writer.write("      <a href=\"#\" onclick=\"showSocialDialog('" + renderURL.setMode("displayPicture").setParameter("pictureUrl", URLEncoder.encode(picture, "UTF-8")) +
+                        writer.write("      <a href=\"#\" onclick=\"showDialog('" + renderURL.setMode("displayPicture").setParameter("pictureUrl", URLEncoder.encode(picture, "UTF-8")) +
                                 "','Picture from " + postsData.getJSONObject("from").getString("name") + "'); return false;\"><img src=\"" + picture + "\" style=\"position: relative;\" onerror=\"this.src ='" + picture.replace("_n.", "_s.") + "'\" onload=\"imageLoad(" + "this, 'img" + tabSuffix +facebook.getId() + postsData.getString("id") + "');\"/></a>");
                         writer.write("      </span>");
                     }
@@ -1979,7 +1975,7 @@ public class FacebookWall extends GenericResource {
             JSONArray actions = postsData.has("actions") ? postsData.getJSONArray("actions") : null;
             if(actions != null && actions.length() > 0){//Available actions for the post
                 for (int i = 0; i < actions.length(); i++) {
-                    if(actions.getJSONObject(i).getString("name").equals("Comment") && canClassify){//I can comment                        
+                    if(actions.getJSONObject(i).getString("name").equals("Comment") && socialUserExtAttr.isUserCanRespondMsg()){//I can comment                        
                         writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + REPLY + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
                             writer.write(" <a href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyPost").setParameter("commentID", postsData.getString("id")) + "','Reply to " + postsData.getJSONObject("from").getString("name") + "');return false;\"><span>Reply</span></a>  ");
                         writer.write("   </span>");
@@ -1993,18 +1989,22 @@ public class FacebookWall extends GenericResource {
                         ///////////////////////If I can post I can Classify it to answer it later
                         PostIn post = PostIn.getPostInbySocialMsgId(model, postsData.getString("id"));
                         writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + TOPIC + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
-                        if(post != null){
-                            String socialT = "";
-                            if(post.getSocialTopic() != null){
-                                socialT = post.getSocialTopic().getTitle();
+                        if(socialUserExtAttr.isUserCanReTopicMsg()){
+                            if(post != null){
+                                String socialT = "";
+                                if(post.getSocialTopic() != null){
+                                    socialT = post.getSocialTopic().getTitle();
+                                }
+                                SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("id")).setParameter("postUri", post.getURI()).setParameter("currentTab", tabSuffix);
+                                    writer.write("<a href=\"#\" title=\"" + "Tema actual: " +  socialT + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                                    + "Reclasificar post'); return false;\"><span>Reclasificar</span></a>");
+                            }else{
+                                SWBResourceURL clasifybyTopic = renderURL.setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("id")).setParameter("currentTab", tabSuffix);
+                                writer.write("<a href=\"#\" title=\"" + "Clasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                                + "Clasificar Post'); return false;\"><span>Clasificar</span></a>");
                             }
-                            SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("id")).setParameter("postUri", post.getURI()).setParameter("currentTab", tabSuffix);
-                                writer.write("<a href=\"#\" title=\"" + "Tema actual: " +  socialT + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
-                                + "Reclasificar post'); return false;\"><span>Reclasificar</span></a>");
                         }else{
-                            SWBResourceURL clasifybyTopic = renderURL.setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("id")).setParameter("currentTab", tabSuffix);
-                            writer.write("<a href=\"#\" title=\"" + "Clasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
-                            + "Clasificar Post'); return false;\"><span>Clasificar</span></a>");
+                            writer.write("&nbsp;");
                         }
                         writer.write("   </span>");
 
@@ -2116,7 +2116,7 @@ public class FacebookWall extends GenericResource {
             for (int k = 0; k < 1; k++) {
                 //writer.write("   <td  width=\"5%\">"); 
                 writer.write("      <span id=\"img" + facebook.getId() + media.getJSONObject(k).getString("src") + "\" style=\"width: 150px; height: 150px; border: thick #666666; overflow: hidden; position: relative;\">");
-                writer.write("      <a href=\"#\" onclick=\"showSocialDialog('" + renderURL.setMode("displayPicture").setParameter("pictureUrl", media.getJSONObject(k).getString("src").replace("_s.", "_n.")) +
+                writer.write("      <a href=\"#\" onclick=\"showDialog('" + renderURL.setMode("displayPicture").setParameter("pictureUrl", media.getJSONObject(k).getString("src").replace("_s.", "_n.")) +
                         "','Picture from " + "" + "'); return false;\"><img src=\"" + media.getJSONObject(k).getString("src") + "\" style=\"position: relative;\" onload=\"imageLoad(" + "this, 'img" + facebook.getId() + media.getJSONObject(k).getString("src") + "');\"/></a>");
                 writer.write("      </span>");
                 //writer.write("   </td>"); 
