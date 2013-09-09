@@ -1117,7 +1117,7 @@ public class SWBSocialUtil implements SWBAppObject {
             strb1.append("<div id=\"pagination\">");
             if (npage > 1) {
                pageURL.setParameter("page", ""+(npage - 1));
-               strb1.append("<a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">"+ stxtant + "</a> ");
+               strb1.append("<span><a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">&lt;"+ stxtant + "</a></span>");
             }
             long ini = 1;
             long fin = snpages;
@@ -1159,12 +1159,12 @@ public class SWBSocialUtil implements SWBAppObject {
                    pageURL.setParameter("page", ""+i); 
                    strb1.append("<a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">" + String.valueOf(i) + "</a> ");
                 } else {
-                   strb1.append("<font color=\"RED\">" + String.valueOf(i) + " </font>");
+                   strb1.append("<strong>" + String.valueOf(i) + " </strong>");
                 }
             }
             if (npage < totPages) {
                     pageURL.setParameter("page", ""+(npage + 1));
-                    strb1.append("<a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">" + stxtsig + "</a>");
+                    strb1.append("<span><a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">" + stxtsig + "&gt;</a></span>");
             }
 
             strb1.append("</div>");
