@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.tracing.base;
 
 
-public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.bsc.Help,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Measurable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Committable
+public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Measurable,org.semanticwb.bsc.Committable,org.semanticwb.bsc.ReadOnly,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#index");
     public static final org.semanticwb.platform.SemanticClass bsc_Format=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Format");
@@ -394,5 +394,23 @@ public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing i
     public void setCommited(boolean value)
     {
         getSemanticObject().setBooleanProperty(bsc_commited, value);
+    }
+
+/**
+* Gets the ReadOnly property
+* @return boolean with the ReadOnly
+*/
+    public boolean isReadOnly()
+    {
+        return getSemanticObject().getBooleanProperty(bsc_readOnly);
+    }
+
+/**
+* Sets the ReadOnly property
+* @param value long with the ReadOnly
+*/
+    public void setReadOnly(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(bsc_readOnly, value);
     }
 }
