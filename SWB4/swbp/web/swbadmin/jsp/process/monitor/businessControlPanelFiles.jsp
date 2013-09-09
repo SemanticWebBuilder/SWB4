@@ -1,8 +1,9 @@
 <%-- 
     Document   : businessControlPanelFiles
     Created on : 30/11/2011, 11:04:29 AM
-    Author     : hasdai
+    Author     : Hasdai Pacheco {ebenezer.sanchez@infotec.com.mx}
 --%>
+<%@page import="org.semanticwb.model.WebSite"%>
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.process.model.RepositoryFile"%>
@@ -17,6 +18,7 @@ ArrayList<RepositoryFile> docs = (ArrayList<RepositoryFile>)request.getAttribute
 String pName = (String) request.getAttribute("pName");
 String lang = "es";
 User user = paramRequest.getUser();
+WebSite site = paramRequest.getWebPage().getWebSite();
         
 if (pName == null) {
     pName = "";
@@ -25,65 +27,81 @@ if (pName == null) {
 if (user != null && user.getLanguage() != null) {
     lang = user.getLanguage();
 }
-%>
-
-<h2>Archivos relacionados con el proceso <%=pName%></h2>
-<%
-if (docs != null && !docs.isEmpty()) {
-    %>
-    <table class="tabla-bandeja">
-            <thead>
-                <tr>
-                    <th class="tban-id">ID</th>
-                    <th class="tban-proces">Archivo</th>
-                    <th class="tban-proces">Modificado</th>
-                    <th class="tban-proces">Modificado por</th>
-                </tr>
-            </thead>
-            <tbody>
-                <%
-                Iterator<RepositoryFile> files = docs.iterator();
-                
-                while(files.hasNext()) {
-                    RepositoryFile file = files.next();
-                    String Id = file.getId();
-                    String name = file.getTitle();
-                    String pCreated = SWBUtils.TEXT.getStrDate(file.getLastVersion().getCreated(), lang, "dd/mm/yy - hh:mm");
-                    String pModifiedBy = "--";
-                    if (file.getLastVersion().getCreator() != null) {
-                        pModifiedBy = file.getLastVersion().getCreator().getFullName();
-                    }
-                    String url = null;
-                    if (file.getRepositoryDirectory() != null) {
-                        url = file.getRepositoryDirectory().getUrl() + "?act=detail&back=history&fid=" + file.getEncodedURI();
-                    }
-                    %>
-                    <tr>
-                        <td class="tban-inicia"><%=Id%></td>
-                        <%
-                        if (url != null) {
-                            %><td class="tban-inicia"><a href="<%=url%>"><%=name%></a></td><%
-                        } else {
-                            %><td class="tban-inicia"><%=name%></td><%
-                        }
-                        %>
-                        <td class="tban-inicia"><%=pCreated%></td>
-                        <td class="tban-inicia"><%=pModifiedBy%></td>
-                    </tr>
-                    <%
-                }
-                %>
-            </tbody>
-        </table>
-        <%
-} else {
-    %><p>No existen archivos relacionados con el proceso</p><%
-}
 
 SWBResourceURL viewUrl = paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW);
-viewUrl.setParameter("gFilter", request.getParameter("gFilter"));
-viewUrl.setParameter("sFilter", request.getParameter("sFilter"));
+viewUrl.setParameter("gF", request.getParameter("gF"));
+viewUrl.setParameter("sF", request.getParameter("sF"));
 viewUrl.setParameter("sort", request.getParameter("sort"));
 %>
-<br/>
-<input type="button" value="Regresar al monitor" onclick="window.location='<%=viewUrl%>'"/>
+<h2><a class="btn" data-toggle="tooltip" data-placement="bottom" title="Back to monitor" href="<%=viewUrl%>"><i class="icon-reply"></i></a><%=paramRequest.getLocaleString("viewDocsTitle")%> <%=pName%></h2>
+<%
+if (!user.isSigned()) {
+    if (paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT) {
+        %>
+        <div class="alert alert-block alert-danger fade in">
+            <h4><i class="icon-ban-circle"></i> <%=paramRequest.getLocaleString("msgNoAccessTitle")%></h4>
+            <p><%=paramRequest.getLocaleString("msgNoAccess")%></p>
+            <p>
+                <a class="btn btn-default" href="/login/<%=site.getId()%>/<%=paramRequest.getWebPage().getId()%>"><%=paramRequest.getLocaleString("btnLogin")%></a>
+            </p>
+        </div>
+        <%
+    }
+} else {
+    if (docs != null && !docs.isEmpty()) {
+        %>
+        <div class="table-responsive">
+            <table class="table table-hover swbp-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Archivo</th>
+                        <th>Modificado</th>
+                        <th>Modificado por</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%
+                    Iterator<RepositoryFile> files = docs.iterator();
+                    while(files.hasNext()) {
+                        RepositoryFile file = files.next();
+                        String Id = file.getId();
+                        String name = file.getTitle();
+                        String pCreated = SWBUtils.TEXT.getStrDate(file.getLastVersion().getCreated(), lang, "dd/mm/yy - hh:mm");
+                        String pModifiedBy = "--";
+                        if (file.getLastVersion().getCreator() != null) {
+                            pModifiedBy = file.getLastVersion().getCreator().getFullName();
+                        }
+                        String url = null;
+                        if (file.getRepositoryDirectory() != null) {
+                            url = file.getRepositoryDirectory().getUrl() + "?act=detail&back=history&fid=" + file.getEncodedURI();
+                        }
+                        %>
+                        <tr>
+                            <td><%=Id%></td>
+                            <%
+                            if (url != null) {
+                                %><td><a href="<%=url%>"><%=name%></a></td><%
+                            } else {
+                                %><td><%=name%></td><%
+                            }
+                            %>
+                            <td><%=pCreated%></td>
+                            <td><%=pModifiedBy%></td>
+                        </tr>
+                        <%
+                    }
+                    %>
+                </tbody>
+            </table>
+        </div>
+        <%
+    } else {
+        %>
+        <div class="alert alert-warning">
+            <i class="icon-warning-sign"></i> <strong><%=paramRequest.getLocaleString("msgNoDocs")%></strong>
+        </div>
+        <%
+    }
+}
+%>
