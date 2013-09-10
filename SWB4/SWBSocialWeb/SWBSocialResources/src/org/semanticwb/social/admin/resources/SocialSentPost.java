@@ -66,6 +66,7 @@ import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialTopic;
+import org.semanticwb.social.SocialUserExtAttributes;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.VideoIn;
@@ -564,6 +565,14 @@ public class SocialSentPost extends GenericResource {
         //System.out.println("searchWord en SentPost:"+searchWord);
 
         //Filtros
+        
+         //Manejo de permisos
+        User user=paramRequest.getUser();
+        SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.createSocialUserExtAttributes(user.getId(), wsite);
+        boolean userCanRemoveMsg=socialUserExtAttr.isUserCanRemoveMsg();
+        boolean userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
+        boolean userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
+        boolean userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
 
         String swbSocialUser = request.getParameter("swbSocialUser");
 
@@ -652,8 +661,10 @@ public class SocialSentPost extends GenericResource {
                 msgText = SWBSocialUtil.Util.replaceSpecialCharacters(msgText, false);
             }
 
-
-            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + msgText + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
+            if(userCanRemoveMsg)
+            {
+                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + msgText + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
+            }
 
             /*
              SWBResourceURL urlpre = paramRequest.getRenderUrl();

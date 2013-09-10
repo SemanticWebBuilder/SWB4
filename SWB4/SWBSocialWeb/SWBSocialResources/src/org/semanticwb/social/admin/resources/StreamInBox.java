@@ -54,9 +54,11 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.semanticwb.model.GenericIterator;
+import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticIterator;
 import org.semanticwb.social.Kloutable;
 import org.semanticwb.social.PostIn;
+import org.semanticwb.social.SocialUserExtAttributes;
 
 /**
  *
@@ -167,6 +169,7 @@ public class StreamInBox extends GenericResource {
      */
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        User user=paramRequest.getUser();
         String lang = paramRequest.getUser().getLanguage();
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
@@ -681,6 +684,14 @@ public class StreamInBox extends GenericResource {
         } catch (Exception ignored) {
             nPage = 1;
         }
+        
+        //Manejo de permisos
+        SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.createSocialUserExtAttributes(user.getId(), wsite);
+        boolean userCanRemoveMsg=socialUserExtAttr.isUserCanRemoveMsg();
+        boolean userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
+        boolean userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
+        boolean userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
+        
 
         HashMap hmapResult = filtros(swbSocialUser, wsite, searchWord, request, stream, nPage);
 
@@ -707,8 +718,11 @@ public class StreamInBox extends GenericResource {
 
             text = SWBSocialUtil.Util.replaceSpecialCharacters(text, false);
 
-            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + ": "
+            if(userCanRemoveMsg)
+            {
+                    out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + ": "
                     + text + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
+            }
 
             //Preview
             /*
@@ -725,23 +739,30 @@ public class StreamInBox extends GenericResource {
 
 
 
+            if(userCanRetopicMsg)
+            {
+                //ReClasifyByTpic
+                SWBResourceURL urlreClasifybyTopic = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
+                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reclasifyByTopic") + "\" class=\"retema\" onclick=\"showDialog('" + urlreClasifybyTopic + "','"
+                        + paramRequest.getLocaleString("reclasifyByTopic") + "'); return false;\"></a>");
+            }
 
-            //ReClasifyByTpic
-            SWBResourceURL urlreClasifybyTopic = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
-            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reclasifyByTopic") + "\" class=\"retema\" onclick=\"showDialog('" + urlreClasifybyTopic + "','"
-                    + paramRequest.getLocaleString("reclasifyByTopic") + "'); return false;\"></a>");
-
-
-            //ReClasyfyBySentiment & Intensity
-            SWBResourceURL urlrev = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYSENTIMENT).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
-            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reeval") + "\" class=\"reevaluar\" onclick=\"showDialog('" + urlrev + "','" + paramRequest.getLocaleString("reeval")
-                    + "'); return false;\"></a>");
-
-            //Respond
-            if (postIn.getSocialTopic() != null) {
-                SWBResourceURL urlresponse = paramRequest.getRenderUrl().setMode(Mode_RESPONSE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
-                out.println("<a href=\"#\" class=\"answ\" title=\"" + paramRequest.getLocaleString("respond") + "\" onclick=\"showDialog('" + urlresponse + "','" + paramRequest.getLocaleString("respond")
+            if(userCanRevalueMsg)
+            {
+                //ReClasyfyBySentiment & Intensity
+                SWBResourceURL urlrev = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYSENTIMENT).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
+                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reeval") + "\" class=\"reevaluar\" onclick=\"showDialog('" + urlrev + "','" + paramRequest.getLocaleString("reeval")
                         + "'); return false;\"></a>");
+            }
+
+            if(userCanRespondMsg)
+            {
+                //Respond
+                if (postIn.getSocialTopic() != null) {
+                    SWBResourceURL urlresponse = paramRequest.getRenderUrl().setMode(Mode_RESPONSE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
+                    out.println("<a href=\"#\" class=\"answ\" title=\"" + paramRequest.getLocaleString("respond") + "\" onclick=\"showDialog('" + urlresponse + "','" + paramRequest.getLocaleString("respond")
+                            + "'); return false;\"></a>");
+                }
             }
 
             //Respuestas que posee un PostIn

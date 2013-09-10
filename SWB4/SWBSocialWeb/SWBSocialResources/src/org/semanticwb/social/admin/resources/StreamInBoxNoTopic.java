@@ -21,6 +21,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticIterator;
 import org.semanticwb.platform.SemanticObject;
@@ -35,6 +36,7 @@ import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SentimentalLearningPhrase;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialTopic;
+import org.semanticwb.social.SocialUserExtAttributes;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.util.SWBSocialComparator;
@@ -624,6 +626,14 @@ public class StreamInBoxNoTopic extends GenericResource {
         }
 
 
+        //Manejo de permisos
+        User user=paramRequest.getUser();
+        SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.createSocialUserExtAttributes(user.getId(), wsite);
+        boolean userCanRemoveMsg=socialUserExtAttr.isUserCanRemoveMsg();
+        boolean userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
+        boolean userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
+        boolean userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
+        
 
         //Una vez que ya se cuantos elementos son, ya que ya se hizo una primera iteración sobre todos los PostIn, hago una segunda
         //iteración ya para mostrar esos ultimos elementos, esto de hacer 2 iteraciones no es muy bueno, TODO: ver con Javier si vemos
@@ -657,8 +667,11 @@ public class StreamInBoxNoTopic extends GenericResource {
 
             text = SWBSocialUtil.Util.replaceSpecialCharacters(text, false);
 
-            out.println("<a href=\"#\" class=\"eliminar\" title=\"" + paramRequest.getLocaleString("remove") + "\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " "
-                    + text + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
+            if(userCanRemoveMsg)
+            {
+                out.println("<a href=\"#\" class=\"eliminar\" title=\"" + paramRequest.getLocaleString("remove") + "\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " "
+                        + text + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
+            }
 
 
             //Preview
@@ -666,17 +679,22 @@ public class StreamInBoxNoTopic extends GenericResource {
             out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" class=\"ver\" onclick=\"showDialog('" + urlPrev + "','" + paramRequest.getLocaleString("previewdocument")
                     + "'); return false;\"></a>");
 
-
+            
             //ReClasifyByTpic
-            SWBResourceURL urlreClasifybyTopic = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
-            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reclasifyByTopic") + "\" class=\"retema\"  onclick=\"showDialog('" + urlreClasifybyTopic + "','"
-                    + paramRequest.getLocaleString("reclasifyByTopic") + "'); return false;\"></a>");
+            if(userCanRetopicMsg)
+            {
+                SWBResourceURL urlreClasifybyTopic = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
+                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reclasifyByTopic") + "\" class=\"retema\"  onclick=\"showDialog('" + urlreClasifybyTopic + "','"
+                        + paramRequest.getLocaleString("reclasifyByTopic") + "'); return false;\"></a>");
+            }
 
-
-            //ReClasyfyBySentiment & Intensity
-            SWBResourceURL urlrev = paramRequest.getRenderUrl().setMode(Mode_REVAL).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
-            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reeval") + "\" class=\"reevaluar\" onclick=\"showDialog('" + urlrev + "','" + paramRequest.getLocaleString("reeval")
-                    + "'); return false;\"></a>");
+            if(userCanRevalueMsg)
+            {
+                //ReClasyfyBySentiment & Intensity
+                SWBResourceURL urlrev = paramRequest.getRenderUrl().setMode(Mode_REVAL).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
+                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reeval") + "\" class=\"reevaluar\" onclick=\"showDialog('" + urlrev + "','" + paramRequest.getLocaleString("reeval")
+                        + "'); return false;\"></a>");
+            }
 
             /*
              //Respond
