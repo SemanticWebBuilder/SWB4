@@ -14,7 +14,6 @@ import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -43,7 +42,6 @@ import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.CountryState;
 import org.semanticwb.social.Kloutable;
 import org.semanticwb.social.Message;
-import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.Messageable;
 import org.semanticwb.social.Photo;
 import org.semanticwb.social.Photoable;
@@ -1620,7 +1618,7 @@ public class SWBSocialUtil implements SWBAppObject {
                     message = SWBUtils.TEXT.replaceAll(message, "{postIn.userklout}", ""+postIn.getPostInSocialNetworkUser().getSnu_klout()); 
                 }
 
-                message = SWBUtils.TEXT.replaceAll(message, "{post.message}", ((MessageIn) postIn).getMsg_Text());
+                message = SWBUtils.TEXT.replaceAll(message, "{post.message}", postIn.getMsg_Text());
             } catch (Exception e) {
                 log.error(e);
             }
