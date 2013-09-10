@@ -1289,27 +1289,30 @@ public class StreamInBox extends GenericResource {
      * Method which controls the filters allowed in this class
      */
     private HashMap filtros(String swbSocialUser, WebSite wsite, String searchWord, HttpServletRequest request, Stream stream, int nPage) {
-
+        System.out.println("filtros/searchWord:"+searchWord);
         Set<PostIn> setso = null;
         ArrayList<PostIn> aListFilter = new ArrayList();
         HashMap hampResult = new HashMap();
         Iterator<PostIn> itposts = null;
         if (swbSocialUser != null) {
+            System.out.println("filtros/searchWord-0:"+searchWord);
             SocialNetworkUser socialNetUser = SocialNetworkUser.ClassMgr.getSocialNetworkUser(swbSocialUser, wsite);
             long StreamPostIns = wsite.getSemanticModel().countStatements(null, PostIn.social_postInSocialNetworkUser.getRDFProperty(), socialNetUser.getSemanticObject().getRDFResource(), null);
             hampResult.put("countResult", Long.valueOf(StreamPostIns));
             itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInSocialNetworkUser.getRDFProperty(), socialNetUser.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((nPage * RECPERPAGE)).longValue(), Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), "timems desc"), true));
         } else {
+            System.out.println("filtros/searchWord-1:"+searchWord);
             //itposts = PostIn.ClassMgr.listPostInByPostInStream(stream);
             long StreamPostIns = wsite.getSemanticModel().countStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), null);
             //System.out.println("StreamPostIns:" + StreamPostIns + ", PostInGrp:" + PostIn.sclass.getClassGroupId());
 
             //hampResult.put("countResult", Long.valueOf(StreamPostIns));
-
-            if (nPage != 0) {
+            System.out.println("filtros/searchWord-1.1:"+StreamPostIns+",nPage:"+nPage);
+            if (nPage != 0 && (searchWord==null && searchWord.trim().length()==0)) {
+                System.out.println("Toma PAGE");
                 itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((RECPERPAGE)).longValue(), Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), "timems desc"), true));
             } else { 
-                //System.out.println("Toma Todo...Jorge");
+                System.out.println("Toma Todo...Jorge");
                 itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), StreamPostIns, 0L, "timems desc"), true));
             }
 
@@ -1318,6 +1321,7 @@ public class StreamInBox extends GenericResource {
             //System.out.println("itposts J:" + itposts.hasNext() + ",searchWord:" + searchWord);
 
             if (searchWord != null && searchWord.trim().length()>0) {
+                System.out.println("filtros/searchWord-2:"+searchWord+",itposts:"+itposts.hasNext());
                 StreamPostIns=0L;
                 while (itposts.hasNext()) {
                     PostIn postIn = itposts.next();
@@ -1330,6 +1334,7 @@ public class StreamInBox extends GenericResource {
                     }
                 }
             }
+             System.out.println("filtros/searchWord-3:"+StreamPostIns);
             hampResult.put("countResult", Long.valueOf(StreamPostIns));
         }
 
