@@ -193,7 +193,7 @@ public class SWBSocialRuleMgr {
                     {
                         
                         //System.out.println("Klout de user:"+postIn.getPostInSocialNetworkUser().getSnu_id()+",klout:"+postIn.getPostInSocialNetworkUser().getSnu_klout());
-                        boolean x=postIn.getPostInSocialNetworkUser().getSnu_klout()>=Float.parseFloat(value);
+                        //boolean x=postIn.getPostInSocialNetworkUser().getSnu_klout()>=Float.parseFloat(value);
                         
                         //System.out.println("REGRESA-2:"+x);
                         return postIn.getPostInSocialNetworkUser().getSnu_klout()>=Float.parseFloat(value);
@@ -210,9 +210,10 @@ public class SWBSocialRuleMgr {
                 {
                     if(cond.equals("="))
                     {
-                        boolean x=((MessageIn) postIn).getMsg_Text().toLowerCase().contains(value.toLowerCase());
-                        //System.out.println("REGRESA-3:"+x);
-                        return ((MessageIn) postIn).getMsg_Text().toLowerCase().contains(value.toLowerCase());
+                        //boolean x=((MessageIn) postIn).getMsg_Text().toLowerCase().contains(value.toLowerCase());
+                        //System.out.println("REGRESA-Jorge09Sep..");
+                        //return ((PostIn) postIn).getMsg_Text().toLowerCase().contains(value.toLowerCase());
+                        return postIn.getMsg_Text().toLowerCase().contains(value.toLowerCase());
                     }
                 }catch(Exception e)
                 {

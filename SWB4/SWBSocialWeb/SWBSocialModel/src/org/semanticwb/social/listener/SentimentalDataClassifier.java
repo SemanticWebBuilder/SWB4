@@ -449,17 +449,17 @@ public class SentimentalDataClassifier {
                 ArrayList<SocialRule> streamRules=new ArrayList();
                 //Momento de revisar las reglas del stream
                 Iterator <SocialRuleRef> itsocialRuleRefs =stream.listSocialRuleRefs(); 
-                //System.out.println("itsocialRuleRefs jorge:"+itsocialRuleRefs.hasNext());
+                System.out.println("itsocialRuleRefs jorge:"+itsocialRuleRefs.hasNext());
                 while(itsocialRuleRefs.hasNext())
                 {
                    SocialRuleRef socialRuleRef=itsocialRuleRefs.next();
                    if(socialRuleRef.isActive() && socialRuleRef.getSocialRule()!=null)
                    {
-                        //System.out.println("ReglaRef k:"+socialRuleRef);
+                        System.out.println("ReglaRef k:"+socialRuleRef);
                         SWBSocialRuleMgr socialRuleMgr=new SWBSocialRuleMgr();
                         SocialRule socialRule=socialRuleRef.getSocialRule();
                         rulesClassifierValueTmp=socialRuleMgr.eval(post, socialRule);
-                        //System.out.println("rulesClassifierValueTmp-1:"+rulesClassifierValue);
+                        System.out.println("rulesClassifierValueTmp-1:"+rulesClassifierValue);
                         if(firstTime) {
                             rulesClassifierValue=rulesClassifierValueTmp;
                             firstTime=false;
@@ -479,12 +479,15 @@ public class SentimentalDataClassifier {
                     while(itRules.hasNext())
                     {
                         SocialRule socialRule=itRules.next();
+                        System.out.println("Entra CR/J1");
                         Iterator <Action> itActions=socialRule.listActions();
                         while(itActions.hasNext())
                         {
                             Action action=itActions.next();
+                            System.out.println("Entra CR/J2:"+action);
                             if(action instanceof SendEmail)
                             {
+                               System.out.println("Entra CR/J3:"+action); 
                                SendEmail.sendEmail(action, post, stream, socialNetwork);
                             }else if(action instanceof SendPost)
                             {

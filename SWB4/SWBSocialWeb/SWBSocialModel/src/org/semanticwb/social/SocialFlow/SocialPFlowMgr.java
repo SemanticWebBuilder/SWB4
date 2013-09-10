@@ -78,22 +78,26 @@ public class SocialPFlowMgr {
      */
     public static boolean isManagedByPflow(SocialPFlow pflow, SemanticClass semClass)
     {
-       
-        String _xml = pflow.getXml();
-        Document docflow = SWBUtils.XML.xmlToDom(_xml);
-        Element workflow = (Element) docflow.getElementsByTagName("workflow").item(0);
-        NodeList resourceTypes = workflow.getElementsByTagName("resourceType");
-        for (int ires = 0; ires < resourceTypes.getLength(); ires++)
-        {
-            Element eres = (Element) resourceTypes.item(ires);
-            String iresw = eres.getAttribute("id");
-            if (semClass.getClassId().equals(iresw))
+       try
+       {
+            String _xml = pflow.getXml();
+            Document docflow = SWBUtils.XML.xmlToDom(_xml);
+            Element workflow = (Element) docflow.getElementsByTagName("workflow").item(0);
+            NodeList resourceTypes = workflow.getElementsByTagName("resourceType");
+            for (int ires = 0; ires < resourceTypes.getLength(); ires++)
             {
-                return true;
+                Element eres = (Element) resourceTypes.item(ires);
+                String iresw = eres.getAttribute("id");
+                if (semClass.getClassId().equals(iresw))
+                {
+                    return true;
+                }
             }
-        }
-            
-        return false;
+       }catch(Exception e)
+       {
+          log.error(e); 
+       }
+       return false;
     }
 
     /**
@@ -256,16 +260,22 @@ public class SocialPFlowMgr {
     
     private static boolean isSocialPflowRefActive(PostOut postOut, SocialPFlow socialPflow)
     {
-        SocialTopic socialTopic=postOut.getSocialTopic();
-        Iterator<SocialPFlowRef> itPFlowRefs=socialTopic.listInheritPFlowRefs();
-        while(itPFlowRefs.hasNext())
+        try
         {
-            SocialPFlowRef socialPFlowRef=itPFlowRefs.next();
-            if(postOut.getPflowInstance().getPflow().getURI().equals(socialPFlowRef.getPflow().getURI()))
+            SocialTopic socialTopic=postOut.getSocialTopic();
+            Iterator<SocialPFlowRef> itPFlowRefs=socialTopic.listInheritPFlowRefs();
+            while(itPFlowRefs.hasNext())
             {
-                if(socialPFlowRef.isActive()) return true;
-                else return false;
+                SocialPFlowRef socialPFlowRef=itPFlowRefs.next();
+                if(postOut.getPflowInstance().getPflow().getURI().equals(socialPFlowRef.getPflow().getURI()))
+                {
+                    if(socialPFlowRef.isActive()) return true;
+                    else return false;
+                }
             }
+        }catch(Exception e)
+        {
+            log.error(e);
         }
         return false;
     }

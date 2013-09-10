@@ -82,12 +82,14 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
                     {
                         Photo photo=Photo.ClassMgr.createPhoto(wsite);
                         
-                        while(sendPost.listPhotos().hasNext())
+                        Iterator itPhotos=sendPost.listPhotos();
+                        
+                        while(itPhotos.hasNext())
                         {
-                            String sphoto=(String)sendPost.listPhotos().next(); 
+                            String sphoto=(String)itPhotos.next(); 
                             
-                            String photoSource = SWBPortal.getWorkPath() + sendPost.getWorkPath() + "/" + Photo.social_hasPhoto.getName()+"_"+sendPost.getId()+"_"+sphoto;
-                            System.out.println("photoSource:"+photoSource);
+                            String photoSource = SWBPortal.getWorkPath() + sendPost.getWorkPath() + "/" + sphoto;
+                            //System.out.println("photoSource-George:"+photoSource);
                             String photoTarget = SWBPortal.getWorkPath() + photo.getWorkPath();
                             System.out.println("photoTarget-1:"+photoTarget);
                             File targetFile=new File(photoTarget);
@@ -95,7 +97,7 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
                             {
                                 targetFile.mkdirs();
                             }
-                            photoTarget+="/" + Photo.social_hasPhoto.getName()+"_"+photo.getId()+"_"+ sphoto;
+                            photoTarget+="/" + sphoto;
                             System.out.println("photoTarget-2:"+photoTarget);
                             System.out.println("Va a copiar...");
                             SWBUtils.IO.copy(photoSource,photoTarget, false, null, null);
@@ -129,10 +131,10 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
                             }
                         }
                         
-                        System.out.println("Va a envíar...");
+                        //System.out.println("Va a envíar...");
                         //Envío post de respuesta, que no pasa por flujo
                         SWBSocialUtil.PostOutUtil.publishPost(photo);
-                        System.out.println("Va a envíar...-1");
+                        //System.out.println("Va a envíar...-1");
                     }catch(Exception e)
                     {
                         log.error(e);
