@@ -1304,7 +1304,7 @@ public class StreamInBox extends GenericResource {
             long StreamPostIns = wsite.getSemanticModel().countStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), null);
             //System.out.println("StreamPostIns:" + StreamPostIns + ", PostInGrp:" + PostIn.sclass.getClassGroupId());
 
-            hampResult.put("countResult", Long.valueOf(StreamPostIns));
+            //hampResult.put("countResult", Long.valueOf(StreamPostIns));
 
             if (nPage != 0) {
                 itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((RECPERPAGE)).longValue(), Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), "timems desc"), true));
@@ -1317,16 +1317,20 @@ public class StreamInBox extends GenericResource {
 
             //System.out.println("itposts J:" + itposts.hasNext() + ",searchWord:" + searchWord);
 
-            if (searchWord != null) {
+            if (searchWord != null && searchWord.trim().length()>0) {
+                StreamPostIns=0L;
                 while (itposts.hasNext()) {
                     PostIn postIn = itposts.next();
                     if (postIn.getTags() != null && postIn.getTags().toLowerCase().indexOf(searchWord.toLowerCase()) > -1) {
+                        StreamPostIns++;
                         aListFilter.add(postIn);
                     } else if (postIn.getMsg_Text() != null && postIn.getMsg_Text().toLowerCase().indexOf(searchWord.toLowerCase()) > -1) {
+                        StreamPostIns++;
                         aListFilter.add(postIn);
                     }
                 }
             }
+            hampResult.put("countResult", Long.valueOf(StreamPostIns));
         }
 
 
@@ -1403,8 +1407,7 @@ public class StreamInBox extends GenericResource {
             }
         }
         hampResult.put("itResult", setso);
-
-
+        
         return hampResult;
 
 
