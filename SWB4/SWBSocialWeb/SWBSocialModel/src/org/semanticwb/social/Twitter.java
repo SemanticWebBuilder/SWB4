@@ -359,7 +359,8 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                                     external.setDevice(status.getSource());
                                     if (status.getText()!=null) {
                                        external.setMessage(status.getText());
-                                    }                            
+                                    }                         
+                                    external.setCreatorPhotoUrl(status.getUser().getBiggerProfileImageURL());
                                     external.setPostType(SWBSocialUtil.MESSAGE);   //TODO:VER SI SIEMPRE EN TWITTER LE DEBO DE PONER ESTE TIPO O TAMBIÉN LE PUDIERA PONER QUE ES DE TIPO FOTO
                                     external.setFollowers(status.getUser().getFollowersCount());
                                     external.setFriendsNumber(status.getUser().getFriendsCount());
