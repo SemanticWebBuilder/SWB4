@@ -35,6 +35,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticIterator;
 import org.semanticwb.platform.SemanticObject;
@@ -55,6 +56,7 @@ import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialTopic;
+import org.semanticwb.social.SocialUserExtAttributes;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.VideoIn;
@@ -691,6 +693,14 @@ public class SocialTopicInBox extends GenericResource {
 
         long nRec = ((Long) hmapResult.get("countResult")).longValue();
         Set<PostIn> setso = ((Set) hmapResult.get("itResult"));
+        
+         //Manejo de permisos
+        User user=paramRequest.getUser();
+        SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.createSocialUserExtAttributes(user.getId(), wsite);
+        boolean userCanRemoveMsg=socialUserExtAttr.isUserCanRemoveMsg();
+        boolean userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
+        boolean userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
+        boolean userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
 
         Iterator<PostIn> itposts = setso.iterator();
         while (itposts.hasNext()) {
@@ -715,8 +725,11 @@ public class SocialTopicInBox extends GenericResource {
 
             text = SWBSocialUtil.Util.replaceSpecialCharacters(text, false);
 
-            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " "
-                    + text + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
+            if(userCanRemoveMsg)
+            {
+                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " "
+                        + text + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
+            }
 
 
             //Preview
@@ -735,15 +748,21 @@ public class SocialTopicInBox extends GenericResource {
 
 
             //ReClasifyByTpic
-            SWBResourceURL urlreClasifybyTopic = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
-            out.println("<a href=\"#\" class=\"retema\" title=\"" + paramRequest.getLocaleString("reclasifyByTopic") + "\" onclick=\"showDialog('" + urlreClasifybyTopic + "','"
-                    + paramRequest.getLocaleString("reclasifyByTopic") + "'); return false;\"></a>");
+            if(userCanRetopicMsg)
+            {
+                SWBResourceURL urlreClasifybyTopic = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
+                out.println("<a href=\"#\" class=\"retema\" title=\"" + paramRequest.getLocaleString("reclasifyByTopic") + "\" onclick=\"showDialog('" + urlreClasifybyTopic + "','"
+                        + paramRequest.getLocaleString("reclasifyByTopic") + "'); return false;\"></a>");
+            }
 
 
-            //Respond
-            SWBResourceURL urlresponse = paramRequest.getRenderUrl().setMode(Mode_RESPONSE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
-            out.println("<a href=\"#\" class=\"answ\" title=\"" + paramRequest.getLocaleString("respond") + "\"  onclick=\"showDialog('" + urlresponse + "','" + paramRequest.getLocaleString("respond")
-                    + "'); return false;\"></a>");
+            if(userCanRespondMsg)
+            {
+                //Respond
+                SWBResourceURL urlresponse = paramRequest.getRenderUrl().setMode(Mode_RESPONSE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
+                out.println("<a href=\"#\" class=\"answ\" title=\"" + paramRequest.getLocaleString("respond") + "\"  onclick=\"showDialog('" + urlresponse + "','" + paramRequest.getLocaleString("respond")
+                        + "'); return false;\"></a>");
+            }
 
             //Respuestas que posee un PostIn
             if (postIn.listpostOutResponseInvs().hasNext()) {
