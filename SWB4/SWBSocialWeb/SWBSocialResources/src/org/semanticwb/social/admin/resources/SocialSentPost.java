@@ -1718,23 +1718,9 @@ public class SocialSentPost extends GenericResource {
             hampResult.put("countResult", Long.valueOf(StreamPostIns));
             itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostOut.swb_creator.getRDFProperty(), socialNetUser.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId(), Integer.valueOf((nPage * RECPERPAGE)).longValue(), Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), "timems desc"), true));
         } else {
-            System.out.println("socialTopic.getSocialSite() filtro-George24:" + socialTopic + ",getSocialSite():" + socialTopic.getSocialSite());
-            //itposts = PostOut.ClassMgr.listPostOutBySocialTopic(socialTopic, socialTopic.getSocialSite());
-            long SocialTopicPostOut = wsite.getSemanticModel().countStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), null);
-            System.out.println("SocialTopicPostOut/FiltrosJJ:" + SocialTopicPostOut);
-            
-            if (nPage != 0 && (searchWord==null && searchWord.trim().length()==0)) {
-                itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId(), Integer.valueOf((RECPERPAGE)).longValue(), Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), "timems desc"), true));
-            } else {
-                itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId(), SocialTopicPostOut , 0L, "timems desc"), true));
-
-            }
-
-
-            System.out.println("SocialTopicPostOut/FiltrosJJ/itposts:" + itposts.hasNext());
-
+            long SocialTopicPostOut=0L;
             if (searchWord != null && searchWord.trim().length()>0) {
-                SocialTopicPostOut=0L;
+                itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId(), SocialTopicPostOut , 0L, "timems desc"), true));
                 while (itposts.hasNext()) {
                     PostOut postOut = itposts.next();
                     if (postOut.getTags() != null && postOut.getTags().toLowerCase().indexOf(searchWord.toLowerCase()) > -1) {
@@ -1746,6 +1732,15 @@ public class SocialSentPost extends GenericResource {
                         aListFilter.add(postOut);
 
                     }
+                }
+            }else
+            {
+                SocialTopicPostOut = wsite.getSemanticModel().countStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), null);
+                if (nPage != 0) {
+                    itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId(), Integer.valueOf((RECPERPAGE)).longValue(), Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), "timems desc"), true));
+                } else {
+                    itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId(), SocialTopicPostOut , 0L, "timems desc"), true));
+
                 }
             }
             hampResult.put("countResult", Long.valueOf(SocialTopicPostOut));
