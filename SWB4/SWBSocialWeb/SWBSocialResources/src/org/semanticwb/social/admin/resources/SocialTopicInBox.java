@@ -725,7 +725,7 @@ public class SocialTopicInBox extends GenericResource {
 
             text = SWBSocialUtil.Util.replaceSpecialCharacters(text, false);
 
-            if(userCanRemoveMsg)
+            //if(userCanRemoveMsg)
             {
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " "
                         + text + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
@@ -748,7 +748,7 @@ public class SocialTopicInBox extends GenericResource {
 
 
             //ReClasifyByTpic
-            if(userCanRetopicMsg)
+            //if(userCanRetopicMsg)
             {
                 SWBResourceURL urlreClasifybyTopic = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
                 out.println("<a href=\"#\" class=\"retema\" title=\"" + paramRequest.getLocaleString("reclasifyByTopic") + "\" onclick=\"showDialog('" + urlreClasifybyTopic + "','"
@@ -756,7 +756,7 @@ public class SocialTopicInBox extends GenericResource {
             }
 
 
-            if(userCanRespondMsg)
+            //if(userCanRespondMsg)
             {
                 //Respond
                 SWBResourceURL urlresponse = paramRequest.getRenderUrl().setMode(Mode_RESPONSE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
@@ -1263,27 +1263,31 @@ public class SocialTopicInBox extends GenericResource {
             long SocialTopicPostIns = wsite.getSemanticModel().countStatements(null, PostIn.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), null);
             //System.out.println("StreamPostIns:"+SocialTopicPostIns+", PostInGrp:"+PostIn.sclass.getClassGroupId());
 
-            hampResult.put("countResult", Long.valueOf(SocialTopicPostIns));
+            //hampResult.put("countResult", Long.valueOf(SocialTopicPostIns));
 
 
             //itposts=new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((20).longValue(), Integer.valueOf(0).longValue(), "timems desc"),true));
-            if (nPage != 0) {
+            if (nPage != 0 && (searchWord==null && searchWord.trim().length()==0)) {
                 itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((RECPERPAGE)).longValue(), Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), "timems desc"), true));
             } else {
                 itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), SocialTopicPostIns, 0L, "timems desc"), true));
 
             }
 
-            if (searchWord != null) {
+            if (searchWord != null && searchWord.trim().length()>0) {
+                SocialTopicPostIns=0L;
                 while (itposts.hasNext()) {
                     PostIn postIn = itposts.next();
                     if (postIn.getTags() != null && postIn.getTags().toLowerCase().indexOf(searchWord.toLowerCase()) > -1) {
+                        SocialTopicPostIns++;
                         aListFilter.add(postIn);
                     } else if (postIn.getMsg_Text() != null && postIn.getMsg_Text().toLowerCase().indexOf(searchWord.toLowerCase()) > -1) {
+                        SocialTopicPostIns++;
                         aListFilter.add(postIn);
                     }
                 }
             }
+            hampResult.put("countResult", Long.valueOf(SocialTopicPostIns));
         }
         //Termina Filtros
 

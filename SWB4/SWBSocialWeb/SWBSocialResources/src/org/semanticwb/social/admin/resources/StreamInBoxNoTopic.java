@@ -667,7 +667,7 @@ public class StreamInBoxNoTopic extends GenericResource {
 
             text = SWBSocialUtil.Util.replaceSpecialCharacters(text, false);
 
-            if(userCanRemoveMsg)
+            //if(userCanRemoveMsg)
             {
                 out.println("<a href=\"#\" class=\"eliminar\" title=\"" + paramRequest.getLocaleString("remove") + "\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " "
                         + text + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
@@ -681,14 +681,14 @@ public class StreamInBoxNoTopic extends GenericResource {
 
             
             //ReClasifyByTpic
-            if(userCanRetopicMsg)
+            //if(userCanRetopicMsg)
             {
                 SWBResourceURL urlreClasifybyTopic = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reclasifyByTopic") + "\" class=\"retema\"  onclick=\"showDialog('" + urlreClasifybyTopic + "','"
                         + paramRequest.getLocaleString("reclasifyByTopic") + "'); return false;\"></a>");
             }
 
-            if(userCanRevalueMsg)
+            //if(userCanRevalueMsg)
             {
                 //ReClasyfyBySentiment & Intensity
                 SWBResourceURL urlrev = paramRequest.getRenderUrl().setMode(Mode_REVAL).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
@@ -1088,13 +1088,13 @@ public class StreamInBoxNoTopic extends GenericResource {
             long StreamPostIns=wsite.getSemanticModel().countStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), null);
             System.out.println("StreamPostIns:"+StreamPostIns+", PostInGrp:"+PostIn.sclass.getClassGroupId());
             
-            hampResult.put("countResult", Long.valueOf(StreamPostIns));
+            //hampResult.put("countResult", Long.valueOf(StreamPostIns));
         
             
             //itposts=new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((20).longValue(), Integer.valueOf(0).longValue(), "timems desc"),true));
             
             //original itposts=new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((RECPERPAGE)).longValue(), Integer.valueOf((nPage*RECPERPAGE)-RECPERPAGE).longValue(), "timems desc"),true));
-             if (nPage != 0) {
+             if (nPage != 0 && (searchWord==null && searchWord.trim().length()==0)) {
                 itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((RECPERPAGE)).longValue(), Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), "timems desc"), true));
             } else {
                 itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), StreamPostIns, 0L, "timems desc"), true));
@@ -1105,16 +1105,20 @@ public class StreamInBoxNoTopic extends GenericResource {
 
             System.out.println("itposts J:"+itposts.hasNext()+",searchWord:"+searchWord);
             
-            if (searchWord != null) {
+            if (searchWord != null && searchWord.trim().length()>0) {
+                StreamPostIns=0L;
                 while (itposts.hasNext()) {
                     PostIn postIn = itposts.next();
                     if (postIn.getTags() != null && postIn.getTags().toLowerCase().indexOf(searchWord.toLowerCase()) > -1) {
+                        StreamPostIns++;
                         aListFilter.add(postIn);
                     } else if (postIn.getMsg_Text() != null && postIn.getMsg_Text().toLowerCase().indexOf(searchWord.toLowerCase()) > -1) {
+                        StreamPostIns++;
                         aListFilter.add(postIn);
                     }
                 }
             }
+            hampResult.put("countResult", Long.valueOf(StreamPostIns));
         }
 
 

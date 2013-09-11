@@ -718,7 +718,7 @@ public class StreamInBox extends GenericResource {
 
             text = SWBSocialUtil.Util.replaceSpecialCharacters(text, false);
 
-            if(userCanRemoveMsg)
+            //if(userCanRemoveMsg)
             {
                     out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + ": "
                     + text + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
@@ -739,7 +739,7 @@ public class StreamInBox extends GenericResource {
 
 
 
-            if(userCanRetopicMsg)
+            //if(userCanRetopicMsg)
             {
                 //ReClasifyByTpic
                 SWBResourceURL urlreClasifybyTopic = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
@@ -747,7 +747,7 @@ public class StreamInBox extends GenericResource {
                         + paramRequest.getLocaleString("reclasifyByTopic") + "'); return false;\"></a>");
             }
 
-            if(userCanRevalueMsg)
+            //if(userCanRevalueMsg)
             {
                 //ReClasyfyBySentiment & Intensity
                 SWBResourceURL urlrev = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYSENTIMENT).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
@@ -755,7 +755,7 @@ public class StreamInBox extends GenericResource {
                         + "'); return false;\"></a>");
             }
 
-            if(userCanRespondMsg)
+            //if(userCanRespondMsg)
             {
                 //Respond
                 if (postIn.getSocialTopic() != null) {
