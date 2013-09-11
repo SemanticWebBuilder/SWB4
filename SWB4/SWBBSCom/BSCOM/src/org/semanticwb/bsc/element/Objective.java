@@ -1,9 +1,13 @@
 package org.semanticwb.bsc.element;
 
+import org.semanticwb.bsc.accessory.Period;
+import org.semanticwb.bsc.accessory.State;
+import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.RuleRef;
 import org.semanticwb.model.UserGroup;
+import org.semanticwb.platform.SemanticProperty;
 
 
 public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase 
@@ -164,4 +168,362 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     public UserGroup getUserGroup() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
+    /**
+     * Devuelve el valor de despliegue de la propiedad ontol&oacute;gica especificada. Las propiedades aceptadas
+     * son aquellas cuyo valor devuelto por {@code isDataTypeProperty()} es {@code false}.
+     * @param property la propiedad semantica de la que se desea obtener el valor de despliegue.
+     * @param lang indica el idioma en que se espera el valor devuelto.
+     * @return un objeto {@literal String} que representa el valos de despliegue de la propiedad ontol&oacute;gica indicada.
+     */
+    public String renderObjectPropertyValue(SemanticProperty property, String lang) {
+        
+        String value = null;
+        
+        if (property.equals(Objective.bsc_hasIndicator)) {
+            value = renderHasIndicatorValue(lang);
+        } else if (property.equals(Objective.bsc_hasInitiative)) {
+            value = renderHasInitiativeValue(lang);
+        } else if (property.equals(Objective.bsc_hasPeriod)) {
+            value = renderHasPeriodValue(lang);
+        } else if (property.equals(Objective.bsc_hasPeriodStatus)) {
+            value = renderHasPeriodStatusValue(lang);
+        } else if (property.equals(Objective.bsc_hasState)) {
+            value = renderHasStateValue(lang);
+        } else if (property.equals(Objective.bsc_help)) {
+            value = renderHelpValue();
+        } else if (property.equals(Objective.bsc_parentObjective)) {
+            value = renderParentObjectiveValue(lang);
+        } else if (property.equals(Objective.bsc_periodicity)) {
+            value = renderPeriodicityValue(lang);
+        } else if (property.equals(Objective.bsc_sponsor)) {
+            value = renderSponsorValue();
+        } else if (property.equals(Objective.bsc_themeInv)) {
+            value = renderThemeInvValue(lang);
+        } else if (property.equals(Objective.swb_creator)) {
+            value = renderCreatorValue();
+        } else if (property.equals(Objective.swb_hasRole)) {
+            value = renderHasRoleValue(lang);
+        } else if (property.equals(Objective.swb_hasRuleRef)) {
+            value = renderHasRuleRefValue(lang);
+        } else if (property.equals(Objective.swb_hasUserGroup)) {
+            value = renderHasUserGroupValue(lang);
+        } else if (property.equals(Objective.swb_modifiedBy)) {
+            value = renderModifiedByValue();
+        }
+        
+        return value == null ? "" : value;
+    }
+    
+    /**
+     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.hasIndicator}
+     * @param lang un String que indica el idoma en que se espera el valor devuelto
+     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.hasIndicator}
+     */
+    private String renderHasIndicatorValue(String lang) {
+        
+        StringBuilder value = new StringBuilder(128);
+        
+        if (this.listIndicators().hasNext()) {
+            GenericIterator<Indicator> indicatorIterator = this.listIndicators();
+            short count = 0;
+            while (indicatorIterator.hasNext()) {
+                Indicator indicator = indicatorIterator.next();
+                count++;
+                if (count > 1) {
+                    value.append("; ");
+                }
+                value.append(indicator.renderIndicatorName(lang));
+            }
+        }
+        return value.toString();
+    }
+    
+    /**
+     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.hasInitiative}
+     * @param lang un String que indica el idoma en que se espera el valor devuelto
+     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.hasInitiative}
+     */
+    private String renderHasInitiativeValue(String lang) {
+        
+        StringBuilder value = new StringBuilder(128);
+        
+        if (this.listInitiatives().hasNext()) {
+            GenericIterator<Initiative> initiativeIterator = this.listInitiatives();
+            short count = 0;
+            while (initiativeIterator.hasNext()) {
+                 Initiative initiative = initiativeIterator.next();
+                count++;
+                if (count > 1) {
+                    value.append("; ");
+                }
+                value.append(initiative.renderInitiativeName(lang));
+            }
+        }
+        return value.toString();
+    }
+    
+    /**
+     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.hasPeriod}
+     * @param lang un String que indica el idoma en que se espera el valor devuelto
+     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.hasPeriod}
+     */
+    private String renderHasPeriodValue(String lang) {
+        
+        StringBuilder value = new StringBuilder(128);
+        
+        if (this.listPeriods().hasNext()) {
+            GenericIterator<Period> periodIterator = this.listPeriods();
+            short count = 0;
+            while (periodIterator.hasNext()) {
+                 Period period = periodIterator.next();
+                count++;
+                if (count > 1) {
+                    value.append("; ");
+                }
+                value.append(period.getDisplayTitle(lang));
+            }
+        }
+        return value.toString();
+    }
+    
+    /**
+     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.hasPeriodStatus}
+     * @param lang un String que indica el idoma en que se espera el valor devuelto
+     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.hasPeriodStatus}
+     */
+    private String renderHasPeriodStatusValue(String lang) {
+        
+        StringBuilder value = new StringBuilder(128);
+        
+        if (this.listPeriodStatuses().hasNext()) {
+            GenericIterator<PeriodStatus> periodStatusIterator = this.listPeriodStatuses();
+            short count = 0;
+            while (periodStatusIterator.hasNext()) {
+                 PeriodStatus periodStatus = periodStatusIterator.next();
+                count++;
+                if (count > 1) {
+                    value.append("; ");
+                }
+                value.append(periodStatus.getDisplayTitle(lang));
+            }
+        }
+        return value.toString();
+    }
+    
+    /**
+     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.hasState}
+     * @param lang un String que indica el idoma en que se espera el valor devuelto
+     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.hasState}
+     */
+    private String renderHasStateValue(String lang) {
+        
+        StringBuilder value = new StringBuilder(128);
+        
+        if (this.listStates().hasNext()) {
+            GenericIterator<State> stateIterator = this.listStates();
+            short count = 0;
+            while (stateIterator.hasNext()) {
+                 State state = stateIterator.next();
+                count++;
+                if (count > 1) {
+                    value.append("; ");
+                }
+                value.append(state.getDisplayTitle(lang));
+            }
+        }
+        return value.toString();
+    }
+    
+    /**
+     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.hasRole}
+     * @param lang un String que indica el idoma en que se espera el valor devuelto
+     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.hasRole}
+     */
+    private String renderHasRoleValue(String lang) {
+        
+        StringBuilder value = new StringBuilder(128);
+        
+        if (this.listRoles().hasNext()) {
+            GenericIterator<Role> roleIterator = this.listRoles();
+            short count = 0;
+            while (roleIterator.hasNext()) {
+                 Role role = roleIterator.next();
+                count++;
+                if (count > 1) {
+                    value.append("; ");
+                }
+                value.append(role.getDisplayTitle(lang));
+            }
+        }
+        return value.toString();
+    }
+    
+    /**
+     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.RuleRef}
+     * @param lang un String que indica el idoma en que se espera el valor devuelto
+     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.RuleRef}
+     */
+    private String renderHasRuleRefValue(String lang) {
+        
+        StringBuilder value = new StringBuilder(128);
+        
+        if (this.listRuleRefs().hasNext()) {
+            GenericIterator<RuleRef> ruleRefIterator = this.listRuleRefs();
+            short count = 0;
+            while (ruleRefIterator.hasNext()) {
+                RuleRef ruleRef = ruleRefIterator.next();
+                count++;
+                if (count > 1) {
+                    value.append("; ");
+                }
+                value.append(ruleRef.getRule().getDisplayTitle(lang));
+            }
+        }
+        return value.toString();
+    }
+    
+    /**
+     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.hasUserGroup}
+     * @param lang un String que indica el idoma en que se espera el valor devuelto
+     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.hasUserGroup}
+     */
+    private String renderHasUserGroupValue(String lang) {
+        
+        StringBuilder value = new StringBuilder(128);
+        
+        if (this.listUserGroups().hasNext()) {
+            GenericIterator<UserGroup> userGroupIterator = this.listUserGroups();
+            short count = 0;
+            while (userGroupIterator.hasNext()) {
+                UserGroup userGroup = userGroupIterator.next();
+                count++;
+                if (count > 1) {
+                    value.append("; ");
+                }
+                value.append(userGroup.getDisplayTitle(lang));
+            }
+        }
+        return value.toString();
+    }
+    
+    /**
+     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.help}
+     * @param lang un String que indica el idoma en que se espera el valor devuelto
+     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.help}
+     */
+    private String renderHelpValue() {
+        
+        StringBuilder value = new StringBuilder(128);
+        
+        if (this.getHelp() != null) {
+            value.append(this.getHelp());
+        }
+        return value.toString();
+    }
+    
+    /**
+     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.parentObjective}
+     * @param lang un String que indica el idoma en que se espera el valor devuelto
+     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.parentObjective}
+     */
+    private String renderParentObjectiveValue(String lang) {
+        
+        StringBuilder value = new StringBuilder(128);
+        
+        if (this.getParentObjective() != null && this.getBSC() != null) {
+            value.append(this.getParentObjective().renderObjectiveName(lang));
+        }
+        return value.toString();
+    }
+    
+    /**
+     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.periodicity}
+     * @param lang un String que indica el idoma en que se espera el valor devuelto
+     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.periodicity}
+     */
+    private String renderPeriodicityValue(String lang) {
+        
+        StringBuilder value = new StringBuilder(64);
+        
+        if (this.getPeriodicity() != null) {
+            value.append(this.getPeriodicity().getDisplayTitle(lang));
+        }
+        return value.toString();
+    }
+    
+    /**
+     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.sponsor}
+     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.sponsor}
+     */
+    private String renderSponsorValue() {
+        
+        StringBuilder value = new StringBuilder(64);
+        
+        if (this.getSponsor() != null) {
+            value.append(this.getSponsor().getFullName());
+        }
+        return value.toString();
+    }
+    
+    /**
+     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.creator}
+     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.creator}
+     */
+    private String renderCreatorValue() {
+        
+        StringBuilder value = new StringBuilder(64);
+        
+        if (this.getCreator() != null) {
+            value.append(this.getCreator().getFullName());
+        }
+        return value.toString();
+    }
+    
+    /**
+     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.modifiedBy}
+     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.modifiedBy}
+     */
+    private String renderModifiedByValue() {
+        
+        StringBuilder value = new StringBuilder(64);
+        
+        if (this.getModifiedBy() != null) {
+            value.append(this.getModifiedBy().getFullName());
+        }
+        return value.toString();
+    }
+    
+    /**
+     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.themeInv}
+     * @param lang un String que indica el idoma en que se espera el valor devuelto
+     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.themeInv}
+     */
+    private String renderThemeInvValue(String lang) {
+        
+        StringBuilder value = new StringBuilder(64);
+        
+        if (this.getTheme() != null) {
+            value.append(this.getTheme().getDisplayTitle(lang));
+        }
+        return value.toString();
+    }
+    
+    /**
+     * Genera un String que representa el nombre del objetivo antecedido por su prefijo
+     * @param lang un String que indica el idoma en que se espera el valor devuelto
+     * @return un String que representa el nombre del objetivo antecedido por su prefijo
+     */
+    public String renderObjectiveName(String lang) {
+        
+        StringBuilder value = new StringBuilder(64);
+        
+        if (this.getPrefix() != null) {
+            value.append(this.getPrefix());
+            value.append(" ");
+        }
+        value.append(this.getDisplayTitle(lang));
+        return value.toString();
+    }
+    
 }
