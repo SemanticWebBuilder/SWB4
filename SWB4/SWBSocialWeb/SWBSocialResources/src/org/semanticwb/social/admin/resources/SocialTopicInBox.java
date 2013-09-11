@@ -35,6 +35,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticIterator;
@@ -696,7 +697,7 @@ public class SocialTopicInBox extends GenericResource {
         
          //Manejo de permisos
         User user=paramRequest.getUser();
-        SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.createSocialUserExtAttributes(user.getId(), wsite);
+        SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.createSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
         boolean userCanRemoveMsg=socialUserExtAttr.isUserCanRemoveMsg();
         boolean userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
         boolean userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
@@ -725,7 +726,7 @@ public class SocialTopicInBox extends GenericResource {
 
             text = SWBSocialUtil.Util.replaceSpecialCharacters(text, false);
 
-            //if(userCanRemoveMsg)
+            if(userCanRemoveMsg)
             {
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " "
                         + text + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
@@ -748,7 +749,7 @@ public class SocialTopicInBox extends GenericResource {
 
 
             //ReClasifyByTpic
-            //if(userCanRetopicMsg)
+            if(userCanRetopicMsg)
             {
                 SWBResourceURL urlreClasifybyTopic = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
                 out.println("<a href=\"#\" class=\"retema\" title=\"" + paramRequest.getLocaleString("reclasifyByTopic") + "\" onclick=\"showDialog('" + urlreClasifybyTopic + "','"
@@ -756,7 +757,7 @@ public class SocialTopicInBox extends GenericResource {
             }
 
 
-            //if(userCanRespondMsg)
+            if(userCanRespondMsg)
             {
                 //Respond
                 SWBResourceURL urlresponse = paramRequest.getRenderUrl().setMode(Mode_RESPONSE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
