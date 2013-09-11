@@ -367,6 +367,12 @@ public class ListenerMgr implements SWBAppObject {
     
     private static void doSomeTask(Stream stream)
     {
+        //TODO:Desabilitar guardado de log, revisar con Javier despues
+        WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+        wsite.getSemanticModel().setTraceable(false);
+        System.out.println("DESACTIVA TRACE DE MODELO:"+wsite);
+        //Termina
+                
         System.out.println("Entra a doSomeTask...-1");
         //Revisar redes sociales que se encuentran en este momento en el stream
         ArrayList asocialNetIDs=new ArrayList();    //White List -Lista buena-Lista que si esta en el stream
