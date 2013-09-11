@@ -116,6 +116,7 @@ public class SocialSentPost extends GenericResource {
     public static final String Mode_ShowPostOutNets = "postOutLog";
     private static final int RECPERPAGE = 20; //Number of records by Page, could be dynamic later
     private static final int PAGES2VIEW = 15; //Number of pages 2 display in pagination.
+    private static final String Mode_ShowUsrHistory = "showUsrHistory";
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -132,7 +133,10 @@ public class SocialSentPost extends GenericResource {
             doAction(request, response, paramRequest);
         } else if (Mode_ShowPostOutNets.equals(mode)) {
             doShowPostOutLog(request, response, paramRequest);
-        } else if (paramRequest.getMode().equals("exportExcel")) {
+        }else if(Mode_ShowUsrHistory.equals(mode))
+        {
+             doShowUserHistory(request, response, paramRequest);
+        }else if (paramRequest.getMode().equals("exportExcel")) {
             try {
                 doGenerateReport(request, response, paramRequest);
             } catch (Exception e) {
@@ -367,6 +371,33 @@ public class SocialSentPost extends GenericResource {
         out.println("<span>" + paramRequest.getLocaleString("source") + "</span>");
         out.println("</a>");
         out.println("</th>");
+        
+        
+        //User
+        String nameClassUser = "ascen";
+        String typeOrderUser = "Ordenar Ascendente";
+        urlOderby.setParameter("orderBy", "userUp");
+        if (request.getParameter("orderBy") != null) {
+            if (request.getParameter("orderBy").equals("userUp") || request.getParameter("orderBy").equals("userDown")) {
+                if (request.getParameter("nameClassUser") != null) {
+                    if (request.getParameter("nameClassUser").equals("descen")) {
+                        nameClassUser = "ascen";
+                    } else {
+                        nameClassUser = "descen";
+                        urlOderby.setParameter("orderBy", "userDown");
+                        typeOrderUser = "Ordenar Descendente";
+                    }
+                }
+            }
+        }
+        out.println("<th>");
+        urlOderby.setParameter("nameClassUser", nameClassUser);
+        out.println("<a href=\"#\" class=\"" + nameClassUser + "\" title=\"" + typeOrderUser + "\" onclick=\"submitUrl('" + urlOderby + "',this); return false;\">");
+        out.println("<span>" + paramRequest.getLocaleString("user") + "</span>");
+        out.println("</a>");
+        out.println("</th>");
+        //Ends User
+        
 
         String nameClassCreted = "ascen";
         String typeOrderCreted = "Ordenar Ascendente";
@@ -587,7 +618,7 @@ public class SocialSentPost extends GenericResource {
 
         long nRec = ((Long) hmapResult.get("countResult")).longValue();
         Set<PostOut> setso = ((Set) hmapResult.get("itResult"));
-
+        
         Iterator<PostOut> itposts = setso.iterator();
         while (itposts.hasNext()) {
             PostOut postOut = (PostOut) itposts.next();
@@ -786,6 +817,14 @@ public class SocialSentPost extends GenericResource {
                 out.println("---");
             }
             out.println("</td>");
+        
+        
+            //User
+            out.println("<td>");
+            SWBResourceURL urlshowUsrHistory = paramRequest.getRenderUrl().setMode(Mode_ShowUsrHistory).setCallMethod(SWBResourceURL.Call_DIRECT);
+            out.println(postOut.getCreator() != null ? "<a href=\"#\" onclick=\"showDialog('" + urlshowUsrHistory.setParameter("swbAdminUser", postOut.getCreator().getURI()) + "','" + paramRequest.getLocaleString("userHistory") + "'); return false;\">" + postOut.getCreator().getFullName() + "</a>" : paramRequest.getLocaleString("withoutUser"));
+            out.println("</td>");
+        
 
             //PostOut creation
             out.println("<td>");
@@ -1208,6 +1247,25 @@ public class SocialSentPost extends GenericResource {
         return ret;
     }
 
+    
+    /*
+     * Muestra los datos de un usuario
+     */
+    private void doShowUserHistory(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
+        final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/adminUserHistory.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        if (dis != null) {
+            try {
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("swbAdminUser"));
+                request.setAttribute("swbAdminUser", semObject);
+                request.setAttribute("paramRequest", paramRequest);
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
+    }
+    
     /**
      * Review sem prop.
      *
@@ -1702,7 +1760,8 @@ public class SocialSentPost extends GenericResource {
             log.error(e);
         }
     }
-
+    
+    
     /*
      * Method which controls the filters allowed in this class
      */
