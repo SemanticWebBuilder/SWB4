@@ -568,7 +568,7 @@ public class SocialSentPost extends GenericResource {
         
          //Manejo de permisos
         User user=paramRequest.getUser();
-        SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.createSocialUserExtAttributes(user.getId(), wsite);
+        SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.createSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
         boolean userCanRemoveMsg=socialUserExtAttr.isUserCanRemoveMsg();
         boolean userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
         boolean userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
@@ -661,7 +661,7 @@ public class SocialSentPost extends GenericResource {
                 msgText = SWBSocialUtil.Util.replaceSpecialCharacters(msgText, false);
             }
 
-            //if(userCanRemoveMsg)
+            if(userCanRemoveMsg)
             {
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + msgText + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
             }

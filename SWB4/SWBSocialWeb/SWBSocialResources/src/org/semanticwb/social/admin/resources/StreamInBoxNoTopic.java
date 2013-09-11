@@ -21,6 +21,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticIterator;
@@ -628,7 +629,7 @@ public class StreamInBoxNoTopic extends GenericResource {
 
         //Manejo de permisos
         User user=paramRequest.getUser();
-        SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.createSocialUserExtAttributes(user.getId(), wsite);
+        SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.createSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
         boolean userCanRemoveMsg=socialUserExtAttr.isUserCanRemoveMsg();
         boolean userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
         boolean userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
@@ -667,7 +668,7 @@ public class StreamInBoxNoTopic extends GenericResource {
 
             text = SWBSocialUtil.Util.replaceSpecialCharacters(text, false);
 
-            //if(userCanRemoveMsg)
+            if(userCanRemoveMsg)
             {
                 out.println("<a href=\"#\" class=\"eliminar\" title=\"" + paramRequest.getLocaleString("remove") + "\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " "
                         + text + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
@@ -681,14 +682,14 @@ public class StreamInBoxNoTopic extends GenericResource {
 
             
             //ReClasifyByTpic
-            //if(userCanRetopicMsg)
+            if(userCanRetopicMsg)
             {
                 SWBResourceURL urlreClasifybyTopic = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reclasifyByTopic") + "\" class=\"retema\"  onclick=\"showDialog('" + urlreClasifybyTopic + "','"
                         + paramRequest.getLocaleString("reclasifyByTopic") + "'); return false;\"></a>");
             }
 
-            //if(userCanRevalueMsg)
+            if(userCanRevalueMsg)
             {
                 //ReClasyfyBySentiment & Intensity
                 SWBResourceURL urlrev = paramRequest.getRenderUrl().setMode(Mode_REVAL).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
