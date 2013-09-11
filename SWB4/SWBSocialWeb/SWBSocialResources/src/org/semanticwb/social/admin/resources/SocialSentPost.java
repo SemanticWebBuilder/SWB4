@@ -661,7 +661,7 @@ public class SocialSentPost extends GenericResource {
                 msgText = SWBSocialUtil.Util.replaceSpecialCharacters(msgText, false);
             }
 
-            if(userCanRemoveMsg)
+            //if(userCanRemoveMsg)
             {
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + msgText + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
             }
@@ -1722,8 +1722,8 @@ public class SocialSentPost extends GenericResource {
             //itposts = PostOut.ClassMgr.listPostOutBySocialTopic(socialTopic, socialTopic.getSocialSite());
             long SocialTopicPostOut = wsite.getSemanticModel().countStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), null);
             System.out.println("SocialTopicPostOut/FiltrosJJ:" + SocialTopicPostOut);
-            hampResult.put("countResult", Long.valueOf(SocialTopicPostOut));
-            if (nPage != 0) {
+            
+            if (nPage != 0 && (searchWord==null && searchWord.trim().length()==0)) {
                 itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId(), Integer.valueOf((RECPERPAGE)).longValue(), Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), "timems desc"), true));
             } else {
                 itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId(), SocialTopicPostOut , 0L, "timems desc"), true));
@@ -1733,18 +1733,22 @@ public class SocialSentPost extends GenericResource {
 
             System.out.println("SocialTopicPostOut/FiltrosJJ/itposts:" + itposts.hasNext());
 
-            if (searchWord != null) {
+            if (searchWord != null && searchWord.trim().length()>0) {
+                SocialTopicPostOut=0L;
                 while (itposts.hasNext()) {
                     PostOut postOut = itposts.next();
                     if (postOut.getTags() != null && postOut.getTags().toLowerCase().indexOf(searchWord.toLowerCase()) > -1) {
+                        SocialTopicPostOut++;
                         aListFilter.add(postOut);
 
                     } else if (postOut.getMsg_Text() != null && postOut.getMsg_Text().toLowerCase().indexOf(searchWord.toLowerCase()) > -1) {
+                        SocialTopicPostOut++;
                         aListFilter.add(postOut);
 
                     }
                 }
             }
+            hampResult.put("countResult", Long.valueOf(SocialTopicPostOut));
         }
         //Termina Filtros
 
