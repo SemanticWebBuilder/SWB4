@@ -1284,7 +1284,7 @@
         <swbxf:formElement>
           <bsc:BSCDateElement rdf:ID="estimatedTo">
             <swb:dateOnChange rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >dijit.byId('toEstimatedDate').constraints.min = arguments[0];</swb:dateOnChange>
+            >dijit.byId('fromEstimatedDate{replaceId}').constraints.max = arguments[0];</swb:dateOnChange>
             <swb:dateId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >toEstimatedDate</swb:dateId>
           </bsc:BSCDateElement>
@@ -1357,7 +1357,7 @@
         <swbxf:formElement>
           <bsc:BSCDateElement rdf:ID="estimatedFrom">
             <swb:dateOnChange rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >dijit.byId('fromEstimatedlDate').constraints.min = arguments[0];</swb:dateOnChange>
+            >dijit.byId('toEstimatedDate{replaceId}').constraints.min = arguments[0];</swb:dateOnChange>
             <swb:dateId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >fromEstimatedDate</swb:dateId>
           </bsc:BSCDateElement>
@@ -1613,7 +1613,7 @@
         <swbxf:formElement>
           <bsc:BSCDateElement rdf:ID="actualFrom">
             <swb:dateOnChange rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >dijit.byId('fromActualDate').constraints.min = arguments[0];</swb:dateOnChange>
+            >dijit.byId('toActualDate{replaceId}').constraints.min = arguments[0];</swb:dateOnChange>
             <swb:dateId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >fromActualDate</swb:dateId>
           </bsc:BSCDateElement>
@@ -1632,10 +1632,10 @@
       <swbxf:DisplayProperty rdf:ID="dp_plannedStart">
         <swbxf:formElement>
           <bsc:BSCDateElement rdf:ID="planFrom">
+            <swb:dateOnChange rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >dijit.byId('toPlanDate{replaceId}').constraints.min = arguments[0];</swb:dateOnChange>
             <swb:dateId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >fromPlanDate</swb:dateId>
-            <swb:dateOnChange rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >dijit.byId('fromPlanDate').constraints.min = arguments[0];</swb:dateOnChange>
           </bsc:BSCDateElement>
         </swbxf:formElement>
         <rdfs:label xml:lang="en">Planned start date</rdfs:label>
@@ -1816,7 +1816,7 @@
         <swbxf:formElement>
           <bsc:BSCDateElement rdf:ID="actualTo">
             <swb:dateOnChange rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >dijit.byId('toActualDate').constraints.min = arguments[0];</swb:dateOnChange>
+            >dijit.byId('fromActualDate{replaceId}').constraints.max = arguments[0];</swb:dateOnChange>
             <swb:dateId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >toActualDate</swb:dateId>
           </bsc:BSCDateElement>
@@ -1891,7 +1891,7 @@
         <swbxf:formElement>
           <bsc:BSCDateElement rdf:ID="planTo">
             <swb:dateOnChange rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >dijit.byId('toPlanDate').constraints.min = arguments[0];</swb:dateOnChange>
+            >dijit.byId('fromPlanDate{replaceId}').constraints.max = arguments[0];</swb:dateOnChange>
             <swb:dateId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >toPlanDate</swb:dateId>
           </bsc:BSCDateElement>
