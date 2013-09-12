@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -102,6 +103,7 @@ public class StreamInBox extends GenericResource {
     public static final String Mode_ShowUsrHistory = "showUsrHistory";
     public static final String Mode_RESPONSES = "responses";
     public static final String Mode_SHOWPOSTOUT = "showPostOut";
+    public static final String Mode_ADVANCE_RECLASSIFYbyTOPIC = "advreclassifyByTopic";
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -126,6 +128,8 @@ public class StreamInBox extends GenericResource {
             doShowResponses(request, response, paramRequest);
         } else if (Mode_SHOWPOSTOUT.equals(mode)) {
             doShowPostOut(request, response, paramRequest);
+        } else if (Mode_ADVANCE_RECLASSIFYbyTOPIC.equals(mode)) {
+            doAdvanceReClassifyByTopic(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("exportExcel")) {
             try {
                 doGenerateReport(request, response, paramRequest);
@@ -188,6 +192,20 @@ public class StreamInBox extends GenericResource {
         WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
 
         PrintWriter out = response.getWriter();
+        
+        //Manejo de permisos
+        boolean userCanRemoveMsg=false;
+        boolean userCanRetopicMsg=false;
+        boolean userCanRevalueMsg=false;
+        boolean userCanRespondMsg=false;
+        SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+        if(socialUserExtAttr!=null)
+        {
+            userCanRemoveMsg=socialUserExtAttr.isUserCanRemoveMsg();
+            userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
+            userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
+            userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
+        }
 
 
         if (request.getParameter("leyendReconfirm") != null) {
@@ -301,8 +319,19 @@ public class StreamInBox extends GenericResource {
         out.println("</div>");
         out.println("</form>");
         out.println("</span>");
+        
+        //Advance re-Classify by topic
+        if(userCanRetopicMsg)
+        {
+            out.println("<span  class=\"spanFormat\">");
+            SWBResourceURL ReClassbyTopicUrl = paramRequest.getRenderUrl();
+            ReClassbyTopicUrl.setParameter("streamid", id);
+            ReClassbyTopicUrl.setMode(Mode_ADVANCE_RECLASSIFYbyTOPIC);
+            out.println("<button dojoType='dijit.form.Button'  onclick=\"showDialog('" + ReClassbyTopicUrl + "','" + paramRequest.getLocaleString("reClassifybyTopic") + "'); return false;\">" + paramRequest.getLocaleString("reClassifybyTopic") + "</button>");
+            out.println("</span>");
+        }
+        
         out.println("</fieldset>");
-
 
         out.println("<fieldset>");
 
@@ -686,14 +715,6 @@ public class StreamInBox extends GenericResource {
             nPage = 1;
         }
         
-        //Manejo de permisos
-        SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
-        boolean userCanRemoveMsg=socialUserExtAttr.isUserCanRemoveMsg();
-        boolean userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
-        boolean userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
-        boolean userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
-        
-
         HashMap hmapResult = filtros(swbSocialUser, wsite, searchWord, request, stream, nPage);
 
         long nRec = ((Long) hmapResult.get("countResult")).longValue();
@@ -894,12 +915,12 @@ public class StreamInBox extends GenericResource {
                 //Looking for user klout
                 if(postIn.getPostInSocialNetwork().getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable) && socialNetUser.getSnu_klout()==0 && checkKlout)
                 {
-                    System.out.println("checkKlout--J1:"+checkKlout+",socialNetUser:"+socialNetUser+",id:"+socialNetUser.getId()+",socialNetUser:"+socialNetUser.getSnu_id());
+                    //System.out.println("checkKlout--J1:"+checkKlout+",socialNetUser:"+socialNetUser+",id:"+socialNetUser.getId()+",socialNetUser:"+socialNetUser.getSnu_id());
                     HashMap userKloutDat=SWBSocialUtil.Classifier.classifybyKlout(postIn.getPostInSocialNetwork(), stream, socialNetUser, socialNetUser.getSnu_id(), true);
                     userKloutScore=((Integer)userKloutDat.get("userKloutScore")).intValue();
                     socialNetUser.setSnu_klout(userKloutScore);
                     out.println(userKloutScore);
-                    System.out.println("checkKlout--J2:"+userKloutScore+", NO VOLVERA A PONER KLOUT PARA ESTE USER:"+socialNetUser);
+                    //System.out.println("checkKlout--J2:"+userKloutScore+", NO VOLVERA A PONER KLOUT PARA ESTE USER:"+socialNetUser);
                 }else{
                     out.println(socialNetUser.getSnu_klout());
                 }
@@ -936,7 +957,7 @@ public class StreamInBox extends GenericResource {
                     totalPages=Double.valueOf(nRec/20).intValue()+1;
                 }
             }
-            System.out.println("StreamInBox/totalPages:"+totalPages);
+            //System.out.println("StreamInBox/totalPages:"+totalPages);
             out.println("<div id=\"pagSumary\">"+paramRequest.getLocaleString("page")+":"+nPage+" "+paramRequest.getLocaleString("of") +" "+totalPages+"</div>");
             
             SWBResourceURL pageURL = paramRequest.getRenderUrl();
@@ -1032,6 +1053,26 @@ public class StreamInBox extends GenericResource {
             }
         }
     }
+    
+    /*
+     * Reclasificación avanzada por SocialTopic
+     */
+    private void doAdvanceReClassifyByTopic(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
+        final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/stream/streamAdvclassbyTopic.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        if (dis != null) {
+            try {
+                SemanticObject semObject = SemanticObject.getSemanticObject(request.getParameter("streamid"));
+                request.setAttribute("stream", semObject);
+                request.setAttribute("paramRequest", paramRequest);
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
+    }
+    
+    
 
     /*
      * Reevalua un PostIn en cuanto a sentimiento e intensidad
@@ -1143,6 +1184,7 @@ public class StreamInBox extends GenericResource {
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        User user=response.getUser();
         String action = response.getAction();
         if (action.equals("changeSocialTopic")) {
             if (request.getParameter("postUri") != null && request.getParameter("newSocialTopic") != null) {
@@ -1260,8 +1302,8 @@ public class StreamInBox extends GenericResource {
                 Enumeration<String> enumParams = request.getParameterNames();
                 while (enumParams.hasMoreElements()) {
                     String paramName = enumParams.nextElement();
-                    System.out.println("paramName:" + paramName);
-                    System.out.println("paramValue:" + request.getParameter(paramName));
+                    //System.out.println("paramName:" + paramName);
+                    //System.out.println("paramValue:" + request.getParameter(paramName));
                     if (paramName.startsWith("http://")) {//get param name starting with http:// -> URIs
                         if (socialUri.trim().length() > 0) {
                             socialUri += "|";
@@ -1280,7 +1322,7 @@ public class StreamInBox extends GenericResource {
                         SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
                         //Se agrega la red social de salida al post
                         aSocialNets.add(socialNet);
-                        System.out.println("Agregando net:" + socialNet);
+                        //System.out.println("Agregando net:" + socialNet);
                     }
                 }
                 ///
@@ -1317,9 +1359,110 @@ public class StreamInBox extends GenericResource {
                 response.setRenderParameter("statusMsg", response.getLocaleString("msgResponseCreated"));
                 response.setRenderParameter("suri", stOld.getURI());
             }
+        }else if(action.equals("AdvReClassbyTopic"))
+        {
+            //System.out.println("StreamInBox/processAction/action-1:"+action);
+            String streamUri=request.getParameter("stream");
+            if(streamUri!=null && request.getParameter("advClassChoose")!=null)
+            {
+                SemanticObject semOnj=SemanticObject.getSemanticObject(request.getParameter("stream"));
+                Stream stream=(Stream)semOnj.getGenericInstance(); 
+                HashMap hMap=new HashMap();
+                if(request.getParameter("advClassChoose").equals("WithOut"))    //Reclasifica los PostIn que no tienen SocialTopic asignado, esto en el stream especifico
+                {
+                    Iterator<PostIn> itPostIns=stream.listPostInStreamInvs();
+                    while(itPostIns.hasNext())
+                    {
+                        PostIn postIn=itPostIns.next();
+                        if(postIn.getSocialTopic()==null)
+                        {
+                            SocialTopic socialTopic=SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(postIn, postIn.getMsg_Text(), false);
+                            if(socialTopic!=null)   //El sistema si pudo clasificar el postIn en uno de los SocialTopic del website
+                            {
+                                if(!hMap.containsKey(socialTopic.getURI()))
+                                {
+                                    hMap.put(socialTopic.getURI(), 1);
+                                }else{
+                                    int number=((Integer)hMap.get(socialTopic.getURI())).intValue();
+                                    hMap.remove(socialTopic.getURI());
+                                    hMap.put(socialTopic.getURI(), number++);
+                                }
+                            }
+                        }
+                    }
+                }else if(request.getParameter("advClassChoose").equals("All"))  //ReClasifica todos los PostIn del stream
+                {
+                    Iterator<PostIn> itPostIns=stream.listPostInStreamInvs();
+                    while(itPostIns.hasNext())
+                    {
+                        PostIn postIn=itPostIns.next();
+                        SocialTopic socialTopic=SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(postIn, postIn.getMsg_Text(), false);
+                        if(socialTopic!=null)   //El sistema si pudo clasificar el postIn en uno de los SocialTopic del website
+                        {
+                            if(!hMap.containsKey(socialTopic.getURI()))
+                            {
+                                hMap.put(socialTopic.getURI(), 1);
+                            }else{
+                                int number=((Integer)hMap.get(socialTopic.getURI())).intValue();
+                                hMap.remove(socialTopic.getURI());
+                                hMap.put(socialTopic.getURI(), number++);
+                            }
+                        }
+                    }
+                }
+                //Envio de email a los usuarios que tienen ahora nuevos postIn en su tema
+                if(!hMap.isEmpty())
+                {
+                    
+                    Iterator<String> itSocialTopicsPostIns=hMap.keySet().iterator();
+                    while(itSocialTopicsPostIns.hasNext())
+                    {
+                        String strKey=itSocialTopicsPostIns.next();
+                        SemanticObject semObj=SemanticObject.getSemanticObject(strKey);
+                        SocialTopic socialTopic=(SocialTopic)semObj.getGenericInstance();
+                        sendEmailtoSocialTopicUsers(socialTopic, ((Integer)hMap.get(strKey)).intValue(), stream, user);
+                    }
+                }
+                
+                response.setMode(SWBActionResponse.Mode_EDIT);
+                response.setRenderParameter("dialog", "close");
+                response.setRenderParameter("reloadTap","1");
+                response.setRenderParameter("statusMsg", response.getLocaleString("msgPostInReclassified"));
+                response.setRenderParameter("suri", stream.getURI());
+            }else if(streamUri!=null){
+                response.setMode(SWBActionResponse.Mode_EDIT);
+                response.setRenderParameter("dialog", "close");
+                response.setRenderParameter("reloadTap","1");
+                response.setRenderParameter("statusMsg", response.getLocaleString("msgPostInNotReclassified"));
+                response.setRenderParameter("suri", streamUri);
+            }
         }
-
     }
+    
+    private void sendEmailtoSocialTopicUsers(SocialTopic socialTopic, int postInsNumber, Stream stream, User userAdmin)
+    {
+        WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+        Iterator<User> itSocialTopicUsers=SWBSocialUtil.SocialTopic.getUsersbySocialTopic(socialTopic).iterator();
+        while(itSocialTopicUsers.hasNext()) 
+        {
+            User user=itSocialTopicUsers.next();
+            if(user.getEmail()!=null && SWBUtils.EMAIL.isValidEmailAddress(user.getEmail()))
+            {
+                String sBody="Hola "+user.getFullName()+"<br>";
+                sBody+="Le comunicamos que existen "+postInsNumber+" en la bandeja de entrada del tema:"+socialTopic.getTitle()+", al cual usted se encuentra subscripto<br><br><br>";
+                sBody+="Lo anterior debido a una reclasificación de mensajes ocurrida en el Stream:"+stream.getTitle()+", de la marca:"+wsite.getTitle()+"<br><br><br>";
+                sBody+="Por el usuario:"+userAdmin.getFullName()+"<br><br><br>";
+                try
+                {
+                     SWBUtils.EMAIL.sendBGEmail(user.getEmail(), "Nuevos Mensaje de Entra en Tema:"+socialTopic.getTitle()+"-Reclasificación", sBody);
+                }catch(SocketException so)
+                {
+                    log.error(so);
+                }
+            }
+        }
+    }
+    
 
     /*
      * Method which controls the filters allowed in this class

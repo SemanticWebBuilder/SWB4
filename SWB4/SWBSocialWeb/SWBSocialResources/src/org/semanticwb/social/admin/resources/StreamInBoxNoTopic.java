@@ -629,11 +629,18 @@ public class StreamInBoxNoTopic extends GenericResource {
 
         //Manejo de permisos
         User user=paramRequest.getUser();
-        SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.createSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
-        boolean userCanRemoveMsg=socialUserExtAttr.isUserCanRemoveMsg();
-        boolean userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
-        boolean userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
-        boolean userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
+        boolean userCanRemoveMsg=false;
+        boolean userCanRetopicMsg=false;
+        boolean userCanRevalueMsg=false;
+        //boolean userCanRespondMsg=false;
+        SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+        if(socialUserExtAttr!=null)
+        {
+            userCanRemoveMsg=socialUserExtAttr.isUserCanRemoveMsg();
+            userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
+            userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
+            //userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
+        }
         
 
         //Una vez que ya se cuantos elementos son, ya que ya se hizo una primera iteración sobre todos los PostIn, hago una segunda
