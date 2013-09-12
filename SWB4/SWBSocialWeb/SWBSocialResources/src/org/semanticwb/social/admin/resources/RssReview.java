@@ -125,25 +125,27 @@ public class RssReview extends GenericResource{
                         }
                     }
                 }
+                out.println("<div class=\"rssContent\">");
                 out.println("<ul>");
+                out.println("<p class=\"rssResult\"><em>Resultados en:</em>"+rss.getRss_URL()+"</p>");
+                out.println("<p class=\"rssWords\"><em>Con las palabras:</em><strong>"+rss.getTags()+"</strong></p>");
+                    
                 Iterator <ComunityNews> itNews=swbNews.iterator();
                 if(!itNews.hasNext())
                 {
-                    out.println("<li>En la ruta:"+rss.getRss_URL()+"-NO SE ENCONTRARON RESULTADOS CON LAS PALABRAS:"+rss.getTags()+"</li><br/>");
-                }else{
-                    out.println("<li>RESULTADOS OBTENIDOS DE:"+rss.getRss_URL()+"-CON LAS PALABRAS:"+rss.getTags()+"</li><br/><br/><br/><br/>");
+                    out.println("<br><br><br>NO SE ENCONTRARON RESULTADOS");
                 }
                 while(itNews.hasNext()){
                     ComunityNews comNew=itNews.next();
                     out.println("<li>");
-                    if(comNew.getTitle()!=null) out.println("<span class=\"rssTitle\">"+SWBUtils.TEXT.encode(comNew.getTitle(), "iso8859-1")+"</span><br>");
+                    if(comNew.getTitle()!=null) out.println("<span class=\"rssTitle\">"+comNew.getPubDate()!=null?"<em>"+comNew.getPubDate()+"</em>":""+SWBUtils.TEXT.encode(comNew.getTitle(), "iso8859-1")+"</span><br>");
+                    if(comNew.getDescription()!=null) out.println("<span class=\"rssDescr\">"+SWBUtils.TEXT.encode(comNew.getDescription(), "iso8859-1")+"</span><br>");
                     if(comNew.getLink()!=null) out.println("<span class=\"rssLink\"><a target=\"_new\" href=\""+comNew.getLink()+"\">"+comNew.getLink()+"</a></span><br>");
                     if(comNew.getGuid()!=null) out.println("<span class=\"rssGuid\"><a target=\"_new\" href=\""+comNew.getGuid()+"\">"+comNew.getGuid()+"</a></span><br>");
-                    if(comNew.getDescription()!=null) out.println("<span class=\"rssDescr\">"+SWBUtils.TEXT.encode(comNew.getDescription(), "iso8859-1")+"</span><br>");
-                    if(comNew.getPubDate()!=null) out.println("<span class=\"rssPubDate\">"+comNew.getPubDate()+"</span><br>");
                     out.println("</li>");
                 }
                 out.println("</ul>");
+                out.println("</div>");
             }
         }
         catch (Exception e) {
