@@ -1182,287 +1182,6 @@ public class StreamInBox extends GenericResource {
         }
     }
 
-    @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        User user=response.getUser();
-        String action = response.getAction();
-        if (action.equals("changeSocialTopic")) {
-            if (request.getParameter("postUri") != null && request.getParameter("newSocialTopic") != null) {
-                SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postUri"));
-                PostIn post = (PostIn) semObj.createGenericInstance();
-                Stream stOld = post.getPostInStream();
-                if (request.getParameter("newSocialTopic").equals("none")) {
-                    post.setSocialTopic(null);
-                } else {
-                    SemanticObject semObjSocialTopic = SemanticObject.getSemanticObject(request.getParameter("newSocialTopic"));
-                    if (semObjSocialTopic != null) {
-                        SocialTopic socialTopic = (SocialTopic) semObjSocialTopic.createGenericInstance();
-                        post.setSocialTopic(socialTopic);
-                    }
-                }
-                response.setMode(SWBActionResponse.Mode_EDIT);
-                response.setRenderParameter("statusMsg", response.getLocaleString("socialTopicModified"));
-                response.setRenderParameter("dialog", "close");
-                response.setRenderParameter("reloadTap", "1");
-                response.setRenderParameter("suri", stOld.getURI());
-            }
-        } else if (action.equals("reValue")) {
-            SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postUri"));
-            PostIn post = (PostIn) semObj.createGenericInstance();
-            Stream stOld = post.getPostInStream();
-            try {
-                String inputTextValue = request.getParameter("fw");
-
-                if (inputTextValue != null) {
-                    //System.out.println("Text Completo:"+inputTextValue);
-                    inputTextValue = SWBSocialUtil.Util.removePrepositions(inputTextValue);
-                    //System.out.println("Text Sin Prepo:"+inputTextValue);
-
-                    String[] phrases = inputTextValue.split(";");
-                    ///System.out.println("Entra a processA/reValue-2:"+phrases);
-                    int nv = Integer.parseInt(request.getParameter("nv"));
-                    //System.out.println("Entra a processA/reValue-3:"+nv);
-                    int dpth = Integer.parseInt(request.getParameter("dpth"));
-                    //System.out.println("Entra a processA/reValue-4:"+dpth);
-                    SentimentalLearningPhrase slp;
-                    for (String phrase : phrases) {
-                        phrase = phrase.toLowerCase().trim();
-                        //System.out.println("Entra a processA/reValue-4.1:"+phrase);
-                        phrase = SWBSocialUtil.Classifier.normalizer(phrase).getNormalizedPhrase();
-                        //System.out.println("Entra a processA/reValue-4.2--J:"+phrase);
-                        phrase = SWBSocialUtil.Classifier.getRootPhrase(phrase);
-                        //System.out.println("Entra a processA/reValue-4.3--J:"+phrase);
-                        phrase = SWBSocialUtil.Classifier.phonematize(phrase);
-                        //System.out.println("Entra a processA/reValue-4.4:"+phrase);
-                        //Se Buscan y se crean las frases de aprendizaje del sistema en el sitio de Admin, para que el sistema aprenda independientemente del
-                        //sitio, así también si se elimina un sitio, las palabras aprendidas por el sistema para el clasificador, aun siguen sirviendo para los demas
-                        //sitios.
-                        slp = SentimentalLearningPhrase.getSentimentalLearningPhrasebyPhrase(phrase, SWBContext.getAdminWebSite());
-                        if (slp == null) {
-                            //phrase = SWBSocialUtil.Classifier.normalizer(phrase).getNormalizedPhrase();
-                            //phrase = SWBSocialUtil.Classifier.getRootPhrase(phrase);
-                            //phrase = SWBSocialUtil.Classifier.phonematize(phrase);
-                            slp = SentimentalLearningPhrase.ClassMgr.createSentimentalLearningPhrase(SWBContext.getAdminWebSite());
-                            //System.out.println("Guarda Frase J:"+phrase);
-                            slp.setPhrase(phrase);
-                            slp.setSentimentType(nv);
-                            slp.setIntensityType(dpth);
-                        } else {
-                            //System.out.println("Modifica Frase:"+slp);
-                            slp.setSentimentType(nv);
-                            slp.setIntensityType(dpth);
-                        }
-                    }
-                    response.setMode(SWBActionResponse.Mode_EDIT);
-                    response.setRenderParameter("dialog", "close");
-                    response.setRenderParameter("statusMsg", response.getLocaleString("phrasesAdded"));
-                    //response.setRenderParameter("reloadTap","1");
-                    response.setRenderParameter("suri", stOld.getURI());
-                }
-            } catch (Exception e) {
-                log.error(e);
-            }
-        } else if ("remove".equals(action)) //suri, prop
-        {
-            String sval = request.getParameter("sval");
-            SemanticObject so = SemanticObject.createSemanticObject(sval);
-            WebSite wsite = WebSite.ClassMgr.getWebSite(so.getModel().getName());
-            PostIn postIn = (PostIn) so.getGenericInstance();
-
-            if (PostOut.ClassMgr.listPostOutByPostInSource(postIn, wsite).hasNext()) {
-                response.setRenderParameter("leyendReconfirm", response.getLocaleString("postOutExist"));
-                response.setRenderParameter("suri", request.getParameter("suri"));
-                response.setRenderParameter("postUri", postIn.getURI());
-            } else {
-                so.remove();
-                //response.setRenderParameter("dialog", "close");
-                response.setRenderParameter("suri", request.getParameter("suri"));
-                response.setRenderParameter("statusMsg", response.getLocaleString("postDeleted"));
-            }
-            response.setMode(SWBActionResponse.Mode_EDIT);
-        } else if ("removeConfirm".equals(action)) {
-            String sval = request.getParameter("sval");
-            SemanticObject so = SemanticObject.createSemanticObject(sval);
-            so.remove();
-            response.setMode(SWBActionResponse.Mode_EDIT);
-            response.setRenderParameter("dialog", "close");
-            response.setRenderParameter("reloadTap", request.getParameter("suri"));
-            response.setRenderParameter("suri", request.getParameter("suri"));
-            response.setRenderParameter("statusMsg", response.getLocaleString("postDeleted"));
-        } else if (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo")) {
-            //System.out.println("Entra a Strean_processAction-2:"+request.getParameter("objUri"));
-            if (request.getParameter("objUri") != null) {
-                //System.out.println("Entra a InBox_processAction-3");
-                PostIn postIn = (PostIn) SemanticObject.getSemanticObject(request.getParameter("objUri")).createGenericInstance();
-                Stream stOld = postIn.getPostInStream();
-                ///
-                WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
-                String socialUri = "";
-                int j = 0;
-                Enumeration<String> enumParams = request.getParameterNames();
-                while (enumParams.hasMoreElements()) {
-                    String paramName = enumParams.nextElement();
-                    //System.out.println("paramName:" + paramName);
-                    //System.out.println("paramValue:" + request.getParameter(paramName));
-                    if (paramName.startsWith("http://")) {//get param name starting with http:// -> URIs
-                        if (socialUri.trim().length() > 0) {
-                            socialUri += "|";
-                        }
-                        socialUri += paramName;
-                        j++;
-                    }
-                }
-                
-                ArrayList aSocialNets = new ArrayList();//Social nets where the post will be published
-                String[] socialUris = socialUri.split("\\|");  //Dividir valores
-                if( j > 0 && wsite != null){
-                    for (int i = 0; i < socialUris.length; i++) {
-                        String tmp_socialUri = socialUris[i];
-                        SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri, wsite.getSemanticModel());
-                        SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
-                        //Se agrega la red social de salida al post
-                        aSocialNets.add(socialNet);
-                        //System.out.println("Agregando net:" + socialNet);
-                    }
-                }
-                ///
-                
-                ///old code to post to one single net
-                ///SocialNetwork socialNet = (SocialNetwork) SemanticObject.getSemanticObject(request.getParameter("socialNetUri")).createGenericInstance();
-                ///ArrayList aSocialNets = new ArrayList();
-                ///aSocialNets.add(socialNet);
-
-                ///WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
-
-                //En este momento en el siguiente código saco uno de los SocialPFlowRef que tiene el SocialTopic del PostIn que se esta contestando,
-                //Obviamente debo de quitar este código y el SocialPFlowRef debe llegar como parametro, que es de acuerdo al SocialPFlow que el usuario
-                //desee enviar el PostOut que realizó.
-                /**
-                 * SocialPFlow socialPFlow=null; Iterator<SocialPFlowRef>
-                 * itflowRefs=socialTopic.listPFlowRefs();
-                 * while(itflowRefs.hasNext()) { SocialPFlowRef
-                 * socialPflowRef=itflowRefs.next();
-                 * socialPFlow=socialPflowRef.getPflow(); }*
-                 */
-                String socialFlow = request.getParameter("socialFlow");
-                SocialPFlow socialPFlow = null;
-                if (socialFlow != null && socialFlow.trim().length() > 0) {
-                    socialPFlow = (SocialPFlow) SemanticObject.createSemanticObject(socialFlow).createGenericInstance();
-                }
-
-                //System.out.println("Entra a InBox_processAction-4");
-                SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, request.getParameter("toPost"), request, response);
-
-                //System.out.println("Entra a InBox_processAction-5");
-                response.setMode(SWBActionResponse.Mode_EDIT);
-                response.setRenderParameter("dialog", "close");
-                response.setRenderParameter("statusMsg", response.getLocaleString("msgResponseCreated"));
-                response.setRenderParameter("suri", stOld.getURI());
-            }
-        }else if(action.equals("AdvReClassbyTopic"))
-        {
-            //System.out.println("StreamInBox/processAction/action-1:"+action);
-            String streamUri=request.getParameter("stream");
-            if(streamUri!=null && request.getParameter("advClassChoose")!=null)
-            {
-                SemanticObject semOnj=SemanticObject.getSemanticObject(request.getParameter("stream"));
-                Stream stream=(Stream)semOnj.getGenericInstance(); 
-                HashMap hMap=new HashMap();
-                if(request.getParameter("advClassChoose").equals("WithOut"))    //Reclasifica los PostIn que no tienen SocialTopic asignado, esto en el stream especifico
-                {
-                    Iterator<PostIn> itPostIns=stream.listPostInStreamInvs();
-                    while(itPostIns.hasNext())
-                    {
-                        PostIn postIn=itPostIns.next();
-                        if(postIn.getSocialTopic()==null)
-                        {
-                            SocialTopic socialTopic=SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(postIn, postIn.getMsg_Text(), false);
-                            if(socialTopic!=null)   //El sistema si pudo clasificar el postIn en uno de los SocialTopic del website
-                            {
-                                if(!hMap.containsKey(socialTopic.getURI()))
-                                {
-                                    hMap.put(socialTopic.getURI(), 1);
-                                }else{
-                                    int number=((Integer)hMap.get(socialTopic.getURI())).intValue();
-                                    hMap.remove(socialTopic.getURI());
-                                    hMap.put(socialTopic.getURI(), number++);
-                                }
-                            }
-                        }
-                    }
-                }else if(request.getParameter("advClassChoose").equals("All"))  //ReClasifica todos los PostIn del stream
-                {
-                    Iterator<PostIn> itPostIns=stream.listPostInStreamInvs();
-                    while(itPostIns.hasNext())
-                    {
-                        PostIn postIn=itPostIns.next();
-                        SocialTopic socialTopic=SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(postIn, postIn.getMsg_Text(), false);
-                        if(socialTopic!=null)   //El sistema si pudo clasificar el postIn en uno de los SocialTopic del website
-                        {
-                            if(!hMap.containsKey(socialTopic.getURI()))
-                            {
-                                hMap.put(socialTopic.getURI(), 1);
-                            }else{
-                                int number=((Integer)hMap.get(socialTopic.getURI())).intValue();
-                                hMap.remove(socialTopic.getURI());
-                                hMap.put(socialTopic.getURI(), number++);
-                            }
-                        }
-                    }
-                }
-                //Envio de email a los usuarios que tienen ahora nuevos postIn en su tema
-                if(!hMap.isEmpty())
-                {
-                    
-                    Iterator<String> itSocialTopicsPostIns=hMap.keySet().iterator();
-                    while(itSocialTopicsPostIns.hasNext())
-                    {
-                        String strKey=itSocialTopicsPostIns.next();
-                        SemanticObject semObj=SemanticObject.getSemanticObject(strKey);
-                        SocialTopic socialTopic=(SocialTopic)semObj.getGenericInstance();
-                        sendEmailtoSocialTopicUsers(socialTopic, ((Integer)hMap.get(strKey)).intValue(), stream, user);
-                    }
-                }
-                
-                response.setMode(SWBActionResponse.Mode_EDIT);
-                response.setRenderParameter("dialog", "close");
-                response.setRenderParameter("reloadTap","1");
-                response.setRenderParameter("statusMsg", response.getLocaleString("msgPostInReclassified"));
-                response.setRenderParameter("suri", stream.getURI());
-            }else if(streamUri!=null){
-                response.setMode(SWBActionResponse.Mode_EDIT);
-                response.setRenderParameter("dialog", "close");
-                response.setRenderParameter("reloadTap","1");
-                response.setRenderParameter("statusMsg", response.getLocaleString("msgPostInNotReclassified"));
-                response.setRenderParameter("suri", streamUri);
-            }
-        }
-    }
-    
-    private void sendEmailtoSocialTopicUsers(SocialTopic socialTopic, int postInsNumber, Stream stream, User userAdmin)
-    {
-        WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-        Iterator<User> itSocialTopicUsers=SWBSocialUtil.SocialTopic.getUsersbySocialTopic(socialTopic).iterator();
-        while(itSocialTopicUsers.hasNext()) 
-        {
-            User user=itSocialTopicUsers.next();
-            if(user.getEmail()!=null && SWBUtils.EMAIL.isValidEmailAddress(user.getEmail()))
-            {
-                String sBody="Hola "+user.getFullName()+"<br>";
-                sBody+="Le comunicamos que existen "+postInsNumber+" en la bandeja de entrada del tema:"+socialTopic.getTitle()+", al cual usted se encuentra subscripto<br><br><br>";
-                sBody+="Lo anterior debido a una reclasificación de mensajes ocurrida en el Stream:"+stream.getTitle()+", de la marca:"+wsite.getTitle()+"<br><br><br>";
-                sBody+="Por el usuario:"+userAdmin.getFullName()+"<br><br><br>";
-                try
-                {
-                     SWBUtils.EMAIL.sendBGEmail(user.getEmail(), "Nuevos Mensaje de Entra en Tema:"+socialTopic.getTitle()+"-Reclasificación", sBody);
-                }catch(SocketException so)
-                {
-                    log.error(so);
-                }
-            }
-        }
-    }
-    
 
     /*
      * Method which controls the filters allowed in this class
@@ -1857,5 +1576,300 @@ public class StreamInBox extends GenericResource {
 
         cell.setCellStyle(cellStyle);
 
+    }
+    
+    /*
+     * processAction
+     */
+    @Override
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        User user=response.getUser();
+        String action = response.getAction();
+        if (action.equals("changeSocialTopic")) {
+            if (request.getParameter("postUri") != null && request.getParameter("newSocialTopic") != null) {
+                SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postUri"));
+                PostIn post = (PostIn) semObj.createGenericInstance();
+                Stream stOld = post.getPostInStream();
+                if (request.getParameter("newSocialTopic").equals("none")) {
+                    post.setSocialTopic(null);
+                } else {
+                    SemanticObject semObjSocialTopic = SemanticObject.getSemanticObject(request.getParameter("newSocialTopic"));
+                    if (semObjSocialTopic != null) {
+                        SocialTopic socialTopic = (SocialTopic) semObjSocialTopic.createGenericInstance();
+                        post.setSocialTopic(socialTopic);
+                    }
+                }
+                response.setMode(SWBActionResponse.Mode_EDIT);
+                response.setRenderParameter("statusMsg", response.getLocaleString("socialTopicModified"));
+                response.setRenderParameter("dialog", "close");
+                response.setRenderParameter("reloadTap", "1");
+                response.setRenderParameter("suri", stOld.getURI());
+            }
+        } else if (action.equals("reValue")) {
+            SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postUri"));
+            PostIn post = (PostIn) semObj.createGenericInstance();
+            Stream stOld = post.getPostInStream();
+            try {
+                String inputTextValue = request.getParameter("fw");
+
+                if (inputTextValue != null) {
+                    //System.out.println("Text Completo:"+inputTextValue);
+                    inputTextValue = SWBSocialUtil.Util.removePrepositions(inputTextValue);
+                    //System.out.println("Text Sin Prepo:"+inputTextValue);
+
+                    String[] phrases = inputTextValue.split(";");
+                    ///System.out.println("Entra a processA/reValue-2:"+phrases);
+                    int nv = Integer.parseInt(request.getParameter("nv"));
+                    //System.out.println("Entra a processA/reValue-3:"+nv);
+                    int dpth = Integer.parseInt(request.getParameter("dpth"));
+                    //System.out.println("Entra a processA/reValue-4:"+dpth);
+                    SentimentalLearningPhrase slp;
+                    for (String phrase : phrases) {
+                        phrase = phrase.toLowerCase().trim();
+                        //System.out.println("Entra a processA/reValue-4.1:"+phrase);
+                        phrase = SWBSocialUtil.Classifier.normalizer(phrase).getNormalizedPhrase();
+                        //System.out.println("Entra a processA/reValue-4.2--J:"+phrase);
+                        phrase = SWBSocialUtil.Classifier.getRootPhrase(phrase);
+                        //System.out.println("Entra a processA/reValue-4.3--J:"+phrase);
+                        phrase = SWBSocialUtil.Classifier.phonematize(phrase);
+                        //System.out.println("Entra a processA/reValue-4.4:"+phrase);
+                        //Se Buscan y se crean las frases de aprendizaje del sistema en el sitio de Admin, para que el sistema aprenda independientemente del
+                        //sitio, así también si se elimina un sitio, las palabras aprendidas por el sistema para el clasificador, aun siguen sirviendo para los demas
+                        //sitios.
+                        slp = SentimentalLearningPhrase.getSentimentalLearningPhrasebyPhrase(phrase, SWBContext.getAdminWebSite());
+                        if (slp == null) {
+                            //phrase = SWBSocialUtil.Classifier.normalizer(phrase).getNormalizedPhrase();
+                            //phrase = SWBSocialUtil.Classifier.getRootPhrase(phrase);
+                            //phrase = SWBSocialUtil.Classifier.phonematize(phrase);
+                            slp = SentimentalLearningPhrase.ClassMgr.createSentimentalLearningPhrase(SWBContext.getAdminWebSite());
+                            //System.out.println("Guarda Frase J:"+phrase);
+                            slp.setPhrase(phrase);
+                            slp.setSentimentType(nv);
+                            slp.setIntensityType(dpth);
+                        } else {
+                            //System.out.println("Modifica Frase:"+slp);
+                            slp.setSentimentType(nv);
+                            slp.setIntensityType(dpth);
+                        }
+                    }
+                    response.setMode(SWBActionResponse.Mode_EDIT);
+                    response.setRenderParameter("dialog", "close");
+                    response.setRenderParameter("statusMsg", response.getLocaleString("phrasesAdded"));
+                    //response.setRenderParameter("reloadTap","1");
+                    response.setRenderParameter("suri", stOld.getURI());
+                }
+            } catch (Exception e) {
+                log.error(e);
+            }
+        } else if ("remove".equals(action)) //suri, prop
+        {
+            String sval = request.getParameter("sval");
+            SemanticObject so = SemanticObject.createSemanticObject(sval);
+            WebSite wsite = WebSite.ClassMgr.getWebSite(so.getModel().getName());
+            PostIn postIn = (PostIn) so.getGenericInstance();
+
+            if (PostOut.ClassMgr.listPostOutByPostInSource(postIn, wsite).hasNext()) {
+                response.setRenderParameter("leyendReconfirm", response.getLocaleString("postOutExist"));
+                response.setRenderParameter("suri", request.getParameter("suri"));
+                response.setRenderParameter("postUri", postIn.getURI());
+            } else {
+                so.remove();
+                //response.setRenderParameter("dialog", "close");
+                response.setRenderParameter("suri", request.getParameter("suri"));
+                response.setRenderParameter("statusMsg", response.getLocaleString("postDeleted"));
+            }
+            response.setMode(SWBActionResponse.Mode_EDIT);
+        } else if ("removeConfirm".equals(action)) {
+            String sval = request.getParameter("sval");
+            SemanticObject so = SemanticObject.createSemanticObject(sval);
+            so.remove();
+            response.setMode(SWBActionResponse.Mode_EDIT);
+            response.setRenderParameter("dialog", "close");
+            response.setRenderParameter("reloadTap", request.getParameter("suri"));
+            response.setRenderParameter("suri", request.getParameter("suri"));
+            response.setRenderParameter("statusMsg", response.getLocaleString("postDeleted"));
+        } else if (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo")) {
+            //System.out.println("Entra a Strean_processAction-2:"+request.getParameter("objUri"));
+            if (request.getParameter("objUri") != null) {
+                //System.out.println("Entra a InBox_processAction-3");
+                PostIn postIn = (PostIn) SemanticObject.getSemanticObject(request.getParameter("objUri")).createGenericInstance();
+                Stream stOld = postIn.getPostInStream();
+                ///
+                WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
+                String socialUri = "";
+                int j = 0;
+                Enumeration<String> enumParams = request.getParameterNames();
+                while (enumParams.hasMoreElements()) {
+                    String paramName = enumParams.nextElement();
+                    //System.out.println("paramName:" + paramName);
+                    //System.out.println("paramValue:" + request.getParameter(paramName));
+                    if (paramName.startsWith("http://")) {//get param name starting with http:// -> URIs
+                        if (socialUri.trim().length() > 0) {
+                            socialUri += "|";
+                        }
+                        socialUri += paramName;
+                        j++;
+                    }
+                }
+                
+                ArrayList aSocialNets = new ArrayList();//Social nets where the post will be published
+                String[] socialUris = socialUri.split("\\|");  //Dividir valores
+                if( j > 0 && wsite != null){
+                    for (int i = 0; i < socialUris.length; i++) {
+                        String tmp_socialUri = socialUris[i];
+                        SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri, wsite.getSemanticModel());
+                        SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
+                        //Se agrega la red social de salida al post
+                        aSocialNets.add(socialNet);
+                        //System.out.println("Agregando net:" + socialNet);
+                    }
+                }
+                ///
+                
+                ///old code to post to one single net
+                ///SocialNetwork socialNet = (SocialNetwork) SemanticObject.getSemanticObject(request.getParameter("socialNetUri")).createGenericInstance();
+                ///ArrayList aSocialNets = new ArrayList();
+                ///aSocialNets.add(socialNet);
+
+                ///WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
+
+                //En este momento en el siguiente código saco uno de los SocialPFlowRef que tiene el SocialTopic del PostIn que se esta contestando,
+                //Obviamente debo de quitar este código y el SocialPFlowRef debe llegar como parametro, que es de acuerdo al SocialPFlow que el usuario
+                //desee enviar el PostOut que realizó.
+                /**
+                 * SocialPFlow socialPFlow=null; Iterator<SocialPFlowRef>
+                 * itflowRefs=socialTopic.listPFlowRefs();
+                 * while(itflowRefs.hasNext()) { SocialPFlowRef
+                 * socialPflowRef=itflowRefs.next();
+                 * socialPFlow=socialPflowRef.getPflow(); }*
+                 */
+                String socialFlow = request.getParameter("socialFlow");
+                SocialPFlow socialPFlow = null;
+                if (socialFlow != null && socialFlow.trim().length() > 0) {
+                    socialPFlow = (SocialPFlow) SemanticObject.createSemanticObject(socialFlow).createGenericInstance();
+                }
+
+                //System.out.println("Entra a InBox_processAction-4");
+                SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, request.getParameter("toPost"), request, response);
+
+                //System.out.println("Entra a InBox_processAction-5");
+                response.setMode(SWBActionResponse.Mode_EDIT);
+                response.setRenderParameter("dialog", "close");
+                response.setRenderParameter("statusMsg", response.getLocaleString("msgResponseCreated"));
+                response.setRenderParameter("suri", stOld.getURI());
+            }
+        }else if(action.equals("AdvReClassbyTopic"))
+        {
+            //System.out.println("StreamInBox/processAction/action-1:"+action);
+            String streamUri=request.getParameter("stream");
+            if(streamUri!=null && request.getParameter("advClassChoose")!=null)
+            {
+                SemanticObject semOnj=SemanticObject.getSemanticObject(request.getParameter("stream"));
+                Stream stream=(Stream)semOnj.getGenericInstance(); 
+                HashMap hMap=new HashMap();
+                if(request.getParameter("advClassChoose").equals("WithOut"))    //Reclasifica los PostIn que no tienen SocialTopic asignado, esto en el stream especifico
+                {
+                    Iterator<PostIn> itPostIns=stream.listPostInStreamInvs();
+                    while(itPostIns.hasNext())
+                    {
+                        PostIn postIn=itPostIns.next();
+                        if(postIn.getSocialTopic()==null)
+                        {
+                            SocialTopic socialTopic=SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(postIn, postIn.getMsg_Text(), false);
+                            if(socialTopic!=null)   //El sistema si pudo clasificar el postIn en uno de los SocialTopic del website
+                            {
+                                if(!hMap.containsKey(socialTopic.getURI()))
+                                {
+                                    hMap.put(socialTopic.getURI(), 1);
+                                }else{
+                                    int number=((Integer)hMap.get(socialTopic.getURI())).intValue();
+                                    hMap.remove(socialTopic.getURI());
+                                    number+=number;
+                                    hMap.put(socialTopic.getURI(), number);
+                                }
+                            }
+                        }
+                    }
+                }else if(request.getParameter("advClassChoose").equals("All"))  //ReClasifica todos los PostIn del stream
+                {
+                    Iterator<PostIn> itPostIns=stream.listPostInStreamInvs();
+                    while(itPostIns.hasNext())
+                    {
+                        PostIn postIn=itPostIns.next();
+                        SocialTopic socialTopic=SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(postIn, postIn.getMsg_Text(), false);
+                        if(socialTopic!=null)   //El sistema si pudo clasificar el postIn en uno de los SocialTopic del website
+                        {
+                            if(!hMap.containsKey(socialTopic.getURI()))
+                            {
+                                hMap.put(socialTopic.getURI(), 1);
+                            }else{
+                                int number=((Integer)hMap.get(socialTopic.getURI())).intValue();
+                                hMap.remove(socialTopic.getURI());
+                                number+=number;
+                                hMap.put(socialTopic.getURI(), number);
+                            }
+                        }
+                    }
+                }
+                //Envio de email a los usuarios que tienen ahora nuevos postIn en su tema
+                if(!hMap.isEmpty())
+                {
+                    
+                    Iterator<String> itSocialTopicsPostIns=hMap.keySet().iterator();
+                    while(itSocialTopicsPostIns.hasNext())
+                    {
+                        String strKey=itSocialTopicsPostIns.next();
+                        SemanticObject semObj=SemanticObject.getSemanticObject(strKey);
+                        SocialTopic socialTopic=(SocialTopic)semObj.getGenericInstance();
+                        sendEmailtoSocialTopicUsers(socialTopic, ((Integer)hMap.get(strKey)).intValue(), stream, user);
+                    }
+                }
+                
+                response.setMode(SWBActionResponse.Mode_EDIT);
+                response.setRenderParameter("dialog", "close");
+                response.setRenderParameter("reloadTap","1");
+                response.setRenderParameter("statusMsg", response.getLocaleString("msgPostInReclassified"));
+                response.setRenderParameter("suri", stream.getURI());
+            }else if(streamUri!=null){
+                response.setMode(SWBActionResponse.Mode_EDIT);
+                response.setRenderParameter("dialog", "close");
+                response.setRenderParameter("reloadTap","1");
+                response.setRenderParameter("statusMsg", response.getLocaleString("msgPostInNotReclassified"));
+                response.setRenderParameter("suri", streamUri);
+            }
+        }
+    }
+    
+    /*
+     * Method which sends an email to the SocialTopic users that comes by a parameter
+     * @param socialTopic SocialTopic to review and see which are the users in the groups belongint to it
+     * @param postInsNumber number of PostIns that were changed (Re-Classified by topic)
+     * @param stream Stream whose messages were changed (Re-Classified by topic)
+     * @param userAdmin User that made the action
+     */
+    private void sendEmailtoSocialTopicUsers(SocialTopic socialTopic, int postInsNumber, Stream stream, User userAdmin)
+    {
+        WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+        Iterator<User> itSocialTopicUsers=SWBSocialUtil.SocialTopic.getUsersbySocialTopic(socialTopic).iterator();
+        while(itSocialTopicUsers.hasNext()) 
+        {
+            User user=itSocialTopicUsers.next();
+            if(user.getEmail()!=null && SWBUtils.EMAIL.isValidEmailAddress(user.getEmail()))
+            {
+                String sBody="Hola "+user.getFullName()+",<br><br><br>";
+                sBody+="Le comunicamos que existen <b>"+postInsNumber+"</b> mensajes en la bandeja de entrada del tema:<b>\""+socialTopic.getTitle()+"\"</b>, al cual usted se encuentra subscrito.<br><br><br>";
+                sBody+="Lo anterior debido a una reclasificación de mensajes ocurrida en el Stream:<b>\""+stream.getTitle()+"\"</b>, de la marca:<b>\""+wsite.getTitle()+"\"</b><br><br><br>";
+                sBody+="Realizada por el usuario:<b>"+userAdmin.getFullName()+"</b><br><br><br>";
+                sBody+="Sin mas por el momento, le envio un cordial saludo</b><br><br><br>";
+                sBody+="Atte. <b>SWBSocial</b>";
+                try
+                {
+                     SWBUtils.EMAIL.sendBGEmail(user.getEmail(), "Nuevos Mensajes de Entra en Tema:"+socialTopic.getTitle()+"-Reclasificación", sBody);
+                }catch(SocketException so)
+                {
+                    log.error(so);
+                }
+            }
+        }
     }
 }

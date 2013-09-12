@@ -874,17 +874,17 @@ public class SocialTopicInBox extends GenericResource {
 
             //Followers
             out.println("<td align=\"center\">");
-            out.println(postIn.getPostInSocialNetworkUser().getFollowers());
+            out.println(postIn.getPostInSocialNetworkUser() != null ? postIn.getPostInSocialNetworkUser().getFollowers():"---");
             out.println("</td>");
 
             //Friends
             out.println("<td align=\"center\">");
-            out.println(postIn.getPostInSocialNetworkUser().getFriends());
+            out.println(postIn.getPostInSocialNetworkUser() != null ? postIn.getPostInSocialNetworkUser().getFriends():"---");
             out.println("</td>");
 
             //Klout
             out.println("<td align=\"center\">");
-            out.println(postIn.getPostInSocialNetworkUser().getSnu_klout());
+            out.println(postIn.getPostInSocialNetworkUser() != null ? postIn.getPostInSocialNetworkUser().getSnu_klout():"---");
             out.println("</td>");
 
             //Place
