@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -697,7 +698,7 @@ public class SocialTopicInBox extends GenericResource {
         
          //Manejo de permisos
         User user=paramRequest.getUser();
-        SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.createSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+        SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
         boolean userCanRemoveMsg=socialUserExtAttr.isUserCanRemoveMsg();
         boolean userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
         boolean userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
@@ -1105,11 +1106,39 @@ public class SocialTopicInBox extends GenericResource {
                 //System.out.println("Entra a InBox_processAction-3");
                 PostIn postIn = (PostIn) SemanticObject.getSemanticObject(request.getParameter("objUri")).createGenericInstance();
                 SocialTopic stOld = postIn.getSocialTopic();
-                SocialNetwork socialNet = (SocialNetwork) SemanticObject.getSemanticObject(request.getParameter("socialNetUri")).createGenericInstance();
+                ///
+                WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
+                String socialUri = "";
+                int j = 0;
+                Enumeration<String> enumParams = request.getParameterNames();
+                while (enumParams.hasMoreElements()) {
+                    String paramName = enumParams.nextElement();
+                    if (paramName.startsWith("http://")) {//get param name starting with http:// -> URIs
+                        if (socialUri.trim().length() > 0) {
+                            socialUri += "|";
+                        }
+                        socialUri += paramName;
+                        j++;
+                    }
+                }
+                
+                ArrayList aSocialNets = new ArrayList();//Social nets where the post will be published
+                String[] socialUris = socialUri.split("\\|");  //Dividir valores
+                if( j > 0 && wsite != null){
+                    for (int i = 0; i < socialUris.length; i++) {
+                        String tmp_socialUri = socialUris[i];
+                        SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri, wsite.getSemanticModel());
+                        SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
+                        //Se agrega la red social de salida al post
+                        aSocialNets.add(socialNet);
+                    }
+                }
+                
+                /*SocialNetwork socialNet = (SocialNetwork) SemanticObject.getSemanticObject(request.getParameter("socialNetUri")).createGenericInstance();
                 ArrayList aSocialNets = new ArrayList();
                 aSocialNets.add(socialNet);
 
-                WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
+                WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));*/
 
                 //En este momento en el siguiente código saco uno de los SocialPFlowRef que tiene el SocialTopic del PostIn que se esta contestando,
                 //Obviamente debo de quitar este código y el SocialPFlowRef debe llegar como parametro, que es de acuerdo al SocialPFlow que el usuario
