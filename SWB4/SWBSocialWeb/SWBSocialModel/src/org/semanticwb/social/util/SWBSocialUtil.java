@@ -704,7 +704,6 @@ public class SWBSocialUtil implements SWBAppObject {
          */
         public static HashMap classifybyKlout(SocialNetwork socialNetwork, Stream stream, SocialNetworkUser socialNetUser, String creatorId, boolean upDateSocialUserNetworkData)
         {
-            System.out.println();
             HashMap hmapResult=new HashMap();
             boolean createPostbyKlout=false;
             int userKloutScore=0;
@@ -733,10 +732,9 @@ public class SWBSocialUtil implements SWBAppObject {
                             createPostbyKlout=true;
                         }
                     }else{  //Si ya pasaron 5 o mas días de que se actualizó la info del usuario, entonces busca su score en Klout
-                        System.out.println("Entra a SWBSocialUtil/1:"+creatorId);
                         Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
                         userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
-                        System.out.println("NO Existe usuario en BD, userKloutScore K TRAJO-1:"+userKloutScore);
+                        //System.out.println("NO Existe usuario en BD, userKloutScore K TRAJO-1:"+userKloutScore);
                         if(userKloutScore>=stream.getStream_KloutValue())
                         {
                             createPostbyKlout=true;
