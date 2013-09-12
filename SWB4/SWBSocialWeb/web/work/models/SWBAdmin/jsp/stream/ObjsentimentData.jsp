@@ -20,7 +20,7 @@
     JSONArray getObject(SemanticObject semObj, String lang) throws Exception 
     {
         //WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-        System.out.println("Entra 3");
+        //System.out.println("Entra 3");
         int neutrals=0, positives=0, negatives=0;
         Iterator<PostIn> itObjPostIns=null;
         if(semObj.getGenericInstance() instanceof Stream) 
@@ -48,20 +48,20 @@
         //Positivo
         float intPorcentajePositive = ((float) positives * 100) / (float) intTotalVotos;
    
-        System.out.println("Votos Positivos:"+positives+", porcentaje:"+intPorcentajePositive); 
+        //System.out.println("Votos Positivos:"+positives+", porcentaje:"+intPorcentajePositive); 
         
         //Negativo
         float intPorcentajeNegative = ((float) negatives * 100) / (float) intTotalVotos;
         
-        System.out.println("Votos negatives"+negatives+", porcentaje:"+intPorcentajeNegative); 
+        //System.out.println("Votos negatives"+negatives+", porcentaje:"+intPorcentajeNegative); 
                 
         //Neutro
         float intPorcentajeNeutral = ((float) neutrals * 100) / (float) intTotalVotos;
    
-        System.out.println("Votos neutrals"+neutrals+", porcentaje:"+intPorcentajeNeutral);         
+        //System.out.println("Votos neutrals"+neutrals+", porcentaje:"+intPorcentajeNeutral);         
         
         
-        System.out.println("Entra 4:"+positives+","+negatives+","+neutrals);
+        //System.out.println("Entra 4:"+positives+","+negatives+","+neutrals);
         JSONArray node=new JSONArray();
         
         if(intPorcentajePositive>0)
@@ -97,7 +97,7 @@
         
         if(positives==0 && negatives==0 && neutrals==0)
         {
-            System.out.println("Entra a ObSentData TODOS 0");
+            //System.out.println("Entra a ObSentData TODOS 0");
             JSONObject node3=new JSONObject();
             node3.put("label", "Neutros"); 
             node3.put("value1", "0");
@@ -115,13 +115,13 @@
     }
 %>
 <%
-    System.out.println("Entra 0jjjjjjjjjjj");
+    //System.out.println("Entra 0jjjjjjjjjjj");
     if(request.getParameter("objUri")!=null)
     {
-        System.out.println("Entra 1:"+request.getParameter("objUri"));
+        //System.out.println("Entra 1:"+request.getParameter("objUri"));
         SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("objUri"));
         String lang=request.getParameter("lang");
-        System.out.println("Entra 2:"+lang);
+        //System.out.println("Entra 2:"+lang);
         out.println(getObject(semObj, lang));
     }
 %>
