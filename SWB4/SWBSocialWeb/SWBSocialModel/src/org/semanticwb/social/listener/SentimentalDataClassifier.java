@@ -441,7 +441,7 @@ public class SentimentalDataClassifier {
                 //System.out.println("messageIn final:"+messageIn.getMsg_Text());
                 
                 //Clasificación por palabras relacionadas a un tema
-                clasifyMsgbySocialTopic(post, externalString2Clasify_TMP);
+                SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(post, externalString2Clasify_TMP, true);
                 
                 boolean firstTime=true;
                 boolean rulesClassifierValue=false;
@@ -512,6 +512,7 @@ public class SentimentalDataClassifier {
      * Metodo que revisa el mensaje del post de entrada, si concuerda con algunas de las palabras clave
      * encontradas en algún SocialTopic (Tema), entonces al PostIn le asocia dicho Tema.
      */
+    /*
     public void clasifyMsgbySocialTopic(PostIn post, String text)
     {
         SocialSite socialSite=SocialSite.ClassMgr.getSocialSite(post.getSemanticObject().getModel().getName());
@@ -613,7 +614,7 @@ public class SentimentalDataClassifier {
             }
         }
     }
-    
+    */
     
     /**
      * Crea objeto PostIn, de acuerdo a los datos que contenga el objeto
