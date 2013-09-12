@@ -2,7 +2,7 @@
     Document   : typeOfContent
     Created on : 20/03/2013, 06:04:12 PM
     Author     : Jorge.Jimenez
-    Modified by:Francisco.Jimenez
+    Modified by: Francisco.Jimenez
 --%>
 <%@page import="org.semanticwb.social.util.SocialLoader"%>
 <%@page import="org.semanticwb.social.util.SWBSocialUtil"%>
@@ -49,12 +49,16 @@
     String postOutPFlowUri = null;
     ArrayList apostOutNets = new ArrayList();
     boolean firstTime = false;
-    if (semObj.getSemanticClass().isSubClass(PostIn.social_PostIn)) {
+    if (semObj.getSemanticClass().isSubClass(PostIn.social_PostIn)) {//Publish in response to PostIn
         postIn = (PostIn) semObj.createGenericInstance();
-    } else if (semObj.getGenericInstance() instanceof SocialTopic) {
+        System.out.println("Es un POST IN");
+        apostOutNets.add(postIn.getPostInSocialNetwork().getURI());
+    } else if (semObj.getGenericInstance() instanceof SocialTopic) {//Publish from Social Topic
+        System.out.println("Es un SOCIALTOPIC");
         socialTopic = (SocialTopic) semObj.createGenericInstance();
         firstTime = true;
     } else if (semObj.getSemanticClass().isSubClass(PostOut.social_PostOut)) {
+        System.out.println("Es un POST OUT");
         postOut = (PostOut) semObj.createGenericInstance();
         if (postOut instanceof Message) {
             contentType = "postMessage";
@@ -186,8 +190,8 @@
                     <button class="submit" type="submit" onclick="return checksRedesText('<%=objUri%>','<%=sourceCall%>', <%=(postInSN == null ? "true" : "false")%>);"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
                
             </div>      
-            <%
-                if (postInSN == null) {
+            <%                
+                if (postInSN == null || postIn != null ) {
             %>
             <div class="pub-redes">
                 <p class="titulo">Redes disponibles</p>
@@ -198,20 +202,22 @@
                         SocialNetwork socialNetwork = (SocialNetwork) it.next();
                         if (socialNetwork instanceof Messageable && socialNetwork.isActive() && socialNetwork.isValid()) {
                             boolean isSelected = false;
-                            System.out.println("Las Redes:" + socialNetwork);
+                            //System.out.println("Las Redes:" + socialNetwork);
                             if (apostOutNets.contains(socialNetwork.getURI())) {
                                 System.out.println("La Chida--:" + socialNetwork);
                                 isSelected = true;
                             }
                             String typeClass = "";
+                            if(postIn != null){//If it is a response to some post, show only the nets of the post Type
+                                if(!socialNetwork.getClass().equals(postIn.getPostInSocialNetwork().getClass())){
+                                    continue;
+                                }
+                            }                           
                             if (socialNetwork instanceof Youtube) {
                                 typeClass = "ico-ytb";
-                            }
-                            if (socialNetwork instanceof Facebook){
-                                
+                            }else if (socialNetwork instanceof Facebook){
                              typeClass = "ico-fcb";
-                             }
-                            if (socialNetwork instanceof Twitter) {
+                            }else if (socialNetwork instanceof Twitter) {
                                 typeClass = "ico-twt";
                             }
                             String selected = "";
@@ -226,15 +232,15 @@
                 <%
                         }
                     }
-                } else {
+                }/* else {
                     SocialNetwork socialNet = (SocialNetwork) SemanticObject.getSemanticObject(postInSN).createGenericInstance();
                     if (socialNet == null) {
                         return;
-                    }
+                    }*/
                 %>
-                <input type="hidden" name="socialNetUri" value="<%=socialNet.getURI()%>"/>
+                <!--<input type="hidden" name="socialNetUri" value="<%//=socialNet.getURI()%>"/>-->
                 <%
-                    }
+                    //}
                 %>
             </div>
         </form> 
@@ -333,7 +339,7 @@
                 </div>
 
                 <%
-                    if (postInSN == null) {
+                    if (postInSN == null || postIn != null) {
                 %>
                 <div class="pub-redes">
                 <p class="titulo">Redes disponibles</p>
@@ -344,18 +350,32 @@
                         SocialNetwork socialNetwork = (SocialNetwork) it.next();
                         if (socialNetwork instanceof Photoable && socialNetwork.isActive() && socialNetwork.isValid()) {
                             String typeClass = "";
+                            boolean isSelected = false;
+                            if (apostOutNets.contains(socialNetwork.getURI())) {
+                                System.out.println("Net found--:" + socialNetwork);
+                                isSelected = true;
+                            }
+                            if(postIn != null){//If it is a response to some post, show only the nets of the post Type
+                                if(!socialNetwork.getClass().equals(postIn.getPostInSocialNetwork().getClass())){
+                                    continue;
+                                }
+                            }
+                            
                              if (socialNetwork instanceof Youtube){
                                  typeClass = "ico-ytb";
-                             }
-                              if (socialNetwork instanceof Facebook){
+                             }else if (socialNetwork instanceof Facebook){
                                  typeClass = "ico-fcb";
-                             }
-                               if (socialNetwork instanceof Twitter){
+                             }else if (socialNetwork instanceof Twitter){
                                  typeClass = "ico-twt";
                              }
+                            
+                            String selected = "";
+                            if (isSelected) {
+                                selected = "checked=\"true\"";
+                            }
                 %>
                 <li class="<%=typeClass%>">
-                    <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>"/>
+                    <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" <%=selected%> />
                     <label for="t1"><span></span><%=socialNetwork.getTitle()%></label>
                 </li>
                 <%
@@ -496,7 +516,7 @@
              </div>
                 
             <%
-                if (postInSN == null) {
+                if (postInSN == null || postIn != null) {
             %>
              <div class="pub-redes">
                 <p class="titulo">Redes disponibles</p>
@@ -507,24 +527,38 @@
                     SocialNetwork socialNetwork = (SocialNetwork) it.next();
                     if (socialNetwork instanceof Videoable && socialNetwork.isActive() && socialNetwork.isValid()) {
                     String typeClass = "";
-                             if (socialNetwork instanceof Youtube){
-                                 typeClass = "ico-ytb";
-                             }
-                              if (socialNetwork instanceof Facebook){
-                                 typeClass = "ico-fcb";
-                             }
-                               if (socialNetwork instanceof Twitter){
-                                 typeClass = "ico-twt";
-                             }
+                    boolean isSelected = false;
+                    if (apostOutNets.contains(socialNetwork.getURI())) {
+                        System.out.println("Net found--:" + socialNetwork);
+                        isSelected = true;
+                    }
+                    
+                    if(postIn != null){//If it is a response to some post, show only the nets of the post Type
+                        if(!socialNetwork.getClass().equals(postIn.getPostInSocialNetwork().getClass())){
+                            continue;
+                        }
+                    }
+                    if (socialNetwork instanceof Youtube){
+                        typeClass = "ico-ytb";
+                    }else if (socialNetwork instanceof Facebook){
+                        typeClass = "ico-fcb";
+                    }else if (socialNetwork instanceof Twitter){
+                        typeClass = "ico-twt";
+                    }
+                    
+                    String selected = "";
+                    if (isSelected) {
+                        selected = "checked=\"true\"";
+                    }
                    
-                        if (socialNetwork instanceof Youtube) {
+                    if (socialNetwork instanceof Youtube) {
             %>
             <li class="<%=typeClass%>">
                 <input id="checkYT" type="checkbox" name="<%=socialNetwork.getURI()%>" onClick="showListCategory('<%=objUri%>','<%=sourceCall%>');" />
                 <label><span></span><%=socialNetwork.getTitle()%></label>
             </li>
             <%
-            } else {
+                    } else {
             %>
             <li class="<%=typeClass%>">
                 <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" />
