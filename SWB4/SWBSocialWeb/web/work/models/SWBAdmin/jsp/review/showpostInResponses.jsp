@@ -237,7 +237,7 @@
                                     }
                                 }
                             }
-
+                            
                             //Si todos los PostOutNet referentes al PostOut estan con estatus de 1 o simplemente diferente de 0, quiere decir que ya estan publicados, 
                             //probablente se revisaron desde el MonitorMgr y en el metodo isPublished de c/red social de tipo MonitorAble se reviso el estatus en la red socal
                             // y la misma respondio que ya estaba publicado, por lo cual se le colocó en dicho metodo el estatus 1 (publicado) al PostOutNet de dicho PostOut,
@@ -254,7 +254,7 @@
                     <%=SWBSocialUtil.Util.getStringFromGenericLocale("published", user.getLanguage())%>
                     <%
                     } else {
-                        System.out.println("postOut:" + postOut + ",status:" + postOut.getPflowInstance().getStatus());
+                        //System.out.println("postOut:" + postOut + ",status:" + postOut.getPflowInstance());                        
                         if (!needAuthorization || postOut.getPflowInstance().getStatus() == 3) {
                             if (someOneIsNotPublished) {
                                 if (firstError != null) {
@@ -292,6 +292,7 @@
                             }
                         }
                     } else {
+                            System.out.println("else final");
                     %>
                     <%=SWBSocialUtil.Util.getStringFromGenericLocale("published", user.getLanguage())%>
                     <%
