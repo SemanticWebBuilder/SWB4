@@ -503,6 +503,7 @@
         </owl:allValuesFrom>
       </owl:Restriction>
     </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Sortable"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="CompensationStartEvent">
@@ -3354,6 +3355,16 @@
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >130</swb:index>
   </swbxf:DisplayProperty>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org/swb4/ontology#index">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_index">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >40</swb:index>
+        <rdfs:label xml:lang="en">Sort index</rdfs:label>
+        <rdfs:label xml:lang="es">Índice de ordenamiento</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </rdf:Description>
   <swb:Class rdf:ID="DataObject">
     <rdfs:subClassOf rdf:resource="#ItemAware"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
