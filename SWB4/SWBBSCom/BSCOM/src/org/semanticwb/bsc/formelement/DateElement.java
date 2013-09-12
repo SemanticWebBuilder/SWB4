@@ -102,21 +102,19 @@ public class DateElement extends org.semanticwb.bsc.formelement.base.DateElement
                 ret.append(" required=\"" + required + "\"");
                 ret.append(" promptMessage=\"" + pmsg + "\"");
                 ret.append(" invalidMessage=\"" + imsg + "\"");
+                
+                System.out.println("INPRIME QYUE TRAE CONSTRAINT.." +getConstraints());
 
                 if (getConstraints() != null) {
                     ret.append(" constraints=\"" + getConstraints() + "\"");
                 }
                
-                if(getDateId()!=null) ret.append(" id=\"" + getDateId() + obj.getId() + "\"");
+                if(getDateId()!=null) ret.append(" id=\"" + getDateId() + "_" +obj.getId() + "\"");
                 
-                if (getDateOnChange() != null) {
-                    String attributeValue = getDateOnChange();
-                    ret.append(" onchange=\"");
-                    ret.append((attributeValue.indexOf("{replaceId}") != -1 
-                                ? attributeValue.replace("{replaceId}", obj.getId())
-                                : attributeValue));
-                    ret.append("\"");
-                }
+                 if(getDateOnChange()!=null) ret.append(" onchange=\"" + "dijit.byId('" + getDateOnChange() + "_" +obj.getId()+
+                         "')." + getConstraints() + "\"");
+                 
+                 System.out.println(" onchange=\"" + "dijit.byId('" + getDateOnChange() + "')." + getConstraints());
             }
 
             ret.append(" " + getAttributes());
