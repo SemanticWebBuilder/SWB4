@@ -14,7 +14,7 @@ public class DateElement extends org.semanticwb.bsc.formelement.base.DateElement
     {
         super(base);
     }
-     @Override
+      @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                 String mode, String lang) {
         if (obj == null) {
@@ -81,14 +81,11 @@ public class DateElement extends org.semanticwb.bsc.formelement.base.DateElement
         }
 
         String value = request.getParameter(propName);
-        
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
         if (value == null) {
             Date dt = obj.getDateProperty(prop);
 
             if (dt != null) {
-               
                 value = format.format(dt);
             }
         }
@@ -109,15 +106,14 @@ public class DateElement extends org.semanticwb.bsc.formelement.base.DateElement
                 if (getConstraints() != null) {
                     ret.append(" constraints=\"" + getConstraints() + "\"");
                 }
-                
-                 String elementId = (mode.equals("edit") ? obj.getId() : "1");
-                if(getDateId()!=null) ret.append(" id=\"" + getDateId() + elementId + "\"");
                
+                if(getDateId()!=null) ret.append(" id=\"" + getDateId() + obj.getId() + "\"");
+                
                 if (getDateOnChange() != null) {
                     String attributeValue = getDateOnChange();
                     ret.append(" onchange=\"");
                     ret.append((attributeValue.indexOf("{replaceId}") != -1 
-                                ? attributeValue.replace("{replaceId}", elementId)
+                                ? attributeValue.replace("{replaceId}", obj.getId())
                                 : attributeValue));
                     ret.append("\"");
                 }
