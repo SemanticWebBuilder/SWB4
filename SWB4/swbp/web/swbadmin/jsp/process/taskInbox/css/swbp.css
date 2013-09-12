@@ -216,6 +216,12 @@
   background: url("images/fondoTableThead.jpg") repeat-x center top transparent;
 }
 
+.swbp-table thead > tr > th a,
+.swbp-table thead > tr > th a:visited,
+.swbp-table thead > tr > th a:hover {
+    color:#fff;
+}
+
 .swbp-table tbody > tr > td {
     vertical-align:baseline;
 }
