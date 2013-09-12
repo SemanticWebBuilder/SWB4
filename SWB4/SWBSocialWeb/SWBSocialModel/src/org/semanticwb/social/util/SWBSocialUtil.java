@@ -59,6 +59,7 @@ import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialSite;
+import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.Videoable;
@@ -560,6 +561,139 @@ public class SWBSocialUtil implements SWBAppObject {
      * Metodo que normaliza una palabra, esto de acuerdo a definición realizada internamente en el área
      */
     public static class Classifier {
+        
+        /*
+         * Method that classifies a PostIn by Topic
+         * @param postIn PostIn to be classified
+         * @text String analized versus topics in the same website
+         * @return SocialTopic al que se clasifico el PostIn
+         */
+        public static org.semanticwb.social.SocialTopic clasifyMsgbySocialTopic(PostIn postIn, String text, boolean sendEmail2Users)
+        {
+            System.out.println("SWBSocialUtil/clasifyMsgbySocialTopic-1");
+            org.semanticwb.social.SocialTopic socialTopicResult=null;
+            SocialSite socialSite=SocialSite.ClassMgr.getSocialSite(postIn.getSemanticObject().getModel().getName());
+            //System.out.println("Asocialcion de socialTopic-23-1");
+             //Elimino Caracteres especiales (acentuados)
+            String externalMsgTMP=SWBSocialUtil.Strings.replaceSpecialCharacters(text);
+
+            SocialAdmin socialAdminSite=(SocialAdmin)SWBContext.getAdminWebSite();
+
+            externalMsgTMP=SWBSocialUtil.Strings.removePuntualSigns(externalMsgTMP, socialAdminSite);
+
+            ArrayList<String> amsgWords=new ArrayList();
+            String[] msgWords=externalMsgTMP.split(" ");
+            for(int i=0;i<msgWords.length;i++)
+            {
+                String msgWord=msgWords[i];
+                if(msgWord!=null && msgWord.length()>0)
+                {
+                    amsgWords.add(msgWord.toLowerCase());
+                    System.out.println("SWBSocialUtil/PalabraAgregada:"+msgWord.toLowerCase());
+                }
+            }
+            System.out.println("SWBSocialUtil/clasifyMsgbySocialTopic-2:"+externalMsgTMP);
+
+            //System.out.println("Asocialcion de socialTopic-23");
+
+            
+            Iterator <org.semanticwb.social.SocialTopic> itSocialTopics=org.semanticwb.social.SocialTopic.ClassMgr.listSocialTopics(socialSite); 
+            while(itSocialTopics.hasNext())
+            {
+                org.semanticwb.social.SocialTopic socialTopic=itSocialTopics.next();
+                System.out.println("SWBSocialUtil/clasifyMsgbySocialTopic-3:"+socialTopic);
+                if(socialTopic.isActive() && !socialTopic.isDeleted())  //Si el SocialTopic esta activo y no borrado
+                {
+                    String sTags=socialTopic.getTags();
+                    boolean existWord=false;
+                    if(sTags!=null && sTags.length()>0)
+                    {
+                        System.out.println("SWBSocialUtil/clasifyMsgbySocialTopic-4:"+sTags);
+                        String[] tags=sTags.split("\\,");  //Dividir valores
+                        for(int i=0;i<tags.length;i++)
+                        {
+                            String tag=tags[i];
+                            //System.out.println("tag:"+tag);
+
+                            //Elimino Caracteres especiales (acentuados)
+                            tag=SWBSocialUtil.Strings.replaceSpecialCharacters(tag);
+
+                            tag=SWBSocialUtil.Strings.removePuntualSigns(tag, socialAdminSite);
+
+                            //System.out.println("Tag2_Final:"+tag);
+                            //
+                            System.out.println("SWBSocialUtil/clasifyMsgbySocialTopic-5:"+tag);
+                            //Si una de las palabras clave de un tema esta en el mensaje de entrada, entonces se agrega al postIn ese tema 
+                            //y ya no se continua iterando en los temas
+                            if(amsgWords.contains(tag.toLowerCase()))
+                            {
+                                System.out.println("SWBSocialUtil/clasifyMsgbySocialTopic-6:"+tag);
+                               //System.out.println("tag SI esta contenido en las palabras:"+tag);
+                               //Hice que un msg de entrada solo se pudiera asignar a un tema debido a que si fuera a mas, entonces sería revisado el mismo msg por 
+                               //varios usuarios en varios flujos, es mejor que se vaya solo a un flujo, asignando bien las palabras clave a cada tema (que no se repitan) 
+                               // y si se clasificó a un tema que no debia de ser (por no colocar correctamente las palabras clave), las personas en un flujo podrían
+                               //reclasificar en cualquier momento el mensaje, para que se vaya a otro tema y por consiguiente a otro flujo.
+                               //System.out.println("Al post se le asocial SocialTopic:"+socialTopic.getURI());
+                               postIn.setSocialTopic(socialTopic);    
+                               socialTopicResult=socialTopic;
+                               if(sendEmail2Users)
+                               {
+                                   System.out.println("SWBSocialUtil/clasifyMsgbySocialTopic-7:"+sendEmail2Users);
+                                    //Envío de correo a los usuarios de los grupos que se encuentre asignados al socialtopic, para avisarles
+                                    //del nuevo mensaje que ha llegado a su bandeja
+                                    sendEmail2UsersInSocialTopic(socialTopic, postIn);
+                               }
+                               existWord=true;
+                               break;
+                            }
+                        }
+                        if(existWord) {
+                            break;
+                        }    //Ahora se saldría del while.
+                    }
+                }
+            }
+            return socialTopicResult;
+        }
+        
+        /*
+         * Envio de correo a usuarios de un determinado SocialTopic para indicarles que les ha llegado un 
+         * nuevo PostIn a la bandeja de entrada de dicho SocialTopic
+         * @param socialTopic SocialTopic al que llegó un PostIn
+         * @param postIn PostIn de entrada en el SocialTopic         * 
+         */
+        public static void sendEmail2UsersInSocialTopic(org.semanticwb.social.SocialTopic socialTopic, PostIn postIn)
+        {
+            Iterator<User> itSocialTopicUsers=SWBSocialUtil.SocialTopic.getUsersbySocialTopic(socialTopic).iterator();
+            while(itSocialTopicUsers.hasNext()) 
+            {
+                User user=itSocialTopicUsers.next();
+                if(user.getEmail()!=null && SWBUtils.EMAIL.isValidEmailAddress(user.getEmail()))
+                {
+                    String sBody="Hola "+user.getFullName()+"<br>";
+                    sBody+="Le comunicamos que existe un nuevo mensaje en la bandeja de entrada del tema:"+socialTopic.getTitle()+", al cual usted se encuentra subscripo<br><br><br>";
+                    sBody+="El mensaje cuenta con el siguiente texto:<br><br><br>";
+                    sBody+=postIn.getMsg_Text()+"<br><br><br>";
+                    if(postIn.getPostInSocialNetworkUser()!=null)
+                    {
+                         sBody+="Usuario:"+postIn.getPostInSocialNetworkUser().getSnu_name()+"<br><br><br>";
+                         if(postIn.getPostInSocialNetworkUser().getSnu_klout()>0)
+                         {
+                             sBody+="Klout:"+postIn.getPostInSocialNetworkUser().getSnu_klout();
+                         }
+                    }
+                    try
+                    {
+                         SWBUtils.EMAIL.sendBGEmail(user.getEmail(), "Nuevo Mensaje de Entra en Tema:"+socialTopic.getTitle(), sBody);
+                    }catch(SocketException so)
+                    {
+                        log.error(so);
+                    }
+                }
+            }
+        }
+        
+        
         
         /*
          * Functions which returns the value (number of days) set up in numDaysToCheckKlout Admin site property
