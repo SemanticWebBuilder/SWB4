@@ -15,7 +15,7 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
    */
     public static final org.semanticwb.platform.SemanticProperty social_friends=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#friends");
    /**
-   * Localización del usuario que se encuentra en el profile de la red social específica.
+   * Localización del usuario que se encuentra en el profile de la red social específica. Ej. Tampico, Tamaulipas.
    */
     public static final org.semanticwb.platform.SemanticProperty social_snu_profileGeoLocation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_profileGeoLocation");
    /**
