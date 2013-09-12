@@ -27,7 +27,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -55,7 +54,6 @@ import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.process.model.ItemAwareStatus;
 import org.semanticwb.process.model.RepositoryDirectory;
 import org.semanticwb.process.model.RepositoryElement;
 import org.semanticwb.process.model.RepositoryFile;
@@ -68,8 +66,10 @@ import org.semanticwb.process.model.RepositoryURL;
 public class ProcessFileRepository extends GenericResource {
 
     private Logger log = SWBUtils.getLogger(ProcessFileRepository.class);
-    private SimpleDateFormat format = new SimpleDateFormat("dd/MMM/yy hh:mm");
     public static final String MODE_GETFILE = "getFile";
+    public static final String MODE_PROPS = "props";
+    public static final String MODE_ADDFILE = "addFile";
+    public static final String MODE_HISTORY = "versionHistory";
     public static final String DEFAULT_MIME_TYPE = "application/octet-stream";
     public static final String LVL_VIEW = "prop_view";
     public static final String LVL_MODIFY = "prop_modify";
@@ -79,23 +79,50 @@ public class ProcessFileRepository extends GenericResource {
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        if (paramRequest.getMode().equals(MODE_GETFILE)) {
+        String mode = paramRequest.getMode();
+        if (MODE_GETFILE.equals(mode)) {
             doGetFile(request, response, paramRequest);
+        } else if (MODE_PROPS.equals(mode)) {
+            doFileProps(request, response, paramRequest);
+        } else if (MODE_ADDFILE.equals(mode)) {
+            doAddFile(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
-
     }
 
+    public void doFileProps(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String jsp = "/swbadmin/jsp/process/repository/repositoryFileProps.jsp";
+        RequestDispatcher rd = request.getRequestDispatcher(jsp);
+        try {
+            request.setAttribute("paramRequest", paramRequest);
+            rd.include(request, response);
+        } catch (Exception ex) {
+            log.error("Error including props.jsp", ex);
+        }
+    }
+    
+    public void doAddFile(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String jsp = "/swbadmin/jsp/process/repository/repositoryAddFile.jsp";
+        RequestDispatcher rd = request.getRequestDispatcher(jsp);
+        try {
+            request.setAttribute("paramRequest", paramRequest);
+            rd.include(request, response);
+        } catch (Exception ex) {
+            log.error("Error including add.jsp", ex);
+        }
+    }
+    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/html; charset=ISO-8859-1");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");
+        //response.setContentType("text/html; charset=ISO-8859-1");
+        //response.setHeader("Cache-Control", "no-cache");
+        //response.setHeader("Pragma", "no-cache");
         String jsp = "/swbadmin/jsp/process/repository/repositoryView.jsp";
         
         RequestDispatcher rd = request.getRequestDispatcher(jsp);
         try {
+            request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("files", listFiles(request, paramRequest));
             request.setAttribute("luser", getLevelUser(paramRequest.getUser()));
             rd.include(request, response);
@@ -595,13 +622,12 @@ public class ProcessFileRepository extends GenericResource {
         }
         
         if (repoDir != null) {
-            System.out.println("repoDir not null");
             if (user != null && user.getLanguage() != null) {
                 lang = user.getLanguage();
             }
 
             String usrgpo_filter = request.getParameter("usrgpo_filter");
-            String orderBy = request.getParameter("orderBy");
+            String orderBy = request.getParameter("sort");
             if (null == orderBy || orderBy.equals("")) {
                 orderBy = "title";
             }
@@ -657,6 +683,7 @@ public class ProcessFileRepository extends GenericResource {
                         skey = " - " + repoFile.getStatus().getDisplayTitle(lang) + " - " + repoFile.getId();
                     }
                 }
+                System.out.println("putting skey: "+skey+" object: "+repoFile);
                 hmNodes.put(skey, repoFile);
             }
 
