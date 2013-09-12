@@ -570,7 +570,6 @@ public class SWBSocialUtil implements SWBAppObject {
          */
         public static org.semanticwb.social.SocialTopic clasifyMsgbySocialTopic(PostIn postIn, String text, boolean sendEmail2Users)
         {
-            System.out.println("SWBSocialUtil/clasifyMsgbySocialTopic-1");
             org.semanticwb.social.SocialTopic socialTopicResult=null;
             SocialSite socialSite=SocialSite.ClassMgr.getSocialSite(postIn.getSemanticObject().getModel().getName());
             //System.out.println("Asocialcion de socialTopic-23-1");
@@ -589,11 +588,9 @@ public class SWBSocialUtil implements SWBAppObject {
                 if(msgWord!=null && msgWord.length()>0)
                 {
                     amsgWords.add(msgWord.toLowerCase());
-                    System.out.println("SWBSocialUtil/PalabraAgregada:"+msgWord.toLowerCase());
                 }
             }
-            System.out.println("SWBSocialUtil/clasifyMsgbySocialTopic-2:"+externalMsgTMP);
-
+            
             //System.out.println("Asocialcion de socialTopic-23");
 
             
@@ -601,14 +598,12 @@ public class SWBSocialUtil implements SWBAppObject {
             while(itSocialTopics.hasNext())
             {
                 org.semanticwb.social.SocialTopic socialTopic=itSocialTopics.next();
-                System.out.println("SWBSocialUtil/clasifyMsgbySocialTopic-3:"+socialTopic);
                 if(socialTopic.isActive() && !socialTopic.isDeleted())  //Si el SocialTopic esta activo y no borrado
                 {
                     String sTags=socialTopic.getTags();
                     boolean existWord=false;
                     if(sTags!=null && sTags.length()>0)
                     {
-                        System.out.println("SWBSocialUtil/clasifyMsgbySocialTopic-4:"+sTags);
                         String[] tags=sTags.split("\\,");  //Dividir valores
                         for(int i=0;i<tags.length;i++)
                         {
@@ -622,12 +617,10 @@ public class SWBSocialUtil implements SWBAppObject {
 
                             //System.out.println("Tag2_Final:"+tag);
                             //
-                            System.out.println("SWBSocialUtil/clasifyMsgbySocialTopic-5:"+tag);
                             //Si una de las palabras clave de un tema esta en el mensaje de entrada, entonces se agrega al postIn ese tema 
                             //y ya no se continua iterando en los temas
                             if(amsgWords.contains(tag.toLowerCase()))
                             {
-                                System.out.println("SWBSocialUtil/clasifyMsgbySocialTopic-6:"+tag);
                                //System.out.println("tag SI esta contenido en las palabras:"+tag);
                                //Hice que un msg de entrada solo se pudiera asignar a un tema debido a que si fuera a mas, entonces sería revisado el mismo msg por 
                                //varios usuarios en varios flujos, es mejor que se vaya solo a un flujo, asignando bien las palabras clave a cada tema (que no se repitan) 
@@ -638,7 +631,6 @@ public class SWBSocialUtil implements SWBAppObject {
                                socialTopicResult=socialTopic;
                                if(sendEmail2Users)
                                {
-                                   System.out.println("SWBSocialUtil/clasifyMsgbySocialTopic-7:"+sendEmail2Users);
                                     //Envío de correo a los usuarios de los grupos que se encuentre asignados al socialtopic, para avisarles
                                     //del nuevo mensaje que ha llegado a su bandeja
                                     sendEmail2UsersInSocialTopic(socialTopic, postIn);
