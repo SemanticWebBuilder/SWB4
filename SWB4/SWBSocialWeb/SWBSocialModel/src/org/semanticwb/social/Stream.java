@@ -40,7 +40,6 @@ public class Stream extends org.semanticwb.social.base.StreamBase
                        || (action.equalsIgnoreCase("ADD") && semProp.getURI().equals(social_hasStream_socialNetwork.getURI()))
                        || (action.equalsIgnoreCase("REMOVE") && semProp!=null && semProp.getURI().equals(social_hasStream_socialNetwork.getURI())))
                     {
-                        System.out.println("Entra a Stream/Update...Activo??:"+stream.isActive());
                         /*
                         //Revisar redes sociales que se encuentran en este momento en el stream
                         ArrayList asocialNetIDs=new ArrayList();    //White List -Lista buena-Lista que si esta en el stream
