@@ -607,7 +607,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
 
             //if text is not null, add it to the message. Always include additionalPhotos it may be empty if only one picture was found.
-            params.put("message", (photo.getMsg_Text() == null ? "" : photo.getMsg_Text()) + " " + additionalPhotos);
+            params.put("message", (photo.getMsg_Text() == null ? "" : SWBSocialUtil.Util.shortUrl(photo.getMsg_Text() + " " + additionalPhotos)));
             /*
              if (photo.getMsg_Text() != null) {
              if(!additionalPhotos.isEmpty()){//Msg and photos
@@ -629,7 +629,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
                 //if it's a response to a post and a photo is included don't upload the photo, only the url to the local site
                 if (photo.getPostInSource() != null && photo.getPostInSource().getSocialNetMsgId() != null) {
-                    params.put("message", (photo.getMsg_Text() == null ? "" : photo.getMsg_Text()) + " " + urlLocalPost);
+                    params.put("message", (photo.getMsg_Text() == null ? "" : SWBSocialUtil.Util.shortUrl(photo.getMsg_Text() + " " + urlLocalPost)));
                     facebookResponse = postRequest(params, "https://graph.facebook.com/" + photo.getPostInSource().getSocialNetMsgId() + "/comments",
                             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "POST");
                     System.out.println("1ST OPTION: RESPONDING TO SOMEONE WITH PICTURE:" + photo.getPostInSource().getSocialNetMsgId());
@@ -712,7 +712,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             if (videoFile.exists()) {
                 String facebookResponse;
                 if (video.getPostInSource() != null && video.getPostInSource().getSocialNetMsgId() != null) {
-                    params.put("message", (video.getMsg_Text() == null ? "" : video.getMsg_Text()) + " " + urlLocalPost);
+                    params.put("message", (video.getMsg_Text() == null ? "" : SWBSocialUtil.Util.shortUrl(video.getMsg_Text() + " " + urlLocalPost)));
                     facebookResponse = postRequest(params, "https://graph.facebook.com/" + video.getPostInSource().getSocialNetMsgId() + "/comments",
                             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "POST");
                     System.out.println("1ST OPTION: RESPONDING TO SOMEONE WITH VIDEO:" + video.getPostInSource().getSocialNetMsgId());
