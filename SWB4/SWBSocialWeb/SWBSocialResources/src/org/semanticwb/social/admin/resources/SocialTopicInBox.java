@@ -697,12 +697,20 @@ public class SocialTopicInBox extends GenericResource {
         Set<PostIn> setso = ((Set) hmapResult.get("itResult"));
         
          //Manejo de permisos
+        //Manejo de permisos
         User user=paramRequest.getUser();
+        boolean userCanRemoveMsg=false;
+        boolean userCanRetopicMsg=false;
+        //boolean userCanRevalueMsg=false;
+        boolean userCanRespondMsg=false;
         SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
-        boolean userCanRemoveMsg=socialUserExtAttr.isUserCanRemoveMsg();
-        boolean userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
-        boolean userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
-        boolean userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
+        if(socialUserExtAttr!=null)
+        {
+            userCanRemoveMsg=socialUserExtAttr.isUserCanRemoveMsg();
+            userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
+            //userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
+            userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
+        }
 
         Iterator<PostIn> itposts = setso.iterator();
         while (itposts.hasNext()) {
