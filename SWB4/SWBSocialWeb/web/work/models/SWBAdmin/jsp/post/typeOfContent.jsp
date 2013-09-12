@@ -187,7 +187,7 @@
 
                 %>
             
-                    <button class="submit" type="submit" onclick="return checksRedesText('<%=objUri%>','<%=sourceCall%>', <%=(postInSN == null ? "true" : "false")%>);"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+                    <button class="submit" type="submit" onclick="return checksRedesText('<%=objUri%>','<%=sourceCall%>', <%=(postInSN == null || postIn != null ? "true" : "false")%>);"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
                
             </div>      
             <%                
@@ -335,7 +335,7 @@
                         }
                     %>
 
-                        <button class="submit" type="submit" onclick="return checksRedesPhoto('<%=objUri%>','<%=sourceCall%>',<%=(postInSN == null ? "true" : "false")%>);"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+                        <button class="submit" type="submit" onclick="return checksRedesPhoto('<%=objUri%>','<%=sourceCall%>',<%=(postInSN == null || postIn != null ? "true" : "false")%>);"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
                 </div>
 
                 <%
@@ -512,7 +512,7 @@
                 }
             %>  
                     </p>
-             <button class="submit" type="submit" onclick="return validateChecks('<%=objUri%>','<%=sourceCall%>',<%=(postInSN == null ? "true" : "false")%>);"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+             <button class="submit" type="submit" onclick="return validateChecks('<%=objUri%>','<%=sourceCall%>',<%=(postInSN == null || postIn != null? "true" : "false")%>);"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
              </div>
                 
             <%
