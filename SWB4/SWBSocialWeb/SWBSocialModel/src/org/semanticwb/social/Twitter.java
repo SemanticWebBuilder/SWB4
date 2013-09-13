@@ -483,14 +483,14 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             if(ListenAlives.containsKey(stream.getURI()+"|"+this.getURI())) {
                 stopListenAlive(stream);
             }
-            System.out.println("Entra a Twitter listenAlive-2:"+stream.getURI()+"|"+this.getURI());
+            //System.out.println("Entra a Twitter listenAlive-2:"+stream.getURI()+"|"+this.getURI());
             StatusListener listener = new SWBSocialStatusListener(stream, this, ListenAlives);
-            
+            /*
             System.out.println("AppKey:"+getAppKey());
             System.out.println("SecretKey:"+getSecretKey());
             System.out.println("AccessToken:"+getAccessToken());
             System.out.println("AccessTokenSecret:"+getAccessTokenSecret());
-            
+            */
             /*create filterQuery*/
             FilterQuery query = new FilterQuery();
             
@@ -501,7 +501,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             {
                 String[] tr = {words2Monitor};
                 query.track(tr);
-                System.out.println("words2Monitor--1:"+words2Monitor);
+                //System.out.println("words2Monitor--1:"+words2Monitor);
             }
             
             TwitterStream twitterStream = new TwitterStreamFactory(configureOAuth().build()).getInstance();
@@ -512,11 +512,11 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
             twitterStream.filter(query);
             
-            System.out.println("Entra a Twitter listenAlive-3G1:"+stream.getURI()+"|"+this.getURI());
+            //System.out.println("Entra a Twitter listenAlive-3G1:"+stream.getURI()+"|"+this.getURI());
             //twitterStream.sample();
             ListenAlives.put(stream.getURI()+"|"+this.getURI(), twitterStream);
             
-            System.out.println("Entra a Twitter listenAlive-4-JorgeJJ:"+stream.getURI()+"|"+this.getURI());
+            //System.out.println("Entra a Twitter listenAlive-4-JorgeJJ:"+stream.getURI()+"|"+this.getURI());
         } catch (Exception e) {
             System.out.println(e.getMessage());
             log.error(e);
@@ -533,9 +533,10 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             if(twitterStream!=null)
             {
                 twitterStream.cleanUp();
-                twitterStream.shutdown();
+                //twitterStream.shutdown(); //Este tumba todos los threads y ya no vuelve a levantar otro para ninguno-->No ponerlo
+                twitterStream=null;
                 ListenAlives.remove(stream.getURI()+"|"+this.getURI());
-                System.out.println("DETUVO LA CONEXION EN stopListenAlive:"+this.getId());
+                System.out.println("DETUVO LA CONEXION EN stopListenAliveGeorge:"+this.getId());
             }
         }
         

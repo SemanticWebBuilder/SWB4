@@ -30,12 +30,12 @@ public class Stream extends org.semanticwb.social.base.StreamBase
                 {
                     Stream stream = (Stream) obj.createGenericInstance();
                     SemanticProperty semProp = (SemanticProperty) prop;;
-                    //System.out.println("Stream/Accion:"+action+", streamUri:"+stream.getURI()+",semProp:"+semProp);
+                    System.out.println("Stream/Accion:"+action+", streamUri:"+stream.getURI()+",semProp:"+semProp+",A ver k pex:"+Stream.social_keepAliveManager.getURI());
                     if(action.equalsIgnoreCase("CREATE"))   //Quiere decir que se esta creando una instancia de la clase nueva
                     {
                         //System.out.println("Entra a Stream/Create...");
                         ListenerMgr.createUpdateTimers(stream);
-                    }else if((action.equalsIgnoreCase("SET") && (semProp.getURI().equals("http://www.semanticwebbuilder.org/swb4/ontology#active") || semProp.getURI().equals(Stream.social_keepAliveManager)
+                    }else if((action.equalsIgnoreCase("SET") && (semProp.getURI().equals("http://www.semanticwebbuilder.org/swb4/ontology#active") || semProp.getURI().equals(Stream.social_keepAliveManager.getURI())
                        || semProp.getURI().equals(social_stream_PoolTime.getURI()) || semProp.getURI().equals(social_stream_phrase)))
                        || (action.equalsIgnoreCase("ADD") && semProp.getURI().equals(social_hasStream_socialNetwork.getURI()))
                        || (action.equalsIgnoreCase("REMOVE") && semProp!=null && semProp.getURI().equals(social_hasStream_socialNetwork.getURI())))
