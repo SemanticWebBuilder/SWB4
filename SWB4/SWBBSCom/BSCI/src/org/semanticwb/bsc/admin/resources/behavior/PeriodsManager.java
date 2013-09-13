@@ -72,11 +72,11 @@ public class PeriodsManager extends GenericResource {
             List objetivesCurrent = new ArrayList();
             Iterator<Period> itPeriods = null;
             GenericObject genericObject = semObj.createGenericInstance();
-if(genericObject instanceof Seasonable) {
-System.out.println("semObj "+semObj+" es seasonable");
-}else {
-System.out.println("semObj "+semObj+" NO es seasonable");
-}
+//if(genericObject instanceof Seasonable) {
+//System.out.println("semObj "+semObj+" es seasonable");
+//}else {
+//System.out.println("semObj "+semObj+" NO es seasonable");
+//}
             SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD);
 
             while (itObj.hasNext()) {
@@ -84,13 +84,16 @@ System.out.println("semObj "+semObj+" NO es seasonable");
 
                 objetivesCurrent.add(periodSave);
             }
-            if (genericObject instanceof Objective) {
+            /*if (genericObject instanceof Objective) {
                 itPeriods = Period.ClassMgr.listPeriods(bsc);
-            } else if (genericObject instanceof Indicator) {
+            } else*/ 
+            if (genericObject instanceof Indicator) {
                 SemanticObject objParent = semObj.getObjectProperty(Indicator.bsc_objectiveInv);
 
                 itPeriods = new GenericIterator<Period>(
                         objParent.listObjectProperties(Seasonable.bsc_hasPeriod));
+            } else {
+                itPeriods = Period.ClassMgr.listPeriods(bsc);
             }
             
             if (itPeriods != null && itPeriods.hasNext()) {
