@@ -1187,13 +1187,13 @@ public class StreamInBox extends GenericResource {
      * Method which controls the filters allowed in this class
      */
     private HashMap filtros(String swbSocialUser, WebSite wsite, String searchWord, HttpServletRequest request, Stream stream, int nPage) {
-        System.out.println("filtros/searchWord:"+searchWord);
+        //System.out.println("filtros/searchWord:"+searchWord);
         Set<PostIn> setso = null;
         ArrayList<PostIn> aListFilter = new ArrayList();
         HashMap hampResult = new HashMap();
         Iterator<PostIn> itposts = null;
         if (swbSocialUser != null) {
-            System.out.println("ES POR USUARIO");
+            //System.out.println("ES POR USUARIO");
             SocialNetworkUser socialNetUser = SocialNetworkUser.ClassMgr.getSocialNetworkUser(swbSocialUser, wsite);
             long StreamPostIns = wsite.getSemanticModel().countStatements(null, PostIn.social_postInSocialNetworkUser.getRDFProperty(), socialNetUser.getSemanticObject().getRDFResource(), null);
             hampResult.put("countResult", Long.valueOf(StreamPostIns));
@@ -1201,7 +1201,7 @@ public class StreamInBox extends GenericResource {
         } else {
             long StreamPostIns=0L;
             if (searchWord != null && searchWord.trim().length()>0) {
-                System.out.println("ES POR BUSQUEDA:"+searchWord);
+                //System.out.println("ES POR BUSQUEDA:"+searchWord);
                 itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), StreamPostIns, 0L, "timems desc"), true));
                 while (itposts.hasNext()) {
                     PostIn postIn = itposts.next();
@@ -1215,11 +1215,11 @@ public class StreamInBox extends GenericResource {
                 }
             }else{
                 StreamPostIns = wsite.getSemanticModel().countStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), null);
-                System.out.println("NO ES POR BUSQUEDA,nPage:"+nPage);
+                //System.out.println("NO ES POR BUSQUEDA,nPage:"+nPage);
                 if (nPage != 0) {
                     itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), Integer.valueOf((RECPERPAGE)).longValue(), Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), "timems desc"), true));
                 } else { 
-                    System.out.println("Toma Todo...Jorge");
+                    //System.out.println("Toma Todo...Jorge");
                     itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), StreamPostIns, 0L, "timems desc"), true));
                 }
             }
