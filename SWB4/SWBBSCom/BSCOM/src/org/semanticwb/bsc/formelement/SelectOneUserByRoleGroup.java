@@ -70,7 +70,7 @@ public class SelectOneUserByRoleGroup extends org.semanticwb.bsc.formelement.bas
             DOJO = true;
         }
 
-        StringBuffer   ret          = new StringBuffer();
+        StringBuilder  ret          = new StringBuilder();
         String         name         = propName;
         String         label        = prop.getDisplayName(lang);
         SemanticObject sobj         = prop.getDisplayProperty();
@@ -80,11 +80,23 @@ public class SelectOneUserByRoleGroup extends org.semanticwb.bsc.formelement.bas
         String         selectValues = null;
         boolean        disabled     = false;
 
+System.out.println("\n\n SelectOneUserByRoleGroup...");
+System.out.println("obj="+obj);
+System.out.println("prop="+prop);
+System.out.println("propName="+propName);
+System.out.println("type="+type);
+System.out.println("mode="+mode);
+System.out.println("lang="+lang);
+System.out.println("sobj="+sobj);
+        
+        
         if (sobj != null) {
             DisplayProperty dobj = new DisplayProperty(sobj);
-
+System.out.println("dobj="+dobj);
             pmsg         = dobj.getPromptMessage();
             imsg         = dobj.getInvalidMessage();
+System.out.println("pmsg="+pmsg);
+System.out.println("imsg="+imsg);
             selectValues = dobj.getDisplaySelectValues(lang);
             disabled     = dobj.isDisabled();
         }
@@ -125,11 +137,11 @@ public class SelectOneUserByRoleGroup extends org.semanticwb.bsc.formelement.bas
         if (disabled) {
             ext += " disabled=\"disabled\"";
         }
-
+System.out.println("prop.isObjectProperty()="+prop.isObjectProperty());
         if (prop.isObjectProperty()) {
             SemanticObject val = null;
             String aux = request.getParameter(propName);
-
+System.out.println("aux="+aux);
             if (aux != null) {
                 val = SemanticObject.createSemanticObject(aux);
             } else {
@@ -153,7 +165,8 @@ public class SelectOneUserByRoleGroup extends org.semanticwb.bsc.formelement.bas
 
                 if (DOJO) {
                     ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""
-                               + imsg + "\"" + " value=\""+uri+"\"");
+                               + imsg + "\" promptMessage=\""+pmsg+"\"" 
+                               + " value=\""+uri+"\"");
                 }
 
                 if(!mode.equals("filter"))
@@ -176,6 +189,7 @@ public class SelectOneUserByRoleGroup extends org.semanticwb.bsc.formelement.bas
                 }
 
                 SemanticClass            cls = prop.getRangeClass();
+System.out.println("cls="+cls);
                 Iterator<SemanticObject> it  = null;
 
                 if (isGlobalScope()) {
@@ -187,17 +201,19 @@ public class SelectOneUserByRoleGroup extends org.semanticwb.bsc.formelement.bas
                     }
                 } else if (isUserRepository()) {
                     SemanticModel model = getModel();
+System.out.println("--model="+model);
                     if (getFilterModelId() != null && getFilterModelId().length() > 0) {
                         model = SWBPlatform.getSemanticMgr().getModel(getFilterModelId());
                     }
-                    
+System.out.println("--model="+model);                    
                     SWBModel      m     = (SWBModel) model.getModelObject().createGenericInstance();
+System.out.println("--m="+m);
                     //System.out.println("Modelo inicial:"+m.getId());
                     if (m instanceof WebSite) {
                         m     = ((WebSite) m).getUserRepository();
                         model = m.getSemanticObject().getModel();
                     } else {
-                      m = m.getParentWebSite();  
+                        m = m.getParentWebSite();  
                         if (m instanceof WebSite) {
                             m     = ((WebSite) m).getUserRepository();
                             model = m.getSemanticObject().getModel();
@@ -222,12 +238,14 @@ public class SelectOneUserByRoleGroup extends org.semanticwb.bsc.formelement.bas
                     while (it.hasNext()) {
                         SemanticObject sob = it.next();
                         boolean deleted=false;
-                        if(sob.instanceOf(Trashable.swb_Trashable))
-                        {
-                            deleted=sob.getBooleanProperty(Trashable.swb_deleted);
+                        if(sob.instanceOf(Trashable.swb_Trashable)) {
+                            deleted = sob.getBooleanProperty(Trashable.swb_deleted);
                         }
                         
-                        if(filterObject(request, sobj, sob, prop, propName, type, mode, lang))continue;
+                        if(filterObject(request, sobj, sob, prop, propName, type, mode, lang)) {
+                            continue;
+                        }
+                        
                         if(!deleted)
                         {
                             // System.out.println("display:"+sob.getDisplayName(lang));
@@ -332,7 +350,12 @@ public class SelectOneUserByRoleGroup extends org.semanticwb.bsc.formelement.bas
         boolean ret = true;
         if (filter_obj != null) {
             filterUser = (User) filter_obj.createGenericInstance();
-        }
+        } 
+         
+System.out.println("filterObject...."); 
+System.out.println("filterRoleIds="+getFilterRoleIds()); 
+System.out.println("filterUserGroupId="+getFilterUserGroupId()); 
+        
         //No se especificó un grupo o roles para filtrar
         if ((getFilterRoleIds() == null || getFilterRoleIds().trim().length() == 0) && (getFilterUserGroupId() == null || getFilterUserGroupId().trim().length() == 0)) {
             hasUserGroup = true;

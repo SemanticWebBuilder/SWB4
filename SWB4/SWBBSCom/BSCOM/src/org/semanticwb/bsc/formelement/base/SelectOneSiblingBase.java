@@ -1,20 +1,13 @@
 package org.semanticwb.bsc.formelement.base;
 
 
-   /**
-   * Este form element muestra un componente de selección, o lista de selección, para escoger una instancia excluyendo la instancia actual. 
-   */
 public abstract class SelectOneSiblingBase extends org.semanticwb.model.SelectOne 
 {
-    public static final org.semanticwb.platform.SemanticProperty bsc_cls=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#cls");
-   /**
-   * Este form element muestra un componente de selección, o lista de selección, para escoger una instancia excluyendo la instancia actual.
-   */
-    public static final org.semanticwb.platform.SemanticClass bsc_SelectOneExclusive=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#SelectOneExclusive");
+    public static final org.semanticwb.platform.SemanticClass bsc_SelectOneSibling=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#SelectOneSibling");
    /**
    * The semantic class that represents the currentObject
    */
-    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#SelectOneExclusive");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#SelectOneSibling");
 
     public static class ClassMgr
     {
@@ -24,7 +17,7 @@ public abstract class SelectOneSiblingBase extends org.semanticwb.model.SelectOn
        * @return Iterator of org.semanticwb.bsc.formelement.SelectOneSibling
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.formelement.SelectOneSibling> listSelectOneExclusives(org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.formelement.SelectOneSibling> listSelectOneSiblings(org.semanticwb.model.SWBModel model)
         {
             java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
             return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.formelement.SelectOneSibling>(it, true);
@@ -34,7 +27,7 @@ public abstract class SelectOneSiblingBase extends org.semanticwb.model.SelectOn
        * @return Iterator of org.semanticwb.bsc.formelement.SelectOneSibling
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.formelement.SelectOneSibling> listSelectOneExclusives()
+        public static java.util.Iterator<org.semanticwb.bsc.formelement.SelectOneSibling> listSelectOneSiblings()
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.formelement.SelectOneSibling>(it, true);
@@ -45,7 +38,7 @@ public abstract class SelectOneSiblingBase extends org.semanticwb.model.SelectOn
        * @param model Model of the org.semanticwb.bsc.formelement.SelectOneSibling
        * @return A org.semanticwb.bsc.formelement.SelectOneSibling
        */
-        public static org.semanticwb.bsc.formelement.SelectOneSibling getSelectOneExclusive(String id, org.semanticwb.model.SWBModel model)
+        public static org.semanticwb.bsc.formelement.SelectOneSibling getSelectOneSibling(String id, org.semanticwb.model.SWBModel model)
         {
             return (org.semanticwb.bsc.formelement.SelectOneSibling)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
@@ -55,7 +48,7 @@ public abstract class SelectOneSiblingBase extends org.semanticwb.model.SelectOn
        * @param model Model of the org.semanticwb.bsc.formelement.SelectOneSibling
        * @return A org.semanticwb.bsc.formelement.SelectOneSibling
        */
-        public static org.semanticwb.bsc.formelement.SelectOneSibling createSelectOneExclusive(String id, org.semanticwb.model.SWBModel model)
+        public static org.semanticwb.bsc.formelement.SelectOneSibling createSelectOneSibling(String id, org.semanticwb.model.SWBModel model)
         {
             return (org.semanticwb.bsc.formelement.SelectOneSibling)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
@@ -64,7 +57,7 @@ public abstract class SelectOneSiblingBase extends org.semanticwb.model.SelectOn
        * @param id Identifier for org.semanticwb.bsc.formelement.SelectOneSibling
        * @param model Model of the org.semanticwb.bsc.formelement.SelectOneSibling
        */
-        public static void removeSelectOneExclusive(String id, org.semanticwb.model.SWBModel model)
+        public static void removeSelectOneSibling(String id, org.semanticwb.model.SWBModel model)
         {
             model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
         }
@@ -75,13 +68,13 @@ public abstract class SelectOneSiblingBase extends org.semanticwb.model.SelectOn
        * @return true if the org.semanticwb.bsc.formelement.SelectOneSibling exists, false otherwise
        */
 
-        public static boolean hasSelectOneExclusive(String id, org.semanticwb.model.SWBModel model)
+        public static boolean hasSelectOneSibling(String id, org.semanticwb.model.SWBModel model)
         {
-            return (getSelectOneExclusive(id, model)!=null);
+            return (getSelectOneSibling(id, model)!=null);
         }
     }
 
-    public static SelectOneSiblingBase.ClassMgr getSelectOneExclusiveClassMgr()
+    public static SelectOneSiblingBase.ClassMgr getSelectOneSiblingClassMgr()
     {
         return new SelectOneSiblingBase.ClassMgr();
     }
@@ -93,23 +86,5 @@ public abstract class SelectOneSiblingBase extends org.semanticwb.model.SelectOn
     public SelectOneSiblingBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-/**
-* Gets the MyClass property
-* @return String with the MyClass
-*/
-    public String getMyClass()
-    {
-        return getSemanticObject().getProperty(bsc_cls);
-    }
-
-/**
-* Sets the MyClass property
-* @param value long with the MyClass
-*/
-    public void setMyClass(String value)
-    {
-        getSemanticObject().setProperty(bsc_cls, value);
     }
 }
