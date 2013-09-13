@@ -92,7 +92,7 @@ public class ListenerMgr implements SWBAppObject {
      */
     public static boolean createUpdateTimers(Stream stream)
     {
-        //System.out.println("createUpdateTimers/STREAM:"+stream);
+        System.out.println("createUpdateTimers/STREAM:"+stream);
         try
         {
             synchronized(stream)
@@ -255,10 +255,9 @@ public class ListenerMgr implements SWBAppObject {
         {
             //Si es isKeepAliveManager==true, no importaría si no le ponen un tiempo para que este llamandose el thread, 
             //ya que este es llamado internamente desde cada red social que maneje esta caracteristica
-            if(stream.isKeepAliveManager())
+            System.out.println("IsKeppAlive:"+stream.isKeepAliveManager()+",poolTime:"+stream.getPoolTime());
+            if(stream.isKeepAliveManager() || stream.getPoolTime() > 0)
             {
-                return true;
-            }else if(stream.getPoolTime() > 0) { //si es stream.isKeepAliveManager()=false, entonces para crear el thread debe haber un tiepo para estarse llamando
                 return true;
             }
             //Revisa si en el Stream esta indicado (Active) si se va a manejar KeepAlive en las redes sociales que así lo permitan y que esten

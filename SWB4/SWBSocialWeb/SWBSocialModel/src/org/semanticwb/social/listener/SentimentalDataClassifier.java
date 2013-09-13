@@ -107,7 +107,7 @@ public class SentimentalDataClassifier {
     {
         externalString2Clasify=externalPost.getMessage();
         
-        //System.out.println("SentimentalDataClassifier/getExternalPostData:"+externalString2Clasify);
+        System.out.println("SentimentalDataClassifier/getExternalPostData:"+externalString2Clasify);
         //Si la descripción es diferente que nula, se agrega al texto a ser clasificado
         /*
         if(externalPost.getDescription()!=null)
@@ -219,6 +219,7 @@ public class SentimentalDataClassifier {
         
         //System.out.println("externalString2Clasify:"+externalString2Clasify);
         
+        
         if(externalString2Clasify==null) return;
         
         //Para el caso de Streaming Api que no se le puede enviar un bounding box, ni una latitud, longitud y radio para que solo me traiga tweets de una región
@@ -263,12 +264,12 @@ public class SentimentalDataClassifier {
         
         //long tfinTMP1=System.currentTimeMillis() - tini;
         //System.out.println("\n<!--Total Time to Classify--TMP1: " + tfinTMP1 + "ms - SWBSocial--> ");
-        
-        //System.out.println("SentimentalData../promSentimentalValue:"+promSentimentalValue);
-        //System.out.println("SentimentalData../sentimentalTweetValueType:"+sentimentalTweetValueType);
-        //System.out.println("SentimentalData../promIntensityValue:"+promIntensityValue);
-        //System.out.println("SentimentalData../intensityTweetValueType:"+intensityTweetValueType);
-        
+        /*
+        System.out.println("SentimentalData../promSentimentalValue:"+promSentimentalValue);
+        System.out.println("SentimentalData../sentimentalTweetValueType:"+sentimentalTweetValueType);
+        System.out.println("SentimentalData../promIntensityValue:"+promIntensityValue);
+        System.out.println("SentimentalData../intensityTweetValueType:"+intensityTweetValueType);
+        */
         
         //////////////////////////////////ESTO (PARA ABAJO) SI FUNCIONA BIEN ------10 - Julio - 2013//////////////////////////////////
         boolean filterPositives=stream.isFilterSentimentalPositive();
@@ -315,10 +316,10 @@ public class SentimentalDataClassifier {
         }
         //long tfinTMP2=System.currentTimeMillis() - tini;
         //System.out.println("\n<!--Total Time to Classify--TMP2: " + tfinTMP2 + "ms - SWBSocial--> ");
-        
+        System.out.println("CLASIFICADOR-STEP-1");
         if(createPostInbySentiment && createPostInbyIntensity)    //Si pasa los filtros, entonces se crea el mensaje, de lo contrario el mensaje de la red social nunca se persiste.
         {
-            //System.out.println("PASA FILTRO DE SENTIMIENTOS E INTENSIDAD");
+            System.out.println("PASA FILTRO DE SENTIMIENTOS E INTENSIDAD");
             //Si pasó filtro por sentimiento e intensidad, entonces revisa filtro por klout
             SocialNetworkUser socialNetUser=null;
             String creatorId=externalPost.getCreatorId();
@@ -417,10 +418,10 @@ public class SentimentalDataClassifier {
             
             //long tfinTMP3=System.currentTimeMillis() - tini;
             //System.out.println("\n<!--Total Time to Classify--TMP3: " + tfinTMP3 + "ms - SWBSocial--> ");
-            //System.out.println("Klout de usuario del mensaje, lo crea o no??:"+createPostbyKlout);
+            System.out.println("Klout de usuario del mensaje, lo crea o no??:"+createPostbyKlout);
             if(createPostbyKlout)   //Si pasa el filtro de Klout del usuario, entonces ya persite el mensaje en BD
             {
-                //System.out.println("Paso filtro de sentimientos, intensidad y klout---vamos a persistir el msg...");
+                System.out.println("Paso filtro de sentimientos, intensidad y klout---vamos a persistir el msg...");
                 PostIn post=createPostInObj(socialNetUser, userKloutScore, upDateSocialUserNetworkData, days);
 
                 //Guarda valores sentimentales en el PostIn (mensaje de entrada)

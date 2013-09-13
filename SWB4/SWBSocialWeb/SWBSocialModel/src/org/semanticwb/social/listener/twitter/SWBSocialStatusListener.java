@@ -103,7 +103,7 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                     external.setPostType(SWBSocialUtil.MESSAGE);   //TODO:VER SI SIEMPRE EN TWITTER LE DEBO DE PONER ESTE TIPO O TAMBIÉN LE PUDIERA PONER QUE ES DE TIPO FOTO
                     external.setFollowers(status.getUser().getFollowersCount());
                     external.setFriendsNumber(status.getUser().getFriendsCount());
-                    System.out.println("status.getUser().getLocation()----->"+status.getUser().getLocation());
+                    //System.out.println("status.getUser().getLocation()----->"+status.getUser().getLocation());
                     
                     if(status.getPlace()!=null)
                     {
@@ -115,7 +115,7 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                             double latCenterPoint=((boundingBox[3].getLatitude()-boundingBox[0].getLatitude())/2)+boundingBox[0].getLatitude();
                             double lngCenterPoint=((boundingBox[1].getLongitude()-boundingBox[0].getLongitude())/2)+boundingBox[0].getLongitude();
 
-                            System.out.println("Punto 5--JJ:["+latCenterPoint+"," +lngCenterPoint+"]");
+                            //System.out.println("Punto 5--JJ:["+latCenterPoint+"," +lngCenterPoint+"]");
 
                             external.setLatitude(latCenterPoint);
                             external.setLongitude(lngCenterPoint);
@@ -126,7 +126,7 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                             }
                         }
                     }else if(status.getUser().getLocation()!=null){
-                        System.out.println("Pone en External UserGeo:"+status.getUser().getLocation());
+                        //System.out.println("Pone en External UserGeo:"+status.getUser().getLocation());
                         external.setUserGeoLocation(status.getUser().getLocation());
                     }
                     
@@ -138,19 +138,19 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
 
                     currentTweetID = status.getId();
                     tweetsReceived++;
-                    System.out.println("TweetNumber:"+tweetsReceived+",User: @" + status.getUser().getScreenName() + "\tID:" + status.getId() + "\tTime:" + status.getCreatedAt() + "\tText:" + status.getText());
+                    //System.out.println("TweetNumber:"+tweetsReceived+",User: @" + status.getUser().getScreenName() + "\tID:" + status.getId() + "\tTime:" + status.getCreatedAt() + "\tText:" + status.getText());
                     
                     if(tweetsReceived>=1 && aListExternalPost.size()>0){
-                        System.out.println("Va a enviar a Clasificador--1");
+                        //System.out.println("Va a enviar a Clasificador--1");
                         new Classifier(aListExternalPost, stream, socialNetwork, true);
                         setLastTweetID(currentTweetID, stream);//Save
                         tweetsReceived=0;
                         aListExternalPost=new ArrayList();
-                        System.out.println("Va a enviar a Clasificador--2");
+                        //System.out.println("Va a enviar a Clasificador--2");
                     }
                 }
             }
-            System.out.println("Entra a SWBSocialStatusListener/onStatus-1:" + socialNetwork);
+            //System.out.println("Entra a SWBSocialStatusListener/onStatus-1:" + socialNetwork);
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e);
