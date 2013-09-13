@@ -33,20 +33,17 @@ public class SelectOneSibling extends org.semanticwb.bsc.formelement.base.Select
         if (obj == null) {
             obj = new SemanticObject();
         }
+        
+        boolean dojo = type.equalsIgnoreCase("dojo");
 
-        boolean dojo   = false;
-        if (type.equals("dojo")) {
-            dojo = true;
-        }
-
-        StringBuilder   ret          = new StringBuilder();
-        String         name         = propName;
-        String         label        = prop.getDisplayName(lang);
-        SemanticObject sobj         = prop.getDisplayProperty();
-        boolean        required     = prop.isRequired();
-        String         pmsg         = null;
-        String         imsg         = null;
-        boolean        disabled     = false;
+        StringBuilder  ret      = new StringBuilder();
+        String         name     = propName;
+        String         label    = prop.getDisplayName(lang);
+        SemanticObject sobj     = prop.getDisplayProperty();
+        boolean        required = prop.isRequired();
+        String         pmsg     = null;
+        String         imsg     = null;
+        boolean        disabled = false;
         
 //System.out.println("\n\n SelectOneExclusive...");
 //System.out.println("obj="+obj);
@@ -59,8 +56,8 @@ public class SelectOneSibling extends org.semanticwb.bsc.formelement.base.Select
 
         if (sobj != null) {
             DisplayProperty dobj = new DisplayProperty(sobj);
-            pmsg         = dobj.getPromptMessage();
-            imsg         = dobj.getInvalidMessage();
+            pmsg         = dobj.getPromptMessage(lang);
+            imsg         = dobj.getInvalidMessage(lang);
             disabled     = dobj.isDisabled();
         }
 
@@ -164,15 +161,13 @@ public class SelectOneSibling extends org.semanticwb.bsc.formelement.base.Select
                         if(filterObject(request, obj, sob, prop, propName, type, mode, lang)) {
                             continue;
                         }
-                        if(sob.getURI() != null && !obj.equals(sob)) {
-                            ret.append("<option value=\"" + sob.getURI() + "\" ");
-
-                            if (sob.getURI().equals(uri)) {
-                                ret.append("selected=\"selected\"");
-                            }
-
-                            ret.append(">" + sob.getDisplayName(lang) + "</option>");
+//                        if(sob.getURI() != null) {
+                        ret.append("<option value=\"" + sob.getURI() + "\" ");
+                        if (sob.getURI().equals(uri)) {
+                            ret.append("selected=\"selected\"");
                         }
+                        ret.append(">" + sob.getDisplayName(lang) + "</option>");
+//                        }
                     }
                 }
                 ret.append("</select>");
