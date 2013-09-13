@@ -192,7 +192,7 @@ public class ObjectiveAlignment extends ObjectiveAlignmentBase {
         if (filter_obj != null) {
             objective = (Objective) filter_obj.createGenericInstance();
         }
-        return objective==null?true:!objective.isActive();
+        return objective==null?true:!objective.isValid();
     }
     
 }
