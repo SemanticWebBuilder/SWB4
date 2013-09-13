@@ -36,7 +36,15 @@ public class SeriesOfEvaluation extends org.semanticwb.bsc.formelement.base.Seri
      *         correspondiente al modo especificado para este elemento de forma.
      */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type, String mode, String lang) {        
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type, String mode, String lang) {
+        
+System.out.println("\n\nSeriesOfEvaluation...");
+System.out.println("obj="+obj);
+System.out.println("prop="+prop);
+System.out.println("propName="+propName);
+System.out.println("mode="+mode);
+        
+        
         if (obj == null) {
             obj = new SemanticObject();
         }
