@@ -4,7 +4,7 @@ package org.semanticwb.bsc.accessory.base;
    /**
    * Un Differentiator se dibuja en el mapa estratégico del scorecard. Los Differentiator unicamente sirvan para alojar etiquetas de differenciadores dentro de un mapa estratégico 
    */
-public abstract class DifferentiatorBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Activeable,org.semanticwb.bsc.Help,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable
+public abstract class DifferentiatorBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Sortable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Seasonable,org.semanticwb.model.Traceable
 {
    /**
    * Un DifferentiatorGroup es una clase que permitir contener uno o varios Differentiator que se dibujan en el mapa estratégico del scorecard.
@@ -90,6 +90,29 @@ public abstract class DifferentiatorBase extends org.semanticwb.bsc.accessory.BS
             return (getDifferentiator(id, model)!=null);
         }
        /**
+       * Gets all org.semanticwb.bsc.accessory.Differentiator with a determined Period
+       * @param value Period of the type org.semanticwb.bsc.accessory.Period
+       * @param model Model of the org.semanticwb.bsc.accessory.Differentiator
+       * @return Iterator with all the org.semanticwb.bsc.accessory.Differentiator
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.Differentiator> listDifferentiatorByPeriod(org.semanticwb.bsc.accessory.Period value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.Differentiator> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasPeriod, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.accessory.Differentiator with a determined Period
+       * @param value Period of the type org.semanticwb.bsc.accessory.Period
+       * @return Iterator with all the org.semanticwb.bsc.accessory.Differentiator
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.Differentiator> listDifferentiatorByPeriod(org.semanticwb.bsc.accessory.Period value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.Differentiator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasPeriod,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.bsc.accessory.Differentiator with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.bsc.accessory.Differentiator
@@ -172,6 +195,89 @@ public abstract class DifferentiatorBase extends org.semanticwb.bsc.accessory.BS
     public DifferentiatorBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+   /**
+   * Gets all the org.semanticwb.bsc.accessory.Period
+   * @return A GenericIterator with all the org.semanticwb.bsc.accessory.Period
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.Period> listPeriods()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.Period>(getSemanticObject().listObjectProperties(bsc_hasPeriod));
+    }
+
+   /**
+   * Gets true if has a Period
+   * @param value org.semanticwb.bsc.accessory.Period to verify
+   * @return true if the org.semanticwb.bsc.accessory.Period exists, false otherwise
+   */
+    public boolean hasPeriod(org.semanticwb.bsc.accessory.Period value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(bsc_hasPeriod,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a Period
+   * @param value org.semanticwb.bsc.accessory.Period to add
+   */
+
+    public void addPeriod(org.semanticwb.bsc.accessory.Period value)
+    {
+        getSemanticObject().addObjectProperty(bsc_hasPeriod, value.getSemanticObject());
+    }
+   /**
+   * Removes all the Period
+   */
+
+    public void removeAllPeriod()
+    {
+        getSemanticObject().removeProperty(bsc_hasPeriod);
+    }
+   /**
+   * Removes a Period
+   * @param value org.semanticwb.bsc.accessory.Period to remove
+   */
+
+    public void removePeriod(org.semanticwb.bsc.accessory.Period value)
+    {
+        getSemanticObject().removeObjectProperty(bsc_hasPeriod,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the Period
+   * @return a org.semanticwb.bsc.accessory.Period
+   */
+    public org.semanticwb.bsc.accessory.Period getPeriod()
+    {
+         org.semanticwb.bsc.accessory.Period ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasPeriod);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.accessory.Period)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
+* Gets the Index property
+* @return int with the Index
+*/
+    public int getIndex()
+    {
+        return getSemanticObject().getIntProperty(swb_index);
+    }
+
+/**
+* Sets the Index property
+* @param value long with the Index
+*/
+    public void setIndex(int value)
+    {
+        getSemanticObject().setIntProperty(swb_index, value);
     }
    /**
    * Sets the value for the property DifferentiatorGroup
