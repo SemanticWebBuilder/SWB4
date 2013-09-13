@@ -156,8 +156,7 @@ public class ObjectiveAlignment extends ObjectiveAlignmentBase {
                     Objective sob = it.next();
                     boolean deleted = false;
                     
-                    if (filterObject(request, sobj, sob.getSemanticObject(), prop, propName,
-                            type, mode, lang)) {
+                    if (filterObject(request, sobj, sob.getSemanticObject(), prop, propName, type, mode, lang)) {
                         continue;
                     }
                     if (!deleted) {
@@ -189,7 +188,11 @@ public class ObjectiveAlignment extends ObjectiveAlignmentBase {
             SemanticObject filter_obj, SemanticProperty prop, String propName,
             String type, String mode, String lang) {
         
-        return super.filterObject(request, base_obj, filter_obj, prop, propName, type, mode, lang);
+        Objective objective = null;
+        if (filter_obj != null) {
+            objective = (Objective) filter_obj.createGenericInstance();
+        }
+        return objective==null?true:!objective.isActive();
     }
     
 }
