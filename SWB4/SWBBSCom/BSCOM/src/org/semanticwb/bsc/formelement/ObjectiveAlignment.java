@@ -154,23 +154,20 @@ public class ObjectiveAlignment extends ObjectiveAlignmentBase {
             if (it != null) {
                 while (it.hasNext()) {
                     Objective sob = it.next();
-                    boolean deleted = false;
                     
                     if (filterObject(request, sobj, sob.getSemanticObject(), prop, propName, type, mode, lang)) {
                         continue;
                     }
-                    if (!deleted) {
-                        if (sob.getURI() != null) {
-                            ret.append("<option value=\"");
-                            ret.append(sob.getURI());
-                            ret.append("\" ");
+                    if (sob.getURI() != null) {
+                        ret.append("<option value=\"");
+                        ret.append(sob.getURI());
+                        ret.append("\" ");
 
-                            if (sob.getURI().equals(parentObjUri)) {
-                                ret.append("selected=\"selected\"");
-                            }
-                            ret.append(">" + sob.getDisplayTitle(lang));
-                            ret.append("</option>");
+                        if (sob.getURI().equals(parentObjUri)) {
+                            ret.append("selected=\"selected\"");
                         }
+                        ret.append(">" + sob.getDisplayTitle(lang));
+                        ret.append("</option>");
                     }
                 }
             }
