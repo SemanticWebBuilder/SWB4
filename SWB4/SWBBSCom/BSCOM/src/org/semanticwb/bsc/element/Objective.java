@@ -12,9 +12,7 @@ import org.semanticwb.platform.SemanticProperty;
 
 public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase 
 {
-    public Objective(org.semanticwb.platform.SemanticObject base)
-            
-    {
+    public Objective(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
     
@@ -172,53 +170,56 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     /**
      * Devuelve el valor de despliegue de la propiedad ontol&oacute;gica especificada. Las propiedades aceptadas
      * son aquellas cuyo valor devuelto por {@code isDataTypeProperty()} es {@code false}.
-     * @param property la propiedad semantica de la que se desea obtener el valor de despliegue.
+     * @param property la propiedad sem&aacute;ntica de la que se desea obtener el valor de despliegue.
      * @param lang indica el idioma en que se espera el valor devuelto.
-     * @return un objeto {@literal String} que representa el valos de despliegue de la propiedad ontol&oacute;gica indicada.
+     * @param thisPeriod indica el periodo al que debe corresponder la informaci&oacute;n obtenida
+     * @return un objeto {@literal String} que representa el valor de despliegue de la propiedad ontol&oacute;gica indicada.
      */
-    public String renderObjectPropertyValue(SemanticProperty property, String lang) {
+    public String renderObjectPropertyValue(SemanticProperty property, String lang, Period thisPeriod) {
         
         String value = null;
+        if (lang != null) {
+            if (property.equals(Objective.bsc_hasIndicator)) {
+                value = renderHasIndicatorValue(lang);
+            } else if (property.equals(Objective.bsc_hasInitiative)) {
+                value = renderHasInitiativeValue(lang);
+            } else if (property.equals(Objective.bsc_hasPeriod)) {
+                value = renderHasPeriodValue(lang);
+            } else if (property.equals(Objective.bsc_hasPeriodStatus)) {
+                value = renderHasPeriodStatusValue(lang, thisPeriod);
+            } else if (property.equals(Objective.bsc_hasState)) {
+                value = renderHasStateValue(lang);
+            } else if (property.equals(Objective.bsc_parentObjective)) {
+                value = renderParentObjectiveValue(lang);
+            } else if (property.equals(Objective.bsc_periodicity)) {
+                value = renderPeriodicityValue(lang);
+            } else if (property.equals(Objective.bsc_themeInv)) {
+                value = renderThemeInvValue(lang);
+            } else if (property.equals(Objective.swb_hasRole)) {
+                value = renderHasRoleValue(lang);
+            } else if (property.equals(Objective.swb_hasRuleRef)) {
+                value = renderHasRuleRefValue(lang);
+            } else if (property.equals(Objective.swb_hasUserGroup)) {
+                value = renderHasUserGroupValue(lang);
+            }
+        }
         
-        if (property.equals(Objective.bsc_hasIndicator)) {
-            value = renderHasIndicatorValue(lang);
-        } else if (property.equals(Objective.bsc_hasInitiative)) {
-            value = renderHasInitiativeValue(lang);
-        } else if (property.equals(Objective.bsc_hasPeriod)) {
-            value = renderHasPeriodValue(lang);
-        } else if (property.equals(Objective.bsc_hasPeriodStatus)) {
-            value = renderHasPeriodStatusValue(lang);
-        } else if (property.equals(Objective.bsc_hasState)) {
-            value = renderHasStateValue(lang);
-        } else if (property.equals(Objective.bsc_help)) {
+        if (property.equals(Objective.bsc_help)) {
             value = renderHelpValue();
-        } else if (property.equals(Objective.bsc_parentObjective)) {
-            value = renderParentObjectiveValue(lang);
-        } else if (property.equals(Objective.bsc_periodicity)) {
-            value = renderPeriodicityValue(lang);
         } else if (property.equals(Objective.bsc_sponsor)) {
             value = renderSponsorValue();
-        } else if (property.equals(Objective.bsc_themeInv)) {
-            value = renderThemeInvValue(lang);
         } else if (property.equals(Objective.swb_creator)) {
             value = renderCreatorValue();
-        } else if (property.equals(Objective.swb_hasRole)) {
-            value = renderHasRoleValue(lang);
-        } else if (property.equals(Objective.swb_hasRuleRef)) {
-            value = renderHasRuleRefValue(lang);
-        } else if (property.equals(Objective.swb_hasUserGroup)) {
-            value = renderHasUserGroupValue(lang);
         } else if (property.equals(Objective.swb_modifiedBy)) {
             value = renderModifiedByValue();
         }
-        
         return value == null ? "" : value;
     }
     
     /**
-     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.hasIndicator}
-     * @param lang un String que indica el idoma en que se espera el valor devuelto
-     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.hasIndicator}
+     * Genera un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.hasIndicator}
+     * @param lang un {@code String} que indica el idioma en que se espera el valor devuelto
+     * @return un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.hasIndicator}
      */
     private String renderHasIndicatorValue(String lang) {
         
@@ -226,7 +227,7 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
         
         if (this.listIndicators().hasNext()) {
             GenericIterator<Indicator> indicatorIterator = this.listIndicators();
-            short count = 0;
+            int count = 0;
             while (indicatorIterator.hasNext()) {
                 Indicator indicator = indicatorIterator.next();
                 count++;
@@ -240,9 +241,9 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     }
     
     /**
-     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.hasInitiative}
-     * @param lang un String que indica el idoma en que se espera el valor devuelto
-     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.hasInitiative}
+     * Genera un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.hasInitiative}
+     * @param lang un {@code String} que indica el idioma en que se espera el valor devuelto
+     * @return un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.hasInitiative}
      */
     private String renderHasInitiativeValue(String lang) {
         
@@ -250,9 +251,9 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
         
         if (this.listInitiatives().hasNext()) {
             GenericIterator<Initiative> initiativeIterator = this.listInitiatives();
-            short count = 0;
+            int count = 0;
             while (initiativeIterator.hasNext()) {
-                 Initiative initiative = initiativeIterator.next();
+                Initiative initiative = initiativeIterator.next();
                 count++;
                 if (count > 1) {
                     value.append("; ");
@@ -264,9 +265,9 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     }
     
     /**
-     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.hasPeriod}
-     * @param lang un String que indica el idoma en que se espera el valor devuelto
-     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.hasPeriod}
+     * Genera un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.hasPeriod}
+     * @param lang un {@code String} que indica el idioma en que se espera el valor devuelto
+     * @return un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.hasPeriod}
      */
     private String renderHasPeriodValue(String lang) {
         
@@ -274,9 +275,9 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
         
         if (this.listPeriods().hasNext()) {
             GenericIterator<Period> periodIterator = this.listPeriods();
-            short count = 0;
+            int count = 0;
             while (periodIterator.hasNext()) {
-                 Period period = periodIterator.next();
+                Period period = periodIterator.next();
                 count++;
                 if (count > 1) {
                     value.append("; ");
@@ -288,33 +289,34 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     }
     
     /**
-     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.hasPeriodStatus}
-     * @param lang un String que indica el idoma en que se espera el valor devuelto
-     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.hasPeriodStatus}
+     * Genera un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.hasPeriodStatus}.
+     * Si el periodo indicado es {@code null}, se devuelve un {@code String} vac&iacute;o.
+     * @param lang un {@code String} que indica el idioma en que se espera el valor devuelto
+     * @param thisPeriod indica el periodo para el cual se busca el estatus. Si es {@code null}, se devuelve un {@code String} vac&iacute;o.
+     * @return un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.hasPeriodStatus}.
+     * Si el periodo indicado es {@code null}, se devuelve un {@code String} vac&iacute;o.
      */
-    private String renderHasPeriodStatusValue(String lang) {
+    private String renderHasPeriodStatusValue(String lang, Period thisPeriod) {
         
         StringBuilder value = new StringBuilder(128);
         
-        if (this.listPeriodStatuses().hasNext()) {
+        if (this.listPeriodStatuses().hasNext() && thisPeriod != null) {
             GenericIterator<PeriodStatus> periodStatusIterator = this.listPeriodStatuses();
-            short count = 0;
             while (periodStatusIterator.hasNext()) {
-                 PeriodStatus periodStatus = periodStatusIterator.next();
-                count++;
-                if (count > 1) {
-                    value.append("; ");
+                PeriodStatus periodStatus = periodStatusIterator.next();
+                if (periodStatus.getPeriod().equals(thisPeriod)) {
+                    value.append(periodStatus.getStatus().getDisplayTitle(lang));
+                    break;
                 }
-                value.append(periodStatus.getDisplayTitle(lang));
             }
         }
         return value.toString();
     }
     
     /**
-     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.hasState}
-     * @param lang un String que indica el idoma en que se espera el valor devuelto
-     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.hasState}
+     * Genera un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.hasState}
+     * @param lang un {@code String} que indica el idioma en que se espera el valor devuelto
+     * @return un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.hasState}
      */
     private String renderHasStateValue(String lang) {
         
@@ -322,9 +324,9 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
         
         if (this.listStates().hasNext()) {
             GenericIterator<State> stateIterator = this.listStates();
-            short count = 0;
+            int count = 0;
             while (stateIterator.hasNext()) {
-                 State state = stateIterator.next();
+                State state = stateIterator.next();
                 count++;
                 if (count > 1) {
                     value.append("; ");
@@ -336,9 +338,9 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     }
     
     /**
-     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.hasRole}
-     * @param lang un String que indica el idoma en que se espera el valor devuelto
-     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.hasRole}
+     * Genera un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.hasRole}
+     * @param lang un {@code String} que indica el idioma en que se espera el valor devuelto
+     * @return un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.hasRole}
      */
     private String renderHasRoleValue(String lang) {
         
@@ -346,9 +348,9 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
         
         if (this.listRoles().hasNext()) {
             GenericIterator<Role> roleIterator = this.listRoles();
-            short count = 0;
+            int count = 0;
             while (roleIterator.hasNext()) {
-                 Role role = roleIterator.next();
+                Role role = roleIterator.next();
                 count++;
                 if (count > 1) {
                     value.append("; ");
@@ -360,9 +362,9 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     }
     
     /**
-     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.RuleRef}
-     * @param lang un String que indica el idoma en que se espera el valor devuelto
-     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.RuleRef}
+     * Genera un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.RuleRef}
+     * @param lang un {@code String} que indica el idioma en que se espera el valor devuelto
+     * @return un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.RuleRef}
      */
     private String renderHasRuleRefValue(String lang) {
         
@@ -370,7 +372,7 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
         
         if (this.listRuleRefs().hasNext()) {
             GenericIterator<RuleRef> ruleRefIterator = this.listRuleRefs();
-            short count = 0;
+            int count = 0;
             while (ruleRefIterator.hasNext()) {
                 RuleRef ruleRef = ruleRefIterator.next();
                 count++;
@@ -384,9 +386,9 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     }
     
     /**
-     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.hasUserGroup}
-     * @param lang un String que indica el idoma en que se espera el valor devuelto
-     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.hasUserGroup}
+     * Genera un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.hasUserGroup}
+     * @param lang un {@code String} que indica el idioma en que se espera el valor devuelto
+     * @return un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.hasUserGroup}
      */
     private String renderHasUserGroupValue(String lang) {
         
@@ -394,7 +396,7 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
         
         if (this.listUserGroups().hasNext()) {
             GenericIterator<UserGroup> userGroupIterator = this.listUserGroups();
-            short count = 0;
+            int count = 0;
             while (userGroupIterator.hasNext()) {
                 UserGroup userGroup = userGroupIterator.next();
                 count++;
@@ -408,9 +410,9 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     }
     
     /**
-     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.help}
-     * @param lang un String que indica el idoma en que se espera el valor devuelto
-     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.help}
+     * Genera un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.help}
+     * @param lang un {@code String} que indica el idioma en que se espera el valor devuelto
+     * @return un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.help}
      */
     private String renderHelpValue() {
         
@@ -423,9 +425,9 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     }
     
     /**
-     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.parentObjective}
-     * @param lang un String que indica el idoma en que se espera el valor devuelto
-     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.parentObjective}
+     * Genera un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.parentObjective}
+     * @param lang un {@code String} que indica el idioma en que se espera el valor devuelto
+     * @return un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.parentObjective}
      */
     private String renderParentObjectiveValue(String lang) {
         
@@ -438,9 +440,9 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     }
     
     /**
-     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.periodicity}
-     * @param lang un String que indica el idoma en que se espera el valor devuelto
-     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.periodicity}
+     * Genera un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.periodicity}
+     * @param lang un {@code String} que indica el idioma en que se espera el valor devuelto
+     * @return un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.periodicity}
      */
     private String renderPeriodicityValue(String lang) {
         
@@ -453,8 +455,8 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     }
     
     /**
-     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.sponsor}
-     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.sponsor}
+     * Genera un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.sponsor}
+     * @return un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.sponsor}
      */
     private String renderSponsorValue() {
         
@@ -467,8 +469,8 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     }
     
     /**
-     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.creator}
-     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.creator}
+     * Genera un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.creator}
+     * @return un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.creator}
      */
     private String renderCreatorValue() {
         
@@ -481,8 +483,8 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     }
     
     /**
-     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.modifiedBy}
-     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.modifiedBy}
+     * Genera un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.modifiedBy}
+     * @return un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.modifiedBy}
      */
     private String renderModifiedByValue() {
         
@@ -495,9 +497,9 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     }
     
     /**
-     * Genera un String que representa el valor de despliegue de la propiedad {@code Objective.themeInv}
-     * @param lang un String que indica el idoma en que se espera el valor devuelto
-     * @return un String que representa el valor de despliegue de la propiedad {@code Objective.themeInv}
+     * Genera un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.themeInv}
+     * @param lang un {@code String} que indica el idioma en que se espera el valor devuelto
+     * @return un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.themeInv}
      */
     private String renderThemeInvValue(String lang) {
         
@@ -510,9 +512,9 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     }
     
     /**
-     * Genera un String que representa el nombre del objetivo antecedido por su prefijo
-     * @param lang un String que indica el idoma en que se espera el valor devuelto
-     * @return un String que representa el nombre del objetivo antecedido por su prefijo
+     * Genera un {@code String} que representa el nombre del objetivo antecedido por su prefijo
+     * @param lang un {@code String} que indica el idioma en que se espera el valor devuelto
+     * @return un {@code String} que representa el nombre del objetivo antecedido por su prefijo
      */
     public String renderObjectiveName(String lang) {
         
