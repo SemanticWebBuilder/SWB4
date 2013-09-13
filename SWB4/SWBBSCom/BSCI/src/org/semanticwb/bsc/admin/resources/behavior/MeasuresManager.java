@@ -34,7 +34,7 @@ import org.semanticwb.portal.api.SWBResourceURL;
  * @author carlos.ramos
  */
 public class MeasuresManager extends GenericAdmResource {
-    private final String defaultFormatPattern = "#,##0.0#";
+    public static final String defaultFormatPattern = "#,##0.0#";
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -79,7 +79,7 @@ public class MeasuresManager extends GenericAdmResource {
                     DecimalFormat formatter = (DecimalFormat)numFormat;
                     try {
                         formatter.applyPattern(format.getFormatPattern());
-                    }catch(IllegalArgumentException iae) {
+                    }catch(Exception iae) {
                         formatter.applyPattern(getResourceBase().getAttribute("defaultFormatPattern", defaultFormatPattern));
                     }
                     Period period;
@@ -163,7 +163,7 @@ public class MeasuresManager extends GenericAdmResource {
                 DecimalFormat formatter = (DecimalFormat)numFormat;
                 try {
                     formatter.applyPattern(format.getFormatPattern());
-                }catch(IllegalArgumentException iae) {
+                }catch(Exception iae) {
                     formatter.applyPattern(getResourceBase().getAttribute("defaultFormatPattern", defaultFormatPattern));
                 }
                 
