@@ -97,7 +97,7 @@ public class SelectOneSibling extends org.semanticwb.bsc.formelement.base.Select
                 ret.append("<select name=\"" + name + "\"");
 
                 if(dojo) {
-                    ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\"" + imsg + "\"" + " value=\""+uri+"\"");
+                    ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" promptMessage=\""+pmsg+"\" invalidMessage=\"" + imsg + "\"" + " value=\""+uri+"\"");
                 }
                 if(!mode.equals("filter")) {
                     ret.append(" required=\"" + required + "\"");
