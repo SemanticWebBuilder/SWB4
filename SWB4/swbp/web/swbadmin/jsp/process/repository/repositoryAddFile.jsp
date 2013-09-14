@@ -4,6 +4,14 @@
     Author     : Hasdai Pacheco <ebenezer.sanchez@infotec.com.mx>
 --%>
 
+<%@page import="org.semanticwb.model.SWBComparator"%>
+<%@page import="org.semanticwb.process.model.ItemAwareStatus"%>
+<%@page import="java.util.Iterator"%>
+<%@page import="org.semanticwb.model.VersionInfo"%>
+<%@page import="org.semanticwb.process.model.RepositoryURL"%>
+<%@page import="org.semanticwb.process.model.RepositoryFile"%>
+<%@page import="org.semanticwb.SWBPlatform"%>
+<%@page import="org.semanticwb.process.model.RepositoryElement"%>
 <%@page import="org.semanticwb.process.resources.ProcessFileRepository"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -13,8 +21,35 @@
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
 String validFiles = (String) request.getAttribute(ProcessFileRepository.VALID_FILES);
+WebSite site = paramRequest.getWebPage().getWebSite();
 User user = paramRequest.getUser();
-WebSite site = paramRequest.getWebPage().getWebSite();        
+RepositoryElement re = null;
+String lang ="es";
+String actualStatus ="";
+
+if (user != null && user.getLanguage() != null) {
+    lang = user.getLanguage();
+}
+
+String fid = request.getParameter("fid");
+String type = request.getParameter("type");
+VersionInfo vi = null;
+
+if (fid != null && fid.length() > 0) {
+    if (type != null) {
+        if ("url".equals(type)) {
+            re = RepositoryURL.ClassMgr.getRepositoryURL(fid, site);
+        } else if ("file".equals(type)) {
+            re = RepositoryFile.ClassMgr.getRepositoryFile(fid, site);
+        }
+    }
+}
+
+if (re != null) {
+    vi = re.getLastVersion();
+    actualStatus = re.getStatus()!=null?re.getStatus().getId():"";
+}
+
 if (!user.isSigned()) {
     if (paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT) {
         %>
@@ -31,32 +66,30 @@ if (!user.isSigned()) {
     SWBResourceURL viewURL = paramRequest.getRenderUrl().setMode(SWBParamRequest.Mode_VIEW);
     SWBResourceURL createURL = paramRequest.getActionUrl().setAction(ProcessFileRepository.ACT_NEWFILE);
     %>
-    <h2>Agregar archivo</h2>
+    <h2>Agregar <%=re != null?"versión de ":""%> <%=(re != null && re instanceof RepositoryURL)?"enlace Web":"archivo"%></h2>
     <form class="form-horizontal" role="form" action="<%=createURL%>" method="post" enctype="multipart/form-data">
+        <%if (re != null) {%>
+        <input type="hidden" name="fid" value="<%=re.getURI()%>"/>
+        <%}%>
         <div class="form-group">
             <label for="" class="col-lg-2 control-label">Título *</label>
             <div class="col-lg-3">
-                <input type="text" name="ftitle" id="ftitle" class="form-control"/>
+                <input type="text" name="ftitle" id="ftitle" value="<%=(re != null)?re.getDisplayTitle(lang):""%>" class="form-control"/>
             </div>
         </div>
         <div class="form-group">
             <label for="" class="col-lg-2 control-label">Descripción *</label>
             <div class="col-lg-3">
-                <textarea name="fdescription" id="fdescription" class="form-control"></textarea>
+                <textarea name="fdescription" id="fdescription" class="form-control"><%=(re != null)?re.getDisplayDescription(lang):""%></textarea>
             </div>
         </div>
         <div class="form-group">
             <label for="" class="col-lg-2 control-label">Comentario</label>
             <div class="col-lg-3">
-                <textarea name="fcomment" id="fcomment" class="form-control"></textarea>
+                <textarea name="fcomment" id="fcomment" class="form-control"><%=(re != null)?vi.getVersionComment():""%></textarea>
             </div>
         </div>
-        <div class="form-group">
-            <label for="" class="col-lg-2 control-label">Estatus</label>
-            <div class="col-lg-3">
-                <select name="itemAwStatus" id="itemAwStatus" class="form-control"></select>
-            </div>
-        </div>
+        <%if (re == null) {%>
         <div class="form-group">
             <label class="col-lg-2 control-label">Tipo de archivo *</label>
             <div class="col-lg-3">
@@ -72,6 +105,11 @@ if (!user.isSigned()) {
                 </div>
             </div>
         </div>
+        <%
+        } else {
+            %><input type="hidden" name="hftype" id="hftype" value="<%=type%>"/><%
+        }
+        if (re == null || (re != null && re instanceof RepositoryFile)) {%>
         <div id="fileSelect" class="form-group">
             <label for="" class="col-lg-2 control-label">Archivo *</label>
             <div class="col-lg-3">
@@ -85,16 +123,61 @@ if (!user.isSigned()) {
                 </div>
             </div>
         </div>
-        <div id="linkSelect" class="form-group" style="display:none">
+        <%
+        }
+        if (re == null || (re != null && re instanceof RepositoryURL)) {
+            String val = "";
+            if (re != null) {
+                val = vi.getVersionFile().startsWith("http://")?vi.getVersionFile().replace("http://", ""):vi.getVersionFile();
+            }
+        %>
+        <div id="linkSelect" class="form-group">
             <label for="" class="col-lg-2 control-label">Dirección del enlace *</label>
             <div class="col-lg-3">
                 <div class="input-group">
                     <span class="input-group-addon">http://</span>
-                        <input type="text" name="extfile" id="extfile" class="form-control" />
+                    <input type="text" name="extfile" id="extfile" value="<%=val%>" class="form-control" />
                     </span>
                 </div>
             </div>
         </div>
+        <%}%>
+        <div class="form-group">
+            <label for="" class="col-lg-2 control-label">Estatus</label>
+            <div class="col-lg-3">
+                <select name="itemAwStatus" id="itemAwStatus" class="form-control">
+                    <option value="" <%=(actualStatus.equals("")?"selected":"")%>>Ninguno</option>
+                    <%
+                    System.out.println("actualStatus:"+actualStatus);
+                    Iterator<ItemAwareStatus> ititwstst = SWBComparator.sortByDisplayName(ItemAwareStatus.ClassMgr.listItemAwareStatuses(site), lang);
+                    while (ititwstst.hasNext()) {
+                        ItemAwareStatus itemAwareStatus = ititwstst.next();
+                        %>
+                        <option value="<%=itemAwareStatus.getId()%>" <%=(actualStatus.equals(itemAwareStatus.getId())?"selected":"")%>><%=itemAwareStatus.getDisplayTitle(lang)%></option>
+                        <%
+                    }
+                    %>
+                </select>
+            </div>
+        </div>
+        <%if (re != null) {%>
+        <div class="form-group">
+            <label for="" class="col-lg-2 control-label">Versión *</label>
+            <div class="col-lg-3">
+                <select name="newVersion" id="itemAwStatus" class="form-control">
+                    <%
+                    float fver = Float.parseFloat(vi.getVersionValue());
+                    fver = fver + 0.1F;
+
+                    int iver = (int) fver;
+                    iver = iver + 1;
+                    %>
+                    <option value="fraction"><%=fver%></option>
+                    <option value="nextInt"><%=(float)iver%></option>
+                </select>
+            </div>
+        </div>
+        <%}%>
         <div class="form-group">
             <label for="" class="col-lg-2"></label>
             <div class="col-lg-3 text-right">
@@ -104,6 +187,9 @@ if (!user.isSigned()) {
         </div>
     </form>
     <script>
+        <%if (re == null) {%>
+        $("#linkSelect").css("display","none");
+        
         $("#urlToggleRadio").on('click', function() {
            $("#linkSelect").css("display","block");
            $("#fileSelect").css("display","none");
@@ -113,6 +199,7 @@ if (!user.isSigned()) {
            $("#fileSelect").css("display","block");
            $("#linkSelect").css("display","none");
         });
+        <%}%>
         
         function checkfiles(pExt) {
             var ftit = document.getElementById('ftitle');
@@ -132,8 +219,12 @@ if (!user.isSigned()) {
                 fdesc.focus();
                 return false;
             }
-            var fileradio = document.getElementById('fileToggleRadio');
-            var ftype = fileradio.checked?"file":"url";
+            <%if (re == null) {%>
+                var fileradio = document.getElementById('fileToggleRadio');
+                var ftype = fileradio.checked?"file":"url";
+            <%} else {%>
+                var ftype = document.getElementById('hftype').value;
+            <%}%>
             if(ftype === "url") {
                 var urlfilec = document.getElementById('extfile');
                 var urlfile = urlfilec.value;
