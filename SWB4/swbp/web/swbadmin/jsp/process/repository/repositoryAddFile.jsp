@@ -95,12 +95,12 @@ if (!user.isSigned()) {
             <div class="col-lg-3">
                 <div class="radio-inline">
                   <label>
-                      <input type="radio" id="fileToggleRadio" checked name="hftype" value="file"> Archivo
+                      <input type="radio" id="fileToggleRadio" onclick="toggleShow('fileSelect', true);toggleShow('linkSelect', false);" checked name="hftype" value="file"> Archivo
                   </label>
                 </div>
                 <div class="radio-inline">
                     <label>
-                        <input type="radio" id="urlToggleRadio" name="hftype" value="url"> Enlace Web
+                        <input type="radio" id="urlToggleRadio" onclick="toggleShow('fileSelect', false);toggleShow('linkSelect', true);"name="hftype" value="url"> Enlace Web
                     </label>
                 </div>
             </div>
@@ -188,17 +188,18 @@ if (!user.isSigned()) {
     </form>
     <script>
         <%if (re == null) {%>
-        $("#linkSelect").css("display","none");
+        function toggleShow(elementId, show) {
+            var el = document.getElementById(elementId);
+            if (el !== null) {
+                if (show) {
+                    el.style.display="block";
+                } else {
+                    el.style.display="none";
+                }
+            }
+        }
         
-        $("#urlToggleRadio").on('click', function() {
-           $("#linkSelect").css("display","block");
-           $("#fileSelect").css("display","none");
-        });
-
-        $("#fileToggleRadio").on('click', function() {
-           $("#fileSelect").css("display","block");
-           $("#linkSelect").css("display","none");
-        });
+        toggleShow("linkSelect", false);
         <%}%>
         
         function checkfiles(pExt) {
