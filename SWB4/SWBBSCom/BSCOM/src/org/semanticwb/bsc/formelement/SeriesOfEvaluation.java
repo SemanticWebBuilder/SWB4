@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.model.DisplayProperty;
+import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
@@ -36,64 +37,46 @@ public class SeriesOfEvaluation extends org.semanticwb.bsc.formelement.base.Seri
      *         correspondiente al modo especificado para este elemento de forma.
      */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type, String mode, String lang) {
-        
-System.out.println("\n\nSeriesOfEvaluation...");
-System.out.println("obj="+obj);
-System.out.println("prop="+prop);
-System.out.println("propName="+propName);
-System.out.println("mode="+mode);
-        
-        
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type, String mode, String lang)
+    {   
         if (obj == null) {
             obj = new SemanticObject();
         }
-        boolean isDojoType = false;
-        if (type.equals("dojo")) {
-            isDojoType = true;
-        }
-
-        StringBuilder ret = new StringBuilder(128);
-        String name = propName;
-        String label = prop.getDisplayName(lang);
-        SemanticObject sobj = prop.getDisplayProperty();
-        boolean isRequired = prop.isRequired();
-        String imsg = null;
-        boolean isDisabled = false;
-        String parentObjUri = "";
-        String displayedValue = "";
         
-        if (sobj != null) {
+        boolean dojo = type.equalsIgnoreCase("dojo");
+
+        StringBuilder  ret      = new StringBuilder();
+        String         name     = propName;
+        String         label    = prop.getDisplayName(lang);
+        SemanticObject sobj     = prop.getDisplayProperty();
+        boolean        required = prop.isRequired();
+        String         pmsg     = null;
+        String         imsg     = null;
+        boolean        disabled = false;
+        
+        if(sobj != null) {
             DisplayProperty dobj = new DisplayProperty(sobj);
-            imsg = dobj.getInvalidMessage();
-            isDisabled = dobj.isDisabled();
+            pmsg = dobj.getPromptMessage(lang);
+            imsg = dobj.getInvalidMessage(lang);
+            disabled = dobj.isDisabled();
         }
         
-        SemanticObject value = null;
-        
-        if (isDojoType) {
-            if (imsg == null) {
-                if (isRequired) {
-                    imsg = label + " es requerido.";
-
-                    if (lang.equals("en")) {
-                        imsg = label + " is required.";
-                    }
-                } else {
-                    imsg = "Dato invalido.";
-
-                    if (lang.equals("en")) {
-                        imsg = "Invalid datum.";
-                    }
+        if(dojo) {
+            if(imsg == null) {
+                if(required) {
+                    imsg = label + ("en".equals(lang)?" is required.":" is required.");
+                }else {
+                    imsg = "en".equals(lang)?"Invalid data.":"Dato incorrecto.";
                 }
+            }
+            if(pmsg == null) {
+                pmsg = ("en".equals(lang)?"Enter ":"Captura ") + label + ".";
             }
         }
         
-        String ext = "";
-        if(isDisabled) {
-            ext += " disabled=\"disabled\"";
-        }
+        String ext = disabled?" disabled=\"disabled\" ":"";
         
+        SemanticObject value = null;
         String valueAux = request.getParameter(propName);
         if(valueAux != null) {
             value = SemanticObject.createSemanticObject(valueAux);
@@ -101,6 +84,8 @@ System.out.println("mode="+mode);
             value = obj.getObjectProperty(prop);
         }
         
+        String parentObjUri = "";
+        String displayedValue = "";
         if(value != null) {
             parentObjUri = value.getURI();
             displayedValue = value.getDisplayName(lang);
@@ -113,16 +98,16 @@ System.out.println("mode="+mode);
         if(mode.equals("edit") || mode.equals("create") || mode.equals("filter"))
         {
             ret.append("<select name=\"" + name + "\"");
-            if(isDojoType) {
-                ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\"" + imsg + "\"" + " value=\"" + parentObjUri + "\"");
+            if(dojo) {
+                ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" promptMessage=\""+pmsg+"\" invalidMessage=\"" + imsg + "\"" + " value=\"" + parentObjUri + "\"");
             }
             if(!mode.equals("filter")) {
-                ret.append(" required=\"" + isRequired + "\"");
+                ret.append(" required=\"" + required + "\"");
             }
             if((mode.equals("filter") || isBlankSuport()) && ((parentObjUri == null) || (parentObjUri.length() == 0))) {
                 ret.append(" displayedvalue=\"\"");
             }
-            ret.append(" " + ext + ">");
+            ret.append(ext + ">");
             if((mode.equals("filter") || isBlankSuport())) {
                 ret.append("<option");
                 ret.append(" value=\"\"></option>");
@@ -131,34 +116,26 @@ System.out.println("mode="+mode);
             Indicator indicator = (Indicator) obj.createGenericInstance();
             Iterator<Series> it = null;
             
-            if(indicator !=null)
-            {
+            if(indicator !=null) {
                 it = SWBComparator.sortSemanticObjects(lang, indicator.listSerieses());
             }
 
-            if (it != null)
+            if(it != null)
             {
-                while (it.hasNext())
+                while(it.hasNext())
                 {
-                    Series sob = it.next();
-                    boolean deleted = false;
-                    
-                    if(filterObject(request, sobj, sob.getSemanticObject(), prop, propName, type, mode, lang)) {
+                    Series sob = it.next();                    
+                    if(filterObject(request, obj, sob.getSemanticObject(), prop, propName, type, mode, lang)) {
                         continue;
                     }
-                    if (!deleted) {
-                        if (sob.getURI() != null) {
-                            ret.append("<option value=\"");
-                            ret.append(sob.getURI());
-                            ret.append("\" ");
-
-                            if (sob.getURI().equals(parentObjUri)) {
-                                ret.append("selected=\"selected\"");
-                            }
-                            ret.append(">" + sob.getDisplayTitle(lang));
-                            ret.append("</option>");
-                        }
+                    ret.append("<option value=\"");
+                    ret.append(sob.getURI());
+                    ret.append("\" ");
+                    if(sob.getURI().equals(parentObjUri)) {
+                        ret.append("selected=\"selected\"");
                     }
+                    ret.append(">" + sob.getDisplayTitle(lang));
+                    ret.append("</option>");
                 }
             }
             ret.append("</select>");
@@ -169,5 +146,14 @@ System.out.println("mode="+mode);
             ret.append(displayedValue + "</span>");
         }
         return ret.toString();
+    }
+
+    @Override
+    public boolean filterObject(HttpServletRequest request, SemanticObject base_obj, SemanticObject filter_obj, SemanticProperty prop, String propName, String type, String mode, String lang) {
+        boolean exclude = true;
+        if(filter_obj!=null && filter_obj.createGenericInstance() instanceof SWBClass) {
+            exclude =  !((SWBClass)filter_obj.createGenericInstance()).isValid() || base_obj.equals(filter_obj);
+        }
+        return exclude;
     }
 }
