@@ -70,6 +70,7 @@ public class ProcessFileRepository extends GenericResource {
     public static final String MODE_PROPS = "props";
     public static final String MODE_ADDFILE = "addFile";
     public static final String MODE_HISTORY = "versionHistory";
+    public static final String ACT_NEWFILE = "newfile";
     public static final String DEFAULT_MIME_TYPE = "application/octet-stream";
     public static final String LVL_VIEW = "prop_view";
     public static final String LVL_MODIFY = "prop_modify";
@@ -84,6 +85,8 @@ public class ProcessFileRepository extends GenericResource {
             doGetFile(request, response, paramRequest);
         } else if (MODE_PROPS.equals(mode)) {
             doFileProps(request, response, paramRequest);
+        } else if (MODE_HISTORY.equals(mode)) {
+            doHistory(request, response, paramRequest);
         } else if (MODE_ADDFILE.equals(mode)) {
             doAddFile(request, response, paramRequest);
         } else {
@@ -106,10 +109,22 @@ public class ProcessFileRepository extends GenericResource {
         String jsp = "/swbadmin/jsp/process/repository/repositoryAddFile.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(jsp);
         try {
+            request.setAttribute(VALID_FILES, getResourceBase().getAttribute(VALID_FILES, ""));
             request.setAttribute("paramRequest", paramRequest);
             rd.include(request, response);
         } catch (Exception ex) {
             log.error("Error including add.jsp", ex);
+        }
+    }
+    
+    public void doHistory(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String jsp = "/swbadmin/jsp/process/repository/repositoryFileVersions.jsp";
+        RequestDispatcher rd = request.getRequestDispatcher(jsp);
+        try {
+            request.setAttribute("paramRequest", paramRequest);
+            rd.include(request, response);
+        } catch (Exception ex) {
+            log.error("Error including versions.jsp", ex);
         }
     }
     
@@ -385,7 +400,7 @@ public class ProcessFileRepository extends GenericResource {
 
         WebSite wsite = response.getWebPage().getWebSite();
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-        if ("newfile".equals(action)) {
+        if (ACT_NEWFILE.equals(action)) {
             org.semanticwb.portal.util.FileUpload fup = new org.semanticwb.portal.util.FileUpload();
             fup.getFiles(request, null);
             String fname = fup.getFileName("ffile");
@@ -399,7 +414,6 @@ public class ProcessFileRepository extends GenericResource {
             String newVersion = fup.getValue("newVersion");
             String repoEleStat = fup.getValue("itemAwStatus");
             
-
             GenericObject go = null;
             RepositoryDirectory repoDir = (RepositoryDirectory) response.getWebPage();
             if (hftype != null && hftype.equals("file")) {
@@ -434,7 +448,6 @@ public class ProcessFileRepository extends GenericResource {
                 repoFile.storeFile(fname, new ByteArrayInputStream(bcont), fcomment, incremento, repoEleStat);
                 
             } else {
-
                 RepositoryURL repoUrl = null;
                 boolean incremento = Boolean.FALSE;
                 if (fid != null) {
@@ -453,10 +466,9 @@ public class ProcessFileRepository extends GenericResource {
                 User usr = response.getUser();
 
                 repoUrl.setOwnerUserGroup(usr.getUserGroup());
-                repoUrl.storeFile(extfile, fcomment, incremento, repoEleStat);
-                
+                repoUrl.storeFile(extfile.startsWith("http://")?extfile:"http://"+extfile, fcomment, incremento, repoEleStat);
             }
-
+            response.setMode(SWBParamRequest.Mode_VIEW);
         } else if ("removefile".equals(action)) {
             String fid = request.getParameter("fid");
 
@@ -539,6 +551,8 @@ public class ProcessFileRepository extends GenericResource {
             ret = path+"bmp.png";
         } else if (type.indexOf(".pdf") != -1) {
             ret = path+"pdf.png";
+        } else if (type.indexOf(".png") != -1) {
+            ret = path+"png.png";
         } else if (type.indexOf(".xls") != -1 || type.indexOf(".xlsx") != -1) {
             ret = path+"xlsx_win.png";
         } else if (type.indexOf(".html") != -1 || type.indexOf(".htm") != -1) {
@@ -569,45 +583,6 @@ public class ProcessFileRepository extends GenericResource {
             ret = path+"unknown.png";
         }
         return ret;
-    }
-    
-    public static String getFileName(String filename) {
-        String file = "ico_default2.gif";
-        String type = filename.toLowerCase();
-        if (type.indexOf(".bmp") != -1) {
-            file = "ico_bmp.gif";
-        } else if (type.indexOf(".pdf") != -1) {
-            file = "ico_acrobat.gif";
-        } else if (type.indexOf(".xls") != -1 || type.indexOf(".xlsx") != -1) {
-            file = "ico_excel.gif";
-        } else if (type.indexOf(".html") != -1 || type.indexOf(".htm") != -1) {
-            file = "ico_html.gif";
-        } else if (type.indexOf("jpg") != -1 || type.indexOf("jpeg") != -1) {
-            file = "ico_jpeg.gif";
-        } else if (type.indexOf(".ppt") != -1 || type.indexOf(".pptx") != -1) {
-            file = "ico_powerpoint.gif";
-        } else if (type.indexOf(".exe") != -1) {
-            file = "ico_program.gif";
-        } else if (type.indexOf(".txt") != -1 || type.indexOf(".properties") != -1) {
-            file = "ico_text.gif";
-        } else if (type.indexOf(".doc") != -1 || type.indexOf(".docx") != -1) {
-            file = "ico_word.gif";
-        } else if (type.indexOf(".xml") != -1 || type.indexOf(".xsl") != -1) {
-            file = "ico_xml.gif";
-        } else if (type.indexOf(".mmap") != -1) {
-            file = "ico_mindmanager.GIF";
-        } else if (type.indexOf(".gif") != -1) {
-            file = "ico_gif.gif";
-        } else if (type.indexOf(".avi") != -1) {
-            file = "ico_video.gif";
-        } else if (type.indexOf(".mp3") != -1) {
-            file = "ico_audio.gif";
-        } else if (type.indexOf(".wav") != -1) {
-            file = "ico_audio.gif";
-        } else {
-            file = "ico_default2.gif";
-        }
-        return file;
     }
     
     public List<RepositoryElement> listFiles(HttpServletRequest request, SWBParamRequest paramRequest) {
@@ -661,7 +636,7 @@ public class ProcessFileRepository extends GenericResource {
                     skey = version.getCreated().getTime() + " - " + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
                 } else if (orderBy.equals("type")) {
                     String file = version.getVersionFile();
-                    String type = getFileName(file);
+                    String type = getFileType(file);
                     skey = type + "-" + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
                 } else if (orderBy.equals("usr")) {
                     User usrc = version.getCreator();
@@ -683,17 +658,15 @@ public class ProcessFileRepository extends GenericResource {
                         skey = " - " + repoFile.getStatus().getDisplayTitle(lang) + " - " + repoFile.getId();
                     }
                 }
-                System.out.println("putting skey: "+skey+" object: "+repoFile);
                 hmNodes.put(skey, repoFile);
             }
 
-            ArrayList list = new ArrayList(hmNodes.keySet());
-            Collections.sort(list);
+            ArrayList<String> list = new ArrayList<String>(hmNodes.keySet());
+            Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
             Iterator<String> keys = list.iterator();
             
             while (keys.hasNext()) {
                 String key = keys.next();
-                System.out.println("adding "+((RepositoryElement)hmNodes.get(key)).getTitle());
                 ret.add((RepositoryElement)hmNodes.get(key));
             }
         }
