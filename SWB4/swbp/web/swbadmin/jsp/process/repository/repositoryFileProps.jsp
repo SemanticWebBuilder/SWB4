@@ -69,6 +69,12 @@ if (fid != null && type != null) {
                   </div>
                 </div>
                 <div class="form-group">
+                  <label class="col-lg-5 control-label">Comentario</label>
+                  <div class="col-lg-7">
+                    <p class="form-control-static"><%=vi!=null?vi.getVersionComment():"--"%></p>
+                  </div>
+                </div>
+                <div class="form-group">
                   <label class="col-lg-5 control-label">Usuario creador</label>
                   <div class="col-lg-7">
                     <p class="form-control-static"><%=re.getCreator()==null?"--":re.getCreator().getFullName()%></p>
