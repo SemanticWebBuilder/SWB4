@@ -22,8 +22,7 @@
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
 List<RepositoryElement> files = (List<RepositoryElement>) request.getAttribute("files");
 int luser = (Integer) request.getAttribute("luser");
-WebPage wp = paramRequest.getWebPage();
-WebSite site = wp.getWebSite();
+WebSite site = paramRequest.getWebPage().getWebSite();
 User user = paramRequest.getUser();
 String lang = "es";
 
