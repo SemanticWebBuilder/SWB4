@@ -162,7 +162,7 @@ public class SelectOneSibling extends org.semanticwb.bsc.formelement.base.Select
                         }
 //                        if(sob.getURI() != null) {
                         ret.append("<option value=\"" + sob.getURI() + "\" ");
-                        if (sob.getURI().equals(uri)) {
+                        if(sob.getURI().equals(uri)) {
                             ret.append("selected=\"selected\"");
                         }
                         ret.append(">" + sob.getDisplayName(lang) + "</option>");
