@@ -99,35 +99,26 @@ if (!user.isSigned()) {
                         propsUrl.setParameter("type", (rf instanceof RepositoryURL)?"url":"file");
                         %>
                         <tr>
-                            <td>
-                                <img src="<%=urlIcon%>" alt="<%=type%>" title="<%=rf.getDisplayTitle(lang)%>" /><%=rf.getDisplayTitle(lang)%>
+                            <td><img src="<%=urlIcon%>" alt="<%=type%>" title="<%=rf.getDisplayTitle(lang)%>" /><%=rf.getDisplayTitle(lang)%></td>
                             <td><%=type%></td>
                             <td><%=vi.getVersionValue()%></td>
                             <td><%=vi.getUpdated()==null?"--":format.format(vi.getUpdated())%></td>
                             <td><%=modifier%></td>
                             <td><%=rf.getOwnerUserGroup()==null?"--":rf.getOwnerUserGroup().getDisplayTitle(lang)%></td>
                             <td><%=rf.getStatus()==null?"--":rf.getStatus().getDisplayTitle(lang)%></td>
-                            <td>
+                            <td class="swbp-actions">
                                 <a href="<%=propsUrl%>" title="Propiedades" class="btn btn-default" data-toggle="modal" data-target="#modalDialog"><i class="icon-info-sign"></i></a>
                                 <%if (luser == 3 || (vi.getCreator() != null && vi.getCreator().equals(user) && luser > 1)) {
                                     SWBResourceURL urlremove = paramRequest.getActionUrl();
                                     urlremove.setAction("removefile");
                                     urlremove.setParameter("act", "remove");
                                     urlremove.setParameter("fid", rf.getURI());
+                                    
+                                    addUrl.setParameter("fid", rf.getId());
+                                    addUrl.setParameter("type", (rf instanceof RepositoryURL?"url":"file"));
                                     %>
                                     <a href="<%=urlremove%>" onclick="if (!confirm('<%=paramRequest.getLocaleString("msgAlertConfirmRemoveFile") + " " + rf.getTitle() + "?"%>')) return false;" title="Eliminar" class="btn btn-default"><i class="icon-trash"></i></a>
-                                    <%
-                                }%>
-                                <%if (luser >= 2) {%>
-                                    <a href="#" title="Agregar nueva versión" class="btn btn-default"><i class="icon-upload-alt"></i></a>
-                                <%
-                                }
-                                
-                                if (vi.getPreviousVersion() != null) {
-                                    SWBResourceURL historyUrl = paramRequest.getRenderUrl().setMode(ProcessFileRepository.MODE_HISTORY);
-                                    historyUrl.setParameter("fid", rf.getURI());
-                                    %>
-                                    <a href="<%=historyUrl%>" title="Historial de versiones" class="btn btn-default"><i class="icon-archive"></i></a>
+                                    <a href="<%=addUrl%>" title="Agregar nueva versión" class="btn btn-default"><i class="icon-upload-alt"></i></a>
                                     <%
                                 }
                                 if (luser > 0) {
@@ -137,7 +128,15 @@ if (!user.isSigned()) {
                                     urlDownload.setParameter("verNum", "" + vi.getVersionNumber());
                                     %>
                                     <a href="<%=rf instanceof RepositoryFile?urlDownload:vi.getVersionFile()%>" title="<%=rf instanceof RepositoryFile?"Descargar":"Ir al enlace"%>" class="btn btn-default"><i class="<%=rf instanceof RepositoryFile?"icon-download-alt":"icon-external-link"%>"></i></a>
-                                <%}%>
+                                <%}
+                                if (vi.getPreviousVersion() != null) {
+                                    SWBResourceURL historyUrl = paramRequest.getRenderUrl().setMode(ProcessFileRepository.MODE_HISTORY);
+                                    historyUrl.setParameter("fid", rf.getId());
+                                    historyUrl.setParameter("type", (rf instanceof RepositoryURL?"url":"file"));
+                                    %>
+                                    <a href="<%=historyUrl%>" title="Historial de versiones" class="btn btn-default"><i class="icon-archive"></i></a>
+                                    <%
+                                }%>
                             </td>
                         </tr>
                         <%
