@@ -66,7 +66,7 @@ public class SelectOneSibling extends org.semanticwb.bsc.formelement.base.Select
                 if(required) {
                     imsg = label + ("en".equals(lang)?" is required.":" is required.");
                 }else {
-                    imsg = "en".equals(lang)?"Invalid data.":"Dato invalido.";
+                    imsg = "en".equals(lang)?"Invalid data.":"Dato incorrecto.";
                 }
             }
             if(pmsg == null) {
@@ -78,7 +78,6 @@ public class SelectOneSibling extends org.semanticwb.bsc.formelement.base.Select
         {
             SemanticObject val = null;
             String aux = request.getParameter(propName);
-
             if(aux != null) {
                 val = SemanticObject.createSemanticObject(aux);
             }else {
