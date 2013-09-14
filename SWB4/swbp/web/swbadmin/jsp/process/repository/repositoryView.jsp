@@ -27,11 +27,6 @@ WebSite site = wp.getWebSite();
 User user = paramRequest.getUser();
 String lang = "es";
 
-String action = request.getParameter("act");
-if (null == action) {
-    action = "";
-}
-
 if (user != null && user.getLanguage() != null) {
     lang = user.getLanguage();
 }
