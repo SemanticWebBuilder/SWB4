@@ -2,6 +2,7 @@
 
       dojo.require("dojo.parser");
       // dnd:
+      
       dojo.require("dojo.dnd.Source");
       dojo.require("dojo.date.locale");
 
@@ -10,6 +11,7 @@
       dojo.require("dojo.data.ItemFileReadStore");
 
       dojo.require("dijit.Menu");
+      
       dojo.require("dijit.ColorPalette");
       dojo.require("dijit.ProgressBar");
       dojo.require("dijit.TitlePane");
