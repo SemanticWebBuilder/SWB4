@@ -12,53 +12,65 @@
     }
 %>
 <%
-    User user=SWBContext.getAdminUser();
-    if(user==null)
+    User user = SWBContext.getAdminUser();
+    if (user == null)
     {
         response.sendError(403);
         return;
     }
-    String lang=user.getLanguage();
+    String lang = user.getLanguage();
 
     String id;
     String showRoot;
     String rootLabel;
     String url;
 
-    SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
-    if(paramRequest!=null)
+    SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+    if (paramRequest != null)
     {
-        id=paramRequest.getArgument("id", "tree");
-        showRoot=paramRequest.getArgument("showRoot", "false");
-        rootLabel=paramRequest.getArgument("rootLabel");
-        SWBResourceURL surl=paramRequest.getRenderUrl().setMode("json").setCallMethod(paramRequest.Call_DIRECT);
+        id = paramRequest.getArgument("id", "tree");
+        showRoot = paramRequest.getArgument("showRoot", "false");
+        rootLabel = paramRequest.getArgument("rootLabel");
+        SWBResourceURL surl = paramRequest.getRenderUrl().setMode("json").setCallMethod(paramRequest.Call_DIRECT);
         surl.setParameter("id", id);
-        url=surl.toString();
-    }else
+        url = surl.toString();
+    } else
     {
-        id=request.getParameter("id");
-        showRoot=request.getParameter("showRoot");
-        rootLabel=request.getParameter("rootLabel");
-        if(id==null)id="tree";
-        if(showRoot==null)showRoot="false";
-        url=SWBPlatform.getContextPath()+"/swbadmin/jsp/Tree.jsp?id="+id;
+        id = request.getParameter("id");
+        showRoot = request.getParameter("showRoot");
+        rootLabel = request.getParameter("rootLabel");
+        if (id == null)
+        {
+            id = "tree";
+        }
+        if (showRoot == null)
+        {
+            showRoot = "false";
+        }
+        url = SWBPlatform.getContextPath() + "/swbadmin/jsp/Tree.jsp?id=" + id;
     }
     //System.out.println("id:"+id);
-    if(rootLabel!=null)rootLabel="rootLabel=\""+rootLabel+"\"";
-    else rootLabel="";
-    String store=id+"Store";
-    String model=id+"Model";
-    String menu=id+"Menu";
+    if (rootLabel != null)
+    {
+        rootLabel = "rootLabel=\"" + rootLabel + "\"";
+    } else
+    {
+        rootLabel = "";
+    }
+    String store = id + "Store";
+    String model = id + "Model";
+    String menu = id + "Menu";
 %>
 <!-- menu -->
-<ul dojoType="dijit.Menu" id="<%=menu%>" style="display: none;" onOpen="hideApplet(true);" onClose="hideApplet(false);"></ul>
-<!-- data for tree and combobox -->
+<ul dojoType="dijit.Menu" id="<%=menu%>" style="display: none;" onOpen="hideApplet(true);" onClose="hideApplet(false);">
+    <li dojoType="dijit.MenuItem">DUMMY</li>
+</ul>
 <div dojoType="dojo.data.ItemFileWriteStore" jsId="<%=store%>" url="<%=url%>"></div>
-<div dojoType="dijit.tree.ForestStoreModel" jsId="<%=model%>"
-  store="<%=store%>" rootId="root" <%=rootLabel%> childrenAttrs="children"></div>
-<!-- tree widget -->
+<div dojoType="dijit.tree.ForestStoreModel" jsId="<%=model%>" store="<%=store%>" rootId="root" <%=rootLabel%> childrenAttrs="children"></div>
 <div dojoType="dijit.Tree" id="<%=id%>" model="<%=model%>" dndController="dijit._tree.dndSource" betweenThreshold_="8" persist="false" showRoot="<%=showRoot%>">
     <script type="dojo/method" event="onClick" args="item, node">
+        //console.log("onClick");
+        
         if(item)
         {
             act_treeNode=node;
@@ -67,123 +79,82 @@
             executeTreeNodeEvent(<%=store%>,item,"onClick");
         }
     </script>
-    <script type="dojo/method" event="onOpen" args="item, node">
+    <script type="dojo/method" event="onOpen" args="item, node">                                    
+        //console.log("onOpen");
+        
         if(item)
         {
             act_treeNode=node;
             //alert("onOpen");
             executeTreeNodeEvent(<%=store%>,item,"onOpen");
-        }
+        }                                    
     </script>
     <script type="dojo/method" event="onDblClick" args="item, node">
+        //console.log("onDblClick");
         //printObjProp(event);
         if(item)
         {
             act_treeNode=node;
             executeTreeNodeEvent(<%=store%>,item,"onDblClick");
         }
-
-        //alert("onDblClick:"+event);
-        /*
-        var domElement = event.target;
-        var nodeWidget = dijit.getEnclosingWidget(domElement);
-        act_treeNode=nodeWidget;
-        if(nodeWidget && nodeWidget.isTreeNode){
-            executeTreeNodeEvent(<%=store%>,nodeWidget.item,"onDblClick");
-        }
-        */
     </script>
-<!--
-    <script type="dojo/method" event="onEnterKey" args="event">
-        //alert("onEnterKey"+event);
-        var domElement = event.target;
-        var nodeWidget = dijit.getEnclosingWidget(domElement);
-        act_treeNode=nodeWidget;
-        if(nodeWidget && nodeWidget.isTreeNode){
-            executeTreeNodeEvent(<%=store%>,nodeWidget.item,"onDblClick");
-        }
-    </script>
--->
-    <script type="dojo/method" event="onDndDrop" args="source,nodes,copy">
+    <script type="dojo/method" event="onDndDrop" args="source,nodes,copy,target">
+        //console.log("onDndDrop");
+        
         //alert(source+" "+nodes+" "+copy+" "+this.containerState);
-		// summary:
-		//		Topic event processor for /dnd/drop, called to finish the DnD operation..
-		//		Updates data store items according to where node was dragged from and dropped
-		//		to.   The tree will then respond to those data store updates and redraw itself.
-		// source: Object: the source which provides items
-		// nodes: Array: the list of transferred items
-		// copy: Boolean: copy items, if true, move items otherwise
+        // summary:
+        //		Topic event processor for /dnd/drop, called to finish the DnD operation..
+        //		Updates data store items according to where node was dragged from and dropped
+        //		to.   The tree will then respond to those data store updates and redraw itself.
+        // source: Object: the source which provides items
+        // nodes: Array: the list of transferred items
+        // copy: Boolean: copy items, if true, move items otherwise
+        
+        var newParentItem=source.tree.dropNode.item;
+        var childItem=source.tree.dragNode.item;
+        var oldParentItem=source.tree.dragNode.getParent().item;
 
-		if(this.containerState == "Over"){
-			var tree = this.tree,
-				model = tree.model,
-				target = this.current,
-				requeryRoot = false;	// set to true iff top level items change
+        if(this.containerState == "Over")
+        {
+            this.isDragging = false;
 
-			this.isDragging = false;
-
-			// Compute the new parent item
-			var targetWidget = dijit.getEnclosingWidget(target),
-				newParentItem = (targetWidget && targetWidget.item) || tree.item;
-
-			// If we are dragging from another source (or at least, another source
-			// that points to a different data store), then we need to make new data
-			// store items for each element in nodes[].  This call get the parameters
-			// to pass to store.newItem()
-			var newItemsParams;
-			if(source != this){
-				newItemsParams = this.itemCreator(nodes, target);
-			}
-            var expand=false;
-			dojo.forEach(nodes, function(node, idx)
+            if(childItem && oldParentItem && newParentItem && oldParentItem!=newParentItem && childItem!=newParentItem)
             {
-                //alert(node+" "+idx);
-				if(source == this){
-					// This is a node from my own tree, and we are moving it, not copying.
-					// Remove item from old parent's children attribute.
-					// TODO: dijit._tree.dndSelector should implement deleteSelectedNodes()
-					// and this code should go there.
-					var childTreeNode = dijit.getEnclosingWidget(node),
-						childItem = childTreeNode.item,
-						oldParentItem = childTreeNode.getParent().item;
-                        //alert(childItem.id+" "+newParentItem.id+" "+oldParentItem.id);
-                        if(childItem && oldParentItem && newParentItem && oldParentItem!=newParentItem && childItem!=newParentItem)
-                        {
-                            var ac=confirm("<%=getLocaleString("aceptmove",lang)%>");
-                            if(ac)
-                            {
-                                var f=showStatusURL('<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/drop.jsp?suri='+encodeURIComponent(childItem.id)+'&newp='+encodeURIComponent(newParentItem.id)+'&oldp='+encodeURIComponent(oldParentItem.id)+'&copy='+copy,true);
-                                if(f && !copy)
-                                {
-                                    //model.pasteItem(childItem, oldParentItem, newParentItem, copy);
-                                    pasteItemByURIs(childItem.id,oldParentItem.id,newParentItem.id);
-                                    reloadTab(childItem.id);
-                                    expand=true;
-                                }
-                            }
-                        }
-				}else{
-					model.newItem(newItemsParams[idx], newParentItem);
-				}
-			}, this);
-
-			// Expand the target node (if it's currently collapsed) so the user can see
-			// where their node was dropped.   In particular since that node is still selected.
-			if(expand)this.tree._expandNode(targetWidget);
-		}
-		this.onDndCancel();
+                var ac=confirm("<%=getLocaleString("aceptmove", lang)%>");
+                if(ac)
+                {
+                    var f=showStatusURL('<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/drop.jsp?suri='+encodeURIComponent(childItem.id)+'&newp='+encodeURIComponent(newParentItem.id)+'&oldp='+encodeURIComponent(oldParentItem.id)+'&copy='+copy,true);
+                    if(f && !copy)
+                    {
+                        //model.pasteItem(childItem, oldParentItem, newParentItem, copy);
+                        pasteItemByURIs(childItem.id,oldParentItem.id,newParentItem.id);
+                        reloadTab(childItem.id);
+                        this.tree._expandNode(source.tree.dropNode);
+                    }
+                }
+            }
+        }
+        //console.log(this);
+        this.onDndCancel();
         this.isDragging=false;
         this.mouseDown=false;
-        this.containerState="";
-    </script>
+        this.containerState="";                                    
 
-    <script type="dojo/method" event="checkItemAcceptance" args="node,source">
+    </script>
+    <script type="dojo/method" event="checkItemAcceptance" args="node,source">    
+        //console.log("checkItemAcceptance");
+        //console.log(source);
+        //console.log(node);        
         //if(source.tree && source.tree.id == "collectionsTree"){
         //    return true;
         //}
         var ret=false;
         var dropNode = dijit.getEnclosingWidget(node);
         var dragNode = act_treeNode;
+
+        source.tree.dropNode=dropNode;
+        source.tree.dragNode=dragNode;
+
         //self.status="checkItemAcceptance-->dropNode"+dropNode+" dragSupport:"+dragNode.item.dragSupport;
         if(dropNode && dragNode)
         {
@@ -191,12 +162,12 @@
             var dropItem=dropNode.item;
             if(dragItem!=dropItem && !isParent(dragNode,dropNode) && matchDropLevel(dragNode,dropNode))
             {
-                for (var m in dropItem.dropacc)
+                for (var m in dropItem.dropacc) 
                 {
                     //alert(dropItem.dropacc[m]);
                     if(dragItem.type.toString()==dropItem.dropacc[m].toString())
                     {
-                        ret=true;
+                        ret=true;   
                     }
                 }
             }
@@ -207,11 +178,53 @@
         //self.status="checkItemAcceptance-->ret:"+ret;
         return ret;
     </script>
+    <script type="dojo/method" event="checkAcceptance" args="source,nodes">    
+        //console.log("checkAcceptance");
+        
+/*        
+        if(!this.onDndStartRegister)
+        {
+            this.onDndStartRegister=true;
+            this.onDndStart=function(source,nodes,copy)
+            {
+                console.log("onDndStart");
+                if(nodes[0].className.indexOf("dijitActive")==-1)
+                {
+                    this.stopDrag();
+                    //return false;
+                }  
+                //return true;
+            }
+        }                 
+*/    
+        //console.log(source);
+        //console.log(nodes);
+        //console.log(dojo);
+        //console.log(dijit);
+        //console.log(dojo.dnd.Manager());
+        //source.tree.dndController.stopDrag();           
+        
+        if(nodes[0].className.indexOf("dijitActive")==-1)
+        {
+            var manager=dojo.dnd.Manager();
+            
+            /*
+            //dojo.dnd.Manager().makeAvatar();
+            
+            manager.events = [];
+            if(manager.avatar!=null)manager.avatar.destroy();
+            manager.avatar = null;
+            manager.source = this.target = null;
+            manager.nodes = [];            
+            
+            return false;
+            //this.stopDrag();
+            */
+            throw "Nothing to Drag...";
+        }  
 
-    <script type="dojo/method" event="checkAcceptance" args="source,nodes">
-        //if (this.tree.id=="myTree"){
-        //    return false;
-        //}
+        //this.stopDrag();
+        
         act_treeNode=null;
         dojo.forEach(nodes, function(node, idx)
         {
@@ -231,8 +244,11 @@
         }
         return false;
     </script>
-/*
-    <script type="dojo/method" event="onDndStart" args="_1a,_1b,_1c">
+    <script type="dojo/method" event="onDndStart" args="a,b,c">    
+        //console.log("onDndStart");
+        //console.log(a);
+        //console.log(b);
+        //console.log(c);
         //alert("Hola");
         /*
         if(this.isSource){
@@ -246,8 +262,6 @@
         this.isDragging=true;
         */
     </script>
-*/
-
     <script type="dojo/method" event="getIconClass" args="item, opened">
         if(item)
         {
@@ -260,44 +274,30 @@
                 return "swbIconTemplateGroup";
             }
         }
-    </script>
-<!--
-    <script type="dojo/method" event="getLabel" args="item">
-        if(item)
-        {
-            return <%=store%>.getLabel(item);
-        }
-    </script>
--->
-<!--
-<script type="dojo/method" event="creator" args="item, hint">
-    var type = [];
-    var node = dojo.doc.createElement("span");
-    node.innerHTML = "hola";
-    node.id = dojo.dnd.getUniqueId();
-    return {node: node, data: item, type: type};
-</script>
--->
+    </script>    
     <script type="dojo/connect">
+        //console.log("connect");
+        registerTree(this);
+        
+        var menuEmpty = dijit.byId("<%=menu%>");
+        //menuEmpty.targetNodeIds=[this.domNode];
+        menuEmpty.selector=".dijitTreeNode";
+        menuEmpty.bindDomNode(this.domNode);
 
         <%=store%>.controllerURL="/swbadmin/jsp/Tree.jsp";
         dojo.dnd.Avatar.prototype._generateText = function()
         {
-            return (this.manager.copy ? "<%=getLocaleString("referencing",lang)%>" : "<%=getLocaleString("moving",lang)%>") +
+            return (this.manager.copy ? "<%=getLocaleString("referencing", lang)%>" : "<%=getLocaleString("moving", lang)%>") +
             " "+this.manager.nodes.length + " " +
-            (this.manager.nodes.length != 1 ? "<%=getLocaleString("nodes",lang)%>" : "<%=getLocaleString("node",lang)%>");
+            (this.manager.nodes.length != 1 ? "<%=getLocaleString("nodes", lang)%>" : "<%=getLocaleString("node", lang)%>");
         };
-
-        var menuEmpty = dijit.byId("<%=menu%>");
-
-        menuEmpty.bindDomNode(this.domNode);
-
-        registerTree(this);
-
+        
         dojo.connect(menuEmpty, "_openMyself", this, function(e)
         {
+            //alert("_openMyself");
             var treeNode = dijit.getEnclosingWidget(e.target);
-            act_treeNode=treeNode;
+            //console.log(treeNode.item);
+            treeNode.tree.dndController.onDndCancel();    
 
             var ch = menuEmpty.getChildren();
             //console.log("menu children is "+ch);
@@ -309,10 +309,9 @@
                     menuEmpty.removeChild(child);
                 });
             }
-
             if(treeNode.item.menus)
             {
-                //console.log("Adding new submenus");
+            //console.log("Adding new submenus");
                 for (var m in treeNode.item.menus)
                 {
                     var menu = treeNode.item.menus[m];
@@ -341,7 +340,8 @@
                     }
                     menuEmpty.addChild(sm);
                 }
-            }
+            }            
+            //console.log("End");
         });
     </script>
 </div>

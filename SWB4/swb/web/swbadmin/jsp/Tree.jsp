@@ -293,7 +293,6 @@
         arr.put(jobj);
 
         JSONArray childs=new JSONArray();
-        jobj.putOpt("children", childs);
 
         Iterator<SemanticObject> it=null;
         if(cls!=null)
@@ -398,6 +397,7 @@
                 events.put(getEvent("onOpen", getReloadAction()));
             }
         }
+        if(childs.length()>0)jobj.putOpt("children", childs);
     }
 
     //TODO:Separar en una clase treeController
@@ -503,7 +503,6 @@
 
         //hijos
         JSONArray childs=new JSONArray();
-        jobj.putOpt("children", childs);
 
         if(restype.getResourceMode()!=restype.MODE_CONTENT)
         {
@@ -550,6 +549,7 @@
                 events.put(getEvent("onOpen", getReloadAction()));
             }
         }
+        if(childs.length()>0)jobj.putOpt("children", childs);
     }
 
 
@@ -796,7 +796,6 @@
 
         //hijos
         JSONArray childs=new JSONArray();
-        jobj.putOpt("children", childs);
 
         if(!virtual)
         {
@@ -863,6 +862,7 @@
                 events.put(getEvent("onOpen", getReloadAction()));
             }
         }
+        if(childs.length()>0)jobj.putOpt("children", childs);
     }
 
 /****************************************************************************/
@@ -875,7 +875,6 @@
         arr.put(jobj);
 
         JSONArray childs=new JSONArray();
-        jobj.putOpt("children", childs);
 
         SemanticOntology ont=SWBPlatform.getSemanticMgr().getSchema();
         ArrayList<OntClass> carr=new ArrayList();
@@ -956,6 +955,7 @@
                 events.put(getEvent("onOpen", getReloadAction()));
             }
         }
+        if(childs.length()>0)jobj.putOpt("children", childs);
     }
 
     public void addHNProperties(JSONArray arr, HerarquicalNode node, SemanticObject obj, boolean addChilds, User user) throws JSONException
@@ -966,7 +966,6 @@
         arr.put(jobj);
 
         JSONArray childs=new JSONArray();
-        jobj.putOpt("children", childs);
 
         SemanticOntology ont=SWBPlatform.getSemanticMgr().getSchema();
         ArrayList<OntProperty> carr=new ArrayList();
@@ -1040,6 +1039,7 @@
                 events.put(getEvent("onOpen", getReloadAction()));
             }
         }
+        if(childs.length()>0)jobj.putOpt("children", childs);
     }
 
     public void addClass(JSONArray arr, OntClass cls, boolean addChilds, SemanticModel model, User user) throws JSONException
@@ -1055,7 +1055,6 @@
 
         //hijos
         JSONArray childs=new JSONArray();
-        jobj.putOpt("children", childs);
 
         //eventos
         JSONArray events=new JSONArray();
@@ -1082,6 +1081,7 @@
                 events.put(getEvent("onOpen", getReloadAction()));
             }
         }
+        if(childs.length()>0)jobj.putOpt("children", childs);
     }
 
     public void addProperty(JSONArray arr, OntProperty prop, boolean addChilds, SemanticModel model, User user) throws JSONException
@@ -1096,7 +1096,6 @@
 
         //hijos
         JSONArray childs=new JSONArray();
-        jobj.putOpt("children", childs);
 
         //eventos
         JSONArray events=new JSONArray();
@@ -1122,6 +1121,7 @@
                 events.put(getEvent("onOpen", getReloadAction()));
             }
         }
+        if(childs.length()>0)jobj.putOpt("children", childs);
     }
 /*
     public void addClasses(JSONArray arr, SemanticOntology ont)  throws JSONException

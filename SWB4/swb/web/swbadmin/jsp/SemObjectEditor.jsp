@@ -153,7 +153,8 @@ try
                 
                 out.println("<script type=\"text/javascript\">");
                 out.println("hideDialog();");
-                out.println("reloadTreeNodeByURI('"+ref.getURI()+"');");
+                if(!ref.instanceOf(SWBModel.sclass))out.println("reloadTreeNodeByURI('"+ref.getURI()+"');");                
+                else out.println("reloadTreeNode();");                
                 if(reloadTab!=null && reloadTab.equals("true"))out.println("reloadTab('"+ref.getURI()+"');");
                 out.println("showStatus('"+SWBUtils.TEXT.scape4Script(obj.getSemanticClass().getDisplayName(lang))+" creado');");
                 out.println("addNewTab('"+obj.getURI()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp"+"','"+SWBUtils.TEXT.scape4Script(obj.getDisplayName(lang))+"');");
