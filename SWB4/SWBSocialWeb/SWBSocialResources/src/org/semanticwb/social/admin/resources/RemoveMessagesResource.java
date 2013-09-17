@@ -189,7 +189,7 @@ public class RemoveMessagesResource extends GenericResource {
                         } catch (ParseException ex) {
                             ex.printStackTrace();
                         }
-                        //System.out.println("date J:"+date);
+                        //System.out.println("date JRemove:"+date);
                         if(date!=null)
                         {
                             Iterator<PostIn> itPostIns=PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
