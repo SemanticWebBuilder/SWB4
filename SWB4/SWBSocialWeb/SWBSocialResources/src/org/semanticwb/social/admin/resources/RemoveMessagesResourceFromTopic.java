@@ -6,7 +6,6 @@ package org.semanticwb.social.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,15 +19,16 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.PostIn;
-import org.semanticwb.social.Stream;
+import org.semanticwb.social.PostOut;
+import org.semanticwb.social.SocialTopic;
 
 /**
  *
- * @author francisco.jimenez
+ * @author jorge.jimenez
  */
-public class RemoveMessagesResource extends GenericResource {
+public class RemoveMessagesResourceFromTopic extends GenericResource {
 
-    private static Logger log = SWBUtils.getLogger(RemoveMessagesResource.class);
+    private static Logger log = SWBUtils.getLogger(RemoveMessagesResourceFromTopic.class);
     
     private static String Action_REMOVEWOTOPIC="removewotopic";
     
@@ -37,22 +37,22 @@ public class RemoveMessagesResource extends GenericResource {
         PrintWriter out = response.getWriter();
         String objUri = request.getParameter("suri");
         if(objUri!= null){
-            Stream stream = (Stream)SemanticObject.getSemanticObject(objUri).getGenericInstance();
-            String wsiteId = stream.getSemanticObject().getModel().getName();
+            SocialTopic socialTopic = (SocialTopic)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+            String wsiteId = socialTopic.getSemanticObject().getModel().getName();
             WebSite wsite=WebSite.ClassMgr.getWebSite(wsiteId);
-            //Iterator<PostIn> itPostIn = PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
+            //Iterator<PostIn> itPostIn = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, wsite);
             //long noOfMessages = SWBUtils.Collections.sizeOf(itPostIn);
-            long StreamPostIns = wsite.getSemanticModel().countStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), null);
+            long SocialTopicPostIns = wsite.getSemanticModel().countStatements(null, PostIn.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId());
             out.println("<div class=\"swbform\">");
             //out.println("<form type=\"dijit.form.Form\" id=\"del\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"submitForm('del'); return false;\">");            
-            out.println("<form type=\"dijit.form.Form\" id=\"del" + stream.getId() +"\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes serán eliminados.')){submitForm('del" + stream.getId() + "'); return false;}else{return false;}\">");            
+            out.println("<form type=\"dijit.form.Form\" id=\"del" + socialTopic.getId() +"\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes serán eliminados.')){submitForm('del" + socialTopic.getId() + "'); return false;}else{return false;}\">");            
             out.println("<table width=\"100%\" border=\"0px\">");            
             out.println("   <tr>");
-            out.println("       <td style=\"text-align: center;\">El Stream <b>" + stream.getDisplayTitle(paramRequest.getUser().getLanguage())  + "</b> actualmente contiene en total <b>" + StreamPostIns +  "</b> mensajes</td>");        
+            out.println("       <td style=\"text-align: center;\">El Tema <b>" + socialTopic.getDisplayTitle(paramRequest.getUser().getLanguage())  + "</b> actualmente contiene en total <b>" + SocialTopicPostIns +  "</b> mensajes de entrada</td>");        
             out.println("   </tr>");
-            if(StreamPostIns >0L){
+            if(SocialTopicPostIns >0L){
                 out.println("   <tr>");
-                out.println("       <td style=\"text-align: center;\">¿Eliminar todos los mensajes?</td>");
+                out.println("       <td style=\"text-align: center;\">¿Eliminar mensajes de entrada?</td>");
                 out.println("   </tr>");
                 out.println("   <tr>");
                 out.println("       <td style=\"text-align: center;\"><button dojoType=\"dijit.form.Button\" type=\"submit\">Eliminar</button></td>");
@@ -64,33 +64,22 @@ public class RemoveMessagesResource extends GenericResource {
             out.println("</form>");
             out.println("</div>");
             
-            //Solo mensajes sin Tema
-            /*
-            ArrayList aList=new ArrayList();
-            Iterator <PostIn> itPostInWOTopic=PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
-            while(itPostInWOTopic.hasNext())
-            {
-                PostIn postIn=itPostInWOTopic.next();
-                if(postIn.getSocialTopic()==null) aList.add(postIn.getURI());
-            }*/
-            ArrayList aList=new ArrayList();
-            Iterator <PostIn> itPostInWOTopic=PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
-            while(itPostInWOTopic.hasNext())
-            {
-                PostIn postIn=itPostInWOTopic.next();
-                if(postIn.getSocialTopic()==null) aList.add(postIn.getURI());
-            }
+            //Solo mensajes de salida en el tema
+            
+            long lSocialTopicPostOut = wsite.getSemanticModel().countStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId());
+            //Iterator <PostOut> itPostOutInTopic=PostOut.ClassMgr.listPostOutBySocialTopic(socialTopic, wsite);
+            //long lSocialTopicPostOut = SWBUtils.Collections.sizeOf(itPostOutInTopic);
             
             out.println("<div class=\"swbform\">");
             //out.println("<form type=\"dijit.form.Form\" id=\"del\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"submitForm('del'); return false;\">");            
-            out.println("<form type=\"dijit.form.Form\" id=\"delwotopic" + stream.getId() + "\" action=\"" +  paramRequest.getActionUrl().setAction(Action_REMOVEWOTOPIC).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes serán eliminados.')){submitForm('delwotopic" + stream.getId() + "'); return false;}else{return false;}\">");            
+            out.println("<form type=\"dijit.form.Form\" id=\"delwotopic" + socialTopic.getId() + "\" action=\"" +  paramRequest.getActionUrl().setAction(Action_REMOVEWOTOPIC).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes serán eliminados.')){submitForm('delwotopic" + socialTopic.getId() + "'); return false;}else{return false;}\">");            
             out.println("<table width=\"100%\" border=\"0px\">");            
             out.println("   <tr>");
-            out.println("       <td style=\"text-align: center;\">El Stream <b>" + stream.getDisplayTitle(paramRequest.getUser().getLanguage())  + "</b> actualmente contiene <b>" + aList.size() +  "</b> mensajes sin Tema</td>");        
+            out.println("       <td style=\"text-align: center;\">El Tema <b>" + socialTopic.getDisplayTitle(paramRequest.getUser().getLanguage())  + "</b> actualmente contiene <b>" + lSocialTopicPostOut +  "</b> mensajes de salida</td>");        
             out.println("   </tr>");
-            if(StreamPostIns >0L){
+            if(lSocialTopicPostOut >0L){
                 out.println("   <tr>");
-                out.println("       <td style=\"text-align: center;\">¿Eliminar todos los mensajes sin tema?</td>");
+                out.println("       <td style=\"text-align: center;\">¿Eliminar todos los mensajes de salida?</td>");
                 out.println("   </tr>");
                 out.println("   <tr>");
                 out.println("       <td style=\"text-align: center;\"><button dojoType=\"dijit.form.Button\" type=\"submit\">Eliminar</button></td>");
@@ -109,22 +98,6 @@ public class RemoveMessagesResource extends GenericResource {
                 out.println("</script>");
             }
         }
-        /*
-        out.println("Selecciona la red social: <br/>");
-        out.println("<select name=\"socialNet\"  data-dojo-type=\"dijit.form.Select\">");
-        while(socialNets.hasNext()){
-            SocialNetwork socialNet = socialNets.next();            
-            out.println("<option value\"" + socialNet.getURI() + "\">" + socialNet.getTitle() + "</option>");
-        }
-        out.println("</select>");
-        */
-        /*        
-        Iterator<MessageIn> itposts = MessageIn.ClassMgr.listMessageIns(wsite);
-        MessageIn.ClassMgr.listMessageInByPostInSocialNetwork(null);
-        
-        long el = SWBUtils.Collections.sizeOf(itposts);
-        */
-
     }
 
     @Override
@@ -134,10 +107,10 @@ public class RemoveMessagesResource extends GenericResource {
         if(mode.equals(SWBResourceURL.Action_REMOVE)){
             if(objUri!= null){
                 try{
-                    Stream stream = (Stream)SemanticObject.getSemanticObject(objUri).getGenericInstance();
-                    String wsiteId = stream.getSemanticObject().getModel().getName();
+                    SocialTopic socialTopic = (SocialTopic)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+                    String wsiteId = socialTopic.getSemanticObject().getModel().getName();
                     WebSite wsite=WebSite.ClassMgr.getWebSite(wsiteId);
-                    Iterator<PostIn> itPostIn = PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
+                    Iterator<PostIn> itPostIn = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, wsite);
                     while(itPostIn.hasNext()){
                         PostIn postIn=itPostIn.next();
                         postIn.remove();
@@ -145,26 +118,22 @@ public class RemoveMessagesResource extends GenericResource {
                 }catch(Exception e){
                     log.error(e.getMessage());
                 }
-            }else{
-                System.out.println("No suitable value for 'suri'");
             }
         }else if(mode.equals(Action_REMOVEWOTOPIC)) //Elimina PostIn que se encuentren en un cierto stream y que no tengan un SocialTopic asociado.
         {
             if(objUri!= null){
                 try{
-                    Stream stream = (Stream)SemanticObject.getSemanticObject(objUri).getGenericInstance();
-                    String wsiteId = stream.getSemanticObject().getModel().getName();
+                    SocialTopic socialTopic = (SocialTopic)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+                    String wsiteId = socialTopic.getSemanticObject().getModel().getName();
                     WebSite wsite=WebSite.ClassMgr.getWebSite(wsiteId);
-                    Iterator<PostIn> itPostIn = PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
-                    while(itPostIn.hasNext()){
-                        PostIn postIn=itPostIn.next();
-                        if(postIn.getSocialTopic()==null) postIn.remove();
+                    Iterator<PostOut> itPostOut = PostOut.ClassMgr.listPostOutBySocialTopic(socialTopic, wsite);
+                    while(itPostOut.hasNext()){
+                        PostOut postOut=itPostOut.next();
+                        postOut.remove();
                     }
                 }catch(Exception e){
                     log.error(e.getMessage());
                 }
-            }else{
-                System.out.println("No suitable value for 'suri'");
             }
         }
         response.setRenderParameter("suri", objUri);
