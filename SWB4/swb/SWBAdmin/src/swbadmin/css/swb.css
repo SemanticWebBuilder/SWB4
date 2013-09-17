@@ -605,7 +605,7 @@ th {
     font-size: 1.1em;
     color: #333;
     font: normal 100% "Lucida Grande", Helvetica, Verdana, Arial;
-    background: url(../images/swbform-fieldset.png) left bottom repeat-x;
+    /*background: url(../images/swbform-fieldset.png) left bottom repeat-x;*/
 }
 
 .swbform legend,
