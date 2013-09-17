@@ -170,7 +170,7 @@ public class TimeElement extends org.semanticwb.model.base.TimeElementBase {
             }
 
             if (DOJO) {
-                ret.append(" required=\"" + required + "\"");
+                if(required)ret.append(" required=\"" + required + "\"");
             }
 
 //          ret.append(" propercase=\"true\"");

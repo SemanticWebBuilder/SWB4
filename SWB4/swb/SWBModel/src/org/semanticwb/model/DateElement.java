@@ -157,7 +157,7 @@ public class DateElement extends org.semanticwb.model.base.DateElementBase {
 
             if (DOJO) {
                 ret.append(" dojoType=\"dijit.form.DateTextBox\"");
-                ret.append(" required=\"" + required + "\"");
+                if(required)ret.append(" required=\"" + required + "\"");
                 ret.append(" promptMessage=\"" + pmsg + "\"");
                 ret.append(" invalidMessage=\"" + imsg + "\"");
 

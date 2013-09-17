@@ -144,7 +144,7 @@ public class Text extends TextBase {
             }
 
             if (DOJO) {
-                ret.append(" required=\"" + required + "\"");
+                if(required)ret.append(" required=\"" + required + "\"");
             }
 
 //          ret.append(" propercase=\"true\"");

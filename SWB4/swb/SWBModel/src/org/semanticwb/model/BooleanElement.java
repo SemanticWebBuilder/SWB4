@@ -122,7 +122,7 @@ public class BooleanElement extends org.semanticwb.model.base.BooleanElementBase
                     ret.append("<input type=\"checkbox\" id_=\"").append(name).append("\" name=\"").append(name).append("\" ").append(checked);
                     if (DOJO) {
                         ret.append(" dojoType=\"dijit.form.CheckBox\"");
-                        ret.append(" required=\"").append(required).append("\"");
+                        if(required)ret.append(" required=\"").append(required).append("\"");
                         ret.append(" promptMessage=\"").append(pmsg).append("\"");
                         ret.append(" invalidMessage=\"").append(imsg).append("\"");
                     }
@@ -135,7 +135,7 @@ public class BooleanElement extends org.semanticwb.model.base.BooleanElementBase
                     ret.append("<select id_=\"").append(name).append("\" name=\"").append(name).append("\" ");
                     if (DOJO) {
                         ret.append(" dojoType=\"dijit.form.FilteringSelect\"");
-                        ret.append(" required=\"").append(required).append("\"");
+                        if(required)ret.append(" required=\"").append(required).append("\"");
                         ret.append(" promptMessage=\"").append(pmsg).append("\"");
                         ret.append(" invalidMessage=\"").append(imsg).append("\"");
                     }
@@ -151,7 +151,7 @@ public class BooleanElement extends org.semanticwb.model.base.BooleanElementBase
                     ret.append("<input type=\"radio\" id_=\"").append(name).append("\" id=\"").append(name).append("_True\" name=\"").append(name).append("\" ").append(value?"checked=\"checked\"":"").append(" value=\"true\"");
                     if (DOJO) {
                         ret.append(" dojoType=\"dijit.form.RadioButton\"");
-                        ret.append(" required=\"").append(required).append("\"");
+                        if(required)ret.append(" required=\"").append(required).append("\"");
                         ret.append(" promptMessage=\"").append(pmsg).append("\"");
                         ret.append(" invalidMessage=\"").append(imsg).append("\"");
                     }
@@ -165,7 +165,7 @@ public class BooleanElement extends org.semanticwb.model.base.BooleanElementBase
                     ret.append("<input type=\"radio\" id_=\"").append(name).append("\" id=\"").append(name).append("_False\" name=\"").append(name).append("\" ").append(!value?"checked=\"checked\"":"").append(" value=\"false\"");
                     if (DOJO) {
                         ret.append(" dojoType=\"dijit.form.RadioButton\"");
-                        ret.append(" required=\"").append(required).append("\"");
+                        if(required)ret.append(" required=\"").append(required).append("\"");
                         ret.append(" promptMessage=\"").append(pmsg).append("\"");
                         ret.append(" invalidMessage=\"").append(imsg).append("\"");
                     }
@@ -199,7 +199,7 @@ public class BooleanElement extends org.semanticwb.model.base.BooleanElementBase
                     }
 
                     if (!mode.equals("filter") || DOJO) {
-                        ret.append(" required=\"").append(required).append("\"");
+                        if(required)ret.append(" required=\"").append(required).append("\"");
                     }
 
                     // + " propercase=\"true\""

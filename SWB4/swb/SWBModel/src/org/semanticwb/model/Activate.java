@@ -129,7 +129,7 @@ public class Activate extends org.semanticwb.model.base.ActivateBase
                     ret.append(" dojoType=\"dijit.form.CheckBox\"");
                 }
 
-                if (DOJO) {
+                if (DOJO && required) {
                     ret.append(" required=\"" + required + "\"");
                 }
 

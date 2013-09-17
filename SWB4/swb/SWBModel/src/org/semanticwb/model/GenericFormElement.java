@@ -192,7 +192,7 @@ public class GenericFormElement extends FormElementBase {
                     ret.append(" dojoType=\"dijit.form.CheckBox\"");
                 }
 
-                if (DOJO) {
+                if (DOJO && required) {
                     ret.append(" required=\"" + required + "\"");
                 }
 
@@ -248,7 +248,7 @@ public class GenericFormElement extends FormElementBase {
                     }
 
                     if (!mode.equals("filter") && DOJO) {
-                        ret.append(" required=\"" + required + "\"");
+                        if(required)ret.append(" required=\"" + required + "\"");
                     }
 
                     // + " propercase=\"true\""
@@ -299,7 +299,7 @@ public class GenericFormElement extends FormElementBase {
                     }
 
                     if (!mode.equals("filter") || DOJO) {
-                        ret.append(" required=\"" + required + "\"");
+                        if(required)ret.append(" required=\"" + required + "\"");
                     }
 
                     // + " propercase=\"true\""

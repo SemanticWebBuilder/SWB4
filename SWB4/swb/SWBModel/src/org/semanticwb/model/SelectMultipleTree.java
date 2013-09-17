@@ -211,7 +211,7 @@ private String addObject(SemanticObject obj, ArrayList<String> vals, String lang
                 //    ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+ imsg + "\"");
                 }
 
-                ret.append(" required=\"" + required + "\"");
+                if(required)ret.append(" required=\"" + required + "\"");
 
 //                if (isNullSupport() && ((uri == null) || (uri.length() == 0))) {
 //                    ret.append(" displayedvalue=\"\"");

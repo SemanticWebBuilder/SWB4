@@ -194,7 +194,7 @@ private String addObject(SemanticObject obj, String selected, String lang, Strin
                                + imsg + "\"");
                 }
 
-                ret.append(" required=\"" + required + "\"");
+                if(required)ret.append(" required=\"" + required + "\"");
 
                 if (isBlankSuport() && ((uri == null) || (uri.length() == 0))) {
                     ret.append(" displayedvalue=\"\"");
