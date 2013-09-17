@@ -56,19 +56,8 @@ public class SelectOneUserByRoleGroup extends org.semanticwb.bsc.formelement.bas
         if (obj == null) {
             obj = new SemanticObject();
         }
-
-//        boolean IPHONE = false;
-//        boolean XHTML  = false;
-        boolean DOJO   = false;
-
-//        if (type.equals("iphone")) {
-//            IPHONE = true;
-//        } else if (type.equals("xhtml")) {
-//            XHTML = true;
-//        } else
-        if (type.equals("dojo")) {
-            DOJO = true;
-        }
+        
+        boolean dojo = type.equalsIgnoreCase("dojo");
 
         StringBuilder  ret          = new StringBuilder();
         String         name         = propName;
@@ -79,69 +68,33 @@ public class SelectOneUserByRoleGroup extends org.semanticwb.bsc.formelement.bas
         String         imsg         = null;
         String         selectValues = null;
         boolean        disabled     = false;
-
-System.out.println("\n\n SelectOneUserByRoleGroup...");
-System.out.println("obj="+obj);
-System.out.println("prop="+prop);
-System.out.println("propName="+propName);
-System.out.println("type="+type);
-System.out.println("mode="+mode);
-System.out.println("lang="+lang);
-System.out.println("sobj="+sobj);
-        
         
         if (sobj != null) {
             DisplayProperty dobj = new DisplayProperty(sobj);
-System.out.println("dobj="+dobj);
             pmsg         = dobj.getPromptMessage();
             imsg         = dobj.getInvalidMessage();
-System.out.println("pmsg="+pmsg);
-System.out.println("imsg="+imsg);
             selectValues = dobj.getDisplaySelectValues(lang);
             disabled     = dobj.isDisabled();
         }
-
-/*
-        System.out.println("prop:"+prop);
-        System.out.println("sobj:"+sobj);
-        System.out.println("selectValues:"+selectValues);
-*/
-        if (DOJO) {
-            if (imsg == null) {
-                if (required) {
-                    imsg = label + " es requerido.";
-
-                    if (lang.equals("en")) {
-                        imsg = label + " is required.";
-                    }
-                } else {
-                    imsg = "Dato invalido.";
-
-                    if (lang.equals("en")) {
-                        imsg = "Invalid data.";
-                    }
+        
+        if(dojo) {
+            if(imsg == null) {
+                if(required) {
+                    imsg = label + ("en".equals(lang)?" is required.":" is required.");
+                }else {
+                    imsg = "en".equals(lang)?"Invalid data.":"Dato incorrecto.";
                 }
             }
-
-            if (pmsg == null) {
-                pmsg = "Captura " + label + ".";
-
-                if (lang.equals("en")) {
-                    pmsg = "Enter " + label + ".";
-                }
+            if(pmsg == null) {
+                pmsg = ("en".equals(lang)?"Enter ":"Captura ") + label + ".";
             }
         }
 
-        String ext = "";
+        String ext = disabled?" disabled=\"disabled\"":"";
 
-        if (disabled) {
-            ext += " disabled=\"disabled\"";
-        }
-System.out.println("prop.isObjectProperty()="+prop.isObjectProperty());
         if (prop.isObjectProperty()) {
             SemanticObject val = null;
             String aux = request.getParameter(propName);
-System.out.println("aux="+aux);
             if (aux != null) {
                 val = SemanticObject.createSemanticObject(aux);
             } else {
@@ -163,7 +116,7 @@ System.out.println("aux="+aux);
             if (mode.equals("edit") || mode.equals("create") || mode.equals("filter")) {
                 ret.append("<select name=\"" + name + "\"");
 
-                if (DOJO) {
+                if (dojo) {
                     ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""
                                + imsg + "\" promptMessage=\""+pmsg+"\"" 
                                + " value=\""+uri+"\"");
@@ -189,9 +142,7 @@ System.out.println("aux="+aux);
                 }
 
                 SemanticClass            cls = prop.getRangeClass();
-System.out.println("cls="+cls);
                 Iterator<SemanticObject> it  = null;
-
                 if (isGlobalScope()) {
                     if (cls != null) {
                         it = SWBComparator.sortSemanticObjects(lang, cls.listInstances());
@@ -201,14 +152,10 @@ System.out.println("cls="+cls);
                     }
                 } else if (isUserRepository()) {
                     SemanticModel model = getModel();
-System.out.println("--model="+model);
                     if (getFilterModelId() != null && getFilterModelId().length() > 0) {
                         model = SWBPlatform.getSemanticMgr().getModel(getFilterModelId());
-                    }
-System.out.println("--model="+model);                    
+                    }    
                     SWBModel      m     = (SWBModel) model.getModelObject().createGenericInstance();
-System.out.println("--m="+m);
-                    //System.out.println("Modelo inicial:"+m.getId());
                     if (m instanceof WebSite) {
                         m     = ((WebSite) m).getUserRepository();
                         model = m.getSemanticObject().getModel();
@@ -219,8 +166,6 @@ System.out.println("--m="+m);
                             model = m.getSemanticObject().getModel();
                         }
                     }
-                    //System.out.println("Modelo final:"+m.getId());
-
                     it = SWBComparator.sortSemanticObjects(lang, model.listInstancesOfClass(cls));
                 } else {
                     SemanticModel model = getModel();
@@ -248,7 +193,6 @@ System.out.println("--m="+m);
                         
                         if(!deleted)
                         {
-                            // System.out.println("display:"+sob.getDisplayName(lang));
                             if (sob.getURI() != null) {
                                 ret.append("<option value=\"" + sob.getURI() + "\" ");
 
@@ -285,7 +229,7 @@ System.out.println("--m="+m);
                 if (mode.equals("edit") || mode.equals("create")) {
                     ret.append("<select name=\"" + name + "\"");
 
-                    if (DOJO) {
+                    if (dojo) {
                         ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""
                                 + imsg + "\"");
                     }
@@ -350,11 +294,7 @@ System.out.println("--m="+m);
         boolean ret = true;
         if (filter_obj != null) {
             filterUser = (User) filter_obj.createGenericInstance();
-        } 
-         
-System.out.println("filterObject...."); 
-System.out.println("filterRoleIds="+getFilterRoleIds()); 
-System.out.println("filterUserGroupId="+getFilterUserGroupId()); 
+        }
         
         //No se especificó un grupo o roles para filtrar
         if ((getFilterRoleIds() == null || getFilterRoleIds().trim().length() == 0) && (getFilterUserGroupId() == null || getFilterUserGroupId().trim().length() == 0)) {
