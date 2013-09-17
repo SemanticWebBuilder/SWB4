@@ -10,6 +10,13 @@
         //ret=SWBUtils.TEXT.replaceAll(ret, "eng:", URLEncoder.encode("http://www.owl-ontologies.com/oqp_engine.owl#"));
         return ret;
     }    
+    
+    String replaceId(String id)
+    {
+        id=id.substring(id.lastIndexOf('/')+1);
+        id=id.replace('#', ':');        
+        return id;
+    }
 
 %>
 <%
@@ -20,7 +27,7 @@
         return;
     }
 %>
-<%
+<%    
     String lang="es";
     if(user!=null)lang=user.getLanguage();
     response.setHeader("Cache-Control", "no-cache"); 
@@ -37,12 +44,20 @@
 
     //Div dummy para detectar evento de carga y modificar titulo
     String icon=SWBContext.UTILS.getIconClass(obj);
-    out.println("<div dojoType=\"dijit.layout.ContentPane\" postCreate=\"setTabTitle('"+id+"','"+SWBUtils.TEXT.scape4Script(obj.getDisplayName(lang))+"','"+icon+"');\" />");
+    out.println("<div dojoType=\"dijit.layout.ContentPane\"  postCreate=\"setTabTitle('"+id+"','"+SWBUtils.TEXT.scape4Script(obj.getDisplayName(lang))+"','"+icon+"');\" />");
 
-    out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style_=\"border:0px; width:100%; height:100%\" id=\""+id+"/tab2\" _tabPosition=\"bottom\" nested_=\"true\" _selectedChild=\"btab1\" onButtonClick_=\"alert('click');\" onLoad_=\"alert('Hola');\">");
+    out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" id=\""+replaceId(id)+"_tab2\">");
 
+    //TODO:Modificar este codigo para recarga de clases, posible cambio por onLoad
+    out.println("    <script type=\"dojo/connect\">");
+    out.println("       this.watch(\"selectedChildWidget\", function(name, oval, nval){");
+    out.println("           onClickTab(nval);");
+    out.println("       });    ");
+    out.println("    </script>");    
+    
     Iterator<ObjectBehavior> obit=SWBComparator.sortSermanticObjects(ObjectBehavior.ClassMgr.listObjectBehaviors(adm));
     //Iterator<ObjectBehavior> obit=SWBComparator.sortSermanticObjects(new GenericIterator(ObjectBehavior.swbxf_ObjectBehavior, obj.getModel().listInstancesOfClass(ObjectBehavior.swbxf_ObjectBehavior)));
+
     while(obit.hasNext())
     {
         ObjectBehavior ob=obit.next();
@@ -138,7 +153,7 @@
 
             //out.println("<div dojoType=\"dojox.layout.ContentPane\" title=\""+title+"\" _style=\"display:true;padding:10px;\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" executeScripts=\"true\">");
             //System.out.println("url:"+url+"?"+params);
-            out.println("<div id=\""+aux.getURI()+"/"+ob.getId()+"\" dojoType=\"dijit.layout.ContentPane\" title=\""+title+"\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\" onLoad=\"onLoadTab(this);\">");
+            out.println("<div id_=\""+aux.getURI()+"/"+ob.getId()+"\" dojoType=\"dijit.layout.ContentPane\" title=\""+title+"\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
             //out.println("    <script type=\"dojo/connect\">");
             //out.println("       dojo.connect(this.controlButton, \"onClick\", onClickTab);");
             //out.println("    </script>");
@@ -151,5 +166,5 @@
         }
     }
 
-    out.println("</div><!-- end Bottom TabContainer -->");
+    out.println("</div><!-- end Bottom TabContainer -->");   
 %>

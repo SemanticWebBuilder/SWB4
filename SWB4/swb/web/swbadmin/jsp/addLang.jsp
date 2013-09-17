@@ -63,7 +63,7 @@
                 <td align="right">
                     <label for="title"><%=getLocaleString("title",lang)%> <em>*</em></label>
                 </td><td>
-                    <input type="text" id="swb_create_title" name="title" dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="<%=getLocaleString("enter",lang)%> <%=getLocaleString("title",lang)%>." invalidMessage="<%=getLocaleString("title",lang)%> <%=getLocaleString("invalid",lang)%>." trim="true"/>
+                    <input type="text" id="swb_create_title" name="title" dojoType="dijit.form.TextBox" required="true" promptMessage="<%=getLocaleString("enter",lang)%> <%=getLocaleString("title",lang)%>." invalidMessage="<%=getLocaleString("title",lang)%> <%=getLocaleString("invalid",lang)%>." trim="true"/>
 	            </td>
             </tr>
             <tr>
