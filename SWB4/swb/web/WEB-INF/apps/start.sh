@@ -1,6 +1,6 @@
 #!/bin/sh
 
-JAVA_OPTS="-Xss256k -Xms64m -Xmx512m -Dfile.encoding=ISO8859-1"
+JAVA_OPTS="-Xss256k -Xms64m -Xmx512m -XX:MaxPermSize=128m -Dfile.encoding=ISO8859-1"
 export JAVA_OPTS
 
 # The two previous lines should be ajusted as needed
