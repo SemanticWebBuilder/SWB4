@@ -667,10 +667,10 @@ public class SemanticModel
      * @param r Resource
      * @param p Propery
      * @param o RDFNode
-     * @param stype ClassID
+     * @param stype ClassGroupID
      * @param limit limite de registros
      * @param offset Desplazamiento de los registros
-     * @param sortby campo de ordenamiento valores: "subj", "prop", "obj", "sort", "timems"
+     * @param sortby campo de ordenamiento valores: "subj", "prop", "obj", "sort", "timems", "stype"
      * @return Iterador de Statements
      */
     public StmtIterator listStatements(Resource r, Property p, RDFNode o, String stype, Long limit, Long offset, String sortby)

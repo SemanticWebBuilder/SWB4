@@ -269,7 +269,14 @@ public class SemanticLiteral
         Double ret=null;
         if(literal!=null)
         {
-            ret=literal.getDouble();
+            try
+            {            
+                ret=literal.getDouble();
+            }catch(NumberFormatException e)
+            {
+                log.error("Error parsing double value...",e);
+                ret=0D;
+            }
         }else if(m_obj instanceof Double)
         {
             ret=(Double)m_obj;
@@ -287,8 +294,15 @@ public class SemanticLiteral
     {
         Float ret=null;
         if(literal!=null)
-        {
-            ret=literal.getFloat();
+        {            
+            try
+            {
+                ret=literal.getFloat();
+            }catch(NumberFormatException e)
+            {
+                log.error("Error parsing float value...",e);
+                ret=0F;
+            }
         }else if(m_obj instanceof Float)
         {
             ret=(Float)m_obj;
@@ -307,7 +321,14 @@ public class SemanticLiteral
         Integer ret=null;
         if(literal!=null)
         {
-            ret=literal.getInt();
+            try
+            {            
+                ret=literal.getInt();
+            }catch(NumberFormatException e)
+            {
+                log.error("Error parsing int value...",e);
+                ret=0;
+            }
         }else if(m_obj instanceof Long)
         {
             ret=((Long)m_obj).intValue();
