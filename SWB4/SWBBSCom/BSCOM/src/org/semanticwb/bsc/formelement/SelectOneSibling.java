@@ -3,11 +3,13 @@ package org.semanticwb.bsc.formelement;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.bsc.accessory.Period;
+import org.semanticwb.model.Activeable;
 import org.semanticwb.model.DisplayProperty;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBModel;
+import org.semanticwb.model.Trashable;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
@@ -183,10 +185,18 @@ public class SelectOneSibling extends org.semanticwb.bsc.formelement.base.Select
     public boolean filterObject(HttpServletRequest request, SemanticObject base_obj, SemanticObject filter_obj, SemanticProperty prop, String propName, String type, String mode, String lang) {
         boolean exclude = true;
         if(filter_obj!=null) {
-            if(filter_obj.createGenericInstance() instanceof SWBClass) {
-                exclude = ((SWBClass)filter_obj.createGenericInstance()).isValid();
+            GenericObject gobj = filter_obj.createGenericInstance();
+            if(gobj instanceof SWBClass) {
+                exclude = !((SWBClass)filter_obj.createGenericInstance()).isValid();
+            }else {
+                if(gobj instanceof Activeable) {
+                    exclude = !((Activeable)gobj).isActive();
+                }
+                if(!exclude && (gobj instanceof Trashable)) {
+                    exclude = ((Trashable) gobj).isDeleted();
+                }
             }
-            exclude =  !exclude || base_obj.equals(filter_obj);
+            exclude =  exclude || base_obj.equals(filter_obj);
         }
 //        if(!exclude) {
 //            SemanticProperty prp;
