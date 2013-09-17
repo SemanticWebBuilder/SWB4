@@ -113,7 +113,7 @@ public class SelectOneSibling extends org.semanticwb.bsc.formelement.base.Select
                     ret.append("<option");
                     ret.append(" value=\"\"></option>");
                 }
-
+                
                 SemanticClass cls = prop.getRangeClass();
                 Iterator<SemanticObject> it = null;
                 if(isGlobalScope())
@@ -182,8 +182,11 @@ public class SelectOneSibling extends org.semanticwb.bsc.formelement.base.Select
     @Override
     public boolean filterObject(HttpServletRequest request, SemanticObject base_obj, SemanticObject filter_obj, SemanticProperty prop, String propName, String type, String mode, String lang) {
         boolean exclude = true;
-        if(filter_obj!=null && filter_obj.createGenericInstance() instanceof SWBClass) {
-            exclude =  !((SWBClass)filter_obj.createGenericInstance()).isValid() || base_obj.equals(filter_obj);
+        if(filter_obj!=null) {
+            if(filter_obj.createGenericInstance() instanceof SWBClass) {
+                exclude = ((SWBClass)filter_obj.createGenericInstance()).isValid();
+            }
+            exclude =  !exclude || base_obj.equals(filter_obj);
         }
 //        if(!exclude) {
 //            SemanticProperty prp;
@@ -192,7 +195,6 @@ public class SelectOneSibling extends org.semanticwb.bsc.formelement.base.Select
 //            while(it.hasNext() && !exclude) {
 //                prp = it.next();
 //                if(prp.isObjectProperty() && prp.getRangeClass().equals(cls) && base_obj.getObjectProperty(prp)!=null) {       
-//                    System.out.println("prop "+prp+" es tambien de "+cls);
 //                    exclude =  base_obj.getObjectProperty(prp).equals(filter_obj);
 //                }
 //            }
