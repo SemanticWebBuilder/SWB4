@@ -862,18 +862,18 @@
   <owl:ObjectProperty rdf:ID="parentObjective">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_parentObjective">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >26</swb:index>
-        <rdfs:label xml:lang="en">Aligned</rdfs:label>
-        <rdfs:label xml:lang="es">Alineado a</rdfs:label>
         <swbxf:formElement>
-          <bsc:ObjectiveAlignment rdf:ID="SelectOne_Objetivos_1">
-            <bsc:classnameToUse rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >bsc:Objective</bsc:classnameToUse>
+          <bsc:ObjectiveAlignment rdf:ID="selectOneObjective">
             <swbxf:so_nullSuport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >true</swbxf:so_nullSuport>
+            <bsc:classnameToUse rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >bsc:Objective</bsc:classnameToUse>
           </bsc:ObjectiveAlignment>
         </swbxf:formElement>
+        <rdfs:label xml:lang="en">Aligned</rdfs:label>
+        <rdfs:label xml:lang="es">Alineado a</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >26</swb:index>
         <swbxf:propInvalidMessage xml:lang="es">Objetivo incorrecto</swbxf:propInvalidMessage>
         <swbxf:propInvalidMessage xml:lang="en">Objective is not correct</swbxf:propInvalidMessage>
         <swbxf:propPromptMessage xml:lang="es">Objetivo de alineación</swbxf:propPromptMessage>
