@@ -51,51 +51,41 @@ public class ObjectiveAlignment extends ObjectiveAlignmentBase {
         if (obj == null) {
             obj = new SemanticObject();
         }
-        boolean isDojoType = false;
-        if (type.equals("dojo")) {
-            isDojoType = true;
-        }
-
-        StringBuilder ret = new StringBuilder(128);
-        String name = propName;
-        String label = prop.getDisplayName(lang);
-        SemanticObject sobj = prop.getDisplayProperty();
-        boolean isRequired = prop.isRequired();
-        String imsg = null;
-        boolean isDisabled = false;
-        String parentObjUri = "";
-        String displayedValue = "";
+        
+        boolean dojo = type.equalsIgnoreCase("dojo");
+        
+        StringBuilder  ret      = new StringBuilder();
+        String         name     = propName;
+        String         label    = prop.getDisplayName(lang);
+        SemanticObject sobj     = prop.getDisplayProperty();
+        boolean        required = prop.isRequired();
+        String         pmsg     = null;
+        String         imsg     = null;
+        boolean        disabled = false;
         
         if (sobj != null) {
             DisplayProperty dobj = new DisplayProperty(sobj);
+            pmsg = dobj.getPromptMessage(lang);
             imsg = dobj.getInvalidMessage();
-            isDisabled = dobj.isDisabled();
+            disabled = dobj.isDisabled();
         }
         
         SemanticObject value = null;
         
-        if (isDojoType) {
-            if (imsg == null) {
-                if (isRequired) {
-                    imsg = label + " es requerido.";
-
-                    if (lang.equals("en")) {
-                        imsg = label + " is required.";
-                    }
-                } else {
-                    imsg = "Dato invalido.";
-
-                    if (lang.equals("en")) {
-                        imsg = "Invalid datum.";
-                    }
+        if(dojo) {
+            if(imsg == null) {
+                if(required) {
+                    imsg = label + ("en".equals(lang)?" is required.":" is required.");
+                }else {
+                    imsg = "en".equals(lang)?"Invalid data.":"Dato incorrecto.";
                 }
+            }
+            if(pmsg == null) {
+                pmsg = ("en".equals(lang)?"Enter ":"Captura ") + label + ".";
             }
         }
         
-        String ext = "";
-        if (isDisabled) {
-            ext += " disabled=\"disabled\"";
-        }
+        String ext = disabled?" disabled=\"disabled\"":"";
         
         String valueAux = request.getParameter(propName);
         if (valueAux != null) {
@@ -104,24 +94,22 @@ public class ObjectiveAlignment extends ObjectiveAlignmentBase {
             value = obj.getObjectProperty(prop);
         }
         
+        String parentObjUri = null;
+        String displayedValue = null;   
         if (value != null) {
             parentObjUri = value.getURI();
             displayedValue = value.getDisplayName(lang);
-            if (isUserRepository()) {
-                Objective objective = (Objective) value.createGenericInstance();
-                displayedValue = objective.getDisplayTitle(lang);
-            }
         }
         
         if (mode.equals("edit") || mode.equals("create") || mode.equals("filter")) {
             
             ret.append("<select name=\"" + name + "\"");
-            if (isDojoType) {
-                ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""
+            if (dojo) {
+                ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" promptMessage=\""+pmsg+"\" invalidMessage=\""
                            + imsg + "\"" + " value=\"" + parentObjUri + "\"");
             }
             if (!mode.equals("filter")) {
-                ret.append(" required=\"" + isRequired + "\"");
+                ret.append(" required=\"" + required + "\"");
             }
             if ((mode.equals("filter") || isBlankSuport()) && 
                     ((parentObjUri == null) || (parentObjUri.length() == 0))) {
@@ -145,9 +133,8 @@ public class ObjectiveAlignment extends ObjectiveAlignmentBase {
                     it = SWBComparator.sortSemanticObjects(lang,
                             SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClassesAsSemanticObjects());
                 }
-            } else if (isUserRepository() && parent != null) {
-                it = SWBComparator.sortSemanticObjects(lang, parent.listInstancesOfClass(cls));
-            } else if (parent != null) {
+            }
+            else if (parent != null) {
                 it = SWBComparator.sortSemanticObjects(lang, parent.listInstancesOfClass(cls));
             }
 
@@ -186,7 +173,7 @@ public class ObjectiveAlignment extends ObjectiveAlignmentBase {
             String type, String mode, String lang) {
         
         Objective objective = null;
-        if (filter_obj != null) {
+        if (filter_obj != null && filter_obj.createGenericInstance() instanceof Objective ) {
             objective = (Objective) filter_obj.createGenericInstance();
         }
         return objective==null?true:!objective.isValid();
