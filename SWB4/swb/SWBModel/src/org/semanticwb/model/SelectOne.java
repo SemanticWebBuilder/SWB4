@@ -171,7 +171,7 @@ public class SelectOne extends SelectOneBase {
 
                 if(!mode.equals("filter"))
                 {
-                    ret.append(" required=\"" + required + "\"");
+                    if(required)ret.append(" required=\"" + required + "\"");
                 }
 
                 if ((mode.equals("filter") || isBlankSuport()) && ((uri == null) || (uri.length() == 0))) {
