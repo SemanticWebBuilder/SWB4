@@ -995,7 +995,10 @@
         <swbxf:propInvalidMessage xml:lang="en">Lack define backward</swbxf:propInvalidMessage>
         <swbxf:propInvalidMessage xml:lang="es">Falta definir hacia atrás</swbxf:propInvalidMessage>
         <swbxf:formElement>
-          <bsc:SelectOneSibling rdf:ID="selectOneSibling"/>
+          <bsc:SelectOneSibling rdf:ID="selectOneSibling">
+            <swbxf:so_nullSuport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:so_nullSuport>
+          </bsc:SelectOneSibling>
         </swbxf:formElement>
         <rdfs:label xml:lang="en">Previus</rdfs:label>
         <rdfs:label xml:lang="es">Anterior</rdfs:label>
