@@ -22,6 +22,7 @@
  */
 package org.semanticwb.remotetriplestore;
 
+import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.TransactionHandler;
 import com.hp.hpl.jena.graph.Triple;
 
@@ -31,10 +32,21 @@ import com.hp.hpl.jena.graph.Triple;
  */
 public interface RGraph 
 {
+    public int getId();
+    
     public void performAdd(Triple t, Long id);
 
     public void performDelete(Triple t, Long id); 
     
     public TransactionHandler getTransactionHandler();
+    
+    public String encodeSubject(Node n);
+    public String encodeProperty(Node n);
+    public String encodeObject(Node n);
+    
+    public Node decodeSubject(String sub, String ext);
+    public Node decodeProperty(String sub, String ext);
+    public Node decodeObject(String sub, String ext);
+    
     
 }
