@@ -719,7 +719,7 @@ public class SWBFormMgr implements SWBForms
                     FormElement ele=getFormElement(prop);
                     if(DOJO && !m_cls.isAutogenId() && prop.equals(m_cls.getDisplayNameProperty()))
                     {
-                        ele.setAttribute("onkeyup", "dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate()");
+                        ele.setAttribute("onkeyup", "if(dojo.byId('swb_create_id')!=null)dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);if(dojo.byId('swb_create_id')!=null)dijit.byId('swb_create_id').validate()");
                     }
                     renderProp(request, ret, prop, ele);
                 }
