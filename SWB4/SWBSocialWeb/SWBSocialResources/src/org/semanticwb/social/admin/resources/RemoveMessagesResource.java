@@ -6,8 +6,12 @@ package org.semanticwb.social.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -31,6 +35,7 @@ public class RemoveMessagesResource extends GenericResource {
     private static Logger log = SWBUtils.getLogger(RemoveMessagesResource.class);
     
     private static String Action_REMOVEWOTOPIC="removewotopic";
+    private static String Action_REMOVESINCEDATE="removesinceDate";
     
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -103,6 +108,25 @@ public class RemoveMessagesResource extends GenericResource {
             out.println("</div>");
             
             
+            out.println("<div class=\"swbform\">");
+            out.println("<form type=\"dijit.form.Form\" id=\"delDate" + stream.getId() + "\" action=\"" +  paramRequest.getActionUrl().setAction(Action_REMOVESINCEDATE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes a partir de la facha seleccionada hacia atras serán eliminados.')){submitForm('delDate" + stream.getId() + "'); return false;}else{return false;}\">");            
+            out.println("<table width=\"100%\" border=\"0px\">");            
+            out.println("   <tr>");
+            out.println("       <td style=\"text-align: center;\">Eliminar mensajes apartir de una fecha hacia atras:</td>");        
+            out.println("   </tr>");
+            out.println("   <tr>");
+            out.println("       <td style=\"text-align: center;\">");
+            out.println("           <input type=\"text\" name=\"remSinceDate\" id=\"remSinceDate\" dojoType=\"dijit.form.DateTextBox\"  size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\">");
+            out.println("       </td>");
+            out.println("   </tr>");
+            out.println("   <tr>");
+            out.println("       <td style=\"text-align: center;\"><button dojoType=\"dijit.form.Button\" type=\"submit\">Eliminar</button></td>");
+            out.println("   </tr>");
+            out.println("</table>");
+            out.println("</form>");
+            out.println("</div>");
+            
+            
             if(request.getParameter("deleted")!= null && request.getParameter("deleted").equals("ok")){
                 out.println("<script type=\"text/javascript\">");
                     out.println("   showStatus('Mensajes eliminados');");            
@@ -128,43 +152,65 @@ public class RemoveMessagesResource extends GenericResource {
     }
 
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {        
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException { 
         String mode = response.getAction();
         String objUri = request.getParameter("suri");
-        if(mode.equals(SWBResourceURL.Action_REMOVE)){
-            if(objUri!= null){
-                try{
-                    Stream stream = (Stream)SemanticObject.getSemanticObject(objUri).getGenericInstance();
-                    String wsiteId = stream.getSemanticObject().getModel().getName();
-                    WebSite wsite=WebSite.ClassMgr.getWebSite(wsiteId);
+        if(objUri!= null)
+        {
+            try
+            {
+                Stream stream = (Stream)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+                if(mode.equals(SWBResourceURL.Action_REMOVE))
+                {
                     Iterator<PostIn> itPostIn = PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
                     while(itPostIn.hasNext()){
                         PostIn postIn=itPostIn.next();
                         postIn.remove();
                     }
-                }catch(Exception e){
-                    log.error(e.getMessage());
-                }
-            }else{
-                System.out.println("No suitable value for 'suri'");
-            }
-        }else if(mode.equals(Action_REMOVEWOTOPIC)) //Elimina PostIn que se encuentren en un cierto stream y que no tengan un SocialTopic asociado.
-        {
-            if(objUri!= null){
-                try{
-                    Stream stream = (Stream)SemanticObject.getSemanticObject(objUri).getGenericInstance();
-                    String wsiteId = stream.getSemanticObject().getModel().getName();
-                    WebSite wsite=WebSite.ClassMgr.getWebSite(wsiteId);
+                }else if(mode.equals(Action_REMOVEWOTOPIC)) //Elimina PostIn que se encuentren en un cierto stream y que no tengan un SocialTopic asociado.
+                {
                     Iterator<PostIn> itPostIn = PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
                     while(itPostIn.hasNext()){
                         PostIn postIn=itPostIn.next();
                         if(postIn.getSocialTopic()==null) postIn.remove();
                     }
-                }catch(Exception e){
-                    log.error(e.getMessage());
+                }else if(mode.equals(Action_REMOVESINCEDATE))   //Elimina mensajes en el stream hacia atras, a partir de una fecha dada 
+                {
+                    String remSinceDate=request.getParameter("remSinceDate");
+                    if(remSinceDate!=null)
+                    {
+                        //System.out.println("remSinceDate-2:"+remSinceDate);
+                        Date date = null;
+                        SimpleDateFormat formatoDelTexto=null;
+                        try {
+                            formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
+                            date = formatoDelTexto.parse(remSinceDate);
+                        } catch (ParseException ex) {
+                            ex.printStackTrace();
+                        }
+                        //System.out.println("date J:"+date);
+                        if(date!=null)
+                        {
+                            Iterator<PostIn> itPostIns=PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
+                            while(itPostIns.hasNext())
+                            {
+                                PostIn postIn=itPostIns.next();
+                                if(postIn.getCreated()!=null)
+                                {
+                                    if(postIn.getCreated().compareTo(date)<0)
+                                    {
+                                        //System.out.println("postIn a eliminar:"+postIn.getCreated());
+                                        postIn.remove();
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-            }else{
-                System.out.println("No suitable value for 'suri'");
+            }catch(Exception e)
+            {
+                log.error(e);
             }
         }
         response.setRenderParameter("suri", objUri);
