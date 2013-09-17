@@ -6,6 +6,9 @@ package org.semanticwb.social.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +34,7 @@ public class RemoveMessagesResourceFromTopic extends GenericResource {
     private static Logger log = SWBUtils.getLogger(RemoveMessagesResourceFromTopic.class);
     
     private static String Action_REMOVEWOTOPIC="removewotopic";
+    private static String Action_REMOVESINCEDATE="removesinceDate";
     
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -92,6 +96,25 @@ public class RemoveMessagesResourceFromTopic extends GenericResource {
             out.println("</div>");
             
             
+            out.println("<div class=\"swbform\">");
+            out.println("<form type=\"dijit.form.Form\" id=\"delDate" + socialTopic.getId() + "\" action=\"" +  paramRequest.getActionUrl().setAction(Action_REMOVESINCEDATE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes a partir de la facha seleccionada hacia atras serán eliminados.')){submitForm('delDate" + socialTopic.getId() + "'); return false;}else{return false;}\">");            
+            out.println("<table width=\"100%\" border=\"0px\">");            
+            out.println("   <tr>");
+            out.println("       <td style=\"text-align: center;\">Eliminar mensajes apartir de una fecha hacia atras:</td>");        
+            out.println("   </tr>");
+            out.println("   <tr>");
+            out.println("       <td style=\"text-align: center;\">");
+            out.println("           <input type=\"text\" name=\"remSinceDate\" id=\"remSinceDate\" dojoType=\"dijit.form.DateTextBox\"  size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\">");
+            out.println("       </td>");
+            out.println("   </tr>");
+            out.println("   <tr>");
+            out.println("       <td style=\"text-align: center;\"><button dojoType=\"dijit.form.Button\" type=\"submit\">Eliminar</button></td>");
+            out.println("   </tr>");
+            out.println("</table>");
+            out.println("</form>");
+            out.println("</div>");
+            
+            
             if(request.getParameter("deleted")!= null && request.getParameter("deleted").equals("ok")){
                 out.println("<script type=\"text/javascript\">");
                     out.println("   showStatus('Mensajes eliminados');");            
@@ -104,41 +127,63 @@ public class RemoveMessagesResourceFromTopic extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {        
         String mode = response.getAction();
         String objUri = request.getParameter("suri");
-        if(mode.equals(SWBResourceURL.Action_REMOVE)){
-            if(objUri!= null){
-                try{
-                    SocialTopic socialTopic = (SocialTopic)SemanticObject.getSemanticObject(objUri).getGenericInstance();
-                    String wsiteId = socialTopic.getSemanticObject().getModel().getName();
-                    WebSite wsite=WebSite.ClassMgr.getWebSite(wsiteId);
-                    Iterator<PostIn> itPostIn = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, wsite);
-                    while(itPostIn.hasNext()){
-                        PostIn postIn=itPostIn.next();
-                        postIn.remove();
-                    }
-                }catch(Exception e){
-                    log.error(e.getMessage());
-                }
-            }
-        }else if(mode.equals(Action_REMOVEWOTOPIC)) //Elimina PostIn que se encuentren en un cierto stream y que no tengan un SocialTopic asociado.
+        
+        if(objUri!= null)
         {
-            if(objUri!= null){
-                try{
-                    SocialTopic socialTopic = (SocialTopic)SemanticObject.getSemanticObject(objUri).getGenericInstance();
-                    String wsiteId = socialTopic.getSemanticObject().getModel().getName();
-                    WebSite wsite=WebSite.ClassMgr.getWebSite(wsiteId);
-                    Iterator<PostOut> itPostOut = PostOut.ClassMgr.listPostOutBySocialTopic(socialTopic, wsite);
-                    while(itPostOut.hasNext()){
-                        PostOut postOut=itPostOut.next();
-                        postOut.remove();
+            SocialTopic socialTopic = (SocialTopic)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+            WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+            if(mode.equals(SWBResourceURL.Action_REMOVE))
+            {
+                Iterator<PostIn> itPostIn = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, wsite);
+                while(itPostIn.hasNext()){
+                    PostIn postIn=itPostIn.next();
+                    postIn.remove();
+                }
+            }else if(mode.equals(Action_REMOVEWOTOPIC)) //Elimina PostIn que se encuentren en un cierto stream y que no tengan un SocialTopic asociado.
+            {
+                Iterator<PostOut> itPostOut = PostOut.ClassMgr.listPostOutBySocialTopic(socialTopic, wsite);
+                while(itPostOut.hasNext()){
+                    PostOut postOut=itPostOut.next();
+                    postOut.remove();
+                }                   
+            }else if(mode.equals(Action_REMOVESINCEDATE))   //Elimina mensajes en el stream hacia atras, a partir de una fecha dada 
+            {
+                String remSinceDate=request.getParameter("remSinceDate");
+                if(remSinceDate!=null)
+                {
+                    //System.out.println("remSinceDate-2:"+remSinceDate);
+                    Date date = null;
+                    SimpleDateFormat formatoDelTexto=null;
+                    try {
+                        formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
+                        date = formatoDelTexto.parse(remSinceDate);
+                    } catch (ParseException ex) {
+                        ex.printStackTrace();
                     }
-                }catch(Exception e){
-                    log.error(e.getMessage());
+                    //System.out.println("date J:"+date);
+                    if(date!=null)
+                    {
+                        Iterator<PostIn> itPostIns=PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, wsite);
+                        while(itPostIns.hasNext())
+                        {
+                            PostIn postIn=itPostIns.next();
+                            if(postIn.getCreated()!=null)
+                            {
+                                if(postIn.getCreated().compareTo(date)<0)
+                                {
+                                    //System.out.println("postIn a eliminar:"+postIn.getCreated());
+                                    postIn.remove();
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
         response.setRenderParameter("suri", objUri);
         response.setRenderParameter("deleted", "ok");
         response.setMode(SWBResourceURL.Mode_VIEW);
+    
     }
     
 }
