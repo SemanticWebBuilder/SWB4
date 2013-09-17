@@ -99,9 +99,7 @@ public class ChatServer extends Thread
     
     public void sendMessage(String msg, String community)
     {
-        msgs.add(msgs.size(), new Message(msg, community));
-        
-        
+        msgs.add(msgs.size(), new Message(msg, community));        
     }
     
     public String getUsers(String community)
