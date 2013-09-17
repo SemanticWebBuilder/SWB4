@@ -7,7 +7,6 @@ package org.semanticwb.social.admin.resources;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -54,10 +53,7 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.Message;
-import org.semanticwb.social.MessageIn;
-import org.semanticwb.social.Messageable;
 import org.semanticwb.social.Photo;
-import org.semanticwb.social.PhotoIn;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.PostOut;
 import org.semanticwb.social.PostOutNet;
@@ -67,13 +63,9 @@ import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.SocialUserExtAttributes;
-import org.semanticwb.social.Stream;
 import org.semanticwb.social.Video;
-import org.semanticwb.social.VideoIn;
-import org.semanticwb.social.util.PostableObj;
 import org.semanticwb.social.util.SWBSocialComparator;
 import org.semanticwb.social.util.SWBSocialUtil;
-import org.semanticwb.social.util.SendPostThread;
 import org.semanticwb.social.util.SocialLoader;
 
 /**
@@ -1784,7 +1776,7 @@ public class SocialSentPost extends GenericResource {
         if (swbSocialUser != null) {
             SocialNetworkUser socialNetUser = SocialNetworkUser.ClassMgr.getSocialNetworkUser(swbSocialUser, wsite);
             //itposts = socialNetUser.listPostInInvs();
-            long StreamPostIns = wsite.getSemanticModel().countStatements(null, PostOut.swb_creator.getRDFProperty(), socialNetUser.getSemanticObject().getRDFResource(), null);
+            long StreamPostIns = wsite.getSemanticModel().countStatements(null, PostOut.swb_creator.getRDFProperty(), socialNetUser.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId());
             hampResult.put("countResult", Long.valueOf(StreamPostIns));
             itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostOut.swb_creator.getRDFProperty(), socialNetUser.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId(), Integer.valueOf((nPage * RECPERPAGE)).longValue(), Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), "timems desc"), true));
         } else {
@@ -1805,7 +1797,7 @@ public class SocialSentPost extends GenericResource {
                 }
             }else
             {
-                SocialTopicPostOut = wsite.getSemanticModel().countStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), null);
+                SocialTopicPostOut = wsite.getSemanticModel().countStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId());
                 if (nPage != 0) {
                     itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId(), Integer.valueOf((RECPERPAGE)).longValue(), Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), "timems desc"), true));
                 } else {

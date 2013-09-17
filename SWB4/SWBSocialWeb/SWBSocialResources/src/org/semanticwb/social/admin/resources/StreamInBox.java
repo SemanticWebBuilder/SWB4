@@ -1223,6 +1223,7 @@ public class StreamInBox extends GenericResource {
                     itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), StreamPostIns, 0L, "timems desc"), true));
                 }
             }
+            System.out.println("StreamPostIns:"+StreamPostIns);
             hampResult.put("countResult", Long.valueOf(StreamPostIns));
         }
 
