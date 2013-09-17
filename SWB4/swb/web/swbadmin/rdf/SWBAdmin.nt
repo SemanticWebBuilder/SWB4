@@ -4401,6 +4401,7 @@
 <http://www.semanticwb.org/SWBAdmin#WebPage:bh_documentation> <http://www.semanticwebbuilder.org/swb4/ontology#indexable> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
 <http://www.semanticwb.org/SWBAdmin#WebPage:bh_documentation> <http://www.semanticwebbuilder.org/swb4/ontology#webPageParent> <http://www.semanticwb.org/SWBAdmin#WebPage:ObjectBehavior> .
 <http://www.semanticwb.org/SWBAdmin#WebPage:bh_documentation> <http://www.semanticwebbuilder.org/swb4/ontology#title> "Documentaci\u00F3n" .
+<http://www.semanticwb.org/SWBAdmin#WebPage:bh_documentation> <http://www.semanticwebbuilder.org/swb4/xforms/ontology#nsPrefixFilter> "swp" .
 <http://www.semanticwb.org/SWBAdmin#WebPage:bh_documentation> <http://www.semanticwebbuilder.org/swb4/ontology#active> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
 <http://www.semanticwb.org/SWBAdmin#WebPage:bh_documentation> <http://www.semanticwebbuilder.org/swb4/xforms/ontology#interface> <http://www.semanticwebbuilder.org/swb4/process#ProcessElement> .
 <http://www.semanticwb.org/SWBAdmin#WebPage:bh_documentation> <http://www.semanticwebbuilder.org/swb4/ontology#webPageSortName> "85" .
