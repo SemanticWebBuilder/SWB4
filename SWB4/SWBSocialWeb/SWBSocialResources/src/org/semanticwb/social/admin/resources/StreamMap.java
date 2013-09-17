@@ -28,41 +28,68 @@ public class StreamMap extends GenericAdmResource{
     
     private static Logger log = SWBUtils.getLogger(StreamMap.class);
     public static final String Mode_SHOWMARKERDETAILS = "showMarkDet";
+    private static String Mode_showMap="showMap";
     
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         final String mode = paramRequest.getMode();
         if (Mode_SHOWMARKERDETAILS.equals(mode)) {
             doShowDetails(request, response, paramRequest);
+        }else if (Mode_showMap.equals(mode)) {
+            doShowMap(request, response, paramRequest);
         }else {
             super.processRequest(request, response, paramRequest);
         }
     }
     
     
-     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-       if(request.getParameter("doView")==null) {
-           doEdit(request, response, paramRequest);
-           return;
-       }
-       final String myPath = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/stream/streamMap.jsp";
-        RequestDispatcher dis = request.getRequestDispatcher(myPath);
-        if (dis != null) {
-            try {
-                request.setAttribute("paramRequest", paramRequest);
-                dis.include(request, response);
-            } catch (Exception ex) {
-                log.error(ex);
-            }
+    @Override
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
+    {
+        PrintWriter out = response.getWriter();
+        String suri=request.getParameter("suri");
+        SemanticObject semObj=SemanticObject.getSemanticObject(suri);
+        out.println("<div class=\"swbform\">");
+        out.println("<form type=\"dijit.form.Form\" id=\"showMap_"+semObj.getId()+"\" action=\"" +  paramRequest.getRenderUrl().setParameter("suri", suri) + "\" method=\"post\" onsubmit=\"submitForm('showMap_" + semObj.getId() + "'); return false;\">");            
+        out.println("<table width=\"100%\" border=\"0px\">");            
+        out.println("   <tr>");
+        out.println("       <td style=\"text-align: center;\">Mostrar mapa con datos desde:</td>");        
+        out.println("   </tr>");
+        out.println("   <tr>");
+        out.println("       <td style=\"text-align: center;\">");
+        out.println("           <input type=\"text\" name=\"mapSinceDate\" id=\"mapSinceDate"+semObj.getId()+"\" dojoType=\"dijit.form.DateTextBox\"  size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\">");
+        out.println("       </td>");
+        out.println("   </tr>");
+        out.println("   <tr>");
+        out.println("       <td style=\"text-align: center;\"><button dojoType=\"dijit.form.Button\" type=\"submit\">Mostrar</button></td>");
+        out.println("   </tr>");
+        out.println("</table>");
+        out.println("</form>");
+        out.println("</div>");
+        if(request.getParameter("mapSinceDate")!=null)
+        {
+            out.println("<div class=\"swbSocialMapIframe\">");
+            out.println("   <iframe width=\"100%\" height=\"100%\" src=\""+paramRequest.getRenderUrl().setMode(Mode_showMap).setParameter("suri", request.getParameter("suri")).setParameter("mapSinceDate"+semObj.getId(), request.getParameter("mapSinceDate")) +"\"></iframe> ");
+            out.println("</div>");
         }
     }
      
-     @Override
-    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-       PrintWriter out=response.getWriter();
-       out.println("<iframe width=\"100%\" height=\"100%\" src=\""+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW).setParameter("doView", "1").setParameter("suri", request.getParameter("suri")) +"\"></iframe> ");
-    }
+     public void doShowMap(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+     {
+        final String myPath = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/stream/streamMap.jsp";
+         RequestDispatcher dis = request.getRequestDispatcher(myPath);
+         if (dis != null) {
+             try {
+                 request.setAttribute("paramRequest", paramRequest);
+                 dis.include(request, response);
+             } catch (Exception ex) {
+                 log.error(ex);
+             }
+         }
+     }
+     
+     
+
      
     /*
      * Muestra detalles de un marcador
