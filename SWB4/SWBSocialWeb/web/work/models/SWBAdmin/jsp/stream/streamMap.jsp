@@ -13,6 +13,7 @@
 <%@page import="org.semanticwb.platform.SemanticProperty"%>
 <%@page import="org.semanticwb.portal.api.*"%>
 <%@page import="java.util.*"%>
+<%@page import="java.text.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
 <%
@@ -38,6 +39,20 @@
     SWBResourceURL urlDetails = paramRequest.getRenderUrl().setMode("showMarkDet");
     urlDetails.setCallMethod(SWBResourceURL.Call_DIRECT);
     
+    Date date = null;
+    String showSinceDate="2013-09-17";  //Día en que estaba desarrollando esto. Nunca los post de los usuarios van a ser antes de esta fecha, ya que no se  ha liberado el producto aún
+    if(request.getParameter("mapSinceDate"+semObj.getId())!=null && request.getParameter("mapSinceDate"+semObj.getId()).trim().length()>0)
+    {
+        showSinceDate=request.getParameter("mapSinceDate"+semObj.getId());
+    }
+    SimpleDateFormat formatoDelTexto=null;
+    try {
+        formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
+        date = formatoDelTexto.parse(showSinceDate);
+    } catch (ParseException ex) {
+        ex.printStackTrace();
+    }    
+    System.out.println("dateG:"+date.toString());
 %>
 
 
@@ -92,68 +107,74 @@
         while(itPostIns.hasNext())
         {
             PostIn postIn=itPostIns.next();
-            //System.out.println("postIn/lat:"+postIn.getLatitude()+",lng:"+postIn.getLongitude());
-            if(postIn.getGeoStateMap()!=null && (streamMapView==1 || streamMapView==3 || streamMapView==4))
+            if(postIn.getCreated().compareTo(date)>=0)
             {
-                if(!hmapPoints.containsKey(postIn.getGeoStateMap().getId())) 
+                if(postIn.getCreated()!=null && postIn.getCreated().compareTo(date)<0)
                 {
-                    //System.out.println("Entra a hmapPoints-1.1:"+postIn.getMsg_Text()); 
-                    HashMap<String, Integer> sentimentHash=new HashMap();
-                    //System.out.println("Entra a hmapPoints-1.2:"+postIn.getPostSentimentalType());
-                    if(postIn.getPostSentimentalType()==1) {
-                        sentimentHash.put("P", new Integer(1));
-                    }  //Con sentimiento Positivo
-                    else if(postIn.getPostSentimentalType()==2) {
-                        sentimentHash.put("N", new Integer(1)); 
-                    } //Con sentimiento Negativo
-                    if(!sentimentHash.isEmpty())
+                    //System.out.println("postIn/lat:"+postIn.getLatitude()+",lng:"+postIn.getLongitude());
+                    if(postIn.getGeoStateMap()!=null && (streamMapView==1 || streamMapView==3 || streamMapView==4))
                     {
-                        //System.out.println("sentimentHash PRIMERO:"+sentimentHash);
-                        hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
-                        //System.out.println("Entra a hmapPoints-2:"+hmapPoints);
-                    }
-                }else{  //Si ya contiene el estado en el HashMap
-                    HashMap sentimentHash=hmapPoints.get(postIn.getGeoStateMap().getId());
-                    if(postIn.getPostSentimentalType()==1)
-                    {
-                        if(sentimentHash.containsKey("P"))
+                        if(!hmapPoints.containsKey(postIn.getGeoStateMap().getId())) 
                         {
-                            //System.out.println("Entra a hmapPoints-5.1:"+postIn.getMsg_Text()); 
-                            //System.out.println("Valor:"+sentimentHash.get("P"));
-                            int positiveSentimentNumber=((Integer)sentimentHash.get("P")).intValue()+1;
-                            //System.out.println("Entra a hmapPoints-5.2:"+positiveSentimentNumber); 
-                            sentimentHash.remove("P");
-                            sentimentHash.put("P", new Integer(positiveSentimentNumber));
-                            hmapPoints.remove(postIn.getGeoStateMap().getId());
-                            hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
-                            
-                        }else{
-                            sentimentHash.put("P", new Integer(1)); 
-                            hmapPoints.remove(postIn.getGeoStateMap().getId());
-                            hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
+                            //System.out.println("Entra a hmapPoints-1.1:"+postIn.getMsg_Text()); 
+                            HashMap<String, Integer> sentimentHash=new HashMap();
+                            //System.out.println("Entra a hmapPoints-1.2:"+postIn.getPostSentimentalType());
+                            if(postIn.getPostSentimentalType()==1) {
+                                sentimentHash.put("P", new Integer(1));
+                            }  //Con sentimiento Positivo
+                            else if(postIn.getPostSentimentalType()==2) {
+                                sentimentHash.put("N", new Integer(1)); 
+                            } //Con sentimiento Negativo
+                            if(!sentimentHash.isEmpty())
+                            {
+                                //System.out.println("sentimentHash PRIMERO:"+sentimentHash);
+                                hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
+                                //System.out.println("Entra a hmapPoints-2:"+hmapPoints);
+                            }
+                        }else{  //Si ya contiene el estado en el HashMap
+                            HashMap sentimentHash=hmapPoints.get(postIn.getGeoStateMap().getId());
+                            if(postIn.getPostSentimentalType()==1)
+                            {
+                                if(sentimentHash.containsKey("P"))
+                                {
+                                    //System.out.println("Entra a hmapPoints-5.1:"+postIn.getMsg_Text()); 
+                                    //System.out.println("Valor:"+sentimentHash.get("P"));
+                                    int positiveSentimentNumber=((Integer)sentimentHash.get("P")).intValue()+1;
+                                    //System.out.println("Entra a hmapPoints-5.2:"+positiveSentimentNumber); 
+                                    sentimentHash.remove("P");
+                                    sentimentHash.put("P", new Integer(positiveSentimentNumber));
+                                    hmapPoints.remove(postIn.getGeoStateMap().getId());
+                                    hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
+
+                                }else{
+                                    sentimentHash.put("P", new Integer(1)); 
+                                    hmapPoints.remove(postIn.getGeoStateMap().getId());
+                                    hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
+                                }
+                            }else if(postIn.getPostSentimentalType()==2) 
+                            {
+                                if(sentimentHash.containsKey("N"))
+                                {
+                                    int negativeSentimentNumber=((Integer)sentimentHash.get("N")).intValue()+1;
+                                    sentimentHash.remove("N");
+                                    sentimentHash.put("N", new Integer(negativeSentimentNumber));
+                                    hmapPoints.remove(postIn.getGeoStateMap().getId());
+                                    hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
+                                }else{
+                                    sentimentHash.put("N", new Integer(1)); 
+                                    hmapPoints.remove(postIn.getGeoStateMap().getId());
+                                    hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
+                                }
+                            }
                         }
-                    }else if(postIn.getPostSentimentalType()==2) 
-                    {
-                        if(sentimentHash.containsKey("N"))
+                        if(streamMapView==3 || streamMapView==4)
                         {
-                            int negativeSentimentNumber=((Integer)sentimentHash.get("N")).intValue()+1;
-                            sentimentHash.remove("N");
-                            sentimentHash.put("N", new Integer(negativeSentimentNumber));
-                            hmapPoints.remove(postIn.getGeoStateMap().getId());
-                            hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
-                        }else{
-                            sentimentHash.put("N", new Integer(1)); 
-                            hmapPoints.remove(postIn.getGeoStateMap().getId());
-                            hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
+                            aPostInsNotInStates.add(postIn);
                         }
+                    }else{
+                        aPostInsNotInStates.add(postIn);
                     }
                 }
-                if(streamMapView==3 || streamMapView==4)
-                {
-                    aPostInsNotInStates.add(postIn);
-                }
-            }else{
-                aPostInsNotInStates.add(postIn);
             }
         }
         Iterator<String> itMapStates=hmapPoints.keySet().iterator();
@@ -225,82 +246,85 @@
         while(restOfPostIns.hasNext())
         {
             PostIn postIn=restOfPostIns.next();
-            //System.out.println("postIn Msg Todos:"+postIn.getMsg_Text()+":"+postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation());
-             //Para los PostIns que tienen un sentimiento positivo o negativo y ademas tienen latitud y longitud asociada
-            if(postIn.getLatitude()!=0 && postIn.getLongitude()!=0 && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==2 || streamMapView==4))
+            if(postIn.getCreated().compareTo(date)>=0)
             {
-                 cont1++;
-                 String msg=SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false);
-            
-                %>
-                       var tmpIcon;
-                        <%        
-                        if(postIn.getPostSentimentalType()==1)
-                        {
+                //System.out.println("postIn Msg Todos:"+postIn.getMsg_Text()+":"+postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation());
+                 //Para los PostIns que tienen un sentimiento positivo o negativo y ademas tienen latitud y longitud asociada
+                if(postIn.getLatitude()!=0 && postIn.getLongitude()!=0 && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==2 || streamMapView==4))
+                {
+                     cont1++;
+                     String msg=SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false);
+
+                    %>
+                           var tmpIcon;
+                            <%        
+                            if(postIn.getPostSentimentalType()==1)
+                            {
+                                %>
+                                   tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/greenGMapMarker.png');
+                                <%
+                            }else if(postIn.getPostSentimentalType()==2)
+                            { 
+                                %>
+                                    tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/redGMapMarker.png');
+                                <%
+                            }else if(postIn.getPostSentimentalType()==0)
+                            {
                             %>
-                               tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/greenGMapMarker.png');
+                                    tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/whiteGMapMarker.png');
                             <%
-                        }else if(postIn.getPostSentimentalType()==2)
-                        { 
+                            } 
                             %>
-                                tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/redGMapMarker.png');
-                            <%
-                        }else if(postIn.getPostSentimentalType()==0)
-                        {
-                        %>
-                                tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/whiteGMapMarker.png');
-                        <%
-                        } 
-                        %>
-                       var marker = new google.maps.Marker({
-                       position: new google.maps.LatLng(<%=postIn.getLatitude()%>,<%=postIn.getLongitude()%>),
-                       icon: tmpIcon, 
-                       title: '<%=msg%>',
-                       map: map
-                       });
-                       associateInfoWindows(marker, '<%=postIn.getEncodedURI()%>');
-                       batch.push(marker);  
-                <%         
-            }else if(postIn.getPostInSocialNetworkUser()!=null && postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation()!=null && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==2 || streamMapView==4)){ 
-                cont2++; 
-                %>
-                        var tmpIcon;
-                        <%        
-                        if(postIn.getPostSentimentalType()==1)
-                        {
+                           var marker = new google.maps.Marker({
+                           position: new google.maps.LatLng(<%=postIn.getLatitude()%>,<%=postIn.getLongitude()%>),
+                           icon: tmpIcon, 
+                           title: '<%=msg%>',
+                           map: map
+                           });
+                           associateInfoWindows(marker, '<%=postIn.getEncodedURI()%>');
+                           batch.push(marker);  
+                    <%         
+                }else if(postIn.getPostInSocialNetworkUser()!=null && postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation()!=null && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==2 || streamMapView==4)){ 
+                    cont2++; 
+                    %>
+                            var tmpIcon;
+                            <%        
+                            if(postIn.getPostSentimentalType()==1)
+                            {
+                                %>
+                                   tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/greenGMapMarker.png');
+                                <%
+                            }else if(postIn.getPostSentimentalType()==2)
+                            {
+                                %>
+                                    tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/redGMapMarker.png');
+                                <%
+                            }else if(postIn.getPostSentimentalType()==0)
+                            {
                             %>
-                               tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/greenGMapMarker.png');
+                                    tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/whiteGMapMarker.png');
                             <%
-                        }else if(postIn.getPostSentimentalType()==2)
-                        {
+                            } 
                             %>
-                                tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/redGMapMarker.png');
-                            <%
-                        }else if(postIn.getPostSentimentalType()==0)
-                        {
-                        %>
-                                tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/whiteGMapMarker.png');
-                        <%
-                        } 
-                        %>
-                        var postLocation='<%=SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation().replaceAll("'", ""), false)%>';
-                        var title='<%=postIn.getMsg_Text()!=null?SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false):postIn.getDescription()!=null?
-                            SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getDescription().replaceAll("'", ""), false):postIn.getTags()!=null?SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getTags().replaceAll("'", ""), false):"Sin Mensaje.."%>';
-                         geocoder.geocode( { 'address': postLocation}, function(results, status) { 
-                            if(status==google.maps.GeocoderStatus.OK){
-                                var marker =new google.maps.Marker({
-                                map: map,
-                                position: new google.maps.LatLng(results[0].geometry.location.lat(),results[0].geometry.location.lng()),
-                                icon: tmpIcon,
-                                title: 'By GeoUser Profile:'+title
-                                 });
-                                associateInfoWindows(marker, '<%=postIn.getEncodedURI()%>');
-                                batch.push(marker);  
-                            }//else{
-                               // alert("Esa dirección no existe:"+postLocation);
-                            //}
-                        });
-                <%        
+                            var postLocation='<%=SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation().replaceAll("'", ""), false)%>';
+                            var title='<%=postIn.getMsg_Text()!=null?SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false):postIn.getDescription()!=null?
+                                SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getDescription().replaceAll("'", ""), false):postIn.getTags()!=null?SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getTags().replaceAll("'", ""), false):"Sin Mensaje.."%>';
+                             geocoder.geocode( { 'address': postLocation}, function(results, status) { 
+                                if(status==google.maps.GeocoderStatus.OK){
+                                    var marker =new google.maps.Marker({
+                                    map: map,
+                                    position: new google.maps.LatLng(results[0].geometry.location.lat(),results[0].geometry.location.lng()),
+                                    icon: tmpIcon,
+                                    title: 'By GeoUser Profile:'+title
+                                     });
+                                    associateInfoWindows(marker, '<%=postIn.getEncodedURI()%>');
+                                    batch.push(marker);  
+                                }//else{
+                                   // alert("Esa dirección no existe:"+postLocation);
+                                //}
+                            });
+                    <%        
+                }
             }
         }
         System.out.println("cont1:"+cont1+",cont2:"+cont2);
