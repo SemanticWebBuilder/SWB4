@@ -102,7 +102,7 @@
                     //System.out.println("Entra a hmapPoints-1.2:"+postIn.getPostSentimentalType());
                     if(postIn.getPostSentimentalType()==1) {
                         sentimentHash.put("P", new Integer(1));
-                    }  //Con sentimiento Positivo
+                    }  //Con sentimiento Positivoq
                     else if(postIn.getPostSentimentalType()==2) {
                         sentimentHash.put("N", new Integer(1)); 
                     } //Con sentimiento Negativo
