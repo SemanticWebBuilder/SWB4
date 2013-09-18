@@ -66,41 +66,42 @@ if (!user.isSigned()) {
     SWBResourceURL viewURL = paramRequest.getRenderUrl().setMode(SWBParamRequest.Mode_VIEW);
     SWBResourceURL createURL = paramRequest.getActionUrl().setAction(ProcessFileRepository.ACT_NEWFILE);
     %>
-    <h2>Agregar <%=re != null?"versión de ":""%> <%=(re != null && re instanceof RepositoryURL)?"enlace Web":"archivo"%></h2>
+    <script src="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/repository/fileRepositoryUtils.js" charset="utf"></script>
+    <h2><%=paramRequest.getLocaleString("msgAdd")%> <%=re != null?paramRequest.getLocaleString("msgVersionOf")+" ":""%> <%=(re != null && re instanceof RepositoryURL)?paramRequest.getLocaleString("msgDocLink"):paramRequest.getLocaleString("msgFile")%></h2>
     <form class="form-horizontal" role="form" action="<%=createURL%>" method="post" enctype="multipart/form-data">
         <%if (re != null) {%>
         <input type="hidden" name="fid" value="<%=re.getURI()%>"/>
         <%}%>
         <div class="form-group">
-            <label for="" class="col-lg-2 control-label">Título *</label>
+            <label for="" class="col-lg-2 control-label"><%=paramRequest.getLocaleString("msgTitle")%> *</label>
             <div class="col-lg-3">
                 <input type="text" name="ftitle" id="ftitle" value="<%=(re != null)?re.getDisplayTitle(lang):""%>" class="form-control"/>
             </div>
         </div>
         <div class="form-group">
-            <label for="" class="col-lg-2 control-label">Descripción *</label>
+            <label for="" class="col-lg-2 control-label"><%=paramRequest.getLocaleString("msgDescription")%> *</label>
             <div class="col-lg-3">
                 <textarea name="fdescription" id="fdescription" class="form-control"><%=(re != null)?re.getDisplayDescription(lang):""%></textarea>
             </div>
         </div>
         <div class="form-group">
-            <label for="" class="col-lg-2 control-label">Comentario</label>
+            <label for="" class="col-lg-2 control-label"><%=paramRequest.getLocaleString("msgComments")%></label>
             <div class="col-lg-3">
                 <textarea name="fcomment" id="fcomment" class="form-control"><%=(re != null)?vi.getVersionComment():""%></textarea>
             </div>
         </div>
         <%if (re == null) {%>
         <div class="form-group">
-            <label class="col-lg-2 control-label">Tipo de archivo *</label>
+            <label class="col-lg-2 control-label"><%=paramRequest.getLocaleString("msgFileType")%> *</label>
             <div class="col-lg-3">
                 <div class="radio-inline">
                   <label>
-                      <input type="radio" id="fileToggleRadio" onclick="toggleShow('fileSelect', true);toggleShow('linkSelect', false);" checked name="hftype" value="file"> Archivo
+                      <input type="radio" id="fileToggleRadio" onclick="toggleShow('fileSelect', true);toggleShow('linkSelect', false);" checked name="hftype" value="file"> <%=paramRequest.getLocaleString("msgFile")%>
                   </label>
                 </div>
                 <div class="radio-inline">
                     <label>
-                        <input type="radio" id="urlToggleRadio" onclick="toggleShow('fileSelect', false);toggleShow('linkSelect', true);"name="hftype" value="url"> Enlace Web
+                        <input type="radio" id="urlToggleRadio" onclick="toggleShow('fileSelect', false);toggleShow('linkSelect', true);"name="hftype" value="url"> <%=paramRequest.getLocaleString("msgDocLink")%>
                     </label>
                 </div>
             </div>
@@ -111,12 +112,12 @@ if (!user.isSigned()) {
         }
         if (re == null || (re != null && re instanceof RepositoryFile)) {%>
         <div id="fileSelect" class="form-group">
-            <label for="" class="col-lg-2 control-label">Archivo *</label>
+            <label for="" class="col-lg-2 control-label"><%=paramRequest.getLocaleString("msgFile")%> *</label>
             <div class="col-lg-3">
                 <div class="input-group">
                     <span class="input-group-btn">
                         <span class="btn btn-success btn-file">
-                            Browse... <input type="file" name="ffile" id="ffile" class="form-control" />
+                            <%=paramRequest.getLocaleString("msgSearchFile")%> <input type="file" name="ffile" id="ffile" class="form-control" />
                         </span>
                     </span>
                     <input type="text" class="form-control" disabled/>
@@ -132,7 +133,7 @@ if (!user.isSigned()) {
             }
         %>
         <div id="linkSelect" class="form-group">
-            <label for="" class="col-lg-2 control-label">Dirección del enlace *</label>
+            <label for="" class="col-lg-2 control-label"><%=paramRequest.getLocaleString("msgDocLink")%> *</label>
             <div class="col-lg-3">
                 <div class="input-group">
                     <span class="input-group-addon">http://</span>
@@ -143,10 +144,10 @@ if (!user.isSigned()) {
         </div>
         <%}%>
         <div class="form-group">
-            <label for="" class="col-lg-2 control-label">Estatus</label>
+            <label for="" class="col-lg-2 control-label"><%=paramRequest.getLocaleString("msgTHStatus")%></label>
             <div class="col-lg-3">
                 <select name="itemAwStatus" id="itemAwStatus" class="form-control">
-                    <option value="" <%=(actualStatus.equals("")?"selected":"")%>>Ninguno</option>
+                    <option value="" <%=(actualStatus.equals("")?"selected":"")%>><%=paramRequest.getLocaleString("msgSelNone")%></option>
                     <%
                     System.out.println("actualStatus:"+actualStatus);
                     Iterator<ItemAwareStatus> ititwstst = SWBComparator.sortByDisplayName(ItemAwareStatus.ClassMgr.listItemAwareStatuses(site), lang);
@@ -162,7 +163,7 @@ if (!user.isSigned()) {
         </div>
         <%if (re != null) {%>
         <div class="form-group">
-            <label for="" class="col-lg-2 control-label">Versión *</label>
+            <label for="" class="col-lg-2 control-label"><%=paramRequest.getLocaleString("msgVersion")%> *</label>
             <div class="col-lg-3">
                 <select name="newVersion" id="itemAwStatus" class="form-control">
                     <%
@@ -181,8 +182,8 @@ if (!user.isSigned()) {
         <div class="form-group">
             <label for="" class="col-lg-2"></label>
             <div class="col-lg-3 text-right">
-                <button type="button" onclick="window.location='<%=viewURL%>';" class="btn btn-default">Cancelar</button>
-                <button type="button" class="btn btn-success" onclick="if(checkfiles('<%=validFiles%>')){this.form.submit();} else {return false;};">Agregar</button>
+                <button type="button" onclick="window.location='<%=viewURL%>';" class="btn btn-default"><%=paramRequest.getLocaleString("msgBTNCancel")%></button>
+                <button type="button" class="btn btn-success" onclick="if(checkfiles('<%=validFiles%>')){this.form.submit();} else {return false;};"><%=paramRequest.getLocaleString("msgAdd")%></button>
             </div>
         </div>
     </form>
@@ -207,7 +208,7 @@ if (!user.isSigned()) {
             var ftval = ftit.value;
             ftval = ftval.replace(' ' , '');
             if(ftval.length === 0) {
-                alert('Falta poner el titulo del archivo.');
+                alert('<%=paramRequest.getLocaleString("msgMissingTitle")%>');
                 ftit.focus();
                 return false;
             }
@@ -216,7 +217,7 @@ if (!user.isSigned()) {
             ftval = fdesc.value;
             ftval = ftval.replace(' ' , '');
             if(ftval.length === 0) {
-                alert('Falta poner la descripcion del archivo.');
+                alert('<%=paramRequest.getLocaleString("msgMissingDesc")%>');
                 fdesc.focus();
                 return false;
             }
@@ -231,7 +232,7 @@ if (!user.isSigned()) {
                 var urlfile = urlfilec.value;
                 urlfile = urlfile.replace(' ' , '');
                 if(urlfile.length === 0) {
-                    alert('Falta poner la liga del archivo externo.');
+                    alert('<%=paramRequest.getLocaleString("msgMissingLink")%>');
                     urlfilec.focus();
                     return false;
                 } else {
@@ -241,7 +242,7 @@ if (!user.isSigned()) {
                 var fup = document.getElementById('ffile');
                 var fileName = fup.value;
                 if(fileName.length === 0) {
-                    alert('Falta seleccionar el archivo.');
+                    alert('<%=paramRequest.getLocaleString("msgMissingFile")%>');
                     fup.focus();
                     return false;
                 }
@@ -250,7 +251,7 @@ if (!user.isSigned()) {
                 } else {
                     var ptemp = pExt;
                     ptemp = ptemp.replace('|',',');
-                    alert('Selecciona archivos de tipo '+ptemp+' unicamente.');
+                    alert('<%=paramRequest.getLocaleString("msgBadFileType")%> '+ptemp);
                     fup.focus();
                     return false;
                 }
