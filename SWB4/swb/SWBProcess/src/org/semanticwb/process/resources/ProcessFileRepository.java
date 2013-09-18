@@ -45,7 +45,6 @@ import org.semanticwb.model.Role;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.VersionInfo;
-import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
@@ -120,8 +119,26 @@ public class ProcessFileRepository extends GenericResource {
     public void doHistory(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String jsp = "/swbadmin/jsp/process/repository/repositoryFileVersions.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(jsp);
+        
+        String fid = request.getParameter("fid");
+        String type = request.getParameter("type");
+        RepositoryElement re = null;
+        
+        if (fid != null && fid.length() > 0) {
+            if (type != null) {
+                if ("url".equals(type)) {
+                    re = RepositoryURL.ClassMgr.getRepositoryURL(fid, paramRequest.getWebPage().getWebSite());
+                } else if ("file".equals(type)) {
+                    re = RepositoryFile.ClassMgr.getRepositoryFile(fid, paramRequest.getWebPage().getWebSite());
+                }
+            }
+        }
+        
         try {
             request.setAttribute("paramRequest", paramRequest);
+            request.setAttribute("luser", getLevelUser(paramRequest.getUser()));
+            request.setAttribute("versionList", getFileVersions(re));
+            request.setAttribute("element", re);
             rd.include(request, response);
         } catch (Exception ex) {
             log.error("Error including versions.jsp", ex);
@@ -170,14 +187,16 @@ public class ProcessFileRepository extends GenericResource {
             }
         }
 
-        try {
-            response.setContentType(DEFAULT_MIME_TYPE);
-            response.setHeader("Content-Disposition", "attachment; filename=\"" + ver.getVersionFile() + "\";");
+        if (ver != null) {
+            try {
+                response.setContentType(DEFAULT_MIME_TYPE);
+                response.setHeader("Content-Disposition", "attachment; filename=\"" + ver.getVersionFile() + "\";");
 
-            OutputStream out = response.getOutputStream();
-            SWBUtils.IO.copyStream(new FileInputStream(SWBPortal.getWorkPath() + repoFile.getWorkPath() + "/" + verNumber + "/" + ver.getVersionFile()), out);
-        } catch (Exception e) {
-            log.error("Error al obtener el archivo del Repositorio de documentos.", e);
+                OutputStream out = response.getOutputStream();
+                SWBUtils.IO.copyStream(new FileInputStream(SWBPortal.getWorkPath() + repoFile.getWorkPath() + "/" + verNumber + "/" + ver.getVersionFile()), out);
+            } catch (Exception e) {
+                log.error("Error al obtener el archivo del Repositorio de documentos.", e);
+            }
         }
     }
 
@@ -194,9 +213,7 @@ public class ProcessFileRepository extends GenericResource {
         if (accion == null) {
             accion = "";
         }
-        User user = paramRequest.getUser();
 
-        WebPage wpage = paramRequest.getWebPage();
         WebSite wsite = getResourceBase().getWebSite(); //wpage.getWebSite();
 
         out.println("<div class=\"swbform\">");
@@ -250,6 +267,13 @@ public class ProcessFileRepository extends GenericResource {
         out.println("</div>");
     }
 
+    /**
+     * Construye las opciones de selección para los niveles de administración del componente.
+     * @param type Tipo de permiso cuyos valores pueden ser: "ver", "modificar", "administrar".
+     * @param wsite Sitio Web del componente a administrar.
+     * @param paramRequest SWBParamRequest.
+     * @return Cadena con los valores del selector de niveles de administración del componente.
+     */
     public String getSelectOptions(String type, WebSite wsite, SWBParamRequest paramRequest) {
         String strTemp = "";
         try {
@@ -270,12 +294,12 @@ public class ProcessFileRepository extends GenericResource {
             strTemp = "<option value=\"-1\">" + paramRequest.getLocaleString("msgNoRolesAvailable") + "</option>";
 
             Iterator<Role> iRoles = wsite.getUserRepository().listRoles(); //DBRole.getInstance().getRoles(topicmap.getDbdata().getRepository());
-            StringBuffer strRules = new StringBuffer("");
-            strRules.append("\n<option value=\"0\">" + paramRequest.getLocaleString("msgSelNone") + "</option>");
+            StringBuilder strRules = new StringBuilder("");
+            strRules.append("\n<option value=\"0\">").append(paramRequest.getLocaleString("msgSelNone")).append("</option>");
             strRules.append("\n<optgroup label=\"Roles\">");
             while (iRoles.hasNext()) {
                 Role oRole = iRoles.next();
-                strRules.append("\n<option value=\"" + oRole.getURI() + "\" " + (selectedItem.equals(oRole.getURI()) ? "selected" : "") + ">" + oRole.getDisplayTitle(user.getLanguage()) + "</option>");
+                strRules.append("\n<option value=\"").append(oRole.getURI()).append("\" ").append(selectedItem.equals(oRole.getURI()) ? "selected" : "").append(">").append(oRole.getDisplayTitle(user.getLanguage())).append("</option>");
             }
             strRules.append("\n</optgroup>");
 
@@ -283,7 +307,7 @@ public class ProcessFileRepository extends GenericResource {
             Iterator<UserGroup> iugroups = wsite.getUserRepository().listUserGroups();
             while (iugroups.hasNext()) {
                 UserGroup oUG = iugroups.next();
-                strRules.append("\n<option value=\"" + oUG.getURI() + "\" " + (selectedItem.equals(oUG.getURI()) ? "selected" : "") + ">" + oUG.getDisplayTitle(user.getLanguage()) + "</option>");
+                strRules.append("\n<option value=\"").append(oUG.getURI()).append("\" ").append(selectedItem.equals(oUG.getURI()) ? "selected" : "").append(">").append(oUG.getDisplayTitle(user.getLanguage())).append("</option>");
             }
             strRules.append("\n</optgroup>");
             if (strRules.toString().length() > 0) {
@@ -292,12 +316,14 @@ public class ProcessFileRepository extends GenericResource {
 
         } catch (Exception e) {
         }
-
-
-
         return strTemp;
     }
 
+    /**
+     * Obtiene el nivel de permisos del usuario.
+     * @param user Usuario.
+     * @return Entero que representa el nivel de permisos del usuario.
+     */
     public int getLevelUser(User user) {
         int level = 0;
 
@@ -398,7 +424,6 @@ public class ProcessFileRepository extends GenericResource {
             action = "";
         }
 
-        WebSite wsite = response.getWebPage().getWebSite();
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         if (ACT_NEWFILE.equals(action)) {
             org.semanticwb.portal.util.FileUpload fup = new org.semanticwb.portal.util.FileUpload();
@@ -496,6 +521,11 @@ public class ProcessFileRepository extends GenericResource {
         }
     }
 
+    /**
+     * Obtiene el tipo de archivo de acuerdo a su extensión.
+     * @param filename Nombre del archivo.
+     * @return Cadena con el tipo de archivo.
+     */
     public static String getFileType(String filename) {
         String file = "Document";
         String type = filename.toLowerCase();
@@ -543,6 +573,11 @@ public class ProcessFileRepository extends GenericResource {
         return file;
     }
 
+    /**
+     * Obtiene la ruta al archivo de ícono para un archivo con base en su extensión.
+     * @param fileName Nombre del archivo.
+     * @return Cadena con la ruta al icono del archivo.
+     */
     public static String getFileIcon(String fileName) {
         String path = SWBPlatform.getContextPath()+"/swbadmin/jsp/process/repository/css/images/";
         String ret = "";
@@ -585,7 +620,13 @@ public class ProcessFileRepository extends GenericResource {
         return ret;
     }
     
-    public List<RepositoryElement> listFiles(HttpServletRequest request, SWBParamRequest paramRequest) {
+    /**
+     * Obtiene la lista de archivos del repositorio.
+     * @param request The request.
+     * @param paramRequest The SWBParamRequest.
+     * @return Lista con los archivos del repositorio.
+     */
+    private List<RepositoryElement> listFiles(HttpServletRequest request, SWBParamRequest paramRequest) {
         List<RepositoryElement> ret = new ArrayList<RepositoryElement>();
         HashMap<String, RepositoryElement> hmNodes = new HashMap<String, RepositoryElement>();
         User user = paramRequest.getUser();
@@ -668,6 +709,38 @@ public class ProcessFileRepository extends GenericResource {
             while (keys.hasNext()) {
                 String key = keys.next();
                 ret.add((RepositoryElement)hmNodes.get(key));
+            }
+        }
+        return ret;
+    }
+    
+    /**
+     * Obtiene la lista de versiones de un elemento del repositorio.
+     * @param el Elemento del repositorio del cual se obtendrán las versiones.
+     * @return Lista de versiones del elemento del repositorio.
+     */
+    private List<VersionInfo> getFileVersions(RepositoryElement el) {
+        ArrayList<VersionInfo> ret = new ArrayList<VersionInfo>();
+        
+        if (el != null) {
+            VersionInfo vi = el.getLastVersion();
+            VersionInfo ver = null;
+
+            if (null != vi) {
+                ver = vi;
+                while (ver.getPreviousVersion() != null) {
+                    ver = ver.getPreviousVersion();
+                }
+            }
+
+            if (ver != null) {
+                ret.add(ver);
+                while (ver != null) {
+                    ver = ver.getNextVersion();
+                    if (ver != null) {
+                        ret.add(ver);
+                    }
+                }
             }
         }
         return ret;
