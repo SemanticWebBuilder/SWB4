@@ -66,7 +66,7 @@ public class ReportsResource extends GenericResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/reports/reports.jsp";
+        String jsp = "/swbadmin/jsp/process/reports/reports.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(jsp);
 
         try {
@@ -90,7 +90,7 @@ public class ReportsResource extends GenericResource {
     }
 
     public void doShowURSReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/reports/userRoleSegregation.jsp";
+        String jsp = "/swbadmin/jsp/process/reports/userRoleSegregation.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(jsp);
         ArrayList<UserRolesSegregationBean> beans = getURSBeans(paramRequest, request, paramRequest.getWebPage().getWebSite());
         
@@ -104,7 +104,7 @@ public class ReportsResource extends GenericResource {
     }
     
     public void doShowTRSReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/reports/taskRoleSegregation.jsp";
+        String jsp = "/swbadmin/jsp/process/reports/taskRoleSegregation.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(jsp);
         ArrayList<ProcessBean> beans = getTRSBeans(paramRequest, request, paramRequest.getWebPage().getWebSite());
         
@@ -119,7 +119,7 @@ public class ReportsResource extends GenericResource {
     
     public ArrayList<UserRolesSegregationBean> getURSBeans(SWBParamRequest paramRequest, HttpServletRequest request, WebSite site) {
         ArrayList<UserRolesSegregationBean> temp = UserRolesSegregationReport.generateBeans(site);
-        String inPath = SWBPortal.getWorkPath() + "/models/" + site.getId() + "/jsp/process/reports/URSReportTemplate.xls";
+        String inPath = SWBUtils.getApplicationPath()+"/swbadmin/jsp/process/reports/URSReportTemplate.xls";
         String outPath = SWBPortal.getWorkPath() + "/models/" + site.getId() + "/reports/URSReport.xls";
         
         ArrayList<UserRolesSegregationBean> ret = new ArrayList<UserRolesSegregationBean>();
@@ -178,7 +178,7 @@ public class ReportsResource extends GenericResource {
     
     public ArrayList<ProcessBean> getTRSBeans(SWBParamRequest paramRequest, HttpServletRequest request, WebSite site) {
         ArrayList<ProcessBean> temp = TaskRoleSegregationReport.generateBeans(site);
-        String inPath = SWBPortal.getWorkPath() + "/models/" + site.getId() + "/jsp/process/reports/TRSReportTemplate.xls";
+        String inPath = SWBUtils.getApplicationPath()+"/swbadmin/jsp/process/reports/TRSReportTemplate.xls";
         String outPath = SWBPortal.getWorkPath() + "/models/" + site.getId() + "/reports/TRSReport.xls";
         
         ArrayList<ProcessBean> ret = new ArrayList<ProcessBean>();
