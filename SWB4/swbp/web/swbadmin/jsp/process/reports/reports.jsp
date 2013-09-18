@@ -11,18 +11,15 @@ SWBResourceURL URSUrl = paramRequest.getRenderUrl().setMode("URSReport");
 SWBResourceURL TRSUrl = paramRequest.getRenderUrl().setMode("TRSReport");
 
 %>
-<h2>Generador de Reportes</h2>
-<div class="bandeja-combo">
-    <ul>
-        <li>
-            Reporte:
-            <select id="reportId">
-                <option value="<%=URSUrl%>">Segregaci&oacute;n de Roles por Usuario</option>
-                <option value="<%=TRSUrl%>">Segregaci&oacute;n de Roles por Actividad</option>
-            </select>
-        </li>
-        <li>
-            <input type="button" value="Generar" onclick="window.location=document.getElementById('reportId').value"/>
-        </li>
-    </ul>
-</div>
+<h2><%=paramRequest.getLocaleString("pageTitle")%></h2>
+<ul class="list-unstyled list-inline">
+    <li>
+        <select id="reportId" class="form-control form-inline">
+            <option value="<%=URSUrl%>"><%=paramRequest.getLocaleString("optUserRoles")%></option>
+            <option value="<%=TRSUrl%>"><%=paramRequest.getLocaleString("optActRoles")%></option>
+        </select>
+    </li>
+    <li>
+        <button class="btn btn-success" onclick="window.location=document.getElementById('reportId').value;"><%=paramRequest.getLocaleString("actGenerate")%></button>
+    </li>
+</ul>
