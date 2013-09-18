@@ -37,7 +37,6 @@ public class OrdinalCategorical extends org.semanticwb.bsc.formelement.base.Ordi
     @Override
     public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) throws FormValidateException
     {
-System.out.println("\n\n ordinalcategorical....");   
         int ordinal;
         try            
         {
@@ -52,7 +51,6 @@ System.out.println("\n\n ordinalcategorical....");
         GenericObject genObj = obj.getGenericInstance();
         if(genObj instanceof State)
         {
-System.out.println("OrdinalCategorical. estados");
             State state = (State)obj.getGenericInstance();
             //StateGroup parent = state.getStateGroup();
             Status parent = state.getStatus();
@@ -73,12 +71,8 @@ System.out.println("OrdinalCategorical. estados");
         }
         else if(genObj instanceof Series)
         {
-System.out.println("\n\n");
-System.out.println("OrdinalCategorical. Series");
             Series series = (Series)genObj;
-System.out.println("indicador padre="+series.getIndicator().getTitle());
             Indicator parent = series.getIndicator();
-//            if(parent instanceof StateGroup) {
             GenericIterator<Series> it = parent.listSerieses();
             while(it.hasNext()) {
                 Series s = it.next();
@@ -89,13 +83,10 @@ System.out.println("indicador padre="+series.getIndicator().getTitle());
                 {
                     throw new FormValidateException("El valor debe ser numérico y no puede repetirse");
                 }
-
             }
-//            }
         }
         else
         {
-System.out.println("OrdinalCategorical. otro");
             super.validate(request, obj, prop, propName);
         }        
     }
