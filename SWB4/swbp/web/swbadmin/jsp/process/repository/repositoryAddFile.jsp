@@ -149,7 +149,6 @@ if (!user.isSigned()) {
                 <select name="itemAwStatus" id="itemAwStatus" class="form-control">
                     <option value="" <%=(actualStatus.equals("")?"selected":"")%>><%=paramRequest.getLocaleString("msgSelNone")%></option>
                     <%
-                    System.out.println("actualStatus:"+actualStatus);
                     Iterator<ItemAwareStatus> ititwstst = SWBComparator.sortByDisplayName(ItemAwareStatus.ClassMgr.listItemAwareStatuses(site), lang);
                     while (ititwstst.hasNext()) {
                         ItemAwareStatus itemAwareStatus = ititwstst.next();
