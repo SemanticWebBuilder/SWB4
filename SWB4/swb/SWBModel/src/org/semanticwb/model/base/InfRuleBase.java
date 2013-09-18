@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Reglas de inferencia definidas dentro de una ontologia 
    */
-public abstract class InfRuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class InfRuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
    /**
    * Reglas de inferencia definidas dentro de una ontologia
