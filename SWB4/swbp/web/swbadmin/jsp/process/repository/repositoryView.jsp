@@ -46,10 +46,9 @@ if (!user.isSigned()) {
 } else {
     SWBResourceURL addUrl = paramRequest.getRenderUrl().setMode(ProcessFileRepository.MODE_ADDFILE);
     %>
-    <h2>Repositorio de documentos</h2>
     <ul class="list-unstyled list-inline">
         <li>
-            <a href="<%=addUrl%>" class="btn btn-default"><i class="icon-plus"></i> Agregar documento</a>
+            <a href="<%=addUrl%>" class="btn btn-default"><i class="icon-plus"></i> <%=paramRequest.getLocaleString("addFile")%></a>
         </li>
     </ul>
     <%
@@ -63,14 +62,14 @@ if (!user.isSigned()) {
                 <table class="table table-hover swbp-table">
                     <thead>
                         <tr>
-                            <th><a href="<%=urlOrder.setParameter("sort", "title")%>"><i class="icon-sort"></i></a> Nombre</th>
-                            <th><a href="<%=urlOrder.setParameter("sort", "type")%>"><i class="icon-sort"></i></a> Tipo</th>
-                            <th>Versión</th>
-                            <th><a href="<%=urlOrder.setParameter("sort", "date")%>"><i class="icon-sort"></i></a> Modificado</th>
-                            <th><a href="<%=urlOrder.setParameter("sort", "usr")%>"><i class="icon-sort"></i></a> Modificado por</th>
-                            <th><a href="<%=urlOrder.setParameter("sort", "gpousr")%>"><i class="icon-sort"></i></a> Área</th>
-                            <th><a href="<%=urlOrder.setParameter("sort", "status")%>"><i class="icon-sort"></i></a> Status</th>
-                            <th>Acciones</th>
+                            <th><a href="<%=urlOrder.setParameter("sort", "title")%>"><i class="icon-sort"></i></a> <%=paramRequest.getLocaleString("msgTHFileName")%></th>
+                            <th><a href="<%=urlOrder.setParameter("sort", "type")%>"><i class="icon-sort"></i></a> <%=paramRequest.getLocaleString("msgType")%></th>
+                            <th><%=paramRequest.getLocaleString("msgVersion")%></th>
+                            <th><a href="<%=urlOrder.setParameter("sort", "date")%>"><i class="icon-sort"></i></a> <%=paramRequest.getLocaleString("msgLastDateModification")%></th>
+                            <th><a href="<%=urlOrder.setParameter("sort", "usr")%>"><i class="icon-sort"></i></a> <%=paramRequest.getLocaleString("msgVersionUser")%></th>
+                            <th><a href="<%=urlOrder.setParameter("sort", "gpousr")%>"><i class="icon-sort"></i></a> <%=paramRequest.getLocaleString("msgTHArea")%></th>
+                            <th><a href="<%=urlOrder.setParameter("sort", "status")%>"><i class="icon-sort"></i></a> <%=paramRequest.getLocaleString("msgTHStatus")%></th>
+                            <th><%=paramRequest.getLocaleString("msgTHAction")%></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -101,7 +100,7 @@ if (!user.isSigned()) {
                             <td><%=rf.getOwnerUserGroup()==null?"--":rf.getOwnerUserGroup().getDisplayTitle(lang)%></td>
                             <td><%=rf.getStatus()==null?"--":rf.getStatus().getDisplayTitle(lang)%></td>
                             <td class="swbp-actions">
-                                <a href="<%=propsUrl%>" title="Propiedades" class="btn btn-default" data-toggle="modal" data-target="#modalDialog"><i class="icon-info-sign"></i></a>
+                                <a href="<%=propsUrl%>" title="<%=paramRequest.getLocaleString("msgInfo")%>" class="btn btn-default" data-toggle="modal" data-target="#modalDialog"><i class="icon-info-sign"></i></a>
                                 <%if (luser == 3 || (vi.getCreator() != null && vi.getCreator().equals(user) && luser > 1)) {
                                     SWBResourceURL urlremove = paramRequest.getActionUrl();
                                     urlremove.setAction("removefile");
@@ -111,8 +110,8 @@ if (!user.isSigned()) {
                                     addUrl.setParameter("fid", rf.getId());
                                     addUrl.setParameter("type", (rf instanceof RepositoryURL?"url":"file"));
                                     %>
-                                    <a href="<%=urlremove%>" onclick="if (!confirm('<%=paramRequest.getLocaleString("msgAlertConfirmRemoveFile") + " " + rf.getTitle() + "?"%>')) return false;" title="Eliminar" class="btn btn-default"><i class="icon-trash"></i></a>
-                                    <a href="<%=addUrl%>" title="Agregar nueva versión" class="btn btn-default"><i class="icon-upload-alt"></i></a>
+                                <a href="<%=urlremove%>" onclick="if (!confirm('<%=paramRequest.getLocaleString("msgAlertConfirmRemoveFile") + " " + rf.getTitle() + "?"%>')) return false;" title="<%=paramRequest.getLocaleString("msgAltDelete")%>" class="btn btn-default"><i class="icon-trash"></i></a>
+                                    <a href="<%=addUrl%>" title="<%=paramRequest.getLocaleString("msgAddVersion")%>" class="btn btn-default"><i class="icon-upload-alt"></i></a>
                                     <%
                                 }
                                 if (luser > 0) {
@@ -121,14 +120,14 @@ if (!user.isSigned()) {
                                     urlDownload.setParameter("fid", rf.getId());
                                     urlDownload.setParameter("verNum", "" + vi.getVersionNumber());
                                     %>
-                                    <a href="<%=rf instanceof RepositoryFile?urlDownload:vi.getVersionFile()%>" title="<%=rf instanceof RepositoryFile?"Descargar":"Ir al enlace"%>" class="btn btn-default"><i class="<%=rf instanceof RepositoryFile?"icon-download-alt":"icon-external-link"%>"></i></a>
+                                    <a href="<%=rf instanceof RepositoryFile?urlDownload:vi.getVersionFile()%>" title="<%=rf instanceof RepositoryFile?paramRequest.getLocaleString("msgDownload"):paramRequest.getLocaleString("msgGoLink")%>" class="btn btn-default"><i class="<%=rf instanceof RepositoryFile?"icon-download-alt":"icon-external-link"%>"></i></a>
                                 <%}
                                 if (vi.getPreviousVersion() != null) {
                                     SWBResourceURL historyUrl = paramRequest.getRenderUrl().setMode(ProcessFileRepository.MODE_HISTORY);
                                     historyUrl.setParameter("fid", rf.getId());
                                     historyUrl.setParameter("type", (rf instanceof RepositoryURL?"url":"file"));
                                     %>
-                                    <a href="<%=historyUrl%>" title="Historial de versiones" class="btn btn-default"><i class="icon-archive"></i></a>
+                                    <a href="<%=historyUrl%>" title="<%=paramRequest.getLocaleString("msgViewVersionHistory")%>" class="btn btn-default"><i class="icon-archive"></i></a>
                                     <%
                                 }%>
                             </td>
@@ -141,6 +140,12 @@ if (!user.isSigned()) {
             </div>
             <%
         }
+    } else {
+    %>
+    <div class="alert alert-block alert-warning fade in">
+        <p><%=paramRequest.getLocaleString("msgNoFiles")%></p>
+    </div>
+    <%
     }
 }
 %>
