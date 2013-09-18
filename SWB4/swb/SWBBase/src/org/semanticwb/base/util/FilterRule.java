@@ -26,7 +26,7 @@ package org.semanticwb.base.util;
  *
  * @author javier.solis.g
  */
-public interface FilterRule
+public interface FilterRule<T>
 {
-    public boolean filter(Object obj);
+    public boolean filter(T obj);
 }
