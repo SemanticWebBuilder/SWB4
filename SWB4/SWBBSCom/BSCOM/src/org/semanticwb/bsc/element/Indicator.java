@@ -61,35 +61,31 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
     }
     
     private List<Period> sortPeriods() {
-        List<Period> periods = SWBUtils.Collections.copyIterator(listPeriods());
-        Collections.sort(periods);
-        return periods;
+        return sortPeriods(true);
     }
     
     private List<Period> sortPeriods(boolean ascendent) {
+        List<Period> periods = SWBUtils.Collections.copyIterator(listPeriods());
         if(ascendent) {
-            return sortPeriods();
-        }else {
-            List<Period> periods = SWBUtils.Collections.copyIterator(listPeriods());
-            Collections.sort(periods, Collections.reverseOrder());
-            return periods;
+            Collections.sort(periods);
+        }else {            
+            Collections.sort(periods, Collections.reverseOrder());            
         }
+        return periods;
     }
     
-    private List<State> sortStates() {        
-        List<State> states = SWBUtils.Collections.copyIterator(listStates());
-        Collections.sort(states);
-        return states;
+    private List<State> sortStates() {
+        return sortStates(true);
     }
     
     private List<State> sortStates(boolean ascendent) {
+        List<State> states = SWBUtils.Collections.copyIterator(listStates());
         if(ascendent) {
-            return sortStates();
-        }else {
-            List<State> states = SWBUtils.Collections.copyIterator(listStates());
+            Collections.sort(states);
+        }else {            
             Collections.sort(states, Collections.reverseOrder());
-            return states;
         }
+        return states;
     }
     
     /**
@@ -97,40 +93,29 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
      * @return A GenericIterator with all the org.semanticwb.bsc.accessory.Period sorted
      */
     public Iterator<Period> listMeasurablesPeriods() {
-        int f = getPeriodicity().getNumberOfPeriods();
-        List<Period> periods = sortPeriods();
-        if(f==1) {
-            return periods.iterator();
-        }else {
-            List<Period> lst = new ArrayList<Period>();
-            for(int i=f-1; i<periods.size(); i=i+f) {
-                lst.add(periods.get(i));
-            }
-            return lst.iterator();
-        }
+        return listMeasurablesPeriods(true);
     }
     
     /**
-     * Devuelve todos los períodos de medición ordenados ascendentemente
-     * @param ascendent - ordenar ascendente o descendentemente 
+     * Devuelve todos los períodos de medición ordenados.
+     * @param ascendent - para ordenar ascendente use ascendent=true y descendentemente=false para orden descendente
      * @return A GenericIterator with all the org.semanticwb.bsc.accessory.Period sorted
      */
     public Iterator<Period> listMeasurablesPeriods(boolean ascendent) {
-        if(ascendent) {
-            return listMeasurablesPeriods();
-        }else {
-            int f = getPeriodicity().getNumberOfPeriods();
-            List<Period> periods = sortPeriods(false);
-            if(f==1) {
-                return periods.iterator();
-            }else {
-                List<Period> lst = new ArrayList<Period>();
-                for(int i=f-1; i<periods.size(); i=i+f) {
-                    lst.add(periods.get(i));
-                }
-                return lst.iterator();
+        int f = getPeriodicity().getNumberOfPeriods();
+        List<Period> periods = sortPeriods();        
+        List<Period> measurablesPeriods = new ArrayList<Period>();
+        for(int i=1; i<=periods.size(); i++) {                 
+            if(i%f==0) {                
+                measurablesPeriods.add(periods.get(i-1));
             }
         }
+        if(ascendent) {
+            Collections.sort(measurablesPeriods);
+        }else {
+            Collections.sort(measurablesPeriods, Collections.reverseOrder());
+        }
+        return measurablesPeriods.iterator();
     }
     
     /**
@@ -288,20 +273,4 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
-    /**
-     * Genera un String que representa el nombre del indicador antecedido por su prefijo
-     * @param lang un String que indica el idoma en que se espera el valor devuelto
-     * @return un String que representa el nombre del indicador antecedido por su prefijo
-     */
-    public String renderIndicatorName(String lang) {
-        
-        StringBuilder value = new StringBuilder(64);
-        
-        if (this.getPrefix() != null) {
-            value.append(this.getPrefix());
-            value.append(" ");
-        }
-        value.append(this.getDisplayTitle(lang));
-        return value.toString();
-    }
 }
