@@ -20,6 +20,7 @@ import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.tracing.Series;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBActionResponse;
@@ -195,21 +196,28 @@ System.out.println("inds="+inds);
             out.println("<table border=\"1\">");
             out.println("  <caption>tabla de datos</caption>");
             Iterator<Period> measurablesPeriods = myInd.listMeasurablesPeriods(false);
-            if(measurablesPeriods != null && measurablesPeriods.hasNext())
+            if(measurablesPeriods.hasNext())
             {
                 List<Series> serieses = SWBUtils.Collections.copyIterator(myInd.listSerieses());
                 if(!serieses.isEmpty())
                 {
+                    final User user = paramRequest.getUser();
                     Collections.sort(serieses);
                     
                     out.println("<tr>");
                     out.println("  <th>período</th>");
                     out.println("  <th>estado</th>");
-                    for(Series s:serieses) {
+                    Iterator<Series> it = serieses.iterator();
+                    while(it.hasNext()) {
+                        Series s = it.next();
+                        if(!s.isValid() || !user.haveAccess(s)) {
+                            it.remove();
+                            continue;
+                        }
                         out.println("  <th title=\""+s.getDescription()+"\">"+s.getTitle()+"</th>");
                     }
+                    
                     out.println("</tr>");
-
                     
                     DecimalFormat formatters[] = new DecimalFormat[serieses.size()];
                     for(int i=0; i<serieses.size(); i++) {
