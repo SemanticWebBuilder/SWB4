@@ -58,10 +58,8 @@ public class StreamMap extends GenericAdmResource{
         out.println("   <tr>");
         out.println("       <td style=\"text-align: center;\">");
         out.println("           <input type=\"text\" name=\"mapSinceDate\" id=\"mapSinceDate"+semObj.getId()+"\" dojoType=\"dijit.form.DateTextBox\"  size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\">");
+        out.println("           <button dojoType=\"dijit.form.Button\" type=\"submit\">Mostrar</button>");
         out.println("       </td>");
-        out.println("   </tr>");
-        out.println("   <tr>");
-        out.println("       <td style=\"text-align: center;\"><button dojoType=\"dijit.form.Button\" type=\"submit\">Mostrar</button></td>");
         out.println("   </tr>");
         out.println("</table>");
         out.println("</form>");
