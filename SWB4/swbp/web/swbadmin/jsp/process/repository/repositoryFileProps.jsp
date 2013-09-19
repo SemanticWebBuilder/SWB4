@@ -12,6 +12,7 @@
 <%@page import="org.semanticwb.process.model.RepositoryElement"%>
 <%@page import="org.semanticwb.model.User"%>
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
 User user = paramRequest.getUser();
@@ -83,50 +84,48 @@ if (!user.isSigned()) {
                     <div class="form-group">
                       <label class="col-lg-5 control-label"><%=paramRequest.getLocaleString("msgTitle")%></label>
                       <div class="col-lg-7">
-                        <p class="form-control-static"><%=re.getDisplayTitle(lang)%></p>
+                        <input class="form-control" type="text" disabled value="<%=re.getDisplayTitle(lang)%>"/>
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="col-lg-5 control-label"><%=re instanceof RepositoryFile?paramRequest.getLocaleString("msgFile"):paramRequest.getLocaleString("msgDocLink")%></label>
-                      <div class="col-lg-7">
-                          <p class="form-control-static">
-                              <%
-                              if (ver != null) {
-                                  %><%=ver.getVersionFile()%><%
-                              } else if (vi != null) {
-                                  %><%=vi.getVersionFile()%><%
-                              } else {
-                                  %>--<%
-                              }
-                              %>
-                        </p>
-                      </div>
+                        <label class="col-lg-5 control-label"><%=re instanceof RepositoryFile?paramRequest.getLocaleString("msgFile"):paramRequest.getLocaleString("lblLink")%></label>
+                        <div class="col-lg-7">
+                        <%
+                        String val = "--";
+                        if (ver != null) {
+                            val = ver.getVersionFile();
+                        } else if (vi != null) {
+                            val = vi.getVersionFile();
+                        }
+                        %>
+                        <input class="form-control" type="text" disabled value="<%=val%>" />
+                        </div>
                     </div>
                     <div class="form-group">
                       <label class="col-lg-5 control-label"><%=paramRequest.getLocaleString("msgDescription")%></label>
                       <div class="col-lg-7">
-                        <p class="form-control-static"><%=re.getDisplayDescription(lang)%></p>
+                          <textarea class="form-control" disabled><%=re.getDisplayTitle(lang)!= null?re.getDisplayDescription(lang):"--"%></textarea>
                       </div>
                     </div>
                     <div class="form-group">
                       <label class="col-lg-5 control-label"><%=paramRequest.getLocaleString("msgComments")%></label>
                       <div class="col-lg-7">
-                        <p class="form-control-static"><%=vi!=null?vi.getVersionComment():"--"%></p>
+                        <textarea class="form-control" disabled><%=vi!=null?vi.getVersionComment():"--"%></textarea>
                       </div>
                     </div>
                     <div class="form-group">
                       <label class="col-lg-5 control-label"><%=paramRequest.getLocaleString("msgVersionUser")%></label>
                       <div class="col-lg-7">
-                        <p class="form-control-static"><%=re.getCreator()==null?"--":re.getCreator().getFullName()%></p>
+                          <input class="form-control" type="text" disabled value="<%=re.getCreator()==null?"--":re.getCreator().getFullName()%>"/>
                       </div>
                     </div>
                     <div class="form-group">
                       <label class="col-lg-5 control-label"><%=paramRequest.getLocaleString("msgLastDateModification")%></label>
                       <div class="col-lg-7">
-                        <p class="form-control-static"><%=re.getCreated()==null?"--":format.format(re.getCreated())%></p>
+                        <input class="form-control" type="text" disabled value="<%=re.getCreated()==null?"--":format.format(re.getCreated())%>"/>
                       </div>
                     </div>
-                  </form>
+                </form>
                 <%
                 }
                 %>
