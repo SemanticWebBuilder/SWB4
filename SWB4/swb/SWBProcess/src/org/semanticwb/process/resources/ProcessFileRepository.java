@@ -96,6 +96,8 @@ public class ProcessFileRepository extends GenericResource {
     public void doFileProps(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String jsp = "/swbadmin/jsp/process/repository/repositoryFileProps.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(jsp);
+        
+        response.setContentType("text/html; charset=UTF-8");
         try {
             request.setAttribute("paramRequest", paramRequest);
             rd.include(request, response);
