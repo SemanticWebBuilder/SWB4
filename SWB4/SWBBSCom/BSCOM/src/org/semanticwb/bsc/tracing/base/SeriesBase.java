@@ -1,9 +1,8 @@
 package org.semanticwb.bsc.tracing.base;
 
 
-public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Measurable,org.semanticwb.bsc.Committable,org.semanticwb.bsc.ReadOnly,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode
+public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.ReadOnly,org.semanticwb.bsc.Measurable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Committable,org.semanticwb.bsc.Sortable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode
 {
-    public static final org.semanticwb.platform.SemanticProperty bsc_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#index");
     public static final org.semanticwb.platform.SemanticClass bsc_Format=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Format");
     public static final org.semanticwb.platform.SemanticProperty bsc_format=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#format");
     public static final org.semanticwb.platform.SemanticClass bsc_Measure=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Measure");
@@ -13,6 +12,8 @@ public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing i
    */
     public static final org.semanticwb.platform.SemanticClass bsc_Indicator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Indicator");
     public static final org.semanticwb.platform.SemanticProperty bsc_indicatorInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#indicatorInv");
+    public static final org.semanticwb.platform.SemanticClass bsc_EvaluationRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#EvaluationRule");
+    public static final org.semanticwb.platform.SemanticProperty bsc_hasEvaluationRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasEvaluationRule");
     public static final org.semanticwb.platform.SemanticClass bsc_Series=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Series");
    /**
    * The semantic class that represents the currentObject
@@ -136,23 +137,23 @@ public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing i
         }
        /**
        * Gets all org.semanticwb.bsc.tracing.Series with a determined Measure
-       * @param value Measure of the type org.semanticwb.bsc.Measure
+       * @param value Measure of the type org.semanticwb.bsc.tracing.Measure
        * @param model Model of the org.semanticwb.bsc.tracing.Series
        * @return Iterator with all the org.semanticwb.bsc.tracing.Series
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Series> listSeriesByMeasure(org.semanticwb.bsc.Measure value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.Series> listSeriesByMeasure(org.semanticwb.bsc.tracing.Measure value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Series> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasMeasure, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.bsc.tracing.Series with a determined Measure
-       * @param value Measure of the type org.semanticwb.bsc.Measure
+       * @param value Measure of the type org.semanticwb.bsc.tracing.Measure
        * @return Iterator with all the org.semanticwb.bsc.tracing.Series
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Series> listSeriesByMeasure(org.semanticwb.bsc.Measure value)
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.Series> listSeriesByMeasure(org.semanticwb.bsc.tracing.Measure value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Series> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasMeasure,value.getSemanticObject(),sclass));
             return it;
@@ -201,6 +202,29 @@ public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing i
         public static java.util.Iterator<org.semanticwb.bsc.tracing.Series> listSeriesByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Series> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.tracing.Series with a determined EvaluationRule
+       * @param value EvaluationRule of the type org.semanticwb.bsc.tracing.EvaluationRule
+       * @param model Model of the org.semanticwb.bsc.tracing.Series
+       * @return Iterator with all the org.semanticwb.bsc.tracing.Series
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.Series> listSeriesByEvaluationRule(org.semanticwb.bsc.tracing.EvaluationRule value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Series> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasEvaluationRule, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.tracing.Series with a determined EvaluationRule
+       * @param value EvaluationRule of the type org.semanticwb.bsc.tracing.EvaluationRule
+       * @return Iterator with all the org.semanticwb.bsc.tracing.Series
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.Series> listSeriesByEvaluationRule(org.semanticwb.bsc.tracing.EvaluationRule value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Series> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasEvaluationRule,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -275,21 +299,21 @@ public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing i
          return ret;
     }
    /**
-   * Gets all the org.semanticwb.bsc.Measure
-   * @return A GenericIterator with all the org.semanticwb.bsc.Measure
+   * Gets all the org.semanticwb.bsc.tracing.Measure
+   * @return A GenericIterator with all the org.semanticwb.bsc.tracing.Measure
    */
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Measure> listMeasures()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Measure> listMeasures()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Measure>(getSemanticObject().listObjectProperties(bsc_hasMeasure));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Measure>(getSemanticObject().listObjectProperties(bsc_hasMeasure));
     }
 
    /**
    * Gets true if has a Measure
-   * @param value org.semanticwb.bsc.Measure to verify
-   * @return true if the org.semanticwb.bsc.Measure exists, false otherwise
+   * @param value org.semanticwb.bsc.tracing.Measure to verify
+   * @return true if the org.semanticwb.bsc.tracing.Measure exists, false otherwise
    */
-    public boolean hasMeasure(org.semanticwb.bsc.Measure value)
+    public boolean hasMeasure(org.semanticwb.bsc.tracing.Measure value)
     {
         boolean ret=false;
         if(value!=null)
@@ -300,10 +324,10 @@ public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing i
     }
    /**
    * Adds a Measure
-   * @param value org.semanticwb.bsc.Measure to add
+   * @param value org.semanticwb.bsc.tracing.Measure to add
    */
 
-    public void addMeasure(org.semanticwb.bsc.Measure value)
+    public void addMeasure(org.semanticwb.bsc.tracing.Measure value)
     {
         getSemanticObject().addObjectProperty(bsc_hasMeasure, value.getSemanticObject());
     }
@@ -317,25 +341,25 @@ public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing i
     }
    /**
    * Removes a Measure
-   * @param value org.semanticwb.bsc.Measure to remove
+   * @param value org.semanticwb.bsc.tracing.Measure to remove
    */
 
-    public void removeMeasure(org.semanticwb.bsc.Measure value)
+    public void removeMeasure(org.semanticwb.bsc.tracing.Measure value)
     {
         getSemanticObject().removeObjectProperty(bsc_hasMeasure,value.getSemanticObject());
     }
 
    /**
    * Gets the Measure
-   * @return a org.semanticwb.bsc.Measure
+   * @return a org.semanticwb.bsc.tracing.Measure
    */
-    public org.semanticwb.bsc.Measure getMeasure()
+    public org.semanticwb.bsc.tracing.Measure getMeasure()
     {
-         org.semanticwb.bsc.Measure ret=null;
+         org.semanticwb.bsc.tracing.Measure ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasMeasure);
          if(obj!=null)
          {
-             ret=(org.semanticwb.bsc.Measure)obj.createGenericInstance();
+             ret=(org.semanticwb.bsc.tracing.Measure)obj.createGenericInstance();
          }
          return ret;
     }
@@ -374,6 +398,71 @@ public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing i
          if(obj!=null)
          {
              ret=(org.semanticwb.bsc.element.Indicator)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Gets all the org.semanticwb.bsc.tracing.EvaluationRule
+   * @return A GenericIterator with all the org.semanticwb.bsc.tracing.EvaluationRule
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.EvaluationRule> listEvaluationRules()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.EvaluationRule>(getSemanticObject().listObjectProperties(bsc_hasEvaluationRule));
+    }
+
+   /**
+   * Gets true if has a EvaluationRule
+   * @param value org.semanticwb.bsc.tracing.EvaluationRule to verify
+   * @return true if the org.semanticwb.bsc.tracing.EvaluationRule exists, false otherwise
+   */
+    public boolean hasEvaluationRule(org.semanticwb.bsc.tracing.EvaluationRule value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(bsc_hasEvaluationRule,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a EvaluationRule
+   * @param value org.semanticwb.bsc.tracing.EvaluationRule to add
+   */
+
+    public void addEvaluationRule(org.semanticwb.bsc.tracing.EvaluationRule value)
+    {
+        getSemanticObject().addObjectProperty(bsc_hasEvaluationRule, value.getSemanticObject());
+    }
+   /**
+   * Removes all the EvaluationRule
+   */
+
+    public void removeAllEvaluationRule()
+    {
+        getSemanticObject().removeProperty(bsc_hasEvaluationRule);
+    }
+   /**
+   * Removes a EvaluationRule
+   * @param value org.semanticwb.bsc.tracing.EvaluationRule to remove
+   */
+
+    public void removeEvaluationRule(org.semanticwb.bsc.tracing.EvaluationRule value)
+    {
+        getSemanticObject().removeObjectProperty(bsc_hasEvaluationRule,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the EvaluationRule
+   * @return a org.semanticwb.bsc.tracing.EvaluationRule
+   */
+    public org.semanticwb.bsc.tracing.EvaluationRule getEvaluationRule()
+    {
+         org.semanticwb.bsc.tracing.EvaluationRule ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasEvaluationRule);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.tracing.EvaluationRule)obj.createGenericInstance();
          }
          return ret;
     }
