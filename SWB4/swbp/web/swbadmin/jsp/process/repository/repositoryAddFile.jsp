@@ -133,7 +133,7 @@ if (!user.isSigned()) {
             }
         %>
         <div id="linkSelect" class="form-group">
-            <label for="" class="col-lg-2 control-label"><%=paramRequest.getLocaleString("msgDocLink")%> *</label>
+            <label for="" class="col-lg-2 control-label"><%=paramRequest.getLocaleString("lblLink")%> *</label>
             <div class="col-lg-3">
                 <div class="input-group">
                     <span class="input-group-addon">http://</span>
