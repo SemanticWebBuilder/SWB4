@@ -25,6 +25,7 @@ package org.semanticwb.portal;
 import org.semanticwb.security.SWBNeedToChangePassword;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.security.GeneralSecurityException;
 import java.security.Principal;
 import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,6 +36,7 @@ import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -50,6 +52,7 @@ import org.semanticwb.model.SWBSessionUser;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.servlet.internal.Login;
 import org.semanticwb.util.GetIterator;
 import org.semanticwb.util.SWBIteratorCache;
@@ -212,12 +215,16 @@ public class SWBUserMgr
 
             //language=DBUser.getInstance(repository).getProperty("defaultLanguage",language);        
             
-            ret=new SWBSessionUser(rep);
+            ret=new SWBSessionUser(rep); 
+            if (null==ret.getId() && rep.isUserRepRememberUser()) 
+            {
+                checkCookie(request, (SWBSessionUser)ret, rep);
+            }//System.out.println("retID:"+ret.getId());
             try
             {
                 sub.getPrincipals().add(ret);
             }catch(Exception e){log.error(e);}
-            ret.setLanguage(language);
+            ret.setLanguage(language); 
             //validar dispositivo
             Device dev=getDevice(request, site);
             if(dev!=null)
@@ -409,5 +416,28 @@ public class SWBUserMgr
 
     public java.security.KeyPair getSessionKey(HttpServletRequest request){
         return sessionobjects.get(request.getSession().getId()).getKey();
+    }
+
+    private void checkCookie(final HttpServletRequest request, final SWBSessionUser session, final UserRepository urep) {
+        String id = "swb."+urep.getId();
+        for (Cookie current: request.getCookies())
+        {
+            if (id.equals(current.getName())){
+                try {
+                    String value = SWBUtils.TEXT.decodeBase64(current.getValue());
+                    SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(SWBPlatform.getSemanticMgr().SWBAdminURI + "/PrivateKey");
+                    //System.out.println("sp:"+sp);
+                    String pass = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(sp);
+                    byte[] buid = SWBUtils.CryptoWrapper.PBEAES128Decipher(pass, value.getBytes());
+                    //System.out.println("uid: "+ new String(buid));
+                    String sbuid = new String(buid);
+                    String uid = sbuid.substring(sbuid.lastIndexOf(':')+1);
+                    User user = urep.getUser(uid);
+                    if (null!=user) {
+                        session.updateUser(user);
+                    }
+                } catch (GeneralSecurityException gse) { log.error("checkCookie:", gse);}
+            }
+        }
     }
 }
