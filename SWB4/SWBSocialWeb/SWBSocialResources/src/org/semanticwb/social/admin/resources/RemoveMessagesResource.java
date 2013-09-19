@@ -116,7 +116,7 @@ public class RemoveMessagesResource extends GenericResource {
             out.println("   </tr>");
             out.println("   <tr>");
             out.println("       <td style=\"text-align: center;\">");
-            out.println("           <input type=\"text\" name=\"remSinceDate\" id=\"remSinceDate\" dojoType=\"dijit.form.DateTextBox\"  size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\">");
+            out.println("           <input type=\"text\" name=\"remSinceDate"+stream.getId()+"\" id=\"remSinceDate"+stream.getId()+"\" dojoType=\"dijit.form.DateTextBox\"  size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\">");
             out.println("       </td>");
             out.println("   </tr>");
             out.println("   <tr>");
