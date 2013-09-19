@@ -315,10 +315,12 @@ public class Login implements InternalServlet
                 String matchKey = dparams.getWebPage().getWebSiteId()+"|"+request.getParameter("wb_username");
                 doLogin(callbackHandler, context, subject, request, matchKey, dparams.getWebPage().getWebSite().getUserRepository().getId());
                //MAPS740508 - 18-09-2013 - Checar si recordar con cookie
-                setRememberCookie((User)subject.getPrincipals().iterator().next(), 
-                        response, dparams.getWebPage().getWebSite().getUserRepository().getId(),
-                        dparams.getWebPage().getWebSite().getUserRepository());
-                
+                if ("true".equals(request.getParameter("wb_rememberuser")))
+                {
+                    setRememberCookie((User)subject.getPrincipals().iterator().next(), 
+                            response, dparams.getWebPage().getWebSite().getUserRepository().getId(),
+                            dparams.getWebPage().getWebSite().getUserRepository());
+                }
                 
             } catch (Exception ex)
             {
@@ -654,6 +656,21 @@ public class Login implements InternalServlet
                 login = login.replaceFirst("<SWBSECURITY>", codigoRSA);
             } else {
                 login = login.replaceFirst("<SWBSECURITY>", "");
+            }
+            if (distributorParams.getWebPage().getWebSite().getUserRepository().isUserRepRememberUser())
+            {
+                String rememberField = handleError?
+                    "<br>"+SWBUtils.TEXT.getLocaleString("org.semanticwb.servlet.internal.Login", 
+                        "remember", new Locale(distributorParams.getUser().getLanguage()))
+                        +": <input type=\"checkbox\" name=\"wb_rememberuser\" value=\"true\" />":
+                    "<tr>\n<th>\n<h2>"+SWBUtils.TEXT.getLocaleString("org.semanticwb.servlet.internal.Login", 
+                        "remember", new Locale(distributorParams.getUser().getLanguage()))
+                        +":</h2></th><td><input type=\"checkbox\" name=\"wb_rememberuser\""
+                        + " value=\"true\" />\n</td>\n</tr>\n";
+                login = login.replaceFirst("<SWBREMEMBER>", rememberField);
+            } else 
+            {
+                login = login.replaceFirst("<SWBREMEMBER>", "");
             }
         } catch (Exception e)
         {

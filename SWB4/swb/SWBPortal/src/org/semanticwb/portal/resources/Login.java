@@ -204,6 +204,7 @@ public class Login extends GenericAdmResource
     out.println("       &nbsp;&nbsp;{webworkpath}<BR>");
     out.println("       &nbsp;&nbsp;{websiteid}<BR>");
     out.println("       &nbsp;&nbsp;{workpath}<BR>");
+    out.println("       &nbsp;&nbsp;{remember.field}<BR>");
 
     out.println("       <BR>&nbsp;&nbsp;<b>Note:</b> XXXXX=Text<BR><BR>");
     out.println("\t</font>");
@@ -272,6 +273,7 @@ public class Login extends GenericAdmResource
     str = SWBUtils.TEXT.replaceAll(str, "{webworkpath}", SWBPortal.getWebWorkPath());
     str = SWBUtils.TEXT.replaceAll(str, "{workpath}", SWBPortal.getWorkPath());
     str = SWBUtils.TEXT.replaceAll(str, "{websiteid}", paramRequest.getWebPage().getWebSiteId());
+    str = SWBUtils.TEXT.replaceAll(str, "{remember.field}", "<input type=\"checkbox\" name=\"wb_rememberuser\" value=\"true\" />");
 
     return str;
   }
