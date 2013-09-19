@@ -5,11 +5,15 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.base.util.FilterRule;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
+import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.RuleRef;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
 
 /*
@@ -65,7 +69,8 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
     }
     
     private List<Period> sortPeriods(boolean ascendent) {
-        List<Period> periods = SWBUtils.Collections.copyIterator(listPeriods());
+        //List<Period> periods = SWBUtils.Collections.copyIterator(listPeriods());
+        List<Period> periods = listValidPeriods();
         if(ascendent) {
             Collections.sort(periods);
         }else {            
@@ -166,6 +171,39 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
         return null;
     }
     
+    public List<Series> listValidSeries() {
+        List<Series> validSerieses = SWBUtils.Collections.filterIterator(listSerieses(), new FilterRule<Series>() {
+                                                                        @Override
+                                                                        public boolean filter(Series s) {
+                                                                            User user = SWBContext.getSessionUser();
+                                                                            return !s.isValid() || !user.haveAccess(s);
+                                                                        }            
+                                                                    });
+        return validSerieses;
+    }
+    
+    public List<Period> listValidPeriods() {
+        List<Period> validPeriods = SWBUtils.Collections.filterIterator(listPeriods(), new FilterRule<Period>() {
+                                                                        @Override
+                                                                        public boolean filter(Period p) {
+                                                                            User user = SWBContext.getSessionUser();
+                                                                            return !p.isValid() || !user.haveAccess(p);
+                                                                        }            
+                                                                    });
+        return validPeriods;
+    }
+    
+    public List<State> listValidStates() {
+        List<State> validStates = SWBUtils.Collections.filterIterator(listStates(), new FilterRule<State>() {
+                                                                        @Override
+                                                                        public boolean filter(State s) {
+                                                                            User user = SWBContext.getSessionUser();
+                                                                            return !s.isValid() || !user.haveAccess(s);
+                                                                        }            
+                                                                    });
+        return validStates;
+    }
+    
     /**
      * Recupera el período más próximo de medición en base a la fecha actual. 
      * La diferencia con nextMeasurementPeriod() es que si actualmente es tiempo de medición,
@@ -175,7 +213,7 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
      */
     public Period currentMeasurementPeriod()
     {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
