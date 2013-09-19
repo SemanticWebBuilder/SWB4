@@ -5606,5 +5606,19 @@ public class SWBUtils {
             }
             return ret;
         }
+        
+        public static List filterIterator(Iterator it, GenericFilterRule rule)
+        {
+            List ret=new ArrayList();
+            while (it.hasNext())
+            {
+                Object object = it.next();
+                if(!rule.filter(object))
+                {
+                    ret.add(object);
+                }
+            }
+            return ret;
+        }
     }
 }
