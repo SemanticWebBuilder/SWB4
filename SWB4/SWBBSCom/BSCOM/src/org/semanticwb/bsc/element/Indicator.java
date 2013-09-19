@@ -5,10 +5,12 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.base.util.FilterRule;
+import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.bsc.tracing.Series;
+import org.semanticwb.bsc.utils.InappropriateFrequencyException;
+import org.semanticwb.bsc.utils.UndefinedFrequencyException;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.RuleRef;
@@ -97,7 +99,7 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
      * Devuelve todos los períodos de medición ordenados ascendentemente
      * @return A GenericIterator with all the org.semanticwb.bsc.accessory.Period sorted
      */
-    public Iterator<Period> listMeasurablesPeriods() {
+    public Iterator<Period> listMeasurablesPeriods() throws UndefinedFrequencyException, InappropriateFrequencyException {
         return listMeasurablesPeriods(true);
     }
     
@@ -106,8 +108,17 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
      * @param ascendent - para ordenar ascendente use ascendent=true y descendentemente=false para orden descendente
      * @return A GenericIterator with all the org.semanticwb.bsc.accessory.Period sorted
      */
-    public Iterator<Period> listMeasurablesPeriods(boolean ascendent) {
-        int f = getPeriodicity().getNumberOfPeriods();
+    public Iterator<Period> listMeasurablesPeriods(boolean ascendent) throws UndefinedFrequencyException, InappropriateFrequencyException {
+        int f = 0;
+        try {
+            f = getPeriodicity().getNumberOfPeriods();
+        }catch(Exception e) {
+            throw new UndefinedFrequencyException("Frecuencia de medición indefinida.");
+        }
+        if(f<1) {
+            throw new InappropriateFrequencyException("Frecuencia de medición inapropiada");
+        }
+        
         List<Period> periods = sortPeriods();        
         List<Period> measurablesPeriods = new ArrayList<Period>();
         for(int i=1; i<=periods.size(); i++) {                 
@@ -172,7 +183,7 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
     }
     
     public List<Series> listValidSerieses() {
-        List<Series> validSerieses = SWBUtils.Collections.filterIterator(listSerieses(), new FilterRule<Series>() {
+        List<Series> validSerieses = SWBUtils.Collections.filterIterator(listSerieses(), new GenericFilterRule<Series>() {
                                                                         @Override
                                                                         public boolean filter(Series s) {
                                                                             User user = SWBContext.getSessionUser();
@@ -183,7 +194,7 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
     }
     
     public List<Period> listValidPeriods() {
-        List<Period> validPeriods = SWBUtils.Collections.filterIterator(listPeriods(), new FilterRule<Period>() {
+        List<Period> validPeriods = SWBUtils.Collections.filterIterator(listPeriods(), new GenericFilterRule<Period>() {
                                                                         @Override
                                                                         public boolean filter(Period p) {
                                                                             User user = SWBContext.getSessionUser();
@@ -194,7 +205,7 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
     }
     
     public List<State> listValidStates() {
-        List<State> validStates = SWBUtils.Collections.filterIterator(listStates(), new FilterRule<State>() {
+        List<State> validStates = SWBUtils.Collections.filterIterator(listStates(), new GenericFilterRule<State>() {
                                                                         @Override
                                                                         public boolean filter(State s) {
                                                                             User user = SWBContext.getSessionUser();

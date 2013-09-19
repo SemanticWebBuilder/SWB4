@@ -2,6 +2,7 @@ package org.semanticwb.bsc.admin.resources.behavior;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -44,20 +45,32 @@ public class EvaluationRulesManager extends GenericResource {
         }
          
         final String suri=request.getParameter("suri");
+System.out.println("suri="+suri);
         if(suri==null) {
             response.getWriter().println("No se detect&oacute ning&uacute;n objeto sem&aacute;ntico!");
+System.out.println("adios");
             return;
         }
         StringBuilder htm = new StringBuilder();
         String lang = user.getLanguage();
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         SemanticObject obj = ont.getSemanticObject(suri);
+        
         Series series = (Series)obj.createGenericInstance();
         Indicator indicator = series.getIndicator();
-        Iterator<State> states = indicator.listStates();
-        List<Series> serieses = SWBUtils.Collections.copyIterator(indicator.listSerieses());
-        serieses.remove(series);        
+        
+        List<State> validSates = indicator.listValidStates();
+        Collections.sort(validSates);
+        Iterator<State> states = validSates.iterator();
+        
+        List<Series> serieses = indicator.listValidSerieses();
+        serieses.remove(series);
+        
+        
+        
         List<Operation> operations = SWBUtils.Collections.copyIterator(Operation.ClassMgr.listOperations(getResourceBase().getWebSite()));
+        
+        
         
         PrintWriter out = response.getWriter();
         out.println("<script type=\"text/javascript\">\n");
@@ -77,7 +90,7 @@ public class EvaluationRulesManager extends GenericResource {
                 State state = states.next();
                 out.println("  <tr>");
                 out.println("    <td width=\"5%\"><input type=\"checkbox\" name=\"rc1\" value=\"state1\" /></td>");
-                out.println("    <td width=\"15%\">State1<input name=\"rc2_state1\" type=\"hidden\" value=\"state1\" /></td>");
+                out.println("    <td width=\"15%\">"+state.getTitle()+"<input name=\"rc2_state1\" type=\"hidden\" value=\"state1\" /></td>");
                 out.println("    <td width=\"15%\">");
                 
                 //htm.append(renderSelect(state.getId(), operations.iterator()));
@@ -106,6 +119,8 @@ public class EvaluationRulesManager extends GenericResource {
             out.println("</table>");
             out.println("<input type=\"submit\" value=\"Enviar\" />");
             out.println("</form>");
+        }else {
+            out.println("<p>no hay estados...</p>");
         }
         
         if(request.getParameter("statusMsg")!=null) {
