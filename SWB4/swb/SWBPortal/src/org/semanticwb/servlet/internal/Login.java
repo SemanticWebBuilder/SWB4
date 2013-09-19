@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.security.GeneralSecurityException;
 import java.util.Iterator;
 import java.security.Principal;
 import java.util.Locale;
@@ -35,6 +36,7 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -45,6 +47,7 @@ import org.semanticwb.base.util.SWBSoftkHashMap;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
+import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBSessionObject;
 import org.semanticwb.security.limiter.FailedAttempt;
 
@@ -311,7 +314,12 @@ public class Login implements InternalServlet
             {
                 String matchKey = dparams.getWebPage().getWebSiteId()+"|"+request.getParameter("wb_username");
                 doLogin(callbackHandler, context, subject, request, matchKey, dparams.getWebPage().getWebSite().getUserRepository().getId());
-
+               //MAPS740508 - 18-09-2013 - Checar si recordar con cookie
+                setRememberCookie((User)subject.getPrincipals().iterator().next(), 
+                        response, dparams.getWebPage().getWebSite().getUserRepository().getId(),
+                        dparams.getWebPage().getWebSite().getUserRepository());
+                
+                
             } catch (Exception ex)
             {
                 try {
@@ -909,6 +917,49 @@ public class Login implements InternalServlet
 
         out.flush();
         out.close();
+    }
+
+    public void setRememberCookie(final User user, final HttpServletResponse response, final String id, final UserRepository urep) {
+        try {
+            if (urep.isUserRepRememberUser() && user.isSigned()) {
+                String uid = user.getShortURI();
+                SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(SWBPlatform.getSemanticMgr().SWBAdminURI + "/PrivateKey");
+                //System.out.println("sp:"+sp);
+                String pass = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(sp);
+                //System.out.println("pass:"+pass);
+                if (null!=pass){
+                    byte[] buid = SWBUtils.CryptoWrapper.PBEAES128Cipher(pass, uid.getBytes());
+                    Cookie cookie = new Cookie("swb."+id, SWBUtils.TEXT.encodeBase64(new String(buid)));
+                    cookie.setPath("/");
+                    cookie.setMaxAge(60 * 60 * 24 * 365);
+                    String name = "Set-Cookie";
+                    cookie.setVersion(1);
+                    response.setHeader(name, getCookieData(cookie));
+                    
+                    
+                }
+            }
+        } catch (GeneralSecurityException ex) {
+            log.error("Can't create remembering cookie", ex);
+        }
+    }
+    
+    private String getCookieData(Cookie cookie){
+        StringBuffer buf = new StringBuffer();
+        buf.append(cookie.getName());
+        buf.append("=");
+        buf.append ('"');
+        buf.append (cookie.getValue());
+        buf.append ('"');
+        buf.append (";Version=1");
+        buf.append (";Max-Age=");
+        buf.append (cookie.getMaxAge());
+        buf.append (";Path=");
+        buf.append ('"');
+        buf.append (cookie.getPath());
+        buf.append ('"');
+        buf.append (";HttpOnly");
+        return buf.toString();
     }
 
 }
