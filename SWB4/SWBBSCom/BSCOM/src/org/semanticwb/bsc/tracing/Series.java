@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import org.semanticwb.bsc.Measure;
 import org.semanticwb.bsc.accessory.Period;
+import org.semanticwb.bsc.catalogs.Format;
 import org.semanticwb.bsc.tracing.base.SeriesBase;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.platform.SemanticObject;
@@ -46,7 +47,7 @@ public class Series extends org.semanticwb.bsc.tracing.base.SeriesBase implement
     
     
     
-    public static final String defaultFormatPattern = "#,##0.0#";
+    
     private DecimalFormat formatter;
     
     public Series(org.semanticwb.platform.SemanticObject base)
@@ -55,7 +56,6 @@ public class Series extends org.semanticwb.bsc.tracing.base.SeriesBase implement
     }
 
     public NumberFormat getFormatter() {
-System.out.println("getFormatter():"+formatter);
         if(formatter==null) {
             setFormatter();
         }
@@ -75,7 +75,7 @@ System.out.println("getFormatter():"+formatter);
         try {
             formatter.applyPattern(format.getFormatPattern());
         }catch(Exception iae) {
-            formatter.applyPattern(Series.defaultFormatPattern);
+            formatter.applyPattern(Format.defaultFormatPattern);
         }
     }
     
