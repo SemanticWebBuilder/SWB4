@@ -190,7 +190,7 @@ public class ProcessFileRepository extends GenericResource {
         if (ver != null) {
             try {
                 response.setContentType(DEFAULT_MIME_TYPE);
-                response.setHeader("Content-Disposition", "attachment; filename=\"" + ver.getVersionFile() + "\";");
+                response.setHeader("Content-Disposition", "attachment; filename=\"" + ver.getVersionFile() + "\"");
 
                 OutputStream out = response.getOutputStream();
                 SWBUtils.IO.copyStream(new FileInputStream(SWBPortal.getWorkPath() + repoFile.getWorkPath() + "/" + verNumber + "/" + ver.getVersionFile()), out);
