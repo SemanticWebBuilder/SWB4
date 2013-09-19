@@ -101,7 +101,7 @@ if (!user.isSigned()) {
                 </div>
                 <div class="radio-inline">
                     <label>
-                        <input type="radio" id="urlToggleRadio" onclick="toggleShow('fileSelect', false);toggleShow('linkSelect', true);"name="hftype" value="url"> <%=paramRequest.getLocaleString("msgDocLink")%>
+                        <input type="radio" id="urlToggleRadio" onclick="toggleShow('fileSelect', false);toggleShow('linkSelect', true);"name="hftype" value="url"> <%=paramRequest.getLocaleString("lblLink")%>
                     </label>
                 </div>
             </div>
