@@ -936,7 +936,7 @@ public class SVGModeler extends GenericAdmResource {
         
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + (p != null ? p.getTitle() : "Proceso") + "."+format+"\";");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + (p != null ? p.getTitle() : "Proceso") + "."+format+"\"");
 
         if ("svg".equalsIgnoreCase(format)) {
             String svg = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
