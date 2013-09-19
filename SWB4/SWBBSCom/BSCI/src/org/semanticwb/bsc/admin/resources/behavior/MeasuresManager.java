@@ -16,6 +16,8 @@ import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.catalogs.Format;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.tracing.Series;
+import org.semanticwb.bsc.utils.InappropriateFrequencyException;
+import org.semanticwb.bsc.utils.UndefinedFrequencyException;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
@@ -49,86 +51,95 @@ public class MeasuresManager extends GenericAdmResource {
             if(genericObj instanceof Series)
             {
                 Series series = (Series)genericObj;
-                Iterator<Period> measurablesPeriods = series.getIndicator().listMeasurablesPeriods(false);
-                if(measurablesPeriods != null && measurablesPeriods.hasNext())
+                
+                try
                 {
-                    SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD);
-                    String data = semanticObj.getSemanticClass().getName() + semanticObj.getId();
-                    
-                    out.println("<script type=\"text/javascript\">");
-                    out.println("  dojo.require('dojo.parser');");
-                    out.println("  dojo.require('dijit.layout.ContentPane');");
-                    out.println("  dojo.require('dijit.form.Form');");
-                    out.println("  dojo.require('dijit.form.TextBox');");
-                    out.println("  dojo.require('dijit.form.Button');");
-                    out.println("</script>");
-                    
-                    out.println("<div class=\"swbform\">");                    
-                    out.println("<form method=\"post\" id=\"frmAdd" + data + "\" action=\" " + url + "\" class=\"swbform\" dojoType=\"dijit.form.Form\" onsubmit=\"" + "submitForm('frmAdd" + data + "');return false;\">");
-                    out.println("<fieldset>");
-                    out.println("<input type=\"hidden\" name=\"suri\" value=\"" + semanticObj.getURI() + "\">");                    
-                    out.println("<table>");
-                    Format format = series.getFormat();
-                    Locale locale;
-                    try {
-                        locale = new Locale(format.getLanguage().getId().toLowerCase(), format.getCountry().getId().toUpperCase());
-                    }catch(Exception e) {
-                        locale = new Locale("es","MX");
-                    }
-                    NumberFormat numFormat = NumberFormat.getNumberInstance(locale);
-                    DecimalFormat formatter = (DecimalFormat)numFormat;
-                    try {
-                        formatter.applyPattern(format.getFormatPattern());
-                    }catch(Exception iae) {
-                        formatter.applyPattern(getResourceBase().getAttribute("defaultFormatPattern", defaultFormatPattern));
-                    }
-                    Period period;
-                    while(measurablesPeriods.hasNext())
+                    Iterator<Period> measurablesPeriods = series.getIndicator().listMeasurablesPeriods(false);
+                    if(measurablesPeriods.hasNext())
                     {
-                        period = measurablesPeriods.next();
-//                        if(!period.isActive()) {
-//                            continue;
-//                        }
-                        
-                        Measure measure = series.getMeasureByPeriod(period);
-                        String value = measure==null?"":formatter.format(measure.getValue());
-                        String iconClass, statusTitle;
-                        
+                        SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD);
+                        String data = semanticObj.getSemanticClass().getName() + semanticObj.getId();
+
+                        out.println("<script type=\"text/javascript\">");
+                        out.println("  dojo.require('dojo.parser');");
+                        out.println("  dojo.require('dijit.layout.ContentPane');");
+                        out.println("  dojo.require('dijit.form.Form');");
+                        out.println("  dojo.require('dijit.form.TextBox');");
+                        out.println("  dojo.require('dijit.form.Button');");
+                        out.println("</script>");
+
+                        out.println("<div class=\"swbform\">");                    
+                        out.println("<form method=\"post\" id=\"frmAdd" + data + "\" action=\" " + url + "\" class=\"swbform\" dojoType=\"dijit.form.Form\" onsubmit=\"" + "submitForm('frmAdd" + data + "');return false;\">");
+                        out.println("<fieldset>");
+                        out.println("<input type=\"hidden\" name=\"suri\" value=\"" + semanticObj.getURI() + "\">");                    
+                        out.println("<table>");
+                        Format format = series.getFormat();
+                        Locale locale;
                         try {
-                            statusTitle = measure.getEvaluation().getStatus().getTitle();
+                            locale = new Locale(format.getLanguage().getId().toLowerCase(), format.getCountry().getId().toUpperCase());
+                        }catch(Exception e) {
+                            locale = new Locale("es","MX");
+                        }
+                        NumberFormat numFormat = NumberFormat.getNumberInstance(locale);
+                        DecimalFormat formatter = (DecimalFormat)numFormat;
+                        try {
+                            formatter.applyPattern(format.getFormatPattern());
+                        }catch(Exception iae) {
+                            formatter.applyPattern(getResourceBase().getAttribute("defaultFormatPattern", defaultFormatPattern));
+                        }
+                        Period period;
+                        while(measurablesPeriods.hasNext())
+                        {
+                            period = measurablesPeriods.next();
+    //                        if(!period.isActive()) {
+    //                            continue;
+    //                        }
+
+                            Measure measure = series.getMeasureByPeriod(period);
+                            String value = measure==null?"":formatter.format(measure.getValue());
+                            String iconClass, statusTitle;
+
                             try {
-                                iconClass = measure.getEvaluation().getStatus().getIconClass().trim();
+                                statusTitle = measure.getEvaluation().getStatus().getTitle();
+                                try {
+                                    iconClass = measure.getEvaluation().getStatus().getIconClass().trim();
+                                }catch(Exception e) {
+                                    iconClass = "noStatus";
+                                }
                             }catch(Exception e) {
+                                statusTitle = "-";
                                 iconClass = "noStatus";
                             }
-                        }catch(Exception e) {
-                            statusTitle = "-";
-                            iconClass = "noStatus";
+    //                        if (period.isActive() && user.haveAccess(period)) {
+                                String title = period.getTitle(user.getLanguage()) == null ? period.getTitle() : period.getTitle(user.getLanguage());
+                                out.println("<tr>");
+                                out.println("<td><label>"+title+"</label></td>");
+                                out.println("<td>");
+                                out.println("<input type=\"text\" dojoType=\"dijit.form.TextBox\" name=\"" + period.getId() + "\" value=\""+value+"\" />");
+                                out.println("</td>");
+                                out.println("<td><span class=\""+iconClass+"\">"+statusTitle+"</span></td>");
+                                out.println("</tr>");
+    //                        }
                         }
-//                        if (period.isActive() && user.haveAccess(period)) {
-                            String title = period.getTitle(user.getLanguage()) == null ? period.getTitle() : period.getTitle(user.getLanguage());
-                            out.println("<tr>");
-                            out.println("<td><label>"+title+"</label></td>");
-                            out.println("<td>");
-                            out.println("<input type=\"text\" dojoType=\"dijit.form.TextBox\" name=\"" + period.getId() + "\" value=\""+value+"\" />");
-                            out.println("</td>");
-                            out.println("<td><span class=\""+iconClass+"\">"+statusTitle+"</span></td>");
-                            out.println("</tr>");
-//                        }
+                        out.println("</table>");
+                        out.println("</fieldset>");
+                        out.println("<fieldset>");
+                        out.println(" <button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("lblSave") + "</button>");
+                        out.println(" <button dojoType=\"dijit.form.Button\" type=\"button\" " + "onClick=\"reloadTab('" + semanticObj.getURI() + "');\">" + paramRequest.getLocaleString("lblCancel") + "</button>");
+                        out.println("</fieldset>");
+                        out.println("</form>");
+                        out.println("</div>");
+                    }else {
+                        out.println("<p>" + "ELSE" + "</p>");
                     }
-                    out.println("</table>");
-                    out.println("</fieldset>");
-                    out.println("<fieldset>");
-                    out.println(" <button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("lblSave") + "</button>");
-                    out.println(" <button dojoType=\"dijit.form.Button\" type=\"button\" " + "onClick=\"reloadTab('" + semanticObj.getURI() + "');\">" + paramRequest.getLocaleString("lblCancel") + "</button>");
-                    out.println("</fieldset>");
-                    out.println("</form>");
-                    out.println("</div>");
                 }
-                else
-                {
-                    out.println("<p>" + "ELSE" + "</p>");
+                catch(UndefinedFrequencyException e) {
+                    out.println("no se tienen defina frecuencia de medición. "+e.getMessage());
                 }
+                catch(InappropriateFrequencyException e) {
+                    out.println("no se tienen frecuencia de medición apropiada. "+e.getMessage());
+                }
+                
                 if(request.getParameter("statusMsg") != null && !request.getParameter("statusMsg").isEmpty())
                 {
                     out.println("<div dojoType=\"dojox.layout.ContentPane\">");
