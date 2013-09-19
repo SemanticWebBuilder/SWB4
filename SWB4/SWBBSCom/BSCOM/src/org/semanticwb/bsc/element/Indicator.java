@@ -171,7 +171,7 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
         return null;
     }
     
-    public List<Series> listValidSeries() {
+    public List<Series> listValidSerieses() {
         List<Series> validSerieses = SWBUtils.Collections.filterIterator(listSerieses(), new FilterRule<Series>() {
                                                                         @Override
                                                                         public boolean filter(Series s) {
