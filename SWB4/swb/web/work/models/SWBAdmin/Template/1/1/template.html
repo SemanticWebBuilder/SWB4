@@ -1,20 +1,20 @@
 <template method="setHeaders" Content-Type="text/html; charset=UTF-8" charset="UTF-8" Cache-Control="no-cache" Pragma="no-cache"  response="{response}" />
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{user@getLanguage}" lang="{user@getLanguage}">
-    <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">
-    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
-    <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
-    <META HTTP-EQUIV="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
+<!DOCTYPE html>
+<html>
     <head>
+        <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">
+        <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+        <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
         <title>Semantic WebBuilder 4</title>
-
+        
         <style type="text/css">
-            @import "<webpath/>/swbadmin/js/dojo/dojo/resources/dojo.css";
-            /*@import "<webpath/>/swbadmin/js/dojo/dojo/resources/dnd.css";*/
             @import "<webpath/>/swbadmin/js/dojo/dijit/themes/soria/soria.css";
+            @import "<webpath/>/swbadmin/css/swb.css";
             @import "<webpath/>/swbadmin/js/dojo/dojox/layout/resources/ExpandoPane.css";
             @import "<webpath/>/swbadmin/js/dojo/dojox/form/resources/FileInput.css";
-            @import "<webpath/>/swbadmin/css/swb.css";
+            /*
+            @import "<webpath/>/swbadmin/js/dojo/dojo/resources/dojo.css";
+            */            
 
             /* pre-loader specific stuff to prevent unsightly flash of unstyled content */
             #loader {
@@ -150,12 +150,10 @@
                         </div>
                     </div><!-- end AccordionContainer -->
 
-                    <template method="writeGT"/>div id="vprop" dojoType="dijit.TitlePane" title="<if:user language="es">Propiedades</if:user><if:user language="en">Properties</if:user>" class="admViewProperties" open="false" duration="150" minSize_="20" splitter_="true" region="bottom">
+                    <template method="writeGT"/>div id="vprop" dojoType="dijit.TitlePane" title="<if:user language="es">Propiedades</if:user><if:user language="en">Properties</if:user>" class="admViewProperties" open="true" duration="150" minSize_="20" splitter_="true" region="bottom">
                         View Properties ...
-                        <script type="dojo/method" event="postCreate" args="">
-                            if(!this.open){
-                                this.hideNode.style.display=this.wipeNode.style.display="none";
-                            }
+                        <script type="dojo/method" event="postCreate" args="" >     
+                            //console.log(this);
                             this._setCss();
                             dojo.setSelectable(this.titleNode,false);
                             dijit.setWaiState(this.containerNode,"labelledby",this.titleNode.id);
@@ -168,10 +166,10 @@
                                     _1.style.display="";
                                 },
                                 onEnd:function(){
-                                    //alert("open");
-                                    dijit.byId("leftSplit").layout();
+                                //alert("open");
+                                dijit.byId("leftSplit").layout();
                                 }
-                                });
+                            });
                             this._wipeOut=dojo.fx.wipeOut({
                                 node:this.wipeNode,
                                 duration:this.duration,
@@ -180,8 +178,10 @@
                                     //alert("close");
                                     dijit.byId("leftSplit").layout();
                                 }
-                                });
+                            });
                             //this.inherited(arguments);
+                            window.setTimeout(function(){dijit.byId("vprop").toggle()}, 1000);
+                            //this.toggle();
                         </script>
                     </div>
                 </div><!-- leftsplit -->
@@ -206,6 +206,6 @@
             </div>
         </div>
         <div id="status" dojoType="dojox.layout.ContentPane" executeScripts="true">status...</div>
-        <applet code="LoadApplet" codebase="{webpath}/swbadmin/lib" width="0" height="0"></applet>
+        <!--<applet code="LoadApplet" codebase="{webpath}/swbadmin/lib" width="0" height="0"></applet>-->
     </body>
 </html>
