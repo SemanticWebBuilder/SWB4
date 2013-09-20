@@ -74,7 +74,7 @@ public abstract class DateElementBase extends org.semanticwb.model.DateElement
         }
     }
 
-    /**
+   /**
    * Constructs a DateElementBase with a SemanticObject
    * @param base The SemanticObject with the properties for the DateElement
    */
