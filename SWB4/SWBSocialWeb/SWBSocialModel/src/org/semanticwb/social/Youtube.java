@@ -1,5 +1,17 @@
 package org.semanticwb.social;
 
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestInitializer;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.services.youtube.YouTube;
+import com.google.api.services.youtube.model.ResourceId;
+import com.google.api.services.youtube.model.SearchListResponse;
+import com.google.api.services.youtube.model.SearchResult;
+import com.google.api.services.youtube.model.SearchResultSnippet;
 import com.google.gdata.client.youtube.YouTubeService;
 import java.io.BufferedReader;
 import java.io.Closeable;
@@ -24,6 +36,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -633,22 +646,168 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             if (socialStreamSerch != null && socialStreamSerch.getNextDatetoSearch() != null) {
                 storedValue = formatter.parse(socialStreamSerch.getNextDatetoSearch());
             }
-            System.out.println("Antes de validar las fechas: ");
+            //System.out.println("Antes de validar las fechas: ");
             System.out.println("stored Value : " + storedValue + "  dateVideo:  " + formatter.parse(dateVideo));
             if (formatter.parse(dateVideo).after(storedValue)) {
                 //if (storedValue.before(formatter.parse(dateVideo))) { //Only stores tweetID if it's greater than the current stored value
                 socialStreamSerch.setNextDatetoSearch(dateVideo);
-                System.out.println("GUARDANDO FECHA!!:" + dateVideo);
+                //System.out.println("GUARDANDO FECHA!!:" + dateVideo);
             } else {
-                System.out.println("NO ESTÁ GUARDANDO NADA PORQUE EL VALOR ALMACENADO YA ES IGUAL O MAYOR AL ACTUAL");
+                //System.out.println("NO ESTÁ GUARDANDO NADA PORQUE EL VALOR ALMACENADO YA ES IGUAL O MAYOR AL ACTUAL");
             }
         } catch (NumberFormatException nfe) {
-            log.error("Error in setLastTweetID():" + nfe);
+            log.error("Error in setLastVideoID():" + nfe);
         } catch (ParseException pe) {
             log.error("Error in parseDate():" + pe);
         }
     }
 
+    /*@Override
+    public void listen(Stream stream) {
+        System.out.println("Listening from youtube... API V3");
+        try {
+            // instance of the HTTP transport.
+            HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
+            // instance of the JSON factory. 
+            JsonFactory JSON_FACTORY = new JacksonFactory();
+            // instance of the max number of videos we want returned (50 = upper limit per page). 
+            long NUMBER_OF_VIDEOS_RETURNED = 50;
+            //instance of Youtube object to make all API requests. 
+            YouTube youtube;
+            
+            ArrayList<ExternalPost> aListExternalPost = new ArrayList();
+            // Words from stream.
+            String searchPhrases = getPhrases(stream.getPhrase());
+            System.out.println("searching for phrases:" + searchPhrases);
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+            Date lastVideoID = getLastVideoID(stream); //gets the value stored in NextDatetoSearch
+            System.out.println("storedVideoID:" + lastVideoID);
+
+            //The YouTube object is used to make all API requests. The last argument is required, but
+            //because we don't need anything initialized when the HttpRequest is initialized, we override
+            //the interface and provide a no-op function.
+             
+            youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, new HttpRequestInitializer() {
+              public void initialize(HttpRequest request) throws IOException {}
+            }).setApplicationName("SWB Social").build();
+
+            YouTube.Search.List search = youtube.search().list("id,snippet");
+            
+            //It is important to set your developer key from the Google Developer Console for
+            //non-authenticated requests (found under the API Access tab at this link:
+            //code.google.com/apis/). This is good practice and increased your quota.
+             
+            String apiKey = "AIzaSyBQ6hGagr0wcKrWqsXEfFdDad2loLclqT8";//this.getDeveloperKey();
+            search.setKey(apiKey);
+            search.setQ(searchPhrases);
+            
+             //We are only searching for videos (not playlists or channels). If we were searching for
+             //more, we would add them as a string like this: "video,playlist,channel".
+             
+            search.setType("video");
+            search.setOrder("date");
+            
+            //search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url)");
+            search.setFields("items(id/kind,id/videoId,snippet),nextPageToken");
+            search.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);            
+
+            boolean canGetMoreVideos = false;
+            int totalVideos = 0;
+            int iterations = 1;
+            do{//Iterate to get blocks of videos
+              SearchListResponse searchResponse = search.execute();
+              List<SearchResult> searchResultList = searchResponse.getItems();
+
+              if (searchResultList != null){
+                  Iterator<SearchResult> iteratorSearchResults = searchResultList.iterator();
+                  if(!iteratorSearchResults.hasNext()) {
+                    System.out.println(" There aren't any results for your query.");
+                    canGetMoreVideos = false;
+                  }else{
+                        if(searchResultList.size() < NUMBER_OF_VIDEOS_RETURNED){//It got less videos than requested, therefore there are not more
+                            canGetMoreVideos = false;
+                        }else{
+                            if(searchResponse.getNextPageToken() != null){
+                                //System.out.println("HAY TOKEN PARA OTRA PAGINA:" + searchResponse.getNextPageToken());
+                                search.setPageToken(searchResponse.getNextPageToken());
+                                canGetMoreVideos = true;
+                            }else{
+                                canGetMoreVideos = false;
+                            }
+                        }
+                      
+                        System.out.println("Iteracion:" + iterations + " Size of Array:" + searchResultList.size());
+                        while (iteratorSearchResults.hasNext()){
+                           SearchResult singleVideo = iteratorSearchResults.next();
+                           ResourceId rId = singleVideo.getId();
+
+                           // Double checks the kind is video.
+                           if (rId.getKind().equals("youtube#video")){
+                               
+                               SearchResultSnippet result = singleVideo.getSnippet();
+                               ExternalPost external = new ExternalPost();
+                               Date published = formatter.parse(result.getPublishedAt().toString());
+                               
+                               if(totalVideos == 0){//Set the date of the most recent video
+                                   setLastVideoID(result.getPublishedAt().toString(), stream);
+                               }
+                               
+                               if (published.before(lastVideoID) || published.equals(lastVideoID)) {
+                                   System.out.println("Terminar la busqueda, limite alcanzado");
+                                   canGetMoreVideos = false;
+                                   break;
+                               }
+                               
+                               String desc = result.getDescription();
+                               String title = result.getTitle();
+                               //Date published = formatter.parse(result.getPublishedAt().toString());
+                               if(desc == null || desc.trim().equals("")){
+                                   desc = result.getTitle();
+                               }else{
+                                   desc = title + " / " + desc;
+                               }
+                               external.setPostId(rId.getVideoId());
+                               //System.out.println("$$" + rId.getVideoId() + "$$" + result.getChannelId() + "$$" + result.getChannelTitle() + "$$" + result.getPublishedAt() );
+                               if(result.getChannelTitle() == null || result.getChannelTitle().isEmpty()){
+                                   external.setCreatorId(result.getChannelId());
+                                   external.setCreatorName(result.getChannelId());
+                               }else{
+                                   external.setCreatorId(result.getChannelId());
+                                   external.setCreatorName(result.getChannelTitle());
+                               }
+                               
+                               external.setMessage(desc);
+                               if(result.getPublishedAt() != null){
+                                    external.setCreationTime(result.getPublishedAt().toString());
+                               }
+                               ////////external.setCategory("");
+                               external.setSocialNetwork(this);
+                               external.setVideo(BASE_VIDEO_URL + rId.getVideoId());
+                               external.setPostType(SWBSocialUtil.VIDEO);
+                               aListExternalPost.add(external);
+                               totalVideos++;
+                           }
+                        }
+                    }
+              }
+              iterations++;
+            }while(canGetMoreVideos);
+            System.out.println("Videos totales:" +  totalVideos);
+            
+            if (aListExternalPost.size() > 0) {
+                //new Classifier(aListExternalPost, stream, this, false);
+            }            
+          }catch (GoogleJsonResponseException e) {
+            System.err.println("There was a service error: " + e.getDetails().getCode() + " : "
+                + e.getDetails().getMessage());
+            e.printStackTrace();
+          } catch (IOException e) {
+            System.err.println("There was an IO error: " + e.getCause() + " : " + e.getMessage());
+          } catch (Throwable t) {
+            t.printStackTrace();
+          }
+    }*/
+    
     @Override
     public void listen(Stream stream) {
         //Busca en las categorias: Comedy, Film, Music, People
@@ -779,87 +938,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         }
         System.out.println("Total Videos: " + totalResources);
     }
-
-    /*
-     public void listen(Stream stream) {
-     System.out.println("Entra al metodo listen....");
-     ArrayList<ExternalPost> aListExternalPost = new ArrayList();
-     String searchPhrases = getPhrases(stream.getPhrase());
-
-     int limit = 100;
-     int starIndex = 1;
-     int maxResults = 50;
-     int totalResources = 0;
-
-     for (int j = 0; j <= limit; j++) {
-     String index = String.valueOf(starIndex);
-     // idClave = idClave.replace("|", "/");
-     Map<String, String> params = new HashMap<String, String>();
-     params.put("q", searchPhrases);
-     params.put("v", "2");
-     params.put("start-index", index);
-     params.put("max-results", String.valueOf(maxResults));
-     params.put("alt", "jsonc");
-     params.put("orderby", "published");
-     try {
-     String r2 = getRequest(params, "https://gdata.youtube.com/feeds/api/videos", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
-     //Convertir la String res2 a un objeto json
-     JSONObject resp = new JSONObject(r2);
-     JSONObject data = resp.getJSONObject("data");
-     String updated = data.getString("updated");
-     JSONArray items = data.getJSONArray("items");
-     int count = items.length();
-
-     for (int i = 0; i < count; i++) {
-
-     ExternalPost external = new ExternalPost();
-     JSONObject id = items.getJSONObject(i);
-     String idItem = id.getString("id");
-     String uploader = id.getString("uploader");
-     String updatedItem = id.getString("updated");
-     String title = id.getString("title");
-     String uploaded = id.getString("uploaded");
-     String description = id.getString("description");
-     String categoryItem = id.getString("category");
-     JSONObject content = id.getJSONObject("content");
-     String url = content.getString("5");
-                    
-                   
-     external.setPostId(idItem);
-     external.setCreatorId(uploader);
-     external.setCreatorName(uploader);
-     external.setCreationTime(uploaded);
-     external.setUpdateTime(updatedItem);
-
-
-     if (description == null || description.equals("")) {
-     description = title;
-     }
-     external.setMessage(description);
-     external.setPostType(SWBSocialUtil.VIDEO);
-
-     System.out.println("descripcion: " + description);
-     aListExternalPost.add(external);
-                    
-     totalResources++;
-     }
-     } catch (Exception e) {
-     System.out.println("entra al error: " + e);
-     }
-     starIndex = starIndex + 50;
-     j = j + 50;
-     }
-     System.out.println("Total resources: " + totalResources);
-     try {
-     Thread.sleep(3000);
-     } catch (Exception e) {
-     }
-     if (aListExternalPost.size() > 0) {
-     new Classifier(aListExternalPost, stream, this);
-     }
-     System.out.println("Total resources: " + totalResources);
-     }
-     */
+    
     private String getPhrases(String stream) {
         String parsedPhrases = null; // parsed phrases 
         if (stream != null && !stream.isEmpty()) {
@@ -869,7 +948,8 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             int noOfPhrases = phrasesStream.length;
             for (int i = 0; i < noOfPhrases; i++) {
                 tmp = phrasesStream[i].trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for one only one space
-                parsedPhrases += ((tmp.contains(" ")) ? ("\"" + tmp + "\"") : tmp); // if spaces found, it means more than one word in a phrase
+                //parsedPhrases += ((tmp.contains(" ")) ? ("\"" + tmp + "\"") : tmp); // if spaces found, it means more than one word in a phrase
+                parsedPhrases += "\"" + tmp + "\""; // if spaces found, it means more than one word in a phrase
                 if ((i + 1) < noOfPhrases) {
                     parsedPhrases += "|";
                 }
