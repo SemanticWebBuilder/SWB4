@@ -2,24 +2,19 @@ package org.semanticwb.bsc.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
-import org.semanticwb.bsc.Measure;
 import org.semanticwb.bsc.accessory.Period;
-import org.semanticwb.bsc.admin.resources.behavior.MeasuresManager;
-import org.semanticwb.bsc.catalogs.Format;
 import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.bsc.element.Objective;
+import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.tracing.Series;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericAdmResource;
@@ -35,6 +30,13 @@ import org.semanticwb.portal.api.SWBResourceURL;
 public class DataTableProto extends GenericAdmResource {
     public static final String Mode_CHANGE = "chng";
     public static final String Mode_DATA = "dt";
+    
+    @Override
+    public void setResourceBase(Resource base) throws SWBResourceException {
+        super.setResourceBase(base);
+        
+    }
+    
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -191,99 +193,89 @@ System.out.println("inds="+inds);
         }else {
             myInd = null;
         }
-        
+
         if(myInd!=null && bsc!=null) {
             out.println("<table border=\"1\">");
             out.println("  <caption>tabla de datos</caption>");
-            Iterator<Period> measurablesPeriods = myInd.listMeasurablesPeriods(false);
-            if(measurablesPeriods.hasNext())
+            try
             {
-                List<Series> serieses = SWBUtils.Collections.copyIterator(myInd.listSerieses());
-                if(!serieses.isEmpty())
+                Iterator<Period> measurablesPeriods = myInd.listMeasurablesPeriods(false);
+                if(measurablesPeriods.hasNext())
                 {
-                    final User user = paramRequest.getUser();
-                    Collections.sort(serieses);
-                    
-                    out.println("<tr>");
-                    out.println("  <th>período</th>");
-                    out.println("  <th>estado</th>");
-                    Iterator<Series> it = serieses.iterator();
-                    while(it.hasNext()) {
-                        Series s = it.next();
-                        if(!s.isValid() || !user.haveAccess(s)) {
-                            it.remove();
-                            continue;
-                        }
-                        out.println("  <th title=\""+s.getDescription()+"\">"+s.getTitle()+"</th>");
-                    }
-                    
-                    out.println("</tr>");
-                    
-                    DecimalFormat formatters[] = new DecimalFormat[serieses.size()];
-                    for(int i=0; i<serieses.size(); i++) {
-                        Series s = serieses.get(i);
-                        Format format = s.getFormat();
-                        Locale locale;
-                        try {
-                            locale = new Locale(format.getLanguage().getId().toLowerCase(), format.getCountry().getId().toUpperCase());
-                        }catch(Exception e) {
-                            locale = new Locale("es","MX");
-                        }
-                        NumberFormat numFormat = NumberFormat.getNumberInstance(locale);
-                        DecimalFormat formatter = (DecimalFormat)numFormat;
-                        try {
-                            formatter.applyPattern(format.getFormatPattern());
-                        }catch(Exception iae) {
-                            formatter.applyPattern(MeasuresManager.defaultFormatPattern);
-                        }
-                        formatters[i]=formatter;
-                    }
-
-
-                    Period period;
-                    Measure measure;
-                    Series s;
-                    String value;
-                    Series star = myInd.getStar();
-                    if(star!=null)
+    //                List<Series> serieses = SWBUtils.Collections.copyIterator(myInd.listSerieses());
+                    List<Series> serieses = myInd.listValidSerieses();
+                    if(!serieses.isEmpty())
                     {
-                        while(measurablesPeriods.hasNext())
+                        final User user = paramRequest.getUser();
+                        Collections.sort(serieses);
+
+                        out.println("<tr>");
+                        out.println("  <th>período</th>");
+                        out.println("  <th>estado</th>");
+                        Iterator<Series> it = serieses.iterator();
+                        while(it.hasNext()) {
+                            Series s = it.next();
+    //                        if(!s.isValid() || !user.haveAccess(s)) {
+    //                            it.remove();
+    //                            continue;
+    //                        }
+                            out.println("  <th title=\""+s.getDescription()+"\">"+s.getTitle()+"</th>");
+                        }
+
+                        out.println("</tr>");
+
+                        Period period;
+                        Measure measure;
+                        Series s;
+                        String value;
+                        Series star = myInd.getStar();
+                        if(star!=null)
                         {
-                            out.println("<tr>");
-                            period = measurablesPeriods.next();
-                            out.println("<td>"+period.getTitle()+"</td>");
-                            measure = star.getMeasureByPeriod(period);
-                            try {
-                                value = "<td>"+measure.getEvaluation().getStatus().getTitle()+"</td>";
-                            }catch(Exception e) {
-                                value = "<td>-----</td>";
-                            }
-                            out.println(value);
-                            
-                            for(int i=0; i<serieses.size(); i++)
+                            while(measurablesPeriods.hasNext())
                             {
-                                s = serieses.get(i);
-                                measure = s.getMeasureByPeriod(period);
-                                value = measure==null?"--":formatters[i].format(measure.getValue());
-                                if(s.isReadOnly()) {
-                                    out.println("<td>"+value+"</td>");
-                                }else {
-                                    if(measure==null) {
-System.out.println("la medicion para la serie "+s+", es nula, se creara una nueva...");
-                                        measure = Measure.ClassMgr.createMeasure(bsc);
-                                        PeriodStatus ps = PeriodStatus.ClassMgr.createPeriodStatus(bsc);
-                                        ps.setPeriod(period);
-                                        measure.setEvaluation(ps);
-                                        s.addMeasure(measure);
-                                    }
-                                    out.println("<td><input type=\"text\" name=\""+myInd.getId()+"_"+s.getId()+"_"+measure.getId()+"\" value=\""+value+"\" /></td>");
+                                out.println("<tr>");
+                                period = measurablesPeriods.next();
+                                out.println("<td>"+period.getTitle()+"</td>");
+                                measure = star.getMeasureByPeriod(period);
+                                try {
+                                    value = "<td>"+measure.getEvaluation().getStatus().getTitle()+"</td>";
+                                }catch(Exception e) {
+                                    value = "<td>-----</td>";
                                 }
+                                out.println(value);
+
+                                for(int i=0; i<serieses.size(); i++)
+                                {
+                                    s = serieses.get(i);
+                                    measure = s.getMeasureByPeriod(period);
+    //                                value = measure==null?"--":formatters[i].format(measure.getValue());
+                                    value = measure==null?"--":s.getFormatter().format(measure.getValue());
+                                    if(s.isReadOnly()) {
+                                        out.println("<td>"+value+"</td>");
+                                    }else {
+                                        if(measure==null) {
+    System.out.println("la medicion para la serie "+s+", es nula, se creara una nueva...");
+                                            measure = Measure.ClassMgr.createMeasure(bsc);
+                                            PeriodStatus ps = PeriodStatus.ClassMgr.createPeriodStatus(bsc);
+                                            ps.setPeriod(period);
+                                            measure.setEvaluation(ps);
+                                            s.addMeasure(measure);
+                                        }
+                                        out.println("<td><input type=\"text\" name=\""+myInd.getId()+"_"+s.getId()+"_"+measure.getId()+"\" value=\""+value+"\" /></td>");
+                                    }
+                                }
+                                out.println("</tr>");
                             }
-                            out.println("</tr>");
                         }
                     }
+                }else {
+                    out.println("no hay datos");
                 }
-            }
+        }
+        catch(Exception e)
+        {
+            out.println("hay problemas para mostrar los datos");
+        }
             out.println("</table>");
         }else {
             out.println("no hay indicadores");
