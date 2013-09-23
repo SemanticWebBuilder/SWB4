@@ -1109,7 +1109,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         WebSite site = SWBContext.getWebSite(webpage.siteID);
         WebPage parent = site.getWebPage(webpage.id);
         User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
-        Iterator<WebPage> pages = parent.listVisibleChilds(ouser.getLanguage());
+        Iterator<WebPage> pages = parent.listChilds(ouser.getLanguage(),null,false,null,null,false);
         while (pages.hasNext())
         {
             WebPage page = pages.next();
