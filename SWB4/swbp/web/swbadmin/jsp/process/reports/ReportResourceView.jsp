@@ -168,7 +168,7 @@
                                         if (iarr.getItemAware() != null && pins.getItemAwareReference().getProcessObject() != null) {
                                             contador++;
                                             if (iarr.getItemAware().equals(ite)) {
-                                                System.out.println("the array: " + array[1]);
+                                                //System.out.println("the array: " + array[1]);
                                                 SemanticProperty spt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(array[1]);
                         %>
                         <td>
