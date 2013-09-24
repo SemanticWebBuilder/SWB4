@@ -1,0 +1,64 @@
+* {
+    font-family: Verdana,Geneva,sans-serif;
+}
+
+body {
+    background: url("content_bg.jpg") repeat scroll left top #DDDCE2;
+    background-color: #DDDCE2;
+    color: #666666;
+}
+
+a, a:hover {
+    color:green;
+    text-decoration: none;
+}
+
+.input-group {
+    width:250px;
+}
+
+.swbp-panel {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #767676;
+    box-shadow: 0 0 5px 2px #a0a0a0;
+}
+
+.swbp-container {
+    margin-top: 10%;
+}
+
+.btn-success {
+    background-color: green;
+}
+
+.swbp-panel-title {
+    background: #97ba59; /* Old browsers */
+    background: -moz-linear-gradient(top, #97ba59 0%, #016800 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#97ba59), color-stop(100%,#016800)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #97ba59 0%,#016800 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #97ba59 0%,#016800 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #97ba59 0%,#016800 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #97ba59 0%,#016800 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#97ba59', endColorstr='#016800',GradientType=0 ); /* IE6-9 */
+    border-bottom: 1px solid #fff;
+}
+
+.swbp-panel-title h1 {
+    color:#fff;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.panel-body {
+    padding:40px;
+}
+
+.text-muted {
+    font-size: 0.9em;
+}
+
+.form-control:focus {
+    border-color: green;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(73, 153, 42, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(73, 153, 42, 0.6);
+}
