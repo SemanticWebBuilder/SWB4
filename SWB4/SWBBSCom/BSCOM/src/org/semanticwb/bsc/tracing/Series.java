@@ -3,11 +3,16 @@ package org.semanticwb.bsc.tracing;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.catalogs.Format;
 import org.semanticwb.bsc.tracing.base.SeriesBase;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
+import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
 
@@ -98,5 +103,16 @@ public class Series extends org.semanticwb.bsc.tracing.base.SeriesBase implement
             }
         }
         return null;
+    }
+    
+    public List<EvaluationRule> lisValidEvaluationRules() {
+        List<EvaluationRule> validRules = SWBUtils.Collections.filterIterator(listEvaluationRules(), new GenericFilterRule<EvaluationRule>() {
+                                                                        @Override
+                                                                        public boolean filter(EvaluationRule r) {
+                                                                            User user = SWBContext.getSessionUser();
+                                                                            return !r.isValid() || !user.haveAccess(r);
+                                                                        }            
+                                                                    });
+        return validRules;
     }
 }
