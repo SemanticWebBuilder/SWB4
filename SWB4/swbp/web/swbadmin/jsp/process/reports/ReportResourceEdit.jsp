@@ -52,19 +52,15 @@
     urlDialog.setParameter("idReport", obj.getId());
     urlDialog.setParameter("action", "export");
 
-%>
-
-<div id="out" style="display: none; width: 100%; alignment-adjust: central;">
-    <%url = paramRequest.getRenderUrl();
-        url.setMode(SWBResourceURL.Mode_VIEW);%>
-    <a id="a" href="<%=url%>"
+%>    
+<div id="out" class="alert alert-dismissable alert-warning" style="display: none; width: 100%; alignment-adjust: central;">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <a id="a" href="<%=url.setMode(SWBResourceURL.Mode_VIEW)%>"
        data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("reports") + " " + paramRequest.getLocaleString("saved")%>">
         <%=paramRequest.getLocaleString("reports") + " " + paramRequest.getLocaleString("saved")%> <span id="count" class="badge"></span></a>
-    <br/>
-    <br/>
 </div>
 <div class="row">
-    <div class="panel panel-success">
+    <div class="panel panel-default">
         <div class="panel-heading">
             <table style="width: 100%;">
                 <tr><td>
@@ -73,12 +69,12 @@
                         <a class="btn btn-default btn-sm"
                            onclick="javascript:document.back.submit();"
                            data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("back")%>">
-                            <li class="icon-mail-reply icon-large"></li>
+                            <li class="icon-mail-reply"></li> <%=paramRequest.getLocaleString("back")%>
                         </a>
                         <%if (modeExport == 2) {%>
                         <a class="btn btn-default btn-sm" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("view") + " " + paramRequest.getLocaleString("report") + " " + obj.getTitle()%>"
                            href="<%=urlViewReport.setMode("viewReport").setParameter("idReport", obj.getId())%>">
-                            <li class="icon-eye-open icon-large"></li>
+                            <li class="icon-eye-open"></li> <%=paramRequest.getLocaleString("view")%>
                         </a>
                         <%} else {%>
                         <%
@@ -86,12 +82,12 @@
                         %>
                         <a href="<%=urlDialog%>" data-toggle="modal" data-target="#modalDialog"
                            class="btn btn-default btn-sm" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("save") + " " + paramRequest.getLocaleString("report") + " " + obj.getTitle()%>">
-                            <li class="icon-save icon-large"></li>
+                            <li class="icon-save"></li> <%=paramRequest.getLocaleString("save")%>
                         </a>
                         <%} else {%>
                         <a href="<%=urlDialog%>" data-toggle="modal" data-target="#modalDialog" class="btn btn-default btn-sm"
                            data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("generate") + " " + paramRequest.getLocaleString("report") + " " + obj.getTitle()%>">
-                            <li class="icon-file icon-large"></li>
+                            <li class="icon-file"></li> <%=paramRequest.getLocaleString("generate")%>
                         </a>
                         <%}%>
                         <%}%>
@@ -103,14 +99,14 @@
             <form class="col-xs-12 col-sm-10 col-md-6" action="<%=urlAction.setAction(SWBResourceURL.Action_EDIT)%>" method="post">
                 <%out.println(tipo.getFormHiddens());%>
                 <div class="table-responsive">
-                    <table class="table table-hover swbp-table">
+                    <table>
                         <tr>
                             <td style="text-align: right; vertical-align: middle;"><strong><%=paramRequest.getLocaleString("title")%></strong></td>
-                            <td><input name="title" class="form-control input-sm"  placeholder="<%=paramRequest.getLocaleString("title")%>"  type="text" value="<%=obj.getTitle()%>"></td>
+                            <td><input name="title" id="title" class="form-control input-sm"  placeholder="<%=paramRequest.getLocaleString("title")%>"  type="text" value="<%=obj.getTitle()%>"></td>
                         </tr>
                         <tr>
                             <td style="text-align: right; vertical-align: middle;"><strong><%=paramRequest.getLocaleString("process")%></strong></td>
-                            <td><strong><%=obj.getProcessName().getTitle()%></strong></td>
+                            <td><input class="form-control" value="<%=obj.getProcessName().getTitle()%>" disabled="true"></td>
                         </tr>
                         <tr>
                             <td style="text-align: right; vertical-align: middle;"><strong><%=paramRequest.getLocaleString("pagingSize")%></strong></td>
@@ -120,134 +116,7 @@
                             <td style="text-align: right; vertical-align: middle;" colspan="2">
                                 <button class="btn btn-default btn-sm" type="submit"
                                         data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("save")%>">
-                                    <li class="icon-save icon-large"></li>
-                                </button> 
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <input type="hidden" name="idReport" value="<%=obj.getId()%>"/>
-            </form>
-        </div>
-        <div class="col-xs-0 col-sm-1 col-md-3"></div>
-        <div class="panel-heading">
-            <div class="panel-title"><strong><%=paramRequest.getLocaleString("configure")%></strong></div>
-        </div>
-        <div class="panel-body">
-            <div class="col-xs-0 col-sm-1 col-md-3"></div>
-            <form class="col-xs-12 col-sm-10 col-md-6" dojoType="dijit.form.Form" action="<%=urlAction.setAction("addColumn")%>" method="post">
-                <table class="table table-hover swbp-table" style="width: 500px;">
-                    <tr><td>
-                            <select multiple name="property" style="" class="form-control">
-                                <%try {
-                                        while (ia.hasNext()) {
-                                            ItemAware iaw = ia.next();
-                                            if (iaw.getItemSemanticClass() != null) {
-                                                Iterator<SemanticProperty> sp = iaw.getItemSemanticClass().listProperties();
-                                                while (sp.hasNext()) {
-                                                    SemanticProperty spr = sp.next();
-                                                    if (!propiedades.contains(iaw.getId() + "|" + spr.getPropId())) {
-                                                        if (!spr.getPropId().equals("swb:valid")) {
-                                                            control++;
-                                %>
-                                <option value="<%=iaw.getURI() + "|" + spr.getPropId()%>"> <%=iaw.getDisplayTitle(lang) + "." + spr.getName()%></option>
-                                <%
-                                                            objeto = iaw.getDisplayTitle(lang);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                %>
-                            </select>
-                        </td>
-                        <td style="text-align: left; vertical-align: middle;">
-                            <input type="hidden" name="idReport" value="<%=obj.getId()%>"/>
-                            <button type="submit" class="btn btn-default btn-sm <%if (control == 0) {%>disabled<%}%>" 
-                                    data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("add") + " " + paramRequest.getLocaleString("column")%>">
-                                <li class="icon-plus-sign-alt icon-large"></li>
-                            </button>
-                        </td></tr>
-                </table>
-            </form>
-            <div class="col-xs-0 col-sm-1 col-md-3"></div>
-        </div>
-        <div class="panel-body">
-            <form dojoType="dijit.form.Form" action="<%=urlAction.setAction("updateColumn")%>" method="post">
-                <div class="table-responsive">
-                    <table class="table table-hover swbp-table">
-                        <thead>
-                        <th><%=paramRequest.getLocaleString("remove")%></th>
-                        <th><%=paramRequest.getLocaleString("order")%></th>
-                        <th><%=paramRequest.getLocaleString("property")%></th>
-                        <th><%=paramRequest.getLocaleString("title")%></th>
-                        <th><%=paramRequest.getLocaleString("enabledOrder")%></th>
-                        <th><%=paramRequest.getLocaleString("visible")%></th>
-                        <th><%=paramRequest.getLocaleString("filter")%></th>
-                        </thead>
-                        <%
-                            Iterator<ColumnReport> colum = SWBComparator.sortSortableObject(obj.listColumnReports());
-                            while (colum.hasNext()) {
-                                ColumnReport colu = colum.next();
-                                contador++;
-                                SemanticProperty sp = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(colu.getNameProperty().substring(colu.getNameProperty().indexOf("|") + 1));
-
-                                SemanticObject semObj = SemanticObject.createSemanticObject(colu.getNameProperty().substring(0, colu.getNameProperty().indexOf("|")));
-                                ItemAware ias = (ItemAware) semObj.createGenericInstance();
-                                objeto = ias.getTitle();
-                        %>
-                        <tr>
-                            <td style="text-align: center;"><input type="checkbox" name="delete<%=colu.getURI()%>"/></td>
-                            <td style="text-align: center;"><%if (contador == 1 && total > 1) {%>
-                                <a href="<%=urlAction.setAction("moveDown").setParameter("idColumn", colu.getId())%>"
-                                   data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("down")%>">
-                                    <li class="icon-arrow-down icon-large"></li>
-                                </a>
-                                <%} else if (contador < total && total > 1) {%>
-                                <a href="<%=urlAction.setAction("moveUp").setParameter("idColumn", colu.getId())%>" 
-                                   data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("up")%>">
-                                    <li class="icon-arrow-up icon-large"></li>
-                                </a>
-                                <a href="<%=urlAction.setAction("moveDown").setParameter("idColumn", colu.getId())%>"
-                                   data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("down")%>">
-                                    <li class="icon-arrow-down icon-large"></li>
-                                </a>
-                                <%} else if (contador == total && total > 1) {%>
-                                <a href="<%=urlAction.setAction("moveUp").setParameter("idColumn", colu.getId())%>" 
-                                   data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("up")%>">
-                                    <li class="icon-arrow-up icon-large"></li>    
-                                </a><%}%></td>
-                            <td><%=objeto + "." + sp.getName()%></td>
-                            <td><input class="form-control input-sm" placeholder="<%=paramRequest.getLocaleString("title")%>" type="text" name="title<%=colu.getURI()%>" value="<%=colu.getTitleColumn() == null ? sp.getDisplayName(lang) : colu.getTitleColumn()%>"></input></td>
-                            <td style="text-align: center;">
-                                <input name="enabledOrder<%=colu.getURI()%>" type="checkbox" <%if (colu.isEnabledOrder()) {%> checked="true"<%}%>/></td>
-                            <td style="text-align: center;">
-                                <input name="columnVisible<%=colu.getURI()%>" type="checkbox" <%if (colu.isColumnVisible()) {%> checked="true"<%}%>/></td>
-                            <td style="text-align: center;">
-                                <%if (sp.isDataTypeProperty()) {%>
-                                <input class="form-control input-sm" name="defaultValue<%=colu.getURI()%>" type="text"  value="<%=colu.getDefaultValue() == null ? "" : colu.getDefaultValue()%>"/>
-                                <%if (sp.isNumeric() || sp.isDate()) {%>
-                                <input class="form-control input-sm" name="defaultValueMax<%=colu.getURI()%>" type="text"  value="<%=colu.getDefaultValueMax() == null ? "" : colu.getDefaultValueMax()%>"/>
-                                <%}
-                                    }%>
-                            </td>
-                        </tr>
-                        <%
-                            }
-                        %>
-                        <tr>
-                            <td style="text-align: center; vertical-align: middle;" colspan="7">
-                                <a class="btn btn-default btn-sm"
-                                   onclick="javascript:document.back.submit();"
-                                   data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("back")%>">
-                                    <li class="icon-mail-reply icon-large"></li>
-                                </a>
-                                <button class="btn btn-default btn-sm <%if (contador == 0) {%>disabled<%}%>" type="submit"
-                                        data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("save")%>">
-                                    <li class="icon-save icon-large"></li>
+                                    <li class="icon-save"></li> <%=paramRequest.getLocaleString("save")%>
                                 </button> 
                             </td>
                         </tr>
@@ -257,7 +126,137 @@
             </form>
         </div>
     </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title"><strong><%=paramRequest.getLocaleString("configure")%></strong></div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <form class="col-xs-12 col-sm-10 col-md-6" action="<%=urlAction.setAction("addColumn")%>" method="post">
+                    <table style="width: 500px;">
+                        <tr><td>
+                                <select multiple name="property" style="" class="form-control">
+                                    <%try {
+                                            while (ia.hasNext()) {
+                                                ItemAware iaw = ia.next();
+                                                if (iaw.getItemSemanticClass() != null) {
+                                                    Iterator<SemanticProperty> sp = iaw.getItemSemanticClass().listProperties();
+                                                    while (sp.hasNext()) {
+                                                        SemanticProperty spr = sp.next();
+                                                        if (!propiedades.contains(iaw.getId() + "|" + spr.getPropId())) {
+                                                            if (!spr.getPropId().equals("swb:valid")) {
+                                                                control++;
+                                    %>
+                                    <option value="<%=iaw.getURI() + "|" + spr.getPropId()%>"> <%=iaw.getDisplayTitle(lang) + "." + spr.getName()%></option>
+                                    <%
+                                                                objeto = iaw.getDisplayTitle(lang);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    %>
+                                </select>
+                            </td>
+                            <td style="text-align: left; vertical-align: middle;">
+                                <input type="hidden" name="idReport" value="<%=obj.getId()%>"/>
+                                <button type="submit" class="btn btn-default btn-sm <%if (control == 0) {%>disabled<%}%>" 
+                                        data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("add") + " " + paramRequest.getLocaleString("column")%>">
+                                    <li class="icon-plus"></li> <%=paramRequest.getLocaleString("add")%>
+                                </button>
+                            </td></tr>
+                    </table>
+                </form>
+            </div>
+            <div class="row">
+                <%
+                    Iterator<ColumnReport> colum = SWBComparator.sortSortableObject(obj.listColumnReports());
+                    if (colum.hasNext()) {%>
+                <form action="<%=urlAction.setAction("updateColumn")%>" method="post">
+                    <div class="table-responsive">
+                        <table class="table table-hover swbp-table">
+                            <thead>
+                            <th><%=paramRequest.getLocaleString("remove")%></th>
+                            <th><%=paramRequest.getLocaleString("order")%></th>
+                            <th><%=paramRequest.getLocaleString("property")%></th>
+                            <th><%=paramRequest.getLocaleString("title")%></th>
+                            <th><%=paramRequest.getLocaleString("enabledOrder")%></th>
+                            <th><%=paramRequest.getLocaleString("visible")%></th>
+                            <th><%=paramRequest.getLocaleString("filter")%></th>
+                            </thead>
+                            <%
+
+                                while (colum.hasNext()) {
+                                    ColumnReport colu = colum.next();
+                                    contador++;
+                                    SemanticProperty sp = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(colu.getNameProperty().substring(colu.getNameProperty().indexOf("|") + 1));
+
+                                    SemanticObject semObj = SemanticObject.createSemanticObject(colu.getNameProperty().substring(0, colu.getNameProperty().indexOf("|")));
+                                    ItemAware ias = (ItemAware) semObj.createGenericInstance();
+                                    objeto = ias.getTitle();
+                            %>
+                            <tr>
+                                <td style="text-align: center;"><input type="checkbox" name="delete<%=colu.getURI()%>"/></td>
+                                <td style="text-align: center;"><%if (contador == 1 && total > 1) {%>
+                                    <a href="<%=urlAction.setAction("moveDown").setParameter("idColumn", colu.getId())%>"
+                                       data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("down")%>">
+                                        <li class="icon-arrow-down"></li>
+                                    </a>
+                                    <%} else if (contador < total && total > 1) {%>
+                                    <a href="<%=urlAction.setAction("moveUp").setParameter("idColumn", colu.getId())%>" 
+                                       data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("up")%>">
+                                        <li class="icon-arrow-up"></li>
+                                    </a>
+                                    <a href="<%=urlAction.setAction("moveDown").setParameter("idColumn", colu.getId())%>"
+                                       data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("down")%>">
+                                        <li class="icon-arrow-down"></li>
+                                    </a>
+                                    <%} else if (contador == total && total > 1) {%>
+                                    <a href="<%=urlAction.setAction("moveUp").setParameter("idColumn", colu.getId())%>" 
+                                       data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("up")%>">
+                                        <li class="icon-arrow-up"></li>    
+                                    </a><%}%></td>
+                                <td><%=objeto + "." + sp.getName()%></td>
+                                <td><input class="form-control input-sm" placeholder="<%=paramRequest.getLocaleString("title")%>" type="text" name="title<%=colu.getURI()%>" value="<%=colu.getTitleColumn() == null ? sp.getDisplayName(lang) : colu.getTitleColumn()%>"></input></td>
+                                <td style="text-align: center;">
+                                    <input name="enabledOrder<%=colu.getURI()%>" type="checkbox" <%if (colu.isEnabledOrder()) {%> checked="true"<%}%>/></td>
+                                <td style="text-align: center;">
+                                    <input name="columnVisible<%=colu.getURI()%>" type="checkbox" <%if (colu.isColumnVisible()) {%> checked="true"<%}%>/></td>
+                                <td style="text-align: center;">
+                                    <%if (sp.isDataTypeProperty()) {%>
+                                    <input class="form-control input-sm" name="defaultValue<%=colu.getURI()%>" type="text"  value="<%=colu.getDefaultValue() == null ? "" : colu.getDefaultValue()%>"/>
+                                    <%if (sp.isNumeric() || sp.isDate()) {%>
+                                    <input class="form-control input-sm" name="defaultValueMax<%=colu.getURI()%>" type="text"  value="<%=colu.getDefaultValueMax() == null ? "" : colu.getDefaultValueMax()%>"/>
+                                    <%}
+                                    }%>
+                                </td>
+                            </tr>
+                            <%
+                                }
+                            %>
+
+                            <tr>
+                                <td style="text-align: center; vertical-align: middle;" colspan="7">
+                                    <button class="btn btn-default btn-sm" type="submit"
+                                            data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("save")%>">
+                                        <li class="icon-save"></li> <%=paramRequest.getLocaleString("save")%>
+                                    </button> 
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+                    <input type="hidden" name="idReport" value="<%=obj.getId()%>"/>
+                </form>
+            </div>
+            <%}%>
+        </div>
+    </div>
 </div>
+
 <form method="post" action="<%=paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW)%>" name="back"></form>    
 <script type="text/javascript">
                                var count = 0;
@@ -304,3 +303,4 @@
     dojo.require("dojox.form.BusyButton");
     dojo.require("dojox.form.TimeSpinner");
 </script>
+<script>document.getElementById("title").focus();</script> 

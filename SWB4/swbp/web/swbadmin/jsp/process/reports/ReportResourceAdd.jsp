@@ -30,16 +30,16 @@
                 <div class="panel-title"><strong><%=paramRequest.getLocaleString("add") + " " + paramRequest.getLocaleString("report")%></strong></div>
             </div>
             <div class="panel-body">
-                <form class="form-horizontal" action="<%=paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD)%>" method="post">
+                <form class="form-group" action="<%=paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD)%>" method="post">
                     <%out.println(tipo.getFormHiddens());%>
                     <div class="table-responsive">
-                        <table class="table table-hover swbp-table">
+                        <table>
                             <tr>
                                 <td style="text-align: right; vertical-align: middle;">
                                     <strong><%=paramRequest.getLocaleString("title")%></strong>
                                 </td>
                                 <td>
-                                    <input name="title" class="form-control input-sm" type="text" placeholder="<%=paramRequest.getLocaleString("title")%>">
+                                    <input name="title" id="title" class="form-control input-sm" type="text" placeholder="<%=paramRequest.getLocaleString("title")%>">
                                 </td>
                             </tr>
                             <tr>
@@ -48,8 +48,8 @@
                                 </td>
                                 <td><%
                                     String processName = tipo.renderElement(request, Report.rep_processName, SWBFormMgr.MODE_CREATE);
-                                    processName = processName.replace("<select ", "<select class=\"form-control\"");
-                                    processName = processName.replace("dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\"Dato invalido.\" value=\"\" required=\"false\"", "");
+                                    processName = processName.replace("<select ", "<select class=\"form-control\" ");
+                                    processName = processName.replace("dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" ", "");
                                     out.print(processName);
                                     %>
                                 </td>
@@ -59,15 +59,10 @@
                                     <strong><%=paramRequest.getLocaleString("pagingSize")%></strong>
                                 </td>
                                 <td>
-                                    
-                                    
-                                    
                                     <div class="controls">
-                                    <input type="number" name="pagingSize" class="form-control input-sm" placeholder="<%=paramRequest.getLocaleString("pagingSize")%>">
-                                    <p class="help-block"></p>
+                                        <input type="number" name="pagingSize" class="form-control input-sm" placeholder="<%=paramRequest.getLocaleString("pagingSize")%>">
+                                        <p class="help-block"></p>
                                     </div>
-                                    
-                                    
                                 </td>
                             </tr>
                             <tr>
@@ -75,11 +70,11 @@
                                     <a class="btn btn-default btn-sm"
                                        onclick="javascript:document.back.submit();"
                                        data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("back")%>">
-                                        <li class="icon-mail-reply icon-large"></li>
+                                        <li class="icon-mail-reply"></li> Regresar
                                     </a>
-                                    <button class="btn btn-default btn-sm" type="submit"
+                                    <button class="btn btn-success btn-sm" type="submit"
                                             data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("save")%>">
-                                        <li class="icon-save icon-large"></li>
+                                        <li class="icon-save"></li> <%=paramRequest.getLocaleString("save")%>
                                     </button>
                                 </td>
                             </tr>
@@ -112,3 +107,4 @@
                                            dojo.require("dojox.form.TimeSpinner");
                                            dojo.require("dojox.form.ValidationTextBox");
 </script>
+<script>document.getElementById("title").focus();</script> 

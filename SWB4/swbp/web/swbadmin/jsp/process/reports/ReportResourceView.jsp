@@ -61,48 +61,53 @@
     urlDialog.setParameter("idReport", obj.getId());
     urlDialog.setParameter("action", "export");
 %>
-<div id="out" style="display: none; width: 100%; alignment-adjust: central;">
+<div>
     <%url = paramRequest.getRenderUrl();
         url.setMode(SWBResourceURL.Mode_VIEW);%>
-    <a id="a" href="<%=url%>"
-       data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("reports") + " " + paramRequest.getLocaleString("saved")%>">
-        <%=paramRequest.getLocaleString("reports") + " " + paramRequest.getLocaleString("saved")%> <span id="count" class="badge"></span></a>
+    
     <br/>
     <br/>
 </div>
-<div class="row">
-    <div class="panel panel-success">
-        <div class="panel-heading">
-            <table style="width: 100%;">
-                <tr><td>
-                        <div class="panel-title"><strong><%=paramRequest.getLocaleString("report") + " " + obj.getTitle()%></strong></div>  
-                    </td>
-                    <td style="text-align: right;">
-                        <a class="btn btn-default btn-sm"
+    <div id="out" class="alert alert-dismissable alert-warning" style="display: none; width: 100%; alignment-adjust: central;">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <a id="a" href="<%=url%>"
+       data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("reports") + " " + paramRequest.getLocaleString("saved")%>">
+        <%=paramRequest.getLocaleString("reports") + " " + paramRequest.getLocaleString("saved")%> <span id="count" class="badge"></span></a>
+    </div>
+    
+    
+    
+                            <h2>
+                                <a class="btn"
                            onclick="javascript:document.back.submit();"
                            data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("back")%>">
-                            <li class="icon-mail-reply icon-large"></li>
+                            <li class="icon-mail-reply"></li>
                         </a>
-                        <%
+                                <%=paramRequest.getLocaleString("report") + " " + obj.getTitle()%></h2>
+                            <ul class="list-unstyled list-inline">
+                                    <%
                             if (isSaveOnSystem) {
                         %>
+                        
+                                <li>
                         <a href="<%=urlDialog%>" data-toggle="modal" data-target="#modalDialog"
-                           class="btn btn-default btn-sm" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("save") + " " + paramRequest.getLocaleString("report") + " " + obj.getTitle()%>">
-                            <li class="icon-save icon-large"></li>
+                           class="btn  btn-default icon-save" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("save") + " " + paramRequest.getLocaleString("report") + " " + obj.getTitle()%>">
                         </a>
+                                </li>
                         <%} else {%>
-                        <a href="<%=urlDialog%>" data-toggle="modal" data-target="#modalDialog" class="btn btn-default btn-sm"
+                        <li>
+                        <a href="<%=urlDialog%>" data-toggle="modal" data-target="#modalDialog" class="btn btn-default icon-file"
                            data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("generate") + " " + paramRequest.getLocaleString("report") + " " + obj.getTitle()%>">
-                            <li class="icon-file icon-large"></li>
                         </a>
+                            </li>
                         <%}%>
-                        <a class="btn btn-default btn-sm" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("configureReport") + " " + obj.getTitle()%>" href="<%=url.setMode(SWBResourceURL.Mode_EDIT).setParameter("idReport", obj.getId())%>">
-                            <li class="icon-wrench icon-large"></li>
+                        <li>
+                        <a class="btn btn-default icon-wrench" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("configureReport") + " " + obj.getTitle()%>" href="<%=url.setMode(SWBResourceURL.Mode_EDIT).setParameter("idReport", obj.getId())%>">
                         </a>  
-                    </td></tr>
-            </table>
-        </div>
-        <div class="panel-body">
+                                </li>
+                                
+                            </ul>
+<div class="row">
             <div class="table-responsive">
                 <table class="table table-hover swbp-table">
                     <thead>
@@ -111,6 +116,7 @@
                                 Iterator<ColumnReport> colum = SWBComparator.sortSortableObject(obj.listColumnReports());
                                 while (colum.hasNext()) {
                                     ColumnReport colu = colum.next();
+                                    //System.out.println("propiedad: " + colu.getNameProperty().substring(colu.getNameProperty().indexOf("|") + 1));
                                     SemanticProperty sp = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(colu.getNameProperty().substring(colu.getNameProperty().indexOf("|") + 1));
                                     SWBResourceURL order = paramRequest.getRenderUrl();
                                     order.setParameter("idReport", obj.getId());
@@ -162,6 +168,7 @@
                                         if (iarr.getItemAware() != null && pins.getItemAwareReference().getProcessObject() != null) {
                                             contador++;
                                             if (iarr.getItemAware().equals(ite)) {
+                                                System.out.println("the array: " + array[1]);
                                                 SemanticProperty spt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(array[1]);
                         %>
                         <td>
@@ -247,9 +254,6 @@
             </div>
             <!--/END PAGINATION-->
         </div>
-
-    </div>
-</div>
 <form method="post" action="<%=paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW)%>" name="back"></form>  
 <script type="text/javascript">
                                var count = 0;
