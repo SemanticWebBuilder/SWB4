@@ -12,7 +12,7 @@ form.oculto {display:none;}
 
 /*REPOSITORIO*/
 #repositorio *  { margin:0; padding:0; font-family:Arial, Helvetica, sans-serif;}
-#repositorio 	{ border:solid 1px #ccc; width:100%;
+#repositorio 	{ border:solid 1px #ccc; width:100%; border-bottom:none;
 border-radius:5px; /*opera y CSS3*/ 
 -moz-border-radius:5px; /*FireFox*/
 -webkit-border-radius:5px; /*Safari Chrome*/
@@ -30,8 +30,8 @@ background: -webkit-linear-gradient(#fff, #e1e1e1);
 background: -moz-linear-gradient(#fff, #e1e1e1);}
 
 /*DIR FILE*/
-#dir, #file     { display:inline-table; vertical-align:top;}
-#dir *, #file * { font-size:14px}
+#dir, #file     { display:inline-table; float:left; vertical-align:top;}
+#dir *, #file * { font-size:12px}
 #dir p, #file p { font-weight:bold; font-size:14px}
 #dir  { width:24%; border-right:solid 1px #ccc;}
 #file { width:70%; padding:25px 0 0 20px;}
@@ -60,11 +60,13 @@ background: -moz-linear-gradient(#7eb3dd, #3079b2, #216499);
 border-radius:3px; /*opera y CSS3*/ 
 -moz-border-radius:3px; /*FireFox*/
 -webkit-border-radius:3px; /*Safari Chrome*/
--khtml-border-radius:3px;}
+-khtml-border-radius:3px;
+*background:#3079b2;}
 #diropcion a:hover {
 background:#7eb3dd;
 background: -webkit-linear-gradient(#216499, #3079b2, #7eb3dd);
-background: -moz-linear-gradient(#216499, #3079b2, #7eb3dd);}
+background: -moz-linear-gradient(#216499, #3079b2, #7eb3dd);
+*background:#7eb3dd;}
 #diropcion a.inactivo { background:#e1e1e1 !important; cursor:default; text-shadow:none; color:#F6F6F6;}
 
 /*TABLE*/
@@ -242,4 +244,3 @@ border-radius:3px; /*opera y CSS3*/
 
 #file #informacion .suscribir, #file #informacion .nosuscribir, #file #informacion .ver, #file #informacion .mover, #file #informacion .eliminar { padding:2px 0 2px 20px; color:#368dcd !important; margin:0 5px;}
 #file #informacion .suscribir span, #file #informacion .nosuscribir span, #file #informacion .ver span, #file #informacion .mover span, #file #informacion .eliminar span  { display:none;}
-
