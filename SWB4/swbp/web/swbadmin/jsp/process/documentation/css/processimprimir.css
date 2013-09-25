@@ -1,0 +1,118 @@
+HTML
+{
+    height:100%; 
+
+}
+BODY
+{
+    height:792px; 
+    width: 612px;
+    margin:0px; 
+    text-align:center;
+    background-color:#fff;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+} 
+img{
+    border: 0px;
+}
+#contenedor{
+    height: auto;
+    width: 612px;
+    text-align:center;
+    margin-right: auto;
+    margin-left: auto;
+    /*background-color: blue;*/
+}
+#header{
+    height: 40px;
+    width: 612px;
+    text-align: center;
+    background-color: #339933;
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+    line-height: 44px;
+    background-image: url(css/images/logoprocess.png);
+    background-repeat: no-repeat;
+    background-position: right;
+}
+#menu{
+    display: none;
+
+}
+#menu ul{
+    display: none;
+
+
+}
+#menu ul li a{
+    display: none;
+
+}
+#menu ul li a:hover{
+    display: none;
+}
+#contenido{
+    float: left;
+    height: auto;
+    width: 612px;
+    background-color: #fff;
+    text-align:left;
+    overflow: hidden;
+}
+#ruta{
+    width: 612px;
+    height: auto;
+    float: left;
+    background-color: #fff;
+    padding-left: 1%;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    font-style: italic;
+    color: #29abe2;
+    font-weight: bold;
+}
+#ruta a{
+    color: #29abe2;
+    font-weight: bold;
+}
+
+#imprimir {
+    display: none;
+}
+#diagrama{
+    height: auto;
+    width: 612px;
+    float: left; 
+    background-color: #fff;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+}
+#diagrama img{
+    width: 500px;
+    height: 250px;
+    text-align: center;
+}
+#texto{
+    height: auto;
+    width: 660px;
+    float: left;
+    background-color: #fff;
+    text-align: left;
+    padding-top: 20px;
+    padding-left: 50px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
