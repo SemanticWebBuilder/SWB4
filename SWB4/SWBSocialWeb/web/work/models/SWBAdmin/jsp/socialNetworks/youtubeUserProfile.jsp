@@ -62,6 +62,7 @@
     String aboutMe = "";
     String picture = "";
     String profileUrl = "";
+    String subscribers = "";
     int friendsCount = 0;
     int mutualFriendsCount = 0;
     
@@ -86,6 +87,11 @@
     }
     if(!information.isNull("birthday_date")){
         birthday = information.getString("birthday_date");
+    }
+    if(!information.isNull("yt$statistics")){
+        if(!information.getJSONObject("yt$statistics").isNull("subscriberCount")){
+            subscribers = information.getJSONObject("yt$statistics").getString("subscriberCount");
+        }
     }
 %>
 
@@ -122,21 +128,14 @@
 
 
 <%
-    if(friendsCount > 0 || mutualFriendsCount > 0){
+    if(!subscribers.isEmpty()){
 %>
     <fieldset>
-         <legend>Friends information:</legend>
-         <%if(friendsCount>0){%>
-            <div align="left">
-                Total friends: <%=friendsCount%>
-            </div>
-         <%}%>
+         <legend>Subscribers:</legend>
          
-         <%if(mutualFriendsCount>0){%>
             <div align="left">
-                Mutual friends: <%=mutualFriendsCount%>
+                Subscribers: <%=subscribers%>
             </div>
-         <%}%>
     </fieldset>
 <%
     }
