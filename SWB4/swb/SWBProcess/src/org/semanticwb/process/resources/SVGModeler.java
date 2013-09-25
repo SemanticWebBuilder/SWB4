@@ -225,7 +225,9 @@ public class SVGModeler extends GenericAdmResource {
                                 }
                             }
                             boolean endsGood = createProcessElements(process, request, response, paramRequest, hmjson);
-                            if(!endsGood) {
+                            if (endsGood) {
+                                process.setData(jsonStr);
+                            } else {
                                 outs.write(ERRORSTRING.replace("_JSONERROR_", getError(3)).getBytes());
                             }
                         } catch (Exception ejs) {
