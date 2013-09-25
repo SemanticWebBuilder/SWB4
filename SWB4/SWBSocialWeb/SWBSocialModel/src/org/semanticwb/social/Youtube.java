@@ -234,8 +234,8 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                     Map<String, String> params = new HashMap<String, String>();
                     //Temporalmente comentado por que ya se habia autenticado mi cuenta sin pedir el refresh token
                     //params.put("refresh_token", "1/WY53_4yVfdnoCZ9WATEjVdvt8GgZOobQ9YC5T77PjwY");//Ana
-                    //params.put("refresh_token", "1/EBI7ANgfHcp7CHm3acP5hGoFZ29XhZzIzT2jv_h-3so");//Paco
-                    params.put("refresh_token", this.getRefreshToken());
+                    params.put("refresh_token", "1/EBI7ANgfHcp7CHm3acP5hGoFZ29XhZzIzT2jv_h-3so");//Paco
+                    //params.put("refresh_token", this.getRefreshToken());
                     params.put("client_id", this.getAppKey());
                     params.put("client_secret", this.getSecretKey());
                     params.put("grant_type", "refresh_token");
@@ -342,12 +342,12 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                            SWBSocialUtil.PostOutUtil.savePostOutNetID(video, this, videoId, null);
                         }  
         } 
-                        catch(Exception ex)
-                        {
-                            log.error("ERROR" + ex.toString());
-                            System.out.println("ERROR" + ex.toString());
-                            ex.printStackTrace();
-                        }
+        catch(Exception ex)
+        {
+            log.error("ERROR" + ex.toString());
+            System.out.println("ERROR" + ex.toString());
+            ex.printStackTrace();
+        }
 
      /*   try
         {
@@ -1036,6 +1036,47 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
     @Override
     public JSONObject getUserInfobyId(String userId) {
         return null;
+    }
+    
+    public boolean validateToken(){
+        boolean refreshedToken = false;
+        try {
+            HttpClient client = new DefaultHttpClient();
+            HttpPost post = new HttpPost("https://www.googleapis.com/oauth2/v2/tokeninfo?access_token=" + this.getAccessToken());
+            ResponseHandler<String> responseHandler = new BasicResponseHandler();
+            String responseBody = client.execute(post, responseHandler);
+            System.out.println("la respuesta es: " + responseBody);
+            refreshedToken = true;//No exception thrown, the token is fine
+            //TODO: validate status of the token :)
+        } catch (HttpResponseException e) {
+            System.out.println("Msg" + e.getMessage());
+            System.out.println("Error code" + e.getStatusCode());
+            if (e.getStatusCode() == 400) {
+                System.out.println("entra al error 400....");
+                try {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("refresh_token", this.getRefreshToken());
+                    params.put("client_id", this.getAppKey());
+                    params.put("client_secret", this.getSecretKey());
+                    params.put("grant_type", "refresh_token");
+                    String res = postRequest(params, "https://accounts.google.com/o/oauth2/token", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "POST");
+                    System.out.println("respuesta de peticion del token nuevo" + res);
+                    JSONObject userData = new JSONObject(res);
+                    String tokenAccess = userData.getString("access_token");
+                    this.setAccessToken(tokenAccess);
+                    refreshedToken = true;
+                } catch (IOException io) {
+                    System.out.println("Error en la peticion del nuevo accessToken" + io);
+                } catch (JSONException ex) {
+                    System.out.println("Error en la respuesta del nuevo accessToken" + ex);
+                }
+            }
+            //e.printStackTrace();
+        } catch (IOException ex) {
+            System.out.println("Error: " + ex);
+        }
+        return refreshedToken;
+    
     }
     
 }
