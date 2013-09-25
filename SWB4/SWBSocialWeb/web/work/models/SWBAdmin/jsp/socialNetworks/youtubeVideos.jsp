@@ -30,6 +30,10 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <!DOCTYPE html>
 
+<style type="text/css">
+    span.inline { display:inline; }
+</style>
+
 <%!
 //Favorites Add-> Add as favorites
 //Like
@@ -321,6 +325,7 @@ public static String getRequest(Map<String, String> params, String url,
                 }
                 //Comments
                 
+                //out.print("<div class=\"timelineresume\" dojoType=\"dijit.layout.ContentPane\">");//timelineresume
                 out.print("<div class=\"timelineresume\" dojoType=\"dijit.layout.ContentPane\">");//timelineresume
                 out.print("<span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
                 out.print("<em>" + videosArray.getJSONObject(i).getString("uploaded") + "</em>");                
@@ -364,12 +369,12 @@ public static String getRequest(Map<String, String> params, String url,
                 
                 out.print("</div>");//timelineresume
                 ///////out.print("ytComments:" +ytComments + "\n\n");
-                out.println("Uploader: <a href=\"#\" onclick=\"showDialog('" + "/work/models/SWBAdmin/jsp/socialNetworks/youtubeUserProfile.jsp" + "','Ver Perfil'); return false;\">" + videosArray.getJSONObject(i).getString("uploader") + "</a></br>");
+                //out.println("Uploader: <a href=\"#\" onclick=\"showDialog('" + "/work/models/SWBAdmin/jsp/socialNetworks/youtubeUserProfile.jsp" + "','Ver Perfil'); return false;\">" + videosArray.getJSONObject(i).getString("uploader") + "</a></br>");
                 
                 if(videosArray.getJSONObject(i).has("rating")){
-                    out.println("Rating:" + videosArray.getJSONObject(i).getDouble("rating") + "</br>");
+                    //out.println("Rating:" + videosArray.getJSONObject(i).getDouble("rating") + "</br>");
                 }                
-                out.println("</br></br>");
+                //out.println("</br></br>");
                 out.print("</div>");
             }
         }
