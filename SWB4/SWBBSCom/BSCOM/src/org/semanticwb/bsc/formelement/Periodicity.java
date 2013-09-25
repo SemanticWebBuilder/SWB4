@@ -10,6 +10,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormValidateException;
+import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
@@ -187,7 +188,7 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
         
         String value = request.getParameter(propName);
         Date date = null;
-        
+
         try {
             date = format.parse(value);
         } catch (ParseException pe) {
@@ -200,10 +201,11 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
         }
 
         SWBModel model = (SWBModel) obj.getModel().getModelObject().createGenericInstance();
+        Period current = (Period)obj.createGenericInstance();
         Iterator<Period> iperiods = Period.ClassMgr.listPeriods(model);
         while (iperiods.hasNext()) {
             Period p = iperiods.next();
-            if (obj.equals(p) || p.getStart() == null || p.getEnd() == null) {
+            if (current.equals(p) || p.getStart() == null || p.getEnd() == null) {
                 continue;
             }
             
@@ -215,11 +217,15 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
             } catch (ParseException pe) {
                 fromDate = p.getStart();
                 toDate = p.getEnd();
+            }            
+            if(  fromDate.getTime()<=date.getTime() && toDate.getTime()>=date.getTime()  ) {
+               throw new FormValidateException("Esta fecha ya forma parte de otro periodo");
             }
-            if ((fromDate.before(date) || fromDate.equals(date)) &&
-                    (toDate.after(date) || toDate.equals(date))) {
-                throw new FormValidateException("Esta fecha ya forma parte de otro periodo");
-            }
+            
+//            if ((fromDate.before(date) || fromDate.equals(date)) &&
+//                    (toDate.after(date) || toDate.equals(date))) {
+//                throw new FormValidateException("Esta fecha ya forma parte de otro periodo");
+//            }
         }
     }
     
