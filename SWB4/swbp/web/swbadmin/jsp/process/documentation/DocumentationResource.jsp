@@ -4,6 +4,7 @@
     Author     : carlos.alvarez
 --%>
 
+<%@page import="org.semanticwb.model.User"%>
 <%@page import="org.semanticwb.process.model.DataObject"%>
 <%@page import="org.semanticwb.process.model.SequenceFlow"%>
 <%@page import="org.semanticwb.process.model.ConnectionObject"%>
@@ -34,12 +35,11 @@
 <link rel="stylesheet" href="/swbadmin/jsp/process/formsBuilder.css" type="text/css"/>
 <!DOCTYPE html>
 <!--IMPORT BOOTSTRAP-->
-<link href="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/bootstrap/css/font-awesome.min.css" rel="stylesheet">
-<link href="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/bootstrap/css/swbp2.css" rel="stylesheet">
-<script type="text/javascript" src="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/bootstrap/js/jquery.min.js"></script>
-<script src="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/bootstrap/js/bootstrap.min.js"></script>
-<script src="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/bootstrap/js/holder.js"></script>
+<link href="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/utils/bootstrap/bootstrap.min.css" rel="stylesheet">
+<link href="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/utils/fontawesome/css/font-awesome.min.css" rel="stylesheet">
+<!--link href="<%//=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/utils/bootstrap/css/swbp2.css" rel="stylesheet"-->
+<script type="text/javascript" src="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/utils/jquery/jquery.min.js"></script>
+<script src="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/utils/bootstrap/bootstrap.min.js"></script>
 <script type='text/javascript'> //Activate tooltips
     $(document).ready(function() {
         if ($("[data-toggle=tooltip]").length) {
@@ -62,23 +62,24 @@
         urlGenerate.setParameter("suri", suri);
         String text = paramRequest.getLocaleString("hereDoc");
         String aux = text;
-        String element = paramRequest.getLocaleString("element");
         String suriProcess = "";
         ConnectionObject conObj = null;
         GraphicalElement graEle = null;
         Containerable container = null;
-        %>
-    <script type="text/javascript" src="<%=SWBPlatform.getContextPath() + "/swbadmin/jsp/process/tinymce/tinymce.min.js"%>"></script>
-    <div class="panel panel-default">
-        <%
-            if (pe instanceof org.semanticwb.process.model.Process
-                    || pe instanceof Lane
-                    || pe instanceof Activity
-                    || pe instanceof Gateway
-                    || pe instanceof ConnectionObject
-                    || pe instanceof Gateway
-                    || pe instanceof DataObject) {
-                if (pe instanceof org.semanticwb.process.model.Process) {
+        if (paramRequest.getUser() != null && paramRequest.getUser().isSigned()) {
+    %>
+    <script type="text/javascript" src="<%=SWBPlatform.getContextPath() + "/swbadmin/jsp/process/utils/tinymce/tinymce.min.js"%>"></script>
+
+    <%
+        if (pe instanceof org.semanticwb.process.model.Process
+                || pe instanceof Lane
+                || pe instanceof Activity
+                || pe instanceof Gateway
+                || pe instanceof ConnectionObject
+                || pe instanceof Gateway
+                || pe instanceof DataObject) {
+    %><div class="panel panel-default"><%
+        if (pe instanceof org.semanticwb.process.model.Process) {
 
         %>
         <div class="panel-heading">
@@ -86,12 +87,12 @@
                         <div class="panel-title"><strong><%=paramRequest.getLocaleString("docFromPro") + " " + pe.getTitle()%></strong></div>
                     </td><td style="text-align: right;">
                         <a class="btn btn-default btn-sm" onclick="window.location = '<%=urlGenerate%>'" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("view")%>">
-                            <i class="icon-html5 icon-large"></i>
+                            <i class="icon-file-text-alt"></i>
                         </a>
                     </td></tr></table>
         </div>
-
         <%                } else {
+
                 out.print("<div class=\"panel-heading\"><div class=\"panel-title\"><strong>" + paramRequest.getLocaleString("docFromSub") + " " + pe.getTitle() + "</strong></div> </div>");
                 if (pe instanceof GraphicalElement) {
                     graEle = (GraphicalElement) pe;
@@ -110,7 +111,7 @@
                     }
                 }
             }
-        %>
+        %><div class="panel-body">
         <form method="post" style="width: 100%;">
             <div class="editable" style="width:100%; height:100%;" id="idDocumentation/<%=idDocumentation%>">
                 <%
@@ -125,6 +126,7 @@
             </div>
             <input type="hidden" id="pe/<%=documentation.getId()%>" name="pe/<%=documentation.getId()%>" value="<%=pe.getTitle()%>"/>
         </form>
+    </div>
         <%
             if (pe instanceof org.semanticwb.process.model.Process) {
                 SemanticObject semObj = SemanticObject.createSemanticObject(suri);
@@ -162,81 +164,72 @@
                             ge.addDocumentation(doc);
                         }
                     }
-                    //Lane
-                    iterator = SWBComparator.sortByDisplayName(lane.iterator(), paramRequest.getUser().getLanguage());
-                    if (lane.size() > 0) {
-                        out.print("<div class=\"panel-heading\"><div class=\"panel-title\"><strong>" + paramRequest.getLocaleString("lane") + "</strong></div></div>");
-                    }
-                    while (iterator.hasNext()) {
-                        ge = iterator.next();
-                        doc = ge.getDocumentation();
-                        out.println("<h3> " + element + " " + ge.getTitle() + " </h3>");
-                        out.println("<form method=\"post\">");
-                        out.println("<div class=\"editable\" style=\"width:100%; border: 2px;\" id=\"idDocumentation/" + doc.getId() + "\">");
-                        text = doc.getText();
-                        out.println(text);
-                        text = "";
-                        out.println("</div>");
-                        out.println("<input type=\"hidden\" id=\"pe/" + doc.getId() + "\" name=\"pe/" + doc.getId() + "\" value=\"" + ge.getTitle() + "\"/>");
-                        out.println("</form>");
-                    }
-                    //Activity
-                    iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
-                    if (activity.size() > 0) {
-                        out.print("<div class=\"panel-heading\"><div class=\"panel-title\"><strong>" + paramRequest.getLocaleString("activity") + "</strong></div></div>");
-                    }
-                    while (iterator.hasNext()) {
-                        ge = iterator.next();
-                        doc = ge.getDocumentation();
-                        out.println("<h3> " + element + " " + ge.getTitle() + " </h3>");
-                        out.println("<form method=\"post\">");
-                        out.println("<div class=\"editable\" style=\"width:100%; border: 2px;\" id=\"idDocumentation/" + doc.getId() + "\">");
-                        if (doc.getText().trim().length() > 0) {
-                            text = doc.getText();
-                        } else {
-                            text = aux;
-                        }
-                        out.println(text);
-                        out.println("</div>");
-                        out.println("<input type=\"hidden\" id=\"pe/" + doc.getId() + "\" name=\"pe/" + doc.getId() + "\" value=\"" + ge.getTitle() + "\"/>");
-                        out.println("</form>");
-                    }
-                    //Gateway
-                    iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
-                    if (gateway.size() > 0) {
-                        out.print("<div class=\"panel-heading\"><div class=\"panel-title\"><strong>" + paramRequest.getLocaleString("gateway") + "</strong></div></div>");
-                    }
-                    while (iterator.hasNext()) {
-                        ge = iterator.next();
-                        //Connections
-                        Iterator<ConnectionObject> itConObj = SWBComparator.sortByDisplayName(((Gateway) ge).listOutputConnectionObjects(), paramRequest.getUser().getLanguage());
-                        while (itConObj.hasNext()) {
-                            ConnectionObject connectionObj = itConObj.next();
-                            if (connectionObj instanceof SequenceFlow) {
-                                if (connectionObj.getDocumentation() == null) {
-                                    doc = Documentation.ClassMgr.createDocumentation(paramRequest.getWebPage().getWebSite());
-                                    doc.setText(text);
-                                    doc.setTextFormat("text/html");
-                                    connectionObj.addDocumentation(doc);
-                                } else {
-                                    doc = connectionObj.getDocumentation();
+
+        %></div><%
+            //Lane
+            iterator = SWBComparator.sortByDisplayName(lane.iterator(), paramRequest.getUser().getLanguage());
+            if (lane.size() > 0) {
+        %><div class="panel panel-default"><%
+            out.print("<div class=\"panel-heading\"><div class=\"panel-title\"><strong>" + paramRequest.getLocaleString("lane") + "</strong></div></div>");
+%><div class="panel-body"><%
+            while (iterator.hasNext()) {
+                ge = iterator.next();
+                doc = ge.getDocumentation();
+                out.println("<h4> " + ge.getTitle() + " </h4>");
+                out.println("<form method=\"post\">");
+                out.println("<div class=\"editable\" style=\"width:100%; border: 2px;\" id=\"idDocumentation/" + doc.getId() + "\">");
+                text = doc.getText();
+                out.println(text);
+                text = "";
+                out.println("</div>");
+                out.println("<input type=\"hidden\" id=\"pe/" + doc.getId() + "\" name=\"pe/" + doc.getId() + "\" value=\"" + ge.getTitle() + "\"/>");
+                out.println("</form>");
+            }%></div></div><%}
+                                //Activity
+                                if (activity.size() > 0) {
+        %><div class="panel panel-default"><%
+            out.print("<div class=\"panel-heading\"><div class=\"panel-title\"><strong>" + paramRequest.getLocaleString("activity") + "</strong></div></div>");
+            %><div class="panel-body"><%
+            iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
+            while (iterator.hasNext()) {
+                ge = iterator.next();
+                doc = ge.getDocumentation();
+                out.println("<h4> " + ge.getTitle() + " </h4>");
+                out.println("<form method=\"post\">");
+                out.println("<div class=\"editable\" style=\"width:100%; border: 2px;\" id=\"idDocumentation/" + doc.getId() + "\">");
+                if (doc.getText().trim().length() > 0) {
+                    text = doc.getText();
+                } else {
+                    text = aux;
+                }
+                out.println(text);
+                out.println("</div>");
+                out.println("<input type=\"hidden\" id=\"pe/" + doc.getId() + "\" name=\"pe/" + doc.getId() + "\" value=\"" + ge.getTitle() + "\"/>");
+                out.println("</form>");
+            }%></div></div><%
                                 }
-                                out.println("<h3> " + element + " " + connectionObj.getTitle() + " </h3>");
-                                out.println("<form method=\"post\">");
-                                out.println("<div class=\"editable\" style=\"width:100%; border: 2px;\" id=\"idDocumentation/" + doc.getId() + "\">");
-                                if (doc.getText().trim().length() > 0) {
-                                    text = doc.getText();
-                                } else {
-                                    text = aux;
-                                }
-                                out.println(text);
-                                out.println("</div>");
-                                out.println("<input type=\"hidden\" id=\"pe/" + doc.getId() + "\" name=\"pe/" + doc.getId() + "\" value=\"" + connectionObj.getTitle() + "\"/>");
-                                out.println("</form>");
-                            }
+                                //Gateway
+                                if (gateway.size() > 0) {
+        %><div class="panel panel-default"><%
+            out.print("<div class=\"panel-heading\"><div class=\"panel-title\"><strong>" + paramRequest.getLocaleString("gateway") + "</strong></div></div>");
+            %><div class="panel-body"><%
+            iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
+            while (iterator.hasNext()) {
+                ge = iterator.next();
+                //Connections
+                Iterator<ConnectionObject> itConObj = SWBComparator.sortByDisplayName(((Gateway) ge).listOutputConnectionObjects(), paramRequest.getUser().getLanguage());
+                while (itConObj.hasNext()) {
+                    ConnectionObject connectionObj = itConObj.next();
+                    if (connectionObj instanceof SequenceFlow) {
+                        if (connectionObj.getDocumentation() == null) {
+                            doc = Documentation.ClassMgr.createDocumentation(paramRequest.getWebPage().getWebSite());
+                            doc.setText(text);
+                            doc.setTextFormat("text/html");
+                            connectionObj.addDocumentation(doc);
+                        } else {
+                            doc = connectionObj.getDocumentation();
                         }
-                        doc = ge.getDocumentation();
-                        out.println("<h3> " + element + " " + ge.getTitle() + " </h3>");
+                        out.println("<h4> " + connectionObj.getTitle() + " </h4>");
                         out.println("<form method=\"post\">");
                         out.println("<div class=\"editable\" style=\"width:100%; border: 2px;\" id=\"idDocumentation/" + doc.getId() + "\">");
                         if (doc.getText().trim().length() > 0) {
@@ -246,55 +239,75 @@
                         }
                         out.println(text);
                         out.println("</div>");
-                        out.println("<input type=\"hidden\" id=\"pe/" + doc.getId() + "\" name=\"pe/" + doc.getId() + "\" value=\"" + ge.getTitle() + "\"/>");
-                        out.println("</form>");
-                    }
-                    //Event
-                    iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
-                    if (event.size() > 0) {
-                        out.print("<div class=\"panel-heading\"><div class=\"panel-title\"><strong>" + paramRequest.getLocaleString("event") + "</strong></div></div>");
-                    }
-                    while (iterator.hasNext()) {
-                        ge = iterator.next();
-                        doc = ge.getDocumentation();
-                        out.println("<h3> " + element + " " + ge.getTitle() + " </h3>");
-                        out.println("<form method=\"post\">");
-                        out.println("<div class=\"editable\" style=\"width:100%; border: 2px;\" id=\"idDocumentation/" + doc.getId() + "\">");
-                        if (doc.getText().trim().length() > 0) {
-                            text = doc.getText();
-                        } else {
-                            text = aux;
-                        }
-                        out.println(text);
-                        out.println("</div>");
-                        out.println("<input type=\"hidden\" id=\"pe/" + doc.getId() + "\" name=\"pe/" + doc.getId() + "\" value=\"" + ge.getTitle() + "\"/>");
-                        out.println("</form>");
-                    }
-                    //Data
-                    iterator = SWBComparator.sortByDisplayName(data.iterator(), paramRequest.getUser().getLanguage());
-                    if (data.size() > 0) {
-                        out.print("<div class=\"panel-heading\"><div class=\"panel-title\"><strong>" + paramRequest.getLocaleString("data") + "</strong></div></div>");
-                    }
-                    while (iterator.hasNext()) {
-                        ge = iterator.next();
-                        doc = ge.getDocumentation();
-                        out.println("<h3> " + element + " " + ge.getTitle() + " </h3>");
-                        out.println("<form method=\"post\">");
-                        out.println("<div class=\"editable\" style=\"width:100%; border: 2px;\" id=\"idDocumentation/" + doc.getId() + "\">");
-                        if (doc.getText().trim().length() > 0) {
-                            text = doc.getText();
-                        } else {
-                            text = aux;
-                        }
-                        out.println(text);
-                        out.println("</div>");
-                        out.println("<input type=\"hidden\" id=\"pe/" + doc.getId() + "\" name=\"pe/" + doc.getId() + "\" value=\"" + ge.getTitle() + "\"/>");
+                        out.println("<input type=\"hidden\" id=\"pe/" + doc.getId() + "\" name=\"pe/" + doc.getId() + "\" value=\"" + connectionObj.getTitle() + "\"/>");
                         out.println("</form>");
                     }
                 }
+                doc = ge.getDocumentation();
+                out.println("<h4> " + ge.getTitle() + " </h4>");
+                out.println("<form method=\"post\">");
+                out.println("<div class=\"editable\" style=\"width:100%; border: 2px;\" id=\"idDocumentation/" + doc.getId() + "\">");
+                if (doc.getText().trim().length() > 0) {
+                    text = doc.getText();
+                } else {
+                    text = aux;
+                }
+                out.println(text);
+                out.println("</div>");
+                out.println("<input type=\"hidden\" id=\"pe/" + doc.getId() + "\" name=\"pe/" + doc.getId() + "\" value=\"" + ge.getTitle() + "\"/>");
+                out.println("</form>");
             }
+            %></div></div><%
+            }
+            //Event
+            if (event.size() > 0) {
+        %><div class="panel panel-default"><%
+            out.print("<div class=\"panel-heading\"><div class=\"panel-title\"><strong>" + paramRequest.getLocaleString("event") + "</strong></div></div>");
+            %><div class="panel-body"><%
+            iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
+            while (iterator.hasNext()) {
+                ge = iterator.next();
+                doc = ge.getDocumentation();
+                out.println("<h4> " + ge.getTitle() + " </h4>");
+                out.println("<form method=\"post\">");
+                out.println("<div class=\"editable\" style=\"width:100%; border: 2px;\" id=\"idDocumentation/" + doc.getId() + "\">");
+                if (doc.getText().trim().length() > 0) {
+                    text = doc.getText();
+                } else {
+                    text = aux;
+                }
+                out.println(text);
+                out.println("</div>");
+                out.println("<input type=\"hidden\" id=\"pe/" + doc.getId() + "\" name=\"pe/" + doc.getId() + "\" value=\"" + ge.getTitle() + "\"/>");
+                out.println("</form>");
+            }%></div></div><%
+                                }
+                                //Data
+                                if (data.size() > 0) {
+        %><div class="panel panel-default"><%
+            out.print("<div class=\"panel-heading\"><div class=\"panel-title\"><strong>" + paramRequest.getLocaleString("data") + "</strong></div></div>");
+            %><div class="panel-body"><%
+            iterator = SWBComparator.sortByDisplayName(data.iterator(), paramRequest.getUser().getLanguage());
+            while (iterator.hasNext()) {
+                ge = iterator.next();
+                doc = ge.getDocumentation();
+                out.println("<h4> " + ge.getTitle() + " </h4>");
+                out.println("<form method=\"post\">");
+                out.println("<div class=\"editable\" style=\"width:100%; border: 2px;\" id=\"idDocumentation/" + doc.getId() + "\">");
+                if (doc.getText().trim().length() > 0) {
+                    text = doc.getText();
+                } else {
+                    text = aux;
+                }
+                out.println(text);
+                out.println("</div>");
+                out.println("<input type=\"hidden\" id=\"pe/" + doc.getId() + "\" name=\"pe/" + doc.getId() + "\" value=\"" + ge.getTitle() + "\"/>");
+                       out.println("</form>");
+                   }%></div></div><%}
+                                                   }
+                                               }
         %>
-        <script type="text/javascript">
+    <script type="text/javascript">
     var suriProcess = "<%=suriProcess%>";
     tinymce.init({
         selector: "div.editable",
@@ -324,9 +337,7 @@
         style_formats: [
             {title: 'Bold text', inline: 'b'},
             {title: 'Red text', inline: 'span', styles: {color: '#ff0000'}},
-            {title: 'Red header', block: 'h1', styles: {color: '#ff0000'}},
-            {title: 'Example 1', inline: 'span', classes: 'example1'},
-            {title: 'Example 2', inline: 'span', classes: 'example2'},
+            {title: 'Red header', block: 'h1', styles: {color: '#ff0000'}}, {title: 'Example 1', inline: 'span', classes: 'example1'}, {title: 'Example 2', inline: 'span', classes: 'example2'},
             {title: 'Table styles'},
             {title: 'Table row 1', selector: 'tr', classes: 'tablerow1'}
         ]
@@ -349,7 +360,6 @@
             },
             handleAs: "text"
         });
-
     }
     function generateHtml(url) {
         dojo.xhrPost({url: url,
@@ -365,9 +375,9 @@
             handleAs: "text"
         });
     }
-        </script>
-        <%} else {
+    </script>
+    <%} else {
                 out.println("<h1>" + paramRequest.getLocaleLogString("noDocumentation") + "</h1>");
-            }%>
-    </div>
+            }
+        }%>
 </div>
