@@ -67,125 +67,133 @@ if (!user.isSigned()) {
     SWBResourceURL createURL = paramRequest.getActionUrl().setAction(ProcessFileRepository.ACT_NEWFILE);
     %>
     <script src="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/repository/fileRepositoryUtils.js" charset="utf"></script>
-    <h2><%=paramRequest.getLocaleString("msgAdd")%> <%=re != null?paramRequest.getLocaleString("msgVersionOf")+" ":""%> <%=(re != null && re instanceof RepositoryURL)?paramRequest.getLocaleString("msgDocLink"):paramRequest.getLocaleString("msgFile")%></h2>
-    <form class="form-horizontal" role="form" action="<%=createURL%>" method="post" enctype="multipart/form-data">
-        <%if (re != null) {%>
-        <input type="hidden" name="fid" value="<%=re.getURI()%>"/>
-        <%}%>
-        <div class="form-group">
-            <label for="" class="col-lg-2 control-label"><%=paramRequest.getLocaleString("msgTitle")%> *</label>
-            <div class="col-lg-3">
-                <input type="text" name="ftitle" id="ftitle" value="<%=(re != null)?re.getDisplayTitle(lang):""%>" class="form-control"/>
-            </div>
+    <div class="col-lg-offset-3 col-lg-6">
+    <div class="panel panel-default swbp-panel">
+        <div class="panel-heading swbp-panel-title">
+            <h1 class="panel-title"><strong><%=paramRequest.getLocaleString("msgAdd")%>&nbsp;<%=re != null?paramRequest.getLocaleString("msgVersionOf")+" ":""%> <%=(re != null && re instanceof RepositoryURL)?paramRequest.getLocaleString("msgDocLink"):paramRequest.getLocaleString("msgFile")%></strong></h1>
         </div>
-        <div class="form-group">
-            <label for="" class="col-lg-2 control-label"><%=paramRequest.getLocaleString("msgDescription")%> *</label>
-            <div class="col-lg-3">
-                <textarea name="fdescription" id="fdescription" class="form-control"><%=(re != null)?re.getDisplayDescription(lang):""%></textarea>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="" class="col-lg-2 control-label"><%=paramRequest.getLocaleString("msgComments")%></label>
-            <div class="col-lg-3">
-                <textarea name="fcomment" id="fcomment" class="form-control"><%=(re != null)?vi.getVersionComment():""%></textarea>
-            </div>
-        </div>
-        <%if (re == null) {%>
-        <div class="form-group">
-            <label class="col-lg-2 control-label"><%=paramRequest.getLocaleString("msgFileType")%> *</label>
-            <div class="col-lg-3">
-                <div class="radio-inline">
-                  <label>
-                      <input type="radio" id="fileToggleRadio" onclick="toggleShow('fileSelect', true);toggleShow('linkSelect', false);" checked name="hftype" value="file"> <%=paramRequest.getLocaleString("msgFile")%>
-                  </label>
+        <div class="panel-body">
+            <form class="form-horizontal" role="form" action="<%=createURL%>" method="post" enctype="multipart/form-data">
+                <%if (re != null) {%>
+                <input type="hidden" name="fid" value="<%=re.getURI()%>"/>
+                <%}%>
+                <div class="form-group">
+                    <label for="" class="col-lg-4 control-label"><%=paramRequest.getLocaleString("msgTitle")%> *</label>
+                    <div class="col-lg-6">
+                        <input type="text" name="ftitle" id="ftitle" value="<%=(re != null)?re.getDisplayTitle(lang):""%>" class="form-control"/>
+                    </div>
                 </div>
-                <div class="radio-inline">
-                    <label>
-                        <input type="radio" id="urlToggleRadio" onclick="toggleShow('fileSelect', false);toggleShow('linkSelect', true);"name="hftype" value="url"> <%=paramRequest.getLocaleString("lblLink")%>
-                    </label>
+                <div class="form-group">
+                    <label for="" class="col-lg-4 control-label"><%=paramRequest.getLocaleString("msgDescription")%> *</label>
+                    <div class="col-lg-6">
+                        <textarea name="fdescription" id="fdescription" class="form-control"><%=(re != null)?re.getDisplayDescription(lang):""%></textarea>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <%
-        } else {
-            %><input type="hidden" name="hftype" id="hftype" value="<%=type%>"/><%
-        }
-        if (re == null || (re != null && re instanceof RepositoryFile)) {%>
-        <div id="fileSelect" class="form-group">
-            <label for="" class="col-lg-2 control-label"><%=paramRequest.getLocaleString("msgFile")%> *</label>
-            <div class="col-lg-3">
-                <div class="input-group">
-                    <span class="input-group-btn">
-                        <span class="btn btn-success btn-file">
-                            <%=paramRequest.getLocaleString("msgSearchFile")%> <input type="file" name="ffile" id="ffile" class="form-control" />
-                        </span>
-                    </span>
-                    <input type="text" class="form-control" disabled/>
+                <div class="form-group">
+                    <label for="" class="col-lg-4 control-label"><%=paramRequest.getLocaleString("msgComments")%></label>
+                    <div class="col-lg-6">
+                        <textarea name="fcomment" id="fcomment" class="form-control"><%=(re != null)?vi.getVersionComment():""%></textarea>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <%
-        }
-        if (re == null || (re != null && re instanceof RepositoryURL)) {
-            String val = "";
-            if (re != null) {
-                val = vi.getVersionFile().startsWith("http://")?vi.getVersionFile().replace("http://", ""):vi.getVersionFile();
-            }
-        %>
-        <div id="linkSelect" class="form-group">
-            <label for="" class="col-lg-2 control-label"><%=paramRequest.getLocaleString("lblLink")%> *</label>
-            <div class="col-lg-3">
-                <div class="input-group">
-                    <span class="input-group-addon">http://</span>
-                    <input type="text" name="extfile" id="extfile" value="<%=val%>" class="form-control" />
-                    </span>
-                </div>
-            </div>
-        </div>
-        <%}%>
-        <div class="form-group">
-            <label for="" class="col-lg-2 control-label"><%=paramRequest.getLocaleString("msgTHStatus")%></label>
-            <div class="col-lg-3">
-                <select name="itemAwStatus" id="itemAwStatus" class="form-control">
-                    <option value="" <%=(actualStatus.equals("")?"selected":"")%>><%=paramRequest.getLocaleString("msgSelNone")%></option>
-                    <%
-                    Iterator<ItemAwareStatus> ititwstst = SWBComparator.sortByDisplayName(ItemAwareStatus.ClassMgr.listItemAwareStatuses(site), lang);
-                    while (ititwstst.hasNext()) {
-                        ItemAwareStatus itemAwareStatus = ititwstst.next();
-                        %>
-                        <option value="<%=itemAwareStatus.getId()%>" <%=(actualStatus.equals(itemAwareStatus.getId())?"selected":"")%>><%=itemAwareStatus.getDisplayTitle(lang)%></option>
-                        <%
+                <%if (re == null) {%>
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label"><%=paramRequest.getLocaleString("msgFileType")%> *</label>
+                        <div class="col-lg-6">
+                            <div class="radio-inline">
+                              <label>
+                                  <input type="radio" id="fileToggleRadio" onclick="toggleShow('fileSelect', true);toggleShow('linkSelect', false);" checked name="hftype" value="file"> <%=paramRequest.getLocaleString("msgFile")%>
+                              </label>
+                            </div>
+                            <div class="radio-inline">
+                                <label>
+                                    <input type="radio" id="urlToggleRadio" onclick="toggleShow('fileSelect', false);toggleShow('linkSelect', true);"name="hftype" value="url"> <%=paramRequest.getLocaleString("lblLink")%>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                <%
+                } else {
+                    %><input type="hidden" name="hftype" id="hftype" value="<%=type%>"/><%
+                }
+                if (re == null || (re != null && re instanceof RepositoryFile)) {%>
+                    <div id="fileSelect" class="form-group">
+                        <label for="" class="col-lg-4 control-label"><%=paramRequest.getLocaleString("msgFile")%> *</label>
+                        <div class="col-lg-6">
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <span class="btn btn-success btn-file">
+                                        <%=paramRequest.getLocaleString("msgSearchFile")%> <input type="file" name="ffile" id="ffile" class="form-control" />
+                                    </span>
+                                </span>
+                                <input type="text" class="form-control" disabled/>
+                            </div>
+                        </div>
+                    </div>
+                <%
+                }
+                if (re == null || (re != null && re instanceof RepositoryURL)) {
+                    String val = "";
+                    if (re != null) {
+                        val = vi.getVersionFile().startsWith("http://")?vi.getVersionFile().replace("http://", ""):vi.getVersionFile();
                     }
                     %>
-                </select>
-            </div>
-        </div>
-        <%if (re != null) {%>
-        <div class="form-group">
-            <label for="" class="col-lg-2 control-label"><%=paramRequest.getLocaleString("msgVersion")%> *</label>
-            <div class="col-lg-3">
-                <select name="newVersion" id="itemAwStatus" class="form-control">
-                    <%
-                    float fver = Float.parseFloat(vi.getVersionValue());
-                    fver = fver + 0.1F;
+                    <div id="linkSelect" class="form-group">
+                        <label for="" class="col-lg-4 control-label"><%=paramRequest.getLocaleString("lblLink")%> *</label>
+                        <div class="col-lg-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">http://</span>
+                                <input type="text" name="extfile" id="extfile" value="<%=val%>" class="form-control" />
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                <%}%>
+                <div class="form-group">
+                    <label for="" class="col-lg-4 control-label"><%=paramRequest.getLocaleString("msgTHStatus")%></label>
+                    <div class="col-lg-6">
+                        <select name="itemAwStatus" id="itemAwStatus" class="form-control">
+                            <option value="" <%=(actualStatus.equals("")?"selected":"")%>><%=paramRequest.getLocaleString("msgSelNone")%></option>
+                            <%
+                            Iterator<ItemAwareStatus> ititwstst = SWBComparator.sortByDisplayName(ItemAwareStatus.ClassMgr.listItemAwareStatuses(site), lang);
+                            while (ititwstst.hasNext()) {
+                                ItemAwareStatus itemAwareStatus = ititwstst.next();
+                                %>
+                                <option value="<%=itemAwareStatus.getId()%>" <%=(actualStatus.equals(itemAwareStatus.getId())?"selected":"")%>><%=itemAwareStatus.getDisplayTitle(lang)%></option>
+                                <%
+                            }
+                            %>
+                        </select>
+                    </div>
+                </div>
+                <%if (re != null) {%>
+                    <div class="form-group">
+                        <label for="" class="col-lg-4 control-label"><%=paramRequest.getLocaleString("msgVersion")%> *</label>
+                        <div class="col-lg-6">
+                            <select name="newVersion" id="itemAwStatus" class="form-control">
+                                <%
+                                float fver = Float.parseFloat(vi.getVersionValue());
+                                fver = fver + 0.1F;
 
-                    int iver = (int) fver;
-                    iver = iver + 1;
-                    %>
-                    <option value="fraction"><%=fver%></option>
-                    <option value="nextInt"><%=(float)iver%></option>
-                </select>
-            </div>
+                                int iver = (int) fver;
+                                iver = iver + 1;
+                                %>
+                                <option value="fraction"><%=fver%></option>
+                                <option value="nextInt"><%=(float)iver%></option>
+                            </select>
+                        </div>
+                    </div>
+                <%}%>
+                <div class="panel-footer text-right">
+                    <!--label for="" class="col-lg-2"></label-->
+                    <!--div class="col-lg-3 text-right"-->
+                        <button type="button" onclick="window.location='<%=viewURL%>';" class="btn btn-default"><%=paramRequest.getLocaleString("msgBTNCancel")%></button>
+                        <button type="button" class="btn btn-success" onclick="if(checkfiles('<%=validFiles%>')){this.form.submit();} else {return false;};"><%=paramRequest.getLocaleString("msgAdd")%></button>
+                    <!--/div-->
+                </div>
+            </form>
         </div>
-        <%}%>
-        <div class="form-group">
-            <label for="" class="col-lg-2"></label>
-            <div class="col-lg-3 text-right">
-                <button type="button" onclick="window.location='<%=viewURL%>';" class="btn btn-default"><%=paramRequest.getLocaleString("msgBTNCancel")%></button>
-                <button type="button" class="btn btn-success" onclick="if(checkfiles('<%=validFiles%>')){this.form.submit();} else {return false;};"><%=paramRequest.getLocaleString("msgAdd")%></button>
-            </div>
-        </div>
-    </form>
+    </div>
+    </div>
     <script>
         <%if (re == null) {%>
         function toggleShow(elementId, show) {
