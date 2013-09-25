@@ -89,12 +89,16 @@ public class YoutubeWall extends GenericResource{
         System.out.println("\n\n\nModo: " + mode);        
         String objUri = request.getParameter("suri");        
         System.out.println("suri in processRequest:" + objUri);
+        PrintWriter out = response.getWriter();
         if(mode!= null && mode.equals("commentVideoSent")){//Feedback of commented video
-            response.getWriter().print("Comment sent");
+            //response.getWriter().print("Comment sent");
+            out.println("<script type=\"text/javascript\">");
+            out.println("   hideDialog();");
+            out.println("   showStatus('Comment sent successfully');");
+            out.println("</script>");
         }else if(mode!= null && mode.equals("likeSent")){//Feedback of liked video
             response.getWriter().print("like / unlike sent");
         }else if(mode!= null && mode.equals("commentVideo")){//Displays dialog to create a comment
-            PrintWriter out = response.getWriter();
             SWBResourceURL actionURL = paramRequest.getActionUrl();
             actionURL.setParameter("videoId", request.getParameter("videoId"));
             actionURL.setParameter("suri", request.getParameter("suri"));
@@ -104,7 +108,7 @@ public class YoutubeWall extends GenericResource{
             out.println("<table>");
             out.println("<tr>"); 
             out.println("   <td>");
-            out.println("       <textarea type=\"dijit.form.Textarea\" name=\"replyText\" id=\"replyText\" rows=\"4\" cols=\"50\"></textarea>");
+            out.println("       <textarea type=\"dijit.form.Textarea\" name=\"comment\" id=\"comment\" rows=\"4\" cols=\"50\"></textarea>");
             out.println("   </td>");
             out.println("</tr>");
             out.println("<tr>");
