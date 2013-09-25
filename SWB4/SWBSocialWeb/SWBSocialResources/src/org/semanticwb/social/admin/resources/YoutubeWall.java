@@ -20,8 +20,10 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.Youtube;
 
 /**
@@ -87,22 +89,51 @@ public class YoutubeWall extends GenericResource{
         System.out.println("\n\n\nModo: " + mode);        
         String objUri = request.getParameter("suri");        
         System.out.println("suri in processRequest:" + objUri);
-        
-        if(mode != null && mode.equals("doLike")){//Do a Like
-            System.out.println("Doing a like");
-            doLikeDislike(request, response, paramRequest);
-        }else if(mode != null && mode.equals("doDislike")){//Do a dislike
-            System.out.println("Doing a dislike");
-            doLikeDislike(request, response, paramRequest);
-        }else if(mode != null && mode.equals("reply")){
-            System.out.println("Commenting a video");
-            doCommentVideo(request, response, paramRequest);
+        if(mode!= null && mode.equals("commentVideoSent")){//Feedback of commented video
+            response.getWriter().print("Comment sent");
+        }else if(mode!= null && mode.equals("likeSent")){//Feedback of liked video
+            response.getWriter().print("like / unlike sent");
+        }else if(mode!= null && mode.equals("commentVideo")){//Displays dialog to create a comment
+            PrintWriter out = response.getWriter();
+            SWBResourceURL actionURL = paramRequest.getActionUrl();
+            actionURL.setParameter("videoId", request.getParameter("videoId"));
+            actionURL.setParameter("suri", request.getParameter("suri"));
+
+            out.println("<form type=\"dijit.form.Form\" id=\"createComment\" action=\"" +  actionURL.setAction("createCommentVideo") + "\" method=\"post\" onsubmit=\"submitForm('createComment'); try{document.getElementById('csLoading').style.display='inline';}catch(noe){}; return false;\">");
+            out.println("<fieldset>");
+            out.println("<table>");
+            out.println("<tr>"); 
+            out.println("   <td>");
+            out.println("       <textarea type=\"dijit.form.Textarea\" name=\"replyText\" id=\"replyText\" rows=\"4\" cols=\"50\"></textarea>");
+            out.println("   </td>");
+            out.println("</tr>");
+            out.println("<tr>");
+            out.println("       <td style=\"text-align: center;\"><button dojoType=\"dijit.form.Button\" type=\"submit\">Comment</button></td>");
+            out.println("</tr>");
+            out.println("</table>");
+            out.println("</fieldset>");
+            out.println("</form>");
+            out.println("<span id=\"csLoading\" style=\"width: 100px; display: none\" align=\"center\">&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\"/></span>");
         }else{
             super.processRequest(request, response, paramRequest);
         }
     }
 
-    private void doLikeDislike(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
+    @Override
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        String action = response.getAction();
+        
+        if(action != null && (action.equals("doLike") || action.equals("doDislike"))){//Do a Like
+            System.out.println("Doing a like");
+            doLikeDislike(request);
+            response.setMode("likeSent");
+        }else if(action != null && action.equals("createCommentVideo")){
+            System.out.println("Commenting a video");
+            doCommentVideo(request);
+            response.setMode("commentVideoSent");
+        }
+    }
+    private void doLikeDislike(HttpServletRequest request) {
         String action = request.getParameter("action");
         String videoId = request.getParameter("videoId");
         String objUri = request.getParameter("suri");
@@ -147,14 +178,13 @@ public class YoutubeWall extends GenericResource{
             BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String docxml = readerl.readLine();
             System.out.print("--Ejecuted Like/disLike:" + docxml);
-            response.getWriter().write("LIKED/UNLIKED");
         }catch(Exception ex){
             System.out.println("ERROR" + ex.toString());
             ex.printStackTrace();
         }
     }
 
-    private void doCommentVideo(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
+    private void doCommentVideo(HttpServletRequest request) {
         String videoId = request.getParameter("videoId");
         String objUri = request.getParameter("suri");
         String comment = request.getParameter("comment");
@@ -188,7 +218,6 @@ public class YoutubeWall extends GenericResource{
             conn.setRequestProperty("GData-Version", "2");
             conn.setRequestProperty("X-GData-Key", "key=" + semanticYoutube.getDeveloperKey());
 
-            //conn.setRequestProperty("Connection", "close");
             DataOutputStream writer = new DataOutputStream(conn.getOutputStream());                        
             String xml = "<?xml version=\"1.0\"?>"
                 + "<entry xmlns=\"http://www.w3.org/2005/Atom\""
@@ -201,9 +230,7 @@ public class YoutubeWall extends GenericResource{
             BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String docxml = readerl.readLine();
             System.out.print("--docxml en post Comment----" + docxml);               
-        } 
-        catch(Exception ex)
-        {
+        }catch(Exception ex){
             System.out.println("ERROR" + ex.toString());
             ex.printStackTrace();
         }
