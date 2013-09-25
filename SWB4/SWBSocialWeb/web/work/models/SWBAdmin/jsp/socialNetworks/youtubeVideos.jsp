@@ -190,7 +190,7 @@ public static String getRequest(Map<String, String> params, String url,
         String objUri = (String)request.getParameter("suri");
         SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
         Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();
-        semanticYoutube.setRefreshToken("1/EBI7ANgfHcp7CHm3acP5hGoFZ29XhZzIzT2jv_h-3so");
+        //semanticYoutube.setRefreshToken("1/EBI7ANgfHcp7CHm3acP5hGoFZ29XhZzIzT2jv_h-3so");
         System.out.println("ACCESS TOKEN:" + semanticYoutube.getAccessToken());
         if(!semanticYoutube.validateToken()){//If was unable to refresh the token
             System.out.println("unable to refresh the token!");
@@ -348,17 +348,17 @@ public static String getRequest(Map<String, String> params, String url,
                 out.print("</span>");
                 
                 out.print("   <span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
-                    out.print(" <a href=\"\" onclick=\"showDialog('" + "#" + "','Reply to " + "USERNAME" + "');return false;\"><span>Reply</span></a>  ");
+                    out.print(" <a href=\"\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("commentVideo").setParameter("suri", objUri).setParameter("videoId", videosArray.getJSONObject(i).getString("id")) + "','Comment to " + videosArray.getJSONObject(i).getString("title") + "');return false;\"><span>Comment</span></a>  ");                    
                 out.print("   </span>");
                 System.out.println("VIDEOID:" + videosArray.getJSONObject(i).getString("id"));
                 out.print("   <span id=\"" + videosArray.getJSONObject(i).getString("id") +  "/like\" class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
                     //out.print(" <a href=\"\" onclick=\"showDialog('" + "#" + "','Reply to " + "USERNAME" + "');return false;\"><span>Like</span></a>  ");
                     //out.print("<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("doLike").setParameter("suri", objUri).setParameter("action", "like").setParameter("videoId", videosArray.getJSONObject(i).getString("id")) + "','" + "DoLike" + "'); return false;\">" + comment.getJSONArray("author").getJSONObject(0).getJSONObject("name").getString("$t") + "</a>:");
-                out.println("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + paramRequest.getRenderUrl().setMode("doLike").setParameter("suri", objUri).setParameter("action", "like").setParameter("videoId", videosArray.getJSONObject(i).getString("id")) + "','" + videosArray.getJSONObject(i).getString("id") +  "/like'); return false;\">Like</a>");
+                out.println("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + paramRequest.getActionUrl().setAction("doLike").setParameter("suri", objUri).setParameter("action", "like").setParameter("videoId", videosArray.getJSONObject(i).getString("id")) + "','" + videosArray.getJSONObject(i).getString("id") +  "/like'); return false;\">Like</a>");
                 out.print("   </span>");
                 
                 out.print("   <span id=\"" + videosArray.getJSONObject(i).getString("id") +  "/dislike\" class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
-                out.println("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + paramRequest.getRenderUrl().setMode("doDislike").setParameter("suri", objUri).setParameter("action", "dislike").setParameter("videoId", videosArray.getJSONObject(i).getString("id")) + "','" + videosArray.getJSONObject(i).getString("id") + "/dislike'); return false;\">Dislike</a>");
+                out.println("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + paramRequest.getActionUrl().setAction("doDislike").setParameter("suri", objUri).setParameter("action", "dislike").setParameter("videoId", videosArray.getJSONObject(i).getString("id")) + "','" + videosArray.getJSONObject(i).getString("id") + "/dislike'); return false;\">Dislike</a>");
                 out.print("   </span>");
                 
                 out.print("</div>");//timelineresume
