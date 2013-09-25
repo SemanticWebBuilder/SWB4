@@ -87,7 +87,7 @@ Iterator<String> keys = groups.keySet().iterator();
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"><%=paramRequest.getLocaleString("btnCancel")%></button>
-                    <button type="submit" class="btn btn-primary"><%=paramRequest.getLocaleString("btnOk")%></button>
+                    <button type="submit" class="btn btn-success"><%=paramRequest.getLocaleString("btnOk")%></button>
                 </div>
             </form>
         <%
