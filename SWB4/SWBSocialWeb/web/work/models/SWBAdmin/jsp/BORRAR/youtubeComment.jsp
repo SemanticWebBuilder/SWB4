@@ -4,6 +4,9 @@
     Author     : francisco.jimenez
 --%>
 
+<%@page import="java.io.DataOutputStream"%>
+<%@page import="java.net.HttpURLConnection"%>
+<%@page import="java.net.URL"%>
 <%@page import="org.semanticwb.SWBUtils"%>
 <%@page contentType="text/html" pageEncoding="x-iso-8859-11"%>
 
@@ -31,13 +34,13 @@
 <%@page import="java.util.HashMap"%>
 
 <%
-    HttpClient client = new DefaultHttpClient();
+    /*HttpClient client = new DefaultHttpClient();
     client.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
-    HttpPost post = new HttpPost("http://gdata.youtube.com/feeds/api/videos/F_ZYFz9rNR0/comments");
+    HttpPost post = new HttpPost("http://gdata.youtube.com/feeds/api/videos/hZ2gyZMA9fo/comments");
 
     try {
         post.setHeader("Content-Type", "application/atom+xml");
-        post.setHeader("Authorization", "Bearer " + "ya29.AHES6ZTGkABrFTiV3msGlgR6lERJdNlF0pmwMWRYy-nVUsfiifxMrAjKfA");
+        post.setHeader("Authorization", "Bearer " + "ya29.AHES6ZSUZhSV24AshDxMxtO7n3geJE8PKwhMjRt7q7BmFIE5LVz7A3cItgI");
         post.setHeader("GData-Version", "2");
         post.setHeader("X-GData-Key", "key=AI39si4LK4YxaCRYV0HAjypDOx3qfrqkC90wLfieDPFLlSmvDsb4HivpXKXb8CNtYcOkAnmGQoK4-aSrayHocpTGI8DHGD2r9g");
 
@@ -46,7 +49,7 @@
                 "<?xml version=\"1.0\"?>"
                 + "<entry xmlns=\"http://www.w3.org/2005/Atom\""
                 + " xmlns:yt=\"http://gdata.youtube.com/schemas/2007\">"
-                + "<content>This is a comment from Youtube API</content>"
+                + "<content>Testing API</content>"
                 + "</entry>");
         post.setEntity(entity);
 
@@ -90,6 +93,42 @@
     }catch(Exception e){
         System.out.println("Other error:" + e.getMessage());
         e.printStackTrace();
-    }
+    }*/
+
+        String url1 = "http://gdata.youtube.com/feeds/api/videos/hZ2gyZMA9fo/comments";
+        URL url;
+        HttpURLConnection conn = null;
+        try {
+            url = new URL(url1);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            conn.setUseCaches(false);
+            conn.setRequestProperty("Host", "gdata.youtube.com");
+            conn.setRequestProperty("Content-Type", "application/atom+xml");
+            conn.setRequestProperty("Authorization", "Bearer " + "ya29.AHES6ZSUZhSV24AshDxMxtO7n3geJE8PKwhMjRt7q7BmFIE5LVz7A3cItgI");
+            conn.setRequestProperty("GData-Version", "2");
+            conn.setRequestProperty("X-GData-Key", "key=" + "AI39si4LK4YxaCRYV0HAjypDOx3qfrqkC90wLfieDPFLlSmvDsb4HivpXKXb8CNtYcOkAnmGQoK4-aSrayHocpTGI8DHGD2r9g");
+
+            //conn.setRequestProperty("Connection", "close");
+            DataOutputStream writer = new DataOutputStream(conn.getOutputStream());                        
+            String xml = "<?xml version=\"1.0\"?>"
+                + "<entry xmlns=\"http://www.w3.org/2005/Atom\""
+                + " xmlns:yt=\"http://gdata.youtube.com/schemas/2007\">"
+                + "<content>Testing API, t1. Great Video!</content>"
+                + "</entry>";
+            writer.write(xml.getBytes("UTF-8"));
+            writer.flush();
+            writer.close();                        
+            BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String docxml = readerl.readLine();
+            System.out.print("--docxml en post Comment----" + docxml);               
+        } 
+        catch(Exception ex)
+        {
+            System.out.println("ERROR" + ex.toString());
+            ex.printStackTrace();
+        }
 %>
 
