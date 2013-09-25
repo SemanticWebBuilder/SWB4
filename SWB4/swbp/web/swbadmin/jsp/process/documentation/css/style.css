@@ -1,0 +1,61 @@
+.swbp-left-menu-doc{
+    height: 70%;
+    /*white-space: nowrap;*/
+    display: block;
+    overflow: scroll;
+}
+.contenido {
+    width: 100%;
+    height: 70%;
+    background-color: #fff;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+.contenedor{
+    height: 100%;
+    width: 100%;
+    text-align:center;
+    margin-right: auto;
+    margin-left: auto;
+}
+HTML
+{
+    height: auto;
+}
+BODY
+{
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    height:100%; 
+    width: 100%;
+    margin:0px; 
+    background-color:#fff;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    /*color: white;*/
+} 
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+    background-color: green;
+}
+a {
+    color: #8F9A83;
+}
+a:hover{
+    color: #8F9A83;
+}
+a:visited {
+    color: #8F9A83;
+}
+a:active {
+    color: green;
+}
+a.list-group-item.active > .badge, .nav-pills > .active > a > .badge {
+    color: #8F9A83;
+}
+.swbp-nav h2 {
+    color: white;
+}
