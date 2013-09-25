@@ -341,3 +341,10 @@ h3.dijitCalendarYearLabel  {
 .btn-success {
     background-color: green;
 }
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+    color: #fff;
+    text-decoration: none;
+    background-color: green;
+}
