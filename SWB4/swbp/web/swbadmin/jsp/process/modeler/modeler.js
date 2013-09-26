@@ -2125,8 +2125,25 @@
         navPath:null,
         window:null,
                 
-        init:function(svgid, mode, callbackHandler)
+        init:function(svgid, options, callbackHandler)
         {
+            //Set default options
+            Modeler.options = {
+                mode:'edit',
+                layerNavigation:true
+            };
+            
+            //Override passed options
+            if (options && options !== null) {
+                if (options.mode && options.mode !== null && options.mode.length > 0) {
+                    Modeler.options.mode = options.mode;
+                }
+                
+                if (options.layerNavigation && options.layerNavigation !== null) {
+                    Modeler.options.layerNavigation = options.layerNavigation;
+                }
+            }
+                
             ToolKit.init(svgid);
             ToolKit.onmousedown=Modeler.onmousedown;
             ToolKit.onmousemove=Modeler.onmousemove;
@@ -2134,7 +2151,7 @@
             if(!ToolKit.svg.offsetLeft)ToolKit.svg.offsetLeft=60;
             if(!ToolKit.svg.offsetTop)ToolKit.svg.offsetTop=10;
             Modeler.createNavPath();
-            Modeler.mode = mode;
+            Modeler.mode = (options !== null && options.mode)?options.mode:"view";
             
             //Sobreescritura del método setLayer para establecer la barra de navegación
             var fSetLayer = ToolKit.setLayer;
@@ -2894,10 +2911,12 @@
             var icon=obj.addIcon("#subProcessMarker",0,1,-1,-12);
             obj.subLayer={parent:obj};
             
-            icon.obj.ondblclick=function(evt)
-            {
-                ToolKit.setLayer(obj.subLayer);
-            };
+            if (Modeler.options !== null && Modeler.options.layerNavigation) {
+                icon.obj.ondblclick=function(evt)
+                {
+                    ToolKit.setLayer(obj.subLayer);
+                };
+            }
             
             if (type=="eventsubProcess") {
                 obj.setAttributeNS(null,"bclass","eventSubTask");
