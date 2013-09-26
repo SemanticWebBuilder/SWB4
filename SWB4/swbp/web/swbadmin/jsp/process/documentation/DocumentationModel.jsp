@@ -33,6 +33,29 @@
         </div>
     </div>
     <div class="panel-body">
+        <ul class="list-unstyled list-inline hidden-print visible-lg">
+                    <li>
+                        <a href="#" class="btn btn-default" data-placement="bottom" data-toggle="tooltip" data-original-title="Zoom in" onclick="zoomin(); return false;"><i class="icon-zoom-in"></i></a>
+                    </li>
+                    <li>
+                        <a href="#" class="btn btn-default" data-placement="bottom" data-toggle="tooltip" data-original-title="Zoom out" onclick="zoomout(); return false;"><i class="icon-zoom-out"></i></a>
+                    </li>
+                    <li>
+                        <a href="#" class="btn btn-default" data-placement="bottom" data-toggle="tooltip" data-original-title="Reset zoom" onclick="fitToScreen(); return false;"><i class="icon-desktop"></i></a>
+                    </li>
+                    <li>
+                        <a href="#" class="btn btn-default" data-placement="bottom" data-toggle="tooltip" data-original-title="Pan left" onclick="handlePanning('left'); return false;"><i class="icon-arrow-left"></i></a>
+                    </li>
+                    <li>
+                        <a href="#" class="btn btn-default" data-placement="bottom" data-toggle="tooltip" data-original-title="Pan down" onclick="handlePanning('down'); return false;"><i class="icon-arrow-down"></i></a>
+                    </li>
+                    <li>
+                        <a href="#" class="btn btn-default" data-placement="bottom" data-toggle="tooltip" data-original-title="Pan up" onclick="handlePanning('up'); return false;"><i class="icon-arrow-up"></i></a>
+                    </li>
+                    <li>
+                        <a href="#" class="btn btn-default" data-placement="bottom" data-toggle="tooltip" data-original-title="Pan right" onclick="handlePanning('right'); return false;"><i class="icon-arrow-right"></i></a>
+                    </li>
+                </ul>
 <svg id="modeler" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="100" class="modeler">
                 <style type="text/css"><![CDATA[
                     /*.resizeBox {
@@ -733,6 +756,109 @@
         //Si viene suri
         //var obj = Modeler.getGraphElementByURI(null, "http://www.eworkplace.swb#swp_SubProcess:303");
         //ToolKit.setLayer(obj.subLayer);
+    }
+    
+    function zoomin() {
+        var viewBox = document.getElementById("modeler").getAttribute('viewBox');
+        var viewBoxValues = viewBox.split(' ');
+        
+        viewBoxValues[2] = parseFloat(viewBoxValues[2]);
+        viewBoxValues[3] = parseFloat(viewBoxValues[3]);
+        
+        viewBoxValues[2] /= zoomFactor;
+        viewBoxValues[3] /= zoomFactor;
+        
+        document.getElementById("modeler").setAttribute('viewBox', viewBoxValues.join(' '));
+    }
+    
+    function zoomout() {
+        var viewBox = document.getElementById("modeler").getAttribute('viewBox');
+        var viewBoxValues = viewBox.split(' ');
+        
+        viewBoxValues[2] = parseFloat(viewBoxValues[2]);
+        viewBoxValues[3] = parseFloat(viewBoxValues[3]);
+        
+        viewBoxValues[2] *= zoomFactor;
+        viewBoxValues[3] *= zoomFactor;
+        
+        document.getElementById("modeler").setAttribute('viewBox', viewBoxValues.join(' '));
+    }
+    
+    function resetZoom() {
+        var el = document.getElementById("modeler");
+        
+        el.setAttribute('viewBox', '0 0 '+$("#modeler").parent().width()+' '+$("#modeler").parent().height());
+        el.setAttribute('width', '1024');
+        el.setAttribute('height', '768');
+    }
+    
+    function handlePanning(code) {
+      var viewBox = document.getElementById("modeler").getAttribute('viewBox');
+      var viewBoxValues = viewBox.split(' ');
+      viewBoxValues[0] = parseFloat(viewBoxValues[0]);
+      viewBoxValues[1] = parseFloat(viewBoxValues[1]);
+      
+      switch (code) {
+        case 'left':
+          viewBoxValues[0] += panRate;
+          break;
+        case 'right':
+          viewBoxValues[0] -= panRate;
+          break;
+        case 'up':
+          viewBoxValues[1] += panRate;
+          break;
+        case 'down':
+          viewBoxValues[1] -= panRate;
+          break;
+      }
+      document.getElementById("modeler").setAttribute('viewBox', viewBoxValues.join(' '));
+    }
+    
+    function getDiagramSize() {
+        var cw = 0;
+        var ch = 0;
+        var fx = null;
+        var fy = null;
+        for (var i = 0; i < ToolKit.contents.length; i++) {
+            var obj = ToolKit.contents[i];
+            if (obj.typeOf && (obj.typeOf("GraphicalElement") || obj.typeOf("Pool"))) {
+                if (obj.layer === ToolKit.layer) {
+                var bb = obj.getBBox();
+                
+                if (bb.x + bb.width > cw) {
+                    cw = bb.x + bb.width;
+                    fx = obj;
+                }
+                
+                if (bb.y + bb.height > ch) {
+                    ch = bb.y + bb.height;
+                    fy = obj;
+                }
+            }
+        }
+        }
+        var ret = {w:cw, h:ch};
+        return ret;
+    };
+    
+    function fitToScreen() {
+        //console.log(Modeler._svgSize);
+        var ws = $("#modeler").parent().width();
+        var hs = $("#modeler").parent().height();
+        var wi = Modeler._svgSize.w;
+        var hi = Modeler._svgSize.h;
+        var rs = ws / hs;
+        var ri = wi / hi;
+        var w = rs > ri ? wi * hs/hi : ws;
+        var h = rs > ri ? hs : hi * ws/wi;
+        
+        //console.log("ws="+ws+", hs="+hs+", wi="+wi+", hi="+hi+", rs="+rs+", ri="+ri+", w="+w+", h="+h);
+        
+        var el = document.getElementById("modeler");
+        el.setAttribute('viewBox', '0 0 '+w+' '+h);
+        el.setAttribute('width', ws);
+        el.setAttribute('height', hs);
     }
 </script>
 <%}%>
