@@ -59,7 +59,6 @@
        data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("reports") + " " + paramRequest.getLocaleString("saved")%>">
         <%=paramRequest.getLocaleString("reports") + " " + paramRequest.getLocaleString("saved")%> <span id="count" class="badge"></span></a>
 </div>
-<div class="row">
     <div class="panel panel-default">
         <div class="panel-heading">
             <table style="width: 100%;">
@@ -136,6 +135,7 @@
             </div>
 
             <div class="col-xs-0 col-sm-1 col-md-3"></div>
+        </div>
         </div>
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -266,8 +266,6 @@
                 <%}%>
             </div>
         </div>
-    </div>
-
     <form method="post" action="<%=paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW)%>" name="back"></form>    
     <script type="text/javascript">
                                    var count = 0;
