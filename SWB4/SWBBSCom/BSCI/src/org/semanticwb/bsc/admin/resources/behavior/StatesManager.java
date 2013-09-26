@@ -208,7 +208,6 @@ public class StatesManager extends GenericResource {
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
-System.out.println("processAction....");
         final String sgId = request.getParameter("sg");
         final String suri=request.getParameter("suri");
 
@@ -251,14 +250,12 @@ System.out.println("processAction....");
 
             status.removeAllState();
             String[] values = request.getParameterValues("abc");
-System.out.println("values="+Arrays.toString(values));
             if(values!=null)
             {
                 State state;
                 for(int i=0; i<values.length; i++) {
                     if(State.ClassMgr.hasState(values[i], model)) {
                         state = State.ClassMgr.getState(values[i], model);
-System.out.println("state="+state);
                         status.addState(state);
                         state.setUndeleteable(true);
                         state.getStateGroup().setUndeleteable(true);
