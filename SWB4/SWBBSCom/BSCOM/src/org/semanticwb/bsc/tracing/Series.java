@@ -11,7 +11,6 @@ import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.catalogs.Format;
 import org.semanticwb.bsc.tracing.base.SeriesBase;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
@@ -34,18 +33,42 @@ public class Series extends org.semanticwb.bsc.tracing.base.SeriesBase implement
             }
         });
         
-        sclass.registerObserver(new SemanticObserver() {
+        /*sclass.registerObserver(new SemanticObserver() {
             @Override
             public void notify(SemanticObject obj, Object prop, String lang, String action)
             {
                 SWBModel model = (SWBModel)obj.getModel().getModelObject().createGenericInstance();
                 if("CREATE".equalsIgnoreCase(action)) {
+System.out.println("\nSeries...CREATE");
+System.out.println("obj="+obj);
+System.out.println("prop="+prop);
+BSC bsc = (BSC)obj.getModel().getModelObject().createGenericInstance();
+Series series = (Series)obj.getGenericInstance();
+//Indicator indicator = series.getIndicator();
+//List<State> validSates = indicator.listValidStates();
+//for(State state:validSates) {
+//    EvaluationRule rule = EvaluationRule.ClassMgr.createEvaluationRule(bsc);
+//    rule.setAppraisal(state);
+//    series.addEvaluationRule(rule);
+//}
                 }else if("SET".equalsIgnoreCase(action)) {
-                }else if("ADD".equalsIgnoreCase(action)) {               
-                }else if("REMOVE".equalsIgnoreCase(action)) {               
+System.out.println("\nSeries...SET");
+System.out.println("obj="+obj);
+System.out.println("prop="+prop);
+Series series = (Series)obj.getGenericInstance();
+                }else if("ADD".equalsIgnoreCase(action)) {
+System.out.println("\nSeries...ADD");
+System.out.println("obj="+obj);
+System.out.println("prop="+prop);
+Series series = (Series)obj.getGenericInstance();
+                }else if("REMOVE".equalsIgnoreCase(action)) {
+System.out.println("\nSeries...REMOVE");
+System.out.println("obj="+obj);
+System.out.println("prop="+prop);
+Series series = (Series)obj.getGenericInstance();
                 }
             }
-        });
+        });*/
     }
     
     
