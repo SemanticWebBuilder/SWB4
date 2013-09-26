@@ -147,10 +147,16 @@ public class TreeRepHtml {
                 backg ="class=\"abierto\"";
             }
 
+            String tmpName = topic.getDisplayName(user.getLanguage());
+            String tmpNameShort = topic.getDisplayName(user.getLanguage());
+            if(null!=tmpName&&tmpName.trim().length()>15){
+                tmpNameShort = tmpName.substring(0, 15)+"...";
+            }
+            
             sbfRet.append("<li >");
             url1.setTopic(topic);
-            sbfRet.append("<a " + backg + "  href=\"" + url1 + "\">");
-            sbfRet.append( topic.getDisplayName(user.getLanguage()));
+            sbfRet.append("<a " + backg + "  href=\"" + url1 + "\" title=\""+tmpName+"\">");
+            sbfRet.append( tmpNameShort);
             sbfRet.append("</a>");
             boolean cerrar = Boolean.FALSE;
 
@@ -174,10 +180,15 @@ public class TreeRepHtml {
 //                    else if(tpid != null && tpid.isParentof(tp)){
 //                        backg ="class=\"abierto\"";
 //                    }
+                    tmpName = tp.getDisplayName();
+                    tmpNameShort = tp.getDisplayName();
+                    if (null != tmpName && tmpName.trim().length() > 15) {
+                        tmpNameShort = tmpName.substring(0, 14) + "...";
+                    }
                     sbfRet.append("<li>");
                     url1.setTopic(tp);
-                    sbfRet.append("<a " + backg + " href=\"" + url1 + "?reptp=" + tp.getId() + "\">");
-                    sbfRet.append( tp.getDisplayName() +"</a>");
+                    sbfRet.append("<a " + backg + " href=\"" + url1 + "?reptp=" + tp.getId() + "\" title=\""+tmpName+"\">");
+                    sbfRet.append( tmpNameShort +"</a>");
                     if ((intLevel < intMaxLevel || (tpid != null && tp.getId().equals(tpid.getId()))
                             || vctPath.contains(tp.getId())) && sortByOrderedName(tp.listChilds()).hasNext()) {
                         sbfRet.append("<ul>");
@@ -242,10 +253,15 @@ public class TreeRepHtml {
                         backg ="class=\"abierto\"";
                     }
 
+                    String tmpName =  tpsub.getDisplayName();
+                    String tmpNameShort =  tpsub.getDisplayName();
+                    if (null != tmpName && tmpName.trim().length() > 15) {
+                        tmpNameShort = tmpName.substring(0, 14) + "...";
+                    }
                     sbfRet.append("<li>");
                     url1.setTopic(tpsub);
-                    sbfRet.append("<a " + backg + " href=\"" + url1 + "?reptp=" + tpsub.getId() + "\">");
-                    sbfRet.append( tpsub.getDisplayName() + "</a>");
+                    sbfRet.append("<a " + backg + " href=\"" + url1 + "?reptp=" + tpsub.getId() + "\" title=\""+tmpName+"\">");
+                    sbfRet.append( tmpNameShort + "</a>");
                     
                     if ((intLevel < intMaxLevel || (tpid != null && tpsub.getId().equals(tpid.getId()))
                             || vctPath.contains(tpsub.getId())) && sortByOrderedName(tpsub.listChilds()).hasNext()) {
@@ -395,9 +411,15 @@ public class TreeRepHtml {
                 backg ="class=\"abierto\"";
             }
 
+            String tmpName = topic.getDisplayName(user.getLanguage());
+            String tmpNameShort = topic.getDisplayName(user.getLanguage());
+            if(null!=tmpName&&tmpName.trim().length()>15){
+                tmpNameShort = tmpName.substring(0, 14)+"...";
+            }
+            
             sbfRet.append("<li   "+ backg +" >");
-            sbfRet.append("<a href=\"" + strUrl + "&reptp=" + topic.getId() + "\" >");
-            sbfRet.append( topic.getDisplayName(user.getLanguage()));
+            sbfRet.append("<a href=\"" + strUrl + "&reptp=" + topic.getId() + "\" title=\""+tmpName+"\">");
+            sbfRet.append( tmpNameShort);
             sbfRet.append("</a>");
             boolean cerrar = Boolean.FALSE;
 
@@ -419,9 +441,16 @@ public class TreeRepHtml {
                     } else if(tpid != null && tpid.isParentof(tp)){
                         backg ="class=\"abierto\"";
                     }
+                    
+                    tmpName = tp.getDisplayName(user.getLanguage());
+                    tmpNameShort = tp.getDisplayName(user.getLanguage());
+                    if (null != tmpName && tmpName.trim().length() > 15) {
+                        tmpNameShort = tmpName.substring(0, 14) + "...";
+                    }
+            
                     sbfRet.append("<li>");
-                    sbfRet.append("<a " + backg + " href=\"" + strUrl + "&reptp=" + tp.getId() + "\">");
-                    sbfRet.append(tp.getDisplayName(user.getLanguage()) );
+                    sbfRet.append("<a " + backg + " href=\"" + strUrl + "&reptp=" + tp.getId() + "\" title=\""+tmpName+"\">");
+                    sbfRet.append(tmpNameShort);
                     sbfRet.append(" </a>");
                     if ((intLevel < intMaxLevel || (tpid != null && tp.getId().equals(tpid.getId()))
                             || vctPath.contains(tp.getId())) && sortByOrderedName(tp.listChilds()).hasNext()) {
@@ -522,9 +551,15 @@ public class TreeRepHtml {
                     } else if(tpid != null && tpsub.isParentof(tpid)){
                         backg ="class=\"abierto\"";
                     }
+                    String tmpName = tpsub.getDisplayName();
+                    String tmpNameShort = tpsub.getDisplayName();
+                    if (null != tmpName && tmpName.trim().length() > 15) {
+                        tmpNameShort = tmpName.substring(0, 14) + "...";
+                    }
+
                     sbfRet.append("<li>");
-                    sbfRet.append("<a " + backg + " href=\"" + strUrl + "&reptp=" + tpsub.getId() + "\" >");
-                    sbfRet.append(tpsub.getDisplayName());
+                    sbfRet.append("<a " + backg + " href=\"" + strUrl + "&reptp=" + tpsub.getId() + "\" title=\""+tmpName+"\">");
+                    sbfRet.append(tmpNameShort);
                     sbfRet.append("</a>");
                     if ((intLevel < intMaxLevel || (tpid != null && tpsub.getId().equals(tpid.getId()))
                             || vctPath.contains(tpsub.getId())) && sortByOrderedName( tpsub.listChilds()).hasNext()) {
