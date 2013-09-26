@@ -134,7 +134,7 @@
     <div class="swbp-user-menu">
         <div class="row">
             <div class="col-lg-11 col-md-10 col-sm-10">
-                <ul class="breadcrumb">
+                <ul class="breadcrumb hidden-print">
                     <%
                         String[] urls = path.split("\\|");
                         int cont = 0;
@@ -162,8 +162,8 @@
             </div>
             <%if (pe instanceof org.semanticwb.process.model.Process) {%>
             <div class="col-lg-1 col-md-2 col-sm-2">
-                <a href="javascript:print()" class="btn btn-default btn-sm icon-print" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("print")%>"></a>
-                <a href="<%=urlExport.setParameter("format", "html")%>" class="btn btn-default btn-sm icon-file-text-alt" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("export")%>"></a>
+                <a href="javascript:print()" class="btn btn-default icon-print hidden-print" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("print")%>"></a>
+                <a href="<%=urlExport.setParameter("format", "html")%>" class="btn btn-default icon-download-alt hidden-print" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("export")%>"></a>
             </div>
             <%}%>
         </div>
@@ -1037,7 +1037,6 @@
     function callbackHandler() {
         <%if (pe instanceof org.semanticwb.process.model.Process) {
             org.semanticwb.process.model.Process pr = (org.semanticwb.process.model.Process)pe;
-            System.out.println(pr.getData());
             %>
             var strJSON = '<%=pr.getData()%>';
             Modeler.loadProcess(strJSON);
@@ -1146,10 +1145,12 @@
         var wi = Modeler._svgSize.w;
         var hi = Modeler._svgSize.h;
         
-        var el = document.getElementById("modeler");
-        el.setAttribute('viewBox', '0 0 '+ wi+' '+hi);
-        el.setAttribute('width', ws);
-        el.setAttribute('height', hs);
+        if (wi > ws || hi > hs) {
+            var el = document.getElementById("modeler");
+            el.setAttribute('viewBox', '0 0 '+ wi+' '+hi);
+            el.setAttribute('width', ws);
+            el.setAttribute('height', hs);
+        }
     }
 </script>
 <%} else {
