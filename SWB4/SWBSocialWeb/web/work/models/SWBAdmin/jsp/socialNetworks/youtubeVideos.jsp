@@ -203,7 +203,7 @@ public static String getRequest(Map<String, String> params, String url,
         
         //Validate token from youtube and pass it as param.
         //String ytResponse = getRequest(params, "http://gdata.youtube.com/feeds/api/users/" + "xxxreckoningxxx" + "/uploads" ,blackcat060406
-        String ytResponse = getRequest(params, "http://gdata.youtube.com/feeds/api/users/" + "blackcat060406" + "/uploads" ,
+        String ytResponse = getRequest(params, "http://gdata.youtube.com/feeds/api/users/" + "UCVlpYOOXE83fl9Z1e5564Kg" + "/uploads" ,
                 "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", null);
         //String ytResponse = getRequest(params, "http://gdata.youtube.com/feeds/api/users/default/uploads" ,
         //                "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "token");
@@ -310,6 +310,15 @@ public static String getRequest(Map<String, String> params, String url,
                             out.print("<em>" + "creado el: " + comment.getJSONObject("published").getString("$t") +  "</em>");                            
                             out.print("</span>");
                             out.print("</p>");
+                            
+                            
+                            //Comment  
+
+                                String comentarioId = comment.getJSONObject("id").getString("$t");
+                                out.print("   <span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
+                                out.print(" <a href=\"\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("commentComment").setParameter("suri", objUri).setParameter("videoId", videosArray.getJSONObject(i).getString("id")).setParameter("commentId", comentarioId.substring(comentarioId.indexOf("comment") + 8)) + "','Comment to " + comment.getJSONObject("content").getString("$t").replace("\n", "</br>") + "');return false;\"><span>Comment</span></a>  ");
+                                out.print("   </span>");
+                                
                             out.print("</li>");
                         }
                         //out.println("COMENTARIOS:"  +videosArray.getJSONObject(i).getInt("commentCount"));
