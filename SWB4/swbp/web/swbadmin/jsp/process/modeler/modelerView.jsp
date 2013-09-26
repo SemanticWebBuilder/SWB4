@@ -37,11 +37,11 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
 </head>
 <%if (!isViewMode) {
     %>
-    <body style="margin: 0px;" onload="Modeler.init('modeler','edit', loadProcess);">
+    <body style="margin: 0px;" onload="Modeler.init('modeler',{mode:'edit'}, loadProcess);">
     <%
 } else {
 %>
-    <body style="margin: 0px;" onload="Modeler.init('modeler','view', loadProcess);">
+    <body style="margin: 0px;" onload="Modeler.init('modeler',{mode:'view'}, loadProcess);">
     <%
 }
 if (!isViewMode) {
