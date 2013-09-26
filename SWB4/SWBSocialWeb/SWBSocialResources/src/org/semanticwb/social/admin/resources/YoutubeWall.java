@@ -128,7 +128,28 @@ public class YoutubeWall extends GenericResource{
             out.println("</fieldset>");
             out.println("</form>");
             out.println("<span id=\"csLoading\" style=\"width: 100px; display: none\" align=\"center\">&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\"/></span>");
-        }else if(mode != null && mode.equals("getMoreComments")){
+        } else if (mode != null && mode.equals("commentComment")) {//Displays dialog to create a comment
+            SWBResourceURL actionURL = paramRequest.getActionUrl();
+            actionURL.setParameter("videoId", request.getParameter("videoId"));
+            actionURL.setParameter("suri", request.getParameter("suri"));
+            actionURL.setParameter("commentId", request.getParameter("commentId"));
+
+            out.println("<form type=\"dijit.form.Form\" id=\"commentCommentForm\" action=\"" + actionURL.setAction("createCommentComment") + "\" method=\"post\" onsubmit=\"submitForm('commentCommentForm'); try{document.getElementById('csLoading').style.display='inline';}catch(noe){}; return false;\">");
+            out.println("<fieldset>");
+            out.println("<table>");
+            out.println("<tr>");
+            out.println("   <td>");
+            out.println("       <textarea type=\"dijit.form.Textarea\" name=\"commentComment\" id=\"commentComment\" rows=\"4\" cols=\"50\"></textarea>");
+            out.println("   </td>");
+            out.println("</tr>");
+            out.println("<tr>");
+            out.println("       <td style=\"text-align: center;\"><button dojoType=\"dijit.form.Button\" type=\"submit\">Comment</button></td>");
+            out.println("</tr>");
+            out.println("</table>");
+            out.println("</fieldset>");
+            out.println("</form>");
+            out.println("<span id=\"csLoading\" style=\"width: 100px; display: none\" align=\"center\">&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\"/></span>");
+        } else if(mode != null && mode.equals("getMoreComments")){
             doGetMoreComments(request, response, paramRequest);
         }else{
             super.processRequest(request, response, paramRequest);
@@ -222,6 +243,10 @@ public class YoutubeWall extends GenericResource{
             System.out.println("Commenting a video");
             doCommentVideo(request);
             response.setMode("commentVideoSent");
+        }else if (action != null && action.equals("createCommentComment")) {
+            System.out.println("Commenting commenting a video");
+            doCommentComment(request);
+            response.setMode("commentCommentSent");
         }
     }
     private void doLikeDislike(HttpServletRequest request) {
@@ -327,6 +352,64 @@ public class YoutubeWall extends GenericResource{
         }
     }
     
+     private void doCommentComment(HttpServletRequest request) {
+        String videoId = request.getParameter("videoId");
+        String commentId = request.getParameter("commentId");
+        String objUri = request.getParameter("suri");
+        String comment = request.getParameter("commentComment");
+
+
+        if ((videoId == null || videoId.isEmpty()) || (comment == null || comment.isEmpty())
+                || (objUri == null || objUri.isEmpty()) || ( commentId == null || commentId.isEmpty())) {
+            log.error("Problema ejecutando el posteo del comentario hacia un comentario");
+            return;
+        }
+
+        SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
+        Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();
+        if (!semanticYoutube.validateToken()) {
+            log.error("Unable to update the access token inside post Comment!");
+            return;
+        }
+
+        String urlComment = "http://gdata.youtube.com/feeds/api/videos/" + videoId + "/comments";
+        URL url;
+        HttpURLConnection conn = null;
+        try {
+            url = new URL(urlComment);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            conn.setUseCaches(false);
+            conn.setRequestProperty("Host", "gdata.youtube.com");
+            conn.setRequestProperty("Content-Type", "application/atom+xml");
+            conn.setRequestProperty("Authorization", "Bearer " + semanticYoutube.getAccessToken());
+            conn.setRequestProperty("GData-Version", "2");
+            conn.setRequestProperty("X-GData-Key", "key=" + semanticYoutube.getDeveloperKey());
+
+            DataOutputStream writer = new DataOutputStream(conn.getOutputStream());
+            String xml = "<?xml version=\"1.0\"?>"
+                    + "<entry xmlns=\"http://www.w3.org/2005/Atom\""
+                    + " xmlns:yt=\"http://gdata.youtube.com/schemas/2007\">"
+                    + "<link rel=\"http://gdata.youtube.com/schemas/2007#in-reply-to\""
+                    + " type=\"application/atom+xml\" "
+                    + " href=\"http://gdata.youtube.com/feeds/api/videos/" + videoId + "/comments/" + commentId + "\" />   "
+                    + "<content>" + comment + "</content>"
+                    + "</entry>";
+            System.out.println("XML" + xml);
+            writer.write(xml.getBytes("UTF-8"));
+            writer.flush();
+            writer.close();
+            BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String docxml = readerl.readLine();
+            System.out.print("--docxml en post Comment----" + docxml);
+        } catch (Exception ex) {
+            System.out.println("ERROR" + ex.toString());
+            ex.printStackTrace();
+        }
+    }
+     
     public static String getRequest(Map<String, String> params, String url,
             String userAgent, String token) throws IOException {
         
