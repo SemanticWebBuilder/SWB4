@@ -16,7 +16,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.RequestDispatcher;
@@ -28,13 +30,26 @@ import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.SWBModel;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.social.Kloutable;
+import org.semanticwb.social.MessageIn;
+import org.semanticwb.social.Post;
+import org.semanticwb.social.PostIn;
+import org.semanticwb.social.SocialNetwork;
+import org.semanticwb.social.SocialNetworkUser;
+import org.semanticwb.social.SocialTopic;
+import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.Youtube;
+import org.semanticwb.social.util.SWBSocialUtil;
+import twitter4j.Status;
+import twitter4j.User;
 
 /**
  *
@@ -56,7 +71,7 @@ public class YoutubeWall extends GenericResource{
     public static String DISCOVER_TAB ="/discover";
     
     public static int DEFAULT_VIDEO_COMMENTS = 5;
-    
+    public static String BASE_VIDEO_URL = "http://www.youtube.com/v/";
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
@@ -151,6 +166,59 @@ public class YoutubeWall extends GenericResource{
             out.println("<span id=\"csLoading\" style=\"width: 100px; display: none\" align=\"center\">&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\"/></span>");
         } else if(mode != null && mode.equals("getMoreComments")){
             doGetMoreComments(request, response, paramRequest);
+        }else if(mode.equals("doShowTopic")){
+            final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/assignTopic.jsp";
+            RequestDispatcher dis = request.getRequestDispatcher(path);
+            if (dis != null) {
+                try {
+                    request.setAttribute("suri", objUri);
+                    request.setAttribute("paramRequest", paramRequest);
+                    dis.include(request, response);
+                } catch (Exception e) {
+                    log.error("Error on doShowTopic: " + e);
+                }
+            }
+        }else if(mode.equals("doReclassifyTopic")){
+            final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/classifybyTopic.jsp";
+            RequestDispatcher dis = request.getRequestDispatcher(path);
+            if (dis != null) {
+                try {
+                    SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
+                    request.setAttribute("postUri", semObject);
+                    request.setAttribute("paramRequest", paramRequest);
+                    dis.include(request, response);
+                } catch (Exception e) {
+                    log.error("Error on doReclassifyTopic: " + e);
+                }
+            }
+        }else if(mode.equals("assignedPost")){
+            String id = request.getParameter("id");
+            String currentTab = request.getParameter("currentTab");
+            String postUri = request.getParameter("postUri");
+            SWBResourceURL renderURL = paramRequest.getRenderUrl();
+            SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", id).setParameter("postUri", postUri).setParameter("currentTab", currentTab);
+            
+            SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
+            Youtube semYoutube = (Youtube) semanticObject.createGenericInstance();
+            
+            String url= "<a href=\"#\" title=\"" + "Reclasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','Reclasificar tweet'); return false;\">Reclasificar</a>";
+            out.println("<span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
+            out.println("<script type=\"dojo/method\">");
+            out.println("   hideDialog(); ");            
+            out.println("   try{");
+            out.println("   var spanId = dijit.byId('" + semYoutube.getId() +  id + TOPIC + "');");            
+            out.println("   spanId.attr('content', '" + url.replace("'", "\\'") +"');");           
+            out.println("   }catch(noe){alert('Error:' + noe);}");
+            out.println("   showStatus('Tema asociado correctamente');");
+            out.println("</script>");
+            out.println("</span>");
+            //response.setRenderParameter("currentTab", request.getParameter("currentTab"));
+            //response.setRenderParameter("id", idStatus);
+        }else if(mode.equals("reAssignedPost")){
+            out.println("<script type=\"javascript\">");
+            out.println("   hideDialog(); ");
+            out.println("   showStatus('El tema fue cambiado correctamente');");
+            out.println("</script>");
         }else{
             super.processRequest(request, response, paramRequest);
         }
@@ -247,6 +315,126 @@ public class YoutubeWall extends GenericResource{
             System.out.println("Commenting commenting a video");
             doCommentComment(request);
             response.setMode("commentVideoSent");
+        }else if(action.equals("setSocialTopic")){
+            SocialNetwork socialNetwork = null;
+            String videoId = request.getParameter("id");
+            String objUri = request.getParameter("suri");
+
+            try {
+                socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+            }catch(Exception e){
+                System.out.println("Error getting the SocialNetwork " + e);
+                return;
+            }
+            
+            try {
+                HashMap<String, String> paramsVideo = new HashMap<String, String>(3);
+                paramsVideo.put("v", "2");            
+                paramsVideo.put("alt", "json");//https://gdata.youtube.com/feeds/api/videos/videoid?v=2
+                String ytVideo= getRequest(paramsVideo, "https://gdata.youtube.com/feeds/api/videos/" + videoId,
+                                "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", null);
+                JSONObject jsonVideo = new JSONObject(ytVideo);
+
+                String title = "";
+                String description = "";
+                String creatorName = "";
+                String creatorId =  "";
+
+                if(jsonVideo.has("entry")){
+                    if(jsonVideo.getJSONObject("entry").has("title")){//Title
+                        title = jsonVideo.getJSONObject("entry").getJSONObject("title").getString("$t");
+                    }
+                    
+                    if(jsonVideo.getJSONObject("entry").has("media$group")){//Desc
+                        if(jsonVideo.getJSONObject("entry").getJSONObject("media$group").has("media$description")){
+                            description = jsonVideo.getJSONObject("entry").getJSONObject("media$group").getJSONObject("media$description").getString("$t");
+                        }
+                    }
+
+                    if(jsonVideo.getJSONObject("entry").has("author")){//User
+                        if(jsonVideo.getJSONObject("entry").getJSONArray("author").getJSONObject(0).has("name")){
+                            creatorName = jsonVideo.getJSONObject("entry").getJSONArray("author").getJSONObject(0).getJSONObject("name").getString("$t");
+                        }
+                        
+                        if(jsonVideo.getJSONObject("entry").getJSONArray("author").getJSONObject(0).has("yt$userId")){
+                            creatorId = jsonVideo.getJSONObject("entry").getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t");
+                        }
+                    }
+                }
+
+                //System.out.println("-" + title + "-" + description +"-" + creatorName + "-" + creatorId );
+                SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
+                SocialNetworkUser socialNetUser = SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(creatorId, socialNetwork, model);
+                                
+                PostIn post = PostIn.getPostInbySocialMsgId(model, videoId);
+                if(post != null){
+                    log.error("The post with id :" + post.getSocialNetMsgId() + " already exists");
+                    return;
+                }
+                
+                PostIn postIn = null; //The post
+                postIn=VideoIn.ClassMgr.createVideoIn(model);
+                postIn.setSocialNetMsgId(videoId);
+                postIn.setMsg_Text(title + (description.isEmpty()? "" : " / " + description));
+                postIn.setPostInSocialNetwork(socialNetwork);
+                postIn.setPostInStream(null);
+                
+                VideoIn videoIn=(VideoIn)postIn;
+                videoIn.setVideo(BASE_VIDEO_URL + videoId);
+                
+                 if(socialNetUser == null){//User does not exist                    
+                    System.out.println("USUARIO NO EXISTE EN EL SISTEMA");
+                    socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);//Create a socialNetworkUser
+                    socialNetUser.setSnu_id(creatorId);
+                    socialNetUser.setSnu_name((creatorName.isEmpty()) ? creatorId : creatorName);
+                    socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject());                    
+                    socialNetUser.setCreated(new Date());
+                    socialNetUser.setFollowers(0);
+                    socialNetUser.setFriends(0);
+                }else{
+                    System.out.println("YA EXISTE EN EL SISTEMA:" + socialNetUser);
+                }
+                
+                postIn.setPostInSocialNetworkUser(socialNetUser);
+                
+                if(request.getParameter("newSocialTopic").equals("none")){
+                    postIn.setSocialTopic(null);
+                }else {
+                    SemanticObject semObjSocialTopic=SemanticObject.getSemanticObject(request.getParameter("newSocialTopic"));
+                    if(semObjSocialTopic!=null)
+                    {
+                        SocialTopic socialTopic=(SocialTopic)semObjSocialTopic.createGenericInstance();
+                        postIn.setSocialTopic(socialTopic);//Asigns socialTipic
+                    }
+                }
+                
+                response.setRenderParameter("postUri", postIn.getURI());
+
+                System.out.println("POST CREADO CORRECTAMENTE: " + postIn.getId() + " ** " + postIn.getSocialNetMsgId());
+            }catch(Exception e){
+                System.out.println("Error trying to setSocialTopic");
+                log.error("ERROR:", e);
+            }
+            response.setRenderParameter("suri", socialNetwork.getURI());
+            response.setRenderParameter("currentTab", request.getParameter("currentTab"));
+            response.setRenderParameter("id", videoId);            
+            response.setMode("assignedPost");
+        }else if(action.equals("changeSocialTopic"))
+        {
+            if(request.getParameter("postUri")!=null && request.getParameter("newSocialTopic")!=null){
+                SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("postUri"));
+                Post post=(Post)semObj.createGenericInstance();
+                if(request.getParameter("newSocialTopic").equals("none")){
+                    post.setSocialTopic(null);
+                }else{
+                    SemanticObject semObjSocialTopic=SemanticObject.getSemanticObject(request.getParameter("newSocialTopic"));
+                    if(semObjSocialTopic!=null){
+                        SocialTopic socialTopic=(SocialTopic)semObjSocialTopic.createGenericInstance();
+                        post.setSocialTopic(socialTopic);
+                    }
+                }
+            }
+            response.setMode("reAssignedPost");
         }
     }
     private void doLikeDislike(HttpServletRequest request) {
@@ -415,7 +603,7 @@ public class YoutubeWall extends GenericResource{
         
         CharSequence paramString = (null == params) ? "" : delimit(params.entrySet(), "&", "=", true);
         URL serverUrl = new URL(url + "?" +  paramString);       
-        //System.out.println("URL:" +  serverUrl);
+        System.out.println("URL:" +  serverUrl);
         
         HttpURLConnection conex = null;
         InputStream in = null;
