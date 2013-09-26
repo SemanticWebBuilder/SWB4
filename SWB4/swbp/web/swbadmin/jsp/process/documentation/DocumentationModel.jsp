@@ -734,6 +734,8 @@
     </div>
 </div>
 <script type="text/javascript">
+    var zoomFactor = 1.1;
+    var panRate = 10;
     Modeler.init('modeler', 'view', callbackHandler);
 
     function callbackHandler() {
@@ -752,7 +754,7 @@
         var obj = Modeler.getGraphElementByURI(null, "<%=suri%>");
         ToolKit.setLayer(obj.subLayer);
     <%}%>
-
+resetZoom();
         //Si viene suri
         //var obj = Modeler.getGraphElementByURI(null, "http://www.eworkplace.swb#swp_SubProcess:303");
         //ToolKit.setLayer(obj.subLayer);
