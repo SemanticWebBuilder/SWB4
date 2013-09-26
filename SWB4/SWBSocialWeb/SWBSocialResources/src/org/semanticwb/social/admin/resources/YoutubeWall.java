@@ -5,16 +5,26 @@
 package org.semanticwb.social.admin.resources;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
@@ -38,7 +48,7 @@ public class YoutubeWall extends GenericResource{
      Each link is in a different '<div>' and it's updated individually*/
     public static String INFORMATION = "/inf";
     public static String LIKE = "/like";
-    public static String UNDOLIKE = "/unlike";
+    public static String DISLIKE = "/unlike";
     public static String TOPIC ="/topic";
     
     /*Additionally every div has a suffix to identify if the status is inside the tab*/ 
@@ -118,11 +128,88 @@ public class YoutubeWall extends GenericResource{
             out.println("</fieldset>");
             out.println("</form>");
             out.println("<span id=\"csLoading\" style=\"width: 100px; display: none\" align=\"center\">&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\"/></span>");
+        }else if(mode != null && mode.equals("getMoreComments")){
+            doGetMoreComments(request, response, paramRequest);
         }else{
             super.processRequest(request, response, paramRequest);
         }
     }
 
+    public void doGetMoreComments(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        String videoId = request.getParameter("videoId");
+        String startIndex = request.getParameter("startIndex");
+        String totalComments = request.getParameter("totalComments");
+        System.out.println("videoId:" +videoId + "--startIndex:" + startIndex  + "--totalComments:" + totalComments);
+        
+        try{
+            HashMap<String, String> paramsUsr = new HashMap<String, String>(3);
+            paramsUsr.put("v", "2");
+            paramsUsr.put("fields", "media:thumbnail");
+            paramsUsr.put("alt", "json");
+        
+            HashMap<String, String> paramsComments = new HashMap<String, String>(3);
+            paramsComments.put("v", "2");
+            paramsComments.put("max-results", "10");
+            paramsComments.put("start-index", (Integer.parseInt(startIndex) + 1) + "");
+            paramsComments.put("alt", "json");
+            String ytComments= getRequest(paramsComments, "https://gdata.youtube.com/feeds/api/videos/" + videoId + "/comments",
+                            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", null);
+            JSONObject jsonComments = new JSONObject(ytComments);
+            JSONArray arrayComments = null;
+            if(!jsonComments.isNull("feed")){
+                if(!jsonComments.getJSONObject("feed").isNull("entry")){
+                    arrayComments = jsonComments.getJSONObject("feed").getJSONArray("entry");
+                }
+            }
+            
+            if(arrayComments != null && arrayComments.length() > 0){//Only print <li></li> because the HTML will be returned inside <ul></ul
+                int commentCounter = 0;
+                for(int c = 0; c < arrayComments.length(); c++){
+                    commentCounter++;
+                    JSONObject comment = arrayComments.getJSONObject(c);
+                    JSONObject usrCommentProfile = null;
+                    if(!comment.isNull("author")){
+                        if(!comment.getJSONArray("author").getJSONObject(0).isNull("yt$userId")){
+                            String commentProfile = getRequest(paramsUsr, "http://gdata.youtube.com/feeds/api/users/" + comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t"),
+                                "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", null);
+                            usrCommentProfile = new JSONObject(commentProfile);
+                        }
+                    }
+                    out.print("<li>");
+                    out.print("<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + "#" + "','" + "source" + "'); return false;\"><img src=\"" + usrCommentProfile.getJSONObject("entry").getJSONObject("media$thumbnail").getString("url") + "\" width=\"50\" height=\"50\"/></a>");
+
+                    out.print("<p>");
+                    out.print("<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + "/work/models/SWBAdmin/jsp/socialNetworks/youtubeUserProfile.jsp?suri=null&id=" + comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t") + "','" + "Ver perfil" + "'); return false;\">" + comment.getJSONArray("author").getJSONObject(0).getJSONObject("name").getString("$t") + "</a>:");                            
+                    out.print(       comment.getJSONObject("content").getString("$t").replace("\n", "</br>"));
+                    out.print("</p>");
+
+                    //Date commentTime = formatter.parse(comments.getJSONObject(k).getString("created_time"));
+
+                    out.print("<p class=\"timelinedate\">");
+                    out.print("<span dojoType=\"dojox.layout.ContentPane\">");
+
+                    out.print("<em>" + "creado el: " + comment.getJSONObject("published").getString("$t") +  "</em>");                            
+                    out.print("</span>");
+                    out.print("</p>");
+                    out.print("</li>");
+                }
+                System.out.println("SE OBTUVIERON :" + commentCounter + " COMENTARIOS");
+                if((Integer.parseInt(startIndex) + commentCounter) < Integer.parseInt(totalComments) ){//Link to get more comments
+                    out.print("<li class=\"timelinemore\">");
+                    out.print("<label><a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setMode("getMoreComments").setParameter("videoId", videoId).setParameter("startIndex", (commentCounter + Integer.parseInt(startIndex)) +"").setParameter("totalComments", totalComments+"")
+                            + "','" + videoId +"/comments', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\"><span>+</span>View more comments</a></label>");
+                    out.print("</li>");
+                }
+            }
+        }catch(Exception e){
+            System.out.println("ERROR GETTING MORE COMMENTS");
+            log.error("Problem getting more comments", e);
+        }
+    }
+
+    
+    
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
@@ -240,4 +327,115 @@ public class YoutubeWall extends GenericResource{
         }
     }
     
+    public static String getRequest(Map<String, String> params, String url,
+            String userAgent, String token) throws IOException {
+        
+        CharSequence paramString = (null == params) ? "" : delimit(params.entrySet(), "&", "=", true);
+        URL serverUrl = new URL(url + "?" +  paramString);       
+        //System.out.println("URL:" +  serverUrl);
+        
+        HttpURLConnection conex = null;
+        InputStream in = null;
+        String response = null;
+       
+        try {
+            conex = (HttpURLConnection) serverUrl.openConnection();
+            if (userAgent != null) {
+                conex.setRequestProperty("user-agent", userAgent);                
+            }
+            ///Validate if i am looking for the default user or another
+            if(token != null){
+                conex.setRequestProperty("Authorization", "Bearer " + "ya29.AHES6ZQJgECzLX3Y5hbAkVMn7qCupPdOJ6RR9d4tO0pEhUziVlAdFwKL4A");
+            }
+            ///
+            conex.setConnectTimeout(30000);
+            conex.setReadTimeout(60000);
+            conex.setRequestMethod("GET");
+            conex.setDoOutput(true);
+            conex.connect();
+            in = conex.getInputStream();
+            response = getResponse(in);
+            //System.out.println("RESPONSE:" + response);
+                        
+        } catch (java.io.IOException ioe) {
+            if (conex.getResponseCode() >= 400) {
+                response = getResponse(conex.getErrorStream());
+                System.out.println("\n\n\nERROR:" +   response);
+            }
+            ioe.printStackTrace();
+        } finally {
+            close(in);
+            if (conex != null) {
+                conex.disconnect();
+            }
+        }
+        if (response == null) {
+            response = "";
+        }
+        return response;
+    }
+
+    public static CharSequence delimit(Collection<Map.Entry<String, String>> entries,
+            String delimiter, String equals, boolean doEncode)
+            throws UnsupportedEncodingException {
+
+        if (entries == null || entries.isEmpty()) {
+            return null;
+        }
+        StringBuilder buffer
+                = new StringBuilder(64);
+	boolean notFirst = false;
+        for (Map.Entry<String, String> entry : entries ) {
+            if (notFirst) {
+                buffer.append(delimiter);
+            } else {
+                notFirst = true;
+            }
+            CharSequence value = entry.getValue();
+            buffer.append(entry.getKey());
+            buffer.append(equals);
+            buffer.append(doEncode ? encode(value) : value);
+        }
+        return buffer;
+    }
+    
+    /**
+     * Codifica el valor de {@code target} de acuerdo al c&oacute;digo de caracteres UTF-8
+     * @param target representa el texto a codificar
+     * @return un {@code String} que representa el valor de {@code target} de acuerdo al c&oacute;digo de caracteres UTF-8
+     * @throws UnsupportedEncodingException en caso de ocurrir algun problema en la codificaci&oacute;n a UTF-8
+     */
+    private static String encode(CharSequence target) throws UnsupportedEncodingException {
+
+        String result = "";
+        if (target != null) {
+            result = target.toString();
+            result = URLEncoder.encode(result, "UTF8");
+        }
+        return result;
+    }
+    
+    public static String getResponse(InputStream data) throws IOException {
+
+        Reader in = new BufferedReader(new InputStreamReader(data, "UTF-8"));
+        StringBuilder response = new StringBuilder(256);
+        char[] buffer = new char[1000];
+        int charsRead = 0;
+        while (charsRead >= 0) {
+            response.append(buffer, 0, charsRead);
+            charsRead = in.read(buffer);
+        }
+        in.close();
+        return response.toString();
+    }
+    
+    public static void close( Closeable c ) {
+        if ( c != null ) {
+            try {
+                c.close();
+            }
+            catch ( IOException ex ) {             
+            }
+        }
+    }
 }
