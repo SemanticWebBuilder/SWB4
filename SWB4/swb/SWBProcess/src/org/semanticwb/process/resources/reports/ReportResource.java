@@ -9,7 +9,6 @@ import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -43,7 +42,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.hssf.util.Region;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Drawing;
@@ -55,7 +53,6 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.SWBComparator;
-import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
@@ -67,7 +64,6 @@ import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.process.model.ItemAware;
 import org.semanticwb.process.model.ItemAwareReference;
 import org.semanticwb.process.model.ProcessInstance;
-import static org.semanticwb.process.resources.reports.UserRolesSegregationReport.log;
 
 //itext libraries to write PDF file
 public class ReportResource extends org.semanticwb.process.resources.reports.base.ReportResourceBase {
@@ -96,25 +92,6 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
         request.setAttribute("pageElements", getPageElements());
         request.setAttribute("modeExport", getModeExport());
         request.setAttribute("isSaveOnSystem", isSaveOnSystem());
-
-//        Iterator<ProcessInstance> pi = ProcessInstance.ClassMgr.listProcessInstances();
-//        int[] months = new int[12];
-//        while (pi.hasNext()) {
-//            ProcessInstance pins = pi.next();
-//            Calendar cal = Calendar.getInstance();
-//            cal.setTime(pins.getCreated() != null ? pins.getCreated() : new Date());
-//            months[cal.get(Calendar.MONTH)] += 1;
-//            int[] days = new int[cal.getActualMaximum(cal.get(Calendar.DAY_OF_MONTH))];
-//            days[cal.get(Calendar.DAY_OF_MONTH)] += 1;
-//        }
-//        for (int i = 0; i < months.length; i++) {
-//            System.out.println("month" + (i + 1) + ": " + months[i]);
-//            if(months[i]>0){
-//                
-//            }
-//        }
-
-
         try {
             rd.include(request, response);
         } catch (ServletException ex) {
@@ -150,7 +127,7 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
 
     public void doShowURSReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, ParsePropertyException, InvalidFormatException {
         WebSite site = paramRequest.getWebPage().getWebSite();
-        String inPath = SWBPortal.getWorkPath() + "/models/" + site.getId() + "/jsp/process/reports/URSReportTemplate.xls";
+        String inPath = SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/reports/URSReportTemplate.xls";
         ArrayList<UserRolesSegregationBean> temp = UserRolesSegregationReport.generateBeans(site);
         Map beans = new HashMap();
         beans.put("bean", temp);
@@ -171,7 +148,7 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
 
     public void doShowTRSReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, ParsePropertyException, InvalidFormatException {
         WebSite site = paramRequest.getWebPage().getWebSite();
-        String inPath = SWBPortal.getWorkPath() + "/models/" + site.getId() + "/jsp/process/reports/TRSReportTemplate.xls";
+        String inPath = SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/reports/TRSReportTemplate.xls";
         ArrayList<ProcessBean> temp = TaskRoleSegregationReport.generateBeans(site);
         Map beans = new HashMap();
         beans.put("bean", temp);
@@ -762,7 +739,9 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
                 if (semProp.isInt()) {
                     try {
                         Integer pagingSize = Integer.parseInt(request.getParameter("pagingSize"));
-                        reportMgr.addProperty(semProp);
+                        if (pagingSize > 0) {
+                            reportMgr.addProperty(semProp);
+                        }
                     } catch (NumberFormatException nfe) {
                     }
                 } else {
@@ -793,7 +772,9 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
                     if (semProp.isInt()) {
                         try {
                             Integer pagingSize = Integer.parseInt(request.getParameter("pagingSize"));
-                            reportMgr.addProperty(semProp);
+                            if (pagingSize >= 0) {
+                                reportMgr.addProperty(semProp);
+                            }
                         } catch (NumberFormatException nfe) {
                         }
                     } else {
@@ -935,24 +916,6 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
         }
         return output;
     }
-    private Comparator<UserRolesSegregationBean> userNameComparatorE = new Comparator<UserRolesSegregationBean>() {
-        @Override
-        public int compare(UserRolesSegregationBean o1, UserRolesSegregationBean o2) {
-            return o1.getUserName().compareToIgnoreCase(o2.getUserName());
-        }
-    };
-    private Comparator<UserRolesSegregationBean> processNameComparatorE = new Comparator<UserRolesSegregationBean>() {
-        @Override
-        public int compare(UserRolesSegregationBean o1, UserRolesSegregationBean o2) {
-            return o1.getProcessName().compareToIgnoreCase(o2.getProcessName());
-        }
-    };
-    private Comparator<UserRolesSegregationBean> roleNameComparatorE = new Comparator<UserRolesSegregationBean>() {
-        @Override
-        public int compare(UserRolesSegregationBean o1, UserRolesSegregationBean o2) {
-            return o1.getRoleName().compareToIgnoreCase(o2.getRoleName());
-        }
-    };
 
     public static void generateReport(String templatePath, String outPath, ArrayList<UserRolesSegregationBean> beansList) {
 //        Collection beans = new HashSet();
