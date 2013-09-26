@@ -4,6 +4,12 @@
     Author     : francisco.jimenez
 --%>
 
+<%@page import="org.semanticwb.social.PostIn"%>
+<%@page import="org.semanticwb.model.SWBContext"%>
+<%@page import="org.semanticwb.social.SocialUserExtAttributes"%>
+<%@page import="org.semanticwb.model.WebSite"%>
+<%@page import="org.semanticwb.model.SWBModel"%>
+<%@page import="org.semanticwb.social.SocialNetwork"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.social.Youtube"%>
@@ -24,7 +30,7 @@
 <%@page import="java.net.URL"%>
 <%@page import="java.io.IOException"%>
 <%@page import="java.util.Map"%>
-<%//@page import="org.semanticwb.social.admin.resources.YoutubeWall"%>
+<%@page import="org.semanticwb.social.admin.resources.YoutubeWall.*"%>
 
 <%@page contentType="text/html" pageEncoding="x-iso-8859-11"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
@@ -185,9 +191,6 @@ public static String getRequest(Map<String, String> params, String url,
         <h1>My Videos</h1>
         
         <%
-        SWBResourceURL renderURL = paramRequest.getRenderUrl();
-        
-        
         HashMap<String, String> params = new HashMap<String, String>(2);
         params.put("v", "2");
         params.put("alt","jsonc");
@@ -226,6 +229,16 @@ public static String getRequest(Map<String, String> params, String url,
         paramsUsr.put("v", "2");
         paramsUsr.put("fields", "media:thumbnail");
         paramsUsr.put("alt", "json");
+        
+        SocialNetwork socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+        SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());                
+        String postURI = null;
+        org.semanticwb.model.User user = paramRequest.getUser();
+        SocialUserExtAttributes socialUserExtAttr = null;
+        if(user.isSigned()){
+            socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+        }
+        System.out.println("SocialUserExtAttributes:" + socialUserExtAttr);
         
         //THE INFO OF THE USER SHOULD BE DISPLAYED AT TOP
         if(videosArray != null){
@@ -370,6 +383,32 @@ public static String getRequest(Map<String, String> params, String url,
                 out.print("   <span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
                     out.print(" <a href=\"\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("commentVideo").setParameter("suri", objUri).setParameter("videoId", videosArray.getJSONObject(i).getString("id")) + "','Comment to " + videosArray.getJSONObject(i).getString("title") + "');return false;\"><span>Comment</span></a>  ");                    
                 out.print("   </span>");
+
+                postURI = null;
+                PostIn post = PostIn.getPostInbySocialMsgId(model, videosArray.getJSONObject(i).getString("id"));
+                if(post != null){
+                    postURI = post.getURI();
+                }
+                
+                out.print("   <span class=\"inline\" id=\"" + semanticYoutube.getId() + videosArray.getJSONObject(i).getString("id") + "/topic"  + "\" dojoType=\"dojox.layout.ContentPane\">");
+                if(socialUserExtAttr != null && socialUserExtAttr.isUserCanReTopicMsg()){
+                    if(postURI != null){//If post already exists
+                        SWBResourceURL clasifybyTopic = paramRequest.getRenderUrl().setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("videoId", videosArray.getJSONObject(i).getString("id")).setParameter("postUri", postURI).setParameter("suri", objUri);
+                        out.print("<a href=\"#\" title=\"" + "Reclasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                            + "Reclasificar video'); return false;\"><span>Reclasificar</span></a>");
+                    }else{//If posts does not exists 
+                        SWBResourceURL clasifybyTopic = paramRequest.getRenderUrl().setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", videosArray.getJSONObject(i).getString("id")).setParameter("postUri", postURI).setParameter("suri", objUri);
+                        out.print("<a href=\"#\" title=\"" + "Clasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                            + "Clasificar video'); return false;\"><span>Clasificar</span></a>");
+                    }
+                }else{
+                    out.print("&nbsp;");
+                }
+                out.print("   </span>");
+                
+                
+                
+                
                 System.out.println("VIDEOID:" + videosArray.getJSONObject(i).getString("id"));
                 out.print("   <span id=\"" + videosArray.getJSONObject(i).getString("id") +  "/like\" class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
                     //out.print(" <a href=\"\" onclick=\"showDialog('" + "#" + "','Reply to " + "USERNAME" + "');return false;\"><span>Like</span></a>  ");
