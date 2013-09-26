@@ -246,7 +246,7 @@ public class YoutubeWall extends GenericResource{
         }else if (action != null && action.equals("createCommentComment")) {
             System.out.println("Commenting commenting a video");
             doCommentComment(request);
-            response.setMode("commentCommentSent");
+            response.setMode("commentVideoSent");
         }
     }
     private void doLikeDislike(HttpServletRequest request) {
