@@ -277,10 +277,10 @@ public static String getRequest(Map<String, String> params, String url,
                         if(!jsonComments.getJSONObject("feed").isNull("entry")){
                             arrayComments = jsonComments.getJSONObject("feed").getJSONArray("entry");
                         }
-                    }
-                    
+                    }                    
                     if(arrayComments != null && arrayComments.length() > 0){
-                        out.print("<ul>");
+                        //out.print("<span id=\"" + videosArray.getJSONObject(i).getString("id") + "/comments\" dojoType=\"dijit.layout.ContentPane\">");
+                        out.print("<ul id=\"" + videosArray.getJSONObject(i).getString("id") + "/comments\">");
                         int totalComments = 0;
                         for(int c = 0; c < arrayComments.length(); c++){
                             totalComments++;
@@ -312,15 +312,20 @@ public static String getRequest(Map<String, String> params, String url,
                             out.print("</p>");
                             out.print("</li>");
                         }
-                        out.println("COMENTARIOS:"  +videosArray.getJSONObject(i).getInt("commentCount"));
+                        //out.println("COMENTARIOS:"  +videosArray.getJSONObject(i).getInt("commentCount"));
                         if(!videosArray.getJSONObject(i).isNull("commentCount") && videosArray.getJSONObject(i).getInt("commentCount") > 5 && totalComments == 5){//Link to get more comments
                             //getMoreComments(videosArray.getJSONObject(i).getString("id"), out);
                             out.print("<li class=\"timelinemore\">");
-                            out.print("<label><a href=\"#\" onclick=\"appendHtmlAt('" + "url"
-                                    + "','" + "" +"/comments', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\"><span>+</span>View more comments</a></label>");
+                            out.print("<label><a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setMode("getMoreComments").setParameter("videoId", videosArray.getJSONObject(i).getString("id")).setParameter("startIndex", totalComments + "").setParameter("totalComments",videosArray.getJSONObject(i).getInt("commentCount")+"")
+                                    + "','" + videosArray.getJSONObject(i).getString("id") +"/comments', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\"><span>+</span>View more comments</a></label>");
                             out.print("</li>");
                         }
                         out.print("</ul>");
+                        /*out.print("<ul>");
+                        out.print("<li>PERFIL</li>");
+                        out.print("<li>COMMENT</li>");
+                        out.print("</ul>");*/
+                        //out.print("</span>");
                     }
                 }
                 //Comments
