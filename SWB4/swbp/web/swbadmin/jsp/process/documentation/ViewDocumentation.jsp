@@ -53,6 +53,7 @@
     SWBResourceURL urlExport = paramRequest.getRenderUrl().setMode("doExportDocument");
     String suri = request.getAttribute("suri") != null ? request.getAttribute("suri").toString() : "";
     urlExport.setParameter("suri", suri);
+    SWBResourceURL urlModel = paramRequest.getRenderUrl().setMode("viewModel");
 
     ProcessElement pe = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
     if (paramRequest.getUser() != null && paramRequest.getUser().isSigned()) {
@@ -914,7 +915,10 @@
             </div>
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <div class="panel-title"><strong><%=paramRequest.getLocaleString("docFromPro") + " " + pe.getTitle()%></strong></div>
+                    <div class="panel-title">
+                        <strong><%=paramRequest.getLocaleString("docFromPro") + " " + pe.getTitle()%></strong>
+                        <a href="<%=urlModel.setParameter("suri", suri)%>" target="_blank" data-placement="bottom" data-toggle="tooltip" data-original-title="Ver modelo" class="pull-right icon-fullscreen hidden-l"></a>
+                    </div>
                 </div>
                 <div class="panel-body">
                     <%out.print(pe.getDocumentation().getText());%>
@@ -1030,7 +1034,7 @@
         //toast.style.opacity = 0;
     }
     
-    Modeler.init('modeler','view', callbackHandler);
+    Modeler.init('modeler',{mode:'view', layerNavigation:false}, callbackHandler);
     var zoomFactor = 1.1;
     var panRate = 10;
     
