@@ -50,12 +50,15 @@
             </a>
             <ul class="dropdown-menu">
                 <!-- dropdown menu links -->
-                <li><a  href="#" onclick="window.location='<%=URSUrl%>'"><i class="icon-download-alt"></i> <%=paramRequest.getLocaleString("userRoles")%></a></li>
-                <li><a href="#" onclick="window.location='<%=TRSUrl%>'"><i class="icon-download-alt"></i> <%=paramRequest.getLocaleString("activityRoles")%></a></li>
+                <li><a  href="#" onclick="window.location = '<%=URSUrl%>'"><i class="icon-download-alt"></i> <%=paramRequest.getLocaleString("userRoles")%></a></li>
+                <li><a href="#" onclick="window.location = '<%=TRSUrl%>'"><i class="icon-download-alt"></i> <%=paramRequest.getLocaleString("activityRoles")%></a></li>
             </ul>
         </div>
     </li>
 </ul>
+<%
+    if(report.hasNext()){
+%>
 <div class="table-responsive">
     <table class="table table-hover swbp-table">
         <thead>
@@ -126,44 +129,48 @@
         <%}%>
     </table>
 </div>
+<%} else {%>
+<div class="alert alert-block alert-warning fade in">
+    <p><%=paramRequest.getLocaleString("msgNoReports")%></p>
+</div>
+<%}%>
 <script type="text/javascript">
                         var count = 0;
                         function submitUrl(url, reference) {
-                            var extension = document.getElementById("extension");
-                            url = url + '?idReport=' + document.getElementById('idReport').value + '&extension=' + extension.options[extension.selectedIndex].value + '&reportName=' + document.getElementById('reportName').value;
+                        var extension = document.getElementById("extension");
+                                url = url + '?idReport=' + document.getElementById('idReport').value + '&extension=' + extension.options[extension.selectedIndex].value + '&reportName=' + document.getElementById('reportName').value;
                             dojo.xhrGet({
                                 url: url,
                                 load: function(response, ioArgs)
                                 {
-                                    count++;
-                                    document.getElementById('out').style.display = 'block';
-                                    //alert(count);
-                                    document.getElementById('count').innerHTML = count;
-                                    //setInterval(function(){myTimer()},2000);
-                                    return response;
+                                count++;
+                                document.getElementById('out').style.display = 'block';
+                            //alert(count);
+                                    document.getElementById('count').innerHTML = count;                                     //setInterval(function(){myTimer()},2000);
+                                return response;
                                 },
-                                error: function(response, ioArgs) {
-                                    setInterval(function() {
-                                        myTimer2()
+                            error: function(response, ioArgs) {
+                            setInterval(function() {
+                    myTimer2()
                                     }, 2000);
-                                    return response;
-                                },
-                                handleAs: "text"
-                            });
-                        }
+                    return response;
+                    },
+                    handleAs: "text"
+                    });
+                    }
 </script>
 <script type="text/javascript">
-    dojo.require("dijit.Dialog");
-    dojo.require("dojo.parser");
+                    dojo.require("dijit.Dialog");
+                    dojo.require("dojo.parser");
     dojo.require("dijit._Calendar");
-    dojo.require("dijit.ProgressBar");
-    dojo.require("dijit.Editor");
-    dojo.require("dijit.form.Form");
-    dojo.require("dijit.form.CheckBox");
-    dojo.require("dijit.form.Textarea");
-    dojo.require("dijit.form.FilteringSelect");
-    dojo.require("dijit.form.TextBox");
-    dojo.require("dijit.form.DateTextBox");
+                    dojo.require("dijit.ProgressBar");
+                    dojo.require("dijit.Editor");
+                    dojo.require("dijit.form.Form");
+                    dojo.require("dijit.form.CheckBox");
+                    dojo.require("dijit.form.Textarea");
+                    dojo.require("dijit.form.FilteringSelect");
+                    dojo.require("dijit.form.TextBox");
+                    dojo.require("dijit.form.DateTextBox");
     dojo.require("dijit.form.TimeTextBox");
     dojo.require("dijit.form.Button");
     dojo.require("dijit.form.NumberSpinner");
