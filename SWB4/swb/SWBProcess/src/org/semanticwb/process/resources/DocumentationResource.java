@@ -12,9 +12,11 @@ import com.lowagie.text.PageSize;
 import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.pdf.PdfWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
@@ -82,6 +84,7 @@ public class DocumentationResource extends GenericAdmResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=UTF-8");
         String suri = request.getParameter("suri");
         PrintWriter out = response.getWriter();
         if (suri != null) {
@@ -95,9 +98,10 @@ public class DocumentationResource extends GenericAdmResource {
                 } else {
                     url.setMode("documentation");
                 }
+                url.setParameter("despliege", despliege);
                 url.setCallMethod(SWBResourceURL.Call_DIRECT);
                 url.setParameter("suri", request.getParameter("suri"));
-                out.println("<iframe dojoType_=\"dijit.layout.ContentPane\" src=\"" + url + "\" style=\"width:100%; height:100%;\" frameborder=\"0\"></iframe>");
+                out.println("<iframe src=\"" + url + "\" style=\"width:100%; height:100%;\" frameborder=\"0\"></iframe>");
             }
         }
     }
@@ -303,7 +307,7 @@ public class DocumentationResource extends GenericAdmResource {
                             while (itFiles.hasNext()) {
                                 GraphicalElement geFiles = itFiles.next();
                                 if (geFiles instanceof SubProcess) {
-                                    createHtmlSubProcess(process, ((SubProcess) geFiles), paramRequest, basePath);
+                                    createHtmlSubProcess(process, ((SubProcess) geFiles), paramRequest, basePath, suri);
                                 }
                             }
                             while (iterator.hasNext()) {
@@ -346,11 +350,23 @@ public class DocumentationResource extends GenericAdmResource {
                         }
                         SWBUtils.IO.copyStructure(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/utils/jquery/", basePath + "/jquery/");
                         //Add modeler
+//                        File modeler = new File(basePath + "modeler/");
+//                        if (!modeler.exists()) {
+//                            modeler.mkdirs();
+//                        }
+//                        SWBUtils.IO.copyStructure(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/modeler/", basePath + "/modeler/");
                         File modeler = new File(basePath + "modeler/");
                         if (!modeler.exists()) {
                             modeler.mkdirs();
                         }
-                        SWBUtils.IO.copyStructure(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/modeler/", basePath + "/modeler/");
+                        File toolkitFile = new File(basePath + "modeler/toolkit.js");
+                        File modelerFile = new File(basePath + "modeler/modeler.js");
+                        File css = new File(basePath + "modeler/modelerFrame.css");
+
+                        copyFile(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/modeler/toolkit.js", basePath + "/modeler/toolkit.js");
+                        copyFile(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/modeler/modeler.js", basePath + "/modeler/modeler.js");
+                        copyFile(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/modeler/images/modelerFrame.css", basePath + "/modeler/modelerFrame.css");
+
 
                         //Add taskInbox
                         File taskInbox = new File(basePath + "taskInbox/css/");
@@ -374,13 +390,14 @@ public class DocumentationResource extends GenericAdmResource {
                                 + "<script type=\"text/javascript\" src=\"modeler/toolkit.js\"></script>\n"
                                 + "<script type=\"text/javascript\" src=\"modeler/modeler.js\"></script>\n"
                                 + "<link href=\"documentation/style.css\" rel=\"stylesheet\">\n"
+                                + "<link href=\"modeler/modelerFrame.css\" rel=\"stylesheet\">"
                                 + "<script type=\'text/javascript\'> //Activate tooltips\n"
-                                + "    $(document).ready(function() {"
-                                + "        if ($(\"[data-toggle=tooltip]\").length) {"
-                                + "            $(\"[data-toggle=tooltip]\").tooltip();"
-                                + "        }"
+                                + "    $(document).ready(function() {\n"
+                                + "        if ($(\"[data-toggle=tooltip]\").length) {\n"
+                                + "            $(\"[data-toggle=tooltip]\").tooltip();\n"
+                                + "        }\n"
                                 + "        $('body').off('.data-api');"
-                                + "    });"
+                                + "    });\n"
                                 + "</script>\n"; //End imports
 
                         html += "<div class=\"swbp-content-wrapper\">";//Begin wrapper
@@ -392,97 +409,96 @@ public class DocumentationResource extends GenericAdmResource {
                                 + "<nav class=\"swbp-toolbar hidden-xs\" role=\"navigation\">\n"
                                 + "<div style=\"text-align: center;\">\n"
                                 + "    <ul class=\"swbp-nav\">\n"
-                                + "<li><h2><i class=\"icon-gears\" style=\"width: auto;\"></i> " + pe.getTitle() + "</h2></li>"
+                                + "<li><h2><i class=\"icon-gears\" style=\"width: auto;\"></i> " + pe.getTitle() + "</h2></li>\n"
                                 //                                + "        <li class=\"active\">"
                                 //                                + "<a href=\"#\"><i class=\"icon-gears\"></i><span>" + pe.getTitle() + "</span></a>\n"
                                 //                                + "</li>\n"
                                 + "</ul>\n"
                                 + "</div>\n"
                                 + "</nav>\n"; //End header
-                        html += "<div class=\"swbp-user-menu\">";
+                        html += "<div class=\"swbp-user-menu\">\n";
                         html += "<ul class=\"breadcrumb\">"; //Begin ruta
-                        html += "<li class=\"active\">" + process.getTitle() + "</li>"; //Ruta
+                        html += "<li class=\"active\">" + process.getTitle() + "</li>\n"; //Ruta
                         html += "</ul>"; //End ruta
                         html += "</div>";
                         String ref = "";
-                        html += "<div class=\"col-lg-2 col-md-2 col-sm-4 hidden-xs\">";//Begin menu
+                        html += "<div class=\"col-lg-2 col-md-2 col-sm-4 hidden-xs\">\n";//Begin menu
                         //html += "<a href=\"#ruta\" style=\"width: 100%;\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + paramRequest.getLocaleString("home") + "\" class=\"btn btn-success btn-sm swbp-btn-start\"><i class=\"icon-home\"></i>" + paramRequest.getLocaleString("home") + "</a>";//Ruta
                         html += "<div class=\"swbp-left-menu swbp-left-menu-doc\">";//Begin body menu
                         html += "<ul class=\"nav nav-pills nav-stacked\">";
                         if (lane.size() > 0) {
-                            html += "<li class=\"active\"><a href=\"#lanemenu\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + laneT + " " + lane.size() + "\">" + laneT + "<span class=\"badge pull-right\">" + lane.size() + "</span></a></li>";
+                            html += "<li class=\"active\"><a href=\"#lanemenu\">" + laneT + "<span class=\"badge pull-right\">" + lane.size() + "</span></a></li>\n";
                             iterator = SWBComparator.sortByDisplayName(lane.iterator(), paramRequest.getUser().getLanguage());
                             while (iterator.hasNext()) {
                                 ge = iterator.next();
-                                ref = "#" + ge.getURI();
+                                ref = "#" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId();
                                 if (ge instanceof SubProcess) {
                                     ref = ((SubProcess) ge).getTitle() + ".html";
                                 }
-                                html += "<li><a href=\"" + ref + "\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</a></li>";
+                                html += "<li><a href=\"" + ref + "\" data-placement=\"bottom\">" + ge.getTitle() + "</a></li>\n";
                             }
                         }
                         if (activity.size() > 0) {
-                            html += "<li class=\"active\"> <a href=\"#activitymenu\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + activityT + " " + activity.size() + "\">" + activityT + "<span class=\"badge pull-right\">" + activity.size() + "</span></a></li>";
+                            html += "<li class=\"active\"> <a href=\"#activitymenu\">" + activityT + "<span class=\"badge pull-right\">" + activity.size() + "</span></a></li>\n";
                             iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
                             while (iterator.hasNext()) {
                                 ge = iterator.next();
-                                ref = "#" + ge.getURI();
+                                ref = "#" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId();
                                 if (ge instanceof SubProcess) {
                                     ref = ((SubProcess) ge).getTitle() + ".html";
                                 }
-                                html += "<li><a href=\"" + ref + "\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</a></li>";
+                                html += "<li><a href=\"" + ref + "\">" + ge.getTitle() + "</a></li>\n";
                             }
                         }
                         if (gateway.size() > 0) {
-                            html += "<li class=\"active\"><a href=\"#gatewaymenu\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + gatewayT + " " + gateway.size() + "\">" + gatewayT + "<span class=\"badge pull-right\">" + gateway.size() + "</span></a></li>";
+                            html += "<li class=\"active\"><a href=\"#gatewaymenu\">" + gatewayT + "<span class=\"badge pull-right\">" + gateway.size() + "</span></a></li>\n";
                             iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
                             while (iterator.hasNext()) {
                                 ge = iterator.next();
-                                ref = "#" + ge.getURI();
+                                ref = "#" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId();
                                 if (ge instanceof SubProcess) {
                                     ref = ((SubProcess) ge).getTitle() + ".html";
                                 }
-                                html += "<li><a href=\"" + ref + "\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</a></li>";
+                                html += "<li><a href=\"" + ref + "\">" + ge.getTitle() + "</a></li>\n";
                             }
                         }
                         if (event.size() > 0) {
-                            html += "<li class=\"active\"><a href=\"#eventmenu\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + eventT + " " + event.size() + "\">" + eventT + "<span class=\"badge pull-right\">" + event.size() + "</span></a></li>";
+                            html += "<li class=\"active\"><a href=\"#eventmenu\">" + eventT + "<span class=\"badge pull-right\">" + event.size() + "</span></a></li>\n";
                             iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
                             while (iterator.hasNext()) {
                                 ge = iterator.next();
-                                ref = "#" + ge.getURI();
+                                ref = "#" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId();
                                 if (ge instanceof SubProcess) {
                                     ref = ((SubProcess) ge).getTitle() + ".html";
                                 }
-                                html += "<li><a href=\"" + ref + "\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</a></li>";
+                                html += "<li><a href=\"" + ref + "\">" + ge.getTitle() + "</a></li>\n";
                             }
                         }
                         if (dataob.size() > 0) {
-                            html += "<li class=\"active\"><a href=\"#dataobmenu\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + dataT + " " + dataob.size() + "\">" + dataT + "<span class=\"badge pull-right\">" + dataob.size() + "</span></a></li>";
+                            html += "<li class=\"active\"><a href=\"#dataobmenu\">" + dataT + "<span class=\"badge pull-right\">" + dataob.size() + "</span></a></li>\n";
                             iterator = SWBComparator.sortByDisplayName(dataob.iterator(), paramRequest.getUser().getLanguage());
                             while (iterator.hasNext()) {
                                 ge = iterator.next();
-                                ref = "#" + ge.getURI();
+                                ref = "#" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId();
                                 if (ge instanceof SubProcess) {
                                     ref = ((SubProcess) ge).getTitle() + ".html";
                                 }
-                                html += "<li><a href=\"" + ref + "\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</a></li>";
+                                html += "<li><a href=\"" + ref + "\">" + ge.getTitle() + "</a></li>\n";
                             }
                         }
-                        html += "</ul>";
-                        html += "</div>";//End body menu
-                        html += "</div>";//End menu
-                        html += "<div class=\"col-lg-10 col-md-10 col-sm-8\" role=\"main\">";//Begin content
-                        html += "<div class=\"contenido\">"; //Begin body content
+                        html += "</ul>\n";
+                        html += "</div>\n";//End body menu
+                        html += "</div>\n";//End menu
+                        html += "<div class=\"col-lg-10 col-md-10 col-sm-8\" role=\"main\">\n";//Begin content
+                        html += "<div class=\"contenido\">\n"; //Begin body content
                         /**
                          * BEGIN IMAGE MODEL
                          */
                         String data = process.getData() != null ? process.getData() : paramRequest.getLocaleString("noImage");
-                        System.out.println("get data: " + data);
 //                        html += "<div id=\"ruta\">" + data + "</div>"; 
-                        html += "<div id=\"ruta\">";
+                        html += "\n<div id=\"ruta\">\n";
                         html += getStyleModel();
-                        html += "</div>";
+                        html += "</div>\n";
 
                         /**
                          * END IMAGE MODEL
@@ -502,7 +518,7 @@ public class DocumentationResource extends GenericAdmResource {
                             iterator = SWBComparator.sortByDisplayName(lane.iterator(), paramRequest.getUser().getLanguage());
                             while (iterator.hasNext()) {
                                 ge = iterator.next();
-                                html += "<h4 id=\"" + ge.getURI() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>";
+                                html += "<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>";
                                 html += ge.getDocumentation().getText();
                             }
                             html += "</div>";
@@ -515,7 +531,7 @@ public class DocumentationResource extends GenericAdmResource {
                             iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
                             while (iterator.hasNext()) {
                                 ge = iterator.next();
-                                html += "<h4 id=\"" + ge.getURI() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>";
+                                html += "<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>";
                                 html += ge.getDocumentation().getText();
                             }
                             html += "</div>\n";
@@ -528,7 +544,7 @@ public class DocumentationResource extends GenericAdmResource {
                             iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
                             while (iterator.hasNext()) {
                                 ge = iterator.next();
-                                html += "<h4 id=\"" + ge.getURI() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>";
+                                html += "<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>";
                                 html += ge.getDocumentation().getText();
                                 //Begin ConnectionObject
                                 Iterator<ConnectionObject> itConObj = SWBComparator.sortByDisplayName(((Gateway) ge).listOutputConnectionObjects(), paramRequest.getUser().getLanguage());
@@ -551,7 +567,7 @@ public class DocumentationResource extends GenericAdmResource {
                             iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
                             while (iterator.hasNext()) {
                                 ge = iterator.next();
-                                html += "<h4 id=\"" + ge.getURI() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>";
+                                html += "<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>";
                                 html += ge.getDocumentation().getText();
                             }
                             html += "</div>\n";
@@ -564,23 +580,25 @@ public class DocumentationResource extends GenericAdmResource {
                             iterator = SWBComparator.sortByDisplayName(dataob.iterator(), paramRequest.getUser().getLanguage());
                             while (iterator.hasNext()) {
                                 ge = iterator.next();
-                                html += "<h4 id=\"" + ge.getURI() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>";
+                                html += "<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>";
                                 html += ge.getDocumentation().getText();
                             }
                             html += "</div>\n";
                             html += "</div>\n";
                         }
-                        html += "</div>";//End body content
-                        html += "</div>";//End content
-                        html += "</div>";//End wrapper
-                        
-                        html += "<script type=\"text/javascript\">";
-                        html += "Modeler.init('modeler', 'view', callbackHandler);";
-                        html += "var json;";
-                        html += "json = '" + data + "';";
-                        html += "Modeler.loadProcess(json);";
-                        html += "</script>";
-                        
+                        html += "</div>\n";//End body content
+                        html += "</div>\n";//End content
+                        html += "</div>\n";//End wrapper
+
+                        html += "<script type=\"text/javascript\">\n";
+                        html += "Modeler.init('modeler', 'view', callbackHandler);\n";
+                        html += "function callbackHandler() {\n";
+                        html += "var json;\n";
+                        html += "json = '" + data + "';\n";
+                        html += "Modeler.loadProcess(json);\n";
+                        html += "}\n";
+                        html += "</script>\n";
+
                         File index = new File(basePath + "index.html");
                         FileOutputStream out = new FileOutputStream(index);
                         out.write(html.getBytes());
@@ -608,30 +626,30 @@ public class DocumentationResource extends GenericAdmResource {
             }
         }
     }
-//    public static void copyFile(String sourceFile, String destFile) throws IOException {
-//        InputStream inStream = null;
-//        OutputStream outStream = null;
-//        try {
-//
-//            File afile = new File(sourceFile);
-//            File bfile = new File(destFile);
-//            inStream = new FileInputStream(afile);
-//            outStream = new FileOutputStream(bfile);
-//            byte[] buffer = new byte[1024];
-//            int length;
-//            //copy the file content in bytes 
-//            while ((length = inStream.read(buffer)) > 0) {
-//                outStream.write(buffer, 0, length);
-//            }
-//            inStream.close();
-//            outStream.close();
-//        } catch (IOException e) {
-//            System.out.println("error to copy file " + sourceFile + ", " + e.getMessage());
-//        }
-//    }
+
+    public static void copyFile(String sourceFile, String destFile) throws IOException {
+        InputStream inStream = null;
+        OutputStream outStream = null;
+        try {
+            File afile = new File(sourceFile);
+            File bfile = new File(destFile);
+            inStream = new FileInputStream(afile);
+            outStream = new FileOutputStream(bfile);
+            byte[] buffer = new byte[1024];
+            int length;
+            //copy the file content in bytes 
+            while ((length = inStream.read(buffer)) > 0) {
+                outStream.write(buffer, 0, length);
+            }
+            inStream.close();
+            outStream.close();
+        } catch (IOException e) {
+            log.error("Error to copy file " + sourceFile + ", " + e.getMessage());
+        }
+    }
     public static final String FILE_SEPARATOR = System.getProperty("file.separator");
 
-    public static void createHtmlSubProcess(org.semanticwb.process.model.Process process, SubProcess subProcess, SWBParamRequest paramRequest, String basePath) throws FileNotFoundException, IOException, SWBResourceException {
+    public static void createHtmlSubProcess(org.semanticwb.process.model.Process process, SubProcess subProcess, SWBParamRequest paramRequest, String basePath, String suri) throws FileNotFoundException, IOException, SWBResourceException {
         ArrayList activity = new ArrayList();
         ArrayList gateway = new ArrayList();
         ArrayList event = new ArrayList();
@@ -677,14 +695,17 @@ public class DocumentationResource extends GenericAdmResource {
                 + "<link href=\"fontawesome/css/font-awesome.min.css\" rel=\"stylesheet\">\n"
                 + "<link href=\"taskInbox/css/swbp.css\" rel=\"stylesheet\">\n"
                 + "<script type=\"text/javascript\" src=\"jquery/jquery.min.js\"></script>\n"
+                + "<script type=\"text/javascript\" src=\"modeler/toolkit.js\"></script>\n"
+                + "<script type=\"text/javascript\" src=\"modeler/modeler.js\"></script>\n"
                 + "<link href=\"documentation/style.css\" rel=\"stylesheet\">\n"
+                + "<link href=\"modeler/modelerFrame.css\" rel=\"stylesheet\">"
                 + "<script type=\'text/javascript\'> //Activate tooltips\n"
-                + "    $(document).ready(function() {"
-                + "        if ($(\"[data-toggle=tooltip]\").length) {"
-                + "            $(\"[data-toggle=tooltip]\").tooltip();"
-                + "        }"
+                + "    $(document).ready(function() {\n"
+                + "        if ($(\"[data-toggle=tooltip]\").length) {\n"
+                + "            $(\"[data-toggle=tooltip]\").tooltip();\n"
+                + "        }\n"
                 + "        $('body').off('.data-api');"
-                + "    });"
+                + "    });\n"
                 + "</script>\n"; //End imports
         html += "<div class=\"swbp-content-wrapper\">";//Begin wrapper
         html += "<div class=\"row swbp-header hidden-xs\">\n" //Begin header
@@ -708,7 +729,7 @@ public class DocumentationResource extends GenericAdmResource {
         html += "<ul class=\"breadcrumb \">\n"; //Begin ruta
         String[] urls = path.split("\\|");
         for (int i = 0; i < urls.length; i++) {
-            System.out.println("urls[i]: " + urls[i]);
+//            System.out.println("urls[i]: " + urls[i]);
             ProcessElement peAux = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(urls[i]);
             String title = peAux.getTitle();
             String refAux = title + ".html";
@@ -729,51 +750,51 @@ public class DocumentationResource extends GenericAdmResource {
         html += "<div class=\"swbp-left-menu swbp-left-menu-doc\">";//Begin body menu
         html += "<ul class=\"nav nav-pills nav-stacked\">";
         if (activity.size() > 0) {
-            html += "<li class=\"active\"> <a href=\"#activitymenu\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + activityT + " " + activity.size() + "\">" + activityT + "<span class=\"badge pull-right\">" + activity.size() + "</span></a></li>";
+            html += "<li class=\"active\"> <a href=\"#activitymenu\">" + activityT + "<span class=\"badge pull-right\">" + activity.size() + "</span></a></li>";
             iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
             while (iterator.hasNext()) {
                 ge = iterator.next();
-                ref = "#" + ge.getURI();
+                ref = "#" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId();
                 if (ge instanceof SubProcess) {
                     ref = ((SubProcess) ge).getTitle() + ".html";
                 }
-                html += "<li><a href=\"" + ref + "\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</a></li>";
+                html += "<li><a href=\"" + ref + "\">" + ge.getTitle() + "</a></li>";
             }
         }
         if (gateway.size() > 0) {
-            html += "<li class=\"active\"><a href=\"#gatewaymenu\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + gatewayT + " " + gateway.size() + "\">" + gatewayT + "<span class=\"badge pull-right\">" + gateway.size() + "</span></a></li>";
+            html += "<li class=\"active\"><a href=\"#gatewaymenu\">" + gatewayT + "<span class=\"badge pull-right\">" + gateway.size() + "</span></a></li>";
             iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
             while (iterator.hasNext()) {
                 ge = iterator.next();
-                ref = "#" + ge.getURI();
+                ref = "#" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId();
                 if (ge instanceof SubProcess) {
                     ref = ((SubProcess) ge).getTitle() + ".html";
                 }
-                html += "<li><a href=\"" + ref + "\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</a></li>";
+                html += "<li><a href=\"" + ref + "\">" + ge.getTitle() + "</a></li>";
             }
         }
         if (event.size() > 0) {
-            html += "<li class=\"active\"><a href=\"#eventmenu\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + eventT + " " + event.size() + "\">" + eventT + "<span class=\"badge pull-right\">" + event.size() + "</span></a></li>";
+            html += "<li class=\"active\"><a href=\"#eventmenu\">" + eventT + "<span class=\"badge pull-right\">" + event.size() + "</span></a></li>";
             iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
             while (iterator.hasNext()) {
                 ge = iterator.next();
-                ref = "#" + ge.getURI();
+                ref = "#" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId();
                 if (ge instanceof SubProcess) {
                     ref = ((SubProcess) ge).getTitle() + ".html";
                 }
-                html += "<li><a href=\"" + ref + "\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</a></li>";
+                html += "<li><a href=\"" + ref + "\">" + ge.getTitle() + "</a></li>";
             }
         }
         if (dataob.size() > 0) {
-            html += "<li class=\"active\"><a href=\"#dataobmenu\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + dataT + " " + dataob.size() + "\">" + dataT + "<span class=\"badge pull-right\">" + dataob.size() + "</span></a></li>";
+            html += "<li class=\"active\"><a href=\"#dataobmenu\">" + dataT + "<span class=\"badge pull-right\">" + dataob.size() + "</span></a></li>";
             iterator = SWBComparator.sortByDisplayName(dataob.iterator(), paramRequest.getUser().getLanguage());
             while (iterator.hasNext()) {
                 ge = iterator.next();
-                ref = "#" + ge.getURI();
+                ref = "#" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId();
                 if (ge instanceof SubProcess) {
                     ref = ((SubProcess) ge).getTitle() + ".html";
                 }
-                html += "<li><a href=\"" + ref + "\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</a></li>";
+                html += "<li><a href=\"" + ref + "\">" + ge.getTitle() + "</a></li>";
             }
         }
         html += "</ul>";
@@ -784,7 +805,8 @@ public class DocumentationResource extends GenericAdmResource {
         /**
          * BEGIN IMAGE MODEL
          */
-//        String data = subProcess.getData() != null ? subProcess.getData() : paramRequest.getLocaleString("noImage");
+        String data = subProcess.getData() != null ? subProcess.getData() : paramRequest.getLocaleString("noImage");
+        html += getStyleModel();
 //        html += "<div id=\"ruta\">" + data + "</div>\n";
         /**
          * BEGIN IMAGE MODEL
@@ -797,7 +819,7 @@ public class DocumentationResource extends GenericAdmResource {
             iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
             while (iterator.hasNext()) {
                 ge = iterator.next();
-                html += "<h4 id=\"" + ge.getURI() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>\n";
+                html += "<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>\n";
                 html += ge.getDocumentation().getText();
             }
             html += "</div>\n";
@@ -810,7 +832,7 @@ public class DocumentationResource extends GenericAdmResource {
             iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
             while (iterator.hasNext()) {
                 ge = iterator.next();
-                html += "<h4 id=\"" + ge.getURI() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>\n";
+                html += "<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>\n";
                 html += ge.getDocumentation().getText();
                 //Begin ConnectionObject
                 Iterator<ConnectionObject> itConObj = SWBComparator.sortByDisplayName(((Gateway) ge).listOutputConnectionObjects(), paramRequest.getUser().getLanguage());
@@ -833,7 +855,7 @@ public class DocumentationResource extends GenericAdmResource {
             iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
             while (iterator.hasNext()) {
                 ge = iterator.next();
-                html += "<h4 id=\"" + ge.getURI() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>\n";
+                html += "<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>\n";
                 html += ge.getDocumentation().getText();
             }
             html += "</div>\n";
@@ -846,7 +868,7 @@ public class DocumentationResource extends GenericAdmResource {
             iterator = SWBComparator.sortByDisplayName(dataob.iterator(), paramRequest.getUser().getLanguage());
             while (iterator.hasNext()) {
                 ge = iterator.next();
-                html += "<h4 id=\"" + ge.getURI() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>\n";
+                html += "<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>\n";
                 html += ge.getDocumentation().getText();
             }
             html += "</div>\n";
@@ -855,6 +877,19 @@ public class DocumentationResource extends GenericAdmResource {
         html += "</div>\n";//End body content
         html += "</div>";//End content
         html += "</div>\n";//End wrapper
+
+
+        html += "<script type=\"text/javascript\">\n";
+        html += "   Modeler.init('modeler', 'view', callbackHandler);\n";
+        html += "   function callbackHandler() {\n";
+        html += "       var json;\n";
+        html += "       json = '" + data + "';\n";
+        html += "       Modeler.loadProcess(json);\n";
+        html += "       var obj = Modeler.getGraphElementByURI(null, \"" + suri + "\");\n"
+                + "     ToolKit.setLayer(obj.subLayer);";
+        html += "}\n";
+        html += "</script>\n";
+
         File index = new File(basePath + "/" + subProcess.getTitle() + ".html");
         FileOutputStream out = new FileOutputStream(index);
         out.write(html.getBytes());
@@ -881,6 +916,7 @@ public class DocumentationResource extends GenericAdmResource {
         RequestDispatcher rd = request.getRequestDispatcher(path);
         request.setAttribute("paramRequest", paramRequest);
         request.setAttribute("suri", request.getParameter("suri"));
+        request.setAttribute("despliege", request.getParameter("despliege"));
         response.setContentType("text/html; charset=UTF-8");
         rd.include(request, response);
     }
