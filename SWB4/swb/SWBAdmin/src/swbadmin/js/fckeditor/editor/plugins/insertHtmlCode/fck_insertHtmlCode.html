@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+<!--
+ * File Name: fck_insertHtmlCode.html
+ * 	Insert Code dialog window.
+ * 
+ * File Authors:
+ * 		Abdul-Aziz Al-Oraij (top7up@hotmail.com)
+ * 		Michel Staelens
+ * 		Bernadette Cierzniak
+ * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
+ *      Nico Piponides	
+-->
+<html>
+	<head>
+		<title>Insert properties code</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta content="noindex, nofollow" name="robots">
+		<link rel="stylesheet" type="text/css" href="fck_insertHtmlCode.css" />
+		<script type="text/javascript">
+
+var oEditor = window.parent.InnerDialogLoaded() ;
+
+window.onload = function() {
+
+	document.body.style.padding = '0px' ;
+
+	// First of all, translate the dialog box texts
+	oEditor.FCKLanguageManager.TranslatePage(document) ;
+    
+    var xmlhttp;
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    } else {// code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var dataSet = eval(xmlhttp.responseText);
+            //alert(dataset.length);
+            var selectObj = document.getElementById( 'propertiesSet' ) ;
+            for (var i=0; i<dataSet.length; i++) {
+                var newOption = new Option(dataSet[i].name, dataSet[i].uri, false, false);
+                selectObj.add(newOption);
+            }
+        }
+    }
+    var urlToRequest = oEditor.FCKPlugins.Items['insertHtmlCode'].urlInsertHtml;
+    xmlhttp.open("GET", urlToRequest, true);
+    xmlhttp.send();
+    /*
+    var dataSet = [
+                        {name: "Prop1", uri: "bsc:prop1"},
+                        {name: "Prop2", uri: "bsc:prop2"},
+                        {name: "Prop3", uri: "bsc:prop3"},
+                        {name: "Prop4", uri: "bsc:prop4"},
+                        {name: "Prop5", uri: "bsc:prop5"}
+                    ];
+    */
+
+	window.parent.SetOkButton( true ) ;
+	window.parent.SetAutoSize( true ) ;	
+}
+
+function Ok()
+{
+	var selectObj = document.getElementById( 'propertiesSet' ) ;
+
+	if ( selectObj.selectedIndex > 0 ) {
+        var imageUrl = oEditor.FCKPlugins.Items['insertHtmlCode'].Path + 'insertHtmlCode_icon.png';
+		oEditor.FCK.InsertHtml( "<img src='" + imageUrl + "' type='semanticProperty' title='" + selectObj[selectObj.selectedIndex].text + "' tagProp='" + selectObj[selectObj.selectedIndex].value + "'/>" ) ;
+    }
+	return true ;
+}
+
+		</script>
+	</head>
+	<body style="OVERFLOW: hidden" scroll="no">
+        <form name="propertiesSelection" id="propertiesSelection">
+            <label for="propertiesSet">Properties to choose:</label>
+            <select name="propertiesSet" id="propertiesSet">
+                <option>Select one property</option>
+            </select>
+        </form>
+		<script type="text/javascript" src="dialogue.js"></script>
+	</body>
+</html>
