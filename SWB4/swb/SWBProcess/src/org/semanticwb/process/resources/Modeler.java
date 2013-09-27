@@ -230,7 +230,11 @@ public class Modeler extends GenericResource {
                             }
                         }
                         boolean endsGood = createProcessElements(process, request, response, paramRequest, hmjson);
-                        if(!endsGood) return getError(3);
+                        if (endsGood) {
+                            process.setData(jsonStr);
+                        } else {
+                            return getError(3);
+                        }
                     } catch (Exception ejs) {
                         log.error("Error en el JSON recibido. ", ejs);
                         return getError(3);
