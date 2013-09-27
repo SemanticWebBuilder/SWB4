@@ -163,7 +163,7 @@
             </div>
             <%if (pe instanceof org.semanticwb.process.model.Process) {%>
             <div class="col-lg-1 col-md-2 col-sm-2">
-                <a href="javascript:print()" class="btn btn-default icon-print hidden-print" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("print")%>"></a>
+                <!--a href="javascript:print()" class="btn btn-default icon-print hidden-print" data-placement="bottom" data-toggle="tooltip" data-original-title="<%//paramRequest.getLocaleString("print")%>"></a-->
                 <a href="<%=urlExport.setParameter("format", "html")%>" class="btn btn-default icon-download-alt hidden-print" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("export")%>"></a>
             </div>
             <%}%>
