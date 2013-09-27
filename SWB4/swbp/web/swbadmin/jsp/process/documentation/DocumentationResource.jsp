@@ -33,7 +33,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false, locale: 'es'" ></script>
 <link rel="stylesheet" href="/swbadmin/jsp/process/formsBuilder.css" type="text/css"/>
-<!DOCTYPE html>
 <!--IMPORT BOOTSTRAP-->
 <link href="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/utils/bootstrap/bootstrap.min.css" rel="stylesheet">
 <link href="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/utils/fontawesome/css/font-awesome.min.css" rel="stylesheet">
