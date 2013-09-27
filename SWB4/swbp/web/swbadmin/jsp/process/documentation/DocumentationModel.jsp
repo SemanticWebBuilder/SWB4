@@ -9,7 +9,6 @@
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
 <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false, locale: 'es'" ></script>
 <link href="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/utils/bootstrap/bootstrap.min.css" rel="stylesheet">
 <link href="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/utils/fontawesome/css/font-awesome.min.css" rel="stylesheet">
@@ -736,7 +735,7 @@
 <script type="text/javascript">
     var zoomFactor = 1.1;
     var panRate = 10;
-    Modeler.init('modeler', 'view', callbackHandler);
+    Modeler.init('modeler',{mode:'view', layerNavigation:true}, callbackHandler);
 
     function callbackHandler() {
         var json;
