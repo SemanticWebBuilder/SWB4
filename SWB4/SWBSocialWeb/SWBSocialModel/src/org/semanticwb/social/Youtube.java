@@ -1,6 +1,6 @@
 package org.semanticwb.social;
 
-import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+/*import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpTransport;
@@ -12,6 +12,7 @@ import com.google.api.services.youtube.model.ResourceId;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
 import com.google.api.services.youtube.model.SearchResultSnippet;
+*/
 import com.google.gdata.client.youtube.YouTubeService;
 import java.io.BufferedReader;
 import java.io.Closeable;
