@@ -1,17 +1,73 @@
 package org.semanticwb.bsc.element;
 
+import java.util.Iterator;
+import java.util.List;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
+import org.semanticwb.bsc.tracing.EvaluationRule;
 import org.semanticwb.bsc.tracing.PeriodStatus;
+import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.RuleRef;
+import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticObserver;
 import org.semanticwb.platform.SemanticProperty;
 
 
 public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase 
 {
+    static
+    {
+        bsc_hasIndicator.registerObserver(new SemanticObserver() {
+            @Override
+            public void notify(SemanticObject obj, Object prop, String lang, String action)
+            {
+                if("ADD".equalsIgnoreCase(action)) {
+                    //SWBModel model = (SWBModel)obj.getModel().getModelObject().createGenericInstance();
+                    Objective objective = (Objective)obj.createGenericInstance();
+                    List<State> states = objective.listValidStates();
+                    // Funcionan exactamente igual objective.getIndicator() y objective.getLastIndicator()
+                    Indicator indicator = objective.getIndicator();
+                    if(!states.isEmpty() && indicator!=null)
+                    {
+                        indicator.addAllStates(states);
+                        
+                        String names[] = {"Actual","Meta","Actual Acumulado","Meta Acumulada"};
+                        Series series;
+                        for(int i=0; i<names.length; i++)
+                        {
+                            series = Series.ClassMgr.createSeries(objective.getBSC());
+                            series.setTitle(names[i]);
+                            series.setTitle(names[i], lang);
+                            series.setDescription("Serie "+names[i]);
+                            series.setDescription("Serie "+names[i], lang);
+                            series.setIndex(i);
+                            indicator.addSeries(series);
+                            for(State state:states)
+                            {
+                                EvaluationRule rule = EvaluationRule.ClassMgr.createEvaluationRule(indicator.getBSC());
+                                rule.setTitle("Regla para "+state.getTitle());
+                                rule.setTitle("Regla para "+state.getTitle(lang), lang);
+                                rule.setDescription("Regla para evaluar serie "+names[i]);
+                                rule.setDescription("Regla para evaluar serie "+names[i], lang);
+                                rule.setAppraisal(state);
+                                series.addEvaluationRule(rule);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    
     public Objective(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
@@ -70,6 +126,27 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     @Override
     public void setPrefix(String value) {
         super.setPrefix(value);
+    }
+    
+    public Indicator getLastIndicator() {
+        return getIndicator();
+    }
+
+    @Override
+    public Indicator getIndicator() {
+        Iterator<Indicator> it = SWBComparator.sortByCreated(listIndicators(), false);
+        return it.hasNext()?it.next():null;
+    }
+    
+    public List<State> listValidStates() {
+        List<State> validStates = SWBUtils.Collections.filterIterator(listStates(), new GenericFilterRule<State>() {
+                                                                        @Override
+                                                                        public boolean filter(State s) {
+                                                                            User user = SWBContext.getSessionUser();
+                                                                            return !s.isValid() || !user.haveAccess(s);
+                                                                        }            
+                                                                    });
+        return validStates;
     }
 
     @Override
