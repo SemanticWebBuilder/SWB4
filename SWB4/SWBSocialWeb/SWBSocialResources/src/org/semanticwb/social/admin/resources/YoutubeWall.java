@@ -17,6 +17,8 @@ import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -32,6 +34,7 @@ import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
@@ -75,6 +78,7 @@ public class YoutubeWall extends GenericResource{
     
     public static int DEFAULT_VIDEO_COMMENTS = 5;
     public static String BASE_VIDEO_URL = "http://www.youtube.com/v/";
+    public static DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
@@ -215,13 +219,13 @@ public class YoutubeWall extends GenericResource{
             out.println("   showStatus('Tema asociado correctamente');");
             out.println("</script>");
             out.println("</span>");
-            //response.setRenderParameter("currentTab", request.getParameter("currentTab"));
-            //response.setRenderParameter("id", idStatus);
         }else if(mode.equals("reAssignedPost")){
             out.println("<script type=\"javascript\">");
             out.println("   hideDialog(); ");
             out.println("   showStatus('El tema fue cambiado correctamente');");
             out.println("</script>");
+        }else if(mode.equals("getMoreVideos")){
+            doGetMoreVideos(request, response, paramRequest);
         }else{
             super.processRequest(request, response, paramRequest);
         }
@@ -232,6 +236,7 @@ public class YoutubeWall extends GenericResource{
         String videoId = request.getParameter("videoId");
         String startIndex = request.getParameter("startIndex");
         String totalComments = request.getParameter("totalComments");
+        String objUri = request.getParameter("suri");
         System.out.println("videoId:" +videoId + "--startIndex:" + startIndex  + "--totalComments:" + totalComments);
         
         try{
@@ -280,9 +285,13 @@ public class YoutubeWall extends GenericResource{
 
                     out.print("<p class=\"timelinedate\">");
                     out.print("<span dojoType=\"dojox.layout.ContentPane\">");
-
-                    out.print("<em>" + "creado el: " + comment.getJSONObject("published").getString("$t") +  "</em>");                            
+                    Date date = formatter.parse(comment.getJSONObject("published").getString("$t"));
+                    out.print("<em>" + humanFriendlyDate(date) +  "</em>");
                     out.print("</span>");
+                    String comentarioId = comment.getJSONObject("id").getString("$t");
+                    out.print("   <span class=\"inline\">");
+                    out.print(" <a href=\"\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("commentComment").setParameter("suri", objUri).setParameter("videoId",videoId).setParameter("commentId", comentarioId.substring(comentarioId.indexOf("comment") + 8)) + "','Comment to " + comment.getJSONObject("content").getString("$t").replace("\n", "</br>") + "');return false;\">Comment</a>");
+                    out.print("   </span>");
                     out.print("</p>");
                     out.print("</li>");
                 }
@@ -603,10 +612,11 @@ public class YoutubeWall extends GenericResource{
      
      public static void doPrintVideo(HttpServletRequest request, HttpServletResponse response, 
              SWBParamRequest paramRequest, java.io.Writer out, String postURI, SocialUserExtAttributes socialUserExtAttr, JSONObject video) throws SWBResourceException, IOException {
+        //System.out.println("VIDEO:" + video);
         HashMap<String, String> paramsComments = new HashMap<String, String>(3);
         paramsComments.put("v", "2");
-        paramsComments.put("max-results", "10");
-        paramsComments.put("start-index", "6");
+        paramsComments.put("max-results", "5");
+        paramsComments.put("start-index", "1");
         paramsComments.put("alt", "json");
         
         HashMap<String, String> paramsUsr = new HashMap<String, String>(3);
@@ -645,17 +655,24 @@ public class YoutubeWall extends GenericResource{
 
             //Comments,start
             String ytComments = "";
+            System.out.println("COMMENT COUNT:" + video.getInt("commentCount"));
             if(!video.isNull("commentCount") && video.getInt("commentCount")>0){
-                System.out.println("URL for comments:" );
+                //System.out.println("URL for comments:" );
                 ytComments= getRequest(paramsComments, "https://gdata.youtube.com/feeds/api/videos/" + video.getString("id") + "/comments",
                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", null);
+                //System.out.println("ytComments:" + ytComments);
                 JSONObject jsonComments = new JSONObject(ytComments);
                 JSONArray arrayComments = null;
                 if(!jsonComments.isNull("feed")){
                     if(!jsonComments.getJSONObject("feed").isNull("entry")){
                         arrayComments = jsonComments.getJSONObject("feed").getJSONArray("entry");
                     }
-                }                    
+                } 
+                if(arrayComments == null || arrayComments.length() == 0){
+                    System.out.println("NO TRAJO NADA!!!");
+                }else{
+                    System.out.println("SI TRAJO ALGO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                }
                 if(arrayComments != null && arrayComments.length() > 0){
                     //out.write("<span id=\"" + video.getString("id") + "/comments\" dojoType=\"dijit.layout.ContentPane\">");
                     out.write("<ul id=\"" + video.getString("id") + "/comments\">");
@@ -841,6 +858,82 @@ public class YoutubeWall extends GenericResource{
         }
         return response;
     }
+    
+    public void doGetMoreVideos(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        try{
+            PrintWriter out = response.getWriter();
+            String maxVideoId = request.getParameter("maxVideoId");
+            HashMap<String, String> params = new HashMap<String, String>(2);
+            params.put("v", "2");
+            params.put("alt","jsonc");
+            params.put("start-index",Integer.parseInt(maxVideoId)+1+"");
+            String objUri = (String)request.getParameter("suri");
+            SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
+            Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();
+            int videosInChannel = 0 ;
+            if(!semanticYoutube.validateToken()){//If was unable to refresh the token
+                System.out.println("unable to refresh the token!");
+                return;
+            }
+            //Validate token from youtube and pass it as param.
+            String ytResponse = getRequest(params, "http://gdata.youtube.com/feeds/api/users/" + "unam" + "/uploads",
+                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", null);
+
+            JSONObject jsonResponse = new JSONObject(ytResponse);
+            JSONArray videosArray = null;
+            if(jsonResponse.has("data")){
+                if(jsonResponse.getJSONObject("data").has("items")){
+                    videosArray = jsonResponse.getJSONObject("data").getJSONArray("items");
+                }
+                if(jsonResponse.getJSONObject("data").has("totalItems")){
+                    videosInChannel = jsonResponse.getJSONObject("data").getInt("totalItems");
+                }
+            }
+
+
+            HashMap<String, String> paramsComments = new HashMap<String, String>(3);
+            paramsComments.put("v", "2");
+            paramsComments.put("max-results", "5");
+            paramsComments.put("start-index", "1");
+            paramsComments.put("alt", "json");
+
+            HashMap<String, String> paramsUsr = new HashMap<String, String>(3);
+            paramsUsr.put("v", "2");
+            paramsUsr.put("fields", "media:thumbnail");
+            paramsUsr.put("alt", "json");
+
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+
+            SocialNetwork socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+            SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());                
+            String postURI = null;
+            org.semanticwb.model.User user = paramRequest.getUser();
+            SocialUserExtAttributes socialUserExtAttr = null;
+            if(user.isSigned()){
+                socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+            }
+
+            //THE INFO OF THE USER SHOULD BE DISPLAYED AT TOP
+            int totalVideos = 0;
+            if(videosArray != null){
+                for(int i = 0; i < videosArray.length(); i++ ){
+                    doPrintVideo(request, response, paramRequest, out, postURI, socialUserExtAttr, videosArray.getJSONObject(i));
+                    totalVideos++;
+                }
+                System.out.println("Videos recibidos:" + totalVideos);
+
+                if(totalVideos + Integer.parseInt(maxVideoId) < videosInChannel){
+                    out.print("<div id=\"" + objUri + "/getMoreVideos\" dojoType=\"dojox.layout.ContentPane\">");
+                    out.print("<label id=\"" + objUri + "/moreVideosLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setMode("getMoreVideos").setParameter("maxVideoId", (totalVideos + Integer.parseInt(maxVideoId))+"").setParameter("suri", objUri) + "','" + objUri + "/getMoreVideos', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">More Videos</a></label>");
+                    out.print("</div>");
+
+
+                }
+            }
+        }catch(Exception e){
+            log.error("Problem getting more videos", e);
+        }
+    }
 
     public static CharSequence delimit(Collection<Map.Entry<String, String>> entries,
             String delimiter, String equals, boolean doEncode)
@@ -904,5 +997,39 @@ public class YoutubeWall extends GenericResource{
             catch ( IOException ex ) {             
             }
         }
+    }
+    
+    public static String humanFriendlyDate(Date created){
+        Date today = new Date();
+        Long duration = today.getTime() - created.getTime();
+
+        int second = 1000;
+        int minute = second * 60;
+        int hour = minute * 60;
+        int day = hour * 24;
+        String date = "";
+
+        if (duration < second * 7) {//Less than 7 seconds
+            date = "right now";
+        }else if (duration < minute) {
+            int n = (int) Math.floor(duration / second);
+            date = n + " seconds ago";
+        }else if (duration < minute * 2) {//Less than 2 minutes
+            date = "about 1 minute ago";
+        }else if (duration < hour) {
+            int n = (int) Math.floor(duration / minute);
+            date = n + " minutes ago";
+        }else if (duration < hour * 2) {//Less than 1 hour
+            date = "about 1 hour ago";
+        }else if (duration < day) {
+            int n = (int) Math.floor(duration / hour);
+            date = n + " hours ago";
+        }else  if (duration > day && duration < day * 2) {
+            date = "yesterday";
+        }else{
+            int n = (int) Math.floor(duration / day);
+            date = n + " days ago";
+        }
+        return date;
     }
 }
