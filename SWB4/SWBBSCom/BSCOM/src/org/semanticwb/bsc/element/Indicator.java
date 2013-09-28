@@ -8,21 +8,51 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
+import org.semanticwb.bsc.tracing.EvaluationRule;
 import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.bsc.utils.InappropriateFrequencyException;
 import org.semanticwb.bsc.utils.UndefinedFrequencyException;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.RuleRef;
+import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticObserver;
 
 /*
  * Clase que persiste informaci&oacute;n de un indicador. Un indicador permite informar sobre el avance para alcanzar un objetivo.
  */
 public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase 
 {
+    static
+    {        
+        bsc_hasSeries.registerObserver(new SemanticObserver() {
+            @Override
+            public void notify(SemanticObject obj, Object prop, String lang, String action)
+            {
+                if("ADD".equalsIgnoreCase(action)) {
+                    Indicator indicator = (Indicator)obj.createGenericInstance();
+                    // Funcionan exactamente igual indicator.getSeries() y indicator.getLastSeries()
+                    Series series = indicator.getSeries();
+                    if(series!=null)
+                    {
+                        if(series.getEvaluationRule()==null)
+                        {
+                            List<State> validSates = indicator.listValidStates();
+                            for(State state:validSates) {
+                                EvaluationRule rule = EvaluationRule.ClassMgr.createEvaluationRule(indicator.getBSC());
+                                rule.setAppraisal(state);
+                                series.addEvaluationRule(rule);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
    
     public Indicator(org.semanticwb.platform.SemanticObject base)
     {
@@ -182,6 +212,18 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
         return null;
     }
     
+    public Series getLastSeries()
+    {
+        return getSeries();
+    }
+    
+    @Override
+    public Series getSeries()
+    {
+        Iterator<Series> it = SWBComparator.sortByCreated(listSerieses(), false);
+        return it.hasNext()?it.next():null;
+    }
+    
     public List<Series> listValidSerieses() {
         List<Series> validSerieses = SWBUtils.Collections.filterIterator(listSerieses(), new GenericFilterRule<Series>() {
                                                                         @Override
@@ -213,6 +255,12 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
                                                                         }            
                                                                     });
         return validStates;
+    }
+    
+    public void addAllStates(List<State> c) {
+        for(State s:c) {
+            addState(s);
+        }
     }
     
     /**

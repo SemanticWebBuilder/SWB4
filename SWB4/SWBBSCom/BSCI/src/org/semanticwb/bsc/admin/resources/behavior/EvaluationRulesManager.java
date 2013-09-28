@@ -2,22 +2,29 @@ package org.semanticwb.bsc.admin.resources.behavior;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.base.util.GenericFilterRule;
+import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.bsc.element.Indicator;
+import org.semanticwb.bsc.tracing.EvaluationRule;
 import org.semanticwb.bsc.tracing.Operation;
 import org.semanticwb.bsc.tracing.Series;
-import org.semanticwb.model.SWBClass;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
-import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -31,10 +38,67 @@ import org.semanticwb.portal.api.SWBResourceURL;
  * @version %I%, %G%
  * @since 1.0
  */
-public class EvaluationRulesManager extends GenericResource {
+public class EvaluationRulesManager extends GenericAdmResource {
+    public static final String Action_UPDT_SERIES = "updsrs";
+    public static final String Action_UPDT_OPER = "updopr";
+    public static final String Action_UPDT_FACTOR = "updftr";
+    public static final String Action_UPDT_ACTIVE = "updactv";
+    public static final String Action_ACTIVE_ALL = "actall";
+    public static final String Action_DEACTIVE_ALL = "deactall";
+    public static final String Action_DELETE_ALL = "delall";
+    public static final String Default_FORMAT_PATTERN = "(([\\*\\+-])(0|\\d*\\.?\\d+),)*(([\\*\\+-])(0|\\d*\\.?\\d+))";
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        
+        User user = paramRequest.getUser();
+        if(user==null || !user.isSigned())
+        {
+            response.sendError(403);
+            return;
+        }
+         
+        final String suri=request.getParameter("suri");
+        if(suri==null) {
+            response.getWriter().println("No se detect&oacute ning&uacute;n objeto sem&aacute;ntico!");
+            return;
+        }
+        
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        SemanticObject obj = ont.getSemanticObject(suri);
+        
+        String action = paramRequest.getAction();
+        
+        PrintWriter out = response.getWriter();
+        out.println("<script type=\"text/javascript\">");
+        //String s_soid = request.getParameter("so");
+        if (request.getParameter("statmsg") != null && request.getParameter("statmsg").trim().length() > 0) {
+System.out.println("showStatus");
+            out.println("   showStatus('" + request.getParameter("statmsg") + "');");
+//            out.println("updateTreeNodeByURI('" + obj.getURI() + "');");
+//            String icon = SWBContext.UTILS.getIconClass(obj);
+//            out.println("setTabTitle('" + obj.getURI() + "','" + obj.getDisplayName(user.getLanguage()) + "','" + icon + "');");
+        }
+//        if (request.getParameter("closetab") != null && request.getParameter("closetab").trim().length() > 0) {
+//System.out.println("closeTab..." + request.getParameter("closetab"));
+//            out.println("   closeTab('" + request.getParameter("closetab") + "');");
+//        }
+        out.println("</script>");
+        
+        SWBResourceURL url = paramRequest.getActionUrl();
+        url.setAction("update");
+        if(SWBResourceURL.Action_EDIT.equalsIgnoreCase(action)) {
+            
+        }
+//        doEdit(request, response, paramRequest);
+        doXML(request, response, paramRequest);
+    }
+
+    @Override
+    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html,UTF-8");
         
         User user = paramRequest.getUser();
@@ -45,83 +109,116 @@ public class EvaluationRulesManager extends GenericResource {
         }
          
         final String suri=request.getParameter("suri");
-System.out.println("suri="+suri);
         if(suri==null) {
             response.getWriter().println("No se detect&oacute ning&uacute;n objeto sem&aacute;ntico!");
-System.out.println("adios");
             return;
         }
         StringBuilder htm = new StringBuilder();
         String lang = user.getLanguage();
+        
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         SemanticObject obj = ont.getSemanticObject(suri);
-        
+        //BSC bsc = (BSC) semanticObj.getModel().getModelObject().createGenericInstance();
         Series series = (Series)obj.createGenericInstance();
         Indicator indicator = series.getIndicator();
+        BSC bsc = series.getIndicator().getObjective().getTheme().getPerspective().getBSC();
+        
+        // obtener la lista de operaciones
+        List<Operation> operations = SWBUtils.Collections.filterIterator(Operation.ClassMgr.listOperations(bsc),
+                                                        new GenericFilterRule<Operation>(){
+                                                            @Override
+                                                            public boolean filter(Operation o) {
+                                                                User user = SWBContext.getSessionUser();
+                                                                return !o.isValid() || !user.haveAccess(o);
+                                                            } 
+                                                        });
+                
+        // obtener la lista de series para contraparte
+        List<Series> siblingSerieses = indicator.listValidSerieses();
+        siblingSerieses.remove(series);
+        
+        // crear el hashset
+        HashSet<State> configuredStates = new HashSet<State>();
+        
+        // agregar el formulario de cada una de las reglas de la serie
+        PrintWriter out = response.getWriter();
+        out.println("<script type=\"text/javascript\">");
+        out.println("  dojo.require('dojo.parser');");
+        out.println("  dojo.require('dijit.layout.ContentPane');");
+        out.println("  dojo.require('dijit.form.Form');");
+        out.println("  dojo.require('dijit.form.CheckBox');");
+        out.println("</script>");
+        SWBResourceURL url = paramRequest.getActionUrl();
+        out.println("<form method=\"post\" id=\"rulessetup\" action=\""+url+"\" class=\"swbform\" type=\"dijit.form.Form\" onsubmit=\"submitForm('rulessetup');return false;\">");
+        out.println(" <table width=\"50%\" border=\"1\">");
+        Iterator<EvaluationRule> rules = series.lisValidEvaluationRules().iterator();
+        while(rules.hasNext()) {
+            EvaluationRule rule = rules.next();
+            out.println("  <tr>");
+            out.println("   <td width=\"5%\"><input type=\"checkbox\" name=\"rc1\" value=\""+rule.getId()+"\" checked=\"checked\" /></td>");
+            out.println("   <td width=\"15%\">"+(rule.getAppraisal().getTitle(lang)==null?rule.getAppraisal().getTitle():rule.getAppraisal().getTitle(lang))+"<input name=\"rc2\" type=\"hidden\" value=\""+rule.getAppraisal().getId()+"\" /></td>");
+            
+            out.println("   <td width=\"15%\">");
+            out.println("    <select name=\"rc3\">");
+            out.println("     <option value=\"\"></option>");
+            for(Operation o:operations) {
+                out.println("     <option value=\""+o.getId()+"\"");
+                out.println(o.getId().equals(rule.getOperationId())?" selected=\"selected\"":"");
+                out.println("      >"+o.getTitle()+"</option>");
+            }            
+            out.println("    </select>");
+            out.println("    </td>");
+            
+            out.println("   <td width=\"25%\">");
+            out.println("    <select name=\"rc4\">");
+            out.println("     <option value=\"\"></option>");
+            for(Series s:siblingSerieses) {
+                out.println("     <option value=\""+s.getId()+"\"");
+                out.println(s.equals(rule.getAnotherSeries())?" selected=\"selected\"":"");
+                out.println("      >"+(s.getTitle(lang)==null?s.getTitle():s.getTitle(lang))+"</option>");
+            }
+            out.println("    </select>");
+            out.println("   </td>");
+            
+            out.println("   <td width=\"40%\"><input name=\"rc5\" type=\"text\" value=\""+(rule.getFactor()==null?"":rule.getFactor())+"\" /></td>");
+            out.println("  </tr>");
+            configuredStates.add(rule.getAppraisal());
+        }
         
         List<State> validSates = indicator.listValidStates();
-        Collections.sort(validSates);
-        Iterator<State> states = validSates.iterator();
-        
-        List<Series> serieses = indicator.listValidSerieses();
-        serieses.remove(series);
-        
-        
-        
-        List<Operation> operations = SWBUtils.Collections.copyIterator(Operation.ClassMgr.listOperations(getResourceBase().getWebSite()));
-        
-        
-        
-        PrintWriter out = response.getWriter();
-        out.println("<script type=\"text/javascript\">\n");
-        out.println("  dojo.require('dojo.parser');\n");
-        out.println("  dojo.require('dijit.layout.ContentPane');\n");
-        out.println("  dojo.require('dijit.form.Form');\n");
-        out.println("  dojo.require('dijit.form.CheckBox');\n");
-        out.println("</script>\n");
-        
-        if(states.hasNext())
-        {
-            SWBResourceURL url = paramRequest.getActionUrl();
-            out.println("<form method=\"post\" id=\"rulessetup\" action=\""+url+"\" class=\"swbform\" type=\"dijit.form.Form\" onsubmit=\"submitForm('rulessetup');return false;\">");
-            out.println("<table width=\"50%\" border=\"1\">");
-            while(states.hasNext())
-            {
-                State state = states.next();
+        for(State state:validSates) {
+            if( configuredStates.add(state) ) {
                 out.println("  <tr>");
-                out.println("    <td width=\"5%\"><input type=\"checkbox\" name=\"rc1\" value=\"state1\" /></td>");
-                out.println("    <td width=\"15%\">"+state.getTitle()+"<input name=\"rc2_state1\" type=\"hidden\" value=\"state1\" /></td>");
-                out.println("    <td width=\"15%\">");
-                
-                //htm.append(renderSelect(state.getId(), operations.iterator()));
-                out.println("    <select name=\"rc3_state1\">");
-                out.println("      <option value=\"oper1\">&gt;=</option>");
-                out.println("      <option value=\"oper2\">&gt;</option>");
-                out.println("      <option value=\"oper3\">&lt;=</option>");
-                out.println("      <option value=\"oper4\">&lt;</option>");
-                out.println("      <option value=\"oper5\">=</option>");
-                out.println("      <option value=\"oper6\">!=</option>");
-                out.println("      <option value=\"oper7\">rango</option>");
-                out.println("      <option value=\"oper8\">vacío</option>");
+                out.println("   <td width=\"5%\"><input type=\"checkbox\" name=\"rc1\" value=\"1\" /></td>");
+                out.println("   <td width=\"15%\">"+(state.getTitle(lang)==null?state.getTitle():state.getTitle(lang))+"<input name=\"rc2\" type=\"hidden\" value=\""+state.getId()+"\" /></td>");
+
+                out.println("   <td width=\"15%\">");
+                out.println("    <select name=\"rc3\">");
+                out.println("     <option value=\"\"></option>");
+                for(Operation o:operations) {
+                    out.println("     <option value=\""+o.getId()+"\">"+o.getTitle()+"</option>");
+                }            
                 out.println("    </select>");
                 out.println("    </td>");
-                out.println("    <td width=\"25%\">");
-                out.println("     <select name=\"rc4_state1\">");
-                out.println("      <option value=\"serie1\">Serie 1</option>");
-                out.println("      <option value=\"serie2\">Serie 2</option>");
-                out.println("      <option value=\"serie3\">Serie 3</option>");
-                out.println("      <option value=\"serie4\">Serie 4</option>");
+
+                out.println("   <td width=\"25%\">");
+                out.println("    <select name=\"rc4\">");
+                out.println("     <option value=\"\"></option>");
+                for(Series s:siblingSerieses) {
+                    out.println("     <option value=\""+s.getId()+"\">"+(s.getTitle(lang)==null?s.getTitle():s.getTitle(lang))+"</option>");
+                }
                 out.println("    </select>");
-                out.println("    </td>");
-                out.println("    <td width=\"40%\"><input name=\"rc5_state1\" type=\"text\" /></td>");
+                out.println("   </td>");
+
+                out.println("   <td width=\"40%\"><input name=\"rc5\" type=\"text\" value=\"\" /></td>");
                 out.println("  </tr>");
             }
-            out.println("</table>");
-            out.println("<input type=\"submit\" value=\"Enviar\" />");
-            out.println("</form>");
-        }else {
-            out.println("<p>no hay estados...</p>");
         }
+        out.println(" </table>");
+        if(!operations.isEmpty() && !siblingSerieses.isEmpty()) {
+            out.println(" <input type=\"submit\" value=\"Guardar\" />");
+        }
+        out.println("</form>");
         
         if(request.getParameter("statusMsg")!=null) {
             out.println("<div dojoType=\"dojox.layout.ContentPane\">");
@@ -133,27 +230,424 @@ System.out.println("adios");
     }
 
     @Override
-    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        super.doEdit(request, response, paramRequest);
+    public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+System.out.println("\n\ndoXML...");
+        User user = paramRequest.getUser();
+        if(user==null || !user.isSigned())
+        {
+            response.sendError(403);
+            return;
+        }
+
+        final String suri=request.getParameter("suri");
+        if(suri==null) {
+            response.getWriter().println("No se detect&oacute ning&uacute;n objeto sem&aacute;ntico!");
+            return;
+        }
+System.out.println("suri="+suri);
+        final String lang = user.getLanguage();
+        
+        boolean hasRules = Boolean.FALSE;
+        
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        SemanticObject obj = ont.getSemanticObject(suri);
+        Series series;
+        
+        PrintWriter out = response.getWriter();
+        
+        out.println("<script type=\"text/javascript\">");
+        //String s_soid = request.getParameter("so");
+        if (request.getParameter("statmsg") != null && request.getParameter("statmsg").trim().length() > 0) {
+System.out.println("showStatus");
+            out.println("   showStatus('" + request.getParameter("statmsg") + "');");
+            out.println("updateTreeNodeByURI('" + obj.getURI() + "');");
+            String icon = SWBContext.UTILS.getIconClass(obj);
+            out.println("setTabTitle('" + obj.getURI() + "','" + obj.getDisplayName(user.getLanguage()) + "','" + icon + "');");
+        }
+        if (request.getParameter("closetab") != null && request.getParameter("closetab").trim().length() > 0) {
+System.out.println("closeTab..." + request.getParameter("closetab"));
+            out.println("   closeTab('" + request.getParameter("closetab") + "');");
+        }
+        out.println("</script>");
+        
+        
+        SWBResourceURL url = paramRequest.getActionUrl();
+        url.setAction(SWBResourceURL.Action_ADD);
+        String action = paramRequest.getAction();
+System.out.println("action="+action);
+        if(SWBResourceURL.Action_EDIT.equalsIgnoreCase(action))
+        {
+            out.println("<div class=\"swbform\">");
+            out.println("<fieldset>");
+            out.println("<table width=\"98%\">"); 
+            out.println("<thead>");
+            out.println("<tr>");
+            out.println("<th>"+paramRequest.getLocaleString("lblAction")+"</th>");
+            out.println("<th>"+paramRequest.getLocaleString("lblStatus")+"</th>");            
+            out.println("<th>"+paramRequest.getLocaleString("StatusGroup")+"</th>");            
+            out.println("<th>"+paramRequest.getLocaleString("lblOperation")+"</th>");            
+            out.println("<th>"+paramRequest.getLocaleString("lblSeries")+"</th>");            
+            out.println("<th>"+paramRequest.getLocaleString("lblFactor")+"</th>");            
+            out.println("<th>"+paramRequest.getLocaleString("lblActive")+"</th>");            
+            out.println("</tr>");
+            out.println("</thead>");
+            out.println("<tbody>");
+            
+            series = (Series)obj.createGenericInstance();
+            Indicator indicator = series.getIndicator();
+            BSC bsc = series.getIndicator().getObjective().getTheme().getPerspective().getBSC();
+
+            // Obtener la lista de operaciones válidas
+            List<Operation> operations = SWBUtils.Collections.filterIterator(Operation.ClassMgr.listOperations(bsc),
+                                    new GenericFilterRule<Operation>(){
+                                        @Override
+                                        public boolean filter(Operation o) {
+                                            User user = SWBContext.getSessionUser();
+                                            return !o.isValid() || !user.haveAccess(o);
+                                        } 
+                                    });
+
+            // Otener la lista de series para contraparte
+            List<Series> siblingSerieses = indicator.listValidSerieses();
+            siblingSerieses.remove(series);
+
+            // Crear el conjunto de reglas, recordemos que si 
+            // una regla ya está en el conjunto no se agrega de nuevo 
+            HashSet<State> configuredStates = new HashSet<State>();            
+            Iterator<EvaluationRule> rules = series.listEvaluationRules();
+            hasRules = rules.hasNext();
+System.out.println("serie dt="+series.getDisplayTitle(lang)+", t="+series.getTitle(lang));
+            while(rules.hasNext()) {
+                EvaluationRule rule = rules.next();
+                out.println("  <tr>");                
+                
+                // Eliminar regla
+                out.println("<td>");
+                SWBResourceURL urlr = paramRequest.getActionUrl();
+                urlr.setParameter("suri", suri);
+                urlr.setParameter("sval", rule.getURI());
+                urlr.setAction(SWBResourceURL.Action_REMOVE);
+                out.println("<a href=\"#\" onclick=\"if(confirm('" + paramRequest.getLocaleString("queryRemove") + " " + (rule.getTitle(lang)==null?(rule.getTitle()==null?"Sin título":rule.getTitle().replaceAll("'","")):rule.getTitle(lang).replaceAll("'","")) + "?')){submitUrl('" + urlr + "',this);} else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=0></a>");
+                out.println("</td>");
+                
+                // Estado
+                SWBResourceURL urlchoose = paramRequest.getRenderUrl();
+                urlchoose.setParameter("suri", suri);
+                urlchoose.setParameter("sval", rule.getURI());
+                out.println("   <td>");
+                out.println("<a href=\"#\" onclick=\"addNewTab('" + rule.getAppraisal().getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + (rule.getAppraisal().getTitle(lang)==null?(rule.getAppraisal().getTitle()==null?"Sin título":rule.getAppraisal().getTitle().replaceAll("'","")):rule.getAppraisal().getTitle(lang).replaceAll("'","")) + "');return false;\" >" + (rule.getAppraisal().getTitle(lang)==null?(rule.getAppraisal().getTitle()==null?"Sin título":rule.getAppraisal().getTitle().replaceAll("'","")):rule.getAppraisal().getTitle(lang).replaceAll("'","")) + "</a>");
+                out.println("   </td>");
+                
+                // Grupo del estado
+                out.println("   <td>");
+                out.println((rule.getAppraisal().getStateGroup().getTitle(lang)==null?(rule.getAppraisal().getStateGroup().getTitle()==null?"Sin título":rule.getAppraisal().getStateGroup().getTitle().replaceAll("'","")):rule.getAppraisal().getStateGroup().getTitle(lang).replaceAll("'","")));
+                out.println("   </td>");
+                
+                // Lista de operadores
+                SWBResourceURL urlopr = paramRequest.getActionUrl();
+                urlopr.setParameter("suri", suri);
+                urlopr.setParameter("sval", rule.getURI());
+                urlopr.setAction(Action_UPDT_OPER);
+                out.println("   <td>");
+                out.println("    <select name=\"operId\" onchange=\"submitUrl('" + urlopr + "&'+this.attr('name')+'='+this.attr('value'),this.domNode)\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" hasDownArrow=\"true\" style=\"width:120px;\">");
+                out.println("     <option value=\"\"></option>");
+                for(Operation operation:operations) {
+                    out.println("     <option value=\""+operation.getId()+"\"");
+                    out.println(operation.getId().equals(rule.getOperationId())?" selected=\"selected\"":"");
+                    out.println("      >"+(operation.getTitle(lang)==null?(operation.getTitle()==null?"Sin título":operation.getTitle().replaceAll("'","")):operation.getTitle(lang).replaceAll("'",""))+"</option>");
+                }            
+                out.println("    </select>");
+                out.println("   </td>");
+                
+                // Lista de series hermanas
+                SWBResourceURL urluinh = paramRequest.getActionUrl();
+                urluinh.setParameter("suri", suri);
+                urluinh.setParameter("sval", rule.getURI());
+                urluinh.setAction(Action_UPDT_SERIES);
+                out.println("   <td>");
+                out.println("    <select name=\"ssId\" onchange=\"submitUrl('" + urluinh + "&'+this.attr('name')+'='+this.attr('value'),this.domNode)\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" hasDownArrow=\"true\" style=\"width:120px;\">");
+                out.println("     <option value=\"\"></option>");
+                for(Series s:siblingSerieses) {
+                    out.println("     <option value=\""+s.getId()+"\"");
+                    out.println(s.equals(rule.getAnotherSeries())?" selected=\"selected\"":"");
+                    out.println("      >"+(s.getTitle(lang)==null?s.getTitle():s.getTitle(lang))+"</option>");
+                }
+                out.println("    </select>");
+                out.println("   </td>");
+                
+                // Factor
+                SWBResourceURL urlfctr = paramRequest.getActionUrl();
+                urlfctr.setParameter("suri", suri);
+                urlfctr.setParameter("sval", rule.getURI());
+                urlfctr.setAction(Action_UPDT_FACTOR);
+                out.println("   <td><input type=\"text\" name=\"fctr\" onchange=\"submitUrl('" + urlfctr + "&'+this.attr('name')+'='+this.attr('value'),this.domNode)\" dojoType=\"dijit.form.TextBox\" value=\""+(rule.getFactor()==null?"":rule.getFactor())+"\" /></td>");
+                //out.println("   <td><input type=\"text\" name=\"fctr\" onchange=\"alert('url='+'"+urlfctr+"&'+this.attr('name')+'='+this.attr('value'))\" dojoType=\"dijit.form.TextBox\" value=\""+(rule.getFactor()==null?"":rule.getFactor())+"\" /></td>");
+                
+                // Activo?
+                SWBResourceURL urlactv = paramRequest.getActionUrl();
+                urlactv.setParameter("suri", suri);
+                urlactv.setParameter("sval", rule.getURI());
+                urlactv.setAction(Action_UPDT_ACTIVE);
+                out.println("   <td align=\"center\"><input type=\"checkbox\" name=\"act\" onchange=\"submitUrl('" + urlactv + "&'+this.attr('name')+'='+this.attr('value'),this.domNode)\" dojoType=\"dijit.form.CheckBox\" value=\""+rule.getId()+"\" "+(rule.isActive()?"checked=\"checked\"":"")+" /></td>");
+                //out.println("   <td align=\"center\"><input type=\"checkbox\" name=\"act\" onchange=\"alert('url='+'" + urlactv + "&'+this.attr('name')+'='+this.attr('value'))\" value=\""+rule.getId()+"\" "+(rule.isActive()?"checked=\"checked\"":"")+" /></td>");
+                
+                out.println("  </tr>");
+                configuredStates.add(rule.getAppraisal());
+            }
+            
+            List<State> validSates = indicator.listValidStates();
+            if(!validSates.isEmpty())
+            {
+                for(State state:validSates)
+                {
+                    if( configuredStates.add(state) ) {
+System.out.println("regla impropia para estado="+state);
+                        out.println("  <tr>");
+                        // Columna vacía
+                        out.println("   <td>&nbsp;</td>");
+                        
+                        // Estado
+                        out.println("   <td>");
+                        out.println("<a href=\"#\"  onclick=\"addNewTab('" + state.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + (state.getTitle(lang)==null?(state.getTitle()==null?"Sin título":state.getTitle()):state.getTitle(lang)) + "');return false;\" >" + (state.getTitle(lang)==null?(state.getTitle()==null?"Sin título":state.getTitle()):state.getTitle(lang)) + "</a>");
+                        out.println("   </td>");
+                        
+                        // Grupo del estado
+                        out.println("   <td>");
+                        out.println((state.getStateGroup().getTitle(lang)==null?(state.getStateGroup().getTitle()==null?"Sin título":state.getStateGroup().getTitle()):state.getStateGroup().getTitle(lang)));
+                        out.println("   </td>");
+                        
+                        // Lista de operadores
+                        SWBResourceURL urlopr = paramRequest.getActionUrl();
+                        urlopr.setParameter("suri", suri);
+                        urlopr.setParameter("stateId", state.getId());
+                        urlopr.setAction(Action_UPDT_OPER);
+                        out.println("   <td>");
+                        out.println("    <select name=\"operId\" onchange=\"submitUrl('" + urlopr + "&'+this.attr('name')+'='+this.attr('value'),this.domNode)\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" hasDownArrow=\"true\" style=\"width:120px;\">");
+                        out.println("     <option value=\"\"></option>");
+                        for(Operation operation:operations) {
+                            out.println("     <option value=\""+operation.getId()+"\">"+(operation.getTitle(lang)==null?(operation.getTitle()==null?"Sin título":operation.getTitle()):operation.getTitle(lang))+"</option>");
+                        }            
+                        out.println("    </select>");
+                        out.println("    </td>");
+                        
+                        // Lista de series
+                        SWBResourceURL urluinh = paramRequest.getActionUrl();
+                        urluinh.setParameter("suri", suri);
+                        urluinh.setParameter("stateId", state.getId());
+                        urluinh.setAction(Action_UPDT_SERIES);
+                        out.println("   <td>");
+                        out.println("    <select name=\"ssId\" onchange=\"submitUrl('" + urluinh + "&'+this.attr('name')+'='+this.attr('value'),this.domNode)\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" hasDownArrow=\"true\" style=\"width:120px;\">");
+                        out.println("     <option value=\"\"></option>");
+                        for(Series s:siblingSerieses) {
+                            out.println(" <option value=\""+s.getId()+"\">"+(s.getTitle(lang)==null?(s.getTitle()==null?"Sin título":s.getTitle()):s.getTitle(lang))+"</option>");
+                        }
+                        out.println("    </select>");
+                        out.println("   </td>");
+                        
+                        // Factor
+                        SWBResourceURL urlfctr = paramRequest.getActionUrl();
+                        urlfctr.setParameter("suri", suri);
+                        urlfctr.setParameter("stateId", state.getId());
+                        urlfctr.setAction(Action_UPDT_FACTOR);
+                        out.println("   <td><input type=\"text\" name=\"fctr\" onchange=\"submitUrl('" + urlfctr + "&'+this.attr('name')+'='+this.attr('value'),this.domNode)\" dojoType=\"dijit.form.TextBox\" value=\"\" /></td>");
+                        
+                        // Activo?
+//                        SWBResourceURL urlactv = paramRequest.getActionUrl();
+//                        urlactv.setParameter("suri", suri);
+//                        urlactv.setParameter("stateId", state.getId());
+//                        urlactv.setAction(Action_UPDT_ACTIVE);
+//                        out.println("   <td align=\"center\"><input type=\"checkbox\" name=\"act\" onchange=\"submitUrl('" + urlactv + "&'+this.attr('name')+'='+this.attr('value'),this.domNode)\" dojoType=\"dijit.form.CheckBox\" value=\"1\" /></td>");
+                        out.println("   <td>&nbsp;</td>");
+
+                        out.println("  </tr>");
+                    }
+                }
+            }
+            else
+            {
+                out.println("no hay estados asignados al indicador");
+            }
+            out.println("</tbody>");
+            out.println("</table>");
+            out.println("</fieldset>");
+            if(hasRules || !validSates.isEmpty())
+            {
+                out.println("<fieldset>");
+                SWBResourceURL urlAll = paramRequest.getActionUrl();
+                urlAll.setParameter("suri", suri);
+                
+                urlAll.setAction(Action_ACTIVE_ALL);
+                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlAll + "',this.domNode); return false;\">" + paramRequest.getLocaleString("lblActiveAll") + "</button>");
+                
+                urlAll.setAction(Action_DEACTIVE_ALL);
+                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlAll + "',this.domNode); return false;\">" + paramRequest.getLocaleString("lblDeactiveAll") + "</button>");
+                out.println("</fieldset>");
+                
+                urlAll.setAction(Action_DELETE_ALL);
+                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"if(confirm('"+paramRequest.getLocaleString("queryRemoveAll")+"?')){submitUrl('" + urlAll + "',this.domNode);} return false;\">" + paramRequest.getLocaleString("lblRemoveAll") + "</button>");
+            }
+            out.println("</div>");
+        }
+        
     }
     
-    private String renderSelect(final String name, Iterator<SWBClass> iterator)
-    {
-        StringBuilder select = null;
-        if(iterator!=null && iterator.hasNext())
-        {
-            select = new StringBuilder("<select name=\"\">");
-            while(iterator.hasNext())
-            {
-//                SWBClass object = objects.next();
-            }
-            select.append("</select>");
-        }
-        return select.toString();
-    }
-
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        super.processAction(request, response);
+        final String action = response.getAction();
+        final String suri = request.getParameter("suri");
+        
+        response.setAction(SWBResourceURL.Action_EDIT);
+        response.setRenderParameter("suri", suri);
+        
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        SemanticObject objSeries = ont.getSemanticObject(suri);
+        if(objSeries==null) {
+            response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchSemanticElement"));
+            return;
+        }
+System.out.println("\n\na");
+        User user = response.getUser();
+        if(!user.isSigned() || !user.haveAccess(objSeries.getGenericInstance())) {
+            response.setRenderParameter("statmsg", response.getLocaleString("msgUnauthorizedUser"));
+            return;
+        }
+System.out.println("b");
+        if(Action_UPDT_OPER.equalsIgnoreCase(action))
+        {
+            SemanticObject objRule = ont.getSemanticObject(request.getParameter("sval"));
+            SWBModel model = (SWBModel)objSeries.getModel().getModelObject().createGenericInstance();
+            Series series = (Series)objSeries.getGenericInstance();
+            String operId = request.getParameter("operId");
+            EvaluationRule rule;
+
+            if(Operation.ClassMgr.hasOperation(operId, model)) {
+                if(objRule==null) {
+                    rule = EvaluationRule.ClassMgr.createEvaluationRule(model);
+                    rule.setTitle(rule.getId());
+                    rule.setTitle(rule.getId(), user.getLanguage());
+                    if(State.ClassMgr.hasState(request.getParameter("stateId"), SWBContext.getAdminWebSite())) {
+                        State state = State.ClassMgr.getState(request.getParameter("stateId"), SWBContext.getAdminWebSite());
+                        rule.setAppraisal(state);
+                    }
+                    series.addEvaluationRule(rule);
+                }else {
+                    rule = (EvaluationRule)objRule.getGenericInstance();
+                }
+                rule.setOperationId(operId);
+                response.setRenderParameter("statmsg", response.getLocaleString("msgUpdtOperatorOk"));
+            }else {
+                response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchOperation"));
+            }
+        }
+        else if(Action_UPDT_SERIES.equalsIgnoreCase(action))
+        {
+            SemanticObject objRule = ont.getSemanticObject(request.getParameter("sval"));
+            SWBModel model = (SWBModel)objSeries.getModel().getModelObject().createGenericInstance();
+            Series series = (Series)objSeries.getGenericInstance();
+            String siblingId = request.getParameter("ssId");
+            EvaluationRule rule;
+            
+            if(Series.ClassMgr.hasSeries(siblingId, model)) {
+                if(objRule==null) {
+                    rule = EvaluationRule.ClassMgr.createEvaluationRule(model);
+                    rule.setTitle(rule.getId());
+                    rule.setTitle(rule.getId(), user.getLanguage());
+                    if(State.ClassMgr.hasState(request.getParameter("stateId"), SWBContext.getAdminWebSite())) {
+                        State state = State.ClassMgr.getState(request.getParameter("stateId"), SWBContext.getAdminWebSite());
+                        rule.setAppraisal(state);
+                    }
+                    series.addEvaluationRule(rule);
+                }else {
+                    rule = (EvaluationRule)objRule.getGenericInstance();
+                }                
+                Series sibling = Series.ClassMgr.getSeries(siblingId, model);
+                rule.setAnotherSeries(sibling);
+                response.setRenderParameter("statmsg", response.getLocaleString("msgUpdtSeriesOk"));
+            }else {
+                response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchSeries"));
+            }
+        }
+        else if(Action_UPDT_FACTOR.equalsIgnoreCase(action))
+        {
+            SemanticObject objRule = ont.getSemanticObject(request.getParameter("sval"));
+            SWBModel model = (SWBModel)objSeries.getModel().getModelObject().createGenericInstance();
+            Series series = (Series)objSeries.getGenericInstance();
+            String factor = request.getParameter("fctr")==null?"":request.getParameter("fctr");
+            EvaluationRule rule;
+            
+            Pattern pattern;
+            String regexp = getResourceBase().getAttribute("defaultFormatPattern", Default_FORMAT_PATTERN);
+            try{
+                pattern = Pattern.compile(regexp);
+System.out.println("1");
+            }catch(PatternSyntaxException pse) {
+                pattern = Pattern.compile(Default_FORMAT_PATTERN);
+System.out.println("2");
+            }            
+            Matcher matcher = pattern.matcher(factor);
+System.out.println("3");
+            if(matcher.matches()) {
+System.out.println("4");
+                if(objRule==null) {
+System.out.println("5");
+                    rule = EvaluationRule.ClassMgr.createEvaluationRule(model);
+                    rule.setTitle(rule.getId());
+                    rule.setTitle(rule.getId(), user.getLanguage());
+                    if(State.ClassMgr.hasState(request.getParameter("stateId"), SWBContext.getAdminWebSite())) {
+System.out.println("6");
+                        State state = State.ClassMgr.getState(request.getParameter("stateId"), SWBContext.getAdminWebSite());
+                        rule.setAppraisal(state);
+                    }
+                    series.addEvaluationRule(rule);
+System.out.println("7");
+                }else {
+System.out.println("8");
+                    rule = (EvaluationRule)objRule.getGenericInstance();
+System.out.println("9");
+                }
+System.out.println("10");
+                rule.setFactor(factor);
+System.out.println("11");
+                response.setRenderParameter("statmsg", response.getLocaleString("msgUpdtFactorOk"));
+            }else {
+System.out.println("12");
+                response.setRenderParameter("statmsg", response.getLocaleString("msgFactorBadFormat"));
+            }
+        }
+        else if(Action_UPDT_ACTIVE.equalsIgnoreCase(action))
+        {
+            SemanticObject objRule = ont.getSemanticObject(request.getParameter("sval"));
+            if(objSeries!=null && objRule!=null) {
+                EvaluationRule rule = (EvaluationRule)objRule.getGenericInstance();
+                Series series = (Series)objSeries.getGenericInstance();
+                if(series.hasEvaluationRule(rule)) {
+                    rule.setActive(!rule.isActive());                    
+                    response.setRenderParameter("statmsg", (rule.isActive()?response.getLocaleString("msgUpdtActiveOk"):response.getLocaleString("msgUpdtDeactiveOk")));
+                }else {
+                    response.setRenderParameter("statmsg", response.getLocaleString("msgRemoveError"));
+                }
+            }else {
+                response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchSemanticElement"));
+            }
+        }
+        else if(SWBResourceURL.Action_REMOVE.equals(action))
+        {
+            SemanticObject objRule = ont.getSemanticObject(request.getParameter("sval"));
+            if(objSeries!=null && objRule!=null) {
+                EvaluationRule rule = (EvaluationRule)objRule.getGenericInstance();
+                Series series = (Series)objSeries.getGenericInstance();
+                if(series.hasEvaluationRule(rule)) {
+                    series.removeEvaluationRule(rule);
+                    response.setRenderParameter("statmsg", response.getLocaleString("msgRemoveOk"));
+                }else {
+                    response.setRenderParameter("statmsg", response.getLocaleString("msgRemoveError"));
+                }
+            }else {
+                response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchSemanticElement"));
+            }
+        }
     }
 }
