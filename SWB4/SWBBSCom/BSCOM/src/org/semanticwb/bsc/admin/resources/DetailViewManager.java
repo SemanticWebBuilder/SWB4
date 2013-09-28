@@ -352,6 +352,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         output.append("');return false;\" method=\"post\" action=\"");
         output.append(url.toString());
         output.append("\">\n");
+        output.append("                <input type=\"hidden\" id=\"urlForProperties\" name=\"urlForProperties\" value=\"" + propertiesUrl + "\">\n");
 //        output.append("                <input type=\"hidden\" name=\"suri\" value=\"");
 //        output.append(suri);
 //        output.append("\">\n");
@@ -569,6 +570,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             doShowListing(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("editTemplate")) {
             doEditTemplate(request, response, paramRequest);
+        } else if (paramRequest.getMode().equals("getPropertiesInfo")) {
+            doGetPropertiesInfo(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
