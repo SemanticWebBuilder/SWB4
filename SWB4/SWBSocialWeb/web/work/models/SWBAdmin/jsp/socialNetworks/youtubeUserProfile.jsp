@@ -40,19 +40,15 @@
 
 <%
     String target = (String) request.getParameter("id");
-    String objUri = (String) request.getParameter("suri");
-    if(target == null || objUri == null){
-        //return;
-        target = "UCbaSliTsedbczHN7fPqmyKA";
-    }
+    if(target == null){
+        return;
+        }
     
     String usrProfile = getFullUserProfileFromId(target);
     System.out.println("userprofile:" + usrProfile);    
         
     JSONObject usrResp = new JSONObject(usrProfile);
-    if(usrResp.has("entry")){
-        //usrResp = usrResp.getJSONObject("entry");        
-    }
+    
     String sex = "";
     String name = "";
     String birthday="";
@@ -98,7 +94,7 @@
 <div class="swbform" style="width: 500px">
     
     <fieldset>
-        <div align="center"><a href="#" title="View profile on Youtube"  target="_blank"><img src="<%=picture%>"/></a></div>
+        <div align="center"><a href="#" title="View profile on Youtube"  target="_blank"><img src="<%=picture%>" height="150" width="150"/></a></div>
     </fieldset>
     
     <fieldset>
