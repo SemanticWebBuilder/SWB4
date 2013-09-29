@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.HttpURLConnection;
@@ -29,6 +30,8 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
@@ -51,9 +54,15 @@ import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.SocialUserExtAttributes;
+import org.semanticwb.social.Twitter;
 import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.Youtube;
 import org.semanticwb.social.util.SWBSocialUtil;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import twitter4j.Status;
 import twitter4j.User;
 
@@ -129,7 +138,75 @@ public class YoutubeWall extends GenericResource{
             out.println("   showStatus('Comment sent successfully');");
             out.println("</script>");
         }else if(mode!= null && mode.equals("likeSent")){//Feedback of liked video
-            response.getWriter().print("like / unlike sent");
+            SWBResourceURL actionURL = paramRequest.getActionUrl();
+            actionURL.setParameter("suri", request.getParameter("suri"));
+            String videoId = request.getParameter("videoId");
+            String action = request.getParameter("action");
+            System.out.println("LIKE SENT:" + request.getParameter("suri") + videoId + action);
+            String actionTitle = "";
+            SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
+            Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();
+        
+            try {
+                HashMap<String, String> paramsVideo = new HashMap<String, String>(3);
+                paramsVideo.put("v", "2");
+                paramsVideo.put("fields", "yt:statistics,yt:rating,published");
+                String videoInfo= getRequest(paramsVideo, "https://gdata.youtube.com/feeds/api/videos/" + videoId,
+                                "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", null);
+                System.out.println("video INFO:" + videoInfo);
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder;
+                builder = factory.newDocumentBuilder();
+                Document xmlDoc = builder.parse(new InputSource(new StringReader(videoInfo)));
+                xmlDoc.getDocumentElement().normalize();
+                NodeList rootNode = xmlDoc.getDocumentElement().getChildNodes();
+                String favCount = "0";
+                
+                for( int tmp = 0; tmp < rootNode.getLength(); tmp++){
+                    Node nNode= rootNode.item(tmp);
+                    if(nNode.getNodeName().equals("published")){
+                        System.out.println("published:" + nNode.getTextContent());
+                        Date date = formatter.parse(nNode.getTextContent());
+                        out.print("<em>" + humanFriendlyDate(date) + "</em>");
+                    }else if(nNode.getNodeName().equals("yt:statistics")){                        
+                        out.println("Views:" + nNode.getAttributes().getNamedItem("viewCount").getTextContent() + " ");
+                        System.out.println(nNode.getAttributes().getNamedItem("viewCount").getTextContent());
+                        favCount = nNode.getAttributes().getNamedItem("favoriteCount").getTextContent();
+                    }else if(nNode.getNodeName().equals("yt:rating")){
+                        System.out.println("yt:rating" + nNode.getNodeValue());
+                        System.out.println(nNode.getAttributes().getNamedItem("numDislikes").getTextContent());
+                        System.out.println(nNode.getAttributes().getNamedItem("numLikes").getTextContent());
+                        
+                        out.print(" <strong><span> Likes: </span>");
+                        out.print(nNode.getAttributes().getNamedItem("numLikes").getTextContent() + " ");
+                        
+                        out.print(" Dislikes: ");
+                        out.println(nNode.getAttributes().getNamedItem("numDislikes").getTextContent() + " ");
+                        out.println(" Favorites: " +  favCount);
+                        out.print("</strong>");
+                    }
+                }                
+
+                if(action.equals("doLike")){
+                    action = "doDislike";
+                    actionTitle = "Dislike";
+                }else if(action.equals("doDislike")){
+                    action = "doLike";
+                    actionTitle = "Like";
+                }
+                actionURL.setAction(action);
+                /* updates only the DOM of the 'Like/Dislike' message and change URL also*/
+                out.println("<span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
+                out.println("<script type=\"dojo/method\">");
+                out.println("   var spanId = dijit.byId('" + semanticYoutube.getId() + videoId + LIKE + "');");
+                out.println("   spanId.attr('content', '" + "<a href=\"\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = \\'<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>\\';}catch(noe){} postSocialHtml(\\'" + actionURL.setParameter("videoId", videoId).setParameter("action", actionTitle.toLowerCase()) + "\\',\\'" + semanticYoutube.getId() + videoId + INFORMATION + "\\');return false;" +"\"><span>" + actionTitle + "</span></a>" +"')");
+                out.println("   showStatus('Action successfully excecuted');");
+                out.println("</script>");
+                out.println("</span>");
+            } catch (Exception ex) {
+                log.error("Error when trying to like/dislike ", ex);
+            }
+            //response.getWriter().print("like / unlike sent");
         }else if(mode!= null && mode.equals("commentVideo")){//Displays dialog to create a comment
             SWBResourceURL actionURL = paramRequest.getActionUrl();
             actionURL.setParameter("videoId", request.getParameter("videoId"));
@@ -226,6 +303,22 @@ public class YoutubeWall extends GenericResource{
             out.println("</script>");
         }else if(mode.equals("getMoreVideos")){
             doGetMoreVideos(request, response, paramRequest);
+        }else if(mode!=null && mode.equals("displayVideo")){
+            String jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/playVideo.jsp";
+            RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
+            try {
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error("Error in displayVideo() for requestDispatcher" , e);
+            }
+        }else if(mode.equals("showUserProfile")){
+            RequestDispatcher dis = request.getRequestDispatcher(SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/youtubeUserProfile.jsp");
+            try {
+                request.setAttribute("paramRequest", paramRequest);
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error("Error in processRequest() for requestDispatcher" , e);
+            }
         }else{
             super.processRequest(request, response, paramRequest);
         }
@@ -237,6 +330,8 @@ public class YoutubeWall extends GenericResource{
         String startIndex = request.getParameter("startIndex");
         String totalComments = request.getParameter("totalComments");
         String objUri = request.getParameter("suri");
+        SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
+        Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();
         System.out.println("videoId:" +videoId + "--startIndex:" + startIndex  + "--totalComments:" + totalComments);
         
         try{
@@ -298,8 +393,8 @@ public class YoutubeWall extends GenericResource{
                 System.out.println("SE OBTUVIERON :" + commentCounter + " COMENTARIOS");
                 if((Integer.parseInt(startIndex) + commentCounter) < Integer.parseInt(totalComments) ){//Link to get more comments
                     out.print("<li class=\"timelinemore\">");
-                    out.print("<label><a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setMode("getMoreComments").setParameter("videoId", videoId).setParameter("startIndex", (commentCounter + Integer.parseInt(startIndex)) +"").setParameter("totalComments", totalComments+"")
-                            + "','" + videoId +"/comments', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\"><span>+</span>View more comments</a></label>");
+                    out.print("<label><a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setMode("getMoreComments").setParameter("videoId", videoId).setParameter("startIndex", (commentCounter + Integer.parseInt(startIndex)) +"").setParameter("totalComments", totalComments+"").setParameter("suri", objUri)
+                            + "','" + semanticYoutube.getId() + videoId +"/comments', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\"><span>+</span>View more comments</a></label>");
                     out.print("</li>");
                 }
             }
@@ -317,6 +412,9 @@ public class YoutubeWall extends GenericResource{
         
         if(action != null && (action.equals("doLike") || action.equals("doDislike"))){//Do a Like
             System.out.println("Doing a like");
+            response.setRenderParameter("videoId", request.getParameter("videoId"));                                       //Id of original status
+            response.setRenderParameter("suri", request.getParameter("suri"));
+            response.setRenderParameter("action", action);
             doLikeDislike(request);
             response.setMode("likeSent");
         }else if(action != null && action.equals("createCommentVideo")){
@@ -721,7 +819,7 @@ public class YoutubeWall extends GenericResource{
                         //getMoreComments(video.getString("id"), out);
                         out.write("<li class=\"timelinemore\">");
                         out.write("<label><a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setMode("getMoreComments").setParameter("videoId", video.getString("id")).setParameter("startIndex", totalComments + "").setParameter("totalComments",video.getInt("commentCount")+"")
-                                + "','" + video.getString("id") +"/comments', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\"><span>+</span>View more comments</a></label>");
+                                + "','" +semanticYoutube.getId() + video.getString("id") +"/comments', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\"><span>+</span>View more comments</a></label>");
                         out.write("</li>");
                     }
                     out.write("</ul>");
