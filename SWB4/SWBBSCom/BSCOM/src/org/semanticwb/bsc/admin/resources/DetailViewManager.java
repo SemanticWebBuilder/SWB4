@@ -217,8 +217,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                     listCode.append("          </td>\n");
                     listCode.append("          <td align=\"center\">");
                     
-                    if (this.getActiveDetailView() != null
-                            && !this.getActiveDetailView().getURI().equals(view.getURI())) {
+                    if (this.getActiveDetailView() == null || (this.getActiveDetailView() != null
+                            && !this.getActiveDetailView().getURI().equals(view.getURI()))) {
                         //Código HTML para asignación como contenido
                         listCode.append("          <input type=\"radio\" dojoType=\"dijit.form.RadioButton\" ");
                         listCode.append("name=\"asContent\" id=\"asContent");
@@ -227,7 +227,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                         listCode.append(view.getId());
                         listCode.append("\" onclick=\"submitUrl('");
                         listCode.append(urlMakeActive);
-                        listCode.append("', this);return false;\">");
+                        listCode.append("', this.domNode);return false;\">");
                     } else if (this.getActiveDetailView() != null
                             && this.getActiveDetailView().getURI().equals(view.getURI())) {
                         listCode.append("          <input type=\"radio\" dojoType=\"dijit.form.RadioButton\" ");
@@ -237,7 +237,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                         listCode.append(view.getId());
                         listCode.append("\" checked=\"checked\" onclick=\"submitUrl('");
                         listCode.append(urlMakeActive);
-                        listCode.append("', this);return false;\">");
+                        listCode.append("', this.domNode);return false;\">");
                     }
                     listCode.append("          </td>\n");
                     listCode.append("        </tr>\n");
@@ -311,9 +311,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         String statusMsg = request.getParameter("statusMsg");
         String statusErr = request.getParameter("statusErr");
         
-        //SemanticClass semWorkClass = this.getWorkClass().transformToSemanticClass();
-        
-        //Poner validacion de clase a utilizar, debe ser descendiente de BSCElement
         String lang = paramRequest.getUser().getLanguage();
         SWBFormMgr formMgr = null;
         String modeUsed = null;
@@ -353,9 +350,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         output.append(url.toString());
         output.append("\">\n");
         output.append("                <input type=\"hidden\" id=\"urlForProperties\" name=\"urlForProperties\" value=\"" + propertiesUrl + "\">\n");
-//        output.append("                <input type=\"hidden\" name=\"suri\" value=\"");
-//        output.append(suri);
-//        output.append("\">\n");
         if (operation.equals("edit")) {
             output.append("                <input type=\"hidden\" id=\"svUri");
             output.append(this.getId());
@@ -452,22 +446,20 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         output.append("      <script type=\"dojo/method\" event=\"onClick\" args=\"evt\">\n");
         output.append("        var oEditor = FCKeditorAPI.GetInstance('FCKeditorDetailView" + this.getId() + "') ;\n");
         output.append("        document.getElementById('FCKeditorDetailView" + this.getId() + "').value = oEditor.GetData();\n");
-        output.append("        alert(oEditor.FCKPlugins.Items['insertHtmlCode'].urlInsertHtml);");
-        output.append("        //submitForm(\"detailViewForm" + this.getId() + "\");\n");
+        output.append("        submitForm(\"detailViewForm" + this.getId() + "\");\n");
         output.append("        return false;\n");
         output.append("      </script>\n");
         output.append("    </button>\n");
-        //if (operation.equals("edit")) {
-            SWBResourceURL urlCancel = paramRequest.getRenderUrl();
-            urlCancel.setMode("showListing");
-            //urlCancel.setParameter("operation", "add");
-            output.append("    <button dojoType=\"dijit.form.Button\" ");
-            output.append("type=\"button\" onClick=\"reloadTab('");
-            output.append(this.getResource().getURI());
-            output.append("');\">\n");
-            output.append(paramRequest.getLocaleString("lbl_btnCancel"));
-            output.append("    </button>\n");
-        //}
+        
+        SWBResourceURL urlCancel = paramRequest.getRenderUrl();
+        urlCancel.setMode("showListing");
+        output.append("    <button dojoType=\"dijit.form.Button\" ");
+        output.append("type=\"button\" onClick=\"reloadTab('");
+        output.append(this.getResource().getURI());
+        output.append("');\">\n");
+        output.append(paramRequest.getLocaleString("lbl_btnCancel"));
+        output.append("    </button>\n");
+        
         output.append("</fieldset>\n");
         output.append("            </form>\n");
         output.append("        </div>\n");
@@ -525,6 +517,9 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     public void doGetPropertiesInfo(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         
+        response.setContentType("application/json; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
         SemanticClass semWorkClass = this.getWorkClass().transformToSemanticClass();
         Iterator<SemanticProperty> basePropertiesList = semWorkClass.listProperties();
@@ -537,9 +532,9 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                     SemanticProperty prop = basePropertiesList.next();
                     //Se crea una estructura de JSON con los datos de las propiedades de la clase en la variable array
                     JSONObject object = new JSONObject();
-                    object.append("name", prop.getName());
-                    object.append("label", prop.getDisplayName());
-                    object.append("uri", prop.getURI());
+                    object.put("name", prop.getName());
+                    object.put("label", prop.getDisplayName());
+                    object.put("uri", prop.getURI());
                     array.put(object);
                 }
                 structure = array.toString(2);
@@ -637,7 +632,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                     //Almacenar en el archivo asociado el contenido de la configuración
                     viewFilePath = SWBPortal.getWorkPath() + detailView.getWorkPath();
                     try {
-                        System.out.println("Directorio de plantilla: \n" + viewFilePath);
                         File filePath = new File(viewFilePath);
                         if (!filePath.exists()) {
                             filePath.mkdirs();
