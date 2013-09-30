@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social Flicker. 
    */
-public abstract class FlickerBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Photoable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Tagable,org.semanticwb.social.SocialNetPostable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Secreteable,org.semanticwb.social.Listenerable,org.semanticwb.social.Oauthable,org.semanticwb.model.Trashable
+public abstract class FlickerBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Traceable,org.semanticwb.social.Listenerable,org.semanticwb.social.SocialNetPostable,org.semanticwb.model.Tagable,org.semanticwb.social.Oauthable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Secreteable,org.semanticwb.social.Photoable,org.semanticwb.model.Activeable
 {
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social Flicker.
