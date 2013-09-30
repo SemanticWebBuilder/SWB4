@@ -217,7 +217,7 @@ public static String getRequest(Map<String, String> params, String url,
         //DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
         */
         SocialNetwork socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
-        SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());                
+        SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
         String postURI = null;
         org.semanticwb.model.User user = paramRequest.getUser();
         SocialUserExtAttributes socialUserExtAttr = null;
