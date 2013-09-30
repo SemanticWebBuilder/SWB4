@@ -296,10 +296,14 @@ public class DocumentationResource extends GenericAdmResource {
                     } else { // is html
                         String webPath = SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/documentation/styles/";
                         String basePath = SWBPortal.getWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/Resource/" + pe.getTitle() + "/";
+
                         File dest = new File(basePath);
                         if (!dest.exists()) {
                             dest.mkdirs();
                         }
+                        //Create model
+                        createModel(suri, basePath);
+
                         if (pe instanceof org.semanticwb.process.model.Process) {
                             process = (org.semanticwb.process.model.Process) pe;
                             iterator = process.listContaineds();
@@ -308,6 +312,7 @@ public class DocumentationResource extends GenericAdmResource {
                                 GraphicalElement geFiles = itFiles.next();
                                 if (geFiles instanceof SubProcess) {
                                     createHtmlSubProcess(process, ((SubProcess) geFiles), paramRequest, basePath, suri);
+//                                    createModel(suri, basePath);
                                 }
                             }
                             while (iterator.hasNext()) {
@@ -497,7 +502,11 @@ public class DocumentationResource extends GenericAdmResource {
                         String data = process.getData() != null ? process.getData() : paramRequest.getLocaleString("noImage");
 //                        html += "<div id=\"ruta\">" + data + "</div>"; 
                         html += "\n<div id=\"ruta\">\n";
+                        html += "<div class=\"panel panel-default visible-lg\">\n"
+                                + "                    <div class=\"panel-body\">";
                         html += getStyleModel();
+                        html += "</div>\n";
+                        html += "</div>\n";
                         html += "</div>\n";
 
                         /**
@@ -506,6 +515,7 @@ public class DocumentationResource extends GenericAdmResource {
                         html += "<div class=\"panel panel-default\">\n"//Documentation Process
                                 + "   <div class=\"panel-heading\">\n"
                                 + "        <div class=\"panel-title\"><strong>" + paramRequest.getLocaleString("docFromPro") + " " + pe.getTitle() + "</strong></div>\n"
+                                + "<a href=\"Model_" + pe.getTitle() + ".html\" target=\"_blank\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + paramRequest.getLocaleString("viewModel") + "\" class=\"pull-right icon-fullscreen hidden-lg\"></a>"
                                 + "   </div>\n"
                                 + "   <div class=\"panel-body\">\n"
                                 + pe.getDocumentation().getText()
@@ -591,12 +601,116 @@ public class DocumentationResource extends GenericAdmResource {
                         html += "</div>\n";//End wrapper
 
                         html += "<script type=\"text/javascript\">\n";
-                        html += "Modeler.init('modeler', 'view', callbackHandler);\n";
+                        html += "Modeler.init('modeler', {mode: 'view', layerNavigation: false}, callbackHandler);\n"
+                                + "    var zoomFactor = 1.1;\n"
+                                + "    var panRate = 10;\n";
                         html += "function callbackHandler() {\n";
                         html += "var json;\n";
                         html += "json = '" + data + "';\n";
                         html += "Modeler.loadProcess(json);\n";
                         html += "}\n";
+                        html += "Modeler._svgSize = getDiagramSize();\n"
+                                + "        fitToScreen();\n";
+                        html += "\n"
+                                + "\n"
+                                + "    function zoomin() {\n"
+                                + "        var viewBox = document.getElementById(\"modeler\").getAttribute('viewBox');\n"
+                                + "        var viewBoxValues = viewBox.split(' ');\n"
+                                + "\n"
+                                + "        viewBoxValues[2] = parseFloat(viewBoxValues[2]);\n"
+                                + "        viewBoxValues[3] = parseFloat(viewBoxValues[3]);\n"
+                                + "\n"
+                                + "        viewBoxValues[2] /= zoomFactor;\n"
+                                + "        viewBoxValues[3] /= zoomFactor;\n"
+                                + "\n"
+                                + "        document.getElementById(\"modeler\").setAttribute('viewBox', viewBoxValues.join(' '));\n"
+                                + "    }\n"
+                                + "\n"
+                                + "    function zoomout() {\n"
+                                + "        var viewBox = document.getElementById(\"modeler\").getAttribute('viewBox');\n"
+                                + "        var viewBoxValues = viewBox.split(' ');\n"
+                                + "\n"
+                                + "        viewBoxValues[2] = parseFloat(viewBoxValues[2]);\n"
+                                + "        viewBoxValues[3] = parseFloat(viewBoxValues[3]);\n"
+                                + "\n"
+                                + "        viewBoxValues[2] *= zoomFactor;\n"
+                                + "        viewBoxValues[3] *= zoomFactor;\n"
+                                + "\n"
+                                + "        document.getElementById(\"modeler\").setAttribute('viewBox', viewBoxValues.join(' '));\n"
+                                + "    }\n"
+                                + "\n"
+                                + "    function resetZoom() {\n"
+                                + "        var el = document.getElementById(\"modeler\");\n"
+                                + "        el.setAttribute('viewBox', '0 0 ' + $(\"#modeler\").parent().width() + ' ' + $(\"#modeler\").parent().height());\n"
+                                + "        el.setAttribute('width', '1024');\n"
+                                + "        el.setAttribute('height', '768');\n"
+                                + "    }\n"
+                                + "\n"
+                                + "    function handlePanning(code) {\n"
+                                + "        var viewBox = document.getElementById(\"modeler\").getAttribute('viewBox');\n"
+                                + "        var viewBoxValues = viewBox.split(' ');\n"
+                                + "        viewBoxValues[0] = parseFloat(viewBoxValues[0]);\n"
+                                + "        viewBoxValues[1] = parseFloat(viewBoxValues[1]);\n"
+                                + "\n"
+                                + "        switch (code) {\n"
+                                + "            case 'left':\n"
+                                + "                viewBoxValues[0] += panRate;\n"
+                                + "                break;\n"
+                                + "            case 'right':\n"
+                                + "                viewBoxValues[0] -= panRate;\n"
+                                + "                break;\n"
+                                + "            case 'up':\n"
+                                + "                viewBoxValues[1] += panRate;\n"
+                                + "                break;\n"
+                                + "            case 'down':\n"
+                                + "                viewBoxValues[1] -= panRate;\n"
+                                + "                break;\n"
+                                + "        }\n"
+                                + "        document.getElementById(\"modeler\").setAttribute('viewBox', viewBoxValues.join(' '));\n"
+                                + "    }\n"
+                                + "\n"
+                                + "    function getDiagramSize() {\n"
+                                + "        var cw = 0;\n"
+                                + "        var ch = 0;\n"
+                                + "        var fx = null;\n"
+                                + "        var fy = null;\n"
+                                + "        for (var i = 0; i < ToolKit.contents.length; i++) {\n"
+                                + "            var obj = ToolKit.contents[i];\n"
+                                + "            if (obj.typeOf && (obj.typeOf(\"GraphicalElement\") || obj.typeOf(\"Pool\"))) {\n"
+                                + "                if (obj.layer === ToolKit.layer) {\n"
+                                + "                    if (obj.getX() > cw) {\n"
+                                + "                        cw = obj.getX();\n"
+                                + "                        fx = obj;\n"
+                                + "                    }\n"
+                                + "\n"
+                                + "                    if (obj.getY() > ch) {\n"
+                                + "                        ch = obj.getY();\n"
+                                + "                        fy = obj;\n"
+                                + "                    }\n"
+                                + "                }\n"
+                                + "            }\n"
+                                + "        }\n"
+                                + "        cw = cw + fx.getBBox().width;\n"
+                                + "        ch = ch + fy.getBBox().height;\n"
+                                + "\n"
+                                + "        var ret = {w: cw, h: ch};\n"
+                                + "        return ret;\n"
+                                + "    }\n"
+                                + "\n"
+                                + "    function fitToScreen() {\n"
+                                + "        resetZoom();\n"
+                                + "        var ws = $(\"#modeler\").parent().width();\n"
+                                + "        var hs = $(\"#modeler\").parent().height();\n"
+                                + "        var wi = Modeler._svgSize.w;\n"
+                                + "        var hi = Modeler._svgSize.h;\n"
+                                + "\n"
+                                + "        if (wi > ws || hi > hs) {\n"
+                                + "            var el = document.getElementById(\"modeler\");\n"
+                                + "            el.setAttribute('viewBox', '0 0 ' + wi + ' ' + hi);\n"
+                                + "            el.setAttribute('width', ws);\n"
+                                + "            el.setAttribute('height', hs);\n"
+                                + "        }\n"
+                                + "    }";
                         html += "</script>\n";
 
                         File index = new File(basePath + "index.html");
@@ -806,12 +920,23 @@ public class DocumentationResource extends GenericAdmResource {
          * BEGIN IMAGE MODEL
          */
         String data = subProcess.getData() != null ? subProcess.getData() : paramRequest.getLocaleString("noImage");
+        html += "<div id=\"ruta\">";
         html += getStyleModel();
-//        html += "<div id=\"ruta\">" + data + "</div>\n";
+        html += "</div>\n";
         /**
-         * BEGIN IMAGE MODEL
+         * END IMAGE MODEL
          */
-        html += subProcess.getDocumentation().getText();
+        html += "<div class=\"panel panel-default\">\n"//Documentation Process
+                + "   <div class=\"panel-heading\">\n"
+                + "        <div class=\"panel-title\"><strong>" + paramRequest.getLocaleString("docFromSub") + " " + subProcess.getTitle() + "</strong></div>\n"
+                + "<a href=\"Model_" + subProcess.getTitle() + ".html\" target=\"_blank\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + paramRequest.getLocaleString("viewModel") + "\" class=\"pull-right icon-fullscreen hidden-lg\"></a>"
+                + "   </div>\n"
+                + "   <div class=\"panel-body\">\n"
+                + subProcess.getDocumentation().getText()
+                + "   </div>\n"
+                + "</div>";
+
+
         if (activity.size() > 0) {
             html += "<div class=\"panel panel-default\">\n";
             html += "<div id=\"activitymenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + activityT + "</strong></div></div>\n";
@@ -921,8 +1046,199 @@ public class DocumentationResource extends GenericAdmResource {
         rd.include(request, response);
     }
 
+    public static void createModel(String suri, String basePath) throws FileNotFoundException, IOException {
+        System.out.println("entre createModel: " + suri);
+        ProcessElement pe = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
+        String html = "";
+        html += "<script type=\"text/javascript\" src=\"bootstrap/bootstrap.min.js\"></script>\n"//Begin imports
+                + "<link href=\"bootstrap/bootstrap.min.css\" rel=\"stylesheet\">\n"
+                + "<link href=\"fontawesome/css/font-awesome.min.css\" rel=\"stylesheet\">\n"
+                + "<link href=\"taskInbox/css/swbp.css\" rel=\"stylesheet\">\n"
+                + "<script type=\"text/javascript\" src=\"jquery/jquery.min.js\"></script>\n"
+                + "<script type=\"text/javascript\" src=\"modeler/toolkit.js\"></script>\n"
+                + "<script type=\"text/javascript\" src=\"modeler/modeler.js\"></script>\n"
+                + "<link href=\"documentation/style.css\" rel=\"stylesheet\">\n"
+                + "<link href=\"modeler/modelerFrame.css\" rel=\"stylesheet\">"
+                + "<script type=\'text/javascript\'> //Activate tooltips\n"
+                + "    $(document).ready(function() {\n"
+                + "        if ($(\"[data-toggle=tooltip]\").length) {\n"
+                + "            $(\"[data-toggle=tooltip]\").tooltip();\n"
+                + "        }\n"
+                + "        $('body').off('.data-api');"
+                + "    });\n"
+                + "</script>\n"; //End imports
+        html += "<div class=\"panel panel-default\">\n"
+                + "    <div class=\"panel-heading\">\n"
+                + "        <div class=\"panel-title text-center\">\n"
+                + "            <li class=\"icon-cogs\"></li> " + pe.getTitle() + "\n"
+                + "        </div>\n"
+                + "    </div>\n"
+                + "    <div class=\"panel-body text-center\">\n"
+                + "        <ul class=\"list-unstyled list-inline hidden-print visible-lg\">\n"
+                + "            <li>\n"
+                + "                <a href=\"#\" class=\"btn btn-default\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"Zoom in\" onclick=\"zoomin();\n"
+                + "                                return false;\"><i class=\"icon-zoom-in\"></i></a>\n"
+                + "            </li>\n"
+                + "            <li>\n"
+                + "                <a href=\"#\" class=\"btn btn-default\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"Zoom out\" onclick=\"zoomout();\n"
+                + "                                return false;\"><i class=\"icon-zoom-out\"></i></a>\n"
+                + "            </li>\n"
+                + "            <li>\n"
+                + "                <a href=\"#\" class=\"btn btn-default\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"Reset zoom\" onclick=\"fitToScreen();\n"
+                + "                                return false;\"><i class=\"icon-desktop\"></i></a>\n"
+                + "            </li>\n"
+                + "            <li>\n"
+                + "                <a href=\"#\" class=\"btn btn-default\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"Pan left\" onclick=\"handlePanning('left');\n"
+                + "                                return false;\"><i class=\"icon-arrow-left\"></i></a>\n"
+                + "            </li>\n"
+                + "            <li>\n"
+                + "                <a href=\"#\" class=\"btn btn-default\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"Pan down\" onclick=\"handlePanning('down');\n"
+                + "                                return false;\"><i class=\"icon-arrow-down\"></i></a>\n"
+                + "            </li>\n"
+                + "            <li>\n"
+                + "                <a href=\"#\" class=\"btn btn-default\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"Pan up\" onclick=\"handlePanning('up');\n"
+                + "                                return false;\"><i class=\"icon-arrow-up\"></i></a>\n"
+                + "            </li>\n"
+                + "            <li>\n"
+                + "                <a href=\"#\" class=\"btn btn-default\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"Pan right\" onclick=\"handlePanning('right');\n"
+                + "                                return false;\"><i class=\"icon-arrow-right\"></i></a>\n"
+                + "            </li>\n"
+                + "        </ul>\n";
+        html += getStyleModel();
+        html += "       </div>\n"
+                + "</div>";
+        html += "<script type=\"text/javascript\">\n";
+        html += "Modeler.init('modeler', {mode: 'view', layerNavigation: false}, callbackHandler);\n"
+                + "    var zoomFactor = 1.1;\n"
+                + "    var panRate = 10;\n";
+        html += "function callbackHandler() {\n";
+        html += "var json;\n";
+        if (pe instanceof org.semanticwb.process.model.Process) {
+            html += "json = '" + ((org.semanticwb.process.model.Process) pe).getData() + "';\n";
+        }
+        if (pe instanceof org.semanticwb.process.model.SubProcess) {
+            SubProcess sp = (SubProcess) pe;
+            org.semanticwb.process.model.Process process = sp.getProcess();
+            html += "json = '" + process.getData() + "';\n";
+        }
+        html += "Modeler.loadProcess(json);\n";
+        if (pe instanceof org.semanticwb.process.model.SubProcess) {
+            html += "var obj = Modeler.getGraphElementByURI(null, \"" + suri + "\");\n"
+                    + "ToolKit.setLayer(obj.subLayer);";
+        }
+        html += "}\n";
+        html += "Modeler._svgSize = getDiagramSize();\n"
+                + "        fitToScreen();\n";
+        html += "\n"
+                + "\n"
+                + "    function zoomin() {\n"
+                + "        var viewBox = document.getElementById(\"modeler\").getAttribute('viewBox');\n"
+                + "        var viewBoxValues = viewBox.split(' ');\n"
+                + "\n"
+                + "        viewBoxValues[2] = parseFloat(viewBoxValues[2]);\n"
+                + "        viewBoxValues[3] = parseFloat(viewBoxValues[3]);\n"
+                + "\n"
+                + "        viewBoxValues[2] /= zoomFactor;\n"
+                + "        viewBoxValues[3] /= zoomFactor;\n"
+                + "\n"
+                + "        document.getElementById(\"modeler\").setAttribute('viewBox', viewBoxValues.join(' '));\n"
+                + "    }\n"
+                + "\n"
+                + "    function zoomout() {\n"
+                + "        var viewBox = document.getElementById(\"modeler\").getAttribute('viewBox');\n"
+                + "        var viewBoxValues = viewBox.split(' ');\n"
+                + "\n"
+                + "        viewBoxValues[2] = parseFloat(viewBoxValues[2]);\n"
+                + "        viewBoxValues[3] = parseFloat(viewBoxValues[3]);\n"
+                + "\n"
+                + "        viewBoxValues[2] *= zoomFactor;\n"
+                + "        viewBoxValues[3] *= zoomFactor;\n"
+                + "\n"
+                + "        document.getElementById(\"modeler\").setAttribute('viewBox', viewBoxValues.join(' '));\n"
+                + "    }\n"
+                + "\n"
+                + "    function resetZoom() {\n"
+                + "        var el = document.getElementById(\"modeler\");\n"
+                + "        el.setAttribute('viewBox', '0 0 ' + $(\"#modeler\").parent().width() + ' ' + $(\"#modeler\").parent().height());\n"
+                + "        el.setAttribute('width', '1024');\n"
+                + "        el.setAttribute('height', '768');\n"
+                + "    }\n"
+                + "\n"
+                + "    function handlePanning(code) {\n"
+                + "        var viewBox = document.getElementById(\"modeler\").getAttribute('viewBox');\n"
+                + "        var viewBoxValues = viewBox.split(' ');\n"
+                + "        viewBoxValues[0] = parseFloat(viewBoxValues[0]);\n"
+                + "        viewBoxValues[1] = parseFloat(viewBoxValues[1]);\n"
+                + "\n"
+                + "        switch (code) {\n"
+                + "            case 'left':\n"
+                + "                viewBoxValues[0] += panRate;\n"
+                + "                break;\n"
+                + "            case 'right':\n"
+                + "                viewBoxValues[0] -= panRate;\n"
+                + "                break;\n"
+                + "            case 'up':\n"
+                + "                viewBoxValues[1] += panRate;\n"
+                + "                break;\n"
+                + "            case 'down':\n"
+                + "                viewBoxValues[1] -= panRate;\n"
+                + "                break;\n"
+                + "        }\n"
+                + "        document.getElementById(\"modeler\").setAttribute('viewBox', viewBoxValues.join(' '));\n"
+                + "    }\n"
+                + "\n"
+                + "    function getDiagramSize() {\n"
+                + "        var cw = 0;\n"
+                + "        var ch = 0;\n"
+                + "        var fx = null;\n"
+                + "        var fy = null;\n"
+                + "        for (var i = 0; i < ToolKit.contents.length; i++) {\n"
+                + "            var obj = ToolKit.contents[i];\n"
+                + "            if (obj.typeOf && (obj.typeOf(\"GraphicalElement\") || obj.typeOf(\"Pool\"))) {\n"
+                + "                if (obj.layer === ToolKit.layer) {\n"
+                + "                    if (obj.getX() > cw) {\n"
+                + "                        cw = obj.getX();\n"
+                + "                        fx = obj;\n"
+                + "                    }\n"
+                + "\n"
+                + "                    if (obj.getY() > ch) {\n"
+                + "                        ch = obj.getY();\n"
+                + "                        fy = obj;\n"
+                + "                    }\n"
+                + "                }\n"
+                + "            }\n"
+                + "        }\n"
+                + "        cw = cw + fx.getBBox().width;\n"
+                + "        ch = ch + fy.getBBox().height;\n"
+                + "\n"
+                + "        var ret = {w: cw, h: ch};\n"
+                + "        return ret;\n"
+                + "    }\n"
+                + "\n"
+                + "    function fitToScreen() {\n"
+                + "        resetZoom();\n"
+                + "        var ws = $(\"#modeler\").parent().width();\n"
+                + "        var hs = $(\"#modeler\").parent().height();\n"
+                + "        var wi = Modeler._svgSize.w;\n"
+                + "        var hi = Modeler._svgSize.h;\n"
+                + "\n"
+                + "        if (wi > ws || hi > hs) {\n"
+                + "            var el = document.getElementById(\"modeler\");\n"
+                + "            el.setAttribute('viewBox', '0 0 ' + wi + ' ' + hi);\n"
+                + "            el.setAttribute('width', ws);\n"
+                + "            el.setAttribute('height', hs);\n"
+                + "        }\n"
+                + "    }";
+        html += "</script>\n";
+        File index = new File(basePath + "Model_" + pe.getTitle() + ".html");
+        FileOutputStream out = new FileOutputStream(index);
+        out.write(html.getBytes());
+        out.flush();
+        out.close();
+    }
+
     public static String getStyleModel() {
-        String style = "<svg id=\"modeler\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"100\" height=\"100\" class=\"modeler\">\n"
+        String style = "<svg id=\"modeler\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"100\" height=\"100\" viewBox=\"0 0 1200 800\" class=\"modeler\">\n"
                 + "                <style type=\"text/css\"><![CDATA[\n"
                 + "                    /*.resizeBox {\n"
                 + "                        stroke:#008000;\n"
