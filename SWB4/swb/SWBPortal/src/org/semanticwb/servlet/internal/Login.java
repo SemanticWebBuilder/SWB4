@@ -947,7 +947,7 @@ public class Login implements InternalServlet
                 if (null!=pass){
                     byte[] buid = SWBUtils.CryptoWrapper.PBEAES128Cipher(pass, uid.getBytes());
                     Cookie cookie = new Cookie("swb."+id, SWBUtils.TEXT.encodeBase64(new String(buid)));
-                    cookie.setPath(SWBPortal.getContextPath());
+                    cookie.setPath(SWBPortal.getContextPath()+"/");
                     cookie.setMaxAge(60 * 60 * 24 * 365);
                     String name = "Set-Cookie";
                     cookie.setVersion(1);
