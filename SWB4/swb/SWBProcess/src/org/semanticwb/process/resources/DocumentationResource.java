@@ -1047,7 +1047,7 @@ public class DocumentationResource extends GenericAdmResource {
     }
 
     public static void createModel(String suri, String basePath) throws FileNotFoundException, IOException {
-        System.out.println("entre createModel: " + suri);
+//        System.out.println("entre createModel: " + suri);
         ProcessElement pe = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
         String html = "";
         html += "<script type=\"text/javascript\" src=\"bootstrap/bootstrap.min.js\"></script>\n"//Begin imports
