@@ -419,24 +419,27 @@ public class SWBUserMgr
     }
 
     private void checkCookie(final HttpServletRequest request, final SWBSessionUser session, final UserRepository urep) {
-        String id = "swb."+urep.getId();
-        for (Cookie current: request.getCookies())
-        {
-            if (id.equals(current.getName())){
-                try {
-                    String value = SWBUtils.TEXT.decodeBase64(current.getValue());
-                    SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(SWBPlatform.getSemanticMgr().SWBAdminURI + "/PrivateKey");
-                    //System.out.println("sp:"+sp);
-                    String pass = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(sp);
-                    byte[] buid = SWBUtils.CryptoWrapper.PBEAES128Decipher(pass, value.getBytes());
-                    //System.out.println("uid: "+ new String(buid));
-                    String sbuid = new String(buid);
-                    String uid = sbuid.substring(sbuid.lastIndexOf(':')+1);
-                    User user = urep.getUser(uid);
-                    if (null!=user) {
-                        session.updateUser(user);
+        String id = "swb." + urep.getId();
+        if (null != request.getCookies()) {
+            for (Cookie current : request.getCookies()) {
+                if (id.equals(current.getName())) {
+                    try {
+                        String value = SWBUtils.TEXT.decodeBase64(current.getValue());
+                        SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(SWBPlatform.getSemanticMgr().SWBAdminURI + "/PrivateKey");
+                        //System.out.println("sp:"+sp);
+                        String pass = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(sp);
+                        byte[] buid = SWBUtils.CryptoWrapper.PBEAES128Decipher(pass, value.getBytes());
+                        //System.out.println("uid: "+ new String(buid));
+                        String sbuid = new String(buid);
+                        String uid = sbuid.substring(sbuid.lastIndexOf(':') + 1);
+                        User user = urep.getUser(uid);
+                        if (null != user) {
+                            session.updateUser(user);
+                        }
+                    } catch (GeneralSecurityException gse) {
+                        log.error("checkCookie:", gse);
                     }
-                } catch (GeneralSecurityException gse) { log.error("checkCookie:", gse);}
+                }
             }
         }
     }
