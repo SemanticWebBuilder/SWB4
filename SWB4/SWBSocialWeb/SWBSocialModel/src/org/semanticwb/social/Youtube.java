@@ -559,7 +559,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             out.println("<script type=\"text/javascript\">");
             out.println(" function ioauth() {");
             //out.println("  mywin = window.open('https://accounts.google.com/o/oauth2/auth?client_id=" + clientId + "&redirect_uri=" + uriTemp + "&response_type=code&scope=https://gdata.youtube.com&access_type=offline','_blank','width=840,height=680',true);");
-            out.println("  mywin = window.open('https://accounts.google.com/o/oauth2/auth?client_id=" + clientId + "&redirect_uri=" + uriTemp + "&response_type=code&scope=https://gdata.youtube.com+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile&access_type=offline&state=/profile','_blank','width=840,height=680',true);");
+            out.println("  mywin = window.open('https://accounts.google.com/o/oauth2/auth?client_id=" + clientId + "&redirect_uri=" + uriTemp + "&response_type=code&scope=https://gdata.youtube.com+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile&access_type=offline&state=/profile&approval_prompt=force','_blank','width=840,height=680',true);");
             out.println("  mywin.focus();");
             out.println(" }");
             out.println(" if(confirm('¿Autenticar la cuenta en YouTube?')) {");
