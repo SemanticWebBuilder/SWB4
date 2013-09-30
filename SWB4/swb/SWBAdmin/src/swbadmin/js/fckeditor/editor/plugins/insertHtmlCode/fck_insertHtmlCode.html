@@ -44,7 +44,7 @@ window.onload = function() {
             }
         }
     }
-    var urlToRequest = oEditor.FCKPlugins.Items['insertHtmlCode'].urlInsertHtml;
+    var urlToRequest = oEditor.FCK.LinkedField.form["urlForProperties"].value;
     xmlhttp.open("GET", urlToRequest, true);
     xmlhttp.send();
     /*
