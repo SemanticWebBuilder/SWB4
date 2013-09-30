@@ -7,6 +7,9 @@ public abstract class LifeStageBase extends org.semanticwb.model.SWBClass implem
    * Edad Maxima considerada para la etapa de la vida especificada
    */
     public static final org.semanticwb.platform.SemanticProperty social_ls_maxAge=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#ls_maxAge");
+   /**
+   * Minima edad que debe de cumplir un usuario para estar en una determinada etapa de la vida
+   */
     public static final org.semanticwb.platform.SemanticProperty social_ls_minAge=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#ls_minAge");
     public static final org.semanticwb.platform.SemanticClass social_LifeStage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#LifeStage");
    /**
