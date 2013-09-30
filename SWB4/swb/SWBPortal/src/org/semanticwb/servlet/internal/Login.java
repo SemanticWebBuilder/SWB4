@@ -947,7 +947,7 @@ public class Login implements InternalServlet
                 if (null!=pass){
                     byte[] buid = SWBUtils.CryptoWrapper.PBEAES128Cipher(pass, uid.getBytes());
                     Cookie cookie = new Cookie("swb."+id, SWBUtils.TEXT.encodeBase64(new String(buid)));
-                    cookie.setPath("/");
+                    cookie.setPath(SWBPortal.getContextPath());
                     cookie.setMaxAge(60 * 60 * 24 * 365);
                     String name = "Set-Cookie";
                     cookie.setVersion(1);
@@ -968,14 +968,14 @@ public class Login implements InternalServlet
         buf.append ('"');
         buf.append (cookie.getValue());
         buf.append ('"');
-        buf.append (";Version=1");
-        buf.append (";Max-Age=");
+        buf.append ("; Version=1");
+        buf.append ("; Max-Age=");
         buf.append (cookie.getMaxAge());
-        buf.append (";Path=");
-        buf.append ('"');
+        buf.append ("; Path=");
+        //buf.append ('"');
         buf.append (cookie.getPath());
-        buf.append ('"');
-        buf.append (";HttpOnly");
+        //buf.append ('"');
+        buf.append ("; HttpOnly");
         return buf.toString();
     }
 
