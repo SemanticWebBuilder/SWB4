@@ -323,10 +323,17 @@ public class YoutubeWall extends GenericResource{
             String jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/youtubeEditVideo.jsp";
             RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
             try {
+                request.setAttribute("paramRequest", paramRequest);
                 dis.include(request, response);
+
             } catch (Exception e) {
                 log.error("Error in editVideo() for requestDispatcher" , e);
             }
+        }else if(mode != null && mode.equals("videoUpdated")){
+            out.println("<script type=\"javascript\">");
+            out.println("   hideDialog(); ");
+            out.println("   showStatus('Video actualizado correctamente');");
+            out.println("</script>");
         }else{
             super.processRequest(request, response, paramRequest);
         }
@@ -553,8 +560,80 @@ public class YoutubeWall extends GenericResource{
                 }
             }
             response.setMode("reAssignedPost");
+        }else if(action.equals("doUpdateVideo")){
+            doUpdateVideo(request);
+            response.setMode("videoUpdated");
         }
     }
+    
+    private void doUpdateVideo(HttpServletRequest request) {
+        String videoId = request.getParameter("videoId");
+        String objUri = request.getParameter("suri");
+        String title = request.getParameter("title");
+        String description = request.getParameter("description");
+        String category = request.getParameter("category");
+        String keywords = request.getParameter("keywords");
+        
+        if((videoId == null || videoId.trim().isEmpty()) || (title == null || title.trim().isEmpty()) ||
+                (objUri == null || objUri.trim().isEmpty()) || (description == null || description.trim().isEmpty())
+                || (category == null || category.trim().isEmpty()) || (keywords == null || keywords.trim().isEmpty())){
+            log.error("Problem updating video information");
+            return;
+        }
+        
+        SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
+        Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();
+        if(!semanticYoutube.validateToken()){
+            log.error("Unable to update the access token inside update Video!");
+            return;
+        }
+        
+        String urlVideo = "http://gdata.youtube.com/feeds/api/users/default/uploads/" + videoId;
+        URL url;
+        HttpURLConnection conn = null;
+        try {
+            url = new URL(urlVideo);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setRequestMethod("PUT");
+            conn.setUseCaches(false);
+            conn.setRequestProperty("Host", "gdata.youtube.com");
+            conn.setRequestProperty("Content-Type", "application/atom+xml");
+            conn.setRequestProperty("Authorization", "Bearer " + semanticYoutube.getAccessToken());
+            conn.setRequestProperty("GData-Version", "2");
+            conn.setRequestProperty("X-GData-Key", "key=" + semanticYoutube.getDeveloperKey());
+
+            DataOutputStream writer = new DataOutputStream(conn.getOutputStream());                        
+            String xml = "<?xml version=\"1.0\"?> \n\r"
+                + "<entry xmlns=\"http://www.w3.org/2005/Atom\" \n\r"
+                + "xmlns:media=\"http://search.yahoo.com/mrss/\" \n\r"
+                + "xmlns:yt=\"http://gdata.youtube.com/schemas/2007\"> \n\r"
+                + "<media:group> \n\r"
+                + "<media:title type=\"plain\">" + title + "</media:title> \n\r"
+                + "<media:description type=\"plain\">" + description + "</media:description> \n\r"
+                + "<media:category scheme=\"http://gdata.youtube.com/schemas/2007/categories.cat\">" + category + "</media:category> \n\r"
+                + "<media:keywords>" + keywords + "</media:keywords> \n\r"
+                + "</media:group> \n\r"
+                + "<yt:accessControl action=\"comment\" permission=\"allowed\"/> \n\r"
+                + "<yt:accessControl action=\"commentVote\" permission=\"allowed\"/> \n\r"
+                + "<yt:accessControl action=\"rate\" permission=\"allowed\"/> \n\r"
+                + "<yt:accessControl action=\"list\" permission=\"allowed\"/> \n\r"
+                + "<yt:accessControl action=\"embed\" permission=\"allowed\"/> \n\r"
+                + "<yt:accessControl action=\"syndicate\" permission=\"allowed\"/> \n\r"
+                + "</entry>\n\r";
+            writer.write(xml.getBytes("UTF-8"));
+            writer.flush();
+            writer.close();                        
+            BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String docxml = readerl.readLine();
+
+        }catch(Exception ex){
+            System.out.println("ERROR" + ex.toString());
+            ex.printStackTrace();
+        }
+    }
+    
     private void doLikeDislike(HttpServletRequest request) {
         String action = request.getParameter("action");
         String videoId = request.getParameter("videoId");
