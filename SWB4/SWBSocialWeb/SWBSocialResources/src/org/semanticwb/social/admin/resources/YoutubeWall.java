@@ -167,7 +167,7 @@ public class YoutubeWall extends GenericResource{
                     if(nNode.getNodeName().equals("published")){
                         System.out.println("published:" + nNode.getTextContent());
                         Date date = formatter.parse(nNode.getTextContent());
-                        out.print("<em>" + humanFriendlyDate(date) + "</em>");
+                        out.write("<em>" + humanFriendlyDate(date) + "</em>");
                     }else if(nNode.getNodeName().equals("yt:statistics")){                        
                         out.println("Views:" + nNode.getAttributes().getNamedItem("viewCount").getTextContent() + " ");
                         System.out.println(nNode.getAttributes().getNamedItem("viewCount").getTextContent());
@@ -177,13 +177,13 @@ public class YoutubeWall extends GenericResource{
                         System.out.println(nNode.getAttributes().getNamedItem("numDislikes").getTextContent());
                         System.out.println(nNode.getAttributes().getNamedItem("numLikes").getTextContent());
                         
-                        out.print(" <strong><span> Likes: </span>");
-                        out.print(nNode.getAttributes().getNamedItem("numLikes").getTextContent() + " ");
+                        out.write(" <strong><span> Likes: </span>");
+                        out.write(nNode.getAttributes().getNamedItem("numLikes").getTextContent() + " ");
                         
-                        out.print(" Dislikes: ");
+                        out.write(" Dislikes: ");
                         out.println(nNode.getAttributes().getNamedItem("numDislikes").getTextContent() + " ");
                         out.println(" Favorites: " +  favCount);
-                        out.print("</strong>");
+                        out.write("</strong>");
                     }
                 }                
 
@@ -285,7 +285,7 @@ public class YoutubeWall extends GenericResource{
             SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
             Youtube semYoutube = (Youtube) semanticObject.createGenericInstance();
             
-            String url= "<a href=\"#\" title=\"" + "Reclasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','Reclasificar tweet'); return false;\">Reclasificar</a>";
+            String url= "<a href=\"#\" title=\"" + "Reclasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','Reclasificar video'); return false;\">Reclasificar</a>";
             out.println("<span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
             out.println("<script type=\"dojo/method\">");
             out.println("   hideDialog(); ");            
@@ -318,6 +318,14 @@ public class YoutubeWall extends GenericResource{
                 dis.include(request, response);
             } catch (Exception e) {
                 log.error("Error in processRequest() for requestDispatcher" , e);
+            }
+        }else if(mode!=null && mode.equals("editVideo")){
+            String jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/youtubeEditVideo.jsp";
+            RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
+            try {
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error("Error in editVideo() for requestDispatcher" , e);
             }
         }else{
             super.processRequest(request, response, paramRequest);
@@ -368,34 +376,34 @@ public class YoutubeWall extends GenericResource{
                             usrCommentProfile = new JSONObject(commentProfile);
                         }
                     }
-                    out.print("<li>");
-                    out.print("<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + "#" + "','" + "source" + "'); return false;\"><img src=\"" + usrCommentProfile.getJSONObject("entry").getJSONObject("media$thumbnail").getString("url") + "\" width=\"50\" height=\"50\"/></a>");
+                    out.write("<li>");
+                    out.write("<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("id", comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t")) + "','" + "Ver perfil" + "'); return false;\"><img src=\"" + usrCommentProfile.getJSONObject("entry").getJSONObject("media$thumbnail").getString("url") + "\" width=\"50\" height=\"50\"/></a>");
 
-                    out.print("<p>");
-                    out.print("<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + "/work/models/SWBAdmin/jsp/socialNetworks/youtubeUserProfile.jsp?suri=null&id=" + comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t") + "','" + "Ver perfil" + "'); return false;\">" + comment.getJSONArray("author").getJSONObject(0).getJSONObject("name").getString("$t") + "</a>:");                            
-                    out.print(       comment.getJSONObject("content").getString("$t").replace("\n", "</br>"));
-                    out.print("</p>");
+                    out.write("<p>");
+                    out.write("<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("id", comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t")) + "','" + "Ver perfil" + "'); return false;\">" + comment.getJSONArray("author").getJSONObject(0).getJSONObject("name").getString("$t") + "</a>:");
+                    out.write(       comment.getJSONObject("content").getString("$t").replace("\n", "</br>"));
+                    out.write("</p>");
 
                     //Date commentTime = formatter.parse(comments.getJSONObject(k).getString("created_time"));
 
-                    out.print("<p class=\"timelinedate\">");
-                    out.print("<span dojoType=\"dojox.layout.ContentPane\">");
+                    out.write("<p class=\"timelinedate\">");
+                    out.write("<span dojoType=\"dojox.layout.ContentPane\">");
                     Date date = formatter.parse(comment.getJSONObject("published").getString("$t"));
-                    out.print("<em>" + humanFriendlyDate(date) +  "</em>");
-                    out.print("</span>");
+                    out.write("<em>" + humanFriendlyDate(date) +  "</em>");
+                    out.write("</span>");
                     String comentarioId = comment.getJSONObject("id").getString("$t");
-                    out.print("   <span class=\"inline\">");
-                    out.print(" <a href=\"\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("commentComment").setParameter("suri", objUri).setParameter("videoId",videoId).setParameter("commentId", comentarioId.substring(comentarioId.indexOf("comment") + 8)) + "','Comment to " + comment.getJSONObject("content").getString("$t").replace("\n", "</br>") + "');return false;\">Comment</a>");
-                    out.print("   </span>");
-                    out.print("</p>");
-                    out.print("</li>");
+                    out.write("   <span class=\"inline\">");
+                    out.write(" <a href=\"\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("commentComment").setParameter("suri", objUri).setParameter("videoId",videoId).setParameter("commentId", comentarioId.substring(comentarioId.indexOf("comment") + 8)) + "','Comment to " + comment.getJSONObject("content").getString("$t").replace("\n", "</br>") + "');return false;\">Comment</a>");
+                    out.write("   </span>");
+                    out.write("</p>");
+                    out.write("</li>");
                 }
                 System.out.println("SE OBTUVIERON :" + commentCounter + " COMENTARIOS");
                 if((Integer.parseInt(startIndex) + commentCounter) < Integer.parseInt(totalComments) ){//Link to get more comments
-                    out.print("<li class=\"timelinemore\">");
-                    out.print("<label><a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setMode("getMoreComments").setParameter("videoId", videoId).setParameter("startIndex", (commentCounter + Integer.parseInt(startIndex)) +"").setParameter("totalComments", totalComments+"").setParameter("suri", objUri)
+                    out.write("<li class=\"timelinemore\">");
+                    out.write("<label><a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setMode("getMoreComments").setParameter("videoId", videoId).setParameter("startIndex", (commentCounter + Integer.parseInt(startIndex)) +"").setParameter("totalComments", totalComments+"").setParameter("suri", objUri)
                             + "','" + semanticYoutube.getId() + videoId +"/comments', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\"><span>+</span>View more comments</a></label>");
-                    out.print("</li>");
+                    out.write("</li>");
                 }
             }
         }catch(Exception e){
@@ -591,7 +599,7 @@ public class YoutubeWall extends GenericResource{
             writer.close();                        
             BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String docxml = readerl.readLine();
-            System.out.print("--Ejecuted Like/disLike:" + docxml);
+            System.out.println("--Ejecuted Like/disLike:" + docxml);
         }catch(Exception ex){
             System.out.println("ERROR" + ex.toString());
             ex.printStackTrace();
@@ -643,7 +651,7 @@ public class YoutubeWall extends GenericResource{
             writer.close();                        
             BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String docxml = readerl.readLine();
-            System.out.print("--docxml en post Comment----" + docxml);               
+            System.out.println("--docxml en post Comment----" + docxml);               
         }catch(Exception ex){
             System.out.println("ERROR" + ex.toString());
             ex.printStackTrace();
@@ -701,7 +709,7 @@ public class YoutubeWall extends GenericResource{
             writer.close();
             BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String docxml = readerl.readLine();
-            System.out.print("--docxml en post Comment----" + docxml);
+            System.out.println("--docxml en post Comment----" + docxml);
         } catch (Exception ex) {
             System.out.println("ERROR" + ex.toString());
             ex.printStackTrace();
@@ -729,180 +737,171 @@ public class YoutubeWall extends GenericResource{
         Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();        
         try{
             out.write("<div class=\"timeline timelinefacebook\">");
-            //Username and story
-            out.write("<p>");
-            out.write(video.getString("title"));
-            out.write("</p>");
+                //Username and story
+                out.write("<p>");
+                out.write(video.getString("title"));
+                out.write("</p>");
 
-            out.write("<div class=\"timelineembed\">");
-            out.write(" <span>");
-            out.write("  <embed src=" + "http://www.youtube.com/v/" + video.getString("id") + " width=\"250\" height=\"195\" autostart=\"false\" type=\"application/x-shockwave-flash\">");
-            out.write(" </span>");
-
-            out.write("<p class=\"imgtitle\">");
-            out.write(  video.getString("title"));
-            out.write("</p>");
-
-            out.write("<p class =\"imgdesc\">");
-            out.write( video.isNull("description") ?  "&nbsp;" : video.getString("description"));
-            out.write("</p>");
-            out.write("</div>");//End First section
-
-
-            out.write("<div class=\"clear\"></div>");//Clear
-
-            //Comments,start
-            String ytComments = "";
-            System.out.println("COMMENT COUNT:" + video.getInt("commentCount"));
-            if(!video.isNull("commentCount") && video.getInt("commentCount")>0){
-                //System.out.println("URL for comments:" );
-                ytComments= getRequest(paramsComments, "https://gdata.youtube.com/feeds/api/videos/" + video.getString("id") + "/comments",
-                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", null);
-                //System.out.println("ytComments:" + ytComments);
-                JSONObject jsonComments = new JSONObject(ytComments);
-                JSONArray arrayComments = null;
-                if(!jsonComments.isNull("feed")){
-                    if(!jsonComments.getJSONObject("feed").isNull("entry")){
-                        arrayComments = jsonComments.getJSONObject("feed").getJSONArray("entry");
+                out.write("<div class=\"timelineimg\">");
+                out.write(" <span>");
+                String imgPath = "";
+                if(video.has("thumbnail")){
+                    if(video.getJSONObject("thumbnail").has("hqDefault")){
+                        imgPath = video.getJSONObject("thumbnail").getString("hqDefault");
+                    }else if(video.getJSONObject("thumbnail").has("sqDefault")){
+                        imgPath = video.getJSONObject("thumbnail").getString("sqDefault");
                     }
-                } 
-                if(arrayComments == null || arrayComments.length() == 0){
-                    System.out.println("NO TRAJO NADA!!!");
-                }else{
-                    System.out.println("SI TRAJO ALGO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 }
-                if(arrayComments != null && arrayComments.length() > 0){
-                    //out.write("<span id=\"" + video.getString("id") + "/comments\" dojoType=\"dijit.layout.ContentPane\">");
-                    out.write("<ul id=\"" + video.getString("id") + "/comments\">");
-                    int totalComments = 0;
-                    for(int c = 0; c < arrayComments.length(); c++){
-                        totalComments++;
-                        JSONObject comment = arrayComments.getJSONObject(c);
-                        JSONObject usrCommentProfile = null;
-                        if(!comment.isNull("author")){
-                            if(!comment.getJSONArray("author").getJSONObject(0).isNull("yt$userId")){
-                                String commentProfile = getRequest(paramsUsr, "http://gdata.youtube.com/feeds/api/users/" + comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t"),
-                                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", null);
-                                usrCommentProfile = new JSONObject(commentProfile);
 
-                            }
+                out.write("      <span id=\"img" + semanticYoutube.getId() + video.getString("id") + "\" style=\"width: 250px; height: 250px; border: thick #666666; overflow: hidden; position: relative;\">");
+                    out.write("      <a href=\"#\" onclick=\"showDialog('"+ paramRequest.getRenderUrl().setMode("displayVideo").setParameter("videoUrl", URLEncoder.encode("http://www.youtube.com/v/" +video.getString("id"), "UTF-8")) +
+                            "','" + video.getString("title") + "'); return false;\"><img src=\"" + imgPath + "\" style=\"position: relative;\" onerror=\"this.src ='" + imgPath + "'\" onload=\"imageLoad(" + "this, 'img" + semanticYoutube.getId() + video.getString("id") + "');\"/></a>");
+                    out.write("      </span>");
+                out.write(" </span>");
+                
+                out.write("<p class=\"imgtitle\">");
+                out.write(  video.getString("title"));
+                out.write("</p>");
+                
+                out.write("<p class =\"imgdesc\">");
+                out.write( video.isNull("description") ?  "&nbsp;" : video.getString("description"));
+                out.write("</p>");
+                out.write("</div>");//End First section
+                
+                
+                out.write("<div class=\"clear\"></div>");//Clear
+                
+                //Comments,start
+                String ytComments = "";
+                if(!video.isNull("commentCount") && video.getInt("commentCount")>0){
+                    System.out.println("URL for comments:" );
+                    ytComments= getRequest(paramsComments, "https://gdata.youtube.com/feeds/api/videos/" + video.getString("id") + "/comments",
+                        "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", null);
+                    JSONObject jsonComments = new JSONObject(ytComments);
+                    JSONArray arrayComments = null;
+                    if(!jsonComments.isNull("feed")){
+                        if(!jsonComments.getJSONObject("feed").isNull("entry")){
+                            arrayComments = jsonComments.getJSONObject("feed").getJSONArray("entry");
                         }
-                        out.write("<li>");
-                        out.write("<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + "#" + "','" + "source" + "'); return false;\"><img src=\"" + usrCommentProfile.getJSONObject("entry").getJSONObject("media$thumbnail").getString("url") + "\" width=\"50\" height=\"50\"/></a>");
+                    }                    
+                    if(arrayComments != null && arrayComments.length() > 0){
+                        //out.write("<span id=\"" + video.getString("id") + "/comments\" dojoType=\"dijit.layout.ContentPane\">");
+                        out.write("<ul id=\"" + semanticYoutube.getId() + video.getString("id") + "/comments\">");
+                        int totalComments = 0;
+                        for(int c = 0; c < arrayComments.length(); c++){                            
+                            totalComments++;
+                            JSONObject comment = arrayComments.getJSONObject(c);
+                            JSONObject usrCommentProfile = null;
+                            if(!comment.isNull("author")){
+                                if(!comment.getJSONArray("author").getJSONObject(0).isNull("yt$userId")){
+                                    String commentProfile = getRequest(paramsUsr, "http://gdata.youtube.com/feeds/api/users/" + comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t"),
+                                        "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", null);
+                                    usrCommentProfile = new JSONObject(commentProfile);
+                                    
+                                }
+                            }
+                            out.write("<li>");
+                            out.write("<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("id", comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t")) + "','" + "Ver perfil" + "'); return false;\"><img src=\"" + usrCommentProfile.getJSONObject("entry").getJSONObject("media$thumbnail").getString("url") + "\" width=\"50\" height=\"50\"/></a>");
 
-                        out.write("<p>");
-                        out.write("<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + "/work/models/SWBAdmin/jsp/socialNetworks/youtubeUserProfile.jsp?suri=null&id=" + comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t") + "','" + "Ver perfil" + "'); return false;\">" + comment.getJSONArray("author").getJSONObject(0).getJSONObject("name").getString("$t") + "</a>:");                            
-                        out.write(       comment.getJSONObject("content").getString("$t").replace("\n", "</br>"));
-                        out.write("</p>");
+                            out.write("<p>");
+                            out.write("<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("id", comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t")) + "','" + "Ver perfil" + "'); return false;\">" + comment.getJSONArray("author").getJSONObject(0).getJSONObject("name").getString("$t") + "</a>:");
+                            out.write(       comment.getJSONObject("content").getString("$t").replace("\n", "</br>"));
+                            out.write("</p>");
 
-                        //Date commentTime = formatter.parse(comments.getJSONObject(k).getString("created_time"));
+                            out.write("<p class=\"timelinedate\">");
+                            out.write("<span dojoType=\"dojox.layout.ContentPane\">");
 
-                        out.write("<p class=\"timelinedate\">");
-                        out.write("<span dojoType=\"dojox.layout.ContentPane\">");
-
-                        out.write("<em>" + "creado el: " + comment.getJSONObject("published").getString("$t") +  "</em>");                            
-                        out.write("</span>");
-                        out.write("</p>");
-
-
-                        //Comment  
-
+                            Date date = formatter.parse(comment.getJSONObject("published").getString("$t"));
+                            out.write("<em>" + humanFriendlyDate(date) +  "</em>");
+                            out.write("</span>");
                             String comentarioId = comment.getJSONObject("id").getString("$t");
-                            out.write("   <span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
-                            out.write(" <a href=\"\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("commentComment").setParameter("suri", objUri).setParameter("videoId", video.getString("id")).setParameter("commentId", comentarioId.substring(comentarioId.indexOf("comment") + 8)) + "','Comment to " + comment.getJSONObject("content").getString("$t").replace("\n", "</br>") + "');return false;\"><span>Comment</span></a>  ");
+                            out.write("   <span class=\"inline\">");
+                            out.write(" <a href=\"\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("commentComment").setParameter("suri", objUri).setParameter("videoId", video.getString("id")).setParameter("commentId", comentarioId.substring(comentarioId.indexOf("comment") + 8)) + "','Comment to " + comment.getJSONObject("content").getString("$t").replace("\n", "</br>") + "');return false;\">Comment</a>");
                             out.write("   </span>");
-
-                        out.write("</li>");
+                            out.write("</p>");
+                            out.write("</li>");
+                        }
+                        if(!video.isNull("commentCount") && video.getInt("commentCount") > DEFAULT_VIDEO_COMMENTS && totalComments == DEFAULT_VIDEO_COMMENTS){//Link to get more comments
+                            //getMoreComments(video.getString("id"), out);
+                            out.write("<li class=\"timelinemore\">");
+                            out.write("<label><a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setMode("getMoreComments").setParameter("videoId", video.getString("id")).setParameter("startIndex", totalComments + "").setParameter("totalComments",video.getInt("commentCount")+"").setParameter("suri", objUri)
+                                    + "','" + semanticYoutube.getId() + video.getString("id") +"/comments', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild( this.parentNode.parentNode );}catch(noe){}; return false;\"><span>+</span>View more comments</a></label>");
+                            out.write("</li>");
+                        }
+                        out.write("</ul>");
                     }
-                    //out.println("COMENTARIOS:"  +video.getInt("commentCount"));
-                    if(!video.isNull("commentCount") && video.getInt("commentCount") > DEFAULT_VIDEO_COMMENTS && totalComments == DEFAULT_VIDEO_COMMENTS){//Link to get more comments
-                        //getMoreComments(video.getString("id"), out);
-                        out.write("<li class=\"timelinemore\">");
-                        out.write("<label><a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setMode("getMoreComments").setParameter("videoId", video.getString("id")).setParameter("startIndex", totalComments + "").setParameter("totalComments",video.getInt("commentCount")+"")
-                                + "','" +semanticYoutube.getId() + video.getString("id") +"/comments', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\"><span>+</span>View more comments</a></label>");
-                        out.write("</li>");
+                }
+                //Comments
+
+                out.write("<div class=\"timelineresume\" dojoType=\"dijit.layout.ContentPane\">");//timelineresume
+                out.write("<span id=\"" + semanticYoutube.getId() + video.getString("id") + INFORMATION + "\" class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
+                Date date = formatter.parse(video.getString("uploaded"));
+                out.write("<em>" + humanFriendlyDate(date) + "</em>");
+                
+                
+                if(video.has("viewCount")){
+                    out.write("Views:" + video.getInt("viewCount") + " ");
+                }
+                out.write(" <strong><span> Likes: </span>");
+                if(video.has("likeCount")){
+                    out.write(video.getInt("likeCount") +" ");           
+                }else{
+                    out.write("0 ");
+                }
+                
+                out.write(" Dislikes: ");
+                if(video.has("likeCount") && video.has("ratingCount")){
+                    out.write(video.getInt("ratingCount") - video.getInt("likeCount") + " ");
+                }else{
+                    out.write("0 ");
+                }
+                
+                if(video.has("favoriteCount")){
+                    out.write(" Favorites: " + video.getInt("favoriteCount"));
+                }
+                
+                out.write("</strong>");
+                out.write("</span>");
+                
+                out.write("   <span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
+                    out.write(" <a href=\"\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("commentVideo").setParameter("suri", objUri).setParameter("videoId", video.getString("id")) + "','Comment to " + video.getString("title") + "');return false;\"><span>Comment</span></a>  ");                    
+                out.write("   </span>");
+
+                postURI = null;
+                PostIn post = PostIn.getPostInbySocialMsgId(model, video.getString("id"));
+                if(post != null){
+                    postURI = post.getURI();
+                }
+                
+                out.write("   <span class=\"inline\" id=\"" + semanticYoutube.getId() + video.getString("id") + TOPIC  + "\" dojoType=\"dojox.layout.ContentPane\">");
+                if(socialUserExtAttr != null && socialUserExtAttr.isUserCanReTopicMsg()){
+                    if(postURI != null){//If post already exists
+                        SWBResourceURL clasifybyTopic = paramRequest.getRenderUrl().setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("videoId", video.getString("id")).setParameter("postUri", postURI).setParameter("suri", objUri);
+                        out.write("<a href=\"#\" title=\"" + "Reclasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                            + "Reclasificar video'); return false;\"><span>Reclasificar</span></a>");
+                    }else{//If posts does not exists 
+                        SWBResourceURL clasifybyTopic = paramRequest.getRenderUrl().setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", video.getString("id")).setParameter("postUri", postURI).setParameter("suri", objUri);
+                        out.write("<a href=\"#\" title=\"" + "Clasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                            + "Clasificar video'); return false;\"><span>Clasificar</span></a>");
                     }
-                    out.write("</ul>");
+                }else{
+                    out.write("&nbsp;");
                 }
-            }
-            //Comments
-
-            out.write("<div class=\"timelineresume\" dojoType=\"dijit.layout.ContentPane\">");//timelineresume
-            out.write("<span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
-            out.write("<em>" + video.getString("uploaded") + "</em>");                
-            if(video.has("viewCount")){
-                out.write("Views:" + video.getInt("viewCount"));
-            }
-            out.write("<strong><span> Likes: </span>");
-            if(video.has("likeCount")){
-                out.write(video.getInt("likeCount"));           
-            }else{
-                out.write("0");
-            }
-
-            out.write(" Dislikes: ");
-            if(video.has("likeCount") && video.has("ratingCount")){
-                out.write(video.getInt("ratingCount") - video.getInt("likeCount"));
-            }else{
-                out.write("0");
-            }
-
-            if(video.has("favoriteCount")){
-                out.write(" Favorites: " + video.getInt("favoriteCount") + "</br>");
-            }
-
-            out.write("</strong>");
-            out.write("</span>");
-
-            out.write("   <span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
-                out.write(" <a href=\"\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("commentVideo").setParameter("suri", objUri).setParameter("videoId", video.getString("id")) + "','Comment to " + video.getString("title") + "');return false;\"><span>Comment</span></a>  ");                    
-            out.write("   </span>");
-
-            postURI = null;
-            PostIn post = PostIn.getPostInbySocialMsgId(model, video.getString("id"));
-            if(post != null){
-                postURI = post.getURI();
-            }
-
-            out.write("   <span class=\"inline\" id=\"" + semanticYoutube.getId() + video.getString("id") + TOPIC  + "\" dojoType=\"dojox.layout.ContentPane\">");
-            if(socialUserExtAttr != null && socialUserExtAttr.isUserCanReTopicMsg()){
-                if(postURI != null){//If post already exists
-                    SWBResourceURL clasifybyTopic = paramRequest.getRenderUrl().setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("videoId", video.getString("id")).setParameter("postUri", postURI).setParameter("suri", objUri);
-                    out.write("<a href=\"#\" title=\"" + "Reclasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
-                        + "Reclasificar video'); return false;\"><span>Reclasificar</span></a>");
-                }else{//If posts does not exists 
-                    SWBResourceURL clasifybyTopic = paramRequest.getRenderUrl().setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", video.getString("id")).setParameter("postUri", postURI).setParameter("suri", objUri);
-                    out.write("<a href=\"#\" title=\"" + "Clasificar" + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
-                        + "Clasificar video'); return false;\"><span>Clasificar</span></a>");
-                }
-            }else{
-                out.write("&nbsp;");
-            }
-            out.write("   </span>");
-
-
-
-
-            System.out.println("VIDEOID:" + video.getString("id"));
-            out.write("   <span id=\"" + video.getString("id") +  "/like\" class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
-                //out.write(" <a href=\"\" onclick=\"showDialog('" + "#" + "','Reply to " + "USERNAME" + "');return false;\"><span>Like</span></a>  ");
-                //out.write("<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("doLike").setParameter("suri", objUri).setParameter("action", "like").setParameter("videoId", video.getString("id")) + "','" + "DoLike" + "'); return false;\">" + comment.getJSONArray("author").getJSONObject(0).getJSONObject("name").getString("$t") + "</a>:");
-            out.write("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + paramRequest.getActionUrl().setAction("doLike").setParameter("suri", objUri).setParameter("action", "like").setParameter("videoId", video.getString("id")) + "','" + video.getString("id") +  "/like'); return false;\">Like</a>");
-            out.write("   </span>");
-
-            out.write("   <span id=\"" + video.getString("id") +  "/dislike\" class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
-            out.write("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + paramRequest.getActionUrl().setAction("doDislike").setParameter("suri", objUri).setParameter("action", "dislike").setParameter("videoId", video.getString("id")) + "','" + video.getString("id") + "/dislike'); return false;\">Dislike</a>");
-            out.write("   </span>");
-
-            out.write("</div>");//timelineresume
-            ///////out.write("ytComments:" +ytComments + "\n\n");
-            //out.println("Uploader: <a href=\"#\" onclick=\"showDialog('" + "/work/models/SWBAdmin/jsp/socialNetworks/youtubeUserProfile.jsp" + "','Ver Perfil'); return false;\">" + video.getString("uploader") + "</a></br>");
-
-            if(video.has("rating")){
-                //out.println("Rating:" + video.getDouble("rating") + "</br>");
-            }                
-            //out.println("</br></br>");
-            out.write("</div>");
+                out.write("   </span>");
+                
+                
+                out.write("   <span id=\"" + semanticYoutube.getId() + video.getString("id") +  LIKE + "\" class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
+                out.write("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + paramRequest.getActionUrl().setAction("doLike").setParameter("suri", objUri).setParameter("action", "like").setParameter("videoId", video.getString("id")) + "','" + semanticYoutube.getId() +  video.getString("id") + INFORMATION + "'); return false;\">Like</a>");
+                out.write("   </span>");
+                
+                out.write("   <span id=\"" + semanticYoutube.getId() + video.getString("id") +  "/edit" + "\" class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
+                SWBResourceURL editVideo = paramRequest.getRenderUrl().setMode("editVideo").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("videoId", video.getString("id")).setParameter("suri", objUri);
+                out.write("<a href=\"#\" title=\"" + "Clasificar" + "\" onclick=\"showDialog('" + editVideo + "','"
+                    + "Editar video'); return false;\"><span>Editar</span></a>");
+                out.write("   </span>");
+                
+                out.write("</div>");//timelineresume
+                out.write("</div>");
         }catch(Exception e){
             log.error("Problema imprimiendo video ", e);
         }
@@ -910,7 +909,7 @@ public class YoutubeWall extends GenericResource{
      }
      
     public static String getRequest(Map<String, String> params, String url,
-            String userAgent, String token) throws IOException {
+            String userAgent, String accessToken) throws IOException {
         
         CharSequence paramString = (null == params) ? "" : delimit(params.entrySet(), "&", "=", true);
         URL serverUrl = new URL(url + "?" +  paramString);       
@@ -926,8 +925,8 @@ public class YoutubeWall extends GenericResource{
                 conex.setRequestProperty("user-agent", userAgent);                
             }
             ///Validate if i am looking for the default user or another
-            if(token != null){
-                conex.setRequestProperty("Authorization", "Bearer " + "ya29.AHES6ZQJgECzLX3Y5hbAkVMn7qCupPdOJ6RR9d4tO0pEhUziVlAdFwKL4A");
+            if(accessToken != null){
+                conex.setRequestProperty("Authorization", "Bearer " + accessToken);
             }
             ///
             conex.setConnectTimeout(30000);
@@ -1021,11 +1020,9 @@ public class YoutubeWall extends GenericResource{
                 System.out.println("Videos recibidos:" + totalVideos);
 
                 if(totalVideos + Integer.parseInt(maxVideoId) < videosInChannel){
-                    out.print("<div id=\"" + objUri + "/getMoreVideos\" dojoType=\"dojox.layout.ContentPane\">");
-                    out.print("<label id=\"" + objUri + "/moreVideosLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setMode("getMoreVideos").setParameter("maxVideoId", (totalVideos + Integer.parseInt(maxVideoId))+"").setParameter("suri", objUri) + "','" + objUri + "/getMoreVideos', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">More Videos</a></label>");
-                    out.print("</div>");
-
-
+                    out.write("<div align=\"center\">");
+                    out.write("<label id=\"" + objUri + "/moreVideosLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setMode("getMoreVideos").setParameter("maxVideoId", (totalVideos + Integer.parseInt(maxVideoId))+"").setParameter("suri", objUri) + "','" + objUri + "/getMoreVideos', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild( this.parentNode.parentNode );}catch(noe){}; return false;\">More Videos</a></label>");
+                    out.write("</div>");
                 }
             }
         }catch(Exception e){
