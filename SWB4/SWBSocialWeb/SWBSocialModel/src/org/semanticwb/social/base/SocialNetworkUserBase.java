@@ -7,6 +7,10 @@ package org.semanticwb.social.base;
 public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable
 {
    /**
+   * Genero registrado en el red social para el usuario. 1=Hombre; 2=Mujer; 3=Indefinido.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_snu_gender=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_gender");
+   /**
    * Cantidad de seguidores que tiene el usuario que es almacenado en c/instancia de esta clase (en su propiedad id)
    */
     public static final org.semanticwb.platform.SemanticProperty social_followers=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#followers");
@@ -14,6 +18,15 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
    * Número de usuarios a los que yo sigo (así se maneja en twitter), en facebook aqui pondría a mis amigos y la de followers (que son los que me siguen) según yo no la utilizaría (en facebook)
    */
     public static final org.semanticwb.platform.SemanticProperty social_friends=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#friends");
+   /**
+   * Educación definida del usuario en la red social.   1=Primaria; 2=Secundaria; 3=Preparatoria; 4=Universidad; 5=PostGrado;
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_snu_education=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_education");
+    public static final org.semanticwb.platform.SemanticClass social_LifeStage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#LifeStage");
+   /**
+   * Etapa de vida del usuario de la red social
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_snu_LifeStage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_LifeStage");
    /**
    * Localización del usuario que se encuentra en el profile de la red social específica. Ej. Tampico, Tamaulipas.
    */
@@ -23,9 +36,17 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
    */
     public static final org.semanticwb.platform.SemanticProperty social_snu_id=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_id");
    /**
+   * Relación sentimental del usuario en la red social. 1=Soltero; 2=Unión Libre; 3=Casado; 4=Divordiado; 5=Viudo;
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_snu_relationShipStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_relationShipStatus");
+   /**
    * Nombre del usuario en la Red Social
    */
     public static final org.semanticwb.platform.SemanticProperty social_snu_name=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_name");
+   /**
+   * Email registrado para el usuario en la red social
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_snu_email=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_email");
    /**
    * Url de la foto del usuario. La foto nunca se va ha guardar en SWBSocial, solo se guarda la url de la misma en el servidor de la red social.
    */
@@ -149,6 +170,29 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
             return it;
         }
        /**
+       * Gets all org.semanticwb.social.SocialNetworkUser with a determined Snu_LifeStage
+       * @param value Snu_LifeStage of the type org.semanticwb.social.LifeStage
+       * @param model Model of the org.semanticwb.social.SocialNetworkUser
+       * @return Iterator with all the org.semanticwb.social.SocialNetworkUser
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SocialNetworkUser> listSocialNetworkUserBySnu_LifeStage(org.semanticwb.social.LifeStage value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetworkUser> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_snu_LifeStage, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SocialNetworkUser with a determined Snu_LifeStage
+       * @param value Snu_LifeStage of the type org.semanticwb.social.LifeStage
+       * @return Iterator with all the org.semanticwb.social.SocialNetworkUser
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SocialNetworkUser> listSocialNetworkUserBySnu_LifeStage(org.semanticwb.social.LifeStage value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetworkUser> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_snu_LifeStage,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.social.SocialNetworkUser with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.social.SocialNetworkUser
@@ -208,6 +252,24 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
     public SocialNetworkUserBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the Snu_gender property
+* @return int with the Snu_gender
+*/
+    public int getSnu_gender()
+    {
+        return getSemanticObject().getIntProperty(social_snu_gender);
+    }
+
+/**
+* Sets the Snu_gender property
+* @param value long with the Snu_gender
+*/
+    public void setSnu_gender(int value)
+    {
+        getSemanticObject().setIntProperty(social_snu_gender, value);
     }
    /**
    * Sets the value for the property ModifiedBy
@@ -321,6 +383,62 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
     }
 
 /**
+* Gets the Snu_education property
+* @return int with the Snu_education
+*/
+    public int getSnu_education()
+    {
+        return getSemanticObject().getIntProperty(social_snu_education);
+    }
+
+/**
+* Sets the Snu_education property
+* @param value long with the Snu_education
+*/
+    public void setSnu_education(int value)
+    {
+        getSemanticObject().setIntProperty(social_snu_education, value);
+    }
+   /**
+   * Sets the value for the property Snu_LifeStage
+   * @param value Snu_LifeStage to set
+   */
+
+    public void setSnu_LifeStage(org.semanticwb.social.LifeStage value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(social_snu_LifeStage, value.getSemanticObject());
+        }else
+        {
+            removeSnu_LifeStage();
+        }
+    }
+   /**
+   * Remove the value for Snu_LifeStage property
+   */
+
+    public void removeSnu_LifeStage()
+    {
+        getSemanticObject().removeProperty(social_snu_LifeStage);
+    }
+
+   /**
+   * Gets the Snu_LifeStage
+   * @return a org.semanticwb.social.LifeStage
+   */
+    public org.semanticwb.social.LifeStage getSnu_LifeStage()
+    {
+         org.semanticwb.social.LifeStage ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_snu_LifeStage);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.LifeStage)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
 * Gets the Snu_profileGeoLocation property
 * @return String with the Snu_profileGeoLocation
 */
@@ -354,6 +472,24 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
     public void setSnu_id(String value)
     {
         getSemanticObject().setProperty(social_snu_id, value);
+    }
+
+/**
+* Gets the Snu_relationShipStatus property
+* @return int with the Snu_relationShipStatus
+*/
+    public int getSnu_relationShipStatus()
+    {
+        return getSemanticObject().getIntProperty(social_snu_relationShipStatus);
+    }
+
+/**
+* Sets the Snu_relationShipStatus property
+* @param value long with the Snu_relationShipStatus
+*/
+    public void setSnu_relationShipStatus(int value)
+    {
+        getSemanticObject().setIntProperty(social_snu_relationShipStatus, value);
     }
    /**
    * Sets the value for the property Creator
@@ -410,6 +546,24 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
     public void setSnu_name(String value)
     {
         getSemanticObject().setProperty(social_snu_name, value);
+    }
+
+/**
+* Gets the Snu_email property
+* @return String with the Snu_email
+*/
+    public String getSnu_email()
+    {
+        return getSemanticObject().getProperty(social_snu_email);
+    }
+
+/**
+* Sets the Snu_email property
+* @param value long with the Snu_email
+*/
+    public void setSnu_email(String value)
+    {
+        getSemanticObject().setProperty(social_snu_email, value);
     }
 
 /**
