@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que sera creada cuando un post sea de tipo Foto (una imagen), como lo es flicker y facebook (cuando se envia una foto a facebook). 
    */
-public abstract class PhotoBase extends org.semanticwb.social.PostOut implements org.semanticwb.model.Traceable,org.semanticwb.model.CalendarRefable,org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.model.Referensable,org.semanticwb.social.PostImageable
+public abstract class PhotoBase extends org.semanticwb.social.PostOut implements org.semanticwb.social.PostImageable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.Tagable,org.semanticwb.model.CalendarRefable
 {
    /**
    * Clase que sera creada cuando un post sea de tipo Foto (una imagen), como lo es flicker y facebook (cuando se envia una foto a facebook).

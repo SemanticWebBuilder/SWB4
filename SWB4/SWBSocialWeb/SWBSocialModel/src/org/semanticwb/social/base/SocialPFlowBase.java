@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Un Flujo de Publicación es una serie de autorizaciones por las que pasa un contenido antes de publicarse en un Sitio Web 
    */
-public abstract class SocialPFlowBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.XMLable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
+public abstract class SocialPFlowBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Referencia a un objeto de tipo PFlow
