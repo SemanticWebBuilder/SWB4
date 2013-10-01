@@ -1330,8 +1330,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                         userInfo.put("followers", 0);
                     }
 
+                    
                     if (parseUsrInf.has("current_location") && !parseUsrInf.isNull("current_location")) {
                         JSONObject location = parseUsrInf.getJSONObject("current_location");
+                        /*
                         //Latitude
                         if (location.has("latitude") && !location.isNull("latitude")) {
                             userInfo.put("latitude", location.getDouble("latitude"));
@@ -1348,11 +1350,13 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                 userInfo.put("country_code", "US");
                             }
                         }
+                        * */
                         //Name of the place
                         if (location.has("name") && !location.isNull("name")) {
                             userInfo.put("place_name", location.getString("name"));
                         }
                     }
+                    
 
                     //Gender
                     if (parseUsrInf.has("sex") && !parseUsrInf.isNull("sex")) {
@@ -1401,6 +1405,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     }
 
                     //work
+                    /*
                     JSONArray jArrayWork = null;
                     if (parseUsrInf.has("work") && !parseUsrInf.isNull("work")) {
                         jArrayWork = parseUsrInf.getJSONArray("work");
@@ -1408,7 +1413,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     } else {
                         jArrayWork = new JSONArray();
                         userInfo.put("work", jArrayWork);
-                    }
+                    }*/
                 }
                 //if(parseUsrInf.has(id))
             } catch (JSONException jsone) {
