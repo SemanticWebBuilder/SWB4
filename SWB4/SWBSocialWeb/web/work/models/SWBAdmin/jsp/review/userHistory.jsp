@@ -22,6 +22,8 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
 <%
+    String suri=(String)request.getAttribute("suri");
+    if(suri==null) return; 
     org.semanticwb.model.User user = paramRequest.getUser();
     if (request.getAttribute("swbSocialUser") == null) {
         return;
@@ -65,16 +67,41 @@
         <p><strong><%=socialNetUser.getSnu_klout()%></strong> Klout</p>
         <p>   
             <%
+                long cont=0;
+                SemanticObject semObjTab=SemanticObject.getSemanticObject(suri);
+                if(semObjTab.getGenericInstance() instanceof Stream) 
+                {
+                    Stream stream=(Stream)semObjTab.getGenericInstance();
+                    Iterator<PostIn> itPostIns = socialNetUser.listPostInInvs();
+                    while(itPostIns.hasNext())
+                    {
+                        PostIn postIn=itPostIns.next();
+                        if(postIn.getPostInStream().getURI().equals(stream.getURI()))
+                        {
+                            cont++; 
+                        }
+                    }                    
+                }else if(semObjTab.getGenericInstance() instanceof SocialTopic) 
+                {
+                    SocialTopic socialTopic=(SocialTopic)semObjTab.getGenericInstance();
+                    Iterator<PostIn> itPostIns = socialNetUser.listPostInInvs();
+                    while(itPostIns.hasNext())
+                    {
+                        PostIn postIn=itPostIns.next();
+                        if(postIn.getSocialTopic().getURI().equals(socialTopic.getURI()))
+                        {
+                            cont++; 
+                        }
+                    }                    
+                }
                 SWBResourceURL url = paramRequest.getRenderUrl();
                 url.setMode(SWBResourceURL.Action_EDIT);
                 url.setParameter("swbSocialUser", socialNetUser.getId());
                 url.setParameter("dialog", "close");
                 url.setParameter("suri", (String) request.getAttribute("suri"));
                 url.setParameter("reloadTap", "true");
-                Iterator<PostIn> itPostIns = socialNetUser.listPostInInvs();
-                long sizeItPostIns = SWBUtils.Collections.sizeOf(itPostIns);
             %>
-            <strong><a href="#" onclick="submitUrl('<%=url.setParameter("swbSocialUser", socialNetUser.getId())%>',this); return false;"><%=sizeItPostIns%></a></strong>  Mensajes de entrada
+            <strong><a href="#" onclick="submitUrl('<%=url.setParameter("swbSocialUser", socialNetUser.getId())%>',this); return false;"><%=cont%></a></strong>  Mensajes de entrada
         </p>
         <div class="clear"></div>
     </div>
