@@ -45,18 +45,9 @@
 
     SocialNetworkUser socialNetworkUser = postIn.getPostInSocialNetworkUser();
     String userPhoto = socialNetworkUser.getSnu_photoUrl(); //Sacar la foto de la redSocial;
-    SocialNetwork sn = postIn.getPostInSocialNetwork();
-    if(sn instanceof org.semanticwb.social.Twitter){
-        if(userPhoto == null){
-            userPhoto = "/swbadmin/css/images/profileDefImg.jpg";
-        }
-    }else if(sn instanceof org.semanticwb.social.Facebook){
-        userPhoto = "http://graph.facebook.com/" + socialNetworkUser.getSnu_id() + "/picture?width=150&height=150";
-    }else if(sn instanceof org.semanticwb.social.Youtube){
+    if(userPhoto == null || userPhoto.isEmpty()){
         userPhoto = "/swbadmin/css/images/profileDefImg.jpg";
-    }else{
-        userPhoto = "/swbadmin/css/images/profileDefImg.jpg";
-    }
+    }    
 %>
 
 
