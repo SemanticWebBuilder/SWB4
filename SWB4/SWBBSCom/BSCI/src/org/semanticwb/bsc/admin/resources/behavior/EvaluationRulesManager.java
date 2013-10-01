@@ -93,144 +93,11 @@ System.out.println("showStatus");
         if(SWBResourceURL.Action_EDIT.equalsIgnoreCase(action)) {
             
         }
-//        doEdit(request, response, paramRequest);
-        doXML(request, response, paramRequest);
+        doEdit(request, response, paramRequest);
     }
 
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/html,UTF-8");
-        
-        User user = paramRequest.getUser();
-        if(user==null || !user.isSigned())
-        {
-            response.sendError(403);
-            return;
-        }
-         
-        final String suri=request.getParameter("suri");
-        if(suri==null) {
-            response.getWriter().println("No se detect&oacute ning&uacute;n objeto sem&aacute;ntico!");
-            return;
-        }
-        StringBuilder htm = new StringBuilder();
-        String lang = user.getLanguage();
-        
-        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-        SemanticObject obj = ont.getSemanticObject(suri);
-        //BSC bsc = (BSC) semanticObj.getModel().getModelObject().createGenericInstance();
-        Series series = (Series)obj.createGenericInstance();
-        Indicator indicator = series.getIndicator();
-        BSC bsc = series.getIndicator().getObjective().getTheme().getPerspective().getBSC();
-        
-        // obtener la lista de operaciones
-        List<Operation> operations = SWBUtils.Collections.filterIterator(Operation.ClassMgr.listOperations(bsc),
-                                                        new GenericFilterRule<Operation>(){
-                                                            @Override
-                                                            public boolean filter(Operation o) {
-                                                                User user = SWBContext.getSessionUser();
-                                                                return !o.isValid() || !user.haveAccess(o);
-                                                            } 
-                                                        });
-                
-        // obtener la lista de series para contraparte
-        List<Series> siblingSerieses = indicator.listValidSerieses();
-        siblingSerieses.remove(series);
-        
-        // crear el hashset
-        HashSet<State> configuredStates = new HashSet<State>();
-        
-        // agregar el formulario de cada una de las reglas de la serie
-        PrintWriter out = response.getWriter();
-        out.println("<script type=\"text/javascript\">");
-        out.println("  dojo.require('dojo.parser');");
-        out.println("  dojo.require('dijit.layout.ContentPane');");
-        out.println("  dojo.require('dijit.form.Form');");
-        out.println("  dojo.require('dijit.form.CheckBox');");
-        out.println("</script>");
-        SWBResourceURL url = paramRequest.getActionUrl();
-        out.println("<form method=\"post\" id=\"rulessetup\" action=\""+url+"\" class=\"swbform\" type=\"dijit.form.Form\" onsubmit=\"submitForm('rulessetup');return false;\">");
-        out.println(" <table width=\"50%\" border=\"1\">");
-        Iterator<EvaluationRule> rules = series.lisValidEvaluationRules().iterator();
-        while(rules.hasNext()) {
-            EvaluationRule rule = rules.next();
-            out.println("  <tr>");
-            out.println("   <td width=\"5%\"><input type=\"checkbox\" name=\"rc1\" value=\""+rule.getId()+"\" checked=\"checked\" /></td>");
-            out.println("   <td width=\"15%\">"+(rule.getAppraisal().getTitle(lang)==null?rule.getAppraisal().getTitle():rule.getAppraisal().getTitle(lang))+"<input name=\"rc2\" type=\"hidden\" value=\""+rule.getAppraisal().getId()+"\" /></td>");
-            
-            out.println("   <td width=\"15%\">");
-            out.println("    <select name=\"rc3\">");
-            out.println("     <option value=\"\"></option>");
-            for(Operation o:operations) {
-                out.println("     <option value=\""+o.getId()+"\"");
-                out.println(o.getId().equals(rule.getOperationId())?" selected=\"selected\"":"");
-                out.println("      >"+o.getTitle()+"</option>");
-            }            
-            out.println("    </select>");
-            out.println("    </td>");
-            
-            out.println("   <td width=\"25%\">");
-            out.println("    <select name=\"rc4\">");
-            out.println("     <option value=\"\"></option>");
-            for(Series s:siblingSerieses) {
-                out.println("     <option value=\""+s.getId()+"\"");
-                out.println(s.equals(rule.getAnotherSeries())?" selected=\"selected\"":"");
-                out.println("      >"+(s.getTitle(lang)==null?s.getTitle():s.getTitle(lang))+"</option>");
-            }
-            out.println("    </select>");
-            out.println("   </td>");
-            
-            out.println("   <td width=\"40%\"><input name=\"rc5\" type=\"text\" value=\""+(rule.getFactor()==null?"":rule.getFactor())+"\" /></td>");
-            out.println("  </tr>");
-            configuredStates.add(rule.getAppraisal());
-        }
-        
-        List<State> validSates = indicator.listValidStates();
-        for(State state:validSates) {
-            if( configuredStates.add(state) ) {
-                out.println("  <tr>");
-                out.println("   <td width=\"5%\"><input type=\"checkbox\" name=\"rc1\" value=\"1\" /></td>");
-                out.println("   <td width=\"15%\">"+(state.getTitle(lang)==null?state.getTitle():state.getTitle(lang))+"<input name=\"rc2\" type=\"hidden\" value=\""+state.getId()+"\" /></td>");
-
-                out.println("   <td width=\"15%\">");
-                out.println("    <select name=\"rc3\">");
-                out.println("     <option value=\"\"></option>");
-                for(Operation o:operations) {
-                    out.println("     <option value=\""+o.getId()+"\">"+o.getTitle()+"</option>");
-                }            
-                out.println("    </select>");
-                out.println("    </td>");
-
-                out.println("   <td width=\"25%\">");
-                out.println("    <select name=\"rc4\">");
-                out.println("     <option value=\"\"></option>");
-                for(Series s:siblingSerieses) {
-                    out.println("     <option value=\""+s.getId()+"\">"+(s.getTitle(lang)==null?s.getTitle():s.getTitle(lang))+"</option>");
-                }
-                out.println("    </select>");
-                out.println("   </td>");
-
-                out.println("   <td width=\"40%\"><input name=\"rc5\" type=\"text\" value=\"\" /></td>");
-                out.println("  </tr>");
-            }
-        }
-        out.println(" </table>");
-        if(!operations.isEmpty() && !siblingSerieses.isEmpty()) {
-            out.println(" <input type=\"submit\" value=\"Guardar\" />");
-        }
-        out.println("</form>");
-        
-        if(request.getParameter("statusMsg")!=null) {
-            out.println("<div dojoType=\"dojox.layout.ContentPane\">");
-            out.println("<script type=\"dojo/method\">");
-            out.println("showStatus('" + request.getParameter("statusMsg") + "');\n");
-            out.println("</script>\n");
-            out.println("</div>");
-        }
-    }
-
-    @Override
-    public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -494,6 +361,18 @@ System.out.println("regla impropia para estado="+state);
         
     }
     
+    private boolean validateFactor(String factor) {
+        Pattern pattern;
+        String regexp = getResourceBase().getAttribute("defaultFormatPattern", Default_FORMAT_PATTERN);
+        try{
+            pattern = Pattern.compile(regexp);
+        }catch(PatternSyntaxException pse) {
+            pattern = Pattern.compile(Default_FORMAT_PATTERN);
+        }            
+        Matcher matcher = pattern.matcher(factor);
+        return matcher.matches();
+    }
+    
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         final String action = response.getAction();
@@ -578,42 +457,31 @@ System.out.println("b");
             String factor = request.getParameter("fctr")==null?"":request.getParameter("fctr");
             EvaluationRule rule;
             
-            Pattern pattern;
-            String regexp = getResourceBase().getAttribute("defaultFormatPattern", Default_FORMAT_PATTERN);
-            try{
-                pattern = Pattern.compile(regexp);
-System.out.println("1");
-            }catch(PatternSyntaxException pse) {
-                pattern = Pattern.compile(Default_FORMAT_PATTERN);
-System.out.println("2");
-            }            
-            Matcher matcher = pattern.matcher(factor);
-System.out.println("3");
-            if(matcher.matches()) {
-System.out.println("4");
+//            Pattern pattern;
+//            String regexp = getResourceBase().getAttribute("defaultFormatPattern", Default_FORMAT_PATTERN);
+//            try{
+//                pattern = Pattern.compile(regexp);
+//            }catch(PatternSyntaxException pse) {
+//                pattern = Pattern.compile(Default_FORMAT_PATTERN);
+//            }            
+//            Matcher matcher = pattern.matcher(factor);
+//            if(matcher.matches()) {
+            if(validateFactor(factor)) {
                 if(objRule==null) {
-System.out.println("5");
                     rule = EvaluationRule.ClassMgr.createEvaluationRule(model);
                     rule.setTitle(rule.getId());
                     rule.setTitle(rule.getId(), user.getLanguage());
                     if(State.ClassMgr.hasState(request.getParameter("stateId"), SWBContext.getAdminWebSite())) {
-System.out.println("6");
                         State state = State.ClassMgr.getState(request.getParameter("stateId"), SWBContext.getAdminWebSite());
                         rule.setAppraisal(state);
                     }
                     series.addEvaluationRule(rule);
-System.out.println("7");
                 }else {
-System.out.println("8");
                     rule = (EvaluationRule)objRule.getGenericInstance();
-System.out.println("9");
                 }
-System.out.println("10");
                 rule.setFactor(factor);
-System.out.println("11");
                 response.setRenderParameter("statmsg", response.getLocaleString("msgUpdtFactorOk"));
             }else {
-System.out.println("12");
                 response.setRenderParameter("statmsg", response.getLocaleString("msgFactorBadFormat"));
             }
         }
