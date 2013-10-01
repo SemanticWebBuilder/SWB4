@@ -15,9 +15,8 @@
 <%@page import="org.semanticwb.social.util.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%
-    System.out.println("entro a show");
+   
     String suri = request.getParameter("suri");
-    System.out.println("suri en showgraphbar" + suri);
     if (suri == null) {
         return;
     }
@@ -25,7 +24,7 @@
     if (semObj == null) {
         return;
     }
-    System.out.println("semObj" + semObj);
+    
     String args = "?objUri=" + semObj.getEncodedURI();
     String selectedAnio = request.getParameter("selectedAnio");
     String selectAnio = request.getParameter("selectAnio");
@@ -34,31 +33,9 @@
     args += "&selectAnio=" + selectAnio;
     args += "&selectMes=" + selectMes;
 
-
-    System.out.println("jspselectedAnio " + selectedAnio);
-    System.out.println("jsp selectAnio2 " + selectAnio);
-    System.out.println(" jsp selectMes" + selectMes);
-
-
-    String anioSelected = "";
-    ArrayList listMeses = new ArrayList();
-    listMeses.add("Enero");
-    listMeses.add("Febrero");
-    listMeses.add("Marzo");
-    listMeses.add("Abril");
-    listMeses.add("Mayo");
-    listMeses.add("Junio");
-    listMeses.add("Julio");
-    Iterator iMeses = listMeses.iterator();
-
-    ArrayList listAnio = new ArrayList();
-    listAnio.add("2013");
-    listAnio.add("2012");
-
-    Iterator iAnio = listAnio.iterator();
+ 
     SWBResourceURL url = paramRequest.getRenderUrl();
-    System.out.println("url" + url);
-
+   
 %>
 
 
