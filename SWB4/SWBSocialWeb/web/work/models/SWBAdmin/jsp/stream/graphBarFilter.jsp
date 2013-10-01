@@ -21,7 +21,7 @@
     if (suri == null) {
         return;
     }
-    
+
     SemanticObject semObj = SemanticObject.getSemanticObject(suri);
     if (semObj == null) {
         return;
@@ -31,7 +31,6 @@
     args += "&lang=" + lang;
 
 
-    String anioSelected = "";
     ArrayList listMeses = new ArrayList();
     listMeses.add("Enero");
     listMeses.add("Febrero");
@@ -56,23 +55,13 @@
 
 %>
 <html>
-    <head>
-       <script type="text/javascript" id="appends">
-    appendHtmlAt = function(url, tagid, location){
-   
-    }
-</script>
-    </head>
-    
     <body>
-
         <div class="pub-redes">
             <p class="titulo">Seleccione:</p> 
 
-
             <%
                 if (selected.equals("1")) {
-                    
+
             %>
             <div id="graphBardivd" >
                 <form name="formgraphBarAnio" id="formgraphBarAnio" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data" action="">
@@ -89,13 +78,13 @@
                         </select>
                         </tr>
                         <tr>
-                        <input type="button" value="Mostrar" onclick="javascript:appendHtmlAt();postHtml('<%=urlRender.setMode("showGraphBar")%>?selectedAnio='+escape(document.formgraphBarAnio.selectAnio[document.formgraphBarAnio.selectAnio.selectedIndex].value)+'&suri=<%=URLEncoder.encode(suri)%>', 'showgraphBar');">
+                        <input type="button" value="Mostrar" onclick="javascript:valid('1');postHtml('<%=urlRender.setMode("showGraphBar")%>?selectedAnio='+escape(document.formgraphBarAnio.selectAnio[document.formgraphBarAnio.selectAnio.selectedIndex].value)+'&suri=<%=URLEncoder.encode(suri)%>', 'showgraphBar');">
                         </tr>
                     </table>
                 </form>
             </div>
         </div>
-                        
+
         <%
         } else if (selected.equals("2")) {
         %>           
@@ -133,7 +122,7 @@
                         </td>
                         <td></td>
                         <td>
-                            <input type="button" value="Mostrar" onclick="javascript:postHtml('<%=urlRender.setMode("showGraphBar")%>?selectAnio='+escape(document.createPost.selectAnio2[document.createPost.selectAnio2.selectedIndex].value)+'&suri=<%=URLEncoder.encode(suri)%>&selectMes='+escape(document.createPost.selectMes[document.createPost.selectMes.selectedIndex].value) +'', 'showgraphBar');">
+                            <input type="button" value="Mostrar" onclick="javascript:valid('2');postHtml('<%=urlRender.setMode("showGraphBar")%>?selectAnio='+escape(document.createPost.selectAnio2[document.createPost.selectAnio2.selectedIndex].value)+'&suri=<%=URLEncoder.encode(suri)%>&selectMes='+escape(document.createPost.selectMes[document.createPost.selectMes.selectedIndex].value) +'', 'showgraphBar');">
                         </td>
                     </tr>
                 </table>
