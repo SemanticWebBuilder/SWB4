@@ -1299,7 +1299,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     @Override
     public JSONObject getUserInfobyId(String userId) {
         HashMap<String, String> params = new HashMap<String, String>(2);
-        params.put("q", "SELECT friend_count, subscriber_count, current_location FROM user WHERE uid = " + userId);
+        params.put("q", "SELECT friend_count, subscriber_count, current_location, sex, relationship_status, birthday_date, email, education, work  FROM user WHERE uid = " + userId);
         params.put("access_token", this.getAccessToken());
 
         JSONObject userInfo = new JSONObject();
