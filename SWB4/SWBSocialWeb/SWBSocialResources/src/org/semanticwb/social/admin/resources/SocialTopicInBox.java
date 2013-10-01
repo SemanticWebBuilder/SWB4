@@ -1434,9 +1434,9 @@ public class SocialTopicInBox extends GenericResource {
             createHead(wb, row, 9, CellStyle.ALIGN_CENTER,  CellStyle.VERTICAL_CENTER, "Usuario");
             createHead(wb, row, 10, CellStyle.ALIGN_CENTER,CellStyle.VERTICAL_CENTER, "Seguidores");
             createHead(wb, row, 11, CellStyle.ALIGN_CENTER,CellStyle.VERTICAL_CENTER, "Amigos");
-            createHead(wb, row, 12, CellStyle.ALIGN_CENTER,CellStyle.VERTICAL_CENTER, "Klout");
-            createHead(wb, row, 13, CellStyle.ALIGN_CENTER,CellStyle.VERTICAL_CENTER, "Lugar");
-            createHead(wb, row, 14, CellStyle.ALIGN_CENTER,CellStyle.VERTICAL_CENTER, "Prioritario");
+            //createHead(wb, row, 12, CellStyle.ALIGN_CENTER,CellStyle.VERTICAL_CENTER, "Klout");
+            createHead(wb, row, 12, CellStyle.ALIGN_CENTER,CellStyle.VERTICAL_CENTER, "Lugar");
+            createHead(wb, row, 13, CellStyle.ALIGN_CENTER,CellStyle.VERTICAL_CENTER, "Prioritario");
 
 
             String lang = paramRequest.getUser().getLanguage();
@@ -1521,9 +1521,9 @@ public class SocialTopicInBox extends GenericResource {
                     Serializable amigos = postIn.getPostInSocialNetworkUser() != null ? postIn.getPostInSocialNetworkUser().getFriends() : paramRequest.getLocaleString("withoutUser");
                     createCell(cellStyle,wb, troww, 11, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, amigos.toString());
                     Serializable klout = postIn.getPostInSocialNetworkUser() != null ? postIn.getPostInSocialNetworkUser().getSnu_klout() : paramRequest.getLocaleString("withoutUser");
-                    createCell(cellStyle,wb, troww, 12, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, klout.toString());
-                    createCell(cellStyle,wb, troww, 13, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, postIn.getPostPlace() == null ? "---" : postIn.getPostPlace());
-                    createCell(cellStyle,wb, troww, 14, CellStyle.ALIGN_CENTER,
+                    //createCell(cellStyle,wb, troww, 12, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, klout.toString());
+                    createCell(cellStyle,wb, troww, 12, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, postIn.getPostPlace() == null ? "---" : postIn.getPostPlace());
+                    createCell(cellStyle,wb, troww, 13, CellStyle.ALIGN_CENTER,
                             CellStyle.VERTICAL_CENTER, postIn.isIsPrioritary() ? "SI" : "NO");
 
                     i++;
@@ -1551,7 +1551,7 @@ public class SocialTopicInBox extends GenericResource {
                 ssheet.autoSizeColumn(11);
                 ssheet.autoSizeColumn(12);
                 ssheet.autoSizeColumn(13);
-                ssheet.autoSizeColumn(14);
+                //ssheet.autoSizeColumn(14);
 
 
                 OutputStream ou = response.getOutputStream();
