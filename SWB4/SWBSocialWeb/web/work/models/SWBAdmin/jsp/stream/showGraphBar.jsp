@@ -1,3 +1,9 @@
+<%-- 
+    Document   : graphBarFilter
+    Created on : 16/09/2013, 07:31:57 PM
+    Author     : gabriela.rosales
+--%>
+
 <%@page import="java.net.URLEncoder"%>
 <%@page import="com.sun.mail.handlers.image_gif"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
