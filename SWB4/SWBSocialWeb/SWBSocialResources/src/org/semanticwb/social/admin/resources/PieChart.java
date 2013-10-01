@@ -91,7 +91,6 @@ public class PieChart extends GenericResource{
         RequestDispatcher dis = request.getRequestDispatcher(myPath);
         if (dis != null) {
             try {
-                System.out.println("suri en el showgraphbar java"+ request.getParameter("suri"));
                 request.setAttribute("suri", request.getParameter("suri"));
                 request.setAttribute("paramRequest", paramRequest);
                 dis.include(request, response);
@@ -107,11 +106,6 @@ public class PieChart extends GenericResource{
          String selectedanio = request.getParameter("selectedAnio")== null ? "": request.getParameter("selectedAnio");
          String selectAnio = request.getParameter("selectAnio")== null ? "": request.getParameter("selectAnio");
          String selectMes = request.getParameter("selectMes")== null ? "": request.getParameter("selectMes");
-         out.println("<script language=\"javascript\" type=\"text/javascript\">");
-         out.println("  function resizeThisFrame() {");
-         out.println("alert('entro');");
-         out.println("}");
-         out.println("</script>");
          out.println("<iframe  id=\"inneriframe\" src=\""+paramRequest.getRenderUrl().setMode("showGraphBar").setParameter("doViewGraph", "1").setParameter("suri", request.getParameter("suri")).setParameter("selectedAnio", selectedanio).setParameter("selectAnio", selectAnio).setParameter("selectMes", selectMes) +"\"  frameborder=\"0\" width=\"100%\"   marginheight=\"0\" marginwidth=\"0\"  scrolling=\"no\"></iframe>"); //frameborder=\"0\" style=\"overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:100%;width:100%;position:absolute;top:0px;left:0px;right:0px;bottom:0px\" height=\"100%\" width=\"100%\" ></iframe> ");
                                                                                                                                                                                                                                                                                                                                                                      
 
