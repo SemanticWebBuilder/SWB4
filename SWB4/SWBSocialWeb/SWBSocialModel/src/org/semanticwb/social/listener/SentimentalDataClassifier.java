@@ -5,7 +5,6 @@
 
 package org.semanticwb.social.listener;
 
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,7 +16,6 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
-import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.social.Action;
 import org.semanticwb.social.Country;
@@ -31,13 +29,10 @@ import org.semanticwb.social.PhotoIn;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SendEmail;
 import org.semanticwb.social.SendPost;
-import org.semanticwb.social.SocialAdmin;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialRule;
 import org.semanticwb.social.SocialRuleRef;
-import org.semanticwb.social.SocialSite;
-import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.YouTubeCategory;
@@ -847,7 +842,7 @@ public class SentimentalDataClassifier {
             {
                 Listenerable listenerAble=(Listenerable)socialNetwork;
                 JSONObject userData = listenerAble.getUserInfobyId(socialNetUser.getSnu_id());
-                //System.out.println("Sentimental/userDataToString:"+userData.toString());
+                System.out.println("Sentimental/userDataToString-Georgy:"+userData.toString());
                 if(userData!=null && !userData.toString().equals("{}"))
                 {
                     long followers=userData != null && userData.getLong("followers") >0 ? userData.getLong("followers") : 0; 
@@ -863,6 +858,27 @@ public class SentimentalDataClassifier {
                             socialNetUser.setSnu_profileGeoLocation(profileGeoLoc);
                         }
                     }
+                    //User email
+                    if(!userData.isNull("email"))
+                    {
+                        String userEmail = userData != null && userData.getString("email")!=null ? userData.getString("email") : null;
+                        if(userEmail!=null)
+                        {
+                            socialNetUser.setSnu_email(userEmail);
+                        }
+                    }
+                    //User birthday
+                    if(!userData.isNull("birthday"))
+                    {
+                        String userEmail = userData != null && userData.getString("birthday")!=null ? userData.getString("birthday") : null;
+                        if(userEmail!=null)
+                        {
+                            socialNetUser.setSnu_email(userEmail);
+                        }
+                    }
+                    
+                    
+                   
                     //Quiere decir que el mensaje no trae posición, entonces tomar las coordenadas del usuario, si estan en el json
                     /*
                     if(externalPost.getLatitude()==0 || externalPost.getLongitude()==0)
