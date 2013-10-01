@@ -36,11 +36,7 @@
         }
 
 
-        ArrayList fechas = new ArrayList();
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-
         java.util.Date date = null;
-        String fecha = "";
         Calendar calendario = Calendar.getInstance();
 
         String selectedAnio = request.getParameter("selectedAnio") == null ? "" : request.getParameter("selectedAnio");
@@ -97,18 +93,6 @@
 
             iListPostIn = listPostIn.iterator();
 
-
-
-
-            /*while (iListPostIn.hasNext()) {
-             Date postin = (Date) iListPostIn.next();
-             System.out.println("postin fecha" + postin);
-             calendario.setTime(postin);
-             System.out.println("month " + calendario.get(Calendar.MONTH));
-             months[calendario.get(Calendar.MONTH)] += 1;
-
-             }*/
-
             int meses = 1;
             for (int idx = 0; idx < months.length; idx++) {
                 if (meses < 13) {
@@ -153,8 +137,8 @@
 
             int neutrals_ = 0, positives_ = 0, negatives_ = 0;
             int[][] dias = new int[days][4];
-            String[] sentimiento = new String[days];
-            int senti = 0;
+            
+            
             while (itObjPostIns.hasNext()) {
                 PostIn postIn = itObjPostIns.next();
                 if (postIn.getPostSentimentalType() == 0) {
@@ -231,12 +215,9 @@
 %>
 <%
 
-    String anio = request.getParameter("selectedAnio");
-    if (request.getParameter("selectedAnio") != null) {
-        
+    if (request.getParameter("selectedAnio") != null) {        
         SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("objUri"));
         String lang = request.getParameter("lang");
-        //System.out.println("Entra 2:" + lang);
         out.println(getObject(semObj, lang, request));
     }
 %>
