@@ -457,15 +457,6 @@ System.out.println("b");
             String factor = request.getParameter("fctr")==null?"":request.getParameter("fctr");
             EvaluationRule rule;
             
-//            Pattern pattern;
-//            String regexp = getResourceBase().getAttribute("defaultFormatPattern", Default_FORMAT_PATTERN);
-//            try{
-//                pattern = Pattern.compile(regexp);
-//            }catch(PatternSyntaxException pse) {
-//                pattern = Pattern.compile(Default_FORMAT_PATTERN);
-//            }            
-//            Matcher matcher = pattern.matcher(factor);
-//            if(matcher.matches()) {
             if(validateFactor(factor)) {
                 if(objRule==null) {
                     rule = EvaluationRule.ClassMgr.createEvaluationRule(model);
