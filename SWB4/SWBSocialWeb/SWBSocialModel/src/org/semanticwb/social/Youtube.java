@@ -228,8 +228,8 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                     Map<String, String> params = new HashMap<String, String>();
                     //Temporalmente comentado por que ya se habia autenticado mi cuenta sin pedir el refresh token
                     //params.put("refresh_token", "1/WY53_4yVfdnoCZ9WATEjVdvt8GgZOobQ9YC5T77PjwY");//Ana
-                    params.put("refresh_token", "1/EBI7ANgfHcp7CHm3acP5hGoFZ29XhZzIzT2jv_h-3so");//Paco
-                    //params.put("refresh_token", this.getRefreshToken());
+                    //params.put("refresh_token", "1/EBI7ANgfHcp7CHm3acP5hGoFZ29XhZzIzT2jv_h-3so");//Paco
+                    params.put("refresh_token", this.getRefreshToken());
                     params.put("client_id", this.getAppKey());
                     params.put("client_secret", this.getSecretKey());
                     params.put("grant_type", "refresh_token");
@@ -576,7 +576,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                 String token_type = userData.getString("token_type");
                 String refresh_token = "";
                 if(userData.has("refresh_token") && !userData.isNull("refresh_token")){
-                    userData.getString("refresh_token");
+                    refresh_token = userData.getString("refresh_token");
                 }
 
                 setAccessToken(tokenAccess);                
