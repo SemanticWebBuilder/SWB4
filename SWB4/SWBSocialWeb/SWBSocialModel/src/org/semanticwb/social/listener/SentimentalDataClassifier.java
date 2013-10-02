@@ -855,8 +855,8 @@ public class SentimentalDataClassifier {
                     //User profile geoLocation
                     if(!userData.isNull("place_name"))
                     {
-                        String profileGeoLoc = userData != null && userData.getString("place_name")!=null ? userData.getString("place_name") : null;
-                        if(profileGeoLoc!=null)
+                        String profileGeoLoc = userData.getString("place_name")!=null ? userData.getString("place_name") : null;
+                        if(profileGeoLoc!=null && profileGeoLoc.trim().length()>0)
                         {
                             socialNetUser.setSnu_profileGeoLocation(profileGeoLoc);
                         }
@@ -864,8 +864,8 @@ public class SentimentalDataClassifier {
                     //User email
                     if(!userData.isNull("email"))
                     {
-                        String userEmail = userData != null && userData.getString("email")!=null ? userData.getString("email") : null;
-                        if(userEmail!=null)
+                        String userEmail = userData.getString("email")!=null ? userData.getString("email") : null;
+                        if(userEmail!=null && userEmail.trim().length()>0)
                         {
                             socialNetUser.setSnu_email(userEmail);
                         }
@@ -873,9 +873,10 @@ public class SentimentalDataClassifier {
                     //User birthday
                     if(!userData.isNull("birthday"))
                     {
-                        String userBirthDay = userData != null && userData.getString("birthday")!=null ? userData.getString("birthday") : null;
-                        if(userBirthDay!=null)
+                        String userBirthDay = userData.getString("birthday")!=null ? userData.getString("birthday") : null;
+                        if(userBirthDay!=null && userBirthDay.trim().length()>0)
                         {
+                            System.out.println("userBirthDay:"+userBirthDay);
                             Date date=new SimpleDateFormat("MM/dd/yyyy").parse(userBirthDay);
                             int userYears=SWBSocialUtil.Util.calculateAge(date);
                             System.out.println("userYears:"+userYears);
@@ -897,8 +898,8 @@ public class SentimentalDataClassifier {
                     //Gender
                     if(!userData.isNull("gender"))
                     {
-                        String userGender = userData != null && userData.getString("gender")!=null ? userData.getString("gender") : null;
-                        if(userGender!=null)
+                        String userGender = userData.getString("gender")!=null ? userData.getString("gender") : null;
+                        if(userGender!=null && userGender.trim().length()>0)
                         {
                             System.out.println("userGender George:"+userGender);
                             if(userGender.equals("male")) socialNetUser.setSnu_gender(SocialNetworkUser.USER_GENDER_MALE);
@@ -909,8 +910,8 @@ public class SentimentalDataClassifier {
                     //RelationShio Status
                     if(!userData.isNull("relationship_status"))
                     {
-                        String userRelationShip = userData != null && userData.getString("relationship_status")!=null ? userData.getString("relationship_status") : null;
-                        if(userRelationShip!=null)
+                        String userRelationShip = userData.getString("relationship_status")!=null ? userData.getString("relationship_status") : null;
+                        if(userRelationShip!=null && userRelationShip.trim().length()>0)
                         {
                             System.out.println("relationship_status George:"+userRelationShip);
                             if(userRelationShip.equals("Single")) socialNetUser.setSnu_relationShipStatus(SocialNetworkUser.USER_RELATION_SINGLE);
@@ -924,12 +925,10 @@ public class SentimentalDataClassifier {
                     String school="";
                     if(!userData.isNull("education"))
                     {
-                         System.out.println("Va a Checar Escuela...1");
                          JSONArray jArrayEduacation = userData.getJSONArray("education");
                          for (int i=0;i<jArrayEduacation.length();i++)
                          {
                              JSONObject jsonObj=jArrayEduacation.getJSONObject(i);
-                             System.out.println("Va a Checar Escuela...2:"+jsonObj);
                              if(jsonObj.getString("type")!=null)
                              {
                                  String schoolType=jsonObj.getString("type");
@@ -952,7 +951,10 @@ public class SentimentalDataClassifier {
                     System.out.println("User Friends:"+socialNetUser.getFriends());
                     System.out.println("User ProfileGeo:"+socialNetUser.getSnu_profileGeoLocation());
                     System.out.println("User Email:"+socialNetUser.getSnu_email());
-                    System.out.println("User LifeStage:"+socialNetUser.getSnu_LifeStage().getId());
+                    if(socialNetUser.getSnu_LifeStage()!=null)
+                    {
+                        System.out.println("User LifeStage:"+socialNetUser.getSnu_LifeStage().getId());
+                    }
                     System.out.println("User Gender:"+socialNetUser.getSnu_gender());
                     System.out.println("User RelationShip:"+socialNetUser.getSnu_relationShipStatus());
                     System.out.println("User Education:"+socialNetUser.getSnu_education());
