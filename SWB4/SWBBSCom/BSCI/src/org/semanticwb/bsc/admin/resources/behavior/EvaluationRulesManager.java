@@ -67,32 +67,19 @@ public class EvaluationRulesManager extends GenericAdmResource {
             return;
         }
         
-        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-        SemanticObject obj = ont.getSemanticObject(suri);
-        
-        String action = paramRequest.getAction();
-        
-        PrintWriter out = response.getWriter();
-        out.println("<script type=\"text/javascript\">");
-        //String s_soid = request.getParameter("so");
-        if (request.getParameter("statmsg") != null && request.getParameter("statmsg").trim().length() > 0) {
-System.out.println("showStatus");
-            out.println("   showStatus('" + request.getParameter("statmsg") + "');");
+//        PrintWriter out = response.getWriter();
+//        out.println("<script type=\"text/javascript\">");
+//        if(request.getParameter("statmsg") != null && request.getParameter("statmsg").trim().length() > 0) {
+//            out.println("   showStatus('" + request.getParameter("statmsg") + "');");
 //            out.println("updateTreeNodeByURI('" + obj.getURI() + "');");
 //            String icon = SWBContext.UTILS.getIconClass(obj);
 //            out.println("setTabTitle('" + obj.getURI() + "','" + obj.getDisplayName(user.getLanguage()) + "','" + icon + "');");
-        }
+//        }
 //        if (request.getParameter("closetab") != null && request.getParameter("closetab").trim().length() > 0) {
-//System.out.println("closeTab..." + request.getParameter("closetab"));
 //            out.println("   closeTab('" + request.getParameter("closetab") + "');");
 //        }
-        out.println("</script>");
-        
-        SWBResourceURL url = paramRequest.getActionUrl();
-        url.setAction("update");
-        if(SWBResourceURL.Action_EDIT.equalsIgnoreCase(action)) {
-            
-        }
+//        out.println("</script>");
+       
         doEdit(request, response, paramRequest);
     }
 
@@ -101,7 +88,7 @@ System.out.println("showStatus");
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-System.out.println("\n\ndoXML...");
+        
         User user = paramRequest.getUser();
         if(user==null || !user.isSigned())
         {
@@ -114,7 +101,7 @@ System.out.println("\n\ndoXML...");
             response.getWriter().println("No se detect&oacute ning&uacute;n objeto sem&aacute;ntico!");
             return;
         }
-System.out.println("suri="+suri);
+
         final String lang = user.getLanguage();
         
         boolean hasRules = Boolean.FALSE;
@@ -126,16 +113,13 @@ System.out.println("suri="+suri);
         PrintWriter out = response.getWriter();
         
         out.println("<script type=\"text/javascript\">");
-        //String s_soid = request.getParameter("so");
         if (request.getParameter("statmsg") != null && request.getParameter("statmsg").trim().length() > 0) {
-System.out.println("showStatus");
             out.println("   showStatus('" + request.getParameter("statmsg") + "');");
             out.println("updateTreeNodeByURI('" + obj.getURI() + "');");
             String icon = SWBContext.UTILS.getIconClass(obj);
             out.println("setTabTitle('" + obj.getURI() + "','" + obj.getDisplayName(user.getLanguage()) + "','" + icon + "');");
         }
         if (request.getParameter("closetab") != null && request.getParameter("closetab").trim().length() > 0) {
-System.out.println("closeTab..." + request.getParameter("closetab"));
             out.println("   closeTab('" + request.getParameter("closetab") + "');");
         }
         out.println("</script>");
@@ -144,7 +128,6 @@ System.out.println("closeTab..." + request.getParameter("closetab"));
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction(SWBResourceURL.Action_ADD);
         String action = paramRequest.getAction();
-System.out.println("action="+action);
         if(SWBResourceURL.Action_EDIT.equalsIgnoreCase(action))
         {
             out.println("<div class=\"swbform\">");
@@ -186,7 +169,6 @@ System.out.println("action="+action);
             HashSet<State> configuredStates = new HashSet<State>();            
             Iterator<EvaluationRule> rules = series.listEvaluationRules();
             hasRules = rules.hasNext();
-System.out.println("serie dt="+series.getDisplayTitle(lang)+", t="+series.getTitle(lang));
             while(rules.hasNext()) {
                 EvaluationRule rule = rules.next();
                 out.println("  <tr>");                
@@ -197,7 +179,9 @@ System.out.println("serie dt="+series.getDisplayTitle(lang)+", t="+series.getTit
                 urlr.setParameter("suri", suri);
                 urlr.setParameter("sval", rule.getURI());
                 urlr.setAction(SWBResourceURL.Action_REMOVE);
-                out.println("<a href=\"#\" onclick=\"if(confirm('" + paramRequest.getLocaleString("queryRemove") + " " + (rule.getTitle(lang)==null?(rule.getTitle()==null?"Sin título":rule.getTitle().replaceAll("'","")):rule.getTitle(lang).replaceAll("'","")) + "?')){submitUrl('" + urlr + "',this);} else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=0></a>");
+                out.println("<a href=\"#\" onclick=\"if(confirm('" + paramRequest.getLocaleString("queryRemove") + " " 
+                        + (rule.getTitle(lang)==null?(rule.getTitle()==null?"Sin título":rule.getTitle().replaceAll("'","")):rule.getTitle(lang).replaceAll("'","")) 
+                        + "?')){submitUrl('" + urlr + "',this);} else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=0></a>");
                 out.println("</td>");
                 
                 // Estado
@@ -251,7 +235,6 @@ System.out.println("serie dt="+series.getDisplayTitle(lang)+", t="+series.getTit
                 urlfctr.setParameter("sval", rule.getURI());
                 urlfctr.setAction(Action_UPDT_FACTOR);
                 out.println("   <td><input type=\"text\" name=\"fctr\" onchange=\"submitUrl('" + urlfctr + "&'+this.attr('name')+'='+this.attr('value'),this.domNode)\" dojoType=\"dijit.form.TextBox\" value=\""+(rule.getFactor()==null?"":rule.getFactor())+"\" /></td>");
-                //out.println("   <td><input type=\"text\" name=\"fctr\" onchange=\"alert('url='+'"+urlfctr+"&'+this.attr('name')+'='+this.attr('value'))\" dojoType=\"dijit.form.TextBox\" value=\""+(rule.getFactor()==null?"":rule.getFactor())+"\" /></td>");
                 
                 // Activo?
                 SWBResourceURL urlactv = paramRequest.getActionUrl();
@@ -259,7 +242,6 @@ System.out.println("serie dt="+series.getDisplayTitle(lang)+", t="+series.getTit
                 urlactv.setParameter("sval", rule.getURI());
                 urlactv.setAction(Action_UPDT_ACTIVE);
                 out.println("   <td align=\"center\"><input type=\"checkbox\" name=\"act\" onchange=\"submitUrl('" + urlactv + "&'+this.attr('name')+'='+this.attr('value'),this.domNode)\" dojoType=\"dijit.form.CheckBox\" value=\""+rule.getId()+"\" "+(rule.isActive()?"checked=\"checked\"":"")+" /></td>");
-                //out.println("   <td align=\"center\"><input type=\"checkbox\" name=\"act\" onchange=\"alert('url='+'" + urlactv + "&'+this.attr('name')+'='+this.attr('value'))\" value=\""+rule.getId()+"\" "+(rule.isActive()?"checked=\"checked\"":"")+" /></td>");
                 
                 out.println("  </tr>");
                 configuredStates.add(rule.getAppraisal());
@@ -271,7 +253,6 @@ System.out.println("serie dt="+series.getDisplayTitle(lang)+", t="+series.getTit
                 for(State state:validSates)
                 {
                     if( configuredStates.add(state) ) {
-System.out.println("regla impropia para estado="+state);
                         out.println("  <tr>");
                         // Columna vacía
                         out.println("   <td>&nbsp;</td>");
@@ -321,12 +302,7 @@ System.out.println("regla impropia para estado="+state);
                         urlfctr.setAction(Action_UPDT_FACTOR);
                         out.println("   <td><input type=\"text\" name=\"fctr\" onchange=\"submitUrl('" + urlfctr + "&'+this.attr('name')+'='+this.attr('value'),this.domNode)\" dojoType=\"dijit.form.TextBox\" value=\"\" /></td>");
                         
-                        // Activo?
-//                        SWBResourceURL urlactv = paramRequest.getActionUrl();
-//                        urlactv.setParameter("suri", suri);
-//                        urlactv.setParameter("stateId", state.getId());
-//                        urlactv.setAction(Action_UPDT_ACTIVE);
-//                        out.println("   <td align=\"center\"><input type=\"checkbox\" name=\"act\" onchange=\"submitUrl('" + urlactv + "&'+this.attr('name')+'='+this.attr('value'),this.domNode)\" dojoType=\"dijit.form.CheckBox\" value=\"1\" /></td>");
+                        // Columna vacía
                         out.println("   <td>&nbsp;</td>");
 
                         out.println("  </tr>");
@@ -361,6 +337,11 @@ System.out.println("regla impropia para estado="+state);
         
     }
     
+    /*
+     * Valida el formato del factor del criterio de evaluación
+     * @param factor un {@code String} que indica los factores para comparar las series. Por ejemplo: *0.3,*05
+     * @return Si el factor cumple con el formato entonces cierto, de lo contrario falso.
+     */
     private boolean validateFactor(String factor) {
         Pattern pattern;
         String regexp = getResourceBase().getAttribute("defaultFormatPattern", Default_FORMAT_PATTERN);
@@ -387,13 +368,13 @@ System.out.println("regla impropia para estado="+state);
             response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchSemanticElement"));
             return;
         }
-System.out.println("\n\na");
+        
         User user = response.getUser();
         if(!user.isSigned() || !user.haveAccess(objSeries.getGenericInstance())) {
             response.setRenderParameter("statmsg", response.getLocaleString("msgUnauthorizedUser"));
             return;
         }
-System.out.println("b");
+
         if(Action_UPDT_OPER.equalsIgnoreCase(action))
         {
             SemanticObject objRule = ont.getSemanticObject(request.getParameter("sval"));
@@ -430,21 +411,28 @@ System.out.println("b");
             EvaluationRule rule;
             
             if(Series.ClassMgr.hasSeries(siblingId, model)) {
-                if(objRule==null) {
-                    rule = EvaluationRule.ClassMgr.createEvaluationRule(model);
-                    rule.setTitle(rule.getId());
-                    rule.setTitle(rule.getId(), user.getLanguage());
-                    if(State.ClassMgr.hasState(request.getParameter("stateId"), SWBContext.getAdminWebSite())) {
-                        State state = State.ClassMgr.getState(request.getParameter("stateId"), SWBContext.getAdminWebSite());
-                        rule.setAppraisal(state);
-                    }
-                    series.addEvaluationRule(rule);
-                }else {
-                    rule = (EvaluationRule)objRule.getGenericInstance();
-                }                
                 Series sibling = Series.ClassMgr.getSeries(siblingId, model);
-                rule.setAnotherSeries(sibling);
-                response.setRenderParameter("statmsg", response.getLocaleString("msgUpdtSeriesOk"));
+                if(series.getIndicator().hasSeries(sibling))
+                {
+                    if(objRule==null) {
+                        rule = EvaluationRule.ClassMgr.createEvaluationRule(model);
+                        rule.setTitle(rule.getId());
+                        rule.setTitle(rule.getId(), user.getLanguage());
+                        if(State.ClassMgr.hasState(request.getParameter("stateId"), SWBContext.getAdminWebSite())) {
+                            State state = State.ClassMgr.getState(request.getParameter("stateId"), SWBContext.getAdminWebSite());
+                            rule.setAppraisal(state);
+                        }
+                        series.addEvaluationRule(rule);
+                    }else {
+                        rule = (EvaluationRule)objRule.getGenericInstance();
+                    }
+                    rule.setAnotherSeries(sibling);
+                    response.setRenderParameter("statmsg", response.getLocaleString("msgUpdtSeriesOk"));
+                }
+                else
+                {
+                    response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchSeries"));
+                }
             }else {
                 response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchSeries"));
             }
