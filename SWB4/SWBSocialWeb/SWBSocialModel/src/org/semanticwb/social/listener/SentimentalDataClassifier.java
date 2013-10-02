@@ -5,12 +5,14 @@
 
 package org.semanticwb.social.listener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -22,6 +24,7 @@ import org.semanticwb.social.Country;
 import org.semanticwb.social.CountryState;
 import org.semanticwb.social.ExternalPost;
 import org.semanticwb.social.Kloutable;
+import org.semanticwb.social.LifeStage;
 import org.semanticwb.social.Listenerable;
 import org.semanticwb.social.MarkMsgAsPrioritary;
 import org.semanticwb.social.MessageIn;
@@ -870,28 +873,90 @@ public class SentimentalDataClassifier {
                     //User birthday
                     if(!userData.isNull("birthday"))
                     {
-                        String userEmail = userData != null && userData.getString("birthday")!=null ? userData.getString("birthday") : null;
-                        if(userEmail!=null)
+                        String userBirthDay = userData != null && userData.getString("birthday")!=null ? userData.getString("birthday") : null;
+                        if(userBirthDay!=null)
                         {
-                            socialNetUser.setSnu_email(userEmail);
+                            Date date=new SimpleDateFormat("MM/dd/yyyy").parse(userBirthDay);
+                            int userYears=SWBSocialUtil.Util.calculateAge(date);
+                            System.out.println("userYears:"+userYears);
+                            if(userYears>0)
+                            {
+                                Iterator <LifeStage> itLifeStage=LifeStage.ClassMgr.listLifeStages(SWBContext.getAdminWebSite());
+                                while(itLifeStage.hasNext())
+                                {
+                                    LifeStage lifeStage=itLifeStage.next();
+                                    if(userYears>=lifeStage.getLs_minAge() && userYears<=lifeStage.getLs_maxAge())
+                                    {
+                                        socialNetUser.setSnu_LifeStage(lifeStage);
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     }
-                    
-                    
-                   
-                    //Quiere decir que el mensaje no trae posición, entonces tomar las coordenadas del usuario, si estan en el json
-                    /*
-                    if(externalPost.getLatitude()==0 || externalPost.getLongitude()==0)
+                    //Gender
+                    if(!userData.isNull("gender"))
                     {
-                        Double latitude = userData != null && userData.getDouble("latitude") >0 ? userData.getDouble("latitude") : 0;
-                        Double longitude = userData != null && userData.getDouble("longitude") >0 ? userData.getDouble("longitude") : 0;
-                        if(latitude>0 && longitude>0)
+                        String userGender = userData != null && userData.getString("gender")!=null ? userData.getString("gender") : null;
+                        if(userGender!=null)
                         {
-                            postIn.setLatitude(IntensiveTweetValue);
-                            postIn.setLongitude(IntensiveTweetValue);
+                            System.out.println("userGender George:"+userGender);
+                            if(userGender.equals("male")) socialNetUser.setSnu_gender(SocialNetworkUser.USER_GENDER_MALE);
+                            else if(userGender.equals("female")) socialNetUser.setSnu_gender(SocialNetworkUser.USER_GENDER_FEMALE);
+                            else socialNetUser.setSnu_gender(SocialNetworkUser.USER_GENDER_UNDEFINED);
                         }
                     }
-                    * **/
+                    //RelationShio Status
+                    if(!userData.isNull("relationship_status"))
+                    {
+                        String userRelationShip = userData != null && userData.getString("relationship_status")!=null ? userData.getString("relationship_status") : null;
+                        if(userRelationShip!=null)
+                        {
+                            System.out.println("relationship_status George:"+userRelationShip);
+                            if(userRelationShip.equals("Single")) socialNetUser.setSnu_relationShipStatus(SocialNetworkUser.USER_RELATION_SINGLE);
+                            else if(userRelationShip.equals("Married")) socialNetUser.setSnu_relationShipStatus(SocialNetworkUser.USER_RELATION_MARRIED);
+                            else if(userRelationShip.equals("Divorced")) socialNetUser.setSnu_relationShipStatus(SocialNetworkUser.USER_RELATION_DIVORCED);
+                            else if(userRelationShip.equals("Widowed")) socialNetUser.setSnu_relationShipStatus(SocialNetworkUser.USER_RELATION_WIDOWED); 
+                            else socialNetUser.setSnu_relationShipStatus(SocialNetworkUser.USER_RELATION_UNDEFINED); //Could be: In a relationship, Engaged, It's complicated, In an open relationship,Separated,  In a civil union, In a domestic partnership, etc
+                        }
+                    }
+                    //User Education
+                    String school="";
+                    if(!userData.isNull("education"))
+                    {
+                         System.out.println("Va a Checar Escuela...1");
+                         JSONArray jArrayEduacation = userData.getJSONArray("education");
+                         for (int i=0;i<jArrayEduacation.length();i++)
+                         {
+                             JSONObject jsonObj=jArrayEduacation.getJSONObject(i);
+                             System.out.println("Va a Checar Escuela...2:"+jsonObj);
+                             if(jsonObj.getString("type")!=null)
+                             {
+                                 String schoolType=jsonObj.getString("type");
+                                 if(school==null && schoolType.equals("High School"))   //Secundaria
+                                 {
+                                     school=schoolType;
+                                 }else if(schoolType.equals("College")){    //Universidad
+                                     school=schoolType;
+                                 }else if(schoolType.equals("Graduate School")){    //PostGrado
+                                     school=schoolType;
+                                 }
+                             }
+                         }
+                         if(school.equals("High School")) socialNetUser.setSnu_education(SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL);
+                         else if(school.equals("College")) socialNetUser.setSnu_education(SocialNetworkUser.USER_EDUCATION_COLLEGE);
+                         else if(school.equals("Graduate School")) socialNetUser.setSnu_education(SocialNetworkUser.USER_EDUCATION_GRADUATE);
+                         else socialNetUser.setSnu_education(SocialNetworkUser.USER_EDUCATION_UNDEFINED);
+                    }
+                    System.out.println("User Followers:"+socialNetUser.getFollowers());
+                    System.out.println("User Friends:"+socialNetUser.getFriends());
+                    System.out.println("User ProfileGeo:"+socialNetUser.getSnu_profileGeoLocation());
+                    System.out.println("User Email:"+socialNetUser.getSnu_email());
+                    System.out.println("User LifeStage:"+socialNetUser.getSnu_LifeStage().getId());
+                    System.out.println("User Gender:"+socialNetUser.getSnu_gender());
+                    System.out.println("User RelationShip:"+socialNetUser.getSnu_relationShipStatus());
+                    System.out.println("User Education:"+socialNetUser.getSnu_education());
+                    
                 }
             }
         }catch(Exception e)

@@ -10,6 +10,24 @@ import org.semanticwb.platform.SemanticObject;
    */
 public class SocialNetworkUser extends org.semanticwb.social.base.SocialNetworkUserBase 
 {
+    //USER GENDER
+    public static final int USER_GENDER_MALE=1;
+    public static final int USER_GENDER_FEMALE=2;
+    public static final int USER_GENDER_UNDEFINED=3;
+    
+    //USER RELATIONSHIP STATUS
+    public static final int USER_RELATION_SINGLE=1;
+    public static final int USER_RELATION_MARRIED=2;
+    public static final int USER_RELATION_DIVORCED=3;
+    public static final int USER_RELATION_WIDOWED=4;
+    public static final int USER_RELATION_UNDEFINED=5;
+    
+    //USER EDUCATION
+    public static final int USER_EDUCATION_HIGHSCHOOL=1;
+    public static final int USER_EDUCATION_COLLEGE=2;
+    public static final int USER_EDUCATION_GRADUATE=3;
+    public static final int USER_EDUCATION_UNDEFINED=4;
+    
     public SocialNetworkUser(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
