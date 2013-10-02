@@ -848,10 +848,18 @@ public class SentimentalDataClassifier {
                 System.out.println("Sentimental/userDataToString-Georgy:"+userData.toString());
                 if(userData!=null && !userData.toString().equals("{}"))
                 {
-                    long followers=userData != null && userData.getLong("followers") >0 ? userData.getLong("followers") : 0; 
-                    long friends = userData != null && userData.getLong("friends") >0 ? userData.getLong("friends") : 0;
-                    socialNetUser.setFollowers(((Long)followers).intValue()); 
-                    socialNetUser.setFriends(((Long)friends).intValue());
+                    //Followers
+                    if(!userData.isNull("followers"))
+                    {
+                        long followers=userData != null && userData.getLong("followers") >0 ? userData.getLong("followers") : 0; 
+                        socialNetUser.setFollowers(((Long)followers).intValue()); 
+                    }
+                    //Friends
+                    if(!userData.isNull("friends"))
+                    {
+                        long friends = userData != null && userData.getLong("friends") >0 ? userData.getLong("friends") : 0;
+                        socialNetUser.setFriends(((Long)friends).intValue());
+                    }
                     //User profile geoLocation
                     if(!userData.isNull("place_name"))
                     {
