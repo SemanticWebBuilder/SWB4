@@ -57,8 +57,8 @@ public final class SWBCloudConfig extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        out.print(jsElements());
-        if (SWBPortal.getAWSCloud()==null){
+        //out.print(jsElements());
+        if (SWBPortal.getCloud()==null){
             out.println("<fieldset class=\"swbform\"><legend>Information</legend>"
                     + "<form></br></br></br></br></br>"
                     + "This function only works in an EC2 AWS"
@@ -66,13 +66,14 @@ public final class SWBCloudConfig extends GenericResource {
                     + "</br></br></br></br></br></form></fieldset>");
             return;
         }
+        /**
         String val = getValueOf("/launched"); 
         boolean launched = (null!=val&&"true".equals(val))?true:false;
         if ("launch".equals(paramRequest.getAction())){
             if (null==val || "false".equals(val)){
                 setValueOf("/launched", "true");
                 launched=true;
-                SWBPortal.getAWSCloud().launch();
+                SWBPortal.getCloud().launch();
             } else {
                 setValueOf("/launched", "false");
                 launched=false;
@@ -456,6 +457,8 @@ public final class SWBCloudConfig extends GenericResource {
                 + "</form>";
 
         return forma;
+    }
+    **/
     }
 }
 
