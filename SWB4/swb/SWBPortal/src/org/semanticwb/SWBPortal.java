@@ -53,8 +53,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBUtils.IO;
-import org.semanticwb.aws.AWSServices;
-import org.semanticwb.base.db.PoolConnection;
 import org.semanticwb.css.parser.Attribute;
 import org.semanticwb.css.parser.CSSParser;
 import org.semanticwb.css.parser.Selector;
@@ -70,6 +68,7 @@ import org.semanticwb.portal.api.SWBResource;
 import org.semanticwb.portal.db.SWBDBAdmLog;
 import org.semanticwb.portal.indexer.SWBIndexMgr;
 import org.semanticwb.portal.resources.ImageGallery;
+import org.semanticwb.portal.services.SWBCloud;
 import org.semanticwb.portal.util.CaptchaUtil;
 import org.semanticwb.portal.util.ContentStyles;
 import org.semanticwb.repository.Workspace;
@@ -270,7 +269,7 @@ public class SWBPortal
     /**
      * Link to AWS Services
      */
-    private static AWSServices cloudAWS = null;
+    private static SWBCloud cloudServices = null;
 
     /**
      * Creates an object of this class, calling method {@code createInstance(ServletContext, Filter) with.
@@ -800,10 +799,10 @@ public class SWBPortal
             String cloudClass = getEnv("swb/cloudImplementation");
             try {
                 Class clazz = Class.forName(cloudClass);
-                cloudAWS = (AWSServices)clazz.newInstance();
+                cloudServices = (SWBCloud)clazz.newInstance();
                 new Thread(){
                         public void run() {
-                            cloudAWS.launch();
+                            cloudServices.launch();
                         }
                     }.start();
                 log.event("CloudServices enabled...");
@@ -1653,8 +1652,8 @@ public class SWBPortal
      * Gets the cloud services interface
      * @return 
      */
-    public final static AWSServices getAWSCloud() {
-        return cloudAWS;
+    public final static SWBCloud getCloud() {
+        return cloudServices;
     }
 
     /**
