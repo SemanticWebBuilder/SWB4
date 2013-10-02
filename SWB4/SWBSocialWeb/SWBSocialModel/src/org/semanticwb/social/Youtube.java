@@ -1027,6 +1027,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
 
     @Override
     public JSONObject getUserInfobyId(String userId) {
+        System.out.println("entro al getUserr");
 
         JSONObject userInfo = new JSONObject();
 
@@ -1044,9 +1045,26 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             }
 
             if (parseUsrInf.has("relationshipStatus") && !parseUsrInf.isNull("relationshipStatus")) {
-                userInfo.put("relationshipStatus", parseUsrInf.getString("relationshipStatus"));
+                userInfo.put("relationship_status", parseUsrInf.getString("relationshipStatus"));
             } else {
-                userInfo.put("relationshipStatus", "");
+                userInfo.put("relationship_status", "");
+            }
+
+            if (parseUsrInf.has("placesLived") && !parseUsrInf.isNull("placesLived")) {
+                JSONArray location = parseUsrInf.getJSONArray("placesLived");
+
+                for (int i = 0; i < location.length(); i++) {
+                    JSONObject jo = location.getJSONObject(i);
+                    
+                    if (jo.has("primary") && !jo.isNull("primary")) {                        
+                            userInfo.put("placesLived", jo.getString("value"));
+                            break;                       
+                    }else{
+                        userInfo.put("placesLived", "");
+                    }
+                }
+            } else {
+                userInfo.put("placesLived", "");
             }
 
             if (parseUsrInf.has("birthday") && !parseUsrInf.isNull("birthday")) {
@@ -1060,7 +1078,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         } catch (IOException ex) {
             log.error(ex);
         }
-
+        
         return userInfo;
     }
 
