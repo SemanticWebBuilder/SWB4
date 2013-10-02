@@ -52,7 +52,7 @@ FCKConfig.PluginsPath = FCKConfig.BasePath + 'plugins/' ;
 
 // FCKConfig.Plugins.Add( 'autogrow' ) ;
 // FCKConfig.Plugins.Add( 'dragresizetable' );
-FCKConfig.Plugins.Add( 'insertHtmlCode' ) ;
+FCKConfig.Plugins.Add( 'insertHtmlCode', 'en,es' ) ;
 
 FCKConfig.AutoGrowMax = 400 ;
 
@@ -103,11 +103,11 @@ FCKConfig.ToolbarLocation = 'In' ;
 FCKConfig.ToolbarSets["Default"] = [
 	['Source'],
 	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
-	['Cut','Copy','Paste','PasteText','PasteWord','insertHtmlCode'],
+	['Cut','Copy','Paste','PasteText','PasteWord'],
 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
 //	['Form','Checkbox','Radio','TextField','Textarea','Select','Button','ImageButton','HiddenField'],
 	'/',
-	['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'],
+	['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv','-','insertHtmlCode'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['Link','Unlink','Anchor'],
 	['Image','Table','Rule','Smiley','SpecialChar'],
