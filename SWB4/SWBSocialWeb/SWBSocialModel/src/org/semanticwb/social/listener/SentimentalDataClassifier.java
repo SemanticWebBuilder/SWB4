@@ -851,13 +851,13 @@ public class SentimentalDataClassifier {
                     //Followers
                     if(!userData.isNull("followers"))
                     {
-                        long followers=userData != null && userData.getLong("followers") >0 ? userData.getLong("followers") : 0; 
+                        long followers=userData.getLong("followers") >0 ? userData.getLong("followers") : 0; 
                         socialNetUser.setFollowers(((Long)followers).intValue()); 
                     }
                     //Friends
                     if(!userData.isNull("friends"))
                     {
-                        long friends = userData != null && userData.getLong("friends") >0 ? userData.getLong("friends") : 0;
+                        long friends = userData.getLong("friends") >0 ? userData.getLong("friends") : 0;
                         socialNetUser.setFriends(((Long)friends).intValue());
                     }
                     //User profile geoLocation
