@@ -1027,15 +1027,40 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
 
     @Override
     public JSONObject getUserInfobyId(String userId) {
-        System.out.println("entro al getUserr");
 
-        JSONObject userInfo = new JSONObject();
+        //Realiza la peticion a Youtube para obtener id de Google+
+        HashMap<String, String> params = new HashMap<String, String>(3);
+        params.put("v", "2");
+        params.put("alt", "json");
 
+        String responseIdGoogle = null;
+        String googlePlusUserId = "";
         try {
-            String youtubeResponse = getRequest(null, "https://www.googleapis.com/plus/v1/people/" + userId + "?key=AIzaSyBEbVYqvZudUYdt-UeHkgRl-rkvNHCw4Z8", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
+            responseIdGoogle = getRequest(params, "https://gdata.youtube.com/feeds/api/users/" + userId, "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
 
+            JSONObject parseUsrInfYoutube = null;
+            parseUsrInfYoutube = new JSONObject(responseIdGoogle);
+
+            JSONObject information = parseUsrInfYoutube.getJSONObject("entry");
+            if (information.has("yt$googlePlusUserId") && !information.isNull("yt$googlePlusUserId")) {
+                googlePlusUserId = information.getJSONObject("yt$googlePlusUserId").getString("$t");
+            }
+        } catch (Exception e) {
+            System.out.println("Error getting user information" + e.getMessage());
+        }
+
+        //Se realiza la peticion API Google,para obtener los datos de usuario en google+
+        
+        JSONObject userInfo = new JSONObject();
+        
+        if(googlePlusUserId.equals("")){
+           log.error("Not found for googlePlusUserId :" + userId);
+                    return null;
+        }
+        
+        try {
+            String youtubeResponse = getRequest(null, "https://www.googleapis.com/plus/v1/people/" + googlePlusUserId + "?key=AIzaSyBEbVYqvZudUYdt-UeHkgRl-rkvNHCw4Z8", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
             JSONObject parseUsrInf = null;
-
             parseUsrInf = new JSONObject(youtubeResponse);
 
             if (parseUsrInf.has("gender") && !parseUsrInf.isNull("gender")) {
@@ -1055,11 +1080,11 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
 
                 for (int i = 0; i < location.length(); i++) {
                     JSONObject jo = location.getJSONObject(i);
-                    
-                    if (jo.has("primary") && !jo.isNull("primary")) {                        
-                            userInfo.put("placesLived", jo.getString("value"));
-                            break;                       
-                    }else{
+
+                    if (jo.has("primary") && !jo.isNull("primary")) {
+                        userInfo.put("placesLived", jo.getString("value"));
+                        break;
+                    } else {
                         userInfo.put("placesLived", "");
                     }
                 }
@@ -1078,7 +1103,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         } catch (IOException ex) {
             log.error(ex);
         }
-        
+                
         return userInfo;
     }
 
