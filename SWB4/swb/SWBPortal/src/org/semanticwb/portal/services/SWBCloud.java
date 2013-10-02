@@ -23,6 +23,7 @@
 package org.semanticwb.portal.services;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -37,6 +38,6 @@ public interface SWBCloud {
     void launch();
     
     void doView(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException;
+            SWBParamRequest paramRequest, PrintWriter out) throws SWBResourceException, IOException;
     
 }
