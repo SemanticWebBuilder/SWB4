@@ -22,7 +22,6 @@
  */
 package org.semanticwb.aws;
 
-import java.util.Calendar;
 import java.util.TimerTask;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
@@ -47,7 +46,7 @@ public final class MonitorCloudTask extends TimerTask {
     public void run() {
         try {
         log.trace("Monitor AWS Timer Wake Up...");
-        AWSServices awsServ = SWBPortal.getAWSCloud();
+        AWSServicesImp awsServ = (AWSServicesImp)SWBPortal.getCloud();
         SWBCloudControlCenter cc = awsServ.getControlCenter();
         cc.reloadData();
         log.trace("found a load of: "+cc.getAverageLoad());
@@ -77,7 +76,7 @@ public final class MonitorCloudTask extends TimerTask {
         }
     }
     
-    private String launchNew(final AWSServices awsServ, final SWBCloudControlCenter controlCenter){
+    private String launchNew(final AWSServicesImp awsServ, final SWBCloudControlCenter controlCenter){
         return awsServ.createInstance(controlCenter.getPlacement(), controlCenter.getAmiID(), 
                 controlCenter.getInstanceType(), controlCenter.getSeg(), controlCenter.getKeyPair(), 
                 controlCenter.getMemory(), controlCenter.getAppServ(), controlCenter.getElasticDNS(), 
