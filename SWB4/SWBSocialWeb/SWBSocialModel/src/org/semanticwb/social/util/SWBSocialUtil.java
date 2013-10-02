@@ -14,6 +14,7 @@ import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -59,7 +60,6 @@ import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialSite;
-import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.Videoable;
@@ -1694,6 +1694,24 @@ public class SWBSocialUtil implements SWBAppObject {
             }
             return null;
         }
+        
+         //Returns person's age based in his/her bornDate
+         public static int calculateAge(Date bornDate) 
+         {
+            Calendar cal = Calendar.getInstance(); // current date
+            int currYear = cal.get(Calendar.YEAR);
+            int currMonth = cal.get(Calendar.MONTH);
+            int currDay = cal.get(Calendar.DAY_OF_MONTH);
+            cal.setTime(bornDate); // now born date
+            int years = currYear - cal.get(Calendar.YEAR);
+            int bornMonth = cal.get(Calendar.MONTH);
+            if (bornMonth == currMonth) { // same month
+                return cal.get(Calendar.DAY_OF_MONTH) <= currDay ? years: years - 1;
+            } else {
+                return bornMonth < currMonth ? years : years - 1;
+            }
+	}
+        
 
         //Diferencias entre dos fechas
         //@param fechaInicial La fecha de inicio
