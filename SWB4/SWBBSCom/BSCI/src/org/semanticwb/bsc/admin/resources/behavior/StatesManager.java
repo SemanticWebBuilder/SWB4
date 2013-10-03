@@ -63,7 +63,7 @@ public class StatesManager extends GenericResource {
             Status status = (Status)obj.createGenericInstance();
 
             SWBResourceURL url = paramRequest.getActionUrl();
-            StringBuilder ret = new StringBuilder();
+            StringBuilder ret = new StringBuilder(128);
             ret.append("<script type=\"text/javascript\">\n");
             ret.append("  dojo.require('dojo.parser');\n");
             ret.append("  dojo.require('dijit.layout.ContentPane');\n");
@@ -99,7 +99,7 @@ public class StatesManager extends GenericResource {
                 ret.append("  <select onchange=\"postHtml('").append(surl).append("'+'?sg='+this.attr('value')+'&suri=").append(URLEncoder.encode(suri,"UTF-8")).append("','").append(divId).append("')\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"sg\" >\n");
                 while(groups.hasNext()) {
                     StateGroup group = groups.next();
-                    if(!group.isValid() || !user.haveAccess(group)) {
+                    if((!group.isValid() && !containsAssignedState(status, group)) || !user.haveAccess(group)) {
                         continue;
                     }
                     if(aux==null) {
@@ -187,11 +187,12 @@ public class StatesManager extends GenericResource {
         if(states.hasNext())
         {
             String lang = user.getLanguage();
-            StringBuilder ret = new StringBuilder();
+            StringBuilder ret = new StringBuilder(128);
             ret.append("<ul>\n");
             while(states.hasNext()) {
                 State state = states.next();
-                if(!state.isValid() || !user.haveAccess(state)) {
+                //Si el estado fue asociado antes de haber sido desactivado, se muestra
+                if((!state.isValid() && !status.hasState(state)) || !user.haveAccess(state)) {
                     continue;
                 }
                 ret.append("<li><label for=\"chk_"+state.getId()+"\"><input type=\"checkbox\" "+(status.hasState(state)?"checked=\"checked\"":"")+" name=\"abc\" id=\"chk_"+state.getId()+"\" value=\""+state.getId()+"\"/>"+state.getDisplayTitle(lang)+"</label></li>\n"); 
@@ -272,5 +273,30 @@ System.out.println(response.getLocaleString("statmsg"));
         
         response.setRenderParameter("suri", suri);
         response.setRenderParameter("sg", sgId);
+    }
+    
+    /**
+     * Verifica si un grupo de estados contiene al menos un estado que haya sido asignado
+     * al elemento {@code status}, en cuyo caso devuelve {@code true}. De lo contrario el valor
+     * devuelto es {@code false}
+     * @param status el objeto que tiene asignados los estados de sem&aacute;foros a listar
+     * @param group el grupo de estados que se eval&uacute;a para desplegarse, en caso de que
+     *      est&eacute; activo o haya sido asignado anteriormente a la validaci&oacute;n.
+     * @return {@code true} en caso de que el grupo evaluado contenga al menos un estado asignado 
+     */
+    private boolean containsAssignedState(Status status, StateGroup group) {
+        
+        boolean containsState = false;
+        
+        GenericIterator<State> listStates = group.listGroupedStateses();
+        //Recorrer los estados del grupo y si status tiene asignado uno, devolver true
+        while (listStates.hasNext()) {
+            State state = listStates.next();
+            if (status.hasState(state)) {
+                containsState = true;
+                break;
+            }
+        }
+        return containsState;
     }
 }
