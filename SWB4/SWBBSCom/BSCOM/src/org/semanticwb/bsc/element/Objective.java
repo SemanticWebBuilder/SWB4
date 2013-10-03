@@ -50,16 +50,16 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
                             series.setDescription("Serie "+names[i], lang);
                             series.setIndex(i);
                             indicator.addSeries(series);
-                            for(State state:states)
-                            {
-                                EvaluationRule rule = EvaluationRule.ClassMgr.createEvaluationRule(indicator.getBSC());
-                                rule.setTitle("Regla para "+state.getTitle());
-                                rule.setTitle("Regla para "+state.getTitle(lang), lang);
-                                rule.setDescription("Regla para evaluar serie "+names[i]);
-                                rule.setDescription("Regla para evaluar serie "+names[i], lang);
-                                rule.setAppraisal(state);
-                                series.addEvaluationRule(rule);
-                            }
+//                            for(State state:states)
+//                            {
+//                                EvaluationRule rule = EvaluationRule.ClassMgr.createEvaluationRule(indicator.getBSC());
+//                                rule.setTitle("Regla para "+state.getTitle());
+//                                rule.setTitle("Regla para "+state.getTitle(lang), lang);
+//                                rule.setDescription("Regla para evaluar serie "+names[i]);
+//                                rule.setDescription("Regla para evaluar serie "+names[i], lang);
+//                                rule.setAppraisal(state);
+//                                series.addEvaluationRule(rule);
+//                            }
                         }
                     }
                 }

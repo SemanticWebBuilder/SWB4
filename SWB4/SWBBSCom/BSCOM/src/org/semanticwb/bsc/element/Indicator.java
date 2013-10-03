@@ -37,17 +37,21 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
                     Indicator indicator = (Indicator)obj.createGenericInstance();
                     // Funcionan exactamente igual indicator.getSeries() y indicator.getLastSeries()
                     Series series = indicator.getSeries();
-                    if(series!=null)
+                    if(series!=null && series.getEvaluationRule()==null)
                     {
-                        if(series.getEvaluationRule()==null)
-                        {
-                            List<State> validSates = indicator.listValidStates();
-                            for(State state:validSates) {
-                                EvaluationRule rule = EvaluationRule.ClassMgr.createEvaluationRule(indicator.getBSC());
-                                rule.setAppraisal(state);
-                                series.addEvaluationRule(rule);
-                            }
-                        }
+                        State state;
+                        String names[] = {"Actual","Meta","Actual Acumulado","Meta Acumulada"};
+                        List<State> validStates = indicator.listValidStates();
+                        for(int i=0; i<validStates.size(); i++) {
+                            state = validStates.get(i);
+                            EvaluationRule rule = EvaluationRule.ClassMgr.createEvaluationRule(indicator.getBSC());
+                            rule.setTitle("Regla para "+state.getTitle());
+                            rule.setTitle("Regla para "+state.getTitle(lang), lang);
+                            rule.setDescription("Regla para evaluar serie "+names[i]);
+                            rule.setDescription("Regla para evaluar serie "+names[i], lang);
+                            rule.setAppraisal(state);
+                            series.addEvaluationRule(rule);
+                        }                            
                     }
                 }
             }
