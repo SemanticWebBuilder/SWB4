@@ -1,0 +1,37 @@
+/* 
+    Document   : causaArrows
+    Created on : 3/10/2013, 11:25:13 AM
+    Author     : Martha
+    Description:
+        Purpose of the stylesheet follows.
+*/
+.axis line,
+.axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.arrow {
+  stroke: red;
+  stroke-width: 1.5px;
+  fill: red;
+  color: red;
+}
+
+.outer,
+.inner {
+  shape-rendering: crispEdges;
+}
+
+.outer {
+  fill: none;
+  stroke: #000;
+}
+
+.inner {
+  fill: #ccc;
+  stroke: #000;
+  stroke-dasharray: 3, 4;
+}
+
