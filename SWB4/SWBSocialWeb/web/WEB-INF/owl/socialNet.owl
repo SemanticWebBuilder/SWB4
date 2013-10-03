@@ -13,12 +13,6 @@
     >Created with TopBraid Composer</owl:versionInfo>
     <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
   </owl:Ontology>
-  <owl:Class rdf:ID="YouTubeCategory">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-    <rdfs:comment>Categorias a llenar en una colección.</rdfs:comment>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
   <owl:Class rdf:ID="Videoable">
     <rdfs:subClassOf>
       <swb:Interface rdf:ID="SocialNetPostable">
@@ -29,6 +23,12 @@
     </rdfs:subClassOf>
     <rdfs:comment>Interface que es utilizada para definir metodos necesarios para el envio y recepción de Post de tipo Video en las diferentes redes sociales que así lo requieran.</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="YouTubeCategory">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:comment>Categorias a llenar en una colección.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="MarkMsgAsPrioritary">
     <rdfs:label xml:lang="en">Action of marking a message as prioritary</rdfs:label>
@@ -195,6 +195,7 @@
     </rdfs:subClassOf>
     <rdfs:label xml:lang="en">Social Admin WebSite</rdfs:label>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTContents"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTStrategies"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Collections"/>
     <swb:hasClass rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
     <rdfs:comment>Objeto que define un Sitio Web de Administración de SWBSocial</rdfs:comment>
@@ -357,6 +358,19 @@
     <swb:hasClass>
       <owl:Class rdf:ID="SocialPFlowRef"/>
     </swb:hasClass>
+    <swb:hasHerarquicalNode>
+      <swbxf:HerarquicalNode rdf:ID="hn_Rss">
+        <swbxf:heClass>
+          <owl:Class rdf:ID="Rss"/>
+        </swbxf:heClass>
+        <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Rss</swb:title>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconRssGrp</swb:iconClass>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >70</swb:index>
+      </swbxf:HerarquicalNode>
+    </swb:hasHerarquicalNode>
     <swb:hasClass>
       <owl:Class rdf:about="#SocialTopic"/>
     </swb:hasClass>
@@ -366,7 +380,6 @@
         >swbIconSocialSite</swb:iconClass>
       </swbxf:DisplayObject>
     </swb:displayObject>
-    <swb:hasClass rdf:resource="#MarkMsgAsPrioritary"/>
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_SocialNets">
         <swb:hasHerarquicalNode>
@@ -461,6 +474,10 @@
         >swbIconSocialNetGrp</swb:iconClass>
       </swbxf:HerarquicalNode>
     </swb:hasHerarquicalNode>
+    <swb:hasClass>
+      <owl:Class rdf:about="#Rss"/>
+    </swb:hasClass>
+    <swb:hasClass rdf:resource="#MarkMsgAsPrioritary"/>
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_SocialPFlow">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
@@ -607,6 +624,24 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
     <rdfs:comment>Interface que contiene propiedades que sirven para el envío de emails</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Rss">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_Rss">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconRss</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdfs:label>Rss</rdfs:label>
+    <rdfs:comment>Manejo de Rss en una marca</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Tagable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Trashable"/>
   </owl:Class>
   <owl:Class rdf:about="#Stream">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableClass"/>
@@ -760,6 +795,7 @@
     <rdfs:comment>Clase que almacenara las diferentes cuentas de una organización para la red social YouTube.</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <rdfs:subClassOf rdf:resource="#DeveloperKeyable"/>
+    <rdfs:subClassOf rdf:resource="#Messageable"/>
     <rdfs:subClassOf rdf:resource="#SocialNetwork"/>
     <rdfs:subClassOf rdf:resource="#Videoable"/>
   </owl:Class>
@@ -1001,13 +1037,13 @@
       <owl:ObjectProperty rdf:ID="pflowInstance"/>
     </owl:inverseOf>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasPostContainer_PostInv">
+    <rdfs:comment>Propiedad inversa que me regresa los postContainers con los cuales tiene referencia un objeto(instancia) PostOut, recordemos que se crea una instancia de PostContainer por una red social, de modo que si se envía un postOut a varias redes sociales(lo cual puede pasar) pues se deverían de crear varios postContainers (Si es que no hay ya creados) por cada una de estas redes sociales a las cuales se envía el PostOut.</rdfs:comment>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasPostInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >hasPost</swb:propertyCodeName>
     <rdfs:comment>Un SocialTopic puede tener muchos post asociados a este. Si se elimina un socialTopic, no se eliminan estos post asociados, simplemente se quedan sin socialTopic y aparecerían en el Stream de entrada.</rdfs:comment>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasPostContainer_PostInv">
-    <rdfs:comment>Propiedad inversa que me regresa los postContainers con los cuales tiene referencia un objeto(instancia) PostOut, recordemos que se crea una instancia de PostContainer por una red social, de modo que si se envía un postOut a varias redes sociales(lo cual puede pasar) pues se deverían de crear varios postContainers (Si es que no hay ya creados) por cada una de estas redes sociales a las cuales se envía el PostOut.</rdfs:comment>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="socialNetwork">
     <owl:inverseOf rdf:resource="#hasSocialPostInv"/>
@@ -1099,6 +1135,18 @@
     <rdfs:comment>Redes Sociales a las cuales publicará la sección</rdfs:comment>
     <rdfs:domain rdf:resource="#SocialWebPage"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="snu_LifeStage">
+    <rdfs:comment>Etapa de vida del usuario de la red social</rdfs:comment>
+    <rdfs:range>
+      <swb:Class rdf:ID="LifeStage">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasYoutubeCategory">
     <rdfs:label xml:lang="en">Categories to listen</rdfs:label>
     <rdfs:label xml:lang="es">Categorias a escuchar</rdfs:label>
@@ -1157,6 +1205,26 @@
     <rdfs:range rdf:resource="#PostIn"/>
     <rdfs:domain rdf:resource="#PostOut"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasUsers">
+    <rdfs:label xml:lang="es">Para usuario</rdfs:label>
+    <rdfs:label xml:lang="en">to users</rdfs:label>
+    <rdfs:comment>Para que usuarios esta dirigido el mensaje</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <rdfs:domain>
+      <swb:Class rdf:ID="UserMessage">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf>
+          <swb:Class rdf:ID="Colaboration">
+            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </rdfs:subClassOf>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasStatesInv">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
@@ -1196,6 +1264,11 @@
     <rdfs:range rdf:resource="#SocialRuleRef"/>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="fromUser">
+    <rdfs:comment>Usuario autor del mensaje</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <rdfs:domain rdf:resource="#UserMessage"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="pflow">
     <rdfs:domain rdf:resource="#SocialPFlowRef"/>
@@ -1272,6 +1345,12 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#PostOutNet"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="pfiTime">
+    <rdfs:domain rdf:resource="#SocialPFlowInstance"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >time</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="socialwpPhoto">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_socialwpPhoto">
@@ -1299,12 +1378,6 @@
     <rdfs:label xml:lang="es">Foto</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#SocialWebPage"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="pfiTime">
-    <rdfs:domain rdf:resource="#SocialPFlowInstance"/>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >time</swb:propertyCodeName>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="latitude">
     <rdfs:domain rdf:resource="#Post"/>
@@ -1428,6 +1501,11 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#SocialNetworkUser"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="snu_education">
+    <rdfs:comment>Educación definida del usuario en la red social.   1=Primaria; 2=Secundaria; 3=Preparatoria; 4=Universidad; 5=PostGrado;</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="filterSentimentalNeutral">
     <rdfs:label xml:lang="en">Neutral Sentiment</rdfs:label>
     <rdfs:label xml:lang="es">Sentimiento Neutral</rdfs:label>
@@ -1483,6 +1561,11 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#SentimentalLearningPhrase"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="snu_gender">
+    <rdfs:comment>Genero registrado en el red social para el usuario. 1=Hombre; 2=Mujer; 3=Indefinido.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="snu_id">
     <rdfs:comment>Id del usuario en una determinada red social, es decir, en twitter, facebook, google+, youtube, flicker, etc.</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -1508,6 +1591,11 @@
         <rdfs:label xml:lang="en">Latitude</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="snu_relationShipStatus">
+    <rdfs:comment>Relación sentimental del usuario en la red social. 1=Soltero; 2=Unión Libre; 3=Casado; 4=Divordiado; 5=Viudo;</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="secretKey">
     <swb:displayProperty>
@@ -1662,6 +1750,12 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:comment>Frase a monitorear en un determinado stream, cada stream tiene sus propias frasea a monitorear.</rdfs:comment>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="accessToken">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Almacena el access Token autorizado para hacer publicaciones, por conveniencia no utiliza displayProperty</rdfs:comment>
+    <rdfs:domain rdf:resource="#Oauthable"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="userCanReTopicMsg">
     <rdfs:domain rdf:resource="#SocialUserExtAttributes"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
@@ -1674,12 +1768,6 @@
         <swbxf:propGroup rdf:resource="#SocialUserGroup"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="accessToken">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Almacena el access Token autorizado para hacer publicaciones, por conveniencia no utiliza displayProperty</rdfs:comment>
-    <rdfs:domain rdf:resource="#Oauthable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="snu_name">
     <rdfs:comment>Nombre del usuario en la Red Social</rdfs:comment>
@@ -1722,6 +1810,11 @@
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Almacena la fecha de expiración del token autorizado para hacer publicaciones, por conveniencia no utiliza displayProperty</rdfs:comment>
     <rdfs:domain rdf:resource="#Oauthable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="snu_email">
+    <rdfs:comment>Email registrado para el usuario en la red social</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="preposition">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -1812,6 +1905,21 @@
     >step</swb:propertyCodeName>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="ls_minAge">
+    <rdfs:label xml:lang="en">Min Age</rdfs:label>
+    <rdfs:label xml:lang="es">Minima edad</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_minAge">
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>Minima edad que debe de cumplir un usuario para estar en una determinada etapa de la vida</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#LifeStage"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="geoCenterLongitude">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_geoCenterLongitude">
@@ -1830,21 +1938,6 @@
     <rdfs:comment>Propiedad con valor entero que representa el tipo de Sentimientos que expresa el Post, estos se estan definiendo de esta manera: 0) Neutro 1) Positivo 2)Negativo, estos valores pueden ser mas y permanecer en un objeto tipo colección en lo futuro.</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#Post"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="msg_Text">
-    <rdfs:label xml:lang="en">Message</rdfs:label>
-    <rdfs:label xml:lang="es">Mensaje</rdfs:label>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_msg_Text">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >100</swb:index>
-        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#PostTextable"/>
-    <rdfs:comment>Propiedad que almacena un texto o mensaje en un objeto Post que lo requiera.</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="video">
     <swb:displayProperty>
@@ -1865,6 +1958,21 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#PostVideoable"/>
     <rdfs:comment>Propiedad que almacena el nombre(referencia) de un video en un objeto Post que lo requiera.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="msg_Text">
+    <rdfs:label xml:lang="en">Message</rdfs:label>
+    <rdfs:label xml:lang="es">Mensaje</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_msg_Text">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#PostTextable"/>
+    <rdfs:comment>Propiedad que almacena un texto o mensaje en un objeto Post que lo requiera.</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="postSentimentalEmoticonType">
     <rdfs:comment>Sentimiento de el mensaje (Post) basado en emoticones encontrados. (1=Positivo;2=Negativo;0=Neutro)</rdfs:comment>
@@ -1901,10 +2009,19 @@
     <rdfs:domain rdf:resource="#Facebook"/>
     <rdfs:comment>Eliminar despues esta propiedad, ver si Jose puede eliminar la propiedad login que se encuentra en la clase padre(SocialNetwork).</rdfs:comment>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="month">
-    <rdfs:comment>Mes en el cual es creada una instancia de PostContainer,esta propiedad servira mucho  para buscar los postOut de manera optima, ya que pudieran ser muchos en un corto tiempo.</rdfs:comment>
+  <owl:DatatypeProperty rdf:ID="usrMsg">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_usrMsg">
+        <rdfs:label xml:lang="en">Message</rdfs:label>
+        <rdfs:label xml:lang="es">Mensaje</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>Mensaje a dejar a uno o varios usuarios</rdfs:comment>
+    <rdfs:label xml:lang="en">Message</rdfs:label>
+    <rdfs:label xml:lang="es">Mensaje</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#PostOutContainer"/>
+    <rdfs:domain rdf:resource="#UserMessage"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="password">
     <swb:displayProperty>
@@ -1917,6 +2034,24 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:comment>Password o contraseña con la cual una organización se puede conectar a una determinada instancia de Red Social.</rdfs:comment>
     <rdfs:domain rdf:resource="#Authenticable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="month">
+    <rdfs:comment>Mes en el cual es creada una instancia de PostContainer,esta propiedad servira mucho  para buscar los postOut de manera optima, ya que pudieran ser muchos en un corto tiempo.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#PostOutContainer"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="rss_URL">
+    <rdfs:domain rdf:resource="#Rss"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label>Url</rdfs:label>
+    <rdfs:comment>Url del rss</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_rss_URL">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="SentimentalValue">
     <rdfs:domain rdf:resource="#SentimentWords"/>
@@ -2025,6 +2160,17 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#SentimentalLearningPhrase"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="userPriority">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_userPriority"/>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Is priority?</rdfs:label>
+    <rdfs:label xml:lang="es">Es priorotario</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#UserMessage"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="Phrase">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</swb:required>
@@ -2032,15 +2178,35 @@
     <rdfs:comment>Frase a ser re-clasificada por los usuarios.</rdfs:comment>
     <rdfs:domain rdf:resource="#SentimentalLearningPhrase"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="snu_profileGeoLocation">
+    <rdfs:comment>Localización del usuario que se encuentra en el profile de la red social específica. Ej. Tampico, Tamaulipas.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="status">
     <rdfs:comment>Estatus del PostOut en una instancia de red social específica. 0=No publicado; 1=Publicado;</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#PostOutNet"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="snu_profileGeoLocation">
-    <rdfs:comment>Localización del usuario que se encuentra en el profile de la red social específica. Ej. Tampico, Tamaulipas.</rdfs:comment>
+  <owl:DatatypeProperty rdf:ID="ls_maxAge">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_maxAge">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>Edad Maxima considerada para la etapa de la vida especificada</rdfs:comment>
+    <rdfs:label xml:lang="en">Max Age</rdfs:label>
+    <rdfs:label xml:lang="es">Maxima edad</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#LifeStage"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="category">
+    <rdfs:domain rdf:resource="#PostVideoable"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
+    <rdfs:comment>Categoría del video en la red social. Hasta el momento se utiliza solo para las categorias de YouTube, sin embargo, otras redes sociales que añadamos y que manejen videos, seguramente utilizaran también categorias. En este campo se graba el uri de la categoría, para youtube se toman de la clase de tipo catálogo llamada "YouTubeCategory".</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="east">
     <swb:displayProperty>
@@ -2056,11 +2222,6 @@
     <rdfs:comment>Punto Este, del punto North East (NE) de un bounding box.</rdfs:comment>
     <rdfs:label xml:lang="en">East</rdfs:label>
     <rdfs:domain rdf:resource="#GeoMapable"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="category">
-    <rdfs:domain rdf:resource="#PostVideoable"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Categoría del video en la red social. Hasta el momento se utiliza solo para las categorias de YouTube, sin embargo, otras redes sociales que añadamos y que manejen videos, seguramente utilizaran también categorias. En este campo se graba el uri de la categoría, para youtube se toman de la clase de tipo catálogo llamada "YouTubeCategory".</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="po_created">
     <rdfs:domain rdf:resource="#PostOutNet"/>
@@ -2096,6 +2257,10 @@
   <swbxf:DisplayProperty rdf:ID="dp_countryCodetoSearch">
     <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
     <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_userFavorite">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >200</swb:index>
   </swbxf:DisplayProperty>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org/swb4/ontology#usrPhoto">
     <swb:displayProperty>
