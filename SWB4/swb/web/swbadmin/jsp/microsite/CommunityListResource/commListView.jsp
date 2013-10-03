@@ -10,7 +10,7 @@
         while (itwp.hasNext())
         {
             WebPage wpit = itwp.next();
-            if (wpit.getSemanticObject().getGenericInstance() instanceof MicroSite)
+            if (wpit instanceof MicroSite)
             {
                 numc++;
             }
@@ -36,7 +36,7 @@
                 while (itso.hasNext())
                 {
                     WebPage so = itso.next();
-                    if (so.getSemanticObject().getGenericInstance() instanceof WebPage && !(so.getSemanticObject().getGenericInstance() instanceof MicroSite))
+                    if (so instanceof WebPage && !(so instanceof MicroSite))
                     {
                         nwp++;
                         //break;
@@ -113,7 +113,7 @@
         {
             wpgs = itwpch.next();
 
-            if (!(wpgs instanceof MicroSite) && wpgs.isActive() && !wpgs.isDeleted() && !(wpgs.getSemanticObject().getGenericInstance() instanceof MicroSiteWebPageUtil))
+            if (!(wpgs instanceof MicroSite) && wpgs.isActive() && !wpgs.isDeleted() && !(wpgs instanceof MicroSiteWebPageUtil))
             {
                 numcomm = getExistingCommunities(wpgs, user);
                 nummsg = "";
@@ -160,7 +160,7 @@
                     {
                         wpgs = itwpch.next();
 
-                        if (!(wpgs instanceof MicroSite) && wpgs.isActive() && !wpgs.isDeleted() && !(wpgs.getSemanticObject().getGenericInstance() instanceof MicroSiteWebPageUtil))
+                        if (!(wpgs instanceof MicroSite) && wpgs.isActive() && !wpgs.isDeleted() && !(wpgs instanceof MicroSiteWebPageUtil))
                         {
                             numcomm = getExistingCommunities(wpgs, user);
                             nummsg = "";

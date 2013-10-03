@@ -52,15 +52,15 @@
                             String show=((MenuItem)child.getSemanticObject().createGenericInstance()).getShowAs();
                             if(show!=null && show.equals("DIALOG"))
                             {
-                                out.println("            <div dojoType=\"dijit.MenuItem\" iconClass_=\"swbIconWebPage\" onclick=\"showDialog('"+child.getUrl()+"','"+child.getDisplayName(lang)+"');\">"+child.getDisplayName(lang)+"</div>");
+                                out.println("            <div dojoType=\"dijit.MenuItem\" iconClass_=\"swbIconWebPage\" onclick=\"showDialog('"+child.getUrl()+"','"+SWBUtils.TEXT.scape4Script(child.getDisplayName(lang))+"');\">"+child.getDisplayName(lang)+"</div>");
                             }else
                             {
-                                out.println("            <div dojoType=\"dijit.MenuItem\" iconClass_=\"swbIconWebPage\" onclick=\"addNewTab('"+child.getURI()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/menuTab.jsp"+"','"+child.getDisplayName(lang)+"');\">"+child.getDisplayName(lang)+"</div>");
+                                out.println("            <div dojoType=\"dijit.MenuItem\" iconClass_=\"swbIconWebPage\" onclick=\"addNewTab('"+child.getURI()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/menuTab.jsp"+"','"+SWBUtils.TEXT.scape4Script(child.getDisplayName(lang))+"');\">"+child.getDisplayName(lang)+"</div>");
                             }
                         }else
                         {
                             //out.println("            <div dojoType=\"dijit.MenuItem\" accelKey=\"Ctrl+S\" iconClass_=\"swbIconWebPage\" onclick=\"addNewTab('"+child.getURI()+"','"+child.getTitle()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/menuTab.jsp"+"');\">"+child.getTitle()+"</div>");
-                            out.println("            <div dojoType=\"dijit.MenuItem\" iconClass_=\"swbIconWebPage\" onclick=\"addNewTab('"+child.getURI()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/menuTab.jsp"+"','"+child.getDisplayName(lang)+"');\">"+child.getDisplayName(lang)+"</div>");
+                            out.println("            <div dojoType=\"dijit.MenuItem\" iconClass_=\"swbIconWebPage\" onclick=\"addNewTab('"+child.getURI()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/menuTab.jsp"+"','"+SWBUtils.TEXT.scape4Script(child.getDisplayName(lang))+"');\">"+child.getDisplayName(lang)+"</div>");
                         }
                     }
                 }
@@ -124,7 +124,7 @@
 
     }
 %>
-<span id="swblogout"><a href="?suri=<%=user.getEncodedURI()%>" onclick="addNewTab('<%=user.getURI()%>', null, '<%=user.getSemanticObject().getDisplayName(lang)%>');return false;"><%=user.getFullName()%></a> | <a href="<%=SWBPlatform.getContextPath()%>/login?wb_logout=true"><%=getLocaleString("logout",lang)%></a></span>
+<span id="swblogout"><a href="?suri=<%=user.getEncodedURI()%>" onclick="addNewTab('<%=user.getURI()%>', null, '<%=SWBUtils.TEXT.scape4Script(user.getSemanticObject().getDisplayName(lang))%>');return false;"><%=user.getFullName()%></a> | <a href="<%=SWBPlatform.getContextPath()%>/login?wb_logout=true"><%=getLocaleString("logout",lang)%></a></span>
 <!--    
 
     <div id="getMail" dojoType="dijit.form.ComboButton" optionsTitle="Mail Source Options">

@@ -325,9 +325,9 @@
                     {
                         sm = new dijit.MenuItem(
                         {
-                            label: menu.title,
-                            iconClass:menu.icon,
-                            action: menu.action
+                            label: menu.title instanceof Array?menu.title[0]:menu.title,
+                            iconClass:menu.icon instanceof Array?menu.icon[0]:menu.icon,
+                            action: menu.action instanceof Array?menu.action[0]:menu.action
                         }, mi);
                         sm.onClick = function(ele)
                         {

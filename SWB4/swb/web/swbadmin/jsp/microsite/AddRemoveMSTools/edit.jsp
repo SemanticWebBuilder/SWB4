@@ -21,7 +21,7 @@
         boolean isMicrosite = false;
         Member member = null;
 
-        if (wp.getSemanticObject().getGenericInstance() instanceof MicroSite) {
+        if (wp instanceof MicroSite) {
             isMicrosite = true;
             member = getMember(user, (MicroSite)wp);
         }
@@ -132,7 +132,7 @@
                 out.println("<tr><td colspan=\"2\"><table>");
 
                 MicroSite ms = null;
-                if(wp.getSemanticObject().getGenericInstance() instanceof MicroSite)
+                if(wp instanceof MicroSite)
                 {
                     ms = (MicroSite)wp;
                     Iterator<Member> itmms = ms.listMembers();

@@ -29,7 +29,7 @@
             urle.setParameter("act", "edit");
             MicroSite site = MicroSite.getMicroSite(paramRequest.getWebPage());
             Member member = getMember(user, site);
-            if (!(wp.getSemanticObject().getGenericInstance() instanceof MicroSite))
+            if (!(wp instanceof MicroSite))
             {
                 return;
             }
