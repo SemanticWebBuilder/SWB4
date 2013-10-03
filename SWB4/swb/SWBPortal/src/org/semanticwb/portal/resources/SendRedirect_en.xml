@@ -1,23 +1,107 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<xslfile>admresource.xslt</xslfile>
-	<form name="frmSendRedirect" action="true" method="POST">
-		<admdbconnmgr defconn="true"/>
-                <fieldset>
-		<input type="TEXT" name="url" label="Url redirection:" size="50" jsrequired="true"/>
-                </fieldset>
-                <fieldset>
-		<input type="SUBMIT" name="btnSave"  value="Save" class="boton"/>
-		<input type="RESET"  name="btnReset" value="Cancel" class="boton"/>
-                </fieldset>
-	</form>
-	<statictext name="txtNote">
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmSendRedirect" action="true" method="POST">
+        <admdbconnmgr defconn="true"/>
+        <fieldset>
+            <input type="TEXT" name="url" label="Url redirection:" size="50" jsrequired="true"/>
+            <statictext name="txtNotaUserLogin">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {user.login} User login
+			</font>
+		]]>
+            </statictext>
+            <statictext name="txtNotaUserMail">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {user.email} User E-mail
+			</font>
+		]]>
+            </statictext>
+            <statictext name="txtNotaUserLanguage">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {user.language} User's language code
+			</font>
+		]]>
+            </statictext>
+            <statictext name="txtNotaUserCountry">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {user.country} User's country code
+			</font>
+		]]>
+            </statictext>
+            <statictext name="txtNotaWebPath">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {webpath} Web path (of this SWB instance's context)
+			</font>
+		]]>
+            </statictext>
+            <statictext name="txtNotaDispath">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {distpath} Distributor path for this SWB instance's context
+			</font>
+		]]>
+            </statictext>
+            <statictext name="txtNotaWebWorkPath">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {webworkpath} Web path for this SWB instance's work directory
+			</font>
+		]]>
+            </statictext>
+            <statictext name="txtNotaWorkPath">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {workpath} Physical path for this SWB instance's work directory
+			</font>
+		]]>
+            </statictext>
+            <statictext name="txtNotaWebSiteId">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {websiteid} Identifier of the Web site related to this resource
+			</font>
+		]]>
+            </statictext>
+            <statictext name="txtNotaTopicUrl">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {topicurl} URL for the page in which this StaticText is displayed
+			</font>
+		]]>
+            </statictext>
+            <statictext name="txtNotaTopicId">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {topicid} Identifier of the page in which this StaticText is displayed
+			</font>
+		]]>
+            </statictext>
+            <statictext name="txtNotaTopicTitle">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {topic.title} Title of the page in which this StaticText is displayed
+			</font>
+		]]>
+            </statictext>                
+        </fieldset>
+        <fieldset>
+            <input type="SUBMIT" name="btnSave"  value="Save" class="boton"/>
+            <input type="RESET"  name="btnReset" value="Cancel" class="boton"/>
+        </fieldset>
+    </form>
+    <statictext name="txtNote">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
 				* Data requirements.
 			</font>
 		]]>
-	</statictext>
+    </statictext>
 
     <script type="text/javascript">
         <![CDATA[

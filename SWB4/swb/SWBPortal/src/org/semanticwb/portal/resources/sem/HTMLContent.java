@@ -396,7 +396,8 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                 }
                 //Termina Páginación
             }
-        }
+            fileContent = SWBUtils.TEXT.replaceAll(fileContent, "<webpath/>",SWBPortal.getContextPath());
+         }
 
         response.getWriter().println(fileContent);
     }
