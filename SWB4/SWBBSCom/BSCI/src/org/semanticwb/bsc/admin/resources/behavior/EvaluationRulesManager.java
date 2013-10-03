@@ -137,7 +137,7 @@ public class EvaluationRulesManager extends GenericAdmResource {
             out.println("<tr>");
             out.println("<th>"+paramRequest.getLocaleString("lblAction")+"</th>");
             out.println("<th>"+paramRequest.getLocaleString("lblStatus")+"</th>");            
-            out.println("<th>"+paramRequest.getLocaleString("StatusGroup")+"</th>");            
+            out.println("<th>"+paramRequest.getLocaleString("lblStatusGroup")+"</th>");            
             out.println("<th>"+paramRequest.getLocaleString("lblOperation")+"</th>");            
             out.println("<th>"+paramRequest.getLocaleString("lblSeries")+"</th>");            
             out.println("<th>"+paramRequest.getLocaleString("lblFactor")+"</th>");            
@@ -316,7 +316,7 @@ public class EvaluationRulesManager extends GenericAdmResource {
             out.println("</tbody>");
             out.println("</table>");
             out.println("</fieldset>");
-            if(hasRules || !validSates.isEmpty())
+            if(hasRules)
             {
                 out.println("<fieldset>");
                 SWBResourceURL urlAll = paramRequest.getActionUrl();
@@ -327,10 +327,10 @@ public class EvaluationRulesManager extends GenericAdmResource {
                 
                 urlAll.setAction(Action_DEACTIVE_ALL);
                 out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlAll + "',this.domNode); return false;\">" + paramRequest.getLocaleString("lblDeactiveAll") + "</button>");
-                out.println("</fieldset>");
                 
                 urlAll.setAction(Action_DELETE_ALL);
                 out.println("<button dojoType=\"dijit.form.Button\" onclick=\"if(confirm('"+paramRequest.getLocaleString("queryRemoveAll")+"?')){submitUrl('" + urlAll + "',this.domNode);} return false;\">" + paramRequest.getLocaleString("lblRemoveAll") + "</button>");
+                out.println("</fieldset>");
             }
             out.println("</div>");
         }
@@ -480,7 +480,27 @@ public class EvaluationRulesManager extends GenericAdmResource {
                 response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchSemanticElement"));
             }
         }
-        else if(SWBResourceURL.Action_REMOVE.equals(action))
+        else if(Action_ACTIVE_ALL.equalsIgnoreCase(action))
+        {
+            if(objSeries!=null) {
+                Series series = (Series)objSeries.getGenericInstance();                
+                Iterator<EvaluationRule> rules = series.listEvaluationRules();
+                while(rules.hasNext()) {
+                    rules.next().setActive(Boolean.TRUE);
+                }
+            }
+        }
+        else if(Action_DEACTIVE_ALL.equalsIgnoreCase(action))
+        {
+            if(objSeries!=null) {
+                Series series = (Series)objSeries.getGenericInstance();                
+                Iterator<EvaluationRule> rules = series.listEvaluationRules();
+                while(rules.hasNext()) {
+                    rules.next().setActive(Boolean.FALSE);
+                }
+            }
+        }
+        else if(SWBResourceURL.Action_REMOVE.equalsIgnoreCase(action))
         {
             SemanticObject objRule = ont.getSemanticObject(request.getParameter("sval"));
             if(objSeries!=null && objRule!=null) {
@@ -494,6 +514,13 @@ public class EvaluationRulesManager extends GenericAdmResource {
                 }
             }else {
                 response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchSemanticElement"));
+            }
+        }
+        else if(Action_DELETE_ALL.equalsIgnoreCase(action))
+        {
+            if(objSeries!=null) {
+                Series series = (Series)objSeries.getGenericInstance();                
+                series.removeAllEvaluationRule();
             }
         }
     }
