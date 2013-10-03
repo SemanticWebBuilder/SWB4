@@ -6,7 +6,6 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
-import org.semanticwb.bsc.tracing.EvaluationRule;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.model.GenericIterator;
@@ -14,6 +13,7 @@ import org.semanticwb.model.Role;
 import org.semanticwb.model.RuleRef;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
 import org.semanticwb.platform.SemanticObject;
@@ -30,7 +30,7 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
             public void notify(SemanticObject obj, Object prop, String lang, String action)
             {
                 if("ADD".equalsIgnoreCase(action)) {
-                    //SWBModel model = (SWBModel)obj.getModel().getModelObject().createGenericInstance();
+                    SWBModel model = (SWBModel)obj.getModel().getModelObject().createGenericInstance();
                     Objective objective = (Objective)obj.createGenericInstance();
                     List<State> states = objective.listValidStates();
                     // Funcionan exactamente igual objective.getIndicator() y objective.getLastIndicator()
@@ -43,7 +43,7 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
                         Series series;
                         for(int i=0; i<names.length; i++)
                         {
-                            series = Series.ClassMgr.createSeries(objective.getBSC());
+                            series = Series.ClassMgr.createSeries(model);
                             series.setTitle(names[i]);
                             series.setTitle(names[i], lang);
                             series.setDescription("Serie "+names[i]);
