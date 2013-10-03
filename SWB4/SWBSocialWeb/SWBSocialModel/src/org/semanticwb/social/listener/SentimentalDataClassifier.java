@@ -886,18 +886,21 @@ public class SentimentalDataClassifier {
                         {
                             System.out.println("userBirthDay:"+userBirthDay);
                             Date date=new SimpleDateFormat("MM/dd/yyyy").parse(userBirthDay);
-                            int userYears=SWBSocialUtil.Util.calculateAge(date);
-                            System.out.println("userYears:"+userYears);
-                            if(userYears>0)
+                            if(date.getYear()>1900)
                             {
-                                Iterator <LifeStage> itLifeStage=LifeStage.ClassMgr.listLifeStages(SWBContext.getAdminWebSite());
-                                while(itLifeStage.hasNext())
+                                int userYears=SWBSocialUtil.Util.calculateAge(date);
+                                System.out.println("userYears:"+userYears);
+                                if(userYears>0)
                                 {
-                                    LifeStage lifeStage=itLifeStage.next();
-                                    if(userYears>=lifeStage.getLs_minAge() && userYears<=lifeStage.getLs_maxAge())
+                                    Iterator <LifeStage> itLifeStage=LifeStage.ClassMgr.listLifeStages(SWBContext.getAdminWebSite());
+                                    while(itLifeStage.hasNext())
                                     {
-                                        socialNetUser.setSnu_LifeStage(lifeStage);
-                                        break;
+                                        LifeStage lifeStage=itLifeStage.next();
+                                        if(userYears>=lifeStage.getLs_minAge() && userYears<=lifeStage.getLs_maxAge())
+                                        {
+                                            socialNetUser.setSnu_LifeStage(lifeStage);
+                                            break;
+                                        }
                                     }
                                 }
                             }
