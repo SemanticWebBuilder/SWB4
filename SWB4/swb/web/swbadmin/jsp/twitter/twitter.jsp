@@ -19,7 +19,7 @@
 
         boolean isComunity=false;
         Member member = Member.getMember(owner, webpage);
-        if (webpage.getSemanticObject().getGenericInstance() instanceof MicroSiteWebPageUtil) {
+        if (webpage instanceof MicroSiteWebPageUtil) {
             isComunity=true;
         }
 

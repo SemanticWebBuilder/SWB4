@@ -354,7 +354,7 @@ class Contenedor {
 
     WebPage getWebPage(){
         SemanticObject obj=SemanticObject.createSemanticObject(yoid)
-        if(obj!=null)return obj.getGenericInstance()
+        if(obj!=null)return obj.createGenericInstance()
         return null
     }
 

@@ -13,7 +13,7 @@
         while(itso.hasNext())
         {
             WebPage so = itso.next();
-            if(so.getSemanticObject().getGenericInstance() instanceof WebPage && !(so.getSemanticObject().getGenericInstance() instanceof MicroSite) )
+            if(so instanceof WebPage && !(so instanceof MicroSite) )
             {
                 nwp++;
                 break;
@@ -91,7 +91,7 @@
             StringBuffer select = new StringBuffer("");
             StringBuffer temas = new StringBuffer("");
             String opciones = null;
-            if(!(wpage.getSemanticObject().getGenericInstance() instanceof MicroSite))
+            if(!(wpage instanceof MicroSite))
             {
                 if(wpage.getLevel()==1)
                 {
@@ -100,7 +100,7 @@
                     while(iteWP.hasNext())
                     {
                         WebPage wpc = iteWP.next();
-                        if(!(wpc.getSemanticObject().getGenericInstance() instanceof MicroSite))
+                        if(!(wpc instanceof MicroSite))
                         {
                             opciones =  getSubTemas(wpc,lang);
                             if(opciones.trim().length()>0)
@@ -131,7 +131,7 @@
                 
                 if(select.toString().trim().length()==0&&wpage.getLevel()==1)
                 {
-                    if(!(wpage.getSemanticObject().getGenericInstance() instanceof MicroSite))
+                    if(!(wpage instanceof MicroSite))
                     {
                         opciones =  getSubTemas(wpage,lang);
                     }
@@ -197,7 +197,7 @@
         while(itwpst.hasNext())
         {
             WebPage wpst = itwpst.next();
-            if(!(wpst.getSemanticObject().getGenericInstance() instanceof MicroSite))
+            if(!(wpst instanceof MicroSite))
             {
                stOpts.append("<option label=\""+wpst.getDisplayName()+"\">"+wpst.getId()+"</option>");
             }

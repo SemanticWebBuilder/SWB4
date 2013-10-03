@@ -109,7 +109,7 @@
                         addDiv=true;
                     }else if(obj.instanceOf(Resource.sclass))
                     {
-                        Resource res=(Resource)obj.getGenericInstance();
+                        Resource res=(Resource)obj.createGenericInstance();
                         SWBResource swbres=SWBPortal.getResourceMgr().getResource(res);
                         if(swbres!=null && swbres instanceof GenericSemResource)
                         {

@@ -19,9 +19,22 @@
     //System.out.println("smode:"+smode);
 
     SemanticModel model=sobj.getModel();   
-    if(!model.getModelObject().instanceOf(WebSite.sclass))
+    if(model.getModelObject().instanceOf(UserRepository.sclass))
     {
-        SWBModel rep=(SWBModel)model.getModelObject().getGenericInstance();
+        UserRepository rep=(UserRepository)model.getModelObject().createGenericInstance();
+        Iterator<WebSite> wsit=SWBContext.listWebSites();
+        while(wsit.hasNext())
+        {
+            WebSite site =  wsit.next();
+            if(rep.equals(site.getUserRepository()))
+            {
+                model=site.getSemanticObject().getModel();
+            }
+        }
+
+    }else if(!model.getModelObject().instanceOf(WebSite.sclass))
+    {
+        SWBModel rep=(SWBModel)model.getModelObject().createGenericInstance();
         Iterator<WebSite> wsit=SWBContext.listWebSites();
         while(wsit.hasNext())
         {
@@ -48,7 +61,7 @@
         Iterator<SemanticObject> it=model.listInstancesOfClass(Language.sclass);
         while(it.hasNext())
         {
-            Language lng=(Language)it.next().getGenericInstance();
+            Language lng=(Language)it.next().createGenericInstance();
             ret.append("      <tr>");
             ret.append("        <td><label>"+lng.getDisplayTitle(lang)+":</label></td>");
             String sval=sobj.getProperty(sprop,"",lng.getId());
@@ -73,7 +86,7 @@
         Iterator<SemanticObject> it=model.listInstancesOfClass(Language.sclass);
         while(it.hasNext())
         {
-            Language lng=(Language)it.next().getGenericInstance();
+            Language lng=(Language)it.next().createGenericInstance();
             
             String val=request.getParameter(lng.getId());
             //System.out.println("val:"+val);

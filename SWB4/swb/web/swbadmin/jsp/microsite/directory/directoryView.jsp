@@ -46,7 +46,7 @@ private final int I_PAGE_SIZE = 20;
                     StringBuffer select = new StringBuffer("");
                     StringBuffer temas = new StringBuffer("");
                     String opciones = null;
-                    if(!(wpage.getSemanticObject().getGenericInstance() instanceof MicroSite))
+                    if(!(wpage instanceof MicroSite))
                     {
                         if(wpage.getLevel()==1)
                         {
@@ -55,7 +55,7 @@ private final int I_PAGE_SIZE = 20;
                             while(iteWP.hasNext())
                             {
                                 WebPage wpc = iteWP.next();
-                                if(!(wpc.getSemanticObject().getGenericInstance() instanceof MicroSite))
+                                if(!(wpc instanceof MicroSite))
                                 {
                                     opciones =  getSubTemas(wpc,lang);
                                     if(opciones.trim().length()>0)
@@ -87,7 +87,7 @@ private final int I_PAGE_SIZE = 20;
 
                         if(select.toString().trim().length()==0&&wpage.getLevel()==1)
                         {
-                            if(!(wpage.getSemanticObject().getGenericInstance() instanceof MicroSite))
+                            if(!(wpage instanceof MicroSite))
                             {
                                 opciones =  getSubTemas(wpage,lang);
                             }
@@ -667,7 +667,7 @@ if (!exist)
         while(itwpst.hasNext())
         {
             WebPage wpst = itwpst.next();
-            if(!(wpst.getSemanticObject().getGenericInstance() instanceof MicroSite))
+            if(!(wpst instanceof MicroSite))
             {
                stOpts.append("<option label=\""+wpst.getDisplayName()+"\">"+wpst.getId()+"</option>");
             }

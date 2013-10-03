@@ -43,7 +43,7 @@
 
     boolean isMicrosite = false;
 
-    if (wp.getSemanticObject().getGenericInstance() instanceof MicroSite) {
+    if (wp instanceof MicroSite) {
         isMicrosite = true;
         member = getMember(user, (MicroSite)wp);
     }
