@@ -1958,7 +1958,11 @@ public class FacebookWall extends GenericResource {
             writer.write("<strong><span> Likes: </span>");
             if(postsData.has("likes")){
                 JSONArray likes = postsData.getJSONObject("likes").getJSONArray("data");
-                writer.write(postsData.getJSONObject("likes").getLong("count") + "");
+                if(!postsData.getJSONObject("likes").isNull("count")){
+                    writer.write(postsData.getJSONObject("likes").getLong("count") + "");
+                }else{
+                    writer.write("0");
+                }
                 for (int k = 0; k < likes.length(); k++) {
                     if(likes.getJSONObject(k).getString("id").equals(facebook.getFacebookUserId())){
                         //My User id is in 'the likes' of this post
