@@ -201,6 +201,9 @@
                     while (it.hasNext()) {
                         SocialNetwork socialNetwork = (SocialNetwork) it.next();
                         if (socialNetwork instanceof Messageable && socialNetwork.isActive() && socialNetwork.isValid()) {
+                            if(socialNetwork instanceof Youtube && postIn == null ){//Only show youtube networks if is a response
+                                continue;
+                            }
                             boolean isSelected = false;
                             //System.out.println("Las Redes:" + socialNetwork);
                             if (apostOutNets.contains(socialNetwork.getURI())) {
@@ -438,7 +441,7 @@
     
                     </p>
                     <p>   
-        <div class="etiqueta"><label for="title"><%=Video.swb_title.getDisplayName()%>: </label></div>
+        <div class="etiqueta"><label for="title"><%=SWBUtils.TEXT.encode(Video.swb_title.getDisplayName(), "UTF-8")%>: </label></div>
         <div class="campo"><%=videoMgr.renderElement(request, Video.swb_title, videoMgr.MODE_CREATE)%></div>
              </p>
                     <p>
@@ -554,14 +557,14 @@
                     if (socialNetwork instanceof Youtube) {
             %>
             <li class="<%=typeClass%>">
-                <input id="checkYT" type="checkbox" name="<%=socialNetwork.getURI()%>" onClick="showListCategory('<%=objUri%>','<%=sourceCall%>');" />
+                <input id="checkYT" type="checkbox" name="<%=socialNetwork.getURI()%>" onClick="showListCategory('<%=objUri%>','<%=sourceCall%>');" <%=selected%>/>
                 <label><span></span><%=socialNetwork.getTitle()%></label>
             </li>
             <%
                     } else {
             %>
             <li class="<%=typeClass%>">
-                <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" />
+                <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" <%=selected%>/>
                 <label><span></span><%=socialNetwork.getTitle()%></label>
             </li>
             <%
