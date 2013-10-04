@@ -67,7 +67,8 @@
             %> 
                 <td style="text-align: center;"><a id="Img" class="sel-img2" style="cursor: pointer;" title="<%=paramRequest.getLocaleString("photo")%>" onclick="postHtml('<%=url.setMode("post").setParameters(args)%>', '<%=postUri%>postType')"></a></td>
             <%}%>
-            <%if(isVideoable){
+            <%//if(isVideoable){
+                if(isVideoable && !(postInSN instanceof Youtube)){
                 args.put("valor", "uploadVideo"); 
             %> 
                 <td style="text-align: center;"><a id="Video" class="sel-vid2" style="cursor: pointer;" title="<%=paramRequest.getLocaleString("video")%>" onclick="postHtml('<%=url.setMode("post").setParameters(args)%>', '<%=postUri%>postType')"></a></td>
