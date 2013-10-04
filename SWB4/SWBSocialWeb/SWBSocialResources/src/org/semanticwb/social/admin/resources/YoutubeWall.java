@@ -14,22 +14,18 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.json.JSONArray;
@@ -46,25 +42,19 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.social.Kloutable;
-import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.Post;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.SocialUserExtAttributes;
-import org.semanticwb.social.Twitter;
 import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.Youtube;
 import org.semanticwb.social.util.SWBSocialUtil;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-import twitter4j.Status;
-import twitter4j.User;
 
 /**
  *
@@ -325,7 +315,6 @@ public class YoutubeWall extends GenericResource{
             try {
                 request.setAttribute("paramRequest", paramRequest);
                 dis.include(request, response);
-
             } catch (Exception e) {
                 log.error("Error in editVideo() for requestDispatcher" , e);
             }
@@ -742,7 +731,11 @@ public class YoutubeWall extends GenericResource{
         String commentId = request.getParameter("commentId");
         String objUri = request.getParameter("suri");
         String comment = request.getParameter("commentComment");
-
+        System.out.println("videoId:" + videoId);
+        System.out.println("commentId:" + commentId);
+        System.out.println("objUri:" + objUri);
+        System.out.println("comment:" + comment);
+        
 
         if ((videoId == null || videoId.isEmpty()) || (comment == null || comment.isEmpty())
                 || (objUri == null || objUri.isEmpty()) || ( commentId == null || commentId.isEmpty())) {
@@ -843,7 +836,7 @@ public class YoutubeWall extends GenericResource{
                 out.write("</p>");
                 
                 out.write("<p class =\"imgdesc\">");
-                out.write( video.isNull("description") ?  "&nbsp;" : video.getString("description"));
+                out.write( video.isNull("description") ?  "&nbsp;" : video.getString("description").replace("\n", "</br>"));
                 out.write("</p>");
                 out.write("</div>");//End First section
                 
@@ -864,7 +857,6 @@ public class YoutubeWall extends GenericResource{
                         }
                     }                    
                     if(arrayComments != null && arrayComments.length() > 0){
-                        //out.write("<span id=\"" + video.getString("id") + "/comments\" dojoType=\"dijit.layout.ContentPane\">");
                         out.write("<ul id=\"" + semanticYoutube.getId() + video.getString("id") + "/comments\">");
                         int totalComments = 0;
                         for(int c = 0; c < arrayComments.length(); c++){                            
