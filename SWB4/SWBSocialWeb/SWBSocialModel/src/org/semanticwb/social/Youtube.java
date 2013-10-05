@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -41,6 +42,8 @@ import java.util.logging.Level;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.HttpResponseException;
@@ -56,6 +59,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.io.SWBFile;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.social.listener.Classifier;
@@ -63,6 +67,7 @@ import org.semanticwb.social.util.SWBSocialUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 public class Youtube extends org.semanticwb.social.base.YoutubeBase {
 
@@ -1162,6 +1167,110 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
 
     @Override
     public void postMsg(Message message) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //throw new UnsupportedOperationException("Not supported yet.");
+        
+        if (message != null && message.getMsg_Text() != null && message.getMsg_Text().trim().length() > 1) {
+            if(message.getPostInSource()!=null && message.getPostInSource().getSocialNetMsgId()!=null){
+                System.out.println("Youtube Making comment:...:" + message.getPostInSource().getPostInSocialNetworkUser().getSnu_name());
+                String videoId = message.getPostInSource().getSocialNetMsgId();
+                String comment = message.getMsg_Text();
+                
+                if(!this.validateToken()){
+                    log.error("Unable to update the access token inside post Comment!");
+                    return;
+                }
+                
+                String urlComment = "http://gdata.youtube.com/feeds/api/videos/" + videoId + "/comments";
+                URL url;
+                HttpURLConnection conn = null;
+                try {
+                    url = new URL(urlComment);
+                    conn = (HttpURLConnection) url.openConnection();
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
+                    conn.setRequestMethod("POST");
+                    conn.setUseCaches(false);
+                    conn.setRequestProperty("Host", "gdata.youtube.com");
+                    conn.setRequestProperty("Content-Type", "application/atom+xml");
+                    conn.setRequestProperty("Authorization", "Bearer " + this.getAccessToken());
+                    conn.setRequestProperty("GData-Version", "2");
+                    conn.setRequestProperty("X-GData-Key", "key=" + this.getDeveloperKey());
+
+                    DataOutputStream writer = new DataOutputStream(conn.getOutputStream());                        
+                    String xml = "<?xml version=\"1.0\"?>"
+                        + "<entry xmlns=\"http://www.w3.org/2005/Atom\""
+                        + " xmlns:yt=\"http://gdata.youtube.com/schemas/2007\">"
+                        + "<content>" + comment + "</content>"
+                        + "</entry>";
+                    writer.write(xml.getBytes("UTF-8"));
+                    writer.flush();
+                    writer.close();                        
+                    BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    String docxml = readerl.readLine();
+                    System.out.println("--docxml en post Comment----" + docxml);               
+                    
+                    //Must save the ID of the comment posted:
+                    //SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, String.valueOf(longStat), null);
+                    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                    DocumentBuilder builder;
+                    builder = factory.newDocumentBuilder();
+                    Document xmlDoc = builder.parse(new InputSource(new StringReader(docxml)));
+                    xmlDoc.getDocumentElement().normalize();
+                    NodeList rootNode = xmlDoc.getDocumentElement().getChildNodes();
+                    String favCount = "0";
+
+                    for( int tmp = 0; tmp < rootNode.getLength(); tmp++){
+                        Node nNode= rootNode.item(tmp);
+                        System.out.println("nNode.getNodeName():" + nNode.getNodeName());
+                        if(nNode.getNodeName().equals("id")){
+                            System.out.println("id:" + nNode.getTextContent());
+                            /*NodeList entry = nNode.getChildNodes();
+                            for(int i = 0 ; i< entry.getLength(); i++){
+                                Node child = entry.item(i);
+                                System.out.println("child.getNodeName():" + child.getNodeName());
+                                if(child.getNodeName().equals("id")){
+                                    System.out.println("child:" + child.getTextContent());
+                                    break;
+                                }
+                            }*/
+                        }
+                    }                
+                }catch(Exception ex){                    
+                    log.error("Problem posting comment ", ex);
+                    SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, null, ex.getMessage());
+                    ex.printStackTrace();
+                }
+                
+            }else{
+                System.out.println("Youtube only allows comment to a video not POSTS!");
+                return;
+            }
+        }        
     }
+    
+    /*
+     f (message != null && message.getMsg_Text() != null && message.getMsg_Text().trim().length() > 1) {
+            twitter4j.Twitter twitter = new TwitterFactory().getInstance();
+            try {
+                //Status stat = twitter.updateStatus(sup);
+                long longStat = sup.getId();
+                
+                if(longStat>0)
+                {
+                    SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, String.valueOf(longStat), null);
+                }else{
+                    SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, null, "Problem encountered posting twitter message");
+                }
+                
+                // System.out.println("longStat: " + longStat + " texto: " + stat.getText());
+                //getPostContainer().getPost().setSocialNetPostId("");
+            }catch (TwitterException te) {
+                SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, null, te.getErrorMessage());
+                log.error("Twitter exception posting twitter message" + te);
+            }catch(Exception e ){
+                SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, null, e.getMessage());
+                log.error("Exception posting twitter message" + e);
+            }
+        }
+     */
 }
