@@ -7,6 +7,7 @@ border-radius:2px; /*opera y CSS3*/
 -webkit-border-radius:2px; /*Safari Chrome*/
 -khtml-border-radius:2px; /* Linux browers */
 }
+.clear { clear:both;}
 
 form.oculto {display:none;}
 
@@ -30,11 +31,14 @@ background: -webkit-linear-gradient(#fff, #e1e1e1);
 background: -moz-linear-gradient(#fff, #e1e1e1);}
 
 /*DIR FILE*/
-#dir, #file     { display:inline-table; float:left; vertical-align:top;}
+.dirfile		{}
+.dirfile td		{ vertical-align:top;}
+#dir			{  }
+#file			{  }
 #dir *, #file * { font-size:12px}
 #dir p, #file p { font-weight:bold; font-size:14px}
-#dir  { width:24%; border-right:solid 1px #ccc;}
-#file { width:70%; padding:25px 0 0 20px;}
+#dir  { /*width:24%;*/ border-right:solid 1px #ccc;  }
+#file { /*width:70%;*/ padding:25px 0 0 20px;}
 
 /*DIRECTORIO*/
 #dir	{ background:#f8fbfc;
@@ -42,15 +46,18 @@ background: -webkit-linear-gradient(#fefefe, #f7f8f9);
 background: -moz-linear-gradient(#fefefe, #f7f8f9);}
 #dir p	{ display:none;}
 #dir ul { padding:5px 0 0; /*background:url(linea-ul.gif) repeat-y 9px 0px; */} 
-#dir li { list-style-type:none; padding:7px 0px 7px 30px; margin:3px 0;/* background:url(linea-li.gif) no-repeat 12px 11px; */}
+#dir li { list-style-type:none; padding:7px 0px 7px 10px; margin:3px 0;/* background:url(linea-li.gif) no-repeat 12px 11px; */}
+#dir li li { padding-left:30px;}
 #dir a  { padding:8px 10px 6px 47px; text-decoration:none;}
-#dir .cerrado { background:url(images/folder-closed.png) no-repeat 5px 3px; color:#369;}
-#dir .abierto { background:url(images/folder-open.png) no-repeat 6px 3px; color:#369;}
-#dir .selec   { background:url(images/folder-select.png) no-repeat 5px 3px #F0F8F9; color:#369; border:solid 1px #ccc;
-border-radius:3px; /*opera y CSS3*/ 
--moz-border-radius:3px; /*FireFox*/
--webkit-border-radius:3px; /*Safari Chrome*/
--khtml-border-radius:3px;}
+#dir .cerrado { background:url(images/folder-closed.png) no-repeat 5px 3px; color:#369; display:block;}
+#dir .abierto { background:url(images/folder-open.png) no-repeat 6px 3px; color:#369; display:block;}
+
+#dir .selec   { background:url(images/folder-select.png) no-repeat 5px 3px; color:#369;
+/* border:solid 1px #ccc;
+border-radius:3px;
+-moz-border-radius:3px;
+-webkit-border-radius:3px;
+-khtml-border-radius:3px;*/}
 
 #diropcion   { border-bottom:1px solid #CCCCCC; padding:10px 20px; background:#fafafa;}
 #diropcion a { color:#FFF; text-shadow:1px 1px 0px #666; padding:5px 12px; text-transform:capitalize; margin-right:10px; font-weight:bold;
@@ -89,8 +96,8 @@ background: -moz-linear-gradient(#216499, #3079b2, #7eb3dd);
 #file th    { border-left: solid 1px #FFF; padding:7px; text-align:center;}
 #file th a  { color:#FFF;}
 #file td    { border: solid 1px #ccc; padding:7px; text-align:center;}
-#file td, #file td a { color:#666 !important;}
-#file td.archivo   { text-align:left !important;}
+#file td, #file td a { color:#666 !important; vertical-align:top;}
+#file td.archivo   { text-align:left !important; /* word-break:break-all; word-wrap:break-word; width:100px;*/}
 #file td.archivo a { padding:3px 5px 3px 26px;}
 #file a     { text-decoration:none;}
 #file span  {}
@@ -160,7 +167,7 @@ background: -moz-linear-gradient(#666, #CCC);}
 #file .info a		{ background:url(images/info.png) no-repeat; display:block; height:20px; margin:auto; width:20px;}
 #file .info a:hover { background:url(images/info2.png) no-repeat; display:block; height:20px; margin:auto; width:20px;}
 #file .info span    { display:none;}
-#file .archivo      {}
+#file .archivo p      { word-break:break-all; word-wrap:break-word; }/*nuevo*/
 
 #file .archivo .pdf,
 #file .archivo .pdfx  { background:url(images/ico-pdf.jpg) no-repeat;}
@@ -244,3 +251,4 @@ border-radius:3px; /*opera y CSS3*/
 
 #file #informacion .suscribir, #file #informacion .nosuscribir, #file #informacion .ver, #file #informacion .mover, #file #informacion .eliminar { padding:2px 0 2px 20px; color:#368dcd !important; margin:0 5px;}
 #file #informacion .suscribir span, #file #informacion .nosuscribir span, #file #informacion .ver span, #file #informacion .mover span, #file #informacion .eliminar span  { display:none;}
+
