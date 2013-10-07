@@ -1,7 +1,7 @@
   4.5.0.0
-    - Cambio de la versión de DOJO (Jei)
-    - Desacoplamiento de AWS, esta versión no se debe usar en AWS (Serch)
-    - Nueva funcionalidad para manejo de usuarios registrados vs usuarios firmados (Serch)
+    - Cambio de la versión de DOJO - SEMANTICWEBBUILDER-84 (Jei)
+    - Desacoplamiento de AWS, esta versión no se debe usar en AWS - SEMANTICWEBBUILDER-92(Serch)
+    - Nueva funcionalidad para manejo de usuarios registrados vs usuarios firmados - SEMANTICWEBBUILDER-88(Serch)
     - Mejora al sistema de cache para alta concurrencia y dependencias externas (Jei, Serch)
   4.2.6.1
     - Mejora de sistema de cache para alta concurrencia (Jei)
