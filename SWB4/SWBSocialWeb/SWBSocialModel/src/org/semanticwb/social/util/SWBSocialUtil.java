@@ -50,6 +50,7 @@ import org.semanticwb.social.PostIn;
 import org.semanticwb.social.PostMonitor;
 import org.semanticwb.social.PostOut;
 import org.semanticwb.social.PostOutNet;
+import org.semanticwb.social.PostVideoable;
 import org.semanticwb.social.Prepositions;
 import org.semanticwb.social.PunctuationSign;
 import org.semanticwb.social.SentimentWords;
@@ -1813,6 +1814,28 @@ public class SWBSocialUtil implements SWBAppObject {
 
     public static class PostOutUtil
     {
+
+        public static PostOutNet savePostOutNetID(PostOut postOut, SocialNetwork socialNet, String socialNetMsgId, String error)
+        {
+            //En este momento solo se estan monitoreando los que sean SocialMonitorable, pero que ademas el PostOut enviado sea de tipo
+            //video, ya que esta el caso de Youtube que la red es SocialMonitorable, pero como ademas de ser VideoAble también es
+            //MessageAble, entonce ademas de poderse enviar videos, también se pueden enviar mensajes (Comentarios), los cuales por
+            //supuesto no se deberían de monitorear.
+            //Si se desean o no se desean monitorear sin utilizar este criterio, se puede utilizar el metodo donde acepta ese parametro directamente
+            //osea el metodo sobreescrito:public static PostOutNet savePostOutNetID(PostOut postOut, SocialNetwork socialNet, String socialNetMsgId, String error, boolean ToMonitor)
+            if(socialNet instanceof SocialMonitorable && postOut instanceof PostVideoable)
+            {
+                PostVideoable postVideoable=(PostVideoable)socialNet;
+                if(postVideoable.getVideo()!=null && postVideoable.getVideo().trim().length()>0)
+                {
+                    return savePostOutNetID(postOut, socialNet, socialNetMsgId, error, true);
+                }else{
+                    return savePostOutNetID(postOut, socialNet, socialNetMsgId, error, false);
+                }
+            }else{
+                return savePostOutNetID(postOut, socialNet, socialNetMsgId, error, false);
+            }
+        }
         
         
         /*
@@ -1820,7 +1843,7 @@ public class SWBSocialUtil implements SWBAppObject {
          * en las diferentes redes sociales a los que se envia un postOut desde swbsocial, esto nos sirve para llevar
          * la trazabilidad de los mensajes enviados.
          */
-        public static PostOutNet savePostOutNetID(PostOut postOut, SocialNetwork socialNet, String socialNetMsgId, String error)
+        public static PostOutNet savePostOutNetID(PostOut postOut, SocialNetwork socialNet, String socialNetMsgId, String error, boolean toMonitor)
         {
             //System.out.println("Entra a savePostOutNetID-1");
             PostOutNet postOutNet=null;
@@ -1839,7 +1862,7 @@ public class SWBSocialUtil implements SWBAppObject {
                 postOutNet.setPo_created(new Date());
                 //System.out.println("Entra a savePostOutNetID-4:"+postOutNet);
                 //Si la red social es de tipo SocialMonitorable, se pone a monitorear el PostOutNet creado.
-                if(socialNet instanceof SocialMonitorable)
+                if(toMonitor)
                 {
                     //System.out.println("Entra a savePostOutNetID-5:"+socialNet);
                     SWBSocialUtil.PostOutUtil.savePostOutNetToMonitor(postOutNet);
