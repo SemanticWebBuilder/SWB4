@@ -1862,7 +1862,7 @@ public class SWBSocialUtil implements SWBAppObject {
                 postOutNet.setPo_created(new Date());
                 //System.out.println("Entra a savePostOutNetID-4:"+postOutNet);
                 //Si la red social es de tipo SocialMonitorable, se pone a monitorear el PostOutNet creado.
-                if(toMonitor)
+                if(socialNet instanceof SocialMonitorable && toMonitor)
                 {
                     //System.out.println("Entra a savePostOutNetID-5:"+socialNet);
                     SWBSocialUtil.PostOutUtil.savePostOutNetToMonitor(postOutNet);
