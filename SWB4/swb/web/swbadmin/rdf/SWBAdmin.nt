@@ -4325,8 +4325,8 @@
 <http://www.semanticwb.org/SWBAdmin#WebPage:mnui_CloudConfig> <http://www.semanticwebbuilder.org/swb4/ontology#creator> <http://www.semanticwb.org/uradm#swb_User:1> .
 <http://www.semanticwb.org/SWBAdmin#WebPage:mnui_CloudConfig> <http://www.semanticwebbuilder.org/swb4/ontology#indexable> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
 <http://www.semanticwb.org/SWBAdmin#WebPage:mnui_CloudConfig> <http://www.semanticwebbuilder.org/swb4/ontology#webPageParent> <http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_System> .
-<http://www.semanticwb.org/SWBAdmin#WebPage:mnui_CloudConfig> <http://www.semanticwebbuilder.org/swb4/ontology#title> "AWS Configuration"@en .
-<http://www.semanticwb.org/SWBAdmin#WebPage:mnui_CloudConfig> <http://www.semanticwebbuilder.org/swb4/ontology#title> "Configuraci\u00F3n AWS" .
+<http://www.semanticwb.org/SWBAdmin#WebPage:mnui_CloudConfig> <http://www.semanticwebbuilder.org/swb4/ontology#title> "Cloud Configuration"@en .
+<http://www.semanticwb.org/SWBAdmin#WebPage:mnui_CloudConfig> <http://www.semanticwebbuilder.org/swb4/ontology#title> "Configuraci\u00F3n Cloud" .
 <http://www.semanticwb.org/SWBAdmin#WebPage:mnui_CloudConfig> <http://www.semanticwebbuilder.org/swb4/ontology#active> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
 <http://www.semanticwb.org/SWBAdmin#WebPage:mnui_CloudConfig> <http://www.semanticwebbuilder.org/swb4/ontology#mnuItemShowIFrame> "CONTENT" .
 <http://www.semanticwb.org/SWBAdmin#counter:swb_UserGroupRef> <http://www.semanticwb.org/SWBAdmin#counter> "8"^^<http://www.w3.org/2001/XMLSchema#long> .
