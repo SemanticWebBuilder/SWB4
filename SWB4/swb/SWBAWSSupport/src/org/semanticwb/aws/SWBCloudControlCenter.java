@@ -86,11 +86,11 @@ public final class SWBCloudControlCenter {
             }
 
             runningInstances = Collections.synchronizedSortedSet(new TreeSet<InstanceData>());
-//            for (InstanceData cur : SWBPortal.getAWSCloud().getRunningInstances()) {
-//                if ("swbClient".equals(cur.getType()) && "running".equals(cur.getStatus())) {
-//                    runningInstances.add(cur);
-//                }
-//            }
+            for (InstanceData cur : ((AWSServicesImp)SWBPortal.getCloud()).getRunningInstances()) {
+                if ("swbClient".equals(cur.getType()) && "running".equals(cur.getStatus())) {
+                    runningInstances.add(cur);
+                }
+            }
         } else {
             runningInstances = null;
         }
@@ -128,7 +128,7 @@ public final class SWBCloudControlCenter {
         double load = 0.0d;
         int instCount = 0;
         for (InstanceData id : runningInstances) {
-//            load += SWBPortal.getAWSCloud().getCPUUSage(id.getId());
+            load += ((AWSServicesImp)SWBPortal.getCloud()).getCPUUSage(id.getId());
             instCount++;
         }
         return load / instCount;
