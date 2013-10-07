@@ -373,6 +373,9 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                         //ret.append("\n<p>" +  ((base.getDescription() != null) ? base.getDescription() : "") + "</p>");
                         ret.append("\n</div>");
                         if (i_log == 1) {
+                            ret.append("\n<table class=\"dirfile\">");
+                            ret.append("\n<tr>");
+                            ret.append("\n<td>");
                             ret.append("<div id=\"dir\">");
 
                             //************************** menu directorios ********************************************
@@ -401,7 +404,9 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                             ret.append(tree.getHtml(request, response, user, topic, arguments, topic.getWebSite().getWebPage(home), paramsRequest));
 
                             ret.append("</div>");
+                            ret.append("\n</td>");
                             ///////////////////////////////////////////////////  muestra archivos en el folder
+                            ret.append("\n<td>");
                             ret.append("<div id=\"file\">");
                             if ("AdmTopics".equals(repobj)) {
                                 if ("create".equals(repacc)) {
@@ -421,6 +426,9 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                                 ret.append(files.getHtml(request, response, user, topic, arguments, dir, level, paramsRequest));
                             }
                             ret.append("</div>");
+                            ret.append("\n</td>");
+                            ret.append("\n</tr>");
+                            ret.append("\n</table>");
                         } else {
                             ret.append("<p>" + paramsRequest.getLocaleString("msgMostSigned") + "</p>");
                         }
