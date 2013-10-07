@@ -1167,8 +1167,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
 
     @Override
     public void postMsg(Message message) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-        
+        System.out.println("Posting comment to a video");
         if (message != null && message.getMsg_Text() != null && message.getMsg_Text().trim().length() > 1) {
             if(message.getPostInSource()!=null && message.getPostInSource().getSocialNetMsgId()!=null){
                 System.out.println("Youtube Making comment:...:" + message.getPostInSource().getPostInSocialNetworkUser().getSnu_name());
@@ -1207,9 +1206,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                     writer.close();                        
                     BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                     String docxml = readerl.readLine();
-                    System.out.println("--docxml en post Comment----" + docxml);               
-                    
-                    //Must save the ID of the comment posted:
+
                     //SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, String.valueOf(longStat), null);
                     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                     DocumentBuilder builder;
@@ -1217,60 +1214,28 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                     Document xmlDoc = builder.parse(new InputSource(new StringReader(docxml)));
                     xmlDoc.getDocumentElement().normalize();
                     NodeList rootNode = xmlDoc.getDocumentElement().getChildNodes();
-                    String favCount = "0";
 
                     for( int tmp = 0; tmp < rootNode.getLength(); tmp++){
                         Node nNode= rootNode.item(tmp);
-                        System.out.println("nNode.getNodeName():" + nNode.getNodeName());
                         if(nNode.getNodeName().equals("id")){
-                            System.out.println("id:" + nNode.getTextContent());
-                            /*NodeList entry = nNode.getChildNodes();
-                            for(int i = 0 ; i< entry.getLength(); i++){
-                                Node child = entry.item(i);
-                                System.out.println("child.getNodeName():" + child.getNodeName());
-                                if(child.getNodeName().equals("id")){
-                                    System.out.println("child:" + child.getTextContent());
-                                    break;
-                                }
-                            }*/
+                            //System.out.println("id-->" + nNode.getTextContent());
+                            if(nNode.getTextContent().contains("comment:")){
+                                String commentId = nNode.getTextContent().substring(nNode.getTextContent().indexOf("comment:") + 8);
+                                SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, commentId, null);
+                                System.out.println("ID-->" + commentId + "<--");
+                                break;
+                            }
                         }
-                    }                
+                    }
                 }catch(Exception ex){                    
-                    log.error("Problem posting comment ", ex);
                     SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, null, ex.getMessage());
-                    ex.printStackTrace();
+                    log.error("Problem posting comment ", ex);
                 }
                 
             }else{
                 System.out.println("Youtube only allows comment to a video not POSTS!");
-                return;
+                log.error("Youtube only allows comment to a video not POSTS!");
             }
         }        
     }
-    
-    /*
-     f (message != null && message.getMsg_Text() != null && message.getMsg_Text().trim().length() > 1) {
-            twitter4j.Twitter twitter = new TwitterFactory().getInstance();
-            try {
-                //Status stat = twitter.updateStatus(sup);
-                long longStat = sup.getId();
-                
-                if(longStat>0)
-                {
-                    SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, String.valueOf(longStat), null);
-                }else{
-                    SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, null, "Problem encountered posting twitter message");
-                }
-                
-                // System.out.println("longStat: " + longStat + " texto: " + stat.getText());
-                //getPostContainer().getPost().setSocialNetPostId("");
-            }catch (TwitterException te) {
-                SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, null, te.getErrorMessage());
-                log.error("Twitter exception posting twitter message" + te);
-            }catch(Exception e ){
-                SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, null, e.getMessage());
-                log.error("Exception posting twitter message" + e);
-            }
-        }
-     */
 }
