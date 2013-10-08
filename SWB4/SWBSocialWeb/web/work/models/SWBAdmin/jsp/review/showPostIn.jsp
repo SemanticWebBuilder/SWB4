@@ -49,7 +49,7 @@
         userPhoto = "/swbadmin/css/images/profileDefImg.jpg";
     }    
 %>
-
+             
 
 <div class="swbform swbpopup usr-pop">
     <div class="perfilgral">
@@ -63,7 +63,9 @@
 
         <div class="clear"></div>
     </div>
-
+    <jsp:include page="/work/models/SWBAdmin/jsp/post/postActions.jsp">
+        <jsp:param name="postUri" value="<%=postIn.getURI()%>" />
+    </jsp:include>
     <table class="tabla1">
         <thead>
             <tr>               
