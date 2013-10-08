@@ -255,8 +255,11 @@ public class SocialSentPost extends GenericResource {
 
 
         out.println("<div class=\"swbform\">");
+        out.println("<div class=\"barra\">"); 
 
         out.println("<fieldset>");
+
+        /*
         out.println("<span  class=\"spanFormat\">");
         out.println("<form id=\"" + id + "/fsearchwp\" name=\"" + id + "/fsearchwp\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearchwp');return false;\">");
         out.println("<div align=\"right\">");
@@ -266,11 +269,13 @@ public class SocialSentPost extends GenericResource {
         out.println("</div>");
         out.println("</form>");
         out.println("</span>");
+        * */
         String page = request.getParameter("page");
         if (page == null) {
             page = "1";
         }
         String orderBy = request.getParameter("orderBy");
+        /*
         out.println("<span  class=\"spanFormat\">");
         out.println("<form id=\"" + id + "/importCurrentPage\" name=\"" + id + "/importCurrentPage\" method=\"post\" action=\"" + urls.setMode("exportExcel").setParameter("pages", page).setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("orderBy", orderBy) + "\" >");
         out.println("<div align=\"left\">");
@@ -278,7 +283,10 @@ public class SocialSentPost extends GenericResource {
         out.println("</div>");
         out.println("</form>");
         out.println("</span>");
+        * */
+        out.println("<a href=\""+urls.setMode("exportExcel").setParameter("pages", page).setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("orderBy", orderBy)+"\" class=\"excel\">"+paramRequest.getLocaleString("importCurrentPage")+"</a>");
 
+        /*
         out.println("<span  class=\"spanFormat\">");
         out.println("<form id=\"" + id + "/importAll\" name=\"" + id + "/importAll\" method=\"post\" action=\"" + urls.setMode("exportExcel").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("pages", "0").setParameter("orderBy", orderBy) + "\" >");
         out.println("<div align=\"left\">");
@@ -287,9 +295,23 @@ public class SocialSentPost extends GenericResource {
         out.println("</form>");
         out.println("</span>");
         out.println("</fieldset>");
-
-
+        * */
+        out.println("<a href=\""+urls.setMode("exportExcel").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("pages", "0").setParameter("orderBy", orderBy)+"\" class=\"excelall\">"+paramRequest.getLocaleString("importAll")+"</a>");
+        
+        out.println("<span  class=\"spanFormat\">");
+        out.println("<form id=\"" + id + "/fsearchwp\" name=\"" + id + "/fsearchwp\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearchwp');return false;\">");
+        out.println("<div align=\"right\">");
+        out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
+        out.println("<label for=\"" + id + "_searchwp\">" + paramRequest.getLocaleString("searchPost") + ": </label><input type=\"text\" name=\"search\" id=\"" + id + "_searchwp\" value=\"" + searchWord + "\">");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("btnSearch") + "</button>"); //
+        out.println("</div>");
+        out.println("</form>");
+        out.println("</span>");
+        
+        out.println("</div>");
         out.println("<fieldset>");
+        
+        
         out.println("<table class=\"tabla1\" >");
         out.println("<thead>");
         out.println("<tr>");
