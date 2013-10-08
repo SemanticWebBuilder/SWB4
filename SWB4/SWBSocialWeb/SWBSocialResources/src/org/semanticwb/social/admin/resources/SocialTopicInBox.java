@@ -275,7 +275,7 @@ public class SocialTopicInBox extends GenericResource {
 
         out.println("<div class=\"swbform\">");
 
-        out.println("<fieldset>");
+        out.println("<fieldset class=\"barra\">");
         out.println("<div class=\"barra\">"); 
         
         /*
@@ -329,16 +329,16 @@ public class SocialTopicInBox extends GenericResource {
         out.println("<a href=\"#\" onclick=\"showDialog('" + tagUrl + "','" + paramRequest.getLocaleString("tagLabel") + "'); return false;\" class=\"btnCloud\">"+paramRequest.getLocaleString("btnCloud")+"</a>");
         //ENDS TAG CLOUD
         
-        out.println("<span  class=\"spanFormat\">");
+        //out.println("<span  class=\"spanFormat\">");
         out.println("<form id=\"" + id + "/fsearchSocialT\" name=\"" + id + "/fsearchSocialT\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearchSocialT');return false;\">");
         out.println("<div align=\"right\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
         out.println("<input type=\"hidden\" name=\"noSaveSess\" value=\"1\">");
-        out.println("<label for=\"" + id + "_fsearchSocialT\">" + paramRequest.getLocaleString("searchPost") + ": </label><input type=\"text\" name=\"search\" id=\"" + id + "_fsearchSocialT\" value=\"" + searchWord + "\">");
+        out.println("<input type=\"text\" name=\"search\" id=\"" + id + "_fsearchSocialT\" value=\"" + searchWord + "\" placeholder=\""+paramRequest.getLocaleString("searchPost")+"\">");
         out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("btnSearch") + "</button>"); //
         out.println("</div>");
         out.println("</form>");
-        out.println("</span>");
+        //out.println("</span>");
         
         out.println("</div>");
         out.println("</fieldset>");

@@ -283,7 +283,7 @@ public class StreamInBox extends GenericResource {
 
         out.println("<div class=\"swbform\">");
 
-        out.println("<fieldset>");
+        out.println("<fieldset class=\"barra\">");
         out.println("<div class=\"barra\">"); 
        
         if (page == null) {
@@ -330,16 +330,16 @@ public class StreamInBox extends GenericResource {
         //out.println("</span>");
         out.println("<a href=\"#\" onclick=\"showDialog('" + tagUrl + "','" + paramRequest.getLocaleString("tagLabel") + "'); return false;\" class=\"btnCloud\">"+paramRequest.getLocaleString("btnCloud")+"</a>");
         
-        out.println("<span  class=\"spanFormat\">");
+        //out.println("<span  class=\"spanFormat\">");
         out.println("<form id=\"" + id + "/fsearchwp\" name=\"" + id + "/fsearchwp\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearchwp');return false;\">");
         out.println("<div align=\"right\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
         out.println("<input type=\"hidden\" name=\"noSaveSess\" value=\"1\">");
-        out.println("<label for=\"" + id + "_searchwp\">" + paramRequest.getLocaleString("searchPost") + ": </label><input type=\"text\" name=\"search\" id=\"" + id + "_searchwp\" value=\"" + searchWord + "\">");
+        out.println("<input type=\"text\" name=\"search\" id=\"" + id + "_searchwp\" value=\"" + searchWord + "\" placeholder=\""+paramRequest.getLocaleString("searchPost")+"\">");
         out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("btnSearch") + "</button>"); //
         out.println("</div>");
         out.println("</form>");
-        out.println("</span>");
+        //out.println("</span>");
         
         out.println("</div>");
         out.println("</fieldset>");
