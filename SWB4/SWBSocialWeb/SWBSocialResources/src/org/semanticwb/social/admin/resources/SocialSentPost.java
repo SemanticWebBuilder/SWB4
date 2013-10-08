@@ -255,9 +255,9 @@ public class SocialSentPost extends GenericResource {
 
 
         out.println("<div class=\"swbform\">");
+        
+        out.println("<fieldset class=\"barra\">");
         out.println("<div class=\"barra\">"); 
-
-        out.println("<fieldset>");
 
         /*
         out.println("<span  class=\"spanFormat\">");
@@ -298,19 +298,20 @@ public class SocialSentPost extends GenericResource {
         * */
         out.println("<a href=\""+urls.setMode("exportExcel").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("pages", "0").setParameter("orderBy", orderBy)+"\" class=\"excelall\">"+paramRequest.getLocaleString("importAll")+"</a>");
         
-        out.println("<span  class=\"spanFormat\">");
+        //out.println("<span  class=\"spanFormat\">");
         out.println("<form id=\"" + id + "/fsearchwp\" name=\"" + id + "/fsearchwp\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearchwp');return false;\">");
         out.println("<div align=\"right\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
-        out.println("<label for=\"" + id + "_searchwp\">" + paramRequest.getLocaleString("searchPost") + ": </label><input type=\"text\" name=\"search\" id=\"" + id + "_searchwp\" value=\"" + searchWord + "\">");
+        out.println("<input type=\"text\" name=\"search\" id=\"" + id + "_searchwp\" value=\"" + searchWord + "\" placeholder=\""+paramRequest.getLocaleString("searchPost")+"\">");
         out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("btnSearch") + "</button>"); //
         out.println("</div>");
         out.println("</form>");
-        out.println("</span>");
+        //out.println("</span>");
         
         out.println("</div>");
-        out.println("<fieldset>");
+        out.println("</fieldset>");
         
+        out.println("<fieldset>");
         
         out.println("<table class=\"tabla1\" >");
         out.println("<thead>");
@@ -1140,7 +1141,7 @@ public class SocialSentPost extends GenericResource {
         User user = paramRequest.getUser();
 
 
-        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        //SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         SocialPFlowMgr pfmgr = SocialLoader.getPFlowManager();
 
         String pfid = "";
