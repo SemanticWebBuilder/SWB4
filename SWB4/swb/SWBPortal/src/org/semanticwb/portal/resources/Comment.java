@@ -250,10 +250,11 @@ public class Comment extends GenericResource {
                     root.appendChild(emn);
                 }
 
-                emn = dom.createElement("ftext");
-                emn.setAttribute("tag", paramRequest.getLocaleString("msgName"));
-                emn.setAttribute("inname", "txtFromName");
+                
                 if (user.isSigned()) {
+                    emn = dom.createElement("ftext");
+                    emn.setAttribute("tag", paramRequest.getLocaleString("msgFirstName"));
+                    emn.setAttribute("inname", "txtFromName");
                     String strFromName = ("1".equals(
                             base.getAttribute("firstname", "0").trim())
                             && (null != user.getFirstName()
@@ -273,8 +274,28 @@ public class Comment extends GenericResource {
                             ? " " + user.getSecondLastName().trim()
                             : "");
                     emn.setAttribute("invalue", strFromName);
+                    root.appendChild(emn);
+                }else {
+                    if("1".equals(base.getAttribute("firstname", "0"))) {
+                        emn = dom.createElement("ftext");
+                        emn.setAttribute("tag", paramRequest.getLocaleString("msgFirstName"));
+                        emn.setAttribute("inname", "txtFromName");
+                        root.appendChild(emn);
+                    }
+                    if("1".equals(base.getAttribute("lastname", "0"))) {
+                        emn = dom.createElement("ftext");
+                        emn.setAttribute("tag", paramRequest.getLocaleString("msgLastName"));
+                        emn.setAttribute("inname", "txtFromLName");
+                        root.appendChild(emn);
+                    }
+                    if("1".equals(base.getAttribute("middlename", "0"))) {
+                        emn = dom.createElement("ftext");
+                        emn.setAttribute("tag", paramRequest.getLocaleString("msgMiddleName"));
+                        emn.setAttribute("inname", "txtFromSLName");
+                        root.appendChild(emn);
+                    }
                 }
-                root.appendChild(emn);
+                
                 emn = dom.createElement("ftext");
                 emn.setAttribute("tag", paramRequest.getLocaleString("msgViewEmail"));
                 emn.setAttribute("inname", "txtFromEmail");
@@ -643,7 +664,7 @@ public class Comment extends GenericResource {
         PrintWriter out = response.getWriter();
         Resource base = getResourceBase();
 
-        if( paramRequest.getCallMethod()==paramRequest.Call_STRATEGY ) {
+        if( paramRequest.getCallMethod()==SWBParamRequest.Call_STRATEGY ) {
             String surl = paramRequest.getWebPage().getUrl();
             Iterator<Resourceable> res = base.listResourceables();
             while(res.hasNext()) {
@@ -661,12 +682,12 @@ public class Comment extends GenericResource {
                 out.println("<input type=\"submit\" value=\""+base.getAttribute("label")+"\" />");
                 out.println("</form>");
             }else if( base.getAttribute("img")!=null ) {
-                out.println("<a href=\""+surl+"\" class=\"swb-comment-stgy\" title=\""+paramRequest.getLocaleString("msgComments")+"\">");
+                out.println("<a href=\""+surl+"\" class=\"swb-comment-stgy\" title=\""+base.getAttribute("alt",paramRequest.getLocaleString("msgComments"))+"\">");
                 out.println("<img src=\""+webWorkPath+base.getAttribute("img")+"\" alt=\""+base.getAttribute("alt",paramRequest.getLocaleString("msgComments"))+"\" class=\"cmt-stg-img\" />");
                 out.println("</a>");
             }else {
                 out.println("<div class=\"swb-comment\">");
-                out.println("<a href=\""+surl+"\" class=\"swb-comment-stgy\" title=\""+paramRequest.getLocaleString("msgComments")+"\">"+paramRequest.getLocaleString("msgComments")+"</a>");
+                out.println("<a href=\""+surl+"\" class=\"swb-comment-stgy\" title=\""+base.getAttribute("lnktexto",paramRequest.getLocaleString("msgComments"))+"\">"+base.getAttribute("lnktexto",paramRequest.getLocaleString("msgComments"))+"</a>");
                 out.println("</div>");
             }
         }else {
@@ -804,31 +825,47 @@ public class Comment extends GenericResource {
             try {
                 fup.getFiles(request, response);
                 String applet = null;
-                String value = (null != fup.getFileName("template")
+                String value = (null != fup.getValue("notmp")
+                         && !"".equals(fup.getValue("notmp").trim())
+                         ? fup.getValue("notmp").trim()
+                         : "0");        
+                if ("1".equals(value)
+                        && !"".equals(base.getAttribute("img", "").trim())) {
+                    SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath()
+                            + base.getWorkPath() + "/"
+                            + base.getAttribute("template").trim());
+                    base.removeAttribute("template");
+                }else {
+                    value = (null != fup.getFileName("template")
                         && !"".equals(fup.getFileName("template").trim())
                         ? fup.getFileName("template").trim()
                         : null);
-                if (value != null) {
-                    String file = admResUtils.getFileName(base, value);
-                    if (file != null && !file.trim().equals("")) {
-                        if (!admResUtils.isFileType(file, "xsl|xslt")) {
-                            msg = paramsRequest.getLocaleString("msgErrFileType")
-                                    +" <i>xsl, xslt</i>: " + file;
-                        } else {
-                            applet = admResUtils.uploadFileParsed(base, fup,
-                                    "template", request.getSession().getId());
-                            if (applet != null && !applet.trim().equals("")) {
-                                base.setAttribute("template", file);
+                    if (value != null) {
+                        String file = admResUtils.getFileName(base, value);
+                        if (file != null && !file.trim().equals("")) {
+                            if (!admResUtils.isFileType(file, "xsl|xslt")) {
+                                msg = paramsRequest.getLocaleString("msgErrFileType")
+                                        +" <i>xsl, xslt</i>: " + file;
                             } else {
-                                msg = paramsRequest.getLocaleString("msgErrUploadFile")
-                                        + " <i>" + value + "</i>.";
+                                applet = admResUtils.uploadFileParsed(base, fup,
+                                        "template", request.getSession().getId());
+                                if (applet != null && !applet.trim().equals("")) {
+                                    base.setAttribute("template", file);
+                                } else {
+                                    msg = paramsRequest.getLocaleString("msgErrUploadFile")
+                                            + " <i>" + value + "</i>.";
+                                }
                             }
+                        } else {
+                            msg = paramsRequest.getLocaleString("msgErrUploadFile")
+                                    + " <i>" + value + "</i>.";
                         }
-                    } else {
-                        msg = paramsRequest.getLocaleString("msgErrUploadFile")
-                                + " <i>" + value + "</i>.";
                     }
                 }
+                
+                
+                
+                
                 value = (null != fup.getValue("noimg")
                          && !"".equals(fup.getValue("noimg").trim())
                          ? fup.getValue("noimg").trim()
@@ -1071,7 +1108,7 @@ public class Comment extends GenericResource {
      *        contains the attribute's name.
      */
     protected void setAttribute(Resource base, FileUpload fup, String att) {
-        try {
+        try {            
             if (null != fup.getValue(att)
                     && !"".equals(fup.getValue(att).trim())) {
                 base.setAttribute(att, fup.getValue(att).trim());
@@ -1151,10 +1188,7 @@ public class Comment extends GenericResource {
      *
      */
     private String getForm(HttpServletRequest request, SWBParamRequest paramsRequest) {
-
         String name = getClass().getName().substring(getClass().getName().lastIndexOf(".") + 1);
-//        String webWorkPath = "/work";
-//        String path = SWBPlatform.getContextPath() + "/swbadmin/xsl/" + name + "/";
         WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
         StringBuilder ret = new StringBuilder();
         Resource base = getResourceBase();
@@ -1174,11 +1208,12 @@ public class Comment extends GenericResource {
             ret.append(" (xsl, xslt):</td> \n");
             ret.append("<td>");
             ret.append("<input type=\"file\" name=\"template\" onChange=\"isFileType(this, 'xsl|xslt');\" />");
-            //if (path.indexOf(webWorkPath) != -1) {
+
             if( !"".equals(base.getAttribute("template", "").trim()) ) {
-                ret.append("<p>"+paramsRequest.getLocaleString("msgCurrentTemplate")+" <a href=\"" + path + base.getAttribute("template").trim() + "\">" + base.getAttribute("template").trim() + "</a></p>");
+                ret.append("<p>"+paramsRequest.getLocaleString("msgCurrentTemplate")+" <a title=\"Editar plantilla\" href=\""+ SWBPlatform.getContextPath()+"/editfile?file="+SWBPortal.getWorkPath()+ base.getWorkPath() + "/" + base.getAttribute("template") + "&pathType=res&resUri="+base.getEncodedURI()+"\">"+base.getAttribute("template")+"</a></p>");
+                ret.append("<p>" + "Quitar plantilla " + " <i>" + base.getAttribute("template") + "</i> <input type=\"checkbox\" name=\"notmp\" value=\"1\"/></p>");
             } else {
-                ret.append("<p>" + paramsRequest.getLocaleString("msgByDefault")+" <a href=\"" + path + name + ".xsl\">" + name + ".xsl</a></p>");
+                ret.append("<p>" + paramsRequest.getLocaleString("msgByDefault")+" <a title=\"Ver plantilla\" href=\""+ SWBPlatform.getContextPath()+"/showfile?file="+SWBPlatform.getContextPath() +"/swbadmin/xsl/Comment/Comment.xsl"+"&pathType=def&resUri="+base.getEncodedURI()+"&attr="+name+"\">"+name+"</a></p>");
             }
             ret.append("</td> \n");
             ret.append("</tr> \n");
@@ -1187,7 +1222,7 @@ public class Comment extends GenericResource {
             ret.append("<td>");
             ret.append("<input type=\"file\" name=\"img\" onClick=\"this.form.btntexto.value=''; this.form.lnktexto.value=''\" onChange=\"isFileType(this, 'jpg|jpeg|gif|png');\"/>");
             if (!"".equals(base.getAttribute("img", "").trim())) {
-                ret.append("<p>"+admResUtils.displayImage(base, base.getAttribute("img").trim(), "img")+"<input type=\"checkbox\" name=\"noimg\" value=\"1\"/>" + paramsRequest.getLocaleString("msgCutImage") + " <i>" + base.getAttribute("img").trim() + "</i></p>");
+                ret.append("<p>"+admResUtils.displayImage(base, base.getAttribute("img").trim(), "img")+" <input type=\"checkbox\" name=\"noimg\" value=\"1\"/> " + paramsRequest.getLocaleString("msgCutImage") + " <i>" + base.getAttribute("img").trim() + "</i></p>");
             }
             ret.append("</td> \n");
             ret.append("</tr> \n");
