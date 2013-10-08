@@ -285,7 +285,7 @@ public class AdmDBConnMgr {
                     while (params.hasNext()) {
                         String paramN = (String) params.next();
                         if (fUpload.getFileName(paramN) == null) { //Para parametros que no son de tipo file
-                            Iterator paramval = fUpload.getValue(paramN).iterator();;
+                            Iterator paramval = fUpload.getValue(paramN).iterator();
                             while (paramval.hasNext()) {
                                 String value = (String) paramval.next();
                                 if (!paramN.equalsIgnoreCase("conname") && !paramN.equalsIgnoreCase("tablename") && !paramN.equalsIgnoreCase("fieldname") && !paramN.equalsIgnoreCase("wbi_resID") && !paramN.equalsIgnoreCase("wbi_resIDTM") && !paramN.startsWith("wbpconn_") && !paramN.startsWith("wbpconnI_")) { //agregar a hashmap de parametros
