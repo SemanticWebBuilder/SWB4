@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.catalogs.Format;
@@ -68,11 +69,19 @@ public class MeasuresManager extends GenericAdmResource {
                         out.println("  dojo.require('dijit.form.Button');");
                         out.println("</script>");
 
-                        out.println("<div class=\"swbform\">");                    
+                        out.println("<div class=\"swbform\">");
                         out.println("<form method=\"post\" id=\"frmAdd" + data + "\" action=\" " + url + "\" class=\"swbform\" dojoType=\"dijit.form.Form\" onsubmit=\"" + "submitForm('frmAdd" + data + "');return false;\">");
                         out.println("<fieldset>");
                         out.println("<input type=\"hidden\" name=\"suri\" value=\"" + semanticObj.getURI() + "\">");                    
-                        out.println("<table>");
+                        out.println("<table width=\"98%\">");
+                        out.println(" <thead>");
+                        out.println("  <tr>");
+                        out.println("   <th>"+paramRequest.getLocaleString("lblPeriod")+"</th>");
+                        out.println("   <th>"+paramRequest.getLocaleString("lblMeasure")+"</th>");            
+                        out.println("   <th>"+paramRequest.getLocaleString("lblStatus")+"</th>");            
+                        out.println("  </tr>");
+                        out.println(" </thead>");
+                        out.println(" <tbody>");
                         Format format = series.getFormat();
                         Locale locale;
                         try {
@@ -91,9 +100,6 @@ public class MeasuresManager extends GenericAdmResource {
                         while(measurablesPeriods.hasNext())
                         {
                             period = measurablesPeriods.next();
-    //                        if(!period.isActive()) {
-    //                            continue;
-    //                        }
 
                             Measure measure = series.getMeasureByPeriod(period);
                             String value = measure==null?"":formatter.format(measure.getValue());
@@ -112,8 +118,11 @@ public class MeasuresManager extends GenericAdmResource {
                             }
     //                        if (period.isActive() && user.haveAccess(period)) {
                                 String title = period.getTitle(user.getLanguage()) == null ? period.getTitle() : period.getTitle(user.getLanguage());
+                                title.replaceAll("'", "");
                                 out.println("<tr>");
-                                out.println("<td><label>"+title+"</label></td>");
+                                out.print("<td>");
+                                out.print("<a href=\"#\" onclick=\"addNewTab('" + period.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + title + "');return false;\" title=\""+paramRequest.getLocaleString("lblViewDetails") +"\" >" + title + "</a>");
+                                out.println("</td>");
                                 out.println("<td>");
                                 out.println("<input type=\"text\" dojoType=\"dijit.form.TextBox\" name=\"" + period.getId() + "\" value=\""+value+"\" />");
                                 out.println("</td>");
@@ -121,6 +130,7 @@ public class MeasuresManager extends GenericAdmResource {
                                 out.println("</tr>");
     //                        }
                         }
+                        out.println(" </tbody>");
                         out.println("</table>");
                         out.println("</fieldset>");
                         out.println("<fieldset>");
@@ -193,17 +203,19 @@ public class MeasuresManager extends GenericAdmResource {
                             measure = Measure.ClassMgr.createMeasure(bsc);
                             ps = PeriodStatus.ClassMgr.createPeriodStatus(bsc);
                             ps.setPeriod(period);
-                            ps.setStatus(series.getIndicator().getMinimumState());
+                            //ps.setStatus(series.getIndicator().getMinimumState());
                             measure.setEvaluation(ps);
                             series.addMeasure(measure);
                         }
                         try {
                             float value = Float.parseFloat(val);
                             measure.setValue(value);
+                            //measure.evaluate();
                         }catch(NumberFormatException nfe) {
                             try {
                                 Number value = formatter.parse(val);
                                 measure.setValue(value.floatValue());
+                                measure.getEvaluation().setStatus(series.getIndicator().getMinimumState());
                             }catch(ParseException pe) {
                                 measure.setValue(0);
                             }
