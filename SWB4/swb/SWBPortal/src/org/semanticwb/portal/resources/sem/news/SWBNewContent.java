@@ -47,6 +47,7 @@ import org.semanticwb.portal.api.SWBResourceURL;
  * The Class SWBNewContent.
  */
 public class SWBNewContent extends org.semanticwb.portal.resources.sem.news.base.SWBNewContentBase {
+    public static final String LOCAL_IP = "127.0.0.1";
 
     private static final Logger log = SWBUtils.getLogger(SWBNewContent.class);
 
@@ -142,10 +143,14 @@ public class SWBNewContent extends org.semanticwb.portal.resources.sem.news.base
                     else if(protocol!=null&&protocol.startsWith("HTTPS/")) protocol = "https://";
                     String srvrname = request.getServerName();
 
-                    if(srvrname!=null&&"localhost".equalsIgnoreCase(srvrname))
+                    if(srvrname!=null && "localhost".equalsIgnoreCase(srvrname))
                     {
                         srvrname = request.getRemoteAddr();
-                        if(srvrname.equals("127.0.0.1")) srvrname="www.infotec.com.mx";
+                        //if(srvrname.equals("127.0.0.1")) srvrname="www.infotec.com.mx";
+                        if(srvrname.equals(LOCAL_IP)) 
+                        {
+                            srvrname=request.getLocalName();
+                        }
                     }
 
                     int srvrport = request.getServerPort();
