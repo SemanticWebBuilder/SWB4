@@ -441,7 +441,7 @@
     
                     </p>
                     <p>   
-        <div class="etiqueta"><label for="title"><%=SWBUtils.TEXT.encode(Video.swb_title.getDisplayName(), "UTF-8")%>: </label></div>
+        <div class="etiqueta"><label for="title"><%=Video.swb_title.getDisplayName()%>: </label></div>
         <div class="campo"><%=videoMgr.renderElement(request, Video.swb_title, videoMgr.MODE_CREATE)%></div>
              </p>
                     <p>
