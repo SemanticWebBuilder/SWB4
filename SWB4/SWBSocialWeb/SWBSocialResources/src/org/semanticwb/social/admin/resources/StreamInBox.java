@@ -279,15 +279,57 @@ public class StreamInBox extends GenericResource {
         urls.setParameter("act", "");
         urls.setParameter("suri", id);
 
-        SWBResourceURL tagUrl = paramRequest.getRenderUrl();
-        tagUrl.setParameter("suri", id);
-        tagUrl.setMode(Mode_showTags);
-
         String orderBy = request.getParameter("orderBy");
 
         out.println("<div class=\"swbform\">");
 
         out.println("<fieldset>");
+        out.println("<div class=\"barra\">"); 
+       
+        if (page == null) {
+            page = "1";
+        }
+        //out.println("<span  class=\"spanFormat\">");
+        //out.println("<form id=\"" + id + "/importCurrentPage\" name=\"" + id + "/importCurrentPage\" method=\"post\" action=\"" + urls.setMode("exportExcel").setParameter("pages", page).setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("orderBy", orderBy) + "\" >");
+        //out.println("<div align=\"right\">");
+        //out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("importCurrentPage") + "</button>"); //
+        //out.println("</div>");
+        //out.println("</form>");
+        //out.println("</span>");
+        out.println("<a href=\""+urls.setMode("exportExcel").setParameter("pages", page).setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("orderBy", orderBy)+"\" class=\"excel\">"+paramRequest.getLocaleString("importCurrentPage")+"</a>");
+
+        /*
+        out.println("<span  class=\"spanFormat\">");
+        out.println("<form id=\"" + id + "/importAll\" name=\"" + id + "/importAll\" method=\"post\" action=\"" + urls.setMode("exportExcel").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("pages", "0").setParameter("orderBy", orderBy) + "\" >");
+        out.println("<div align=\"right\">");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("importAll") + "</button>"); //
+        out.println("</div>");
+        out.println("</form>");
+        out.println("</span>");
+        * */
+        out.println("<a href=\""+urls.setMode("exportExcel").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("pages", "0").setParameter("orderBy", orderBy)+"\" class=\"excelall\">"+paramRequest.getLocaleString("importAll")+"</a>");
+        
+        
+        //Advance re-Classify by topic
+        if(userCanRetopicMsg)
+        {
+            //out.println("<span  class=\"spanFormat\">");
+            SWBResourceURL ReClassbyTopicUrl = paramRequest.getRenderUrl();
+            ReClassbyTopicUrl.setParameter("streamid", id);
+            ReClassbyTopicUrl.setMode(Mode_ADVANCE_RECLASSIFYbyTOPIC);
+            //out.println("<button dojoType='dijit.form.Button'  onclick=\"showDialog('" + ReClassbyTopicUrl + "','" + paramRequest.getLocaleString("reClassifybyTopic") + "'); return false;\">" + paramRequest.getLocaleString("reClassifybyTopic") + "</button>");
+            //out.println("</span>");
+            out.println("<a href=\"#\" onclick=\"showDialog('" + ReClassbyTopicUrl + "','" + paramRequest.getLocaleString("reClassifybyTopic") + "'); return false;\" class=\"reclasif\">"+paramRequest.getLocaleString("reClassifybyTopic")+"</a>");
+        }
+        
+        SWBResourceURL tagUrl = paramRequest.getRenderUrl();
+        tagUrl.setParameter("suri", id);
+        tagUrl.setMode(Mode_showTags);
+        //out.println("<span  class=\"spanFormat\">");
+        //out.println("<button dojoType='dijit.form.Button'  onclick=\"showDialog('" + tagUrl + "','" + paramRequest.getLocaleString("tagLabel") + "'); return false;\">" + paramRequest.getLocaleString("btnCloud") + "</button>");
+        //out.println("</span>");
+        out.println("<a href=\"#\" onclick=\"showDialog('" + tagUrl + "','" + paramRequest.getLocaleString("tagLabel") + "'); return false;\" class=\"btnCloud\">"+paramRequest.getLocaleString("btnCloud")+"</a>");
+        
         out.println("<span  class=\"spanFormat\">");
         out.println("<form id=\"" + id + "/fsearchwp\" name=\"" + id + "/fsearchwp\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearchwp');return false;\">");
         out.println("<div align=\"right\">");
@@ -298,39 +340,8 @@ public class StreamInBox extends GenericResource {
         out.println("</div>");
         out.println("</form>");
         out.println("</span>");
-        out.println("<span  class=\"spanFormat\">");
-        out.println("<button dojoType='dijit.form.Button'  onclick=\"showDialog('" + tagUrl + "','" + paramRequest.getLocaleString("tagLabel") + "'); return false;\">" + paramRequest.getLocaleString("btnCloud") + "</button>");
-        out.println("</span>");
-        if (page == null) {
-            page = "1";
-        }
-        out.println("<span  class=\"spanFormat\">");
-        out.println("<form id=\"" + id + "/importCurrentPage\" name=\"" + id + "/importCurrentPage\" method=\"post\" action=\"" + urls.setMode("exportExcel").setParameter("pages", page).setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("orderBy", orderBy) + "\" >");
-        out.println("<div align=\"right\">");
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("importCurrentPage") + "</button>"); //
-        out.println("</div>");
-        out.println("</form>");
-        out.println("</span>");
-
-        out.println("<span  class=\"spanFormat\">");
-        out.println("<form id=\"" + id + "/importAll\" name=\"" + id + "/importAll\" method=\"post\" action=\"" + urls.setMode("exportExcel").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("pages", "0").setParameter("orderBy", orderBy) + "\" >");
-        out.println("<div align=\"right\">");
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("importAll") + "</button>"); //
-        out.println("</div>");
-        out.println("</form>");
-        out.println("</span>");
         
-        //Advance re-Classify by topic
-        if(userCanRetopicMsg)
-        {
-            out.println("<span  class=\"spanFormat\">");
-            SWBResourceURL ReClassbyTopicUrl = paramRequest.getRenderUrl();
-            ReClassbyTopicUrl.setParameter("streamid", id);
-            ReClassbyTopicUrl.setMode(Mode_ADVANCE_RECLASSIFYbyTOPIC);
-            out.println("<button dojoType='dijit.form.Button'  onclick=\"showDialog('" + ReClassbyTopicUrl + "','" + paramRequest.getLocaleString("reClassifybyTopic") + "'); return false;\">" + paramRequest.getLocaleString("reClassifybyTopic") + "</button>");
-            out.println("</span>");
-        }
-        
+        out.println("</div>");
         out.println("</fieldset>");
 
         out.println("<fieldset>");
