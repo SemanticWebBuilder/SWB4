@@ -5,6 +5,7 @@
 
 package org.semanticwb.social.listener;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -885,10 +886,13 @@ public class SentimentalDataClassifier {
                         if(userBirthDay!=null && userBirthDay.trim().length()>0)
                         {
                             System.out.println("userBirthDay:"+userBirthDay);
-                            Date date=new SimpleDateFormat("MM/dd/yyyy").parse(userBirthDay);
-                            if(date.getYear()>1900)
+                            //Date date=new SimpleDateFormat("MM/dd/yyyy").parse(userBirthDay);
+                            final DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
+                            final Calendar c = Calendar.getInstance();
+                            c.setTime(date.parse(userBirthDay));
+                            if(c.get(Calendar.YEAR)>1900)
                             {
-                                int userYears=SWBSocialUtil.Util.calculateAge(date);
+                                int userYears=SWBSocialUtil.Util.calculateAge(c.getTime());
                                 System.out.println("userYears:"+userYears);
                                 if(userYears>0)
                                 {
