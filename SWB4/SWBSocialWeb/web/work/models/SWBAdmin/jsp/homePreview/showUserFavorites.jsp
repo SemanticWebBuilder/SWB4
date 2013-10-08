@@ -23,6 +23,7 @@
     if(fav!=null)
     {
         %>
+        <div id="userFavorites">
         <ul>
         <%
         Iterator<SemanticObject> it=SWBComparator.sortSermanticObjects(fav.listObjects());
@@ -73,6 +74,7 @@
         }
         %>
             </ul>
+            </div>
         <%
     }
    

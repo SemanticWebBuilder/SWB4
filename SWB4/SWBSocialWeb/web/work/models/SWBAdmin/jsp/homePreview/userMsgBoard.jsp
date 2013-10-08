@@ -99,6 +99,7 @@
     }else if(action.equals("fromMe"))
     {
         %>
+        <div id="usrMsgFromMe">
          <ul>
          <%
          Iterator<UserMessage> itUserMsg=UserMessage.ClassMgr.listUserMessageByFromUser(user, wsite);
@@ -113,6 +114,7 @@
          }
          %>
          </ul>
+        </div>
          <%
     }else if(action.equals("sendNew"))
     {
@@ -160,6 +162,7 @@
     <%
     }else {  //Opción por defecto
          %>
+         <div id="usrMsgToMe">
          <ul>
          <%
          Iterator<UserMessage> itUserMsg=UserMessage.ClassMgr.listUserMessageByUsers(user, wsite);
@@ -174,6 +177,7 @@
          }
          %>
          </ul>
+         </div>
          <%
     }
 %>
