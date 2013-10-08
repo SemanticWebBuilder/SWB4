@@ -131,12 +131,14 @@
         <%        
 
         User user=SWBContext.getAdminUser();
+       
         if(user==null)
         {
             response.sendError(403);
             return;
         }            
-            String stop=request.getParameter("stop");
+
+            String stop=null;// request.getParameter("stop");
             if(stop!=null)
             {
                 ThreadGroup group=Thread.currentThread().getThreadGroup();
@@ -151,7 +153,13 @@
                     out.println("thread:"+thread.getName()+"<br>");
                     if(stop!=null && stop.length()>1 && thread.getName().indexOf(stop)>-1)
                     {
-                        thread.stop();
+                        try
+                        {
+                            thread.suspend();;
+                            //thread.interrupt();
+                            thread.stop();
+                            //thread.destroy();
+                        }catch(Throwable e){out.println(e);}
                         out.println("Interrupted...<br>");
                     }
                 }

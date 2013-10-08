@@ -3,6 +3,8 @@
     Created on : 30-jul-2013, 3:05:58
     Author     : javier.solis.g
 --%>
+<%@page import="org.semanticwb.model.SWBContext"%>
+<%@page import="org.semanticwb.model.User"%>
 <%@page import="org.semanticwb.portal.access.LinkedPageCounter"%>
 <%@page import="org.semanticwb.base.util.URLEncoder"%>
 <%@page import="java.io.File"%>
@@ -20,6 +22,15 @@
         <h2>Log Files</h2>    
     <ul>        
 <%
+        User user=SWBContext.getAdminUser();
+       
+        if(user==null)
+        {
+            response.sendError(403);
+            return;
+        }      
+    
+    
     String f=request.getParameter("f");
     if(LinkedPageCounter.isLoading())
     {

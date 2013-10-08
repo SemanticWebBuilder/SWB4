@@ -1,3 +1,4 @@
+<%@page import="org.semanticwb.portal.monitor.SWBSummaryData"%>
 <%@page import="org.semanticwb.model.SWBContext"%>
 <%@page import="org.semanticwb.servlet.internal.Distributor"%>
 <%@page import="org.semanticwb.portal.monitor.SWBLocalMemoryPool"%>
@@ -18,25 +19,28 @@ static private SWBSummary swbSummary = new SWBSummary();
     <body>        
 <%
     org.semanticwb.model.User user=SWBContext.getAdminUser();
+    
     if(user==null)
     {
         response.sendError(403);
         return;
     }
+    
  
-    String pc=request.getParameter("pageCache");
+    String pc=null; //request.getParameter("pageCache");
+    SWBSummaryData sample=swbSummary.getSample();
     if(pc!=null)Distributor.setPageCache(Boolean.parseBoolean(pc));
 %>        
         <h1>General</h1>
         <ul>
             <li>PageCache:<%= Distributor.isPageCache() %></li>
-            <li>CPU Time:<%= String.format("%1$3.6f",swbSummary.getSample().instantCPU) %></li>
-            <li>Instance Name:<%= swbSummary.getSample().vmInstanceName %></li>
-            <li>Commited:<%= String.format("%,d",swbSummary.getSample().currentCommited) %></li>
-            <li>Heap:<%= String.format("%,d",swbSummary.getSample().currentHeap) %></li>
-            <li>GC:<% for (String item:swbSummary.getSample().gcDetails) { out.print("<br>"+item);} %></li>
-            <li>Threads:<%= swbSummary.getSample().startedTh %></li>
-            <li>Demonios:<%= swbSummary.getSample().deamonTh %></li>
+            <li>CPU Time:<%= String.format("%1$3.6f",sample.instantCPU) %></li>
+            <li>Instance Name:<%= sample.vmInstanceName %></li>
+            <li>Commited:<%= String.format("%,d",sample.currentCommited) %></li>
+            <li>Heap:<%= String.format("%,d",sample.currentHeap) %></li>
+            <li>GC:<% for (String item:sample.gcDetails) { out.print("<br>"+item);} %></li>
+            <li>Threads:<%= sample.startedTh %></li>
+            <li>Demonios:<%= sample.deamonTh %></li>
         </ul>
         <h1>Memoria</h1>
 
