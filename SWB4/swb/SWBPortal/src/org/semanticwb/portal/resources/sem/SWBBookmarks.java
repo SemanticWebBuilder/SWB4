@@ -122,7 +122,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         if(tgs == null) {
             tgs = "";
         } else {
-            tgs.trim();
+            tgs=tgs.trim();
         }
 
         if (action.equals("ADDNEW")) {
