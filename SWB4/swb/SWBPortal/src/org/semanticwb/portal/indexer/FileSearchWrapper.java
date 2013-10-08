@@ -27,10 +27,10 @@ public class FileSearchWrapper implements Searchable
     {
         this.file=file;
         this.title=title==null?"":title;
-        this.description=description==null?"":description;;
+        this.description=description==null?"":description;
         this.url=url;
         this.page=resource;
-        this.tags=tags==null?"":tags;;
+        this.tags=tags==null?"":tags;
     }
 
     @Override
