@@ -50,7 +50,7 @@
         URL serverUrl = new URL(url + "?" +  paramString);
         
         //URL serverUrl = new URL(url);
-        System.out.println("URL:" +  serverUrl);
+        //System.out.println("URL:" +  serverUrl);
         //System.out.println("paramString:" + paramString);
         
         HttpURLConnection conex = null;
@@ -99,7 +99,7 @@
         
         CharSequence paramString = (null == params) ? "" : delimit(params.entrySet(), "&", "=", true);
         URL serverUrl = new URL(url + "?" +  paramString);       
-        System.out.println("URL:" +  serverUrl);
+        //System.out.println("URL:" +  serverUrl);
         
         HttpURLConnection conex = null;
         InputStream in = null;
@@ -221,11 +221,11 @@
             twitter4j.Twitter twitter = null;
             Twitter semanticTwitter = (Twitter)postInSN;
             twitter = new TwitterFactory(configureOAuth(semanticTwitter).build()).getInstance();
-            System.out.println("MESSAGE ID:" + postIn.getSocialNetMsgId());
+            //System.out.println("MESSAGE ID:" + postIn.getSocialNetMsgId());
             Long id = Long.parseLong(postIn.getSocialNetMsgId());
-            System.out.println("Tweet to RT in doRT:" + id);
+            //System.out.println("Tweet to RT in doRT:" + id);
             retweetId = "" + twitter.retweetStatus(id).getId();
-            System.out.println("Retwit!");
+            System.out.println("Retweet!");
         } catch (TwitterException ex){
             System.out.println("Error when trying to retweet " + ex.getMessage());
         }
@@ -238,9 +238,9 @@
             twitter4j.Twitter twitter = null;
             Twitter semanticTwitter = (Twitter)postInSN;
             twitter = new TwitterFactory(configureOAuth(semanticTwitter).build()).getInstance();
-            System.out.println("Tweet to UNDORT " + retweetId);
+            //System.out.println("Tweet to UNDORT " + retweetId);
             twitter.destroyStatus(retweetId); //Destroy Tweet generated when you Retweeted
-            System.out.println("UNDO Retwit!");
+            System.out.println("UNDO Retweet!");
             return true;
         } catch (TwitterException ex) {
             System.out.println("Error when trying to undo retweet:" + ex.getMessage());
@@ -298,9 +298,11 @@
                     JSONObject likeResponse = new JSONObject(fbResponse);
                     if(likeResponse.has("error")){
                         System.out.println(likeResponse.getJSONObject("error").getString("message"));
+                        return false;
                     }
                 } catch (JSONException ex) {
                     System.out.println("Error doing like action " +  ex.getMessage());
+                    return false;
                 }
             }
             System.out.println("LIKE-End");
@@ -320,7 +322,7 @@
             
             HashMap<String, String> params = new HashMap<String, String>(2);
             params.put("access_token", facebook.getAccessToken());
-            System.out.println("\n\nComment ID:" + postID.substring(postID.indexOf('_') + 1));
+            //System.out.println("\n\nComment ID:" + postID.substring(postID.indexOf('_') + 1));
             String fbResponse ="";
             fbResponse= postRequest(params, "https://graph.facebook.com/" + postID + "/likes" ,
                             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "DELETE");
@@ -384,9 +386,7 @@
             while((line = reader.readLine()) != null) {
                likeInfo.append(line);
             }
-            System.out.println("--Ejecuted Like/disLike:" + likeInfo.toString());
-            
-            
+            //System.out.println("--Ejecuted Like/disLike:" + likeInfo.toString());
         }catch(Exception ex){
             System.out.println("ERROR" + ex.toString());
             ex.printStackTrace();
@@ -449,7 +449,7 @@
                 Node nNode= rootNode.item(tmp);
                 if(nNode.getNodeName().equals("yt:favoriteId")){                    
                     favoriteId = nNode.getTextContent();
-                    System.out.println("yt:favoriteId-->" + favoriteId);
+                    //System.out.println("yt:favoriteId-->" + favoriteId);
                 }
             }
         }catch(Exception ex){
@@ -528,10 +528,10 @@
                 Status st = twitter.showStatus(id);
 
                 if(st.isRetweetedByMe()){
-                    System.out.println("Retwited by me!");
+                    //System.out.println("Retwited by me!");
                     out.print("<span class=\"inline\"><a href=\"#\" onclick=\"return false;" +"\">UNDO RT</a></span> ");
                 }else{
-                    System.out.println("NOT Retwited by me!");
+                    //System.out.println("NOT Retwited by me!");
                     out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/RT\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=RT" + "','" + postIn.getURI() +  "/RT'); return false;" +"\">RT</a></span> ");
                 }
 
@@ -574,14 +574,12 @@
                 System.out.println("Error getting like information for Facebook post"  + e.getMessage());
             }
         }else if(postInSN instanceof Youtube){//Displays Like, Favorite
-            System.out.println("Ejecutar acciones de like, comment");
             out.println("<b><font color=\"#CC6600\">Youtube</font></b></br>");
             out.print("<span id=\"" + postIn.getURI() + "/LIKE\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=LIKE" + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\"><span>LIKE</span></a></span> ");
             out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/FAV\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=FAV" + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">FAVORITE</a></span> ");
         }
     }else{//We received an action
         if(action.equalsIgnoreCase("RT")){//Only for Twitter
-            System.out.println("Doing RT");
             String retweetId = doRT(postIn);
             if(retweetId != null){//The retweet was sent correctly
                 out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=UNDORT&retweetId=" + retweetId + "','" + postIn.getURI() +  "/RT'); return false;" +"\">UNDO RT</a> ");
@@ -601,7 +599,6 @@
                 System.out.println("Error undoing retweet:" + nfe.getMessage());
             }
         }else if(action.equalsIgnoreCase("FAV")){//For Twitter and Youtube
-            System.out.println("Doing FAV");
             if(postInSN instanceof Twitter){
                 if(doFavorite(postIn)){//Action executed correctly
                     out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=UNDOFAV" + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">UNDO FAVORITE</a> ");
@@ -618,7 +615,6 @@
             }
             //out.println("Doing FAV");
         }else if(action.equalsIgnoreCase("UNDOFAV")){//For Twitter and Youtube
-            System.out.println("UNDOING FAV");
             if(postInSN instanceof Twitter){
                 if(undoFavorite(postIn)){//Action executed correctly
                     out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=FAV" + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">FAVORITE</a> ");
