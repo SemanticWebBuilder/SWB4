@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales. Esta clase no se relaciona con una red social (con la clase SocialNetwork) porque un post de salida (desde la herramienta) podría ser enviado a diferentes redes sociales, sin embargo, es el mismo post de salida. Donde esta a que red social se envía esta en las instancias de la clase PostContainer. 
    */
-public abstract class PostOutBase extends org.semanticwb.social.Post implements org.semanticwb.social.PostDataable,org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Tagable,org.semanticwb.social.PostTextable,org.semanticwb.model.Traceable
+public abstract class PostOutBase extends org.semanticwb.social.Post implements org.semanticwb.social.PostDataable,org.semanticwb.model.Traceable,org.semanticwb.model.CalendarRefable,org.semanticwb.social.PostTextable,org.semanticwb.model.Referensable,org.semanticwb.model.Tagable
 {
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta.
