@@ -11,11 +11,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
@@ -42,14 +42,16 @@ public class RemoveMessagesResource extends GenericResource {
         PrintWriter out = response.getWriter();
         String objUri = request.getParameter("suri");
         if(objUri!= null){
+            User user=paramRequest.getUser();
             Stream stream = (Stream)SemanticObject.getSemanticObject(objUri).getGenericInstance();
             String wsiteId = stream.getSemanticObject().getModel().getName();
             WebSite wsite=WebSite.ClassMgr.getWebSite(wsiteId);
             //Iterator<PostIn> itPostIn = PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
             //long noOfMessages = SWBUtils.Collections.sizeOf(itPostIn);
             long StreamPostIns = wsite.getSemanticModel().countStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), null);
-            out.println("<div class=\"swbform\">");
+            //out.println("<div class=\"swbform\">");
             //out.println("<form type=\"dijit.form.Form\" id=\"del\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"submitForm('del'); return false;\">");            
+            /*
             out.println("<form type=\"dijit.form.Form\" id=\"del" + stream.getId() +"\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes serán eliminados.')){submitForm('del" + stream.getId() + "'); return false;}else{return false;}\">");            
             out.println("<table width=\"100%\" border=\"0px\">");            
             out.println("   <tr>");
@@ -68,6 +70,24 @@ public class RemoveMessagesResource extends GenericResource {
             out.println("</table>");
             out.println("</form>");
             out.println("</div>");
+            * */
+            out.println("<div id=\"msj-eliminar\">");
+            out.println("<p>Mensajes del stream: <strong>"+stream.getDisplayTitle(user.getLanguage()) +"</strong></p>");
+            
+            
+            if(StreamPostIns >0L){
+                out.println("<div class=\"eliminar-boton entrada-on\">");
+                    out.println("<a onclick=\"if(confirm('Desea eliminar todos los mensajes?'))" + "{ submitUrl('" + paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "',this); } else { return false;}\" title=\"Eliminar "+ StreamPostIns +" mensajes de entrada\">");
+                    out.println("<strong>"+StreamPostIns+"</strong> <em>Mensajes de entrada</em>");
+                out.println("</a>");
+                out.println("</div>");
+            }else{
+                out.println("<div class=\"eliminar-boton entrada-off\">");
+        	out.println("<span>");
+                out.println("<strong>0</strong> <em>Mensajes de entrada</em>");
+                out.println("</span>");
+                out.println("</div>");
+            }
             
             //Solo mensajes sin Tema
             /*
@@ -85,7 +105,7 @@ public class RemoveMessagesResource extends GenericResource {
                 PostIn postIn=itPostInWOTopic.next();
                 if(postIn.getSocialTopic()==null) aList.add(postIn.getURI());
             }
-            
+            /*
             out.println("<div class=\"swbform\">");
             //out.println("<form type=\"dijit.form.Form\" id=\"del\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"submitForm('del'); return false;\">");            
             out.println("<form type=\"dijit.form.Form\" id=\"delwotopic" + stream.getId() + "\" action=\"" +  paramRequest.getActionUrl().setAction(Action_REMOVEWOTOPIC).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes serán eliminados.')){submitForm('delwotopic" + stream.getId() + "'); return false;}else{return false;}\">");            
@@ -106,26 +126,35 @@ public class RemoveMessagesResource extends GenericResource {
             out.println("</table>");
             out.println("</form>");
             out.println("</div>");
+            **/
+            
+            if(aList.size() >0L){
+                out.println("<div class=\"eliminar-boton entrada-on\">");
+                    out.println("<a onclick=\"if(confirm('Desea eliminar todos los mensajes sin tema?'))" + "{ submitUrl('" + paramRequest.getActionUrl().setAction(Action_REMOVEWOTOPIC).setParameter("suri", objUri) + "',this); } else { return false;}\" title=\"Eliminar "+ StreamPostIns +" mensajes de entrada\">");
+                    out.println("<strong>"+aList.size()+"</strong> <em>Mensajes de entrada</em>");
+                out.println("</a>");
+                out.println("</div>");
+            }else{
+                out.println("<div class=\"eliminar-boton entrada-off\">");
+        	out.println("<span>");
+                out.println("<strong>0</strong> <em>Mensajes sin tema/em>");
+                out.println("</span>");
+                out.println("</div>");
+            }
             
             
             out.println("<div class=\"swbform\">");
             out.println("<form type=\"dijit.form.Form\" id=\"delDate" + stream.getId() + "\" action=\"" +  paramRequest.getActionUrl().setAction(Action_REMOVESINCEDATE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes a partir de la facha seleccionada hacia atras serán eliminados.')){submitForm('delDate" + stream.getId() + "'); return false;}else{return false;}\">");            
-            out.println("<table width=\"100%\" border=\"0px\">");            
-            out.println("   <tr>");
-            out.println("       <td style=\"text-align: center;\">Eliminar mensajes apartir de una fecha hacia atras:</td>");        
-            out.println("   </tr>");
-            out.println("   <tr>");
-            out.println("       <td style=\"text-align: center;\">");
-            out.println("           <input type=\"text\" name=\"remSinceDate"+stream.getId()+"\" id=\"remSinceDate"+stream.getId()+"\" dojoType=\"dijit.form.DateTextBox\"  size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\">");
-            out.println("       </td>");
-            out.println("   </tr>");
-            out.println("   <tr>");
-            out.println("       <td style=\"text-align: center;\"><button dojoType=\"dijit.form.Button\" type=\"submit\">Eliminar</button></td>");
-            out.println("   </tr>");
-            out.println("</table>");
+            out.println("<div class=\"eliminar-date\">");
+            out.println("<p>Eliminar mensajes apartir de una fecha hacia atras:</p>");
+            out.println("<input type=\"text\" name=\"remSinceDate"+stream.getId()+"\" id=\"remSinceDate"+stream.getId()+"\" dojoType=\"dijit.form.DateTextBox\"  size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\">");
+            out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">Eliminar</button>");
+            out.println("</div>");
             out.println("</form>");
             out.println("</div>");
             
+            
+            out.println("</div>");
             
             if(request.getParameter("deleted")!= null && request.getParameter("deleted").equals("ok")){
                 out.println("<script type=\"text/javascript\">");
@@ -177,10 +206,11 @@ public class RemoveMessagesResource extends GenericResource {
                     }
                 }else if(mode.equals(Action_REMOVESINCEDATE))   //Elimina mensajes en el stream hacia atras, a partir de una fecha dada 
                 {
-                    String remSinceDate=request.getParameter("remSinceDate");
-                    if(remSinceDate!=null)
+                    String remSinceDate=request.getParameter("remSinceDate"+stream.getId());
+                    //System.out.println("Entra a processAction/RemoveStream2:"+remSinceDate);
+                    if(remSinceDate!=null && remSinceDate.trim().length()>0)
                     {
-                        //System.out.println("remSinceDate-2:"+remSinceDate);
+                        //System.out.println("remSinceDate-G2:"+remSinceDate);
                         Date date = null;
                         SimpleDateFormat formatoDelTexto=null;
                         try {

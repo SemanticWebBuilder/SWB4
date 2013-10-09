@@ -28,8 +28,6 @@ public class PieChart extends GenericResource{
 
      @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-
-         
        if(request.getParameter("doView")==null) {
            doEdit(request, response, paramRequest);
            return;
