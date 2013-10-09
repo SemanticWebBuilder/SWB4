@@ -19,7 +19,7 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
    */
     public static final org.semanticwb.platform.SemanticProperty social_friends=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#friends");
    /**
-   * Educación definida del usuario en la red social.   1=Primaria; 2=Secundaria; 3=Preparatoria; 4=Universidad; 5=PostGrado;
+   * Educación definida del usuario en la red social.    1=HighSchool; 2=College; 3=Graduate; 4=Undefined;
    */
     public static final org.semanticwb.platform.SemanticProperty social_snu_education=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_education");
     public static final org.semanticwb.platform.SemanticClass social_LifeStage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#LifeStage");

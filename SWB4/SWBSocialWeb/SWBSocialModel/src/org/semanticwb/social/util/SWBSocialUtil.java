@@ -50,6 +50,8 @@ import org.semanticwb.social.PostIn;
 import org.semanticwb.social.PostMonitor;
 import org.semanticwb.social.PostOut;
 import org.semanticwb.social.PostOutNet;
+import org.semanticwb.social.PostOutPrivacy;
+import org.semanticwb.social.PostOutPrivacyRelation;
 import org.semanticwb.social.PostVideoable;
 import org.semanticwb.social.Prepositions;
 import org.semanticwb.social.PunctuationSign;
@@ -1873,6 +1875,24 @@ public class SWBSocialUtil implements SWBAppObject {
                     postOutNet.setStatus(0);
                     postOutNet.setError(error);
                 }
+                //Elimina el PostOut del objeto tempora PostOutPrivacyRelation
+                PostOutPrivacy postOutPrivacy=null;
+                Iterator<PostOutPrivacyRelation> itPostOutPrivacyRelations=PostOutPrivacyRelation.ClassMgr.listPostOutPrivacyRelationByPopr_postOut(postOut, wsite);
+                while(itPostOutPrivacyRelations.hasNext())
+                {
+                    PostOutPrivacyRelation postOutPrivacyRelation=itPostOutPrivacyRelations.next();
+                    if(postOutPrivacyRelation.getPopr_socialNetwork().getURI().equals(socialNet.getURI()))
+                    {
+                        postOutPrivacy=postOutPrivacyRelation.getPopr_privacy();
+                        postOutPrivacyRelation.remove();
+                    }
+                }
+                //Agrega el tipo de privacidad al objeto postOutNet creado, para que siempre sepamos con que privacidad publicamos un cierto mensaje en 
+                //cara red social.
+                if(postOutPrivacy!=null)
+                {
+                    postOutNet.setPo_privacy(postOutPrivacy);
+                }
             }catch(Exception e)
             {
                 //System.out.println(e.getMessage());
@@ -2030,6 +2050,40 @@ public class SWBSocialUtil implements SWBAppObject {
                             postOut.addSocialNetwork(socialNet);
                         }
                     }
+                    
+                    //Guardado de las privacidades para c/red social del postOut
+                    if(request.getParameterValues("postoutPrivacy")!=null)
+                    {
+                        String[] netPrivacys=request.getParameterValues("postoutPrivacy");
+                        for(int i=0;i<netPrivacys.length;i++)
+                        {
+                            String netPrivacy=netPrivacys[i];
+                            //System.out.println("sendNewPost-3:"+value);
+                            if(netPrivacy!=null && netPrivacy.trim().length()>0)
+                            {
+                                int pos=netPrivacy.indexOf("|"); 
+                                if(pos>-1)
+                                {
+                                    String socialNet=netPrivacy.substring(0, pos);
+                                    String privacy=netPrivacy.substring(pos+1);
+                                    if(socialNet!=null && privacy!=null)
+                                    {
+                                        SemanticObject semObjSocialNet=SemanticObject.getSemanticObject(socialNet);
+                                        PostOutPrivacy postOutPrivacy=PostOutPrivacy.ClassMgr.getPostOutPrivacy(privacy, SWBContext.getAdminWebSite());
+                                        if(semObjSocialNet!=null && postOutPrivacy!=null && semObjSocialNet.getGenericInstance() instanceof SocialNetwork)
+                                        {
+                                            PostOutPrivacyRelation postOutPrivacyRel=PostOutPrivacyRelation.ClassMgr.createPostOutPrivacyRelation(wsite);
+                                            postOutPrivacyRel.setPopr_postOut(postOut);
+                                            postOutPrivacyRel.setPopr_socialNetwork(((SocialNetwork)semObjSocialNet.getGenericInstance()));
+                                            postOutPrivacyRel.setPopr_privacy(postOutPrivacy);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //Termina Guardado de las privacidades para c/red social del postOut
+                    
                     
                     //Clasificar mensaje de salida, esto siempre y cuando exista la propiedad "classifySentMgs" igual a true en el sitio
                     //en donde se acaba de crear el PostOut
