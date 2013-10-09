@@ -4,6 +4,7 @@
     Author     : francisco.jimenez
 --%>
 
+<%@page import="org.semanticwb.SWBUtils"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="org.semanticwb.social.YouTubeCategory"%>
 <%@page import="org.semanticwb.model.WebSite"%>
@@ -14,7 +15,7 @@
 <%@page import="java.util.HashMap"%>
 <%@page import="static org.semanticwb.social.admin.resources.YoutubeWall.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
-<%@page contentType="text/html" pageEncoding="x-iso-8859-11"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%!      
     public static String getFullVideoFromId(String id, String accessToken){
         HashMap<String, String> params = new HashMap<String, String>(3);    
@@ -47,72 +48,46 @@
         out.println("Problem refreshing access token");
         return;
     }
-     
     
     String video = getFullVideoFromId(videoId, semanticYoutube.getAccessToken());
-    //System.out.println("userprofile:" + video);    
+    System.out.println("userprofile:" + video);    
     //out.print("video:" + video);
+    //response.getWriter().write("video:" + video);
+    
     JSONObject usrResp = new JSONObject(video);
     
-    String sex = "";
-    String name = "";
-    String birthday="";
-    String locationName= "";
-    String locationCoordinates="";
-    String locationId = "";
     
+    String title = "";
     String description = "";
     String category = "";
     String keywords = "";
-    
-    
-    String picture = "";
-    String profileUrl = "";
-    String subscribers = "";
-    int friendsCount = 0;
-    int mutualFriendsCount = 0;
-    
-    
-    System.out.println("Displaying user information!!");
     JSONObject information = usrResp.getJSONObject("entry");      
 
     
     if(!information.isNull("title")){
-        name = information.getJSONObject("title").getString("$t");
+        title = information.getJSONObject("title").getString("$t");
+        title = SWBUtils.TEXT.encode(title, "UTF-8");
     }
     if(!information.isNull("media$group")){
         if(!information.getJSONObject("media$group").isNull("media$description")){
             if(!information.getJSONObject("media$group").getJSONObject("media$description").isNull("$t")){
-                description = information.getJSONObject("media$group").getJSONObject("media$description").getString("$t");
+                description = information.getJSONObject("media$group").getJSONObject("media$description").getString("$t");                
+                description = SWBUtils.TEXT.encode(description, "UTF-8");
             }
         }
         
         if(!information.getJSONObject("media$group").isNull("media$category")){
             if(!information.getJSONObject("media$group").getJSONArray("media$category").getJSONObject(0).isNull("$t")){
                 category = information.getJSONObject("media$group").getJSONArray("media$category").getJSONObject(0).getString("$t");
+                category = SWBUtils.TEXT.encode(category, "UTF-8");
             }
         }
         
         if(!information.getJSONObject("media$group").isNull("media$keywords")){
             if(!information.getJSONObject("media$group").getJSONObject("media$keywords").isNull("$t")){
                 keywords = information.getJSONObject("media$group").getJSONObject("media$keywords").getString("$t");
+                keywords = SWBUtils.TEXT.encode(keywords, "UTF-8");
             }
-        }
-    }
-
-    if(!information.isNull("media$thumbnail")){
-        picture = information.getJSONObject("media$thumbnail").getString("url");
-    }
-
-    if(!information.isNull("yt$location")){
-        locationName = information.getJSONObject("yt$location").getString("$t");
-    }
-    if(!information.isNull("birthday_date")){
-        birthday = information.getString("birthday_date");
-    }
-    if(!information.isNull("yt$statistics")){
-        if(!information.getJSONObject("yt$statistics").isNull("subscriberCount")){
-            subscribers = information.getJSONObject("yt$statistics").getString("subscriberCount");
         }
     }
 %>
@@ -128,7 +103,7 @@
     <fieldset>
         <legend>Title:</legend>
         <div align="left">
-            <input type="text" name="title" size="67" value="<%=name%>"/>
+            <input type="text" name="title" size="67" value="<%=title%>"/>
         </div>
     </fieldset>
     
@@ -163,7 +138,7 @@
             </select>
         </div>
     </fieldset>
-            <div align="center"><input type="submit" value="Actualizar"/></div>
+            <div align="center"><button dojoType="dijit.form.Button" type="submit">Actualizar</button></div>
     </form>
 
 <%
