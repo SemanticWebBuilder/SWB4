@@ -874,6 +874,7 @@ public class StreamInBoxNoTopic extends GenericResource {
                     totalPages=Double.valueOf(nRec/20).intValue()+1;
                 }
             }
+            out.println("<div id=\"page\">");
             out.println("<div id=\"pagSumary\">"+paramRequest.getLocaleString("page")+":"+nPage+" "+paramRequest.getLocaleString("of") +" "+totalPages+"</div>");
             
             SWBResourceURL pageURL = paramRequest.getRenderUrl();
@@ -906,6 +907,7 @@ public class StreamInBoxNoTopic extends GenericResource {
             * */
           
             out.println(SWBSocialUtil.Util.getContentByPage(totalPages, nPage, PAGES2VIEW, paramRequest.getLocaleString("pageBefore"), paramRequest.getLocaleString("pageNext"), pageURL));
+            out.println("</div>");
         }
 
 
