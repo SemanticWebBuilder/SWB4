@@ -71,18 +71,18 @@ public class RemoveMessagesResource extends GenericResource {
             out.println("</form>");
             out.println("</div>");
             * */
-            out.println("<div id=\"msj-eliminar\">");
+            out.println("<div id=\"strm-eliminar\">");
             out.println("<p>Mensajes del stream: <strong>"+stream.getDisplayTitle(user.getLanguage()) +"</strong></p>");
             
             
             if(StreamPostIns >0L){
-                out.println("<div class=\"eliminar-boton entrada-on\">");
+                out.println("<div class=\"eliminar-boton streamtot-on\">");
                     out.println("<a onclick=\"if(confirm('Desea eliminar todos los mensajes?'))" + "{ submitUrl('" + paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "',this); } else { return false;}\" title=\"Eliminar "+ StreamPostIns +" mensajes de entrada\">");
                     out.println("<strong>"+StreamPostIns+"</strong> <em>Mensajes de entrada</em>");
                 out.println("</a>");
                 out.println("</div>");
             }else{
-                out.println("<div class=\"eliminar-boton entrada-off\">");
+                out.println("<div class=\"eliminar-boton streamtot-off\">");
         	out.println("<span>");
                 out.println("<strong>0</strong> <em>Mensajes de entrada</em>");
                 out.println("</span>");
@@ -129,13 +129,13 @@ public class RemoveMessagesResource extends GenericResource {
             **/
             
             if(aList.size() >0L){
-                out.println("<div class=\"eliminar-boton entrada-on\">");
+                out.println("<div class=\"eliminar-boton streamsin-on\">");
                     out.println("<a onclick=\"if(confirm('Desea eliminar todos los mensajes sin tema?'))" + "{ submitUrl('" + paramRequest.getActionUrl().setAction(Action_REMOVEWOTOPIC).setParameter("suri", objUri) + "',this); } else { return false;}\" title=\"Eliminar "+ StreamPostIns +" mensajes de entrada\">");
                     out.println("<strong>"+aList.size()+"</strong> <em>Mensajes de entrada</em>");
                 out.println("</a>");
                 out.println("</div>");
             }else{
-                out.println("<div class=\"eliminar-boton entrada-off\">");
+                out.println("<div class=\"eliminar-boton streamsin-off\">");
         	out.println("<span>");
                 out.println("<strong>0</strong> <em>Mensajes sin tema/em>");
                 out.println("</span>");

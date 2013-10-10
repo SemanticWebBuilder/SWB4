@@ -26,7 +26,6 @@ public class Reporter extends GenericResource{
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-       System.out.println("Entra a Reporter/doView"); 
        if(request.getParameter("doView")==null) {
            doEdit(request, response, paramRequest);
            return;
@@ -47,7 +46,6 @@ public class Reporter extends GenericResource{
      @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
        PrintWriter out=response.getWriter();
-       System.out.println("Entra a Reporter/doEdit"); 
        out.println("<iframe width=\"100%\" height=\"100%\" src=\""+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW).setParameter("doView", "1").setParameter("suri", request.getParameter("suri")) +"\"></iframe> ");
     }
 }
