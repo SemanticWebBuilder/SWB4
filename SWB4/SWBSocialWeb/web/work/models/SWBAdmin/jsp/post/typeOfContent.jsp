@@ -96,7 +96,40 @@
     urlAction.setParameter("wsite", wsite.getSemanticObject().getModel().getName());
 
     SocialPFlowMgr pfmgr = SocialLoader.getPFlowManager();
+    
+    //Recovering privacy options
+    ArrayList<String> selectFacebook= new ArrayList<String>();
+    ArrayList<String> selectYoutube= new ArrayList<String>();        
+    Iterator <PostOutPrivacy> postOutPs = PostOutPrivacy.ClassMgr.listPostOutPrivacies();
+    while(postOutPs.hasNext()){
+        PostOutPrivacy postOutP = postOutPs.next();
+        //SemanticObject sObj =postOutP.getNetworkType();
+        Iterator<SemanticObject> nets = postOutP.listNetworkTypes();
+        while(nets.hasNext()){
+            SemanticObject semObjNetw=nets.next(); 
+            SemanticClass sClass=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(semObjNetw.getURI());
+            if(sClass.equals(Facebook.social_Facebook)){
+                if(!postOutP.getId().equals("PUBLIC")){
+                    selectFacebook.add(postOutP.getId());
+                }
+            }
+            if(sClass.equals(Youtube.social_Youtube)){
+                if(!postOutP.getId().equals("PUBLIC")){
+                    selectYoutube.add(postOutP.getId());
+                }
+            }
+        }        
+    }
+    
+    System.out.println("Facebook");
+    for(int i = 0; i < selectFacebook.size(); i++){
+        System.out.println(selectFacebook.get(i));
+    }
 
+    System.out.println("Youtube");
+    for(int i = 0; i < selectYoutube.size(); i++){
+        System.out.println(selectYoutube.get(i));
+    }       
     ///////////////////////////////POSTEO DE MENSAJES/////////////////////////////
 
     if (contentType.equals("postMessage")) {
@@ -226,12 +259,28 @@
                             String selected = "";
                             if (isSelected) {
                                 selected = "checked=\"true\"";
-                            }
+                            }                            
                 %>
                 <li class="<%=typeClass%>">
-                    <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" <%=selected%> />
+                    <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" <%=selected%> onClick="disableSelect(this);"/>
                     <label for="t1"><span></span><%=socialNetwork.getTitle()%></label> 
-                </li>
+                    <%
+                    if(socialNetwork instanceof Facebook && postIn == null){
+                    %>
+                    <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
+                        <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">PUBLIC</option>
+                        <%
+                        for(int i = 0; i < selectFacebook.size(); i++){
+                        %>
+                            <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i)%>"><%=selectFacebook.get(i)%></option>
+                        <%
+                        }
+                        %>
+                    </select>
+                    <%
+                    }
+                    %>
+                </li>                                    
                 <%
                         }
                     }
@@ -378,8 +427,24 @@
                             }
                 %>
                 <li class="<%=typeClass%>">
-                    <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" <%=selected%> />
+                    <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" <%=selected%> onClick="disableSelect(this);"/>
                     <label for="t1"><span></span><%=socialNetwork.getTitle()%></label>
+                    <%
+                    if(socialNetwork instanceof Facebook && postIn == null){                        
+                    %>
+                    <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
+                        <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">PUBLIC</option>
+                        <%
+                        for(int i = 0; i < selectFacebook.size(); i++){
+                        %>
+                            <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i)%>"><%=selectFacebook.get(i)%></option>
+                        <%
+                        }
+                        %>
+                    </select>
+                    <%
+                    }
+                    %>
                 </li>
                 <%
                         }
@@ -425,7 +490,7 @@
                     <p>
                       <div id="<%=objUri%><%=sourceCall%>divCategory" style="display:none;" class="etiqueta"><label for="description">Categoría:</label>
                 <select name="<%=Video.social_category.getName()%>">
-                    <option>Selecciona...</option>
+                    <option value="">Selecciona...</option>
                     <%
                         SWBModel model = WebSite.ClassMgr.getWebSite(paramRequest.getWebPage().getWebSiteId());
                         Iterator<YouTubeCategory> itYtube = YouTubeCategory.ClassMgr.listYouTubeCategories(model);
@@ -557,15 +622,47 @@
                     if (socialNetwork instanceof Youtube) {
             %>
             <li class="<%=typeClass%>">
-                <input id="checkYT" type="checkbox" name="<%=socialNetwork.getURI()%>" onClick="showListCategory('<%=objUri%>','<%=sourceCall%>');" <%=selected%>/>
+                <input id="checkYT" type="checkbox" name="<%=socialNetwork.getURI()%>" onClick="showListCategory('<%=objUri%>','<%=sourceCall%>'); disableSelect(this);" <%=selected%>/>
                 <label><span></span><%=socialNetwork.getTitle()%></label>
+                <%
+                    if(socialNetwork instanceof Youtube && postIn == null){                        
+                    %>
+                    <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
+                        <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">PUBLIC</option>
+                        <%
+                        for(int i = 0; i < selectYoutube.size(); i++){
+                        %>
+                            <option value="<%=socialNetwork.getURI() + "|" + selectYoutube.get(i)%>"><%=selectYoutube.get(i)%></option>
+                        <%
+                        }
+                        %>
+                    </select>
+                    <%
+                    }
+                    %>
             </li>
             <%
                     } else {
             %>
             <li class="<%=typeClass%>">
-                <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" <%=selected%>/>
+                <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" <%=selected%> onClick="disableSelect(this);"/>
                 <label><span></span><%=socialNetwork.getTitle()%></label>
+                <%
+                if(socialNetwork instanceof Facebook && postIn == null){                        
+                %>
+                <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
+                    <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">PUBLIC</option>
+                    <%
+                    for(int i = 0; i < selectFacebook.size(); i++){
+                    %>
+                        <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i)%>"><%=selectFacebook.get(i)%></option>
+                    <%
+                    }
+                    %>
+                </select>
+                <%
+                }
+                %>
             </li>
             <%
                         }
