@@ -522,7 +522,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
         SemanticClass semWorkClass = this.getWorkClass().transformToSemanticClass();
-        Iterator<SemanticProperty> basePropertiesList = semWorkClass.listProperties();
+        Iterator<SemanticProperty> basePropertiesList = semWorkClass.listSortProperties();
         JSONArray array = new JSONArray();
         String structure = null;
 
