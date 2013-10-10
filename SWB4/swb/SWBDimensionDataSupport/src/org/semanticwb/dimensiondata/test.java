@@ -23,13 +23,8 @@
 package org.semanticwb.dimensiondata;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.Buffer;
 import javax.net.ssl.HttpsURLConnection;
 import sun.misc.BASE64Encoder;
 
@@ -47,9 +42,14 @@ public class test {
 //        HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
 //        connection.setRequestMethod("GET");
         BASE64Encoder enc = new sun.misc.BASE64Encoder();
-      String userpassword = "ss_api_user" + ":" + "4rfv5tgb";
+      String userpassword = "USER" + ":" + "#######";
       String encodedAuthorization = enc.encode( userpassword.getBytes() );
-        System.out.println("resutl:"+getRESTget("https://api.opsourcecloud.net/oec/0.9/myaccount", encodedAuthorization));
+       // System.out.println("resutl:"+getRESTget("https://api.opsourcecloud.net/oec/0.9/myaccount", encodedAuthorization));
+        //f367c118-3f58-49b0-8bf6-127d26d9d823 OrgID
+        
+        System.out.println("Result: "+ getRESTget("https://api.opsourcecloud.net/oec/0.9/base/image", encodedAuthorization));
+        
+        
 //      connection.setRequestProperty("Authorization", "Basic "+
 //            encodedAuthorization);
 //      connection.connect();
