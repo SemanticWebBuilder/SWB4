@@ -608,6 +608,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         Map<String, String> params = new HashMap<String, String>(2);
         params.put("access_token", this.getAccessToken());
         params.put("message", message.getMsg_Text());
+        params.put("privacy", "{'value':'" + privacyValue(message) + "'}");
         String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/feed";
         JSONObject jsonResponse = null;
         String facebookResponse = "";
@@ -679,6 +680,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         }
 
         Map<String, String> params = new HashMap<String, String>(2);
+        params.put("privacy", "{'value':'" + privacyValue(photo) + "'}");
         if (this.getAccessToken() != null) {
             params.put("access_token", this.getAccessToken());
         }
@@ -807,6 +809,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         if (video.getMsg_Text() != null) {
             params.put("description", video.getMsg_Text());
         }
+        params.put("privacy", "{'value':'" + privacyValue(video) + "'}");
         //String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/videos";
         String url = Facebook.FACEBOOKGRAPH_VIDEO + this.getFacebookUserId() + "/videos";
         JSONObject jsonResponse = null;
@@ -1545,5 +1548,33 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             return false;
         }
         return true;
+    }
+    
+    private String privacyValue(PostOut postout){
+        Iterator<PostOutPrivacyRelation> privacyRelation = PostOutPrivacyRelation.ClassMgr.listPostOutPrivacyRelationByPopr_postOut(postout);        
+        String privacy = "EVERYONE";//Default Value
+        try{
+            while(privacyRelation.hasNext()){
+                PostOutPrivacyRelation privacyR = privacyRelation.next();
+                if(privacyR.getPopr_socialNetwork().getURI().equals(this.getURI())){
+                    if(privacyR.getPopr_privacy() != null){                        
+                        //For facebook PUBLIC->EVERYONE
+                        //And PRIVATE->SELF
+                        System.out.println("PRIVACY--->" + privacyR.getPopr_privacy().getId() + "<---");
+                        if(privacyR.getPopr_privacy().getId().equals("PUBLIC")){
+                            privacy = "EVERYONE";
+                        }else if(privacyR.getPopr_privacy().getId().equals("PRIVATE")){
+                            privacy = "SELF";
+                        }else{
+                            privacy = privacyR.getPopr_privacy().getId();
+                        }
+                    }
+                }
+            }
+        }catch(Exception e){
+            log.error("Problem setting privacy:", e );
+        }
+        System.out.println("PRIVACY:" + privacy);
+        return privacy;
     }
 }
