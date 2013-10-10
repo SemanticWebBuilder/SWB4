@@ -69,7 +69,6 @@
     </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#RuleRefable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Roleable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.element</swb:classCodePackage>
