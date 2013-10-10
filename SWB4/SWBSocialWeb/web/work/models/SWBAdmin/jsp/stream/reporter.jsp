@@ -175,13 +175,6 @@
 
         });
            </script>
-        
-            VAMOS A MOSTRAR GRAFICA!!
-            <p><%=gender%></p>
-            <p><%=schoolGrade%></p>
-            <p><%=slifeStage%></p>
-            <p><%=sentimentalRelationShip%></p>
-            <p><%=scountryState%></p>
         <%
     }
 %>

@@ -44,7 +44,6 @@
             PostIn postIn=itObjPostIns.next();
             if(passFilters(postIn, gender, schoolGrade, slifeStage, sentimentalRelationShip, scountryState))
             {    
-                System.out.println("Enyra a If-2");
                 if(postIn.getPostSentimentalType()==0){
                     neutrals++; 
                 }else if(postIn.getPostSentimentalType()==1){
