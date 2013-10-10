@@ -268,6 +268,29 @@ public abstract class FlickerBase extends org.semanticwb.social.SocialNetwork im
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Flicker> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.social.Flicker with a determined Popr_socialNetworkInv
+       * @param value Popr_socialNetworkInv of the type org.semanticwb.social.PostOutPrivacyRelation
+       * @param model Model of the org.semanticwb.social.Flicker
+       * @return Iterator with all the org.semanticwb.social.Flicker
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Flicker> listFlickerByPopr_socialNetworkInv(org.semanticwb.social.PostOutPrivacyRelation value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Flicker> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_haspopr_socialNetworkInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Flicker with a determined Popr_socialNetworkInv
+       * @param value Popr_socialNetworkInv of the type org.semanticwb.social.PostOutPrivacyRelation
+       * @return Iterator with all the org.semanticwb.social.Flicker
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Flicker> listFlickerByPopr_socialNetworkInv(org.semanticwb.social.PostOutPrivacyRelation value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Flicker> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_haspopr_socialNetworkInv,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
     public static FlickerBase.ClassMgr getFlickerClassMgr()

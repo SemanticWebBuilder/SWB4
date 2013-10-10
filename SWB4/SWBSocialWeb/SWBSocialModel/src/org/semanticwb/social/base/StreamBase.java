@@ -15,6 +15,14 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasStream_socialNetwork=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasStream_socialNetwork");
    /**
+   * Clase a Cambiar despues por "Relacional".Clase en la cual se almacenan los usuarios que escriben los PostIn que llegan. No se puso como identificador de las instancias de esta clase el id que maneja el usuario en la red social, ya que un identificador de una red social, puede ser el mismo para otra red social, pero obviamnete para otro usuario.Es por ello que se puso como AutoGenID esta clase y por ello se maneja por separado el id de un usuario en una determinada red social, esto en la propiedad snu_id.
+   */
+    public static final org.semanticwb.platform.SemanticClass social_SocialNetworkUser=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialNetworkUser");
+   /**
+   * Lista todos las instancias de SocialNetworkUser que esten asociados con un determinado Stream, se utiliza para las campañas.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_hasSocialNetUserInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasSocialNetUserInv");
+   /**
    * Clase en la que se guardan datos que sirven para realizar una siguiente busqueda en una determinada red social y en un determinado stream.
    */
     public static final org.semanticwb.platform.SemanticClass social_SocialNetStreamSearch=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialNetStreamSearch");
@@ -196,6 +204,29 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
         public static java.util.Iterator<org.semanticwb.social.Stream> listStreamByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Stream> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Stream with a determined SocialNetUserInv
+       * @param value SocialNetUserInv of the type org.semanticwb.social.SocialNetworkUser
+       * @param model Model of the org.semanticwb.social.Stream
+       * @return Iterator with all the org.semanticwb.social.Stream
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Stream> listStreamBySocialNetUserInv(org.semanticwb.social.SocialNetworkUser value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Stream> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetUserInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Stream with a determined SocialNetUserInv
+       * @param value SocialNetUserInv of the type org.semanticwb.social.SocialNetworkUser
+       * @return Iterator with all the org.semanticwb.social.Stream
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Stream> listStreamBySocialNetUserInv(org.semanticwb.social.SocialNetworkUser value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Stream> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetUserInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -423,6 +454,45 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Gets all the org.semanticwb.social.SocialNetworkUser
+   * @return A GenericIterator with all the org.semanticwb.social.SocialNetworkUser
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetworkUser> listSocialNetUserInvs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetworkUser>(getSemanticObject().listObjectProperties(social_hasSocialNetUserInv));
+    }
+
+   /**
+   * Gets true if has a SocialNetUserInv
+   * @param value org.semanticwb.social.SocialNetworkUser to verify
+   * @return true if the org.semanticwb.social.SocialNetworkUser exists, false otherwise
+   */
+    public boolean hasSocialNetUserInv(org.semanticwb.social.SocialNetworkUser value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_hasSocialNetUserInv,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the SocialNetUserInv
+   * @return a org.semanticwb.social.SocialNetworkUser
+   */
+    public org.semanticwb.social.SocialNetworkUser getSocialNetUserInv()
+    {
+         org.semanticwb.social.SocialNetworkUser ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasSocialNetUserInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.SocialNetworkUser)obj.createGenericInstance();
          }
          return ret;
     }
