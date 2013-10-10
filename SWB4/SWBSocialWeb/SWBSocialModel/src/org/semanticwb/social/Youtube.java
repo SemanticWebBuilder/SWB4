@@ -203,61 +203,13 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         System.out.println("Entra al metodo postVideo de YouTube....");
         if (video.getVideo() == null || video.getTitle() == null) {//Required fields
             return;
+        }        
+
+        //Valida que este activo el token, de lo contrario lo refresca
+        if(!this.validateToken()){
+            log.error("Unable to update the access token inside postVideo Youtube!");
+            return;
         }
-        /*YouTubeCategory youTubeCat;
-         String allCategories=video.getCategory();
-         String[] arrayCat=allCategories.split(";");
-         for(int i=0;i<arrayCat.length;i++)
-         {
-         String category=arrayCat[i];
-         youTubeCat = YouTubeCategory.ClassMgr.getYouTubeCategory(category, SWBContext.getAdminWebSite());
-         }*/
-
-
-
-        //Valida que este activo el token, de lo contrario manda el token refresh
-        //para que nos regrese un nuevo 
-
-        try {
-            HttpClient client = new DefaultHttpClient();
-            //client.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
-            HttpPost post = new HttpPost("https://www.googleapis.com/oauth2/v2/tokeninfo?access_token=" + this.getAccessToken());
-            ResponseHandler<String> responseHandler = new BasicResponseHandler();
-            String responseBody = client.execute(post, responseHandler);
-            System.out.println("la respuesta es: " + responseBody);
-        } catch (HttpResponseException e) {
-            System.out.println("Msg" + e.getMessage());
-            System.out.println("Error code" + e.getStatusCode());
-            if (e.getStatusCode() == 400) {
-                System.out.println("entra al error 400....");
-                try {
-                    Map<String, String> params = new HashMap<String, String>();
-                    //Temporalmente comentado por que ya se habia autenticado mi cuenta sin pedir el refresh token
-                    //params.put("refresh_token", "1/WY53_4yVfdnoCZ9WATEjVdvt8GgZOobQ9YC5T77PjwY");//Ana
-                    //params.put("refresh_token", "1/EBI7ANgfHcp7CHm3acP5hGoFZ29XhZzIzT2jv_h-3so");//Paco
-                    params.put("refresh_token", this.getRefreshToken());
-                    params.put("client_id", this.getAppKey());
-                    params.put("client_secret", this.getSecretKey());
-                    params.put("grant_type", "refresh_token");
-                    String res = postRequest(params, "https://accounts.google.com/o/oauth2/token", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "POST");
-                    System.out.println("respuesta de peticion del token nuevo" + res);
-                    JSONObject userData = new JSONObject(res);
-                    String tokenAccess = userData.getString("access_token");
-                    setAccessToken(tokenAccess);
-                } catch (IOException io) {
-                    System.out.println("Error en la peticion del nuevo accessToken" + io);
-                } catch (JSONException ex) {
-                    System.out.println("Error en la respuesta del nuevo accessToken" + ex);
-                }
-            }
-            e.printStackTrace();
-        } catch (IOException ex) {
-            System.out.println("Error: " + ex);
-        }
-
-        /*System.out.println("el token de acceso es: " + this.getAccessToken());
-         System.out.println("la developerkey es: " + this.getDeveloperKey());
-         System.out.println("El refresh token:" + this.getRefreshToken());*/
 
         String base = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String boundary = "";
@@ -288,6 +240,9 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             DataOutputStream writer = new DataOutputStream(conn.getOutputStream());
             writer.write(("\r\n--" + boundary + "\r\n").getBytes());
             writer.write("Content-Type: application/atom+xml; charset=UTF-8\r\n\r\n".getBytes());
+            String category = video.getCategory() == null || video.getCategory().isEmpty() ? "People" : video.getCategory();
+            System.out.println("THE CATEGORY->" + category + "<-");
+            String privacy = privacyValue(video);
             String xml = "<?xml version=\"1.0\"?>\r\n"
                     + " <entry xmlns=\"http://www.w3.org/2005/Atom\"" + "\r\n"
                     + "xmlns:media=\"http://search.yahoo.com/mrss/\"\r\n"
@@ -297,11 +252,14 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                     + " <media:description type=\"plain\"> \r\n" + (video.getMsg_Text() == null ? "" : video.getMsg_Text()) + "\r\n"
                     + " </media:description> \r\n"
                     + " <media:category\r\n"
-                    + "scheme=\"http://gdata.youtube.com/schemas/2007/categories.cat\"> " + (video.getCategory() == null ? "People" : video.getCategory()) + " \r\n"
+                    + "scheme=\"http://gdata.youtube.com/schemas/2007/categories.cat\"> " + category + " \r\n"
                     + " </media:category> \r\n"
                     + " <media:keywords>" + (video.getTags() == null ? "" : video.getTags()) + "</media:keywords> \r\n"
+                    + (privacy.equals("PRIVATE") ? " <yt:private/> \r\n" :"")//Ad this tag to make a video PRIVATE
                     + " </media:group> \r\n"
+                    + (privacy.equals("NOT_LISTED") ? " <yt:accessControl action='list' permission='denied'/> \r\n" : "")
                     + " </entry> \r\n";
+            //System.out.println("XML:" + xml);
             writer.write(xml.getBytes("UTF-8"));
             writer.write(("--" + boundary + "\r\n").getBytes());
             String[] arr = video.getVideo().split("\\.");
@@ -329,10 +287,14 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             writer.flush();
             writer.close();
             reader.close();
-            BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String docxml = readerl.readLine();
-            System.out.print("--docxml en postVideo----" + docxml);
-            String videoId = docxml.substring(docxml.indexOf("<yt:videoid>"), docxml.lastIndexOf("</yt:videoid>"));
+            BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));            
+            StringBuilder videoInfo = new StringBuilder();
+            String line;
+            while((line = readerl.readLine()) != null) {
+               videoInfo.append(line);
+            }
+            line = videoInfo.toString();
+            String videoId = line.substring(line.indexOf("<yt:videoid>"), line.lastIndexOf("</yt:videoid>"));
             videoId = videoId.replace("<yt:videoid>", "");
             System.out.println("videoId..." + videoId);
             //Si el videoId es diferente de null manda a preguntar por el status del video
@@ -1237,5 +1199,24 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                 log.error("Youtube only allows comment to a video not POSTS!");
             }
         }        
+    }
+    
+    private String privacyValue(PostOut postout){
+        Iterator<PostOutPrivacyRelation> privacyRelation = PostOutPrivacyRelation.ClassMgr.listPostOutPrivacyRelationByPopr_postOut(postout);        
+        String privacy = "";
+        try{
+            while(privacyRelation.hasNext()){
+                PostOutPrivacyRelation privacyR = privacyRelation.next();
+                if(privacyR.getPopr_socialNetwork().getURI().equals(this.getURI())){
+                    if(privacyR.getPopr_privacy() != null){
+                        privacy = privacyR.getPopr_privacy().getId();
+                    }
+                }
+            }
+        }catch(Exception e){
+            log.error("Problem setting privacy:", e );
+        }
+        System.out.println("PRIVACY:" + privacy);
+        return privacy;
     }
 }
