@@ -467,3 +467,19 @@
               return true;
           }
       }
+      
+      
+function disableSelect(source){
+    var children = source.parentNode.childNodes;
+    for(var i = 0; i < children.length; i++){
+        if(children[i].nodeName == "SELECT"){
+            if(source.checked){
+                children[i].removeAttribute('style');
+                children[i].removeAttribute('disabled');
+            }else{
+                children[i].setAttribute('disabled','disabled');
+                children[i].setAttribute('style','display:none');
+            }
+        }
+    }  
+}
