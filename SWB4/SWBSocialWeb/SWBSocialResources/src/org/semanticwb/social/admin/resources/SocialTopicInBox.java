@@ -944,7 +944,7 @@ public class SocialTopicInBox extends GenericResource {
                     System.out.println("totalPages SocialTopicInBox/totalPages-2:"+totalPages);
                 }
             }
-            System.out.println("totalPages SocialTopicInBox/Jorge-3:"+totalPages);
+            out.println("<div id=\"page\">");
             out.println("<div id=\"pagSumary\">"+paramRequest.getLocaleString("page")+":"+nPage+" "+paramRequest.getLocaleString("of") +" "+totalPages+"</div>");
             
             SWBResourceURL pageURL = paramRequest.getRenderUrl();
@@ -975,6 +975,8 @@ public class SocialTopicInBox extends GenericResource {
             * */
             
             out.println(SWBSocialUtil.Util.getContentByPage(totalPages, nPage, PAGES2VIEW, paramRequest.getLocaleString("pageBefore"), paramRequest.getLocaleString("pageNext"), pageURL));
+            
+            out.println("</div>");
         }
 
 

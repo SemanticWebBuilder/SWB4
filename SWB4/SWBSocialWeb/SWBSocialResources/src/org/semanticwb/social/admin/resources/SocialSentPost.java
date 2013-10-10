@@ -979,6 +979,7 @@ public class SocialSentPost extends GenericResource {
                     totalPages=Double.valueOf(nRec/20).intValue()+1;
                 }
             }
+            out.println("<div id=\"page\">");
             out.println("<div id=\"pagSumary\">"+paramRequest.getLocaleString("page")+":"+nPage+" "+paramRequest.getLocaleString("of") +" "+totalPages+"</div>");
             
             SWBResourceURL pageURL = paramRequest.getRenderUrl();
@@ -1008,6 +1009,7 @@ public class SocialSentPost extends GenericResource {
             out.println("</div>");
             * */
             out.println(SWBSocialUtil.Util.getContentByPage(totalPages, nPage, PAGES2VIEW, paramRequest.getLocaleString("pageBefore"), paramRequest.getLocaleString("pageNext"), pageURL));
+            out.println("</div>");
         }
 
         out.println("</div>");
