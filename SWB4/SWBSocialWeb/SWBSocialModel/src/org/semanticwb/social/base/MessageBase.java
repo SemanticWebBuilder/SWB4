@@ -154,6 +154,29 @@ public abstract class MessageBase extends org.semanticwb.social.PostOut implemen
             return it;
         }
        /**
+       * Gets all org.semanticwb.social.Message with a determined Popr_postOutInv
+       * @param value Popr_postOutInv of the type org.semanticwb.social.PostOutPrivacyRelation
+       * @param model Model of the org.semanticwb.social.Message
+       * @return Iterator with all the org.semanticwb.social.Message
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByPopr_postOutInv(org.semanticwb.social.PostOutPrivacyRelation value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_haspopr_postOutInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Message with a determined Popr_postOutInv
+       * @param value Popr_postOutInv of the type org.semanticwb.social.PostOutPrivacyRelation
+       * @return Iterator with all the org.semanticwb.social.Message
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByPopr_postOutInv(org.semanticwb.social.PostOutPrivacyRelation value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_haspopr_postOutInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.social.Message with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.social.Message

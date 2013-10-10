@@ -59,6 +59,14 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasSocialNetworkPostOutInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasSocialNetworkPostOutInv");
    /**
+   * Relación de Privacidad entre PostOut y las redes sociales a las cuales se envía.
+   */
+    public static final org.semanticwb.platform.SemanticClass social_PostOutPrivacyRelation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostOutPrivacyRelation");
+   /**
+   * PostOutPrivacyRelation que estan relacionados con una instancia de SocialNetwork, al eliminar la socialNetwork se eliminarían las instancias de PostOutPrivacyRelation que tengan asociada dicha SocialNetwork.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_haspopr_socialNetworkInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#haspopr_socialNetworkInv");
+   /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
    */
     public static final org.semanticwb.platform.SemanticClass social_SocialNetwork=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialNetwork");
@@ -318,6 +326,29 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
         public static java.util.Iterator<org.semanticwb.social.SocialNetwork> listSocialNetworkByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetwork> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SocialNetwork with a determined Popr_socialNetworkInv
+       * @param value Popr_socialNetworkInv of the type org.semanticwb.social.PostOutPrivacyRelation
+       * @param model Model of the org.semanticwb.social.SocialNetwork
+       * @return Iterator with all the org.semanticwb.social.SocialNetwork
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SocialNetwork> listSocialNetworkByPopr_socialNetworkInv(org.semanticwb.social.PostOutPrivacyRelation value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetwork> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_haspopr_socialNetworkInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SocialNetwork with a determined Popr_socialNetworkInv
+       * @param value Popr_socialNetworkInv of the type org.semanticwb.social.PostOutPrivacyRelation
+       * @return Iterator with all the org.semanticwb.social.SocialNetwork
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SocialNetwork> listSocialNetworkByPopr_socialNetworkInv(org.semanticwb.social.PostOutPrivacyRelation value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetwork> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_haspopr_socialNetworkInv,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -903,6 +934,45 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
     public void setTags(String tags, String lang)
     {
         getSemanticObject().setProperty(swb_tags, tags, lang);
+    }
+   /**
+   * Gets all the org.semanticwb.social.PostOutPrivacyRelation
+   * @return A GenericIterator with all the org.semanticwb.social.PostOutPrivacyRelation
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutPrivacyRelation> listpopr_socialNetworkInvs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutPrivacyRelation>(getSemanticObject().listObjectProperties(social_haspopr_socialNetworkInv));
+    }
+
+   /**
+   * Gets true if has a popr_socialNetworkInv
+   * @param value org.semanticwb.social.PostOutPrivacyRelation to verify
+   * @return true if the org.semanticwb.social.PostOutPrivacyRelation exists, false otherwise
+   */
+    public boolean haspopr_socialNetworkInv(org.semanticwb.social.PostOutPrivacyRelation value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_haspopr_socialNetworkInv,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the popr_socialNetworkInv
+   * @return a org.semanticwb.social.PostOutPrivacyRelation
+   */
+    public org.semanticwb.social.PostOutPrivacyRelation getpopr_socialNetworkInv()
+    {
+         org.semanticwb.social.PostOutPrivacyRelation ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_haspopr_socialNetworkInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.PostOutPrivacyRelation)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**
