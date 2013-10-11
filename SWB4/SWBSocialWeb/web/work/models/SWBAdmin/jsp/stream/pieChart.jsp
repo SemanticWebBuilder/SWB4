@@ -45,7 +45,6 @@
         title = ((Descriptiveable) semObj.getGenericInstance()).getDisplayTitle(lang);
     }
 %>
-
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
@@ -59,14 +58,11 @@
     }
 
 </style>
-
-
-
-
 <head>
     <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" ></script>
-    
- 
+    <script type="text/javascript" charset="utf-8" src="/swbadmin/js/swb.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/swbadmin/js/swb_admin.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/work/models/SWBAdmin/js/swbsocial.js" ></script>
     <script type="text/javascript" >
         function postHtml(url, tagid)
         {
@@ -107,26 +103,24 @@
             if(id ==1){    
                 var selectAnio=  document.getElementById("selectAnio").value;
                 if(selectAnio== ""){
-                    alert('Debe seleccionar el año')
+                    alert('Seleccione el año')
                     return;
                 }
             }else{                  
                 var selectAnio2=  document.getElementById("selectAnio2").value;
                 var selectMes = document.getElementById("selectMes").value;
                 if(selectAnio2== ""){
-                    alert('Debe seleccionar el año')
+                    alert('Seleccione el año')
                     return;
                 }
                 if(selectMes== ""){
-                    alert('Debe seleccionar el mes')
+                    alert('Seleccione el mes')
                     return;
                 }
             }                   
         }
     </script>
 </head>
-
-
 
 <fieldset>
     <div id="pieChart">
