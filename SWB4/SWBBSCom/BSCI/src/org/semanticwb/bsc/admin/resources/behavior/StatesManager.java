@@ -394,10 +394,11 @@ public class StatesManager extends GenericResource {
                 out.println(" method=\"post\">");              
                 
                 out.println("<fieldset>");
-                out.println("<table width=\"98%\">"); 
+                out.println("<table width=\"57%\">"); 
                 out.println("<thead>");
                 out.println("<tr>");
                 out.println("<th>"+paramRequest.getLocaleString("lblStateGroup")+"</th>");
+                out.println("<th>"+paramRequest.getLocaleString("lblDescriptionGroup")+"</th>");
                 out.println("<th>&nbsp;</th>");
                 out.println("</tr>");
                 out.println("</thead>");
@@ -415,6 +416,9 @@ public class StatesManager extends GenericResource {
                     out.println(" <td><label for=\"sg_"+formId_+stateGroup.getId()+"\">");
                     out.println((stateGroup.getTitle(lang)==null?(stateGroup.getTitle()==null?"Sin título":stateGroup.getTitle().replaceAll("'","")):stateGroup.getTitle(lang).replaceAll("'","")));
                     out.println(" </label></td>");
+                    out.println(" <td>");
+                    out.println((stateGroup.getDescription(lang)==null?(stateGroup.getDescription()==null?"Sin descripción":stateGroup.getDescription().replaceAll("'","")):stateGroup.getDescription(lang).replaceAll("'","")));
+                    out.println("</td>");
 
                     // Selección
                     out.println(" <td align=\"center\">");
