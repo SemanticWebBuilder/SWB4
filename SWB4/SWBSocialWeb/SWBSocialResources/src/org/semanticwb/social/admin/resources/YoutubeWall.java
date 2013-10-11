@@ -562,6 +562,9 @@ public class YoutubeWall extends GenericResource{
         String description = request.getParameter("description");
         String category = request.getParameter("category");
         String keywords = request.getParameter("keywords");
+        String privacy = request.getParameter("privacy");
+        System.out.println("THE PRIVACY:" + privacy);
+        System.out.println("SURI:" + objUri);
         
         if((videoId == null || videoId.trim().isEmpty()) || (title == null || title.trim().isEmpty()) ||
                 (objUri == null || objUri.trim().isEmpty()) || (description == null || description.trim().isEmpty())
@@ -593,7 +596,13 @@ public class YoutubeWall extends GenericResource{
             conn.setRequestProperty("GData-Version", "2");
             conn.setRequestProperty("X-GData-Key", "key=" + semanticYoutube.getDeveloperKey());
 
-            DataOutputStream writer = new DataOutputStream(conn.getOutputStream());                        
+            DataOutputStream writer = new DataOutputStream(conn.getOutputStream());
+            String listControl = "";
+            if(privacy.equals("NOT_LISTED")){
+                listControl = "<yt:accessControl action=\"list\" permission=\"denied\"/> \n\r";
+            }else{
+                listControl = "<yt:accessControl action=\"list\" permission=\"allowed\"/> \n\r";
+            }
             String xml = "<?xml version=\"1.0\"?> \n\r"
                 + "<entry xmlns=\"http://www.w3.org/2005/Atom\" \n\r"
                 + "xmlns:media=\"http://search.yahoo.com/mrss/\" \n\r"
@@ -603,19 +612,21 @@ public class YoutubeWall extends GenericResource{
                 + "<media:description type=\"plain\">" + description + "</media:description> \n\r"
                 + "<media:category scheme=\"http://gdata.youtube.com/schemas/2007/categories.cat\">" + category + "</media:category> \n\r"
                 + "<media:keywords>" + keywords + "</media:keywords> \n\r"
+                + (privacy.equals("PRIVATE") ? "<yt:private/> \n\r" :"")//Add this tag to make a video PRIVATE
                 + "</media:group> \n\r"
                 + "<yt:accessControl action=\"comment\" permission=\"allowed\"/> \n\r"
                 + "<yt:accessControl action=\"commentVote\" permission=\"allowed\"/> \n\r"
                 + "<yt:accessControl action=\"rate\" permission=\"allowed\"/> \n\r"
-                + "<yt:accessControl action=\"list\" permission=\"allowed\"/> \n\r"
+                + listControl
                 + "<yt:accessControl action=\"embed\" permission=\"allowed\"/> \n\r"
-                + "<yt:accessControl action=\"syndicate\" permission=\"allowed\"/> \n\r"
+                + "<yt:accessControl action=\"syndicate\" permission=\"allowed\"/> \n\r"                
                 + "</entry>\n\r";
             writer.write(xml.getBytes("UTF-8"));
             writer.flush();
             writer.close();                        
             BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String docxml = readerl.readLine();
+            System.out.println("THE READ:" + docxml);
 
         }catch(Exception ex){
             System.out.println("ERROR" + ex.toString());
