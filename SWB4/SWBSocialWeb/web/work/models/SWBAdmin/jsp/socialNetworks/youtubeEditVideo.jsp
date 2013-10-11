@@ -4,6 +4,10 @@
     Author     : francisco.jimenez
 --%>
 
+<%@page import="org.json.JSONArray"%>
+<%@page import="org.semanticwb.SWBPlatform"%>
+<%@page import="org.semanticwb.platform.SemanticClass"%>
+<%@page import="org.semanticwb.social.PostOutPrivacy"%>
 <%@page import="org.semanticwb.SWBUtils"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="org.semanticwb.social.YouTubeCategory"%>
@@ -50,7 +54,7 @@
     }
     
     String video = getFullVideoFromId(videoId, semanticYoutube.getAccessToken());
-    System.out.println("userprofile:" + video);    
+    //out.println("userprofile:" + video);    
     //out.print("video:" + video);
     //response.getWriter().write("video:" + video);
     
@@ -61,8 +65,13 @@
     String description = "";
     String category = "";
     String keywords = "";
-    JSONObject information = usrResp.getJSONObject("entry");      
-
+    String privacy = "";
+    JSONObject information = usrResp.getJSONObject("entry");
+    JSONArray accessControl = null;
+    
+    if(!information.isNull("yt$accessControl")){
+        accessControl = information.getJSONArray("yt$accessControl");
+    }
     
     if(!information.isNull("title")){
         title = information.getJSONObject("title").getString("$t");
@@ -87,6 +96,22 @@
             if(!information.getJSONObject("media$group").getJSONObject("media$keywords").isNull("$t")){
                 keywords = information.getJSONObject("media$group").getJSONObject("media$keywords").getString("$t");
                 keywords = SWBUtils.TEXT.encode(keywords, "UTF-8");
+            }
+        }
+        if(!information.getJSONObject("media$group").isNull("yt$private")){//If video is private
+            privacy = "PRIVATE";
+        }else{//If is not private check if public or unlisted
+            for(int i = 0; i < accessControl.length(); i++){
+                JSONObject control = accessControl.getJSONObject(i);
+                if(!control.isNull("action") && !control.isNull("permission")){
+                    if(control.getString("action").equalsIgnoreCase("list")){
+                        if(control.getString("permission").equalsIgnoreCase("allowed")){
+                            privacy = "PUBLIC";
+                        }else if(control.getString("permission").equalsIgnoreCase("denied")){
+                            privacy = "NOT_LISTED";
+                        }
+                    }
+                }
             }
         }
     }
@@ -133,6 +158,29 @@
                 %>
                     <option <%=category.equals(socialCategory.getId()) ? " selected " : ""%>value="<%=socialCategory.getId()%>"><%=socialCategory.getTitle()%></option>
                 <%
+                    }
+                %>
+            </select>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Privacy:</legend>
+        <div align="left">
+            <select name="privacy">
+                <%
+                    Iterator <PostOutPrivacy> postOutPs = PostOutPrivacy.ClassMgr.listPostOutPrivacies();
+                    while(postOutPs.hasNext()){
+                        PostOutPrivacy postOutP = postOutPs.next();
+                        Iterator<SemanticObject> nets = postOutP.listNetworkTypes();
+                        while(nets.hasNext()){
+                            SemanticObject semObjNetw=nets.next(); 
+                            SemanticClass sClass=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(semObjNetw.getURI());
+                            if(sClass.equals(Youtube.social_Youtube)){
+                                %>
+                                <option value="<%=postOutP.getId()%>" <%=postOutP.getId().equals(privacy) ? "selected" : ""%>><%=postOutP.getTitle()%></option>
+                                <%
+                            }
+                        }
                     }
                 %>
             </select>
