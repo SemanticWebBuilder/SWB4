@@ -37,6 +37,7 @@
     actionUrl.setAction("changeSocialTopic");
     actionUrl.setParameter("postUri", post.getURI());
     actionUrl.setParameter("wsite", wsite.getURI());
+    actionUrl.setParameter("suri",request.getParameter("suri"));
 %>
 
 <div class="swbform swbpopup retema-pop">   
