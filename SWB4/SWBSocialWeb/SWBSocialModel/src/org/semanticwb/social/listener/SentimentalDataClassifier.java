@@ -846,7 +846,6 @@ public class SentimentalDataClassifier {
             {
                 Listenerable listenerAble=(Listenerable)socialNetwork;
                 JSONObject userData = listenerAble.getUserInfobyId(socialNetUser.getSnu_id());
-                System.out.println("Sentimental/userDataToString-Georgy:"+userData.toString());
                 if(userData!=null && !userData.toString().equals("{}"))
                 {
                     //Followers

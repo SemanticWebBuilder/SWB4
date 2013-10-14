@@ -7,6 +7,10 @@ package org.semanticwb.social.base;
 public abstract class PostOutNetBase extends org.semanticwb.model.SWBClass 
 {
    /**
+   * Identificador del mensaje en la red social
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_po_socialNetMsgID=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#po_socialNetMsgID");
+   /**
    * Clase de tipo catálogo que define las privacidades para los Post
    */
     public static final org.semanticwb.platform.SemanticClass social_PostOutPrivacy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostOutPrivacy");
@@ -18,10 +22,6 @@ public abstract class PostOutNetBase extends org.semanticwb.model.SWBClass
    * Estatus del PostOut en una instancia de red social específica. 0=No publicado; 1=Publicado;
    */
     public static final org.semanticwb.platform.SemanticProperty social_status=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#status");
-   /**
-   * Identificador del mensaje en la red social
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_socialNetMsgID=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#socialNetMsgID");
    /**
    * Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales. Esta clase no se relaciona con una red social (con la clase SocialNetwork) porque un post de salida (desde la herramienta) podría ser enviado a diferentes redes sociales, sin embargo, es el mismo post de salida. Donde esta a que red social se envía esta en las instancias de la clase PostContainer.
    */
@@ -208,6 +208,24 @@ public abstract class PostOutNetBase extends org.semanticwb.model.SWBClass
     {
         super(base);
     }
+
+/**
+* Gets the Po_socialNetMsgID property
+* @return String with the Po_socialNetMsgID
+*/
+    public String getPo_socialNetMsgID()
+    {
+        return getSemanticObject().getProperty(social_po_socialNetMsgID);
+    }
+
+/**
+* Sets the Po_socialNetMsgID property
+* @param value long with the Po_socialNetMsgID
+*/
+    public void setPo_socialNetMsgID(String value)
+    {
+        getSemanticObject().setProperty(social_po_socialNetMsgID, value);
+    }
    /**
    * Sets the value for the property Po_privacy
    * @param value Po_privacy to set
@@ -263,24 +281,6 @@ public abstract class PostOutNetBase extends org.semanticwb.model.SWBClass
     public void setStatus(int value)
     {
         getSemanticObject().setIntProperty(social_status, value);
-    }
-
-/**
-* Gets the SocialNetMsgID property
-* @return String with the SocialNetMsgID
-*/
-    public String getSocialNetMsgID()
-    {
-        return getSemanticObject().getProperty(social_socialNetMsgID);
-    }
-
-/**
-* Sets the SocialNetMsgID property
-* @param value long with the SocialNetMsgID
-*/
-    public void setSocialNetMsgID(String value)
-    {
-        getSemanticObject().setProperty(social_socialNetMsgID, value);
     }
    /**
    * Sets the value for the property SocialPost

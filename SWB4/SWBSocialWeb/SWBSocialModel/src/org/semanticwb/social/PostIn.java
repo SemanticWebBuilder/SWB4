@@ -13,16 +13,21 @@ public class PostIn extends org.semanticwb.social.base.PostInBase
         super(base);
     }
     
-     /*
-     * Busqueda de aseguradora por nombre de clase de implementación de webservice de cotización
-     */
+    
     public static PostIn getPostInbySocialMsgId(SWBModel model, String socialMsgId)
     {
+        System.out.println("PostIn/getPostInbySocialMsgId-LLega:"+socialMsgId);
         Iterator<SemanticObject> it=model.getSemanticModel().listSubjects(PostIn.social_socialNetMsgId, socialMsgId);
-        if(it.hasNext())
+        while(it.hasNext())
         {
             SemanticObject obj=it.next();
-            return (PostIn)obj.createGenericInstance();
+            System.out.println("objJorge:"+obj);
+            if(obj.getGenericInstance() instanceof PostIn)
+            {
+                PostIn postIn=(PostIn)obj.createGenericInstance();
+                System.out.println("postInGeoge:"+postIn.getSocialNetMsgId());
+                return (PostIn)obj.createGenericInstance();
+            }
         }
         return null;
     }
