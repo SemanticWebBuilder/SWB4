@@ -6,6 +6,7 @@ package org.semanticwb.social.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +16,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -67,51 +69,56 @@ public class SocialUserExtAttributesRes extends GenericResource{
         response.setRenderParameter("suri", request.getParameter("suri"));
         response.setRenderParameter("reloadTap", request.getParameter("suri"));
         response.setMode(response.Mode_VIEW);
-        response.setCallMethod(response.Call_CONTENT);
+        //response.setCallMethod(response.Call_CONTENT);
     }
       
       
     private void setUserExtendedAttributes(HttpServletRequest request, SWBActionResponse response) {
-        User user=response.getUser();
+        //User user=response.getUser();
         //Tomando en cuenta que todos los usuarios que se modificaran en sus propiedades extendidas, sean usuarios del repositorio de Admin.
-        WebSite wsite=SWBContext.getAdminWebSite();
-
-        SocialUserExtAttributes socialextatt = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), wsite);
-        if (socialextatt == null) {
-            socialextatt = SocialUserExtAttributes.ClassMgr.createSocialUserExtAttributes(user.getId(), wsite);
-        }
-        /*
-        Enumeration enParams=request.getParameterNames();
-        while(enParams.hasMoreElements())
+        if(request.getParameter("suri")!=null)
         {
-            String paramName=(String)enParams.nextElement();
-            System.out.println("param:"+paramName+"value:"+request.getParameter(paramName));
-        }*/
+            WebSite wsite=SWBContext.getAdminWebSite();
 
-        if (request.getParameter(SocialUserExtAttributes.social_userCanRemoveMsg.getName()) != null) {
-            socialextatt.setUserCanRemoveMsg(true);
-        }else{
-            socialextatt.setUserCanRemoveMsg(false);
-        }
-        
-        if (request.getParameter(SocialUserExtAttributes.social_userCanRespondMsg.getName()) != null) {
-            socialextatt.setUserCanRespondMsg(true);
-        }else{
-            socialextatt.setUserCanRespondMsg(false);
-        }
-        
-        if (request.getParameter(SocialUserExtAttributes.social_userCanReValueMsg.getName()) != null) {
-            socialextatt.setUserCanReValueMsg(true);
-        }else{
-            socialextatt.setUserCanReValueMsg(false);
-        }
-        
-        if (request.getParameter(SocialUserExtAttributes.social_userCanReTopicMsg.getName()) != null) {
-            socialextatt.setUserCanReTopicMsg(true);
-        }else{
-            socialextatt.setUserCanReTopicMsg(false);
-        }
+            SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("suri"));
+            User user=(User)semObj.getGenericInstance();
 
+            SocialUserExtAttributes socialextatt = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), wsite);
+            if (socialextatt == null) {
+                socialextatt = SocialUserExtAttributes.ClassMgr.createSocialUserExtAttributes(user.getId(), wsite);
+            }
+            /*
+            Enumeration enParams=request.getParameterNames();
+            while(enParams.hasMoreElements())
+            {
+                String paramName=(String)enParams.nextElement();
+                System.out.println("param:"+paramName+",value:"+request.getParameter(paramName));
+            }*/
+
+            if (request.getParameter(SocialUserExtAttributes.social_userCanRemoveMsg.getName()) != null) {
+                socialextatt.setUserCanRemoveMsg(true);
+            }else{
+                socialextatt.setUserCanRemoveMsg(false);
+            }
+
+            if (request.getParameter(SocialUserExtAttributes.social_userCanRespondMsg.getName()) != null) {
+                socialextatt.setUserCanRespondMsg(true);
+            }else{
+                socialextatt.setUserCanRespondMsg(false);
+            }
+
+            if (request.getParameter(SocialUserExtAttributes.social_userCanReValueMsg.getName()) != null) {
+                socialextatt.setUserCanReValueMsg(true);
+            }else{
+                socialextatt.setUserCanReValueMsg(false);
+            }
+
+            if (request.getParameter(SocialUserExtAttributes.social_userCanReTopicMsg.getName()) != null) {
+                socialextatt.setUserCanReTopicMsg(true);
+            }else{
+                socialextatt.setUserCanReTopicMsg(false);
+            }
+        }
     }
     
 }
