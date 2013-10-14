@@ -22,14 +22,31 @@ import org.semanticwb.bsc.element.Theme;
 import org.semanticwb.model.Resource;
 
 /**
+ * Clase que permite obtener los datos de un mapa estrat&eacute;gico. Obtiene la
+ * información y la entrega en un objeto de tipo JSON
  *
- * @author martha.jimenez Pendiente checar que pasa con los elementos de alto de
- * objetivos y diferenciadores horizontal / vertical
+ * @author Martha Elvia Jim&eacute;nez Salgado
+ * @version %I%, %G%
+ * @since 1.0
+ *
  */
 public class DataBuilder {
+    //Pendiente checar que pasa con los elementos de alto de objetivos y diferenciadores horizontal / vertical
 
     private static Logger log = SWBUtils.getLogger(DataBuilder.class);
 
+    /**
+     * Se encarga de obtener la estructura de datos de un BalanceScoreCard
+     *
+     * @param base Elemento de tipo Resource, utilizado para obtener las
+     * configuraciones del recurso
+     * @param period Elemento de tipo Period, se refiere al periodo seleccionado
+     * actualmente en el sitio BSC
+     * @param bsc Elemento de tipo BalanScoreCard, se refiere al BSC
+     * seleccionado actualmente
+     * @return objeto de tipo {
+     * @JSONArray} que contiene la estructura de datos de una BalanceScoreCard
+     */
     public JSONArray getData(Resource base, Period period, BSC bsc) {
         JSONArray mapContainer = new JSONArray();
         JSONArray allPerspectives = new JSONArray();
@@ -52,6 +69,15 @@ public class DataBuilder {
         return mapContainer;
     }
 
+    /**
+     * Obtiene la cabecera de un BSC, es decir obtiene la visi&oacute;n,
+     * misi&acute;n y logotipo
+     *
+     * @param bsc Elemento de tipo BalanScoreCard, se refiere al BSC
+     * seleccionado actualmente
+     * @return objeto de tipo {@code JSONObject} con los datos de la cabera de
+     * un BSC mision, vision y logo
+     */
     private JSONObject getDataHeaders(BSC bsc) {
         JSONObject headers = new JSONObject();
         try {
@@ -67,6 +93,18 @@ public class DataBuilder {
         return headers;
     }
 
+    /**
+     * Obtiene los datos de una perspectiva de un BSC
+     *
+     * @param period Elemento de tipo Period, se refiere al periodo seleccionado
+     * actualmente en el sitio BSC
+     * @param base Elemento de tipo Resource, utilizado para obtener las
+     * configuraciones del recurso
+     * @param perspective objeto de tipo {@code Perspective} utilizado para
+     * obtener la informaci&oacute;n de una perspectiva
+     * @return objeto de tipo {@code JSONObject} con la estructura de los datos
+     * de una perspectiva
+     */
     private JSONObject getDataPerspective(Period period, Resource base, Perspective perspective) {
         JSONObject dataPerspective = new JSONObject();
         JSONArray arrayThemes = new JSONArray();
@@ -75,17 +113,18 @@ public class DataBuilder {
         int countDiffGroup = 0;
         String index = perspective.getIndex() + "";
         String idResour = base.getId();
-        boolean showHorizontal = base.getData("perspective" + idResour + perspective.getId()) == null
+        boolean showHorizontal = (base.getData("perspective" + idResour + perspective.getId()) == null)
                 ? false : true;
         String title = perspective.getTitle();
-        int sizeTitle = (base.getData("amountPerspective") == null
-                || base.getData("amountPerspective").trim().length() > 1)
+        int sizeTitle = ((base.getData("amountPerspective") == null)
+                || (base.getData("amountPerspective").trim().length() == 0)
+                || (base.getData("amountPerspective").equals("")))
                 ? 200 : Integer.parseInt(base.getData("amountPerspective"));
         title = SWBUtils.TEXT.cropText(title, sizeTitle);
-        boolean titleHorizontal = base.getData("show_" + perspective.getTitle() + "_"
-                + perspective.getId()) == null ? false : true;
-        String colorText = base.getData("ty_" + perspective.getTitle() + "_" + perspective.getId())
-                == null ? "black" : base.getData("ty_" + perspective.getTitle() + "_"
+        boolean titleHorizontal = (base.getData("show_" + perspective.getTitle() + "_"
+                + perspective.getId())) == null ? false : true;
+        String colorText = (base.getData("ty_" + perspective.getTitle() + "_" + perspective.getId())
+                == null) ? "black" : base.getData("ty_" + perspective.getTitle() + "_"
                 + perspective.getId());
         Iterator itTheme = perspective.listThemes();
 
@@ -109,10 +148,14 @@ public class DataBuilder {
         if (itDifferGroup.hasNext()) {
             while (itDifferGroup.hasNext()) {
                 DifferentiatorGroup differentiatorGroup = itDifferGroup.next();
-                JSONObject dataDifferGroup = getDataDifferentiatorGroup(period, base, differentiatorGroup);
-                if (dataDifferGroup.length() > 0) {
-                    arrayDifferentiatorGroup.put(dataDifferGroup);
-                    countDiffGroup++;
+                JSONObject dataDifferGroup = getDataDifferentiatorGroup(base, differentiatorGroup);
+                try {
+                    if (dataDifferGroup.getInt("countDifferentiator") > 0) {
+                        arrayDifferentiatorGroup.put(dataDifferGroup);
+                        countDiffGroup++;
+                    }
+                } catch (JSONException ex) {
+                    log.error("Exception try get countObjectives: " + ex);
                 }
             }
         }
@@ -132,6 +175,19 @@ public class DataBuilder {
         return dataPerspective;
     }
 
+    /**
+     * Obtiene los datos de un tema para construir una estructura de
+     * informaci&oacute;n
+     *
+     * @param period Elemento de tipo Period, se refiere al periodo seleccionado
+     * actualmente en el sitio BSC
+     * @param base Elemento de tipo Resource, utilizado para obtener las
+     * configuraciones del recurso
+     * @param theme objeto de tipo {@code Theme} utilizado para obtener la
+     * informaci&oacute;n de un tema
+     * @return objeto de tipo {@code JSONObject} con la estructura de los datos
+     * de un tema
+     */
     private JSONObject getDataTheme(Period period, Resource base, Theme theme) {
         JSONObject dataTheme = new JSONObject();
         JSONArray arrayObjectives = new JSONArray();
@@ -147,14 +203,14 @@ public class DataBuilder {
                 arrayObjectives.put(getDataObjective(base, objective, period));
                 countObjectives++;
             }
-            String colorText = base.getData("ty_" + theme.getTitle() + "_" + theme.getId())
-                    == null ? "black" : base.getData("ty_" + theme.getTitle() + "_"
+            String colorText = (base.getData("ty_" + theme.getTitle() + "_" + theme.getId())
+                    == null) ? "black" : base.getData("ty_" + theme.getTitle() + "_"
                     + theme.getId());
-            String bgcolor = base.getData("bg_" + theme.getTitle() + "_" + theme.getId()) == null
+            String bgcolor = (base.getData("bg_" + theme.getTitle() + "_" + theme.getId()) == null)
                     ? "white" : base.getData("bg_" + theme.getTitle() + "_" + theme.getId());
             String title = theme.getTitle();
-            int sizeTitle = (base.getData("amountTheme") == null
-                    || base.getData("amountTheme").trim().length() > 1)
+            int sizeTitle = ((base.getData("amountTheme") == null)
+                    || (base.getData("amountTheme").trim().length() == 0))
                     ? 200 : Integer.parseInt(base.getData("amountTheme"));
             title = SWBUtils.TEXT.cropText(title, sizeTitle);
             try {
@@ -172,12 +228,23 @@ public class DataBuilder {
         return dataTheme;
     }
 
-    private JSONObject getDataDifferentiatorGroup(Period period, Resource base,
+    /**
+     * Obtiene los datos de un grupo de diferenciadores para construir una
+     * estructura de informaci&oacute;n
+     *
+     * @param base Recurso de SWB utilizado para mostrarlo dentro de la
+     * plataforma SWBPortal
+     * @param differentiatorGroup objeto de tipo {@code DifferentiatorGroup}
+     * utilizado para obtener la informaci&oacute;n de un grupo de
+     * diferenciadores
+     * @return objeto de tipo {@code JSONObject} con la estructura de los datos
+     * de un grupo de diferenciadores
+     */
+    private JSONObject getDataDifferentiatorGroup(Resource base,
             DifferentiatorGroup differentiatorGroup) {
         JSONObject dataDiffeGroup = new JSONObject();
         JSONArray arrayDifferentiator = new JSONArray();
         Iterator<Differentiator> itDiffe = differentiatorGroup.listDifferentiators();
-        itDiffe = getDifferentiatorByPeriod(itDiffe, period);
         if (itDiffe.hasNext()) {
             int countDifferentiator = 0;
             while (itDiffe.hasNext()) {
@@ -185,15 +252,15 @@ public class DataBuilder {
                 arrayDifferentiator.put(getDataDifferentiator(base, differentiator));
                 countDifferentiator++;
             }
-            String colorText = base.getData("ty_" + differentiatorGroup.getTitle() + "_"
-                    + differentiatorGroup.getId()) == null ? "black" : base.getData("ty_"
-                    + differentiatorGroup.getTitle() + "_" + differentiatorGroup.getId());
-            String bgcolor = base.getData("bg_" + differentiatorGroup.getTitle() + "_"
-                    + differentiatorGroup.getId()) == null ? "white" : base.getData("bg_"
-                    + differentiatorGroup.getTitle() + "_" + differentiatorGroup.getId());
+            String colorText = (base.getData("ty_" + differentiatorGroup.getTitle() + "_"
+                    + differentiatorGroup.getId())) == null ? "black" : (base.getData("ty_"
+                    + differentiatorGroup.getTitle() + "_" + differentiatorGroup.getId()));
+            String bgcolor = (base.getData("bg_" + differentiatorGroup.getTitle() + "_"
+                    + differentiatorGroup.getId()) == null) ? "white" : (base.getData("bg_"
+                    + differentiatorGroup.getTitle() + "_" + differentiatorGroup.getId()));
             String title = differentiatorGroup.getTitle();
-            int sizeTitle = (base.getData("amountDifferentiator") == null
-                    || base.getData("amountDifferntiator").trim().length() > 1)
+            int sizeTitle = ((base.getData("amountDifferentiator") == null)
+                    || (base.getData("amountDifferntiator").trim().length() == 0))
                     ? 200 : Integer.parseInt(base.getData("amountDifferntiator"));
             title = SWBUtils.TEXT.cropText(title, sizeTitle);
             try {
@@ -209,14 +276,27 @@ public class DataBuilder {
         return dataDiffeGroup;
     }
 
+    /**
+     * Obtiene los datos de un objetivo para construir una estructura de
+     * informaci&oacute;n
+     *
+     * @param base Elemento de tipo Resource, utilizado para obtener las
+     * configuraciones del recurso
+     * @param objective objeto de tipo {@code Objective} utilizado para obtener
+     * la informaci&oacute;n de un objetivo
+     * @param period Elemento de tipo Period, se refiere al periodo seleccionado
+     * actualmente en el sitio BSC
+     * @return objeto de tipo {@code JSONObject} con la estructura de los datos
+     * de un objetivo
+     */
     private JSONObject getDataObjective(Resource base, Objective objective, Period period) {
         JSONObject dataObjective = new JSONObject();
         String title = objective.getTitle();
-        int sizeTitle = (base.getData("amountObjective") == null
-                || base.getData("amountObjective").trim().length() > 1)
+        int sizeTitle = ((base.getData("amountObjective") == null)
+                || (base.getData("amountObjective").trim().length() == 0))
                 ? 200 : Integer.parseInt(base.getData("amountObjective"));
         title = SWBUtils.TEXT.cropText(title, sizeTitle);
-        String prefix = objective.getPrefix() == null ? "" : objective.getPrefix();
+        String prefix = (objective.getPrefix() == null) ? "" : objective.getPrefix();
         try {
             dataObjective.put("title", title);
             dataObjective.put("sponsor", BSCUtils.getSponsor(objective.getSponsor()));
@@ -231,11 +311,22 @@ public class DataBuilder {
         return dataObjective;
     }
 
+    /**
+     * Obtiene los datos de un diferenciaador para construir una estructura de
+     * informaci&oacute;n
+     *
+     * @param base Elemento de tipo Resource, utilizado para obtener las
+     * configuraciones del recurso
+     * @param differentiator objeto de tipo {@code Differentiator} utilizado
+     * para obtener la informaci&oacute;n de un diferenciador
+     * @return objeto de tipo {@code JSONObject} con la estructura de los datos
+     * de un diferenciador
+     */
     private JSONObject getDataDifferentiator(Resource base, Differentiator differentiator) {
         JSONObject dataDifferentiator = new JSONObject();
         String title = differentiator.getTitle();
-        int sizeTitle = (base.getData("amountDistinctive") == null
-                || base.getData("amountDistinctive").trim().length() > 1)
+        int sizeTitle = ((base.getData("amountDistinctive") == null)
+                || (base.getData("amountDistinctive").trim().length() == 0))
                 ? 200 : Integer.parseInt(base.getData("amountDistinctive"));
         title = SWBUtils.TEXT.cropText(title, sizeTitle);
         try {
@@ -247,17 +338,15 @@ public class DataBuilder {
         return dataDifferentiator;
     }
 
-    private Iterator getDifferentiatorByPeriod(Iterator itDifferentiator, Period period) {
-        ArrayList list = new ArrayList();
-        while (itDifferentiator.hasNext()) {
-            Differentiator differentiator = (Differentiator) itDifferentiator.next();
-            if (differentiator.hasPeriod(period)) {
-                list.add(differentiator);
-            }
-        }
-        return list.iterator();
-    }
-
+    /**
+     * Se encarga de validar que los objetivos tengan asociado el periodo actual
+     *
+     * @param itObjectives Iterador con los objetivos a validar
+     * @param period Elemento de tipo Period, se refiere al periodo seleccionado
+     * actualmente en el sitio BSC
+     * @return Objeto de tipo {
+     * @codeIterator} con los objetivos validados para el periodo
+     */
     private Iterator getObjetivesByPeriod(Iterator itObjectives, Period period) {
         ArrayList list = new ArrayList();
         while (itObjectives.hasNext()) {
@@ -268,50 +357,4 @@ public class DataBuilder {
         }
         return list.iterator();
     }
-    /*private List<Perspective> sortPerspective(Iterator<Perspective> itPersp) {
-     List perspectives = listValidPerspective(itPersp);
-     Collections.sort(perspectives, new Comparator() {
-     public int compare(Object o1, Object o2) {
-     Perspective p1 = (Perspective) o1;
-     Perspective p2 = (Perspective) o2;
-     return p1.getIndex() >= p2.getIndex() ? 1 : -1;
-     }
-     });
-     return perspectives;
-     }
-
-     public List<Perspective> listValidPerspective(Iterator<Perspective> itPersp) {
-     List<Perspective> validPerspectives = null;
-     while (itPersp.hasNext()) {
-     Perspective perspective = itPersp.next();
-     if (perspective.isValid() && perspective.isActive()) {
-     validPerspectives.add(itPersp.next());
-     }
-     }
-     return validPerspectives;
-     }
-
-     private List<Theme> sortTheme(Iterator<Theme> itThemes) {
-     List themes = listValidTheme(itThemes);
-     Collections.sort(themes, new Comparator() {
-     public int compare(Object o1, Object o2) {
-     Theme p1 = (Theme) o1;
-     Theme p2 = (Theme) o2;
-     return p1.getIndex() >= p2.getIndex() ? 1 : -1;
-     }
-     });
-     return themes;
-     }
-
-     public List<Theme> listValidTheme(Iterator<Theme> itTheme) {
-     List<Theme> validTheme = null;
-     while (itTheme.hasNext()) {
-     Theme theme = itTheme.next();
-     if (theme.isValid() && theme.isActive()) {
-     validTheme.add(itTheme.next());
-     }
-     }
-     return validTheme;
-     }*/
-
 }

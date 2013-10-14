@@ -15,6 +15,8 @@ import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
+import org.semanticwb.bsc.accessory.Differentiator;
+import org.semanticwb.bsc.accessory.DifferentiatorGroup;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.bsc.element.Perspective;
@@ -40,6 +42,7 @@ public class CausalArrows extends Decorator {
     private double y1 = 0;
     private double y2 = 0;
     private String triangleEnd = "#triangle-end";
+    private JSONObject dataArrows = new JSONObject();
 
     /**
      * Construye una instancia de tipo {@code CausalArrows}
@@ -51,7 +54,7 @@ public class CausalArrows extends Decorator {
     }
 
     /**
-     * Permite agregar m&aacute;s cosas al Mapa Estrat&eacute;gico
+     * Permite agregar m&aacute;s funcionalidades al Mapa Estrat&eacute;gico
      *
      * @param bsc Elemento de tipo BalanScoreCard, se refiere al BSC
      * seleccionado actualmente
@@ -66,12 +69,21 @@ public class CausalArrows extends Decorator {
     public StringBuilder draw(BSC bsc, Period period, Resource base) {
         StringBuilder sb = new StringBuilder();
         sb.append(super.draw(bsc, period, base));
-        sb.append(paintArrows(getStructureDataArrows(base, bsc), base, bsc, period));
+        sb.append(paintArrows(getStructureDataArrows(base, bsc, period), base, bsc, period));
         return sb;
     }
 
-    private JSONObject getStructureDataArrows(Resource base, BSC bsc) {
-        JSONObject dataArrows = new JSONObject();
+    /**
+     * Obtiene la estructura de la informaci&oacute;n de un balanscorecard en
+     * especif&iacute;co.
+     *
+     * @param base Recurso de SWB utilizado para mostrarlo dentro de la
+     * plataforma SWBPortal
+     * @param bsc Elemento de tipo BalanScoreCard, se refiere al BSC
+     * seleccionado actualmente
+     * @return
+     */
+    private JSONObject getStructureDataArrows(Resource base, BSC bsc, Period period) {
         Iterator itPers = bsc.listPerspectives();
         if (itPers.hasNext()) {
             itPers = BSCUtils.sortObjSortable(itPers).listIterator();
@@ -80,11 +92,13 @@ public class CausalArrows extends Decorator {
                 try {
                     JSONObject perspectiveObj = new JSONObject();
                     Perspective perspective = (Perspective) itPers.next();
-                    boolean config = base.getData("perspective" + base.getId() + perspective.getId()) == null ? false : true;
-                    int maxObjectForPerspective = getMaxObjectiveForTheme(perspective);
+                    boolean config = base.getData("perspective" + base.getId() + perspective.getId())
+                            == null ? false : true;
+                    int maxObjectForPerspective = getMaxObjectiveForTheme(perspective, period);
                     perspectiveObj.put("index", perspective.getIndex());
                     perspectiveObj.put("title", perspective.getTitle());
-                    perspectiveObj.put("height", getHeightPerspective(perspective, base, maxObjectForPerspective));
+                    perspectiveObj.put("height", getHeightPerspective(perspective, base,
+                            maxObjectForPerspective));
                     perspectiveObj.put("isHorizontal", config);
                     perspectiveObj.put("maxObjectives", maxObjectForPerspective);
                     perspectiveObj.put("arrayTheme", getArrayTheme(perspective));
@@ -100,14 +114,28 @@ public class CausalArrows extends Decorator {
         return dataArrows;
     }
 
+    /**
+     * Ejecuta una serie de acciones para poder obtener las flechas causa -
+     * efecto
+     *
+     * @param dataStructure objeto de tipo {@code JSONObject} que contiene la
+     * estructura de datos de un balancescorecard
+     * @param base Recurso de SWB utilizado para mostrarlo dentro de la
+     * plataforma SWBPortal
+     * @param bsc Elemento de tipo BalanScoreCard, se refiere al objeto
+     * {@code BSC} seleccionado actualmente
+     * @param period Elemento de tipo {@code Period], se refiere al periodo seleccionado
+     * actualmente en el sitio BSC
+     * @return un objeto de tipo {@code StringBuilder} con el c&oacute;digo HTML de las
+     * flechas causa - efecti
+     */
     private StringBuilder paintArrows(JSONObject dataStructure, Resource base, BSC bsc, Period period) {
         StringBuilder sb = new StringBuilder();
         Iterator<Perspective> itPers = bsc.listPerspectives();
-        int countLines = 1;
         int countLinesAttributes = 1;
         StringBuilder sbAttributeLines = new StringBuilder();
         StringBuilder sbStatementLines = new StringBuilder();
-        HashMap map = new HashMap();
+
         Iterator<Entry> itMap;
         while (itPers.hasNext()) {
             Perspective perspective = itPers.next();
@@ -116,100 +144,73 @@ public class CausalArrows extends Decorator {
                 Theme theme = listThemes.next();
                 Iterator<Theme> itCausalTheme = theme.listCausalThemes();
                 int startPerspectiveIndex = findIndexPerspective(perspective, dataStructure);
-                    //System.out.println("startPerspectiveIndex: " + startPerspectiveIndex);
                 int startThemeIndex = findIndexTheme(startPerspectiveIndex, dataStructure, theme);
                 if (itCausalTheme.hasNext()) {
-
-                    //int startPerspectiveIndex = findIndexPerspective(perspective, dataStructure);
-                    //System.out.println("startPerspectiveIndex: " + startPerspectiveIndex);
-                    //int startThemeIndex = findIndexTheme(startPerspectiveIndex, dataStructure, theme);
-                    //System.out.println("startThemeIndex: " + startThemeIndex);
-                    map = paintThemeTheme(dataStructure, startPerspectiveIndex, startThemeIndex, base, 
-                            itCausalTheme, countLinesAttributes, period);
+                    HashMap map = paintThemeTheme(dataStructure, startPerspectiveIndex, startThemeIndex,
+                            base, itCausalTheme, countLinesAttributes, period);
                     itMap = map.entrySet().iterator();
                     while (itMap.hasNext()) {
                         Entry entry = itMap.next();
-                        countLines = Integer.parseInt(entry.getKey().toString());
+                        countLinesAttributes = Integer.parseInt(entry.getKey().toString());
                         StringBuilder sb1 = (StringBuilder) entry.getValue();
                         sbAttributeLines.append(sb1);
                     }
-                   // System.out.println("countLines: " + countLines);
-                    map = createLineTheme(itCausalTheme, countLines, period);
-                    itMap = map.entrySet().iterator();
-                    while (itMap.hasNext()) {
-                        Entry entry = itMap.next();
-                        countLines = Integer.parseInt(entry.getKey().toString());
-                        StringBuilder sb1 = (StringBuilder) entry.getValue();
-                        sbStatementLines.append(sb1);
-                    }
                 }
                 Iterator<Objective> itCausalobjective = theme.listCausalObjectives();
-                if (itCausalobjective.hasNext()) { //
-                    //int startPerspectiveIndex = findIndexPerspective(perspective, dataStructure);
-                    //System.out.println("startPerspectiveIndex: " + startPerspectiveIndex);
-                    //int startThemeIndex = findIndexTheme(startPerspectiveIndex, dataStructure, theme);
-                    sbAttributeLines.append(paintThemeObjective(dataStructure, startPerspectiveIndex, startThemeIndex, 0, 
-                            itCausalobjective, base, period, countLinesAttributes));
-                    map = createLineObjective(itCausalobjective, countLines, period);
+                if (itCausalobjective.hasNext()) {
+                    HashMap map = paintThemeObjective(dataStructure, startPerspectiveIndex, startThemeIndex,
+                            0, itCausalobjective, base, period, countLinesAttributes);
                     itMap = map.entrySet().iterator();
                     while (itMap.hasNext()) {
                         Entry entry = itMap.next();
-                        countLines = Integer.parseInt(entry.getKey().toString());
+                        countLinesAttributes = Integer.parseInt(entry.getKey().toString());
                         StringBuilder sb1 = (StringBuilder) entry.getValue();
-                        sbStatementLines.append(sb1);
+                        sbAttributeLines.append(sb1);
                     }
                 }
                 Iterator<Objective> itObjectives = theme.listObjectives();
                 while (itObjectives.hasNext()) {
                     Objective objective = itObjectives.next();
                     itCausalTheme = objective.listCausalThemes();
-                    int startObjective = findIndexObjective(startPerspectiveIndex, dataStructure, startThemeIndex, objective);
-                    sbAttributeLines.append(paintObjectiveTheme(dataStructure, startPerspectiveIndex, startThemeIndex, startObjective, 
-                            itCausalTheme, base, period, countLinesAttributes));
-                    if (itCausalTheme.hasNext()) {
-                        map = createLineTheme(itCausalTheme, countLines, period);
-                        itMap = map.entrySet().iterator();
-                        while (itMap.hasNext()) {
-                            Entry entry = itMap.next();
-                            countLines = Integer.parseInt(entry.getKey().toString());
-                            StringBuilder sb1 = (StringBuilder) entry.getValue();
-                            sbStatementLines.append(sb1);
-                        }
+                    int startObjective = findIndexObjective(startPerspectiveIndex, dataStructure,
+                            startThemeIndex, objective);
+                    HashMap map = paintObjectiveTheme(dataStructure, startPerspectiveIndex, startThemeIndex,
+                            startObjective, itCausalTheme, base, period, countLinesAttributes);
+                    itMap = map.entrySet().iterator();
+                    while (itMap.hasNext()) {
+                        Entry entry = itMap.next();
+                        countLinesAttributes = Integer.parseInt(entry.getKey().toString());
+                        StringBuilder sb1 = (StringBuilder) entry.getValue();
+                        sbAttributeLines.append(sb1);
                     }
-                    itCausalobjective = objective.listCausalObjectives();//countLinesAttributes
-                    sbAttributeLines.append(paintObjectiveObjective(dataStructure, startPerspectiveIndex, startThemeIndex, startObjective, base, period, 
-                            itCausalobjective, objective, countLines));
-                    if (itCausalobjective.hasNext()) {
-                        map = createLineObjective(itCausalobjective, countLines, period);
-                        itMap = map.entrySet().iterator();
-                        while (itMap.hasNext()) {
-                            Entry entry = itMap.next();
-                            countLines = Integer.parseInt(entry.getKey().toString());
-                            StringBuilder sb1 = (StringBuilder) entry.getValue();
-                            sbStatementLines.append(sb1);
-                        }
+                    itCausalobjective = objective.listCausalObjectives();
+                    map = paintObjectiveObjective(dataStructure, startPerspectiveIndex, startThemeIndex,
+                            startObjective, base, period, itCausalobjective, objective, countLinesAttributes);
+                    itMap = map.entrySet().iterator();
+                    while (itMap.hasNext()) {
+                        Entry entry = itMap.next();
+                        countLinesAttributes = Integer.parseInt(entry.getKey().toString());
+                        StringBuilder sb1 = (StringBuilder) entry.getValue();
+                        sbAttributeLines.append(sb1);
                     }
                 }
             }
         }
+        sbStatementLines.append(createLinesSVG(countLinesAttributes));
         sb.append(getJavascript(sbStatementLines, sbAttributeLines));
         sb.append(loadJavascript());
         return sb;
     }
 
-    private HashMap createLineTheme(Iterator<Theme> themes, int count, Period period) {
-        HashMap map = new HashMap();
-        StringBuilder sb = new StringBuilder();
-        while (themes.hasNext()) {
-            Theme theme = themes.next();
-            if (isValidTheme(theme, period)) {
-                sb.append("line" + count + " = svg.appendChild(create(\"line\"));");
-            }
-        }
-        map.put(count, sb);
-        return map;
-    }
-
+    /**
+     * Valida que el tema tenga objetivos con en el periodo proporcionado
+     *
+     * @param theme
+     * @param period Elemento de tipo Period, se refiere al periodo seleccionado
+     * actualmente en el sitio BSC
+     * @return un true o false indicando si el tema tiene objetivos con el
+     * periodo proporcionado
+     */
     private boolean isValidTheme(Theme theme, Period period) {
         boolean valid = false;
         Iterator<Objective> itObjectives = theme.listObjectives();
@@ -223,216 +224,291 @@ public class CausalArrows extends Decorator {
         return valid;
     }
 
-    private HashMap createLineObjective(Iterator<Objective> objectives, int count, Period period) {
-        HashMap map = new HashMap();
+    /**
+     * Crea l&iacute;neas de tipo SVG
+     *
+     * @param count n&uacute;mero de l&iacute;neas a crear
+     * @return un objeto de tipo {@code StringBuilder} que contiene las
+     * intrucciones para crear l&iacute;neas SVG
+     */
+    private StringBuilder createLinesSVG(int count) {
         StringBuilder sb = new StringBuilder();
-        while (objectives.hasNext()) {
-            Objective objective = objectives.next();
-            if (objective.hasPeriod(period)) {
-                sb.append("line" + count + " = svg.appendChild(create(\"line\"));");
-            }
+        for (int i = 1; i <= count; i++) {
+            sb.append("line" + i + " = svg.appendChild(create(\"line\"));");
         }
-        map.put(count, sb);
-        return map;
+        return sb;
     }
 
-    private HashMap paintThemeTheme(JSONObject jsonArrows, int startPerspectiveIndex, int startThemeIndex,
-            Resource base, Iterator<Theme> itCausalTheme, int countLine, Period period) {
-        HashMap map = new HashMap();
+    /**
+     * Pinta la relaci&oacute;n Causa - Efecto entre temas
+     *
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @param startPerspectiveIndex &Iacute;ndice de la perspectiva (Causa) que
+     * contiene la relación causa - efecto
+     * @param startThemeIndex &Iacute;ndice del tema (Causa) que contiene la
+     * relación causa - efecto
+     * @param base Recurso de SWB utilizado para mostrarlo dentro de la
+     * plataforma SWBPortal
+     * @param itCausalTheme Iterador con los temas asociados a la causa - efecto
+     * de objetivos/ temas
+     * @param countLine n&uacute;mero de l&iacute;nea a partir de la cual
+     * deber&aacute;n crearse las siguientes l&iacute;neas
+     * @param period Elemento de tipo Period, se refiere al periodo seleccionado
+     * actualmente en el sitio BSC
+     * @return objeto de tipo {@code HashMap} con las l&iacute;neas creadas y el
+     * contador de l&iacute;neas utilizados
+     */
+    private HashMap paintThemeTheme(JSONObject jsonArrows, int startPerspectiveIndex,
+            int startThemeIndex, Resource base, Iterator<Theme> itCausalTheme, int countLine,
+            Period period) {
+        HashMap map1 = new HashMap();
+        Iterator<Entry> itMap;
         StringBuilder sb = new StringBuilder();
-        int finalPerspectiveIndex = 0;
-        int finalThemeIndex = 0;
-        String classLine = base.getData("colorRelTT") == null ? "arrow" : base.getData("colorRelTT");
+        String classLine = ((base.getData("colorRelTT") == null) ||
+                (base.getData("colorRelTT").trim().length() == 0))
+                ? "arrow" : base.getData("colorRelTT");
         while (itCausalTheme.hasNext()) {
             Theme theme = itCausalTheme.next();
             if (isValidTheme(theme, period)) {
+                HashMap map = new HashMap();
                 Perspective perspective = theme.getPerspective();
-                finalPerspectiveIndex = findIndexPerspective(perspective, jsonArrows);
-                finalThemeIndex = findIndexTheme(finalPerspectiveIndex, jsonArrows, theme);
-                System.out.println("--------------en paintThemeThme: " + countLine);
+                int finalPerspectiveIndex = findIndexPerspective(perspective, jsonArrows);
+                int finalThemeIndex = findIndexTheme(finalPerspectiveIndex, jsonArrows, theme);
                 if (startPerspectiveIndex != finalPerspectiveIndex) {
-                    sb.append(getLinesThemeTheme(startPerspectiveIndex, startThemeIndex,
-                            finalPerspectiveIndex, finalThemeIndex, countLine, classLine, jsonArrows));
+                    map = paintLinesThemeTheme(startPerspectiveIndex, startThemeIndex,
+                            finalPerspectiveIndex, finalThemeIndex, countLine, classLine, jsonArrows);
                 } else {
-                    sb.append(getLinesSameThemeTheme(startPerspectiveIndex, startThemeIndex,
-                            finalPerspectiveIndex, finalThemeIndex, countLine, classLine, jsonArrows));
+                    map = paintLinesSameThemeTheme(startPerspectiveIndex, startThemeIndex,
+                            finalThemeIndex, countLine, classLine, jsonArrows);
                 }
-                countLine++;
+                itMap = map.entrySet().iterator();
+                while (itMap.hasNext()) {
+                    Entry entry = itMap.next();
+                    countLine = Integer.parseInt(entry.getKey().toString());
+                    StringBuilder sb1 = (StringBuilder) entry.getValue();
+                    sb.append(sb1);
+                }
             }
+        }
+        map1.put(countLine, sb);
+        return map1;
+    }
+
+    /**
+     * Pinta la relaci&oacute;n Causa - Efecto entre temas de misma perspectiva
+     *
+     * @param startPerspectiveIndex &Iacute;ndice de la perspectiva (Causa) que
+     * contiene la relación causa - efecto
+     * @param startThemeIndex &Iacute;ndice del tema (Causa) que contiene la
+     * relación causa - efecto
+     * @param finalPerspectiveIndex &Iacute;ndice de la perspectiva (Efecto) que
+     * contiene la relación causa - efecto
+     * @param finalThemeIndex &Iacute;ndice del tema (Efecto) que contiene la
+     * relación causa - efecto
+     * @param countLine n&uacute;mero de l&iacute;nea a partir de la cual
+     * deber&aacute;n crearse las siguientes l&iacute;neas
+     * @param classLine Clase CSS
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @return objeto de tipo {@code HashMap} con las l&iacute;neas creadas y el
+     * contador de l&iacute;neas utilizados
+     */
+    private HashMap paintLinesSameThemeTheme(int startPerspectiveIndex, int startThemeIndex,
+            int finalThemeIndex, int countLine, String classLine, JSONObject jsonArrows) {
+        HashMap map = new HashMap();
+        StringBuilder sb = new StringBuilder();
+        try {
+            JSONObject startPers = (JSONObject) jsonArrows.get((startPerspectiveIndex - 1) + "");
+            JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
+            int noCols = arrayTheme.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
+            int restCols = (int) divContainerCols / noCols;//valor por columna
+            int[] heightPer = getHeigthPerspectives(startPerspectiveIndex, jsonArrows);
+            //primer linea
+            x1 = (divTitle) + ((startThemeIndex * (restCols)) - (restCols / 2));
+            x2 = x1;
+            y1 = heightPer[0] + heightPer[1] + 20;//+ 120
+            y2 = heightPer[0] + heightPer[1] + (2 * countLine);//+ 120
+            sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
+            countLine++;
+            //segunda linea
+            x1 = x2;
+            y1 = y2;
+            y2 = y1;
+            x2 = (divTitle) + ((finalThemeIndex * (restCols)) - (restCols / 2));
+            sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
+            countLine++;
+            //tercer linea
+            x1 = x2;
+            x2 = x1;
+            y1 = y2;
+            y2 = heightPer[0] + heightPer[1] + (2 * countLine);//+ 120
+            sb.append(paintLineTriangle(countLine, triangleEnd));
+            countLine++;
+        } catch (JSONException ex) {
+            log.error("Exception in getLinesSameThemeTheme: " + ex);
+        } catch (NumberFormatException ex) {
+            log.error("Exception in NumberFormatException, getLinesSameThemeTheme: " + ex);
         }
         map.put(countLine, sb);
         return map;
     }
 
-    private StringBuilder getLinesSameThemeTheme(int startPerspectiveIndex, int startThemeIndex, int finalPerspectiveIndex, int finalThemeIndex,
+    /**
+     * Pinta la relaci&oacute;n Causa - Efecto entre temas de distintas
+     * perspectivas
+     *
+     * @param startPerspectiveIndex &Iacute;ndice de la perspectiva (Causa) que
+     * contiene la relación causa - efecto
+     * @param startThemeIndex &Iacute;ndice del tema (Causa) que contiene la
+     * relación causa - efecto
+     * @param finalPerspectiveIndex &Iacute;ndice de la perspectiva (Efecto) que
+     * contiene la relación causa - efecto
+     * @param finalThemeIndex &Iacute;ndice del tema (Efecto) que contiene la
+     * relación causa - efecto
+     * @param countLine n&uacute;mero de l&iacute;nea a partir de la cual
+     * deber&aacute;n crearse las siguientes l&iacute;neas
+     * @param classLine Clase CSS
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @return objeto de tipo {@code HashMap} con las l&iacute;neas creadas y el
+     * contador de l&iacute;neas utilizados
+     */
+    private HashMap paintLinesThemeTheme(int startPerspectiveIndex, int startThemeIndex,
+            int finalPerspectiveIndex, int finalThemeIndex,
             int countLine, String classLine, JSONObject jsonArrows) {
-        StringBuilder sb = new StringBuilder();
-//        double x1 = 0;
-//        double x2 = 0;
-//        double y1 = 0;
-//        double y2 = 0;
-        try {
-            JSONObject startPers = (JSONObject) jsonArrows.get(startPerspectiveIndex + "");
-            JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
-            int noCols = arrayTheme.length();//total de columnas
-            int restCols = (int) divContainerCols / noCols;//valor por columna
-            x1 = (divTitle) + ((startThemeIndex * (restCols)) - (restCols / 2));
-            x2 = x1;
-            /*Calculo Y alto de perspectivas*/
-            int[] heightPer = getHeigthPerspectives(startPerspectiveIndex, jsonArrows);
-            x1 = (divTitle) + ((startThemeIndex * (restCols)) - (restCols / 2));
-            x2 = x1;
-            y1 = heightPer[0] + heightPer[1] + 20;
-            y2 = heightPer[0] + heightPer[1] + (1 * countLine);
-            /*for (int i = 1; i < startPerspectiveIndex; i++) {
-             JSONObject pers = (JSONObject) jsonArrows.get("" + i);
-             addArrowY = addArrowY + pers.getInt("height");
-             filaAgregadasSuma = filaAgregadasSuma + pers.getInt("maxObjectives");
-             }
-             if (startPerspectiveIndex > 1) {
-             filaAgregadasSuma = filaAgregadasSuma * 20;
-             }*/
-            /*Calculo Y*/
-            sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-            x1 = x2;
-            y1 = y2;
-            y2 = y1;
-            int diff = restCols * (startThemeIndex - finalThemeIndex);
-            if (startPerspectiveIndex > finalPerspectiveIndex) {
-                x2 = x1 - diff;
-            } else {
-                x2 = x1 + diff;
-            }
-            sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-            x1 = x2;
-            x2 = x1;
-            y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (1 * countLine);
-            sb.append(paintLineTriangle(countLine, triangleEnd));
-            sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-        } catch (JSONException ex) {
-            log.error("Exception in getLinesSameThemeTheme: " + ex);
-        }
-        return sb;
-    }
-
-    private StringBuilder getLinesThemeTheme(int startPerspectiveIndex, int startThemeIndex, int finalPerspectiveIndex, int finalThemeIndex,
-            int countLine, String classLine, JSONObject jsonArrows) {
+        HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
         String triangleEnd = "#triangle-end";
-//        double x1 = 0;
-//        double x2 = 0;
-//        double y1 = 0;
-//        double y2 = 0;
         try {
             JSONObject startPers = (JSONObject) jsonArrows.get(startPerspectiveIndex + "");
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
             int noCols = arrayTheme.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             int restCols = (int) divContainerCols / noCols;//valor por columna
-            //int colActualPerc = (countLine * 1) * startThemeIndex; // variable dependiendo cual columna se esta pintando
-
-            int[] heightPer = getHeigthPerspectives(startPerspectiveIndex, jsonArrows);
-            /*                    //Convertir en funcion
-             int addArrowY = 0;
-             int filaAgregadasSuma = 0;
-             for (int i = 1; i < startPerspectiveIndex; i++) {
-             JSONObject pers = (JSONObject) jsonArrows.get("" + i);
-             addArrowY = addArrowY + pers.getInt("height");
-             filaAgregadasSuma = filaAgregadasSuma + pers.getInt("maxObjectives");
-             }
-             if (startPerspectiveIndex > 1) {
-             filaAgregadasSuma = filaAgregadasSuma * 20;
-             }
-             //Fin de convertir en funcion devuelve dos enteros en un int[]
-             */
+            //primer linea
+            int[] heightPer = getHeigthPerspectives(startPerspectiveIndex - 1, jsonArrows);
             x1 = (divTitle) + ((startThemeIndex * (restCols)) - (restCols / 2));
             x2 = x1;
-            y1 = heightPer[0] + heightPer[1] + 20;
-            y2 = heightPer[0] + heightPer[1] + (1 * countLine);
-
+            y1 = heightPer[0] + heightPer[1] + 20 + 120; //cabecera
+            y2 = heightPer[0] + heightPer[1] + (2 * countLine) + 120;
+            
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
+            //segunda linea
+            int countCol = 1;
+            if(countLine < 5) {
+                countCol = countLine; 
+            }
             x1 = x2;
-            x2 = 92 + 5 + countLine;
+            x2 = 92 + 5 + countCol;
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
+            countLine++;
+            //tercer linea
             x1 = x2;
             x2 = x1;
             y1 = y2;
             /*Calculo Y alto de perspectivas*/
-            heightPer = getHeigthPerspectives(finalPerspectiveIndex, jsonArrows);
-            /*filaAgregadasSuma = 0;
-             for (int i = 1; i < finalPerspectiveIndex; i++) {
-             JSONObject pers = (JSONObject) jsonArrows.get("" + i);
-             addArrowY = addArrowY + pers.getInt("height");
-             filaAgregadasSuma = filaAgregadasSuma + pers.getInt("maxObjectives");
-             }
-             if (startPerspectiveIndex > 1) {
-             filaAgregadasSuma = filaAgregadasSuma * 20;
-             }*/
-            /*Calculo Y*/
-            if (startPerspectiveIndex > finalPerspectiveIndex) {
-                y2 = y1 - heightPer[0];
-            } else {
-                y2 = y1 + heightPer[0];
-            }
+            heightPer = getHeigthPerspectives((finalPerspectiveIndex - 1), jsonArrows);
+            int[] aux = getHeigthPerspectives((finalPerspectiveIndex), jsonArrows);
+            int margin = heightPer[1] + aux[1];
+            y2 = heightPer[0] + margin + 120 + (20 * (finalPerspectiveIndex - 1));//
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
+            countLine++;
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalPerspectiveIndex + "");
             arrayTheme = (JSONObject) finalPers.get("arrayTheme");
             noCols = arrayTheme.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             restCols = (int) divContainerCols / noCols;//valor por columna            
+            //cuarta linea
             x1 = x2;
             x2 = (divTitle) + ((finalThemeIndex * (restCols)) - (restCols / 2));
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-            /*Calculo Y alto de perspectivas*/
-            heightPer = getHeigthPerspectives(finalPerspectiveIndex, jsonArrows);
-            /*for (int i = 1; i < finalPerspectiveIndex; i++) {
-             JSONObject pers = (JSONObject) jsonArrows.get("" + i);
-             addArrowY = addArrowY + pers.getInt("height");
-             filaAgregadasSuma = filaAgregadasSuma + pers.getInt("maxObjectives");
-             }
-             if (finalPerspectiveIndex > 1) {
-             filaAgregadasSuma = filaAgregadasSuma * 20;
-             }*/
-            /*Calculo Y*/
+            countLine++;
+            //quinta linea
+            heightPer = getHeigthPerspectives((finalPerspectiveIndex - 1), jsonArrows);
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + 20;
+
+            aux = getHeigthPerspectives((finalPerspectiveIndex), jsonArrows);
+            margin = heightPer[1] + aux[1];
+//            y2 = heightPer[0] +  margin + 120 + (20 * (finalPerspectiveIndex - 1));//
+            y2 = heightPer[0] + margin + 20 + (20 * (finalPerspectiveIndex - 1)) + 120;// 
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             sb.append(paintLineTriangle(countLine, triangleEnd));
+            countLine++;
+
         } catch (JSONException ex) {
             log.error("Exception get lines (Theme Theme): " + ex);
+        } catch (NumberFormatException ex) {
+            log.error("Exception NumberFormatException get lines (Theme Theme): " + ex);
         }
-        return sb;
+        map.put(countLine, sb);
+        return map;
     }
 
+    /**
+     * Obtiene el alto de las perspectivas acumuladas a partir de una
+     * perspectiva dada
+     *
+     * @param perspectiveIndex &Iacute;ndice de la perspectiva de la que se
+     * requiere obtener el alto
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @return arreglo de enteros que contiene la sumatoria de los altos de las
+     * perspectivas y el n&uacute;mero de objetivos m&aacute;ximo por
+     * perspectiva
+     */
     private int[] getHeigthPerspectives(int perspectiveIndex, JSONObject jsonArrows) {
         int[] heightPerspectives = new int[2];
         int addArrowY = 0;
         int filaAgregadasSuma = 0;
-        /*Calculo Y alto de perspectivas*/
-        for (int i = 1; i < perspectiveIndex; i++) {
+        for (int i = 1; i <= perspectiveIndex; i++) {
             try {
                 JSONObject pers = (JSONObject) jsonArrows.get("" + i);
                 addArrowY = addArrowY + pers.getInt("height");
+
                 filaAgregadasSuma = filaAgregadasSuma + pers.getInt("maxObjectives");
             } catch (JSONException ex) {
                 log.error("Exception getHeigthPerspectives: " + ex);
             }
         }
         if (perspectiveIndex > 1) {
-            filaAgregadasSuma = filaAgregadasSuma * 20;
+            filaAgregadasSuma = filaAgregadasSuma * 1; // usado para los margenes
+            //filaAgregadasSuma = filaAgregadasSuma * 20; // usado para los margenes
         }
         heightPerspectives[0] = addArrowY;
         heightPerspectives[1] = filaAgregadasSuma;
-        /*Calculo Y*/
         return heightPerspectives;
     }
 
+    /**
+     * Encuentra el &iacute;ndice del tema
+     *
+     * @param indexPerspective &iacute;ndice de la perspectiva contenedora del
+     * tema
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @param theme objeto de tipo {@code Theme} que ser&aacute; ubicado
+     * @return &iacute;ndice del tema en el objeto de tipo {@code JSONObject}
+     */
     private int findIndexTheme(int indexPerspective, JSONObject jsonArrows, Theme theme) {
         int indexTheme = 0;
         try {
@@ -440,7 +516,7 @@ public class CausalArrows extends Decorator {
             JSONObject arrayTheme = (JSONObject) perspective.get("arrayTheme");
             boolean find = false;
             int i = 1;
-            while (i <= arrayTheme.length() && !find) {
+            while ((i <= arrayTheme.length()) && (!find)) {
                 JSONObject obj = (JSONObject) arrayTheme.get(i + "");
                 int index = obj.getInt("index");
                 if (theme.getIndex() == index) {
@@ -450,11 +526,24 @@ public class CausalArrows extends Decorator {
                 i++;
             }
         } catch (JSONException ex) {
-            log.error("Exception find indez theme: " + ex);
+            log.error("Exception findIndexTheme: " + ex);
         }
         return indexTheme;
     }
 
+    /**
+     * Encuentra el &iacute;ndice del Objetivo
+     *
+     * @param indexPerspective &iacute;ndice de la perspectiva contenedora del
+     * objetivo
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @param indexTheme &iacute;ndice del tema contenedor del objetivo
+     * @param objective objeto de tipo {@code Objective} que ser&aacute; ubicado
+     * @return &iacute;ndice del objetivo en el objeto de tipo
+     * {@code JSONObject}
+     */
     private int findIndexObjective(int indexPerspective, JSONObject jsonArrows, int indexTheme, Objective objective) {
         int indexObjective = 0;
         try {
@@ -462,10 +551,9 @@ public class CausalArrows extends Decorator {
             JSONObject arrayTheme = (JSONObject) perspective.get("arrayTheme");
             JSONObject themeData = (JSONObject) arrayTheme.get(indexTheme + "");
             JSONObject arrayObjective = (JSONObject) themeData.get("arrayObjective");
-
             boolean find = false;
             int i = 1;
-            while (i <= arrayObjective.length() && !find) {
+            while ((i <= arrayObjective.length()) && (!find)) {
                 JSONObject obj = (JSONObject) arrayObjective.get(i + "");
                 int index = obj.getInt("index");
                 if (objective.getIndex() == index) {
@@ -474,18 +562,28 @@ public class CausalArrows extends Decorator {
                 }
                 i++;
             }
-
         } catch (JSONException ex) {
-            log.error("Exception find indez theme: " + ex);
+            log.error("Exception findIndexObjective: " + ex);
         }
         return indexObjective;
     }
 
+    /**
+     * Encuentra el &iacute;ndice de la perspectiva
+     *
+     * @param perspective objeto de tipo {@code Perspective} que ser&aacute;
+     * ubicado
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @return &iacute;ndice de la perspectiva en el objeto de tipo
+     * {@code JSONObject}
+     */
     private int findIndexPerspective(Perspective perspective, JSONObject jsonArrows) {
         int indexPerspective = 0;
         boolean find = false;
         int i = 1;
-        while (i <= jsonArrows.length() && !find) {
+        while ((i <= jsonArrows.length()) && (!find)) {
             try {
                 JSONObject obj = (JSONObject) jsonArrows.get(i + "");
                 int index = obj.getInt("index");
@@ -494,54 +592,62 @@ public class CausalArrows extends Decorator {
                     find = true;
                 }
             } catch (JSONException ex) {
-                log.error("Error get indexPerspective: " + ex);
+                log.error("Error get findIndexPerspective: " + ex);
             }
             i++;
         }
         return indexPerspective;
     }
 
+    /**
+     * Permite cargar la funci&oacute;n javascript que ejecutar&aacute; la
+     * creaci&oacute;n de flechas causa - efecto
+     *
+     * @return objeto de tipo {@code StringBuilder} con la funci&oacute;n
+     * javascript que ejecutar&aacute; la creaci&oacute;n de flechas causa -
+     * efecto
+     */
     private StringBuilder loadJavascript() {
-        //10.26 - 10.30
-        StringBuilder sb = new StringBuilder();//z-index:-1,visibility:visible
-        sb.append("\n <div style=\"position:absolute; width:100%;height:100%; float:left;  z-index:1 \" id=\"arrowLayer\" name=\"arrowLayer\">");
+        StringBuilder sb = new StringBuilder();
+        int[] height = getHeigthPerspectives(dataArrows.length(), dataArrows);
+        int heightAll = height[0] + height[1] + (dataArrows.length() * 20) + 120 + 40;
+        sb.append("\n <div style=\"position:absolute; width:100%;height:" + heightAll);
+        sb.append("px; float:left;  z-index:1 \" id=\"arrowLayer\" name=\"arrowLayer\">");
         sb.append("\n </div>");
         sb.append("\n <script type=\"text/javascript\">");
-        //sb.append("     <!--");
         sb.append("\n         dojo.addOnLoad( function(){");
         sb.append("\n             calculateDivs();}");
         sb.append("\n         );");
-        //sb.append("     -->");
         sb.append("\n </script>");
         return sb;
     }
 
+    /**
+     * Funci&oacute;n javascript que contiene la creaci&oacute;n din&aacute;mica
+     * de flechas causa - efecto
+     *
+     * @param allLines objeto de tipo {@code StringBuilder} que contiene la
+     * creaci&oacute;n de l&iacute;neas SVG
+     * @param allAttributeLines objeto de tipo {@code StringBuilder} que
+     * contiene la definici&oacute;n de atributos para l&iacute;neas definidas
+     * en SVG
+     * @return funci&oacute;n javascript con la creaci&oacute;n din&aacute;mica
+     * de flechas causa - efecto.
+     */
     private StringBuilder getJavascript(StringBuilder allLines, StringBuilder allAttributeLines) {
-        //<LINE x1="10" y1="10" x2="100" y2="100"/> 9.45 - 10.02
         StringBuilder sb = new StringBuilder();
         sb.append("\n <link href=\"/swbadmin/css/mapaEstrategico.css\" rel=\"stylesheet\" type=\"text/css\" />");
         sb.append("\n<script type=\"text/javascript\">");
-        sb.append("\n<!--");
         sb.append("\n	function calculateDivs() {");
         sb.append("\n         var div1 = document.getElementById(\"arrowLayer\"),");
         sb.append("\n         svg = div1.appendChild(create(\"svg\")),");
 
         sb.append("\n         defs1 = svg.appendChild(create(\"defs\"));");
         sb.append(allLines);
-        //llamado a todas las lineas creadas
-
         sb.append("\n         svg.setAttribute(\"width\", \"100%\");");
         sb.append("\n         svg.setAttribute(\"height\", \"100%\");");
         sb.append(getDownArrow());
-
         sb.append(allAttributeLines);
-//        sb.append("\n         line2.setAttribute(\"x1\",  \"1%\");");
-//        sb.append("\n         line2.setAttribute(\"x2\",  \"1%\");");
-//        sb.append("\n         line2.setAttribute(\"y1\",  \"10%\");");
-//        sb.append("\n         line2.setAttribute(\"y2\",  \"20%\");");
-//        sb.append("\n         line2.setAttribute(\"class\",\"arrow\");");
-//        sb.append("\n         line2.setAttribute(\"marker-end\", \"url(#triangle-end)\");");
-
         sb.append("\n     }");
         sb.append("\n     function create(type) {");
         sb.append("\n		return document.createElementNS(\"http://www.w3.org/2000/svg\", type);");
@@ -551,6 +657,12 @@ public class CausalArrows extends Decorator {
         return sb;
     }
 
+    /**
+     * Genera las flechas causa - efecto de un mapa estrat&eacute;gico
+     *
+     * @return objeto tipo {@code StringBuilder} con el contenedor de las
+     * flechas causa - efecto
+     */
     private StringBuilder getDownArrow() {
         StringBuilder sb = new StringBuilder();
         sb.append("\n         var defs = document.createElementNS(\"http://www.w3.org/2000/svg\", \"defs\");");
@@ -572,7 +684,20 @@ public class CausalArrows extends Decorator {
         return sb;
     }
 
-    private StringBuilder paintLines(int countLine, double x1, double x2, double y1, double y2, String classLine) {
+    /**
+     * Crea los atributos de las l&iacute;neas SVG
+     *
+     * @param countLine n&uacute;mero de l&iacute;nea a partir de la cual
+     * deber&aacute;n crearse las siguientes l&iacute;neas
+     * @param x1 Coordenda inicial x
+     * @param x2 Coordenda final x
+     * @param y1 Coordenda inicial y
+     * @param y2 Coordenda final y
+     * @param classLine Clase CSS
+     * @return objeto de tipo {@code StringBuilder}
+     */
+    private StringBuilder paintLines(int countLine, double x1, double x2, double y1,
+            double y2, String classLine) {
         StringBuilder sb = new StringBuilder();
         sb.append("\n         line" + countLine + ".setAttribute(\"x1\", \"" + x1 + "%\");");
         sb.append("\n         line" + countLine + ".setAttribute(\"x2\", \"" + x2 + "%\");");
@@ -582,578 +707,920 @@ public class CausalArrows extends Decorator {
         return sb;
     }
 
+    /**
+     * Crea la flecha que indica el efecto
+     *
+     * @param countLine n&uacute;mero de l&iacute;nea a partir de la cual
+     * deber&aacute;n crearse las siguientes l&iacute;neas
+     * @param valueTriangle nombre del elemento creado previamente para
+     * mostrarse
+     * @return objeto de tipo {@code StringBuilder} con la flecha que indica el
+     * efecto en un mapa estrat&eacute;gico
+     */
     private StringBuilder paintLineTriangle(int countLine, String valueTriangle) {
         StringBuilder sb = new StringBuilder();
-        sb.append("\n         line" + countLine + ".setAttribute(\"marker-end\", \"url(" + valueTriangle + ")\");");//#triangle-end
+        sb.append("\n         line" + countLine + ".setAttribute(\"marker-end\",");
+        sb.append("\"url(" + valueTriangle + ")\");");//#triangle-end
         return sb;
     }
 
-    private boolean getIndexTheme(int themeIndex, JSONObject jsonArrows, int perspectiveIndex) {
+    /**
+     * Obtiene true/false si el tema coincide con el tema final de una
+     * perspectiva
+     *
+     * @param themeIndex &Iacute;ndice del tema que buscar&aacute; si es final
+     * de la perspectiva
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @param perspectiveIndex &Iacute;ndice de la perspectiva contenedora del
+     * tema
+     * @return la validaci&oacute;n si el tema esta al final de la perspectiva
+     */
+    private boolean getIndexFinalTheme(int themeIndex, JSONObject jsonArrows, int perspectiveIndex) {
         boolean isFinalTheme = false;
         try {
             JSONObject perspe = (JSONObject) jsonArrows.get("" + perspectiveIndex);
-            JSONObject themes = (JSONObject) perspe.get("" + themeIndex);
+            JSONObject themesA = (JSONObject) perspe.get("arrayTheme");
+            JSONObject themes = (JSONObject) themesA.get("" + themeIndex);
             if (themeIndex == themes.length()) {
                 isFinalTheme = true;
             }
         } catch (JSONException ex) {
-            log.error("Exception in getIndexTheme: " + ex);
+            log.error("Exception in getIndexFinalTheme: " + ex);
         }
         return isFinalTheme;
     }
 
-
-    private HashMap paintThemeObjective(JSONObject jsonArrows, int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
-            Iterator<Objective> itCausalobjective, Resource base, Period period, int countLine) {
-        HashMap map = new HashMap();
+    /**
+     * Pinta la relaci&oacute;n Causa - Efecto entre tema - objetivo
+     *
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @param startPerspectiveIndex &Iacute;ndice de la perspectiva (Causa) que
+     * contiene la relación causa - efecto
+     * @param startThemeIndex &Iacute;ndice del tema (Causa) que contiene la
+     * relación causa - efecto
+     * @param startObjetiveIndex &Iacute;ndice del Objetivo (Causa) que contiene
+     * la relación causa - efecto
+     * @param itCausalobjective Iterador con los objetivos asociados a la causa
+     * - efecto de objetivos/ temas
+     * @param base Recurso de SWB utilizado para mostrarlo dentro de la
+     * plataforma SWBPortal
+     * @param period Elemento de tipo Period, se refiere al periodo seleccionado
+     * actualmente en el sitio BSC
+     * @param countLine n&uacute;mero de l&iacute;nea a partir de la cual
+     * deber&aacute;n crearse las siguientes l&iacute;neas
+     * @return objeto de tipo {@code HashMap} con las l&iacute;neas creadas y el
+     * contador de l&iacute;neas utilizados
+     */
+    private HashMap paintThemeObjective(JSONObject jsonArrows, int startPerspectiveIndex,
+            int startThemeIndex, int startObjetiveIndex, Iterator<Objective> itCausalobjective,
+            Resource base, Period period, int countLine) {
+        HashMap map1 = new HashMap();
+        Iterator<Entry> itMap;
         StringBuilder sb = new StringBuilder();
-        int finalPerspectiveIndex = 0;
-        int finalThemeIndex = 0;
-        int finalObjetiveIndex = 0;
-        String classLine = base.getData("colorRelTO") == null ? "arrow" : base.getData("colorRelTO");
+        String classLine = ((base.getData("colorRelTO") == null) ||
+                (base.getData("colorRelTO").trim().length() == 0))
+                ? "arrow" : base.getData("colorRelTO");
         while (itCausalobjective.hasNext()) {
             Objective objective = itCausalobjective.next();
             if (objective.hasPeriod(period)) {
+                HashMap map = new HashMap();
                 Perspective perspective = objective.getTheme().getPerspective();
-                finalPerspectiveIndex = findIndexPerspective(perspective, jsonArrows);
-                finalThemeIndex = findIndexTheme(finalPerspectiveIndex, jsonArrows, objective.getTheme());
-                finalObjetiveIndex = findIndexObjective(finalPerspectiveIndex, jsonArrows, finalThemeIndex, objective);
-                boolean isFinalTheme = getIndexTheme(finalThemeIndex, jsonArrows, finalPerspectiveIndex);
+                int finalPerspectiveIndex = findIndexPerspective(perspective, jsonArrows);
+                int finalThemeIndex = findIndexTheme(finalPerspectiveIndex, jsonArrows, 
+                        objective.getTheme());
+                int finalObjetiveIndex = findIndexObjective(finalPerspectiveIndex, jsonArrows, 
+                        finalThemeIndex, objective);
+                boolean isFinalTheme = getIndexFinalTheme(finalThemeIndex, jsonArrows, 
+                        finalPerspectiveIndex);
                 if (base.getData("perspective" + base.getId() + perspective.getId()) == null) {
                     if (isFinalTheme) {
-                        //aqui traer funcion que haga lo necesario
-                        sb.append(paintOTIndexFinalP(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
-                                finalObjetiveIndex, jsonArrows, countLine, classLine));
-
-                    } else if (((startPerspectiveIndex - finalPerspectiveIndex) == 1) || 
+                       // System.out.println("first option");
+                        map = paintOTIndexFinalP(startPerspectiveIndex, startThemeIndex,
+                                startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
+                                finalObjetiveIndex, jsonArrows, countLine, classLine);
+                    } else if ((startObjetiveIndex > 0) && 
                             ((startPerspectiveIndex - finalPerspectiveIndex) == -1)) {
-                        sb.append(paintOTVIndexContinuos(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
-                                finalObjetiveIndex, jsonArrows, countLine, classLine));
+                        //objStart > 1 && (perspecstart - perspecFinal == -1)
+                            //    else if (((startPerspectiveIndex - finalPerspectiveIndex) == 1)
+                            //|| ((startPerspectiveIndex - finalPerspectiveIndex) == -1)) {
+                      //  System.out.println("second option");
+                        map = paintOTVIndexContinuos(startPerspectiveIndex, startThemeIndex, 
+                                startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
+                                finalObjetiveIndex, jsonArrows, countLine, classLine);
                     } else {
-                        sb.append(paintOTH(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
-                                finalObjetiveIndex, jsonArrows, countLine, classLine));
-                    }
-                } else {
-                    if (((startPerspectiveIndex - finalPerspectiveIndex) == 1) || 
-                            ((startPerspectiveIndex - finalPerspectiveIndex) == -1)) {
-                        sb.append(paintOTVHIndexContinuos(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
-                                finalObjetiveIndex, jsonArrows, countLine, classLine));
-                    } else {
-                        //aqui traer funcion que haga lo necesario
-                        sb.append(paintOTV(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex,
-                                jsonArrows, countLine, classLine));
-                    }
-                }
-                countLine++;
-            }
-        }
-        map.put(countLine, sb);
-        return map;
-    }
-
-    private HashMap paintObjectiveTheme(JSONObject jsonArrows, int startPerspectiveIndex, int startThemeIndex,
-            int startObjetiveIndex, Iterator<Theme> itCausalTheme, Resource base, Period period, int countLine) {
-        HashMap map = new HashMap();
-        StringBuilder sb = new StringBuilder();
-        int finalPerspectiveIndex = 0;
-        int finalThemeIndex = 0;
-        int finalObjetiveIndex = 0;
-        String classLine = base.getData("colorRelOT") == null ? "arrow" : base.getData("colorRelOT");
-        while (itCausalTheme.hasNext()) {
-            Theme theme = itCausalTheme.next();
-            if (isValidTheme(theme, period)) {
-                Perspective perspective = theme.getPerspective();
-                finalPerspectiveIndex = findIndexPerspective(perspective, jsonArrows);
-                finalThemeIndex = findIndexTheme(finalPerspectiveIndex, jsonArrows, theme);
-                boolean isFinalTheme = getIndexTheme(startThemeIndex, jsonArrows, startPerspectiveIndex);
-                if (base.getData("perspective" + base.getId() + perspective.getId()) == null) {
-                    if (isFinalTheme) {
-                        //aqui traer funcion que haga lo necesario C
-                        sb.append(paintOTIndexFinalP(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
-                                finalObjetiveIndex, jsonArrows, countLine, classLine));
-                    } else if (((startPerspectiveIndex - finalPerspectiveIndex) == 1)
-                            || ((startPerspectiveIndex - finalPerspectiveIndex) == -1)) {
-                        //aqui traer funcion que haga lo necesario B
-                        sb.append(paintOTVIndexContinuos(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
-                                finalObjetiveIndex, jsonArrows, countLine, classLine));
-                    } else {
-                        //aqui traer funcion que haga lo necesario A
-                        sb.append(paintOTH(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
-                                finalObjetiveIndex, jsonArrows, countLine, classLine));
+                     //   System.out.println("third option");
+                        
+                        map = paintOTH(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, 
+                                finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex, 
+                                jsonArrows, countLine, classLine);
                     }
                 } else {
                     if (((startPerspectiveIndex - finalPerspectiveIndex) == 1)
                             || ((startPerspectiveIndex - finalPerspectiveIndex) == -1)) {
-                        //aqui traer funcion que haga lo necesario A
-                        sb.append(paintOTVHIndexContinuos(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
-                                finalObjetiveIndex, jsonArrows, countLine, classLine));
+                        //System.out.println("four option");
+                        
+                        map = paintOTVHIndexContinuos(startPerspectiveIndex, startThemeIndex, 
+                                startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
+                                finalObjetiveIndex, jsonArrows, countLine, classLine);
                     } else {
-                        //aqui traer funcion que haga lo necesario B
-                        sb.append(paintOTV(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex,
-                                jsonArrows, countLine, classLine));
+                      //  System.out.println("five option");
+                        
+                        map = paintOTV(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, 
+                                finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex,
+                                jsonArrows, countLine, classLine);
                     }
                 }
-                countLine++;
+                itMap = map.entrySet().iterator();
+                while (itMap.hasNext()) {
+                    Entry entry = itMap.next();
+                    countLine = Integer.parseInt(entry.getKey().toString());
+                    StringBuilder sb1 = (StringBuilder) entry.getValue();
+                    sb.append(sb1);
+                }
+            }
+        }
+        map1.put(countLine, sb);
+        return map1;
+    }
+
+    /**
+     * Pinta la relaci&oacute;n Causa - Efecto entre objetivo - tema
+     *
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @param startPerspectiveIndex &Iacute;ndice de la perspectiva (Causa) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param startThemeIndex &Iacute;ndice del tema (Causa) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param startObjetiveIndex &Iacute;ndice del objetivo (Causa) que contiene
+     * la relaci&oacute;n causa - efecto
+     * @param itCausalTheme Iterador con los temas asociados a la causa - efecto
+     * de objetivos/ temas
+     * @param base Recurso de SWB utilizado para mostrarlo dentro de la
+     * plataforma SWBPortal
+     * @param period Elemento de tipo Period, se refiere al periodo seleccionado
+     * actualmente en el sitio BSC
+     * @param countLine n&uacute;mero de l&iacute;nea a partir de la cual
+     * deber&aacute;n crearse las siguientes l&iacute;neas
+     * @return objeto de tipo {@code HashMap} con las l&iacute;neas creadas y el
+     * contador de l&iacute;neas utilizados
+     */
+    private HashMap paintObjectiveTheme(JSONObject jsonArrows, int startPerspectiveIndex,
+            int startThemeIndex, int startObjetiveIndex, Iterator<Theme> itCausalTheme,
+            Resource base, Period period, int countLine) {
+        
+        HashMap map1 = new HashMap();
+        Iterator<Entry> itMap;
+        StringBuilder sb = new StringBuilder();
+       
+        String classLine = ((base.getData("colorRelOT") == null) ||
+                (base.getData("colorRelOT").trim().length() == 0))
+                ? "arrow" : base.getData("colorRelOT");
+        while (itCausalTheme.hasNext()) {
+            Theme theme = itCausalTheme.next();
+            if (isValidTheme(theme, period)) {
+                HashMap map = new HashMap();
+                Perspective perspective = theme.getPerspective();
+                int finalPerspectiveIndex = findIndexPerspective(perspective, jsonArrows);
+                int finalThemeIndex = findIndexTheme(finalPerspectiveIndex, jsonArrows, theme);
+                int finalObjetiveIndex = 0;
+                boolean isFinalTheme = getIndexFinalTheme(startThemeIndex, jsonArrows, 
+                        startPerspectiveIndex);
+                if (base.getData("perspective" + base.getId() + perspective.getId()) == null) {
+                    if (isFinalTheme) {
+                        map = paintOTIndexFinalP(startPerspectiveIndex, startThemeIndex, 
+                                startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
+                                finalObjetiveIndex, jsonArrows, countLine, classLine);
+                    } else if (((startPerspectiveIndex - finalPerspectiveIndex) == 1)
+                            || ((startPerspectiveIndex - finalPerspectiveIndex) == -1)) {
+                        map = paintOTVIndexContinuos(startPerspectiveIndex, startThemeIndex, 
+                                startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
+                                finalObjetiveIndex, jsonArrows, countLine, classLine);
+                    } else {
+                        map = paintOTH(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, 
+                                finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex, 
+                                jsonArrows, countLine, classLine);
+                    }
+                } else {
+                    if (((startPerspectiveIndex - finalPerspectiveIndex) == 1)
+                            || ((startPerspectiveIndex - finalPerspectiveIndex) == -1)) {
+                        map = paintOTVHIndexContinuos(startPerspectiveIndex, startThemeIndex, 
+                                startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
+                                finalObjetiveIndex, jsonArrows, countLine, classLine);
+                    } else {
+                        map = paintOTV(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, 
+                                finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex,
+                                jsonArrows, countLine, classLine);
+                    }
+                }
+                itMap = map.entrySet().iterator();
+                while (itMap.hasNext()) {
+                    Entry entry = itMap.next();
+                    countLine = Integer.parseInt(entry.getKey().toString());
+                    StringBuilder sb1 = (StringBuilder) entry.getValue();
+                    sb.append(sb1);
+                }
             }
         }
 
-        map.put(countLine, sb);
-        return map;
+        map1.put(countLine, sb);
+        return map1;
     }
 
-    private StringBuilder paintOTV(int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
-            int finalPerspectiveIndex, int finalThemeIndex, int finalObjetiveIndex, JSONObject jsonArrows,
-            int countLine, String classLine) {
+    /**
+     * Pinta la relaci&oacute;n Causa - Efecto entre objetivo - tema, forma
+     * Vertical
+     *
+     * @param startPerspectiveIndex &Iacute;ndice de la perspectiva (Causa) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param startThemeIndex &Iacute;ndice del tema (Causa) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param startObjetiveIndex &Iacute;ndice del objetivo (Causa) que contiene
+     * la relaci&oacute;n causa - efecto
+     * @param finalPerspectiveIndex &Iacute;ndice de la perspectiva (Causa) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param finalThemeIndex &Iacute;ndice del tema (Efecto) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param finalObjetiveIndex &Iacute;ndice del objetivo (Efecto) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @param countLine n&uacute;mero de l&iacute;nea a partir de la cual
+     * deber&aacute;n crearse las siguientes l&iacute;neas
+     * @param classLine Clase CSS
+     * @return objeto de tipo {@code HashMap} con las l&iacute;neas creadas y el
+     * contador de l&iacute;neas utilizados
+     */
+    private HashMap paintOTV(int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
+            int finalPerspectiveIndex, int finalThemeIndex, int finalObjetiveIndex,
+            JSONObject jsonArrows, int countLine, String classLine) {
+        HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
         int initPerspective = startPerspectiveIndex;
         int initTheme = startThemeIndex;
         int initObjective = startObjetiveIndex;
         int finalizePerspective = finalPerspectiveIndex;
         int finalizeTheme = finalThemeIndex;
-        //int finalizeObjective = finalObjetiveIndex;
         if (finalPerspectiveIndex > startPerspectiveIndex) {
             initPerspective = finalPerspectiveIndex;
             initTheme = finalThemeIndex;
             initObjective = finalObjetiveIndex;
             finalizePerspective = startPerspectiveIndex;
             finalizeTheme = startThemeIndex;
-            //  finalizeObjective = startObjetiveIndex;
         }
         try {
             JSONObject startPers = (JSONObject) jsonArrows.get(initPerspective + "");
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
             JSONObject themePer = (JSONObject) arrayTheme.get(initTheme + "");
-            JSONObject arrayObjective = (JSONObject) themePer.get(initObjective + "");
+            JSONObject arraysObjects = (JSONObject) themePer.get("arrayObjective");
+            JSONObject arrayObjective = (JSONObject) arraysObjects.get(initObjective + "");
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
-            //JSONObject themePerFinal = (JSONObject) arrayThemeFinal.get(finalizeTheme + "");
-            //JSONObject arrayObjectiveFinal = (JSONObject) themePerFinal.get(finalizeObjective + "");
             int[] heightPer = getHeigthPerspectives(initPerspective, jsonArrows);
             int noCols = arrayTheme.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
+            if (arrayObjective.length() == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             int restCols = (int) divContainerCols / noCols;//valor por columna
-            //int heightObjective = (startPers.getInt("height") - 20) / arrayObjective.length();
-            //primer linea
-            x1 = (divTitle) + (restCols * (initTheme - 1)) + ((divSizeColumn / arrayObjective.length()) * (initObjective - 1)) + (countLine * 2);//((startThemeIndex * (restCols)) - (restCols / 2));
+            x1 = (divTitle) + (restCols * (initTheme - 1)) + ((divSizeColumn / arrayObjective.length())
+                    * (initObjective - 1)) + (countLine * 2);//((startThemeIndex * (restCols)) - (restCols / 2));
             x2 = x1;
-            y1 = heightPer[0] + heightPer[1];
-            y2 = y1 + (countLine * 2);
+            y1 = heightPer[0] + heightPer[1] + 120;//
+            y2 = y1 + (countLine * 2);//+ 120
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (finalPerspectiveIndex < startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
-
+            countLine++;
             //segunda linea
             x1 = x2;
             x2 = divTitle + divContainerCols + (countLine * 2);
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //tercer linea
             heightPer = getHeigthPerspectives(finalizePerspective - 1, jsonArrows);
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (countLine * 2);
+            y2 = heightPer[0] + heightPer[1] + (countLine * 2);//+ 120
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //cuarta linea
             noCols = arrayThemeFinal.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             restCols = (int) divContainerCols / noCols;//valor por columna            
             x1 = x2;
             x2 = divTitle + (restCols * (finalizeTheme - 1)) + (restCols / 2) + (countLine * 2);
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //quinta linea
             heightPer = getHeigthPerspectives(finalizePerspective - 1, jsonArrows);
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + 20;
+            y2 = heightPer[0] + heightPer[1] + 20;//+ 120
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (finalPerspectiveIndex > startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
+            countLine++;
         } catch (JSONException ex) {
             log.error("Exception in paintOTVHIndexContinuos: " + ex);
         }
-        return sb;
+        map.put(countLine, sb);
+        return map;
     }
 
-    private StringBuilder paintOTVHIndexContinuos(int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
-            int finalPerspectiveIndex, int finalThemeIndex, int finalObjetiveIndex, JSONObject jsonArrows,
-            int countLine, String classLine) {
+    /**
+     * Pinta la relaci&oacute;n Causa - Efecto entre objetivo - tema(s), aplica
+     * para forma Vertical / Horizontal.
+     *
+     * @param startPerspectiveIndex &Iacute;ndice de la perspectiva (Causa) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param startThemeIndex &Iacute;ndice del tema (Causa) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param startObjetiveIndex &Iacute;ndice del objetivo (Causa) que contiene
+     * la relaci&oacute;n causa - efecto
+     * @param finalPerspectiveIndex &Iacute;ndice de la perspectiva (Efecto) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param finalThemeIndex &Iacute;ndice del tema (Efecto) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param finalObjetiveIndex &Iacute;ndice del objetivo (Efecto) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @param countLine n&uacute;mero de l&iacute;nea a partir de la cual
+     * deber&aacute;n crearse las siguientes l&iacute;neas
+     * @param classLine Clase CSS
+     * @return objeto de tipo {@code HashMap} con las l&iacute;neas creadas y el
+     * contador de l&iacute;neas utilizados
+     */
+    private HashMap paintOTVHIndexContinuos(int startPerspectiveIndex, int startThemeIndex,
+            int startObjetiveIndex, int finalPerspectiveIndex, int finalThemeIndex,
+            int finalObjetiveIndex, JSONObject jsonArrows, int countLine, String classLine) {
+        HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
         int initPerspective = startPerspectiveIndex;
         int initTheme = startThemeIndex;
         int initObjective = startObjetiveIndex;
         int finalizePerspective = finalPerspectiveIndex;
         int finalizeTheme = finalThemeIndex;
-        //int finalizeObjective = finalObjetiveIndex;
         if (finalPerspectiveIndex > startPerspectiveIndex) {
             initPerspective = finalPerspectiveIndex;
             initTheme = finalThemeIndex;
             initObjective = finalObjetiveIndex;
             finalizePerspective = startPerspectiveIndex;
             finalizeTheme = startThemeIndex;
-            //    finalizeObjective = startObjetiveIndex;
         }
         try {
             JSONObject startPers = (JSONObject) jsonArrows.get(initPerspective + "");
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
             JSONObject themePer = (JSONObject) arrayTheme.get(initTheme + "");
-            JSONObject arrayObjective = (JSONObject) themePer.get(initObjective + "");
+            JSONObject arraysObjects = (JSONObject) themePer.get("arrayObjective");
+            JSONObject arrayObjective = (JSONObject) arraysObjects.get(initObjective + "");
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
-            //JSONObject themePerFinal = (JSONObject) arrayThemeFinal.get(finalizeTheme + "");
-            //JSONObject arrayObjectiveFinal = (JSONObject) themePerFinal.get(finalizeObjective + "");
             int[] heightPer = getHeigthPerspectives(initPerspective, jsonArrows);
             int noCols = arrayTheme.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
+            if (arrayObjective.length() == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             int restCols = (int) divContainerCols / noCols;//valor por columna
-            //int heightObjective = (startPers.getInt("height") - 20) / arrayObjective.length();
             //primer linea
-            x1 = (divTitle) + (restCols * (initTheme - 1)) + ((divSizeColumn / arrayObjective.length()) * (initObjective - 1)) + (countLine * 2);//((startThemeIndex * (restCols)) - (restCols / 2));
+            x1 = (divTitle) + (restCols * (initTheme - 1)) + ((divSizeColumn / arrayObjective.length())
+                    * (initObjective - 1)) + (countLine * 2);//((startThemeIndex * (restCols)) - (restCols / 2));
             x2 = x1;
-            y1 = heightPer[0] + heightPer[1];
-            y2 = y1 + (countLine * 2);
+            y1 = heightPer[0] + heightPer[1] + 120;// 
+            y2 = y1 + (countLine * 2);// + 120
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (finalPerspectiveIndex < startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
-
+            countLine++;
             //segunda linea
             noCols = arrayThemeFinal.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             restCols = (int) divContainerCols / noCols;//valor por columna            
             x1 = x2;
             x2 = divTitle + (restCols * (finalizeTheme - 1)) + (restCols / 2) + (countLine * 2);
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //tercer linea
             heightPer = getHeigthPerspectives(finalizePerspective - 1, jsonArrows);
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + 20;
+            y2 = heightPer[0] + heightPer[1] + 20;//+ 120
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (finalPerspectiveIndex > startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
+            countLine++;
         } catch (JSONException ex) {
             log.error("Exception in paintOTVHIndexContinuos: " + ex);
         }
-        return sb;
+        map.put(countLine, sb);
+        return map;
     }
 
-    private StringBuilder paintOTIndexFinalP(int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
-            int finalPerspectiveIndex, int finalThemeIndex, int finalObjetiveIndex, JSONObject jsonArrows,
-            int countLine, String classLine) {
+    /**
+     * Pinta la relaci&oacute;n Causa - Efecto entre objetivo - tema cuando el
+     * objetivo esta al final de la perspectiva.
+     *
+     * @param startPerspectiveIndex &Iacute;ndice de la perspectiva (Causa) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param startThemeIndex &Iacute;ndice del tema (Causa) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param startObjetiveIndex &Iacute;ndice del obejtivo (Causa) que contiene
+     * la relaci&oacute;n causa - efecto
+     * @param finalPerspectiveIndex &Iacute;ndice de la perspectiva (Efecto) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param finalThemeIndex &Iacute;ndice del tema (Efecto) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param finalObjetiveIndex &Iacute;ndice del obejtivo (Efecto) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @param countLine n&uacute;mero de l&iacute;nea a partir de la cual
+     * deber&aacute;n crearse las siguientes l&iacute;neas
+     * @param classLine Clase CSS
+     * @return objeto de tipo {@code HashMap} con las l&iacute;neas creadas y el
+     * contador de l&iacute;neas utilizados
+     */
+    private HashMap paintOTIndexFinalP(int startPerspectiveIndex, int startThemeIndex,
+            int startObjetiveIndex, int finalPerspectiveIndex, int finalThemeIndex,
+            int finalObjetiveIndex, JSONObject jsonArrows, int countLine, String classLine) {
+        HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
         int initPerspective = startPerspectiveIndex;
         int initTheme = startThemeIndex;
         int initObjective = startObjetiveIndex;
         int finalizePerspective = finalPerspectiveIndex;
         int finalizeTheme = finalThemeIndex;
-        //int finalizeObjective = finalObjetiveIndex;
         if (finalPerspectiveIndex > startPerspectiveIndex) {
             initPerspective = finalPerspectiveIndex;
             initTheme = finalThemeIndex;
             initObjective = finalObjetiveIndex;
             finalizePerspective = startPerspectiveIndex;
             finalizeTheme = startThemeIndex;
-            //  finalizeObjective = startObjetiveIndex;
         }
         try {
             JSONObject startPers = (JSONObject) jsonArrows.get(initPerspective + "");
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
             JSONObject themePer = (JSONObject) arrayTheme.get(initTheme + "");
-            JSONObject arrayObjective = (JSONObject) themePer.get(initObjective + "");
+            JSONObject arraysObjects = (JSONObject) themePer.get("arrayObjective");
+            JSONObject arrayObjective = (JSONObject) arraysObjects.get(initObjective + "");
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
-            //JSONObject themePerFinal = (JSONObject) arrayThemeFinal.get(finalizeTheme + "");
-            //JSONObject arrayObjectiveFinal = (JSONObject) themePerFinal.get(finalizeObjective + "");
-
             int[] heightPer = getHeigthPerspectives(initPerspective - 1, jsonArrows);
             int noCols = arrayTheme.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
+            if (arrayObjective.length() == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             int restCols = (int) divContainerCols / noCols;//valor por columna
             int heightObjective = (startPers.getInt("height") - 20) / arrayObjective.length();
             //primer linea
             x1 = (divTitle) + (restCols * (initTheme - 1)) + (restCols * (divSizeColumn / 100));//((startThemeIndex * (restCols)) - (restCols / 2));
             x2 = x1 + (2 * countLine);
             y1 = heightPer[0] + heightPer[1] + 20 + (heightObjective * (initObjective - 1))
-                    + (countLine * 2);
+                    + (countLine * 2) + 120;//
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (finalPerspectiveIndex < startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
-
+            countLine++;
             //segunda linea
             heightPer = getHeigthPerspectives(initPerspective, jsonArrows);
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (countLine * 2);
+            y2 = heightPer[0] + heightPer[1] + (countLine * 2);//+ 120
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //tercer linea
             noCols = arrayThemeFinal.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             restCols = (int) divContainerCols / noCols;//valor por columna
             x1 = x2;
             x2 = divTitle + ((restCols) * (finalizeTheme - 1)) + (restCols / 2) + (countLine * 2);
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //cuarta linea
             heightPer = getHeigthPerspectives(finalizePerspective - 1, jsonArrows);
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + 20;
+            y2 = heightPer[0] + heightPer[1] + 20;//+ 120
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (finalPerspectiveIndex > startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
-
+            countLine++;
         } catch (JSONException ex) {
             log.error("Exception in paintOTIndexFinalP: " + ex);
         }
-        return sb;
+        map.put(countLine, sb);
+        return map;
     }
 
-    private StringBuilder paintOTVIndexContinuos(int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
-            int finalPerspectiveIndex, int finalThemeIndex, int finalObjetiveIndex, JSONObject jsonArrows,
-            int countLine, String classLine) {
+    /**
+     * Pinta la relaci&oacute;n Causa - Efecto entre objetivo - tema, forma
+     * vertical con &icute;ndice de perspectivas continuas
+     *
+     * @param startPerspectiveIndex &Iacute;ndice de la perspectiva (Causa) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param startThemeIndex &Iacute;ndice del tema (Causa) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param startObjetiveIndex &Iacute;ndice del objetivo (Causa) que contiene
+     * la relaci&oacute;n causa - efecto
+     * @param finalPerspectiveIndex &Iacute;ndice de la perspectiva (Efecto) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param finalThemeIndex &Iacute;ndice del tema (Efecto) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param finalObjetiveIndex &Iacute;ndice del objetivo (Efecto) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @param countLine n&uacute;mero de l&iacute;nea a partir de la cual
+     * deber&aacute;n crearse las siguientes l&iacute;neas
+     * @param classLine Clase CSS
+     * @return objeto de tipo {@code HashMap} con las l&iacute;neas creadas y el
+     * contador de l&iacute;neas utilizados
+     */
+    private HashMap paintOTVIndexContinuos(int startPerspectiveIndex, int startThemeIndex,
+            int startObjetiveIndex, int finalPerspectiveIndex, int finalThemeIndex,
+            int finalObjetiveIndex, JSONObject jsonArrows, int countLine, String classLine) {
+        HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
         int initPerspective = startPerspectiveIndex;
         int initTheme = startThemeIndex;
         int initObjective = startObjetiveIndex;
         int finalizePerspective = finalPerspectiveIndex;
         int finalizeTheme = finalThemeIndex;
-        //int finalizeObjective = finalObjetiveIndex;
-        if (finalPerspectiveIndex > startPerspectiveIndex) {
+        if ((finalPerspectiveIndex < startPerspectiveIndex) || (startObjetiveIndex == 0)) {
             initPerspective = finalPerspectiveIndex;
             initTheme = finalThemeIndex;
             initObjective = finalObjetiveIndex;
             finalizePerspective = startPerspectiveIndex;
             finalizeTheme = startThemeIndex;
-            //    finalizeObjective = startObjetiveIndex;
         }
         try {
             JSONObject startPers = (JSONObject) jsonArrows.get(initPerspective + "");
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
             JSONObject themePer = (JSONObject) arrayTheme.get(initTheme + "");
-            JSONObject arrayObjective = (JSONObject) themePer.get(initObjective + "");
+            JSONObject arraysObjects = (JSONObject) themePer.get("arrayObjective");
+            JSONObject arrayObjective = (JSONObject) arraysObjects.get(initObjective + "");
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
-            //JSONObject themePerFinal = (JSONObject) arrayThemeFinal.get(finalizeTheme + "");
-            //JSONObject arrayObjectiveFinal = (JSONObject) themePerFinal.get(finalizeObjective + "");
-
             int[] heightPer = getHeigthPerspectives(initPerspective - 1, jsonArrows);
             int noCols = arrayTheme.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
+            if (arrayObjective.length() == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             int restCols = (int) divContainerCols / noCols;//valor por columna
             int heightObjective = (startPers.getInt("height") - 20) / arrayObjective.length();
             //primer linea
             x1 = (divTitle) + (restCols * (initTheme - 1)) + (restCols * (divSizeColumn / 100));//((startThemeIndex * (restCols)) - (restCols / 2));
             x2 = x1 + (2 * countLine);
             y1 = heightPer[0] + heightPer[1] + 20 + (heightObjective * (initObjective - 1))
-                    + (countLine * 2);
+                    + (countLine * 2) + 120;//
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (finalPerspectiveIndex < startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
-
+            countLine++;
             //segunda linea
             heightPer = getHeigthPerspectives(finalizePerspective - 1, jsonArrows);
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (countLine * 2);
+            y2 = heightPer[0] + heightPer[1] + (countLine * 2);//+ 120
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //tercer linea
             noCols = arrayThemeFinal.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             restCols = (int) divContainerCols / noCols;//valor por columna
             x1 = x2;
             x2 = divTitle + ((restCols) * (finalizeTheme - 1)) + (restCols / 2) + (countLine * 2);
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //cuarta linea
             heightPer = getHeigthPerspectives(finalizePerspective - 1, jsonArrows);
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + 20;
+            y2 = heightPer[0] + heightPer[1] + 20;//+ 120
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (finalPerspectiveIndex > startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
-
+            countLine++;
         } catch (JSONException ex) {
             log.error("Exception in paintOTVIndexContinuos: " + ex);
         }
-        return sb;
+        map.put(countLine, sb);
+        return map;
     }
 
-    private StringBuilder paintOTH(int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
-            int finalPerspectiveIndex, int finalThemeIndex, int finalObjetiveIndex, JSONObject jsonArrows,
-            int countLine, String classLine) {
+    /**
+     * Pinta la relaci&oacute;n Causa - Efecto entre objetivo - tema, en forma
+     * Horizontal
+     *
+     * @param startPerspectiveIndex &Iacute;ndice de la perspectiva (Causa) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param startThemeIndex &Iacute;ndice del tema (Causa) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param startObjetiveIndex &Iacute;ndice del objetivo (Causa) que contiene
+     * la relaci&oacute;n causa - efecto
+     * @param finalPerspectiveIndex &Iacute;ndice de la perspectiva (Efecto) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param finalThemeIndex &Iacute;ndice del tema (Efecto) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param finalObjetiveIndex &Iacute;ndice del objetivo (Efecto) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @param countLine n&uacute;mero de l&iacute;nea a partir de la cual
+     * deber&aacute;n crearse las siguientes l&iacute;neas
+     * @param classLine Clase CSS
+     * @return objeto de tipo {@code HashMap} con las l&iacute;neas creadas y el
+     * contador de l&iacute;neas utilizados
+     */
+    private HashMap paintOTH(int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
+            int finalPerspectiveIndex, int finalThemeIndex, int finalObjetiveIndex,
+            JSONObject jsonArrows, int countLine, String classLine) {
+        HashMap map = new HashMap();
+
         StringBuilder sb = new StringBuilder();
         int initPerspective = startPerspectiveIndex;
         int initTheme = startThemeIndex;
         int initObjective = startObjetiveIndex;
         int finalizePerspective = finalPerspectiveIndex;
-        //int finalizeTheme = finalThemeIndex;
         int finalizeObjective = finalObjetiveIndex;
         if (finalPerspectiveIndex > startPerspectiveIndex) {
             initPerspective = finalPerspectiveIndex;
             initTheme = finalThemeIndex;
             initObjective = finalObjetiveIndex;
             finalizePerspective = startPerspectiveIndex;
-            //     finalizeTheme = startThemeIndex;
             finalizeObjective = startObjetiveIndex;
         }
         try {
             JSONObject startPers = (JSONObject) jsonArrows.get(initPerspective + "");
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
             JSONObject themePer = (JSONObject) arrayTheme.get(initTheme + "");
-            JSONObject arrayObjective = (JSONObject) themePer.get(initObjective + "");
+            JSONObject arraysObjects = (JSONObject) themePer.get("arrayObjective");
+            JSONObject arrayObjective = (JSONObject) arraysObjects.get(initObjective + "");
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
-            //JSONObject themePerFinal = (JSONObject) arrayThemeFinal.get(finalizeTheme + "");
-            //JSONObject arrayObjectiveFinal = (JSONObject) themePerFinal.get(finalizeObjective + "");
-
             int[] heightPer = getHeigthPerspectives(initPerspective - 1, jsonArrows);
             int noCols = arrayTheme.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
+            if (arrayObjective.length() == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             int restCols = (int) divContainerCols / noCols;//valor por columna
             int heightObjective = (startPers.getInt("height") - 20) / arrayObjective.length();
             //primer linea
             x1 = (divTitle) + (restCols * (initTheme - 1)) + (restCols * (divSizeColumn / 100));//((startThemeIndex * (restCols)) - (restCols / 2));
             x2 = x1 + (2 * countLine);
             y1 = heightPer[0] + heightPer[1] + 20 + (heightObjective * (initObjective - 1))
-                    + (countLine * 2);
+                    + (countLine * 2);//+ 120
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (finalPerspectiveIndex < startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
-
+            countLine++;
             //segunda linea
             heightPer = getHeigthPerspectives(initPerspective, jsonArrows);
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (countLine * 2);
+            y2 = heightPer[0] + heightPer[1] + (countLine * 2);//+ 120
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //tercer linea
             x1 = x2;
             x2 = divTitle + divContainerCols + (countLine * 2);
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //cuarta linea
             heightPer = getHeigthPerspectives(finalizePerspective - 1, jsonArrows);
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (countLine * 2);
+            y2 = heightPer[0] + heightPer[1] + (countLine * 2);//+ 120
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //quinta linea
             noCols = arrayThemeFinal.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             restCols = (int) divContainerCols / noCols;//valor por columna            
             x1 = x2;
             x2 = (restCols * (finalizeObjective - 1)) + (restCols / 2) + (countLine * 2);
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //sexta linea
             heightPer = getHeigthPerspectives(finalizePerspective, jsonArrows);
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + 20;
+            y2 = heightPer[0] + heightPer[1] + 20;//+ 120
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (finalPerspectiveIndex > startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
-
+            countLine++;
         } catch (JSONException ex) {
             log.error("Exception in paintOTH:" + ex);
-        }
-        return sb;
-    }
-
-    private HashMap paintObjectiveObjective(JSONObject jsonArrows, int startPerspectiveIndex, int startThemeIndex,
-            int startObjetiveIndex, Resource base, Period period, Iterator<Objective> itCausalobjective, Objective objStart,
-            int countLine) {
-        HashMap map = new HashMap();
-        StringBuilder sb = new StringBuilder();
-        int finalPerspectiveIndex = 0;
-        int finalThemeIndex = 0;
-        int finalObjetiveIndex = 0;
-        Perspective persStart = objStart.getTheme().getPerspective();
-        String classLine = base.getData("colorRelTO") == null ? "arrow" : base.getData("colorRelTO");
-        while (itCausalobjective.hasNext()) {
-            Objective objective = itCausalobjective.next();
-            if (objective.hasPeriod(period)) {
-                Perspective perspective = objective.getTheme().getPerspective();
-                finalPerspectiveIndex = findIndexPerspective(perspective, jsonArrows);
-                finalThemeIndex = findIndexTheme(finalPerspectiveIndex, jsonArrows, objective.getTheme());
-                finalObjetiveIndex = findIndexObjective(finalPerspectiveIndex, jsonArrows, finalThemeIndex, objective);
-                boolean isFinalTheme = getIndexTheme(finalThemeIndex, jsonArrows, finalPerspectiveIndex);
-                boolean isStartTheme = getIndexTheme(startThemeIndex, jsonArrows, startPerspectiveIndex);
-
-                if (base.getData("perspective" + base.getId() + perspective.getId()) == null
-                        && base.getData("perspective" + base.getId() + persStart.getId()) == null) {
-                    if (isFinalTheme || isStartTheme) {
-                        sb.append(paintOOIndexFinalP(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, finalPerspectiveIndex,
-                                finalThemeIndex, finalObjetiveIndex, isFinalTheme, jsonArrows, countLine, classLine));
-                    } else if ((startPerspectiveIndex - finalPerspectiveIndex == 1 && finalThemeIndex == startThemeIndex)
-                            || (startPerspectiveIndex - finalPerspectiveIndex == -1 && finalThemeIndex == startThemeIndex)) {
-                        sb.append(paintOOIndexContinuos(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
-                                finalObjetiveIndex, jsonArrows, countLine, classLine));
-                    } else {
-                        sb.append(paintOO(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex,
-                                jsonArrows, countLine, classLine));
-                    }
-                } else if (base.getData("perspective" + base.getId() + perspective.getId()) != null
-                        && base.getData("perspective" + base.getId() + persStart.getId()) != null) {
-                    sb.append(paintOOHH(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex,
-                            jsonArrows, countLine, classLine));
-                } else /*if (base.getData("perspective" + base.getId() + perspective.getId()) == null
-                 && base.getData("perspective" + base.getId() + persStart.getId()) != null) */ {
-                    if (isFinalTheme || isStartTheme) {
-                        paintOOH_VSame(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex,
-                                jsonArrows, countLine, classLine);
-                    } else {
-                        sb.append(paintOOH_V(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex,
-                                jsonArrows, countLine, classLine));
-                    }
-
-                } /*else if (base.getData("perspective" + base.getId() + perspective.getId()) != null
-                 && base.getData("perspective" + base.getId() + persStart.getId()) == null) {
-                 }*/
-                countLine++;
-            }
         }
         map.put(countLine, sb);
         return map;
     }
 
-    private StringBuilder paintOOH_VSame(int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
-            int finalPerspectiveIndex, int finalThemeIndex, int finalObjetiveIndex, JSONObject jsonArrows,
-            int countLine, String classLine) {
+    /**
+     * Pinta la relaci&oacute;n Causa - Efecto entre objetivos
+     *
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @param startPerspectiveIndex &Iacute;ndice de la perspectiva (Causa) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param startThemeIndex &Iacute;ndice del tema (Causa) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param startObjetiveIndex &Iacute;ndice del objetivo (Causa) que contiene
+     * la relaci&oacute;n causa - efecto
+     * @param base Recurso de SWB utilizado para mostrarlo dentro de la
+     * plataforma SWBPortal
+     * @param period Elemento de tipo Period, se refiere al periodo seleccionado
+     * actualmente en el sitio BSC
+     * @param itCausalobjective Iterador con los objetivos asociados a la causa
+     * - efecto de objetivos/ temas
+     * @param objStart objeto de tipo {@code Objective} definido como el
+     * objetivo Causa.
+     * @param countLine n&uacute;mero de l&iacute;nea a partir de la cual
+     * deber&aacute;n crearse las siguientes l&iacute;neas
+     * @return objeto de tipo {@code HashMap} con las l&iacute;neas creadas y el
+     * contador de l&iacute;neas utilizados
+     */
+    private HashMap paintObjectiveObjective(JSONObject jsonArrows, int startPerspectiveIndex,
+            int startThemeIndex, int startObjetiveIndex, Resource base, Period period,
+            Iterator<Objective> itCausalobjective, Objective objStart, int countLine) {
+        HashMap map1 = new HashMap();
+        StringBuilder sb = new StringBuilder();
+
+        Perspective persStart = objStart.getTheme().getPerspective();
+        String classLine = ((base.getData("colorRelTO") == null) ||
+                (base.getData("colorRelTO").trim().length() == 0)) ? 
+                "arrow" : base.getData("colorRelTO");
+        while (itCausalobjective.hasNext()) {
+            Objective objective = itCausalobjective.next();
+            if (objective.hasPeriod(period)) {
+                HashMap map = new HashMap();
+                Perspective perspective = objective.getTheme().getPerspective();
+                int finalPerspectiveIndex = findIndexPerspective(perspective, jsonArrows);
+                int finalThemeIndex = findIndexTheme(finalPerspectiveIndex, jsonArrows,
+                        objective.getTheme());
+                int finalObjetiveIndex = findIndexObjective(finalPerspectiveIndex, jsonArrows,
+                        finalThemeIndex, objective);
+                boolean isFinalTheme = getIndexFinalTheme(finalThemeIndex, jsonArrows,
+                        finalPerspectiveIndex);
+                boolean isStartTheme = getIndexFinalTheme(startThemeIndex, jsonArrows,
+                        startPerspectiveIndex);
+                if ((base.getData("perspective" + base.getId() + perspective.getId()) == null)
+                        && (base.getData("perspective" + base.getId() + persStart.getId()) == null)) {
+                    if ((isFinalTheme) || (isStartTheme)) {
+                       // System.out.println("1");
+                        map = paintOOIndexFinalP(startPerspectiveIndex, startThemeIndex,
+                                startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
+                                finalObjetiveIndex, isFinalTheme, jsonArrows, countLine, classLine);
+                    } else if ((((startPerspectiveIndex - finalPerspectiveIndex) == 1)
+                            && (finalThemeIndex == startThemeIndex))
+                            || ((startPerspectiveIndex - finalPerspectiveIndex == -1)
+                            && (finalThemeIndex == startThemeIndex))) {
+                       // System.out.println("2");
+                        map = paintOOIndexContinuos(startPerspectiveIndex, startThemeIndex,
+                                startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
+                                finalObjetiveIndex, jsonArrows, countLine, classLine);
+                    } else {
+                       // System.out.println("3");
+                        map = paintOO(startPerspectiveIndex, startThemeIndex, startObjetiveIndex,
+                                finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex,
+                                jsonArrows, countLine, classLine);
+                    }
+                } else if ((base.getData("perspective" + base.getId() + perspective.getId()) != null)
+                        && (base.getData("perspective" + base.getId() + persStart.getId()) != null)) {
+                    //System.out.println("4");
+                    map = paintOOHH(startPerspectiveIndex, startThemeIndex, startObjetiveIndex,
+                            finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex, jsonArrows,
+                            countLine, classLine);
+                } else {
+                    if ((isFinalTheme) || (isStartTheme)) {
+                      //  System.out.println("5");
+                        map = paintOOH_VSame(startPerspectiveIndex, startThemeIndex, startObjetiveIndex,
+                                finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex, jsonArrows,
+                                countLine, classLine);
+                    } else {
+                       // System.out.println("6");
+                        map = paintOOH_V(startPerspectiveIndex, startThemeIndex, startObjetiveIndex,
+                                finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex, jsonArrows,
+                                countLine, classLine);
+                    }
+
+                }
+                Iterator<Entry> itMap = map.entrySet().iterator();
+                while (itMap.hasNext()) {
+                    Entry entry = itMap.next();
+                    countLine = Integer.parseInt(entry.getKey().toString());
+                    StringBuilder sb1 = (StringBuilder) entry.getValue();
+                    sb.append(sb1);
+                }
+            }
+        }
+        map1.put(countLine, sb);
+        return map1;
+    }
+
+    /**
+     * Pinta la relaci&oacute;n Causa - Efecto entre objetivos, forma Horizontal
+     * / Vertical misma
+     *
+     * @param startPerspectiveIndex &Iacute;ndice de la perspectiva (Causa) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param startThemeIndex &Iacute;ndice del tema (Causa) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param startObjetiveIndex &Iacute;ndice del objetivo (Causa) que contiene
+     * la relaci&oacute;n causa - efecto
+     * @param finalPerspectiveIndex &Iacute;ndice de la perspectiva (Efecto) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param finalThemeIndex &Iacute;ndice del tema (Efecto) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param finalObjetiveIndex &Iacute;ndice del tema (Efecto) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @param countLine n&uacute;mero de l&iacute;nea a partir de la cual
+     * deber&aacute;n crearse las siguientes l&iacute;neas
+     * @param classLine Clase CSS
+     * @return objeto de tipo {@code HashMap} con las l&iacute;neas creadas y el
+     * contador de l&iacute;neas utilizados
+     */
+    private HashMap paintOOH_VSame(int startPerspectiveIndex, int startThemeIndex,
+            int startObjetiveIndex, int finalPerspectiveIndex, int finalThemeIndex,
+            int finalObjetiveIndex, JSONObject jsonArrows, int countLine, String classLine) {
+        HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
         int initPerspective = startPerspectiveIndex;
         int initTheme = startThemeIndex;
@@ -1173,14 +1640,21 @@ public class CausalArrows extends Decorator {
             JSONObject startPers = (JSONObject) jsonArrows.get(initPerspective + "");
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
             JSONObject themePer = (JSONObject) arrayTheme.get(initTheme + "");
-            JSONObject arrayObjective = (JSONObject) themePer.get(initObjective + "");
+            JSONObject arraysObjects = (JSONObject) themePer.get("arrayObjective");
+            JSONObject arrayObjective = (JSONObject) arraysObjects.get(initObjective + "");
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
             JSONObject themePerFinal = (JSONObject) arrayThemeFinal.get(finalizeTheme + "");
-            JSONObject arrayObjectiveFinal = (JSONObject) themePerFinal.get(finalizeObjective + "");
-
+            JSONObject arraysObjectsFinal = (JSONObject) themePerFinal.get("arrayObjective");
+            JSONObject arrayObjectiveFinal = (JSONObject) arraysObjectsFinal.get(finalizeObjective + "");
             int[] heightPer = getHeigthPerspectives(initPerspective, jsonArrows);
             int noCols = arrayTheme.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
+            if (arrayObjective.length() == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             int restCols = (int) divContainerCols / noCols;//valor por columna
             int heigthPers = finalPers.getInt("height");
             //primer linea
@@ -1193,25 +1667,32 @@ public class CausalArrows extends Decorator {
             if (finalPerspectiveIndex > startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
-
+            countLine++;
             //segunda linea
             x1 = x2;
             x2 = divTitle + divContainerCols + (countLine * 2);
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //tercer linea
             heightPer = getHeigthPerspectives(finalizePerspective - 1, jsonArrows);
+            if (arrayObjectiveFinal.length() == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + 20 + (((heigthPers - 20) / arrayObjectiveFinal.length()) * (finalizeObjective - 1))
-                    + (((heigthPers - 20) / arrayObjectiveFinal.length()) / 2) + (countLine * 2);
+            y2 = heightPer[0] + heightPer[1] + 20 + (((heigthPers - 20) / arrayObjectiveFinal.length())
+                    * (finalizeObjective - 1)) + (((heigthPers - 20) / arrayObjectiveFinal.length())
+                    / 2) + (countLine * 2);
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //cuarta linea
             noCols = arrayThemeFinal.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             restCols = (int) divContainerCols / noCols;
             x1 = x2;
             x2 = (restCols * (finalizeTheme - 1)) + (restCols * (divSizeColumn / 100));
@@ -1221,16 +1702,43 @@ public class CausalArrows extends Decorator {
             if (finalPerspectiveIndex < startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
-
+            countLine++;
         } catch (JSONException ex) {
             log.error("Exception in paintOOH_VSame: " + ex);
         }
-        return sb;
+        map.put(countLine, sb);
+        return map;
     }
 
-    private StringBuilder paintOOH_V(int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
-            int finalPerspectiveIndex, int finalThemeIndex, int finalObjetiveIndex, JSONObject jsonArrows,
-            int countLine, String classLine) {
+    /**
+     * Pinta la relaci&oacute;n Causa - Efecto entre objetivos, forma Horizontal
+     * / Vertical
+     *
+     * @param startPerspectiveIndex &Iacute;ndice de la perspectiva (Causa) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param startThemeIndex &Iacute;ndice del tema (Causa) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param startObjetiveIndex &Iacute;ndice del objetivo (Causa) que contiene
+     * la relaci&oacute;n causa - efecto
+     * @param finalPerspectiveIndex &Iacute;ndice de la perspectiva (Efecto) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param finalThemeIndex &Iacute;ndice del tema (Efecto) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param finalObjetiveIndex &Iacute;ndice del objetivo (Causa) que contiene
+     * la relaci&oacute;n causa - efecto
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @param countLine n&uacute;mero de l&iacute;nea a partir de la cual
+     * deber&aacute;n crearse las siguientes l&iacute;neas
+     * @param classLine Clase CSS
+     * @return objeto de tipo {@code HashMap} con las l&iacute;neas creadas y el
+     * contador de l&iacute;neas utilizados
+     */
+    private HashMap paintOOH_V(int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
+            int finalPerspectiveIndex, int finalThemeIndex, int finalObjetiveIndex,
+            JSONObject jsonArrows, int countLine, String classLine) {
+        HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
         int initPerspective = startPerspectiveIndex;
         int initTheme = startThemeIndex;
@@ -1250,26 +1758,35 @@ public class CausalArrows extends Decorator {
             JSONObject startPers = (JSONObject) jsonArrows.get(initPerspective + "");
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
             JSONObject themePer = (JSONObject) arrayTheme.get(initTheme + "");
-            JSONObject arrayObjective = (JSONObject) themePer.get(initObjective + "");
+            JSONObject arraysObjects = (JSONObject) themePer.get("arrayObjective");
+            JSONObject arrayObjective = (JSONObject) arraysObjects.get(initObjective + "");
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
             JSONObject themePerFinal = (JSONObject) arrayThemeFinal.get(finalizeTheme + "");
-            JSONObject arrayObjectiveFinal = (JSONObject) themePerFinal.get(finalizeObjective + "");
+            JSONObject arraysObjectsFinal = (JSONObject) themePerFinal.get("arrayObjective");
+            JSONObject arrayObjectiveFinal = (JSONObject) arraysObjectsFinal.get(finalizeObjective + "");
             int[] heightPer = getHeigthPerspectives(initPerspective - 1, jsonArrows);
             int noCols = arrayTheme.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             int restCols = (int) divContainerCols / noCols;//valor por columna
             int heigthPers = startPers.getInt("height");
             //primer linea
             x1 = (divTitle) + (restCols * (initTheme - 1)) + (restCols * divSizeColumn);
             x2 = x1 + (countLine * 2);
-            y1 = heightPer[0] + heightPer[1] + 20 + ((heigthPers - 20) / arrayObjective.length()) * (initObjective - 1)
-                    + ((heigthPers - 20) / arrayTheme.length()) / 2 + (countLine * 2);
+            if (arrayObjective.length() == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
+            y1 = heightPer[0] + heightPer[1] + 20 + ((heigthPers - 20) / arrayObjective.length())
+                    * (initObjective - 1) + (((heigthPers - 20) / arrayTheme.length()) / 2)
+                    + (countLine * 2);
             y2 = y1 + (2 * countLine);
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (finalPerspectiveIndex > startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
-
+            countLine++;
             //segunda linea
             heightPer = getHeigthPerspectives(initPerspective, jsonArrows);
             x1 = x2;
@@ -1277,14 +1794,14 @@ public class CausalArrows extends Decorator {
             y1 = y2;
             y2 = heightPer[0] + heightPer[1] + (countLine * 2);
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //tercer linea
             x1 = x2;
             x2 = divTitle + divContainerCols + (countLine * 2);
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //cuarta linea
             heightPer = getHeigthPerspectives(finalizePerspective, jsonArrows);
             x1 = x2;
@@ -1292,17 +1809,24 @@ public class CausalArrows extends Decorator {
             y1 = y2;
             y2 = heightPer[0] + heightPer[1] + (countLine * 2);
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //quinta linea
             noCols = arrayThemeFinal.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
+            if (arrayObjectiveFinal.length() == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             restCols = (int) divContainerCols / noCols;//valor por columna
             heigthPers = finalPers.getInt("height");
             x1 = x2;
-            x2 = (restCols * (finalizeTheme - 1)) + ((divSizeColumn / arrayObjectiveFinal.length()) * (finalizeObjective - 1))
-                    + (countLine * 2);
+            x2 = (restCols * (finalizeTheme - 1)) + ((divSizeColumn / arrayObjectiveFinal.length())
+                    * (finalizeObjective - 1)) + (countLine * 2);
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
+            countLine++;
             //sexta linea
             heightPer = getHeigthPerspectives(finalizePerspective, jsonArrows);
             x1 = x2;
@@ -1313,16 +1837,43 @@ public class CausalArrows extends Decorator {
             if (finalPerspectiveIndex < startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
-
+            countLine++;
         } catch (JSONException ex) {
             log.error("Exception in paintOOH_V: " + ex);
         }
-        return sb;
+        map.put(countLine, sb);
+        return map;
     }
 
-    private StringBuilder paintOOHH(int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
-            int finalPerspectiveIndex, int finalThemeIndex, int finalObjetiveIndex, JSONObject jsonArrows,
-            int countLine, String classLine) {
+    /**
+     * Pinta la relaci&oacute;n Causa - Efecto entre objetivos forma Horizontal
+     * / Horizontal
+     *
+     * @param startPerspectiveIndex &Iacute;ndice de la perspectiva (Causa) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param startThemeIndex &Iacute;ndice del tema (Causa) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param startObjetiveIndex &Iacute;ndice del objetivo (Causa) que contiene
+     * la relaci&oacute;n causa - efecto
+     * @param finalPerspectiveIndex &Iacute;ndice de la perspectiva (Efecto) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param finalThemeIndex &Iacute;ndice del tema (Efecto) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param finalObjetiveIndex &Iacute;ndice del objetivo (Efecto) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @param countLine n&uacute;mero de l&iacute;nea a partir de la cual
+     * deber&aacute;n crearse las siguientes l&iacute;neas
+     * @param classLine Clase CSS
+     * @return objeto de tipo {@code HashMap} con las l&iacute;neas creadas y el
+     * contador de l&iacute;neas utilizados
+     */
+    private HashMap paintOOHH(int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
+            int finalPerspectiveIndex, int finalThemeIndex, int finalObjetiveIndex,
+            JSONObject jsonArrows, int countLine, String classLine) {
+        HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
         int initPerspective = startPerspectiveIndex;
         int initTheme = startThemeIndex;
@@ -1342,16 +1893,25 @@ public class CausalArrows extends Decorator {
             JSONObject startPers = (JSONObject) jsonArrows.get(initPerspective + "");
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
             JSONObject themePer = (JSONObject) arrayTheme.get(initTheme + "");
-            JSONObject arrayObjective = (JSONObject) themePer.get(initObjective + "");
+            JSONObject arraysObjects = (JSONObject) themePer.get("arrayObjective");
+            JSONObject arrayObjective = (JSONObject) arraysObjects.get(initObjective + "");
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
             JSONObject themePerFinal = (JSONObject) arrayThemeFinal.get(finalizeTheme + "");
-            JSONObject arrayObjectiveFinal = (JSONObject) themePerFinal.get(finalizeObjective + "");
+            JSONObject arraysObjectsFinal = (JSONObject) themePerFinal.get("arrayObjective");
+            JSONObject arrayObjectiveFinal = (JSONObject) arraysObjectsFinal.get(finalizeObjective + "");
             int[] heightPer = getHeigthPerspectives(initPerspective, jsonArrows);
             int noCols = arrayTheme.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
+            if (arrayObjective.length() == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             int restCols = (int) divContainerCols / noCols;//valor por columna
             //primer linea
-            x1 = (divTitle) + (restCols * (initTheme - 1)) + ((divSizeColumn / arrayObjective.length()) * (initObjective - 1))
+            x1 = (divTitle) + (restCols * (initTheme - 1))
+                    + ((divSizeColumn / arrayObjective.length()) * (initObjective - 1))
                     + (countLine * 2);//(restCols * (divSizeColumn/100));//((startThemeIndex * (restCols)) - (restCols / 2));
             x2 = x1;
             y1 = heightPer[0] + heightPer[1];
@@ -1360,12 +1920,14 @@ public class CausalArrows extends Decorator {
             if (finalPerspectiveIndex > startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
+            countLine++;
             //segunda linea
             x1 = x2;
             x2 = divTitle + divContainerCols + (countLine * 2);
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
+            countLine++;
             //tercer linea
             heightPer = getHeigthPerspectives(finalizePerspective, jsonArrows);
             x1 = x2;
@@ -1373,16 +1935,25 @@ public class CausalArrows extends Decorator {
             y1 = y2;
             y2 = heightPer[0] + heightPer[1] + (countLine * 2);
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
+            countLine++;
             //cuarta linea
             noCols = arrayThemeFinal.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
+            if (arrayObjectiveFinal.length() == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             restCols = (int) divContainerCols / noCols;
             x1 = x2;
-            x2 = (divTitle) + (restCols * (initTheme - 1)) + ((divSizeColumn / arrayObjectiveFinal.length()) * (finalizeObjective - 1))
+            x2 = (divTitle) + (restCols * (initTheme - 1))
+                    + ((divSizeColumn / arrayObjectiveFinal.length()) * (finalizeObjective - 1))
                     + (countLine * 2);
             y1 = y2;
             y2 = heightPer[0] + heightPer[1] + (countLine * 2);
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
+            //quinta linea
             heightPer = getHeigthPerspectives(finalizePerspective, jsonArrows);
             x1 = x2;
             x2 = x1;
@@ -1391,17 +1962,43 @@ public class CausalArrows extends Decorator {
             if (finalPerspectiveIndex < startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
-
-
+            countLine++;
         } catch (JSONException ex) {
             log.error("Exception in paintOOHH: " + ex);
         }
-        return sb;
+        map.put(countLine, sb);
+        return map;
     }
 
-    private StringBuilder paintOOIndexContinuos(int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
-            int finalPerspectiveIndex, int finalThemeIndex, int finalObjetiveIndex, JSONObject jsonArrows,
-            int countLine, String classLine) {
+    /**
+     * Pinta la relaci&oacute;n Causa - Efecto entre objetivos con indices
+     * continuos
+     *
+     * @param startPerspectiveIndex &Iacute;ndice de la perspectiva (Causa) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param startThemeIndex &Iacute;ndice del tema (Causa) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param startObjetiveIndex &Iacute;ndice del objetivo (Causa) que contiene
+     * la relaci&oacute;n causa - efecto
+     * @param finalPerspectiveIndex &Iacute;ndice de la perspectiva (Efecto) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param finalThemeIndex &Iacute;ndice del tema (Efecto) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param finalObjetiveIndex &Iacute;ndice del objetivo (Efecto) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @param countLine n&uacute;mero de l&iacute;nea a partir de la cual
+     * deber&aacute;n crearse las siguientes l&iacute;neas
+     * @param classLine Clase CSS
+     * @return objeto de tipo {@code HashMap} con las l&iacute;neas creadas y el
+     * contador de l&iacute;neas utilizados
+     */
+   private HashMap paintOOIndexContinuos(int startPerspectiveIndex, int startThemeIndex,
+            int startObjetiveIndex, int finalPerspectiveIndex, int finalThemeIndex,
+            int finalObjetiveIndex, JSONObject jsonArrows, int countLine, String classLine) {
+        HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
         int initPerspective = startPerspectiveIndex;
         int initTheme = startThemeIndex;
@@ -1421,13 +2018,21 @@ public class CausalArrows extends Decorator {
             JSONObject startPers = (JSONObject) jsonArrows.get(initPerspective + "");
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
             JSONObject themePer = (JSONObject) arrayTheme.get(initTheme + "");
-            JSONObject arrayObjective = (JSONObject) themePer.get(initObjective + "");
+            JSONObject arraysObjects = (JSONObject) themePer.get("arrayObjective");
+            JSONObject arrayObjective = (JSONObject) arraysObjects.get(initObjective + "");
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
             JSONObject themePerFinal = (JSONObject) arrayThemeFinal.get(finalizeTheme + "");
-            JSONObject arrayObjectiveFinal = (JSONObject) themePerFinal.get(finalizeObjective + "");
+            JSONObject arraysObjectsFinal = (JSONObject) themePerFinal.get("arrayObjective");
+            JSONObject arrayObjectiveFinal = (JSONObject) arraysObjectsFinal.get(finalizeObjective + "");
             int[] heightPer = getHeigthPerspectives(initPerspective - 1, jsonArrows);
             int noCols = arrayTheme.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
+            if (arrayObjective.length() == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             int restCols = (int) divContainerCols / noCols;//valor por columna
             int heightObjective = (startPers.getInt("height") - 20) / arrayObjective.length();
             //primer linea
@@ -1439,33 +2044,69 @@ public class CausalArrows extends Decorator {
             if (finalPerspectiveIndex > startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
+            countLine++;
             //Segunda linea
             heightPer = getHeigthPerspectives(finalizePerspective - 1, jsonArrows);
+            if (arrayObjectiveFinal.length() == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             heightObjective = (finalPers.getInt("height") - 20) / arrayObjectiveFinal.length();
             x1 = x2;
             x2 = x1;
             y1 = y2;
             y2 = heightPer[0] + heightPer[1] + 20 + (heightObjective * finalizeObjective);
-
+            sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
+            countLine++;
             //Tercer linea
             noCols = arrayThemeFinal.length();
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             restCols = (int) divContainerCols / noCols;
             x1 = x2;
-            x2 = (divTitle) + (restCols * (finalizeTheme - 1)) + (restCols * (divSizeColumn / 100));;
+            x2 = (divTitle) + (restCols * (finalizeTheme - 1)) + (restCols * (divSizeColumn / 100));
             y1 = y2;
             y2 = y1;
+            sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (finalPerspectiveIndex < startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
+            countLine++;
         } catch (JSONException ex) {
             log.error("Exception in paintOOIndexContinuos: " + ex);
         }
-        return sb;
+        map.put(countLine, sb);
+        return map;
     }
 
-    private StringBuilder paintOO(int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
-            int finalPerspectiveIndex, int finalThemeIndex, int finalObjetiveIndex, JSONObject jsonArrows,
-            int countLine, String classLine) {
+    /**
+     * Pinta la relaci&oacute;n Causa - Efecto entre objetivos
+     *
+     * @param startPerspectiveIndex &Iacute;ndice de la perspectiva (Causa) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param startThemeIndex &Iacute;ndice del tema (Causa) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param startObjetiveIndex &Iacute;ndice del objetivo (Causa) que contiene
+     * la relaci&oacute;n causa - efecto
+     * @param finalPerspectiveIndex &Iacute;ndice de la perspectiva (Efecto) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param finalThemeIndex &Iacute;ndice del tema (Efecto) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param finalObjetiveIndex &Iacute;ndice del objetivo (Efecto) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @param countLine n&uacute;mero de l&iacute;nea a partir de la cual
+     * deber&aacute;n crearse las siguientes l&iacute;neas
+     * @param classLine Clase CSS
+     * @return objeto de tipo {@code HashMap} con las l&iacute;neas creadas y el
+     * contador de l&iacute;neas utilizados
+     */
+    private HashMap paintOO(int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
+            int finalPerspectiveIndex, int finalThemeIndex, int finalObjetiveIndex,
+            JSONObject jsonArrows, int countLine, String classLine) {
+        HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
         int initPerspective = startPerspectiveIndex;
         int initTheme = startThemeIndex;
@@ -1473,7 +2114,7 @@ public class CausalArrows extends Decorator {
         int finalizePerspective = finalPerspectiveIndex;
         int finalizeTheme = finalThemeIndex;
         int finalizeObjective = finalObjetiveIndex;
-        if (finalPerspectiveIndex > startPerspectiveIndex) {
+        if (finalPerspectiveIndex < startPerspectiveIndex) {
             initPerspective = finalPerspectiveIndex;
             initTheme = finalThemeIndex;
             initObjective = finalObjetiveIndex;
@@ -1485,85 +2126,139 @@ public class CausalArrows extends Decorator {
             JSONObject startPers = (JSONObject) jsonArrows.get(initPerspective + "");
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
             JSONObject themePer = (JSONObject) arrayTheme.get(initTheme + "");
-            JSONObject arrayObjective = (JSONObject) themePer.get(initObjective + "");
+            JSONObject arraysObjects = (JSONObject) themePer.get("arrayObjective");
+            JSONObject arrayObjective = (JSONObject) arraysObjects.get(initObjective + "");
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
             JSONObject themePerFinal = (JSONObject) arrayThemeFinal.get(finalizeTheme + "");
-            JSONObject arrayObjectiveFinal = (JSONObject) themePerFinal.get(finalizeObjective + "");
-
+            JSONObject arraysObjectsFinal = (JSONObject) themePerFinal.get("arrayObjective");
+            JSONObject arrayObjectiveFinal = (JSONObject) arraysObjectsFinal.get(finalizeObjective + "");
             int[] heightPer = getHeigthPerspectives(initPerspective - 1, jsonArrows);
             int noCols = arrayTheme.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             int restCols = (int) divContainerCols / noCols;//valor por columna
+            if (arrayObjective.length() == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             int heightObjective = (startPers.getInt("height") - 20) / arrayObjective.length();
             //primer linea
-            x1 = (divTitle) + (restCols * (initTheme - 1)) + (restCols * (divSizeColumn / 100));//((startThemeIndex * (restCols)) - (restCols / 2));
-            x2 = x1 + (2 * countLine);
-            y1 = heightPer[0] + heightPer[1] + (heightObjective * initObjective) + 20;
+            x1 = (divTitle) + (restCols * (initTheme - 1)) + (restCols * (0.95));//((startThemeIndex * (restCols)) - (restCols / 2));
+            x2 = x1 + 1;//(2 * countLine)
+            y1 = heightPer[0] + heightPer[1] + (heightObjective * initObjective) + 20;//+ 120
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (finalPerspectiveIndex < startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
+            countLine++;
             //segunda linea
             heightPer = getHeigthPerspectives(initPerspective, jsonArrows);
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (countLine * 2);
+            y2 = heightPer[0] + heightPer[1] + (20 * initPerspective) + 120;//
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
+            countLine++;
             //tercera linea
             x1 = x2;
-            x2 = divTitle + divContainerCols + (countLine * 2);//(divTitle) + (restCols * (finalizeTheme - 1)) + (restCols * 0.95) + (countLine * 2);
+            x2 = divTitle + divContainerCols + (1);//(divTitle) + (restCols * (finalizeTheme - 1)) + (restCols * 0.95) + (countLine * 2);
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
+            countLine++;
             //cuarta linea
-            heightPer = getHeigthPerspectives(finalizePerspective - 1, jsonArrows);
+            heightPer = getHeigthPerspectives(finalizePerspective, jsonArrows);
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (countLine * 2);
+            y2 = heightPer[0] + heightPer[1] + (20 * finalizePerspective) + 120;//+ 120
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //quinta linea
             noCols = arrayThemeFinal.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             restCols = (int) divContainerCols / noCols;//valor por columna
             x1 = x2;
-            x2 = divTitle + (restCols * (finalizeTheme - 1)) + (restCols * (divSizeColumn / 100)) + (countLine * 2);
+            int margin = 1;
+            if ((divContainerCols % noCols) != 0) {
+                margin = divContainerCols % noCols + margin;
+            }
+            x2 = divTitle + (restCols * (finalizeTheme - 1)) + (restCols * (0.95)) + margin;
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //sexta linea
             heightPer = getHeigthPerspectives(finalizePerspective - 1, jsonArrows);
+            if (arrayObjectiveFinal.length() == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             heightObjective = (finalPers.getInt("height") - 20) / arrayObjectiveFinal.length();
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (countLine * 2) + (heightObjective * initObjective);
-
+            y2 = heightPer[0] + heightPer[1] + (countLine * 2) + (heightObjective * initObjective);//+ 120
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //septima linea
             noCols = arrayThemeFinal.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             restCols = (int) divContainerCols / noCols;
             x1 = x2;
-            x2 = (divTitle) + (restCols * (finalizeTheme - 1)) + (restCols * (divSizeColumn / 100));;
+            x2 = (divTitle) + (restCols * (finalizeTheme - 1)) + (restCols * (0.95));;
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (finalPerspectiveIndex > startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
+            countLine++;
         } catch (JSONException ex) {
             log.error("Exception in paintOO: " + ex);
         }
-        return sb;
+        map.put(countLine, sb);
+        return map;
     }
 
-    private StringBuilder paintOOIndexFinalP(int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
-            int finalPerspectiveIndex, int finalThemeIndex, int finalObjetiveIndex, boolean isFinalTheme,
-            JSONObject jsonArrows, int countLine, String classLine) {
+    /**
+     * Pinta la relaci&oacute;n Causa - Efecto entre objetivos, con
+     * &iacute;ndice final en la perspectiva
+     *
+     * @param startPerspectiveIndex &Iacute;ndice de la perspectiva (Causa) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param startThemeIndex &Iacute;ndice del tema (Causa) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param startObjetiveIndex &Iacute;ndice del objetivo (Causa) que contiene
+     * la relaci&oacute;n causa - efecto
+     * @param finalPerspectiveIndex &Iacute;ndice de la perspectiva (Efecto) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param finalThemeIndex &Iacute;ndice del tema (Efecto) que contiene la
+     * relaci&oacute;n causa - efecto
+     * @param finalObjetiveIndex &Iacute;ndice del objetivo (Efecto) que
+     * contiene la relaci&oacute;n causa - efecto
+     * @param isFinalTheme la validaci&oacute;on si el tema esta al final de la
+     * perspectiva
+     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
+     * datos de un balanscorecard a partir del cual buscar&aacute; la
+     * perspectiva
+     * @param countLine n&uacute;mero de l&iacute;nea a partir de la cual
+     * deber&aacute;n crearse las siguientes l&iacute;neas
+     * @param classLine Clase CSS
+     * @return objeto de tipo {@code HashMap} con las l&iacute;neas creadas y el
+     * contador de l&iacute;neas utilizados
+     */
+    private HashMap paintOOIndexFinalP(int startPerspectiveIndex, int startThemeIndex,
+            int startObjetiveIndex, int finalPerspectiveIndex, int finalThemeIndex,
+            int finalObjetiveIndex, boolean isFinalTheme, JSONObject jsonArrows,
+            int countLine, String classLine) {
+        HashMap map = new HashMap();
+
         StringBuilder sb = new StringBuilder();
         int initPerspective = startPerspectiveIndex;
         int initTheme = startThemeIndex;
@@ -1583,65 +2278,114 @@ public class CausalArrows extends Decorator {
             JSONObject startPers = (JSONObject) jsonArrows.get(initPerspective + "");
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
             JSONObject themePer = (JSONObject) arrayTheme.get(initTheme + "");
-            JSONObject arrayObjective = (JSONObject) themePer.get(initObjective + "");
+            JSONObject arraysObjects = (JSONObject) themePer.get("arrayObjective");
+            JSONObject arrayObjective = (JSONObject) arraysObjects.get(initObjective + "");
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
             JSONObject themePerFinal = (JSONObject) arrayThemeFinal.get(finalizeTheme + "");
-            JSONObject arrayObjectiveFinal = (JSONObject) themePerFinal.get(finalizeObjective + "");
+            JSONObject arraysObjectsFinal = (JSONObject) themePerFinal.get("arrayObjective");
+            JSONObject arrayObjectiveFinal = (JSONObject) arraysObjectsFinal.get(finalizeObjective + "");
             int[] heightPer = getHeigthPerspectives(initPerspective - 1, jsonArrows);
             int noCols = arrayTheme.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
+            if (arrayObjective.length() == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             int restCols = (int) divContainerCols / noCols;//valor por columna
             int heightObjective = (startPers.getInt("height") - 20) / arrayObjective.length();
             //primer linea
-            x1 = (divTitle) + (restCols * (initTheme - 1)) + (restCols * (divSizeColumn / 100));//((startThemeIndex * (restCols)) - (restCols / 2));
-            x2 = x1 + (2 * countLine);
-            y1 = heightPer[0] + heightPer[1] + (heightObjective * initObjective) + 20;
+            x1 = (divTitle) + divContainerCols ;//((startThemeIndex * (restCols)) - (restCols / 2));
+//            x1 = (divTitle) + (restCols * (initTheme)) + (restCols * (divSizeColumn / 100));//((startThemeIndex * (restCols)) - (restCols / 2));
+            int margE = 2;
+            if(countLine < 5) {
+                margE = countLine;
+            }
+            x2 = x1  + margE;
+            y1 = heightPer[0] + heightPer[1] + ((heightObjective * initObjective) / 2) + 20 + 120;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (isFinalTheme) {
+                sb.append(paintLines(countLine, x2, x1, y2, y1, classLine));
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
+            countLine++;
             //segunda linea
             heightPer = getHeigthPerspectives(finalizePerspective, jsonArrows);
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (countLine * 2);
+            y2 = heightPer[0] + heightPer[1] + 120 + (20 * finalizePerspective);//+ 120 (countLine * 2)
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //tercer linea
+            noCols = arrayThemeFinal.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
+            restCols = (int) divContainerCols / noCols;
             x1 = x2;
-            x2 = (divTitle) + (restCols * (initTheme - 1)) + (restCols * (divSizeColumn / 100)) + (countLine * 2);
+            int margin = 1;
+            if ((divContainerCols % noCols) != 0) {
+                margin = (divContainerCols % noCols) + margin;
+            }
+            x2 = (divTitle) + (restCols * (finalizeTheme -1)) + (restCols * (0.95))
+                    + margin;
+            //System.out.println("restCols: " + restCols + ", x2= " + x2 + "div: " + divSizeColumn);
+            //System.out.println("mult: " + (divContainerCols%noCols));
+                    //((restCols * (finalizeTheme)) - 2);// + (restCols * (divSizeColumn/100))
+                    //+ (countLine * 2);
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-
+            countLine++;
             //cuarta linea
             heightPer = getHeigthPerspectives(finalizePerspective - 1, jsonArrows);
+            if (arrayObjectiveFinal.length() == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             heightObjective = (finalPers.getInt("height") - 20) / arrayObjectiveFinal.length();
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + 20 + (heightObjective * finalizeObjective);
+            y2 = heightPer[0] + heightPer[1] + 20 + (heightObjective * finalizeObjective);//+ 120
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
+            countLine++;
             //quinta linea
             noCols = arrayThemeFinal.length();//total de columnas
+            if (noCols == 0) {
+                throw new java.lang.ArithmeticException("/ by zero");
+            }
             restCols = (int) divContainerCols / noCols;
             x1 = x2;
-            x2 = (divTitle) + (restCols * (finalizeTheme - 1)) + (restCols * (divSizeColumn / 100)) + +(countLine * 2);
+            margin = 0;
+            if ((divContainerCols % noCols) != 0) {
+                margin = 1;
+            }
+            x2 = (divTitle) + (restCols * (finalizeTheme - 1)) +(restCols * (0.95)) + margin;
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (!isFinalTheme) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
-
+            countLine++;
         } catch (JSONException ex) {
             log.error("Exception en paintOOIndexSame: " + ex);
         }
-        return sb;
+        map.put(countLine, sb);
+        return map;
     }
 
+    /**
+     * Obtiene un JSONObject con los datos de los temas en una perspectiva
+     *
+     * @param perspective objeto de tipo {@code Perspective} de la perspectiva
+     * contenedora deñ tema
+     * @return objeto de tipo {@code JSONObject} devuelve la estructura de datos
+     * de los temas
+     */
     private JSONObject getArrayTheme(Perspective perspective) {
         JSONObject arrayTheme = new JSONObject();
         Iterator<Theme> itTheme = perspective.listThemes();
@@ -1662,6 +2406,14 @@ public class CausalArrows extends Decorator {
         return arrayTheme;
     }
 
+    /**
+     * Obtiene un JSONObject con los objetivos de un tema
+     *
+     * @param theme objeto de tipo {@code Theme} que contiene los objetivos que
+     * seran almacenados en el objeto de tipo {@code JSONObject}
+     * @return objeto de tipo {@code JSONObject} que contiene los objetivos de
+     * un tema
+     */
     private JSONObject getArrayObjective(Theme theme) {
         JSONObject arrayObjective = new JSONObject();
         Iterator<Objective> itObjective = theme.listObjectives();
@@ -1681,33 +2433,69 @@ public class CausalArrows extends Decorator {
         return arrayObjective;
     }
 
+    /**
+     * Obtiene el alto de una perspectiva
+     *
+     * @param perspective objeto de tipo {@code Perspective}
+     * @param base Recurso de SWB utilizado para mostrarlo dentro de la
+     * plataforma SWBPortal
+     * @param maxObject n&uacute;mero de objetivos m&aacute;ximo
+     * @return regresa el alto de una perspectiva
+     */
     private int getHeightPerspective(Perspective perspective, Resource base, int maxObject) {
         int height = 120;
         if (base.getData("perspective" + base.getId() + perspective.getId()) == null) {
-            if (base.getData("widthVerticalObjective") != null) {
+            if ((base.getData("widthVerticalObjective") != null) &&
+                    (base.getData("widthVerticalObjective").trim().length() != 0)) {
                 height = Integer.parseInt(base.getData("widthVerticalObjective"));
-                if (maxObject > 0) {
-                    height = height * maxObject;
-                }
             }
-        } else if (base.getData("perspective" + base.getId() + perspective.getId()) != null && base.getData("widthHorizontalObjective") != null) {
+            if (maxObject > 0) {
+                height = height * maxObject;
+            }
+        } else if ((base.getData("perspective" + base.getId() + perspective.getId())) != null
+                && (base.getData("widthHorizontalObjective") != null) &&
+                (base.getData("widthHorizontalObjective").trim().length() != 0)) {
             height = Integer.parseInt(base.getData("widthHorizontalObjective"));
         }
         height = height + 20;//Cabecera del tema
+        Iterator itGroupPers = perspective.listDifferentiatorGroups();
+        if (itGroupPers.hasNext()) {
+            while (itGroupPers.hasNext()) {
+                DifferentiatorGroup diffeGroup = (DifferentiatorGroup) itGroupPers.next();
+                Iterator<Differentiator> itDiff = diffeGroup.listDifferentiators();
+                if (itDiff.hasNext()) {
+                    int heigthDiff = 120;
+                    if ((base.getData("widthHorizontalDifferentiator") != null) &&
+                            (base.getData("widthHorizontalDifferentiator").trim().length() != 0)) {
+                        heigthDiff = Integer.parseInt(base.getData("widthHorizontalDifferentiator"));
+                    }
+                    height = height + heigthDiff + 20; //cabecera del grupo de diferenciadores
+                }
+            }
+        }
         return height;
     }
 
-    private int getMaxObjectiveForTheme(Perspective perspective) {
+    /**
+     * Obtiene el n&uacute;mero m&aacute;ximo de objetivos por tema
+     *
+     * @param perspective objeto de tipo {@code Perspective}
+     * @return un n&uacute;mero con los objetivos del tema que contenga
+     * m&aacute;s objetivos
+     */
+    private int getMaxObjectiveForTheme(Perspective perspective, Period period) {
         Iterator<Theme> it = perspective.listThemes();
         int maxObjecForTheme = 0;
         List list = new ArrayList();
         while (it.hasNext()) {
             Theme theme = it.next();
-            Iterator<Objective> itObjective = theme.listObjectives();
             int countObjective = 0;
+            Iterator<Objective> itObjective = theme.listObjectives();
+
             while (itObjective.hasNext()) {
                 Objective objective = itObjective.next();
-                if (objective.isActive() && objective.isValid()) {
+                if ((objective.isActive()) && (objective.isValid())
+                        && (objective.hasPeriod(period))) {
                     countObjective++;
                 }
             }
@@ -1715,7 +2503,7 @@ public class CausalArrows extends Decorator {
         }
         Collections.sort(list);
         if (!list.isEmpty()) {
-            maxObjecForTheme = Integer.parseInt(list.get(0).toString());
+            maxObjecForTheme = Integer.parseInt(list.get(list.size() - 1).toString());
         }
         return maxObjecForTheme;
     }
