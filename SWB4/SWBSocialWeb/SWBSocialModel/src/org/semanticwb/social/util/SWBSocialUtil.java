@@ -1859,7 +1859,7 @@ public class SWBSocialUtil implements SWBAppObject {
                 postOutNet.setSocialPost(postOut);
                 postOutNet.setSocialNetwork(socialNet);
                 if(socialNetMsgId!=null)  {
-                    postOutNet.setSocialNetMsgID(socialNetMsgId);
+                    postOutNet.setPo_socialNetMsgID(socialNetMsgId);
                 }
                 postOutNet.setPo_created(new Date());
                 //System.out.println("Entra a savePostOutNetID-4:"+postOutNet);
