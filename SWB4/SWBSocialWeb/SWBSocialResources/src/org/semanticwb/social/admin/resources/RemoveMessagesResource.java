@@ -42,124 +42,132 @@ public class RemoveMessagesResource extends GenericResource {
         PrintWriter out = response.getWriter();
         String objUri = request.getParameter("suri");
         if(objUri!= null){
-            User user=paramRequest.getUser();
-            Stream stream = (Stream)SemanticObject.getSemanticObject(objUri).getGenericInstance();
-            String wsiteId = stream.getSemanticObject().getModel().getName();
-            WebSite wsite=WebSite.ClassMgr.getWebSite(wsiteId);
-            //Iterator<PostIn> itPostIn = PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
-            //long noOfMessages = SWBUtils.Collections.sizeOf(itPostIn);
-            long StreamPostIns = wsite.getSemanticModel().countStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), null);
-            //out.println("<div class=\"swbform\">");
-            //out.println("<form type=\"dijit.form.Form\" id=\"del\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"submitForm('del'); return false;\">");            
-            /*
-            out.println("<form type=\"dijit.form.Form\" id=\"del" + stream.getId() +"\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes serán eliminados.')){submitForm('del" + stream.getId() + "'); return false;}else{return false;}\">");            
-            out.println("<table width=\"100%\" border=\"0px\">");            
-            out.println("   <tr>");
-            out.println("       <td style=\"text-align: center;\">El Stream <b>" + stream.getDisplayTitle(paramRequest.getUser().getLanguage())  + "</b> actualmente contiene en total <b>" + StreamPostIns +  "</b> mensajes</td>");        
-            out.println("   </tr>");
-            if(StreamPostIns >0L){
-                out.println("   <tr>");
-                out.println("       <td style=\"text-align: center;\">¿Eliminar todos los mensajes?</td>");
-                out.println("   </tr>");
-                out.println("   <tr>");
-                out.println("       <td style=\"text-align: center;\"><button dojoType=\"dijit.form.Button\" type=\"submit\">Eliminar</button></td>");
-                //out.println("       <td style=\"text-align: center;\"><button onclick=\"delete()\">Eliminar</button></td>");
-                //out.println("<button name=\"Delete\" value=\"Delete\" onClick=\"if(confirm('Deseas eliminar los mensajes?')){alert('Enviando'); document.getElementById('del').submit();}else{alert('NO enviando'); return false;}\">Eliminar</button>");
-                out.println("   </tr>");
-            }
-            out.println("</table>");
-            out.println("</form>");
-            out.println("</div>");
-            * */
-            out.println("<div id=\"strm-eliminar\">");
-            out.println("<p>Mensajes del stream: <strong>"+stream.getDisplayTitle(user.getLanguage()) +"</strong></p>");
-            
-            
-            if(StreamPostIns >0L){
-                out.println("<div class=\"eliminar-boton streamtot-on\">");
-                    out.println("<a onclick=\"if(confirm('Desea eliminar todos los mensajes?'))" + "{ submitUrl('" + paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "',this); } else { return false;}\" title=\"Eliminar "+ StreamPostIns +" mensajes de entrada\">");
-                    out.println("<strong>"+StreamPostIns+"</strong> <em>Mensajes de entrada</em>");
-                out.println("</a>");
-                out.println("</div>");
-            }else{
-                out.println("<div class=\"eliminar-boton streamtot-off\">");
-        	out.println("<span>");
-                out.println("<strong>0</strong> <em>Mensajes de entrada</em>");
-                out.println("</span>");
-                out.println("</div>");
-            }
-            
-            //Solo mensajes sin Tema
-            /*
-            ArrayList aList=new ArrayList();
-            Iterator <PostIn> itPostInWOTopic=PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
-            while(itPostInWOTopic.hasNext())
+            try
             {
-                PostIn postIn=itPostInWOTopic.next();
-                if(postIn.getSocialTopic()==null) aList.add(postIn.getURI());
-            }*/
-            ArrayList aList=new ArrayList();
-            Iterator <PostIn> itPostInWOTopic=PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
-            while(itPostInWOTopic.hasNext())
+            
+                User user=paramRequest.getUser();
+                Stream stream = (Stream)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+                String wsiteId = stream.getSemanticObject().getModel().getName();
+                WebSite wsite=WebSite.ClassMgr.getWebSite(wsiteId);
+                //Iterator<PostIn> itPostIn = PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
+                //long noOfMessages = SWBUtils.Collections.sizeOf(itPostIn);
+                long StreamPostIns = wsite.getSemanticModel().countStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), null);
+                //out.println("<div class=\"swbform\">");
+                //out.println("<form type=\"dijit.form.Form\" id=\"del\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"submitForm('del'); return false;\">");            
+                /*
+                out.println("<form type=\"dijit.form.Form\" id=\"del" + stream.getId() +"\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes serán eliminados.')){submitForm('del" + stream.getId() + "'); return false;}else{return false;}\">");            
+                out.println("<table width=\"100%\" border=\"0px\">");            
+                out.println("   <tr>");
+                out.println("       <td style=\"text-align: center;\">El Stream <b>" + stream.getDisplayTitle(paramRequest.getUser().getLanguage())  + "</b> actualmente contiene en total <b>" + StreamPostIns +  "</b> mensajes</td>");        
+                out.println("   </tr>");
+                if(StreamPostIns >0L){
+                    out.println("   <tr>");
+                    out.println("       <td style=\"text-align: center;\">¿Eliminar todos los mensajes?</td>");
+                    out.println("   </tr>");
+                    out.println("   <tr>");
+                    out.println("       <td style=\"text-align: center;\"><button dojoType=\"dijit.form.Button\" type=\"submit\">Eliminar</button></td>");
+                    //out.println("       <td style=\"text-align: center;\"><button onclick=\"delete()\">Eliminar</button></td>");
+                    //out.println("<button name=\"Delete\" value=\"Delete\" onClick=\"if(confirm('Deseas eliminar los mensajes?')){alert('Enviando'); document.getElementById('del').submit();}else{alert('NO enviando'); return false;}\">Eliminar</button>");
+                    out.println("   </tr>");
+                }
+                out.println("</table>");
+                out.println("</form>");
+                out.println("</div>");
+                * */
+                out.println("<div id=\"strm-eliminar\">");
+                out.println("<p>Mensajes del stream: <strong>"+stream.getDisplayTitle(user.getLanguage()) +"</strong></p>");
+
+
+                if(StreamPostIns >0L){
+                    out.println("<div class=\"eliminar-boton streamtot-on\">");
+                        out.println("<a onclick=\"if(confirm('Desea eliminar todos los mensajes?'))" + "{ submitUrl('" + paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "',this); } else { return false;}\" title=\"Eliminar "+ StreamPostIns +" mensajes de entrada\">");
+                        out.println("<strong>"+StreamPostIns+"</strong> <em>Mensajes de entrada</em>");
+                    out.println("</a>");
+                    out.println("</div>");
+                }else{
+                    out.println("<div class=\"eliminar-boton streamtot-off\">");
+                    out.println("<span>");
+                    out.println("<strong>0</strong> <em>Mensajes de entrada</em>");
+                    out.println("</span>");
+                    out.println("</div>");
+                }
+
+                //Solo mensajes sin Tema
+                /*
+                ArrayList aList=new ArrayList();
+                Iterator <PostIn> itPostInWOTopic=PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
+                while(itPostInWOTopic.hasNext())
+                {
+                    PostIn postIn=itPostInWOTopic.next();
+                    if(postIn.getSocialTopic()==null) aList.add(postIn.getURI());
+                }*/
+                ArrayList aList=new ArrayList();
+                Iterator <PostIn> itPostInWOTopic=PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
+                while(itPostInWOTopic.hasNext())
+                {
+                    PostIn postIn=itPostInWOTopic.next();
+                    if(postIn.getSocialTopic()==null) aList.add(postIn.getURI());
+                }
+                /*
+                out.println("<div class=\"swbform\">");
+                //out.println("<form type=\"dijit.form.Form\" id=\"del\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"submitForm('del'); return false;\">");            
+                out.println("<form type=\"dijit.form.Form\" id=\"delwotopic" + stream.getId() + "\" action=\"" +  paramRequest.getActionUrl().setAction(Action_REMOVEWOTOPIC).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes serán eliminados.')){submitForm('delwotopic" + stream.getId() + "'); return false;}else{return false;}\">");            
+                out.println("<table width=\"100%\" border=\"0px\">");            
+                out.println("   <tr>");
+                out.println("       <td style=\"text-align: center;\">El Stream <b>" + stream.getDisplayTitle(paramRequest.getUser().getLanguage())  + "</b> actualmente contiene <b>" + aList.size() +  "</b> mensajes sin Tema</td>");        
+                out.println("   </tr>");
+                if(StreamPostIns >0L){
+                    out.println("   <tr>");
+                    out.println("       <td style=\"text-align: center;\">¿Eliminar todos los mensajes sin tema?</td>");
+                    out.println("   </tr>");
+                    out.println("   <tr>");
+                    out.println("       <td style=\"text-align: center;\"><button dojoType=\"dijit.form.Button\" type=\"submit\">Eliminar</button></td>");
+                    //out.println("       <td style=\"text-align: center;\"><button onclick=\"delete()\">Eliminar</button></td>");
+                    //out.println("<button name=\"Delete\" value=\"Delete\" onClick=\"if(confirm('Deseas eliminar los mensajes?')){alert('Enviando'); document.getElementById('del').submit();}else{alert('NO enviando'); return false;}\">Eliminar</button>");
+                    out.println("   </tr>");
+                }
+                out.println("</table>");
+                out.println("</form>");
+                out.println("</div>");
+                **/
+
+                if(aList.size() >0L){
+                    out.println("<div class=\"eliminar-boton streamsin-on\">");
+                        out.println("<a onclick=\"if(confirm('Desea eliminar todos los mensajes sin tema?'))" + "{ submitUrl('" + paramRequest.getActionUrl().setAction(Action_REMOVEWOTOPIC).setParameter("suri", objUri) + "',this); } else { return false;}\" title=\"Eliminar "+ StreamPostIns +" mensajes de entrada\">");
+                        out.println("<strong>"+aList.size()+"</strong> <em>Mensajes de entrada</em>");
+                    out.println("</a>");
+                    out.println("</div>");
+                }else{
+                    out.println("<div class=\"eliminar-boton streamsin-off\">");
+                    out.println("<span>");
+                    out.println("<strong>0</strong> <em>Mensajes sin tema/em>");
+                    out.println("</span>");
+                    out.println("</div>");
+                }
+
+
+                out.println("<div class=\"swbform\">");
+                out.println("<form type=\"dijit.form.Form\" id=\"delDate" + stream.getId() + "\" action=\"" +  paramRequest.getActionUrl().setAction(Action_REMOVESINCEDATE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes a partir de la facha seleccionada hacia atras serán eliminados.')){submitForm('delDate" + stream.getId() + "'); return false;}else{return false;}\">");            
+                out.println("<div class=\"eliminar-date\">");
+                out.println("<p>Eliminar mensajes apartir de una fecha hacia atras:</p>");
+                out.println("<input type=\"text\" name=\"remSinceDate"+stream.getId()+"\" id=\"remSinceDate"+stream.getId()+"\" dojoType=\"dijit.form.DateTextBox\"  size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\">");
+                out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">Eliminar</button>");
+                out.println("</div>");
+                out.println("</form>");
+                out.println("</div>");
+
+
+                out.println("</div>");
+
+                if(request.getParameter("deleted")!= null && request.getParameter("deleted").equals("ok")){
+                    out.println("<script type=\"text/javascript\">");
+                        out.println("   showStatus('Mensajes eliminados');");            
+                    out.println("</script>");
+                }
+            }catch(Exception e)
             {
-                PostIn postIn=itPostInWOTopic.next();
-                if(postIn.getSocialTopic()==null) aList.add(postIn.getURI());
-            }
-            /*
-            out.println("<div class=\"swbform\">");
-            //out.println("<form type=\"dijit.form.Form\" id=\"del\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"submitForm('del'); return false;\">");            
-            out.println("<form type=\"dijit.form.Form\" id=\"delwotopic" + stream.getId() + "\" action=\"" +  paramRequest.getActionUrl().setAction(Action_REMOVEWOTOPIC).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes serán eliminados.')){submitForm('delwotopic" + stream.getId() + "'); return false;}else{return false;}\">");            
-            out.println("<table width=\"100%\" border=\"0px\">");            
-            out.println("   <tr>");
-            out.println("       <td style=\"text-align: center;\">El Stream <b>" + stream.getDisplayTitle(paramRequest.getUser().getLanguage())  + "</b> actualmente contiene <b>" + aList.size() +  "</b> mensajes sin Tema</td>");        
-            out.println("   </tr>");
-            if(StreamPostIns >0L){
-                out.println("   <tr>");
-                out.println("       <td style=\"text-align: center;\">¿Eliminar todos los mensajes sin tema?</td>");
-                out.println("   </tr>");
-                out.println("   <tr>");
-                out.println("       <td style=\"text-align: center;\"><button dojoType=\"dijit.form.Button\" type=\"submit\">Eliminar</button></td>");
-                //out.println("       <td style=\"text-align: center;\"><button onclick=\"delete()\">Eliminar</button></td>");
-                //out.println("<button name=\"Delete\" value=\"Delete\" onClick=\"if(confirm('Deseas eliminar los mensajes?')){alert('Enviando'); document.getElementById('del').submit();}else{alert('NO enviando'); return false;}\">Eliminar</button>");
-                out.println("   </tr>");
-            }
-            out.println("</table>");
-            out.println("</form>");
-            out.println("</div>");
-            **/
-            
-            if(aList.size() >0L){
-                out.println("<div class=\"eliminar-boton streamsin-on\">");
-                    out.println("<a onclick=\"if(confirm('Desea eliminar todos los mensajes sin tema?'))" + "{ submitUrl('" + paramRequest.getActionUrl().setAction(Action_REMOVEWOTOPIC).setParameter("suri", objUri) + "',this); } else { return false;}\" title=\"Eliminar "+ StreamPostIns +" mensajes de entrada\">");
-                    out.println("<strong>"+aList.size()+"</strong> <em>Mensajes de entrada</em>");
-                out.println("</a>");
-                out.println("</div>");
-            }else{
-                out.println("<div class=\"eliminar-boton streamsin-off\">");
-        	out.println("<span>");
-                out.println("<strong>0</strong> <em>Mensajes sin tema/em>");
-                out.println("</span>");
-                out.println("</div>");
-            }
-            
-            
-            out.println("<div class=\"swbform\">");
-            out.println("<form type=\"dijit.form.Form\" id=\"delDate" + stream.getId() + "\" action=\"" +  paramRequest.getActionUrl().setAction(Action_REMOVESINCEDATE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes a partir de la facha seleccionada hacia atras serán eliminados.')){submitForm('delDate" + stream.getId() + "'); return false;}else{return false;}\">");            
-            out.println("<div class=\"eliminar-date\">");
-            out.println("<p>Eliminar mensajes apartir de una fecha hacia atras:</p>");
-            out.println("<input type=\"text\" name=\"remSinceDate"+stream.getId()+"\" id=\"remSinceDate"+stream.getId()+"\" dojoType=\"dijit.form.DateTextBox\"  size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\">");
-            out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">Eliminar</button>");
-            out.println("</div>");
-            out.println("</form>");
-            out.println("</div>");
-            
-            
-            out.println("</div>");
-            
-            if(request.getParameter("deleted")!= null && request.getParameter("deleted").equals("ok")){
-                out.println("<script type=\"text/javascript\">");
-                    out.println("   showStatus('Mensajes eliminados');");            
-                out.println("</script>");
+                System.out.println(e.getMessage()); 
+                log.error(e);
             }
         }
         /*
