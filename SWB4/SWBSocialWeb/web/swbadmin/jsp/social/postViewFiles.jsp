@@ -39,7 +39,8 @@ if(request.getParameter("uri") != null)
                     if(file.getName().toLowerCase().endsWith(".png") || file.getName().toLowerCase().endsWith(".jpg") || file.getName().toLowerCase().endsWith(".gif")) 
                     {
                         aPostImages.add(file);
-                    }else if(file.getName().toLowerCase().endsWith(".mov") || file.getName().toLowerCase().endsWith(".avi") || file.getName().toLowerCase().endsWith(".wmv"))   //Ver que extensiones para video soportamos 
+                    }else if(file.getName().toLowerCase().endsWith(".mov") || file.getName().toLowerCase().endsWith(".avi") 
+                            || file.getName().toLowerCase().endsWith(".wmv") || file.getName().toLowerCase().endsWith(".mp4"))   //Ver que extensiones para video soportamos 
                     {
                         aPostVideos.add(file);
                     }

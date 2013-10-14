@@ -53,7 +53,7 @@
                     <%=postOutNet.getSocialNetwork().getDisplayTitle(user.getLanguage())%>
                 </td>
                 <td>
-                    <%=postOutNet.getSocialNetMsgID()!=null?postOutNet.getSocialNetMsgID():""%>
+                    <%=postOutNet.getPo_socialNetMsgID()!=null?postOutNet.getPo_socialNetMsgID():""%>
                 </td>
                 <td>
                 <%
