@@ -1,7 +1,12 @@
 package org.semanticwb.bsc.admin.resources;
 
 
+import com.arthurdo.parser.HtmlException;
+import com.arthurdo.parser.HtmlStreamTokenizer;
+import com.arthurdo.parser.HtmlTag;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,12 +21,13 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
-import org.semanticwb.bsc.element.BSCElement;
+import org.semanticwb.bsc.element.*;
 import org.semanticwb.bsc.utils.DetailView;
+import org.semanticwb.model.FormElement;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
@@ -500,7 +506,35 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         
         PrintWriter out = response.getWriter();
-        out.println("Hello DetailViewManager...");
+        StringBuilder output = new StringBuilder(256);
+        String message = validateInput(request);
+
+        output.append("<div>\n");
+
+        if (message == null) {
+            FileReader reader = retrieveTemplate();
+            String suri = request.getParameter("suri");
+            SemanticObject semObj = SemanticObject.getSemanticObject(suri);
+            //Declarar variable para el periodo, obteniendo el valor del request
+            //Si el semObj es hijo de PeriodStatusAssignable se debe:
+            //-Agregar encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
+            // para el período especificado y el título del objeto, para lo que:
+            //    - Se pide el listado de objetos PeriodStatus asociado al semObj
+            //    - Se recorre uno por uno los PeriodStatus relacionados
+            //    - Cuando el período del PeriodStatur = período del request:
+            //        - Se obtiene el status correspondiente y su ícono relacionado
+            //        - Se agrega el ícono al encabezado y el título del objeto semObj
+
+            if (reader != null) {
+                output.append(generateDisplay(request, paramRequest, reader, semObj));
+            }
+
+        } else { //Si la información de entrada no es válida
+            output.append(paramRequest.getLocaleString(message));
+        }
+
+        output.append("</div>\n");
+        out.println(output.toString());
     }
 
     /**
@@ -710,4 +744,136 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         }
     }
     
+    private String validateInput(HttpServletRequest request) {
+        
+        String suri = request.getParameter("suri");
+        SemanticObject semObj = SemanticObject.getSemanticObject(suri);
+        GenericObject genericObject = semObj != null ? semObj.createGenericInstance() : null;
+        SemanticClass workClassSC = this.getWorkClass() != null
+                ? this.getWorkClass().transformToSemanticClass()
+                : null;
+        String messageType = null;
+        //Declarar una variable para evaluar al período especificado
+
+        //Revisa configuración del recurso
+        if (workClassSC == null) {
+            messageType = "workClassNotConfigured";
+        }
+
+        //Revisa datos recibidos en request
+        if (messageType == null && genericObject == null) {
+            messageType = "uriNotValid";
+        }
+        if (messageType == null && (genericObject instanceof Objective && workClassSC != Objective.sclass)) {
+            messageType = "objectTypeMissmatch";
+        } else if (messageType == null && (genericObject instanceof Indicator && workClassSC != Indicator.sclass)) {
+            messageType = "objectTypeMissmatch";
+        } else if (messageType == null && (genericObject instanceof Initiative && workClassSC != Initiative.sclass)) {
+            messageType = "objectTypeMissmatch";
+        } else if (messageType == null && (genericObject instanceof Deliverable && workClassSC != Deliverable.sclass)) {
+            messageType = "objectTypeMissmatch";
+        } else if (messageType == null && (genericObject instanceof Perspective && workClassSC != Perspective.sclass)) {
+            messageType = "objectTypeMissmatch";
+        } else if (messageType == null && (genericObject instanceof Theme && workClassSC != Theme.sclass)) {
+            messageType = "objectTypeMissmatch";
+        }
+
+        //Revisa vista asignada como contenido
+        if (messageType == null && this.getActiveDetailView() == null) {
+            messageType = "withNoActiveView";
+        }
+        if (messageType == null && this.getActiveDetailView() != null && this.getActiveDetailView().getViewFilePath() == null) {
+            messageType = "activeViewWithNoFile";
+        }
+        if (messageType == null && this.getActiveDetailView() != null && this.getActiveDetailView().getViewFilePath() != null) {
+            //Revisar que al menos exista un archivo con la ruta y nombre almacenados en this.getActiveDetailView().getViewFilePath()
+            File templateFile = new File(this.getActiveDetailView().getViewFilePath());
+            //si no es el caso, asignar el tipo de mensaje:
+            if (!templateFile.exists()) {
+                messageType = "activeViewWithNoFile";
+            }
+        }
+
+        //Revisa existencia de un período con el identificador recibido en el request
+        //Si no existe el período, asignar el tipo de mensaje a "periodNotExistent"
+        //if (variableDelPeriodo == null) {
+        //	messageType = "periodNotExistent";
+        //}
+
+        return messageType;
+    }
+    
+    private FileReader retrieveTemplate() {
+        
+        String filePath = this.getActiveDetailView().getViewFilePath();
+        FileReader reader = null;
+
+        try {
+            reader = new FileReader(filePath);
+        } catch (FileNotFoundException fnfe) {
+            DetailViewManager.log.error("Al leer plantilla de vista detalle con Id: "
+                    + this.getActiveDetailView().getId(), fnfe);
+        }
+
+        return reader;
+    }
+    
+    private String generateDisplay(HttpServletRequest request, SWBParamRequest paramRequest,
+            FileReader template, SemanticObject elementBSC) throws IOException {
+        
+        StringBuilder view = new StringBuilder(256);
+        HtmlStreamTokenizer tok = new HtmlStreamTokenizer(template);
+        HtmlTag tag = new HtmlTag();
+        String lang = paramRequest.getUser().getLanguage();
+
+        while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
+            int ttype = tok.getTokenType();
+
+            if (ttype == HtmlStreamTokenizer.TT_TAG) {
+
+                try {
+                    //si no es un tag de imagen, que continúe con el siguiente
+                    tok.parseTag(tok.getStringValue(), tag);
+                } catch (HtmlException htmle) {
+                    DetailViewManager.log.error("Al parsear plantilla vista detalle, " + 
+                            this.getActiveDetailView().getId(), htmle);
+                    view = new StringBuilder(16);
+                }
+                if (!tag.getTagString().toLowerCase().equals("img")) {
+                    view.append(tag.toString());
+                } else if (tag.getTagString().toLowerCase().equals("img") && !tag.hasParam("tagProp")) {
+                    view.append(tag.toString());
+                } /*
+                 Si es un tag de imagen y tiene el atributo tagProp
+                 obtener el valor del atributo tagProp que contiene el uri de la propiedad
+                 */ else if (tag.getTagString().toLowerCase().equals("img") && tag.hasParam("tagProp")) {
+                    String propUri = tag.getParam("tagProp");
+                    if (propUri != null) {
+                        view.append(renderPropertyValue(request, elementBSC, propUri, lang));
+                    }
+                }
+            } else if (ttype == HtmlStreamTokenizer.TT_TEXT) {
+                view.append(tok.getStringValue());
+            } else if (ttype == HtmlStreamTokenizer.TT_COMMENT) {
+                view.append("<!--" + tok.getStringValue() + "-->");
+            }
+            view.append("\n");
+        }
+
+        return view.toString();
+    }
+    
+    private String renderPropertyValue(HttpServletRequest request, SemanticObject elementBSC,
+            String propUri, String lang) {
+        
+        String ret = null;
+        SWBFormMgr formMgr = new SWBFormMgr(elementBSC, null, SWBFormMgr.MODE_VIEW);
+        SemanticProperty semprop = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propUri);
+
+        FormElement formElement = formMgr.getFormElement(semprop);
+        if (formElement != null) {
+            ret = formElement.renderElement(request, elementBSC, semprop, semprop.getName(), SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_VIEW, lang);
+        }
+        return ret != null ? ret : "";
+    }
 }
