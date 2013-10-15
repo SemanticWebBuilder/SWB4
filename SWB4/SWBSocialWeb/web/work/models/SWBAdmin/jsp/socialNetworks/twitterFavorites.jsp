@@ -73,8 +73,10 @@
             te.printStackTrace();
         }
             out.println("</div>");
-%>    
+%>
 <div id="<%=objUri%>/getMoreFavorites" dojoType="dojox.layout.ContentPane">
-    <label id="<%=objUri%>/moreFavoritesLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMoreFavorites").setParameter("maxTweetID", maxTweetID+"")%>','<%=objUri%>/getMoreFavorites', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;">More Favorites</a></label>
+    <div align="center">
+        <label id="<%=objUri%>/moreFavoritesLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMoreFavorites").setParameter("maxTweetID", maxTweetID+"")%>','<%=objUri%>/getMoreFavorites', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;">More Favorites</a></label>
+    </div>
 </div>
 </div>
