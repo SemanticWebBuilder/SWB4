@@ -57,6 +57,7 @@ import org.semanticwb.social.Photo;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.PostOut;
 import org.semanticwb.social.PostOutNet;
+import org.semanticwb.social.PostOutPrivacyRelation;
 import org.semanticwb.social.SocialFlow.SocialPFlowMgr;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
@@ -109,6 +110,7 @@ public class SocialSentPost extends GenericResource {
     private static final int RECPERPAGE = 20; //Number of records by Page, could be dynamic later
     private static final int PAGES2VIEW = 15; //Number of pages 2 display in pagination.
     private static final String Mode_ShowUsrHistory = "showUsrHistory";
+    private static final String Mode_ShowMoreNets="showMoreNets";
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -128,6 +130,9 @@ public class SocialSentPost extends GenericResource {
         }else if(Mode_ShowUsrHistory.equals(mode))
         {
              doShowUserHistory(request, response, paramRequest);
+        }else if(Mode_ShowMoreNets.equals(mode))
+        {
+             doShowMoreNets(request, response, paramRequest);
         }else if (paramRequest.getMode().equals("exportExcel")) {
             try {
                 doGenerateReport(request, response, paramRequest);
@@ -737,6 +742,32 @@ public class SocialSentPost extends GenericResource {
             SWBResourceURL urlPrev = paramRequest.getRenderUrl().setMode(Mode_PREVIEW).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postOut.getURI());
             out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" class=\"ver\" onclick=\"showDialog('" + urlPrev + "','" + paramRequest.getLocaleString("previewdocument")
                     + "'); return false;\"></a>");
+            
+            
+            //Nuevo agregado por Jorge el 15/Oct/2013
+            System.out.println("PostUri:" + postOut.getURI());
+            boolean postOutwithPostOutNets = false;
+            boolean someOneIsNotPublished = false;
+            SWBResourceURL urlPostOutNets = paramRequest.getRenderUrl().setMode(Mode_ShowPostOutNets).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postOut", postOut.getURI());
+            if (!postOut.isPublished()) {
+                Iterator<PostOutNet> itPostOutNets = PostOutNet.ClassMgr.listPostOutNetBySocialPost(postOut, wsite);
+                while (itPostOutNets.hasNext()) {
+                    PostOutNet postOutNet = itPostOutNets.next();
+                    //System.out.println("postOutNet:"+postOutNet);
+                    postOutwithPostOutNets = true;
+                    if (postOutNet.getStatus() == 0) {
+                        //System.out.println("postOutNet-1/status:"+postOutNet.getStatus());
+                        someOneIsNotPublished = true;
+                        break;
+                    }
+                }
+                
+                if (!isInFlow && postOutwithPostOutNets && !someOneIsNotPublished) {
+                    postOut.setPublished(true);
+                }
+            }
+            
+            //Termina agregado
 
             if (!postOut.isPublished()) {
                 if (send2Flow) {    //Social:Solo cuando se puede enviar el documento a flujo, se muestra la opción de editar, si el documento esta en flujo no se muestra.
@@ -794,7 +825,12 @@ public class SocialSentPost extends GenericResource {
             if (postOut.getMsg_Text() != null) {
                 msgText = SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(postOut.getMsg_Text()), 25);
             }
-            out.println("<a href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + msgText + "');return false;\" title=\"" + getDisplaySemObj(postOut.getSemanticObject(), lang) + "\">" + msgText + "</a>");
+            if(!postOut.isPublished())
+            {
+                out.println("<a href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + msgText + "');return false;\" title=\"" + getDisplaySemObj(postOut.getSemanticObject(), lang) + "\">" + msgText + "</a>");
+            }else{
+                out.println(msgText);
+            }
             out.println("</td>");
 
             //Show PostType
@@ -807,24 +843,57 @@ public class SocialSentPost extends GenericResource {
             out.println("<td>");
             String nets = "---";
             //System.out.println("socialNet:"+postOut.getSocialNetwork()+",redes:"+postOut.listSocialNetworks().hasNext());
-            boolean firstTime = true;
+            int cont=0;
             Iterator<SocialNetwork> itPostSocialNets = postOut.listSocialNetworks();
             while (itPostSocialNets.hasNext()) {
+                cont++;
+                if(cont>1) break; //Determinamos que solo se mostrara una y se mostrara un "ver mas" en dado caso que fueran mas redes sociales.
                 SocialNetwork socialNet = itPostSocialNets.next();
                 //System.out.println("socialNet-1:"+socialNet);
                 String sSocialNet = socialNet.getDisplayTitle(lang);
                 //System.out.println("socialNet-2:"+sSocialNet);
                 if (sSocialNet != null && sSocialNet.trim().length() > 0) {
                     //System.out.println("socialNet-3:"+sSocialNet);
-                    if (firstTime) {
-                        nets = "" + sSocialNet;
-                        firstTime = false;
-                    } else {
-                        nets += "|" + sSocialNet;
+                    //Sacar privacidad
+                    String sPrivacy=null;
+                    //Si es necesario, cambiar esto por querys del Jei despues.
+                    Iterator<PostOutPrivacyRelation> itpostOutPriRel=PostOutPrivacyRelation.ClassMgr.listPostOutPrivacyRelationByPopr_postOut(postOut, wsite);
+                    while(itpostOutPriRel.hasNext())
+                    {
+                        PostOutPrivacyRelation poPrivRel=itpostOutPriRel.next();
+                        if(poPrivRel.getPopr_socialNetwork().getURI().equals(socialNet.getURI()))
+                        {
+                            sPrivacy=poPrivRel.getPopr_privacy().getTitle(lang);
+                        }
+                    }
+                    if(sPrivacy==null)
+                    {
+                        Iterator<PostOutNet> itpostOutNet=PostOutNet.ClassMgr.listPostOutNetBySocialPost(postOut, wsite);
+                        while(itpostOutNet.hasNext())
+                        {
+                            PostOutNet postOutnet=itpostOutNet.next();
+                            if(postOutnet.getSocialNetwork().getURI().equals(socialNet.getURI()) && postOutnet.getPo_privacy()!=null)
+                            {
+                                sPrivacy=postOutnet.getPo_privacy().getTitle(lang);
+                            }
+                        }
+                    }
+                    if(sPrivacy==null) sPrivacy=paramRequest.getLocaleString("public");
+                    
+                    //Termina privacidad
+                    if (cont==1) {
+                        nets = "<p>" + sSocialNet+"("+sPrivacy+")"+"</p>";
+                    } else {//Nunca entraría aquí con lo que se determinó, de solo mostrar la primera red social y un "ver mas", en caso de haber mas, se deja este códigp por si cambia esta regla en lo futuro.
+                        nets += "<p>"+"|" + sSocialNet+"("+sPrivacy+")"+"</p>";
                     }
                 }
             }
             out.println(nets);
+            if(cont>1)
+            {
+                SWBResourceURL urlshowmoreNets = paramRequest.getRenderUrl().setMode(Mode_ShowMoreNets).setCallMethod(SWBResourceURL.Call_DIRECT); 
+                out.println("<p><a href=\"#\" onclick=\"showDialog('" + urlshowmoreNets.setParameter("postUri", postOut.getURI()) + "','" + paramRequest.getLocaleString("associatedSocialNets") + "'); return false;\">"+paramRequest.getLocaleString("watchMore")+"</a></p>");
+            }
             out.println("</td>");
 
             //PostIn Source 
@@ -888,22 +957,8 @@ public class SocialSentPost extends GenericResource {
             //System.out.println("Ya esta publicado..:"+postOut.isPublished());
 
             System.out.println("PostUri:" + postOut.getURI());
-            SWBResourceURL urlPostOutNets = paramRequest.getRenderUrl().setMode(Mode_ShowPostOutNets).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postOut", postOut.getURI());
+            
             if (!postOut.isPublished()) {
-
-                boolean postOutwithPostOutNets = false;
-                boolean someOneIsNotPublished = false;
-                Iterator<PostOutNet> itPostOutNets = PostOutNet.ClassMgr.listPostOutNetBySocialPost(postOut, wsite);
-                while (itPostOutNets.hasNext()) {
-                    PostOutNet postOutNet = itPostOutNets.next();
-                    //System.out.println("postOutNet:"+postOutNet);
-                    postOutwithPostOutNets = true;
-                    if (postOutNet.getStatus() == 0) {
-                        //System.out.println("postOutNet-1/status:"+postOutNet.getStatus());
-                        someOneIsNotPublished = true;
-                        break;
-                    }
-                }
 
                 //Si todos los PostOutNet referentes al PostOut estan con estatus de 1 o simplemente diferente de 0, quiere decir que ya estan publicados, 
                 //probablente se revisaron desde el MonitorMgr y en el metodo isPublished de c/red social de tipo MonitorAble se reviso el estatus en la red socal
@@ -1286,6 +1341,24 @@ public class SocialSentPost extends GenericResource {
             try {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("swbAdminUser"));
                 request.setAttribute("swbAdminUser", semObject);
+                request.setAttribute("paramRequest", paramRequest);
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
+    }
+    
+    /*
+     * Muestra todas las redes sociales a las que se envío el mensaje de salida
+     */
+    private void doShowMoreNets(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
+        final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showMoreNets.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        if (dis != null) {
+            try {
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
+                request.setAttribute("postOut", semObject);
                 request.setAttribute("paramRequest", paramRequest);
                 dis.include(request, response);
             } catch (Exception e) {
