@@ -234,7 +234,7 @@
                     while (it.hasNext()) {
                         SocialNetwork socialNetwork = (SocialNetwork) it.next();
                         if (socialNetwork instanceof Messageable && socialNetwork.isActive() && socialNetwork.isValid()) {
-                            if(socialNetwork instanceof Youtube && postIn == null ){//Only show youtube networks if is a response
+                            if(socialNetwork instanceof Youtube && postIn == null && postOut == null){//Only show youtube networks if is a response
                                 continue;
                             }
                             boolean isSelected = false;
