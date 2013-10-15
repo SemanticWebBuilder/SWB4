@@ -39,7 +39,7 @@ window.onload = function() {
             //alert(dataset.length);
             var selectObj = document.getElementById( 'propertiesSet' ) ;
             for (var i=0; i<dataSet.length; i++) {
-                var newOption = new Option(dataSet[i].name, dataSet[i].uri, false, false);
+                var newOption = new Option(dataSet[i].label, dataSet[i].uri, false, false);
                 selectObj.add(newOption);
             }
         }
