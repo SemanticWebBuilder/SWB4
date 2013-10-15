@@ -2155,6 +2155,21 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#Stream"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="blockofMsgToClassify">
+    <rdfs:label xml:lang="en">Block of messages to classify</rdfs:label>
+    <rdfs:label xml:lang="es">Bloque de mensajes a clasificar</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_blockofMsgToClassify">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >80</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#Stream"/>
+    <rdfs:comment>Enviar al clasificador un determinado número de mensajes o todos los que puedan llegar por la red social de un solo golpe. Si se registra un número en este campo apareceran los mensajes mas rapidamente clasificados en la pestaña "Mensajes de entrada" de un Stream y de los socialTopic, sin embargo, esto puede hacer que se generen mayor cantidad de threads en el aplicativo.</rdfs:comment>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="stream_KloutValue">
     <rdfs:label xml:lang="en">Klout greater than</rdfs:label>
     <rdfs:label xml:lang="es">Klout mayor a</rdfs:label>
