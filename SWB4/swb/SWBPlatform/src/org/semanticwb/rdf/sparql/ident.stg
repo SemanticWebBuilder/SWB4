@@ -1,0 +1,947 @@
+/*
+* Copyright 2011 - 2012 the original author or authors.
+*
+* All rights reserved.
+*
+* Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following
+* conditions are met:
+*
+* Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+* disclaimer.
+*
+* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following
+* disclaimer in the documentation and/or other materials provided with the distribution.
+*
+* Neither the name of the author or authors nor the names of its contributors may be used to endorse or promote
+* products derived from this software without specific prior written permission.
+*
+* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+* "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+* LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+* A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+* CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+* EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+* PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+* PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+* LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+* NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*
+* @author Simone Tripodi (simone.tripodi)
+* @author Michele Mostarda (michele.mostarda)
+* @author Juergen Pfundt (Juergen.Pfundt)
+*
+* J�rgen Pfundt, 28.07.2011 First draft of ident template
+*/
+
+group ident;
+
+/* All keywords are listed in the keywordMap
+ * A keyword is stored as key and mapped to a value (key:value)
+ * The keyword map represents a identity mapping: keywords are delivered in uppper case and mapped to upper case.
+ */
+keywordMap ::= [
+                "ADD":"ADD",
+                "AS":"AS",
+                "ALL":"ALL",
+                "ASC":"ASC",
+                "ASK":"ASK",
+                "BASE":"BASE",
+                "BIND":"BIND",
+                "BINDINGS":"BINDINGS",
+                "CLEAR":"CLEAR",
+                "CONSTRUCT":"CONSTRUCT",
+                "COPY":"COPY",
+                "CREATE":"CREATE",
+                "DATA":"DATA",
+                "DEFAULT":"DEFAULT",
+                "DELETE":"DELETE",
+                "DESC":"DESC",
+                "DESCRIBE":"DESCRIBE",
+                "DISTINCT":"DISTINCT",
+                "DROP":"DROP",
+                "FILTER":"FILTER",
+                "FROM":"FROM",
+                "GRAPH":"GRAPH",
+                "GROUP_BY":"GROUP BY",
+                "GROUP_CONCAT":"GROUP_CONCAT",
+                "HAVING":"HAVING",
+                "INSERT":"INSERT",
+                "INTO":"INTO",
+                "LOAD":"LOAD",
+                "LIMIT":"LIMIT",
+                "MINUS":"MINUS",
+                "MOVE":"MOVE",
+                "NAMED":"NAMED",
+                "OFFSET":"OFFSET",
+                "OPTIONAL":"OPTIONAL",
+                "ORDER_BY":"ORDER BY",
+                "PREFIX":"PREFIX",
+                "REDUCED":"REDUCED",
+                "SELECT":"SELECT",
+                "SERVICE":"SERVICE",
+                "SILENT":"SILENT",
+                "TO":"TO",
+                "UNDEF":"UNDEF",
+                "UNION":"UNION",
+                "USING":"USING",
+                "VALUES":"VALUES",
+                "WHERE":"WHERE",
+                "WITH":"WITH",
+                default:"---ERROR---" // not a keyword
+               ]
+
+builtInMap ::= [
+                "ABS":"Abs",
+                "AVG":"Avg",
+                "BNODE":"Bnode",
+                "BOUND":"Bound",
+                "CEIL":"Ceil",
+                "COALESCE":"Coalesce",
+                "CONCAT":"Concat",
+                "CONTAINS":"Contains",
+                "COUNT":"Count",
+                "DATATYPE":"Datatype",
+                "DAY":"Day",
+                "ENCODE_FOR_URI":"Encode_For_Uri",
+                "EXISTS":"Exists",
+                "FLOOR":"Floor",
+                "GROUP_CONCAT":"Group_Concat",
+                "HOURS":"Hours",
+                "IF":"If",
+                "IRI":"Iri",
+                "ISBLANK":"Isblank",
+                "ISIRI":"Isiri",
+                "ISLITERAL":"Isliteral",
+                "ISNUMERIC":"Isnumeric",
+                "ISURI":"Isuri",
+                "LANG":"Lang",
+                "LANGMATCHES":"Langmatches",
+                "LCASE":"Lcase",
+                "MAX":"Max",
+                "MD5":"Md5",
+                "MIN":"Min",
+                "MINUTES":"Minutes",
+                "MONTH":"Month",
+                "NOT_EXISTS":"Not Exists",
+                "NOW":"Now",
+                "RAND":"Rand",
+                "REGEX":"Regex",
+                "REPLACE":"Replace",
+                "ROUND":"Round",
+                "SAMETERM":"Sameterm",
+                "SAMPLE":"Sample",
+                "SECONDS":"Seconds",
+                "SHA1":"Sha1",
+                "SHA256":"Sha256",
+                "SHA384":"Sha384",
+                "SHA512":"Sha512",
+                "STR":"Str",
+                "STRAFTER":"Strafter",
+                "STRBEFORE":"Strbefore",
+                "STRDT":"StrDt",
+                "STRENDS":"Strends",
+                "STRLANG":"Strlang",
+                "STRLEN":"Strlen",
+                "STRSTARTS":"Strstarts",
+                "STRUUID":"Struuid",
+                "SUBSTR":"Substr",
+                "SUM":"Sum",
+                "TIMEZONE":"Timezone",
+                "TZ":"Tz",
+                "UCASE":"Ucase",
+                "URI":"Uri",
+                "UUID":"Uuid",
+                "YEAR":"Year",
+                default:"+++ERROR+++" // not a built in function
+               ]
+
+/*
+ * Indent a line by the specified characters.
+ * Modifying this template, modifies the indentation for the complete output
+ */ 
+indent(line) ::= "   <line>"
+
+query(prologue, selectQuery, constructQuery, describeQuery, askQuery, valuesClause, updateCommand) ::= <<
+<if(prologue)><prologue><if(selectQuery)><selectQuery><elseif(constructQuery)><constructQuery><elseif(describeQuery)><describeQuery><elseif(askQuery)><askQuery><endif><if(valuesClause)><valuesClause><endif><else><updateCommand><endif>
+>>
+
+prologue(baseDecl, prefixDecl) ::= <<
+<baseDecl; separator="\n"><if(baseDecl)><\n><endif><prefixDecl; separator="\n"><if(prefixDecl)><\n><endif><if(baseDecl || prefixDecl)><\n><endif>
+>>
+
+baseDecl(iriref) ::= <<
+<keywordMap.BASE> \<<iriref>\>
+>>
+
+prefixDecl(pname, iriref) ::= <<
+<keywordMap.PREFIX> <pname> \<<iriref>\>
+>>
+
+selectQuery(selectClause, datasetClause, whereClause, solutionModifier) ::= <<
+<if(selectClause)><selectClause><endif><if(datasetClause)><\n><datasetClause; separator="\n"><endif><if(whereClause)><\n><whereClause><endif><if(solutionModifier)><solutionModifier><endif>
+>>
+
+subSelect(selectClause, whereClause, solutionModifier, valuesClause) ::= <<
+<if(selectClause)><selectClause><\n><endif><if(whereClause)><whereClause><endif><if(solutionModifier)><solutionModifier><endif><if(valuesClause)><valuesClause><endif>
+>>
+
+selectClause(attribute, ASTERISK, selectVariables) ::= <<
+<keywordMap.SELECT> <if(attribute)><keywordMap.(attribute)> <endif><if(ASTERISK)><ASTERISK><else><selectVariables; wrap, anchor, separator=" "><endif>
+>>
+
+selectVariables(expression, var) ::= <<
+<if(expression)>(<expression> AS <var>)<else><var><endif>
+>>
+
+constructQuery(constructTemplate, datasetClause, whereClause, triplesTemplate, solutionModifier) ::= <<
+<keywordMap.CONSTRUCT> <if(constructTemplate)>{<\n><constructTemplate><\n>}<if(datasetClause)><\n><datasetClause; separator="\n"><endif><\n><whereClause><if(solutionModifier)><\n><solutionModifier><endif><else><if(datasetClause)><\n><datasetClause; separator="\n"><endif><\n><keywordMap.WHERE> { <if(triplesTemplate)><\n><triplesTemplate:indent()><endif><\n>}<if(solutionModifier)><solutionModifier><endif><endif>
+>>
+
+describeQuery(ASTERISK, varOrIRI, datasetClause, whereClause, solutionModifier) ::= <<
+<keywordMap.DESCRIBE> <if(ASTERISK)><ASTERISK><elseif(varOrIRI)><varOrIRI; wrap, separator=" "><endif><if(datasetClause)><\n><datasetClause; separator="\n"><endif><if(whereClause)><\n><whereClause><endif><if(solutionModifier)><solutionModifier><endif>
+>>
+
+askQuery(datasetClause, whereClause, solutionModifier) ::= <<
+<keywordMap.ASK><if(datasetClause)><\n><datasetClause; separator="\n"><endif><\n><whereClause><if(solutionModifier)><solutionModifier><endif>
+>>
+
+datasetClause(NAMED, iri) ::= <<
+<keywordMap.FROM> <if(NAMED)><keywordMap.NAMED> <endif><iri>
+>>
+
+whereClause(groupGraphPattern) ::= <<
+<keywordMap.WHERE> {
+<if(groupGraphPattern)><groupGraphPattern:indent()><endif>
+}
+>>
+
+solutionModifier(groupClause, havingClause, orderClause, limitOffsetClauses) ::= <<
+<if(groupClause)><\n><groupClause><if(havingClause)><\n><havingClause><endif><if(orderClause)><\n><orderClause><endif><if(limitOffsetClauses)><\n><limitOffsetClauses><endif><elseif(havingClause)><\n><havingClause><if(orderClause)><\n><orderClause><endif><if(limitOffsetClauses)><\n><limitOffsetClauses><endif><elseif(orderClause)><\n><orderClause><if(limitOffsetClauses)><\n><limitOffsetClauses><endif><elseif(limitOffsetClauses)><\n><limitOffsetClauses><endif>
+>>
+
+groupClause(groupCondition) ::= <<
+<keywordMap.GROUP_BY> <groupCondition; wrap, anchor, separator="\n">
+>>
+
+groupCondition(builtInCall, functionCall, expression, var) ::= <<
+<if(builtInCall)><builtInCall><elseif(functionCall)><functionCall><elseif(expression)>(<expression><if(var)> AS <var><endif>)<elseif(var)><var><endif>
+>>
+
+havingClause(havingCondition) ::= <<
+<keywordMap.HAVING> <havingCondition; wrap, anchor, separator="\n">
+>>
+
+havingCondition(constraint) ::= <<
+<constraint>
+>>
+
+orderClause(orderCondition) ::= <<
+<keywordMap.ORDER_BY> <orderCondition; wrap, anchor, separator="\n">
+>>
+
+orderCondition(ASC, DESC, expression, constraint, var) ::= <<
+<if(ASC)><keywordMap.ASC> (<expression>)<elseif(DESC)><keywordMap.DESC> (<expression>)<elseif(constraint)><constraint><elseif(var)><var><endif>
+>>
+
+limitOffsetClauses(limitClause, offsetClause) ::= <<
+<if(limitClause)><limitClause><if(offsetClause)><\n><offsetClause><endif><elseif(offsetClause)><\n><offsetClause><endif>
+>>
+
+limitClause(limit) ::= <<
+<keywordMap.LIMIT> <limit>
+>>
+
+offsetClause(offset) ::= <<
+<keywordMap.OFFSET> <offset>
+>>
+
+valuesClause(dataBlock) ::= <<
+<if(dataBlock)><\n><keywordMap.VALUES> <dataBlock><endif>
+>>
+
+updateCommand(prologue, update, updateCommand) ::= <<
+<if(prologue)><prologue><if(update)><update><if(updateCommand)>;<updateCommand><endif><endif><endif>
+>>
+
+update(load, clear, drop, add, move, copy, create, insertData, deleteData, deleteWhere, modify) ::= <<
+<if(load)><load><elseif(clear)><clear><elseif(drop)><drop><elseif(add)><add><elseif(move)><move><elseif(copy)><copy><elseif(create)><create><elseif(insertData)><insertData><elseif(deleteData)><deleteData><elseif(deleteWhere)><deleteWhere><elseif(modify)><modify><endif>
+>>
+
+load(SILENT, iri, graphRef) ::= <<
+<keywordMap.LOAD> <if(SILENT)><keywordMap.SILENT> <endif><iri><if(graphRef)> <keywordMap.INTO> <graphRef><endif>
+>>
+
+clear(SILENT, graphRefAll) ::= <<
+<keywordMap.CLEAR> <if(SILENT)><keywordMap.SILENT> <endif><graphRefAll>
+>>
+
+drop(SILENT, graphRefAll) ::= <<
+<keywordMap.DROP> <if(SILENT)><keywordMap.SILENT> <endif><graphRefAll>
+>>
+
+create(SILENT, graphRef) ::= <<
+<keywordMap.CREATE> <if(SILENT)><keywordMap.SILENT> <endif><graphRef>
+>>
+
+add(SILENT, graphOrDefault1, graphOrDefault2) ::= <<
+<keywordMap.ADD> <if(SILENT)><keywordMap.SILENT> <endif><graphOrDefault1> <keywordMap.TO> <graphOrDefault2>
+>>
+
+move(SILENT, graphOrDefault1, graphOrDefault2) ::= <<
+<keywordMap.MOVE> <if(SILENT)><keywordMap.SILENT> <endif><graphOrDefault1> <keywordMap.TO> <graphOrDefault2>
+>>
+
+copy(SILENT, graphOrDefault1, graphOrDefault2) ::= <<
+<keywordMap.COPY> <if(SILENT)><keywordMap.SILENT> <endif><graphOrDefault1> <keywordMap.TO> <graphOrDefault2>
+>>
+
+insertData(quadData) ::= <<
+<keywordMap.INSERT> <keywordMap.DATA> <quadData>
+>>
+
+deleteData(quadData) ::= <<
+<keywordMap.DELETE> <keywordMap.DATA> <quadData>
+>>
+
+deleteWhere(quadPattern) ::= <<
+<keywordMap.DELETE> <keywordMap.WHERE> <quadPattern>
+>>
+
+modify(iri, deleteClause, insertClause, usingClause, groupGraphPattern) ::= <<
+<if(iri)><keywordMap.WITH> <iri><\n><endif><if(deleteClause)><deleteClause><if(insertClause)><\n><insertClause><endif><else><insertClause><endif><if(usingClause)><\n><usingClause; wrap, separator="\n"><endif><\n><keywordMap.WHERE> {<\n><groupGraphPattern:indent()><\n>}
+>>
+
+deleteClause(quadPattern) ::= <<
+<keywordMap.DELETE> <quadPattern>
+>>
+
+insertClause(quadPattern) ::= <<
+<keywordMap.INSERT> <quadPattern>
+>>
+
+usingClause(NAMED, iri) ::= <<
+<keywordMap.USING><if(NAMED)> <keywordMap.NAMED><endif> <iri>
+>>
+
+graphOrDefault(DEFAULT, GRAPH, iri) ::= <<
+<if(DEFAULT)><keywordMap.DEFAULT><else><if(GRAPH)><keywordMap.GRAPH> <endif><iri><endif>
+>>
+
+graphRef(iri) ::= <<
+<keywordMap.GRAPH> <iri>
+>>
+
+graphRefAll(graphRef, DEFAULT, NAMED, ALL) ::= <<
+<if(graphRef)><graphRef><elseif(DEFAULT)><keywordMap.DEFAULT><elseif(NAMED)><keywordMap.NAMED><elseif(ALL)><keywordMap.ALL><endif>
+>>
+
+quadPattern(quads) ::= <<
+{
+<quads:indent()>
+}
+>>
+
+quadData(quads) ::= <<
+{
+<quads:indent()>
+}
+>>
+
+quads(triplesTemplate, quadsDetails) ::= <<
+<if(triplesTemplate)><triplesTemplate><if(quadsDetails)><\n><endif><endif><quadsDetails; wrap, separator="\n">
+>>
+
+quadsDetails(quadsNotTriples, triplesTemplate) ::= <<
+<quadsNotTriples><if(triplesTemplate)> . <triplesTemplate><endif> 
+>>
+
+quadsNotTriples(varOrIRI, triplesTemplate) ::= <<
+<keywordMap.GRAPH> <varOrIRI><if(triplesTemplate)> {
+<triplesTemplate:indent()>
+}<else>{ }<endif>
+>>
+
+triplesTemplate(triplesSameSubject) ::= <<
+<triplesSameSubject; separator=" .\n">
+>>
+
+groupGraphPattern(subSelect, groupGraphPatternSub) ::= <<
+<if(subSelect)><subSelect><elseif(groupGraphPatternSub)><groupGraphPatternSub><endif>
+>>
+
+groupGraphPatternSub(triplesBlock, groupGraphPatternSubList) ::= <<
+<if(triplesBlock)><triplesBlock><endif><if(groupGraphPatternSubList)><if(triplesBlock)><\n><endif><groupGraphPatternSubList; separator="\n"><endif>
+>>
+
+groupGraphPatternSubList(graphPatternNotTriples, triplesBlock) ::= <<
+<if(graphPatternNotTriples)><graphPatternNotTriples><endif><if(triplesBlock)><\n><triplesBlock><endif>
+>>
+
+triplesBlock(triplesSameSubjectPath) ::= <<
+<triplesSameSubjectPath; separator=" .\n">
+>>
+
+graphPatternNotTriples(groupOrUnionGraphPattern, optionalGraphPattern, minusGraphPattern, graphGraphPattern, serviceGraphPattern, filter, bind, inlineData) ::= <<
+<if(groupOrUnionGraphPattern)><groupOrUnionGraphPattern><elseif(optionalGraphPattern)><optionalGraphPattern><elseif(minusGraphPattern)><minusGraphPattern><elseif(graphGraphPattern)><graphGraphPattern><elseif(serviceGraphPattern)><serviceGraphPattern><elseif(filter)><filter><elseif(bind)><bind><elseif(inlineData)><inlineData><endif>
+>>
+
+optionalGraphPattern(groupGraphPattern) ::= <<
+<keywordMap.OPTIONAL> {
+<groupGraphPattern:indent()>
+}
+>>
+
+graphGraphPattern(varOrIRI, groupGraphPattern) ::= <<
+<keywordMap.GRAPH> <varOrIRI> {
+<groupGraphPattern:indent()>
+}
+>>
+
+serviceGraphPattern(SILENT, varOrIRI, groupGraphPattern) ::= <<
+<keywordMap.SERVICE><if(SILENT)> <keywordMap.SILENT><endif> <varOrIRI> {
+<groupGraphPattern:indent()>
+}
+>>
+
+bind(expression, var) ::= <<
+<keywordMap.BIND>(<expression> <keywordMap.AS> <var>)
+>>
+
+inlineData(dataBlock) ::= <<
+<\n><keywordMap.VALUES; anchor> <dataBlock>
+>>
+
+dataBlock(inlineDataOneVar, inlineDataFull) ::= <<
+<if(inlineDataOneVar)><inlineDataOneVar><elseif(inlineDataFull)><inlineDataFull><endif>
+>>
+
+inlineDataOneVar(var, dataBlockValue) ::= <<
+<var> {<dataBlockValue; separator="\n">}
+>>
+
+inlineDataFull(var, dataBlockValues) ::= <<
+(<var; anchor, wrap, separator=" ">) {<\n><dataBlockValues:indent(); anchor, wrap, separator="\n"><\n>}
+>>
+
+dataBlockValues(dataBlockValue) ::= <<
+(<dataBlockValue; anchor, wrap, separator=" ">)
+>>
+
+dataBlockValue(iri, rdfLiteral, numericLiteral, booleanLiteral, UNDEF) ::= <<
+<if(iri)><iri><elseif(rdfLiteral)><rdfLiteral><elseif(numericLiteral)><numericLiteral><elseif(booleanLiteral)><booleanLiteral><else><keywordMap.UNDEF><endif>
+>>
+
+minusGraphPattern(groupGraphPattern) ::= <<
+<keywordMap.MINUS> {
+<groupGraphPattern:indent()>
+}
+>>
+ 
+groupOrUnionGraphPattern(groupGraphPattern) ::= <<
+{
+<groupGraphPattern:indent(); separator="\n}\nUNION\n{\n">
+}
+>>
+
+filter(constraint) ::= <<
+<keywordMap.FILTER><constraint>
+>>
+
+constraint(expression, builtInCall, functionCall) ::= <<
+<if(expression)>(<expression>)<elseif(builtInCall)> <builtInCall><elseif(functionCall)><functionCall><endif>
+>>
+
+functionCall(iri, argList) ::= <<
+<iri>(<argList>)
+>>
+
+argList(DISTINCT, expressionList) ::= <<
+<if(DISTINCT)><keywordMap.DISTINCT> <endif><if(expressionList)><expressionList; wrap, separator=", "><endif>
+>>
+
+expressionList(expression) ::= <<
+<if(expression)><expression; anchor, wrap, separator=", "><endif>
+>>
+
+constructTemplate(constructTriples) ::= <<
+<if(constructTriples)><constructTriples><endif>
+>>
+
+constructTriples(triplesSameSubject, constructTriples) ::= <<
+<triplesSameSubject:indent()><if(constructTriples)>.<\n><constructTriples><endif>
+>>
+
+triplesSameSubject(varOrTerm, propertyListNotEmpty, triplesNode, propertyList) ::= <<
+<if(varOrTerm)><varOrTerm> <propertyListNotEmpty><elseif(triplesNode)><triplesNode> <propertyList><endif>
+>>
+
+propertyList(propertyListNotEmpty) ::= <<
+<if(propertyListNotEmpty)><propertyListNotEmpty><endif>
+>>
+
+propertyListNotEmpty(verb, objectList) ::= <<
+<verb, objectList : {v, o |<v> <o>}; wrap, anchor, separator=" ;\n">
+>>
+
+verb(varOrIRI, A) ::= <<
+<if(varOrIRI)><varOrIRI><else><A><endif>
+>>
+
+objectList(object) ::= <<
+<object; wrap, anchor, separator=",\n">
+>>
+
+object(graphNode) ::= <<
+<graphNode>
+>>
+
+triplesSameSubjectPath(varOrTerm, propertyListPathNotEmpty, triplesNodePath, propertyListPath) ::= <<
+<if(varOrTerm)><varOrTerm> <propertyListPathNotEmpty; anchor><elseif(triplesNodePath)><triplesNodePath:indent()><if(propertyListPath)> <propertyListPath><endif><endif>
+>>
+
+propertyListPath(propertyListPathNotEmpty) ::= <<
+<if(propertyListPathNotEmpty)><propertyListPathNotEmpty><endif>
+>>
+
+propertyListPathNotEmpty(verbPath, verbSimple, objectListPath, propertyListPathNotEmptyList) ::= <<
+<if(verbPath)><verbPath><elseif(verbSimple)><verbSimple><endif> <objectListPath><if(propertyListPathNotEmptyList)>;<\n><propertyListPathNotEmptyList; separator=";\n"><endif>
+>>
+
+propertyListPathNotEmptyList(verbPath, verbSimple, objectList) ::= <<
+<if(verbPath)><verbPath><elseif(verbSimple)><verbSimple><endif><if(objectList)> <objectList><endif>
+>>
+
+verbPath(path) ::= <<
+<path>
+>>
+
+verbSimple(var) ::= <<
+<var>
+>>
+
+objectListPath(objectPath) ::= <<
+<objectPath; separator=" ,\n">
+>>
+
+objectPath(graphNodePath) ::= <<
+<graphNodePath>
+>>
+
+path(pathAlternative) ::= <<
+<pathAlternative>
+>>
+
+pathAlternative(pathSequence) ::= <<
+<pathSequence; wrap, separator="|">
+>>
+
+pathSequence(pathEltOrInverse) ::= <<
+<pathEltOrInverse; wrap, separator="/">
+>>
+
+pathElt(pathPrimary, pathMod) ::= <<
+<pathPrimary><if(pathMod)><pathMod><endif>
+>>
+
+pathEltOrInverse(INVERSE, pathElt) ::= <<
+<if(INVERSE)><INVERSE><endif><pathElt>
+>>
+
+pathMod(QUESTION_MARK, ASTERISK, PLUS) ::= <<
+<if(ASTERISK)><ASTERISK><elseif(QUESTION_MARK)><QUESTION_MARK><elseif(PLUS)><PLUS><endif>
+>>
+
+pathPrimary(iri, A, pathNegatedPropertySet, DISTINCT, path) ::= <<
+<if(iri)><iri><elseif(A)><A><elseif(pathNegatedPropertySet)>!<pathNegatedPropertySet><elseif(path)><if(DISTINCT)><keywordMap.DISTINCT> <endif>(<path>)<endif>
+>>
+
+pathNegatedPropertySet(pathOneInPropertySet) ::= <<
+(<pathOneInPropertySet; wrap, separator="|">)
+>>
+
+pathOneInPropertySet(INVERSE, iri, A) ::= <<
+<if(INVERSE)><INVERSE><endif><if(iri)><iri><else><A><endif>
+>>
+
+integer(INTEGER) ::= <<
+<INTEGER>
+>>
+
+triplesNode(collection, blankNodePropertyList) ::= <<
+<if(collection)><collection><elseif(blankNodePropertyList)><blankNodePropertyList><endif>
+>>
+
+blankNodePropertyList(propertyListNotEmpty) ::= <<
+[<propertyListNotEmpty>]
+>>
+
+triplesNodePath(collectionPath, blankNodePropertyListPath) ::= <<
+<if(collectionPath)><collectionPath><elseif(blankNodePropertyListPath)><blankNodePropertyListPath><endif>
+>>
+
+blankNodePropertyListPath(propertyListPathNotEmpty) ::= <<
+[<propertyListPathNotEmpty>]
+>>
+
+collection(graphNode) ::= <<
+(<graphNode; wrap, separator="">)
+>>
+
+collectionPath(graphNodePath) ::= <<
+(<graphNodePath; wrap, separator=" ">)
+>>
+
+graphNode(varOrTerm, triplesNode) ::= <<
+<if(varOrTerm)><varOrTerm><else><triplesNode><endif>
+>>
+
+graphNodePath(varOrTerm, triplesNodePath) ::= <<
+<if(varOrTerm)><varOrTerm><else><triplesNodePath><endif>
+>>
+
+varOrTerm(var, graphTerm) ::= <<
+<if(var)><var><else><graphTerm><endif>
+>>
+
+varOrIRI(var, iri) ::= <<
+<if(var)><var><else><iri><endif>
+>>
+
+var(value) ::= <<
+<value>
+>>
+
+graphTerm(iri, rdfLiteral, numericLiteral, booleanLiteral, blankNode, nil) ::= <<
+<if(iri)><iri><elseif(rdfLiteral)><rdfLiteral><elseif(numericLiteral)><numericLiteral><elseif(booleanLiteral)><booleanLiteral><elseif(blankNode)><blankNode><else><nil><endif>
+>>
+
+nil() ::= <<
+()
+>>
+
+baseExpression(primaryExpression) ::= <<
+<primaryExpression>
+>>
+
+unaryMultiplicativeExpression(MULTIPLY, DIVIDE, expression) ::= <<
+<if(MULTIPLY)>*<else>/<endif><expression>
+>>
+
+unaryAdditiveExpression(ADD, SUBTRACT, expression) ::= <<
+<if(ADD)>+<else>-<endif><expression>
+>>
+
+unaryNegationExpression(expression) ::= <<
+!<expression>
+>>
+
+multiplicativeExpression(leftExpression, MULTIPLY, DIVIDE, rightExpression) ::= <<
+<leftExpression><if(MULTIPLY)>*<else>/<endif><rightExpression>
+>>
+
+additiveExpression(leftExpression, ADD, SUBTRACT, rightExpression) ::= <<
+<leftExpression><if(ADD)>+<else>-<endif><rightExpression>
+>>
+
+unarySignedLiteralExpression(expression, unaryLiteralExpression) ::= <<
+<expression><unaryLiteralExpression>
+>>
+
+relationalSetExpression(leftExpression, NOT, IN, expressionList) ::= <<
+<leftExpression><if(NOT)> NOT<endif><if(IN)> IN<endif>(<expressionList>)
+>>
+
+relationalExpression(leftExpression, operator, rightExpression) ::= <<
+<leftExpression> <operator> <rightExpression>
+>>
+
+conditionalAndExpression(leftExpression, rightExpression) ::= <<
+<leftExpression> && <rightExpression>
+>>
+
+conditionalOrExpression(leftExpression, rightExpression) ::= <<
+<leftExpression> || <rightExpression>
+>>
+
+unaryLiteralExpression(numericLiteralPositive, numericLiteralNegative, operator, unaryExpression) ::= <<
+<if(numericLiteralPositive)><numericLiteralPositive><else><numericLiteralNegative><endif><operator><unaryExpression>
+>>
+
+unaryExpression(operator, primaryExpression) ::= <<
+<if(operator)><operator><endif><primaryExpression>
+>>
+
+primaryExpression(expression, builtInCall, iriRefOrFunction, rdfLiteral, numericLiteral, booleanLiteral, var) ::= <<
+<if(expression)><expression><elseif(builtInCall)><builtInCall><elseif(iriRefOrFunction)><iriRefOrFunction><elseif(rdfLiteral)><rdfLiteral><elseif(numericLiteral)><numericLiteral><elseif(booleanLiteral)><booleanLiteral><elseif(var)><var><endif>
+>>
+
+builtInCall(aggregate, builtInFunction, var, expression, expressionList, subStringExpression, strReplaceExpression, regexExpression, existsFunction, notExistsFunction) ::= <<
+<if(aggregate)><aggregate><elseif(expressionList)><(builtInFunction)(expressionList)><elseif(var)><(builtInFunction)(var)><elseif(builtInFunction)><(builtInFunction)(expression)><else><subStringExpression><strReplaceExpression><regexExpression><existsFunction><notExistsFunction><endif>
+>>
+
+STR(expression) ::= <<
+<builtInMap.STR>(<expression>)
+>>
+
+LANG(expression) ::= <<
+<builtInMap.LANG>(<expression>)
+>>
+
+LANGMATCHES(expression) ::= <<
+<builtInMap.LANGMATCHES>(<expression; wrap, separator=",">)
+>>
+
+DATATYPE(expression) ::= <<
+<builtInMap.DATATYPE>(<expression>)
+>>
+
+BOUND(var) ::= <<
+<builtInMap.BOUND>(<var>)
+>>
+
+IRI(expression) ::= <<
+<builtInMap.IRI>(<expression>)
+>>
+
+URI(expression) ::= <<
+<builtInMap.URI>(<expression>)
+>>
+
+BNODE(expression) ::= <<
+<builtInMap.BNODE>(<if(expression)><expression><endif>)
+>>
+
+RAND(expression) ::= <<
+<builtInMap.RAND>()
+>>
+
+ABS(expression) ::= <<
+<builtInMap.ABS>(<expression>)
+>>
+
+CEIL(expression) ::= <<
+<builtInMap.CEIL>(<expression>)
+>>
+
+FLOOR(expression) ::= <<
+<builtInMap.FLOOR>(<expression>)
+>>
+
+ROUND(expression) ::= <<
+<builtInMap.ROUND>(<expression>)
+>>
+
+CONCAT(expressionList) ::= <<
+<builtInMap.CONCAT>(<expressionList>)
+>>
+
+subStringExpression(expression) ::= <<
+<builtInMap.SUBSTR>(<expression; wrap, separator=", ">)
+>>
+
+STRLEN(expression) ::= <<
+<builtInMap.STRLEN>(<expression>)
+>>
+
+strReplaceExpression(expression) ::= <<
+<builtInMap.REPLACE>(<expression; wrap, separator=", ">)
+>>
+
+UCASE(expression) ::= <<
+<builtInMap.UCASE>(<expression>)
+>>
+
+LCASE(expression) ::= <<
+<builtInMap.LCASE>(<expression>)
+>>
+
+ENCODE_FOR_URI(expression) ::= <<
+<builtInMap.ENCODE_FOR_URI>(<expression>)
+>>
+
+CONTAINS(expression) ::= <<
+<builtInMap.CONTAINS>(<expression; wrap, separator=", ">)
+>>
+
+STRSTARTS(expression) ::= <<
+<builtInMap.STRSTARTS>(<expression; wrap, separator=", ">)
+>>
+
+STRENDS(expression) ::= <<
+<builtInMap.STRENDS>(<expression; wrap, separator=", ">)
+>>
+
+STRBEFORE(expression) ::= <<
+<builtInMap.STRBEFORE>(<expression; wrap, separator=", ">)
+>>
+
+STRAFTER(expression) ::= <<
+<builtInMap.STRAFTER>(<expression; wrap, separator=", ">)
+>>
+
+YEAR(expression) ::= <<
+<builtInMap.YEAR>(<expression>)
+>>
+
+MONTH(expression) ::= <<
+<builtInMap.MONTH>(<expression>)
+>>
+
+DAY(expression) ::= <<
+<builtInMap.DAY>(<expression>)
+>>
+
+HOURS(expression) ::= <<
+<builtInMap.HOURS>(<expression>)
+>>
+
+MINUTES(expression) ::= <<
+<builtInMap.MINUTES>(<expression>)
+>>
+
+SECONDS(expression) ::= <<
+<builtInMap.SECONDS>(<expression>)
+>>
+
+TIMEZONE(expression) ::= <<
+<builtInMap.TIMEZONE>(<expression>)
+>>
+
+TZ(expression) ::= <<
+<builtInMap.TZ>(<expression>)
+>>
+
+NOW(expression) ::= <<
+<builtInMap.NOW>()
+>>
+
+UUID(expression) ::= <<
+<builtInMap.UUID>()
+>>
+
+STRUUID(expression) ::= <<
+<builtInMap.STRUUID>()
+>>
+
+MD5(expression) ::= <<
+<builtInMap.MD5>(<expression>)
+>>
+
+SHA1(expression) ::= <<
+<builtInMap.SHA1>(<expression>)
+>>
+
+SHA256(expression) ::= <<
+<builtInMap.SHA256>(<expression>)
+>>
+
+SHA384(expression) ::= <<
+<builtInMap.SHA384>(<expression>)
+>>
+
+SHA512(expression) ::= <<
+<builtInMap.SHA512>(<expression>)
+>>
+
+COALESCE(expressionList) ::=<<
+<builtInMap.COALESCE>(<expressionList>)
+>>
+
+IF(expression) ::= <<
+<builtInMap.IF>(<expression; wrap, separator=", ">)
+>>
+
+STRLANG(expression) ::= <<
+<builtInMap.STRLANG>(<expression; wrap, separator=", ">)
+>>
+
+STRDT(expression) ::= <<
+<builtInMap.STRDT>(<expression; wrap, separator=", ">)
+>>
+
+SAMETERM(expression) ::= <<
+<builtInMap.SAMETERM>(<expression; wrap, separator=", ">)
+>>
+
+ISIRI(expression) ::= <<
+<builtInMap.ISIRI>(<expression>)
+>>
+
+ISURI(expression) ::= <<
+<builtInMap.ISURI>(<expression>)
+>>
+
+ISBLANK(expression) ::= <<
+<builtInMap.ISBLANK>(<expression>)
+>>
+
+ISLITERAL(expression) ::= <<
+<builtInMap.ISLITERAL>(<expression>)
+>>
+
+ISNUMERIC(expression) ::= <<
+<builtInMap.ISNUMERIC>(<expression>)
+>>
+
+regexExpression(expression) ::= <<
+<builtInMap.REGEX>(<expression; wrap, separator=", ">)
+>>
+
+existsFunction(groupGraphPattern) ::= <<
+<builtInMap.EXISTS> {<\n>   <groupGraphPattern:indent()><\n>}
+>>
+
+notExistsFunction(groupGraphPattern) ::= <<
+<builtInMap.NOT_EXISTS> {<\n>   <groupGraphPattern:indent()><\n>}
+>>
+
+aggregate(operation, attribute, whatever, expression, string) ::= <<
+<builtInMap.(operation)>(<if(attribute)><attribute> <endif><if(whatever)><whatever><endif><if(expression)><expression><endif><if(string)>; SEPARATOR=<string><endif>)
+>>
+
+iriRefOrFunction(iri, argList) ::= <<
+<if(argList)><iri>(<argList>)<else><iri><endif>
+>>
+
+rdfLiteral(string, langTag, iri) ::= <<
+<string><if(langTag)><langTag><elseif(iri)>^^<iri><endif>
+>>
+
+numericLiteral(numericLiteralUnsigned, numericLiteralPositive, numericLiteralNegative) ::= <<
+<if(numericLiteralUnsigned)><numericLiteralUnsigned><elseif(numericLiteralPositive)><numericLiteralPositive><elseif(numericLiteralNegative)><numericLiteralNegative><endif>
+>>
+
+numericLiteralUnsigned(value) ::= <<
+<value>
+>>
+
+numericLiteralPositive(value) ::= <<
+<value>
+>>
+
+numericLiteralNegative(value) ::= <<
+<value>
+>>
+
+booleanLiteral(value) ::= <<
+<value>
+>>
+
+string(value) ::= <%<value>%>
+
+iri(IRIREF, prefixedName) ::= <<
+<if(IRIREF)>\<<IRIREF>\><else><prefixedName><endif>
+>>
+
+prefixedName(value) ::= <<
+<value>
+>>
+
+blankNode(value, anon) ::= <<
+<if(value)><value><else><anon><endif>
+>>
+
+anon() ::= <<
+[ ]
+>>
