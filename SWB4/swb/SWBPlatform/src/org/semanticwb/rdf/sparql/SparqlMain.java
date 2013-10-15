@@ -117,7 +117,7 @@ public class SparqlMain {
 "}\n" +
 "LIMIT 100";
 			//lex = new SparqlLexer(new ANTLRFileStream(args[0]));
-                        lex = new SparqlLexer(new ANTLRInputStream("select ?s ?p ?o where {?s a ?o; hola:asd <http://sdf.ser:sadasd>. ?s ?p2 ?o2}"));
+                        lex = new SparqlLexer(new ANTLRInputStream("select (count(*) as ?c) ?s ?p ?o where {?s a ?o; hola:asd <http://sdf.ser:sadasd>. ?s ?p2 ?o2}"));
                         //lex = new SparqlLexer(new ANTLRInputStream(q));
                         
 		} catch (Exception ex) {

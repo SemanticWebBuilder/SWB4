@@ -44,6 +44,7 @@ public class SparqlProcessor
     private QueryNode temp_obj;    
     private boolean temp_typed=false;    
     private boolean temp_orderbydesc;    
+    private boolean isCount=false;
     
     public static void main(String args[])
     {
@@ -57,7 +58,7 @@ public class SparqlProcessor
                     "\n" +
 //                    "select ?nombre ?telefono ?estado ?nempresa ?telempresa\n" +
 //                    "select (count(?s) as ?c)\n" +
-                "select *\n" +
+                "select count(*)\n" +
                     "where {\n" +
                     "  ?s a onto:Persona.\n" +
                     "  ?s prop:nombre ?nombre.\n" +
@@ -122,6 +123,17 @@ public class SparqlProcessor
 
     public void process(Model model, String sparql)
     {
+        if(sparql==null)return;
+        
+        //Validacion de contador no estandar de sparql 
+        int ci=sparql.toLowerCase().indexOf("count(*)");
+        if(ci>-1)
+        {
+            sparql=sparql.substring(0,ci)+"*"+sparql.substring(ci+8);
+            isCount=true;
+        }
+        System.out.println(sparql);
+        
         SparqlLexer lex = null;
         try
         {
@@ -271,62 +283,81 @@ public class SparqlProcessor
         
         if(querytype.equals("select"))
         {
-            if(SWBUtils.DB.getDatabaseType()==SWBUtils.DB.DBTYPE_MySQL)
+            String dbtype=SWBUtils.DB.DBTYPE_HSQLDB;
+            
+            try
+            {
+                dbtype=SWBUtils.DB.getDatabaseType();
+            }catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            
+            if(dbtype==SWBUtils.DB.DBTYPE_MySQL)
             {
                 select.append("select STRAIGHT_JOIN");  //Ordenamiento directo
             }else
             {
-                select.append("select ");  //Ordenamiento directo
+                select.append("select");  //Ordenamiento directo
             }
-            Iterator<QueryNode> it=null;
-            if(!sparams.isEmpty())
+            if(isCount)
             {
-                it=sparams.iterator();
+                select.append(" count(*)"); 
             }else
             {
-                it=ovars.iterator();               
-            }
-            boolean first=true;
-            while (it.hasNext())
-            {
-                QueryNode node = it.next();
-                if(first)
+                Iterator<QueryNode> it=null;
+                if(!sparams.isEmpty())
                 {
-                    select.append(" ");
-                    first=false;
+                    it=sparams.iterator();
+                }else
+                {
+                    it=ovars.iterator();               
                 }
-                else select.append(", ");
-                select.append(node.getLastInternalVar()+" as "+node.getValue().substring(1));
-                //select.append(", ");
-                //select.append(node.getLastInternalVar().substring(0,node.getLastInternalVar().indexOf("."))+".ext as __ext__"+node.getValue().substring(1));
-            } 
+                boolean first=true;
+                while (it.hasNext())
+                {
+                    QueryNode node = it.next();
+                    if(first)
+                    {
+                        select.append(" ");
+                        first=false;
+                    }
+                    else select.append(", ");
+                    select.append(node.getLastInternalVar()+" as "+node.getValue().substring(1));
+                    //select.append(", ");
+                    //select.append(node.getLastInternalVar().substring(0,node.getLastInternalVar().indexOf("."))+".ext as __ext__"+node.getValue().substring(1));
+                } 
+            }
         }
         
-        if(!orderbyvars.isEmpty())
+        if(!isCount)
         {
-            ext.append("order by");
-            Iterator<OrderVar> it=orderbyvars.iterator();
-            boolean first=true;
-            while (it.hasNext())
+            if(!orderbyvars.isEmpty())
             {
-                OrderVar orderVar = it.next();
-                if(first)
+                ext.append("order by");
+                Iterator<OrderVar> it=orderbyvars.iterator();
+                boolean first=true;
+                while (it.hasNext())
                 {
-                    ext.append(" ");
-                    first=false;
-                }
-                else ext.append(", ");
-                ext.append(orderVar.getNode().getLastInternalVar());
-                if(orderVar.isDesc())ext.append(" desc");
-            }  
-            ext.append("\n");
-        }    
-        if(offset!=null && limit!=null)
-        {
-            ext.append("limit "+limit+" offset "+offset);
-        }else if(limit!=null)
-        {
-            ext.append("limit "+limit);
+                    OrderVar orderVar = it.next();
+                    if(first)
+                    {
+                        ext.append(" ");
+                        first=false;
+                    }
+                    else ext.append(", ");
+                    ext.append(orderVar.getNode().getLastInternalVar());
+                    if(orderVar.isDesc())ext.append(" desc");
+                }  
+                ext.append("\n");
+            }    
+            if(offset!=null && limit!=null)
+            {
+                ext.append("limit "+limit+" offset "+offset);
+            }else if(limit!=null)
+            {
+                ext.append("limit "+limit);
+            }
         }
         
         return select.toString()+"\n"+from.toString()+"\n"+where.toString()+"\n"+ext.toString();
