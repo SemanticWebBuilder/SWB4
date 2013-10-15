@@ -6,6 +6,7 @@ package org.semanticwb.rdf.sparql;
 
 import com.hp.hpl.jena.datatypes.BaseDatatype;
 import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.impl.LiteralLabelFactory;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QuerySolution;
@@ -440,8 +441,14 @@ public class SWBQueryExecution implements QueryExecution
 //                        {
 //                            if(sext!=null)ext=SWBUtils.IO.readInputStream(sext);
 //                        }catch(Exception e){log.error(e);}
-                        
-                        Node n = ((RGraph)model.getGraph()).decodeObject(rs.getString(name), ext);
+                        Node n = null;
+                        if(name.equals("count(*)"))
+                        {
+                            n=Node.createLiteral(LiteralLabelFactory.create(rs.getInt(name)));
+                        }else
+                        {
+                            n = ((RGraph)model.getGraph()).decodeObject(rs.getString(name), ext);
+                        }
                         if (n != null)
                         {
                             v_row.add(Var.alloc(rsmd.getColumnLabel(i)), n);
