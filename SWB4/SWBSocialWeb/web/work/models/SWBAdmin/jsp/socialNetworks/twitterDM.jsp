@@ -65,6 +65,8 @@
             out.println("</div>");
 %>    
 <div id="<%=objUri%>/getMoreDM" dojoType="dojox.layout.ContentPane">
-    <label id="<%=objUri%>/moreDMLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMoreDM").setParameter("maxTweetID", maxTweetID+"")%>','<%=objUri%>/getMoreDM', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;">More Direct Messages</a></label>
+    <div align="center">
+        <label id="<%=objUri%>/moreDMLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMoreDM").setParameter("maxTweetID", maxTweetID+"")%>','<%=objUri%>/getMoreDM', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;">More Direct Messages</a></label>
+    </div>
 </div>
 </div>

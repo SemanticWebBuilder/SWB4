@@ -118,7 +118,7 @@
                         out.println("</tr>");
                         out.println("<tr>");
                         out.println("   <td colspan=\"2\">");
-                        out.write("Created:<b>" + twitterHumanFriendlyDate(status.getCreatedAt()) + "</b> - - ");                    
+                        out.write("Created:<b>" + twitterHumanFriendlyDate(status.getCreatedAt(), paramRequest) + "</b>");                    
                         out.println("   </td>");
                         out.println("</tr>");
                         out.println("</table>");
