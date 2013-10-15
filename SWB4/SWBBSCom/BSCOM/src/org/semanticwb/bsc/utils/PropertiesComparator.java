@@ -38,7 +38,6 @@ public class PropertiesComparator implements Comparator {
                 s2 = ((SemanticProperty) prop2).getDisplayName();
             }
         }
-        System.out.println("Compara: " + s1 + " vs " + s2);
         comparacion = s1.compareTo(s2);
         return comparacion;
     }
