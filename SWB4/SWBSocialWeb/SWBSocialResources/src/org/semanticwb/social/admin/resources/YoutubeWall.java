@@ -157,7 +157,7 @@ public class YoutubeWall extends GenericResource{
                     if(nNode.getNodeName().equals("published")){
                         System.out.println("published:" + nNode.getTextContent());
                         Date date = formatter.parse(nNode.getTextContent());
-                        out.write("<em>" + humanFriendlyDate(date) + "</em>");
+                        out.write("<em>" + humanFriendlyDate(date, paramRequest) + "</em>");
                     }else if(nNode.getNodeName().equals("yt:statistics")){                        
                         out.println("Views:" + nNode.getAttributes().getNamedItem("viewCount").getTextContent() + " ");
                         System.out.println(nNode.getAttributes().getNamedItem("viewCount").getTextContent());
@@ -385,12 +385,12 @@ public class YoutubeWall extends GenericResource{
                     out.write("<p class=\"timelinedate\">");
                     out.write("<span dojoType=\"dojox.layout.ContentPane\">");
                     Date date = formatter.parse(comment.getJSONObject("published").getString("$t"));
-                    out.write("<em>" + humanFriendlyDate(date) +  "</em>");
+                    out.write("<em>" + humanFriendlyDate(date, paramRequest) +  "</em>");
                     out.write("</span>");
                     String comentarioId = comment.getJSONObject("id").getString("$t");
-                    out.write("   <span class=\"inline\">");
+                    /*out.write("   <span class=\"inline\">");
                     out.write(" <a href=\"\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("commentComment").setParameter("suri", objUri).setParameter("videoId",videoId).setParameter("commentId", comentarioId.substring(comentarioId.indexOf("comment") + 8)) + "','Comment to " + comment.getJSONObject("content").getString("$t").replace("\n", "</br>") + "');return false;\">Comment</a>");
-                    out.write("   </span>");
+                    out.write("   </span>");*/
                     out.write("</p>");
                     out.write("</li>");
                 }
@@ -894,7 +894,7 @@ public class YoutubeWall extends GenericResource{
                             out.write("<span dojoType=\"dojox.layout.ContentPane\">");
 
                             Date date = formatter.parse(comment.getJSONObject("published").getString("$t"));
-                            out.write("<em>" + humanFriendlyDate(date) +  "</em>");
+                            out.write("<em>" + humanFriendlyDate(date, paramRequest) +  "</em>");
                             out.write("</span>");
                             String comentarioId = comment.getJSONObject("id").getString("$t");
                             out.write("   <span class=\"inline\">");
@@ -918,7 +918,7 @@ public class YoutubeWall extends GenericResource{
                 out.write("<div class=\"timelineresume\" dojoType=\"dijit.layout.ContentPane\">");//timelineresume
                 out.write("<span id=\"" + semanticYoutube.getId() + video.getString("id") + INFORMATION + "\" class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
                 Date date = formatter.parse(video.getString("uploaded"));
-                out.write("<em>" + humanFriendlyDate(date) + "</em>");
+                out.write("<em>" + humanFriendlyDate(date, paramRequest) + "</em>");
                 
                 
                 if(video.has("viewCount")){
@@ -1176,7 +1176,7 @@ public class YoutubeWall extends GenericResource{
         }
     }
     
-    public static String humanFriendlyDate(Date created){
+    public static String humanFriendlyDate(Date created, SWBParamRequest paramRequest){
         Date today = new Date();
         Long duration = today.getTime() - created.getTime();
 
@@ -1185,28 +1185,31 @@ public class YoutubeWall extends GenericResource{
         int hour = minute * 60;
         int day = hour * 24;
         String date = "";
-
-        if (duration < second * 7) {//Less than 7 seconds
-            date = "right now";
-        }else if (duration < minute) {
-            int n = (int) Math.floor(duration / second);
-            date = n + " seconds ago";
-        }else if (duration < minute * 2) {//Less than 2 minutes
-            date = "about 1 minute ago";
-        }else if (duration < hour) {
-            int n = (int) Math.floor(duration / minute);
-            date = n + " minutes ago";
-        }else if (duration < hour * 2) {//Less than 1 hour
-            date = "about 1 hour ago";
-        }else if (duration < day) {
-            int n = (int) Math.floor(duration / hour);
-            date = n + " hours ago";
-        }else  if (duration > day && duration < day * 2) {
-            date = "yesterday";
-        }else{
-            int n = (int) Math.floor(duration / day);
-            date = n + " days ago";
-        }
+        try{
+            if (duration < second * 7) {//Less than 7 seconds
+                date = paramRequest.getLocaleString("rightNow");
+            }else if (duration < minute) {
+                int n = (int) Math.floor(duration / second);
+                date = n + " " + paramRequest.getLocaleString("secondsAgo");
+            }else if (duration < minute * 2) {//Less than 2 minutes
+                date = paramRequest.getLocaleString("about") + " 1 " + paramRequest.getLocaleString("minuteAgo");
+            }else if (duration < hour) {
+                int n = (int) Math.floor(duration / minute);
+                date = n + " " + paramRequest.getLocaleString("minutesAgo");
+            }else if (duration < hour * 2) {//Less than 1 hour
+                date = paramRequest.getLocaleString("about") + " 1 " + paramRequest.getLocaleString("hourAgo");
+            }else if (duration < day) {
+                int n = (int) Math.floor(duration / hour);
+                date = n + " " + paramRequest.getLocaleString("hoursAgo");
+            }else  if (duration > day && duration < day * 2) {
+                date = paramRequest.getLocaleString("yesterday");
+            }else{
+                int n = (int) Math.floor(duration / day);
+                date = n + " " + paramRequest.getLocaleString("daysAgo");
+            }
+        }catch(Exception e){
+            log.error("Problem found computing time of post. ", e);
+        }        
         return date;
     }
 }
