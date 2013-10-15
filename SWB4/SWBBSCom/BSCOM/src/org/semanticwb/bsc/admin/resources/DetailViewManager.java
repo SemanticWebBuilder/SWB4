@@ -11,7 +11,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import javax.servlet.http.*;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +25,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.element.*;
 import org.semanticwb.bsc.utils.DetailView;
+import org.semanticwb.bsc.utils.PropertiesComparator;
 import org.semanticwb.model.FormElement;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.SWBComparator;
@@ -556,7 +559,11 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
         SemanticClass semWorkClass = this.getWorkClass().transformToSemanticClass();
-        Iterator<SemanticProperty> basePropertiesList = semWorkClass.listSortProperties();
+        String lang = paramRequest.getUser().getLanguage();
+        //Iterator<SemanticProperty> basePropertiesList = SWBComparator.sortByDisplayName(, lang);
+        ArrayList<SemanticProperty> propsList = (ArrayList<SemanticProperty>) SWBUtils.Collections.copyIterator(semWorkClass.listSortProperties());
+        Collections.sort(propsList, new PropertiesComparator());
+        Iterator<SemanticProperty> basePropertiesList = propsList.iterator();
         JSONArray array = new JSONArray();
         String structure = null;
 
@@ -564,12 +571,14 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             try {
                 while (basePropertiesList.hasNext()) {
                     SemanticProperty prop = basePropertiesList.next();
-                    //Se crea una estructura de JSON con los datos de las propiedades de la clase en la variable array
-                    JSONObject object = new JSONObject();
-                    object.put("name", prop.getName());
-                    object.put("label", prop.getDisplayName());
-                    object.put("uri", prop.getURI());
-                    array.put(object);
+                    if (prop.getDisplayProperty() != null) {
+                        //Se crea una estructura de JSON con los datos de las propiedades de la clase en la variable array
+                        JSONObject object = new JSONObject();
+                        object.put("name", prop.getName());
+                        object.put("label", prop.getDisplayName());
+                        object.put("uri", prop.getURI());
+                        array.put(object);
+                    }
                 }
                 structure = array.toString(2);
             } catch (JSONException jsone) {
