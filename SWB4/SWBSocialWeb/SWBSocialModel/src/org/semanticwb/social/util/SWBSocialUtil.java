@@ -611,6 +611,7 @@ public class SWBSocialUtil implements SWBAppObject {
                         for(int i=0;i<tags.length;i++)
                         {
                             String tag=tags[i];
+                            tag=tag.trim();
                             //System.out.println("tag:"+tag);
 
                             //Elimino Caracteres especiales (acentuados)

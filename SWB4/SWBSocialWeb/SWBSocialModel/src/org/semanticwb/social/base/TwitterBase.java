@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social Twitter. 
    */
-public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.SocialNetPostable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.social.KeepAliveListenerable,org.semanticwb.social.Secreteable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Messageable,org.semanticwb.social.Kloutable,org.semanticwb.social.Photoable,org.semanticwb.social.Oauthable,org.semanticwb.model.Trashable,org.semanticwb.social.Listenerable
+public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Kloutable,org.semanticwb.social.Messageable,org.semanticwb.social.KeepAliveListenerable,org.semanticwb.model.Trashable,org.semanticwb.social.Secreteable,org.semanticwb.social.Photoable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Oauthable,org.semanticwb.model.Traceable,org.semanticwb.social.Listenerable
 {
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social Twitter.
