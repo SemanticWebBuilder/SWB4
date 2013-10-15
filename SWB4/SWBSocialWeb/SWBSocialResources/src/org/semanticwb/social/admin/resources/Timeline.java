@@ -490,7 +490,7 @@ public class Timeline extends GenericResource{
                 if(user.isSigned()){
                     socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
                 }
-                updateStatusInformation(originalStatus, renderURL, objUri, out, socialUserExtAttr);
+                updateStatusInformation(originalStatus, renderURL, objUri, out, socialUserExtAttr, paramRequest);
                 
                 actionURL.setAction("undoRT");
                 /* updates only the DOM of the 'Retweet' message to change it for 'Undo retweet' and change URL also*/
@@ -521,7 +521,7 @@ public class Timeline extends GenericResource{
                 if(user.isSigned()){
                     socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
                 }
-                updateStatusInformation(originalStatus, renderURL, objUri, out, socialUserExtAttr);
+                updateStatusInformation(originalStatus, renderURL, objUri, out, socialUserExtAttr, paramRequest);
                 
                 actionURL.setAction("doRT");
                 /* updates only the DOM of the 'Undo Retweet' message to change it for 'Retweet' and change URL also*/
@@ -801,7 +801,7 @@ public class Timeline extends GenericResource{
                 if(user.isSigned()){
                     socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
                 }
-                updateStatusInformation(originalStatus, renderURL, objUri, out, socialUserExtAttr);
+                updateStatusInformation(originalStatus, renderURL, objUri, out, socialUserExtAttr, paramRequest);
                 out.println("<span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
                 out.println("<script type=\"dojo/method\">");
                 out.println("   try{");
@@ -826,7 +826,7 @@ public class Timeline extends GenericResource{
                 if(user.isSigned()){
                     socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
                 }
-                updateStatusInformation(originalStatus, renderURL, objUri, out, socialUserExtAttr);
+                updateStatusInformation(originalStatus, renderURL, objUri, out, socialUserExtAttr, paramRequest);
                 out.println("<span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
                 out.println("<script type=\"dojo/method\">");
                 out.println("   showError('No fue posible procesar la solicitud');");
@@ -959,7 +959,10 @@ public class Timeline extends GenericResource{
                 doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),null, HOME_TAB, null, socialUserExtAttr);
                 i++;
             }
-            out.println("<label id=\"" + objUri + "/moreTwitLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreTweets").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreTweets','bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">More tweets</a></label>");
+
+            out.println("<div align=\"center\">");
+            out.println("<label id=\"" + objUri + "/moreTwitLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreTweets").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreTweets','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">More tweets</a></label>");
+            out.println("</div>");
             System.out.println("Total tweets:" + i);
         } catch (Exception te) {
             log.error("Error when getting timeline: ", te);
@@ -1004,7 +1007,10 @@ public class Timeline extends GenericResource{
                 doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),null,MENTIONS_TAB, null, socialUserExtAttr);
                 i++;
             }
-            out.println("<label id=\"" + objUri + "/moreMentionLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreMentions").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreMentions','bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">More Mentions</a></label>");
+
+            out.println("<div align=\"center\">");
+            out.println("<label id=\"" + objUri + "/moreMentionLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreMentions").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreMentions','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">More Mentions</a></label>");
+            out.println("</div>");
             System.out.println("Total mentions:" + i);
         } catch (Exception te) {
             log.error("Error when getting mentions timeline: ", te);
@@ -1048,7 +1054,9 @@ public class Timeline extends GenericResource{
                 doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(), null, FAVORITES_TAB, null, socialUserExtAttr);
                 i++;
             }
-            out.println("<label id=\"" + objUri + "/moreFavoritesLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreFavorites").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreFavorites','bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">More Favorites</a></label>");
+            out.println("<div align=\"center\">");
+            out.println("<label id=\"" + objUri + "/moreFavoritesLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreFavorites").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreFavorites','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">More Favorites</a></label>");
+            out.println("</div>");
             System.out.println("Total favorites:" + i);
         } catch (Exception te) {
             log.error("Error when getting more favorites: ", te);
@@ -1086,7 +1094,9 @@ public class Timeline extends GenericResource{
                 doPrintDM(request, response, paramRequest, directMsg, twitter.getId(), out);
                 i++;
             }
-            out.println("<label id=\"" + objUri + "/moreDMLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreDM").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreDM','bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">More Direct Messages</a></label>");
+            out.println("<div align=\"center\"");
+            out.println("<label id=\"" + objUri + "/moreDMLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreDM").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreDM','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">More Direct Messages</a></label>");
+            out.println("</div>");
             System.out.println("Total direct messages:" + i);
         } catch (Exception te) {
             log.error("Error when getting timeline: ", te);
@@ -1181,7 +1191,7 @@ public class Timeline extends GenericResource{
                 writer.write("<div class=\"timelineresume\">");
                 /*creates isolated spans to identify and update only the elemente where the action affects*/
                 writer.write("   <span class=\"inline\" id=\"" + semTwitter.getId() +  status.getId() + INFORMATION + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");                
-                updateStatusInformation(status, renderURL, objUri, writer,socialUserExtAttr);                
+                updateStatusInformation(status, renderURL, objUri, writer,socialUserExtAttr, paramRequest);                
                 writer.write("   </span>");                
                 
                 writer.write("   <span class=\"inline\" id=\"" + semTwitter.getId() + status.getId() + TOPIC + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
@@ -1250,7 +1260,7 @@ public class Timeline extends GenericResource{
                                 writer.write("   <td colspan=\"2\">");
                                 
                                 writer.write("   <span class=\"inline\" id=\"" + semTwitter.getId() + st.getId() + INFORMATION + "\" dojoType=\"dojox.layout.ContentPane\">");
-                                updateStatusInformation(st, renderURL, objUri, writer, socialUserExtAttr);
+                                updateStatusInformation(st, renderURL, objUri, writer, socialUserExtAttr, paramRequest);
                                 writer.write("   </span>");
                                 writer.write("   <span class=\"inline\" id=\"" + semTwitter.getId() + st.getId() + RETWEET + "\" dojoType=\"dojox.layout.ContentPane\">");
                                 updateStatusRT(st, renderURL, actionURL, objUri, writer, twitter.getId(), tabSuffix, semTwitter);
@@ -1315,7 +1325,7 @@ public class Timeline extends GenericResource{
                 
                 writer.write("<div id=\"" + dm.getId() + "\" dojoType=\"dijit.layout.ContentPane\">");
                 long minutes = (long)(new Date().getTime()/60000) - (dm.getCreatedAt().getTime()/60000);
-                writer.write("Created:<b>" + twitterHumanFriendlyDate(dm.getCreatedAt()) + "</b> - - ");                    
+                writer.write("Created:<b>" + twitterHumanFriendlyDate(dm.getCreatedAt(), paramRequest) + "</b> - - ");                    
                 writer.write("<a href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyDM").setParameter("userId", dm.getSenderId()+"") + "','DM to @" + dm.getSenderScreenName()+ "');return false;\">Reply</a>  ");                
                 writer.write("   </div>");
                 writer.write("   </td>");
@@ -1425,16 +1435,17 @@ public class Timeline extends GenericResource{
      * @param out
      * @param currentUser 
      */
-    public static void updateStatusInformation(Status originalStatus, SWBResourceURL renderURL, String objUri, java.io.Writer out, SocialUserExtAttributes socialUserExtAttr){
+    public static void updateStatusInformation(Status originalStatus, SWBResourceURL renderURL, String objUri, java.io.Writer out, SocialUserExtAttributes socialUserExtAttr, SWBParamRequest paramRequest){
         try{
-            out.write("<em>" + twitterHumanFriendlyDate(originalStatus.getCreatedAt()) + "</em> <strong><span>Retweeted: </span>" + originalStatus.getRetweetCount() + " times </strong>");
+            out.write("<em>" + twitterHumanFriendlyDate(originalStatus.getCreatedAt(), paramRequest) + "</em> <strong><span>Retweeted: </span>" + originalStatus.getRetweetCount() + " times </strong>");
             
             if(socialUserExtAttr != null && socialUserExtAttr.isUserCanRespondMsg()){
-            out.write("<a href=\"#\" onclick=\"showDialog('" + renderURL.setMode("replyTweet").setParameter("id", originalStatus.getId()+"").setParameter("userName", "@" +
+            /*out.write("<a href=\"#\" onclick=\"showDialog('" + renderURL.setMode("replyTweet").setParameter("id", originalStatus.getId()+"").setParameter("userName", "@" +
                     originalStatus.getUser().getScreenName()).setParameter("suri", objUri) +
                     "','Reply to @"  + originalStatus.getUser().getScreenName() + "');return false;\"><span>Reply</span></a> ");
+            */
             }
-        }catch(IOException ex){
+        }catch(Exception ex){
             System.out.println("Error checking updating Tweet Status!" + ex.getMessage());
         }
     }
@@ -1459,7 +1470,7 @@ public class Timeline extends GenericResource{
         }
     }
     
-    public static String twitterHumanFriendlyDate(Date created){
+    public static String twitterHumanFriendlyDate(Date created, SWBParamRequest paramRequest){
         Date today = new Date();
         Long duration = today.getTime() - created.getTime();
 
@@ -1468,36 +1479,31 @@ public class Timeline extends GenericResource{
         int hour = minute * 60;
         int day = hour * 24;
         String date = "";
-
-        if (duration < second * 7) {//Less than 7 seconds
-            date = "right now";
-        }else if (duration < minute) {
-            int n = (int) Math.floor(duration / second);
-            date = n + " seconds ago";
-        }else if (duration < minute * 2) {//Less than 2 minutes
-            date = "about 1 minute ago";
-        }else if (duration < hour) {
-            int n = (int) Math.floor(duration / minute);
-            date = n + " minutes ago";
-        }else if (duration < hour * 2) {//Less than 1 hour
-            date = "about 1 hour ago";
-        }else if (duration < day) {
-            int n = (int) Math.floor(duration / hour);
-            date = n + " hours ago";
-        }else  if (duration > day && duration < day * 2) {
-            date = "yesterday";
-        }else{
-            int n = (int) Math.floor(duration / day);
-            date = n + " days ago";
-        }
-        /*else  if (duration < day * 365) {
-            int n = (int) Math.floor(duration / day);
-            System.out.println("TIME:" + n);
-            date = n + " days ago";
-        }/*else{
-            System.out.println("TIME YEAR:" + Math.floor(duration / day));
-            date = "over a year ago";
-        }*/
+        try{
+            if (duration < second * 7) {//Less than 7 seconds
+                date = paramRequest.getLocaleString("rightNow");
+            }else if (duration < minute) {
+                int n = (int) Math.floor(duration / second);
+                date = n + " " + paramRequest.getLocaleString("secondsAgo");
+            }else if (duration < minute * 2) {//Less than 2 minutes
+                date = paramRequest.getLocaleString("about") + " 1 " + paramRequest.getLocaleString("minuteAgo");
+            }else if (duration < hour) {
+                int n = (int) Math.floor(duration / minute);
+                date = n + " " + paramRequest.getLocaleString("minutesAgo");
+            }else if (duration < hour * 2) {//Less than 1 hour
+                date = paramRequest.getLocaleString("about") + " 1 " + paramRequest.getLocaleString("hourAgo");
+            }else if (duration < day) {
+                int n = (int) Math.floor(duration / hour);
+                date = n + " " + paramRequest.getLocaleString("hoursAgo");
+            }else  if (duration > day && duration < day * 2) {
+                date = paramRequest.getLocaleString("yesterday");
+            }else{
+                int n = (int) Math.floor(duration / day);
+                date = n + " " + paramRequest.getLocaleString("daysAgo");
+            }
+        }catch(Exception e){
+            log.error("Problem found computing time of post. ", e);
+        }        
         return date;
     }
 }

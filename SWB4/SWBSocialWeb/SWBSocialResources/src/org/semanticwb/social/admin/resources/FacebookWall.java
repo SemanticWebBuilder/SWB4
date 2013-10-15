@@ -937,7 +937,7 @@ public class FacebookWall extends GenericResource {
                                                                                            
                 Date likeTime = formatter.parse(facebookDate);
                 
-                out.write("<em>" + facebookHumanFriendlyDate(likeTime) + "</em>");
+                out.write("<em>" + facebookHumanFriendlyDate(likeTime, paramRequest) + "</em>");
                 //IMPRIMIR EL CREATED Y LOS NUEVOS LIKES
                 boolean iLikedPost = false;
                 if(likeResp.has("likes")){
@@ -1247,7 +1247,7 @@ public class FacebookWall extends GenericResource {
                     out.write("<p class=\"timelinedate\">");
                     out.write("<span dojoType=\"dojox.layout.ContentPane\">");
 
-                    out.write("<em>" + facebookHumanFriendlyDate(commentTime) + "</em>");
+                    out.write("<em>" + facebookHumanFriendlyDate(commentTime, paramRequest) + "</em>");
                     if(comments.getJSONObject(k).has("like_count")){
                         out.write("<strong>");
                         out.write("<span> Likes: " + comments.getJSONObject(k).getInt("like_count") + "</span>");
@@ -1913,7 +1913,7 @@ public class FacebookWall extends GenericResource {
                         writer.write("<p class=\"timelinedate\">");
                         writer.write("<span id=\"" +facebook.getId() + comments.getJSONObject(k).getString("id") + "_" + postsData.getString("id") + "\" dojoType=\"dojox.layout.ContentPane\">");
                         
-                        writer.write("<em>" + facebookHumanFriendlyDate(commentTime) + "</em>");
+                        writer.write("<em>" + facebookHumanFriendlyDate(commentTime, paramRequest) + "</em>");
                         if(comments.getJSONObject(k).has("like_count")){
                             writer.write("<strong>");
                             writer.write("<span>Likes:</span> " + comments.getJSONObject(k).getInt("like_count") );
@@ -1953,7 +1953,7 @@ public class FacebookWall extends GenericResource {
             writer.write("<div class=\"timelineresume\" dojoType=\"dijit.layout.ContentPane\">");
             
             writer.write("<span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + INFORMATION + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
-            writer.write("<em>" + facebookHumanFriendlyDate(postTime) + "</em>");
+            writer.write("<em>" + facebookHumanFriendlyDate(postTime, paramRequest) + "</em>");
             boolean iLikedPost = false;
             writer.write("<strong><span> Likes: </span>");
             if(postsData.has("likes")){
@@ -1980,14 +1980,14 @@ public class FacebookWall extends GenericResource {
             if(actions != null && actions.length() > 0){//Available actions for the post
                 for (int i = 0; i < actions.length(); i++) {
                     if(actions.getJSONObject(i).getString("name").equals("Comment") && socialUserExtAttr.isUserCanRespondMsg()){//I can comment                        
-                        writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + REPLY + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
+                        /*writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + REPLY + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
                             writer.write(" <a href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyPost").setParameter("commentID", postsData.getString("id")) + "','Reply to " + postsData.getJSONObject("from").getString("name") + "');return false;\"><span>Reply</span></a>  ");
-                        writer.write("   </span>");
+                        writer.write("   </span>");*/
                         
                         if(linkLike != null){
-                            writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + REPLY + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
+                            /*writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + REPLY + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
                                 writer.write(" <a href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyPost").setParameter("commentID", linkLike.getString("id")) + "','Reply to " + postsData.getJSONObject("from").getString("name") + "');return false;\"><span>Reply</span></a>  ");
-                            writer.write("   </span>");
+                            writer.write("   </span>");*/
                         }
 
                         ///////////////////////If I can post I can Classify it to answer it later
@@ -2178,7 +2178,7 @@ public class FacebookWall extends GenericResource {
                         
                         writer.write("<p class=\"timelinedate\">");
                         writer.write("<span id=\"" + comments.getJSONObject(k).getString("id") + "\" dojoType=\"dojox.layout.ContentPane\">");
-                        writer.write("<em>" + facebookHumanFriendlyDate(commentTime) + "</em>");
+                        writer.write("<em>" + facebookHumanFriendlyDate(commentTime, paramRequest) + "</em>");
                         //writer.write("<a href=\"\" onMouseOver=\"dijit.Tooltip.defaultPosition=['above', 'below']\" id=\"TooltipButton\" onclick=\"return false;\"> LIKE/UNLIKE</a>");
                         //writer.write("<div class=\"dijitHidden\"><span data-dojo-type=\"dijit.Tooltip\" data-dojo-props=\"connectId:'TooltipButton'\">I am <strong>above</strong> the button</span></div>");
                         if(comments.getJSONObject(k).has("like_count")){
@@ -2227,7 +2227,7 @@ public class FacebookWall extends GenericResource {
             writer.write("<div class=\"timelineresume\" dojoType=\"dijit.layout.ContentPane\">");
             
             writer.write("   <span class=\"inline\" id=\"" + facebook.getId() +  postsData.getString("post_id") + INFORMATION + MEDIA_TAB + "\" dojoType=\"dojox.layout.ContentPane\">");
-            writer.write("<em>" + facebookHumanFriendlyDate(postTime) + "</em>");
+            writer.write("<em>" + facebookHumanFriendlyDate(postTime, paramRequest) + "</em>");
 
             if(postsData.has("like_info")){
                 likeInfo = postsData.getJSONObject("like_info");
@@ -2243,9 +2243,9 @@ public class FacebookWall extends GenericResource {
                 JSONObject comments = postsData.getJSONObject("comment_info");
                 
                 if(comments.getBoolean("can_comment")){
-                    writer.write("   <span class=\"inline\" id=\"" + postsData.getString("post_id") + REPLY + MEDIA_TAB + "\" dojoType=\"dojox.layout.ContentPane\">");
+                    /*writer.write("   <span class=\"inline\" id=\"" + postsData.getString("post_id") + REPLY + MEDIA_TAB + "\" dojoType=\"dojox.layout.ContentPane\">");
                         writer.write(" <a href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyPost").setParameter("commentID", postsData.getString("post_id")) + "','Reply to " + "" + "');return false;\"><span>Reply</span></a>  ");
-                    writer.write("   </span>");
+                    writer.write("   </span>");*/
 
                     ///////////////////////If I can post I can Classify it to answer it later
                     PostIn post = PostIn.getPostInbySocialMsgId(model, postsData.getString("post_id"));
@@ -2603,7 +2603,7 @@ public class FacebookWall extends GenericResource {
         return fbResponse;
     }
     
-     public static String facebookHumanFriendlyDate(Date created){
+     public static String facebookHumanFriendlyDate(Date created, SWBParamRequest paramRequest){
         Date today = new Date();
         Long duration = today.getTime() - created.getTime();
 
@@ -2612,28 +2612,31 @@ public class FacebookWall extends GenericResource {
         int hour = minute * 60;
         int day = hour * 24;
         String date = "";
-
-        if (duration < second * 7) {//Less than 7 seconds
-            date = "right now";
-        }else if (duration < minute) {
-            int n = (int) Math.floor(duration / second);
-            date = n + " seconds ago";
-        }else if (duration < minute * 2) {//Less than 2 minutes
-            date = "about 1 minute ago";
-        }else if (duration < hour) {
-            int n = (int) Math.floor(duration / minute);
-            date = n + " minutes ago";
-        }else if (duration < hour * 2) {//Less than 1 hour
-            date = "about 1 hour ago";
-        }else if (duration < day) {
-            int n = (int) Math.floor(duration / hour);
-            date = n + " hours ago";
-        }else  if (duration > day && duration < day * 2) {
-            date = "yesterday";
-        }else{
-            int n = (int) Math.floor(duration / day);
-            date = n + " days ago";
-        }
+        try{
+            if (duration < second * 7) {//Less than 7 seconds
+                date = paramRequest.getLocaleString("rightNow");
+            }else if (duration < minute) {
+                int n = (int) Math.floor(duration / second);
+                date = n + " " + paramRequest.getLocaleString("secondsAgo");
+            }else if (duration < minute * 2) {//Less than 2 minutes
+                date = paramRequest.getLocaleString("about") + " 1 " + paramRequest.getLocaleString("minuteAgo");
+            }else if (duration < hour) {
+                int n = (int) Math.floor(duration / minute);
+                date = n + " " + paramRequest.getLocaleString("minutesAgo");
+            }else if (duration < hour * 2) {//Less than 1 hour
+                date = paramRequest.getLocaleString("about") + " 1 " + paramRequest.getLocaleString("hourAgo");
+            }else if (duration < day) {
+                int n = (int) Math.floor(duration / hour);
+                date = n + " " + paramRequest.getLocaleString("hoursAgo");
+            }else  if (duration > day && duration < day * 2) {
+                date = paramRequest.getLocaleString("yesterday");
+            }else{
+                int n = (int) Math.floor(duration / day);
+                date = n + " " + paramRequest.getLocaleString("daysAgo");
+            }
+        }catch(Exception e){
+            log.error("Problem found computing time of post. ", e);
+        }        
         return date;
     }
 }
