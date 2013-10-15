@@ -248,7 +248,15 @@
                                 if(!socialNetwork.getClass().equals(postIn.getPostInSocialNetwork().getClass())){
                                     continue;
                                 }
-                            }                           
+                            }
+                            if(postOut != null){//If it is a response to some post, show only the nets of the post Type
+                                if(postOut.getPostInSource() != null){
+                                    if(!socialNetwork.getClass().equals(postOut.getPostInSource().getPostInSocialNetwork().getClass())){
+                                        continue;
+                                    }
+                                }
+                            }
+                            
                             if (socialNetwork instanceof Youtube) {
                                 typeClass = "ico-ytb";
                             }else if (socialNetwork instanceof Facebook){
@@ -265,7 +273,7 @@
                     <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" <%=selected%> onClick="disableSelect(this);"/>
                     <label for="t1"><span></span><%=socialNetwork.getTitle()%></label> 
                     <%
-                    if(socialNetwork instanceof Facebook && postIn == null){
+                    if(socialNetwork instanceof Facebook && postIn == null && postOut == null){
                     %>
                     <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
                         <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">PUBLIC</option>
@@ -412,6 +420,13 @@
                                     continue;
                                 }
                             }
+                            if(postOut != null){//If it is a response to some post, show only the nets of the post Type
+                                if(postOut.getPostInSource() != null){
+                                    if(!socialNetwork.getClass().equals(postOut.getPostInSource().getPostInSocialNetwork().getClass())){
+                                        continue;
+                                    }
+                                }
+                            }
                             
                              if (socialNetwork instanceof Youtube){
                                  typeClass = "ico-ytb";
@@ -430,7 +445,7 @@
                     <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" <%=selected%> onClick="disableSelect(this);"/>
                     <label for="t1"><span></span><%=socialNetwork.getTitle()%></label>
                     <%
-                    if(socialNetwork instanceof Facebook && postIn == null){                        
+                    if(socialNetwork instanceof Facebook && postIn == null && postOut == null){                        
                     %>
                     <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
                         <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">PUBLIC</option>
@@ -606,6 +621,13 @@
                             continue;
                         }
                     }
+                    if(postOut != null){//If it is a response to some post, show only the nets of the post Type
+                        if(postOut.getPostInSource() != null){
+                            if(!socialNetwork.getClass().equals(postOut.getPostInSource().getPostInSocialNetwork().getClass())){
+                                continue;
+                            }
+                        }
+                    }
                     if (socialNetwork instanceof Youtube){
                         typeClass = "ico-ytb";
                     }else if (socialNetwork instanceof Facebook){
@@ -625,7 +647,7 @@
                 <input id="checkYT" type="checkbox" name="<%=socialNetwork.getURI()%>" onClick="showListCategory('<%=objUri%>','<%=sourceCall%>'); disableSelect(this);" <%=selected%>/>
                 <label><span></span><%=socialNetwork.getTitle()%></label>
                 <%
-                    if(socialNetwork instanceof Youtube && postIn == null){                        
+                    if(socialNetwork instanceof Youtube && postIn == null && postOut == null){                        
                     %>
                     <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
                         <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">PUBLIC</option>
