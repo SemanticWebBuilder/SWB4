@@ -1094,7 +1094,7 @@ public class Timeline extends GenericResource{
                 doPrintDM(request, response, paramRequest, directMsg, twitter.getId(), out);
                 i++;
             }
-            out.println("<div align=\"center\"");
+            out.println("<div align=\"center\">");
             out.println("<label id=\"" + objUri + "/moreDMLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreDM").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreDM','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">More Direct Messages</a></label>");
             out.println("</div>");
             System.out.println("Total direct messages:" + i);
