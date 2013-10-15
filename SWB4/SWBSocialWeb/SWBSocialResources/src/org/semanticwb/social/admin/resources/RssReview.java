@@ -115,7 +115,7 @@ public class RssReview extends GenericResource{
                             for(int k=0;k<amsgWords.size();k++)
                             {
                                 String word=amsgWords.get(k);
-                                if(node.getFirstChild().getNodeValue().indexOf(word)>-1)
+                                if(node.getFirstChild().getNodeValue().toLowerCase().indexOf(word)>-1)
                                 {
                                     ComunityNews comNews=new ComunityNews();
                                     comNews.setNode(nListItems.item(i));
