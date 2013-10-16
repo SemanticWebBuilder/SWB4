@@ -493,6 +493,8 @@ I have listed down type codes I have found:
     */
 %>
 <div id="<%=objUri%>getMorePictures" dojoType="dijit.layout.ContentPane">
-    <label id="<%=objUri%>morePicturesLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMorePictures").setParameter("createdTime", createdTime).setParameter("currentTab", MEDIA_TAB)%>','<%=objUri%>getMorePictures', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;">More pictures</a></label>
+    <div align="center">
+        <label id="<%=objUri%>morePicturesLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMorePictures").setParameter("createdTime", createdTime).setParameter("currentTab", MEDIA_TAB)%>','<%=objUri%>getMorePictures', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;">More pictures</a></label>
+    </div>
 </div>
 </div>

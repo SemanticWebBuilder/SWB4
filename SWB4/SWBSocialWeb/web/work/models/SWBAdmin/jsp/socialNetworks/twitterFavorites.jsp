@@ -49,8 +49,8 @@
     try {
             //gets Twitter4j instance with account credentials
             out.println("<div class=\"swbform\">");
-            System.out.println("Showing @" + twitterBean.getScreenName() +  "'s Favorites.");
-            out.println("<div align=\"center\"><h2>Showing @" + twitterBean.getScreenName() +  "'s Favorites. </h2><br/></div>");
+            System.out.println( paramRequest.getLocaleString("showing") + " @" + twitterBean.getScreenName() +  "'s Favorites.");
+            out.println("<div align=\"center\"><h2>" + paramRequest.getLocaleString("showing") + " @" + twitterBean.getScreenName() + " " + paramRequest.getLocaleString("favorites") +  "</h2><br/></div>");
             out.println("<div class=\"bar\" id=\"" + objUri + "/newFavoritesAvailable\" dojoType=\"dojox.layout.ContentPane\"></div>");
             out.println("<div id=\"" + objUri + "/favoritesStream\" dojoType=\"dojox.layout.ContentPane\"></div>");
 
