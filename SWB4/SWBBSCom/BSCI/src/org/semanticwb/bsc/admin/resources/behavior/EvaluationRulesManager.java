@@ -5,9 +5,6 @@ import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
@@ -30,6 +27,7 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
+
 /**
  * Se encarga de mostrar un formulario para definir las reglas de evaluación, de
  * una serie dada, para cada estado disponible en el indicador.
@@ -46,7 +44,7 @@ public class EvaluationRulesManager extends GenericAdmResource {
     public static final String Action_ACTIVE_ALL = "actall";
     public static final String Action_DEACTIVE_ALL = "deactall";
     public static final String Action_DELETE_ALL = "delall";
-    public static final String Default_FORMAT_PATTERN = "(([\\*\\+-])(0|\\d*\\.?\\d+),)*(([\\*\\+-])(0|\\d*\\.?\\d+))";
+    
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -65,21 +63,7 @@ public class EvaluationRulesManager extends GenericAdmResource {
         if(suri==null) {
             response.getWriter().println("No se detect&oacute ning&uacute;n objeto sem&aacute;ntico!");
             return;
-        }
-        
-//        PrintWriter out = response.getWriter();
-//        out.println("<script type=\"text/javascript\">");
-//        if(request.getParameter("statmsg") != null && request.getParameter("statmsg").trim().length() > 0) {
-//            out.println("   showStatus('" + request.getParameter("statmsg") + "');");
-//            out.println("updateTreeNodeByURI('" + obj.getURI() + "');");
-//            String icon = SWBContext.UTILS.getIconClass(obj);
-//            out.println("setTabTitle('" + obj.getURI() + "','" + obj.getDisplayName(user.getLanguage()) + "','" + icon + "');");
-//        }
-//        if (request.getParameter("closetab") != null && request.getParameter("closetab").trim().length() > 0) {
-//            out.println("   closeTab('" + request.getParameter("closetab") + "');");
-//        }
-//        out.println("</script>");
-       
+        }       
         doEdit(request, response, paramRequest);
     }
 
@@ -337,23 +321,6 @@ public class EvaluationRulesManager extends GenericAdmResource {
         
     }
     
-    /*
-     * Valida el formato del factor del criterio de evaluación
-     * @param factor un {@code String} que indica los factores para comparar las series. Por ejemplo: *0.3,*05
-     * @return Si el factor cumple con el formato entonces cierto, de lo contrario falso.
-     */
-    private boolean validateFactor(String factor) {
-        Pattern pattern;
-        String regexp = getResourceBase().getAttribute("defaultFormatPattern", Default_FORMAT_PATTERN);
-        try{
-            pattern = Pattern.compile(regexp);
-        }catch(PatternSyntaxException pse) {
-            pattern = Pattern.compile(Default_FORMAT_PATTERN);
-        }            
-        Matcher matcher = pattern.matcher(factor);
-        return matcher.matches();
-    }
-    
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         final String action = response.getAction();
@@ -391,11 +358,12 @@ public class EvaluationRulesManager extends GenericAdmResource {
                     if(State.ClassMgr.hasState(request.getParameter("stateId"), SWBContext.getAdminWebSite())) {
                         State state = State.ClassMgr.getState(request.getParameter("stateId"), SWBContext.getAdminWebSite());
                         rule.setAppraisal(state);
+                        series.addEvaluationRule(rule);
                     }
-                    series.addEvaluationRule(rule);
                 }else {
                     rule = (EvaluationRule)objRule.getGenericInstance();
                 }
+                Operation oper = Operation.ClassMgr.getOperation(operId, model);
                 rule.setOperationId(operId);
                 response.setRenderParameter("statmsg", response.getLocaleString("msgUpdtOperatorOk"));
             }else {
@@ -421,8 +389,8 @@ public class EvaluationRulesManager extends GenericAdmResource {
                         if(State.ClassMgr.hasState(request.getParameter("stateId"), SWBContext.getAdminWebSite())) {
                             State state = State.ClassMgr.getState(request.getParameter("stateId"), SWBContext.getAdminWebSite());
                             rule.setAppraisal(state);
+                            series.addEvaluationRule(rule);
                         }
-                        series.addEvaluationRule(rule);
                     }else {
                         rule = (EvaluationRule)objRule.getGenericInstance();
                     }
@@ -445,19 +413,19 @@ public class EvaluationRulesManager extends GenericAdmResource {
             String factor = request.getParameter("fctr")==null?"":request.getParameter("fctr");
             EvaluationRule rule;
             
-            if(validateFactor(factor)) {
-                if(objRule==null) {
-                    rule = EvaluationRule.ClassMgr.createEvaluationRule(model);
-                    rule.setTitle(rule.getId());
-                    rule.setTitle(rule.getId(), user.getLanguage());
-                    if(State.ClassMgr.hasState(request.getParameter("stateId"), SWBContext.getAdminWebSite())) {
-                        State state = State.ClassMgr.getState(request.getParameter("stateId"), SWBContext.getAdminWebSite());
-                        rule.setAppraisal(state);
-                    }
+            if(objRule==null) {
+                rule = EvaluationRule.ClassMgr.createEvaluationRule(model);
+                rule.setTitle(rule.getId());
+                rule.setTitle(rule.getId(), user.getLanguage());
+                if(State.ClassMgr.hasState(request.getParameter("stateId"), SWBContext.getAdminWebSite())) {
+                    State state = State.ClassMgr.getState(request.getParameter("stateId"), SWBContext.getAdminWebSite());
+                    rule.setAppraisal(state);
                     series.addEvaluationRule(rule);
-                }else {
-                    rule = (EvaluationRule)objRule.getGenericInstance();
                 }
+            }else {
+                rule = (EvaluationRule)objRule.getGenericInstance();
+            }
+            if(rule.validateFactor(factor)) {
                 rule.setFactor(factor);
                 response.setRenderParameter("statmsg", response.getLocaleString("msgUpdtFactorOk"));
             }else {

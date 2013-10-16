@@ -93,8 +93,8 @@ public class InitiativeManager extends GenericResource {
                     out.print(SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + initiative.getTitle());
                     out.println("');return false;\" >" + (initiative.getTitle()!= null ? initiative.getTitle() : paramRequest.getLocaleString("lbl_undefined")) + "</a>");                  
                     out.println("</td>"
-                            + "<td>" + (initiative.getRisponsableInitiative() != null ? initiative.getRisponsableInitiative() : paramRequest.getLocaleString("lbl_undefined")) + "</td>"
-                            + "<td>" + (initiative.getArea()!= null ? initiative.getArea() : paramRequest.getLocaleString("lbl_undefined")) + "</td>"
+//                            + "<td>" + (initiative.getRisponsableInitiative() != null ? initiative.getRisponsableInitiative() : paramRequest.getLocaleString("lbl_undefined")) + "</td>"
+//                            + "<td>" + (initiative.getArea()!= null ? initiative.getArea() : paramRequest.getLocaleString("lbl_undefined")) + "</td>"
                             + "<td>"
                             + "<input type=\"checkbox\" name=\"initiative" + data + "\" "
                             + "onchange=\"submitUrl('" + urlAdd + "&'+this.attr('name')+'='+this.attr('value'),this.domNode)\" "

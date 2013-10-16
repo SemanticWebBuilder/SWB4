@@ -14,6 +14,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.catalogs.Format;
+import org.semanticwb.bsc.tracing.EvaluationRule;
 import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.tracing.Series;
@@ -22,6 +23,7 @@ import org.semanticwb.bsc.utils.UndefinedFrequencyException;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -55,7 +57,7 @@ public class MeasuresManager extends GenericAdmResource {
                 
                 try
                 {
-                    Iterator<Period> measurablesPeriods = series.getIndicator().listMeasurablesPeriods(false);
+                    Iterator<Period> measurablesPeriods = series.getIndicator().listMeasurablesPeriods();
                     if(measurablesPeriods.hasNext())
                     {
                         SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD);
@@ -73,9 +75,10 @@ public class MeasuresManager extends GenericAdmResource {
                         out.println("<form method=\"post\" id=\"frmAdd" + data + "\" action=\" " + url + "\" class=\"swbform\" dojoType=\"dijit.form.Form\" onsubmit=\"" + "submitForm('frmAdd" + data + "');return false;\">");
                         out.println("<fieldset>");
                         out.println("<input type=\"hidden\" name=\"suri\" value=\"" + semanticObj.getURI() + "\">");                    
-                        out.println("<table width=\"98%\">");
+                        out.println("<table width=\"75%\">");
                         out.println(" <thead>");
                         out.println("  <tr>");
+                        out.println("   <th>"+paramRequest.getLocaleString("lblAction")+"</th>");
                         out.println("   <th>"+paramRequest.getLocaleString("lblPeriod")+"</th>");
                         out.println("   <th>"+paramRequest.getLocaleString("lblMeasure")+"</th>");            
                         out.println("   <th>"+paramRequest.getLocaleString("lblStatus")+"</th>");            
@@ -102,11 +105,26 @@ public class MeasuresManager extends GenericAdmResource {
                             period = measurablesPeriods.next();
 
                             Measure measure = series.getMeasureByPeriod(period);
-                            String value = measure==null?"":formatter.format(measure.getValue());
+                            if(measure == null) {
+                                measure = Measure.ClassMgr.createMeasure(period.getBSC());
+                                PeriodStatus ps = PeriodStatus.ClassMgr.createPeriodStatus(period.getBSC());
+                                ps.setPeriod(period);
+                                //ps.setStatus(series.getIndicator().getMinimumState());
+                                measure.setEvaluation(ps);
+                                measure.setValue(0);
+                                series.addMeasure(measure);
+                            }else {
+                                // Valida que el estado asignado a la medición aún este asignado al indicador.
+                                if(!series.getIndicator().hasState(measure.getEvaluation().getStatus())) {
+                                    measure.getEvaluation().removeStatus();
+                                }
+                            }
+                            
+                            String value = formatter.format(measure.getValue());
                             String iconClass, statusTitle;
 
                             try {
-                                statusTitle = measure.getEvaluation().getStatus().getTitle();
+                                statusTitle = measure.getEvaluation().getStatus().getTitle(user.getLanguage())==null?measure.getEvaluation().getStatus().getTitle():measure.getEvaluation().getStatus().getTitle(user.getLanguage());
                                 try {
                                     iconClass = measure.getEvaluation().getStatus().getIconClass().trim();
                                 }catch(Exception e) {
@@ -120,12 +138,29 @@ public class MeasuresManager extends GenericAdmResource {
                                 String title = period.getTitle(user.getLanguage()) == null ? period.getTitle() : period.getTitle(user.getLanguage());
                                 title.replaceAll("'", "");
                                 out.println("<tr>");
+                                
+                                // Acción
+                                // Eliminar regla
+                                out.println("<td>");
+                                SWBResourceURL urlr = paramRequest.getActionUrl();
+                                urlr.setParameter("suri", suri);
+                                urlr.setParameter("sval", measure.getURI());
+                                urlr.setAction(SWBResourceURL.Action_REMOVE);
+                                out.println("<a href=\"#\" onclick=\"if(confirm('" + paramRequest.getLocaleString("queryRemove")                                        
+                                        + "')){submitUrl('" + urlr + "',this);} else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=0></a>");
+                                out.println("</td>");
+                                
+                                // Período
                                 out.print("<td>");
                                 out.print("<a href=\"#\" onclick=\"addNewTab('" + period.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + title + "');return false;\" title=\""+paramRequest.getLocaleString("lblViewDetails") +"\" >" + title + "</a>");
                                 out.println("</td>");
+                                
+                                // Valor de la medición
                                 out.println("<td>");
                                 out.println("<input type=\"text\" dojoType=\"dijit.form.TextBox\" name=\"" + period.getId() + "\" value=\""+value+"\" />");
                                 out.println("</td>");
+                                
+                                // Estatus
                                 out.println("<td><span class=\""+iconClass+"\">"+statusTitle+"</span></td>");
                                 out.println("</tr>");
     //                        }
@@ -164,65 +199,94 @@ public class MeasuresManager extends GenericAdmResource {
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        final String action = response.getAction();
         final String suri = request.getParameter("suri");
+        
+        response.setAction(SWBResourceURL.Action_EDIT);
         response.setRenderParameter("suri", suri);
         
-        SemanticObject semanticObj = SemanticObject.getSemanticObject(suri);
-        if(semanticObj != null) {
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        SemanticObject semanticObj = ont.getSemanticObject(suri);
+        if(semanticObj==null) {
+            response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchSemanticElement"));
+            return;
+        }
+        
+        //if(semanticObj != null) {
             GenericObject genericObj = semanticObj.createGenericInstance();
             if(genericObj instanceof Series)
             {
                 Series series = (Series)genericObj;
-                Format format = series.getFormat();
-                Locale locale;
-                try {
-                    locale = new Locale(format.getLanguage().getId().toLowerCase(), format.getCountry().getId().toUpperCase());
-                }catch(Exception e) {
-                    locale = new Locale("es","MX");
-                }
-                NumberFormat numFormat = NumberFormat.getNumberInstance(locale);
-                DecimalFormat formatter = (DecimalFormat)numFormat;
-                try {
-                    formatter.applyPattern(format.getFormatPattern());
-                }catch(Exception iae) {
-                    formatter.applyPattern(getResourceBase().getAttribute("defaultFormatPattern", Default_FORMAT_PATTERN));
-                }
                 
-                String pid, val;
-                BSC bsc = (BSC) semanticObj.getModel().getModelObject().createGenericInstance();
-                Enumeration<String> e = request.getParameterNames();
-                while(e.hasMoreElements()) {
-                    pid = e.nextElement();
-                    val = request.getParameter(pid);
-                    if(Period.ClassMgr.hasPeriod(pid, bsc))
-                    {
-                        Period period = Period.ClassMgr.getPeriod(pid, bsc);
-                        Measure measure = series.getMeasureByPeriod(period);
-                        PeriodStatus ps;
-                        if(measure == null) {
-                            measure = Measure.ClassMgr.createMeasure(bsc);
-                            ps = PeriodStatus.ClassMgr.createPeriodStatus(bsc);
-                            ps.setPeriod(period);
-                            //ps.setStatus(series.getIndicator().getMinimumState());
-                            measure.setEvaluation(ps);
-                            series.addMeasure(measure);
+                if(SWBResourceURL.Action_REMOVE.equalsIgnoreCase(action))
+                {
+                    SemanticObject objMeasure = ont.getSemanticObject(request.getParameter("sval"));
+                    if(objMeasure!=null) {
+                        Measure measure = (Measure)objMeasure.getGenericInstance();
+                        if(series.hasMeasure(measure)) {
+                            series.removeMeasure(measure);
+                            response.setRenderParameter("statmsg", response.getLocaleString("msgRemoveOk"));
+                        }else {
+                            response.setRenderParameter("statmsg", response.getLocaleString("msgRemoveError"));
                         }
-                        try {
-                            float value = Float.parseFloat(val);
-                            measure.setValue(value);
-                            //measure.evaluate();
-                        }catch(NumberFormatException nfe) {
+                    }else {
+                        response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchSemanticElement"));
+                    }
+                }
+                else
+                {
+                    Format format = series.getFormat();
+                    Locale locale;
+                    try {
+                        locale = new Locale(format.getLanguage().getId().toLowerCase(), format.getCountry().getId().toUpperCase());
+                    }catch(Exception e) {
+                        locale = new Locale("es","MX");
+                    }
+                    NumberFormat numFormat = NumberFormat.getNumberInstance(locale);
+                    DecimalFormat formatter = (DecimalFormat)numFormat;
+                    try {
+                        formatter.applyPattern(format.getFormatPattern());
+                    }catch(Exception iae) {
+                        formatter.applyPattern(getResourceBase().getAttribute("defaultFormatPattern", Default_FORMAT_PATTERN));
+                    }
+
+                    String pid, val;
+                    BSC bsc = (BSC) semanticObj.getModel().getModelObject().createGenericInstance();
+                    Enumeration<String> e = request.getParameterNames();
+                    while(e.hasMoreElements()) {
+                        pid = e.nextElement();
+                        val = request.getParameter(pid);
+                        if(Period.ClassMgr.hasPeriod(pid, bsc))
+                        {
+                            Period period = Period.ClassMgr.getPeriod(pid, bsc);
+                            Measure measure = series.getMeasureByPeriod(period);
+                            PeriodStatus ps;
+                            if(measure == null) {
+                                measure = Measure.ClassMgr.createMeasure(bsc);
+                                ps = PeriodStatus.ClassMgr.createPeriodStatus(bsc);
+                                ps.setPeriod(period);
+                                //ps.setStatus(series.getIndicator().getMinimumState());
+                                measure.setEvaluation(ps);
+                                series.addMeasure(measure);
+                            }
                             try {
-                                Number value = formatter.parse(val);
-                                measure.setValue(value.floatValue());
-                                measure.getEvaluation().setStatus(series.getIndicator().getMinimumState());
-                            }catch(ParseException pe) {
-                                measure.setValue(0);
+                                float value = Float.parseFloat(val);
+                                measure.setValue(value);
+                            }catch(NumberFormatException nfe) {
+                                try {
+                                    Number value = formatter.parse(val);
+                                    measure.setValue(value.floatValue());
+                                    measure.getEvaluation().setStatus(series.getIndicator().getMinimumState());
+                                }catch(ParseException pe) {
+                                    measure.setValue(0);
+                                }
+                            }finally {
+                                measure.evaluate();
                             }
                         }
                     }
                 }
             }
-        }
+        //}
     }
 }
