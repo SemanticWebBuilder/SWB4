@@ -23,16 +23,18 @@
 
 <%
     String suri=(String)request.getAttribute("suri");
+    System.out.println("suri UserH:"+suri);
     if(suri==null) return; 
     org.semanticwb.model.User user = paramRequest.getUser();
     if (request.getAttribute("swbSocialUser") == null) {
         return;
     }
-
+    
     SemanticObject semObj = (SemanticObject) request.getAttribute("swbSocialUser");
     if (semObj == null) {
         return;
     }
+    System.out.println("semObj:"+semObj);
 
     WebSite wsite = WebSite.ClassMgr.getWebSite(semObj.getModel().getName());
     if (wsite == null) {

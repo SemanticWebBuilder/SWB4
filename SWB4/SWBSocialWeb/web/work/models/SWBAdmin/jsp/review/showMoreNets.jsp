@@ -83,7 +83,7 @@
                 nets = "<li>" + sSocialNet+"("+sPrivacy+")"+"</li>";
                 cont++;
             } else {
-                nets += "<li>"+"|" + sSocialNet+"("+sPrivacy+")"+"</li>";
+                nets += "<li>"+ sSocialNet+"("+sPrivacy+")"+"</li>";
             }
         }
     }

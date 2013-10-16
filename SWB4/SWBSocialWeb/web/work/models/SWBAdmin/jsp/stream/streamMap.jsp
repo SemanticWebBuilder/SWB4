@@ -97,6 +97,7 @@
         Iterator <PostIn> itPostIns=null;  
         if(semObj.getGenericInstance() instanceof Stream) 
         {
+            System.out.println("Map es Stream");
             Stream stream=(Stream)semObj.getGenericInstance();
             itPostIns=stream.listPostInStreamInvs();  
         }else if(semObj.getGenericInstance() instanceof SocialTopic) {
@@ -107,73 +108,76 @@
         while(itPostIns.hasNext())
         {
             PostIn postIn=itPostIns.next();
-            if(postIn.getCreated().compareTo(date)>=0)
+            System.out.println("postIn Solin:"+postIn);
+            if(postIn.getCreated()!=null && postIn.getCreated().compareTo(date)>=0)
             {
-                if(postIn.getCreated()!=null && postIn.getCreated().compareTo(date)<0)
+                System.out.println("postIn Solin-1:"+postIn);
+                
+                System.out.println("postIn/lat:"+postIn.getLatitude()+",lng:"+postIn.getLongitude());
+                if(postIn.getGeoStateMap()!=null && (streamMapView==1 || streamMapView==3 || streamMapView==4))
                 {
-                    //System.out.println("postIn/lat:"+postIn.getLatitude()+",lng:"+postIn.getLongitude());
-                    if(postIn.getGeoStateMap()!=null && (streamMapView==1 || streamMapView==3 || streamMapView==4))
+                    System.out.println("postIn En estado:"+postIn);
+                    if(!hmapPoints.containsKey(postIn.getGeoStateMap().getId())) 
                     {
-                        if(!hmapPoints.containsKey(postIn.getGeoStateMap().getId())) 
+                        //System.out.println("Entra a hmapPoints-1.1:"+postIn.getMsg_Text()); 
+                        HashMap<String, Integer> sentimentHash=new HashMap();
+                        //System.out.println("Entra a hmapPoints-1.2:"+postIn.getPostSentimentalType());
+                        if(postIn.getPostSentimentalType()==1) {
+                            sentimentHash.put("P", new Integer(1));
+                        }  //Con sentimiento Positivo
+                        else if(postIn.getPostSentimentalType()==2) {
+                            sentimentHash.put("N", new Integer(1)); 
+                        } //Con sentimiento Negativo
+                        if(!sentimentHash.isEmpty())
                         {
-                            //System.out.println("Entra a hmapPoints-1.1:"+postIn.getMsg_Text()); 
-                            HashMap<String, Integer> sentimentHash=new HashMap();
-                            //System.out.println("Entra a hmapPoints-1.2:"+postIn.getPostSentimentalType());
-                            if(postIn.getPostSentimentalType()==1) {
-                                sentimentHash.put("P", new Integer(1));
-                            }  //Con sentimiento Positivo
-                            else if(postIn.getPostSentimentalType()==2) {
-                                sentimentHash.put("N", new Integer(1)); 
-                            } //Con sentimiento Negativo
-                            if(!sentimentHash.isEmpty())
+                            //System.out.println("sentimentHash PRIMERO:"+sentimentHash);
+                            hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
+                            //System.out.println("Entra a hmapPoints-2:"+hmapPoints);
+                        }
+                    }else{  //Si ya contiene el estado en el HashMap
+                        HashMap sentimentHash=hmapPoints.get(postIn.getGeoStateMap().getId());
+                        if(postIn.getPostSentimentalType()==1)
+                        {
+                            if(sentimentHash.containsKey("P"))
                             {
-                                //System.out.println("sentimentHash PRIMERO:"+sentimentHash);
+                                //System.out.println("Entra a hmapPoints-5.1:"+postIn.getMsg_Text()); 
+                                //System.out.println("Valor:"+sentimentHash.get("P"));
+                                int positiveSentimentNumber=((Integer)sentimentHash.get("P")).intValue()+1;
+                                //System.out.println("Entra a hmapPoints-5.2:"+positiveSentimentNumber); 
+                                sentimentHash.remove("P");
+                                sentimentHash.put("P", new Integer(positiveSentimentNumber));
+                                hmapPoints.remove(postIn.getGeoStateMap().getId());
                                 hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
-                                //System.out.println("Entra a hmapPoints-2:"+hmapPoints);
-                            }
-                        }else{  //Si ya contiene el estado en el HashMap
-                            HashMap sentimentHash=hmapPoints.get(postIn.getGeoStateMap().getId());
-                            if(postIn.getPostSentimentalType()==1)
-                            {
-                                if(sentimentHash.containsKey("P"))
-                                {
-                                    //System.out.println("Entra a hmapPoints-5.1:"+postIn.getMsg_Text()); 
-                                    //System.out.println("Valor:"+sentimentHash.get("P"));
-                                    int positiveSentimentNumber=((Integer)sentimentHash.get("P")).intValue()+1;
-                                    //System.out.println("Entra a hmapPoints-5.2:"+positiveSentimentNumber); 
-                                    sentimentHash.remove("P");
-                                    sentimentHash.put("P", new Integer(positiveSentimentNumber));
-                                    hmapPoints.remove(postIn.getGeoStateMap().getId());
-                                    hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
 
-                                }else{
-                                    sentimentHash.put("P", new Integer(1)); 
-                                    hmapPoints.remove(postIn.getGeoStateMap().getId());
-                                    hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
-                                }
-                            }else if(postIn.getPostSentimentalType()==2) 
+                            }else{
+                                sentimentHash.put("P", new Integer(1)); 
+                                hmapPoints.remove(postIn.getGeoStateMap().getId());
+                                hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
+                            }
+                        }else if(postIn.getPostSentimentalType()==2) 
+                        {
+                            if(sentimentHash.containsKey("N"))
                             {
-                                if(sentimentHash.containsKey("N"))
-                                {
-                                    int negativeSentimentNumber=((Integer)sentimentHash.get("N")).intValue()+1;
-                                    sentimentHash.remove("N");
-                                    sentimentHash.put("N", new Integer(negativeSentimentNumber));
-                                    hmapPoints.remove(postIn.getGeoStateMap().getId());
-                                    hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
-                                }else{
-                                    sentimentHash.put("N", new Integer(1)); 
-                                    hmapPoints.remove(postIn.getGeoStateMap().getId());
-                                    hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
-                                }
+                                int negativeSentimentNumber=((Integer)sentimentHash.get("N")).intValue()+1;
+                                sentimentHash.remove("N");
+                                sentimentHash.put("N", new Integer(negativeSentimentNumber));
+                                hmapPoints.remove(postIn.getGeoStateMap().getId());
+                                hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
+                            }else{
+                                sentimentHash.put("N", new Integer(1)); 
+                                hmapPoints.remove(postIn.getGeoStateMap().getId());
+                                hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
                             }
                         }
-                        if(streamMapView==3 || streamMapView==4)
-                        {
-                            aPostInsNotInStates.add(postIn);
-                        }
-                    }else{
+                    }
+                    if(streamMapView==3 || streamMapView==4)
+                    {
+                        System.out.println("postIn NO EN estado:"+postIn);
                         aPostInsNotInStates.add(postIn);
                     }
+                }else{
+                    System.out.println("postIn NO EN estado:"+postIn);
+                    aPostInsNotInStates.add(postIn);
                 }
             }
         }
@@ -281,7 +285,7 @@
                            title: '<%=msg%>',
                            map: map
                            });
-                           associateInfoWindows(marker, '<%=postIn.getEncodedURI()%>');
+                           associateInfoWindows(marker, '<%=postIn.getEncodedURI()%>', '<%=semObj.getEncodedURI()%>');
                            batch.push(marker);  
                     <%         
                 }else if(postIn.getPostInSocialNetworkUser()!=null && postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation()!=null && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==2 || streamMapView==4)){ 
@@ -317,7 +321,7 @@
                                     icon: tmpIcon,
                                     title: 'By GeoUser Profile:'+title
                                      });
-                                    associateInfoWindows(marker, '<%=postIn.getEncodedURI()%>');
+                                    associateInfoWindows(marker, '<%=postIn.getEncodedURI()%>', '<%=semObj.getEncodedURI()%>');
                                     batch.push(marker);  
                                 }//else{
                                    // alert("Esa dirección no existe:"+postLocation);
@@ -335,7 +339,7 @@
     }
     
     //Crea los escuchas de los eventos "click", para cada marcador del mapa
-    function associateInfoWindows(marker, postInUri) {
+    function associateInfoWindows(marker, postInUri, suri) {
         google.maps.event.addListener(marker, 'click', function() {
             var infoWin = null;
             var request = false;
@@ -346,6 +350,7 @@
             }
             var url = "<%=urlDetails%>";
             url += "?postUri=" + postInUri;
+            url += "&suri=" + suri;
             request.open('POST', url, true);
             request.onreadystatechange = function() {
                 if ((request.readyState == 4) && (request.status == 200)) {
