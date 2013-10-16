@@ -961,7 +961,7 @@ public class Timeline extends GenericResource{
             }
 
             out.println("<div align=\"center\">");
-            out.println("<label id=\"" + objUri + "/moreTwitLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreTweets").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreTweets','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">More tweets</a></label>");
+            out.println("<label id=\"" + objUri + "/moreTwitLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreTweets").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreTweets','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreTweets") + "</a></label>");
             out.println("</div>");
             System.out.println("Total tweets:" + i);
         } catch (Exception te) {
@@ -1009,7 +1009,7 @@ public class Timeline extends GenericResource{
             }
 
             out.println("<div align=\"center\">");
-            out.println("<label id=\"" + objUri + "/moreMentionLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreMentions").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreMentions','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">More Mentions</a></label>");
+            out.println("<label id=\"" + objUri + "/moreMentionLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreMentions").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreMentions','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreMentions") +"</a></label>");
             out.println("</div>");
             System.out.println("Total mentions:" + i);
         } catch (Exception te) {
@@ -1055,7 +1055,7 @@ public class Timeline extends GenericResource{
                 i++;
             }
             out.println("<div align=\"center\">");
-            out.println("<label id=\"" + objUri + "/moreFavoritesLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreFavorites").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreFavorites','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">More Favorites</a></label>");
+            out.println("<label id=\"" + objUri + "/moreFavoritesLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreFavorites").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreFavorites','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreFavorites") + "</a></label>");
             out.println("</div>");
             System.out.println("Total favorites:" + i);
         } catch (Exception te) {
@@ -1095,7 +1095,7 @@ public class Timeline extends GenericResource{
                 i++;
             }
             out.println("<div align=\"center\">");
-            out.println("<label id=\"" + objUri + "/moreDMLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreDM").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreDM','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">More Direct Messages</a></label>");
+            out.println("<label id=\"" + objUri + "/moreDMLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreDM").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreDM','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreDMs") + "</a></label>");
             out.println("</div>");
             System.out.println("Total direct messages:" + i);
         } catch (Exception te) {
