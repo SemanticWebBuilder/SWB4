@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Persiste los atributos de un indicador 
    */
-public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Seasonable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Status,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Serializable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Committable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass
+public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Recognizable,org.semanticwb.model.Roleable,org.semanticwb.model.UserGroupable,org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Status,org.semanticwb.model.Filterable,org.semanticwb.bsc.Committable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Serializable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Seasonable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.model.Referensable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable
 {
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
@@ -279,6 +279,29 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
         public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Indicator with a determined Role
+       * @param value Role of the type org.semanticwb.model.Role
+       * @param model Model of the org.semanticwb.bsc.element.Indicator
+       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByRole(org.semanticwb.model.Role value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Indicator with a determined Role
+       * @param value Role of the type org.semanticwb.model.Role
+       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByRole(org.semanticwb.model.Role value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole,value.getSemanticObject(),sclass));
             return it;
         }
        /**
