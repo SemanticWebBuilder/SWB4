@@ -1167,7 +1167,7 @@ public class Timeline extends GenericResource{
         try {
                 writer.write("<div class=\"timeline timelinetweeter\">");
                 if(status.isRetweet()){
-                    writer.write("  <p class=\"retweeted\">Retweeted  by ");
+                    writer.write("  <p class=\"retweeted\">" + paramRequest.getLocaleString("retweetedBy") +  " ");
                     writer.write("       <a href=\"#\" onclick=\"showDialog('" + renderURL.setMode("showUserProfile").setParameter("targetUser", status.getUser().getScreenName()) + "','" + status.getUser().getName() + " - @" + status.getUser().getScreenName() + "');return false;\">@"+ status.getUser().getScreenName() + "</a>");
                     writer.write("  </p>");
                 }
