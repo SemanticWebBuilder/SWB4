@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class BSCElementBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Help,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Traceable,org.semanticwb.model.Roleable
+public abstract class BSCElementBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Help
 {
     public static final org.semanticwb.platform.SemanticClass bsc_BSCElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#BSCElement");
    /**
@@ -145,29 +145,6 @@ public abstract class BSCElementBase extends org.semanticwb.model.SWBClass imple
         public static java.util.Iterator<org.semanticwb.bsc.element.BSCElement> listBSCElementByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.BSCElement> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.element.BSCElement with a determined Role
-       * @param value Role of the type org.semanticwb.model.Role
-       * @param model Model of the org.semanticwb.bsc.element.BSCElement
-       * @return Iterator with all the org.semanticwb.bsc.element.BSCElement
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.BSCElement> listBSCElementByRole(org.semanticwb.model.Role value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.BSCElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.element.BSCElement with a determined Role
-       * @param value Role of the type org.semanticwb.model.Role
-       * @return Iterator with all the org.semanticwb.bsc.element.BSCElement
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.BSCElement> listBSCElementByRole(org.semanticwb.model.Role value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.BSCElement> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -451,71 +428,6 @@ public abstract class BSCElementBase extends org.semanticwb.model.SWBClass imple
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
-    }
-   /**
-   * Gets all the org.semanticwb.model.Role
-   * @return A GenericIterator with all the org.semanticwb.model.Role
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> listRoles()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(getSemanticObject().listObjectProperties(swb_hasRole));
-    }
-
-   /**
-   * Gets true if has a Role
-   * @param value org.semanticwb.model.Role to verify
-   * @return true if the org.semanticwb.model.Role exists, false otherwise
-   */
-    public boolean hasRole(org.semanticwb.model.Role value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swb_hasRole,value.getSemanticObject());
-        }
-        return ret;
-    }
-   /**
-   * Adds a Role
-   * @param value org.semanticwb.model.Role to add
-   */
-
-    public void addRole(org.semanticwb.model.Role value)
-    {
-        getSemanticObject().addObjectProperty(swb_hasRole, value.getSemanticObject());
-    }
-   /**
-   * Removes all the Role
-   */
-
-    public void removeAllRole()
-    {
-        getSemanticObject().removeProperty(swb_hasRole);
-    }
-   /**
-   * Removes a Role
-   * @param value org.semanticwb.model.Role to remove
-   */
-
-    public void removeRole(org.semanticwb.model.Role value)
-    {
-        getSemanticObject().removeObjectProperty(swb_hasRole,value.getSemanticObject());
-    }
-
-   /**
-   * Gets the Role
-   * @return a org.semanticwb.model.Role
-   */
-    public org.semanticwb.model.Role getRole()
-    {
-         org.semanticwb.model.Role ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRole);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.Role)obj.createGenericInstance();
          }
          return ret;
     }

@@ -1,68 +1,48 @@
 package org.semanticwb.bsc.catalogs;
 
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
 /*
  * Una operación es usada para definir una regla de evaluación. Evaluar la regla
  * implica evaluar la operación con los valores que se especifican en la regla.
  * Los operadores incluyen operadores lógicos y relacionales principalmente.
  */
-public abstract class Operation extends org.semanticwb.bsc.catalogs.base.OperationBase 
-{
-    protected String formattPattern;
-    protected String separator;
-    protected String term;
-    
+public class Operation extends org.semanticwb.bsc.catalogs.base.OperationBase 
+{    
     public Operation(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
     
-    public abstract boolean evaluate(final double value1, final double value2);
+    public boolean evaluate(final double value1, final double value2) throws ScriptException, NoSuchMethodException {
+        if(getScript()==null || getScript().trim().isEmpty()) {
+            throw new ScriptException("no hay script");
+        }
+        Boolean res = false;
+        ScriptEngineManager factory = new ScriptEngineManager();
+        ScriptEngine jsEngine = factory.getEngineByName("javascript");
+        jsEngine.eval(getScript());
+        Invocable invocableEngine = (Invocable) jsEngine;
+        res = (Boolean)invocableEngine.invokeFunction("evaluate",value1,value2);
+        return res;
+    }
     
-    public abstract boolean evaluate(final String factor, final double value1, final double value2);
+    public boolean evaluate(final double value1, final double value2, final double value3) throws ScriptException, NoSuchMethodException {
+        if(getScript()==null || getScript().trim().isEmpty()) {
+            throw new ScriptException("no hay script");
+        }
+        Boolean res = false;
+        ScriptEngineManager factory = new ScriptEngineManager();
+        ScriptEngine jsEngine = factory.getEngineByName("javascript");
+        jsEngine.eval(getScript());
+        Invocable invocableEngine = (Invocable) jsEngine;
+        res = (Boolean)invocableEngine.invokeFunction("evaluate",value1,value2,value3);
+        return res;
+    }
     
     public void parseFactor() {
     }
-
-    /**
-     * @return the formattPattern
-     */
-    public String getFormattPattern() {
-        return formattPattern;
-    }
-
-    /**
-     * @param formattPattern the formattPattern to set
-     */
-    public void setFormattPattern(String formattPattern) {
-        this.formattPattern = formattPattern;
-    }
-
-    /**
-     * @return the separator
-     */
-    public String getSeparator() {
-        return separator;
-    }
-
-    /**
-     * @param separator the separator to set
-     */
-    public void setSeparator(String separator) {
-        this.separator = separator;
-    }
-
-    /**
-     * @return the term
-     */
-    public String getTerm() {
-        return term;
-    }
-
-    /**
-     * @param term the term to set
-     */
-    public void setTerm(String term) {
-        this.term = term;
-    }
-    
 }
