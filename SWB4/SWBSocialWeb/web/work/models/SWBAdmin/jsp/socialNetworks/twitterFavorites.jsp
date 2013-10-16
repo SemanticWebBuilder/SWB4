@@ -63,7 +63,7 @@
                 socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
             }
             for (Status status : twitterBean.getFavorites(paging)){
-                //maxTweetID = status.getId();
+                maxTweetID = status.getId();
                 doPrintTweet(request, response, paramRequest, status, twitterBean, out, null, FAVORITES_TAB, null, socialUserExtAttr);
                 i++;
             }
@@ -76,7 +76,7 @@
 %>
 <div id="<%=objUri%>/getMoreFavorites" dojoType="dojox.layout.ContentPane">
     <div align="center">
-        <label id="<%=objUri%>/moreFavoritesLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMoreFavorites").setParameter("maxTweetID", maxTweetID+"")%>','<%=objUri%>/getMoreFavorites', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;">More Favorites</a></label>
+        <label id="<%=objUri%>/moreFavoritesLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMoreFavorites").setParameter("maxTweetID", maxTweetID+"")%>','<%=objUri%>/getMoreFavorites', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;"><%=paramRequest.getLocaleString("moreFavorites")%></a></label>
     </div>
 </div>
 </div>

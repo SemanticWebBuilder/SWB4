@@ -45,15 +45,15 @@
     actionURL.setParameter("suri", suri);
     
     if(isFollowedByMe){
-        relationshipStatus="Unfollow";
+        relationshipStatus = paramRequest.getLocaleString("unfollow");
         actionURL.setAction("undoFollow");
     }else{
-        relationshipStatus="Follow";
+        relationshipStatus = paramRequest.getLocaleString("follow");
         actionURL.setAction("doFollow");
     }
 %>
 <div class="swbform" style="width: 500px">
-    <div align="center"><img src="<%=twitterUser.getBiggerProfileImageURL()%>"/></div>
+    <div align="center"><img src="<%=twitterUser.getBiggerProfileImageURL()%>" width="73" height="73"/></div>
     <table style="width: 100%">
         <tr>
             <td align="center" colspan="4">
@@ -90,7 +90,7 @@
     </table>
 <%
     try {
-            out.println("<div align=\"center\"><h2>Showing @" + targetUser +  "'s Timeline. </h2></div>");
+            out.println("<div align=\"center\"><h2>@" + targetUser +  " Timeline. </h2></div>");
             Paging paging = new Paging(); //used to set maxId and count
             paging.count(3);//Gets a number of tweets of timeline. Max value is 100           
             int i = 0;
@@ -118,7 +118,7 @@
                         out.println("</tr>");
                         out.println("<tr>");
                         out.println("   <td colspan=\"2\">");
-                        out.write("Created:<b>" + twitterHumanFriendlyDate(status.getCreatedAt(), paramRequest) + "</b>");                    
+                        out.println("<b>" + twitterHumanFriendlyDate(status.getCreatedAt(), paramRequest) + "</b>");                    
                         out.println("   </td>");
                         out.println("</tr>");
                         out.println("</table>");
