@@ -3,6 +3,7 @@
     Created on : 03-oct-2013, 19:51:58
     Author     : gabriela.rosales
 --%>
+<%@page import="com.sun.corba.se.impl.ior.WireObjectKeyTemplate"%>
 <%@page import="org.semanticwb.social.util.SWBSocialUtil"%>
 <%@page contentType="text/json" pageEncoding="UTF-8"%> 
 <%@page import="org.semanticwb.platform.SemanticObject"%>
@@ -20,7 +21,7 @@
 <%!
     JSONArray getObject(SemanticObject semObj, String lang) throws Exception {
       
-        int neutrals = 0, positives = 0, negatives = 0, single = 0, married = 0, divorced = 0, widowed = 0, undefined = 0;
+        int  single = 0, married = 0, divorced = 0, widowed = 0, undefined = 0;
         ArrayList singleArray = new ArrayList();
         ArrayList marriedArray = new ArrayList();
         ArrayList divorcedArray = new ArrayList();
@@ -230,6 +231,20 @@
             node5.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("undefinedRelation", lang)+": " + undefined + " Positivos : " + positivesUndefined+ " Negativos: " + negativesUndefined+ " Neutros: " + neutralsUndefined);
             node5.put("chartclass", "possClass");
             node.put(node5);
+        }
+        
+        if(single == 0 && married == 0 && divorced==0 && widowed==0 && undefined==0 ){
+                   
+            JSONObject node3=new JSONObject();
+            node3.put("label", "Neutros"); 
+            node3.put("value1", "0");
+            node3.put("value2", "100");
+            node3.put("color", "#eae8e3");
+            node3.put("chartclass", "neuClass");
+            node3.put("label2", "Sin datos para procesar");
+
+            node.put(node3);
+        
         }
 
         return node;

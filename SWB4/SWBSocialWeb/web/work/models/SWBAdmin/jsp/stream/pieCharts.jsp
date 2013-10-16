@@ -209,7 +209,8 @@
                         .style("fill", function(d, i) {
                             return  d.data.color;
                         });
-
+                    
+             
                         svg
                         .append("text")
                         .text("title")
@@ -220,16 +221,15 @@
                         .attr("x","0")
                         .attr("y",function(d) {
                             return - width/2;
-                        });                      
-                      
+                        });    
 
-                        for (i = 0; i < data.length; i++) {               
+                        for (var i = 0; i < data.length; i++) {               
                             xArray.push(data[i].label2);                                            
                         }  
                                           
-                        for (i = 0; i <xArray.length ; i++) {   
+                        for (var j = 0; j <xArray.length ; j++) {   
                             var para = document.createElement("p");                                  
-                            var node = document.createTextNode( xArray[i] );
+                            var node = document.createTextNode( xArray[j] );
                             para.appendChild(node);
                             var element=document.getElementById("pieGenderParent");
                             element.appendChild(para);
@@ -350,13 +350,13 @@
                             return - width/2;
                         });    
                         
-                        for (i = 0; i < data.length; i++) {               
+                        for (var i = 0; i < data.length; i++) {               
                             educationArray.push(data[i].label2);                                            
                         }  
                                           
-                        for (i = 0; i <educationArray.length ; i++) {   
+                        for (var j = 0; j <educationArray.length ; j++) {   
                             var para = document.createElement("p");                                  
-                            var node = document.createTextNode( educationArray[i] );
+                            var node = document.createTextNode( educationArray[j] );
                             para.appendChild(node);
                             var element=document.getElementById("pieEducationParent");
                             element.appendChild(para);
@@ -468,13 +468,13 @@
                         });
                         
                         
-                        for (i = 0; i < data.length; i++) {               
+                        for (var i = 0; i < data.length; i++) {               
                             relationArray.push(data[i].label2);                                            
                         }  
                                           
-                        for (i = 0; i <relationArray.length ; i++) {   
+                        for (var j = 0; j <relationArray.length ; j++) {   
                             var para = document.createElement("p");                                  
-                            var node = document.createTextNode( relationArray[i] );
+                            var node = document.createTextNode( relationArray[j] );
                             para.appendChild(node);
                             var element=document.getElementById("pieRelationParent");
                             element.appendChild(para);
@@ -584,13 +584,13 @@
                             return - width/2;
                         });
                         
-                        for (i = 0; i < data.length; i++) {               
+                        for (var i = 0; i < data.length; i++) {               
                             geoArray.push(data[i].label2);                                            
                         }  
                                           
-                        for (i = 0; i <geoArray.length ; i++) {   
+                        for (var j = 0; j <geoArray.length ; j++) {   
                             var para = document.createElement("p");                                  
-                            var node = document.createTextNode( geoArray[i] );
+                            var node = document.createTextNode( geoArray[j] );
                             para.appendChild(node);
                             var element=document.getElementById("profileGeoLocationParent");
                             element.appendChild(para);
@@ -701,13 +701,13 @@
                             return - width/2;
                         });
                         
-                        for (i = 0; i < data.length; i++) {               
+                        for (var i = 0; i < data.length; i++) {               
                             lifeStageArray.push(data[i].label2);                                            
                         }  
                                           
-                        for (i = 0; i <lifeStageArray.length ; i++) {   
+                        for (var j = 0; j <lifeStageArray.length ; j++) {   
                             var para = document.createElement("p");                                  
-                            var node = document.createTextNode( lifeStageArray[i] );
+                            var node = document.createTextNode( lifeStageArray[j] );
                             para.appendChild(node);
                             var element=document.getElementById("lifeStageParent");
                             element.appendChild(para);

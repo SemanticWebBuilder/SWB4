@@ -27,7 +27,7 @@
 
         int neutrals = 0, positives = 0, negatives = 0;
         Iterator<PostIn> itObjPostIns = null;
-       
+
 
         if (semObj.getGenericInstance() instanceof Stream) {
             Stream stream = (Stream) semObj.getGenericInstance();
@@ -87,10 +87,10 @@
             size++;
         }
         float intTotalVotos = map.size() - 1;
-        System.out.println("TOTAL DE VOTOS: " + intTotalVotos);
+        // System.out.println("TOTAL DE VOTOS: " + intTotalVotos);
 
         //Positivo
-        float intPorcentajePositive = ((float) positives * 100) / (float) intTotalVotos;
+        //float intPorcentajePositive = ((float) positives * 100) / (float) intTotalVotos;
         Iterator i = map.entrySet().iterator();
         while (i.hasNext()) {
             Map.Entry e = (Map.Entry) i.next();
@@ -117,15 +117,32 @@
                 node1.put("label2", csss.getTitle() + " " + e.getValue());
                 node1.put("chartclass", "possClass");
                 node.put(node1);
+            } else {
+
+                JSONObject node3 = new JSONObject();
+                node3.put("label", "Neutros");
+                node3.put("value1", "0");
+                node3.put("value2", "100");
+                node3.put("color", "#eae8e3");
+                node3.put("chartclass", "neuClass");
+                node3.put("label2", "Sin datos para procesar");
+                node.put(node3);
             }
         }
-
-        for (int ii = 0; ii < node.length(); ii++) {
-            JSONObject jsonObject = node.getJSONObject(ii);
-            System.out.println("jsonObjectGeo" + jsonObject);
+        
+        if(map.isEmpty()){
+            
+            JSONObject node3 = new JSONObject();
+                node3.put("label", "Neutros");
+                node3.put("value1", "0");
+                node3.put("value2", "100");
+                node3.put("color", "#eae8e3");
+                node3.put("chartclass", "neuClass");
+                node3.put("label2", "Sin datos para procesar");
+                node.put(node3);
+        
         }
 
-        
         return node;
     }
 
@@ -135,10 +152,10 @@
 %>
 <%
 
-    if (request.getParameter("objUri") != null) {        
+    if (request.getParameter("objUri") != null) {
         SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("objUri"));
         String lang = request.getParameter("lang");
         String idModel = request.getParameter("idModel");
-       out.println(getObject(semObj, lang, idModel));
+        out.println(getObject(semObj, lang, idModel));
     }
 %>

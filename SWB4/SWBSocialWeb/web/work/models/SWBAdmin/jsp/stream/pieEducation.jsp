@@ -19,8 +19,8 @@
 
 <%!
     JSONArray getObject(SemanticObject semObj, String lang) throws Exception {
-        System.out.println("----->entro a pie education");
-        int neutrals = 0, positives = 0, negatives = 0, highSchool = 0, college = 0, graduate = 0, undefined = 0;
+        
+        int highSchool = 0, college = 0, graduate = 0, undefined = 0;
         Iterator<PostIn> itObjPostIns = null;
         if (semObj.getGenericInstance() instanceof Stream) {
             Stream stream = (Stream) semObj.getGenericInstance();
@@ -200,6 +200,20 @@
             node4.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("undefinedEducation", lang)+" :" + undefined + " Positivos :" + positivesundefined + " Negativos: " + negativesundefined + " Neutros :" + neutralsundefined);
             node4.put("chartclass", "possClass");
             node.put(node4);
+        }
+        
+         if(highSchool == 0 && college == 0 &&  graduate ==0 && undefined==0 ){
+                   
+            JSONObject node3=new JSONObject();
+            node3.put("label", "Neutros"); 
+            node3.put("value1", "0");
+            node3.put("value2", "100");
+            node3.put("color", "#eae8e3");
+            node3.put("chartclass", "neuClass");
+            node3.put("label2", "Sin datos para procesar");
+
+            node.put(node3);
+        
         }
 
         return node;
