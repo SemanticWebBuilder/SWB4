@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social Facebook. 
    */
-public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Videoable,org.semanticwb.social.Messageable,org.semanticwb.model.Trashable,org.semanticwb.social.Secreteable,org.semanticwb.social.Photoable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Oauthable,org.semanticwb.model.Traceable,org.semanticwb.social.Listenerable
+public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Videoable,org.semanticwb.social.Oauthable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Secreteable,org.semanticwb.social.Listenerable,org.semanticwb.model.Trashable,org.semanticwb.social.Photoable,org.semanticwb.social.Messageable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Relationable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable
 {
    /**
    * Eliminar despues esta propiedad, ver si Jose puede eliminar la propiedad login que se encuentra en la clase padre(SocialNetwork).
