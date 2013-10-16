@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.tracing.base;
 
 
-public abstract class EvaluationRuleBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Help,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable
+public abstract class EvaluationRuleBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Help
 {
     public static final org.semanticwb.platform.SemanticClass bsc_Series=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Series");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasEvaluationRuleInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasEvaluationRuleInv");

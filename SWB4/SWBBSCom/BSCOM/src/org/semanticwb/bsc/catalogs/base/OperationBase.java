@@ -3,7 +3,7 @@ package org.semanticwb.bsc.catalogs.base;
 
 public abstract class OperationBase extends org.semanticwb.bsc.catalogs.Catalog implements org.semanticwb.model.Descriptiveable
 {
-    public static final org.semanticwb.platform.SemanticProperty bsc_symbol=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#symbol");
+    public static final org.semanticwb.platform.SemanticProperty bsc_script=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#script");
     public static final org.semanticwb.platform.SemanticClass bsc_Operation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Operation");
    /**
    * The semantic class that represents the currentObject
@@ -96,21 +96,21 @@ public abstract class OperationBase extends org.semanticwb.bsc.catalogs.Catalog 
     }
 
 /**
-* Gets the Symbol property
-* @return String with the Symbol
+* Gets the Script property
+* @return String with the Script
 */
-    public String getSymbol()
+    public String getScript()
     {
-        return getSemanticObject().getProperty(bsc_symbol);
+        return getSemanticObject().getProperty(bsc_script);
     }
 
 /**
-* Sets the Symbol property
-* @param value long with the Symbol
+* Sets the Script property
+* @param value long with the Script
 */
-    public void setSymbol(String value)
+    public void setScript(String value)
     {
-        getSemanticObject().setProperty(bsc_symbol, value);
+        getSemanticObject().setProperty(bsc_script, value);
     }
 
    /**

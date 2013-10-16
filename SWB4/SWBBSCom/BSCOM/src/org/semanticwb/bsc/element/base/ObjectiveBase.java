@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Status,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.bsc.Preference,org.semanticwb.bsc.Serializable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Help,org.semanticwb.model.Roleable,org.semanticwb.bsc.Causal,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Committable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.Sortable,org.semanticwb.bsc.Seasonable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.PeriodStatusAssignable
+public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Activeable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Status,org.semanticwb.model.Filterable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Serializable,org.semanticwb.bsc.Causal,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Sortable,org.semanticwb.bsc.Committable,org.semanticwb.model.Traceable,org.semanticwb.bsc.PeriodStatusAssignable,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.Seasonable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Referensable,org.semanticwb.bsc.Preference
 {
    /**
    * Persiste los atributos de un indicador
@@ -353,29 +353,6 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
         public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.element.Objective with a determined Role
-       * @param value Role of the type org.semanticwb.model.Role
-       * @param model Model of the org.semanticwb.bsc.element.Objective
-       * @return Iterator with all the org.semanticwb.bsc.element.Objective
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByRole(org.semanticwb.model.Role value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.element.Objective with a determined Role
-       * @param value Role of the type org.semanticwb.model.Role
-       * @return Iterator with all the org.semanticwb.bsc.element.Objective
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByRole(org.semanticwb.model.Role value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole,value.getSemanticObject(),sclass));
             return it;
         }
        /**

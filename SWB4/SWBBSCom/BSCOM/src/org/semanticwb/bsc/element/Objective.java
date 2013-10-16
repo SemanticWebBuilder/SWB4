@@ -173,55 +173,7 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
         super.removeAllState();
     }
     
-    /**
-     * Devuelve el valor de despliegue de la propiedad ontol&oacute;gica especificada. Las propiedades aceptadas
-     * son aquellas cuyo valor devuelto por {@code isDataTypeProperty()} es {@code false}.
-     * @param property la propiedad sem&aacute;ntica de la que se desea obtener el valor de despliegue.
-     * @param lang indica el idioma en que se espera el valor devuelto.
-     * @param thisPeriod indica el periodo al que debe corresponder la informaci&oacute;n obtenida
-     * @return un objeto {@literal String} que representa el valor de despliegue de la propiedad ontol&oacute;gica indicada.
-     */
-    public String renderObjectPropertyValue(SemanticProperty property, String lang, Period thisPeriod) {
-        
-        String value = null;
-        if (lang != null) {
-            if (property.equals(Objective.bsc_hasIndicator)) {
-                value = renderHasIndicatorValue(lang);
-            } else if (property.equals(Objective.bsc_hasInitiative)) {
-                value = renderHasInitiativeValue(lang);
-            } else if (property.equals(Objective.bsc_hasPeriod)) {
-                value = renderHasPeriodValue(lang);
-            } else if (property.equals(Objective.bsc_hasPeriodStatus)) {
-                value = renderHasPeriodStatusValue(lang, thisPeriod);
-            } else if (property.equals(Objective.bsc_hasState)) {
-                value = renderHasStateValue(lang);
-            } else if (property.equals(Objective.bsc_parentObjective)) {
-                value = renderParentObjectiveValue(lang);
-            } else if (property.equals(Objective.bsc_periodicity)) {
-                value = renderPeriodicityValue(lang);
-            } else if (property.equals(Objective.bsc_themeInv)) {
-                value = renderThemeInvValue(lang);
-            } else if (property.equals(Objective.swb_hasRole)) {
-                value = renderHasRoleValue(lang);
-            } else if (property.equals(Objective.swb_hasRuleRef)) {
-                value = renderHasRuleRefValue(lang);
-            } else if (property.equals(Objective.swb_hasUserGroup)) {
-                value = renderHasUserGroupValue(lang);
-            }
-        }
-        
-        if (property.equals(Objective.bsc_help)) {
-            value = renderHelpValue();
-        } else if (property.equals(Objective.bsc_sponsor)) {
-            value = renderSponsorValue();
-        } else if (property.equals(Objective.swb_creator)) {
-            value = renderCreatorValue();
-        } else if (property.equals(Objective.swb_modifiedBy)) {
-            value = renderModifiedByValue();
-        }
-        return value == null ? "" : value;
-    }
-    
+  
     /**
      * Genera un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.hasIndicator}
      * @param lang un {@code String} que indica el idioma en que se espera el valor devuelto
@@ -343,29 +295,7 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
         return value.toString();
     }
     
-    /**
-     * Genera un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.hasRole}
-     * @param lang un {@code String} que indica el idioma en que se espera el valor devuelto
-     * @return un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.hasRole}
-     */
-    private String renderHasRoleValue(String lang) {
-        
-        StringBuilder value = new StringBuilder(128);
-        
-        if (this.listRoles().hasNext()) {
-            GenericIterator<Role> roleIterator = this.listRoles();
-            int count = 0;
-            while (roleIterator.hasNext()) {
-                Role role = roleIterator.next();
-                count++;
-                if (count > 1) {
-                    value.append("; ");
-                }
-                value.append(role.getDisplayTitle(lang));
-            }
-        }
-        return value.toString();
-    }
+   
     
     /**
      * Genera un {@code String} que representa el valor de despliegue de la propiedad {@code Objective.RuleRef}

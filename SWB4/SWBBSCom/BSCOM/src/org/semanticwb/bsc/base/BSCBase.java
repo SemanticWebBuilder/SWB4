@@ -4,7 +4,7 @@ package org.semanticwb.bsc.base;
    /**
    * Modelo que define un Scorecard de la metodologia BalancedScorecard de Norton y Kaplan 
    */
-public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Localeable,org.semanticwb.model.Indexable,org.semanticwb.model.Countryable,org.semanticwb.model.Traceable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Filterable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Help,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Undeleteable
+public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Trashable,org.semanticwb.bsc.Help,org.semanticwb.model.Localeable,org.semanticwb.model.Indexable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Countryable
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_values=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#values");
    /**
@@ -625,34 +625,34 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
         return org.semanticwb.model.Collection.ClassMgr.hasCollection(id, this);
     }
 
-    public org.semanticwb.bsc.tracing.Operation getOperation(String id)
+    public org.semanticwb.bsc.catalogs.Operation getOperation(String id)
     {
-        return org.semanticwb.bsc.tracing.Operation.ClassMgr.getOperation(id, this);
+        return org.semanticwb.bsc.catalogs.Operation.ClassMgr.getOperation(id, this);
     }
 
-    public java.util.Iterator<org.semanticwb.bsc.tracing.Operation> listOperations()
+    public java.util.Iterator<org.semanticwb.bsc.catalogs.Operation> listOperations()
     {
-        return org.semanticwb.bsc.tracing.Operation.ClassMgr.listOperations(this);
+        return org.semanticwb.bsc.catalogs.Operation.ClassMgr.listOperations(this);
     }
 
-    public org.semanticwb.bsc.tracing.Operation createOperation(String id)
+    public org.semanticwb.bsc.catalogs.Operation createOperation(String id)
     {
-        return org.semanticwb.bsc.tracing.Operation.ClassMgr.createOperation(id,this);
+        return org.semanticwb.bsc.catalogs.Operation.ClassMgr.createOperation(id,this);
     }
 
-    public org.semanticwb.bsc.tracing.Operation createOperation()
+    public org.semanticwb.bsc.catalogs.Operation createOperation()
     {
         long id=getSemanticObject().getModel().getCounter(bsc_Operation);
-        return org.semanticwb.bsc.tracing.Operation.ClassMgr.createOperation(String.valueOf(id),this);
+        return org.semanticwb.bsc.catalogs.Operation.ClassMgr.createOperation(String.valueOf(id),this);
     } 
 
     public void removeOperation(String id)
     {
-        org.semanticwb.bsc.tracing.Operation.ClassMgr.removeOperation(id, this);
+        org.semanticwb.bsc.catalogs.Operation.ClassMgr.removeOperation(id, this);
     }
     public boolean hasOperation(String id)
     {
-        return org.semanticwb.bsc.tracing.Operation.ClassMgr.hasOperation(id, this);
+        return org.semanticwb.bsc.catalogs.Operation.ClassMgr.hasOperation(id, this);
     }
 
     public org.semanticwb.bsc.element.Objective getObjective(String id)
