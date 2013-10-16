@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.FilterableClass,org.semanticwb.bsc.Committable,org.semanticwb.bsc.Schedule,org.semanticwb.bsc.Updateable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Status,org.semanticwb.bsc.Help,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Sortable,org.semanticwb.model.Activeable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Traceable,org.semanticwb.model.RuleRefable,org.semanticwb.model.FilterableNode
+public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Schedule,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Status,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.bsc.Sortable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Committable,org.semanticwb.bsc.Updateable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_totalInvestment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#totalInvestment");
     public static final org.semanticwb.platform.SemanticProperty bsc_businessCase=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#businessCase");
@@ -242,42 +242,6 @@ public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCEleme
     }
 
 /**
-* Gets the TotalInvestment property
-* @return String with the TotalInvestment
-*/
-    public String getTotalInvestment()
-    {
-        return getSemanticObject().getProperty(bsc_totalInvestment);
-    }
-
-/**
-* Sets the TotalInvestment property
-* @param value long with the TotalInvestment
-*/
-    public void setTotalInvestment(String value)
-    {
-        getSemanticObject().setProperty(bsc_totalInvestment, value);
-    }
-
-/**
-* Gets the BusinessCase property
-* @return String with the BusinessCase
-*/
-    public String getBusinessCase()
-    {
-        return getSemanticObject().getProperty(bsc_businessCase);
-    }
-
-/**
-* Sets the BusinessCase property
-* @param value long with the BusinessCase
-*/
-    public void setBusinessCase(String value)
-    {
-        getSemanticObject().setProperty(bsc_businessCase, value);
-    }
-
-/**
 * Gets the PercentageProgress property
 * @return float with the PercentageProgress
 */
@@ -394,24 +358,6 @@ public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCEleme
     public void setIndex(int value)
     {
         getSemanticObject().setIntProperty(bsc_index, value);
-    }
-
-/**
-* Gets the RisponsableInitiative property
-* @return String with the RisponsableInitiative
-*/
-    public String getRisponsableInitiative()
-    {
-        return getSemanticObject().getProperty(bsc_risponsableInitiative);
-    }
-
-/**
-* Sets the RisponsableInitiative property
-* @param value long with the RisponsableInitiative
-*/
-    public void setRisponsableInitiative(String value)
-    {
-        getSemanticObject().setProperty(bsc_risponsableInitiative, value);
     }
 
 /**
@@ -552,24 +498,6 @@ public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCEleme
     }
 
 /**
-* Gets the Area property
-* @return String with the Area
-*/
-    public String getArea()
-    {
-        return getSemanticObject().getProperty(bsc_area);
-    }
-
-/**
-* Sets the Area property
-* @param value long with the Area
-*/
-    public void setArea(String value)
-    {
-        getSemanticObject().setProperty(bsc_area, value);
-    }
-
-/**
 * Gets the Commited property
 * @return boolean with the Commited
 */
@@ -603,60 +531,6 @@ public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCEleme
     public void setActualStart(java.util.Date value)
     {
         getSemanticObject().setDateProperty(bsc_actualStart, value);
-    }
-
-/**
-* Gets the EstimatedStart property
-* @return java.util.Date with the EstimatedStart
-*/
-    public java.util.Date getEstimatedStart()
-    {
-        return getSemanticObject().getDateProperty(bsc_estimatedStart);
-    }
-
-/**
-* Sets the EstimatedStart property
-* @param value long with the EstimatedStart
-*/
-    public void setEstimatedStart(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(bsc_estimatedStart, value);
-    }
-
-/**
-* Gets the EstimatedEnd property
-* @return java.util.Date with the EstimatedEnd
-*/
-    public java.util.Date getEstimatedEnd()
-    {
-        return getSemanticObject().getDateProperty(bsc_estimatedEnd);
-    }
-
-/**
-* Sets the EstimatedEnd property
-* @param value long with the EstimatedEnd
-*/
-    public void setEstimatedEnd(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(bsc_estimatedEnd, value);
-    }
-
-/**
-* Gets the InvestmentAmount property
-* @return String with the InvestmentAmount
-*/
-    public String getInvestmentAmount()
-    {
-        return getSemanticObject().getProperty(bsc_investmentAmount);
-    }
-
-/**
-* Sets the InvestmentAmount property
-* @param value long with the InvestmentAmount
-*/
-    public void setInvestmentAmount(String value)
-    {
-        getSemanticObject().setProperty(bsc_investmentAmount, value);
     }
 
    /**
