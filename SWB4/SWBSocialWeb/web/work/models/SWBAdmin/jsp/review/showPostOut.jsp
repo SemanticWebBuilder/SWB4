@@ -44,12 +44,7 @@
         userPhoto = "/swbadmin/css/images/profileDefImg.jpg";
     } else {
         userPhoto = SWBPortal.getWebWorkPath() + userCreator.getWorkPath() + "/" + User.swb_usrPhoto.getName() + "_" + userCreator.getId() + "_" + userPhoto;
-    }
-    //Un mensaje de entrada siempre debe estar atachado a un usuar
-    PostIn postInSource = null;
-    if (postOut.getPostInSource() != null) {
-        postInSource = postOut.getPostInSource();
-    }
+    }    
 %>
 
 
@@ -69,21 +64,23 @@
 
 
     <%
-        if (postInSource != null) {
+       String isSentMgstoClassify=SWBSocialUtil.Util.getModelPropertyValue(wsite, SWBSocialUtil.CLASSIFYSENTMGS_PROPNAME);
+       if(isSentMgstoClassify!=null && isSentMgstoClassify.equalsIgnoreCase("true")) //Los mensajes de salida si se deben clasificar por sentimientos e intensidad, tal como los de entrada.
+       {
     %>    
 
     <table><tr>
             <td>
                 <%=SWBSocialUtil.Util.getStringFromGenericLocale("sentiment", user.getLanguage())%>:
                 <%
-                    if (postInSource.getPostSentimentalType() == 0) {
+                    if (postOut.getPostSentimentalType() == 0) {
                 %>
                 ---
-                <%                  } else if (postInSource.getPostSentimentalType() == 1) {
+                <%                  } else if (postOut.getPostSentimentalType() == 1) {
                 %>
                 <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/pos.png">
                 <%
-                } else if (postInSource.getPostSentimentalType() == 2) {
+                } else if (postOut.getPostSentimentalType() == 2) {
                 %>
                 <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/neg.png">
                 <%
@@ -91,16 +88,10 @@
                 %>
             </td>
             <td align="center">
-                <%=SWBSocialUtil.Util.getStringFromGenericLocale("intensity", user.getLanguage())%>:<%=postInSource.getPostIntesityType() == 0 ? paramRequest.getLocaleString("low") : postInSource.getPostIntesityType() == 1 ? paramRequest.getLocaleString("medium") : postInSource.getPostIntesityType() == 2 ? paramRequest.getLocaleString("high") : "---"%>
+                <%=SWBSocialUtil.Util.getStringFromGenericLocale("intensity", user.getLanguage())%>:<%=postOut.getPostIntesityType() == 0 ? paramRequest.getLocaleString("low") : postOut.getPostIntesityType() == 1 ? paramRequest.getLocaleString("medium") : postOut.getPostIntesityType() == 2 ? paramRequest.getLocaleString("high") : "---"%>
             </td>
             <td align="center">
-                <%=SWBSocialUtil.Util.getStringFromGenericLocale("replies", user.getLanguage())%>:<%=postInSource.getPostShared()%>
-            </td>
-            <td align="center">
-                <%=SWBSocialUtil.Util.getStringFromGenericLocale("place", user.getLanguage())%>:<%=postInSource.getPostPlace() == null ? "---" : postInSource.getPostPlace()%>
-            </td> 
-            <td align="center">
-                <%=SWBSocialUtil.Util.getStringFromGenericLocale("priority", user.getLanguage())%>:<%=postInSource.isIsPrioritary() ? SWBSocialUtil.Util.getStringFromGenericLocale("yes", user.getLanguage()) : SWBSocialUtil.Util.getStringFromGenericLocale("not", user.getLanguage())%>
+                <%=SWBSocialUtil.Util.getStringFromGenericLocale("priority", user.getLanguage())%>:<%=postOut.isIsPrioritary() ? SWBSocialUtil.Util.getStringFromGenericLocale("yes", user.getLanguage()) : SWBSocialUtil.Util.getStringFromGenericLocale("not", user.getLanguage())%>
             </td> 
         </tr>
     </table>
