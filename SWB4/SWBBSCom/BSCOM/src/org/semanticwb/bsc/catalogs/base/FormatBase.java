@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.catalogs.base;
 
 
-public abstract class FormatBase extends org.semanticwb.bsc.catalogs.Catalog implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Countryable,org.semanticwb.model.Localeable
+public abstract class FormatBase extends org.semanticwb.bsc.catalogs.Catalog implements org.semanticwb.model.Localeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Countryable
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_formatPattern=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#formatPattern");
     public static final org.semanticwb.platform.SemanticClass bsc_Format=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Format");
