@@ -186,6 +186,12 @@
         >swbSocialIconPFlow</swb:iconClass>
       </swbxf:DisplayObject>
     </swb:displayObject>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Relationable">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Filterable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
   </owl:Class>
@@ -249,6 +255,7 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="SocialRule">
+    <rdfs:subClassOf rdf:resource="#Relationable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#XMLable"/>
     <rdfs:comment>Clase principal para manejo de reglas en swbSocial</rdfs:comment>
@@ -294,6 +301,7 @@
     >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="#Listenerable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#Relationable"/>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_SocialNetwork">
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -307,6 +315,7 @@
     <rdfs:label xml:lang="en">Social Network</rdfs:label>
   </owl:Class>
   <owl:Class rdf:ID="SocialCalendar">
+    <rdfs:subClassOf rdf:resource="#Relationable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Calendar"/>
     <rdfs:comment>Clase Calendario para SWBSocial</rdfs:comment>
     <rdfs:label xml:lang="es">Calendario</rdfs:label>
