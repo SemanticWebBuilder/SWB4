@@ -225,13 +225,13 @@
                     var neutrals = d.neutrals;
                     var positives = d.positives;
                     var negatives = d.negatives;
-                    if(neutrals>positives>negatives){
-                        return "bar_neutrals"; 
-                    }else if(neutrals<positives<negatives){                        
+                    if(positives>negatives && positives>neutrals){
+                        return "bar_positives"; 
+                    }else if(negatives>neutrals){                        
                         return "bar_negatives";                        
-                    }else if(neutrals<positives>negatives){
-                         return "bar_positives";                        
-                    }
+                    }else {
+                         return "bar_neutrals";                        
+                    }        
                     
                 })
                 .attr("x", function(d) { return x(d.month);})
