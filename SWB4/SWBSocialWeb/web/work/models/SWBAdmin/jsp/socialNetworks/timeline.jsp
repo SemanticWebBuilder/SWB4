@@ -62,8 +62,8 @@
 <%
     try {
             //gets Twitter4j instance with account credentials
-            System.out.println("Showing @" + twitterBean.getScreenName() +  "'s home timeline.");
-            out.println("<div align=\"center\"><h2>Showing @" + twitterBean.getScreenName() +  "'s home timeline. </h2><br/></div>");
+            System.out.println( paramRequest.getLocaleString("showing") + " @" + twitterBean.getScreenName() + " " +  paramRequest.getLocaleString("timeline"));
+            out.println("<div align=\"center\"><h2>" + paramRequest.getLocaleString("showing") +" @" + twitterBean.getScreenName() +  " " + paramRequest.getLocaleString("timeline") + "</h2><br/></div>");
             out.println("<div class=\"bar\" id=\"" + objUri + "/newTweetsAvailable\" dojoType=\"dojox.layout.ContentPane\"></div>");
             out.println("<div id=\"" + objUri + "/stream\" dojoType=\"dojox.layout.ContentPane\"></div>");           
             

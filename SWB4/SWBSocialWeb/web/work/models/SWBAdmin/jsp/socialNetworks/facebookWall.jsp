@@ -74,6 +74,8 @@
 %>
 
 <div id="<%=objUri%>getMorePostsWall" dojoType="dijit.layout.ContentPane">
-    <label id="<%=objUri%>morePostsWallLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMorePosts").setParameter("until", untilPost).setParameter("scope", "wall")%>','<%=objUri%>getMorePostsWall', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;">More posts</a></label>
+    <div align="center">
+        <label id="<%=objUri%>morePostsWallLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMorePosts").setParameter("until", untilPost).setParameter("scope", "wall")%>','<%=objUri%>getMorePostsWall', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;">More posts</a></label>
+    </div>
 </div>
 </div>
