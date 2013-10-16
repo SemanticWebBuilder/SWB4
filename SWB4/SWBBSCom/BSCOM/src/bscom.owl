@@ -1743,8 +1743,6 @@
     >window</swb:defaultValue>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="script">
-    <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:externalInvocation>
     <rdfs:domain rdf:resource="#Operation"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
