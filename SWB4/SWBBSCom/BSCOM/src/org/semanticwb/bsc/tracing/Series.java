@@ -128,7 +128,7 @@ Series series = (Series)obj.getGenericInstance();
         return null;
     }
     
-    public List<EvaluationRule> lisValidEvaluationRules() {
+    public List<EvaluationRule> listValidEvaluationRules() {
         List<EvaluationRule> validRules = SWBUtils.Collections.filterIterator(listEvaluationRules(), new GenericFilterRule<EvaluationRule>() {
                                                                         @Override
                                                                         public boolean filter(EvaluationRule r) {
