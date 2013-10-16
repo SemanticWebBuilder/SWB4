@@ -106,6 +106,8 @@ public class StreamMap extends GenericAdmResource{
                if (dis != null) {
                    try {
                        request.setAttribute("swbSocialUser", swbSocialUser.getSemanticObject());
+                       System.out.println("Map/doShowDetails:"+request.getParameter("suri"));
+                       request.setAttribute("suri", request.getParameter("suri"));
                        request.setAttribute("paramRequest", paramRequest);
                        dis.include(request, response);
                    } catch (Exception e) {

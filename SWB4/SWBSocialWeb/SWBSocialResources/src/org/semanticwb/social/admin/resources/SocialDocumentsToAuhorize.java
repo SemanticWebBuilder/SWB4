@@ -172,6 +172,13 @@ public class SocialDocumentsToAuhorize extends GenericResource
             out.println("dojo.require(\"dijit.form.Textarea\");");
             out.println("dojo.require(\"dojox.form.DropDownSelect\");");            
             out.println("</script>");
+            
+            //Jorge
+            out.println("<script type=\"text/javascript\" src=\"/swbadmin/js/dojo/dojo/dojo.js\" ></script>");
+            out.println("<script type=\"text/javascript\" charset=\"utf-8\" src=\"/swbadmin/js/swb.js\"></script>");
+            out.println("<script type=\"text/javascript\" charset=\"utf-8\" src=\"/swbadmin/js/swb_admin.js\"></script>");
+            out.println("<script type=\"text/javascript\" charset=\"utf-8\" src=\"/work/models/SWBAdmin/js/swbsocial.js\" ></script>");
+            //Jorge
 
             
             out.println("<form class=\"swbform\" name='frmseecontentsToAuthorize' action='" + paramRequest.getRenderUrl() + "' method='post'>");
@@ -313,6 +320,60 @@ public class SocialDocumentsToAuhorize extends GenericResource
                     out.println("</form>");
                     out.println("</div>");
                     
+                    //Jorge
+                    out.println("<div dojoType=\"dijit.Dialog\" id=\""+id+"_watchMoreNets\"  title=\""+paramRequest.getLocaleString("associatedSocialNets")+" ("+resTitle+")\">");
+                    int cont=1;
+                    String nets="";
+                    Iterator<SocialNetwork> itPostSocialNets = resource.listSocialNetworks();
+                    while (itPostSocialNets.hasNext()) {
+                        SocialNetwork socialNet = itPostSocialNets.next();
+                        //System.out.println("socialNet-1:"+socialNet);
+                        String sSocialNet = socialNet.getDisplayTitle(user.getLanguage());
+                        //System.out.println("socialNet-2:"+sSocialNet);
+                        if (sSocialNet != null && sSocialNet.trim().length() > 0) {
+                            //System.out.println("socialNet-3:"+sSocialNet);
+                            //Sacar privacidad
+                            String sPrivacy=null;
+                            try
+                            {
+                                //Si es necesario, cambiar esto por querys del Jei despues.
+                                Iterator<PostOutPrivacyRelation> itpostOutPriRel=PostOutPrivacyRelation.ClassMgr.listPostOutPrivacyRelationByPopr_postOut(resource, sitetoShow);
+                                while(itpostOutPriRel.hasNext())
+                                {
+                                    PostOutPrivacyRelation poPrivRel=itpostOutPriRel.next();
+                                    if(poPrivRel.getPopr_socialNetwork().getURI().equals(socialNet.getURI()))
+                                    {
+                                        sPrivacy=poPrivRel.getPopr_privacy().getTitle(user.getLanguage());
+                                    }
+                                }
+                                if(sPrivacy==null)
+                                {
+                                    Iterator<PostOutNet> itpostOutNet=PostOutNet.ClassMgr.listPostOutNetBySocialPost(resource, sitetoShow);
+                                    while(itpostOutNet.hasNext())
+                                    {
+                                        PostOutNet postOutnet=itpostOutNet.next();
+                                        if(postOutnet.getSocialNetwork().getURI().equals(socialNet.getURI()) && postOutnet.getPo_privacy()!=null)
+                                        {
+                                            sPrivacy=postOutnet.getPo_privacy().getTitle(user.getLanguage());
+                                        }
+                                    }
+                                }
+                            }catch(Exception ignored){}
+                                
+                            if(sPrivacy==null) sPrivacy=paramRequest.getLocaleString("public");
+
+                            //Termina privacidad
+                            if (cont==1) {
+                                nets = "<li>" + sSocialNet+"("+sPrivacy+")"+"</li>";
+                                cont++;
+                            } else {
+                                nets += "<li>"+ sSocialNet+"("+sPrivacy+")"+"</li>";
+                            }
+                        }
+                    }
+                    out.println(nets);
+                    out.println("</div>");
+                    //Jorge
                 }
                 if(resources.length>0)
                 {
@@ -491,7 +552,7 @@ public class SocialDocumentsToAuhorize extends GenericResource
                             if (cont==1) {
                                 nets = "<p>" + sSocialNet+"("+sPrivacy+")"+"</p>";
                             } else {//Nunca entraría aquí con lo que se determinó, de solo mostrar la primera red social y un "ver mas", en caso de haber mas, se deja este códigp por si cambia esta regla en lo futuro.
-                                nets += "<p>"+"|" + sSocialNet+"("+sPrivacy+")"+"</p>";
+                                nets += "<p>"+ sSocialNet+"("+sPrivacy+")"+"</p>";
                             }
                         }
                     }
@@ -499,8 +560,10 @@ public class SocialDocumentsToAuhorize extends GenericResource
                     
                     if(cont>1)
                     {
-                        SWBResourceURL urlshowmoreNets = paramRequest.getRenderUrl().setMode(Mode_ShowMoreNets).setCallMethod(SWBResourceURL.Call_DIRECT); 
-                        out.println("<p><a href=\"#\" onclick=\"showDialog('" + urlshowmoreNets.setParameter("postUri", resource.getURI()) + "','" + paramRequest.getLocaleString("associatedSocialNets") + "'); return false;\">"+paramRequest.getLocaleString("watchMore")+"</a></p>");
+                        //SWBResourceURL urlshowmoreNets = paramRequest.getRenderUrl().setMode(Mode_ShowMoreNets).setCallMethod(SWBResourceURL.Call_DIRECT); 
+                        String id=resource.getEncodedURI().replace('%', '_').replace(':', '_').replace('/', '_');
+                        //out.println("<p><a href=\"#\" onclick=\"showDialog('" + urlshowmoreNets.setParameter("postUri", resource.getURI()) + "','" + paramRequest.getLocaleString("associatedSocialNets") + "'); return false;\">"+paramRequest.getLocaleString("watchMore")+"</a></p>");
+                        out.println("<p><a title=\""+ paramRequest.getLocaleString("watchMore") +"\" onclick=\"viewMoreNets('"+id+"_watchMoreNets')\" href=\"#\">"+paramRequest.getLocaleString("watchMore")+"</p></a>");
                     }
                     
                     out.println("</td>");
@@ -583,8 +646,15 @@ public class SocialDocumentsToAuhorize extends GenericResource
                 out.println("   var tDiv = document.getElementById(\"previewcontent\");");                                
                 out.println("   tDiv.innerHTML=\"<iframe width='100%' height='500' src='\"+ url +\"'></iframe>\";");
                 out.println("   dijit.byId(id).show()");
-                out.println("}");                
-                 
+                out.println("}");
+                
+                out.println("function viewMoreNets(id)");
+                out.println("{");
+                out.println("   dijit.byId(id).show()");
+                out.println("}");
+                
+                        
+                        
                 out.println("function reject()");
                 out.println("{");
                 out.println("   if(document.swbfrmResourcesReject.msg.value=='')");

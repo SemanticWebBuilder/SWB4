@@ -753,10 +753,10 @@ public class SocialSentPost extends GenericResource {
                 Iterator<PostOutNet> itPostOutNets = PostOutNet.ClassMgr.listPostOutNetBySocialPost(postOut, wsite);
                 while (itPostOutNets.hasNext()) {
                     PostOutNet postOutNet = itPostOutNets.next();
-                    //System.out.println("postOutNet:"+postOutNet);
+                    System.out.println("postOutNet:"+postOutNet);
                     postOutwithPostOutNets = true;
                     if (postOutNet.getStatus() == 0) {
-                        //System.out.println("postOutNet-1/status:"+postOutNet.getStatus());
+                        System.out.println("postOutNet-1/status:"+postOutNet.getStatus());
                         someOneIsNotPublished = true;
                         break;
                     }
@@ -824,10 +824,11 @@ public class SocialSentPost extends GenericResource {
             //out.println(SWBUtils.TEXT.cropText(sobj.getMsg_Text(), 30));
             if (postOut.getMsg_Text() != null) {
                 msgText = SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(postOut.getMsg_Text()), 25);
+                msgText = msgText.replaceAll("\n", " ");
             }
             if(!postOut.isPublished())
             {
-                out.println("<a href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + msgText + "');return false;\" title=\"" + getDisplaySemObj(postOut.getSemanticObject(), lang) + "\">" + msgText + "</a>");
+                out.println("<a href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + msgText + "');return false;\" title=\"" + msgText + "\">" + msgText + "</a>");
             }else{
                 out.println(msgText);
             }
@@ -884,7 +885,7 @@ public class SocialSentPost extends GenericResource {
                     if (cont==1) {
                         nets = "<p>" + sSocialNet+"("+sPrivacy+")"+"</p>";
                     } else {//Nunca entraría aquí con lo que se determinó, de solo mostrar la primera red social y un "ver mas", en caso de haber mas, se deja este códigp por si cambia esta regla en lo futuro.
-                        nets += "<p>"+"|" + sSocialNet+"("+sPrivacy+")"+"</p>";
+                        nets += "<p>"+ sSocialNet+"("+sPrivacy+")"+"</p>";
                     }
                 }
             }
