@@ -19,7 +19,7 @@
 <%!
     JSONArray getObject(SemanticObject semObj, String lang) throws Exception {
 
-        int neutrals = 0, positives = 0, negatives = 0, female = 0, male = 0, other = 0;
+        int  female = 0, male = 0, other = 0;
         ArrayList genderMale = new ArrayList();
         ArrayList genderFemale = new ArrayList();
         ArrayList genderother = new ArrayList();
@@ -159,6 +159,20 @@
             node3.put("label", "Otro: " + other + "  Positivos: " + positivesOther + " Negativos :" + negativesOther + " Neutros: " + neutralsOther);
             node3.put("chartclass", "possClass");
             node.put(node3);
+        }
+        
+         if(male == 0 && female == 0 && other==0 ){
+                   
+            JSONObject node3=new JSONObject();
+            node3.put("label", "Neutros"); 
+            node3.put("value1", "0");
+            node3.put("value2", "100");
+            node3.put("color", "#eae8e3");
+            node3.put("chartclass", "neuClass");
+            node3.put("label2", "Sin datos para procesar");
+
+            node.put(node3);
+        
         }
 
 

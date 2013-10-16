@@ -19,7 +19,7 @@
 <%!
     JSONArray getObject(SemanticObject semObj, String lang, String idModel) throws Exception {
 
-        int neutrals = 0, positives = 0, negatives = 0, young = 0, child = 0, teenAge = 0, youngAdult = 0, adult = 0, thirdAge = 0;
+        int  young = 0, child = 0, teenAge = 0, youngAdult = 0, adult = 0, thirdAge = 0;
         Iterator<PostIn> itObjPostIns = null;
         if (semObj.getGenericInstance() instanceof Stream) {
             Stream stream = (Stream) semObj.getGenericInstance();
@@ -295,6 +295,19 @@
             node.put(node6);
         }
 
+        
+         if(child == 0 && young ==0 && teenAge  == 0 && youngAdult ==0 && adult==0 && thirdAge==0 ){
+                   
+            JSONObject node3=new JSONObject();
+            node3.put("label", "Neutros"); 
+            node3.put("value1", "0");
+            node3.put("value2", "100");
+            node3.put("color", "#eae8e3");
+            node3.put("chartclass", "neuClass");
+            node3.put("label2", "Sin datos para procesar");
+            node.put(node3);
+        
+        }
         return node;
     }
 
