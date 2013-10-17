@@ -93,6 +93,10 @@ public class Series extends org.semanticwb.bsc.tracing.base.SeriesBase implement
     }
     
     public List<EvaluationRule> listValidEvaluationRules() {
+        return listValidEvaluationRules(true);
+    }
+    
+    public List<EvaluationRule> listValidEvaluationRules(boolean ascendent) {        
         List<EvaluationRule> validRules = SWBUtils.Collections.filterIterator(listEvaluationRules(), new GenericFilterRule<EvaluationRule>() {
                                                                         @Override
                                                                         public boolean filter(EvaluationRule r) {
@@ -100,7 +104,11 @@ public class Series extends org.semanticwb.bsc.tracing.base.SeriesBase implement
                                                                             return !r.isValid() || !user.haveAccess(r);
                                                                         }            
                                                                     });
-        Collections.sort(validRules);        
+        if(ascendent) {
+            Collections.sort(validRules);
+        }else {
+            Collections.sort(validRules, Collections.reverseOrder());
+        }
         return validRules;
     }
 }
