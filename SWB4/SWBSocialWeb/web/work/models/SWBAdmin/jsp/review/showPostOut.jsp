@@ -47,7 +47,7 @@
     }    
 %>
 
-
+<div style="height: 500px">
 <div class="swbform swbpopup msj-txt">
     <div class="perfilgral">
         <div class="perfil">
@@ -232,4 +232,5 @@
         }
     %>
 </table>
+</div>
 </div>
