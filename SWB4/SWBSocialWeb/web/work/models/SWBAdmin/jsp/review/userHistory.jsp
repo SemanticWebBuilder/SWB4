@@ -23,7 +23,7 @@
 
 <%
     String suri=(String)request.getAttribute("suri");
-    System.out.println("suri UserH:"+suri);
+    //System.out.println("suri UserH:"+suri);
     if(suri==null) return; 
     org.semanticwb.model.User user = paramRequest.getUser();
     if (request.getAttribute("swbSocialUser") == null) {
@@ -34,7 +34,7 @@
     if (semObj == null) {
         return;
     }
-    System.out.println("semObj:"+semObj);
+    //System.out.println("semObj:"+semObj);
 
     WebSite wsite = WebSite.ClassMgr.getWebSite(semObj.getModel().getName());
     if (wsite == null) {
@@ -42,6 +42,7 @@
     }
 
     SocialNetworkUser socialNetUser = (SocialNetworkUser) semObj.getGenericInstance();
+    //System.out.println("socialNetUser:"+socialNetUser);
     //Un mensaje de entrada siempre debe estar atachado a un usuario de la red social de la que proviene, de esta manera, es como desde swbsocial
     //se respondería a un mensaje
     if (socialNetUser == null) {
@@ -69,10 +70,12 @@
         <p><strong><%=socialNetUser.getSnu_klout()%></strong> Klout</p>
         <p>   
             <%
+                //System.out.println(" ver 1");
                 long cont=0;
                 SemanticObject semObjTab=SemanticObject.getSemanticObject(suri);
                 if(semObjTab.getGenericInstance() instanceof Stream) 
                 {
+                    //System.out.println(" ver 1.1");
                     Stream stream=(Stream)semObjTab.getGenericInstance();
                     Iterator<PostIn> itPostIns = socialNetUser.listPostInInvs();
                     while(itPostIns.hasNext())
@@ -86,16 +89,18 @@
                 }else if(semObjTab.getGenericInstance() instanceof SocialTopic) 
                 {
                     SocialTopic socialTopic=(SocialTopic)semObjTab.getGenericInstance();
+                    //System.out.println(" ver 1.2:"+socialTopic);
                     Iterator<PostIn> itPostIns = socialNetUser.listPostInInvs();
                     while(itPostIns.hasNext())
                     {
                         PostIn postIn=itPostIns.next();
-                        if(postIn.getSocialTopic().getURI().equals(socialTopic.getURI()))
+                        if(postIn.getSocialTopic()!=null && postIn.getSocialTopic().getURI().equals(socialTopic.getURI()))
                         {
                             cont++; 
                         }
                     }                    
                 }
+                //System.out.println(" ver 2");
                 SWBResourceURL url = paramRequest.getRenderUrl();
                 url.setMode(SWBResourceURL.Action_EDIT);
                 url.setParameter("swbSocialUser", socialNetUser.getId());

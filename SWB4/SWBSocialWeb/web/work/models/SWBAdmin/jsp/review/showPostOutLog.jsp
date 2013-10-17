@@ -60,7 +60,7 @@
                 {
                     SWBResourceURL urlr = paramRequest.getActionUrl();
                     urlr.setParameter("suri", suri);
-                    //urlr.setParameter("postOut", postOut.getURI());
+                    urlr.setParameter("postOut", postOut.getURI());
                     urlr.setParameter("postOutNetUri", postOutNet.getURI());
                     urlr.setAction("removePostOutNet");
                     
