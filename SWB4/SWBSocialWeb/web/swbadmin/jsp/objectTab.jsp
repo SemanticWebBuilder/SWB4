@@ -1,6 +1,6 @@
 <%@page contentType="text/html"%><%@page pageEncoding="UTF-8"%><%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*,org.semanticwb.portal.api.*"%>
 <%!
-
+    
     String replaceUriID(String txt)
     {
         String ret=txt;
@@ -21,17 +21,44 @@
     }
 %>
 <%
+    String id=request.getParameter("suri");
+    //Agregado Jorge Jiménez 17/Octubre/2014, para que no se muestre tab de información de un mensaje cuando ya esta publicado
+    //Esto para que no sea alterado (una vez que ya ha sido publicado).
+    boolean notShowInfo=false;
+    {
+        notShowInfo=false;
+        if(request.getParameter("publish")!=null)
+        {
+            int pos=request.getParameter("publish").indexOf("?suri=");
+            if(pos>-1)
+            {
+                id=request.getParameter("publish").substring(pos+6);
+                notShowInfo=true;
+            }
+        }
+        if(id==null)
+        {
+            %>
+                Tab sin ID, por favor contacte al admin del sistema..
+            <%
+        }
+    }
+    
     String lang="es";
     if(user!=null)lang=user.getLanguage();
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
-    String id=request.getParameter("suri");
+    
+    System.out.println("IDj:"+id);
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
     SemanticObject obj=ont.getSemanticObject(id);
+    System.out.println("objj:"+id);
     WebSite adm=SWBContext.getAdminWebSite();
     //System.out.println("suri:"+id);
     if(obj==null)return;
     SemanticClass cls=obj.getSemanticClass();
+    
+    System.out.println("clsj:"+id);
 
     String loading="<BR/><center><img src='"+SWBPlatform.getContextPath()+"/swbadmin/images/loading.gif'/><center>";
 
@@ -46,6 +73,13 @@
     while(obit.hasNext())
     {
         ObjectBehavior ob=obit.next();
+        
+        //System.out.println("obBehavior:"+ob);
+        //Agregado Jorge Jiménez 17/Octubre/2014
+        if(notShowInfo) 
+        {
+            if(ob.getURI().endsWith(":bh_Information")) continue;   //Que no muestre el tag de información
+        }
         
         if(ob.getNsPrefixFilter()!=null)
         {
