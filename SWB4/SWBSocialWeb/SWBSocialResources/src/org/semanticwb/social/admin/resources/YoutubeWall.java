@@ -388,9 +388,9 @@ public class YoutubeWall extends GenericResource{
                     out.write("<em>" + humanFriendlyDate(date, paramRequest) +  "</em>");
                     out.write("</span>");
                     String comentarioId = comment.getJSONObject("id").getString("$t");
-                    /*out.write("   <span class=\"inline\">");
+                    out.write("   <span class=\"inline\">");
                     out.write(" <a href=\"\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("commentComment").setParameter("suri", objUri).setParameter("videoId",videoId).setParameter("commentId", comentarioId.substring(comentarioId.indexOf("comment") + 8)) + "','Comment to " + comment.getJSONObject("content").getString("$t").replace("\n", "</br>") + "');return false;\">Comment</a>");
-                    out.write("   </span>");*/
+                    out.write("   </span>");
                     out.write("</p>");
                     out.write("</li>");
                 }
