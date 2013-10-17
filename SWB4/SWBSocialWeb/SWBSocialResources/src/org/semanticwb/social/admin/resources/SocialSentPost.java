@@ -997,8 +997,10 @@ public class SocialSentPost extends GenericResource {
                             out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">" + paramRequest.getLocaleString("toReview") + "</a>"); //No ha sido publicado en todas las redes sociales que debiera, abrir dialogo para mostrar todos los PostOutNtes del PostOut
                         } else if (postOut.getPflowInstance() != null && postOut.getPflowInstance().getStatus() == 3) {
                             out.println("<a href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />" + paramRequest.getLocaleString("publish") + "</a>");
-                        } else {
-                            out.println(paramRequest.getLocaleString("publishing"));
+                        } else if(!isInFlow && !needAuthorization && !postOutwithPostOutNets){
+                            out.println(paramRequest.getLocaleString("publishing")+"..");
+                        }else {
+                            out.println("<a href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />" + paramRequest.getLocaleString("publish") + "</a>");
                         }
                     } else {    //El PostOut ya se envío
                         //System.out.println("SOCIALSENTPOST2");
@@ -1839,7 +1841,7 @@ public class SocialSentPost extends GenericResource {
                     postOutNet.remove();
                 }
                 response.setRenderParameter("suri", request.getParameter("suri"));
-                //response.setRenderParameter("postOut", request.getParameter("postOut"));
+                response.setRenderParameter("postOut", request.getParameter("postOut"));
             }
         }catch(Exception e)
         {
