@@ -47,10 +47,11 @@
                 </tr>
             </thead>
     <%
-    
+    boolean entersToWhile=false; 
     Iterator<PostOutNet> itPostOutNets=PostOutNet.ClassMgr.listPostOutNetBySocialPost(postOut, wsite);
     while(itPostOutNets.hasNext())
     {
+        entersToWhile=true;
         PostOutNet postOutNet=itPostOutNets.next();
         %>
             <tr>
@@ -128,7 +129,15 @@
             </tr>
         <%
     }
-    
+    if(!entersToWhile)
+    {
+        %>
+        <script type="javascript">
+            hideDialog();
+            reloadTab('<%=suri%>'); 
+        </script>
+        <%
+    }
  %>
         </table>
       </div>

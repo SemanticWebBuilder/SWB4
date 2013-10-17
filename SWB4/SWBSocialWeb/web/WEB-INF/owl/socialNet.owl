@@ -1449,16 +1449,16 @@
         <swbxf:propGroup rdf:resource="#publish_Grp"/>
         <swbxf:formElement>
           <swb:DojoImageUpload rdf:ID="socialDojoImageUpload">
-            <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >*.jpg:JPG|*.gif:GIF|*.png:PNG</swbxf:fileFilter>
+            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+            >5000000</swbxf:fileMaxSize>
             <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >Cargador de imágenes para social. Fotos de maximo 500,000 bytes y con extensión jpg o gif o png o Tiff</rdfs:comment>
             <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >false</swbxf:imgCrop>
             <swbxf:imgThumbnail rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >false</swbxf:imgThumbnail>
-            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
-            >500000</swbxf:fileMaxSize>
+            <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >*.jpg:JPG|*.gif:GIF|*.png:PNG</swbxf:fileFilter>
           </swb:DojoImageUpload>
         </swbxf:formElement>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
