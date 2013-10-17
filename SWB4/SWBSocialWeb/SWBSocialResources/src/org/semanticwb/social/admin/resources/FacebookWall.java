@@ -85,6 +85,7 @@ public class FacebookWall extends GenericResource {
     public static String NEWS_FEED_TAB = "/newsfeed";
     public static String WALL_TAB = "/wall";
     public static String MEDIA_TAB = "/media";
+    public static String VIDEOS_TAB ="/videos";
     
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -113,7 +114,7 @@ public class FacebookWall extends GenericResource {
             jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/facebookWall.jsp";
         }else if(contentTabId != null && contentTabId.equals(MEDIA_TAB)){
             jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/facebookPictures.jsp";
-        }else if(contentTabId != null && contentTabId.equals("videos")){
+        }else if(contentTabId != null && contentTabId.equals(VIDEOS_TAB)){
             jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/facebookVideos.jsp";
         }
         
