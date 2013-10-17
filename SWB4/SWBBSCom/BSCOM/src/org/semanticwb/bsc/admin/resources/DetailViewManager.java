@@ -518,18 +518,20 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             FileReader reader = retrieveTemplate();
             String suri = request.getParameter("suri");
             SemanticObject semObj = SemanticObject.getSemanticObject(suri);
-            //Declarar variable para el periodo, obteniendo el valor del request
+            //Declarar variable para el per&iacte;odo, obteniendo el valor del request
             //Si el semObj es hijo de PeriodStatusAssignable se debe:
             //-Agregar encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
-            // para el período especificado y el título del objeto, para lo que:
+            // para el per&iacte;odo especificado y el t&iacte;tulo del objeto, para lo que:
             //    - Se pide el listado de objetos PeriodStatus asociado al semObj
             //    - Se recorre uno por uno los PeriodStatus relacionados
-            //    - Cuando el período del PeriodStatur = período del request:
-            //        - Se obtiene el status correspondiente y su ícono relacionado
-            //        - Se agrega el ícono al encabezado y el título del objeto semObj
+            //    - Cuando el per&iacte;odo del PeriodStatus = per&iacte;odo del request:
+            //        - Se obtiene el status correspondiente y su &iacte;cono relacionado
+            //        - Se agrega el &iacte;cono al encabezado y el t&iacte;tulo del objeto semObj
 
             if (reader != null) {
                 output.append(generateDisplay(request, paramRequest, reader, semObj));
+            } else {
+                output.append(paramRequest.getLocaleString("fileNotRead"));
             }
 
         } else { //Si la información de entrada no es válida
@@ -753,6 +755,12 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         }
     }
     
+    /**
+     * Realiza validaciones a los datos de entrada para el despliegue de informaci&oacute;n
+     * @param request petici&oacute;n HTTP realizada por el cliente
+     * @return un String que representa una llave del archivo de propiedades que corresponde
+     *         al mensaje de error que describe el problema encontrado en los datos, null de lo contrario.
+     */
     private String validateInput(HttpServletRequest request) {
         
         String suri = request.getParameter("suri");
@@ -762,7 +770,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 ? this.getWorkClass().transformToSemanticClass()
                 : null;
         String messageType = null;
-        //Declarar una variable para evaluar al período especificado
+        //TODO:Declarar una variable para evaluar al período especificado
 
         //Revisa configuración del recurso
         if (workClassSC == null) {
@@ -791,10 +799,12 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         if (messageType == null && this.getActiveDetailView() == null) {
             messageType = "withNoActiveView";
         }
-        if (messageType == null && this.getActiveDetailView() != null && this.getActiveDetailView().getViewFilePath() == null) {
+        if (messageType == null && this.getActiveDetailView() != null &&
+                this.getActiveDetailView().getViewFilePath() == null) {
             messageType = "activeViewWithNoFile";
         }
-        if (messageType == null && this.getActiveDetailView() != null && this.getActiveDetailView().getViewFilePath() != null) {
+        if (messageType == null && this.getActiveDetailView() != null &&
+                this.getActiveDetailView().getViewFilePath() != null) {
             //Revisar que al menos exista un archivo con la ruta y nombre almacenados en this.getActiveDetailView().getViewFilePath()
             File templateFile = new File(this.getActiveDetailView().getViewFilePath());
             //si no es el caso, asignar el tipo de mensaje:
@@ -803,7 +813,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             }
         }
 
-        //Revisa existencia de un período con el identificador recibido en el request
+        //TODO: Revisa existencia de un período con el identificador recibido en el request
         //Si no existe el período, asignar el tipo de mensaje a "periodNotExistent"
         //if (variableDelPeriodo == null) {
         //	messageType = "periodNotExistent";
@@ -812,6 +822,10 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         return messageType;
     }
     
+    /**
+     * Lee el archivo asociado a la vista detalle asignada como contenido.
+     * @return un objeto {@code FileReader} con el contenido del archivo asociado a la vista detalle asignada como contenido.
+     */
     private FileReader retrieveTemplate() {
         
         String filePath = this.getActiveDetailView().getViewFilePath();
@@ -827,6 +841,18 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         return reader;
     }
     
+    /**
+     * Interpreta el contenido de la plantilla de la vista detalle asignada como contenido, 
+     * sustituyendo los tags que representan las propiedades de los objetos, por los despliegues
+     * de valores de esas propiedades.
+     * @param request petici&oacute;n HTTP realizada por el cliente
+     * @param paramRequest un objeto de la plataforma de SWB con datos adicionales de la petici&oacute;n
+     * @param template el contenido de la vista detalle asignada como contenido
+     * @param elementBSC representa el objeto del cual se desea extraer la informaci&oacute;n
+     * @return un {@code String} que representa el contenido de la plantilla de la vista detalle
+     *         correspondiente con el despliegue de los valores de las propiedades configuradas.
+     * @throws IOException en caso de que se presente alg&uacute;n problema en el parseo del contenido de la plantilla
+     */
     private String generateDisplay(HttpServletRequest request, SWBParamRequest paramRequest,
             FileReader template, SemanticObject elementBSC) throws IOException {
         
@@ -852,7 +878,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                     view.append(tag.toString());
                 } else if (tag.getTagString().toLowerCase().equals("img") && !tag.hasParam("tagProp")) {
                     view.append(tag.toString());
-                } /*
+                }
+                /*
                  Si es un tag de imagen y tiene el atributo tagProp
                  obtener el valor del atributo tagProp que contiene el uri de la propiedad
                  */ else if (tag.getTagString().toLowerCase().equals("img") && tag.hasParam("tagProp")) {
@@ -872,6 +899,14 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         return view.toString();
     }
     
+    /**
+     * Devuelve el despliegue correspondiente al valor de la propiedad especificada, del objeto indicado.
+     * @param request petici&oacute;n HTTP realizada por el cliente
+     * @param elementBSC representa el objeto del cual se desea extraer la informaci&oacute;n
+     * @param propUri representa la uri de la propiedad semantica de la que se desea obtener su valor
+     * @param lang representa el lenguaje en que se desea mostrar el valor de la propiedad indicada
+     * @return el despliegue del valor almacenado para la propiedad indicada
+     */
     private String renderPropertyValue(HttpServletRequest request, SemanticObject elementBSC,
             String propUri, String lang) {
         
