@@ -644,16 +644,27 @@
 */
 %>
 <%
-    String objUri = (String) request.getParameter("suri");
+    try{
+        String objUri = (String) request.getParameter("suri");
+        String username;
+        HashMap<String, String> params = new HashMap<String, String>(2);
+        params.put("access_token", facebookBean.getAccessToken());
+        
+        String user = postRequest(params, "https://graph.facebook.com/me",
+                                "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
+        System.out.println("user:"+ user);
+        JSONObject userObj = new JSONObject(user);
+        if(!userObj.isNull("name")){
+            username = userObj.getString("name");
+        }else{
+            username = facebookBean.getTitle();
+        }
 %>
 <div class="swbform">
-<div align="center"><h2>Showing <%=facebookBean.getTitle()%> FEED.</h2><br/></div>
+<div align="center"><h2><%=username%> News Feed.</h2><br/></div>
 <div class="bar" id="<%=objUri%>newPostsAvailable" dojoType="dojox.layout.ContentPane"></div>
 <div id="<%=objUri%>facebookStream" dojoType="dojox.layout.ContentPane"></div>
 <%
-
-    HashMap<String, String> params = new HashMap<String, String>(2);
-    params.put("access_token", facebookBean.getAccessToken());
     SWBModel model=WebSite.ClassMgr.getWebSite(facebookBean.getSemanticObject().getModel().getName());
     
     params.put("limit", "50");
@@ -711,3 +722,8 @@
     </div>
 </div>
 </div>
+    <%
+        }catch(Exception e){
+        out.print("Problem displaying News feed: " + e.getMessage());
+    }
+%>

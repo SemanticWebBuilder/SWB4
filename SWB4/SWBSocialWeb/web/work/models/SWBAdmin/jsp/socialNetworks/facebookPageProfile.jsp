@@ -17,7 +17,7 @@
 <%@page import="org.json.JSONObject"%>
 
 <%@page import="static org.semanticwb.social.admin.resources.FacebookWall.*"%>
-
+<jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%@page contentType="text/html" pageEncoding="x-iso-8859-11"%>
 <!DOCTYPE html>
 
@@ -94,13 +94,13 @@
 
 <div class="swbform" style="width: 500px;">
     <fieldset>
-        <div align="center"><a href="http://www.facebook.com/<%=target%>" title="View profile on Facebook"  target="_blank"><img src="https://graph.facebook.com/<%=target%>/picture?width=150&height=150"/></a></div>
+        <div align="center"><a href="http://www.facebook.com/<%=target%>" title="<%=paramRequest.getLocaleString("viewProfOnFB")%>"  target="_blank"><img src="https://graph.facebook.com/<%=target%>/picture?width=150&height=150" width="150" height="150"/></a></div>
     </fieldset>
 <%
     if(!about.isEmpty()){
 %>
     <fieldset>
-        <legend>About:</legend>
+        <legend><%=paramRequest.getLocaleString("aboutMe")%>:</legend>
         <div align="left"><%=about%></div>
     </fieldset>
 <%
@@ -111,7 +111,7 @@
     if(!releaseDate.isEmpty()){
 %>
     <fieldset>
-        <legend>Released on:</legend>
+        <legend><%=paramRequest.getLocaleString("releasedOn")%>:</legend>
         <div align="left"><%=releaseDate%></div>
     </fieldset>
 <%
@@ -122,7 +122,7 @@
     if(!generalInfo.isEmpty()){
 %>
     <fieldset>
-        <legend>General information:</legend>
+        <legend><%=paramRequest.getLocaleString("generalInformation")%>:</legend>
         <div align="left"><%=generalInfo%></div>
     </fieldset>
 <%
@@ -133,7 +133,7 @@
     if(!companyOverview.isEmpty()){
 %>
     <fieldset>
-        <legend>Company Overview:</legend>
+        <legend><%=paramRequest.getLocaleString("companyOverview")%>:</legend>
         <div align="left"><%=companyOverview%></div>
     </fieldset>
 <%
@@ -144,7 +144,7 @@
     if(!description.isEmpty()){
 %>
     <fieldset>
-        <legend>Description:</legend>
+        <legend><%=paramRequest.getLocaleString("description")%>:</legend>
         <div align="left"><%=description%></div>
     </fieldset>
 <%
@@ -155,10 +155,10 @@
     if(fanCount > 0){
 %>
     <fieldset>
-         <legend>Fans:</legend>
+         <legend><%=paramRequest.getLocaleString("fans")%>:</legend>
          <%if(fanCount>0){%>
             <div align="left">
-                Total likes received: <%=fanCount%>
+                <%=paramRequest.getLocaleString("totalLikes")%>: <%=fanCount%>
             </div>
          <%}%>
     </fieldset>
@@ -170,13 +170,13 @@
     if(!locationName.isEmpty()){
 %>
     <fieldset>
-        <legend>Location:</legend>
+        <legend><%=paramRequest.getLocaleString("location")%>:</legend>
         <div align="left">
-             View on Facebook: <a href="http://www.facebook.com/profile.php?id=<%=locationId%>" title="View profile on Facebook"  target="_blank"><%=locationName%></a>
+             <%=paramRequest.getLocaleString("viewOnFacebook")%>: <a href="http://www.facebook.com/profile.php?id=<%=locationId%>" title="<%=paramRequest.getLocaleString("viewLocFB")%>"  target="_blank"><%=locationName%></a>
         </div>
         <%if(!locationCoordinates.isEmpty()){%>
         <div align="left">
-            View on Google: <a href="https://maps.google.com/maps?q=<%=locationCoordinates%>" title="View profile on Google Maps"  target="_blank">(<%=locationCoordinates%>)</a>
+            <%=paramRequest.getLocaleString("viewOnGoogle")%>: <a href="https://maps.google.com/maps?q=<%=locationCoordinates%>" title="<%=paramRequest.getLocaleString("viewLocGoogle")%>"  target="_blank">(<%=locationCoordinates%>)</a>
         </div>
         <%}%>
                   
@@ -190,9 +190,9 @@
     if(!profileUrl.isEmpty()){
 %>
     <fieldset>
-        <legend>Profile URL:</legend>
+        <legend><%=paramRequest.getLocaleString("profileUrl")%>:</legend>
         <div align="left">
-             <a href="<%=profileUrl%>" title="View profile on Facebook"  target="_blank"><%=profileUrl%></a>
+             <a href="<%=profileUrl%>" title="<%=paramRequest.getLocaleString("viewProfOnFB")%>"  target="_blank"><%=profileUrl%></a>
         </div>
     </fieldset>
 <%
