@@ -2,6 +2,7 @@ package org.semanticwb.bsc.tracing;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -99,6 +100,7 @@ public class Series extends org.semanticwb.bsc.tracing.base.SeriesBase implement
                                                                             return !r.isValid() || !user.haveAccess(r);
                                                                         }            
                                                                     });
+        Collections.sort(validRules);        
         return validRules;
     }
 }
