@@ -16,6 +16,7 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
 <%
+    System.out.println("Entra a TypeOfContent..1");
     WebSite wsite = null;
     if (request.getParameter("wsite") != null) {
         wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
@@ -484,6 +485,7 @@
     </div>
 
 <%} else if (contentType.equals("uploadVideo")) {       ///////////////////////////////POSTEO DE VIDEOS/////////////////////////////
+        System.out.println("Entra a TypeOfContent..2");
         urlAction.setParameter("toPost", "video");
         
         SWBFormMgr videoMgr =null;
@@ -494,7 +496,7 @@
         {
             videoMgr = new SWBFormMgr(postOut.getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
         }
-        
+        System.out.println("Entra a TypeOfContent..3:"+videoMgr);
         
         videoMgr.setType(SWBFormMgr.TYPE_DOJO);
         videoMgr.setFilterRequired(false);
@@ -552,99 +554,103 @@
                     </p>
                     <!--Show Existing Video-->
                     <%
-                    Video video=(Video)postOut;
-                    String videoFormat = "";
-                    String videoUrl = video.getVideo();
-                    String fileext=null;
-                    int pos=videoUrl.lastIndexOf(".");
-                    if(pos>-1)
+                    if(postOut!=null)
                     {
-                        fileext=videoUrl.substring(pos);
-                        int pos1=fileext.indexOf("?");
-                        if(pos1>-1)
+                        Video video=(Video)postOut;
+                        System.out.println("Entra a TypeOfContent..4:"+video);
+                        String videoFormat = "";
+                        String videoUrl = video.getVideo();
+                        String fileext=null;
+                        int pos=videoUrl.lastIndexOf(".");
+                        if(pos>-1)
                         {
-                            fileext=fileext.substring(0, pos1);
+                            fileext=videoUrl.substring(pos);
+                            int pos1=fileext.indexOf("?");
+                            if(pos1>-1)
+                            {
+                                fileext=fileext.substring(0, pos1);
+                            }
                         }
-                    }
-                    if (videoUrl.toLowerCase().contains("www.youtube.com")) {//show player from youtube
-                        videoFormat = "youtube";
-                    } else if (fileext.toLowerCase().equals(".mp4")) {
-                        videoFormat = "mp4";
-                    } else if (fileext.toLowerCase().equals(".swf") || fileext.toLowerCase().equals(".mov")) { 
-                        videoFormat = "flash";
-                    } else if (fileext.toLowerCase().equals(".flv")) {
-                        videoFormat = "flv";
-                    } else if (fileext.toLowerCase().equals(".wav")) {
-                        videoFormat = "wav";
-                    }else if (fileext.equals(".wmv")) {
-                        videoFormat = "wmv";
-                    }
+                        if (videoUrl.toLowerCase().contains("www.youtube.com")) {//show player from youtube
+                            videoFormat = "youtube";
+                        } else if (fileext.toLowerCase().equals(".mp4")) {
+                            videoFormat = "mp4";
+                        } else if (fileext.toLowerCase().equals(".swf") || fileext.toLowerCase().equals(".mov")) { 
+                            videoFormat = "flash";
+                        } else if (fileext.toLowerCase().equals(".flv")) {
+                            videoFormat = "flv";
+                        } else if (fileext.toLowerCase().equals(".wav")) {
+                            videoFormat = "wav";
+                        }else if (fileext.equals(".wmv")) {
+                            videoFormat = "wmv";
+                        }
+                        %>    
+
+                        <%
+                            if (videoFormat.equals("flv")) {
+                        %>
+
+                        <%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
+                        <br>
+                        <object id="video" type="application/x-shockwave-flash" data="<%=SWBPlatform.getContextPath()%>/swbadmin/player_flv_maxi.swf" width="400" height="200">
+                            <param name="movie" value="<%=SWBPlatform.getContextPath()%>/swbadmin/player_flv_maxi.swf" />
+                            <param name="FlashVars" value="flv=<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>"/>
+                        </object>
+                        <%
+                        } else if (videoFormat.equals("flash")) {
+                        %>
+
+                        <%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
+                        <br>
+                        <object width="400" height="200" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"   codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0"> 
+                            <param name="SRC" value="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>">
+                            <embed src="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" width="400" height="200"></embed>
+                        </object>
+
+
+
+                        <%} else if (videoFormat.equals("mp4")) {
+                        %>   
+                        <%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
+                        <br>
+                        <video width="400" height="200" controls>
+                            <source src="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" type="video/mp4">
+                            <object data="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" width="400" height="200">
+                                <embed src="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" width="400" height="200" autostart="false">    
+                            </object>
+                        </video>
+
+                    <%
+                    } else if (videoFormat.equals("wav")) {
+                    %>
+                    <%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
+                    <br>
+                    <object width="400" height="200" classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
+                        <param name="src" value="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>">
+                        <param name="controller" value="true">
+                    </object>
+
+                    <%
+                    } else if (videoFormat.equals("wmv")) {
+
                     %>    
 
-                    <%
-                        if (videoFormat.equals("flv")) {
-                    %>
-
                     <%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
                     <br>
-                    <object id="video" type="application/x-shockwave-flash" data="<%=SWBPlatform.getContextPath()%>/swbadmin/player_flv_maxi.swf" width="400" height="200">
-                        <param name="movie" value="<%=SWBPlatform.getContextPath()%>/swbadmin/player_flv_maxi.swf" />
-                        <param name="FlashVars" value="flv=<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>"/>
-                    </object>
-                    <%
-                    } else if (videoFormat.equals("flash")) {
-                    %>
-
-                    <%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
-                    <br>
-                    <object width="400" height="200" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"   codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0"> 
-                        <param name="SRC" value="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>">
-                        <embed src="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" width="400" height="200"></embed>
+                    <object width="400" height="200" type="video/x-ms-asf" url="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" data="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" classid="CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6">
+                        <param name="url" value="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>">
+                        <param name="filename" value="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>">
+                        <param name="autostart" value="1">
+                        <param name="uiMode" value="full">
+                        <param name="autosize" value="1">
+                        <param name="playcount" value="1"> 
+                        <embed type="application/x-mplayer2" src="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" width="400" height="200" autostart="true" showcontrols="true" pluginspage="http://www.microsoft.com/Windows/MediaPlayer/"></embed>
                     </object>
 
-
-
-                    <%} else if (videoFormat.equals("mp4")) {
-                    %>   
-                    <%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
-                    <br>
-                    <video width="400" height="200" controls>
-                        <source src="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" type="video/mp4">
-                        <object data="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" width="400" height="200">
-                            <embed src="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" width="400" height="200" autostart="false">    
-                        </object>
-                    </video>
-
-                <%
-                } else if (videoFormat.equals("wav")) {
-                %>
-                <%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
-                <br>
-                <object width="400" height="200" classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
-                    <param name="src" value="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>">
-                    <param name="controller" value="true">
-                </object>
-
-                <%
-                } else if (videoFormat.equals("wmv")) {
-
-                %>    
-
-                <%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
-                <br>
-                <object width="400" height="200" type="video/x-ms-asf" url="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" data="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" classid="CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6">
-                    <param name="url" value="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>">
-                    <param name="filename" value="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>">
-                    <param name="autostart" value="1">
-                    <param name="uiMode" value="full">
-                    <param name="autosize" value="1">
-                    <param name="playcount" value="1"> 
-                    <embed type="application/x-mplayer2" src="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" width="400" height="200" autostart="true" showcontrols="true" pluginspage="http://www.microsoft.com/Windows/MediaPlayer/"></embed>
-                </object>
-                
-                <%
+                    <%
+                        }
                     }
-                %>
+                    %>
                  <!--Ends Show Existing Video-->
                 <%        
                 //Showing SocialFlows
