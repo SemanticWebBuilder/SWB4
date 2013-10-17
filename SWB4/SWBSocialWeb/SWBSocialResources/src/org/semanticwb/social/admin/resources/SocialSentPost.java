@@ -748,7 +748,7 @@ public class SocialSentPost extends GenericResource {
             System.out.println("PostUri:" + postOut.getURI());
             boolean postOutwithPostOutNets = false;
             boolean someOneIsNotPublished = false;
-            SWBResourceURL urlPostOutNets = paramRequest.getRenderUrl().setMode(Mode_ShowPostOutNets).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postOut", postOut.getURI());
+            SWBResourceURL urlPostOutNets = paramRequest.getRenderUrl().setMode(Mode_ShowPostOutNets).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postOut", postOut.getURI()).setParameter("suri", id);
             if (!postOut.isPublished()) {
                 Iterator<PostOutNet> itPostOutNets = PostOutNet.ClassMgr.listPostOutNetBySocialPost(postOut, wsite);
                 while (itPostOutNets.hasNext()) {
@@ -826,9 +826,11 @@ public class SocialSentPost extends GenericResource {
                 msgText = SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(postOut.getMsg_Text()), 25);
                 msgText = msgText.replaceAll("\n", " ");
             }
+            String strClass="";
+            if(postOut.listCalendarRefs().hasNext()) strClass="class=\"swbIconSocialCalendar\"";
             if(!postOut.isPublished())
             {
-                out.println("<a href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + msgText + "');return false;\" title=\"" + msgText + "\">" + msgText + "</a>");
+                out.println("<a " +strClass+" href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + msgText + "');return false;\" title=\"" + msgText + "\">" + msgText + "</a>");
             }else{
                 out.println(msgText);
             }
@@ -1640,192 +1642,209 @@ public class SocialSentPost extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
 
         String action = response.getAction();
-        //System.out.println("SocialSentPost/processAction-1:"+action);
-        if (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo")) {
-            try {
-                //System.out.println("SocialSentPost/processAction-2");
-                ArrayList aSocialNets = new ArrayList();
-                WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
-                String objUri = request.getParameter("objUri");
-                SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
-                PostOut postOut = (PostOut) semanticObject.createGenericInstance();
-                //System.out.println("SocialSentPost/processAction-3:"+postOut);
-                SocialPFlow spflow = null;
-                //System.out.println("processA/socialFlow:"+request.getParameter("socialFlow"));
-                if (request.getParameter("socialFlow") != null && request.getParameter("socialFlow").trim().length() > 0) {
-                    SemanticObject semObjSFlow = SemanticObject.getSemanticObject(request.getParameter("socialFlow"));
-                    spflow = (SocialPFlow) semObjSFlow.createGenericInstance();
-                }
-
-                String toPost = request.getParameter("toPost");
-
-                String socialUri = "";
-                int j = 0;
-                Enumeration<String> enumParams = request.getParameterNames();
-                while (enumParams.hasMoreElements()) {
-                    String paramName = enumParams.nextElement();
-                    if (paramName.startsWith("http://")) {
-                        if (socialUri.trim().length() > 0) {
-                            socialUri += "|";
-                        }
-                        socialUri += paramName;
-                        j++;
-                    }
-                }
-                //System.out.println("SocialSentPost/processAction-4:"+socialUri);
-                if (socialUri.trim().length() > 0) // La publicación por lo menos se debe enviar a una red social
-                {
-                    String[] socialUris = socialUri.split("\\|");  //Dividir valores
-                    for (int i = 0; i < socialUris.length; i++) {
-                        String tmp_socialUri = socialUris[i];
-                        SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri, wsite.getSemanticModel());
-                        SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
-                        //Se agrega la red social de salida al post
-                        aSocialNets.add(socialNet);
-                    }
-                    //SWBSocialUtil.PostOutUtil.publishPost(postOut, request, response);
-                    //System.out.println("SocialSentPost/processAction-J5");
-                    //SWBSocialUtil.PostOutUtil.editPostOut(postOut, spflow, aSocialNets, wsite, toPost, request, response);
-                    SWBSocialUtil.PostOutUtil.editPostOut(postOut, spflow, aSocialNets, wsite, toPost, request, response);
-                    response.setMode(SWBResourceURL.Mode_EDIT);
-                    response.setRenderParameter("dialog", "close");
-                    response.setRenderParameter("statusMsg", SWBUtils.TEXT.encode(response.getLocaleLogString("postModified"), "utf8"));
-                    response.setRenderParameter("reloadTab", postOut.getSocialTopic().getURI());
-                    response.setRenderParameter("suri", postOut.getSocialTopic().getURI());
-                    //System.out.println("SocialSentPost/processAction-J6-suri:"+postOut.getSocialTopic().getURI());
-                } else {
-                    response.setMode(SWBResourceURL.Mode_EDIT);
-                    response.setRenderParameter("dialog", "close");
-                    response.setRenderParameter("statusMsg", response.getLocaleLogString("postTypeNotDefined"));
-                    response.setRenderParameter("reloadTab", postOut.getSocialTopic().getURI());
-                }
-            } catch (Exception e) {
-                log.error(e.getMessage());
-                e.printStackTrace();
-            }
-
-
-            ///////////////////////////////
-            response.setRenderParameter("statmsg", response.getLocaleString("statmsg1"));
-            response.setMode(response.Mode_EDIT);
-            response.setRenderParameter("act", "");
-        } else if ("remove".equals(action)) //suri, prop
+        System.out.println("SocialSentPost/processAction-1:"+action);
+        try
         {
-            String sval = request.getParameter("sval");
-            //System.out.println("SocialSentPost-REMOVEj1:"+sval);
-            SemanticObject so = SemanticObject.createSemanticObject(sval);
+            if (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo")) {
+                try {
+                    //System.out.println("SocialSentPost/processAction-2");
+                    ArrayList aSocialNets = new ArrayList();
+                    WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
+                    String objUri = request.getParameter("objUri");
+                    SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
+                    PostOut postOut = (PostOut) semanticObject.createGenericInstance();
+                    //System.out.println("SocialSentPost/processAction-3:"+postOut);
+                    SocialPFlow spflow = null;
+                    //System.out.println("processA/socialFlow:"+request.getParameter("socialFlow"));
+                    if (request.getParameter("socialFlow") != null && request.getParameter("socialFlow").trim().length() > 0) {
+                        SemanticObject semObjSFlow = SemanticObject.getSemanticObject(request.getParameter("socialFlow"));
+                        spflow = (SocialPFlow) semObjSFlow.createGenericInstance();
+                    }
 
-            PostOut postOut = (PostOut) so.getGenericInstance();
+                    String toPost = request.getParameter("toPost");
 
-            //System.out.println("SocialSentPost-REMOVEj2:"+postOut);
-
-            postOut.remove();
-
-            //System.out.println("SocialSentPost-REMOVEj3-LISTO");
-
-            response.setRenderParameter("dialog", "close");
-            response.setRenderParameter("suri", request.getParameter("suri"));
-            response.setRenderParameter("statmsg", response.getLocaleString("postDeleted"));
-            response.setMode(SWBActionResponse.Mode_EDIT);
-        } else if ("send2flow".equals(action)) {
-            String id = request.getParameter("suri");
-            SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-            SemanticObject obj = SemanticObject.createSemanticObject(id); //WebPage
-            SemanticClass cls = obj.getSemanticClass();
-            SocialPFlowMgr pfmgr = SocialLoader.getPFlowManager();
-            String sval = request.getParameter("sval"); // id resource
-            String pfid = request.getParameter("pfid"); // id pflow
-            String usermessage = request.getParameter("usrmsg"); // mensaje del usuario
-            SocialPFlow pf = (SocialPFlow) ont.getGenericObject(pfid);
-            PostOut res = (PostOut) ont.getGenericObject(sval);
-
-            pfmgr.sendResourceToAuthorize(res, pf, usermessage);
-
-            response.setRenderParameter("dialog", "close");
-            response.setMode(SWBActionResponse.Mode_EDIT);
-            response.setRenderParameter("suri", id);
-        } else if ("deleteall".equals(action)) {
-            String id = request.getParameter("suri");
-            String sprop = request.getParameter("sprop");
-            String sproptype = request.getParameter("sproptype");
-            SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-            SemanticObject obj = SemanticObject.createSemanticObject(id); //WebPage
-            SemanticClass cls = obj.getSemanticClass();
-            SemanticProperty sem_p = ont.getSemanticProperty(sprop);
-            SemanticObject so = obj.getObjectProperty(sem_p);
-            Iterator<SemanticObject> itso = obj.listObjectProperties(sem_p);
-            SemanticObject soc = null;
-            while (itso.hasNext()) {
-                //System.out.println("revisando deleteAll (ListObjectsProperties)");
-                soc = itso.next();
-                Iterator<SemanticProperty> it = cls.listProperties();
-                while (it.hasNext()) {
-                    SemanticProperty prop = it.next();
-                    //System.out.println("revisando (ListProperties("+sprop+")) "+ prop.getName());
-                    String value = prop.getName();
-                    //System.out.println(sem_p.getURI() + ":" + sprop + "----" + (prop.getURI().equals(sprop) ? "true" : "false"));
-                    if (value != null && value.equals(sem_p.getName())) { //se tiene que validar el valor por si es más de una
-                        //obj.removeObjectProperty(prop, soc);
-                        if (sem_p.getName().equalsIgnoreCase("userrepository")) {
-                            obj.setObjectProperty(prop, ont.getSemanticObject("urswb"));
-                        }
-
-                        boolean trash = false;
-                        if (soc.instanceOf(Trashable.swb_Trashable)) {
-                            boolean del = soc.getBooleanProperty(Trashable.swb_deleted);
-                            if (!del) {
-                                trash = true;
+                    String socialUri = "";
+                    int j = 0;
+                    Enumeration<String> enumParams = request.getParameterNames();
+                    while (enumParams.hasMoreElements()) {
+                        String paramName = enumParams.nextElement();
+                        if (paramName.startsWith("http://")) {
+                            if (socialUri.trim().length() > 0) {
+                                socialUri += "|";
                             }
+                            socialUri += paramName;
+                            j++;
                         }
-                        if (!trash) {
-                            soc.remove();
-                        } else {
-                            soc.setBooleanProperty(Trashable.swb_deleted, true);
-                        }
-
-
-//                        if(soc.getSemanticClass().isSubClass(Trashable.swb_Trashable))
-//                        {
-//                            System.out.println("Es trashable.. delAll.."+soc.getURI());
-//                            soc.setIntProperty(Trashable.swb_deleted, 1);
-//                        }
-//                        else
-//                        {
-//                            soc.remove();
-//                        }
-
-                        break;
                     }
+                    //System.out.println("SocialSentPost/processAction-4:"+socialUri);
+                    if (socialUri.trim().length() > 0) // La publicación por lo menos se debe enviar a una red social
+                    {
+                        String[] socialUris = socialUri.split("\\|");  //Dividir valores
+                        for (int i = 0; i < socialUris.length; i++) {
+                            String tmp_socialUri = socialUris[i];
+                            SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri, wsite.getSemanticModel());
+                            SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
+                            //Se agrega la red social de salida al post
+                            aSocialNets.add(socialNet);
+                        }
+                        //SWBSocialUtil.PostOutUtil.publishPost(postOut, request, response);
+                        //System.out.println("SocialSentPost/processAction-J5");
+                        //SWBSocialUtil.PostOutUtil.editPostOut(postOut, spflow, aSocialNets, wsite, toPost, request, response);
+                        SWBSocialUtil.PostOutUtil.editPostOut(postOut, spflow, aSocialNets, wsite, toPost, request, response);
+                        response.setMode(SWBResourceURL.Mode_EDIT);
+                        response.setRenderParameter("dialog", "close");
+                        response.setRenderParameter("statusMsg", SWBUtils.TEXT.encode(response.getLocaleLogString("postModified"), "utf8"));
+                        response.setRenderParameter("reloadTab", postOut.getSocialTopic().getURI());
+                        response.setRenderParameter("suri", postOut.getSocialTopic().getURI());
+                        //System.out.println("SocialSentPost/processAction-J6-suri:"+postOut.getSocialTopic().getURI());
+                    } else {
+                        response.setMode(SWBResourceURL.Mode_EDIT);
+                        response.setRenderParameter("dialog", "close");
+                        response.setRenderParameter("statusMsg", response.getLocaleLogString("postTypeNotDefined"));
+                        response.setRenderParameter("reloadTab", postOut.getSocialTopic().getURI());
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                    e.printStackTrace();
                 }
 
-            }
-            if (sproptype != null) {
-                response.setRenderParameter("sproptype", sproptype);
-            }
-            response.setMode(SWBActionResponse.Mode_EDIT);
-            response.setRenderParameter("suri", id);
-            response.setRenderParameter("sprop", sprop);
-        } else if (action.equals("publicByPostOut")) {
-            if (request.getParameter("postOutUri") != null) {
-                SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postOutUri"));
-                if (semObj != null) {
-                    PostOutNet postOutNet = (PostOutNet) semObj.getGenericInstance();
-                    PostOut postOut = postOutNet.getSocialPost();
-                    SocialNetwork socialNet = postOutNet.getSocialNetwork();
-                    if (postOut != null && socialNet != null) {
-                        SWBSocialUtil.PostOutUtil.publishPostOutNet(postOut, socialNet);
+
+                ///////////////////////////////
+                response.setRenderParameter("statmsg", response.getLocaleString("statmsg1"));
+                response.setMode(response.Mode_EDIT);
+                response.setRenderParameter("act", "");
+            } else if ("remove".equals(action)) //suri, prop
+            {
+                String sval = request.getParameter("sval");
+                //System.out.println("SocialSentPost-REMOVEj1:"+sval);
+                SemanticObject so = SemanticObject.createSemanticObject(sval);
+
+                PostOut postOut = (PostOut) so.getGenericInstance();
+
+                //System.out.println("SocialSentPost-REMOVEj2:"+postOut);
+
+                postOut.remove();
+
+                //System.out.println("SocialSentPost-REMOVEj3-LISTO");
+
+                response.setRenderParameter("dialog", "close");
+                response.setRenderParameter("suri", request.getParameter("suri"));
+                response.setRenderParameter("statmsg", response.getLocaleString("postDeleted"));
+                response.setMode(SWBActionResponse.Mode_EDIT);
+            } else if ("send2flow".equals(action)) {
+                String id = request.getParameter("suri");
+                SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+                SemanticObject obj = SemanticObject.createSemanticObject(id); //WebPage
+                //SemanticClass cls = obj.getSemanticClass();
+                SocialPFlowMgr pfmgr = SocialLoader.getPFlowManager();
+                String sval = request.getParameter("sval"); // id resource
+                String pfid = request.getParameter("pfid"); // id pflow
+                String usermessage = request.getParameter("usrmsg"); // mensaje del usuario
+                SocialPFlow pf = (SocialPFlow) ont.getGenericObject(pfid);
+                PostOut res = (PostOut) ont.getGenericObject(sval);
+
+                pfmgr.sendResourceToAuthorize(res, pf, usermessage);
+
+                response.setMode(SWBResourceURL.Mode_EDIT);
+                response.setRenderParameter("dialog", "close");
+                response.setRenderParameter("statusMsg", SWBUtils.TEXT.encode(response.getLocaleLogString("sendContent2Flow"), "utf8"));
+                response.setRenderParameter("reloadTab", id);
+                response.setRenderParameter("suri", id);
+            } else if ("deleteall".equals(action)) {
+                String id = request.getParameter("suri");
+                String sprop = request.getParameter("sprop");
+                String sproptype = request.getParameter("sproptype");
+                SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+                SemanticObject obj = SemanticObject.createSemanticObject(id); //WebPage
+                SemanticClass cls = obj.getSemanticClass();
+                SemanticProperty sem_p = ont.getSemanticProperty(sprop);
+                SemanticObject so = obj.getObjectProperty(sem_p);
+                Iterator<SemanticObject> itso = obj.listObjectProperties(sem_p);
+                SemanticObject soc = null;
+                while (itso.hasNext()) {
+                    //System.out.println("revisando deleteAll (ListObjectsProperties)");
+                    soc = itso.next();
+                    Iterator<SemanticProperty> it = cls.listProperties();
+                    while (it.hasNext()) {
+                        SemanticProperty prop = it.next();
+                        //System.out.println("revisando (ListProperties("+sprop+")) "+ prop.getName());
+                        String value = prop.getName();
+                        //System.out.println(sem_p.getURI() + ":" + sprop + "----" + (prop.getURI().equals(sprop) ? "true" : "false"));
+                        if (value != null && value.equals(sem_p.getName())) { //se tiene que validar el valor por si es más de una
+                            //obj.removeObjectProperty(prop, soc);
+                            if (sem_p.getName().equalsIgnoreCase("userrepository")) {
+                                obj.setObjectProperty(prop, ont.getSemanticObject("urswb"));
+                            }
+
+                            boolean trash = false;
+                            if (soc.instanceOf(Trashable.swb_Trashable)) {
+                                boolean del = soc.getBooleanProperty(Trashable.swb_deleted);
+                                if (!del) {
+                                    trash = true;
+                                }
+                            }
+                            if (!trash) {
+                                soc.remove();
+                            } else {
+                                soc.setBooleanProperty(Trashable.swb_deleted, true);
+                            }
+
+
+    //                        if(soc.getSemanticClass().isSubClass(Trashable.swb_Trashable))
+    //                        {
+    //                            System.out.println("Es trashable.. delAll.."+soc.getURI());
+    //                            soc.setIntProperty(Trashable.swb_deleted, 1);
+    //                        }
+    //                        else
+    //                        {
+    //                            soc.remove();
+    //                        }
+
+                            break;
+                        }
                     }
-                    response.setMode(SWBResourceURL.Mode_EDIT);
-                    response.setRenderParameter("dialog", "close");
-                    response.setRenderParameter("statusMsg", SWBUtils.TEXT.encode(response.getLocaleLogString("postOutPublished"), "utf8"));
-                    response.setRenderParameter("reloadTab", postOut.getSocialTopic().getURI());
-                    response.setRenderParameter("suri", postOut.getSocialTopic().getURI());
+
                 }
+                if (sproptype != null) {
+                    response.setRenderParameter("sproptype", sproptype);
+                }
+                response.setMode(SWBActionResponse.Mode_EDIT);
+                response.setRenderParameter("suri", id);
+                response.setRenderParameter("sprop", sprop);
+            } else if (action.equals("publicByPostOut")) {
+                if (request.getParameter("postOutUri") != null) {
+                    SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postOutUri"));
+                    if (semObj != null) {
+                        PostOutNet postOutNet = (PostOutNet) semObj.getGenericInstance();
+                        PostOut postOut = postOutNet.getSocialPost();
+                        SocialNetwork socialNet = postOutNet.getSocialNetwork();
+                        if (postOut != null && socialNet != null) {
+                            SWBSocialUtil.PostOutUtil.publishPostOutNet(postOut, socialNet);
+                        }
+                        response.setMode(SWBResourceURL.Mode_EDIT);
+                        response.setRenderParameter("dialog", "close");
+                        response.setRenderParameter("statusMsg", SWBUtils.TEXT.encode(response.getLocaleLogString("postOutPublished"), "utf8"));
+                        response.setRenderParameter("reloadTab", postOut.getSocialTopic().getURI());
+                        response.setRenderParameter("suri", postOut.getSocialTopic().getURI());
+                    }
+                }
+            }else if(action.equals("removePostOutNet") && request.getParameter("postOutNetUri")!=null)
+            {
+                System.out.println("SocialSentPost/postOutNetUri");
+                SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("postOutNetUri"));
+                PostOutNet postOutNet=(PostOutNet)semObj.getGenericInstance();
+                if(postOutNet!=null)
+                {
+                    System.out.println("SocialSentPost/postOutNetUri a la goma");
+                    postOutNet.remove();
+                }
+                response.setRenderParameter("suri", request.getParameter("suri"));
+                //response.setRenderParameter("postOut", request.getParameter("postOut"));
             }
+        }catch(Exception e)
+        {
+            log.error(e);
         }
-
-
-
     }
 
     /*
