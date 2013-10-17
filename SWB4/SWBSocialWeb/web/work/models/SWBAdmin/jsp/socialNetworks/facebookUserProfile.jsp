@@ -16,7 +16,7 @@
 <%@page import="org.json.JSONObject"%>
 
 <%@page import="static org.semanticwb.social.admin.resources.FacebookWall.*"%>
-
+<jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%@page contentType="text/html" pageEncoding="x-iso-8859-11"%>
 <!DOCTYPE html>
 
@@ -115,16 +115,15 @@
         }
         
 %>
-
-<div class="swbform" style="width: 500px">
+<div class="swbform" style="width: 500px;">
     <fieldset>
-        <div align="center"><a href="http://www.facebook.com/<%=target%>" title="View profile on Facebook"  target="_blank"><img src="https://graph.facebook.com/<%=target%>/picture?width=150&height=150"/></a></div>
+        <div align="center"><a href="http://www.facebook.com/<%=target%>" title="<%=paramRequest.getLocaleString("viewProfOnFB")%>"  target="_blank"><img src="https://graph.facebook.com/<%=target%>/picture?width=150&height=150" width="150" height="150"/></a></div>
     </fieldset>
 <%
     if(!aboutMe.isEmpty()){
 %>
     <fieldset>
-        <legend>About me:</legend>
+        <legend><%=paramRequest.getLocaleString("aboutMe")%>:</legend>
         <div align="left"><%=aboutMe%></div>
     </fieldset>
 <%
@@ -135,7 +134,7 @@
     if(!birthday.isEmpty()){
 %>
     <fieldset>
-        <legend>Birthday:</legend>
+        <legend><%=paramRequest.getLocaleString("birthday")%>:</legend>
         <div align="left"><%=birthday%></div>
     </fieldset>
 <%
@@ -147,16 +146,16 @@
     if(friendsCount > 0 || mutualFriendsCount > 0){
 %>
     <fieldset>
-         <legend>Friends information:</legend>
+         <legend><%=paramRequest.getLocaleString("friendsInformation")%>:</legend>
          <%if(friendsCount>0){%>
             <div align="left">
-                Total friends: <%=friendsCount%>
+                <%=paramRequest.getLocaleString("totalFriends")%>: <%=friendsCount%>
             </div>
          <%}%>
          
          <%if(mutualFriendsCount>0){%>
             <div align="left">
-                Mutual friends: <%=mutualFriendsCount%>
+                <%=paramRequest.getLocaleString("mutualFriends")%>: <%=mutualFriendsCount%>
             </div>
          <%}%>
     </fieldset>
@@ -168,13 +167,13 @@
     if(!locationName.isEmpty()){
 %>
     <fieldset>
-        <legend>Location:</legend>
+        <legend><%=paramRequest.getLocaleString("location")%>:</legend>
         <div align="left">
-             View on Facebook: <a href="http://www.facebook.com/profile.php?id=<%=locationId%>" title="View profile on Facebook"  target="_blank"><%=locationName%></a>
+             <%=paramRequest.getLocaleString("viewOnFacebook")%>: <a href="http://www.facebook.com/profile.php?id=<%=locationId%>" title="<%=paramRequest.getLocaleString("viewLocFB")%>"  target="_blank"><%=locationName%></a>
         </div>
         <%if(!locationCoordinates.isEmpty()){%>
         <div align="left">
-            View on Google: <a href="https://maps.google.com/maps?q=<%=locationCoordinates%>" title="View profile on Google Maps"  target="_blank">(<%=locationCoordinates%>)</a>
+            <%=paramRequest.getLocaleString("viewOnGoogle")%>: <a href="https://maps.google.com/maps?q=<%=locationCoordinates%>" title="<%=paramRequest.getLocaleString("viewLocGoogle")%>"  target="_blank">(<%=locationCoordinates%>)</a>
         </div>
         <%}%>
                   
@@ -188,9 +187,9 @@
     if(!profileUrl.isEmpty()){
 %>
     <fieldset>
-        <legend>Profile URL:</legend>
+        <legend><%=paramRequest.getLocaleString("profileUrl")%>:</legend>
         <div align="left">
-             <a href="<%=profileUrl%>" title="View profile on Facebook"  target="_blank"><%=profileUrl%></a>
+             <a href="<%=profileUrl%>" title="<%=paramRequest.getLocaleString("viewProfOnFB")%>"  target="_blank"><%=profileUrl%></a>
         </div>
     </fieldset>
 <%
@@ -201,7 +200,7 @@
     if(!sex.isEmpty()){
 %>
     <fieldset>
-         <legend>Gender:</legend>
+         <legend><%=paramRequest.getLocaleString("gender")%>:</legend>
          <div align="left"><%=sex%></div>
     </fieldset>
 <%
