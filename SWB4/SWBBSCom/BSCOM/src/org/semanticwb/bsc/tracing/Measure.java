@@ -12,7 +12,7 @@ public class Measure extends org.semanticwb.bsc.tracing.base.MeasureBase
     
     public void evaluate() {
         getEvaluation().setStatus(getSeries().getIndicator().getMinimumState());
-        Iterator<EvaluationRule> rules = getSeries().listValidEvaluationRules().iterator();
+        Iterator<EvaluationRule> rules = getSeries().listValidEvaluationRules(false).iterator();
 	while(rules.hasNext())
 	{
 		EvaluationRule rule = rules.next();
