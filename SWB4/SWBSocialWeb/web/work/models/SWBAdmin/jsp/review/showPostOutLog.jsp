@@ -20,8 +20,12 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
 <%
+    System.out.println("suri EN JSP:"+request.getParameter("suri")); 
+    String suri=request.getParameter("suri");
+    if(suri==null) return;
     User user=paramRequest.getUser(); 
     if(request.getAttribute("postOut")==null) return;
+    System.out.println("postOut EN JSP:"+request.getParameter("postOut")); 
     
     SemanticObject semObj=(SemanticObject)request.getAttribute("postOut");
     if(semObj==null) return; 
@@ -34,6 +38,7 @@
         <table style="width: 100%">
             <thead>
                 <tr>
+                    <th><%=paramRequest.getLocaleString("actions")%></th>
                     <th><%=paramRequest.getLocaleString("socialNetwork")%></th>
                     <th><%=paramRequest.getLocaleString("idOnSocialNet")%></th>
                     <th><%=paramRequest.getLocaleString("status")%></th>
@@ -49,6 +54,28 @@
         PostOutNet postOutNet=itPostOutNets.next();
         %>
             <tr>
+                <td>
+                <%
+                if(postOutNet.getError()!=null)
+                {
+                    SWBResourceURL urlr = paramRequest.getActionUrl();
+                    urlr.setParameter("suri", suri);
+                    //urlr.setParameter("postOut", postOut.getURI());
+                    urlr.setParameter("postOutNetUri", postOutNet.getURI());
+                    urlr.setAction("removePostOutNet");
+                    
+                    String msgText = postOutNet.getURI();
+                    if (postOutNet.getError() != null) {
+                        msgText = SWBUtils.TEXT.scape4Script(postOutNet.getError());
+                        msgText = SWBSocialUtil.Util.replaceSpecialCharacters(msgText, false);
+                    }
+                    %>
+                    
+                        <a href="#" title="<%=paramRequest.getLocaleString("remove")%>" class="eliminar" onclick="if(confirm('<%=paramRequest.getLocaleString("confirm_remove")%>  <%=msgText%> ?')){ submitUrl('<%=urlr%>',this); } else { return false;}">Eliminar</a>
+                <%
+                }
+                %>
+                </td>
                 <td>
                     <%=postOutNet.getSocialNetwork().getDisplayTitle(user.getLanguage())%>
                 </td>

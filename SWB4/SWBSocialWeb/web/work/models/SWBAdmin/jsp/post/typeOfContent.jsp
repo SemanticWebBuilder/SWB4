@@ -32,7 +32,7 @@
         if(sourceCall == null){ //When typeOfContent is called from Tema/Responder the param source is not being sent
             sourceCall = "reply";
         }
-    System.out.println("****EL source es: " +sourceCall);
+    //System.out.println("****EL source es: " +sourceCall);
     
     SemanticObject semObj = null;
     if (objUri == null && request.getAttribute("objUri") != null) {
@@ -51,14 +51,14 @@
     boolean firstTime = false;
     if (semObj.getSemanticClass().isSubClass(PostIn.social_PostIn)) {//Publish in response to PostIn
         postIn = (PostIn) semObj.createGenericInstance();
-        System.out.println("Es un POST IN");
+        //System.out.println("Es un POST IN");
         apostOutNets.add(postIn.getPostInSocialNetwork().getURI());
     } else if (semObj.getGenericInstance() instanceof SocialTopic) {//Publish from Social Topic
-        System.out.println("Es un SOCIALTOPIC");
+        //System.out.println("Es un SOCIALTOPIC");
         socialTopic = (SocialTopic) semObj.createGenericInstance();
         firstTime = true;
     } else if (semObj.getSemanticClass().isSubClass(PostOut.social_PostOut)) {
-        System.out.println("Es un POST OUT");
+        //System.out.println("Es un POST OUT");
         postOut = (PostOut) semObj.createGenericInstance();
         if (postOut instanceof Message) {
             contentType = "postMessage";
@@ -71,12 +71,12 @@
         Iterator<SocialNetwork> itPostOutSocialNets = postOut.listSocialNetworks();
         while (itPostOutSocialNets.hasNext()) {
             SocialNetwork socialNet = itPostOutSocialNets.next();
-            System.out.println("Red de PostOut:" + socialNet);
+            //System.out.println("Red de PostOut:" + socialNet);
             apostOutNets.add(socialNet.getURI());
         }
         if (postOut.getPflowInstance() != null && postOut.getPflowInstance().getPflow() != null) {
             postOutPFlowUri = postOut.getPflowInstance().getPflow().getURI();
-            System.out.println("postOutPFlowUri++G++:" + postOutPFlowUri);
+            //System.out.println("postOutPFlowUri++G++:" + postOutPFlowUri);
         }
     }
     if (contentType == null) {
@@ -120,16 +120,7 @@
             }
         }        
     }
-    
-    System.out.println("Facebook");
-    for(int i = 0; i < selectFacebook.size(); i++){
-        System.out.println(selectFacebook.get(i));
-    }
-
-    System.out.println("Youtube");
-    for(int i = 0; i < selectYoutube.size(); i++){
-        System.out.println(selectYoutube.get(i));
-    }       
+     
     ///////////////////////////////POSTEO DE MENSAJES/////////////////////////////
 
     if (contentType.equals("postMessage")) {
@@ -240,7 +231,7 @@
                             boolean isSelected = false;
                             //System.out.println("Las Redes:" + socialNetwork);
                             if (apostOutNets.contains(socialNetwork.getURI())) {
-                                System.out.println("La Chida--:" + socialNetwork);
+                                //System.out.println("La Chida--:" + socialNetwork);
                                 isSelected = true;
                             }
                             String typeClass = "";
@@ -307,7 +298,17 @@
     </div>
     <%} else if (contentType.equals("uploadPhoto")) {       ///////////////////////////////POSTEO DE FOTOS/////////////////////////////
         urlAction.setParameter("toPost", "photo");
-        SWBFormMgr photoMgr = new SWBFormMgr(Photo.sclass, paramRequest.getWebPage().getWebSite().getSemanticObject(), null);
+        
+        SWBFormMgr photoMgr=null;
+        if (postOut == null) //Creation
+        {
+            photoMgr = new SWBFormMgr(Photo.sclass.getSemanticObject(), null, SWBFormMgr.MODE_CREATE);
+        } else //Update
+        {
+            photoMgr = new SWBFormMgr(postOut.getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
+        }
+        
+        
         photoMgr.setType(SWBFormMgr.TYPE_DOJO);
         photoMgr.setFilterRequired(false);
         String lang = "es";
@@ -319,6 +320,7 @@
         photoMgr.addButton(SWBFormButton.newBackButton());
     //StringBuffer ret = new StringBuffer();
         SemanticObject obj2 = new SemanticObject(paramRequest.getWebPage().getWebSite().getSemanticModel(), Photo.sclass);
+        //System.out.println("postOut en Photo:"+postOut);
     %>
     <div id="pub-detalle">
         <span class="sel-imgdiv"></span>
@@ -330,7 +332,7 @@
                     <p class="titulo">Detalles de la publicaci&oacute;n</p>
                     <p>
                     <div class="etiqueta"><label for="description"><%=Photo.social_msg_Text.getDisplayName()%>:</label></div>
-                    <div class="campo"><%=photoMgr.renderElement(request, Photo.social_msg_Text, photoMgr.MODE_CREATE)%></div>
+                    <div class="campo"><%=postOut == null ? photoMgr.renderElement(request, Photo.social_msg_Text, photoMgr.MODE_CREATE) : photoMgr.renderElement(request, Photo.social_msg_Text, photoMgr.MODE_EDIT)%></div>
                     </p>
                     <p>
                     <div class="etiqueta"><label for="photo"><%=photoMgr.renderLabel(request, PostImageable.social_hasPhoto, photoMgr.MODE_CREATE)%>: </label></div>
@@ -345,6 +347,8 @@
                     <%
                         if (postIn != null) {
                             socialTopic = postIn.getSocialTopic();
+                        } else if (postIn == null && postOut != null) {
+                            socialTopic = postOut.getSocialTopic();
                         }
                         if (socialTopic != null) {
                             Iterator<SocialPFlowRef> itSocialPFlowRefs = socialTopic.listInheritPFlowRefs();
@@ -481,7 +485,17 @@
 
 <%} else if (contentType.equals("uploadVideo")) {       ///////////////////////////////POSTEO DE VIDEOS/////////////////////////////
         urlAction.setParameter("toPost", "video");
-        SWBFormMgr videoMgr = new SWBFormMgr(Video.sclass, paramRequest.getWebPage().getWebSite().getSemanticObject(), null);
+        
+        SWBFormMgr videoMgr =null;
+        if (postOut == null) //Creation
+        {
+            videoMgr = new SWBFormMgr(Video.sclass.getSemanticObject(), null, SWBFormMgr.MODE_CREATE);
+        } else //Update
+        {
+            videoMgr = new SWBFormMgr(postOut.getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
+        }
+        
+        
         videoMgr.setType(SWBFormMgr.TYPE_DOJO);
         videoMgr.setFilterRequired(false);
         String lang = "";
@@ -521,9 +535,9 @@
     
                     </p>
                     <p>   
-        <div class="etiqueta"><label for="title"><%=Video.swb_title.getDisplayName()%>: </label></div>
-        <div class="campo"><%=videoMgr.renderElement(request, Video.swb_title, videoMgr.MODE_CREATE)%></div>
-             </p>
+                        <div class="etiqueta"><label for="title"><%=Video.swb_title.getDisplayName()%>: </label></div>
+                        <div class="campo"><%=postOut == null ? videoMgr.renderElement(request, Video.swb_title, videoMgr.MODE_CREATE) : videoMgr.renderElement(request, Video.swb_title, videoMgr.MODE_EDIT)%></div>
+                    </p>
                     <p>
                        <div class="etiqueta"><label for="description"><%=Video.social_msg_Text.getDisplayName()%>:</label></div>
                        <div class="campo"><%=videoMgr.renderElement(request, Video.social_msg_Text, videoMgr.MODE_CREATE)%></div>
@@ -536,15 +550,114 @@
                         <div class="etiqueta"><label for="title"><%=videoMgr.renderLabel(request, Video.social_video, videoMgr.MODE_CREATE)%>: </label></div>
                         <div class="campo"><%=videoMgr.getFormElement(Video.social_video).renderElement(request, videoSemObj, Video.social_video, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang).replaceAll("video_new_defaultAuto", "video_new_defaultAuto" + objUri+sourceCall)%></div>       
                     </p>
+                    <!--Show Existing Video-->
+                    <%
+                    Video video=(Video)postOut;
+                    String videoFormat = "";
+                    String videoUrl = video.getVideo();
+                    String fileext=null;
+                    int pos=videoUrl.lastIndexOf(".");
+                    if(pos>-1)
+                    {
+                        fileext=videoUrl.substring(pos);
+                        int pos1=fileext.indexOf("?");
+                        if(pos1>-1)
+                        {
+                            fileext=fileext.substring(0, pos1);
+                        }
+                    }
+                    if (videoUrl.toLowerCase().contains("www.youtube.com")) {//show player from youtube
+                        videoFormat = "youtube";
+                    } else if (fileext.toLowerCase().equals(".mp4")) {
+                        videoFormat = "mp4";
+                    } else if (fileext.toLowerCase().equals(".swf") || fileext.toLowerCase().equals(".mov")) { 
+                        videoFormat = "flash";
+                    } else if (fileext.toLowerCase().equals(".flv")) {
+                        videoFormat = "flv";
+                    } else if (fileext.toLowerCase().equals(".wav")) {
+                        videoFormat = "wav";
+                    }else if (fileext.equals(".wmv")) {
+                        videoFormat = "wmv";
+                    }
+                    %>    
 
-            <%if (postIn != null) {
+                    <%
+                        if (videoFormat.equals("flv")) {
+                    %>
+
+                    <%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
+                    <br>
+                    <object id="video" type="application/x-shockwave-flash" data="<%=SWBPlatform.getContextPath()%>/swbadmin/player_flv_maxi.swf" width="400" height="200">
+                        <param name="movie" value="<%=SWBPlatform.getContextPath()%>/swbadmin/player_flv_maxi.swf" />
+                        <param name="FlashVars" value="flv=<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>"/>
+                    </object>
+                    <%
+                    } else if (videoFormat.equals("flash")) {
+                    %>
+
+                    <%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
+                    <br>
+                    <object width="400" height="200" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"   codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0"> 
+                        <param name="SRC" value="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>">
+                        <embed src="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" width="400" height="200"></embed>
+                    </object>
+
+
+
+                    <%} else if (videoFormat.equals("mp4")) {
+                    %>   
+                    <%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
+                    <br>
+                    <video width="400" height="200" controls>
+                        <source src="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" type="video/mp4">
+                        <object data="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" width="400" height="200">
+                            <embed src="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" width="400" height="200" autostart="false">    
+                        </object>
+                    </video>
+
+                <%
+                } else if (videoFormat.equals("wav")) {
+                %>
+                <%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
+                <br>
+                <object width="400" height="200" classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
+                    <param name="src" value="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>">
+                    <param name="controller" value="true">
+                </object>
+
+                <%
+                } else if (videoFormat.equals("wmv")) {
+
+                %>    
+
+                <%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
+                <br>
+                <object width="400" height="200" type="video/x-ms-asf" url="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" data="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" classid="CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6">
+                    <param name="url" value="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>">
+                    <param name="filename" value="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>">
+                    <param name="autostart" value="1">
+                    <param name="uiMode" value="full">
+                    <param name="autosize" value="1">
+                    <param name="playcount" value="1"> 
+                    <embed type="application/x-mplayer2" src="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" width="400" height="200" autostart="true" showcontrols="true" pluginspage="http://www.microsoft.com/Windows/MediaPlayer/"></embed>
+                </object>
+                
+                <%
+                    }
+                %>
+                 <!--Ends Show Existing Video-->
+                <%        
+                //Showing SocialFlows
+                if (postIn != null) {
                     socialTopic = postIn.getSocialTopic();
+                }else if (postIn == null && postOut != null) {
+                            socialTopic = postOut.getSocialTopic();
                 }
                 if (socialTopic != null) {
                     Iterator<SocialPFlowRef> itSocialPFlowRefs = socialTopic.listInheritPFlowRefs();
-            %>     
+                %>     
                     <p>
-                   
+
             <div class="etiqueta"><label for="socialFlow"><%=SWBSocialUtil.Util.getStringFromGenericLocale("publishFlow", user.getLanguage())%></label></div>
             <div class="campo">
                 <%
