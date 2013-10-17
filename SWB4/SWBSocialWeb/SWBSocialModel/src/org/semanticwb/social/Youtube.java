@@ -924,12 +924,12 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
     @Override
     public boolean isPublished(PostOutNet postOutNet) {
         System.out.println("Entra al metodo isPublished....");
-        System.out.println("El id del video es...." + postOutNet.getSocialNetMsgID());
+        System.out.println("El id del video es...." + postOutNet.getPo_socialNetMsgID());
 
         boolean exit = false;
         try {
             HttpClient client = new DefaultHttpClient();
-            HttpGet get = new HttpGet("https://gdata.youtube.com/feeds/api/users/default/uploads/" + postOutNet.getSocialNetMsgID());
+            HttpGet get = new HttpGet("https://gdata.youtube.com/feeds/api/users/default/uploads/" + postOutNet.getPo_socialNetMsgID());
             get.setHeader("Authorization", "Bearer " + this.getAccessToken());
             HttpResponse res = client.execute(get);
             BufferedReader rd = new BufferedReader(new InputStreamReader(res.getEntity().getContent()));
