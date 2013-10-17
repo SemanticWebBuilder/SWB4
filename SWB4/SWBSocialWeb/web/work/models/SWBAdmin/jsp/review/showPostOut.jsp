@@ -44,10 +44,19 @@
         userPhoto = "/swbadmin/css/images/profileDefImg.jpg";
     } else {
         userPhoto = SWBPortal.getWebWorkPath() + userCreator.getWorkPath() + "/" + User.swb_usrPhoto.getName() + "_" + userCreator.getId() + "_" + userPhoto;
-    }    
+    }
 %>
-
-<div style="height: 500px">
+<%
+    if(!(semObj.getGenericInstance() instanceof Message)){//It's video or image(s) set SIZE
+%>
+    <div style="height: 450px">
+<%
+    }else{
+%>
+<div>
+<%
+   }
+%>
 <div class="swbform swbpopup msj-txt">
     <div class="perfilgral">
         <div class="perfil">
