@@ -1260,10 +1260,7 @@ public class FacebookWall extends GenericResource {
             JSONObject commentsObj = new JSONObject(fbResponse);
 
             if(commentsObj.has("data")){
-                JSONArray comments = commentsObj.getJSONArray("data");
-                if(comments.length()>0){
-                    out.write("<ul>");
-                }
+                JSONArray comments = commentsObj.getJSONArray("data");                
                 
                 for(int k = 0; k < comments.length(); k++){
                     out.write("<li>");
@@ -1302,10 +1299,6 @@ public class FacebookWall extends GenericResource {
                                 + "','" + facebook.getId() + postId + currentTab +"/comments', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\"><span>+</span>View more comments</a></a></label>");
                         out.write("</li>");
                     }
-                }
-
-                if(comments.length()>0){
-                    out.write("<ul>");
                 }
             }
         }catch(Exception e){//If an exception is thrown return the original message
@@ -1931,7 +1924,7 @@ public class FacebookWall extends GenericResource {
                 if(postsData.getJSONObject("comments").has("data")){
                     JSONArray comments = postsData.getJSONObject("comments").getJSONArray("data");
                     if(comments.length()>0){
-                        writer.write("<ul>");
+                        writer.write("<ul id=\"" + facebook.getId() + postsData.getString("id") + tabSuffix + "/comments\">");
                     }
                     for (int k = 0; k < comments.length(); k++){
                         if(k==5)break;
@@ -1968,7 +1961,7 @@ public class FacebookWall extends GenericResource {
                             SWBResourceURL commentsURL = paramRequest.getRenderUrl().setMode("moreComments").setParameter("suri", request.getParameter("suri")).setParameter("postId", postsData.getString("id"));
                             commentsURL = commentsURL.setParameter("after", pagingComments.getJSONObject("cursors").getString("after")).setParameter("currentTab", tabSuffix);
                             writer.write("<label><a href=\"#\" onclick=\"appendHtmlAt('" + commentsURL
-                                    + "','" + facebook.getId() + postsData.getString("id") + tabSuffix +"/comments', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\"><span>+</span>View more comments</a></label>");
+                                    + "','" + facebook.getId() + postsData.getString("id") + tabSuffix +"/comments', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild( this.parentNode.parentNode );}catch(noe){}; return false;\"><span>+</span>View more comments</a></label>");
                             //writer.write("</div>"); 
                             writer.write("</li>");
                         }
@@ -1979,14 +1972,16 @@ public class FacebookWall extends GenericResource {
                 }
             }
             
-            writer.write("<span id=\"" + facebook.getId() + postsData.getString("id") + tabSuffix + "/comments\" dojoType=\"dojox.layout.ContentPane\">");
-            writer.write("</span>"); 
+            //writer.write("<span id=\"" + facebook.getId() + postsData.getString("id") + tabSuffix + "/comments\" dojoType=\"dojox.layout.ContentPane\">");
+            //writer.write("</span>"); 
             //Comments, end
             writer.write("<div class=\"clear\"></div>");
             Date postTime = formatter.parse(postsData.getString("created_time"));
             
             writer.write("<div class=\"timelineresume\" dojoType=\"dijit.layout.ContentPane\">");
-            
+            if(!postsData.isNull("icon")){
+                writer.write("<img src=\"" + postsData.getString("icon") + "\"/>");
+            }
             writer.write("<span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + INFORMATION + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
             writer.write("<em>" + facebookHumanFriendlyDate(postTime, paramRequest) + "</em>");
             boolean iLikedPost = false;
