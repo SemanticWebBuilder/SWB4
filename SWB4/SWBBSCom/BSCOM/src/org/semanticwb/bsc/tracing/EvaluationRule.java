@@ -7,7 +7,7 @@ import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.catalogs.Operation;
 
 
-public class EvaluationRule extends org.semanticwb.bsc.tracing.base.EvaluationRuleBase 
+public class EvaluationRule extends org.semanticwb.bsc.tracing.base.EvaluationRuleBase implements Comparable<EvaluationRule>
 {
     public static final String Default_FORMAT_PATTERN = "(([\\*\\+-])(0|\\d*\\.?\\d+),)*(([\\*\\+-])(0|\\d*\\.?\\d+))";
     public static final String Default_SEPARATOR = ",";
@@ -16,6 +16,13 @@ public class EvaluationRule extends org.semanticwb.bsc.tracing.base.EvaluationRu
     public EvaluationRule(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+    
+    @Override
+    public int compareTo(EvaluationRule anotherRule) {
+        int compare = 0;
+        compare = getAppraisal().compareTo(anotherRule.getAppraisal());
+        return compare;
     }
     
     /*
