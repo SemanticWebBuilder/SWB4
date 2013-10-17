@@ -831,8 +831,8 @@ public class SocialSentPost extends GenericResource {
             if(!postOut.isPublished())
             {
                 out.println("<a " +strClass+" href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + msgText + "');return false;\" title=\"" + msgText + "\">" + msgText + "</a>");
-            }else{
-                out.println(msgText);
+            }else{  //Si ya esta publicado
+                out.println("<a " +strClass+" href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp?publish=true" + "','" + msgText + "');return false;\" title=\"" + msgText + "\">" + msgText + "</a>");
             }
             out.println("</td>");
 
