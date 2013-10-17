@@ -15,11 +15,11 @@ public class Measure extends org.semanticwb.bsc.tracing.base.MeasureBase
         Iterator<EvaluationRule> rules = getSeries().listValidEvaluationRules(false).iterator();
 	while(rules.hasNext())
 	{
-		EvaluationRule rule = rules.next();
-                if(rule.evaluate(getEvaluation().getPeriod())) {
-                    getEvaluation().setStatus(rule.getAppraisal());
-                    break;
-                }
+            EvaluationRule rule = rules.next();
+            if(rule.evaluate(getEvaluation().getPeriod())) {
+                getEvaluation().setStatus(rule.getAppraisal());
+                break;
+            }
 	}
     }
     
