@@ -562,12 +562,12 @@
                     JSONArray likes = likeResp.getJSONArray("data");
 
                     if(likes.length() == 1){//There is one result, I liked this post
-                        out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/LIKE\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=DISLIKE" + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\"><span>DISLIKE</span></a></span> ");
+                        out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/LIKE\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=DISLIKE" + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">DISLIKE</a></span> ");
                     }else{
-                        out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/LIKE\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=LIKE" + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\"><span>LIKE</span></a></span> ");
+                        out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/LIKE\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=LIKE" + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">LIKE</a></span> ");
                     }
                 }else{
-                    out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/LIKE\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=LIKE" + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\"><span>LIKE</span></a></span> ");
+                    out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/LIKE\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=LIKE" + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">LIKE</a></span> ");
                 }
             }catch(Exception e){
                 out.println("This post might not exist anymore");
@@ -575,7 +575,7 @@
             }
         }else if(postInSN instanceof Youtube){//Displays Like, Favorite
             out.println("<b><font color=\"#CC6600\">Youtube</font></b></br>");
-            out.print("<span id=\"" + postIn.getURI() + "/LIKE\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=LIKE" + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\"><span>LIKE</span></a></span> ");
+            out.print("<span id=\"" + postIn.getURI() + "/LIKE\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=LIKE" + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">LIKE</a></span> ");
             out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/FAV\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=FAV" + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">FAVORITE</a></span> ");
         }
     }else{//We received an action
