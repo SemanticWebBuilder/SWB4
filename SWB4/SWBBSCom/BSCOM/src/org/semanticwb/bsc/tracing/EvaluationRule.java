@@ -42,6 +42,10 @@ public class EvaluationRule extends org.semanticwb.bsc.tracing.base.EvaluationRu
     }
     
     public Object[][] lexerFactor() {
+        if(getFactor()==null) {
+            return null;
+        }
+        
         Object[][] tkns = null;
         Pattern term = Pattern.compile(Default_TERM_PATTERN);                
         Matcher matcher;
