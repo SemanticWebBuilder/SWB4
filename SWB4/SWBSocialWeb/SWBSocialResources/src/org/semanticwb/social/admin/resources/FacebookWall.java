@@ -2220,7 +2220,7 @@ public class FacebookWall extends GenericResource {
 
                     JSONArray comments = commentsData.getJSONArray("data");
                     if(comments.length()>0){
-                        writer.write("<ul>");
+                        writer.write("<ul id=\"" + facebook.getId() + postsData.getString("post_id") + tabSuffix + "/comments\">");
                     }
                     for (int k = 0; k < comments.length(); k++){
                         JSONObject commentProfile = comments.getJSONObject(k).getJSONObject("from");
@@ -2261,7 +2261,7 @@ public class FacebookWall extends GenericResource {
                             SWBResourceURL commentsURL = paramRequest.getRenderUrl().setMode("moreComments").setParameter("suri", request.getParameter("suri")).setParameter("postId", postsData.getString("post_id"));
                             commentsURL = commentsURL.setParameter("after", pagingComments.getJSONObject("cursors").getString("after")).setParameter("currentTab", tabSuffix);
                             writer.write("<label><a href=\"#\" onclick=\"appendHtmlAt('" + commentsURL
-                                    + "','" + facebook.getId() +  postsData.getString("post_id") + tabSuffix +"/comments', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\"><span>+</span>View more comments</a></a></label>");
+                                    + "','" + facebook.getId() +  postsData.getString("post_id") + tabSuffix +"/comments', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild( this.parentNode.parentNode );}catch(noe){}; return false;\"><span>+</span>View more comments</a></a></label>");
                             //writer.write("</div>");
                             writer.write("</li>");
                         }
@@ -2271,9 +2271,214 @@ public class FacebookWall extends GenericResource {
                     writer.write("   </ul>");
                 }
             }
+                                                
             
-            writer.write("<span id=\"" + facebook.getId() + postsData.getString("post_id") + tabSuffix + "/comments\" dojoType=\"dojox.layout.ContentPane\">");
-            writer.write("</span>"); 
+            Date postTime = new java.util.Date((long)postsData.getLong("created_time")*1000);
+            createdTime = String.valueOf(postsData.getLong("created_time"));
+            boolean canLike = false;
+            JSONObject likeInfo = null;
+            writer.write("<div class=\"timelineresume\" dojoType=\"dijit.layout.ContentPane\">");
+            
+            writer.write("   <span class=\"inline\" id=\"" + facebook.getId() +  postsData.getString("post_id") + INFORMATION + MEDIA_TAB + "\" dojoType=\"dojox.layout.ContentPane\">");
+            writer.write("<em>" + facebookHumanFriendlyDate(postTime, paramRequest) + "</em>");
+
+            if(postsData.has("like_info")){
+                likeInfo = postsData.getJSONObject("like_info");
+                writer.write("<strong>");
+                writer.write("<span>Likes:</span> " + likeInfo.getLong("like_count"));
+                writer.write("</strong>");                
+                writer.write("</span>");
+            }else{
+                writer.write("   </span>");
+            }
+            
+            if(postsData.has("comment_info")){
+                JSONObject comments = postsData.getJSONObject("comment_info");
+                
+                if(comments.getBoolean("can_comment")){
+                    /*writer.write("   <span class=\"inline\" id=\"" + postsData.getString("post_id") + REPLY + MEDIA_TAB + "\" dojoType=\"dojox.layout.ContentPane\">");
+                        writer.write(" <a href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyPost").setParameter("commentID", postsData.getString("post_id")) + "','Reply to " + "" + "');return false;\"><span>Reply</span></a>  ");
+                    writer.write("   </span>");*/
+
+                    ///////////////////////If I can post I can Classify it to answer it later
+                    PostIn post = PostIn.getPostInbySocialMsgId(model, postsData.getString("post_id"));
+                    writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("post_id") + TOPIC + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
+                    if(post != null){
+                        String socialT = "";
+                            if(post.getSocialTopic() != null){
+                                socialT = post.getSocialTopic().getTitle();
+                            }
+                        SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("post_id")).setParameter("postUri", post.getURI()).setParameter("currentTab", tabSuffix);
+                            writer.write("<a href=\"#\" title=\"" + "Tema actual: " + socialT + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                            + paramRequest.getLocaleString("reclassify") + " post'); return false;\"><span>" + paramRequest.getLocaleString("reclassify") + "</span></a>");
+                    }else{
+                        SWBResourceURL clasifybyTopic = renderURL.setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("post_id")).setParameter("currentTab", tabSuffix);
+                        writer.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("classify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                        + paramRequest.getLocaleString("classify") + " Post'); return false;\"><span>" + paramRequest.getLocaleString("classify") + "</span></a>");
+                    }
+                    writer.write("   </span>");
+                    
+                }
+            }
+            
+            if(canLike){
+                writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("post_id") + LIKE + MEDIA_TAB + "\" dojoType=\"dojox.layout.ContentPane\">");
+                if(likeInfo != null && likeInfo.getBoolean("user_likes")){
+                    writer.write(" <a href=\"#\" class=\"like\" onclick=\"postSocialHtml('" + actionURL.setAction("doUnlike").setParameter("commentID", postsData.getString("post_id")).setParameter("currentTab", MEDIA_TAB) + "','" + facebook.getId() + postsData.getString("post_id") + INFORMATION + MEDIA_TAB + "');return false;" +"\"><span>" + paramRequest.getLocaleString("undoLike") +"</span></a>");
+                }else{
+                    writer.write(" <a href=\"#\" class=\"like\" onclick=\"postSocialHtml('" + actionURL.setAction("doLike").setParameter("commentID", postsData.getString("post_id")).setParameter("currentTab", MEDIA_TAB) + "','" + facebook.getId() + postsData.getString("post_id") + INFORMATION + MEDIA_TAB + "');return false;" +"\"><span>" + paramRequest.getLocaleString("like") +"</span></a>");
+                }
+                writer.write("   </span>");
+            }
+            writer.write("   </div>");
+            writer.write("   </div>");
+                   
+//            writer.write("   </div>");
+//            writer.write("   </td>");
+//
+//            writer.write("</tr>");
+//            writer.write("</table>");
+//            writer.write("</fieldset>");               
+        }catch(Exception e){
+            System.out.println("ERROR printing Picture");
+            e.printStackTrace();
+        }
+        return createdTime;
+    }
+    
+    public static String doPrintVideo(Writer writer, JSONObject postsData, JSONObject commentsData, JSONObject profileData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model){
+        String createdTime="";
+        
+        try{
+            SWBResourceURL actionURL = paramRequest.getActionUrl();
+            actionURL.setParameter("suri",request.getParameter("suri"));
+            
+            SWBResourceURL renderURL = paramRequest.getRenderUrl();
+            renderURL.setParameter("suri",request.getParameter("suri"));
+            
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:SSz");    
+            formatter.setTimeZone(TimeZone.getTimeZone("GMT-6"));
+            long id=0L;
+            if(profileData.has("uid")){
+                id = profileData.getLong("uid");
+            }else if(profileData.has("page_id")){
+                id = profileData.getLong("page_id");
+            }else{
+                return null;
+            }
+            
+            //TODO: id = A 64-bit int representing the user, group, page, event, or application ID
+            JSONArray media = postsData.getJSONObject("attachment").getJSONArray("media");
+
+            writer.write("<div class=\"timeline timelinefacebook\">");
+            writer.write("<p>");
+            writer.write("      <a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", "noType").setParameter("id", id+"") + "','" + profileData.getString("name") + "'); return false;\">" + profileData.getString("name") + "</a>");
+            writer.write("</p>");
+
+            writer.write("<div class=\"timelineusr\">");
+            writer.write("      <a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", "noType").setParameter("id", id+"") + "','" + profileData.getString("name") + "'); return false;\"><img src=\"http://graph.facebook.com/" + id +"/picture\" width=\"30\" height=\"30\"/></a>");
+
+            if(postsData.getInt("type") == 247){//Photo posted
+                writer.write(postsData.getString("message"));
+                
+            }else if(postsData.getInt("type") == 65){//Tagged photo
+                if(!postsData.isNull("description_tags")){//Users tagged in story
+                    JSONObject descriptionData = postsData.optJSONObject("description_tags");
+                    if(descriptionData != null){
+                        writer.write(getTagsFromPost(postsData.getJSONObject("description_tags"), postsData.getString("description"), renderURL));
+                    }else{
+                        writer.write(getTagsFromPostArray(postsData.getJSONArray("description_tags").getJSONArray(0).getJSONObject(0), postsData.getString("description"), renderURL));
+                    }
+                }
+            }else if(postsData.getInt("type") == 373){//Cover update                
+                writer.write(profileData.getString("name") + " has updated cover photo");
+            }else{
+                writer.write("&nbsp;");
+            }            
+            
+            if(!postsData.getJSONObject("attachment").isNull("fb_object_type") && postsData.getJSONObject("attachment").getString("fb_object_type").equals("album")){
+                if(!postsData.getJSONObject("attachment").getString("name").isEmpty())
+                    writer.write(profileData.getString("name") + " has added " + media.length() + " photos to the album " + postsData.getJSONObject("attachment").getString("name") );
+            }
+            
+            writer.write("</div>");
+            
+
+            writer.write("<div class=\"timelineimg\">");
+            for (int k = 0; k < 1; k++) {
+                writer.write("      <span id=\"img" + facebook.getId() + media.getJSONObject(k).getString("src") + "\" style=\"width: 150px; height: 150px; border: thick #666666; overflow: hidden; position: relative;\">");
+                writer.write("      <a href=\"#\" onclick=\"showDialog('" + renderURL.setMode("displayPicture").setParameter("pictureUrl", media.getJSONObject(k).getString("src").replace("_s.", "_n.")) +
+                        "','Picture from " + "" + "'); return false;\"><img src=\"" + media.getJSONObject(k).getString("src") + "\" style=\"position: relative;\" onload=\"imageLoad(" + "this, 'img" + facebook.getId() + media.getJSONObject(k).getString("src") + "');\"/></a>");
+                writer.write("      </span>");
+            }
+            writer.write("<p class=\"imgtitle\">&nbsp;</p>");
+            
+            writer.write("<p class=\"imgdesc\">");
+            writer.write(postsData.isNull("description") ? "" : postsData.getString("description"));
+            writer.write("</p>");
+
+            writer.write("<p class=\"imgfoot\">");
+            writer.write("&nbsp;");
+            writer.write("</p>");
+            
+            writer.write("<div class=\"clear\"></div>");
+            writer.write("</div>");
+            
+            //Comments,start
+            if(commentsData != null){
+                if(commentsData.has("data") && commentsData.getJSONArray("data").length() > 0 ){
+                    
+
+                    JSONArray comments = commentsData.getJSONArray("data");
+                    if(comments.length()>0){
+                        writer.write("<ul id=\"" + facebook.getId() + postsData.getString("post_id") + tabSuffix + "/comments\">");
+                    }
+                    for (int k = 0; k < comments.length(); k++){
+                        JSONObject commentProfile = comments.getJSONObject(k).getJSONObject("from");
+                        writer.write("<li>");                        
+                        writer.write("<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", "noType").setParameter("id", commentProfile.getLong("id")+"") + "','" + commentProfile.getString("name") + "'); return false;\"><img src=\"http://graph.facebook.com/" + commentProfile.getLong("id") +"/picture?width=30&height=30\" width=\"30\" height=\"30\"/></a>");
+                        
+                        writer.write("<p>");
+                        writer.write("      <b><a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", "noType").setParameter("id", commentProfile.getLong("id")+"") + "','" + commentProfile.getString("name") + "'); return false;\">" + commentProfile.getString("name") + "</a></b>:");
+                        writer.write(       comments.getJSONObject(k).getString("message").replace("\n", "</br>") + "</br>");
+                        writer.write("</p>");
+
+                        Date commentTime = formatter.parse(comments.getJSONObject(k).getString("created_time"));
+                        
+                        writer.write("<p class=\"timelinedate\">");
+                        writer.write("<span id=\"" + comments.getJSONObject(k).getString("id") + "\" dojoType=\"dojox.layout.ContentPane\">");
+                        writer.write("<em>" + facebookHumanFriendlyDate(commentTime, paramRequest) + "</em>");
+
+                        if(comments.getJSONObject(k).has("like_count")){
+                            writer.write("<strong>");
+                            writer.write("<span>Likes:</span> " + comments.getJSONObject(k).getInt("like_count"));
+                            writer.write("</strong>");
+                        }
+                        writer.write("</span>");
+
+                        writer.write("</p>");
+			writer.write("</li>");
+                    }                    
+
+                    if(commentsData.has("paging")){//Link to get more comments
+                        JSONObject pagingComments = commentsData.getJSONObject("paging");
+
+                        if(pagingComments.has("next") && pagingComments.has("cursors")){
+                            writer.write("<li class=\"timelinemore\">");
+                            //writer.write("<div align=\"left\" id=\"" + facebook.getId() + postsData.getString("post_id") + tabSuffix + "/comments\" dojoType=\"dojox.layout.ContentPane\">");
+                            SWBResourceURL commentsURL = paramRequest.getRenderUrl().setMode("moreComments").setParameter("suri", request.getParameter("suri")).setParameter("postId", postsData.getString("post_id"));
+                            commentsURL = commentsURL.setParameter("after", pagingComments.getJSONObject("cursors").getString("after")).setParameter("currentTab", tabSuffix);
+                            writer.write("<label><a href=\"#\" onclick=\"appendHtmlAt('" + commentsURL
+                                    + "','" + facebook.getId() +  postsData.getString("post_id") + tabSuffix +"/comments', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild( this.parentNode.parentNode );}catch(noe){}; return false;\"><span>+</span>View more comments</a></a></label>");
+                            writer.write("</li>");
+                        }
+                    }                    
+                    
+                    if(comments.length()>0)
+                    writer.write("   </ul>");
+                }
+            }
+            
                         
             ///////writer.write("<div id=\"" + postsData.getString("id") + postsData.getString("created_time") + "\" dojoType=\"dijit.layout.ContentPane\">");
             //writer.write("<div id=\"" + postsData.getString("id") + "\" dojoType=\"dijit.layout.ContentPane\">");
