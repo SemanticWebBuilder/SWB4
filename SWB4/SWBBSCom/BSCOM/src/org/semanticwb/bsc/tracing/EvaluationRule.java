@@ -50,9 +50,7 @@ public class EvaluationRule extends org.semanticwb.bsc.tracing.base.EvaluationRu
         Object[][] tkns = null;
         Pattern term = Pattern.compile(Default_TERM_PATTERN);                
         Matcher matcher;
-System.out.println("\n\nlexerFactor...factor="+getFactor());
         String[] a = getFactor().split(Default_SEPARATOR);
-System.out.println("a[]="+Arrays.toString(a));
         if(a.length>0)
         {
             tkns = new Object[a.length][2];
@@ -61,8 +59,6 @@ System.out.println("a[]="+Arrays.toString(a));
                 if(matcher.find()) {
                     tkns[k][0] = matcher.group(1);
                     try {
-System.out.println("matcher.group(1)="+matcher.group(1));
-System.out.println("matcher.group(2)="+matcher.group(2));
                         tkns[k][1] = Double.parseDouble(matcher.group(2));
                     }catch(Exception e) {
                         tkns[k][1] = new Double(1.0);
@@ -82,7 +78,6 @@ System.out.println("matcher.group(2)="+matcher.group(2));
             Object[][] f = lexerFactor();
             if(f!=null) {
                 if(f.length==1) {
-System.out.println("---------factor="+f[0][0]+","+f[0][1]);
                     try {
                         double coef = (Double)f[0][1];
                         
@@ -90,7 +85,6 @@ System.out.println("---------factor="+f[0][0]+","+f[0][1]);
                     }catch(Exception e) {
                     }
                 }else if(f.length==2) {
-System.out.println("\n\n---------factor="+f[0][0]+","+f[0][1]+","+f[1][0]+","+f[1][1]);
                     double coef1 = (Double)f[0][1];
                     double coef2 = (Double)f[1][1];
                     try {
