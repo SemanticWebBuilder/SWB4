@@ -43,7 +43,7 @@
         out.println("<div id=\""+ objUri + WALL_TAB + "\" dojoType=\"dijit.layout.ContentPane\" title=\""+"My wall"+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + WALL_TAB +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
         out.println("</div>");                
         
-        out.println("<div id=\""+ objUri + MEDIA_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Pictures"+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + MEDIA_TAB +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
+        out.println("<div id=\""+ objUri + PICTURES_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Pictures"+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + PICTURES_TAB +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
         out.println("</div>");
         
         out.println("<div id=\""+ objUri + VIDEOS_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Videos"+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + VIDEOS_TAB +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
