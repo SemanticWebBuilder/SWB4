@@ -680,13 +680,14 @@ public class SocialPFlowMgr {
                                         //System.out.println("ESTA LISTO PARA PUBLICAR EL POSTOut en SocialPFlowMgr/approveResource,notification:"+notification);
                                         try
                                         {
-                                            System.out.println("Se va a publicar Jorge-20:1");
+                                            System.out.println("Se va a publicar Jorge-20 CHECATE ESTO AMIGO:1");
                                             SWBSocialUtil.PostOutUtil.publishPost(resource);
                                             publishedMsgmailToMsgAuthor(resource);
                                             if(resource.getPflowInstance()!=null)
                                             {
+                                                System.out.println("Se va a publicar Jorge-20 CHECATE ESTO AMIGO:1--PONE STATUS DE 2...");
                                                 resource.getPflowInstance().setStatus(2);
-                                                resource.getPflowInstance().setStep(null);   
+                                                resource.getPflowInstance().setStep("swbSocialPublished");   
                                             }
                                             //resource.setPublished(true);
                                             /*
@@ -1150,12 +1151,13 @@ public class SocialPFlowMgr {
         }
         else
         {
-            if(postOut.getPflowInstance().getStatus() == 3 && postOut.getPflowInstance().getStep() != null)
+            if(postOut.getPflowInstance().getStatus() == 3 && postOut.getPflowInstance().getStep() != null && !postOut.getPflowInstance().getStep().equals("swbSocialPublished"))
             {
                 return true;
             }
             if (!(postOut.getPflowInstance().getStatus() == 3 || postOut.getPflowInstance().getStatus() == 2 || postOut.getPflowInstance().getStep() == null))
             {
+                System.out.println("Entra a PflowMgr/isInFlow");
                 return true;
             }
         }
@@ -1204,6 +1206,7 @@ public class SocialPFlowMgr {
                             else
                             {
                                 SocialPFlowInstance instance = resource.getPflowInstance();
+                                System.out.println("FLOW STATUS:"+instance.getStatus()+",resource.getPflowInstance().getStep():"+resource.getPflowInstance().getStep());
                                 switch (instance.getStatus())
                                 {
                                     case -1:
@@ -1211,7 +1214,10 @@ public class SocialPFlowMgr {
                                         return true;
                                     case 1: return true;    //TODOSOCIAL:REVISAR-Puesto por Jorge Jiménez    
                                     case 3: //rechazado
-                                        return true;
+                                    {
+                                        if(resource.getPflowInstance().getStep()!=null && resource.getPflowInstance().getStep().equals("swbSocialPublished")) return false;
+                                        else return true;
+                                    }
                                 }
                             }
                         }
