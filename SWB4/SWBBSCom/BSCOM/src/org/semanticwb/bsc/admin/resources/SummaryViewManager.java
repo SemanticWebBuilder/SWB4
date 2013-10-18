@@ -4,6 +4,7 @@ package org.semanticwb.bsc.admin.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import javax.servlet.http.*;
@@ -26,6 +27,8 @@ import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.bsc.admin.resources.base.SummaryViewManagerBase;
+import org.semanticwb.bsc.utils.PropertiesComparator;
+import org.semanticwb.model.FormElement;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
@@ -131,7 +134,13 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                     SemanticProperty elementProperty = propListItem.getElementProperty(
                                                        ).transformToSemanticProperty();
                     String propertyValue = null; //para las propiedades tipo objeto
-                    //Para mostrar objetivos:
+                    //Para mostrar los valores de las propiedades, de acuerdo a los FormElements asignados a cada propiedad:
+                    propertyValue = renderPropertyValue(request, semObj, elementProperty.getURI(), lang);
+                    propertyValue = propertyValue.replace("</span>", "");
+                    if (propertyValue.indexOf(">") > 0) {
+                        propertyValue = propertyValue.substring(propertyValue.indexOf(">") + 1);
+                    }
+                    /*
                     if (semWorkClass.equals(Objective.bsc_Objective)) {
                         Objective objective = (Objective) semObj.createGenericInstance();
                         if (elementProperty.isDataTypeProperty() &&
@@ -150,48 +159,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                             }
                         }
                         
-                        //TODO: Cuando se desarrollen las vistas resumen para los demas objetos, se tendra que modificar el siguiente comentario, de acuerdo al avance
-                        /*
-                    } else if (semWorkClass.equals(Indicator.bsc_Indicator)) {
-                        Indicator indicator = (Indicator) semObj.createGenericInstance();
-                        if (elementProperty.isDataTypeProperty() &&
-                                !elementProperty.getName().equals("title")) {
-                            propertyValue = "" + indicator.getProperty(elementProperty.getName());
-                        } else {
-                            if (!elementProperty.getName().equals("title")) {
-                                propertyValue = indicator.renderObjectPropertyValue(elementProperty, lang, thisPeriod);
-                            } else {
-                                //Para que muestre el prefijo y titulo concatenados
-                                propertyValue = indicator.renderObjectiveName(lang);
-                            }
-                        }
-                    } else if (semWorkClass.equals(Initiative.bsc_Initiative)) {
-                        Initiative initiative = (Initiative) semObj.createGenericInstance();
-                        if (elementProperty.isDataTypeProperty() &&
-                                !elementProperty.getName().equals("title")) {
-                            propertyValue = "" + initiative.getProperty(elementProperty.getName());
-                        } else {
-                            if (!elementProperty.getName().equals("title")) {
-                                propertyValue = initiative.renderObjectPropertyValue(elementProperty, lang, thisPeriod);
-                            } else {
-                                //Para que muestre el prefijo y titulo concatenados
-                                propertyValue = initiative.renderObjectiveName(lang);
-                            }
-                        }
-                    } else if (semWorkClass.equals(Deliverable.bsc_Deliverable)) {
-                        Deliverable deliverable = (Deliverable) semObj.createGenericInstance();
-                        if (elementProperty.isDataTypeProperty() &&
-                                !elementProperty.getName().equals("title")) {
-                            propertyValue = "" + deliverable.getProperty(elementProperty.getName());
-                        } else {
-                            if (!elementProperty.getName().equals("title")) {
-                                propertyValue = deliverable.renderObjectPropertyValue(elementProperty, lang, thisPeriod);
-                            } else {
-                                //Para que muestre el prefijo y titulo concatenados
-                                propertyValue = deliverable.renderObjectiveName(lang);
-                            }
-                        } */
-                    }
+                    }*/
                     try {
                         row.put(elementProperty.getName(), propertyValue);
                     } catch (JSONException jsone) {
@@ -306,7 +274,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                         output.append("') {\n");
                         output.append("                    myGrid.setQuery({");
                         output.append(heading[0]);
-                        output.append(": choosenValue.value});\n");
+                        output.append(": choosenValue.value + '*'});\n");
                         output.append("                  }\n");
                     }
                 }
@@ -324,7 +292,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             output.append("</span>\n");
             output.append("<table dojoType=\"dojox.grid.DataGrid\" jsId=\"myGrid\" store=\"myStore\" query=\"{ ");//
             output.append(identifier);
-            output.append(": 'C*' }\"\n");
+            output.append(": '*' }\"\n");
             output.append("  clientSort=\"true\" style=\"width: 80%; height: 800px;\" rowSelector=\"20px\">\n");  //rowsPerPage=\"20\" 
             //Declara el th de cada propiedad con la etiqueta correspondiente
             output.append("  <thead>\n");
@@ -372,7 +340,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         }
         if (workClassIsValid) {
             //Una vez que se especifica la clase de objetos, se puede administrar las instancias
-            doShowForm(request, response, paramRequest);
+            doViewsList(request, response, paramRequest);
         } else {
             super.doAdmin(request, response, paramRequest);
         }
@@ -406,7 +374,9 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         
         //Poner validacion de clase a utilizar, debe ser descendiente de BSCElement
         String lang = paramRequest.getUser().getLanguage();
-        Iterator<SemanticProperty> basePropertiesList = semWorkClass.listProperties();
+        ArrayList<SemanticProperty> propsList = (ArrayList<SemanticProperty>) SWBUtils.Collections.copyIterator(semWorkClass.listProperties());
+        Collections.sort(propsList, new PropertiesComparator());
+        Iterator<SemanticProperty> basePropertiesList = propsList.iterator();
         SWBFormMgr formMgr = null;
         String modeUsed = null;
         SWBResourceURL url = paramRequest.getActionUrl();
@@ -478,12 +448,14 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             //obtener valores de propiedades del tipo de elemento (BSCElement) a usar
             while (basePropertiesList.hasNext()) {
                 SemanticProperty prop = basePropertiesList.next();
-                //generar HTML de la opcion
-                baseListHtml.append("                        <option value=\"");
-                baseListHtml.append(prop.getURI());
-                baseListHtml.append("\">");
-                baseListHtml.append(prop.getDisplayName(lang));
-                baseListHtml.append("</option>\n");
+                if (prop.getDisplayProperty() != null) {
+                    //generar HTML de la opcion
+                    baseListHtml.append("                        <option value=\"");
+                    baseListHtml.append(prop.getURI());
+                    baseListHtml.append("\">");
+                    baseListHtml.append(prop.getDisplayName(lang));
+                    baseListHtml.append("</option>\n");
+                }
             }
         }
         output.append("<script type=\"text/javascript\">\n");
@@ -799,7 +771,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         output.append("                                return false;\n");
         output.append("                            </script>\n");
         output.append("    </button>\n");
-        if (operation.equals("edit")) {
+        //if (operation.equals("edit")) {
             SWBResourceURL urlCancel = paramRequest.getRenderUrl();
             urlCancel.setMode(SWBResourceURLImp.Mode_ADMIN);
             urlCancel.setParameter("operation", "add");
@@ -809,14 +781,14 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             output.append("');\">\n");
             output.append(paramRequest.getLocaleString("lbl_btnCancel"));
             output.append("    </button>\n");
-        }
+        //}
         output.append("</fieldset>\n");
         output.append("            </form>\n");
         output.append("        </div>\n");
-        output.append(generateViewsList(paramRequest));
         
         //Muestra mensaje sobre resultado de la operacion realizada
         if (statusMsg != null && !statusMsg.isEmpty()) {
+            statusMsg = paramRequest.getLocaleString(statusMsg);
             output.append("<div dojoType=\"dojox.layout.ContentPane\">\n");
             output.append("    <script type=\"dojo/method\">\n");
             output.append("        showStatus('" + statusMsg + "');\n");
@@ -852,7 +824,8 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         String lang = response.getUser().getLanguage();
         SummaryView summaryView = null;
         BSC bscModel = (BSC) this.getResource().getWebSite();
-        boolean redirect = false;
+        boolean listingRedirect = false;
+        boolean formRedirect = false;
 
         if (!"addView".equals(action)) {
                 summaryView = SemanticObject.getSemanticObject(summaryViewUri) != null
@@ -872,14 +845,14 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                 if (semWorkClass != null) {
                     summaryView = SummaryView.ClassMgr.createSummaryView(bscModel);
                     summaryView.setObjectsType(semWorkClass.getURI());
-                    statusMsg = response.getLocaleString("msg_ViewCreated");
+                    statusMsg = "msg_ViewCreated";
                 }
             } else if ("editView".equals(action)) {
                 
                 if (summaryView != null && uries.length > 0) {
                     removeAllPropertyListItem(summaryView);
                 }
-                statusMsg = response.getLocaleString("msg_ViewUpdated");
+                statusMsg = "msg_ViewUpdated";
             }
             if (summaryView != null && !propertyUries.isEmpty()) {
                 
@@ -907,7 +880,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                 response.setRenderParameter("viewUri", summaryView.getURI());
                 response.setRenderParameter("operation", "edit");
             }
-            redirect = true;
+            formRedirect = true;
             
         } else if ("deleteView".equals(action)) {
             
@@ -917,21 +890,25 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                 }
                 removeAllPropertyListItem(summaryView);
                 SummaryView.ClassMgr.removeSummaryView(summaryView.getId(), bscModel);
-                statusMsg = response.getLocaleString("msg_ViewDeleted");
+                statusMsg = "msg_ViewDeleted";
             }
-            redirect = true;
+            listingRedirect = true;
             
         } else if (action.equalsIgnoreCase("makeActive") && summaryView != null) {
             //asignar a SummaryViewAdm la instancia de SummaryView correspondiente al uri recibido en request
             this.setActiveView(summaryView);
-            statusMsg = response.getLocaleString("msg_ContentViewAssigned");
-            redirect = true;
+            statusMsg = "msg_ContentViewAssigned";
+            listingRedirect = true;
         } else {
             super.processAction(request, response);
         }
         
-        if (redirect) {
+        if (statusMsg != null) {
             response.setRenderParameter("statusMsg", statusMsg);
+        }
+        if (listingRedirect) {
+            response.setMode("viewsList");
+        } else if (formRedirect) {
             response.setMode("showForm");
         }
     }
@@ -953,16 +930,22 @@ public class SummaryViewManager extends SummaryViewManagerBase {
     }
     
     /**
-     * Genera el c&oacute;digo HTML del listado de vistas resumen a administrar
-     * @return un objeto {@code String} que representa el c&oacute;digo HTML del
-     *         listado de vistas resumen disponibles
+     * Genera el c&oacute;digo HTML del listado de vistas resumen disponibles a administrar
+     * @param request la petici&oacute;n HTTP enviada por el cliente
+     * @param response la respuesta HTTP que se enviar&aacute; al cliente
+     * @param paramRequest objeto por el que se accede a varios exclusivos de SWB
      * @throws SWBResourceException si se presenta alg&uacute;n problema dentro 
      *         de la plataforma de SWB para la correcta ejecuci&oacute;n del m&eacute;todo.
      *         Como la extracci&oacute;n de valores para par&aacute;metros de i18n.
+     * @throws IOException si ocurre un problema con la lectura/escritura de la petici&oacute;n/respuesta.
      */
-    private String generateViewsList(SWBParamRequest paramRequest)
-            throws SWBResourceException {
+    private void doViewsList(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        PrintWriter out = response.getWriter();
         StringBuilder listCode = new StringBuilder(256);
         String lang = paramRequest.getUser().getLanguage();
         BSC bsc = (BSC) this.getResource().getWebSite();
@@ -971,8 +954,13 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                                     : null;
         String objectsType = workClassSC != null
                              ? workClassSC.getURI() : null;
+        String statusMsg = request.getParameter("statusMsg");
+        String statusErr = request.getParameter("statusErr");
         
         if (bsc != null && objectsType != null) {
+            SWBResourceURL urlCreate = paramRequest.getRenderUrl();
+            urlCreate.setParameter("operation", "add");
+            urlCreate.setMode("showForm");
             Iterator listOfViews = SummaryView.ClassMgr.listSummaryViews(bsc);
             
             if (listOfViews != null && listOfViews.hasNext()) {
@@ -988,87 +976,160 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             }
             if (listOfViews != null && listOfViews.hasNext()) {
                 listOfViews = SWBComparator.sortByDisplayName(listOfViews, lang);
-                
-                listCode.append("<div>");
-                if (this.getActiveView() == null) {
-                    listCode.append(paramRequest.getLocaleString("msg_noActiveView"));
-                }
-                listCode.append("</div>");
-                listCode.append("    <form dojoType=\"dijit.form.Form\" name=\"listViewsForm");
-                listCode.append(this.getId());
-                listCode.append("\" id=\"listViewsForm");
-                listCode.append(this.getId());
-                listCode.append("\" class=\"swbform\" method=\"post\">\n");
-                listCode.append("<fieldset>\n");
-                listCode.append("    <legend>");
-                listCode.append(paramRequest.getLocaleString("lbl_listingCaption"));
-                listCode.append("</legend>\n");
-                listCode.append("<table width=\"60%\" border=\"0\" align=\"left\" cellpadding=\"1\" cellspacing=\"1\">\n");
-                listCode.append("    <thead>\n");
-                listCode.append("        <tr>\n");
-                listCode.append("            <th scope=\"col\" align=\"center\">\n");
-                listCode.append(paramRequest.getLocaleString("lbl_listingTitle1"));
-                listCode.append("</th>\n");
-                listCode.append("            <th scope=\"col\" colspan=\"3\" align=\"center\">\n");
-                listCode.append(paramRequest.getLocaleString("lbl_listingOperations"));
-                listCode.append("</th>\n");
-                listCode.append("        </tr>\n");
-                listCode.append("    </thead>\n");
-                listCode.append("    <tbody>\n");
-                
-                //Se agrega al listado cada vista creada
-                while (listOfViews.hasNext()) {
-                    SummaryView view = (SummaryView) listOfViews.next();
-                    
-                    SWBResourceURL urlEdit = paramRequest.getRenderUrl();
-                    urlEdit.setParameter("operation", "edit");
-                    urlEdit.setParameter("viewUri", view.getURI());
-                    
-                    SWBResourceURL urlDelete = paramRequest.getActionUrl();
-                    urlDelete.setAction("deleteView");
-                    urlDelete.setParameter("svUri", view.getURI());
-                    
-                    SWBResourceURL urlMakeActive = paramRequest.getActionUrl();
-                    urlMakeActive.setAction("makeActive");
-                    urlMakeActive.setParameter("svUri", view.getURI());
-                    
-                    listCode.append("        <tr>");
-                    listCode.append("            <td>" + view.getDisplayTitle(lang) + "</td>\n");
-                    listCode.append("            <td align=\"center\"><a href=\"void(0);\" onclick=\"submitUrl('");
-                    listCode.append(urlEdit);
-                    listCode.append("', this);return false;\">");
-                    listCode.append(paramRequest.getLocaleString("lbl_lnkEdit"));
-                    listCode.append("</a></td>\n");
-                    listCode.append("            <td align=\"center\"><a href=\"void(0);\" onclick=\"if (confirm('");
-                    listCode.append(paramRequest.getLocaleString("msg_confirmRemove"));
-                    listCode.append(SWBUtils.TEXT.scape4Script(view.getDisplayTitle(lang)));
-                    listCode.append("?')){submitUrl('");
-                    listCode.append(urlDelete);
-                    listCode.append("', this);}return false;\">");
-                    listCode.append(paramRequest.getLocaleString("lbl_lnkDelete"));
-                    listCode.append("</a></td>\n");
-                    //La opcion para asignar como activa se muestra para aquellas vistas que no lo son
-                    if (this.getActiveView() == null || (this.getActiveView() != null &&
-                            !this.getActiveView().getURI().equals(view.getURI()))) {
-                        listCode.append("            <td align=\"center\"><a href=\"void(0);\" onclick=\"submitUrl('");
-                        listCode.append(urlMakeActive);
-                        listCode.append("', this);return false;\">");
-                        listCode.append(paramRequest.getLocaleString("lbl_lnkAsContent"));
-                        listCode.append("</a></td>");
-                    } else {
-                        listCode.append("            <td>&nbsp;</td>");
-                    }
-                    listCode.append("        </tr>");
-                }
-                listCode.append("    </tbody>");
-                listCode.append("</table>");
-                listCode.append("</fieldset>\n");
-                listCode.append("    </form>");
-                listCode.append("");
             }
+            listCode.append("<div>");
+            if (this.getActiveView() == null) {
+                listCode.append(paramRequest.getLocaleString("msg_noActiveView"));
+            }
+            listCode.append("</div>");
+            listCode.append("    <form dojoType=\"dijit.form.Form\" name=\"listViewsForm");
+            listCode.append(this.getId());
+            listCode.append("\" id=\"listViewsForm");
+            listCode.append(this.getId());
+            listCode.append("\" class=\"swbform\" method=\"post\">\n");
+            listCode.append("<fieldset>\n");
+            listCode.append("    <legend>");
+            listCode.append(paramRequest.getLocaleString("lbl_listingCaption"));
+            listCode.append("</legend>\n");
+            listCode.append("    <div>");
+            listCode.append(paramRequest.getLocaleString("lbl_objectsType") + workClassSC.getName());
+            listCode.append("</div>\n");
+            listCode.append("<table width=\"60%\" border=\"0\" align=\"left\" cellpadding=\"1\" cellspacing=\"1\">\n");
+            listCode.append("    <thead>\n");
+            listCode.append("        <tr>\n");
+            listCode.append("          <th>");
+            listCode.append(paramRequest.getLocaleString("th_action"));
+            listCode.append("</th>\n");
+            listCode.append("            <th scope=\"col\" align=\"center\">\n");
+            listCode.append(paramRequest.getLocaleString("lbl_listingTitle1"));
+            listCode.append("</th>\n");
+            listCode.append("          <th>");
+            listCode.append(SummaryView.swb_modifiedBy.getDisplayName(lang));
+            listCode.append("</th>\n");
+            listCode.append("          <th>");
+            listCode.append(SummaryView.swb_updated.getDisplayName(lang));
+            listCode.append("</th>\n");
+            listCode.append("            <th scope=\"col\" colspan=\"3\" align=\"center\">\n");
+            listCode.append(paramRequest.getLocaleString("lbl_listingOperations"));
+            listCode.append("</th>\n");
+            listCode.append("        </tr>\n");
+            listCode.append("    </thead>\n");
+            listCode.append("    <tbody>\n");
+                
+            //Se agrega al listado cada vista creada
+            while (listOfViews.hasNext()) {
+                SummaryView view = (SummaryView) listOfViews.next();
+
+                SWBResourceURL urlEdit = paramRequest.getRenderUrl();
+                urlEdit.setParameter("operation", "edit");
+                urlEdit.setParameter("viewUri", view.getURI());
+                urlEdit.setMode("showForm");
+
+                SWBResourceURL urlDelete = paramRequest.getActionUrl();
+                urlDelete.setAction("deleteView");
+                urlDelete.setParameter("svUri", view.getURI());
+
+                SWBResourceURL urlMakeActive = paramRequest.getActionUrl();
+                urlMakeActive.setAction("makeActive");
+                urlMakeActive.setParameter("svUri", view.getURI());
+
+                listCode.append("        <tr>");
+                //HTML para las opciones de edicion y eliminacion
+                listCode.append("          <td>\n");
+                listCode.append("            <a href=\"void(0);\" title=\"");
+                listCode.append(paramRequest.getLocaleString("lbl_lnkEdit"));
+                listCode.append("\" onclick=\"submitUrl('");
+                listCode.append(urlEdit);
+                listCode.append("', this);return false;\"><img src=\"");
+                listCode.append(SWBPlatform.getContextPath());
+                listCode.append("/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"");
+                listCode.append(paramRequest.getLocaleString("lbl_lnkEdit"));
+                listCode.append("\"></a>\n");
+                listCode.append("            <a href=\"void(0);\" title=\"");
+                listCode.append(paramRequest.getLocaleString("lbl_lnkDelete"));
+                listCode.append("\" onclick=\"if (confirm('");
+                listCode.append(paramRequest.getLocaleString("msg_confirmRemove"));
+                listCode.append(SWBUtils.TEXT.scape4Script(view.getTitle() != null ? view.getTitle() : "xxx"));
+                listCode.append("?')){submitUrl('");
+                listCode.append(urlDelete);
+                listCode.append("', this);}return false;\"><img src=\"");
+                listCode.append(SWBPlatform.getContextPath());
+                listCode.append("/swbadmin/images/delete.gif\" border=\"0\" alt=\"");
+                listCode.append(paramRequest.getLocaleString("lbl_lnkDelete"));
+                listCode.append("\"></a>\n");
+                listCode.append("          </td>\n");
+                listCode.append("          <td>");
+                listCode.append("            <a href=\"void(0);\" title=\"");
+                listCode.append(paramRequest.getLocaleString("lbl_lnkEdit"));
+                listCode.append("\" onclick=\"submitUrl('");
+                listCode.append(urlEdit);
+                listCode.append("', this);return false;\">");
+                listCode.append(view.getTitle() != null ? view.getTitle() : "xxx");
+                listCode.append("</a>\n");
+                listCode.append("          </td>\n");
+                listCode.append("          <td>");
+                listCode.append(view.getModifiedBy() != null ? view.getModifiedBy().getFullName() : "xxx");
+                listCode.append("          </td>\n");
+                listCode.append("          <td>");
+                listCode.append(view.getUpdated() != null ? view.getUpdated() : "xxx");
+                listCode.append("          </td>\n");
+                listCode.append("          <td align=\"center\">");
+
+                if (this.getActiveView() == null || (this.getActiveView() != null
+                        && !this.getActiveView().getURI().equals(view.getURI()))) {
+                    //Código HTML para asignación como contenido
+                    listCode.append("          <input type=\"radio\" dojoType=\"dijit.form.RadioButton\" ");
+                    listCode.append("name=\"asContent\" id=\"asContent");
+                    listCode.append(view.getId());
+                    listCode.append("\" value=\"");
+                    listCode.append(view.getId());
+                    listCode.append("\" onclick=\"submitUrl('");
+                    listCode.append(urlMakeActive);
+                    listCode.append("', this.domNode);return false;\">");
+                } else if (this.getActiveView() != null
+                        && this.getActiveView().getURI().equals(view.getURI())) {
+                    listCode.append("          <input type=\"radio\" dojoType=\"dijit.form.RadioButton\" ");
+                    listCode.append("name=\"asContent\" id=\"asContent");
+                    listCode.append(view.getId());
+                    listCode.append("\" value=\"");
+                    listCode.append(view.getId());
+                    listCode.append("\" checked=\"checked\" onclick=\"submitUrl('");
+                    listCode.append(urlMakeActive);
+                    listCode.append("', this.domNode);return false;\">");
+                }
+                listCode.append("          </td>\n");
+                listCode.append("        </tr>");
+            }
+            listCode.append("    </tbody>");
+            listCode.append("</table>");
+            listCode.append("</fieldset>\n");
+            listCode.append("  <fieldset>\n");
+            listCode.append("    <button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('");
+            listCode.append(urlCreate);
+            listCode.append("', this.domNode); return false;\">");
+            listCode.append(paramRequest.getLocaleString("btn_add"));
+            listCode.append("</button>\n");
+            listCode.append("  </fieldset>\n");
+            listCode.append("    </form>");
+            listCode.append("");
+        }
+
+        //Muestra mensaje sobre resultado de la operacion realizada
+        if ((statusMsg != null && !statusMsg.isEmpty()) || (statusErr != null && !statusErr.isEmpty())) {
+            listCode.append("<div dojoType=\"dojox.layout.ContentPane\">\n");
+            listCode.append("    <script type=\"dojo/method\">\n");
+            if (statusMsg != null) {
+                statusMsg = paramRequest.getLocaleString(statusMsg);
+                listCode.append("        showStatus('" + statusMsg + "');\n");
+            } else if (statusErr != null) {
+                statusErr = paramRequest.getLocaleString(statusErr);
+                listCode.append("        showError('" + statusErr + "');\n");
+            }
+            listCode.append("    </script>\n");
+            listCode.append("</div>\n");
         }
         
-        return listCode.toString();
+        out.println(listCode.toString());
     }
 
     @Override
@@ -1077,9 +1138,32 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         
         if (paramRequest.getMode().equals("showForm")) {
             doShowForm(request, response, paramRequest);
+        } else if (paramRequest.getMode().equals("viewsList")) {
+            doViewsList(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
     }
     
+    /**
+     * Devuelve el despliegue correspondiente al valor de la propiedad especificada, del objeto indicado.
+     * @param request petici&oacute;n HTTP realizada por el cliente
+     * @param elementBSC representa el objeto del cual se desea extraer la informaci&oacute;n
+     * @param propUri representa la uri de la propiedad semantica de la que se desea obtener su valor
+     * @param lang representa el lenguaje en que se desea mostrar el valor de la propiedad indicada
+     * @return el despliegue del valor almacenado para la propiedad indicada
+     */
+    private String renderPropertyValue(HttpServletRequest request, SemanticObject elementBSC,
+            String propUri, String lang) {
+        
+        String ret = null;
+        SWBFormMgr formMgr = new SWBFormMgr(elementBSC, null, SWBFormMgr.MODE_VIEW);
+        SemanticProperty semprop = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propUri);
+
+        FormElement formElement = formMgr.getFormElement(semprop);
+        if (formElement != null) {
+            ret = formElement.renderElement(request, elementBSC, semprop, semprop.getName(), SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_VIEW, lang);
+        }
+        return ret != null ? ret : "";
+    }
 }
