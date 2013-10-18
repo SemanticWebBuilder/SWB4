@@ -1828,7 +1828,7 @@ public class SWBSocialUtil implements SWBAppObject {
             //osea el metodo sobreescrito:public static PostOutNet savePostOutNetID(PostOut postOut, SocialNetwork socialNet, String socialNetMsgId, String error, boolean ToMonitor)
             if(socialNet instanceof SocialMonitorable && postOut instanceof PostVideoable)
             {
-                PostVideoable postVideoable=(PostVideoable)socialNet;
+                PostVideoable postVideoable=(PostVideoable)postOut;
                 if(postVideoable.getVideo()!=null && postVideoable.getVideo().trim().length()>0)
                 {
                     return savePostOutNetID(postOut, socialNet, socialNetMsgId, error, true);
