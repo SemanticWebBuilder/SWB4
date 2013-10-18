@@ -147,28 +147,34 @@
         String videoFormat = "";
         String videoUrl = video.getVideo();
         String fileext=null;
-        int pos=videoUrl.lastIndexOf(".");
-        if(pos>-1)
+        if(videoUrl!=null)
         {
-            fileext=videoUrl.substring(pos);
-            int pos1=fileext.indexOf("?");
-            if(pos1>-1)
+            int pos=videoUrl.lastIndexOf(".");
+            if(pos>-1)
             {
-                fileext=fileext.substring(0, pos1);
+                fileext=videoUrl.substring(pos);
+                int pos1=fileext.indexOf("?");
+                if(pos1>-1)
+                {
+                    fileext=fileext.substring(0, pos1);
+                }
             }
-        }
-        if (videoUrl.toLowerCase().contains("www.youtube.com")) {//show player from youtube
-            videoFormat = "youtube";
-        } else if (fileext.toLowerCase().equals(".mp4")) {
-            videoFormat = "mp4";
-        } else if (fileext.toLowerCase().equals(".swf") || fileext.toLowerCase().equals(".mov")) { 
-            videoFormat = "flash";
-        } else if (fileext.toLowerCase().equals(".flv")) {
-            videoFormat = "flv";
-        } else if (fileext.toLowerCase().equals(".wav")) {
-            videoFormat = "wav";
-        }else if (fileext.equals(".wmv")) {
-            videoFormat = "wmv";
+            if (videoUrl.toLowerCase().contains("www.youtube.com")) {//show player from youtube
+                videoFormat = "youtube";
+            } else if (fileext.toLowerCase().equals(".mp4")) {
+                videoFormat = "mp4";
+            } else if (fileext.toLowerCase().equals(".swf") || fileext.toLowerCase().equals(".mov")) { 
+                videoFormat = "flash";
+            } else if (fileext.toLowerCase().equals(".flv")) {
+                videoFormat = "flv";
+            } else if (fileext.toLowerCase().equals(".wav")) {
+                videoFormat = "wav";
+            }else if (fileext.equals(".wmv")) {
+                videoFormat = "wmv";
+            }
+        }else{%>
+        <p><h1>VIDEO NO DISPONIBLE</p></h1>
+        <%
         }
     %>    
 
