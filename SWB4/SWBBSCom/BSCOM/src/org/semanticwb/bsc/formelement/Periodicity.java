@@ -67,11 +67,7 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
             obj = new SemanticObject();
         }
 
-        boolean dojo = false;
-
-        if (type.equals("dojo")) {
-            dojo = true;
-        }
+        boolean dojo = type.equals("dojo");
 
         StringBuilder ret = new StringBuilder(128);
         String name = propName;
@@ -111,11 +107,8 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
             }
         }
 
-        String ext = "";
-        if (disabled) {
-            ext += " disabled=\"disabled\"";
-        }
-
+        String ext = disabled?" disabled=\"disabled\"":"";
+        
         String value = request.getParameter(propName);
         if (value == null) {
             Date dt = obj.getDateProperty(prop);
@@ -159,16 +152,13 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
                     ret.append("\"");
                 }
             }
-
             ret.append(" " + getAttributes());
-
             if (dojo) {
                 ret.append(" trim=\"true\"");
             }
 
             ret.append(ext);
             ret.append("/>");
-System.out.println("\n\nfecha:\n"+ret);
         } else if (mode.equals("view")) {
             ret.append("<span name=\"" + name + "\">" + value + "</span>");
         }
@@ -186,7 +176,7 @@ System.out.println("\n\nfecha:\n"+ret);
     @Override 
     public void validate(HttpServletRequest request, SemanticObject obj, 
             SemanticProperty prop, String propName) throws FormValidateException {
-        
+System.out.println("periodicity.validate...");
         String value = request.getParameter(propName);
         Date date = null;
 
@@ -206,7 +196,13 @@ System.out.println("\n\nfecha:\n"+ret);
         Iterator<Period> iperiods = Period.ClassMgr.listPeriods(model);
         while (iperiods.hasNext()) {
             Period p = iperiods.next();
-            if (current.equals(p) || p.getStart() == null || p.getEnd() == null) {
+            if (p.equals(current)) {
+                if(current.getStart()!=null && current.getEnd()!=null) {
+                    if(current.getStart().after(current.getEnd())) {
+                        current.setActive(Boolean.FALSE);
+                        throw new FormValidateException("Inicio y fin de periodo incorrecto");
+                    }
+                }
                 continue;
             }
             
@@ -240,7 +236,7 @@ System.out.println("\n\nfecha:\n"+ret);
     @Override
     public void process(HttpServletRequest request, SemanticObject obj,
             SemanticProperty prop, String propName) {
-        
+System.out.println("periodicity.process...");
         String value = request.getParameter(propName);
         Date fvalue = null;
         try {
