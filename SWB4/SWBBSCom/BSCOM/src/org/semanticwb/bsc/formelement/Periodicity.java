@@ -97,7 +97,7 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
                         imsg = label + " is required.";
                     }
                 } else {
-                    imsg = "Formato no válido o la fecha ya forma parte de otro periodo.";
+                    imsg = "Formato incorrecto o la fecha ya forma parte de otro periodo.";
                     if (lang.equals("en")) {
                         imsg = "Invalid Format or this date is already part of another period.";
                     }
@@ -168,6 +168,7 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
 
             ret.append(ext);
             ret.append("/>");
+System.out.println("\n\nfecha:\n"+ret);
         } else if (mode.equals("view")) {
             ret.append("<span name=\"" + name + "\">" + value + "</span>");
         }
