@@ -215,7 +215,7 @@ public class SocialSentPost extends GenericResource {
         if (request.getParameter("statusMsg") != null) {
             out.println("   showStatus('" + request.getParameter("statusMsg") + "');");
         }
-        if (request.getParameter("reloadTap") != null) {
+        if (request.getParameter("reloadTab") != null) {
             out.println(" reloadTab('" + id + "'); ");
         }
         out.println("</script>");
@@ -672,7 +672,7 @@ public class SocialSentPost extends GenericResource {
 
             needAuthorization = pfmgr.needAnAuthorization(postOut);
 
-            //System.out.println("Necesita autorización: "+needAuthorization);
+            System.out.println("Necesita autorización: "+needAuthorization+",postOut:"+postOut);
 
             /*
              if (!isInFlow && !needAuthorization) {
@@ -745,7 +745,7 @@ public class SocialSentPost extends GenericResource {
             
             
             //Nuevo agregado por Jorge el 15/Oct/2013
-            System.out.println("PostUri:" + postOut.getURI());
+            System.out.println("PostUri-GyA:" + postOut.getURI());
             boolean postOutwithPostOutNets = false;
             boolean someOneIsNotPublished = false;
             SWBResourceURL urlPostOutNets = paramRequest.getRenderUrl().setMode(Mode_ShowPostOutNets).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postOut", postOut.getURI()).setParameter("suri", id);
@@ -753,10 +753,10 @@ public class SocialSentPost extends GenericResource {
                 Iterator<PostOutNet> itPostOutNets = PostOutNet.ClassMgr.listPostOutNetBySocialPost(postOut, wsite);
                 while (itPostOutNets.hasNext()) {
                     PostOutNet postOutNet = itPostOutNets.next();
-                    System.out.println("postOutNet:"+postOutNet);
+                    System.out.println("postOutNet-GyA:"+postOutNet);
                     postOutwithPostOutNets = true;
                     if (postOutNet.getStatus() == 0) {
-                        System.out.println("postOutNet-1/status:"+postOutNet.getStatus());
+                        System.out.println("postOutNet-1/status-GyA:"+postOutNet.getStatus());
                         someOneIsNotPublished = true;
                         break;
                     }
@@ -993,9 +993,10 @@ public class SocialSentPost extends GenericResource {
                          }else{
                          System.out.println("postOut.getPflowInstance()==NULL");
                          }*/
+                        ///System.out.println("isInFlow:"+isInFlow+",needAuthorization:"+needAuthorization+",postOutwithPostOutNets:"+postOutwithPostOutNets+",someOneIsNotPublished:"+someOneIsNotPublished+",FlowStatus:"+postOut.getPflowInstance()!=null?postOut.getPflowInstance().getStatus():"NO TIENE FLUJO");
                         if (someOneIsNotPublished) {
                             out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">" + paramRequest.getLocaleString("toReview") + "</a>"); //No ha sido publicado en todas las redes sociales que debiera, abrir dialogo para mostrar todos los PostOutNtes del PostOut
-                        } else if (postOut.getPflowInstance() != null && postOut.getPflowInstance().getStatus() == 3) {
+                        } else if (isInFlow && needAuthorization && postOut.getPflowInstance() != null && postOut.getPflowInstance().getStatus() == 3) {
                             out.println("<a href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />" + paramRequest.getLocaleString("publish") + "</a>");
                         } else if(!isInFlow && !needAuthorization && !postOutwithPostOutNets){
                             out.println(paramRequest.getLocaleString("publishing")+"..");
@@ -1736,7 +1737,7 @@ public class SocialSentPost extends GenericResource {
             } else if ("send2flow".equals(action)) {
                 String id = request.getParameter("suri");
                 SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-                SemanticObject obj = SemanticObject.createSemanticObject(id); //WebPage
+                //SemanticObject obj = SemanticObject.createSemanticObject(id); //WebPage
                 //SemanticClass cls = obj.getSemanticClass();
                 SocialPFlowMgr pfmgr = SocialLoader.getPFlowManager();
                 String sval = request.getParameter("sval"); // id resource
