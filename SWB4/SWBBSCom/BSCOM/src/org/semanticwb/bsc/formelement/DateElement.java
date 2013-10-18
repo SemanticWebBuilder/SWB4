@@ -21,34 +21,25 @@ public class DateElement extends org.semanticwb.bsc.formelement.base.DateElement
             obj = new SemanticObject();
         }
 
-        // boolean IPHONE=false;
-        // boolean XHTML=false;
-        boolean DOJO = false;
+        boolean dojo = type.equals("dojo");
 
-        // if(type.equals("iphone"))IPHONE=true;
-        // else if(type.equals("xhtml"))XHTML=true;
-        if (type.equals("dojo")) {
-            DOJO = true;
-        }
-
-        StringBuffer   ret      = new StringBuffer();
-        String         name     = propName;
-        String         label    = prop.getDisplayName(lang);
-        SemanticObject sobj     = prop.getDisplayProperty();
-        boolean        required = prop.isRequired();
-        String         pmsg     = null;
-        String         imsg     = null;
-        boolean        disabled = false;
+        StringBuilder ret = new StringBuilder(128);
+        String name = propName;
+        String label = prop.getDisplayName(lang);
+        SemanticObject sobj = prop.getDisplayProperty();
+        boolean required = prop.isRequired();
+        String pmsg = null;
+        String imsg = null;
+        boolean disabled = false;
 
         if (sobj != null) {
             DisplayProperty dobj = new DisplayProperty(sobj);
-
-            pmsg     = dobj.getPromptMessage();
-            imsg     = dobj.getInvalidMessage();
+            pmsg = dobj.getPromptMessage();
+            imsg = dobj.getInvalidMessage();
             disabled = dobj.isDisabled();
         }
 
-        if (DOJO) {
+        if (dojo) {
             if (imsg == null) {
                 if (required) {
                     imsg = label + " es requerido.";
@@ -57,7 +48,7 @@ public class DateElement extends org.semanticwb.bsc.formelement.base.DateElement
                         imsg = label + " is required.";
                     }
                 } else {
-                    imsg = "Formato invalido.";
+                    imsg = "Formato incorrecto.";
 
                     if (lang.equals("en")) {
                         imsg = "Invalid Format.";
@@ -74,33 +65,32 @@ public class DateElement extends org.semanticwb.bsc.formelement.base.DateElement
             }
         }
 
-        String ext = "";
-
-        if (disabled) {
-            ext += " disabled=\"disabled\"";
-        }
-
-        String value = request.getParameter(propName);
+        String ext = disabled?" disabled=\"disabled\"":"";
         
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
+        String value = request.getParameter(propName);
         if (value == null) {
             Date dt = obj.getDateProperty(prop);
-
             if (dt != null) {
-               
                 value = format.format(dt);
             }
         }
-
         if (value == null) {
             value = "";
         }
+        
+//        if (type.equals("dojo")) {
+//            setAttribute("isValid",
+//                    "return validateElement('" + propName + "','" + getValidateURL(obj, prop)
+//                    + "',this.textbox.value);");
+//        } else {
+//            setAttribute("isValid", null);
+//        }
 
         if (mode.equals("edit") || mode.equals("create")) {
             ret.append("<input name=\"" + name + "\" value=\"" + value + "\"");
 
-            if (DOJO) {
+            if (dojo) {
                 ret.append(" dojoType=\"dijit.form.DateTextBox\"");
                 ret.append(" required=\"" + required + "\"");
                 ret.append(" promptMessage=\"" + pmsg + "\"");
@@ -121,10 +111,8 @@ public class DateElement extends org.semanticwb.bsc.formelement.base.DateElement
                     ret.append("\"");
                 }
             }
-
             ret.append(" " + getAttributes());
-
-            if (DOJO) {
+            if (dojo) {
                 ret.append(" trim=\"true\"");
             }
 
