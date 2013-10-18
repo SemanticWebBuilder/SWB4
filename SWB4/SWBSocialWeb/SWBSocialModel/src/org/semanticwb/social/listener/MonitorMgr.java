@@ -33,7 +33,7 @@ public class MonitorMgr {
     public MonitorMgr() {
         try {
             System.out.println("Entra a MonitorMgr..-1");
-            int periodTime = (60*MILISEG_IN_SEGUNDO)*5; //5 minutos
+            int periodTime = (60*MILISEG_IN_SEGUNDO)*3; //3 minutos
             Timer timer = new Timer();
             timer.schedule(new MonitorTask(), 0,periodTime);
             System.out.println("Entra a MonitorMgr..-2");
