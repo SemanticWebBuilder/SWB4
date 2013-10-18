@@ -1055,8 +1055,8 @@ public class YoutubeWall extends GenericResource{
                 return;
             }
             //Validate token from youtube and pass it as param.
-            String ytResponse = getRequest(params, "http://gdata.youtube.com/feeds/api/users/" + "unam" + "/uploads",
-                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", null);
+            String ytResponse = getRequest(params, "http://gdata.youtube.com/feeds/api/users/default/uploads",
+                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", semanticYoutube.getAccessToken());
 
             JSONObject jsonResponse = new JSONObject(ytResponse);
             JSONArray videosArray = null;
