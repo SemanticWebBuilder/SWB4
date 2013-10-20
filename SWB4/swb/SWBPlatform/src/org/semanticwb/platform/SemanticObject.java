@@ -1865,13 +1865,19 @@ public class SemanticObject
         while (stit.hasNext())
         {
             Statement staux = stit.next();
-            String lg = staux.getLanguage();
-            if(lg!=null && lg.length()==0)lg=null;
-            //System.out.println("-->"+lang+" "+lg+" "+staux);
-            if ((lang==null && lg==null) || (lg != null && lg.equals(lang)))
+            try
             {
-                st = staux;
-                break;
+                String lg = staux.getLanguage();
+                if(lg!=null && lg.length()==0)lg=null;
+                //System.out.println("-->"+lang+" "+lg+" "+staux);
+                if ((lang==null && lg==null) || (lg != null && lg.equals(lang)))
+                {
+                    st = staux;
+                    break;
+                }
+            }catch(Exception e)
+            {
+                log.error("Error in statement:"+staux,e);
             }
         }
         return st;

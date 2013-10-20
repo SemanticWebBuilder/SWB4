@@ -226,6 +226,7 @@ public class SemanticClass
      */
     public String getPrefix()
     {
+        //System.out.println("getPrefix:"+m_class+" "+m_class.getNameSpace()+" "+m_class.getOntModel().getNsURIPrefix(m_class.getNameSpace()));
         return m_class.getOntModel().getNsURIPrefix(m_class.getNameSpace());
     }
 

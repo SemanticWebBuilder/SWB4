@@ -47,6 +47,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.StringTokenizer;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
@@ -70,6 +71,7 @@ public class SemanticMgr implements SWBInstanceObject
     private boolean tripleCache=false;
     
     private boolean semobjCache=false;
+    private ArrayList<String> semobjModelCache=new ArrayList();
     
     private boolean userRepCache=false;
     
@@ -249,9 +251,23 @@ public class SemanticMgr implements SWBInstanceObject
     {
         tripleCache=Boolean.parseBoolean(SWBPlatform.getEnv("swb/tripleFullCache","false"));
         semobjCache=Boolean.parseBoolean(SWBPlatform.getEnv("swb/semanticObjectFullCache","true"));
+        String t_semobjModelCache=SWBPlatform.getEnv("swb/semanticObjectModelsCache",null);
+        if(t_semobjModelCache!=null)
+        {
+            StringTokenizer st=new StringTokenizer(t_semobjModelCache," ,;");
+            while (st.hasMoreTokens())
+            {
+                semobjModelCache.add(st.nextToken());
+            }
+        }
+        
         userRepCache=Boolean.parseBoolean(SWBPlatform.getEnv("swb/userRepositoryFullCache","false"));
         log.event("TripleFullCache:"+tripleCache);
         log.event("SemanticObjectFullCache:"+semobjCache);
+        if(t_semobjModelCache!=null)
+        {
+            log.event("SemanticObjectModelsCache:"+t_semobjModelCache);
+        }        
 
         String clsname="org.semanticwb.rdf.RDBStore";
         if (SWBPlatform.isSDB()) 
@@ -309,8 +325,8 @@ public class SemanticMgr implements SWBInstanceObject
         log.event("BaseOntology:"+owlPath);
         Model model = SWBPlatform.getSemanticMgr().loadRDFFileModel(owlPath);
         SemanticModel smodel = new SemanticModel(new File(owlPath).getName(), model);
-        getSchema().addSubModel(smodel, false);
-        getOntology().addSubModel(smodel, false);
+        getSchema().addOWLModel(owlPath,smodel, false);
+        getOntology().addOWLModel(owlPath,smodel, false);
         m_bmodels.put(smodel.getName(), smodel);
 
         //agregar todos los NS del schema
@@ -331,7 +347,7 @@ public class SemanticMgr implements SWBInstanceObject
     public void loadBaseVocabulary() {
         //Create Vocabulary
         //System.out.println("Loading voc...");
-        vocabulary = new SemanticVocabulary();
+        if(vocabulary==null)vocabulary = new SemanticVocabulary();
 
         //m_schema.getRDFOntModel().listStatements(null, RDF.type, RDFS.Class);
 
@@ -614,12 +630,12 @@ public class SemanticMgr implements SWBInstanceObject
             SemanticModel model = loadDBModel(name);
             model.setDataset(store.getDataset());
             
-            if (semobjCache && !(model.getRDFModel().getGraph() instanceof GraphCached)) 
+            if ((semobjCache || semobjModelCache.contains(name)) && !(model.getRDFModel().getGraph() instanceof GraphCached)) 
             {
                 //Se cambia cache de grafo por cache de semanticObjects
                 if(userRepCache || !name.endsWith("_usr"))
                 {
-                    log.event("LoadingModel:"+name+" FullCache");
+                    log.event("Loading SemanticObject:"+name+" FullCache");
                     SemanticObject.loadFullCache(model);
                 }
             }            

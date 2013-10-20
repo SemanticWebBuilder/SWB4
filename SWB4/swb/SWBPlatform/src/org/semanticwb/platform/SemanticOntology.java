@@ -60,6 +60,8 @@ public class SemanticOntology
     
     /** The sub models. */
     private ArrayList<SemanticModel> subModels=new ArrayList();
+    
+    private HashMap<String, SemanticModel> ontologys = new HashMap();
 
     /**
      * Instantiates a new semantic ontology.
@@ -109,9 +111,29 @@ public class SemanticOntology
      */
     public void addSubModel(SemanticModel model, boolean rebind)
     {
-        subModels.add(model);
+        subModels.add(model);                
         m_ontology.addSubModel(model.getRDFModel(),rebind);
     }
+    
+    /**
+     * Adds the sub model join.
+     * 
+     * @param model the model
+     * @param rebind the rebind
+     */
+    public boolean addOWLModel(String owl, SemanticModel model, boolean rebind)
+    {
+        if(!ontologys.containsKey(owl))
+        {
+            ontologys.put(owl, model);
+            subModels.add(model);                
+            m_ontology.add(model.getRDFModel());
+            m_ontology.setNsPrefixes(model.getRDFModel().getNsPrefixMap());
+            if(rebind)m_ontology.rebind();
+            return true;
+        }
+        return false;
+    }    
 
     /**
      * Removes the sub model.

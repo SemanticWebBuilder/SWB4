@@ -61,6 +61,7 @@ public class CodePackage
         {
             SemanticProperty pfx=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_PROP_PREFIX);
             SemanticProperty pkg=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_PROP_PACKAGE);
+            //System.out.println("CodePackage:"+pfx.getRDFProperty()+" "+prefix);
             Iterator<Resource> it=SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().listSubjectsWithProperty(pfx.getRDFProperty(), prefix);
             while(it.hasNext())
             {
