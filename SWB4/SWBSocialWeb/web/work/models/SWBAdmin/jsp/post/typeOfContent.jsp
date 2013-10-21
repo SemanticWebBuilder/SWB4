@@ -299,7 +299,6 @@
     </div>
     <%} else if (contentType.equals("uploadPhoto")) {       ///////////////////////////////POSTEO DE FOTOS/////////////////////////////
         urlAction.setParameter("toPost", "photo");
-        
         SWBFormMgr photoMgr=null;
         if (postOut == null) //Creation
         {
@@ -334,6 +333,9 @@
                     <p>
                     <div class="etiqueta"><label for="description"><%=Photo.social_msg_Text.getDisplayName()%>:</label></div>
                     <div class="campo"><%=postOut == null ? photoMgr.renderElement(request, Photo.social_msg_Text, photoMgr.MODE_CREATE) : photoMgr.renderElement(request, Photo.social_msg_Text, photoMgr.MODE_EDIT)%></div>
+                    </p>
+                    <p>
+                        <a href="#" title="Mostrar" onclick="showDialog('<%=urlAction.setAction("showPhotos").setParameter("postOut", postOut.toString())%>','<%=paramRequest.getLocaleString("source")%>'); return false;">Mostrar fotos</a>
                     </p>
                     <p>
                     <div class="etiqueta"><label for="photo"><%=photoMgr.renderLabel(request, PostImageable.social_hasPhoto, photoMgr.MODE_CREATE)%>: </label></div>
@@ -483,6 +485,9 @@
             </form>
         </div>
     </div>
+         <div id="showPhotos" dojoType="dijit.Dialog" title="Mostrar Fotos" style="overflow: auto;" >
+            <jsp:include flush="true" page="showPhotos.jsp" />
+        </div>
 
 <%} else if (contentType.equals("uploadVideo")) {       ///////////////////////////////POSTEO DE VIDEOS/////////////////////////////
         System.out.println("Entra a TypeOfContent..2");
