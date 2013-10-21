@@ -15,7 +15,7 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
         super(base);
     }
      public List<Initiative> listValidInitiative() {
-         System.out.println("entra a listValid");
+
         List<Initiative> validInitiative = SWBUtils.Collections.filterIterator(listInitiatives(), new GenericFilterRule<Initiative>() {
                                                                         @Override
                                                                         public boolean filter(Initiative s) {
