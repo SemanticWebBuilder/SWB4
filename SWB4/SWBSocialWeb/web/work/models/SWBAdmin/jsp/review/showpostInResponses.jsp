@@ -183,11 +183,11 @@
                     ---
                     <%                    } else if (postOut.getPostSentimentalType() == 1) {
                     %>        
-                    <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/feelpos.png"/>
+                    <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/pos.png"/>
                     <%
                     } else if (postOut.getPostSentimentalType() == 2) {
                     %>        
-                    <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/feelneg.png"/> 
+                    <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/neg.png"/> 
                     <%
                         }
                     %>    
