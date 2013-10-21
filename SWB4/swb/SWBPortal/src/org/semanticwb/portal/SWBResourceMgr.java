@@ -158,6 +158,7 @@ private SWBResourceCachedMgr cache;
                 try
                 {
                     String path="/"+SWBUtils.TEXT.replaceAll(cls, ".", "/")+".owl";
+                    
                     if(!resourceOWLS.contains(path))
                     {
                         resourceOWLS.add(path);
@@ -169,7 +170,10 @@ private SWBResourceCachedMgr cache;
                             Model m=ModelFactory.createDefaultModel();
                             m.read(in, null);
                             SemanticModel model=new SemanticModel(cls,m);
-                            SWBPlatform.getSemanticMgr().getSchema().addSubModel(model,false);
+                            if(SWBPlatform.getSemanticMgr().getSchema().addOWLModel(path,model,false))
+                            {
+                                log.event("ResourceOntology:"+path);
+                            }
                             //SWBPlatform.getSemanticMgr().loadBaseVocabulary();
                             //System.out.println(cls);
                         }
