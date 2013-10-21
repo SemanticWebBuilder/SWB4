@@ -40,17 +40,20 @@ import org.semanticwb.platform.SemanticProperty;
  *
  * @author serch
  */
-public class UserRepositoryTest {
-    
+public class UserRepositoryTest 
+{    
     @BeforeClass
     public static void setUpClass() throws Exception
     {
+        //SWBUtils.createInstance(UserRepositoryTest.class.getResource("/").toString());
         String base=SWBUtils.getApplicationPath();
-        SWBPlatform.createInstance();
+        //System.out.println("base:"+base);
+        SWBPlatform plat=SWBPlatform.createInstance();
+        plat.setPersistenceType(SWBPlatform.PRESIST_TYPE_SWBTRIPLESTOREEXT);
         SWBPlatform.getSemanticMgr().initializeDB();
-        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb.owl");
-        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb_rep.owl");
-        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/office.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"/../../../web/WEB-INF/owl/swb.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"/../../../web/WEB-INF/owl/swb_rep.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"/../../../web/WEB-INF/owl/office.owl");
         SWBPlatform.getSemanticMgr().loadBaseVocabulary();
         SWBPlatform.getSemanticMgr().loadDBModels();
         SWBPlatform.getSemanticMgr().rebind();
@@ -60,8 +63,8 @@ public class UserRepositoryTest {
     public void Test()
     {
          UserRepository urep=SWBContext.getDefaultRepository();
+         System.out.println("urep:"+urep);
          //SemanticProperty prop = urep.createIntExtendedAttribute("Edad");
-
     }
 
 }
