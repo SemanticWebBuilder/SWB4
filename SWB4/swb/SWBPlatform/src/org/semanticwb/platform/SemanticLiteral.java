@@ -231,7 +231,11 @@ public class SemanticLiteral
         Byte ret=null;
         if(literal!=null)
         {
-            ret=literal.getByte();
+            String lf=literal.getLexicalForm();
+            if(lf!=null && lf.length()>0)
+            {                
+                ret=literal.getByte();
+            }
         }else if(m_obj instanceof Byte)
         {
             ret=(Byte)m_obj;
@@ -271,7 +275,11 @@ public class SemanticLiteral
         {
             try
             {            
-                ret=literal.getDouble();
+                String lf=literal.getLexicalForm();
+                if(lf!=null && lf.length()>0)
+                {                
+                    ret=literal.getDouble();
+                }
             }catch(NumberFormatException e)
             {
                 log.error("Error parsing double value...",e);
@@ -296,8 +304,12 @@ public class SemanticLiteral
         if(literal!=null)
         {            
             try
-            {
-                ret=literal.getFloat();
+            {   
+                String lf=literal.getLexicalForm();
+                if(lf!=null && lf.length()>0)
+                {
+                    ret=literal.getFloat();
+                }
             }catch(NumberFormatException e)
             {
                 log.error("Error parsing float value...",e);
@@ -323,7 +335,11 @@ public class SemanticLiteral
         {
             try
             {            
-                ret=literal.getInt();
+                String lf=literal.getLexicalForm();
+                if(lf!=null && lf.length()>0)
+                {                
+                    ret=literal.getInt();
+                }
             }catch(NumberFormatException e)
             {
                 log.error("Error parsing int value...",e);
@@ -350,7 +366,11 @@ public class SemanticLiteral
         Short ret=null;
         if(literal!=null)
         {
-            ret=literal.getShort();
+            String lf=literal.getLexicalForm();
+            if(lf!=null && lf.length()>0)
+            {                
+                ret=literal.getShort();
+            }
         }else if(m_obj instanceof Short)
         {
             ret=(Short)m_obj;
@@ -388,7 +408,11 @@ public class SemanticLiteral
         Long ret=null;
         if(literal!=null)
         {
-            ret=literal.getLong();
+            String lf=literal.getLexicalForm();
+            if(lf!=null && lf.length()>0)
+            {                
+                ret=literal.getLong();
+            }
         }else if(m_obj instanceof Long)
         {
             ret=(Long)m_obj;
@@ -414,7 +438,7 @@ public class SemanticLiteral
             try
             {
                 String aux=(String)obj;
-                if(aux!=null)
+                if(aux!=null && aux.length()>0)
                 {
                     ret=new Date(SWBUtils.TEXT.iso8601DateParse(aux).getTime());
                 }
@@ -440,7 +464,7 @@ public class SemanticLiteral
             try
             {
                 String aux=(String)obj;
-                if(aux!=null)
+                if(aux!=null && aux.length()>0)
                 {
                     ret=new Timestamp(SWBUtils.TEXT.iso8601DateParse(aux).getTime());
                 }
