@@ -1,7 +1,7 @@
 <%@page contentType="text/html"%>
 <%@page import="org.semanticwb.portal.resources.sem.newslite.*,java.util.*,java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <script type="text/javascript">
-    <!--
+    
     function validateremove(url, title,uri)
     {
         if(confirm('¿Esta seguro de borrar la categoria '+title+'?'))
@@ -10,7 +10,7 @@
             window.location.href=url;
         }
     }
-    -->
+    
 </script>
 <%
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
