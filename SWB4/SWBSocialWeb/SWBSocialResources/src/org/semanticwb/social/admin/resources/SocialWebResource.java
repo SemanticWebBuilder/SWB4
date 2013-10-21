@@ -51,7 +51,7 @@ public class SocialWebResource extends GenericAdmResource
         User user = paramRequest.getUser();
         SocialNetwork socialNetwork;
         String objUri = request.getParameter("suri"); //uri of socialNetwork        
-        
+        //System.out.println("Entrando a red doView de autenticate");
         try {
             socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
             if(socialNetwork==null){
@@ -76,6 +76,7 @@ public class SocialWebResource extends GenericAdmResource
         if(user.isSigned()){
             if(socialNetwork.isSn_authenticated())
                {
+                //System.out.println("Ya esta autenticada, puede refrescar tokens");
                 out.println("<div class=\"swbform\">");
                 out.println("<table width=\"100%\" border=\"0px\">");            
                 out.println("   <tr>");
@@ -91,9 +92,10 @@ public class SocialWebResource extends GenericAdmResource
                 out.println("   </tr>");
                 out.println("   <tr>");
                 out.println("       <td style=\"text-align: center;\">");
-                out.println("   <form type=\"dijit.form.Form\" id=\"nc\" action=\"" +  paramRequest.getRenderUrl().setMode(OAUTH_MODE) + "\" method=\"post\" onsubmit=\"submitForm('nc'); return false;\">");
+                out.println("   <form type=\"dijit.form.Form\" id=\"authenticate/" + objUri + "\" action=\"" +  paramRequest.getRenderUrl().setMode(OAUTH_MODE) + "\" method=\"post\" onsubmit=\"submitForm('authenticate/" + objUri +  "'); return false;\">");
                 out.println("       <input type=\"hidden\"  name=\"suri\" value=\"" + objUri +"\">");
                 out.println("       <input type=\"hidden\"  name=\"wsid\" value=\"" + socialNetwork.getSemanticObject().getModel().getName()+"\">");
+                out.println("       <input type=\"hidden\"  name=\"fromDoView\" value=\"true\">");
                 out.println("       <button dojoType=\"dijit.form.Button\" type=\"submit\">" + "Refrescar" + "</button>");
                 out.println("   </form>");
                 out.println("       </td>");
@@ -101,6 +103,7 @@ public class SocialWebResource extends GenericAdmResource
                 out.println("</table>");
                 out.println("</div>");
             }else if(!socialNetwork.isSn_authenticated()){
+                //System.out.println("No esta autenticada");
                 out.println("<div class=\"swbform\">");
                 out.println("<table width=\"100%\" border=\"0px\">");            
                 out.println("   <tr>");
@@ -108,9 +111,10 @@ public class SocialWebResource extends GenericAdmResource
                 out.println("   </tr>");
                 out.println("   <tr>");
                 out.println("       <td style=\"text-align: center;\">");
-                out.println("   <form type=\"dijit.form.Form\" id=\"nc\" action=\"" +  paramRequest.getRenderUrl().setMode(OAUTH_MODE) + "\" method=\"post\" onsubmit=\"submitForm('nc'); return false;\">");
+                out.println("   <form type=\"dijit.form.Form\" id=\"reauthenticate/" + objUri + "\" action=\"" +  paramRequest.getRenderUrl().setMode(OAUTH_MODE) + "\" method=\"post\" onsubmit=\"submitForm('reauthenticate/" + objUri + "'); return false;\">");
                 out.println("       <input type=\"hidden\"  name=\"suri\" value=\"" + objUri +"\">");
                 out.println("       <input type=\"hidden\"  name=\"wsid\" value=\"" + socialNetwork.getSemanticObject().getModel().getName()+"\">");
+                out.println("       <input type=\"hidden\"  name=\"fromDoView\" value=\"true\">");
                 out.println("       <button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("lblAuthentic") + "</button>");
                 out.println("   </form>");
                 out.println("       </td>");
@@ -125,35 +129,49 @@ public class SocialWebResource extends GenericAdmResource
     
     public void doAuthenticate(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        final String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/admin/jsp/components/" + this.getClass().getSimpleName() + "/";
-        String objUri = (String)request.getAttribute("objUri");
-        WebSite wsite = null;// = (SocialSite)WebSite.ClassMgr.getWebSite(request.getParameter("wsid"));
-
+        //System.out.println("**************** ENTRANDO A DO AUTHENTICATE*******************");
+        //System.out.println("\t\tsuri:" + request.getParameter("suri"));
+        //System.out.println("\t\twsid:" + request.getParameter("wsid"));
+        //System.out.println("\t\tParamX:" + request.getParameter("paramX"));
+        
+        String fromDoView = (String)request.getParameter("fromDoView");
+        HttpSession session = request.getSession(true);
+        
+        if(fromDoView != null && fromDoView.equals("true")){//If the call is from the doView method clear session var affected
+            session.removeAttribute("sw");
+        }
+        WebSite wsite = null;
+        String suri = request.getParameter("suri");
+        
         if(WebSite.ClassMgr.getWebSite(request.getParameter("wsid")) instanceof WebSite){
             wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsid"));
         }else if(WebSite.ClassMgr.getWebSite(request.getParameter("wsid")) instanceof SocialSite){
             wsite = (SocialSite)WebSite.ClassMgr.getWebSite(request.getParameter("wsid"));
         }
         
-        HttpSession session = request.getSession(true);
-        if(session.getAttribute("sw")==null)
+        //System.out.println("\t\tsw:" + session.getAttribute("sw") );
+        if(session.getAttribute("sw") == null)
         {
-            /*SemanticClass sclass = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sclassURI);
-            long id = wsite.getSemanticObject().getModel().getCounter(sclass);
-            SocialNetwork socialNetwork = (SocialNetwork)wsite.getSemanticObject().getModel().createGenericObject(wsite.getSemanticObject().getModel().getObjectUri(Long.toString(id), sclass), sclass);
-            */
-            SocialNetwork socialNetwork = (SocialNetwork)wsite.getSemanticObject().getModel().getGenericObject(request.getParameter("suri"));
+            //System.out.println("\n\nLa primera vez que entra SW es null");
+            //System.out.println("SW:" + session.getAttribute("sw") );
+            
+            SocialNetwork socialNetwork = (SocialNetwork)wsite.getSemanticObject().getModel().getGenericObject(suri);
 
             session.setAttribute("sw", socialNetwork);
+            //System.out.println("Ahora ya tiene un valor:" +  socialNetwork);
             socialNetwork.authenticate(request, response, paramRequest);
+            System.out.println("Y va a autenticar");
         }
         else
-        {            
+        {
+            //System.out.println("\n\nLa segunda vez que entra SW ya no es null");
             SocialNetwork socialNetwork = (SocialNetwork)session.getAttribute("sw");
             session.removeAttribute("sw");
-            objUri = socialNetwork.getURI();
-            //if(!socialNetwork.isSn_authenticated()) {
+            //objUri = socialNetwork.getURI();
+            //System.out.println("Y contiene el siguiente valor:" +  socialNetwork);
+            //if(!socialNetwork.isSn_authenticated()) {//removed to allow reauthentication
                 socialNetwork.authenticate(request, response, paramRequest);
+                //System.out.println("Y fue a autenticar, DE NUEVO y entró al else.");
             //}                        
         }        
     }
