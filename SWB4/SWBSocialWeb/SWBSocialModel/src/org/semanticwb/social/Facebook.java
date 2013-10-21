@@ -1192,6 +1192,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             out.println("<script type=\"text/javascript\">");
             out.println(" function ioauth() {");
             out.println("  mywin = window.open(" + url + ",'_blank','width=840,height=680',true);");
+            out.println("  if(mywin == null){");
+            out.println("    alert('¿Tienes bloqueadas las ventajas emergentes?');");
+            out.println("    return;");
+            out.println("  }");
             out.println("  mywin.focus();");
             out.println(" }");
             out.println(" if(confirm('¿Autenticar la cuenta en Facebook?')) {");

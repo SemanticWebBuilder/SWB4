@@ -315,6 +315,11 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         //List<Status> twitterResults = new ArrayList<Status>();
         int  tweetsReceived = 0;
         ArrayList <ExternalPost> aListExternalPost;
+        int blockOfTweets = 0; //this is the default Value, 
+        if(stream.getBlockofMsgToClassify() > 0){
+            blockOfTweets = stream.getBlockofMsgToClassify();
+        }
+        System.out.println("BLOQUE DE MENSAJES:" + blockOfTweets);
         
         try{            
             long lastTweetID = getLastTweetID(stream); //gets the value stored in NextDatetoSearch
@@ -397,6 +402,12 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                                     //System.out.println("User: @" + status.getUser().getScreenName() + "\tID:" + status.getId() + "\tTime:" + status.getCreatedAt() + "\tText:" + status.getText());
                                     currentTweetID = status.getId();
                                     tweetsReceived++;
+                                    
+                                    if((blockOfTweets > 0) && (aListExternalPost.size() >= blockOfTweets)){
+                                        System.out.println("CLASSIFYING:" + aListExternalPost.size());
+                                        new Classifier((ArrayList <ExternalPost>)aListExternalPost.clone(), stream, this, false);
+                                        aListExternalPost.clear();
+                                    }
                                 }
                             }
                         }
@@ -428,9 +439,11 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 //                }
                 
             }while(canGetMoreTweets && tweetsReceived <17000);  //Maximo permitido para extraer de twitter c/15 minutos
+            
             if(aListExternalPost.size()>0){
-                    new Classifier(aListExternalPost, stream, this, false);
-                }
+                System.out.println("CLASSIFYING FINALLY:" + aListExternalPost.size());
+                new Classifier(aListExternalPost, stream, this, false);
+            }
             //System.out.println("TOTAL TWEETS RECEIVED:" + tweetsReceived);
         }catch(Exception e){            
             log.error("Error in listen():"  + e );
@@ -559,6 +572,10 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 out.println("<script type=\"text/javascript\">");
                 out.println(" function ioauth() {");
                 out.println("  mywin = window.open('"+requestToken.getAuthorizationURL()+"','_blank','width=840,height=680',true);");
+                out.println("  if(mywin == null){");
+                out.println("    alert('¿Tienes bloqueadas las ventajas emergentes?');");
+                out.println("    return;");
+                out.println("  }");
                 out.println("  mywin.focus();");
                 out.println(" }");
                 out.println(" if(confirm('¿Autenticar la cuenta en Twitter?')) {");
