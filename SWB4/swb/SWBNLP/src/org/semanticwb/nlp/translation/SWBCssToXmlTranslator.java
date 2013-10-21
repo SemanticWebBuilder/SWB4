@@ -22,7 +22,7 @@
  */
 package org.semanticwb.nlp.translation;
 
-import java.io.File;
+/*import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -54,7 +54,7 @@ import org.w3c.dom.*;
  *
  * @author hasdai
  */
-public class SWBCssToXmlTranslator {
+/*public class SWBCssToXmlTranslator {
     private SimpleCSSParser parser;     //ANTLR parser
     private CSSLexer tokenizer;   //ANTLR tokenizer
     private CommonTokenStream tokens;   //TokenStream for parsing
@@ -236,4 +236,4 @@ public class SWBCssToXmlTranslator {
         }
         return res.trim();
     }
-}
+}*/
