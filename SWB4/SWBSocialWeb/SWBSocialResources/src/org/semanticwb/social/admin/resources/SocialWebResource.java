@@ -80,7 +80,7 @@ public class SocialWebResource extends GenericAdmResource
                 out.println("<div class=\"swbform\">");
                 out.println("<table width=\"100%\" border=\"0px\">");            
                 out.println("   <tr>");
-                out.println("       <td style=\"text-align: center;\"><h3>La cuenta está autenticada correctamente</h3></td>");
+                out.println("       <td style=\"text-align: center;\"><h3>" + paramRequest.getLocaleString("authenticated") + "</h3></td>");
                 out.println("   </tr>");
                 out.println("</table>");
                 out.println("</div>");
@@ -88,7 +88,7 @@ public class SocialWebResource extends GenericAdmResource
                 out.println("<div class=\"swbform\">");
                 out.println("<table width=\"100%\" border=\"0px\">");            
                 out.println("   <tr>");
-                out.println("       <td style=\"text-align: center;\"><h3>Refrescar los tokens de acceso</h3></td>");
+                out.println("       <td style=\"text-align: center;\"><h3>" + paramRequest.getLocaleString("refreshCredentialsMsg") +"</h3></td>");
                 out.println("   </tr>");
                 out.println("   <tr>");
                 out.println("       <td style=\"text-align: center;\">");
@@ -96,7 +96,7 @@ public class SocialWebResource extends GenericAdmResource
                 out.println("       <input type=\"hidden\"  name=\"suri\" value=\"" + objUri +"\">");
                 out.println("       <input type=\"hidden\"  name=\"wsid\" value=\"" + socialNetwork.getSemanticObject().getModel().getName()+"\">");
                 out.println("       <input type=\"hidden\"  name=\"fromDoView\" value=\"true\">");
-                out.println("       <button dojoType=\"dijit.form.Button\" type=\"submit\">" + "Refrescar" + "</button>");
+                out.println("       <button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("refreshCredentials") + "</button>");
                 out.println("   </form>");
                 out.println("       </td>");
                 out.println("   </tr>");
