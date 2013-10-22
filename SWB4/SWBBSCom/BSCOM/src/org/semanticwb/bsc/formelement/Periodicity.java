@@ -108,18 +108,14 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
         }
 
         String ext = disabled?" disabled=\"disabled\"":"";
-        
-        String value = request.getParameter(propName);
-        if (value == null) {
-            Date dt = obj.getDateProperty(prop);
-            if (dt != null) {
-                value = format.format(dt);
-            }
-        }
-        if (value == null) {
-            value = "";
-        }
 
+        String value = null;
+        if(obj.getDateProperty(prop)!=null) {
+            value = format.format(obj.getDateProperty(prop));
+        }else {
+            value = request.getParameter(propName)==null?"":request.getParameter(propName);
+        }
+        
         if (type.equals("dojo")) {
             setAttribute("isValid",
                     "return validateElement('" + propName + "','" + getValidateURL(obj, prop)
