@@ -4,6 +4,8 @@
  */
 package org.semanticwb.bsc.resources.strategicMap;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -42,7 +44,18 @@ public class CausalArrows extends Decorator {
     private double y1 = 0;
     private double y2 = 0;
     private String triangleEnd = "#triangle-end";
-    private JSONObject dataArrows = new JSONObject();
+    //private JSONObject dataArrows = new JSONObject();
+    private int countForRelation = 1;
+    private BigDecimal divTitl = new BigDecimal(divTitle);
+    private BigDecimal divContainerCo = new BigDecimal(divContainerCols);
+    private BigDecimal divSizeColum = new BigDecimal(divSizeColumn);
+    private BigDecimal tam20 = new BigDecimal(20);
+    private BigDecimal tam120 = new BigDecimal(120);
+    private BigDecimal tam18 = new BigDecimal(18);
+    private BigDecimal tam1 = new BigDecimal(1);
+    private BigDecimal tam2 = new BigDecimal(2);
+    private BigDecimal tam100 = new BigDecimal(100);
+    //private BigDecimal tam95 = new BigDecimal(95);
 
     /**
      * Construye una instancia de tipo {@code CausalArrows}
@@ -85,13 +98,14 @@ public class CausalArrows extends Decorator {
      */
     private JSONObject getStructureDataArrows(Resource base, BSC bsc, Period period) {
         Iterator itPers = bsc.listPerspectives();
+        JSONObject dataArrows = new JSONObject();
         if (itPers.hasNext()) {
             itPers = BSCUtils.sortObjSortable(itPers).listIterator();
             int count = 1;
             while (itPers.hasNext()) {
+                Perspective perspective = (Perspective) itPers.next();
                 try {
                     JSONObject perspectiveObj = new JSONObject();
-                    Perspective perspective = (Perspective) itPers.next();
                     boolean config = base.getData("perspective" + base.getId() + perspective.getId())
                             == null ? false : true;
                     int maxObjectForPerspective = getMaxObjectiveForTheme(perspective, period);
@@ -102,10 +116,11 @@ public class CausalArrows extends Decorator {
                     perspectiveObj.put("isHorizontal", config);
                     perspectiveObj.put("maxObjectives", maxObjectForPerspective);
                     perspectiveObj.put("arrayTheme", getArrayTheme(perspective));
+                    perspectiveObj.put("heightDiffe", getHeightDifferentiator(perspective, base));
                     if (maxObjectForPerspective > 0) {
                         dataArrows.put(count + "", perspectiveObj);
+                        count++;
                     }
-                    count++;
                 } catch (JSONException ex) {
                     log.error("Exception getStructureDataArrows: " + ex);
                 }
@@ -131,18 +146,30 @@ public class CausalArrows extends Decorator {
      */
     private StringBuilder paintArrows(JSONObject dataStructure, Resource base, BSC bsc, Period period) {
         StringBuilder sb = new StringBuilder();
-        Iterator<Perspective> itPers = bsc.listPerspectives();
+        Iterator itPers = bsc.listPerspectives();
+        if (itPers.hasNext()) {
+            itPers = BSCUtils.sortObjSortable(itPers).listIterator();
+        }
+
         int countLinesAttributes = 1;
         StringBuilder sbAttributeLines = new StringBuilder();
         StringBuilder sbStatementLines = new StringBuilder();
 
         Iterator<Entry> itMap;
+
         while (itPers.hasNext()) {
-            Perspective perspective = itPers.next();
-            Iterator<Theme> listThemes = perspective.listThemes();
+            Perspective perspective = (Perspective) itPers.next();
+            Iterator listThemes = perspective.listThemes();
+            if (listThemes.hasNext()) {
+                listThemes = BSCUtils.listValidParent(listThemes, null).iterator();
+                listThemes = BSCUtils.sortObjSortable(listThemes).listIterator();
+            }
             while (listThemes.hasNext()) {
-                Theme theme = listThemes.next();
-                Iterator<Theme> itCausalTheme = theme.listCausalThemes();
+                Theme theme = (Theme) listThemes.next();
+                Iterator itCausalTheme = theme.listCausalThemes();
+                itCausalTheme = BSCUtils.listValidParent(itCausalTheme, theme.getPerspective()).iterator();
+                itCausalTheme = BSCUtils.sortObjSortable(itCausalTheme).listIterator();
+
                 int startPerspectiveIndex = findIndexPerspective(perspective, dataStructure);
                 int startThemeIndex = findIndexTheme(startPerspectiveIndex, dataStructure, theme);
                 if (itCausalTheme.hasNext()) {
@@ -156,7 +183,9 @@ public class CausalArrows extends Decorator {
                         sbAttributeLines.append(sb1);
                     }
                 }
-                Iterator<Objective> itCausalobjective = theme.listCausalObjectives();
+                Iterator itCausalobjective = theme.listCausalObjectives();
+                itCausalobjective = BSCUtils.listValidParent(itCausalobjective, theme.getPerspective()).iterator();
+                itCausalobjective = BSCUtils.sortObjSortable(itCausalobjective).listIterator();
                 if (itCausalobjective.hasNext()) {
                     HashMap map = paintThemeObjective(dataStructure, startPerspectiveIndex, startThemeIndex,
                             0, itCausalobjective, base, period, countLinesAttributes);
@@ -168,37 +197,54 @@ public class CausalArrows extends Decorator {
                         sbAttributeLines.append(sb1);
                     }
                 }
-                Iterator<Objective> itObjectives = theme.listObjectives();
+                Iterator itObjectives = theme.listObjectives();
+                itObjectives = BSCUtils.listValidParent(itObjectives, null).iterator();
+                itObjectives = BSCUtils.sortObjSortable(itObjectives).listIterator();
                 while (itObjectives.hasNext()) {
-                    Objective objective = itObjectives.next();
+                    Objective objective = (Objective) itObjectives.next();
                     itCausalTheme = objective.listCausalThemes();
-                    int startObjective = findIndexObjective(startPerspectiveIndex, dataStructure,
-                            startThemeIndex, objective);
-                    HashMap map = paintObjectiveTheme(dataStructure, startPerspectiveIndex, startThemeIndex,
-                            startObjective, itCausalTheme, base, period, countLinesAttributes);
-                    itMap = map.entrySet().iterator();
-                    while (itMap.hasNext()) {
-                        Entry entry = itMap.next();
-                        countLinesAttributes = Integer.parseInt(entry.getKey().toString());
-                        StringBuilder sb1 = (StringBuilder) entry.getValue();
-                        sbAttributeLines.append(sb1);
+                    itCausalTheme = BSCUtils.listValidParent(itCausalTheme, objective.getTheme().
+                            getPerspective()).iterator();
+                    itCausalTheme = BSCUtils.sortObjSortable(itCausalTheme).listIterator();
+                    HashMap map = new HashMap();
+                    int startObjective = 0;
+                    if (itCausalTheme.hasNext()) {
+                        startObjective = findIndexObjective(startPerspectiveIndex, dataStructure,
+                                startThemeIndex, objective);
+                        map = paintObjectiveTheme(dataStructure, startPerspectiveIndex, startThemeIndex,
+                                startObjective, itCausalTheme, base, period, countLinesAttributes,
+                                objective.getTheme().getPerspective());
+                        itMap = map.entrySet().iterator();
+                        while (itMap.hasNext()) {
+                            Entry entry = itMap.next();
+                            countLinesAttributes = Integer.parseInt(entry.getKey().toString());
+                            StringBuilder sb1 = (StringBuilder) entry.getValue();
+                            sbAttributeLines.append(sb1);
+                        }
                     }
                     itCausalobjective = objective.listCausalObjectives();
-                    map = paintObjectiveObjective(dataStructure, startPerspectiveIndex, startThemeIndex,
-                            startObjective, base, period, itCausalobjective, objective, countLinesAttributes);
-                    itMap = map.entrySet().iterator();
-                    while (itMap.hasNext()) {
-                        Entry entry = itMap.next();
-                        countLinesAttributes = Integer.parseInt(entry.getKey().toString());
-                        StringBuilder sb1 = (StringBuilder) entry.getValue();
-                        sbAttributeLines.append(sb1);
+                    itCausalobjective = BSCUtils.listValidParent(itCausalobjective, objective.getTheme().
+                            getPerspective()).iterator();
+                    itCausalobjective = BSCUtils.sortObjSortable(itCausalobjective).listIterator();
+                    if (itCausalobjective.hasNext()) {
+                        startObjective = findIndexObjective(startPerspectiveIndex, dataStructure,
+                                startThemeIndex, objective);
+                        map = paintObjectiveObjective(dataStructure, startPerspectiveIndex, startThemeIndex,
+                                startObjective, base, period, itCausalobjective, objective, countLinesAttributes);
+                        itMap = map.entrySet().iterator();
+                        while (itMap.hasNext()) {
+                            Entry entry = itMap.next();
+                            countLinesAttributes = Integer.parseInt(entry.getKey().toString());
+                            StringBuilder sb1 = (StringBuilder) entry.getValue();
+                            sbAttributeLines.append(sb1);
+                        }
                     }
                 }
             }
         }
         sbStatementLines.append(createLinesSVG(countLinesAttributes));
         sb.append(getJavascript(sbStatementLines, sbAttributeLines));
-        sb.append(loadJavascript());
+        sb.append(loadJavascript(dataStructure));
         return sb;
     }
 
@@ -261,27 +307,26 @@ public class CausalArrows extends Decorator {
      * contador de l&iacute;neas utilizados
      */
     private HashMap paintThemeTheme(JSONObject jsonArrows, int startPerspectiveIndex,
-            int startThemeIndex, Resource base, Iterator<Theme> itCausalTheme, int countLine,
+            int startThemeIndex, Resource base, Iterator itCausalTheme, int countLine,
             Period period) {
         HashMap map1 = new HashMap();
         Iterator<Entry> itMap;
         StringBuilder sb = new StringBuilder();
-        String classLine = ((base.getData("colorRelTT") == null) ||
-                (base.getData("colorRelTT").trim().length() == 0))
+        String classLine = ((base.getData("colorRelTT") == null)
+                || (base.getData("colorRelTT").trim().length() == 0))
                 ? "arrow" : base.getData("colorRelTT");
         while (itCausalTheme.hasNext()) {
-            Theme theme = itCausalTheme.next();
+            Theme theme = (Theme) itCausalTheme.next();
             if (isValidTheme(theme, period)) {
                 HashMap map = new HashMap();
                 Perspective perspective = theme.getPerspective();
                 int finalPerspectiveIndex = findIndexPerspective(perspective, jsonArrows);
                 int finalThemeIndex = findIndexTheme(finalPerspectiveIndex, jsonArrows, theme);
+                getHeightDifferentiator(perspective, base);
                 if (startPerspectiveIndex != finalPerspectiveIndex) {
                     map = paintLinesThemeTheme(startPerspectiveIndex, startThemeIndex,
-                            finalPerspectiveIndex, finalThemeIndex, countLine, classLine, jsonArrows);
-                } else {
-                    map = paintLinesSameThemeTheme(startPerspectiveIndex, startThemeIndex,
-                            finalThemeIndex, countLine, classLine, jsonArrows);
+                            finalPerspectiveIndex, finalThemeIndex, countLine, classLine, jsonArrows,
+                            countForRelation);
                 }
                 itMap = map.entrySet().iterator();
                 while (itMap.hasNext()) {
@@ -290,73 +335,11 @@ public class CausalArrows extends Decorator {
                     StringBuilder sb1 = (StringBuilder) entry.getValue();
                     sb.append(sb1);
                 }
+                countForRelation++;
             }
         }
         map1.put(countLine, sb);
         return map1;
-    }
-
-    /**
-     * Pinta la relaci&oacute;n Causa - Efecto entre temas de misma perspectiva
-     *
-     * @param startPerspectiveIndex &Iacute;ndice de la perspectiva (Causa) que
-     * contiene la relación causa - efecto
-     * @param startThemeIndex &Iacute;ndice del tema (Causa) que contiene la
-     * relación causa - efecto
-     * @param finalPerspectiveIndex &Iacute;ndice de la perspectiva (Efecto) que
-     * contiene la relación causa - efecto
-     * @param finalThemeIndex &Iacute;ndice del tema (Efecto) que contiene la
-     * relación causa - efecto
-     * @param countLine n&uacute;mero de l&iacute;nea a partir de la cual
-     * deber&aacute;n crearse las siguientes l&iacute;neas
-     * @param classLine Clase CSS
-     * @param jsonArrows objeto de tipo {@code JSONObject} que contiene los
-     * datos de un balanscorecard a partir del cual buscar&aacute; la
-     * perspectiva
-     * @return objeto de tipo {@code HashMap} con las l&iacute;neas creadas y el
-     * contador de l&iacute;neas utilizados
-     */
-    private HashMap paintLinesSameThemeTheme(int startPerspectiveIndex, int startThemeIndex,
-            int finalThemeIndex, int countLine, String classLine, JSONObject jsonArrows) {
-        HashMap map = new HashMap();
-        StringBuilder sb = new StringBuilder();
-        try {
-            JSONObject startPers = (JSONObject) jsonArrows.get((startPerspectiveIndex - 1) + "");
-            JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
-            int noCols = arrayTheme.length();//total de columnas
-            if (noCols == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
-            }
-            int restCols = (int) divContainerCols / noCols;//valor por columna
-            int[] heightPer = getHeigthPerspectives(startPerspectiveIndex, jsonArrows);
-            //primer linea
-            x1 = (divTitle) + ((startThemeIndex * (restCols)) - (restCols / 2));
-            x2 = x1;
-            y1 = heightPer[0] + heightPer[1] + 20;//+ 120
-            y2 = heightPer[0] + heightPer[1] + (2 * countLine);//+ 120
-            sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-            countLine++;
-            //segunda linea
-            x1 = x2;
-            y1 = y2;
-            y2 = y1;
-            x2 = (divTitle) + ((finalThemeIndex * (restCols)) - (restCols / 2));
-            sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-            countLine++;
-            //tercer linea
-            x1 = x2;
-            x2 = x1;
-            y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (2 * countLine);//+ 120
-            sb.append(paintLineTriangle(countLine, triangleEnd));
-            countLine++;
-        } catch (JSONException ex) {
-            log.error("Exception in getLinesSameThemeTheme: " + ex);
-        } catch (NumberFormatException ex) {
-            log.error("Exception in NumberFormatException, getLinesSameThemeTheme: " + ex);
-        }
-        map.put(countLine, sb);
-        return map;
     }
 
     /**
@@ -381,35 +364,55 @@ public class CausalArrows extends Decorator {
      * contador de l&iacute;neas utilizados
      */
     private HashMap paintLinesThemeTheme(int startPerspectiveIndex, int startThemeIndex,
-            int finalPerspectiveIndex, int finalThemeIndex,
-            int countLine, String classLine, JSONObject jsonArrows) {
+            int finalPerspectiveIndex, int finalThemeIndex, int countLine,
+            String classLine, JSONObject jsonArrows, int countForRelation) {
         HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
         String triangleEnd = "#triangle-end";
         try {
             JSONObject startPers = (JSONObject) jsonArrows.get(startPerspectiveIndex + "");
+
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
-            int noCols = arrayTheme.length();//total de columnas
-            if (noCols == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
-            }
-            int restCols = (int) divContainerCols / noCols;//valor por columna
+            double restCols = 0;
+            BigDecimal divContaiPer = divContainerCo.divide(tam100, MathContext.DECIMAL128);
+            BigDecimal divSizColPer = divSizeColum.divide(tam100, MathContext.DECIMAL128);
             //primer linea
+            int[] columns = BSCUtils.getSizeColumnsTheme(arrayTheme.length());
+            for (int i = 0; i < (startThemeIndex - 1); i++) {
+                restCols = restCols + columns[i];
+            }
             int[] heightPer = getHeigthPerspectives(startPerspectiveIndex - 1, jsonArrows);
-            x1 = (divTitle) + ((startThemeIndex * (restCols)) - (restCols / 2));
+            BigDecimal incrementTam = new BigDecimal(1);
+            if (countForRelation < 15) {
+                incrementTam = new BigDecimal(countForRelation).multiply(new BigDecimal("0.2")).
+                        add(new BigDecimal("0.4"));
+            }
+            BigDecimal xA1 = new BigDecimal(restCols).multiply(divContaiPer);
+            BigDecimal xA2 = new BigDecimal(columns[startThemeIndex - 1]);
+
+            BigDecimal xA2b = xA2.multiply(divContaiPer).multiply(divSizColPer);
+            BigDecimal xA3 = xA2b.divide(tam2, MathContext.DECIMAL128);
+            BigDecimal xA = divTitl.add(xA1).add(xA3);
+            x1 = xA.doubleValue();
             x2 = x1;
-            y1 = heightPer[0] + heightPer[1] + 20 + 120; //cabecera
-            y2 = heightPer[0] + heightPer[1] + (2 * countLine) + 120;
+            BigDecimal yA1 = new BigDecimal(heightPer[0]).add(new BigDecimal(heightPer[2]));//.add(new BigDecimal(heightPer[2]))
+            BigDecimal yA0 = new BigDecimal(startPerspectiveIndex);
+            BigDecimal yA2 = new BigDecimal(heightPer[1]);
+            BigDecimal yA3 = yA0.subtract(tam1).multiply(tam2).add(tam1);
+            BigDecimal yA4 = yA0.subtract(tam1).multiply(tam20).multiply(tam2);//
+            BigDecimal yA = yA1.add(yA2).add(yA3).add(tam120).add(yA4).add(tam20);
             
+            y1 = yA.doubleValue();
+            BigDecimal yB1 = tam18.subtract(incrementTam);
+            BigDecimal yB = yA.subtract(yB1);
+            y2 = yB.doubleValue();
+
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //segunda linea
-            int countCol = 1;
-            if(countLine < 5) {
-                countCol = countLine; 
-            }
             x1 = x2;
-            x2 = 92 + 5 + countCol;
+            BigDecimal xB = divContainerCo.add(divTitl).add(incrementTam);
+            x2 = xB.doubleValue();
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
@@ -420,21 +423,30 @@ public class CausalArrows extends Decorator {
             y1 = y2;
             /*Calculo Y alto de perspectivas*/
             heightPer = getHeigthPerspectives((finalPerspectiveIndex - 1), jsonArrows);
-            int[] aux = getHeigthPerspectives((finalPerspectiveIndex), jsonArrows);
-            int margin = heightPer[1] + aux[1];
-            y2 = heightPer[0] + margin + 120 + (20 * (finalPerspectiveIndex - 1));//
+            BigDecimal yC1 = new BigDecimal(heightPer[0]);//
+            BigDecimal yC2 = new BigDecimal(heightPer[1]);
+            BigDecimal yC3 = new BigDecimal(finalPerspectiveIndex);
+            BigDecimal yC4 = yC3.subtract(tam1).multiply(tam2).add(tam1);
+            BigDecimal yC5 = yC3.subtract(tam1).multiply(tam20).multiply(tam2);
+            BigDecimal yC = yC1.add(yC2).add(yC4).add(tam120).add(yC5).add(incrementTam);
+            y2 = yC.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalPerspectiveIndex + "");
             arrayTheme = (JSONObject) finalPers.get("arrayTheme");
-            noCols = arrayTheme.length();//total de columnas
-            if (noCols == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
+            columns = BSCUtils.getSizeColumnsTheme(arrayTheme.length());
+            restCols = 0;
+            for (int i = 0; i < (finalThemeIndex - 1); i++) {
+                restCols = restCols + columns[i];
             }
-            restCols = (int) divContainerCols / noCols;//valor por columna            
             //cuarta linea
             x1 = x2;
-            x2 = (divTitle) + ((finalThemeIndex * (restCols)) - (restCols / 2));
+            BigDecimal xD1 = new BigDecimal(restCols).multiply(divContaiPer);
+            BigDecimal xD2 = new BigDecimal(columns[finalThemeIndex - 1]).multiply(divContaiPer).
+                    multiply(divSizColPer);
+            BigDecimal xD3 = xD2.divide(tam2, MathContext.DECIMAL128);
+            BigDecimal xD = divTitl.add(xD1).add(xD3);
+            x2 = xD.doubleValue();
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
@@ -444,11 +456,14 @@ public class CausalArrows extends Decorator {
             x1 = x2;
             x2 = x1;
             y1 = y2;
+            BigDecimal yD1 = new BigDecimal(heightPer[0]);//.add(new BigDecimal(heightPer[2]));
+            BigDecimal yD0 = new BigDecimal(finalPerspectiveIndex);
+            BigDecimal yD2 = new BigDecimal(heightPer[1]);
+            BigDecimal yD3 = yD0.subtract(tam1).multiply(tam2).add(tam1);
+            BigDecimal yD4 = yD0.subtract(tam1).multiply(tam20).multiply(tam2);//
+            BigDecimal yD = yD1.add(yD2).add(yD3).add(tam120).add(yD4).add(tam20);
 
-            aux = getHeigthPerspectives((finalPerspectiveIndex), jsonArrows);
-            margin = heightPer[1] + aux[1];
-//            y2 = heightPer[0] +  margin + 120 + (20 * (finalPerspectiveIndex - 1));//
-            y2 = heightPer[0] + margin + 20 + (20 * (finalPerspectiveIndex - 1)) + 120;// 
+            y2 = yD.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             sb.append(paintLineTriangle(countLine, triangleEnd));
             countLine++;
@@ -476,25 +491,30 @@ public class CausalArrows extends Decorator {
      * perspectiva
      */
     private int[] getHeigthPerspectives(int perspectiveIndex, JSONObject jsonArrows) {
-        int[] heightPerspectives = new int[2];
+        int[] heightPerspectives = new int[3];
         int addArrowY = 0;
         int filaAgregadasSuma = 0;
+        int heightDiff = 0;
         for (int i = 1; i <= perspectiveIndex; i++) {
             try {
                 JSONObject pers = (JSONObject) jsonArrows.get("" + i);
                 addArrowY = addArrowY + pers.getInt("height");
-
-                filaAgregadasSuma = filaAgregadasSuma + pers.getInt("maxObjectives");
+                if (!pers.getBoolean("isHorizontal")) {
+                    filaAgregadasSuma = filaAgregadasSuma + pers.getInt("maxObjectives");
+                } else {
+                    filaAgregadasSuma = filaAgregadasSuma + 1;
+                }
+                heightDiff = heightDiff + pers.getInt("heightDiffe");
             } catch (JSONException ex) {
                 log.error("Exception getHeigthPerspectives: " + ex);
             }
         }
         if (perspectiveIndex > 1) {
             filaAgregadasSuma = filaAgregadasSuma * 1; // usado para los margenes
-            //filaAgregadasSuma = filaAgregadasSuma * 20; // usado para los margenes
         }
         heightPerspectives[0] = addArrowY;
         heightPerspectives[1] = filaAgregadasSuma;
+        heightPerspectives[2] = heightDiff;
         return heightPerspectives;
     }
 
@@ -607,10 +627,11 @@ public class CausalArrows extends Decorator {
      * javascript que ejecutar&aacute; la creaci&oacute;n de flechas causa -
      * efecto
      */
-    private StringBuilder loadJavascript() {
+    private StringBuilder loadJavascript(JSONObject dataArrows) {
         StringBuilder sb = new StringBuilder();
         int[] height = getHeigthPerspectives(dataArrows.length(), dataArrows);
-        int heightAll = height[0] + height[1] + (dataArrows.length() * 20) + 120 + 40;
+        int heightAll = height[0] + height[1] + (dataArrows.length() * 40) + 120
+                + (dataArrows.length() * 2) + 20 + 10;
         sb.append("\n <div style=\"position:absolute; width:100%;height:" + heightAll);
         sb.append("px; float:left;  z-index:1 \" id=\"arrowLayer\" name=\"arrowLayer\">");
         sb.append("\n </div>");
@@ -742,8 +763,7 @@ public class CausalArrows extends Decorator {
         try {
             JSONObject perspe = (JSONObject) jsonArrows.get("" + perspectiveIndex);
             JSONObject themesA = (JSONObject) perspe.get("arrayTheme");
-            JSONObject themes = (JSONObject) themesA.get("" + themeIndex);
-            if (themeIndex == themes.length()) {
+            if (themeIndex == themesA.length()) {
                 isFinalTheme = true;
             }
         } catch (JSONException ex) {
@@ -776,62 +796,49 @@ public class CausalArrows extends Decorator {
      * contador de l&iacute;neas utilizados
      */
     private HashMap paintThemeObjective(JSONObject jsonArrows, int startPerspectiveIndex,
-            int startThemeIndex, int startObjetiveIndex, Iterator<Objective> itCausalobjective,
+            int startThemeIndex, int startObjetiveIndex, Iterator itCausalobjective,
             Resource base, Period period, int countLine) {
         HashMap map1 = new HashMap();
         Iterator<Entry> itMap;
         StringBuilder sb = new StringBuilder();
-        String classLine = ((base.getData("colorRelTO") == null) ||
-                (base.getData("colorRelTO").trim().length() == 0))
+        String classLine = ((base.getData("colorRelTO") == null)
+                || (base.getData("colorRelTO").trim().length() == 0))
                 ? "arrow" : base.getData("colorRelTO");
         while (itCausalobjective.hasNext()) {
-            Objective objective = itCausalobjective.next();
+            Objective objective = (Objective) itCausalobjective.next();
             if (objective.hasPeriod(period)) {
                 HashMap map = new HashMap();
                 Perspective perspective = objective.getTheme().getPerspective();
                 int finalPerspectiveIndex = findIndexPerspective(perspective, jsonArrows);
-                int finalThemeIndex = findIndexTheme(finalPerspectiveIndex, jsonArrows, 
+                int finalThemeIndex = findIndexTheme(finalPerspectiveIndex, jsonArrows,
                         objective.getTheme());
-                int finalObjetiveIndex = findIndexObjective(finalPerspectiveIndex, jsonArrows, 
+                int finalObjetiveIndex = findIndexObjective(finalPerspectiveIndex, jsonArrows,
                         finalThemeIndex, objective);
-                boolean isFinalTheme = getIndexFinalTheme(finalThemeIndex, jsonArrows, 
+                boolean isFinalTheme = getIndexFinalTheme(finalThemeIndex, jsonArrows,
                         finalPerspectiveIndex);
                 if (base.getData("perspective" + base.getId() + perspective.getId()) == null) {
-                    if (isFinalTheme) {
-                       // System.out.println("first option");
-                        map = paintOTIndexFinalP(startPerspectiveIndex, startThemeIndex,
+                    if (((finalPerspectiveIndex - startPerspectiveIndex) == -1) && (!isFinalTheme)) {
+                        map = paintOTVIndexContinuos(startPerspectiveIndex, startThemeIndex,
                                 startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
-                                finalObjetiveIndex, jsonArrows, countLine, classLine);
-                    } else if ((startObjetiveIndex > 0) && 
-                            ((startPerspectiveIndex - finalPerspectiveIndex) == -1)) {
-                        //objStart > 1 && (perspecstart - perspecFinal == -1)
-                            //    else if (((startPerspectiveIndex - finalPerspectiveIndex) == 1)
-                            //|| ((startPerspectiveIndex - finalPerspectiveIndex) == -1)) {
-                      //  System.out.println("second option");
-                        map = paintOTVIndexContinuos(startPerspectiveIndex, startThemeIndex, 
-                                startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
-                                finalObjetiveIndex, jsonArrows, countLine, classLine);
+                                finalObjetiveIndex, jsonArrows, countLine, classLine, countForRelation);
+                    } else if (isFinalTheme) {
+                        map = paintOTIndexFinalP(finalPerspectiveIndex, finalThemeIndex,
+                                finalObjetiveIndex, startPerspectiveIndex, startThemeIndex,
+                                jsonArrows, countLine, classLine, countForRelation, false);
                     } else {
-                     //   System.out.println("third option");
-                        
-                        map = paintOTH(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, 
-                                finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex, 
-                                jsonArrows, countLine, classLine);
+                        map = paintOTH(finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex,
+                                startPerspectiveIndex, startThemeIndex, jsonArrows, countLine,
+                                classLine, countForRelation, true);
                     }
                 } else {
-                    if (((startPerspectiveIndex - finalPerspectiveIndex) == 1)
-                            || ((startPerspectiveIndex - finalPerspectiveIndex) == -1)) {
-                        //System.out.println("four option");
-                        
-                        map = paintOTVHIndexContinuos(startPerspectiveIndex, startThemeIndex, 
-                                startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
-                                finalObjetiveIndex, jsonArrows, countLine, classLine);
+                    if ((finalPerspectiveIndex - startPerspectiveIndex) == -1) {
+                        map = paintOTVHIndexContinuos(finalPerspectiveIndex, finalThemeIndex,
+                                finalObjetiveIndex, startPerspectiveIndex, startThemeIndex,
+                                jsonArrows, countLine, classLine, countForRelation, false);
                     } else {
-                      //  System.out.println("five option");
-                        
-                        map = paintOTV(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, 
-                                finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex,
-                                jsonArrows, countLine, classLine);
+                        map = paintOTV(finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex,
+                                startPerspectiveIndex, startThemeIndex, jsonArrows, countLine,
+                                classLine, countForRelation, false);
                     }
                 }
                 itMap = map.entrySet().iterator();
@@ -841,6 +848,7 @@ public class CausalArrows extends Decorator {
                     StringBuilder sb1 = (StringBuilder) entry.getValue();
                     sb.append(sb1);
                 }
+                countForRelation++;
             }
         }
         map1.put(countLine, sb);
@@ -871,51 +879,47 @@ public class CausalArrows extends Decorator {
      * contador de l&iacute;neas utilizados
      */
     private HashMap paintObjectiveTheme(JSONObject jsonArrows, int startPerspectiveIndex,
-            int startThemeIndex, int startObjetiveIndex, Iterator<Theme> itCausalTheme,
-            Resource base, Period period, int countLine) {
-        
+            int startThemeIndex, int startObjetiveIndex, Iterator itCausalTheme,
+            Resource base, Period period, int countLine, Perspective iniPerspe) {
         HashMap map1 = new HashMap();
         Iterator<Entry> itMap;
         StringBuilder sb = new StringBuilder();
-       
-        String classLine = ((base.getData("colorRelOT") == null) ||
-                (base.getData("colorRelOT").trim().length() == 0))
+        String classLine = ((base.getData("colorRelOT") == null)
+                || (base.getData("colorRelOT").trim().length() == 0))
                 ? "arrow" : base.getData("colorRelOT");
         while (itCausalTheme.hasNext()) {
-            Theme theme = itCausalTheme.next();
+            Theme theme = (Theme) itCausalTheme.next();
             if (isValidTheme(theme, period)) {
                 HashMap map = new HashMap();
                 Perspective perspective = theme.getPerspective();
                 int finalPerspectiveIndex = findIndexPerspective(perspective, jsonArrows);
                 int finalThemeIndex = findIndexTheme(finalPerspectiveIndex, jsonArrows, theme);
                 int finalObjetiveIndex = 0;
-                boolean isFinalTheme = getIndexFinalTheme(startThemeIndex, jsonArrows, 
+                boolean isFinalTheme = getIndexFinalTheme(startThemeIndex, jsonArrows,
                         startPerspectiveIndex);
-                if (base.getData("perspective" + base.getId() + perspective.getId()) == null) {
-                    if (isFinalTheme) {
-                        map = paintOTIndexFinalP(startPerspectiveIndex, startThemeIndex, 
+                if (base.getData("perspective" + base.getId() + iniPerspe.getId()) == null) {
+                    if (((startPerspectiveIndex - finalPerspectiveIndex) == - 1) && (!isFinalTheme)) {
+                        map = paintOTVIndexContinuos(startPerspectiveIndex, startThemeIndex,
                                 startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
-                                finalObjetiveIndex, jsonArrows, countLine, classLine);
-                    } else if (((startPerspectiveIndex - finalPerspectiveIndex) == 1)
-                            || ((startPerspectiveIndex - finalPerspectiveIndex) == -1)) {
-                        map = paintOTVIndexContinuos(startPerspectiveIndex, startThemeIndex, 
+                                finalObjetiveIndex, jsonArrows, countLine, classLine, countForRelation);
+                    } else if (isFinalTheme) {
+                        map = paintOTIndexFinalP(startPerspectiveIndex, startThemeIndex,
                                 startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
-                                finalObjetiveIndex, jsonArrows, countLine, classLine);
+                                jsonArrows, countLine, classLine, countForRelation, true);
                     } else {
-                        map = paintOTH(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, 
-                                finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex, 
-                                jsonArrows, countLine, classLine);
+                        map = paintOTH(startPerspectiveIndex, startThemeIndex, startObjetiveIndex,
+                                finalPerspectiveIndex, finalThemeIndex, jsonArrows, countLine,
+                                classLine, countForRelation, false);
                     }
                 } else {
-                    if (((startPerspectiveIndex - finalPerspectiveIndex) == 1)
-                            || ((startPerspectiveIndex - finalPerspectiveIndex) == -1)) {
-                        map = paintOTVHIndexContinuos(startPerspectiveIndex, startThemeIndex, 
+                    if ((startPerspectiveIndex - finalPerspectiveIndex) == -1) {
+                        map = paintOTVHIndexContinuos(startPerspectiveIndex, startThemeIndex,
                                 startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
-                                finalObjetiveIndex, jsonArrows, countLine, classLine);
+                                jsonArrows, countLine, classLine, countForRelation, true);
                     } else {
-                        map = paintOTV(startPerspectiveIndex, startThemeIndex, startObjetiveIndex, 
-                                finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex,
-                                jsonArrows, countLine, classLine);
+                        map = paintOTV(startPerspectiveIndex, startThemeIndex, startObjetiveIndex,
+                                finalPerspectiveIndex, finalThemeIndex, jsonArrows,
+                                countLine, classLine, countForRelation, true);
                     }
                 }
                 itMap = map.entrySet().iterator();
@@ -925,6 +929,7 @@ public class CausalArrows extends Decorator {
                     StringBuilder sb1 = (StringBuilder) entry.getValue();
                     sb.append(sb1);
                 }
+                countForRelation++;
             }
         }
 
@@ -958,72 +963,103 @@ public class CausalArrows extends Decorator {
      * contador de l&iacute;neas utilizados
      */
     private HashMap paintOTV(int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
-            int finalPerspectiveIndex, int finalThemeIndex, int finalObjetiveIndex,
-            JSONObject jsonArrows, int countLine, String classLine) {
+            int finalPerspectiveIndex, int finalThemeIndex, JSONObject jsonArrows, int countLine,
+            String classLine, int countForRelation, boolean isValid) {
         HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
         int initPerspective = startPerspectiveIndex;
         int initTheme = startThemeIndex;
         int initObjective = startObjetiveIndex;
         int finalizePerspective = finalPerspectiveIndex;
-        int finalizeTheme = finalThemeIndex;
-        if (finalPerspectiveIndex > startPerspectiveIndex) {
-            initPerspective = finalPerspectiveIndex;
-            initTheme = finalThemeIndex;
-            initObjective = finalObjetiveIndex;
-            finalizePerspective = startPerspectiveIndex;
-            finalizeTheme = startThemeIndex;
-        }
         try {
             JSONObject startPers = (JSONObject) jsonArrows.get(initPerspective + "");
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
             JSONObject themePer = (JSONObject) arrayTheme.get(initTheme + "");
             JSONObject arraysObjects = (JSONObject) themePer.get("arrayObjective");
-            JSONObject arrayObjective = (JSONObject) arraysObjects.get(initObjective + "");
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
             int[] heightPer = getHeigthPerspectives(initPerspective, jsonArrows);
-            int noCols = arrayTheme.length();//total de columnas
-            if (noCols == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
+            BigDecimal incrementTam = new BigDecimal(1);
+            if (countForRelation < 15) {
+                incrementTam = new BigDecimal(countForRelation).multiply(new BigDecimal("0.2")).
+                        add(new BigDecimal("0.4"));
             }
-            if (arrayObjective.length() == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
+            BigDecimal divContainerColsPer1 = divContainerCo.divide(new BigDecimal(100),
+                    MathContext.DECIMAL128);
+            BigDecimal divSizeColumnsPer1 = divSizeColum.divide(new BigDecimal(100),
+                    MathContext.DECIMAL128);
+
+            int[] columns = BSCUtils.getSizeColumnsTheme(arrayTheme.length());
+            double restCols = 0;
+            for (int i = 0; i < (initTheme - 1); i++) {
+                restCols = restCols + columns[i];
             }
-            int restCols = (int) divContainerCols / noCols;//valor por columna
-            x1 = (divTitle) + (restCols * (initTheme - 1)) + ((divSizeColumn / arrayObjective.length())
-                    * (initObjective - 1)) + (countLine * 2);//((startThemeIndex * (restCols)) - (restCols / 2));
+            BigDecimal xC1 = new BigDecimal(restCols).multiply(divContainerColsPer1);
+            int[] columnsObjs1 = BSCUtils.getSizeColumnsObjective(arraysObjects.length(),
+                    columns[initTheme - 1]);
+            double restColsObj = 0;
+            for (int i = 0; i < (initObjective - 1); i++) {
+                restColsObj = restColsObj + columnsObjs1[i];
+            }
+            BigDecimal xC3 = new BigDecimal(restColsObj).multiply(divContainerColsPer1).
+                    multiply(divSizeColumnsPer1);
+            BigDecimal xC4 = new BigDecimal(columnsObjs1[initObjective - 1]).divide(tam2,
+                    MathContext.DECIMAL128);
+            BigDecimal xC = divTitl.add(xC1).add(xC3).add(xC4).add(incrementTam);
+            x1 = xC.doubleValue();
             x2 = x1;
-            y1 = heightPer[0] + heightPer[1] + 120;//
-            y2 = y1 + (countLine * 2);//+ 120
+            BigDecimal yA1 = new BigDecimal(heightPer[0]).add(new BigDecimal(heightPer[2]));//.add(new BigDecimal(heightPer[2])).subtract(new BigDecimal(heightPer[2]))
+            BigDecimal yA3 = new BigDecimal(initPerspective);
+            BigDecimal yA4 = yA3.multiply(tam2);
+            BigDecimal yA5 = yA3.multiply(tam20).multiply(tam2);
+            BigDecimal yA = tam120.add(yA1).add(yA4).add(yA5).add(yA3);
+            y1 = yA.doubleValue();
+            BigDecimal xB1 = tam18.subtract(incrementTam);
+            BigDecimal yB = yA.add(xB1);
+            y2 = yB.doubleValue();
+
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-            if (finalPerspectiveIndex < startPerspectiveIndex) {
+            if (!isValid) {
+                sb.append(paintLines(countLine, x1, x2, y2, y1, classLine));
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
             countLine++;
             //segunda linea
             x1 = x2;
-            x2 = divTitle + divContainerCols + (countLine * 2);
+            BigDecimal xB = divContainerCo.add(divTitl).add(incrementTam);
+            x2 = xB.doubleValue();
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //tercer linea
-            heightPer = getHeigthPerspectives(finalizePerspective - 1, jsonArrows);
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (countLine * 2);//+ 120
+            /*Calculo Y alto de perspectivas*/
+            heightPer = getHeigthPerspectives((finalPerspectiveIndex - 1), jsonArrows);
+            BigDecimal yC1 = new BigDecimal(heightPer[0]);//.add(new BigDecimal(heightPer[2]));
+            BigDecimal yC2 = new BigDecimal(heightPer[1]);
+            BigDecimal yC3 = new BigDecimal(finalPerspectiveIndex);
+            BigDecimal yC4 = yC3.subtract(tam1).multiply(tam2).add(tam1);
+            BigDecimal yC5 = yC3.subtract(tam1).multiply(tam20).multiply(tam2);//
+            BigDecimal yC = yC1.add(yC2).add(yC4).add(tam120).add(yC5).add(incrementTam);
+            y2 = yC.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //cuarta linea
-            noCols = arrayThemeFinal.length();//total de columnas
-            if (noCols == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
-            }
-            restCols = (int) divContainerCols / noCols;//valor por columna            
             x1 = x2;
-            x2 = divTitle + (restCols * (finalizeTheme - 1)) + (restCols / 2) + (countLine * 2);
+            columns = BSCUtils.getSizeColumnsTheme(arrayThemeFinal.length());
+            restCols = 0;
+            for (int i = 0; i < (finalThemeIndex - 1); i++) {
+                restCols = restCols + columns[i];
+            }
+            BigDecimal xD1 = new BigDecimal(restCols).multiply(divContainerColsPer1);
+            BigDecimal xD2 = new BigDecimal(columns[finalThemeIndex - 1]).multiply(divContainerColsPer1).
+                    multiply(divSizeColumnsPer1);
+            BigDecimal xD3 = xD2.divide(tam2, MathContext.DECIMAL128);
+            BigDecimal xD = divTitl.add(xD1).add(xD3);
+            x2 = xD.doubleValue();
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
@@ -1033,14 +1069,19 @@ public class CausalArrows extends Decorator {
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + 20;//+ 120
+            BigDecimal yD1 = new BigDecimal(heightPer[0]);//.add(new BigDecimal(heightPer[2]));
+            BigDecimal yD2 = new BigDecimal(heightPer[1]);
+            BigDecimal yD3 = yC3.subtract(tam1).multiply(tam2).add(tam1);
+            BigDecimal yD4 = yC3.subtract(tam1).multiply(tam20).multiply(tam2);//
+            BigDecimal yD = yD1.add(yD2).add(yD3).add(tam120).add(yD4).add(tam20);
+            y2 = yD.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-            if (finalPerspectiveIndex > startPerspectiveIndex) {
+            if (isValid) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
             countLine++;
         } catch (JSONException ex) {
-            log.error("Exception in paintOTVHIndexContinuos: " + ex);
+            log.error("Exception in paintOTV: " + ex);
         }
         map.put(countLine, sb);
         return map;
@@ -1073,57 +1114,79 @@ public class CausalArrows extends Decorator {
      */
     private HashMap paintOTVHIndexContinuos(int startPerspectiveIndex, int startThemeIndex,
             int startObjetiveIndex, int finalPerspectiveIndex, int finalThemeIndex,
-            int finalObjetiveIndex, JSONObject jsonArrows, int countLine, String classLine) {
+            JSONObject jsonArrows, int countLine, String classLine,
+            int countForRelation, boolean isValid) {
         HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
         int initPerspective = startPerspectiveIndex;
         int initTheme = startThemeIndex;
         int initObjective = startObjetiveIndex;
         int finalizePerspective = finalPerspectiveIndex;
-        int finalizeTheme = finalThemeIndex;
-        if (finalPerspectiveIndex > startPerspectiveIndex) {
-            initPerspective = finalPerspectiveIndex;
-            initTheme = finalThemeIndex;
-            initObjective = finalObjetiveIndex;
-            finalizePerspective = startPerspectiveIndex;
-            finalizeTheme = startThemeIndex;
-        }
         try {
             JSONObject startPers = (JSONObject) jsonArrows.get(initPerspective + "");
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
             JSONObject themePer = (JSONObject) arrayTheme.get(initTheme + "");
             JSONObject arraysObjects = (JSONObject) themePer.get("arrayObjective");
-            JSONObject arrayObjective = (JSONObject) arraysObjects.get(initObjective + "");
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
             int[] heightPer = getHeigthPerspectives(initPerspective, jsonArrows);
-            int noCols = arrayTheme.length();//total de columnas
-            if (noCols == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
+            BigDecimal incrementTam = new BigDecimal(1);
+            if (countForRelation < 15) {
+                incrementTam = new BigDecimal(countForRelation).multiply(new BigDecimal("0.2")).
+                        add(new BigDecimal("0.4"));
             }
-            if (arrayObjective.length() == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
+            BigDecimal divContainerColsPer1 = divContainerCo.divide(new BigDecimal(100),
+                    MathContext.DECIMAL128);
+            BigDecimal divSizeColumnsPer1 = divSizeColum.divide(new BigDecimal(100),
+                    MathContext.DECIMAL128);
+            int[] columns = BSCUtils.getSizeColumnsTheme(arrayTheme.length());
+            double restCols = 0;
+            for (int i = 0; i < (initTheme - 1); i++) {
+                restCols = restCols + columns[i];
             }
-            int restCols = (int) divContainerCols / noCols;//valor por columna
             //primer linea
-            x1 = (divTitle) + (restCols * (initTheme - 1)) + ((divSizeColumn / arrayObjective.length())
-                    * (initObjective - 1)) + (countLine * 2);//((startThemeIndex * (restCols)) - (restCols / 2));
+            BigDecimal xC1 = new BigDecimal(restCols).multiply(divContainerColsPer1);
+            int[] columnsObjs1 = BSCUtils.getSizeColumnsObjective(arraysObjects.length(),
+                    columns[initTheme - 1]);
+            double restColsObj = 0;
+            for (int i = 0; i < (initObjective - 1); i++) {
+                restColsObj = restColsObj + columnsObjs1[i];
+            }
+            BigDecimal xC3 = new BigDecimal(restColsObj).multiply(divContainerColsPer1).
+                    multiply(divSizeColumnsPer1);
+            BigDecimal xC4 = new BigDecimal(columnsObjs1[initObjective - 1]).divide(tam2,
+                    MathContext.DECIMAL128);
+            BigDecimal xC = divTitl.add(xC1).add(xC3).add(xC4).add(incrementTam);
+            x1 = xC.doubleValue();
             x2 = x1;
-            y1 = heightPer[0] + heightPer[1] + 120;// 
-            y2 = y1 + (countLine * 2);// + 120
+            BigDecimal yA1 = new BigDecimal(heightPer[0]).add(new BigDecimal(heightPer[2]));;//.add(new BigDecimal(heightPer[2]));
+            BigDecimal yA3 = new BigDecimal(initPerspective);
+            BigDecimal yA4 = yA3.multiply(tam2);
+            BigDecimal yA5 = yA3.multiply(tam20).multiply(tam2);
+            BigDecimal yA = tam120.add(yA1).add(yA4).add(yA5).add(yA3);
+            y1 = yA.doubleValue();
+            BigDecimal xB1 = tam18.subtract(incrementTam);
+            BigDecimal yB = yA.add(xB1);
+            y2 = yB.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-            if (finalPerspectiveIndex < startPerspectiveIndex) {
+            if (!isValid) {
+                sb.append(paintLines(countLine, x1, x2, y2, y1, classLine));
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
             countLine++;
             //segunda linea
-            noCols = arrayThemeFinal.length();//total de columnas
-            if (noCols == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
-            }
-            restCols = (int) divContainerCols / noCols;//valor por columna            
             x1 = x2;
-            x2 = divTitle + (restCols * (finalizeTheme - 1)) + (restCols / 2) + (countLine * 2);
+            columns = BSCUtils.getSizeColumnsTheme(arrayThemeFinal.length());
+            restCols = 0;
+            for (int i = 0; i < (finalThemeIndex - 1); i++) {
+                restCols = restCols + columns[i];
+            }
+            BigDecimal xD1 = new BigDecimal(restCols).multiply(divContainerColsPer1);
+            BigDecimal xD2 = new BigDecimal(columns[finalThemeIndex - 1]).multiply(divContainerColsPer1).
+                    multiply(divSizeColumnsPer1);
+            BigDecimal xD3 = xD2.divide(tam2, MathContext.DECIMAL128);
+            BigDecimal xD = divTitl.add(xD1).add(xD3);
+            x2 = xD.doubleValue();
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
@@ -1133,9 +1196,15 @@ public class CausalArrows extends Decorator {
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + 20;//+ 120
+            BigDecimal yD0 = new BigDecimal(finalPerspectiveIndex);
+            BigDecimal yD1 = new BigDecimal(heightPer[0]);//.add(new BigDecimal(heightPer[2]));
+            BigDecimal yD2 = new BigDecimal(heightPer[1]);
+            BigDecimal yD3 = yD0.subtract(tam1).multiply(tam2).add(tam1);
+            BigDecimal yD4 = yD0.subtract(tam1).multiply(tam20).multiply(tam2);
+            BigDecimal yD = yD1.add(yD2).add(yD3).add(tam120).add(yD4).add(tam20);
+            y2 = yD.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-            if (finalPerspectiveIndex > startPerspectiveIndex) {
+            if (isValid) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
             countLine++;
@@ -1171,23 +1240,12 @@ public class CausalArrows extends Decorator {
      * @return objeto de tipo {@code HashMap} con las l&iacute;neas creadas y el
      * contador de l&iacute;neas utilizados
      */
-    private HashMap paintOTIndexFinalP(int startPerspectiveIndex, int startThemeIndex,
-            int startObjetiveIndex, int finalPerspectiveIndex, int finalThemeIndex,
-            int finalObjetiveIndex, JSONObject jsonArrows, int countLine, String classLine) {
+    private HashMap paintOTIndexFinalP(int initPerspective, int initTheme,
+            int initObjective, int finalizePerspective, int finalThemeIndex,
+            JSONObject jsonArrows, int countLine, String classLine,
+            int countForRelation, boolean relationObjective) {
         HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
-        int initPerspective = startPerspectiveIndex;
-        int initTheme = startThemeIndex;
-        int initObjective = startObjetiveIndex;
-        int finalizePerspective = finalPerspectiveIndex;
-        int finalizeTheme = finalThemeIndex;
-        if (finalPerspectiveIndex > startPerspectiveIndex) {
-            initPerspective = finalPerspectiveIndex;
-            initTheme = finalThemeIndex;
-            initObjective = finalObjetiveIndex;
-            finalizePerspective = startPerspectiveIndex;
-            finalizeTheme = startThemeIndex;
-        }
         try {
             JSONObject startPers = (JSONObject) jsonArrows.get(initPerspective + "");
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
@@ -1197,42 +1255,80 @@ public class CausalArrows extends Decorator {
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
             int[] heightPer = getHeigthPerspectives(initPerspective - 1, jsonArrows);
-            int noCols = arrayTheme.length();//total de columnas
+            int noCols = arrayTheme.length();
             if (noCols == 0) {
                 throw new java.lang.ArithmeticException("/ by zero");
             }
             if (arrayObjective.length() == 0) {
                 throw new java.lang.ArithmeticException("/ by zero");
             }
-            int restCols = (int) divContainerCols / noCols;//valor por columna
-            int heightObjective = (startPers.getInt("height") - 20) / arrayObjective.length();
+            double restCols = 0;
+            BigDecimal incrementTam = new BigDecimal(1);
+            if (countForRelation < 15) {
+                incrementTam = new BigDecimal(countForRelation).multiply(new BigDecimal("0.2")).
+                        add(new BigDecimal("0.4"));
+            }
+            int[] columns = BSCUtils.getSizeColumnsTheme(arrayTheme.length());
+            for (int i = 0; i < (initTheme - 1); i++) {
+                restCols = restCols + columns[i];
+            }
+            BigDecimal divContainerColsPer1 = divContainerCo.divide(new BigDecimal(100),
+                    MathContext.DECIMAL128);
+            BigDecimal divSizeColumnsPer1 = divSizeColum.divide(new BigDecimal(100),
+                    MathContext.DECIMAL128);
             //primer linea
-            x1 = (divTitle) + (restCols * (initTheme - 1)) + (restCols * (divSizeColumn / 100));//((startThemeIndex * (restCols)) - (restCols / 2));
-            x2 = x1 + (2 * countLine);
-            y1 = heightPer[0] + heightPer[1] + 20 + (heightObjective * (initObjective - 1))
-                    + (countLine * 2) + 120;//
+            BigDecimal xA = divTitl.add(divContainerCo);
+            x1 = xA.doubleValue();
+            BigDecimal xB = xA.add(incrementTam);
+            x2 = xB.doubleValue();
+            BigDecimal yA1 = new BigDecimal(heightPer[0]).add(new BigDecimal(heightPer[2]));//.add(new BigDecimal(heightPer[2]));
+            BigDecimal yA2 = new BigDecimal(heightPer[1]);
+            BigDecimal yA3 = new BigDecimal(initPerspective);
+            BigDecimal yA3a = new BigDecimal(initObjective);
+            BigDecimal yA4 = new BigDecimal(startPers.getInt("height")).subtract(tam20)
+                    .divide(new BigDecimal(arraysObjects.length()), MathContext.DECIMAL128);
+            BigDecimal yA5 = yA3.subtract(tam1).multiply(tam2).add(yA2);
+            BigDecimal yA6 = yA3.subtract(tam1).multiply(tam20).multiply(tam2);
+            BigDecimal yA7 = yA3a.subtract(tam1).multiply(yA4);
+            BigDecimal yA8 = yA4.divide(tam2, MathContext.DECIMAL128);
+            BigDecimal yA = yA1.add(yA5).add(yA6).add(yA7).add(yA8).add(tam120).
+                    add(tam20).add(incrementTam).add(yA3a);
+            y1 = yA.doubleValue();
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-            if (finalPerspectiveIndex < startPerspectiveIndex) {
+            if (!relationObjective) {
+                sb.append(paintLines(countLine, x2, x1, y1, y2, classLine));
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
             countLine++;
             //segunda linea
-            heightPer = getHeigthPerspectives(initPerspective, jsonArrows);
+            heightPer = getHeigthPerspectives(finalizePerspective - 1, jsonArrows);
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (countLine * 2);//+ 120
+            heightPer = getHeigthPerspectives((finalizePerspective - 1), jsonArrows);// - 1
+            BigDecimal yB1 = new BigDecimal(heightPer[0]);//.add(new BigDecimal(heightPer[2]));
+            BigDecimal yB2 = new BigDecimal(heightPer[1]);
+            BigDecimal yB3 = new BigDecimal(finalizePerspective);
+            BigDecimal yB4 = yB3.subtract(tam1).multiply(tam2).add(tam1);
+            BigDecimal yB5 = yB3.subtract(tam1).multiply(tam20).multiply(tam2);//
+            BigDecimal yB = yB1.add(yB2).add(yB4).add(tam120).add(yB5).add(incrementTam);
+            y2 = yB.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //tercer linea
-            noCols = arrayThemeFinal.length();//total de columnas
-            if (noCols == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
+            columns = BSCUtils.getSizeColumnsTheme(arrayThemeFinal.length());
+            restCols = 0;
+            for (int i = 0; i < (finalThemeIndex - 1); i++) {
+                restCols = restCols + columns[i];
             }
-            restCols = (int) divContainerCols / noCols;//valor por columna
             x1 = x2;
-            x2 = divTitle + ((restCols) * (finalizeTheme - 1)) + (restCols / 2) + (countLine * 2);
+            BigDecimal xD1 = new BigDecimal(restCols).multiply(divContainerColsPer1);
+            BigDecimal xD2 = new BigDecimal(columns[finalThemeIndex - 1]).multiply(divContainerColsPer1).
+                    multiply(divSizeColumnsPer1);
+            BigDecimal xD3 = xD2.divide(tam2, MathContext.DECIMAL128);
+            BigDecimal xD = divTitl.add(xD1).add(xD3);
+            x2 = xD.doubleValue();
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
@@ -1242,9 +1338,15 @@ public class CausalArrows extends Decorator {
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + 20;//+ 120
+            BigDecimal yC1 = new BigDecimal(heightPer[0]);//.add(new BigDecimal(heightPer[2]));
+            BigDecimal yC0 = new BigDecimal(finalizePerspective);
+            BigDecimal yC2 = new BigDecimal(heightPer[1]);
+            BigDecimal yC3 = yC0.subtract(tam1).multiply(tam2).add(tam1);
+            BigDecimal yC4 = yC0.subtract(tam1).multiply(tam20).multiply(tam2);//
+            BigDecimal yC = yC1.add(yC2).add(yC3).add(tam120).add(yC4).add(tam20);
+            y2 = yC.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-            if (finalPerspectiveIndex > startPerspectiveIndex) {
+            if (relationObjective) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
             countLine++;
@@ -1282,7 +1384,8 @@ public class CausalArrows extends Decorator {
      */
     private HashMap paintOTVIndexContinuos(int startPerspectiveIndex, int startThemeIndex,
             int startObjetiveIndex, int finalPerspectiveIndex, int finalThemeIndex,
-            int finalObjetiveIndex, JSONObject jsonArrows, int countLine, String classLine) {
+            int finalObjetiveIndex, JSONObject jsonArrows, int countLine, String classLine,
+            int countForRelation) {
         HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
         int initPerspective = startPerspectiveIndex;
@@ -1305,24 +1408,50 @@ public class CausalArrows extends Decorator {
             JSONObject arrayObjective = (JSONObject) arraysObjects.get(initObjective + "");
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
-            int[] heightPer = getHeigthPerspectives(initPerspective - 1, jsonArrows);
-            int noCols = arrayTheme.length();//total de columnas
-            if (noCols == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
+            BigDecimal incrementTam = new BigDecimal(1);
+            if (countForRelation < 15) {
+                incrementTam = new BigDecimal(countForRelation).multiply(new BigDecimal("0.2")).
+                        add(new BigDecimal("0.4"));
             }
+            int[] heightPer = getHeigthPerspectives(initPerspective - 1, jsonArrows);
             if (arrayObjective.length() == 0) {
                 throw new java.lang.ArithmeticException("/ by zero");
             }
-            int restCols = (int) divContainerCols / noCols;//valor por columna
-            int heightObjective = (startPers.getInt("height") - 20) / arrayObjective.length();
+            int[] columns = BSCUtils.getSizeColumnsTheme(arrayTheme.length());
+            double restCols = 0;
+            for (int i = 0; i < (initTheme - 1); i++) {
+                restCols = restCols + columns[i];
+            }
+            BigDecimal divContainerColsPer1 = divContainerCo.divide(new BigDecimal(100),
+                    MathContext.DECIMAL128);
+            BigDecimal divSizeColumnsPer1 = divSizeColum.divide(new BigDecimal(100),
+                    MathContext.DECIMAL128);
+            BigDecimal heightObjective1 = new BigDecimal(startPers.getInt("height")).
+                    subtract(new BigDecimal(20)).divide(new BigDecimal(arraysObjects.length()),
+                    MathContext.DECIMAL128);
             //primer linea
-            x1 = (divTitle) + (restCols * (initTheme - 1)) + (restCols * (divSizeColumn / 100));//((startThemeIndex * (restCols)) - (restCols / 2));
-            x2 = x1 + (2 * countLine);
-            y1 = heightPer[0] + heightPer[1] + 20 + (heightObjective * (initObjective - 1))
-                    + (countLine * 2) + 120;//
+            BigDecimal xA2 = new BigDecimal(restCols).multiply(divContainerColsPer1);
+            BigDecimal xA4 = new BigDecimal(columns[initTheme - 1]).multiply(divContainerColsPer1).
+                    multiply(divSizeColumnsPer1);
+            BigDecimal xA = divTitl.add(xA2).add(xA4);//.add(xA5);
+            x1 = xA.doubleValue();
+            BigDecimal xB = xA.add(incrementTam);
+            x2 = xB.doubleValue();
+            BigDecimal yA1 = new BigDecimal(heightPer[0]).add(new BigDecimal(heightPer[2]));;//.add(new BigDecimal(heightPer[2]));
+            BigDecimal yA2 = new BigDecimal(heightPer[1]);
+            BigDecimal yA3 = new BigDecimal(initPerspective);
+            BigDecimal yA4 = yA3.subtract(tam1).multiply(tam2).add(yA2);
+            BigDecimal yA5 = yA3.multiply(tam20).multiply(tam2);
+            BigDecimal yA6 = new BigDecimal(initObjective);
+            BigDecimal yA7 = yA6.subtract(tam1).multiply(heightObjective1);
+            BigDecimal yA8 = heightObjective1.divide(tam2, MathContext.DECIMAL128);
+            BigDecimal yA = tam120.add(yA1).add(yA4).add(yA5).add(yA3).
+                    add(incrementTam).add(yA7).add(yA8);//.add(incrementTam);
+            y1 = yA.doubleValue();
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (finalPerspectiveIndex < startPerspectiveIndex) {
+                sb.append(paintLines(countLine, x2, x1, y1, y2, classLine));
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
             countLine++;
@@ -1331,17 +1460,28 @@ public class CausalArrows extends Decorator {
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (countLine * 2);//+ 120
+            BigDecimal yB1 = new BigDecimal(heightPer[0]);
+            BigDecimal yB2 = new BigDecimal(heightPer[1]);
+            BigDecimal yB3 = new BigDecimal(initPerspective);
+            BigDecimal yB4 = yB3.subtract(tam1).multiply(tam2).add(yB2);
+            BigDecimal yB5 = yB3.multiply(tam20).multiply(tam2);
+            BigDecimal yB = tam120.add(yB1).add(yB4).add(yB5).add(yB3).
+                    add(incrementTam);
+            y2 = yB.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //tercer linea
-            noCols = arrayThemeFinal.length();//total de columnas
-            if (noCols == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
-            }
-            restCols = (int) divContainerCols / noCols;//valor por columna
             x1 = x2;
-            x2 = divTitle + ((restCols) * (finalizeTheme - 1)) + (restCols / 2) + (countLine * 2);
+            columns = BSCUtils.getSizeColumnsTheme(arrayThemeFinal.length());
+            restCols = 0;
+            for (int i = 0; i < (finalizeTheme - 1); i++) {
+                restCols = restCols + columns[i];
+            }
+            BigDecimal xC1 = new BigDecimal(restCols).multiply(divContainerColsPer1);
+            BigDecimal xC2 = new BigDecimal(columns[finalizeTheme - 1]).divide(tam2,
+                    MathContext.DECIMAL128).multiply(divContainerColsPer1).multiply(divSizeColumnsPer1);
+            BigDecimal xC = divTitl.add(xC1).add(xC2).add(incrementTam);
+            x2 = xC.doubleValue();
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
@@ -1351,7 +1491,13 @@ public class CausalArrows extends Decorator {
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + 20;//+ 120
+            BigDecimal yC1 = new BigDecimal(heightPer[0]);//.add(new BigDecimal(heightPer[2]));
+            BigDecimal yC0 = new BigDecimal(finalizePerspective);
+            BigDecimal yC2 = new BigDecimal(heightPer[1]);
+            BigDecimal yC3 = yC0.subtract(tam1).multiply(tam2).add(tam1);
+            BigDecimal yC4 = yC0.subtract(tam1).multiply(tam20).multiply(tam2);//
+            BigDecimal yC = yC1.add(yC2).add(yC3).add(tam120).add(yC4).add(tam20);
+            y2 = yC.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (finalPerspectiveIndex > startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
@@ -1389,24 +1535,11 @@ public class CausalArrows extends Decorator {
      * @return objeto de tipo {@code HashMap} con las l&iacute;neas creadas y el
      * contador de l&iacute;neas utilizados
      */
-    private HashMap paintOTH(int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
-            int finalPerspectiveIndex, int finalThemeIndex, int finalObjetiveIndex,
-            JSONObject jsonArrows, int countLine, String classLine) {
+    private HashMap paintOTH(int initPerspective, int initTheme, int initObjective,
+            int finalizePerspective, int finalThemeIndex, JSONObject jsonArrows, int countLine,
+            String classLine, int countForRelation, boolean isTheme) {
         HashMap map = new HashMap();
-
         StringBuilder sb = new StringBuilder();
-        int initPerspective = startPerspectiveIndex;
-        int initTheme = startThemeIndex;
-        int initObjective = startObjetiveIndex;
-        int finalizePerspective = finalPerspectiveIndex;
-        int finalizeObjective = finalObjetiveIndex;
-        if (finalPerspectiveIndex > startPerspectiveIndex) {
-            initPerspective = finalPerspectiveIndex;
-            initTheme = finalThemeIndex;
-            initObjective = finalObjetiveIndex;
-            finalizePerspective = startPerspectiveIndex;
-            finalizeObjective = startObjetiveIndex;
-        }
         try {
             JSONObject startPers = (JSONObject) jsonArrows.get(initPerspective + "");
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
@@ -1416,23 +1549,49 @@ public class CausalArrows extends Decorator {
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
             int[] heightPer = getHeigthPerspectives(initPerspective - 1, jsonArrows);
-            int noCols = arrayTheme.length();//total de columnas
-            if (noCols == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
+            BigDecimal divContainerColsPer1 = divContainerCo.divide(new BigDecimal(100),
+                    MathContext.DECIMAL128);
+            BigDecimal divSizeColumnsPer1 = divSizeColum.divide(new BigDecimal(100),
+                    MathContext.DECIMAL128);
+            BigDecimal heightObjective1 = new BigDecimal(startPers.getInt("height")).
+                    subtract(new BigDecimal(20)).divide(new BigDecimal(arraysObjects.length()),
+                    MathContext.DECIMAL128);
+            BigDecimal incrementTam = new BigDecimal(1);
+            if (countForRelation < 15) {
+                incrementTam = new BigDecimal(countForRelation).multiply(new BigDecimal("0.2")).
+                        add(new BigDecimal("0.4"));
+            }
+            int[] columns = BSCUtils.getSizeColumnsTheme(arrayTheme.length());
+            double restCols = 0;
+            for (int i = 0; i < (initTheme - 1); i++) {
+                restCols = restCols + columns[i];
             }
             if (arrayObjective.length() == 0) {
                 throw new java.lang.ArithmeticException("/ by zero");
             }
-            int restCols = (int) divContainerCols / noCols;//valor por columna
-            int heightObjective = (startPers.getInt("height") - 20) / arrayObjective.length();
             //primer linea
-            x1 = (divTitle) + (restCols * (initTheme - 1)) + (restCols * (divSizeColumn / 100));//((startThemeIndex * (restCols)) - (restCols / 2));
-            x2 = x1 + (2 * countLine);
-            y1 = heightPer[0] + heightPer[1] + 20 + (heightObjective * (initObjective - 1))
-                    + (countLine * 2);//+ 120
+            BigDecimal xA2 = new BigDecimal(restCols).multiply(divContainerColsPer1);
+            BigDecimal xA4 = new BigDecimal(columns[initTheme - 1]).multiply(divContainerColsPer1).
+                    multiply(divSizeColumnsPer1);
+            BigDecimal xA = divTitl.add(xA2).add(xA4);
+            x1 = xA.doubleValue();
+            BigDecimal xB = xA.add(incrementTam);
+            x2 = xB.doubleValue();
+            BigDecimal yA1 = new BigDecimal(heightPer[0]).add(new BigDecimal(heightPer[2]));
+            BigDecimal yA2 = new BigDecimal(heightPer[1]);
+            BigDecimal yA3 = new BigDecimal(initPerspective);
+            BigDecimal yA4 = yA3.subtract(tam1).multiply(tam2).add(yA2);
+            BigDecimal yA5 = yA3.multiply(tam20).multiply(tam2);
+            BigDecimal yA6 = new BigDecimal(initObjective);
+            BigDecimal yA7 = yA6.subtract(tam1).multiply(heightObjective1);
+            BigDecimal yA8 = heightObjective1.divide(tam2, MathContext.DECIMAL128);
+            BigDecimal yA = tam120.add(yA1).add(yA4).add(yA5).add(yA3).
+                    add(incrementTam).add(yA7).add(yA8);
+            y1 = yA.doubleValue();
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-            if (finalPerspectiveIndex < startPerspectiveIndex) {
+            if (isTheme) {
+                sb.append(paintLines(countLine, x2, x1, y1, y2, classLine));
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
             countLine++;
@@ -1441,12 +1600,20 @@ public class CausalArrows extends Decorator {
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (countLine * 2);//+ 120
+            BigDecimal yB1 = new BigDecimal(heightPer[0]);
+            BigDecimal yB2 = new BigDecimal(heightPer[1]);
+            BigDecimal yB3 = new BigDecimal(initPerspective);
+            BigDecimal yB4 = yB3.subtract(tam1).multiply(tam2).add(yB2);
+            BigDecimal yB5 = yB3.multiply(tam20).multiply(tam2);
+            BigDecimal yB6 = tam18.subtract(incrementTam);
+            BigDecimal yB = tam120.add(yB1).add(yB4).add(yB5).add(yB3).add(yB6);
+            y2 = yB.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //tercer linea
             x1 = x2;
-            x2 = divTitle + divContainerCols + (countLine * 2);
+            BigDecimal yC1 = divTitl.add(divContainerCo).add(incrementTam);
+            x2 = yC1.doubleValue();
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
@@ -1456,29 +1623,46 @@ public class CausalArrows extends Decorator {
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (countLine * 2);//+ 120
+            BigDecimal yD1 = new BigDecimal(heightPer[0]);
+            BigDecimal yD2 = new BigDecimal(heightPer[1]);
+            BigDecimal yD3 = new BigDecimal(finalizePerspective);
+            BigDecimal yD4 = yD3.subtract(tam1).multiply(tam2).add(tam1);
+            BigDecimal yD5 = yD3.subtract(tam1).multiply(tam20).multiply(tam2);//
+            BigDecimal yD = yD1.add(yD2).add(yD4).add(tam120).add(yD5).add(incrementTam);
+            y2 = yD.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //quinta linea
-            noCols = arrayThemeFinal.length();//total de columnas
-            if (noCols == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
-            }
-            restCols = (int) divContainerCols / noCols;//valor por columna            
             x1 = x2;
-            x2 = (restCols * (finalizeObjective - 1)) + (restCols / 2) + (countLine * 2);
+            columns = BSCUtils.getSizeColumnsTheme(arrayThemeFinal.length());
+            restCols = 0;
+            for (int i = 0; i < (finalThemeIndex - 1); i++) {
+                restCols = restCols + columns[i];
+            }
+            BigDecimal xD1 = new BigDecimal(restCols).multiply(divContainerColsPer1);
+            BigDecimal xD2 = new BigDecimal(columns[finalThemeIndex - 1]).multiply(divContainerColsPer1).
+                    multiply(divSizeColumnsPer1);
+            BigDecimal xD3 = xD2.divide(tam2, MathContext.DECIMAL128);
+            BigDecimal xD = divTitl.add(xD1).add(xD3).add(incrementTam);
+            x2 = xD.doubleValue();
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //sexta linea
-            heightPer = getHeigthPerspectives(finalizePerspective, jsonArrows);
+            heightPer = getHeigthPerspectives(finalizePerspective - 1, jsonArrows);
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + 20;//+ 120
+            BigDecimal yE1 = new BigDecimal(heightPer[0]);
+            BigDecimal yE0 = new BigDecimal(finalizePerspective);
+            BigDecimal yE2 = new BigDecimal(heightPer[1]);
+            BigDecimal yE3 = yE0.subtract(tam1).multiply(tam2).add(tam1);
+            BigDecimal yE4 = yE0.subtract(tam1).multiply(tam20).multiply(tam2);
+            BigDecimal yE = yE1.add(yE2).add(yE3).add(tam120).add(yE4).add(tam20);
+            y2 = yE.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-            if (finalPerspectiveIndex > startPerspectiveIndex) {
+            if (!isTheme) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
             countLine++;
@@ -1516,16 +1700,15 @@ public class CausalArrows extends Decorator {
      */
     private HashMap paintObjectiveObjective(JSONObject jsonArrows, int startPerspectiveIndex,
             int startThemeIndex, int startObjetiveIndex, Resource base, Period period,
-            Iterator<Objective> itCausalobjective, Objective objStart, int countLine) {
+            Iterator itCausalobjective, Objective objStart, int countLine) {
         HashMap map1 = new HashMap();
         StringBuilder sb = new StringBuilder();
-
         Perspective persStart = objStart.getTheme().getPerspective();
-        String classLine = ((base.getData("colorRelTO") == null) ||
-                (base.getData("colorRelTO").trim().length() == 0)) ? 
-                "arrow" : base.getData("colorRelTO");
+        String classLine = ((base.getData("colorRelTO") == null)
+                || (base.getData("colorRelTO").trim().length() == 0))
+                ? "arrow" : base.getData("colorRelTO");
         while (itCausalobjective.hasNext()) {
-            Objective objective = itCausalobjective.next();
+            Objective objective = (Objective) itCausalobjective.next();
             if (objective.hasPeriod(period)) {
                 HashMap map = new HashMap();
                 Perspective perspective = objective.getTheme().getPerspective();
@@ -1540,44 +1723,40 @@ public class CausalArrows extends Decorator {
                         startPerspectiveIndex);
                 if ((base.getData("perspective" + base.getId() + perspective.getId()) == null)
                         && (base.getData("perspective" + base.getId() + persStart.getId()) == null)) {
-                    if ((isFinalTheme) || (isStartTheme)) {
-                       // System.out.println("1");
-                        map = paintOOIndexFinalP(startPerspectiveIndex, startThemeIndex,
-                                startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
-                                finalObjetiveIndex, isFinalTheme, jsonArrows, countLine, classLine);
-                    } else if ((((startPerspectiveIndex - finalPerspectiveIndex) == 1)
-                            && (finalThemeIndex == startThemeIndex))
-                            || ((startPerspectiveIndex - finalPerspectiveIndex == -1)
-                            && (finalThemeIndex == startThemeIndex))) {
-                       // System.out.println("2");
+                    if (isFinalTheme && isStartTheme) {
                         map = paintOOIndexContinuos(startPerspectiveIndex, startThemeIndex,
                                 startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
-                                finalObjetiveIndex, jsonArrows, countLine, classLine);
+                                finalObjetiveIndex, jsonArrows, countLine, classLine, countForRelation);
+                    } else if ((isFinalTheme) || (isStartTheme)) {
+                        map = paintOOIndexFinalP(startPerspectiveIndex, startThemeIndex,
+                                startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex,
+                                finalObjetiveIndex, isFinalTheme, jsonArrows, countLine, classLine, countForRelation);
                     } else {
-                       // System.out.println("3");
                         map = paintOO(startPerspectiveIndex, startThemeIndex, startObjetiveIndex,
                                 finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex,
-                                jsonArrows, countLine, classLine);
+                                jsonArrows, countLine, classLine, countForRelation);
                     }
                 } else if ((base.getData("perspective" + base.getId() + perspective.getId()) != null)
                         && (base.getData("perspective" + base.getId() + persStart.getId()) != null)) {
-                    //System.out.println("4");
                     map = paintOOHH(startPerspectiveIndex, startThemeIndex, startObjetiveIndex,
                             finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex, jsonArrows,
-                            countLine, classLine);
+                            countLine, classLine, countForRelation);
                 } else {
-                    if ((isFinalTheme) || (isStartTheme)) {
-                      //  System.out.println("5");
+                    boolean perspecIni = base.getData("perspective" + base.getId() + persStart.getId()) == null
+                            ? true : false;
+                    boolean perspecFin = base.getData("perspective" + base.getId() + perspective.getId()) == null
+                            ? true : false;
+                    if ((isFinalTheme && perspecFin) || (isStartTheme && perspecIni)) {
+                        boolean isValid = (isStartTheme && perspecIni) ? false : true;
                         map = paintOOH_VSame(startPerspectiveIndex, startThemeIndex, startObjetiveIndex,
                                 finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex, jsonArrows,
-                                countLine, classLine);
+                                countLine, classLine, countForRelation, isValid);
                     } else {
-                       // System.out.println("6");
+                        boolean isValid = (perspecIni) ? false : true;
                         map = paintOOH_V(startPerspectiveIndex, startThemeIndex, startObjetiveIndex,
                                 finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex, jsonArrows,
-                                countLine, classLine);
+                                countLine, classLine, countForRelation, isValid);
                     }
-
                 }
                 Iterator<Entry> itMap = map.entrySet().iterator();
                 while (itMap.hasNext()) {
@@ -1586,6 +1765,7 @@ public class CausalArrows extends Decorator {
                     StringBuilder sb1 = (StringBuilder) entry.getValue();
                     sb.append(sb1);
                 }
+                countForRelation++;
             }
         }
         map1.put(countLine, sb);
@@ -1619,87 +1799,121 @@ public class CausalArrows extends Decorator {
      */
     private HashMap paintOOH_VSame(int startPerspectiveIndex, int startThemeIndex,
             int startObjetiveIndex, int finalPerspectiveIndex, int finalThemeIndex,
-            int finalObjetiveIndex, JSONObject jsonArrows, int countLine, String classLine) {
+            int finalObjetiveIndex, JSONObject jsonArrows, int countLine, String classLine,
+            int countForRelation, boolean isValid) {
         HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
-        int initPerspective = startPerspectiveIndex;
-        int initTheme = startThemeIndex;
-        int initObjective = startObjetiveIndex;
-        int finalizePerspective = finalPerspectiveIndex;
-        int finalizeTheme = finalThemeIndex;
-        int finalizeObjective = finalObjetiveIndex;
-        if (finalPerspectiveIndex < startPerspectiveIndex) {
-            initPerspective = finalPerspectiveIndex;
-            initTheme = finalThemeIndex;
-            initObjective = finalObjetiveIndex;
-            finalizePerspective = startPerspectiveIndex;
-            finalizeTheme = startThemeIndex;
-            finalizeObjective = startObjetiveIndex;
+        int initPerspective = finalPerspectiveIndex;
+        int initTheme = finalThemeIndex;
+        int initObjective = finalObjetiveIndex;
+        int finalizePerspective = startPerspectiveIndex;
+        int finalizeTheme = startThemeIndex;
+        int finalizeObjective = startObjetiveIndex;
+        if (!isValid) {
+            initPerspective = startPerspectiveIndex;
+            initTheme = startThemeIndex;
+            initObjective = startObjetiveIndex;
+            finalizePerspective = finalPerspectiveIndex;
+            finalizeTheme = finalThemeIndex;
+            finalizeObjective = finalObjetiveIndex;
         }
         try {
             JSONObject startPers = (JSONObject) jsonArrows.get(initPerspective + "");
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
             JSONObject themePer = (JSONObject) arrayTheme.get(initTheme + "");
             JSONObject arraysObjects = (JSONObject) themePer.get("arrayObjective");
-            JSONObject arrayObjective = (JSONObject) arraysObjects.get(initObjective + "");
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
             JSONObject themePerFinal = (JSONObject) arrayThemeFinal.get(finalizeTheme + "");
             JSONObject arraysObjectsFinal = (JSONObject) themePerFinal.get("arrayObjective");
-            JSONObject arrayObjectiveFinal = (JSONObject) arraysObjectsFinal.get(finalizeObjective + "");
-            int[] heightPer = getHeigthPerspectives(initPerspective, jsonArrows);
-            int noCols = arrayTheme.length();//total de columnas
-            if (noCols == 0) {
+            int[] heightPer = getHeigthPerspectives((initPerspective - 1), jsonArrows);
+            if (arraysObjects.length() == 0) {
                 throw new java.lang.ArithmeticException("/ by zero");
             }
-            if (arrayObjective.length() == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
+            BigDecimal divContainerColsPer1 = divContainerCo.divide(new BigDecimal(100), MathContext.DECIMAL128);
+            BigDecimal divSizeColumnsPer1 = divSizeColum.divide(new BigDecimal(100), MathContext.DECIMAL128);
+            BigDecimal incrementTam = new BigDecimal(1);
+            if (countForRelation < 15) {
+                incrementTam = new BigDecimal(countForRelation).multiply(new BigDecimal("0.2")).
+                        add(new BigDecimal("0.4"));
             }
-            int restCols = (int) divContainerCols / noCols;//valor por columna
-            int heigthPers = finalPers.getInt("height");
-            //primer linea
-            x1 = (divTitle) + (restCols * (initTheme - 1)) + ((divSizeColumn / arrayObjective.length()) * (initObjective - 1))
-                    + ((divSizeColumn / arrayObjective.length()) / 2) + (countLine * 2);
-            x2 = x1;
-            y1 = heightPer[0] + heightPer[1];
-            y2 = y1 + (2 * countLine);
+            BigDecimal xA = divTitl.add(divContainerCo);
+            x1 = xA.doubleValue();
+            BigDecimal xB = xA.add(incrementTam);
+            x2 = xB.doubleValue();
+            BigDecimal yA1 = new BigDecimal(heightPer[0]).add(new BigDecimal(heightPer[2]));
+            BigDecimal yA2 = new BigDecimal(heightPer[1]);
+            BigDecimal yA3 = new BigDecimal(initPerspective);
+            BigDecimal yA3a = new BigDecimal(initObjective);
+            BigDecimal yA4 = new BigDecimal(startPers.getInt("height")).
+                    subtract(tam20).divide(new BigDecimal(arraysObjects.length()),
+                    MathContext.DECIMAL128);
+            BigDecimal yA5 = yA3.subtract(tam1).multiply(tam2).add(yA2);
+            BigDecimal yA6 = yA3.subtract(tam1).multiply(tam20).multiply(tam2);
+            BigDecimal yA7 = yA3a.subtract(tam1).multiply(yA4);
+            BigDecimal yA8 = yA4.divide(tam2, MathContext.DECIMAL128);
+            BigDecimal yA = yA1.add(yA5).add(yA6).add(yA7).add(yA8).add(tam120).
+                    add(tam20).add(incrementTam).add(yA3a);
+            y1 = yA.doubleValue();
+            y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-            if (finalPerspectiveIndex > startPerspectiveIndex) {
+            if (isValid) {
+                sb.append(paintLines(countLine, x2, x1, y1, y2, classLine));
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
             countLine++;
             //segunda linea
-            x1 = x2;
-            x2 = divTitle + divContainerCols + (countLine * 2);
-            y1 = y2;
-            y2 = y1;
-            sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-            countLine++;
-            //tercer linea
-            heightPer = getHeigthPerspectives(finalizePerspective - 1, jsonArrows);
-            if (arrayObjectiveFinal.length() == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
-            }
+            heightPer = getHeigthPerspectives(finalizePerspective, jsonArrows);
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + 20 + (((heigthPers - 20) / arrayObjectiveFinal.length())
-                    * (finalizeObjective - 1)) + (((heigthPers - 20) / arrayObjectiveFinal.length())
-                    / 2) + (countLine * 2);
+            BigDecimal yB1 = new BigDecimal(heightPer[0]);
+            BigDecimal yB3 = new BigDecimal(finalizePerspective);
+            BigDecimal yB4 = yB3.multiply(tam2);
+            BigDecimal yB5 = yB3.multiply(tam20).multiply(tam2);
+            BigDecimal yB6 = tam18.subtract(incrementTam);
+            BigDecimal yB = yB1.add(yB4).add(tam120).add(yB3).add(yB5).add(yB6);
+            y2 = yB.doubleValue();
+            sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
+            countLine++;
+            //tercer linea
+            int[] columns = BSCUtils.getSizeColumnsTheme(arrayThemeFinal.length());
+            double restCols = 0;
+            for (int i = 0; i < (finalizeTheme - 1); i++) {
+                restCols = restCols + columns[i];
+            }
+            BigDecimal xC1 = new BigDecimal(restCols).multiply(divContainerColsPer1);
+            int[] columnsObjs1 = BSCUtils.getSizeColumnsObjective(arraysObjectsFinal.length(),
+                    columns[finalizeTheme - 1]);
+            double restColsObj = 0;
+            for (int i = 0; i < (finalizeObjective - 1); i++) {
+                restColsObj = restColsObj + columnsObjs1[i];
+            }
+            BigDecimal xC3 = new BigDecimal(restColsObj).multiply(divContainerColsPer1).
+                    multiply(divSizeColumnsPer1);
+            BigDecimal xC4 = new BigDecimal(columnsObjs1[finalizeObjective - 1]).
+                    divide(tam2, MathContext.DECIMAL128);
+            BigDecimal xC = divTitl.add(xC1).add(xC3).add(xC4).add(incrementTam);
+            x1 = x2;
+            x2 = xC.doubleValue();
+            y1 = y2;
+            BigDecimal yD1 = new BigDecimal(heightPer[0]);
+            BigDecimal yD3 = new BigDecimal(finalizePerspective);
+            BigDecimal yD4 = yD3.multiply(tam2);
+            BigDecimal yD5 = yD3.multiply(tam20).multiply(tam2);
+            BigDecimal yD6 = tam18.subtract(incrementTam);
+            BigDecimal yD = tam120.add(yD1).add(yD4).add(yD5).add(yD3).add(yD6);
+            y2 = yD.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //cuarta linea
-            noCols = arrayThemeFinal.length();//total de columnas
-            if (noCols == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
-            }
-            restCols = (int) divContainerCols / noCols;
             x1 = x2;
-            x2 = (restCols * (finalizeTheme - 1)) + (restCols * (divSizeColumn / 100));
+            x2 = x1;
             y1 = y2;
-            y2 = y1;
+            BigDecimal yE = tam120.add(yD1).add(yD4).add(yD5).add(yD3);//.add(yD5)
+            y2 = yE.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-            if (finalPerspectiveIndex < startPerspectiveIndex) {
+            if (!isValid) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
             countLine++;
@@ -1737,7 +1951,7 @@ public class CausalArrows extends Decorator {
      */
     private HashMap paintOOH_V(int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
             int finalPerspectiveIndex, int finalThemeIndex, int finalObjetiveIndex,
-            JSONObject jsonArrows, int countLine, String classLine) {
+            JSONObject jsonArrows, int countLine, String classLine, int countForRelation, boolean isValid) {
         HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
         int initPerspective = startPerspectiveIndex;
@@ -1746,7 +1960,7 @@ public class CausalArrows extends Decorator {
         int finalizePerspective = finalPerspectiveIndex;
         int finalizeTheme = finalThemeIndex;
         int finalizeObjective = finalObjetiveIndex;
-        if (finalPerspectiveIndex < startPerspectiveIndex) {
+        if (isValid) {
             initPerspective = finalPerspectiveIndex;
             initTheme = finalThemeIndex;
             initObjective = finalObjetiveIndex;
@@ -1759,31 +1973,51 @@ public class CausalArrows extends Decorator {
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
             JSONObject themePer = (JSONObject) arrayTheme.get(initTheme + "");
             JSONObject arraysObjects = (JSONObject) themePer.get("arrayObjective");
-            JSONObject arrayObjective = (JSONObject) arraysObjects.get(initObjective + "");
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
             JSONObject themePerFinal = (JSONObject) arrayThemeFinal.get(finalizeTheme + "");
             JSONObject arraysObjectsFinal = (JSONObject) themePerFinal.get("arrayObjective");
-            JSONObject arrayObjectiveFinal = (JSONObject) arraysObjectsFinal.get(finalizeObjective + "");
             int[] heightPer = getHeigthPerspectives(initPerspective - 1, jsonArrows);
-            int noCols = arrayTheme.length();//total de columnas
-            if (noCols == 0) {
+            double restCols = 0;
+            int[] columns = BSCUtils.getSizeColumnsTheme(arrayTheme.length());
+            for (int i = 0; i < (initTheme - 1); i++) {
+                restCols = restCols + columns[i];
+            }
+            BigDecimal incrementTam = new BigDecimal(1);
+            if (countForRelation < 15) {
+                incrementTam = new BigDecimal(countForRelation).multiply(new BigDecimal("0.2")).
+                        add(new BigDecimal("0.4"));
+            }
+            if (arraysObjects.length() == 0) {
                 throw new java.lang.ArithmeticException("/ by zero");
             }
-            int restCols = (int) divContainerCols / noCols;//valor por columna
-            int heigthPers = startPers.getInt("height");
+            BigDecimal divContainerColsPer1 = divContainerCo.divide(new BigDecimal(100), MathContext.DECIMAL128);
+            BigDecimal divSizeColumnsPer1 = divSizeColum.divide(new BigDecimal(100), MathContext.DECIMAL128);
+            BigDecimal restCols1 = new BigDecimal(restCols).multiply(divContainerColsPer1);
+            BigDecimal columnsInit = new BigDecimal((columns[initTheme - 1]));
+            BigDecimal result = columnsInit.multiply(divContainerColsPer1).multiply(divSizeColumnsPer1).
+                    add(restCols1).add(divTitl);
             //primer linea
-            x1 = (divTitle) + (restCols * (initTheme - 1)) + (restCols * divSizeColumn);
-            x2 = x1 + (countLine * 2);
-            if (arrayObjective.length() == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
-            }
-            y1 = heightPer[0] + heightPer[1] + 20 + ((heigthPers - 20) / arrayObjective.length())
-                    * (initObjective - 1) + (((heigthPers - 20) / arrayTheme.length()) / 2)
-                    + (countLine * 2);
-            y2 = y1 + (2 * countLine);
+            x1 = result.doubleValue();
+            BigDecimal resultX2 = result.add(incrementTam);
+            x2 = resultX2.doubleValue();
+            BigDecimal baseY1a = new BigDecimal(initPerspective).subtract(tam1).
+                    multiply(tam2).add(new BigDecimal(heightPer[1]));
+            BigDecimal heightObjective1a = new BigDecimal(startPers.getInt("height")).
+                    subtract(tam20).divide(new BigDecimal(arraysObjects.length()), MathContext.DECIMAL128);
+            BigDecimal baseY1a1 = new BigDecimal(initObjective).multiply(tam1);
+            BigDecimal baseY1a2 = new BigDecimal(initPerspective).multiply(tam20).multiply(tam2);
+            BigDecimal baseY1a3 = new BigDecimal(initObjective).subtract(tam1);
+            BigDecimal baseY1a31 = baseY1a3.multiply(heightObjective1a);
+            BigDecimal baseY1a4 = heightObjective1a.divide(tam2, MathContext.DECIMAL128);
+            BigDecimal baseY1a5 = new BigDecimal(heightPer[0]).add(new BigDecimal(heightPer[2]));
+            BigDecimal baseY1 = baseY1a5.add(tam120).add(tam20).add(incrementTam).add(baseY1a).
+                    add(baseY1a1).add(baseY1a2).add(baseY1a31).add(baseY1a4);
+            y1 = baseY1.doubleValue();
+            y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-            if (finalPerspectiveIndex > startPerspectiveIndex) {
+            if (isValid) {
+                sb.append(paintLines(countLine, x2, x1, y1, y2, classLine));
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
             countLine++;
@@ -1792,51 +2026,77 @@ public class CausalArrows extends Decorator {
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (countLine * 2);
+            BigDecimal y2a = new BigDecimal(heightPer[0]);
+            BigDecimal y2a1 = baseY1a3.multiply(tam2).add(new BigDecimal(heightPer[1]));
+            BigDecimal y2a2 = new BigDecimal(initPerspective).multiply(tam1);
+            BigDecimal xB1 = tam18.subtract(incrementTam);
+            BigDecimal resultY2 = y2a.add(y2a1).add(y2a2).add(baseY1a2).add(tam120).add(xB1);
+            y2 = resultY2.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //tercer linea
             x1 = x2;
-            x2 = divTitle + divContainerCols + (countLine * 2);
+            BigDecimal resultX2a = divTitl.add(divContainerCo).add(incrementTam);
+            x2 = resultX2a.doubleValue();
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
+            x2 = resultX2a.doubleValue();
             //cuarta linea
             heightPer = getHeigthPerspectives(finalizePerspective, jsonArrows);
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (countLine * 2);
+            BigDecimal yC1 = new BigDecimal(heightPer[0]);
+            BigDecimal yC3 = new BigDecimal(finalizePerspective);
+            BigDecimal yC4 = yC3.multiply(tam2);
+            BigDecimal yC5 = yC3.multiply(tam20).multiply(tam2);
+            BigDecimal yC6 = tam18.subtract(incrementTam);
+            BigDecimal yC = tam120.add(yC1).add(yC4).add(yC5).add(yC3).add(yC6);
+            y2 = yC.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //quinta linea
-            noCols = arrayThemeFinal.length();//total de columnas
-            if (noCols == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
+            columns = BSCUtils.getSizeColumnsTheme(arrayThemeFinal.length());
+            restCols = 0;
+            for (int i = 0; i < (finalizeTheme - 1); i++) {
+                restCols = restCols + columns[i];
             }
-            if (arrayObjectiveFinal.length() == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
+            BigDecimal xC1 = new BigDecimal(restCols).multiply(divContainerColsPer1);
+            int[] columnsObjs1 = BSCUtils.getSizeColumnsObjective(arraysObjectsFinal.length(),
+                    columns[finalizeTheme - 1]);
+            double restColsObj = 0;
+            for (int i = 0; i < (finalizeObjective - 1); i++) {
+                restColsObj = restColsObj + columnsObjs1[i];
             }
-            restCols = (int) divContainerCols / noCols;//valor por columna
-            heigthPers = finalPers.getInt("height");
+            BigDecimal xC3 = new BigDecimal(restColsObj).multiply(divContainerColsPer1).
+                    multiply(divSizeColumnsPer1);
+            BigDecimal xC4 = new BigDecimal(columnsObjs1[finalizeObjective - 1]).divide(tam2, MathContext.DECIMAL128);
+            BigDecimal xC = divTitl.add(xC1).add(xC3).add(xC4).add(incrementTam);
             x1 = x2;
-            x2 = (restCols * (finalizeTheme - 1)) + ((divSizeColumn / arrayObjectiveFinal.length())
-                    * (finalizeObjective - 1)) + (countLine * 2);
+            x2 = xC.doubleValue();
             y1 = y2;
-            y2 = y1;
+            BigDecimal yD1 = new BigDecimal(heightPer[0]);
+            BigDecimal yD3 = new BigDecimal(finalizePerspective);
+            BigDecimal yD4 = yD3.multiply(tam2);
+            BigDecimal yD5 = yD3.multiply(tam20).multiply(tam2);
+            BigDecimal yD6 = tam18.subtract(incrementTam);
+            BigDecimal yD = tam120.add(yD1).add(yD4).add(yD5).add(yD3).add(yD6);
+            y2 = yD.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //sexta linea
-            heightPer = getHeigthPerspectives(finalizePerspective, jsonArrows);
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1];
+            BigDecimal yE = tam120.add(yD1).add(yD4).add(yD5).add(yD3);
+            y2 = yE.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-            if (finalPerspectiveIndex < startPerspectiveIndex) {
+            if (!isValid) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
+            sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
         } catch (JSONException ex) {
             log.error("Exception in paintOOH_V: " + ex);
@@ -1872,7 +2132,7 @@ public class CausalArrows extends Decorator {
      */
     private HashMap paintOOHH(int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
             int finalPerspectiveIndex, int finalThemeIndex, int finalObjetiveIndex,
-            JSONObject jsonArrows, int countLine, String classLine) {
+            JSONObject jsonArrows, int countLine, String classLine, int countForRelation) {
         HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
         int initPerspective = startPerspectiveIndex;
@@ -1894,36 +2154,56 @@ public class CausalArrows extends Decorator {
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
             JSONObject themePer = (JSONObject) arrayTheme.get(initTheme + "");
             JSONObject arraysObjects = (JSONObject) themePer.get("arrayObjective");
-            JSONObject arrayObjective = (JSONObject) arraysObjects.get(initObjective + "");
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
             JSONObject themePerFinal = (JSONObject) arrayThemeFinal.get(finalizeTheme + "");
             JSONObject arraysObjectsFinal = (JSONObject) themePerFinal.get("arrayObjective");
-            JSONObject arrayObjectiveFinal = (JSONObject) arraysObjectsFinal.get(finalizeObjective + "");
             int[] heightPer = getHeigthPerspectives(initPerspective, jsonArrows);
-            int noCols = arrayTheme.length();//total de columnas
-            if (noCols == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
+            BigDecimal incrementTam = new BigDecimal(1);
+            if (countForRelation < 15) {
+                incrementTam = new BigDecimal(countForRelation).multiply(new BigDecimal("0.2")).
+                        add(new BigDecimal("0.4"));
             }
-            if (arrayObjective.length() == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
+            BigDecimal divContainerColsPer1 = divContainerCo.divide(new BigDecimal(100), MathContext.DECIMAL128);
+            BigDecimal divSizeColumnsPer1 = divSizeColum.divide(new BigDecimal(100), MathContext.DECIMAL128);
+            int[] columns = BSCUtils.getSizeColumnsTheme(arrayTheme.length());
+            double restCols = 0;
+            for (int i = 0; i < (initTheme - 1); i++) {
+                restCols = restCols + columns[i];
             }
-            int restCols = (int) divContainerCols / noCols;//valor por columna
             //primer linea
-            x1 = (divTitle) + (restCols * (initTheme - 1))
-                    + ((divSizeColumn / arrayObjective.length()) * (initObjective - 1))
-                    + (countLine * 2);//(restCols * (divSizeColumn/100));//((startThemeIndex * (restCols)) - (restCols / 2));
+            BigDecimal xA1 = new BigDecimal(restCols).multiply(divContainerColsPer1);
+            int[] columnsObjs = BSCUtils.getSizeColumnsObjective(arraysObjects.length(),
+                    columns[initTheme - 1]);
+            double restColsObj = 0;
+            for (int i = 0; i < (initObjective - 1); i++) {
+                restColsObj = restColsObj + columnsObjs[i];
+            }
+            BigDecimal xA3 = new BigDecimal(restColsObj).multiply(divContainerColsPer1).
+                    multiply(divSizeColumnsPer1);
+            BigDecimal xA4 = new BigDecimal(columnsObjs[initObjective - 1]).divide(tam2, MathContext.DECIMAL128);
+            BigDecimal xA = divTitl.add(xA1).add(xA3).add(xA4).add(incrementTam);
+            x1 = xA.doubleValue();
             x2 = x1;
-            y1 = heightPer[0] + heightPer[1];
-            y2 = y1 + (2 * countLine);
+            BigDecimal yA1 = new BigDecimal(heightPer[0]).add(new BigDecimal(heightPer[2]));
+            BigDecimal yA3 = new BigDecimal(initPerspective);
+            BigDecimal yA4 = yA3.multiply(tam2);
+            BigDecimal yA5 = yA3.multiply(tam20).multiply(tam2);
+            BigDecimal yA = tam120.add(yA1).add(yA4).add(yA5).add(yA3);
+            y1 = yA.doubleValue();
+            BigDecimal xB1 = tam18.subtract(incrementTam);
+            BigDecimal yB = yA.add(xB1);
+            y2 = yB.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-            if (finalPerspectiveIndex > startPerspectiveIndex) {
+            if (finalPerspectiveIndex < startPerspectiveIndex) {
+                sb.append(paintLines(countLine, x1, x2, y2, y1, classLine));
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
             countLine++;
             //segunda linea
             x1 = x2;
-            x2 = divTitle + divContainerCols + (countLine * 2);
+            BigDecimal xB = divContainerCo.add(divTitl).add(incrementTam);
+            x2 = xB.doubleValue();
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
@@ -1933,33 +2213,52 @@ public class CausalArrows extends Decorator {
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (countLine * 2);
+            BigDecimal yC1 = new BigDecimal(heightPer[0]);
+            BigDecimal yC3 = new BigDecimal(finalizePerspective);
+            BigDecimal yC4 = yC3.multiply(tam2);
+            BigDecimal yC5 = yC3.multiply(tam20).multiply(tam2);
+            BigDecimal yC6 = tam18.subtract(incrementTam);
+            BigDecimal yC = tam120.add(yC1).add(yC4).add(yC5).add(yC3).add(yC6);
+            y2 = yC.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //cuarta linea
-            noCols = arrayThemeFinal.length();//total de columnas
-            if (noCols == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
+            columns = BSCUtils.getSizeColumnsTheme(arrayThemeFinal.length());
+            restCols = 0;
+            for (int i = 0; i < (finalizeTheme - 1); i++) {
+                restCols = restCols + columns[i];
             }
-            if (arrayObjectiveFinal.length() == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
+            BigDecimal xC1 = new BigDecimal(restCols).multiply(divContainerColsPer1);
+            int[] columnsObjs1 = BSCUtils.getSizeColumnsObjective(arraysObjectsFinal.length(),
+                    columns[finalizeTheme - 1]);
+            restColsObj = 0;
+            for (int i = 0; i < (finalizeObjective - 1); i++) {
+                restColsObj = restColsObj + columnsObjs1[i];
             }
-            restCols = (int) divContainerCols / noCols;
+            BigDecimal xC3 = new BigDecimal(restColsObj).multiply(divContainerColsPer1).
+                    multiply(divSizeColumnsPer1);
+            BigDecimal xC4 = new BigDecimal(columnsObjs1[finalizeObjective - 1]).divide(tam2, MathContext.DECIMAL128);
+            BigDecimal xC = divTitl.add(xC1).add(xC3).add(xC4).add(incrementTam);
             x1 = x2;
-            x2 = (divTitle) + (restCols * (initTheme - 1))
-                    + ((divSizeColumn / arrayObjectiveFinal.length()) * (finalizeObjective - 1))
-                    + (countLine * 2);
+            x2 = xC.doubleValue();
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (countLine * 2);
+            BigDecimal yD1 = new BigDecimal(heightPer[0]);
+            BigDecimal yD3 = new BigDecimal(finalizePerspective);
+            BigDecimal yD4 = yD3.multiply(tam2);
+            BigDecimal yD5 = yD3.multiply(tam20).multiply(tam2);
+            BigDecimal yD6 = tam18.subtract(incrementTam);
+            BigDecimal yD = tam120.add(yD1).add(yD4).add(yD5).add(yD3).add(yD6);
+            y2 = yD.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //quinta linea
-            heightPer = getHeigthPerspectives(finalizePerspective, jsonArrows);
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1];
-            if (finalPerspectiveIndex < startPerspectiveIndex) {
+            BigDecimal yE = tam120.add(yD1).add(yD4).add(yD5).add(yD3);
+            y2 = yE.doubleValue();
+            sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
+            if (finalPerspectiveIndex > startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
             countLine++;
@@ -1995,9 +2294,10 @@ public class CausalArrows extends Decorator {
      * @return objeto de tipo {@code HashMap} con las l&iacute;neas creadas y el
      * contador de l&iacute;neas utilizados
      */
-   private HashMap paintOOIndexContinuos(int startPerspectiveIndex, int startThemeIndex,
+    private HashMap paintOOIndexContinuos(int startPerspectiveIndex, int startThemeIndex,
             int startObjetiveIndex, int finalPerspectiveIndex, int finalThemeIndex,
-            int finalObjetiveIndex, JSONObject jsonArrows, int countLine, String classLine) {
+            int finalObjetiveIndex, JSONObject jsonArrows, int countLine, String classLine,
+            int countForRelation) {
         HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
         int initPerspective = startPerspectiveIndex;
@@ -2019,56 +2319,75 @@ public class CausalArrows extends Decorator {
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
             JSONObject themePer = (JSONObject) arrayTheme.get(initTheme + "");
             JSONObject arraysObjects = (JSONObject) themePer.get("arrayObjective");
-            JSONObject arrayObjective = (JSONObject) arraysObjects.get(initObjective + "");
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
             JSONObject themePerFinal = (JSONObject) arrayThemeFinal.get(finalizeTheme + "");
             JSONObject arraysObjectsFinal = (JSONObject) themePerFinal.get("arrayObjective");
-            JSONObject arrayObjectiveFinal = (JSONObject) arraysObjectsFinal.get(finalizeObjective + "");
             int[] heightPer = getHeigthPerspectives(initPerspective - 1, jsonArrows);
-            int noCols = arrayTheme.length();//total de columnas
-            if (noCols == 0) {
+            if (arraysObjects.length() == 0) {
                 throw new java.lang.ArithmeticException("/ by zero");
             }
-            if (arrayObjective.length() == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
+            BigDecimal incrementTam = new BigDecimal(1);
+            if (countForRelation < 15) {
+                incrementTam = new BigDecimal(countForRelation).multiply(new BigDecimal("0.2")).
+                        add(new BigDecimal("0.4"));
             }
-            int restCols = (int) divContainerCols / noCols;//valor por columna
-            int heightObjective = (startPers.getInt("height") - 20) / arrayObjective.length();
             //primer linea
-            x1 = (divTitle) + (restCols * (initTheme - 1)) + (restCols * (divSizeColumn / 100));//((startThemeIndex * (restCols)) - (restCols / 2));
-            x2 = x1 + (2 * countLine);
-            y1 = heightPer[0] + heightPer[1] + (heightObjective * initObjective) + 20;
+            BigDecimal xA = divTitl.add(divContainerCo);
+            x1 = xA.doubleValue();
+            BigDecimal xA1 = xA.add(incrementTam);
+            x2 = xA1.doubleValue();
+            BigDecimal yA1 = new BigDecimal(heightPer[0]).add(new BigDecimal(heightPer[2]));
+            BigDecimal yA2 = new BigDecimal(heightPer[1]);
+            BigDecimal yA3 = new BigDecimal(initPerspective);
+            BigDecimal yA4 = new BigDecimal(initObjective);
+            BigDecimal yA5 = yA3.subtract(tam1).multiply(tam2).add(yA2);
+            BigDecimal yA6 = new BigDecimal(startPers.getInt("height")).
+                    subtract(tam20).divide(new BigDecimal(arraysObjects.length()), MathContext.DECIMAL128);
+            BigDecimal yA7 = yA4.subtract(tam1).multiply(yA6);
+            BigDecimal yA8 = yA3.subtract(tam1).multiply(tam20).multiply(tam2);
+            BigDecimal yA9 = yA6.divide(tam2, MathContext.DECIMAL128);
+            BigDecimal yACom = yA1.add(yA5).add(yA7).add(yA8).add(yA9).add(tam120).add(tam20).
+                    add(incrementTam).add(yA4);
+            y1 = yACom.doubleValue();
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-            if (finalPerspectiveIndex > startPerspectiveIndex) {
+            if (finalPerspectiveIndex < startPerspectiveIndex) {
+                sb.append(paintLines(countLine, x2, x1, y2, y1, classLine));
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
             countLine++;
             //Segunda linea
             heightPer = getHeigthPerspectives(finalizePerspective - 1, jsonArrows);
-            if (arrayObjectiveFinal.length() == 0) {
+            if (arraysObjectsFinal.length() == 0) {
                 throw new java.lang.ArithmeticException("/ by zero");
             }
-            heightObjective = (finalPers.getInt("height") - 20) / arrayObjectiveFinal.length();
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + 20 + (heightObjective * finalizeObjective);
+            BigDecimal yB1 = new BigDecimal(heightPer[0]);
+            BigDecimal yB2 = new BigDecimal(heightPer[1]);
+            BigDecimal yB3 = new BigDecimal(finalizeObjective);
+            BigDecimal yB4 = new BigDecimal(finalPers.getInt("height")).
+                    subtract(tam20).divide(new BigDecimal(arraysObjectsFinal.length()), MathContext.DECIMAL128);
+            BigDecimal yB5 = new BigDecimal(finalizePerspective);
+            BigDecimal yB6 = yB5.subtract(tam1).multiply(tam2);
+            BigDecimal yB7 = yB3.subtract(tam1).multiply(yB4);
+            BigDecimal yB8 = yB4.divide(tam2, MathContext.DECIMAL128);
+            BigDecimal yB9 = yB5.subtract(tam1).multiply(tam20).multiply(tam2);
+            BigDecimal yB = yB1.add(yB2).add(yB6).add(yB7).add(yB8).add(yB9).add(tam120)
+                    .add(tam20).add(incrementTam).add(yB3);
+            y2 = yB.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //Tercer linea
-            noCols = arrayThemeFinal.length();
-            if (noCols == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
-            }
-            restCols = (int) divContainerCols / noCols;
             x1 = x2;
-            x2 = (divTitle) + (restCols * (finalizeTheme - 1)) + (restCols * (divSizeColumn / 100));
+            BigDecimal cX = divTitl.add(divContainerCo);
+            x2 = cX.floatValue();
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
-            if (finalPerspectiveIndex < startPerspectiveIndex) {
+            if (finalPerspectiveIndex > startPerspectiveIndex) {
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
             countLine++;
@@ -2105,7 +2424,7 @@ public class CausalArrows extends Decorator {
      */
     private HashMap paintOO(int startPerspectiveIndex, int startThemeIndex, int startObjetiveIndex,
             int finalPerspectiveIndex, int finalThemeIndex, int finalObjetiveIndex,
-            JSONObject jsonArrows, int countLine, String classLine) {
+            JSONObject jsonArrows, int countLine, String classLine, int countForRelation) {
         HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
         int initPerspective = startPerspectiveIndex;
@@ -2127,29 +2446,52 @@ public class CausalArrows extends Decorator {
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
             JSONObject themePer = (JSONObject) arrayTheme.get(initTheme + "");
             JSONObject arraysObjects = (JSONObject) themePer.get("arrayObjective");
-            JSONObject arrayObjective = (JSONObject) arraysObjects.get(initObjective + "");
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
             JSONObject themePerFinal = (JSONObject) arrayThemeFinal.get(finalizeTheme + "");
             JSONObject arraysObjectsFinal = (JSONObject) themePerFinal.get("arrayObjective");
-            JSONObject arrayObjectiveFinal = (JSONObject) arraysObjectsFinal.get(finalizeObjective + "");
             int[] heightPer = getHeigthPerspectives(initPerspective - 1, jsonArrows);
-            int noCols = arrayTheme.length();//total de columnas
-            if (noCols == 0) {
+            double restCols = 0;
+            int[] columns = BSCUtils.getSizeColumnsTheme(arrayTheme.length());
+            for (int i = 0; i < (initTheme - 1); i++) {
+                restCols = restCols + columns[i];
+            }
+            BigDecimal incrementTam = new BigDecimal(1);
+            if (countForRelation < 15) {
+                incrementTam = new BigDecimal(countForRelation).multiply(new BigDecimal("0.2")).
+                        add(new BigDecimal("0.4"));
+            }
+            if (arraysObjects.length() == 0) {
                 throw new java.lang.ArithmeticException("/ by zero");
             }
-            int restCols = (int) divContainerCols / noCols;//valor por columna
-            if (arrayObjective.length() == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
-            }
-            int heightObjective = (startPers.getInt("height") - 20) / arrayObjective.length();
+            BigDecimal divContainerColsPer1 = divContainerCo.divide(new BigDecimal(100), MathContext.DECIMAL128);
+            BigDecimal divSizeColumnsPer1 = divSizeColum.divide(new BigDecimal(100), MathContext.DECIMAL128);
+            BigDecimal restCols1 = new BigDecimal(restCols).multiply(divContainerColsPer1);
+            BigDecimal columnsInit = new BigDecimal((columns[initTheme - 1]));
+            BigDecimal result = columnsInit.multiply(divContainerColsPer1).multiply(divSizeColumnsPer1).
+                    add(restCols1).add(divTitl);
             //primer linea
-            x1 = (divTitle) + (restCols * (initTheme - 1)) + (restCols * (0.95));//((startThemeIndex * (restCols)) - (restCols / 2));
-            x2 = x1 + 1;//(2 * countLine)
-            y1 = heightPer[0] + heightPer[1] + (heightObjective * initObjective) + 20;//+ 120
+            x1 = result.doubleValue();
+            BigDecimal resultX2 = result.add(incrementTam);
+            x2 = resultX2.doubleValue();
+            BigDecimal baseY1a = new BigDecimal(initPerspective).subtract(tam1).
+                    multiply(tam2).add(new BigDecimal(heightPer[1]));
+            BigDecimal heightObjective1a = new BigDecimal(startPers.getInt("height")).
+                    subtract(tam20).divide(new BigDecimal(arraysObjects.length()), MathContext.DECIMAL128);
+            BigDecimal baseY1a1 = new BigDecimal(initObjective).multiply(tam1);
+            BigDecimal baseY1a2 = new BigDecimal(initPerspective).multiply(tam20).multiply(tam2);
+            BigDecimal baseY1a3 = new BigDecimal(initObjective).subtract(tam1);
+            BigDecimal baseY1a31 = baseY1a3.multiply(heightObjective1a);
+            BigDecimal baseY1a4 = heightObjective1a.divide(tam2, MathContext.DECIMAL128);
+            BigDecimal baseY1a5 = new BigDecimal(heightPer[0]).add(new BigDecimal(heightPer[2]));
+            BigDecimal baseY1 = baseY1a5.add(tam120).add(tam20).
+                    add(incrementTam).add(baseY1a).add(baseY1a1).add(baseY1a2).add(baseY1a31).
+                    add(baseY1a4);
+            y1 = baseY1.doubleValue();//heightPer[0] + 
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (finalPerspectiveIndex < startPerspectiveIndex) {
+                sb.append(paintLines(countLine, x2, x1, y1, y2, classLine));
                 sb.append(paintLineTriangle(countLine, triangleEnd));
             }
             countLine++;
@@ -2158,12 +2500,20 @@ public class CausalArrows extends Decorator {
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (20 * initPerspective) + 120;//
+            BigDecimal y1a = new BigDecimal(heightPer[0]);
+            BigDecimal y1b = new BigDecimal(heightPer[1]);
+            BigDecimal y1c = new BigDecimal(initPerspective);
+            BigDecimal y1d = y1c.multiply(tam20).multiply(tam2);
+            BigDecimal y1e = tam18.subtract(incrementTam);
+            BigDecimal y1f = y1c.subtract(tam1).multiply(tam2).add(y1b);
+            BigDecimal y1g = y1a.add(y1d).add(y1c).add(y1f).add(tam120).add(y1e);
+            y2 = y1g.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //tercera linea
             x1 = x2;
-            x2 = divTitle + divContainerCols + (1);//(divTitle) + (restCols * (finalizeTheme - 1)) + (restCols * 0.95) + (countLine * 2);
+            BigDecimal resultX2a = divTitl.add(divContainerCo).add(incrementTam);
+            x2 = resultX2a.doubleValue();
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
@@ -2173,45 +2523,58 @@ public class CausalArrows extends Decorator {
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (20 * finalizePerspective) + 120;//+ 120
+            BigDecimal yb = new BigDecimal(heightPer[0]);
+            BigDecimal yb0 = new BigDecimal(heightPer[1]);
+            BigDecimal yb1 = new BigDecimal(finalizePerspective);
+            BigDecimal yb2 = yb1.multiply(tam20).multiply(tam2);
+            BigDecimal yb3 = yb1.multiply(tam1);
+            BigDecimal yb4 = yb1.multiply(tam2).add(yb0);
+            BigDecimal resultY2b = yb.add(yb2).add(yb3).add(yb4).add(tam120).add(incrementTam);
+            y2 = resultY2b.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //quinta linea
-            noCols = arrayThemeFinal.length();//total de columnas
-            if (noCols == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
+            columns = BSCUtils.getSizeColumnsTheme(arrayThemeFinal.length());
+            restCols = 0;
+            for (int i = 0; i < (finalizeTheme - 1); i++) {
+                restCols = restCols + columns[i];
             }
-            restCols = (int) divContainerCols / noCols;//valor por columna
-            x1 = x2;
-            int margin = 1;
-            if ((divContainerCols % noCols) != 0) {
-                margin = divContainerCols % noCols + margin;
-            }
-            x2 = divTitle + (restCols * (finalizeTheme - 1)) + (restCols * (0.95)) + margin;
+            BigDecimal xb = divContainerColsPer1.multiply(new BigDecimal(restCols));
+            BigDecimal xb1 = divContainerColsPer1.multiply(divSizeColumnsPer1).
+                    multiply(new BigDecimal(columns[finalizeTheme - 1]));
+            BigDecimal resultX2b = divTitl.add(incrementTam).add(xb).add(xb1);
+            x2 = resultX2b.doubleValue();
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //sexta linea
             heightPer = getHeigthPerspectives(finalizePerspective - 1, jsonArrows);
-            if (arrayObjectiveFinal.length() == 0) {
+            if (arraysObjectsFinal.length() == 0) {
                 throw new java.lang.ArithmeticException("/ by zero");
             }
-            heightObjective = (finalPers.getInt("height") - 20) / arrayObjectiveFinal.length();
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + (countLine * 2) + (heightObjective * initObjective);//+ 120
+            heightObjective1a = new BigDecimal(finalPers.getInt("height")).
+                    subtract(tam20).divide(new BigDecimal(arraysObjectsFinal.length()), MathContext.DECIMAL128);
+            BigDecimal yc = new BigDecimal(heightPer[0]);
+            BigDecimal yca = yb1.subtract(tam1).multiply(tam2).add(new BigDecimal(heightPer[1]));
+            BigDecimal ycb = yb1.subtract(tam1).multiply(tam20).multiply(tam2);
+            BigDecimal ycb0 = new BigDecimal(finalizeObjective);
+            BigDecimal ycd = ycb0.subtract(tam1).multiply(heightObjective1a);
+            BigDecimal yce = heightObjective1a.divide(tam2, MathContext.DECIMAL128);
+            BigDecimal resultY2c = yc.add(yca).add(ycb).add(ycd).add(yce).add(tam120).add(tam20).add(ycb0).
+                    add(incrementTam);
+            y2 = resultY2c.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //septima linea
-            noCols = arrayThemeFinal.length();//total de columnas
-            if (noCols == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
-            }
-            restCols = (int) divContainerCols / noCols;
             x1 = x2;
-            x2 = (divTitle) + (restCols * (finalizeTheme - 1)) + (restCols * (0.95));;
+            BigDecimal xc = new BigDecimal(columns[finalizeTheme - 1]).multiply(divContainerColsPer1).
+                    multiply(divSizeColumnsPer1);
+            BigDecimal resultX2c = divTitl.add(xb).add(xc);
+            x2 = resultX2c.doubleValue();
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
@@ -2256,9 +2619,8 @@ public class CausalArrows extends Decorator {
     private HashMap paintOOIndexFinalP(int startPerspectiveIndex, int startThemeIndex,
             int startObjetiveIndex, int finalPerspectiveIndex, int finalThemeIndex,
             int finalObjetiveIndex, boolean isFinalTheme, JSONObject jsonArrows,
-            int countLine, String classLine) {
+            int countLine, String classLine, int countForRelation) {
         HashMap map = new HashMap();
-
         StringBuilder sb = new StringBuilder();
         int initPerspective = startPerspectiveIndex;
         int initTheme = startThemeIndex;
@@ -2279,31 +2641,37 @@ public class CausalArrows extends Decorator {
             JSONObject arrayTheme = (JSONObject) startPers.get("arrayTheme");
             JSONObject themePer = (JSONObject) arrayTheme.get(initTheme + "");
             JSONObject arraysObjects = (JSONObject) themePer.get("arrayObjective");
-            JSONObject arrayObjective = (JSONObject) arraysObjects.get(initObjective + "");
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
             JSONObject arrayThemeFinal = (JSONObject) finalPers.get("arrayTheme");
             JSONObject themePerFinal = (JSONObject) arrayThemeFinal.get(finalizeTheme + "");
             JSONObject arraysObjectsFinal = (JSONObject) themePerFinal.get("arrayObjective");
-            JSONObject arrayObjectiveFinal = (JSONObject) arraysObjectsFinal.get(finalizeObjective + "");
-            int[] heightPer = getHeigthPerspectives(initPerspective - 1, jsonArrows);
-            int noCols = arrayTheme.length();//total de columnas
-            if (noCols == 0) {
+            int[] heightPer = getHeigthPerspectives((initPerspective - 1), jsonArrows);
+            if (arraysObjects.length() == 0) {
                 throw new java.lang.ArithmeticException("/ by zero");
             }
-            if (arrayObjective.length() == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
+            BigDecimal incrementTam = new BigDecimal(1);
+            if (countForRelation < 15) {
+                incrementTam = new BigDecimal(countForRelation).multiply(new BigDecimal("0.2")).
+                        add(new BigDecimal("0.4"));
             }
-            int restCols = (int) divContainerCols / noCols;//valor por columna
-            int heightObjective = (startPers.getInt("height") - 20) / arrayObjective.length();
             //primer linea
-            x1 = (divTitle) + divContainerCols ;//((startThemeIndex * (restCols)) - (restCols / 2));
-//            x1 = (divTitle) + (restCols * (initTheme)) + (restCols * (divSizeColumn / 100));//((startThemeIndex * (restCols)) - (restCols / 2));
-            int margE = 2;
-            if(countLine < 5) {
-                margE = countLine;
-            }
-            x2 = x1  + margE;
-            y1 = heightPer[0] + heightPer[1] + ((heightObjective * initObjective) / 2) + 20 + 120;
+            BigDecimal xA = divTitl.add(divContainerCo);
+            x1 = xA.doubleValue();
+            BigDecimal xB = xA.add(incrementTam);
+            x2 = xB.doubleValue();
+            BigDecimal yA1 = new BigDecimal(heightPer[0]).add(new BigDecimal(heightPer[2]));
+            BigDecimal yA2 = new BigDecimal(heightPer[1]);
+            BigDecimal yA3 = new BigDecimal(initPerspective);
+            BigDecimal yA3a = new BigDecimal(initObjective);
+            BigDecimal yA4 = new BigDecimal(startPers.getInt("height")).
+                    subtract(tam20).divide(new BigDecimal(arraysObjects.length()), MathContext.DECIMAL128);
+            BigDecimal yA5 = yA3.subtract(tam1).multiply(tam2).add(yA2);
+            BigDecimal yA6 = yA3.subtract(tam1).multiply(tam20).multiply(tam2);
+            BigDecimal yA7 = yA3a.subtract(tam1).multiply(yA4);
+            BigDecimal yA8 = yA4.divide(tam2, MathContext.DECIMAL128);
+            BigDecimal yA = yA1.add(yA5).add(yA6).add(yA7).add(yA8).add(tam120).
+                    add(tam20).add(incrementTam).add(yA3a);
+            y1 = yA.doubleValue();
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (isFinalTheme) {
@@ -2316,54 +2684,71 @@ public class CausalArrows extends Decorator {
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + 120 + (20 * finalizePerspective);//+ 120 (countLine * 2)
+            BigDecimal yB1 = new BigDecimal(heightPer[0]);
+            BigDecimal yB2 = new BigDecimal(heightPer[1]);
+            BigDecimal yB3 = new BigDecimal(finalizePerspective);
+            BigDecimal yB4 = yB3.multiply(tam2).add(yB2);
+            BigDecimal yB5 = yB3.multiply(tam20).multiply(tam2);
+            BigDecimal yB = yB1.add(yB4).add(tam120).add(incrementTam).add(yB5);
+            y2 = yB.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //tercer linea
-            noCols = arrayThemeFinal.length();//total de columnas
+            int noCols = arrayThemeFinal.length();
             if (noCols == 0) {
                 throw new java.lang.ArithmeticException("/ by zero");
             }
-            restCols = (int) divContainerCols / noCols;
-            x1 = x2;
-            int margin = 1;
-            if ((divContainerCols % noCols) != 0) {
-                margin = (divContainerCols % noCols) + margin;
+            double restCols = 0;
+            int[] columns = BSCUtils.getSizeColumnsTheme(arrayThemeFinal.length());
+            for (int i = 0; i < (finalizeTheme - 1); i++) {
+                restCols = restCols + columns[i];
             }
-            x2 = (divTitle) + (restCols * (finalizeTheme -1)) + (restCols * (0.95))
-                    + margin;
-            //System.out.println("restCols: " + restCols + ", x2= " + x2 + "div: " + divSizeColumn);
-            //System.out.println("mult: " + (divContainerCols%noCols));
-                    //((restCols * (finalizeTheme)) - 2);// + (restCols * (divSizeColumn/100))
-                    //+ (countLine * 2);
+            BigDecimal xC1 = new BigDecimal(restCols).divide(tam100, MathContext.DECIMAL128).
+                    multiply(divContainerCo);
+            BigDecimal xC2 = new BigDecimal(columns[finalizeTheme - 1]);
+            BigDecimal xC3 = xC2.divide(tam100, MathContext.DECIMAL128);
+            BigDecimal xC4 = divSizeColum.divide(tam100, MathContext.DECIMAL128);
+            BigDecimal xC5 = xC3.multiply(divContainerCo).multiply(xC4);
+            BigDecimal xC = divTitl.add(xC1).add(xC5).add(incrementTam);
+            x1 = x2;
+            x2 = xC.doubleValue();
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //cuarta linea
             heightPer = getHeigthPerspectives(finalizePerspective - 1, jsonArrows);
-            if (arrayObjectiveFinal.length() == 0) {
+            if (arraysObjectsFinal.length() == 0) {
                 throw new java.lang.ArithmeticException("/ by zero");
             }
-            heightObjective = (finalPers.getInt("height") - 20) / arrayObjectiveFinal.length();
             x1 = x2;
             x2 = x1;
             y1 = y2;
-            y2 = heightPer[0] + heightPer[1] + 20 + (heightObjective * finalizeObjective);//+ 120
+            BigDecimal yC1 = new BigDecimal(heightPer[0]);
+            BigDecimal yC2 = new BigDecimal(heightPer[1]);
+            BigDecimal yC3 = new BigDecimal(finalPers.getInt("height")).
+                    subtract(tam20).divide(new BigDecimal(arraysObjectsFinal.length()),
+                    MathContext.DECIMAL128);
+            BigDecimal yC4 = yB3.subtract(tam1).multiply(tam2).add(yC2);
+            BigDecimal yC5 = yB3.multiply(tam20).multiply(tam2);
+            BigDecimal yC6 = new BigDecimal(finalizeObjective);
+            BigDecimal yC7 = yC6.subtract(tam1).multiply(yC3);
+            BigDecimal yC8 = yC3.divide(tam2, MathContext.DECIMAL128);
+            BigDecimal yC = yC1.add(yC4).add(yC5).add(yC7).add(yC8).add(tam120).
+                    add(tam20).add(yC6).add(incrementTam);
+            y2 = yC.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
             //quinta linea
-            noCols = arrayThemeFinal.length();//total de columnas
-            if (noCols == 0) {
-                throw new java.lang.ArithmeticException("/ by zero");
-            }
-            restCols = (int) divContainerCols / noCols;
             x1 = x2;
-            margin = 0;
-            if ((divContainerCols % noCols) != 0) {
-                margin = 1;
-            }
-            x2 = (divTitle) + (restCols * (finalizeTheme - 1)) +(restCols * (0.95)) + margin;
+            BigDecimal xD1 = new BigDecimal(restCols).divide(tam100, MathContext.DECIMAL128).
+                    multiply(divContainerCo);
+            BigDecimal xD2 = new BigDecimal(columns[finalizeTheme - 1]);
+            BigDecimal xD3 = xD2.divide(tam100, MathContext.DECIMAL128);
+            BigDecimal xD4 = divSizeColum.divide(tam100, MathContext.DECIMAL128);
+            BigDecimal xD5 = xD3.multiply(divContainerCo).multiply(xD4);
+            BigDecimal xD = divTitl.add(xD1).add(xD5);
+            x2 = xD.doubleValue();
             y1 = y2;
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
@@ -2388,19 +2773,25 @@ public class CausalArrows extends Decorator {
      */
     private JSONObject getArrayTheme(Perspective perspective) {
         JSONObject arrayTheme = new JSONObject();
-        Iterator<Theme> itTheme = perspective.listThemes();
+        Iterator itTheme = perspective.listThemes();
         int count = 1;
-        while (itTheme.hasNext()) {
-            try {
-                Theme theme = itTheme.next();
-                JSONObject dataTheme = new JSONObject();
-                dataTheme.put("title", theme.getTitle());
-                dataTheme.put("arrayObjective", getArrayObjective(theme));
-                dataTheme.put("index", theme.getIndex());
-                arrayTheme.put(count + "", dataTheme);
-                count++;
-            } catch (JSONException ex) {
-                log.error("Exception getArrayTheme: " + ex);
+        if (itTheme.hasNext()) {
+            itTheme = BSCUtils.sortObjSortable(itTheme).listIterator();
+            while (itTheme.hasNext()) {
+                Theme theme = (Theme) itTheme.next();
+                try {
+                    JSONObject dataTheme = new JSONObject();
+                    dataTheme.put("title", theme.getTitle());
+                    JSONObject arrayObjs = getArrayObjective(theme);
+                    dataTheme.put("arrayObjective", arrayObjs);
+                    dataTheme.put("index", theme.getIndex());
+                    if (arrayObjs.length() > 0) {
+                        arrayTheme.put(count + "", dataTheme);
+                        count++;
+                    }
+                } catch (JSONException ex) {
+                    log.error("Exception getArrayTheme: " + ex);
+                }
             }
         }
         return arrayTheme;
@@ -2416,18 +2807,21 @@ public class CausalArrows extends Decorator {
      */
     private JSONObject getArrayObjective(Theme theme) {
         JSONObject arrayObjective = new JSONObject();
-        Iterator<Objective> itObjective = theme.listObjectives();
+        Iterator itObjective = theme.listObjectives();
         int count = 1;
-        while (itObjective.hasNext()) {
-            try {
-                Objective objective = itObjective.next();
-                JSONObject dataObjective = new JSONObject();
-                dataObjective.put("title", objective.getTitle());
-                dataObjective.put("index", objective.getIndex());
-                arrayObjective.put(count + "", dataObjective);
-                count++;
-            } catch (JSONException ex) {
-                log.error("Error getArrayObjectives: " + ex);
+        if (itObjective.hasNext()) {
+            itObjective = BSCUtils.sortObjSortable(itObjective).listIterator();
+            while (itObjective.hasNext()) {
+                Objective objective = (Objective) itObjective.next();
+                try {
+                    JSONObject dataObjective = new JSONObject();
+                    dataObjective.put("title", objective.getTitle());
+                    dataObjective.put("index", objective.getIndex());
+                    arrayObjective.put(count + "", dataObjective);
+                    count++;
+                } catch (JSONException ex) {
+                    log.error("Error getArrayObjectives: " + ex);
+                }
             }
         }
         return arrayObjective;
@@ -2445,31 +2839,38 @@ public class CausalArrows extends Decorator {
     private int getHeightPerspective(Perspective perspective, Resource base, int maxObject) {
         int height = 120;
         if (base.getData("perspective" + base.getId() + perspective.getId()) == null) {
-            if ((base.getData("widthVerticalObjective") != null) &&
-                    (base.getData("widthVerticalObjective").trim().length() != 0)) {
+            if ((base.getData("widthVerticalObjective") != null)
+                    && (base.getData("widthVerticalObjective").trim().length() != 0)) {
                 height = Integer.parseInt(base.getData("widthVerticalObjective"));
             }
             if (maxObject > 0) {
                 height = height * maxObject;
             }
         } else if ((base.getData("perspective" + base.getId() + perspective.getId())) != null
-                && (base.getData("widthHorizontalObjective") != null) &&
-                (base.getData("widthHorizontalObjective").trim().length() != 0)) {
+                && (base.getData("widthHorizontalObjective") != null)
+                && (base.getData("widthHorizontalObjective").trim().length() != 0)) {
             height = Integer.parseInt(base.getData("widthHorizontalObjective"));
         }
-        height = height + 20;//Cabecera del tema
+        height = height + getHeightDifferentiator(perspective, base);
+        return height;
+    }
+
+    private int getHeightDifferentiator(Perspective perspective, Resource base) {
+        int height = 0;//Cabecera del tema
         Iterator itGroupPers = perspective.listDifferentiatorGroups();
         if (itGroupPers.hasNext()) {
             while (itGroupPers.hasNext()) {
                 DifferentiatorGroup diffeGroup = (DifferentiatorGroup) itGroupPers.next();
-                Iterator<Differentiator> itDiff = diffeGroup.listDifferentiators();
-                if (itDiff.hasNext()) {
-                    int heigthDiff = 120;
-                    if ((base.getData("widthHorizontalDifferentiator") != null) &&
-                            (base.getData("widthHorizontalDifferentiator").trim().length() != 0)) {
-                        heigthDiff = Integer.parseInt(base.getData("widthHorizontalDifferentiator"));
+                if (diffeGroup.isActive()) {
+                    Iterator<Differentiator> itDiff = diffeGroup.listDifferentiators();
+                    if (itDiff.hasNext()) {
+                        int heigthDiff = 120;
+                        if ((base.getData("widthHorizontalDifferentiator") != null)
+                                && (base.getData("widthHorizontalDifferentiator").trim().length() != 0)) {
+                            heigthDiff = Integer.parseInt(base.getData("widthHorizontalDifferentiator"));
+                        }
+                        height = height + heigthDiff + 40 + 4; //cabecera del grupo de diferenciadores
                     }
-                    height = height + heigthDiff + 20; //cabecera del grupo de diferenciadores
                 }
             }
         }
@@ -2491,7 +2892,6 @@ public class CausalArrows extends Decorator {
             Theme theme = it.next();
             int countObjective = 0;
             Iterator<Objective> itObjective = theme.listObjectives();
-
             while (itObjective.hasNext()) {
                 Objective objective = itObjective.next();
                 if ((objective.isActive()) && (objective.isValid())

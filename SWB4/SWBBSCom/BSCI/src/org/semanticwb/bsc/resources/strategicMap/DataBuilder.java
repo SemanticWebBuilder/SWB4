@@ -4,6 +4,7 @@
  */
 package org.semanticwb.bsc.resources.strategicMap;
 
+import java.lang.String;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -11,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.accessory.Differentiator;
@@ -20,6 +22,8 @@ import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.bsc.element.Perspective;
 import org.semanticwb.bsc.element.Theme;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.WebPage;
+import org.semanticwb.model.WebSite;
 
 /**
  * Clase que permite obtener los datos de un mapa estrat&eacute;gico. Obtiene la
@@ -81,7 +85,12 @@ public class DataBuilder {
     private JSONObject getDataHeaders(BSC bsc) {
         JSONObject headers = new JSONObject();
         try {
-            String logo = bsc.getLogo() == null ? "" : bsc.getLogo();
+            String logo = "";
+            if ((bsc.getLogo() != null) && (bsc.getLogo().trim().length() > 0)) {
+                logo = SWBPortal.getWebWorkPath() + bsc.getWorkPath() + "/" + bsc.getLogo();
+                //BSC.bsc_logo.getName()+ "_" + bsc.getId() 
+                //+ "_" + bsc.getLogo();
+            }
             String vision = bsc.getVision() == null ? "" : bsc.getVision();
             String mision = bsc.getMission() == null ? "" : bsc.getMission();
             headers.put("logo", logo);
@@ -121,10 +130,10 @@ public class DataBuilder {
                 || (base.getData("amountPerspective").equals("")))
                 ? 200 : Integer.parseInt(base.getData("amountPerspective"));
         title = SWBUtils.TEXT.cropText(title, sizeTitle);
-        boolean titleHorizontal = (base.getData("show_" + perspective.getTitle() + "_"
+        boolean titleHorizontal = (base.getData("show_perspective" 
                 + perspective.getId())) == null ? false : true;
-        String colorText = (base.getData("ty_" + perspective.getTitle() + "_" + perspective.getId())
-                == null) ? "black" : base.getData("ty_" + perspective.getTitle() + "_"
+        String colorText = (base.getData("ty_perspective" + "_" + perspective.getId())
+                == null) ? "black" : base.getData("ty_perspective" + "_"
                 + perspective.getId());
         Iterator itTheme = perspective.listThemes();
 
@@ -148,14 +157,16 @@ public class DataBuilder {
         if (itDifferGroup.hasNext()) {
             while (itDifferGroup.hasNext()) {
                 DifferentiatorGroup differentiatorGroup = itDifferGroup.next();
-                JSONObject dataDifferGroup = getDataDifferentiatorGroup(base, differentiatorGroup);
-                try {
-                    if (dataDifferGroup.getInt("countDifferentiator") > 0) {
-                        arrayDifferentiatorGroup.put(dataDifferGroup);
-                        countDiffGroup++;
+                if (differentiatorGroup.isActive()) {
+                    JSONObject dataDifferGroup = getDataDifferentiatorGroup(base, differentiatorGroup);
+                    try {
+                        if (dataDifferGroup.getInt("countDifferentiator") > 0) {
+                            arrayDifferentiatorGroup.put(dataDifferGroup);
+                            countDiffGroup++;
+                        }
+                    } catch (JSONException ex) {
+                        log.error("Exception try get countObjectives: " + ex);
                     }
-                } catch (JSONException ex) {
-                    log.error("Exception try get countObjectives: " + ex);
                 }
             }
         }
@@ -203,11 +214,11 @@ public class DataBuilder {
                 arrayObjectives.put(getDataObjective(base, objective, period));
                 countObjectives++;
             }
-            String colorText = (base.getData("ty_" + theme.getTitle() + "_" + theme.getId())
-                    == null) ? "black" : base.getData("ty_" + theme.getTitle() + "_"
+            String colorText = (base.getData("ty_theme" + "_" + theme.getId())
+                    == null) ? "black" : base.getData("ty_theme" + "_"
                     + theme.getId());
-            String bgcolor = (base.getData("bg_" + theme.getTitle() + "_" + theme.getId()) == null)
-                    ? "white" : base.getData("bg_" + theme.getTitle() + "_" + theme.getId());
+            String bgcolor = (base.getData("bg_theme" + "_" + theme.getId()) == null)
+                    ? "white" : base.getData("bg_theme" + "_" + theme.getId());
             String title = theme.getTitle();
             int sizeTitle = ((base.getData("amountTheme") == null)
                     || (base.getData("amountTheme").trim().length() == 0))
@@ -244,23 +255,29 @@ public class DataBuilder {
             DifferentiatorGroup differentiatorGroup) {
         JSONObject dataDiffeGroup = new JSONObject();
         JSONArray arrayDifferentiator = new JSONArray();
-        Iterator<Differentiator> itDiffe = differentiatorGroup.listDifferentiators();
+        Iterator itDiffe = differentiatorGroup.listDifferentiators();
+        List itDifferentiator = null;
         if (itDiffe.hasNext()) {
+            itDifferentiator = BSCUtils.sortObjSortable(itDiffe);
+            itDiffe = itDifferentiator.iterator();
             int countDifferentiator = 0;
             while (itDiffe.hasNext()) {
-                Differentiator differentiator = itDiffe.next();
-                arrayDifferentiator.put(getDataDifferentiator(base, differentiator));
-                countDifferentiator++;
+                Differentiator differentiator = (Differentiator)itDiffe.next();
+                if (differentiator.isActive()) {
+                    arrayDifferentiator.put(getDataDifferentiator(base, differentiator));
+                    countDifferentiator++;
+                }
             }
-            String colorText = (base.getData("ty_" + differentiatorGroup.getTitle() + "_"
-                    + differentiatorGroup.getId())) == null ? "black" : (base.getData("ty_"
-                    + differentiatorGroup.getTitle() + "_" + differentiatorGroup.getId()));
-            String bgcolor = (base.getData("bg_" + differentiatorGroup.getTitle() + "_"
-                    + differentiatorGroup.getId()) == null) ? "white" : (base.getData("bg_"
-                    + differentiatorGroup.getTitle() + "_" + differentiatorGroup.getId()));
+            String colorText = (base.getData("ty_diffG" + "_"
+                    + differentiatorGroup.getId())) == null ? "black" : (base.getData("ty_diffG"
+                    + "_" + differentiatorGroup.getId()));
+            String bgcolor = (base.getData("bg_diffG" + "_"
+                    + differentiatorGroup.getId()) == null) ? "white" : (base.getData("bg_diffG"
+                    + "_" + differentiatorGroup.getId()));
             String title = differentiatorGroup.getTitle();
             int sizeTitle = ((base.getData("amountDifferentiator") == null)
-                    || (base.getData("amountDifferntiator").trim().length() == 0))
+                    || ((base.getData("amountDifferentiator") != null)
+                    && (base.getData("amountDifferentiator").trim().length() == 0)))
                     ? 200 : Integer.parseInt(base.getData("amountDifferntiator"));
             title = SWBUtils.TEXT.cropText(title, sizeTitle);
             try {
@@ -297,13 +314,19 @@ public class DataBuilder {
                 ? 200 : Integer.parseInt(base.getData("amountObjective"));
         title = SWBUtils.TEXT.cropText(title, sizeTitle);
         String prefix = (objective.getPrefix() == null) ? "" : objective.getPrefix();
+        WebSite ws = base.getWebSite();
+        WebPage wp = ws.getWebPage(Objective.class.getSimpleName());
+        String url = "#";
+        if(wp != null) {
+            url = wp.getUrl() + "?suri=" + wp.getURI();
+        }
         try {
             dataObjective.put("title", title);
             dataObjective.put("sponsor", BSCUtils.getSponsor(objective.getSponsor()));
             dataObjective.put("icon", BSCUtils.getIconPeriodStatus(period, objective));
             dataObjective.put("periodicity", BSCUtils.getFrequencyObj(objective.getPeriodicity()));
             dataObjective.put("prefix", prefix);
-            dataObjective.put("url", objective.getURI());
+            dataObjective.put("url", url);
             dataObjective.put("index", objective.getIndex() + "");
         } catch (JSONException ex) {
             log.error("Error try get data Objective: " + ex);

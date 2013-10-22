@@ -179,23 +179,23 @@ public class StrategicMap extends GenericResource {
         Iterator<Perspective> itPers = Perspective.ClassMgr.listPerspectives(ws);
         while (itPers.hasNext()) {
             Perspective perspective = itPers.next();
-            String showTitlePerspective = base.getData("show_" + perspective.getTitle()
-                    + perspective.getId()) == null ? "" : base.getData("show_" + perspective.getTitle()
+            String showTitlePerspective = base.getData("show_perspective" 
+                    + perspective.getId()) == null ? "" : base.getData("show_perspective"
                     + perspective.getId());
-            String colorTextPerspective = base.getData("ty_" + perspective.getTitle() + perspective.getId())
-                    == null ? "" : base.getData("ty_" + perspective.getTitle() + perspective.getId());
+            String colorTextPerspective = base.getData("ty_perspective" + perspective.getId())
+                    == null ? "" : base.getData("ty_perspective" + perspective.getId());
             String viewPerspective = base.getData("perspective" + id + perspective.getId()) == null ? ""
                     : base.getData("perspective" + id + perspective.getId());
 
             String select = showTitlePerspective.equals("") ? "" : "checked";
-            sb.append("\n<ul>");
-            sb.append("\n<li>" + perspective.getTitle() + ": </li>");
+            sb.append("\n<ul class=\"swbform-ul\">");
+            sb.append("\n<li class=\"swbform-li\">" + perspective.getTitle() + ": </li>");
 
-            sb.append("\n<li class=\"swbform-li\"><input id=\"show_" + perspective.getTitle() + perspective.getId());
-            sb.append("\" name=\"show_" + perspective.getTitle() + perspective.getId() + "\" ");
-            sb.append("type=\"checkbox\" value=\"show_" + perspective.getTitle() + perspective.getId() + "\" ");
+            sb.append("\n<li class=\"swbform-li\"><input id=\"show_perspective" + perspective.getId());
+            sb.append("\" name=\"show_perspective" + perspective.getId() + "\" ");
+            sb.append("type=\"checkbox\" value=\"show_perspective" + perspective.getId() + "\" ");
             sb.append(" data-dojo-type=\"dijit.form.CheckBox\" " + select + " class=\"swbform-label\">");
-            sb.append("\n<label for=\"show_" + perspective.getTitle() + perspective.getId() + "\">");
+            sb.append("\n<label for=\"show_perspective" + perspective.getId() + "\">");
             sb.append("Mostra titulo horizontal:</label></li>");
             sb.append("\n</li>");
 
@@ -208,7 +208,7 @@ public class StrategicMap extends GenericResource {
             sb.append("\nMostrar vista en forma horizontal</label></li>");
             sb.append("\n</ul>");
 
-            String strPers = "ty_" + perspective.getTitle() + perspective.getId();
+            String strPers = "ty_perspective" + perspective.getId();
             sb.append("\n<li class=\"swbform-li\"><label for=\"" + strPers + "\" class=\"swbform-label\">");
             sb.append("Color de letra titulo: </label>");
             sb.append("\n<input id=\"" + strPers + "\" name=\"" + strPers + "\" type=\"text\" ");
@@ -216,7 +216,6 @@ public class StrategicMap extends GenericResource {
             sb.append("\n</li>");
 
         }
-        //fin de recorrer perspectivas
 
         sb.append("\n</fieldset>");
 
@@ -237,21 +236,21 @@ public class StrategicMap extends GenericResource {
         Iterator<Theme> itTheme = Theme.ClassMgr.listThemes(ws);
         while (itTheme.hasNext()) {
             Theme theme = itTheme.next();
-            String colorBgTheme = base.getData("bg_" + theme.getTitle() + "_" + theme.getId()) == null ? ""
-                    : base.getData("bg_" + theme.getTitle() + "_" + theme.getId());
-            String colorTxtTheme = base.getData("ty_" + theme.getTitle() + "_" + theme.getId()) == null ? ""
-                    : base.getData("ty_" + theme.getTitle() + "_" + theme.getId());
-            sb.append("\n<ul>");
-            sb.append("\n<li>" + theme.getTitle() + ": </li>");
+            String colorBgTheme = base.getData("bg_theme" + "_" + theme.getId()) == null ? ""
+                    : base.getData("bg_theme" + "_" + theme.getId());
+            String colorTxtTheme = base.getData("ty_theme" + "_" + theme.getId()) == null ? ""
+                    : base.getData("ty_theme" + "_" + theme.getId());
+            sb.append("\n<ul class=\"swbform-ul\">");
+            sb.append("\n<li class=\"swbform-li\">" + theme.getTitle() + ": </li>");
 
-            String strTheme = "ty_" + theme.getTitle() + "_" + theme.getId();
+            String strTheme = "ty_theme" + "_" + theme.getId();
             sb.append("\n<li class=\"swbform-li\"><label for=\"" + strTheme + "\" class=\"swbform-label\">");
             sb.append("Color de letra para titulo: </label>");
             sb.append("\n<input id=\"" + strTheme + "\" name=\"" + strTheme + "\" type=\"text\" ");
             sb.append("value=\"" + colorBgTheme + "\" dojoType=\"dijit.form.ValidationTextBox\">");
             sb.append("\n</li>");
 
-            String strTheme1 = "bg_" + theme.getTitle() + "_" + theme.getId();
+            String strTheme1 = "bg_theme" + "_" + theme.getId();
             sb.append("\n<li class=\"swbform-li\"><label for=\"" + strTheme1 + "\" class=\"swbform-label\">");
             sb.append("Color de Fondo: </label>");
             sb.append("\n<input id=\"" + strTheme1 + "\" name=\"" + strTheme1 + "\" type=\"text\" ");
@@ -315,21 +314,21 @@ public class StrategicMap extends GenericResource {
         Iterator<DifferentiatorGroup> itDiffeG = DifferentiatorGroup.ClassMgr.listDifferentiatorGroups(ws);
         while (itDiffeG.hasNext()) {
             DifferentiatorGroup diffG = itDiffeG.next();
-            String colorBgTheme = base.getData("bg_" + diffG.getTitle() + "_" + diffG.getId()) == null ? ""
-                    : base.getData("bg_" + diffG.getTitle() + "_" + diffG.getId());
-            String colorTxtTheme = base.getData("ty_" + diffG.getTitle() + "_" + diffG.getId()) == null ? ""
-                    : base.getData("ty_" + diffG.getTitle() + "_" + diffG.getId());
-            sb.append("\n<ul>");
-            sb.append("\n<li>" + diffG.getTitle() + ": </li>");
+            String colorBgTheme = base.getData("bg_diffG" + "_" + diffG.getId()) == null ? ""
+                    : base.getData("bg_diffG" + "_" + diffG.getId());
+            String colorTxtTheme = base.getData("ty_diffG" + "_" + diffG.getId()) == null ? ""
+                    : base.getData("ty_diffG" + "_" + diffG.getId());
+            sb.append("\n<ul class=\"swbform-ul\">");
+            sb.append("\n<li class=\"swbform-li\">" + diffG.getTitle() + ": </li>");
 
-            String strTheme = "ty_" + diffG.getTitle() + "_" + diffG.getId();
+            String strTheme = "ty_diffG" + "_" + diffG.getId();
             sb.append("\n<li class=\"swbform-li\"><label for=\"" + strTheme + "\" class=\"swbform-label\">");
             sb.append("Color de letra para titulo: </label>");
             sb.append("\n<input id=\"" + strTheme + "\" name=\"" + strTheme + "\" type=\"text\" ");
             sb.append("value=\"" + colorBgTheme + "\" dojoType=\"dijit.form.ValidationTextBox\">");
             sb.append("\n</li>");
 
-            String strTheme1 = "bg_" + diffG.getTitle() + "_" + diffG.getId();
+            String strTheme1 = "bg_diffG" + "_" + diffG.getId();
             sb.append("\n<li class=\"swbform-li\"><label for=\"" + strTheme1 + "\" class=\"swbform-label\">");
             sb.append("Color de Fondo: </label>");
             sb.append("\n<input id=\"" + strTheme1 + "\" name=\"" + strTheme1 + "\" type=\"text\" ");
@@ -445,6 +444,7 @@ public class StrategicMap extends GenericResource {
         String id = base.getId();
         if ("update".equals(action)) {
             Enumeration enumAttri = request.getParameterNames();
+            
             Iterator<Perspective> itPers = Perspective.ClassMgr.listPerspectives(ws);
             while (itPers.hasNext()) {
                 Perspective perspective = itPers.next();
