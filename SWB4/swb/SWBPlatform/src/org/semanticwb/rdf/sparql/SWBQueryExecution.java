@@ -442,12 +442,13 @@ public class SWBQueryExecution implements QueryExecution
 //                            if(sext!=null)ext=SWBUtils.IO.readInputStream(sext);
 //                        }catch(Exception e){log.error(e);}
                         Node n = null;
-                        if(name.equals("count(*)"))
+                        Object obj=rs.getObject(name);
+                        if(obj instanceof Integer)
                         {
                             n=Node.createLiteral(LiteralLabelFactory.create(rs.getInt(name)));
                         }else
                         {
-                            n = ((RGraph)model.getGraph()).decodeObject(rs.getString(name), ext);
+                            n = ((RGraph)model.getGraph()).decodeObject(obj.toString(), ext);
                         }
                         if (n != null)
                         {
