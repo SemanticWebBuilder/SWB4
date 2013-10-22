@@ -10,7 +10,6 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormValidateException;
-import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
