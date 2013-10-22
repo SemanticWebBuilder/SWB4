@@ -4,6 +4,7 @@
     Author     : javier.solis.g
 --%>
 
+<%@page import="com.hp.hpl.jena.rdf.model.RDFNode"%>
 <%@page import="com.hp.hpl.jena.query.QueryExecution"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="com.hp.hpl.jena.query.QuerySolution"%>
@@ -94,7 +95,11 @@
             {
                 String name=it.next();
                 out.println("<td>");
-                out.println(qs.get(name));
+                RDFNode node=qs.get(name);
+                String val="";
+                if(node.isLiteral())val=node.asLiteral().getLexicalForm();
+                else if(node.isResource())val=node.asResource().getURI();
+                out.println(val);
                 out.println("</td>");
             }
             out.println("</tr>");
