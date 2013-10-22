@@ -126,28 +126,28 @@
         
     <form type="dijit.form.Form" id="editedVideo" action="<%=paramRequest.getActionUrl().setAction("doUpdateVideo").setParameter("suri", objUri).setParameter("videoId", videoId)%>" method="post" onsubmit="submitForm('editedVideo'); try{document.getElementById('csLoading').style.display='inline';}catch(noe){}; return false;">
     <fieldset>
-        <legend>Title:</legend>
+        <legend><%=paramRequest.getLocaleString("title")%>:</legend>
         <div align="left">
             <input type="text" name="title" size="67" value="<%=title%>"/>
         </div>
     </fieldset>
     
     <fieldset>
-        <legend>Description:</legend>
+        <legend><%=paramRequest.getLocaleString("description")%>:</legend>
         <div align="left">
             <textarea rows="5" cols="50" name="description"><%=description%></textarea>
         </div>
     </fieldset>
     
     <fieldset>
-        <legend>Video tags:</legend>
+        <legend><%=paramRequest.getLocaleString("videoTags")%>:</legend>
         <div align="left">
             <input type="text" name="keywords" size="67" value="<%=keywords%>"/>
         </div>
     </fieldset>
     
     <fieldset>
-        <legend>Category:</legend>
+        <legend><%=paramRequest.getLocaleString("category")%>:</legend>
         <div align="left">
             <select name="category">
                 <%
@@ -156,7 +156,7 @@
                         while (itYtube.hasNext()) {
                             YouTubeCategory socialCategory = (YouTubeCategory) itYtube.next();
                 %>
-                    <option <%=category.equals(socialCategory.getId()) ? " selected " : ""%>value="<%=socialCategory.getId()%>"><%=socialCategory.getTitle()%></option>
+                    <option <%=category.equals(socialCategory.getId()) ? " selected " : ""%>value="<%=socialCategory.getId()%>"><%=SWBUtils.TEXT.encode(socialCategory.getTitle(), "UTF-8")%></option>
                 <%
                     }
                 %>
@@ -164,7 +164,7 @@
         </div>
     </fieldset>
     <fieldset>
-        <legend>Privacy:</legend>
+        <legend><%=paramRequest.getLocaleString("privacy")%>:</legend>
         <div align="left">
             <select name="privacy">
                 <%
@@ -186,7 +186,7 @@
             </select>
         </div>
     </fieldset>
-            <div align="center"><button dojoType="dijit.form.Button" type="submit">Actualizar</button></div>
+            <div align="center"><button dojoType="dijit.form.Button" type="submit"><%=paramRequest.getLocaleString("update")%></button></div>
     </form>
 
 <%
