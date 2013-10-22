@@ -13,6 +13,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.WebSite;
 
 /**
  * Patrón de diseño: Decorador (Componente concreto). Define un objeto al cual
@@ -84,13 +85,15 @@ public class CausalMap extends ComponentMap {
         try {
             JSONObject headerData = (JSONObject) header.get("headers");
             sb.append("<div style=\"clear:both; width:100%;float:left;height:120px\">");
-            sb.append("     \n<div style=\"clear:both; width:33%;float:left;height:120px;margin-top:10px;\">");
+            sb.append("     \n<div style=\"width:30%;float:left;height:110px;margin-top:10px;");
+            sb.append("       text-align:center; margin-right:3%;\">");
             sb.append(headerData.get("mision"));
             sb.append("     \n</div>");
-            sb.append("     \n<div style=\"clear:both; width:34%;float:left;height:\"120px\";margin-top:10px;\">");
+            sb.append("     \n<div style=\"width:34%;float:left;height:110px;margin-top:10px;\">");
             sb.append("      \n<img src=\"" + headerData.get("logo") + "\">");
             sb.append("     \n</div>");
-            sb.append("     \n<div style=\"clear:both; width:33%;float:left;height:\"120px\";\">");
+            sb.append("     \n<div style=\"width:30%;float:left;height:110px;margin-top:10px;");
+            sb.append("       text-align:center; margin-left:2%; margin-right:1%\">");
             sb.append(headerData.get("vision"));
             sb.append("     \n</div>");
             sb.append("\n</div>");
@@ -128,7 +131,7 @@ public class CausalMap extends ComponentMap {
             int countDifferentiator = Integer.parseInt(perspective.get("countDiffGroup").toString());
             if ((countTheme > 0) || (countDifferentiator > 0)) {
                 String titlePers = perspective.get("title").toString();
-                sb.append("\n<div style=\"clear:both; width:5%;float:left;\">");
+                sb.append("\n<div style=\"clear:both; width:5%;float:left;\" class=\"titlePersp\">");
                 if (perspective.getBoolean("titleHorizontal")) {
                     sb.append("\n<div style=\"clear:both; width:100%;float:left;text-align:center;color:\"");
                     sb.append(perspective.get("colorText") + "\";\">");
@@ -142,6 +145,10 @@ public class CausalMap extends ComponentMap {
                 }
                 sb.append("\n</div>");
                 sb.append("     \n<div style=\"width:92%;float:left;\">");
+                if (countDifferentiator > 0) {
+                    JSONArray arrayDifferentiatorGroup = (JSONArray) perspective.get("arrayDifferentiatorGroup");
+                    sb.append(paintDivGroupDifferentiator(arrayDifferentiatorGroup, countDifferentiator, base));
+                }                
                 sb.append("     \n<div style=\"width:100%;float:left;\">");
                 JSONArray arrayThemes = (JSONArray) perspective.get("arrayThemes");
                 if ((countTheme > 0) && (perspective.getBoolean("showHorizontal"))) {
@@ -150,10 +157,6 @@ public class CausalMap extends ComponentMap {
                     sb.append(paintDivVerticalView(arrayThemes, countTheme, base));
                 }
                 sb.append("     \n</div>");
-                if (countDifferentiator > 0) {
-                    JSONArray arrayDifferentiatorGroup = (JSONArray) perspective.get("arrayDifferentiatorGroup");
-                    sb.append(paintDivGroupDifferentiator(arrayDifferentiatorGroup, countDifferentiator, base));
-                }
                 sb.append("     \n</div>");
                 sb.append("     <div style=\"clear:both; width:3%;float:left;\"></div>");
             }
@@ -178,7 +181,7 @@ public class CausalMap extends ComponentMap {
         //Array que tendra la cantidad de objetivos por tema
         int[] objsForTheme = getObjectivesForTheme(arrayThemes, countTheme);//new int[countTheme]; 
         //Array con el tamanio de temas a lo ancho
-        int[] arraySizeColThemes = getSizeColumnsTheme(countTheme);
+        int[] arraySizeColThemes = BSCUtils.getSizeColumnsTheme(countTheme);
 
         for (int i = 0; i < arraySizeColThemes.length; i++) {
             //Si el tema no es el final asigna 95% sino asigna 100%
@@ -196,31 +199,38 @@ public class CausalMap extends ComponentMap {
                 fontColor = ((fontColor == null) || (fontColor.trim().length() < 1)
                         || (objObject.getBoolean("isHidden"))) ? "black" : fontColor;
                 sb.append("                 ");
-                sb.append(" <div style=\"background-color:" + backgroundColor + ";color:" + fontColor);
-                sb.append(";clear:both;text-align:center;width:" + configuration[0] + "%;");
-                sb.append("border:1px solid black;border-left:" + configuration[1] + "px solid");
+                
+//                sb.append("                 <div style=\"background-color:" + backgroundColor + ";color:" + fontColor + ";clear:both;text-align:center;width:"
+//                        + sizedColumn + "%;border:1px solid black;border-left:" + increMarginObjIni
+//                        + "px solid black;border-right:" + increMarginObjFin + "px solid black;border-bottom-style:none\">");
+//                sb.append("                 " + objObject.get("name"));
+//                sb.append("                 </div>");
+                
+                sb.append("\n <div style=\"background-color:" + backgroundColor + ";color:" + fontColor);
+                sb.append("; clear:both; text-align:center;height:20px; width:" + configuration[0] + "%;");
+                sb.append(" border:1px solid black; border-left:" + configuration[1] + "px ");
+                sb.append(" solid black;border-right:"+ configuration[2] + "px solid black;");
+                sb.append("border-bottom-style:none");
+                //solid black;
                 //if (!objObject.getBoolean("isHidden")) {
-                    sb.append(" black;");
+                //    sb.append(" ");
                 //} else {
                 //    sb.append(" white;");
                 //}
-                //sb.append(" border-right:" + configuration[2] + "px solid");
-                //if (!objObject.getBoolean("isHidden")) {
-                 //   sb.append(" black;");
-                //} else {
-                //    sb.append(" white;");
-                //}
-               // sb.append(" border-bottom-style:none\"");
-                sb.append(">");
-                //if (objObject.getBoolean("isHidden")) {
-                    sb.append("                 " + objObject.get("title"));
-                //}
-                sb.append("                 </div>");
+                //sb.append(" border-right:" +  + "px solid");
+//                if (!objObject.getBoolean("isHidden")) {
+//                    sb.append(" black;");
+//                } else {
+//                    sb.append(" white;");
+//                }
+//                sb.append(" border-bottom-style:none\"");
+                sb.append("\" class=\"titleTheme\">");
+                if (!objObject.getBoolean("isHidden")) {
+                sb.append("\n                 " + objObject.get("title"));
+                }
+                sb.append("\n                 </div>");
                 JSONArray arrayObjecs = (JSONArray) objObject.get("arrayObjectives");
-                //if (arraySizeColThemes[i] > 0) {
                 sb.append(paintDivObjective(arrayObjecs, base, objsForTheme[i], configuration[0], true));
-                //}
-                //System.out.println("" + paintDivObjective(arrayObjecs, base, objsForTheme[i], configuration[0], true));
                 sb.append("             </div>");
                 sb.append("         </div>");
             } catch (JSONException ex) {
@@ -246,7 +256,7 @@ public class CausalMap extends ComponentMap {
         int[] objsForTheme = getObjectivesForTheme(arrayThemes, countTheme);
         //Tema con mayor objetivos
         int elemHigher = getHigherTheme(objsForTheme);
-        int[] arraySizeColThemes = getSizeColumnsTheme(countTheme);
+        int[] arraySizeColThemes = BSCUtils.getSizeColumnsTheme(countTheme);
 
         int heigthConfig = 120;
         if ((base.getData("widthVerticalObjective") != null)
@@ -269,11 +279,11 @@ public class CausalMap extends ComponentMap {
                 sb.append("         <div style=\"width:" + arraySizeColThemes[i] + "%;float:left;\">");
 
                 sb.append("             <div style=\"background-color:" + backgroundColor + ";color:" + fontColor);
-                sb.append("; clear:both;text-align:center;width:" + widthColTheme + "%;border:1px solid");
+                sb.append("; clear:both;text-align:center;height:20px;width:" + widthColTheme + "%;border:1px solid ");
                 if (!objObject.getBoolean("isHidden")) {
-                    sb.append(" black;\">");
+                    sb.append(" black; border-bottom:none;\" class=\"titleTheme\">");
                 } else {
-                    sb.append(" white;\">");
+                    sb.append(" white border-bottom-style:none;\" class=\"titleTheme\">");
                 }
                 if (!objObject.getBoolean("isHidden")) {
                     sb.append("                 " + objObject.get("title"));
@@ -307,9 +317,10 @@ public class CausalMap extends ComponentMap {
         int[] differenForGroupDifferentiator = getDifferentiatorForDifferentiatorGroup(arrayDifferentiatorGroup, countDiffGroup);
 
         for (int i = 0; i < differenForGroupDifferentiator.length; i++) {
-            sb.append("     <div style=\"width:100%;float:left; margin-top:10px;\">");
+            sb.append("     <div style=\"width:100%;float:left; margin-bottom:20px;\">");
 
-            int[] arraySizeColDifferentiator = getSizeColumnsTheme(differenForGroupDifferentiator[i]);
+            int[] arraySizeColDifferentiator = BSCUtils.getSizeColumnsTheme(differenForGroupDifferentiator[i]);
+            double sizeDiff = BSCUtils.getSizeDifferentiator(differenForGroupDifferentiator[i]);
             try {
                 JSONObject objObjectDistinctive = arrayDifferentiatorGroup.getJSONObject(i);
                 JSONArray arrayObjecs = (JSONArray) objObjectDistinctive.get("arrayDifferentiator");
@@ -320,10 +331,10 @@ public class CausalMap extends ComponentMap {
                 fontColor = ((fontColor == null) || (fontColor.trim().length() < 1)) ? "black" : fontColor;
                 sb.append("     <div style=\"background-color:" + backgroundColor + ";color:" + fontColor);
                 sb.append(";clear:both;text-align:center;");
-                sb.append("width:100%;border:1px solid black;border-bottom-style:none\">");
+                sb.append("width:100%;border:1px solid black;\" class=\"groupDiff\">");//border-bottom-style:none
                 sb.append("     " + objObjectDistinctive.get("title") + "");
                 sb.append("     </div>");
-                sb.append(paintDivDifferentiator(arraySizeColDifferentiator, arrayObjecs, base));
+                sb.append(paintDivDifferentiator(sizeDiff, arrayObjecs, base));
 
             } catch (JSONException ex) {
                 log.error("Exception in paintDivGroupDifferentiator: " + ex);
@@ -363,21 +374,22 @@ public class CausalMap extends ComponentMap {
      * @return un objeto {@code StringBuilder} con los contenedores de los
      * diferenciadores
      */
-    private StringBuilder paintDivDifferentiator(int[] arraySizeColDifferentiator,
+    private StringBuilder paintDivDifferentiator(double arraySizeColDifferentiator,
             JSONArray arrayDifferentiator, Resource base) {
         StringBuilder sb = new StringBuilder();
         String height = "120";
         if (base.getData("widthDifferentiator") != null) {
             height = base.getData("widthDifferentiator");
         }
-        for (int j = 0; j < arraySizeColDifferentiator.length; j++) {
+        for (int j = 0; j < arrayDifferentiator.length(); j++) {
             int widthColTheme = 100;//(arraySizeColDistinctive.length - 1) == j ? 100 : 95;
             try {
                 JSONObject distObj = (JSONObject) arrayDifferentiator.get(j);
-                String title = (String) distObj.get("title");
-                sb.append("         <div style=\"width:" + arraySizeColDifferentiator[j] + "%;float:left;\">");
-                sb.append("             <div style=\"background-color:white;clear:both;text-align:center;height:\"" + height + "\";width:"
-                        + widthColTheme + "%;border:1px solid black;\">");
+                String title = (String) distObj.get("title");//arraySizeColDifferentiator[j]
+                sb.append("         <div style=\"width:" + arraySizeColDifferentiator + "%;float:left;");
+                sb.append("height:" + height + "px;\" class=\"diff\">");
+                sb.append("             <div style=\"background-color:white;text-align:center;width:"
+                        + widthColTheme + "%;border:1px solid black;height:" + height + "px;\">");
                 sb.append("                 " + title);
                 sb.append("             </div>");
                 sb.append("         </div>");
@@ -404,8 +416,7 @@ public class CausalMap extends ComponentMap {
     private StringBuilder paintDivObjective(JSONArray objectives, Resource base, int amountObjective,
             int sizeColumn, boolean isHorizontal) {
         StringBuilder sb = new StringBuilder();
-        int[] arraySizeColObjectives = getSizeColumnsObjective(amountObjective, sizeColumn);
-        //System.out.println("---------------------");
+        int[] arraySizeColObjectives = BSCUtils.getSizeColumnsObjective(amountObjective, sizeColumn);
         String height = "120";
         if ((isHorizontal) && (base.getData("widthHorizontalObjective") != null)
                 && (base.getData("widthHorizontalObjective").trim().length() != 0)) {
@@ -413,7 +424,6 @@ public class CausalMap extends ComponentMap {
         }
         int heigthColDefault = Integer.parseInt(height);
         for (int j = 0; j < arraySizeColObjectives.length; j++) {
-           // System.out.println("arraySi: " + arraySizeColObjectives[j]);
             try {
                 JSONObject objetive = (JSONObject) objectives.get(j);
                 String[] dataObjective = new String[6];
@@ -429,7 +439,6 @@ public class CausalMap extends ComponentMap {
 
                 sb.append(paintDataObjective(dataObjective, arraySizeColObjectives[j], heigthColDefault,
                         borderPaint));
-                //sb.append("             </div>");
             } catch (JSONException ex) {
                 log.error("Exception try get Objective, paintDivObjective: " + ex);
             }
@@ -512,98 +521,25 @@ public class CausalMap extends ComponentMap {
             String borderPaint) {
         StringBuilder sb = new StringBuilder();
         sb.append("             <div style=\"background-color:white;text-align:center;width:" + widthCol + "%;height:");
-        sb.append(heigthCol + "px;float:left; " + borderPaint + "\">");
+        sb.append(heigthCol + "px;float:left; " + borderPaint + "\" class=\"objectives\">");
         try {
             sb.append("             <a href=\"" + dataObjective[5] + "\">" + dataObjective[0] + "</a>");
-            sb.append("                 <p>");
-            sb.append("                     <span style=\"padding:10px;\">");
+            sb.append("             <p>");
+            sb.append("                 <span style=\"padding:10px;\" class=\"icon\">");
             if (dataObjective[1].length() > 1) {
                 sb.append("<img src=\"" + dataObjective[1] + "\"/>");
             }
             sb.append("</span>");
-            sb.append("                     <span style=\"padding:10px;\">" + dataObjective[2] + "</span>");
-            sb.append("                     <span style=\"padding:10px;\">" + dataObjective[3] + "</span>");
-            sb.append("                     <span style=\"padding:10px;\">" + dataObjective[4] + "</span>");
-            sb.append("                 </p>");
+            sb.append("                <span style=\"padding:10px;\" class=\"prefix\">" + dataObjective[2] + "</span>");
+            sb.append("                <span style=\"padding:10px;\" class=\"periodicity\">" + dataObjective[3] + "</span>");
+            sb.append("                <span style=\"padding:10px;\" class=\"sponsor\">" + dataObjective[4] + "</span>");
+            sb.append("            </p>");
         } catch (ArrayIndexOutOfBoundsException ex) {
             log.error("Exception try get ArrayIndex,  paintDataObjective: " + ex);
         }
         sb.append("             </div>");
         return sb;
 
-    }
-
-    /**
-     * Obtiene el tama&ntilde;o de las columnas por tema
-     *
-     * @param amountObjective Cantidad de objetivos por tema
-     * @param sizeColumn tama&ntilde;o de la columna
-     * @return arreglo con el tama&ntilde;o de las columnas inicial, final y las
-     * interiores
-     */
-    private int[] getSizeColumnsObjective(int amountObjective, int sizeColumn) {
-        int[] arraySizeColObjectives = new int[amountObjective];
-
-        if (amountObjective == 0) {
-            throw new java.lang.ArithmeticException("/ by zero");
-        }
-        int sizeColsObjectives = (sizeColumn / amountObjective);
-        int increColsIniObject = 0;
-        int increColsFinObject = 0;
-        if ((sizeColumn % amountObjective) != 0) {
-            increColsIniObject = increColsFinObject = (sizeColumn % amountObjective) / 2;
-            if (((sizeColumn % amountObjective) % 2) != 0) {
-                increColsFinObject = increColsFinObject + 1;
-            }
-        }
-
-        for (int k = 0; k < amountObjective; k++) {
-            if (k == 0) {
-                arraySizeColObjectives[k] = sizeColsObjectives + increColsIniObject;
-            } else if (k == (amountObjective - 1)) {
-                arraySizeColObjectives[k] = sizeColsObjectives + increColsFinObject;
-            } else {
-                arraySizeColObjectives[k] = sizeColsObjectives;
-            }
-        }
-
-        return arraySizeColObjectives;
-    }
-
-    /**
-     * Obtiene un arreglo con el n&uacute;mero de objetivos existentes por
-     * perspectiva.
-     *
-     * @param countTheme Cantidad de temas por perspectiva
-     * @return arreglo con el tama&ntilde;o de las columnas inicial, final y las
-     * interiores
-     */
-    private int[] getSizeColumnsTheme(int countTheme) {
-        int[] arraySizeColThemes = new int[countTheme];
-        if (countTheme == 0) {
-            throw new java.lang.ArithmeticException("/ by zero");
-        }
-        int sizeCols = (int) (100 / countTheme); //Divide el espacio entre el número de temas existentes
-        int divSizeCols = 100 % countTheme; //Obtiene el residuo de la división del número de temas existentes
-        int increColsIni = 0;
-        int increColsFin = 0;
-
-        increColsFin = (int) divSizeCols / 2; //Si tiene datos el residuo de la división lo divide entre 2 para
-        //repartirlo entre las columnas de los temas finales e iniciales
-        if ((divSizeCols % 2) != 0) {
-            increColsIni = increColsFin + 1;
-        }
-        //Asigna los tamanios para cada columna inicial, final y las de enmedio
-        for (int i = 0; i < countTheme; i++) {
-            if (i == 0) {
-                arraySizeColThemes[i] = sizeCols + increColsIni;
-            } else if (i == (countTheme - 1)) {
-                arraySizeColThemes[i] = sizeCols + increColsFin;
-            } else {
-                arraySizeColThemes[i] = sizeCols;
-            }
-        }
-        return arraySizeColThemes;
     }
 
     /**
