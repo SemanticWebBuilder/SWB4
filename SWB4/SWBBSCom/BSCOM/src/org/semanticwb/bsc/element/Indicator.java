@@ -308,20 +308,4 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
         super.removeAllState();
     }
     
-    /**
-     * Genera un String que representa el nombre del indicador antecedido por su prefijo
-     * @param lang un String que indica el idoma en que se espera el valor devuelto
-     * @return un String que representa el nombre del indicador antecedido por su prefijo
-     */
-    public String renderIndicatorName(String lang) {
-        
-        StringBuilder value = new StringBuilder(64);
-        
-        if (this.getPrefix() != null) {
-            value.append(this.getPrefix());
-            value.append(" ");
-        }
-        value.append(this.getDisplayTitle(lang));
-        return value.toString();
-    }
 }
