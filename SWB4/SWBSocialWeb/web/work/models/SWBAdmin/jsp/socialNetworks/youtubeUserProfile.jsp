@@ -16,6 +16,7 @@
 <%@page import="org.json.JSONObject"%>
 
 <%@page import="static org.semanticwb.social.admin.resources.FacebookWall.*"%>
+<jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
 <%@page contentType="text/html" pageEncoding="x-iso-8859-11"%>
 <!DOCTYPE html>
@@ -42,10 +43,10 @@
     String target = (String) request.getParameter("id");
     if(target == null){
         return;
-        }
+    }
     
     String usrProfile = getFullUserProfileFromId(target);
-    System.out.println("userprofile:" + usrProfile);    
+    //out.println("userprofile:" + usrProfile);
         
     JSONObject usrResp = new JSONObject(usrProfile);
     
@@ -94,7 +95,7 @@
 <div class="swbform" style="width: 500px">
     
     <fieldset>
-        <div align="center"><a href="#" title="View profile on Youtube"  target="_blank"><img src="<%=picture%>" height="150" width="150"/></a></div>
+        <div align="center"><img src="<%=picture%>" height="150" width="150"/></div>
     </fieldset>
     
     <fieldset>
@@ -104,7 +105,7 @@
     if(!aboutMe.isEmpty()){
 %>
     <fieldset>
-        <legend>About me:</legend>
+        <legend><%=paramRequest.getLocaleString("aboutMe")%>:</legend>
         <div align="left"><%=aboutMe%></div>
     </fieldset>
 <%
@@ -127,10 +128,10 @@
     if(!subscribers.isEmpty()){
 %>
     <fieldset>
-         <legend>Subscribers:</legend>
+         <legend><%=paramRequest.getLocaleString("subscribers")%>:</legend>
          
             <div align="left">
-                Subscribers: <%=subscribers%>
+                <%=paramRequest.getLocaleString("subscribers")%>: <%=subscribers%>
             </div>
     </fieldset>
 <%
@@ -141,9 +142,9 @@
     if(!locationName.isEmpty()){
 %>
     <fieldset>
-        <legend>Location:</legend>
+        <legend><%=paramRequest.getLocaleString("countryCode")%>:</legend>
         <div align="left">
-             Region code: <a href="http://www.facebook.com/profile.php?id=<%=locationId%>" title="View profile on Facebook"  target="_blank"><%=locationName%></a>
+             <%=paramRequest.getLocaleString("countryCode")%>: <%=locationName%>
         </div>                  
     </fieldset>
 <%
