@@ -16,7 +16,6 @@ import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.Seasonable;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.Indicator;
-import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Undeleteable;
@@ -111,7 +110,7 @@ public class PeriodsManager extends GenericResource {
                 out.println("          <th>" + paramRequest.getLocaleString("lbl_toDate") + "</th>");            
                 out.println("          <th>" + paramRequest.getLocaleString("lbl_former") + "</th>");            
                 out.println("          <th>" + paramRequest.getLocaleString("lbl_next") + "</th>");            
-                out.println("          <th>" + paramRequest.getLocaleString("lbl_inTime") + "</th>");            
+                out.println("          <th>" + paramRequest.getLocaleString("lbl_active") + "</th>");            
                 out.println("          <th>" + paramRequest.getLocaleString("lbl_relate") + "</th>");            
                 out.println("        </tr>");
                 out.println("</thead>");
@@ -185,9 +184,9 @@ public class PeriodsManager extends GenericResource {
                         out.println("          </td>");
                         //TODO: Definir como se obtiene el dato de esta columna
                         out.println("          <td>" + 
-                                (period.isBlocked()
-                                 ? paramRequest.getLocaleString("lbl_isInTime")
-                                 : paramRequest.getLocaleString("lbl_isNotInTime")) +
+                                (period.isActive()
+                                 ? paramRequest.getLocaleString("lbl_isActive")
+                                 : paramRequest.getLocaleString("lbl_isNotActive")) +
                                 "</td>");            
                         out.println("          <td align=\"center\"><input id=\"" + period.getId() + "\" name=\"period" + data
                                 + "\" type=\"checkbox\" value=\"" + period.getId() + "\" onclick=\"submitForm('frmAdd" + data + "');return false;\""
