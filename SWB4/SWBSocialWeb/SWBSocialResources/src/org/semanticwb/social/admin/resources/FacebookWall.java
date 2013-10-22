@@ -494,17 +494,17 @@ public class FacebookWall extends GenericResource {
                         
                         if(postData.has("link") && postData.has("name")){
                             System.out.println("<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>");
-                            postIn.setTitle("<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>");//Link o Title
+                            //postIn.setTitle("<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>");//Link o Title
                             if(!story.isEmpty())
                                 story = story + ": " + "<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>";                            
                             if(!message.isEmpty())
                                 message = message + ":" + "<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>";
                             
                         }
-                        
+                        /*
                         if(postData.has("description")){
                             postIn.setDescription(postData.getString("description"));
-                        }
+                        }*/
                         
                         if(!message.isEmpty()){
                             postIn.setMsg_Text(message);
@@ -553,10 +553,10 @@ public class FacebookWall extends GenericResource {
                         if(!message.isEmpty())
                             message = message + ": " + "<a href=\"" + postData.getString("source") + "\" target=\"_blank\">View video</a>";
                     }
-
+                    /*
                     if(postData.has("description")){
                         postIn.setDescription(postData.getString("description"));
-                    }
+                    }*/
                         
                     System.out.println("THE MESSAGE******\n" + message);
                     System.out.println("THE STORY******\n" + story);
@@ -619,10 +619,10 @@ public class FacebookWall extends GenericResource {
                     }
                     
                     
-                    
+                    /*
                     if(postData.has("description")){
                         postIn.setDescription(postData.getString("description"));
-                    }
+                    }*/
                     System.out.println("\tMESSAGE:" + message);
                     System.out.println("\tSTORY:" + story);
                     if(!message.isEmpty()){
