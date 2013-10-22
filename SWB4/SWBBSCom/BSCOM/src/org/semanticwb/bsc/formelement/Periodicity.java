@@ -32,7 +32,7 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
     /**
      * Establecel el formato en que se utilizaran las fechas
      */
-    private static final String formatPattern = "yyyy-MM-dd";
+    public static final String formatPattern = "yyyy-MM-dd";
     
     /**
      * Aplica el formato establecido por {@code formatPattern} 
@@ -174,9 +174,7 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
      * @throws FormValidateException generada cuando el valor proporcionado por el usuario no es valido
      */
     @Override 
-    public void validate(HttpServletRequest request, SemanticObject obj, 
-            SemanticProperty prop, String propName) throws FormValidateException {
-System.out.println("periodicity.validate...");
+    public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) throws FormValidateException {
         String value = request.getParameter(propName);
         Date date = null;
 
@@ -197,32 +195,17 @@ System.out.println("periodicity.validate...");
         while (iperiods.hasNext()) {
             Period p = iperiods.next();
             if (p.equals(current)) {
-                if(current.getStart()!=null && current.getEnd()!=null) {
-                    if(current.getStart().after(current.getEnd())) {
-                        current.setActive(Boolean.FALSE);
-                        throw new FormValidateException("Inicio y fin de periodo incorrecto");
-                    }
-                }
                 continue;
             }
-            
-            Date fromDate = null;
-            Date toDate = null;
-            try {
-                fromDate = format.parse(p.getStart().toString());
-                toDate = format.parse(p.getEnd().toString());
-            } catch (ParseException pe) {
-                fromDate = p.getStart();
-                toDate = p.getEnd();
-            }            
+            Date fromDate = p.getStart();
+            Date toDate = p.getEnd();
+            if(fromDate==null || toDate==null) {
+                p.setActive(Boolean.FALSE);
+                continue;
+            }
             if(  fromDate.getTime()<=date.getTime() && toDate.getTime()>=date.getTime()  ) {
                throw new FormValidateException("Esta fecha ya forma parte de otro periodo");
             }
-            
-//            if ((fromDate.before(date) || fromDate.equals(date)) &&
-//                    (toDate.after(date) || toDate.equals(date))) {
-//                throw new FormValidateException("Esta fecha ya forma parte de otro periodo");
-//            }
         }
     }
     
@@ -236,7 +219,6 @@ System.out.println("periodicity.validate...");
     @Override
     public void process(HttpServletRequest request, SemanticObject obj,
             SemanticProperty prop, String propName) {
-System.out.println("periodicity.process...");
         String value = request.getParameter(propName);
         Date fvalue = null;
         try {
