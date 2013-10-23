@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto que define un Sitio Web 
    */
-public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Indexable,org.semanticwb.model.Countryable,org.semanticwb.model.Trashable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Localeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode
+public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Indexable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Countryable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass
 {
    /**
    * Superclase de todos los tipos de Modelos de SemanticWebBuilder
@@ -112,6 +112,10 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
    */
     public static final org.semanticwb.platform.SemanticClass swb_TemplateRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef");
    /**
+   * Objeto por medio del cual se define un tipo de componente o recurso
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_ResourceType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceType");
+   /**
    * Referencia a un objeto de tipo Calendar
    */
     public static final org.semanticwb.platform.SemanticClass swb_CalendarRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#CalendarRef");
@@ -119,10 +123,6 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
    * Un recurso es un componente en una Página Web con el cual el usuario tiene interacción
    */
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
-   /**
-   * Objeto por medio del cual se define un tipo de componente o recurso
-   */
-    public static final org.semanticwb.platform.SemanticClass swb_ResourceType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceType");
    /**
    * Instancia de un recurso asociado a un flujo de publicación.
    */
@@ -550,24 +550,6 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
     }
 
 /**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
-    }
-
-/**
 * Gets the Updated property
 * @return java.util.Date with the Updated
 */
@@ -586,36 +568,21 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
     }
 
 /**
-* Gets the Description property
-* @return String with the Description
+* Gets the Created property
+* @return java.util.Date with the Created
 */
-    public String getDescription()
+    public java.util.Date getCreated()
     {
-        return getSemanticObject().getProperty(swb_description);
+        return getSemanticObject().getDateProperty(swb_created);
     }
 
 /**
-* Sets the Description property
-* @param value long with the Description
+* Sets the Created property
+* @param value long with the Created
 */
-    public void setDescription(String value)
+    public void setCreated(java.util.Date value)
     {
-        getSemanticObject().setProperty(swb_description, value);
-    }
-
-    public String getDescription(String lang)
-    {
-        return getSemanticObject().getProperty(swb_description, null, lang);
-    }
-
-    public String getDisplayDescription(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_description, lang);
-    }
-
-    public void setDescription(String description, String lang)
-    {
-        getSemanticObject().setProperty(swb_description, description, lang);
+        getSemanticObject().setDateProperty(swb_created, value);
     }
    /**
    * Gets all the org.semanticwb.model.SWBModel
@@ -681,6 +648,39 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
              ret=(org.semanticwb.model.SWBModel)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Description property
+* @return String with the Description
+*/
+    public String getDescription()
+    {
+        return getSemanticObject().getProperty(swb_description);
+    }
+
+/**
+* Sets the Description property
+* @param value long with the Description
+*/
+    public void setDescription(String value)
+    {
+        getSemanticObject().setProperty(swb_description, value);
+    }
+
+    public String getDescription(String lang)
+    {
+        return getSemanticObject().getProperty(swb_description, null, lang);
+    }
+
+    public String getDisplayDescription(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_description, lang);
+    }
+
+    public void setDescription(String description, String lang)
+    {
+        getSemanticObject().setProperty(swb_description, description, lang);
     }
 
 /**
@@ -1753,6 +1753,30 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
         return org.semanticwb.model.TemplateRef.ClassMgr.hasTemplateRef(id, this);
     }
 
+    public org.semanticwb.model.ResourceType getResourceType(String id)
+    {
+        return org.semanticwb.model.ResourceType.ClassMgr.getResourceType(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.ResourceType> listResourceTypes()
+    {
+        return org.semanticwb.model.ResourceType.ClassMgr.listResourceTypes(this);
+    }
+
+    public org.semanticwb.model.ResourceType createResourceType(String id)
+    {
+        return org.semanticwb.model.ResourceType.ClassMgr.createResourceType(id,this);
+    }
+
+    public void removeResourceType(String id)
+    {
+        org.semanticwb.model.ResourceType.ClassMgr.removeResourceType(id, this);
+    }
+    public boolean hasResourceType(String id)
+    {
+        return org.semanticwb.model.ResourceType.ClassMgr.hasResourceType(id, this);
+    }
+
     public org.semanticwb.model.CalendarRef getCalendarRef(String id)
     {
         return org.semanticwb.model.CalendarRef.ClassMgr.getCalendarRef(id, this);
@@ -1811,30 +1835,6 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
     public boolean hasResource(String id)
     {
         return org.semanticwb.model.Resource.ClassMgr.hasResource(id, this);
-    }
-
-    public org.semanticwb.model.ResourceType getResourceType(String id)
-    {
-        return org.semanticwb.model.ResourceType.ClassMgr.getResourceType(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.model.ResourceType> listResourceTypes()
-    {
-        return org.semanticwb.model.ResourceType.ClassMgr.listResourceTypes(this);
-    }
-
-    public org.semanticwb.model.ResourceType createResourceType(String id)
-    {
-        return org.semanticwb.model.ResourceType.ClassMgr.createResourceType(id,this);
-    }
-
-    public void removeResourceType(String id)
-    {
-        org.semanticwb.model.ResourceType.ClassMgr.removeResourceType(id, this);
-    }
-    public boolean hasResourceType(String id)
-    {
-        return org.semanticwb.model.ResourceType.ClassMgr.hasResourceType(id, this);
     }
 
     public org.semanticwb.model.PFlowInstance getPFlowInstance(String id)

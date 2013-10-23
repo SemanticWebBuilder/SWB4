@@ -25,7 +25,9 @@ package org.semanticwb.model;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 import org.semanticwb.Logger;
@@ -40,6 +42,10 @@ import org.semanticwb.platform.SemanticObject;
  */
 public class WebPage extends WebPageBase 
 {
+    public static final String SECURITY_ACTION_INHERIT="inherit";
+    public static final String SECURITY_ACTION_403="403";
+    public static final String SECURITY_ACTION_404="404";
+    public static final String SECURITY_ACTION_REDIRECT="redirect";
     
     /** The log. */
     private final static Logger log=SWBUtils.getLogger(WebPage.class);
@@ -961,6 +967,57 @@ public class WebPage extends WebPageBase
         if(description!=null)ret.append("<meta name=\"description\" content=\""+description+"\"/>\n");
         if(keywords!=null)ret.append("<meta name=\"keywords\" content=\""+keywords+"\"/>\n");
         return ret.toString();
+    }
+    
+    public String getInheritSecurityAction()
+    {
+        //System.out.println("getInheritSecurityAction:"+this);
+        return getInheritSecurityAction(new HashSet());
+    }
+    
+    private String getInheritSecurityAction(Set set)
+    {
+        //System.out.println("-->getInheritSecurityAction:"+this);
+        if(set.contains(getURI()))return null;
+        set.add(getURI());
+        String action=getSecurityAction();
+        if(action==null)action=SECURITY_ACTION_INHERIT;
+        if(action.equals(SECURITY_ACTION_INHERIT))
+        {
+            WebPage parent=getParent();
+            if(parent!=null)
+            {
+                action=parent.getInheritSecurityAction(set);
+                if(action==null)
+                {
+                    action=SECURITY_ACTION_403;
+                }
+            }                     
+        }
+        return action;
+    }
+    
+    public String getInheritSecurityRedirect()
+    {
+        return getInheritSecurityRedirect(new HashSet());
+    }    
+    
+    private String getInheritSecurityRedirect(Set set)
+    {
+        if(set.contains(getURI()))return null;
+        set.add(getURI());
+        String redirect=getSecurityRedirect();
+        String action=getSecurityAction();
+        if(action==null)action=SECURITY_ACTION_INHERIT;
+        if(SECURITY_ACTION_INHERIT.equals(action))
+        {
+            WebPage parent=getParent();
+            if(parent!=null)
+            {
+                redirect=parent.getInheritSecurityRedirect(set);
+            }                     
+        }
+        return redirect;        
     }
 
 

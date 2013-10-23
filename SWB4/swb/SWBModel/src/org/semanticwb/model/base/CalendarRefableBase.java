@@ -5,6 +5,7 @@ package org.semanticwb.model.base;
    */
 public interface CalendarRefableBase extends org.semanticwb.model.Referensable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_notInheritCalendarRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#notInheritCalendarRef");
    /**
    * Referencia a un objeto de tipo Calendar 
    */
@@ -14,6 +15,10 @@ public interface CalendarRefableBase extends org.semanticwb.model.Referensable
    * Interfaz que define propiedades para elementos que pueden referencia a calendarios 
    */
     public static final org.semanticwb.platform.SemanticClass swb_CalendarRefable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#CalendarRefable");
+
+    public boolean isNotInheritCalendarRef();
+
+    public void setNotInheritCalendarRef(boolean value);
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.CalendarRef> listCalendarRefs();
     public boolean hasCalendarRef(org.semanticwb.model.CalendarRef value);

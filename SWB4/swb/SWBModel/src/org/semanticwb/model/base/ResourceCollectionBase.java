@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Define una agrupacion de objetos de tipo resource 
    */
-public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Resourceable,org.semanticwb.model.PFlowRefable
+public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Resourceable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass
 {
    /**
    * Define una categoria dentro de una colección de recursos
@@ -354,24 +354,6 @@ public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBCla
     }
 
 /**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
-    }
-
-/**
 * Gets the Updated property
 * @return java.util.Date with the Updated
 */
@@ -387,6 +369,24 @@ public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBCla
     public void setUpdated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_updated, value);
+    }
+
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
     }
 
 /**
@@ -420,6 +420,24 @@ public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBCla
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+/**
+* Gets the NotInheritPFlowRef property
+* @return boolean with the NotInheritPFlowRef
+*/
+    public boolean isNotInheritPFlowRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_notInheritPFlowRef);
+    }
+
+/**
+* Sets the NotInheritPFlowRef property
+* @param value long with the NotInheritPFlowRef
+*/
+    public void setNotInheritPFlowRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_notInheritPFlowRef, value);
     }
    /**
    * Sets the value for the property DisplayWebPage

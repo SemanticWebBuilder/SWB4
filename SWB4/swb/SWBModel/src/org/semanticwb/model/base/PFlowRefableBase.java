@@ -5,6 +5,7 @@ package org.semanticwb.model.base;
    */
 public interface PFlowRefableBase extends org.semanticwb.model.Referensable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_notInheritPFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#notInheritPFlowRef");
    /**
    * Referencia a un objeto de tipo PFlow 
    */
@@ -14,6 +15,10 @@ public interface PFlowRefableBase extends org.semanticwb.model.Referensable
    * Interfaz que define propiedades para elementos que pueden referencia a flujos de publicacion 
    */
     public static final org.semanticwb.platform.SemanticClass swb_PFlowRefable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowRefable");
+
+    public boolean isNotInheritPFlowRef();
+
+    public void setNotInheritPFlowRef(boolean value);
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef> listPFlowRefs();
     public boolean hasPFlowRef(org.semanticwb.model.PFlowRef value);

@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Un servidor DNS permite conectarse con la máquina sin necesidad de conocer su dirección IP. En SemanticWebBuilder el DNS local es el nombre asociado al sitio. Al ser invocado el DNS presentará una sección específica a manera de página de inicio. 
    */
-public abstract class DnsBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.WebPageable,org.semanticwb.model.Dnsable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable
+public abstract class DnsBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.WebPageable,org.semanticwb.model.Traceable,org.semanticwb.model.Dnsable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass
 {
     public static final org.semanticwb.platform.SemanticProperty swb_dnsDefault=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#dnsDefault");
    /**
@@ -265,21 +265,21 @@ public abstract class DnsBase extends org.semanticwb.model.SWBClass implements o
     }
 
 /**
-* Gets the Updated property
-* @return java.util.Date with the Updated
+* Gets the Created property
+* @return java.util.Date with the Created
 */
-    public java.util.Date getUpdated()
+    public java.util.Date getCreated()
     {
-        return getSemanticObject().getDateProperty(swb_updated);
+        return getSemanticObject().getDateProperty(swb_created);
     }
 
 /**
-* Sets the Updated property
-* @param value long with the Updated
+* Sets the Created property
+* @param value long with the Created
 */
-    public void setUpdated(java.util.Date value)
+    public void setCreated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_updated, value);
+        getSemanticObject().setDateProperty(swb_created, value);
     }
    /**
    * Sets the value for the property WebPage
@@ -321,21 +321,21 @@ public abstract class DnsBase extends org.semanticwb.model.SWBClass implements o
     }
 
 /**
-* Gets the Created property
-* @return java.util.Date with the Created
+* Gets the Updated property
+* @return java.util.Date with the Updated
 */
-    public java.util.Date getCreated()
+    public java.util.Date getUpdated()
     {
-        return getSemanticObject().getDateProperty(swb_created);
+        return getSemanticObject().getDateProperty(swb_updated);
     }
 
 /**
-* Sets the Created property
-* @param value long with the Created
+* Sets the Updated property
+* @param value long with the Updated
 */
-    public void setCreated(java.util.Date value)
+    public void setUpdated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_created, value);
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
 /**

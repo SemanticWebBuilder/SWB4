@@ -5,6 +5,8 @@ package org.semanticwb.model.base;
    */
 public interface UserGroupRefableBase extends org.semanticwb.model.Referensable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_notInheritUserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#notInheritUserGroupRef");
+    public static final org.semanticwb.platform.SemanticProperty swb_andEvalUserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#andEvalUserGroupRef");
    /**
    * Referencia a un objeto de tipo UserGroup 
    */
@@ -14,6 +16,14 @@ public interface UserGroupRefableBase extends org.semanticwb.model.Referensable
    * Interfaz que define propiedades para elementos que pueden referencia a grupos de usuarios 
    */
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupRefable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRefable");
+
+    public boolean isNotInheritUserGroupRef();
+
+    public void setNotInheritUserGroupRef(boolean value);
+
+    public boolean isAndEvalUserGroupRef();
+
+    public void setAndEvalUserGroupRef(boolean value);
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> listUserGroupRefs();
     public boolean hasUserGroupRef(org.semanticwb.model.UserGroupRef value);
