@@ -186,7 +186,7 @@ public class StatesManager extends GenericResource {
         }
         else
         {
-            response.getWriter().print("objeto semantico no ubicado");
+            response.getWriter().print("objeto semántico no ubicado");
         }
     }
 
@@ -518,7 +518,6 @@ public class StatesManager extends GenericResource {
             {
                 response.setRenderParameter("statmsg", "objeto semantico no ubicado");
             }
-            return;
         }
         else if(Action_ACTIVE_ALL.equalsIgnoreCase(action))
         {
