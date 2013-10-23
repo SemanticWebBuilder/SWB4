@@ -1,15 +1,15 @@
 package org.semanticwb.portal.resources.sem.base;
 
 
-public abstract class HTMLContentBase extends org.semanticwb.portal.resources.sem.Content implements org.semanticwb.model.ResourceVersionable,org.semanticwb.model.Versionable
+public abstract class HTMLContentBase extends org.semanticwb.portal.resources.sem.Content implements org.semanticwb.model.Versionable,org.semanticwb.model.ResourceVersionable
 {
     public static final org.semanticwb.platform.SemanticProperty swbres_contentPaginated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#contentPaginated");
     public static final org.semanticwb.platform.SemanticProperty swbres_nextLinkText=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#nextLinkText");
     public static final org.semanticwb.platform.SemanticClass swb_VersionInfo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo");
     public static final org.semanticwb.platform.SemanticProperty swb_actualVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#actualVersion");
     public static final org.semanticwb.platform.SemanticProperty swbres_formerLinkText=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#formerLinkText");
-    public static final org.semanticwb.platform.SemanticProperty swbres_fontStyle=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#fontStyle");
     public static final org.semanticwb.platform.SemanticProperty swbres_deleteStyles=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#deleteStyles");
+    public static final org.semanticwb.platform.SemanticProperty swbres_fontStyle=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#fontStyle");
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
     public static final org.semanticwb.platform.SemanticProperty swb_lastVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#lastVersion");
@@ -141,24 +141,6 @@ public abstract class HTMLContentBase extends org.semanticwb.portal.resources.se
     }
 
 /**
-* Gets the FontStyle property
-* @return String with the FontStyle
-*/
-    public String getFontStyle()
-    {
-        return getSemanticObject().getProperty(swbres_fontStyle);
-    }
-
-/**
-* Sets the FontStyle property
-* @param value long with the FontStyle
-*/
-    public void setFontStyle(String value)
-    {
-        getSemanticObject().setProperty(swbres_fontStyle, value);
-    }
-
-/**
 * Gets the DeleteStyles property
 * @return boolean with the DeleteStyles
 */
@@ -174,6 +156,24 @@ public abstract class HTMLContentBase extends org.semanticwb.portal.resources.se
     public void setDeleteStyles(boolean value)
     {
         getSemanticObject().setBooleanProperty(swbres_deleteStyles, value);
+    }
+
+/**
+* Gets the FontStyle property
+* @return String with the FontStyle
+*/
+    public String getFontStyle()
+    {
+        return getSemanticObject().getProperty(swbres_fontStyle);
+    }
+
+/**
+* Sets the FontStyle property
+* @param value long with the FontStyle
+*/
+    public void setFontStyle(String value)
+    {
+        getSemanticObject().setProperty(swbres_fontStyle, value);
     }
    /**
    * Sets the value for the property Resource

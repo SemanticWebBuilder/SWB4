@@ -224,25 +224,23 @@ public class Distributor implements InternalServlet
             if (!user.haveAccess(webpage)) 
             {
                 if(!pageCache && log.isDebugEnabled())log.debug("Distributor->Don't access");
-                //TODO:validar acciones
-//                Iterator it = webpage.getConfigData(TopicMap.CNF_WBSecAction);
-//                if (it.hasNext()) {
-//                    //System.out.println("hasData");
-//                    String data = (String) it.next();
-//                    log.debug("Distributor->data:" + data);
-//                    if (data.startsWith("SR:")) {
-//                        response.sendRedirect(data.substring(3));
-//                    } else if (data.startsWith("SE:")) {
-//                        int err = Integer.parseInt(data.substring(3));
-//                        if (err == 403)
-//                            sendError403(request, response);
-//                        else
-//                            response.sendError(err);
-//                    }
-//                } else {
+                
+                String action=webpage.getInheritSecurityAction();
+                String redirect=webpage.getInheritSecurityRedirect();
+                //System.out.println(action+" "+redirect);
+                if(WebPage.SECURITY_ACTION_404.equals(action))
+                {
+                    if(!pageCache && log.isDebugEnabled())log.debug("Distributor->send404");
+                    response.sendError(404, "La pagina " + request.getRequestURI() + " no esta disponible por el momento... ");
+                }else if(WebPage.SECURITY_ACTION_REDIRECT.equals(action) && redirect!=null)
+                {
+                    if(!pageCache && log.isDebugEnabled())log.debug("Distributor->send Redirect:"+redirect);
+                    response.sendRedirect(redirect);
+                }else
+                {
                     if(!pageCache && log.isDebugEnabled())log.debug("Distributor->send403");
                     sendError403(request, response);
-//                }
+                }
                 return false;
             }
 
