@@ -54,7 +54,7 @@ if (!user.isSigned()) {
     if (paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT) {
         %>
         <div class="alert alert-block alert-danger fade in">
-            <h4><i class="icon-ban-circle"></i> <%=paramRequest.getLocaleString("msgNoAccessTitle")%></h4>
+            <h4><span class="fa fa-ban"></span> <%=paramRequest.getLocaleString("msgNoAccessTitle")%></h4>
             <p><%=paramRequest.getLocaleString("msgNoAccess")%></p>
             <p>
                 <a class="btn btn-default" href="/login/<%=site.getId()%>/<%=paramRequest.getWebPage().getId()%>"><%=paramRequest.getLocaleString("btnLogin")%></a>

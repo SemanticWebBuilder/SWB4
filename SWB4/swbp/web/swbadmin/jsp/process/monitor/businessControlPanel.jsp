@@ -164,7 +164,7 @@ if (!user.isSigned()) {
     if (paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT) {
         %>
         <div class="alert alert-block alert-danger fade in">
-            <h4><i class="icon-ban-circle"></i> <%=paramRequest.getLocaleString("msgNoAccessTitle")%></h4>
+            <h4><span class="fa fa-ban"></span> <%=paramRequest.getLocaleString("msgNoAccessTitle")%></h4>
             <p><%=paramRequest.getLocaleString("msgNoAccess")%></p>
             <p>
                 <a class="btn btn-default" href="/login/<%=site.getId()%>/<%=paramRequest.getWebPage().getId()%>"><%=paramRequest.getLocaleString("btnLogin")%></a>
@@ -180,8 +180,8 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
     <ul class="list-unstyled list-inline">
         <li>
             <div class="dropdown">
-                <a class="btn btn-default" data-toggle="dropdown" title="Sort options">
-                    <i class="icon-sort-by-attributes"></i> <%=paramRequest.getLocaleString("sortLabel")%> <span class="caret"></span>
+                <a class="btn btn-default" data-toggle="dropdown">
+                    <span class="fa fa-sort-amount-asc"></span> <%=paramRequest.getLocaleString("sortLabel")%> <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" role="menu">
                     <li class="dropdown-header" role="menuitem"><%=paramRequest.getLocaleString("sortDate")%></li>
@@ -190,26 +190,26 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                         optsUrl.setParameter("sF", sFilter);
                     %>
                     <li role="menuitem">
-                        <a href="<%=optsUrl.setParameter("sort", "1") %>"><i class="icon-sort-by-order"></i> <%=sortType.equals("1")?"<strong>":""%><%=paramRequest.getLocaleString("sortLatest")%><%=sortType.equals("1")?"</strong>":""%></a>
+                        <a href="<%=optsUrl.setParameter("sort", "1") %>"><span class="fa fa-sort-numeric-asc"></span> <%=sortType.equals("1")?"<strong>":""%><%=paramRequest.getLocaleString("sortLatest")%><%=sortType.equals("1")?"</strong>":""%></a>
                     </li>
                     <li role="menuitem">
-                        <a href="<%=optsUrl.setParameter("sort", "2") %>"><i class="icon-sort-by-order-alt"></i> <%=sortType.equals("2")?"<strong>":""%><%=paramRequest.getLocaleString("sortOldest")%><%=sortType.equals("2")?"</strong>":""%></a>
+                        <a href="<%=optsUrl.setParameter("sort", "2") %>"><span class="fa fa-sort-numeric-desc"></span> <%=sortType.equals("2")?"<strong>":""%><%=paramRequest.getLocaleString("sortOldest")%><%=sortType.equals("2")?"</strong>":""%></a>
                     </li>
                     <li class="divider" role="menuitem"></li>
                     <li class="dropdown-header" role="menuitem"><%=paramRequest.getLocaleString("sortProcess")%></li>
                     <li role="menuitem">
-                        <a href="<%=optsUrl.setParameter("sort", "3") %>"><i class="icon-sort-by-alphabet"></i> <%=sortType.equals("3")?"<strong>":""%><%=paramRequest.getLocaleString("sortNameAsc")%><%=sortType.equals("3")?"</strong>":""%></a>
+                        <a href="<%=optsUrl.setParameter("sort", "3") %>"><span class="fa fa-sort-alpha-asc"></span> <%=sortType.equals("3")?"<strong>":""%><%=paramRequest.getLocaleString("sortNameAsc")%><%=sortType.equals("3")?"</strong>":""%></a>
                     </li>
                     <li role="menuitem">
-                        <a href="<%=optsUrl.setParameter("sort", "4") %>"><i class="icon-sort-by-alphabet-alt"></i> <%=sortType.equals("4")?"<strong>":""%><%=paramRequest.getLocaleString("sortNameDes")%><%=sortType.equals("4")?"</strong>":""%></a>
+                        <a href="<%=optsUrl.setParameter("sort", "4") %>"><span class="fa fa-sort-alpha-desc"></span> <%=sortType.equals("4")?"<strong>":""%><%=paramRequest.getLocaleString("sortNameDes")%><%=sortType.equals("4")?"</strong>":""%></a>
                     </li>
                 </ul>
             </div>
         </li>
         <li>
             <div class="dropdown">
-                <a class="btn btn-default" data-toggle="dropdown" title="Filter">
-                    <i class="icon-filter"></i> <%=paramRequest.getLocaleString("filteringLabel")%> <span class="caret"></span>
+                <a class="btn btn-default" data-toggle="dropdown">
+                    <span class="fa fa-filter"></span> <%=paramRequest.getLocaleString("filteringLabel")%> <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" role="menu">
                     <li class="dropdown-header" role="menuitem"><%=paramRequest.getLocaleString("sortStatus")%></li>
@@ -219,16 +219,16 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                         optsUrl.setParameter("gF", gFilter);
                     %>
                     <li role="menuitem">
-                        <a href="<%=optsUrl.setParameter("sF", "-1")%>"><i class="icon-reorder"></i> <%=sFilter.equals("-1")?"<strong>":""%><%=paramRequest.getLocaleString("allStatus")%><%=sFilter.equals("-1")?"</strong>":""%></a>
+                        <a href="<%=optsUrl.setParameter("sF", "-1")%>"><span class="fa fa-reorder"></span> <%=sFilter.equals("-1")?"<strong>":""%><%=paramRequest.getLocaleString("allStatus")%><%=sFilter.equals("-1")?"</strong>":""%></a>
                     </li>
                     <li role="menuitem">
-                        <a href="<%=optsUrl.setParameter("sF", String.valueOf(FlowNodeInstance.STATUS_PROCESSING))%>"><i class="icon-flag-checkered"></i> <%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_PROCESSING))?"<strong>":""%><%=paramRequest.getLocaleString("lblProcessing")%><%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_PROCESSING))?"</strong>":""%></a>
+                        <a href="<%=optsUrl.setParameter("sF", String.valueOf(FlowNodeInstance.STATUS_PROCESSING))%>"><span class="fa fa-flag-checkered"></span> <%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_PROCESSING))?"<strong>":""%><%=paramRequest.getLocaleString("lblProcessing")%><%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_PROCESSING))?"</strong>":""%></a>
                     </li>
                     <li role="menuitem">
-                        <a href="<%=optsUrl.setParameter("sF", String.valueOf(FlowNodeInstance.STATUS_CLOSED))%>"><i class="icon-flag"></i> <%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_CLOSED))?"<strong>":""%><%=paramRequest.getLocaleString("lblClosed")%><%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_CLOSED))?"</strong>":""%></a>
+                        <a href="<%=optsUrl.setParameter("sF", String.valueOf(FlowNodeInstance.STATUS_CLOSED))%>"><span class="fa fa-flag"></span> <%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_CLOSED))?"<strong>":""%><%=paramRequest.getLocaleString("lblClosed")%><%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_CLOSED))?"</strong>":""%></a>
                     </li>
                     <li role="menuitem">
-                        <a href="<%=optsUrl.setParameter("sF", String.valueOf(FlowNodeInstance.STATUS_ABORTED))%>"><i class="icon-flag-alt"></i> <%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_ABORTED))?"<strong>":""%><%=paramRequest.getLocaleString("lblAborted")%><%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_ABORTED))?"</strong>":""%></a>
+                        <a href="<%=optsUrl.setParameter("sF", String.valueOf(FlowNodeInstance.STATUS_ABORTED))%>"><span class="fa fa-flag-o"></span> <%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_ABORTED))?"<strong>":""%><%=paramRequest.getLocaleString("lblAborted")%><%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_ABORTED))?"</strong>":""%></a>
                     </li>
                 </ul>
             </div>
@@ -409,12 +409,12 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
 
                                     if (statusWp != null) {
                                     %>
-                                        <a href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessInstance().getProcessType().getEncodedURI()%>" class="btn btn-default" title="<%=paramRequest.getLocaleString("actMap")%>"><i class="icon-gears"></i></a>
+                                        <a href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessInstance().getProcessType().getEncodedURI()%>" class="btn btn-default" title="<%=paramRequest.getLocaleString("actMap")%>"><span class="fa fa-cogs"></span></a>
                                     <%
                                     }
                                     if (detailWp != null) {
                                     %>
-                                        <a href="<%=detailWp.getUrl()%>?pid=<%=instance.getProcessType().getId()%>" class="btn btn-default" title="<%=paramRequest.getLocaleString("actDetail")%>"><i class="icon-bar-chart"></i></a>
+                                        <a href="<%=detailWp.getUrl()%>?pid=<%=instance.getProcessType().getId()%>" class="btn btn-default" title="<%=paramRequest.getLocaleString("actDetail")%>"><span class="fa fa-bar-chart-o"></span></a>
                                     <%
                                     }
                                     Role processAdmRole = instance.getProcessType().getAdministrationRole();
@@ -432,7 +432,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                     docsUrl.setParameter("sF", request.getParameter("sF"));
                                     docsUrl.setParameter("sort", request.getParameter("sort"));
                                     %>
-                                    <a href="<%=docsUrl%>" class="btn btn-default" title="<%=paramRequest.getLocaleString("actDocs")%>"><i class="icon-folder-open-alt"></i></a>
+                                    <a href="<%=docsUrl%>" class="btn btn-default" title="<%=paramRequest.getLocaleString("actDocs")%>"><span class="fa fa-folder-open-o"></span></a>
                                 </td>
                                 <%
                             }
@@ -500,7 +500,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
     } else {
         %>
         <div class="alert alert-warning">
-            <i class="icon-warning-sign"></i> <strong><%=paramRequest.getLocaleString("msgNoInfo")%></strong>
+            <span class="fa fa-exclamation-triangle"></span> <strong><%=paramRequest.getLocaleString("msgNoInfo")%></strong>
         </div>
         <%
     }

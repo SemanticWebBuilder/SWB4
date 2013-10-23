@@ -33,13 +33,13 @@ viewUrl.setParameter("gF", request.getParameter("gF"));
 viewUrl.setParameter("sF", request.getParameter("sF"));
 viewUrl.setParameter("sort", request.getParameter("sort"));
 %>
-<h2><a class="btn" data-toggle="tooltip" data-placement="bottom" title="Back to monitor" href="<%=viewUrl%>"><i class="icon-reply"></i></a><%=paramRequest.getLocaleString("viewDocsTitle")%> <%=pName%></h2>
+<h2><a class="btn" data-toggle="tooltip" data-placement="bottom" title="Back to monitor" href="<%=viewUrl%>"><span class="fa fa-reply"></span></a><%=paramRequest.getLocaleString("viewDocsTitle")%> <%=pName%></h2>
 <%
 if (!user.isSigned()) {
     if (paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT) {
         %>
         <div class="alert alert-block alert-danger fade in">
-            <h4><i class="icon-ban-circle"></i> <%=paramRequest.getLocaleString("msgNoAccessTitle")%></h4>
+            <h4><span class="fa fa-ban"></span> <%=paramRequest.getLocaleString("msgNoAccessTitle")%></h4>
             <p><%=paramRequest.getLocaleString("msgNoAccess")%></p>
             <p>
                 <a class="btn btn-default" href="/login/<%=site.getId()%>/<%=paramRequest.getWebPage().getId()%>"><%=paramRequest.getLocaleString("btnLogin")%></a>
@@ -99,7 +99,7 @@ if (!user.isSigned()) {
     } else {
         %>
         <div class="alert alert-warning">
-            <i class="icon-warning-sign"></i> <strong><%=paramRequest.getLocaleString("msgNoDocs")%></strong>
+            <span class="fa fa-exclamation-triangle"></span> <strong><%=paramRequest.getLocaleString("msgNoDocs")%></strong>
         </div>
         <%
     }

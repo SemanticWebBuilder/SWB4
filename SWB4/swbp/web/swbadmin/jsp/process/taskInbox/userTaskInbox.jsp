@@ -33,7 +33,7 @@
 <%@page import="java.util.TreeMap"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.net.URLEncoder"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!--%@page contentType="text/html" pageEncoding="UTF-8"%-->
 
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
@@ -104,7 +104,7 @@ if (!user.isSigned()) {
     if (paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT) {
         %>
         <div class="alert alert-block alert-danger fade in">
-            <h4><i class="icon-ban-circle"></i> <%=paramRequest.getLocaleString("msgNoAccessTitle")%></h4>
+            <h4><span class="fa fa-ban"></span> <%=paramRequest.getLocaleString("msgNoAccessTitle")%></h4>
             <p><%=paramRequest.getLocaleString("msgNoAccess")%></p>
             <p>
                 <a class="btn btn-default" href="/login/<%=site.getId()%>/<%=paramRequest.getWebPage().getId()%>"><%=paramRequest.getLocaleString("btnLogin")%></a>
@@ -115,7 +115,7 @@ if (!user.isSigned()) {
 } else {
     if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
         %>
-        <a href="<%=createPiUrl%>" class="btn btn-sm btn-success swbp-btn-start" data-toggle="modal" data-target="#modalDialog"><i class="icon-play-sign"></i> <%=paramRequest.getLocaleString("createCase")%></a>
+        <a href="<%=createPiUrl%>" class="btn btn-sm btn-success swbp-btn-start" data-toggle="modal" data-target="#modalDialog"><span class="fa fa-play-circle fa-lg fa-fw"></span> <%=paramRequest.getLocaleString("createCase")%></a>
         <div class="swbp-left-menu">
             <ul class="list-unstyled">
                 <li>
@@ -138,7 +138,7 @@ if (!user.isSigned()) {
                 %>
                 <div class="alert alert-success alert-dismissable">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <i class="icon-ok"></i> <strong><%=paramRequest.getLocaleString("msgCreated")+" "+id%></strong>
+                    <span class="fa fa-check"></span> <strong><%=paramRequest.getLocaleString("msgCreated")+" "+id%></strong>
                 </div>
                 <%
             }
@@ -148,8 +148,8 @@ if (!user.isSigned()) {
         <ul class="list-unstyled list-inline">
             <li>
                 <div class="dropdown">
-                    <a class="btn btn-default" data-toggle="dropdown" title="Sort options">
-                        <i class="icon-sort-by-attributes"></i> <%=paramRequest.getLocaleString("sortLabel")%> <span class="caret"></span>
+                    <a class="btn btn-default" data-toggle="dropdown">
+                        <span class="fa fa-sort-amount-asc"></span> <%=paramRequest.getLocaleString("sortLabel")%> <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li class="dropdown-header" role="menuitem"><%=paramRequest.getLocaleString("sortDate")%></li>
@@ -161,26 +161,26 @@ if (!user.isSigned()) {
                             optsUrl.setParameter("sf", sFilter);
                         %>
                         <li role="menuitem">
-                            <a href="<%=optsUrl.setParameter("sort", "1") %>"><i class="icon-sort-by-order"></i> <%=sortType.equals("1")?"<strong>":""%><%=paramRequest.getLocaleString("sortLatest")%><%=sortType.equals("1")?"</strong>":""%></a>
+                            <a href="<%=optsUrl.setParameter("sort", "1") %>"><span class="fa fa-sort-numeric-asc"></span> <%=sortType.equals("1")?"<strong>":""%><%=paramRequest.getLocaleString("sortLatest")%><%=sortType.equals("1")?"</strong>":""%></a>
                         </li>
                         <li role="menuitem">
-                            <a href="<%=optsUrl.setParameter("sort", "2") %>"><i class="icon-sort-by-order-alt"></i> <%=sortType.equals("2")?"<strong>":""%><%=paramRequest.getLocaleString("sortOldest")%><%=sortType.equals("2")?"</strong>":""%></a>
+                            <a href="<%=optsUrl.setParameter("sort", "2") %>"><span class="fa fa-sort-numeric-desc"></span> <%=sortType.equals("2")?"<strong>":""%><%=paramRequest.getLocaleString("sortOldest")%><%=sortType.equals("2")?"</strong>":""%></a>
                         </li>
                         <li class="divider" role="menuitem"></li>
                         <li class="dropdown-header" role="menuitem"><%=paramRequest.getLocaleString("sortProcess")%></li>
                         <li role="menuitem">
-                            <a href="<%=optsUrl.setParameter("sort", "3") %>"><i class="icon-sort-by-alphabet"></i> <%=sortType.equals("3")?"<strong>":""%><%=paramRequest.getLocaleString("sortNameAsc")%><%=sortType.equals("3")?"</strong>":""%></a>
+                            <a href="<%=optsUrl.setParameter("sort", "3") %>"><span class="fa fa-sort-alpha-asc"></span> <%=sortType.equals("3")?"<strong>":""%><%=paramRequest.getLocaleString("sortNameAsc")%><%=sortType.equals("3")?"</strong>":""%></a>
                         </li>
                         <li role="menuitem">
-                            <a href="<%=optsUrl.setParameter("sort", "4") %>"><i class="icon-sort-by-alphabet-alt"></i> <%=sortType.equals("4")?"<strong>":""%><%=paramRequest.getLocaleString("sortNameDes")%><%=sortType.equals("4")?"</strong>":""%></a>
+                            <a href="<%=optsUrl.setParameter("sort", "4") %>"><span class="fa fa-sort-alpha-desc"></span> <%=sortType.equals("4")?"<strong>":""%><%=paramRequest.getLocaleString("sortNameDes")%><%=sortType.equals("4")?"</strong>":""%></a>
                         </li>
                     </ul>
                 </div>
             </li>
             <li>
                 <div class="dropdown">
-                    <a class="btn btn-default" data-toggle="dropdown" title="Filter">
-                        <i class="icon-filter"></i> <%=paramRequest.getLocaleString("filteringLabel")%> <span class="caret"></span>
+                    <a class="btn btn-default" data-toggle="dropdown">
+                        <span class="fa fa-filter"></span> <%=paramRequest.getLocaleString("filteringLabel")%> <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li class="dropdown-header" role="menuitem"><%=paramRequest.getLocaleString("sortStatus")%></li>
@@ -192,13 +192,13 @@ if (!user.isSigned()) {
                             }
                         %>
                         <li role="menuitem">
-                            <a href="<%=optsUrl.setParameter("sf", String.valueOf(FlowNodeInstance.STATUS_PROCESSING))%>"><i class="icon-flag-checkered"></i> <%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_PROCESSING))?"<strong>":""%><%=paramRequest.getLocaleString("pendingTasks")%><%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_PROCESSING))?"</strong>":""%></a>
+                            <a href="<%=optsUrl.setParameter("sf", String.valueOf(FlowNodeInstance.STATUS_PROCESSING))%>"><span class="fa fa-flag-checkered"></span> <%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_PROCESSING))?"<strong>":""%><%=paramRequest.getLocaleString("pendingTasks")%><%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_PROCESSING))?"</strong>":""%></a>
                         </li>
                         <li role="menuitem">
-                            <a href="<%=optsUrl.setParameter("sf", String.valueOf(FlowNodeInstance.STATUS_CLOSED))%>"><i class="icon-flag"></i> <%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_CLOSED))?"<strong>":""%><%=paramRequest.getLocaleString("closedTasks")%><%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_CLOSED))?"</strong>":""%></a>
+                            <a href="<%=optsUrl.setParameter("sf", String.valueOf(FlowNodeInstance.STATUS_CLOSED))%>"><span class="fa fa-flag"></span> <%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_CLOSED))?"<strong>":""%><%=paramRequest.getLocaleString("closedTasks")%><%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_CLOSED))?"</strong>":""%></a>
                         </li>
                         <li role="menuitem">
-                            <a href="<%=optsUrl.setParameter("sf", String.valueOf(FlowNodeInstance.STATUS_ABORTED))%>"><i class="icon-flag-alt"></i> <%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_ABORTED))?"<strong>":""%><%=paramRequest.getLocaleString("abortedTasks")%><%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_ABORTED))?"</strong>":""%></a>
+                            <a href="<%=optsUrl.setParameter("sf", String.valueOf(FlowNodeInstance.STATUS_ABORTED))%>"><span class="fa fa-flag-o"></span> <%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_ABORTED))?"<strong>":""%><%=paramRequest.getLocaleString("abortedTasks")%><%=sFilter.equals(String.valueOf(FlowNodeInstance.STATUS_ABORTED))?"</strong>":""%></a>
                         </li>
                     </ul>
                 </div>
@@ -247,7 +247,7 @@ if (!user.isSigned()) {
             </select>
             </li>
             <li>
-                <a href="<%=createPiUrl%>" class="btn btn-default hidden-lg" data-toggle="modal" data-target="#modalDialog"><i class="icon-play-sign"></i> <%=paramRequest.getLocaleString("createCase")%></a>
+                <a href="<%=createPiUrl%>" class="btn btn-default hidden-lg" data-toggle="modal" data-target="#modalDialog"><span class="fa fa-play-circle fa-lg fa-fw"></span> <%=paramRequest.getLocaleString("createCase")%></a>
             </li>
         </ul>
         <% if (tinstances != null && tinstances.size() > 0) { %>
@@ -364,19 +364,19 @@ if (!user.isSigned()) {
                                                     <td class="swbp-actions">
                                                         <%UserTask utask = (UserTask) instance.getFlowNodeType();
                                                         if (instance.getStatus() == ProcessInstance.STATUS_PROCESSING) {%>
-                                                            <a href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>" class="btn btn-default" title="<%=paramRequest.getLocaleString("actTake")%>"><i class="icon-external-link-sign"></i></a>
+                                                            <a href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>" class="btn btn-default" title="<%=paramRequest.getLocaleString("actTake")%>"><span class="fa fa-external-link-square"></span></a>
                                                             <%if (allowForward && instance.getAssignedto() != null) {
                                                                 SWBResourceURL forward = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(UserTaskInboxResource.MODE_FWD);
-                                                                %><a href="<%=forward.setParameter("suri", instance.getEncodedURI())%>" class="btn btn-default" data-toggle="modal" data-target="#modalDialog" title="<%=paramRequest.getLocaleString("actFwd")%>" ><i class="icon-exchange"></i></a><%
+                                                                %><a href="<%=forward.setParameter("suri", instance.getEncodedURI())%>" class="btn btn-default" data-toggle="modal" data-target="#modalDialog" title="<%=paramRequest.getLocaleString("actFwd")%>" ><span class="fa fa-exchange"></span></a><%
                                                             }
                                                         }
                                                         if (statusWp != null) {%>
-                                                            <a href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessInstance().getProcessType().getEncodedURI()%>" class="btn btn-default" title="<%=paramRequest.getLocaleString("actMap")%>"><i class="icon-gears"></i></a><%
+                                                            <a href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessInstance().getProcessType().getEncodedURI()%>" class="btn btn-default" title="<%=paramRequest.getLocaleString("actMap")%>"><span class="fa fa-cogs"></span></a><%
                                                         }
                                                         if(showPwpLink) {
                                                             SWBResourceURL detailUrl = paramRequest.getRenderUrl().setMode(UserTaskInboxResource.MODE_PROCESSDETAIL);
                                                             detailUrl.setParameter("suri", instance.getFlowNodeType().getProcess().getURI());%>
-                                                            <a href="<%=detailUrl%>" class="btn btn-default" title="<%=paramRequest.getLocaleString("actDetail")%>"><i class="icon-bar-chart"></i></a><%
+                                                            <a href="<%=detailUrl%>" class="btn btn-default" title="<%=paramRequest.getLocaleString("actDetail")%>"><span class="fa fa-bar-chart-o"></span></a><%
                                                         }
                                                         %>
                                                     </td>
@@ -409,7 +409,7 @@ if (!user.isSigned()) {
                                                     } else {
                                                         %><span class="swbp-ontime"><%
                                                     }
-                                                    %><i class="icon-time"></i></span>
+                                                    %><span class="fa fa-clock-o"></span></span>
                                                     </td><%
                                                 }
                                             }
@@ -483,7 +483,7 @@ if (!user.isSigned()) {
         } else {
             %>
             <div class="alert alert-warning">
-                <i class="icon-warning-sign"></i> <strong><%=paramRequest.getLocaleString("noTasks")%></strong>
+                <span class="fa fa-exclamation-triangle"></span> <strong><%=paramRequest.getLocaleString("noTasks")%></strong>
             </div>
             <%
         }
