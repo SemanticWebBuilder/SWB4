@@ -2,9 +2,7 @@ package org.semanticwb.bsc.admin.resources.behavior;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
@@ -12,10 +10,10 @@ import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.model.GenericIterator;
-import org.semanticwb.model.SWBModel;
-import org.semanticwb.model.Undeleteable;
 import org.semanticwb.model.User;
+import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -27,151 +25,181 @@ import org.semanticwb.portal.api.SWBResourceURL;
  * un objetivo
  *
  * @ Version 1.0
- * @author Ana Laura García
+ * @author Carlos Ramos
  */
 public class InitiativeManager extends GenericResource {
 
+    public static final String Action_UPDT_ACTIVE = "updactv";
     public static final String Action_ACTIVE_ALL = "actall";
-    public static final String Action_DESACTIVE_ALL = "desactall";
-    public static final String ACTION_ADD_Init = "actInit";
+    public static final String Action_DEACTIVE_ALL = "deactall";
 
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        PrintWriter out = response.getWriter();
-        String suri = request.getParameter("suri");
-        SemanticObject semObj = SemanticObject.getSemanticObject(suri);
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setHeader("Cache-Control", "no-cache"); 
+        response.setHeader("Pragma", "no-cache");
+
         User user = paramRequest.getUser();
-        Initiative.ClassMgr.listInitiatives(getResourceBase().getWebSite());
-        out.println("<script type=\"text/javascript\">\n");
-        out.println("  dojo.require('dojo.parser');\n");
-        out.println("  dojo.require('dijit.layout.ContentPane');\n");
-        out.println("  dojo.require('dijit.form.Form');\n");
-        out.println("  dojo.require('dijit.form.CheckBox');\n");
-        out.println("</script>\n");
+        if(user==null || !user.isSigned())
+        {
+            response.sendError(403);
+            return;
+        }
+        final String lang = user.getLanguage();
+        
+        String suri = request.getParameter("suri");
+        if(suri==null) {
+            response.getWriter().println("No se detect&oacute ning&uacute;n objeto sem&aacute;ntico!");
+            return;
+        }
+        
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();        
+        SemanticObject semObj = ont.getSemanticObject(suri);
+        
+        if (semObj != null)
+        {
+            BSC bsc = (BSC)semObj.getModel().getModelObject().createGenericInstance();
+            SWBResourceURL urlAdd;
+            Iterator<Initiative> itInit = bsc.listInitiatives();
+                
+            PrintWriter out = response.getWriter();
+            out.println("<script type=\"text/javascript\">\n");
+            out.println("  dojo.require('dojo.parser');\n");
+            out.println("  dojo.require('dijit.layout.ContentPane');\n");
+            out.println("  dojo.require('dijit.form.Form');\n");
+            out.println("  dojo.require('dijit.form.CheckBox');\n");
+            out.println("</script>\n");
 
-        if (semObj != null) {
-            BSC bsc = (BSC) semObj.getModel().getModelObject().createGenericInstance();
-            Iterator<Initiative> itObj = new GenericIterator<Initiative>(
-                    semObj.listObjectProperties(Objective.bsc_hasInitiative));
-            List initiativeCurrent = new ArrayList();
-            while (itObj.hasNext()) {
-                Initiative it = itObj.next();
-                initiativeCurrent.add(it);
-            }
+            out.println("<div class=\"swbform\">");
+            out.println("<fieldset>\n");
+            out.println("<table width=\"98%\">");
+            out.println("<thead>");
+            out.println("<tr>");
+            out.println("<th>" + paramRequest.getLocaleString("lbl_title") + "</th>");
+            out.println("<th>" + paramRequest.getLocaleString("lbl_responsible") + "</th>");
+            out.println("<th>" + paramRequest.getLocaleString("lbl_area") + "</th>");
+            out.println("<th>" + paramRequest.getLocaleString("lbl_active") + "</th>");
+            out.println("<th>" + paramRequest.getLocaleString("lbl_relate") + "</th>");
+            out.println("</tr>");
+            out.println("</thead>");
 
-            Iterator<Initiative> itInit = bsc.listValidInitiative().iterator();
-            SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD);
-            if (itInit != null && itInit.hasNext()) {
-                String data = semObj.getSemanticClass().getName() + semObj.getId();
+            while (itInit.hasNext()) {                    
+                Initiative initiative = itInit.next();
 
-                out.println("<form method=\"post\" id=\"frmAdd" + data + "\" action=\" " + url
-                        + "\" class=\"swbform\" type=\"dijit.form.Form\" onsubmit=\""
-                        + "submitForm('frmAdd" + data + "');return false;\">");
-                out.println("<input type=\"hidden\" name=\"suri\" value=\"" + semObj.getURI()
-                        + "\">");
-                out.println("<input type=\"hidden\" name=\"ws\" value=\"" + bsc.getId() + "\">");
-                out.println("<fieldset>\n");
-                out.println("<table width=\"98%\">");
-                out.println("<thead>");
-                out.println("<tr>");
-                out.println("<th>" + paramRequest.getLocaleString("lbl_title") + "</th>");
-                out.println("<th>" + paramRequest.getLocaleString("lbl_responsible") + "</th>");
-                out.println("<th>" + paramRequest.getLocaleString("lbl_area") + "</th>");
-                out.println("<th>" + paramRequest.getLocaleString("lbl_associate") + "</th>");
-                out.println("</tr>");
-                out.println("</thead>");
-
-                while (itInit.hasNext()) {
-                    Initiative initiative = itInit.next();
-                    SWBResourceURL urlAdd = paramRequest.getActionUrl();
+                if (  (initiative.isValid() && user.haveAccess(initiative)) || (!initiative.isActive() && semObj.hasObjectProperty(Objective.bsc_hasInitiative, initiative.getSemanticObject()) && user.haveAccess(initiative))  ) {
+                    urlAdd = paramRequest.getActionUrl();
                     urlAdd.setParameter("suri", suri);
                     urlAdd.setParameter("sval", initiative.getId());
-                    urlAdd.setAction(ACTION_ADD_Init);
-                    out.println("<tr><td>");
+                    urlAdd.setAction(Action_UPDT_ACTIVE);
+                    out.println("<tr>");
+                    // Título de la iniciativa
+                    out.println("<td>");
                     out.print("<a href=\"#\" onclick=\"addNewTab('" + initiative.getURI() + "','");
                     out.print(SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + initiative.getTitle());
-                    out.println("');return false;\" >" + (initiative.getTitle()!= null ? initiative.getTitle() : paramRequest.getLocaleString("lbl_undefined")) + "</a>");                  
-                    out.println("</td>"
-//                            + "<td>" + (initiative.getRisponsableInitiative() != null ? initiative.getRisponsableInitiative() : paramRequest.getLocaleString("lbl_undefined")) + "</td>"
-//                            + "<td>" + (initiative.getArea()!= null ? initiative.getArea() : paramRequest.getLocaleString("lbl_undefined")) + "</td>"
-                            + "<td>"
-                            + "<input type=\"checkbox\" name=\"initiative" + data + "\" "
-                            + "onchange=\"submitUrl('" + urlAdd + "&'+this.attr('name')+'='+this.attr('value'),this.domNode)\" "
-                            + " dojoType=\"dijit.form.CheckBox\" value=\"" + initiative.getId() + "\" " + (initiative.isActive() ? "checked=\"checked\"" : "") + " /></td>"
-                            + "</td></tr>");
+                    out.println("');return false;\" >" + (initiative.getTitle(lang)==null?(initiative.getTitle()==null?paramRequest.getLocaleString("lbl_undefined"):initiative.getTitle().replaceAll("'","")):initiative.getTitle(lang).replaceAll("'","")) + "</a>");                  
+                    out.println("</td>");
+                    // Responsable
+                    out.println("<td>" + (initiative.getInitiativeFacilitator()==null ? paramRequest.getLocaleString("lbl_undefined") : initiative.getInitiativeFacilitator().getFullName()) + "</td>");
+                    // Área
+                    out.println("<td>" + (initiative.getArea()==null ? paramRequest.getLocaleString("lbl_undefined"):initiative.getArea()) + "</td>");
+                    // Activo?
+                    out.println("<td>"+(initiative.isActive()?paramRequest.getLocaleString("lbl_isActive"):paramRequest.getLocaleString("lbl_isNotActive"))+"</td>");
+                    // Asignar
+                    out.println("<td>");
+                    out.println("<input type=\"checkbox\" name=\"initiative\" ");
+                    out.println("onchange=\"submitUrl('" + urlAdd + "&'+this.attr('name')+'='+this.attr('value'),this.domNode)\" ");
+                    out.println(" dojoType=\"dijit.form.CheckBox\" value=\"" + initiative.getId() + "\" " + (semObj.hasObjectProperty(Objective.bsc_hasInitiative, initiative.getSemanticObject())?"checked=\"checked\"":"") + " /></td>");
+                    out.println("</td>");
+                    out.println("</tr>");
                 }
-                out.println("</table>");
-                out.println("</fieldset>\n");
-                out.println("<fieldset>");
-
-                SWBResourceURL urlAll = paramRequest.getActionUrl();
-                urlAll.setParameter("suri", suri);
-                urlAll.setAction(Action_ACTIVE_ALL);
-                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlAll + "',this.domNode); return false;\">" + paramRequest.getLocaleString("lbl_ActiveAll") + "</button>");
-
-                SWBResourceURL urldesAll = paramRequest.getActionUrl();
-                urldesAll.setParameter("suri", suri);
-                urldesAll.setAction(Action_DESACTIVE_ALL);
-                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urldesAll + "',this.domNode); return false;\">" + paramRequest.getLocaleString("lbl_DesActiveAll") + "</button>");
-                out.println("</fieldset>\n");
-                out.println("</form>");
-            } else {
-                out.println("<p>" + paramRequest.getLocaleString("initiativesEstablished") + "</p>");
             }
-            if (request.getParameter("statusMsg") != null
-                    && !request.getParameter("statusMsg").isEmpty()) {
+            out.println("</table>");
+            out.println("</fieldset>\n");
+            out.println("<fieldset>");
+
+            SWBResourceURL urlAll = paramRequest.getActionUrl();
+            urlAll.setParameter("suri", suri);
+            urlAll.setAction(Action_ACTIVE_ALL);
+            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlAll + "',this.domNode); return false;\">" + paramRequest.getLocaleString("lbl_ActiveAll") + "</button>");
+
+            SWBResourceURL urldesAll = paramRequest.getActionUrl();
+            urldesAll.setParameter("suri", suri);
+            urldesAll.setAction(Action_DEACTIVE_ALL);
+            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urldesAll + "',this.domNode); return false;\">" + paramRequest.getLocaleString("lbl_DesActiveAll") + "</button>");
+            out.println("</fieldset>\n");
+            out.println("</div>");
+
+            if (request.getParameter("statmsg") != null && !request.getParameter("statmsg").isEmpty()) {
                 out.println("<div dojoType=\"dojox.layout.ContentPane\">");
                 out.println("<script type=\"dojo/method\">");
-                out.println("showStatus('" + request.getParameter("statusMsg") + "');\n");
+                out.println("showStatus('" + request.getParameter("statmsg") + "');\n");
                 out.println("</script>\n");
                 out.println("</div>");
             }
         }
+        else
+        {
+            response.getWriter().print("objeto semántico no ubicado");
+        }
     }
 
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws
-            SWBResourceException, IOException {
-        String action = response.getAction();
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        final String action = response.getAction();
         final String suri = request.getParameter("suri");
-        SemanticObject semObj = SemanticObject.getSemanticObject(suri);
-        SWBModel model = (SWBModel) semObj.getModel().getModelObject().createGenericInstance();
-        Objective obj = (Objective) semObj.createGenericInstance();
-
-        if (ACTION_ADD_Init.equalsIgnoreCase(action)) {
-            String sval = request.getParameter("sval");
-            Initiative initCheck = Initiative.ClassMgr.getInitiative(sval, model);
-            if (!initCheck.isActive()) {
-                initCheck.setActive(Boolean.TRUE);
-                obj.addInitiative(initCheck);
-            } else {
-                initCheck.setActive(Boolean.FALSE);
-                obj.removeInitiative(initCheck);
-            }
-        } else if (Action_ACTIVE_ALL.equalsIgnoreCase(action)) {
-            if (semObj != null) {
-                BSC bsc = (BSC) semObj.getModel().getModelObject().createGenericInstance();
-                Iterator<Initiative> itInit = bsc.listInitiatives();
-                while (itInit.hasNext()) {
-                    Initiative initiative = itInit.next();
-                    initiative.setActive(Boolean.TRUE);
-                    obj.addInitiative(initiative);
-                }
-            }
-        } else if (Action_DESACTIVE_ALL.equalsIgnoreCase(action)) {
-            if (semObj != null) {
-                BSC bsc = (BSC) semObj.getModel().getModelObject().createGenericInstance();
-                Iterator<Initiative> itInit = bsc.listInitiatives();
-                while (itInit.hasNext()) {
-                    Initiative initiative = itInit.next();
-                    initiative.setActive(Boolean.FALSE);
-                }
-                obj.removeAllInitiative();
-            }
-        }
+        
+        response.setAction(SWBResourceURL.Action_EDIT);
         response.setRenderParameter("suri", suri);
-        response.setRenderParameter("statusMsg", response.getLocaleString("statusMsg"));
-        response.setMode(SWBResourceURL.Mode_VIEW);
+        
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        SemanticObject semObj = ont.getSemanticObject(suri);
+        if(semObj==null) {
+            response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchSemanticElement"));
+            return;
+        }
+        
+        User user = response.getUser();
+        if(!user.isSigned() || !user.haveAccess(semObj.getGenericInstance())) {
+            response.setRenderParameter("statmsg", response.getLocaleString("msgUnauthorizedUser"));
+            return;
+        }
+        
+        Objective obj = (Objective) semObj.createGenericInstance();
+        BSC bsc = obj.getBSC();
+
+        if(Action_UPDT_ACTIVE.equalsIgnoreCase(action)) {
+            final String initiativeId = request.getParameter("sval");
+            if(initiativeId!=null)
+            {
+                Initiative initiative = null;
+                if(Initiative.ClassMgr.hasInitiative(initiativeId, bsc)) {
+                    initiative = Initiative.ClassMgr.getInitiative(initiativeId, bsc);
+                    if(obj.hasInitiative(initiative)) {
+                        obj.removeInitiative(initiative);
+                        response.setRenderParameter("statmsg", response.getLocaleString("msgDeallocatedInitiative"));
+                    }else {
+                        obj.addInitiative(initiative);
+                        response.setRenderParameter("statmsg", response.getLocaleString("msgAssignedInitiative"));
+                    }
+                }else {
+                    response.setRenderParameter("statmsg", "objeto semantico no ubicado");
+                }
+            }
+            else
+            {
+                response.setRenderParameter("statmsg", "Objeto semantico no ubicado.");
+            }
+        }else if(Action_ACTIVE_ALL.equalsIgnoreCase(action)) {
+            Iterator<Initiative> initiatives = bsc.listValidInitiative().iterator();
+            if(initiatives.hasNext()) {
+                obj.removeAllInitiative();
+                while(initiatives.hasNext()) {
+                    obj.addInitiative(initiatives.next());
+                }
+                response.setRenderParameter("statmsg", response.getLocaleString("msgAssignedInitiatives"));
+            }
+        }else if (Action_DEACTIVE_ALL.equalsIgnoreCase(action)) {
+            obj.removeAllInitiative();
+            response.setRenderParameter("statmsg", response.getLocaleString("msgDeallocatedInitiatives"));
+        }
     }
 }
