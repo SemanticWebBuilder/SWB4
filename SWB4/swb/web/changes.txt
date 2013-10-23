@@ -1,3 +1,5 @@
+  4.5.1.0
+    - Se agrego acciones de seguridad, evaluacion de reglas and/or y heredar o no elementos (Jei) 
   4.5.0.0
     - Cambio de la versión de DOJO - SEMANTICWEBBUILDER-84 (Jei)
     - Desacoplamiento de AWS, esta versión no se debe usar en AWS - SEMANTICWEBBUILDER-92(Serch)
