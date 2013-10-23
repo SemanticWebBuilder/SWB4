@@ -126,7 +126,11 @@ public class SemanticOntology
         if(!ontologys.containsKey(owl))
         {
             ontologys.put(owl, model);
-            subModels.add(model);                
+            
+//            subModels.add(model);                
+//            m_ontology.addSubModel(model.getRDFModel(),rebind);
+            
+            subModels.add(model);                            
             m_ontology.add(model.getRDFModel());
             m_ontology.setNsPrefixes(model.getRDFModel().getNsPrefixMap());
             if(rebind)m_ontology.rebind();
