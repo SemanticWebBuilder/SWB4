@@ -5,6 +5,7 @@ package org.semanticwb.model.base;
    */
 public interface TemplateRefableBase extends org.semanticwb.model.Referensable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_notInheritTemplateRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#notInheritTemplateRef");
    /**
    * Referencia a un objeto de tipo Template 
    */
@@ -14,6 +15,10 @@ public interface TemplateRefableBase extends org.semanticwb.model.Referensable
    * Interfaz que define propiedades para elementos que pueden referencia a plantillas 
    */
     public static final org.semanticwb.platform.SemanticClass swb_TemplateRefable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateRefable");
+
+    public boolean isNotInheritTemplateRef();
+
+    public void setNotInheritTemplateRef(boolean value);
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef> listTemplateRefs();
     public boolean hasTemplateRef(org.semanticwb.model.TemplateRef value);

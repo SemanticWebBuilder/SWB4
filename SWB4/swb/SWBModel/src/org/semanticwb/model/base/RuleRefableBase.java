@@ -10,6 +10,8 @@ public interface RuleRefableBase extends org.semanticwb.model.Referensable
    */
     public static final org.semanticwb.platform.SemanticClass swb_RuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RuleRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasRuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRuleRef");
+    public static final org.semanticwb.platform.SemanticProperty swb_notInheritRuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#notInheritRuleRef");
+    public static final org.semanticwb.platform.SemanticProperty swb_andEvalRuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#andEvalRuleRef");
    /**
    * Interfaz que define propiedades para elementos que pueden referencia a reglas 
    */
@@ -41,4 +43,12 @@ public interface RuleRefableBase extends org.semanticwb.model.Referensable
 * @return a instance of org.semanticwb.model.RuleRef
 */
     public org.semanticwb.model.RuleRef getRuleRef();
+
+    public boolean isNotInheritRuleRef();
+
+    public void setNotInheritRuleRef(boolean value);
+
+    public boolean isAndEvalRuleRef();
+
+    public void setAndEvalRuleRef(boolean value);
 }
