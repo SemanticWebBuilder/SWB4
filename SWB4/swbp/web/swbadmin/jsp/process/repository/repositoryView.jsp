@@ -35,7 +35,7 @@ if (!user.isSigned()) {
     if (paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT) {
         %>
         <div class="alert alert-block alert-danger fade in">
-            <h4><i class="icon-ban-circle"></i> <%=paramRequest.getLocaleString("msgNoAccessTitle")%></h4>
+            <h4><span class="fa fa-ban"></span> <%=paramRequest.getLocaleString("msgNoAccessTitle")%></h4>
             <p><%=paramRequest.getLocaleString("msgNoAccess")%></p>
             <p>
                 <a class="btn btn-default" href="/login/<%=site.getId()%>/<%=paramRequest.getWebPage().getId()%>"><%=paramRequest.getLocaleString("btnLogin")%></a>
@@ -48,7 +48,7 @@ if (!user.isSigned()) {
     %>
     <ul class="list-unstyled list-inline">
         <li>
-            <a href="<%=addUrl%>" class="btn btn-default"><i class="icon-plus"></i> <%=paramRequest.getLocaleString("addFile")%></a>
+            <a href="<%=addUrl%>" class="btn btn-default"><span class="fa fa-plus"></span> <%=paramRequest.getLocaleString("addFile")%></a>
         </li>
     </ul>
     <%
@@ -62,13 +62,13 @@ if (!user.isSigned()) {
                 <table class="table table-hover swbp-table">
                     <thead>
                         <tr>
-                            <th><a href="<%=urlOrder.setParameter("sort", "title")%>"><i class="icon-sort"></i></a> <%=paramRequest.getLocaleString("msgTHFileName")%></th>
-                            <th><a href="<%=urlOrder.setParameter("sort", "type")%>"><i class="icon-sort"></i></a> <%=paramRequest.getLocaleString("msgType")%></th>
+                            <th><a href="<%=urlOrder.setParameter("sort", "title")%>"><span class="fa fa-sort-asc"></span></a> <%=paramRequest.getLocaleString("msgTHFileName")%></th>
+                            <th><a href="<%=urlOrder.setParameter("sort", "type")%>"><span class="fa fa-sort-asc"></span></a> <%=paramRequest.getLocaleString("msgType")%></th>
                             <th><%=paramRequest.getLocaleString("msgVersion")%></th>
-                            <th><a href="<%=urlOrder.setParameter("sort", "date")%>"><i class="icon-sort"></i></a> <%=paramRequest.getLocaleString("msgLastDateModification")%></th>
-                            <th><a href="<%=urlOrder.setParameter("sort", "usr")%>"><i class="icon-sort"></i></a> <%=paramRequest.getLocaleString("msgVersionUser")%></th>
-                            <th><a href="<%=urlOrder.setParameter("sort", "gpousr")%>"><i class="icon-sort"></i></a> <%=paramRequest.getLocaleString("msgTHArea")%></th>
-                            <th><a href="<%=urlOrder.setParameter("sort", "status")%>"><i class="icon-sort"></i></a> <%=paramRequest.getLocaleString("msgTHStatus")%></th>
+                            <th><a href="<%=urlOrder.setParameter("sort", "date")%>"><span class="fa fa-sort-asc"></span></a> <%=paramRequest.getLocaleString("msgLastDateModification")%></th>
+                            <th><a href="<%=urlOrder.setParameter("sort", "usr")%>"><span class="fa fa-sort-asc"></span></a> <%=paramRequest.getLocaleString("msgVersionUser")%></th>
+                            <th><a href="<%=urlOrder.setParameter("sort", "gpousr")%>"><span class="fa fa-sort-asc"></span></a> <%=paramRequest.getLocaleString("msgTHArea")%></th>
+                            <th><a href="<%=urlOrder.setParameter("sort", "status")%>"><span class="fa fa-sort-asc"></span></a> <%=paramRequest.getLocaleString("msgTHStatus")%></th>
                             <th><%=paramRequest.getLocaleString("msgTHAction")%></th>
                         </tr>
                     </thead>
@@ -100,7 +100,7 @@ if (!user.isSigned()) {
                             <td><%=rf.getOwnerUserGroup()==null?"--":rf.getOwnerUserGroup().getDisplayTitle(lang)%></td>
                             <td><%=rf.getStatus()==null?"--":rf.getStatus().getDisplayTitle(lang)%></td>
                             <td class="swbp-actions">
-                                <a href="<%=propsUrl%>" title="<%=paramRequest.getLocaleString("msgInfo")%>" class="btn btn-default" data-toggle="modal" data-target="#modalDialog"><i class="icon-info-sign"></i></a>
+                                <a href="<%=propsUrl%>" title="<%=paramRequest.getLocaleString("msgInfo")%>" class="btn btn-default" data-toggle="modal" data-target="#modalDialog"><span class="fa fa-exclamation-triangle"></span></a>
                                 <%if (luser == 3 || (vi.getCreator() != null && vi.getCreator().equals(user) && luser > 1)) {
                                     SWBResourceURL urlremove = paramRequest.getActionUrl();
                                     urlremove.setAction("removefile");
@@ -110,8 +110,8 @@ if (!user.isSigned()) {
                                     addUrl.setParameter("fid", rf.getId());
                                     addUrl.setParameter("type", (rf instanceof RepositoryURL?"url":"file"));
                                     %>
-                                <a href="<%=urlremove%>" onclick="if (!confirm('<%=paramRequest.getLocaleString("msgAlertConfirmRemoveFile") + " " + rf.getTitle() + "?"%>')) return false;" title="<%=paramRequest.getLocaleString("msgAltDelete")%>" class="btn btn-default"><i class="icon-trash"></i></a>
-                                    <a href="<%=addUrl%>" title="<%=paramRequest.getLocaleString("msgAddVersion")%>" class="btn btn-default"><i class="icon-upload-alt"></i></a>
+                                <a href="<%=urlremove%>" onclick="if (!confirm('<%=paramRequest.getLocaleString("msgAlertConfirmRemoveFile") + " " + rf.getTitle() + "?"%>')) return false;" title="<%=paramRequest.getLocaleString("msgAltDelete")%>" class="btn btn-default"><span class="fa fa-trash-o"></span></a>
+                                    <a href="<%=addUrl%>" title="<%=paramRequest.getLocaleString("msgAddVersion")%>" class="btn btn-default"><span class="fa fa-cloud-upload"></span></a>
                                     <%
                                 }
                                 if (luser > 0) {
@@ -120,14 +120,14 @@ if (!user.isSigned()) {
                                     urlDownload.setParameter("fid", rf.getId());
                                     urlDownload.setParameter("verNum", "" + vi.getVersionNumber());
                                     %>
-                                    <a href="<%=rf instanceof RepositoryFile?urlDownload:vi.getVersionFile()%>" title="<%=rf instanceof RepositoryFile?paramRequest.getLocaleString("msgDownload"):paramRequest.getLocaleString("msgGoLink")%>" class="btn btn-default"><i class="<%=rf instanceof RepositoryFile?"icon-download-alt":"icon-external-link"%>"></i></a>
+                                    <a href="<%=rf instanceof RepositoryFile?urlDownload:vi.getVersionFile()%>" title="<%=rf instanceof RepositoryFile?paramRequest.getLocaleString("msgDownload"):paramRequest.getLocaleString("msgGoLink")%>" class="btn btn-default"><span class="fa <%=rf instanceof RepositoryFile?"fa-cloud-download":"fa-external-link"%>"></i></a>
                                 <%}
                                 if (vi.getPreviousVersion() != null) {
                                     SWBResourceURL historyUrl = paramRequest.getRenderUrl().setMode(ProcessFileRepository.MODE_HISTORY);
                                     historyUrl.setParameter("fid", rf.getId());
                                     historyUrl.setParameter("type", (rf instanceof RepositoryURL?"url":"file"));
                                     %>
-                                    <a href="<%=historyUrl%>" title="<%=paramRequest.getLocaleString("msgViewVersionHistory")%>" class="btn btn-default"><i class="icon-archive"></i></a>
+                                    <a href="<%=historyUrl%>" title="<%=paramRequest.getLocaleString("msgViewVersionHistory")%>" class="btn btn-default"><span class="fa fa-archive"></span></a>
                                     <%
                                 }%>
                             </td>

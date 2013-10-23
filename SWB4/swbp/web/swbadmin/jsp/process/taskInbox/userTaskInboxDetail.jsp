@@ -50,7 +50,7 @@ if (!user.isSigned()) {
     if (paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT) {
         %>
         <div class="alert alert-block alert-danger fade in">
-            <h4><i class="icon-ban-circle"></i> <%=paramRequest.getLocaleString("msgNoAccessTitle")%></h4>
+            <h4><span class="fa fa-ban"></span> <%=paramRequest.getLocaleString("msgNoAccessTitle")%></h4>
             <p><%=paramRequest.getLocaleString("msgNoAccess")%></p>
             <p>
                 <a class="btn btn-default" href="/login/<%=site.getId()%>/<%=paramRequest.getWebPage().getId()%>"><%=paramRequest.getLocaleString("btnLogin")%></a>
@@ -64,7 +64,7 @@ if (!user.isSigned()) {
         createPiUrl.setMode(UserTaskInboxResource.MODE_CREATEPI);
         SWBResourceURL optsUrl = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW);
         %>
-        <a href="<%=createPiUrl%>" class="btn btn-sm btn-success swbp-btn-start" data-toggle="modal" data-target="#modalDialog"><i class="icon-play-sign"></i> <%=paramRequest.getLocaleString("createCase")%></a>
+        <a href="<%=createPiUrl%>" class="btn btn-sm btn-success swbp-btn-start" data-toggle="modal" data-target="#modalDialog"><span class="fa fa-play-circle fa-lg fa-fw"></span> <%=paramRequest.getLocaleString("createCase")%></a>
         <div class="swbp-left-menu">
             <ul class="list-unstyled">
                 <li>
@@ -96,7 +96,7 @@ if (!user.isSigned()) {
             %><script>window.location='<%=viewUrl%>';</script><%
         } else {
             %>
-            <h2><a class="btn" data-toggle="tooltip" data-placement="bottom" title="Back to inbox" href="<%=viewUrl%>"><i class="icon-reply"></i></a><%=p.getTitle()%></h2>
+            <h2><a class="btn" data-toggle="tooltip" data-placement="bottom" title="Back to inbox" href="<%=viewUrl%>"><span class="fa fa-reply"></span></a><%=p.getTitle()%></h2>
             <%
             if (tinstances != null && !tinstances.isEmpty()) {
                 if (showGraphs) {
@@ -243,7 +243,7 @@ if (!user.isSigned()) {
             } else {
                 %>
                 <div class="alert alert-warning">
-                    <i class="icon-warning-sign"></i> <strong><%=paramRequest.getLocaleString("msgNoInstances")%></strong>
+                    <span class="fa fa-exclamation-triangle"></span> <strong><%=paramRequest.getLocaleString("msgNoInstances")%></strong>
                 </div>
                 <%
             }

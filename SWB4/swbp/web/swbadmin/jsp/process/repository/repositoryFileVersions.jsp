@@ -36,7 +36,7 @@ if (!user.isSigned()) {
     if (paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT) {
         %>
         <div class="alert alert-block alert-danger fade in">
-            <h4><i class="icon-ban-circle"></i> <%=paramRequest.getLocaleString("msgNoAccessTitle")%></h4>
+            <h4><span class="fa fa-ban"></span> <%=paramRequest.getLocaleString("msgNoAccessTitle")%></h4>
             <p><%=paramRequest.getLocaleString("msgNoAccess")%></p>
             <p>
                 <a class="btn btn-default" href="/login/<%=site.getId()%>/<%=paramRequest.getWebPage().getId()%>"><%=paramRequest.getLocaleString("btnLogin")%></a>
@@ -46,7 +46,7 @@ if (!user.isSigned()) {
     }
 } else {
     %>
-    <h2><a class="btn" data-toggle="tooltip" data-placement="bottom" title="<%=paramRequest.getLocaleString("btnBack")%>" href="<%=paramRequest.getRenderUrl().setMode(SWBParamRequest.Mode_VIEW)%>"><i class="icon-reply"></i></a><%=paramRequest.getLocaleString("msgVerHistoryTitle")%></h2>
+    <h2><a class="btn" data-toggle="tooltip" data-placement="bottom" title="<%=paramRequest.getLocaleString("btnBack")%>" href="<%=paramRequest.getRenderUrl().setMode(SWBParamRequest.Mode_VIEW)%>"><span class="fa fa-reply"></span></a><%=paramRequest.getLocaleString("msgVerHistoryTitle")%></h2>
     <%
     if (!files.isEmpty()) {
         Iterator<VersionInfo> it = files.iterator();
@@ -84,7 +84,7 @@ if (!user.isSigned()) {
                             <td><%=vi.getVersionComment()==null?"--":vi.getVersionComment()%></td>
                             <td><%=rf.getStatus()==null?"--":rf.getStatus().getDisplayTitle(lang)%></td>
                             <td class="swbp-actions">
-                                <a href="<%=propsUrl%>" title="<%=paramRequest.getLocaleString("msgInfo")%>" class="btn btn-default" data-toggle="modal" data-target="#modalDialog"><i class="icon-info-sign"></i></a>
+                                <a href="<%=propsUrl%>" title="<%=paramRequest.getLocaleString("msgInfo")%>" class="btn btn-default" data-toggle="modal" data-target="#modalDialog"><span class="fa fa-info-circle"></span></a>
                                 <%
                                 if (luser > 0) {
                                     SWBResourceURL urlDownload = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
@@ -92,7 +92,7 @@ if (!user.isSigned()) {
                                     urlDownload.setParameter("fid", rf.getId());
                                     urlDownload.setParameter("verNum", "" + vi.getVersionNumber());
                                     %>
-                                    <a href="<%=rf instanceof RepositoryFile?urlDownload:vi.getVersionFile()%>" title="<%=rf instanceof RepositoryFile?paramRequest.getLocaleString("msgDownload"):paramRequest.getLocaleString("msgGoLink")%>" class="btn btn-default"><i class="<%=rf instanceof RepositoryFile?"icon-download-alt":"icon-external-link"%>"></i></a>
+                                    <a href="<%=rf instanceof RepositoryFile?urlDownload:vi.getVersionFile()%>" title="<%=rf instanceof RepositoryFile?paramRequest.getLocaleString("msgDownload"):paramRequest.getLocaleString("msgGoLink")%>" class="btn btn-default"><span class="fa <%=rf instanceof RepositoryFile?"fa-cloud-download":"fa-external-link"%>"></span></a>
                                 <%}
                                 %>
                             </td>
