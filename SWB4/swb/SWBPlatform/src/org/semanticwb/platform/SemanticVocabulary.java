@@ -575,6 +575,7 @@ public class SemanticVocabulary
      */
     public void registerClass(SemanticClass cls, boolean filterProps)
     {
+        if(cls==null || cls.getURI()==null)return;
         if (!classes.containsKey(cls.getURI()))
         {
             log.trace("Registering SemanticClass:" + cls + " --> " + cls.getClassName());
