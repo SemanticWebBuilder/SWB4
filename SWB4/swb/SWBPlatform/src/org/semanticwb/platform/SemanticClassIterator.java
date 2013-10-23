@@ -23,6 +23,8 @@
 package org.semanticwb.platform;
 
 import com.hp.hpl.jena.ontology.OntClass;
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.util.iterator.ClosableIterator;
 import java.util.Iterator;
@@ -53,6 +55,8 @@ public class SemanticClassIterator<T extends SemanticClass> implements Iterator
     /** The retnext. */
     private boolean retnext=false;
     
+    private boolean newInstances=false;
+    
     
     /**
      * Instantiates a new semantic class iterator.
@@ -63,6 +67,17 @@ public class SemanticClassIterator<T extends SemanticClass> implements Iterator
     {
         this.m_it=it;
     }
+    
+    /**
+     * Instantiates a new semantic class iterator.
+     * 
+     * @param it the it
+     */
+    public SemanticClassIterator(Iterator it, boolean newInstances)
+    {
+        this.m_it=it;
+        this.newInstances=newInstances;
+    }    
 
     /* (non-Javadoc)
      * @see java.util.Iterator#hasNext()
@@ -100,12 +115,40 @@ public class SemanticClassIterator<T extends SemanticClass> implements Iterator
         SemanticClass cls=null;
         if(obj instanceof Statement)
         {
-            cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(((Statement)obj).getResource().getURI());
+            if(newInstances)
+            {
+                OntClass ocls=null;
+                Model m=((Statement)obj).getModel();
+                OntModel om=null;
+                if(m instanceof OntModel)
+                {
+                    om=(OntModel)m;
+                }
+                if(om!=null)
+                {
+                    ocls=om.createClass(((Statement)obj).getResource().getURI());
+                }
+                else
+                {
+                    ocls=SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().createClass(((Statement)obj).getResource().getURI());
+                }
+                if(ocls!=null)cls=new SemanticClass(ocls);
+            }else
+            {
+                cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(((Statement)obj).getResource().getURI());
+            }
         }else
         {
             OntClass ocls=(OntClass)obj;
-            //System.out.println(ocls+" "+ocls.getURI()+ocls.getLocalName());
-            cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(ocls.getURI());
+            
+            if(newInstances)
+            {
+                cls=new SemanticClass(ocls);
+            }else
+            {
+                //System.out.println(ocls+" "+ocls.getURI()+ocls.getLocalName());
+                cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(ocls.getURI());
+            }
         }            
         return cls;
     }
