@@ -448,7 +448,10 @@ public class SWBQueryExecution implements QueryExecution
                             n=Node.createLiteral(LiteralLabelFactory.create(rs.getInt(name)));
                         }else
                         {
-                            n = ((RGraph)model.getGraph()).decodeObject(obj.toString(), ext);
+                            if(obj!=null)
+                            {
+                                n = ((RGraph)model.getGraph()).decodeObject(obj.toString(), ext);
+                            }
                         }
                         if (n != null)
                         {
