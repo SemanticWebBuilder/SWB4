@@ -1,36 +1,16 @@
-/*
- * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
- * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
- * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
- * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
- * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
- * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
- *
- * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
- * del SemanticWebBuilder 4.0.
- *
- * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
- *  http://www.semanticwebbuilder.org
- */
 package org.semanticwb.portal.resources.sem.genericCalendar.base;
 
 
-public abstract class ResourceCalendarBase extends org.semanticwb.portal.api.GenericSemResource implements org.semanticwb.model.RoleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Trashable
+public abstract class ResourceCalendarBase extends org.semanticwb.portal.api.GenericSemResource implements org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Referensable,org.semanticwb.model.Trashable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty genCal_previousYear=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/GenericCalendar#previousYear");
+    public static final org.semanticwb.platform.SemanticProperty swb_notInheritRoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#notInheritRoleRef");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
     public static final org.semanticwb.platform.SemanticProperty genCal_canSubscribed=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/GenericCalendar#canSubscribed");
+    public static final org.semanticwb.platform.SemanticProperty swb_notInheritUserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#notInheritUserGroupRef");
     public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
@@ -41,11 +21,13 @@ public abstract class ResourceCalendarBase extends org.semanticwb.portal.api.Gen
     public static final org.semanticwb.platform.SemanticProperty genCal_jspView=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/GenericCalendar#jspView");
     public static final org.semanticwb.platform.SemanticProperty genCal_nextYear=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/GenericCalendar#nextYear");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
+    public static final org.semanticwb.platform.SemanticProperty swb_andEvalUserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#andEvalUserGroupRef");
     public static final org.semanticwb.platform.SemanticProperty genCal_numberNearEvents=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/GenericCalendar#numberNearEvents");
     public static final org.semanticwb.platform.SemanticClass genCal_EventType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/GenericCalendar#EventType");
     public static final org.semanticwb.platform.SemanticProperty genCal_hasEvtType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/GenericCalendar#hasEvtType");
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasUserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroupRef");
+    public static final org.semanticwb.platform.SemanticProperty swb_andEvalRoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#andEvalRoleRef");
     public static final org.semanticwb.platform.SemanticClass swb_RoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RoleRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasRoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRoleRef");
     public static final org.semanticwb.platform.SemanticClass genCal_ResourceCalendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/GenericCalendar#ResourceCalendar");
@@ -99,6 +81,24 @@ public abstract class ResourceCalendarBase extends org.semanticwb.portal.api.Gen
     public void setPreviousYear(boolean value)
     {
         getSemanticObject().setBooleanProperty(genCal_previousYear, value);
+    }
+
+/**
+* Gets the NotInheritRoleRef property
+* @return boolean with the NotInheritRoleRef
+*/
+    public boolean isNotInheritRoleRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_notInheritRoleRef);
+    }
+
+/**
+* Sets the NotInheritRoleRef property
+* @param value long with the NotInheritRoleRef
+*/
+    public void setNotInheritRoleRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_notInheritRoleRef, value);
     }
    /**
    * Sets the value for the property ModifiedBy
@@ -191,6 +191,24 @@ public abstract class ResourceCalendarBase extends org.semanticwb.portal.api.Gen
     public void setCanSubscribed(boolean value)
     {
         getSemanticObject().setBooleanProperty(genCal_canSubscribed, value);
+    }
+
+/**
+* Gets the NotInheritUserGroupRef property
+* @return boolean with the NotInheritUserGroupRef
+*/
+    public boolean isNotInheritUserGroupRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_notInheritUserGroupRef);
+    }
+
+/**
+* Sets the NotInheritUserGroupRef property
+* @param value long with the NotInheritUserGroupRef
+*/
+    public void setNotInheritUserGroupRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_notInheritUserGroupRef, value);
     }
 
 /**
@@ -398,6 +416,24 @@ public abstract class ResourceCalendarBase extends org.semanticwb.portal.api.Gen
     }
 
 /**
+* Gets the AndEvalUserGroupRef property
+* @return boolean with the AndEvalUserGroupRef
+*/
+    public boolean isAndEvalUserGroupRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_andEvalUserGroupRef);
+    }
+
+/**
+* Sets the AndEvalUserGroupRef property
+* @param value long with the AndEvalUserGroupRef
+*/
+    public void setAndEvalUserGroupRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_andEvalUserGroupRef, value);
+    }
+
+/**
 * Gets the NumberNearEvents property
 * @return int with the NumberNearEvents
 */
@@ -552,6 +588,24 @@ public abstract class ResourceCalendarBase extends org.semanticwb.portal.api.Gen
              ret=(org.semanticwb.model.UserGroupRef)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the AndEvalRoleRef property
+* @return boolean with the AndEvalRoleRef
+*/
+    public boolean isAndEvalRoleRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_andEvalRoleRef);
+    }
+
+/**
+* Sets the AndEvalRoleRef property
+* @param value long with the AndEvalRoleRef
+*/
+    public void setAndEvalRoleRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_andEvalRoleRef, value);
     }
    /**
    * Gets all the org.semanticwb.model.RoleRef
