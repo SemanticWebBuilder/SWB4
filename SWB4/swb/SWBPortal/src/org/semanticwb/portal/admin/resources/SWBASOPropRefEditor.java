@@ -251,7 +251,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             title = clsprop.getName();
             out.println("<div class=\"swbform\">");
             if(spandEval != null ||spinHerit!=null){
-                out.println("<p align=\"right\">");
+                out.println("<fieldset><p align=\"right\">");
                 if (spandEval != null) {
                     SWBResourceURL urlAnd = paramRequest.getActionUrl();
                     urlAnd.setParameter("suri", id);
@@ -275,7 +275,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                     String checked = null!=value&&value.equals("true")?"checked":""; 
                     out.println("<input type=\"checkbox\" id=\""+id+NO_INHERIT+"\" name=\""+NO_INHERIT+"\" value=\"1\" "+checked+" onclick=\"submitUrl('" + urlNoInherit + "',this);\" /><label for=\""+id+NO_INHERIT+"\" >"+paramRequest.getLocaleString("lbl_noInherit")+"</label>");
                 }
-                out.println("</p>");
+                out.println("</p></fieldset>");
             }
             out.println("<fieldset>");
             inheritHeader.append("<fieldset>");
