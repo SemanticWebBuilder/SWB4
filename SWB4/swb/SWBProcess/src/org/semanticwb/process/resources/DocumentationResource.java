@@ -414,9 +414,9 @@ public class DocumentationResource extends GenericAdmResource {
                                 + "<nav class=\"swbp-toolbar hidden-xs\" role=\"navigation\">\n"
                                 + "<div style=\"text-align: center;\">\n"
                                 + "    <ul class=\"swbp-nav\">\n"
-                                + "<li><h2><i class=\"icon-gears\" style=\"width: auto;\"></i> " + pe.getTitle() + "</h2></li>\n"
+                                + "<li><h2><i class=\"fa fa-gears\" style=\"width: auto;\"></i> " + pe.getTitle() + "</h2></li>\n"
                                 //                                + "        <li class=\"active\">"
-                                //                                + "<a href=\"#\"><i class=\"icon-gears\"></i><span>" + pe.getTitle() + "</span></a>\n"
+                                //                                + "<a href=\"#\"><i class=\"fa fa-gears\"></i><span>" + pe.getTitle() + "</span></a>\n"
                                 //                                + "</li>\n"
                                 + "</ul>\n"
                                 + "</div>\n"
@@ -428,7 +428,7 @@ public class DocumentationResource extends GenericAdmResource {
                         html += "</div>";
                         String ref = "";
                         html += "<div class=\"col-lg-2 col-md-2 col-sm-4 hidden-xs\">\n";//Begin menu
-                        //html += "<a href=\"#ruta\" style=\"width: 100%;\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + paramRequest.getLocaleString("home") + "\" class=\"btn btn-success btn-sm swbp-btn-start\"><i class=\"icon-home\"></i>" + paramRequest.getLocaleString("home") + "</a>";//Ruta
+                        //html += "<a href=\"#ruta\" style=\"width: 100%;\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + paramRequest.getLocaleString("home") + "\" class=\"btn btn-success btn-sm swbp-btn-start\"><i class=\"fa fa-home\"></i>" + paramRequest.getLocaleString("home") + "</a>";//Ruta
                         html += "<div class=\"swbp-left-menu swbp-left-menu-doc\">";//Begin body menu
                         html += "<ul class=\"nav nav-pills nav-stacked\">";
                         if (lane.size() > 0) {
@@ -515,7 +515,7 @@ public class DocumentationResource extends GenericAdmResource {
                         html += "<div class=\"panel panel-default\">\n"//Documentation Process
                                 + "   <div class=\"panel-heading\">\n"
                                 + "        <div class=\"panel-title\"><strong>" + paramRequest.getLocaleString("docFromPro") + " " + pe.getTitle() + "</strong></div>\n"
-                                + "<a href=\"Model_" + pe.getTitle() + ".html\" target=\"_blank\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + paramRequest.getLocaleString("viewModel") + "\" class=\"pull-right icon-fullscreen hidden-lg\"></a>"
+                                + "<a href=\"Model_" + pe.getTitle() + ".html\" target=\"_blank\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + paramRequest.getLocaleString("viewModel") + "\" class=\"pull-right fa fa-fullscreen hidden-lg\"></a>"
                                 + "   </div>\n"
                                 + "   <div class=\"panel-body\">\n"
                                 + pe.getDocumentation().getText()
@@ -523,7 +523,7 @@ public class DocumentationResource extends GenericAdmResource {
                                 + "</div>";
                         if (lane.size() > 0) {//Lane
                             html += "<div class=\"panel panel-default\">";
-                            html += "<div id=\"lanemenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + laneT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right icon-level-up\"></a></div></div>";
+                            html += "<div id=\"lanemenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + laneT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right fa fa-level-up\"></a></div></div>";
                             html += "<div class=\"panel-body\">";
                             iterator = SWBComparator.sortByDisplayName(lane.iterator(), paramRequest.getUser().getLanguage());
                             while (iterator.hasNext()) {
@@ -536,7 +536,7 @@ public class DocumentationResource extends GenericAdmResource {
                         }
                         if (activity.size() > 0) {
                             html += "<div class=\"panel panel-default\">";
-                            html += "<div id=\"activitymenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + activityT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right icon-level-up\"></a></div></div>";
+                            html += "<div id=\"activitymenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + activityT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right fa fa-level-up\"></a></div></div>";
                             html += "<div class=\"panel-body\">";
                             iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
                             while (iterator.hasNext()) {
@@ -549,7 +549,7 @@ public class DocumentationResource extends GenericAdmResource {
                         }
                         if (gateway.size() > 0) {
                             html += "<div class=\"panel panel-default\">";
-                            html += "<div id=\"gatewaymenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + gatewayT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right icon-level-up\"></a></div></div>";
+                            html += "<div id=\"gatewaymenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + gatewayT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right fa fa-level-up\"></a></div></div>";
                             html += "<div class=\"panel-body\">";
                             iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
                             while (iterator.hasNext()) {
@@ -561,7 +561,7 @@ public class DocumentationResource extends GenericAdmResource {
                                 while (itConObj.hasNext()) {
                                     ConnectionObject connectionObj = itConObj.next();
                                     if (connectionObj instanceof SequenceFlow) {
-                                        html += "<i class=\"icon-arrow-right\"></i> <h4 id=\"" + connectionObj.getURI() + "\" title=\"" + connectionObj.getTitle() + "\">" + connectionObj.getTitle() + "</h4>";
+                                        html += "<i class=\"fa fa-arrow-right\"></i> <h4 id=\"" + connectionObj.getURI() + "\" title=\"" + connectionObj.getTitle() + "\">" + connectionObj.getTitle() + "</h4>";
                                         html += connectionObj.getDocumentation().getText();
                                     }
                                 }
@@ -572,7 +572,7 @@ public class DocumentationResource extends GenericAdmResource {
                         }
                         if (event.size() > 0) {
                             html += "<div class=\"panel panel-default\">";
-                            html += "<div id=\"eventmenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + eventT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right icon-level-up\"></a></div></div>";
+                            html += "<div id=\"eventmenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + eventT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right fa fa-level-up\"></a></div></div>";
                             html += "<div class=\"panel-body\">";
                             iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
                             while (iterator.hasNext()) {
@@ -585,7 +585,7 @@ public class DocumentationResource extends GenericAdmResource {
                         }
                         if (dataob.size() > 0) {
                             html += "<div class=\"panel panel-default\">";
-                            html += "<div id=\"dataobmenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + dataT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right icon-level-up\"></a></div></div>";
+                            html += "<div id=\"dataobmenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + dataT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right fa fa-level-up\"></a></div></div>";
                             html += "<div class=\"panel-body\">";
                             iterator = SWBComparator.sortByDisplayName(dataob.iterator(), paramRequest.getUser().getLanguage());
                             while (iterator.hasNext()) {
@@ -830,7 +830,7 @@ public class DocumentationResource extends GenericAdmResource {
                 + "<nav class=\"swbp-toolbar hidden-xs\" role=\"navigation\">\n"
                 + "<div style=\"text-align: center;\">\n"
                 + "    <ul class=\"swbp-nav\">\n"
-                + "<li><h2><i class=\"icon-gears\" style=\"width: auto;\"></i> " + subProcess.getTitle() + "</h2></li>"
+                + "<li><h2><i class=\"fa fa-gears\" style=\"width: auto;\"></i> " + subProcess.getTitle() + "</h2></li>"
                 + "</li>\n"
                 + "</ul>\n"
                 + "</div>\n"
@@ -860,7 +860,7 @@ public class DocumentationResource extends GenericAdmResource {
          */
         String ref = "";
         html += "<div class=\"col-lg-2 col-md-2 col-sm-4 hidden-xs\">";//Begin menu
-        //html += "<a href=\"#ruta\" style=\"width: 100%;\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + paramRequest.getLocaleString("home") + "\" class=\"btn btn-success btn-sm swbp-btn-start\"><i class=\"icon-home\"></i>" + paramRequest.getLocaleString("home") + "</a>";//Ruta
+        //html += "<a href=\"#ruta\" style=\"width: 100%;\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + paramRequest.getLocaleString("home") + "\" class=\"btn btn-success btn-sm swbp-btn-start\"><i class=\"fa fa-home\"></i>" + paramRequest.getLocaleString("home") + "</a>";//Ruta
         html += "<div class=\"swbp-left-menu swbp-left-menu-doc\">";//Begin body menu
         html += "<ul class=\"nav nav-pills nav-stacked\">";
         if (activity.size() > 0) {
@@ -929,7 +929,7 @@ public class DocumentationResource extends GenericAdmResource {
         html += "<div class=\"panel panel-default\">\n"//Documentation Process
                 + "   <div class=\"panel-heading\">\n"
                 + "        <div class=\"panel-title\"><strong>" + paramRequest.getLocaleString("docFromSub") + " " + subProcess.getTitle() + "</strong></div>\n"
-                + "<a href=\"Model_" + subProcess.getTitle() + ".html\" target=\"_blank\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + paramRequest.getLocaleString("viewModel") + "\" class=\"pull-right icon-fullscreen hidden-lg\"></a>"
+                + "<a href=\"Model_" + subProcess.getTitle() + ".html\" target=\"_blank\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + paramRequest.getLocaleString("viewModel") + "\" class=\"pull-right fa fa-fullscreen hidden-lg\"></a>"
                 + "   </div>\n"
                 + "   <div class=\"panel-body\">\n"
                 + subProcess.getDocumentation().getText()
@@ -952,7 +952,7 @@ public class DocumentationResource extends GenericAdmResource {
         }
         if (gateway.size() > 0) {
             html += "<div class=\"panel panel-default\">\n";
-            html += "<div id=\"gatewaymenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + gatewayT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right icon-level-up\"></a></div></div>\n";
+            html += "<div id=\"gatewaymenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + gatewayT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right fa fa-level-up\"></a></div></div>\n";
             html += "<div class=\"panel-body\">\n";
             iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
             while (iterator.hasNext()) {
@@ -964,7 +964,7 @@ public class DocumentationResource extends GenericAdmResource {
                 while (itConObj.hasNext()) {
                     ConnectionObject connectionObj = itConObj.next();
                     if (connectionObj instanceof SequenceFlow) {
-                        html += "<i class=\"icon-arrow-right\"></i><h4 id=\"" + connectionObj.getURI() + "\" title=\"" + connectionObj.getTitle() + "\">" + connectionObj.getTitle() + "</h4>\n";
+                        html += "<i class=\"fa fa-arrow-right\"></i><h4 id=\"" + connectionObj.getURI() + "\" title=\"" + connectionObj.getTitle() + "\">" + connectionObj.getTitle() + "</h4>\n";
                         html += connectionObj.getDocumentation().getText();
                     }
                 }
@@ -975,7 +975,7 @@ public class DocumentationResource extends GenericAdmResource {
         }
         if (event.size() > 0) {
             html += "<div class=\"panel panel-default\">\n";
-            html += "<div id=\"eventmenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + eventT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right icon-level-up\"></a></div></div>\n";
+            html += "<div id=\"eventmenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + eventT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right fa fa-level-up\"></a></div></div>\n";
             html += "<div class=\"panel-body\">\n";
             iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
             while (iterator.hasNext()) {
@@ -988,7 +988,7 @@ public class DocumentationResource extends GenericAdmResource {
         }
         if (dataob.size() > 0) {
             html += "<div class=\"panel panel-default\">\n";
-            html += "<div id=\"dataobmenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + dataT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right icon-level-up\"></a></div></div>\n";
+            html += "<div id=\"dataobmenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + dataT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right fa fa-level-up\"></a></div></div>\n";
             html += "<div class=\"panel-body\">\n";
             iterator = SWBComparator.sortByDisplayName(dataob.iterator(), paramRequest.getUser().getLanguage());
             while (iterator.hasNext()) {
@@ -1070,38 +1070,38 @@ public class DocumentationResource extends GenericAdmResource {
         html += "<div class=\"panel panel-default\">\n"
                 + "    <div class=\"panel-heading\">\n"
                 + "        <div class=\"panel-title text-center\">\n"
-                + "            <li class=\"icon-cogs\"></li> " + pe.getTitle() + "\n"
+                + "            <li class=\"fa fa-cogs\"></li> " + pe.getTitle() + "\n"
                 + "        </div>\n"
                 + "    </div>\n"
                 + "    <div class=\"panel-body text-center\">\n"
                 + "        <ul class=\"list-unstyled list-inline hidden-print visible-lg\">\n"
                 + "            <li>\n"
                 + "                <a href=\"#\" class=\"btn btn-default\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"Zoom in\" onclick=\"zoomin();\n"
-                + "                                return false;\"><i class=\"icon-zoom-in\"></i></a>\n"
+                + "                                return false;\"><i class=\"fa fa-search-plus\"></i></a>\n"
                 + "            </li>\n"
                 + "            <li>\n"
                 + "                <a href=\"#\" class=\"btn btn-default\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"Zoom out\" onclick=\"zoomout();\n"
-                + "                                return false;\"><i class=\"icon-zoom-out\"></i></a>\n"
+                + "                                return false;\"><i class=\"fa fa-search-minus\"></i></a>\n"
                 + "            </li>\n"
                 + "            <li>\n"
                 + "                <a href=\"#\" class=\"btn btn-default\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"Reset zoom\" onclick=\"fitToScreen();\n"
-                + "                                return false;\"><i class=\"icon-desktop\"></i></a>\n"
+                + "                                return false;\"><i class=\"fa fa-desktop\"></i></a>\n"
                 + "            </li>\n"
                 + "            <li>\n"
                 + "                <a href=\"#\" class=\"btn btn-default\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"Pan left\" onclick=\"handlePanning('left');\n"
-                + "                                return false;\"><i class=\"icon-arrow-left\"></i></a>\n"
+                + "                                return false;\"><i class=\"fa fa-arrow-left\"></i></a>\n"
                 + "            </li>\n"
                 + "            <li>\n"
                 + "                <a href=\"#\" class=\"btn btn-default\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"Pan down\" onclick=\"handlePanning('down');\n"
-                + "                                return false;\"><i class=\"icon-arrow-down\"></i></a>\n"
+                + "                                return false;\"><i class=\"fa fa-arrow-down\"></i></a>\n"
                 + "            </li>\n"
                 + "            <li>\n"
                 + "                <a href=\"#\" class=\"btn btn-default\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"Pan up\" onclick=\"handlePanning('up');\n"
-                + "                                return false;\"><i class=\"icon-arrow-up\"></i></a>\n"
+                + "                                return false;\"><i class=\"fa fa-arrow-up\"></i></a>\n"
                 + "            </li>\n"
                 + "            <li>\n"
                 + "                <a href=\"#\" class=\"btn btn-default\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"Pan right\" onclick=\"handlePanning('right');\n"
-                + "                                return false;\"><i class=\"icon-arrow-right\"></i></a>\n"
+                + "                                return false;\"><i class=\"fa fa-arrow-right\"></i></a>\n"
                 + "            </li>\n"
                 + "        </ul>\n";
         html += getStyleModel();
