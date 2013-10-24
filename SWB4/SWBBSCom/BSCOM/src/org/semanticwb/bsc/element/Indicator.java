@@ -27,6 +27,7 @@ import org.semanticwb.platform.SemanticObserver;
  */
 public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase 
 {
+    public static final String names[] = {"Actual","Meta","Actual Acumulado","Meta Acumulada"};
     static
     {        
         bsc_hasSeries.registerObserver(new SemanticObserver() {
@@ -40,7 +41,6 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
                     if(series!=null && series.getEvaluationRule()==null)
                     {
                         State state;
-                        String names[] = {"Actual","Meta","Actual Acumulado","Meta Acumulada"};
                         List<State> validStates = indicator.listValidStates();
                         for(int i=0; i<validStates.size(); i++) {
                             state = validStates.get(i);
