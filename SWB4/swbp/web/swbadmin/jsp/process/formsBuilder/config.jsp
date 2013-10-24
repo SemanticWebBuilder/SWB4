@@ -69,11 +69,11 @@ if (ProcessForm.ACT_UPDPROP.equals(action)) {
                         <input type="radio" <%=propsMap.get("mode").equals("edit")?"checked":""%> name="<%=ProcessForm.PARAM_PROPMODE%>" value="edit"/><label><%=paramRequest.getLocaleString("lblEdit")%></label>
                     </td>
                 </tr>
-                <tr>
+                <!--tr>
                     <td><label><%=paramRequest.getLocaleString("lblRoles")%>: </label></td>
                     <td>
                         <select multiple name="<%=ProcessForm.PARAM_ROLES%>" style="width:300px;">
-                            <%
+                            <%--
                             //TODO: Obtener roles y marcar los seleccionados
                             String roleList = propsMap.get("roles");
                             ArrayList<String> _roles = new ArrayList<String>();
@@ -88,14 +88,14 @@ if (ProcessForm.ACT_UPDPROP.equals(action)) {
                             while(roles.hasNext()) {
                                 Role role = roles.next();
                                 String selected = _roles.contains(role.getId())?"selected":"";
-                                %>
+                                --%>
                                 <option <%=selected%> value="<%=role.getId()%>"><%=role.getDisplayTitle(lang)%></option>
-                                <%
+                                <%--
                             }
-                            %>
+                            --%>
                         </select>
                     </td>
-                </tr>
+                </tr-->
             </table>
             </fieldset>
             <fieldset>
