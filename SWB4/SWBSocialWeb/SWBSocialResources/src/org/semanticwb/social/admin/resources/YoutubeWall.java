@@ -325,6 +325,26 @@ public class YoutubeWall extends GenericResource{
             out.println("   hideDialog(); ");
             out.println("   showStatus('" + paramRequest.getLocaleString("videoEdited") + "');");
             out.println("</script>");
+        }else if(mode != null && mode.equals("videoDeleted")){
+            String videoId = request.getParameter("videoId");
+
+            if((videoId == null || videoId.trim().isEmpty()) ||
+                    (objUri == null || objUri.trim().isEmpty())){
+                log.error("Problem updating video information");
+                return;
+            }
+            SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
+            Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();
+            System.out.println("VIDEO ID:" + videoId);
+            System.out.println("SURI:" + objUri);
+            out.println("<script type=\"javascript\">");
+            out.println("   showStatus('" + paramRequest.getLocaleString("videoDeleted") +"');");
+            out.println("   var deleted = document.getElementById('" + semanticYoutube.getId() + "/" + videoId +"');");
+            out.println("   deleted.style.display='none';");
+            out.println("   deleted.innerHTML=''");
+            //out.println("   spanId.attr('content', 'PACONE');");
+            //out.println("   spanId.domNode.style.visibility = 'hidden';");
+            out.println("</script>");
         }else{
             super.processRequest(request, response, paramRequest);
         }
@@ -385,7 +405,8 @@ public class YoutubeWall extends GenericResource{
                     //Date commentTime = formatter.parse(comments.getJSONObject(k).getString("created_time"));
 
                     out.write("<p class=\"timelinedate\">");
-                    out.write("<span dojoType=\"dojox.layout.ContentPane\">");
+                    //out.write("<span dojoType=\"dojox.layout.ContentPane\">");
+                    out.write("<span>");
                     Date date = formatter.parse(comment.getJSONObject("published").getString("$t"));
                     out.write("<em>" + humanFriendlyDate(date, paramRequest) +  "</em>");
                     out.write("</span>");
@@ -554,6 +575,53 @@ public class YoutubeWall extends GenericResource{
         }else if(action.equals("doUpdateVideo")){
             doUpdateVideo(request);
             response.setMode("videoUpdated");
+        }else if (action.equals("doDeleteVideo")){
+            doDeleteVideo(request);
+            response.setRenderParameter("videoId", request.getParameter("videoId"));
+            response.setRenderParameter("suri", request.getParameter("suri"));
+            response.setMode("videoDeleted");
+        }
+    }
+    
+    private void doDeleteVideo(HttpServletRequest request){
+        String videoId = request.getParameter("videoId");
+        String objUri = request.getParameter("suri");
+        
+        if((videoId == null || videoId.trim().isEmpty()) ||
+                (objUri == null || objUri.trim().isEmpty())){
+            log.error("Problem updating video information");
+            return;
+        }
+        SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
+        Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();
+        if(!semanticYoutube.validateToken()){
+            log.error("Unable to update the access token inside delete Video!");
+            return;
+        }
+        
+        String urlVideo = "http://gdata.youtube.com/feeds/api/users/default/uploads/" + videoId;
+        URL url;
+        HttpURLConnection conn = null;
+        try {
+            url = new URL(urlVideo);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setRequestMethod("DELETE");
+            conn.setUseCaches(false);
+            conn.setRequestProperty("Host", "gdata.youtube.com");
+            conn.setRequestProperty("Content-Type", "application/atom+xml");
+            conn.setRequestProperty("Authorization", "Bearer " + semanticYoutube.getAccessToken());
+            conn.setRequestProperty("GData-Version", "2");
+            conn.setRequestProperty("X-GData-Key", "key=" + semanticYoutube.getDeveloperKey());
+            conn.connect();
+            BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String docxml = readerl.readLine();
+            System.out.println("THE READ:" + docxml);
+
+        }catch(Exception ex){
+            System.out.println("ERROR" + ex.toString());
+            ex.printStackTrace();
         }
     }
     
@@ -821,7 +889,7 @@ public class YoutubeWall extends GenericResource{
         SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
         Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();        
         try{
-            out.write("<div class=\"timeline timelinefacebook\">");
+            out.write("<div id=\"" + semanticYoutube.getId() +"/" + video.getString("id") + "\" class=\"timeline timelinefacebook\" dojoType=\"dojox.layout.ContentPane\">");
                 //Username and story
                 out.write("<p>");
                 out.write(video.getString("title"));
@@ -893,7 +961,8 @@ public class YoutubeWall extends GenericResource{
                             out.write("</p>");
 
                             out.write("<p class=\"timelinedate\">");
-                            out.write("<span dojoType=\"dojox.layout.ContentPane\">");
+                            //out.write("<span dojoType=\"dojox.layout.ContentPane\">");
+                            out.write("<span>");
 
                             Date date = formatter.parse(comment.getJSONObject("published").getString("$t"));
                             out.write("<em>" + humanFriendlyDate(date, paramRequest) +  "</em>");
@@ -982,6 +1051,10 @@ public class YoutubeWall extends GenericResource{
                 SWBResourceURL editVideo = paramRequest.getRenderUrl().setMode("editVideo").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("videoId", video.getString("id")).setParameter("suri", objUri);
                 out.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("edit") + "\" onclick=\"showDialog('" + editVideo + "','"
                     + paramRequest.getLocaleString("edit") +"'); return false;\"><span>" + paramRequest.getLocaleString("edit") +"</span></a>");
+                out.write("   </span>");
+                
+                out.write("   <span id=\"" + semanticYoutube.getId() + video.getString("id") +  "/delete" + "\" class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
+                out.write("<a href=\"#\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirmDelete") + "')){ postSocialHtml('" + paramRequest.getActionUrl().setAction("doDeleteVideo").setParameter("suri", objUri).setParameter("videoId", video.getString("id")) + "','" + semanticYoutube.getId() + "/" +  video.getString("id") + "');} return false;\">" + paramRequest.getLocaleString("deleteVideo") + "</a>");
                 out.write("   </span>");
                 
                 out.write("</div>");//timelineresume
