@@ -39,7 +39,7 @@
 </div>
 <ul class="list-unstyled list-inline"><li>
         <a class="btn btn-default btn-sm" href="<%=url.setMode("add")%>" data-placement="bottom" data-toggle="tooltip" data-original-title="<%out.println(paramRequest.getLocaleString("add") + " " + paramRequest.getLocaleString("report"));%>">
-            <i class="icon-plus"></i> <%=paramRequest.getLocaleString("add")%>
+            <i class="fa fa-plus"></i> <%=paramRequest.getLocaleString("add")%>
         </a>
     </li>
     <li>
@@ -50,14 +50,14 @@
             </a>
             <ul class="dropdown-menu">
                 <!-- dropdown menu links -->
-                <li><a  href="#" onclick="window.location = '<%=URSUrl%>'"><i class="icon-download-alt"></i> <%=paramRequest.getLocaleString("userRoles")%></a></li>
-                <li><a href="#" onclick="window.location = '<%=TRSUrl%>'"><i class="icon-download-alt"></i> <%=paramRequest.getLocaleString("activityRoles")%></a></li>
+                <li><a  href="#" onclick="window.location = '<%=URSUrl%>'"><i class="fa fa-download"></i> <%=paramRequest.getLocaleString("userRoles")%></a></li>
+                <li><a href="#" onclick="window.location = '<%=TRSUrl%>'"><i class="fa fa-download"></i> <%=paramRequest.getLocaleString("activityRoles")%></a></li>
             </ul>
         </div>
     </li>
 </ul>
 <%
-    if(report.hasNext()){
+    if (report.hasNext()) {
 %>
 <div class="table-responsive">
     <table class="table table-hover swbp-table">
@@ -90,39 +90,39 @@
                 <%=fr.getTitle()%>
                 <a class="btn btn-default" <%if (fr.isActive()) {%> href="<%=path%>"<%}%> 
                    data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("download") + " " + paramRequest.getLocaleString("file") + " " + fr.getTitle()%>"
-                   > <li class="icon-download-alt"></li></a>
+                   > <li class="fa fa-download"></li></a>
                         <%if (fr.isActive()) {%>
                 <a  class="btn btn-default" 
                     onclick="if (!confirm('<%=paramRequest.getLocaleString("remove") + " " + paramRequest.getLocaleString("file")%>?'))
-                                return false;" href="<%=urlAction.setAction("removeFileReport").setParameter("idFileReport", fr.getId())%>" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("remove") + " " + paramRequest.getLocaleString("file") + " " + fr.getTitle()%>">
-                    <li class="icon-trash"></li>            
+                            return false;" href="<%=urlAction.setAction("removeFileReport").setParameter("idFileReport", fr.getId())%>" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("remove") + " " + paramRequest.getLocaleString("file") + " " + fr.getTitle()%>">
+                    <li class="fa fa-trash-o"></li>            
                 </a><%}%>
                 <br/>
                 <%}
                 %></td>
             <td style="text-align: center; vertical-align: middle;" class="tban-tarea">
                 <a class="btn btn-default btn-sm" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("configureReport") + " " + rp.getTitle()%>" href="<%=url.setMode(SWBResourceURL.Mode_EDIT).setParameter("idReport", rp.getId())%>">
-                    <li class="icon-wrench icon-large"></li>
+                    <li class="fa fa-wrench fa-large"></li>
                 </a>  
                 <%if (modeExport == 2) {
                         urlViewReport.setParameter("modeExport", modeExport.toString());%>
                 <a class="btn btn-default btn-sm" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("view") + " " + paramRequest.getLocaleString("report") + " " + rp.getTitle()%>"
                    href="<%=urlViewReport.setMode("viewReport").setParameter("idReport", rp.getId())%>">
-                    <li class="icon-eye-open icon-large"></li>
+                    <li class="fa fa-eye fa-large"></li>
                 </a>
                 <%} else {%>
                 <a href="<%=urlDialog%>" data-toggle="modal" data-target="#modalDialog"
                    class="btn btn-default btn-sm" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("save") + " " + paramRequest.getLocaleString("report") + " " + rp.getTitle()%>">
                     <%if (isSaveOnSystem) {%>
-                    <li class="icon-save icon-large"></li><%} else {%>
-                    <li class="icon-file icon-large"></li>
+                    <li class="fa fa-save fa-large"></li><%} else {%>
+                    <li class="fa fa-file fa-large"></li>
                         <%}%>
                 </a>
                 <%}%>
                 <a class="btn btn-default btn-sm" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("remove") + " " + paramRequest.getLocaleString("report") + " " + rp.getTitle()%>"
                    onclick="if (!confirm('<%=paramRequest.getLocaleString("remove") + " " + paramRequest.getLocaleString("report")%>?'))
-                                return false;" href="<%=urlAction.setAction(SWBResourceURL.Action_REMOVE).setParameter("idReport", rp.getId())%>">
-                    <li class="icon-trash icon-large"></li>
+                            return false;" href="<%=urlAction.setAction(SWBResourceURL.Action_REMOVE).setParameter("idReport", rp.getId())%>">
+                    <li class="fa fa-trash-o fa-large"></li>
                 </a>
             </td>
         </tr>
@@ -135,42 +135,42 @@
 </div>
 <%}%>
 <script type="text/javascript">
-                        var count = 0;
-                        function submitUrl(url, reference) {
+                    var count = 0;
+                    function submitUrl(url, reference) {
                         var extension = document.getElementById("extension");
-                                url = url + '?idReport=' + document.getElementById('idReport').value + '&extension=' + extension.options[extension.selectedIndex].value + '&reportName=' + document.getElementById('reportName').value;
-                            dojo.xhrGet({
-                                url: url,
-                                load: function(response, ioArgs)
-                                {
+                        url = url + '?idReport=' + document.getElementById('idReport').value + '&extension=' + extension.options[extension.selectedIndex].value + '&reportName=' + document.getElementById('reportName').value;
+                        dojo.xhrGet({
+                            url: url,
+                            load: function(response, ioArgs)
+                            {
                                 count++;
                                 document.getElementById('out').style.display = 'block';
-                            //alert(count);
-                                    document.getElementById('count').innerHTML = count;                                     //setInterval(function(){myTimer()},2000);
+                                //alert(count);
+                                document.getElementById('count').innerHTML = count;                                     //setInterval(function(){myTimer()},2000);
                                 return response;
-                                },
+                            },
                             error: function(response, ioArgs) {
-                            setInterval(function() {
-                    myTimer2()
-                                    }, 2000);
-                    return response;
-                    },
-                    handleAs: "text"
-                    });
+                                setInterval(function() {
+                                    myTimer2()
+                                }, 2000);
+                                return response;
+                            },
+                            handleAs: "text"
+                        });
                     }
 </script>
 <script type="text/javascript">
-                    dojo.require("dijit.Dialog");
-                    dojo.require("dojo.parser");
+    dojo.require("dijit.Dialog");
+    dojo.require("dojo.parser");
     dojo.require("dijit._Calendar");
-                    dojo.require("dijit.ProgressBar");
-                    dojo.require("dijit.Editor");
-                    dojo.require("dijit.form.Form");
-                    dojo.require("dijit.form.CheckBox");
-                    dojo.require("dijit.form.Textarea");
-                    dojo.require("dijit.form.FilteringSelect");
-                    dojo.require("dijit.form.TextBox");
-                    dojo.require("dijit.form.DateTextBox");
+    dojo.require("dijit.ProgressBar");
+    dojo.require("dijit.Editor");
+    dojo.require("dijit.form.Form");
+    dojo.require("dijit.form.CheckBox");
+    dojo.require("dijit.form.Textarea");
+    dojo.require("dijit.form.FilteringSelect");
+    dojo.require("dijit.form.TextBox");
+    dojo.require("dijit.form.DateTextBox");
     dojo.require("dijit.form.TimeTextBox");
     dojo.require("dijit.form.Button");
     dojo.require("dijit.form.NumberSpinner");

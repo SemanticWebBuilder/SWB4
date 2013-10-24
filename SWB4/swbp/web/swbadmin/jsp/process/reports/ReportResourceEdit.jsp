@@ -68,12 +68,12 @@
                         <a class="btn btn-default btn-sm"
                            onclick="javascript:document.back.submit();"
                            data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("back")%>">
-                            <li class="icon-mail-reply"></li> <%=paramRequest.getLocaleString("back")%>
+                            <li class="fa fa-mail-reply"></li> <%=paramRequest.getLocaleString("back")%>
                         </a>
                         <%if (modeExport == 2) {%>
                         <a class="btn btn-default btn-sm" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("view") + " " + paramRequest.getLocaleString("report") + " " + obj.getTitle()%>"
                            href="<%=urlViewReport.setMode("viewReport").setParameter("idReport", obj.getId())%>">
-                            <li class="icon-eye-open"></li> <%=paramRequest.getLocaleString("view")%>
+                            <li class="fa fa-eye"></li> <%=paramRequest.getLocaleString("view")%>
                         </a>
                         <%} else {%>
                         <%
@@ -81,12 +81,12 @@
                         %>
                         <a href="<%=urlDialog%>" data-toggle="modal" data-target="#modalDialog"
                            class="btn btn-default btn-sm" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("save") + " " + paramRequest.getLocaleString("report") + " " + obj.getTitle()%>">
-                            <li class="icon-save"></li> <%=paramRequest.getLocaleString("save")%>
+                            <li class="fa fa-save"></li> <%=paramRequest.getLocaleString("save")%>
                         </a>
                         <%} else {%>
                         <a href="<%=urlDialog%>" data-toggle="modal" data-target="#modalDialog" class="btn btn-default btn-sm"
                            data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("generate") + " " + paramRequest.getLocaleString("report") + " " + obj.getTitle()%>">
-                            <li class="icon-file"></li> <%=paramRequest.getLocaleString("generate")%>
+                            <li class="fa fa-file"></li> <%=paramRequest.getLocaleString("generate")%>
                         </a>
                         <%}%>
                         <%}%>
@@ -123,11 +123,11 @@
                         <a class="btn btn-default btn-sm"
                            onclick="javascript:document.back.submit();"
                            data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("back")%>">
-                            <li class="icon-mail-reply"></li> Regresar
+                            <li class="fa fa-mail-reply"></li> Regresar
                         </a>
                         <button class="btn btn-success btn-sm" type="submit"
                                 data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("save")%>">
-                            <li class="icon-save"></li> <%=paramRequest.getLocaleString("save")%>
+                            <li class="fa fa-save"></li> <%=paramRequest.getLocaleString("save")%>
                         </button>
                     </div>
                     <input type="hidden" name="idReport" value="<%=obj.getId()%>"/>
@@ -176,7 +176,7 @@
                                     <input type="hidden" name="idReport" value="<%=obj.getId()%>"/>
                                     <button type="submit" class="btn btn-default btn-sm <%if (control == 0) {%>disabled<%}%>" 
                                             data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("add") + " " + paramRequest.getLocaleString("column")%>">
-                                        <li class="icon-plus"></li> <%=paramRequest.getLocaleString("add")%>
+                                        <li class="fa fa-plus"></li> <%=paramRequest.getLocaleString("add")%>
                                     </button>
                                 </td></tr>
                         </table>
@@ -214,21 +214,21 @@
                                     <td style="text-align: center;"><%if (contador == 1 && total > 1) {%>
                                         <a href="<%=urlAction.setAction("moveDown").setParameter("idColumn", colu.getId())%>"
                                            data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("down")%>">
-                                            <li class="icon-arrow-down"></li>
+                                            <li class="fa fa-arrow-down"></li>
                                         </a>
                                         <%} else if (contador < total && total > 1) {%>
                                         <a href="<%=urlAction.setAction("moveUp").setParameter("idColumn", colu.getId())%>" 
                                            data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("up")%>">
-                                            <li class="icon-arrow-up"></li>
+                                            <li class="fa fa-arrow-up"></li>
                                         </a>
                                         <a href="<%=urlAction.setAction("moveDown").setParameter("idColumn", colu.getId())%>"
                                            data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("down")%>">
-                                            <li class="icon-arrow-down"></li>
+                                            <li class="fa fa-arrow-down"></li>
                                         </a>
                                         <%} else if (contador == total && total > 1) {%>
                                         <a href="<%=urlAction.setAction("moveUp").setParameter("idColumn", colu.getId())%>" 
                                            data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("up")%>">
-                                            <li class="icon-arrow-up"></li>    
+                                            <li class="fa fa-arrow-up"></li>    
                                         </a><%}%></td>
                                     <td><%=objeto + "." + sp.getName()%></td>
                                     <td><input class="form-control input-sm" placeholder="<%=paramRequest.getLocaleString("title")%>" type="text" name="title<%=colu.getURI()%>" value="<%=colu.getTitleColumn() == null ? sp.getDisplayName(lang) : colu.getTitleColumn()%>"></input></td>
@@ -253,7 +253,7 @@
                                     <td style="text-align: center; vertical-align: middle;" colspan="7">
                                         <button class="btn btn-default btn-sm" type="submit"
                                                 data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("save")%>">
-                                            <li class="icon-save"></li> <%=paramRequest.getLocaleString("save")%>
+                                            <li class="fa fa-save"></li> <%=paramRequest.getLocaleString("save")%>
                                         </button> 
                                     </td>
                                 </tr>
