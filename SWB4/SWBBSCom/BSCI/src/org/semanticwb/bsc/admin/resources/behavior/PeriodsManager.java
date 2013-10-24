@@ -16,6 +16,8 @@ import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.Seasonable;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.Indicator;
+import org.semanticwb.bsc.element.Initiative;
+import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Undeleteable;
@@ -80,13 +82,16 @@ public class PeriodsManager extends GenericResource {
 
                 objetivesCurrent.add(periodSave);
             }
+            
             if (genericObject instanceof Indicator) {
-                SemanticObject objParent = semObj.getObjectProperty(Indicator.bsc_objectiveInv);
-
-                itPeriods = new GenericIterator<Period>(
-                        objParent.listObjectProperties(Seasonable.bsc_hasPeriod));
-            } else {
-                itPeriods = Period.ClassMgr.listPeriods(bsc);
+                Indicator indicator = (Indicator)genericObject;
+                itPeriods = indicator.getObjective().listPeriods(true);
+//                SemanticObject objParent = semObj.getObjectProperty(Indicator.bsc_objectiveInv);
+//                itPeriods = new GenericIterator<Period>(objParent.listObjectProperties(Seasonable.bsc_hasPeriod));
+            }else if(genericObject instanceof Objective || genericObject instanceof Initiative) {
+                itPeriods = bsc.listPeriods(true);
+            }else {
+                itPeriods = new GenericIterator<Period>(semObj.listObjectProperties(Seasonable.bsc_hasPeriod));
             }
             
             if (itPeriods != null && itPeriods.hasNext()) {
@@ -182,12 +187,13 @@ public class PeriodsManager extends GenericResource {
                                         "</a>");
                         }
                         out.println("          </td>");
-                        //TODO: Definir como se obtiene el dato de esta columna
+                        
                         out.println("          <td>" + 
                                 (period.isActive()
                                  ? paramRequest.getLocaleString("lbl_isActive")
                                  : paramRequest.getLocaleString("lbl_isNotActive")) +
-                                "</td>");            
+                                "</td>");
+                        
                         out.println("          <td align=\"center\"><input id=\"" + period.getId() + "\" name=\"period" + data
                                 + "\" type=\"checkbox\" value=\"" + period.getId() + "\" onclick=\"submitForm('frmAdd" + data + "');return false;\""
                                 + " data-dojo-type=\"dijit.form.CheckBox\"" + select + "></td>");
@@ -204,7 +210,7 @@ public class PeriodsManager extends GenericResource {
                 out.println("    <button dojoType=\"dijit.form.Button\" type=\"button\">"
                         + paramRequest.getLocaleString("markAll") );
                 out.println("      <script type=\"dojo/method\" event=\"onClick\" args=\"evt\">\n");
-        //incluir javascript para marcar todos los checkboxes y luego hacer submit
+                //incluir javascript para marcar todos los checkboxes y luego hacer submit
                 out.println("        var formPeriods = dijit.byId(\"frmAdd" + data + "\");");
                 out.println("        if (formPeriods != undefined) {");
                 out.println("          for (var i = 0; i < formPeriods.getChildren().length; i++) {");

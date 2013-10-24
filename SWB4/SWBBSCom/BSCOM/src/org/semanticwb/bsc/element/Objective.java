@@ -1,5 +1,7 @@
 package org.semanticwb.bsc.element;
 
+import java.util.Collections;
+import org.semanticwb.model.GenericIterator;
 import java.util.Iterator;
 import java.util.List;
 import org.semanticwb.SWBUtils;
@@ -110,6 +112,20 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
         super.setPrefix(value);
     }
     
+    private List<Period> sortPeriods() {
+        return sortPeriods(true);
+    }
+    
+    private List<Period> sortPeriods(boolean ascendent) {
+        List<Period> periods = SWBUtils.Collections.copyIterator(super.listPeriods());
+        if(ascendent) {
+            Collections.sort(periods);
+        }else {            
+            Collections.sort(periods, Collections.reverseOrder());            
+        }
+        return periods;
+    }
+    
     public Indicator getLastIndicator() {
         return getIndicator();
     }
@@ -120,14 +136,23 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
         return it.hasNext()?it.next():null;
     }
     
+    @Override
+    public GenericIterator<Period> listPeriods() {
+        return (GenericIterator)listPeriods(true);
+    }
+    
+    public Iterator<Period> listPeriods(boolean ascendent) {
+        return sortPeriods(ascendent).iterator();
+    }
+    
     public List<State> listValidStates() {
         List<State> validStates = SWBUtils.Collections.filterIterator(listStates(), new GenericFilterRule<State>() {
-                                                                        @Override
-                                                                        public boolean filter(State s) {
-                                                                            User user = SWBContext.getSessionUser();
-                                                                            return !s.isValid() || !user.haveAccess(s);
-                                                                        }            
-                                                                    });
+                                                        @Override
+                                                        public boolean filter(State s) {
+                                                            User user = SWBContext.getSessionUser();
+                                                            return !s.isValid() || !user.haveAccess(s);
+                                                        }            
+                                                    });
         return validStates;
     }
 
