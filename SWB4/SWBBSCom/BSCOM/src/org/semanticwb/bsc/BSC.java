@@ -1,8 +1,10 @@
 package org.semanticwb.bsc;
 
+import java.util.Collections;
 import java.util.List;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
+import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
@@ -14,8 +16,8 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
     {
         super(base);
     }
-     public List<Initiative> listValidInitiative() {
-
+    
+    public List<Initiative> listValidInitiative() {
         List<Initiative> validInitiative = SWBUtils.Collections.filterIterator(listInitiatives(), new GenericFilterRule<Initiative>() {
                                                                         @Override
                                                                         public boolean filter(Initiative s) {
@@ -24,5 +26,30 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
                                                                         }            
                                                                     });
         return validInitiative;
+    }
+    
+    private List<Period> sortPeriods() {
+        return sortPeriods(true);
+    }
+    
+    private List<Period> sortPeriods(boolean ascendent) {
+        List<Period> periods = SWBUtils.Collections.copyIterator(listPeriods());
+        if(ascendent) {
+            Collections.sort(periods);
+        }else {            
+            Collections.sort(periods, Collections.reverseOrder());            
+        }
+        return periods;
+    }
+    
+    public List<Period> listValidPeriods() {
+        List<Period> validPeriods = SWBUtils.Collections.filterIterator(listPeriods(), new GenericFilterRule<Period>() {
+                                                                        @Override
+                                                                        public boolean filter(Period p) {
+                                                                            User user = SWBContext.getSessionUser();
+                                                                            return !p.isValid() || !user.haveAccess(p);
+                                                                        }            
+                                                                    });
+        return validPeriods;
     }
 }
