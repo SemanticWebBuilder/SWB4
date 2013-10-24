@@ -494,17 +494,17 @@ public class FacebookWall extends GenericResource {
                         
                         if(postData.has("link") && postData.has("name")){
                             System.out.println("<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>");
-                            //postIn.setTitle("<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>");//Link o Title
+                            postIn.setTitle("<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>");//Link o Title
                             if(!story.isEmpty())
                                 story = story + ": " + "<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>";                            
                             if(!message.isEmpty())
                                 message = message + ":" + "<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>";
                             
                         }
-                        /*
+                        
                         if(postData.has("description")){
                             postIn.setDescription(postData.getString("description"));
-                        }*/
+                        }
                         
                         if(!message.isEmpty()){
                             postIn.setMsg_Text(message);
@@ -553,10 +553,10 @@ public class FacebookWall extends GenericResource {
                         if(!message.isEmpty())
                             message = message + ": " + "<a href=\"" + postData.getString("source") + "\" target=\"_blank\">View video</a>";
                     }
-                    /*
+
                     if(postData.has("description")){
                         postIn.setDescription(postData.getString("description"));
-                    }*/
+                    }
                         
                     System.out.println("THE MESSAGE******\n" + message);
                     System.out.println("THE STORY******\n" + story);
@@ -911,6 +911,9 @@ public class FacebookWall extends GenericResource {
         }else if(mode!= null && mode.equals("getMorePictures")){//Gets older pictures
             System.out.println("brings more PICTURES - OLDER");
             doGetMorePictures(request, response, paramRequest);
+        }else if(mode != null && mode.equals("getMoreVideos")){
+            System.out.println("brings more VIDEOS - OLDER");
+            doGetMoreVideos(request, response, paramRequest);
         }else if(mode!= null && mode.equals("likeSent") || mode.equals("unlikeSent")){//Displays updated data of liked/unliked status
             String postID = request.getParameter("postID");
             String objUri = request.getParameter("suri");
@@ -1224,6 +1227,40 @@ public class FacebookWall extends GenericResource {
         out.println("<label id=\"" +objUri + "morePicturesLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMorePictures").setParameter("createdTime", createdTime) + "','" + objUri +"getMorePictures','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">More Pictures</a></label>");
         out.println("</div>");
     }
+
+    public void doGetMoreVideos(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        String objUri = request.getParameter("suri");
+        String createdTimeParam = request.getParameter("createdTime");
+        String currentTab = request.getParameter("currentTab") == null ? "" : request.getParameter("currentTab");
+        SWBResourceURL renderURL = paramRequest.getRenderUrl();
+        SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
+        Facebook facebook = (Facebook)semanticObject.createGenericInstance();
+        SWBModel model = WebSite.ClassMgr.getWebSite(facebook.getSemanticObject().getModel().getName());
+        if(objUri!= null){
+            renderURL.setParameter("suri", objUri);
+        }
+        System.out.println("\n\n\nTHE CURRENT TAB:" + currentTab);        
+        System.out.println("Get the next 25 VIDEOS!!");
+        String fbResponse = "";
+        
+        HashMap<String, String> params = new HashMap<String, String>(2);
+        params.put("q", "{\"videos\": \"SELECT actor_id, created_time, like_info, post_id, attachment, message, description, description_tags, type, comments FROM stream WHERE filter_key IN " + 
+                "( SELECT filter_key FROM stream_filter WHERE uid = me() AND name = 'Video') AND created_time < " + createdTimeParam +" LIMIT 25\", \"usernames\": \"SELECT uid, name FROM user WHERE uid IN (SELECT actor_id FROM #videos)\", \"pages\":\"SELECT page_id, name FROM page WHERE page_id IN (SELECT actor_id FROM #videos)\"}");
+        params.put("access_token", facebook.getAccessToken());
+    
+        fbResponse = getRequest(params, "https://graph.facebook.com/fql",
+                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
+
+        String createdTime = video(fbResponse, out, false, request, paramRequest,model);
+        if(createdTime == null){//A problem was found, recover the original value of the param
+            createdTime = createdTimeParam;
+        }
+        out.println("<div align=\"center\">");
+        out.println("<label id=\"" +objUri + "moreVideosLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreVideos").setParameter("createdTime", createdTime) + "','" + objUri +"getMoreVideos','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">More Videos</a></label>");
+        out.println("</div>");
+    }
+    
     //get the next comments of a post
     public void doGetMoreComments(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String postId = request.getParameter("postId");
