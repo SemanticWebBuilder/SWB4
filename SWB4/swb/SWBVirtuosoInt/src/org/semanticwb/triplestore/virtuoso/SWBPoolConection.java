@@ -6,7 +6,6 @@ package org.semanticwb.triplestore.virtuoso;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import org.semanticwb.base.db.DBConnectionPool;
 import org.semanticwb.base.db.PoolConnection;
 
 /**
