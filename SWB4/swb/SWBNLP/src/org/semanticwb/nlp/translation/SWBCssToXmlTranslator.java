@@ -22,7 +22,7 @@
  */
 package org.semanticwb.nlp.translation;
 
-/*import java.io.File;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -44,7 +44,6 @@ import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.tree.CommonTree;
 
-import org.semanticwb.SWBUtils;
 import org.semanticwb.nlp.analysis.CSSLexer;
 import org.semanticwb.nlp.analysis.SimpleCSSParser;
 
@@ -54,7 +53,7 @@ import org.w3c.dom.*;
  *
  * @author hasdai
  */
-/*public class SWBCssToXmlTranslator {
+public class SWBCssToXmlTranslator {
     private SimpleCSSParser parser;     //ANTLR parser
     private CSSLexer tokenizer;   //ANTLR tokenizer
     private CommonTokenStream tokens;   //TokenStream for parsing
@@ -157,7 +156,7 @@ import org.w3c.dom.*;
             
             Element root = doc.createElement("css");
             ArrayList<Element> statements = new ArrayList<Element>();
-            List<CommonTree> childs = node.getChildren();
+            List<CommonTree> childs = (List<CommonTree>) node.getChildren();
 
             //Para cada nodo hijo (SELECTOR)
             for (CommonTree child : childs) {
@@ -236,4 +235,4 @@ import org.w3c.dom.*;
         }
         return res.trim();
     }
-}*/
+}
