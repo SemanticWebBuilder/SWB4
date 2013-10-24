@@ -13,7 +13,7 @@ import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
-
+import static org.semanticwb.bsc.element.Indicator.*;
 
 public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase 
 {
@@ -32,8 +32,6 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
                     if(!states.isEmpty() && indicator!=null)
                     {
                         indicator.addAllStates(states);
-                        
-                        String names[] = {"Actual","Meta","Actual Acumulado","Meta Acumulada"};
                         Series series;
                         for(int i=0; i<names.length; i++)
                         {
@@ -44,16 +42,6 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
                             series.setDescription("Serie "+names[i], lang);
                             series.setIndex(i);
                             indicator.addSeries(series);
-//                            for(State state:states)
-//                            {
-//                                EvaluationRule rule = EvaluationRule.ClassMgr.createEvaluationRule(indicator.getBSC());
-//                                rule.setTitle("Regla para "+state.getTitle());
-//                                rule.setTitle("Regla para "+state.getTitle(lang), lang);
-//                                rule.setDescription("Regla para evaluar serie "+names[i]);
-//                                rule.setDescription("Regla para evaluar serie "+names[i], lang);
-//                                rule.setAppraisal(state);
-//                                series.addEvaluationRule(rule);
-//                            }
                         }
                     }
                 }
