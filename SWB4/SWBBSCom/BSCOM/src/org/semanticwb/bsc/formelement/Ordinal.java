@@ -124,8 +124,6 @@ public class Ordinal extends org.semanticwb.bsc.formelement.base.OrdinalBase
     @Override
     public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) throws FormValidateException
     {
-System.out.println("Ordinal  validate.....");
-System.out.println("obj="+obj);
         int ordinal;
         try            
         {
@@ -136,7 +134,6 @@ System.out.println("obj="+obj);
         {            
             throw new FormValidateException("El valor debe ser numérico y no debe repetirse");
         }
-System.out.println("ordinal="+ordinal);
         
         SWBModel model = (SWBModel)obj.getModel().getModelObject().createGenericInstance();
         Iterator<SemanticObject> it = model.getSemanticModel().listInstancesOfClass(obj.getSemanticClass());
@@ -145,8 +142,6 @@ System.out.println("ordinal="+ordinal);
             if( obj.equals(so) ) {
                 continue;
             }
-System.out.println("so="+so);
-System.out.println(prop+" = "+so.getIntProperty(prop));
             if(ordinal == so.getIntProperty(prop))
             {
                 throw new FormValidateException("El valor debe ser numérico y no puede repetirse");
@@ -157,23 +152,15 @@ System.out.println(prop+" = "+so.getIntProperty(prop));
     @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName)
     {
-//        try
-//        {
-//            validate(request, obj, prop);
-            String value = request.getParameter(propName);
-            try
-            {
-                int fvalue = Integer.parseInt(value);
-                obj.setIntProperty(prop, fvalue);
-            }
-            catch(Exception e)
-            {
-                log.error(e);
-            }
-//        }
-//        catch(Exception e)
-//        {
-//            log.error(e);
-//        }
+        String value = request.getParameter(propName);
+        try
+        {
+            int fvalue = Integer.parseInt(value);
+            obj.setIntProperty(prop, fvalue);
+        }
+        catch(Exception e)
+        {
+            log.error(e);
+        }
     }
 }

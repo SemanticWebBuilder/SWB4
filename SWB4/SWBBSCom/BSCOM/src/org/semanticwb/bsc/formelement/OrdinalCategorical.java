@@ -37,7 +37,6 @@ public class OrdinalCategorical extends org.semanticwb.bsc.formelement.base.Ordi
     @Override
     public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) throws FormValidateException
     {
-System.out.println("\n\n OrdinalCategorical  validate.....");
         int ordinal;
         try            
         {
@@ -52,19 +51,12 @@ System.out.println("\n\n OrdinalCategorical  validate.....");
         GenericObject genObj = obj.getGenericInstance();
         if(genObj instanceof State)
         {
-System.out.print("State...");
             State state = (State)obj.createGenericInstance();
-            //StateGroup parent = state.getStateGroup();
-System.out.println(" "+state);
             StateGroup parent = state.getStateGroup();
-System.out.println("parent="+parent);
             if(parent instanceof StateGroup) {
-System.out.println("ordinal="+ordinal);
                 GenericIterator<State> it = parent.listGroupedStateses();
                 while(it.hasNext()) {
                     State so = it.next();
-System.out.println("so="+so);
-System.out.println("orden="+so.getOrden());
                     if( state.equals(so) ) {
                         continue;
                     }
@@ -78,7 +70,6 @@ System.out.println("orden="+so.getOrden());
         }
         else if(genObj instanceof Series)
         {
-System.out.println("Serie...");
             Series series = (Series)genObj;
             Indicator parent = series.getIndicator();
             GenericIterator<Series> it = parent.listSerieses();
@@ -95,7 +86,6 @@ System.out.println("Serie...");
         }
         else
         {
-System.out.println("else");
             super.validate(request, obj, prop, propName);
         }        
     }
