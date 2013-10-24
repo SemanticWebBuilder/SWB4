@@ -33,7 +33,7 @@
         //Div dummy para detectar evento de carga y modificar titulo
         out.println("<div dojoType=\"dijit.layout.ContentPane\" postCreate=\"setTabTitle('"+objUri+"','"+ "Titulo " +"','"+loading+"');\" />");
 
-        out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style_=\"border:0px; width:100%; height:100%\" id=\""+objUri+"/tabs\" _tabPosition=\"bottom\" nested_=\"true\" _selectedChild=\"btab1\" onButtonClick_=\"alert('click');\">");
+        out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style_=\"border:0px; width:100%; height:100%\" id=\""+objUri+"/tabs/twitter\" _tabPosition=\"bottom\" nested_=\"true\" _selectedChild=\"btab1\" onButtonClick_=\"alert('click');\" onLoad_=\"alert('Hola');\" onDblClick=\"reloadSocialTab('"+objUri+"/tabs/twitter');\">");        
         
         out.println("<div id=\""+ objUri + HOME_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Home"+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + HOME_TAB +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
         out.println("</div>");

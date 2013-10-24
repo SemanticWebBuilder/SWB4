@@ -35,7 +35,7 @@
         //Div dummy para detectar evento de carga y modificar titulo
         out.println("<div dojoType=\"dijit.layout.ContentPane\" postCreate=\"setTabTitle('"+objUri+"','"+ "Titulo " +"','"+loading+"');\" />");
 
-        out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style_=\"border:0px; width:100%; height:100%\" id=\""+objUri+"/tabs\" _tabPosition=\"bottom\" nested_=\"true\" _selectedChild=\"btab1\" onButtonClick_=\"alert('click');\" onLoad_=\"alert('Hola');\">");        
+        out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style_=\"border:0px; width:100%; height:100%\" id=\""+objUri+"/tabs/facebook\" _tabPosition=\"bottom\" nested_=\"true\" _selectedChild=\"btab1\" onButtonClick_=\"alert('click');\" onLoad_=\"alert('Hola');\" onDblClick=\"reloadSocialTab('"+objUri+"/tabs/facebook');\">");        
         
         out.println("<div id=\""+ objUri + NEWS_FEED_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"News Feed"+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + NEWS_FEED_TAB +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
         out.println("</div>");
