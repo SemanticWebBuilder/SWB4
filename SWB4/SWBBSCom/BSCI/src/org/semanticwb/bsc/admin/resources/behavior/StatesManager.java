@@ -103,56 +103,53 @@ public class StatesManager extends GenericResource {
                         out.println("<tbody>");                    
                         Iterator<State> groupedStates = stateGroup.listValidStates().iterator();
                         boolean hasGroupedStates = groupedStates.hasNext();
-                        if(hasGroupedStates)
-                        {
-                            while(groupedStates.hasNext()) {
-                                State state = groupedStates.next();
-                                out.println("<tr>");
-                                out.println("");
+                        while(groupedStates.hasNext()) {
+                            State state = groupedStates.next();
+                            out.println("<tr>");
+                            out.println("");
 
-                                // Orden
-                                out.println(" <td>"+state.getOrden()+"</td>");
+                            // Orden
+                            out.println(" <td>"+state.getOrden()+"</td>");
 
-                                // Estado
+                            // Estado
+                            out.println(" <td>");
+                            out.println("<a href=\"#\" onclick=\"addNewTab('" + state.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + (state.getTitle(lang)==null?(state.getTitle()==null?"Sin título":state.getTitle().replaceAll("'","")):state.getTitle(lang).replaceAll("'","")) + "');return false;\" >" + (state.getTitle(lang)==null?(state.getTitle()==null?"Sin título":state.getTitle().replaceAll("'","")):state.getTitle(lang).replaceAll("'","")) + "</a>");
+                            out.println(" </td>");
+
+                            // Estado anterior
+                            if(state.getPrevius()==null) {
+                                out.println(" <td>Not set</td>");
+                            }else {
+                                State previus = (State)state.getPrevius();
                                 out.println(" <td>");
-                                out.println("<a href=\"#\" onclick=\"addNewTab('" + state.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + (state.getTitle(lang)==null?(state.getTitle()==null?"Sin título":state.getTitle().replaceAll("'","")):state.getTitle(lang).replaceAll("'","")) + "');return false;\" >" + (state.getTitle(lang)==null?(state.getTitle()==null?"Sin título":state.getTitle().replaceAll("'","")):state.getTitle(lang).replaceAll("'","")) + "</a>");
+                                out.println("<a href=\"#\" onclick=\"addNewTab('" + previus.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + (previus.getTitle(lang)==null?(previus.getTitle()==null?"Sin título":previus.getTitle().replaceAll("'","")):previus.getTitle(lang).replaceAll("'","")) + "');return false;\" >" + (previus.getTitle(lang)==null?(previus.getTitle()==null?"Sin título":previus.getTitle().replaceAll("'","")):previus.getTitle(lang).replaceAll("'","")) + "</a>");
                                 out.println(" </td>");
-
-                                // Estado anterior
-                                if(state.getPrevius()==null) {
-                                    out.println(" <td>Not set</td>");
-                                }else {
-                                    State previus = (State)state.getPrevius();
-                                    out.println(" <td>");
-                                    out.println("<a href=\"#\" onclick=\"addNewTab('" + previus.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + (previus.getTitle(lang)==null?(previus.getTitle()==null?"Sin título":previus.getTitle().replaceAll("'","")):previus.getTitle(lang).replaceAll("'","")) + "');return false;\" >" + (previus.getTitle(lang)==null?(previus.getTitle()==null?"Sin título":previus.getTitle().replaceAll("'","")):previus.getTitle(lang).replaceAll("'","")) + "</a>");
-                                    out.println(" </td>");
-                                }
-
-                                // Estado siguiente
-                                if(state.getNext()==null) {
-                                    out.println(" <td>Not set</td>");
-                                }else {
-                                    State next = (State)state.getNext();
-                                    out.println(" <td>");
-                                    out.println("<a href=\"#\" onclick=\"addNewTab('" + next.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + (next.getTitle(lang)==null?(next.getTitle()==null?"Sin título":next.getTitle().replaceAll("'","")):next.getTitle(lang).replaceAll("'","")) + "');return false;\" >" + (next.getTitle(lang)==null?(next.getTitle()==null?"Sin título":next.getTitle().replaceAll("'","")):next.getTitle(lang).replaceAll("'","")) + "</a>");
-                                    out.println(" </td>");
-                                }
-
-                                // Grupo del estado
-                                out.println(" <td>");
-                                out.println((stateGroup.getTitle(lang)==null?(stateGroup.getTitle()==null?"Sin título":stateGroup.getTitle().replaceAll("'","")):stateGroup.getTitle(lang).replaceAll("'","")));
-                                out.println(" </td>");
-
-                                // Asigna?
-                                SWBResourceURL urlactv = paramRequest.getActionUrl();
-                                urlactv.setParameter("suri", suri);
-                                urlactv.setParameter("sval", state.getId());
-                                urlactv.setParameter("sg", sgId);
-                                urlactv.setAction(Action_UPDT_ACTIVE);
-                                out.println("   <td align=\"center\"><input type=\"checkbox\" name=\"act\" onchange=\"submitUrl('" + urlactv + "&'+this.attr('name')+'='+this.attr('value'),this.domNode)\" dojoType=\"dijit.form.CheckBox\" value=\"\" /></td>");
-                                out.println("</tr>");
                             }
-                        }                        
+
+                            // Estado siguiente
+                            if(state.getNext()==null) {
+                                out.println(" <td>Not set</td>");
+                            }else {
+                                State next = (State)state.getNext();
+                                out.println(" <td>");
+                                out.println("<a href=\"#\" onclick=\"addNewTab('" + next.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + (next.getTitle(lang)==null?(next.getTitle()==null?"Sin título":next.getTitle().replaceAll("'","")):next.getTitle(lang).replaceAll("'","")) + "');return false;\" >" + (next.getTitle(lang)==null?(next.getTitle()==null?"Sin título":next.getTitle().replaceAll("'","")):next.getTitle(lang).replaceAll("'","")) + "</a>");
+                                out.println(" </td>");
+                            }
+
+                            // Grupo del estado
+                            out.println(" <td>");
+                            out.println((stateGroup.getTitle(lang)==null?(stateGroup.getTitle()==null?"Sin título":stateGroup.getTitle().replaceAll("'","")):stateGroup.getTitle(lang).replaceAll("'","")));
+                            out.println(" </td>");
+
+                            // Asigna?
+                            SWBResourceURL urlactv = paramRequest.getActionUrl();
+                            urlactv.setParameter("suri", suri);
+                            urlactv.setParameter("sval", state.getId());
+                            urlactv.setParameter("sg", sgId);
+                            urlactv.setAction(Action_UPDT_ACTIVE);
+                            out.println("   <td align=\"center\"><input type=\"checkbox\" name=\"act\" onchange=\"submitUrl('" + urlactv + "&'+this.attr('name')+'='+this.attr('value'),this.domNode)\" dojoType=\"dijit.form.CheckBox\" value=\"\" /></td>");
+                            out.println("</tr>");
+                        }
                         out.println("</tbody>");
                         out.println("</table>");
                         out.println("</fieldset>");
