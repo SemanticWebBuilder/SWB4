@@ -76,7 +76,7 @@ public class Ordinal extends org.semanticwb.bsc.formelement.base.OrdinalBase
         String ext = disabled ? " disabled=\"disabled\"":"";
         
         String value = null;
-        if(obj.getDateProperty(prop)!=null) {
+        if(obj.getProperty(prop)!=null) {
             value = obj.getProperty(prop);
         }else {
             value = request.getParameter(propName)==null?"":request.getParameter(propName);
