@@ -62,11 +62,11 @@
                     <a class="btn btn-default btn-sm"
                        onclick="javascript:document.back.submit();"
                        data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("back")%>">
-                        <li class="icon-mail-reply"></li> Regresar
+                        <li class="fa fa-mail-reply"></li> Regresar
                     </a>
                     <button class="btn btn-success btn-sm" type="submit"
                             data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("save")%>">
-                        <li class="icon-save"></li> <%=paramRequest.getLocaleString("save")%>
+                        <li class="fa fa-save"></li> <%=paramRequest.getLocaleString("save")%>
                     </button>
                 </div>
             </form>

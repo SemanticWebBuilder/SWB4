@@ -62,14 +62,14 @@
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal"
                         data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("back")%>">
-                    <li class="icon-mail-reply"></li> Regresar</button>
+                    <li class="fa fa-mail-reply"></li> Regresar</button>
                 <button type="submit" class="btn btn-success" <%if (isSaveOnSystem) {%>onclick="submitUrl('<%=urlReport%>', this);
         return false;" data-dismiss="modal" data-original-title="<%=paramRequest.getLocaleString("save")%>"<%}%> 
                         data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("generate")%>">
                     <%if (isSaveOnSystem) {%>
-                    <li class="icon-save"></li> Guardar
+                    <li class="fa fa-save"></li> Guardar
                         <%} else {%>
-                    <li class="icon-file"></li> Generar<%}%>
+                    <li class="fa fa-file"></li> Generar<%}%>
                 </button>
             </div>
         </form>

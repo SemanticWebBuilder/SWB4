@@ -79,7 +79,7 @@
     <a class="btn"
        onclick="javascript:document.back.submit();"
        data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("back")%>">
-        <li class="icon-mail-reply"></li>
+        <li class="fa fa-mail-reply"></li>
     </a>
     <%=paramRequest.getLocaleString("report") + " " + obj.getTitle()%></h2>
     <%if (colum.hasNext()) {%>
@@ -89,18 +89,18 @@
     %>
     <li>
         <a href="<%=urlDialog%>" data-toggle="modal" data-target="#modalDialog"
-           class="btn  btn-default icon-save" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("save") + " " + paramRequest.getLocaleString("report") + " " + obj.getTitle()%>">
+           class="btn  btn-default fa fa-save" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("save") + " " + paramRequest.getLocaleString("report") + " " + obj.getTitle()%>">
         </a>
     </li>
     <%} else {%>
     <li>
-        <a href="<%=urlDialog%>" data-toggle="modal" data-target="#modalDialog" class="btn btn-default icon-file"
+        <a href="<%=urlDialog%>" data-toggle="modal" data-target="#modalDialog" class="btn btn-default fa fa-file"
            data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("generate") + " " + paramRequest.getLocaleString("report") + " " + obj.getTitle()%>">
         </a>
     </li>
     <%}%>
     <li>
-        <a class="btn btn-default icon-wrench" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("configureReport") + " " + obj.getTitle()%>" href="<%=url.setMode(SWBResourceURL.Mode_EDIT).setParameter("idReport", obj.getId())%>">
+        <a class="btn btn-default fa fa-wrench" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("configureReport") + " " + obj.getTitle()%>" href="<%=url.setMode(SWBResourceURL.Mode_EDIT).setParameter("idReport", obj.getId())%>">
         </a>  
     </li>
 </ul>
@@ -133,9 +133,9 @@
                     <th class="tban-id" title="<%=colu.getTitleColumn() == null ? sp.getDisplayName(lang) : colu.getTitleColumn()%>">
                         <a <%if (colu.isEnabledOrder()) {%>href="<%=order%>" style="color: white; text-decoration: none;">
                             <%if (des.equals("des")) {%>
-                            <li class="icon-sort-by-alphabet"></li>
+                            <li class="fa fa-sort-by-alphabet"></li>
                                 <%} else {%>
-                            <li class="icon-sort-by-alphabet-alt"></li>
+                            <li class="fa fa-sort-by-alphabet-alt"></li>
                                 <%}%>
                                 <%}%>
                             <label style="color: white; text-decoration: none;cursor: pointer;"><%=colu.getTitleColumn() == null ? sp.getDisplayName(lang) : colu.getTitleColumn()%></label>
@@ -180,7 +180,12 @@
                             }
                         } else if (!spt.isInverseOf() && spt.isObjectProperty()) {
                             if (iarr.getProcessObject().getSemanticObject().getObjectProperty(spt) != null) {
+                                
+                                String ou = forMgr.renderElement(request,spt, SWBFormMgr.MODE_VIEW);
+                                
                                 out.print(forMgr.renderElement(request, spt, SWBFormMgr.MODE_VIEW));
+                                System.out.println("element: " + forMgr.renderElement(request, spt, SWBFormMgr.MODE_VIEW));
+                                System.out.println("label: " + forMgr.renderLabel(request, spt, SWBFormMgr.MODE_VIEW));
                             } else {
                                 out.print("--");
                             }
@@ -253,7 +258,7 @@
 </div>
 <%} else {%>
 <ul class="list-unstyled list-inline">
-    <li><a class="btn btn-default icon-wrench" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("configureReport") + " " + obj.getTitle()%>" href="<%=url.setMode(SWBResourceURL.Mode_EDIT).setParameter("idReport", obj.getId())%>">
+    <li><a class="btn btn-default fa fa-wrench" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("configureReport") + " " + obj.getTitle()%>" href="<%=url.setMode(SWBResourceURL.Mode_EDIT).setParameter("idReport", obj.getId())%>">
         </a></li>
 </ul>
 <div class="alert alert-block alert-warning fade in">
