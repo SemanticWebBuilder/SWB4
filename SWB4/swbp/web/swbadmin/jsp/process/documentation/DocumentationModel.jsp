@@ -12,7 +12,6 @@
 <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false, locale: 'es'" ></script>
 <link href="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/utils/bootstrap/bootstrap.min.css" rel="stylesheet">
 <link href="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/utils/fontawesome/css/font-awesome.min.css" rel="stylesheet">
-<link href="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/taskInbox/css/swbp.css" rel="stylesheet">
 <script type="text/javascript" src="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/utils/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/modeler/toolkit.js"></script>
 <script type="text/javascript" src="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/modeler/modeler.js"></script>
@@ -28,38 +27,38 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <div class="panel-title text-center">
-            <li class="icon-cogs"></li> <%=pe.getTitle()%>
+            <li class="fa fa-cogs"></li> <%=pe.getTitle()%>
         </div>
     </div>
     <div class="panel-body text-center">
         <ul class="list-unstyled list-inline hidden-print visible-lg">
             <li>
                 <a href="#" class="btn btn-default" data-placement="bottom" data-toggle="tooltip" data-original-title="Zoom in" onclick="zoomin();
-                                return false;"><i class="icon-zoom-in"></i></a>
+                                return false;"><i class="fa fa-search-plus"></i></a>
             </li>
             <li>
                 <a href="#" class="btn btn-default" data-placement="bottom" data-toggle="tooltip" data-original-title="Zoom out" onclick="zoomout();
-                                return false;"><i class="icon-zoom-out"></i></a>
+                                return false;"><i class="fa fa-search-minus"></i></a>
             </li>
             <li>
                 <a href="#" class="btn btn-default" data-placement="bottom" data-toggle="tooltip" data-original-title="Reset zoom" onclick="fitToScreen();
-                                return false;"><i class="icon-desktop"></i></a>
+                                return false;"><i class="fa fa-desktop"></i></a>
             </li>
             <li>
                 <a href="#" class="btn btn-default" data-placement="bottom" data-toggle="tooltip" data-original-title="Pan left" onclick="handlePanning('left');
-                                return false;"><i class="icon-arrow-left"></i></a>
+                                return false;"><i class="fa fa-arrow-left"></i></a>
             </li>
             <li>
                 <a href="#" class="btn btn-default" data-placement="bottom" data-toggle="tooltip" data-original-title="Pan down" onclick="handlePanning('down');
-                                return false;"><i class="icon-arrow-down"></i></a>
+                                return false;"><i class="fa fa-arrow-down"></i></a>
             </li>
             <li>
                 <a href="#" class="btn btn-default" data-placement="bottom" data-toggle="tooltip" data-original-title="Pan up" onclick="handlePanning('up');
-                                return false;"><i class="icon-arrow-up"></i></a>
+                                return false;"><i class="fa fa-arrow-up"></i></a>
             </li>
             <li>
                 <a href="#" class="btn btn-default" data-placement="bottom" data-toggle="tooltip" data-original-title="Pan right" onclick="handlePanning('right');
-                                return false;"><i class="icon-arrow-right"></i></a>
+                                return false;"><i class="fa fa-arrow-right"></i></a>
             </li>
         </ul>
         <svg id="modeler" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="100" class="modeler">
@@ -848,6 +847,7 @@
                             }
                             ;
 
+                            /*
                             function fitToScreen() {
                                 //console.log(Modeler._svgSize);
                                 var ws = $("#modeler").parent().width();
@@ -865,6 +865,20 @@
                                 el.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
                                 el.setAttribute('width', ws);
                                 el.setAttribute('height', hs);
-                            }
+                            }*/
+    function fitToScreen() {
+        resetZoom();
+        var ws = $("#modeler").parent().width();
+        var hs = $("#modeler").parent().height();
+        var wi = Modeler._svgSize.w;
+        var hi = Modeler._svgSize.h;
+
+        if (wi > ws || hi > hs) {
+            var el = document.getElementById("modeler");
+            el.setAttribute('viewBox', '0 0 ' + wi + ' ' + hi);
+            el.setAttribute('width', ws);
+            el.setAttribute('height', hs);
+        }
+    }
 </script>
 <%}%>
