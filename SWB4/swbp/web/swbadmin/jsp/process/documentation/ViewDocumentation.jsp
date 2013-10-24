@@ -132,7 +132,7 @@
     <nav class="swbp-toolbar" role="navigation">
         <div style="text-align: center;">
             <ul class="swbp-nav">
-                <li><h2><i class="icon-gears" style="width: auto;"></i> <%=pe.getTitle()%></h2></li>
+                <li><h2><i class="fa fa-gears" style="width: auto;"></i> <%=pe.getTitle()%></h2></li>
             </ul>
         </div>
     </nav>
@@ -169,9 +169,9 @@
             <%if (pe instanceof org.semanticwb.process.model.Process) {%>
             <div class="col-lg-1 col-md-2 col-sm-2">
                 <ul class="list-unstyled list-inline">
-                <!--a href="javascript:print()" class="btn btn-default icon-print hidden-print" data-placement="bottom" data-toggle="tooltip" data-original-title="<%//paramRequest.getLocaleString("print")%>"></a-->
+                <!--a href="javascript:print()" class="btn btn-default fa fa-print hidden-print" data-placement="bottom" data-toggle="tooltip" data-original-title="<%//paramRequest.getLocaleString("print")%>"></a-->
                     <li>
-                        <a href="<%=urlExport.setParameter("format", "html")%>" class="btn btn-default icon-download-alt hidden-print" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("export")%>"></a>
+                        <a href="<%=urlExport.setParameter("format", "html")%>" class="btn btn-default fa fa-download hidden-print" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("export")%>"></a>
                     </li>
                 </ul>
             </div>
@@ -212,7 +212,7 @@
                          while (itConObj.hasNext()) {
                          ConnectionObject connectionObj = itConObj.next();
                          if (connectionObj instanceof SequenceFlow) {//SequenceFlow%>
-                <!--li><a class="icon-arrow-right" data-placement="bottom" data-toggle="tooltip" data-original-title="<%//connectionObj.getTitle()%>" href="#<%//connectionObj.getURI()%>"><%//connectionObj.getTitle()%></a></li-->
+                <!--li><a class="fa fa-arrow-right" data-placement="bottom" data-toggle="tooltip" data-original-title="<%//connectionObj.getTitle()%>" href="#<%//connectionObj.getURI()%>"><%//connectionObj.getTitle()%></a></li-->
                 <%}
                              }*/
                         }
@@ -926,7 +926,7 @@
                 <div class="panel-heading">
                     <div class="panel-title">
                         <strong><%=paramRequest.getLocaleString("docFromPro") + " " + pe.getTitle()%></strong>
-                        <a href="<%=urlModel.setParameter("suri", suri)%>" target="_blank" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("viewModel")%>" class="pull-right icon-fullscreen hidden-lg"></a>
+                        <a href="<%=urlModel.setParameter("suri", suri)%>" target="_blank" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("viewModel")%>" class="pull-right fa fa-fullscreen hidden-lg"></a>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -934,66 +934,66 @@
                 </div>
             </div>
             <%if (lane.size() > 0) {//Lane
-            %><div class="panel panel-default"><%
+%><div class="panel panel-default"><%
                 iterator = SWBComparator.sortByDisplayName(lane.iterator(), paramRequest.getUser().getLanguage());
-                out.print("<div id=\"lanemenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + laneT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right icon-level-up\"></a></div></div>");
+                out.print("<div id=\"lanemenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + laneT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right fa fa-level-up\"></a></div></div>");
                 %><div class="panel-body"><%
-                                while (iterator.hasNext()) {
-                                    ge = iterator.next();
-                                    out.println("<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>");
-                                    out.println(ge.getDocumentation().getText());
-                                }
+                    while (iterator.hasNext()) {
+                        ge = iterator.next();
+                        out.println("<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>");
+                        out.println(ge.getDocumentation().getText());
+                    }
                     %></div></div><%
-                                    }
-                                    if (activity.size() > 0) {//Activity
-                    %><div class="panel panel-default"><%
-                iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
-                out.print("<div id=\"activitymenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + activityT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right icon-level-up\"></a></div></div>");
+                        }
+                        if (activity.size() > 0) {//Activity
+%><div class="panel panel-default"><%
+                        iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
+                        out.print("<div id=\"activitymenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + activityT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right fa fa-level-up\"></a></div></div>");
                 %><div class="panel-body"><%
-                                while (iterator.hasNext()) {
-                                    ge = iterator.next();
-                                    out.println("<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>");
-                                    out.println(ge.getDocumentation().getText());
-                                }
+                    while (iterator.hasNext()) {
+                        ge = iterator.next();
+                        out.println("<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>");
+                        out.println(ge.getDocumentation().getText());
+                    }
                     %></div></div><%
-                                    }
-                                    if (gateway.size() > 0) {//Gateway
-                    %><div class="panel panel-default"><%
-                iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
-                out.print("<div id=\"gatewaymenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + gatewayT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right icon-level-up\"></a></div></div>");
+                        }
+                        if (gateway.size() > 0) {//Gateway
+%><div class="panel panel-default"><%
+                        iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
+                        out.print("<div id=\"gatewaymenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + gatewayT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right fa fa-level-up\"></a></div></div>");
                 %><div class="panel-body"><%
-                                while (iterator.hasNext()) {
-                                    ge = iterator.next();
-                                    out.println("<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>");
-                                    out.println(ge.getDocumentation().getText());
-                                    /* //Connections
-                                     Iterator<ConnectionObject> itConObj = SWBComparator.sortByDisplayName(((Gateway) ge).listOutputConnectionObjects(), paramRequest.getUser().getLanguage());
-                                     while (itConObj.hasNext()) {
-                                     ConnectionObject connectionObj = itConObj.next();
-                                     if (connectionObj instanceof SequenceFlow) {
-                                     out.println("<i class=\"icon-arrow-right\"></i><h4 id=\"" + connectionObj.getURI() + "\" title=\"" + connectionObj.getTitle() + "\">" + connectionObj.getTitle() + "</h4>");
-                                     out.println(connectionObj.getDocumentation().getText());
-                                     }
-                                     }*/
-                                }
+                    while (iterator.hasNext()) {
+                        ge = iterator.next();
+                        out.println("<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>");
+                        out.println(ge.getDocumentation().getText());
+                        /* //Connections
+                         Iterator<ConnectionObject> itConObj = SWBComparator.sortByDisplayName(((Gateway) ge).listOutputConnectionObjects(), paramRequest.getUser().getLanguage());
+                         while (itConObj.hasNext()) {
+                         ConnectionObject connectionObj = itConObj.next();
+                         if (connectionObj instanceof SequenceFlow) {
+                         out.println("<i class=\"fa fa-arrow-right\"></i><h4 id=\"" + connectionObj.getURI() + "\" title=\"" + connectionObj.getTitle() + "\">" + connectionObj.getTitle() + "</h4>");
+                         out.println(connectionObj.getDocumentation().getText());
+                         }
+                         }*/
+                    }
                     %></div></div><%
-                                    }
-                                    if (event.size() > 0) {//Event
-                    %><div class="panel panel-default"><%
-                iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
-                out.print("<div id=\"eventmenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + eventT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right icon-level-up\"></a></div></div>");
+                        }
+                        if (event.size() > 0) {//Event
+%><div class="panel panel-default"><%
+                        iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
+                        out.print("<div id=\"eventmenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + eventT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right fa fa-level-up\"></a></div></div>");
                 %><div class="panel-body"><%
-                                while (iterator.hasNext()) {
-                                    ge = iterator.next();
-                                    out.println("<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>");
-                                    out.println(ge.getDocumentation().getText());
-                                }
+                    while (iterator.hasNext()) {
+                        ge = iterator.next();
+                        out.println("<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>");
+                        out.println(ge.getDocumentation().getText());
+                    }
                     %></div></div><%
-                                    }
-                                    if (dataob.size() > 0) {//DataObject
-                    %><div class="panel panel-default"><%
-                iterator = SWBComparator.sortByDisplayName(dataob.iterator(), paramRequest.getUser().getLanguage());
-                out.print("<div id=\"dataobmenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + dataOBT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right icon-level-up\"></a></div></div>");
+                        }
+                        if (dataob.size() > 0) {//DataObject
+%><div class="panel panel-default"><%
+                        iterator = SWBComparator.sortByDisplayName(dataob.iterator(), paramRequest.getUser().getLanguage());
+                        out.print("<div id=\"dataobmenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + dataOBT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right fa fa-level-up\"></a></div></div>");
                 %><div class="panel-body"><%
                     while (iterator.hasNext()) {
                         ge = iterator.next();

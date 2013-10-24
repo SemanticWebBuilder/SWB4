@@ -86,7 +86,7 @@
                         <div class="panel-title"><strong><%=paramRequest.getLocaleString("docFromPro") + " " + pe.getTitle()%></strong></div>
                     </td><td style="text-align: right;">
                         <a class="btn btn-default btn-sm" onclick="window.location = '<%=urlGenerate%>'" data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("view")%>">
-                            <i class="icon-file-text-alt"></i>
+                            <i class="fa fa-file-text-o"></i>
                         </a>
                     </td></tr></table>
         </div>
