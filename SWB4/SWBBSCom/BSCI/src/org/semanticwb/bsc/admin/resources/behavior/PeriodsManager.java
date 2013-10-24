@@ -94,7 +94,7 @@ public class PeriodsManager extends GenericResource {
                 itPeriods = new GenericIterator<Period>(semObj.listObjectProperties(Seasonable.bsc_hasPeriod));
             }
             
-            if (itPeriods != null && itPeriods.hasNext()) {
+//            if (itPeriods != null && itPeriods.hasNext()) {//////////////////////////////////////////////////////
                 String data = semObj.getSemanticClass().getName() + semObj.getId();
 
                 out.println("<form method=\"post\" id=\"frmAdd" + data + "\" action=\" " + url
@@ -262,9 +262,9 @@ public class PeriodsManager extends GenericResource {
                 out.println("  </fieldset>");
                 out.println("</div>");
                 out.println("</form>");
-            } else {
-                out.println("<p>" + paramRequest.getLocaleString("periodsEstablished") + "</p>");
-            }
+//            } else {
+//                out.println("<p>" + paramRequest.getLocaleString("periodsEstablished") + "</p>");
+//            }
             if (request.getParameter("statusMsg") != null
                     && !request.getParameter("statusMsg").isEmpty()) {
                 out.println("<div dojoType=\"dojox.layout.ContentPane\">");
