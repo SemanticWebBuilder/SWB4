@@ -97,11 +97,11 @@
                 doPrintTweet(request, response, paramRequest, status, twitterBean, out, null,HOME_TAB, postURI, socialUserExtAttr);
                 i++;
             }
-            out.println("</div>");
+            
             System.out.println("Total tweets:" + i);
         }catch (TwitterException te) {
             if(te.getErrorCode() == 88){
-                out.println("<div align=\"center\"><h2>RATE LIMIT REACHED</h2><br/></div>");
+                out.println("<div align=\"center\"><h2>YOU HAVE REACHED YOUR RATE LIMIT FOR THIS RESOURCE</h2><br/></div>");
             }else{
                 out.println("<div align=\"center\"><h2>" + te.getErrorMessage() + "</h2><br/></div>");
             }
@@ -111,6 +111,7 @@
             System.out.println("Error displaying timeline" + e.getMessage());
             e.printStackTrace();
         }
+        out.println("</div>");
 %>    
 <div id="<%=objUri%>/getMoreTweets" dojoType="dojox.layout.ContentPane">
     <div align="center">

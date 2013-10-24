@@ -54,7 +54,7 @@
 %>
 <div id="<%=objUri%>getMoreVideos" dojoType="dijit.layout.ContentPane">
     <div align="center">
-        <label id="<%=objUri%>moreVideosLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMoreVideos").setParameter("createdTime", createdTime).setParameter("currentTab", VIDEOS_TAB)%>','<%=objUri%>getMorePictures', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;">More videos</a></label>
+        <label id="<%=objUri%>moreVideosLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMoreVideos").setParameter("createdTime", createdTime).setParameter("currentTab", VIDEOS_TAB)%>','<%=objUri%>getMoreVideos', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;">More videos</a></label>
     </div>
 </div>
 </div>

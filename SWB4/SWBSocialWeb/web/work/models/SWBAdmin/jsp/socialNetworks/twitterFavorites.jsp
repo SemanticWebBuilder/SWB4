@@ -55,7 +55,7 @@
             out.println("<div id=\"" + objUri + "/favoritesStream\" dojoType=\"dojox.layout.ContentPane\"></div>");
 
             Paging paging = new Paging(); //used to set maxId and count
-            paging.count(5);//Gets a number of tweets of timeline. Max value is 200           
+            paging.count(20);//Gets a number of tweets of timeline. Max value is 200           
             int i = 0;
             org.semanticwb.model.User user = paramRequest.getUser();
             SocialUserExtAttributes socialUserExtAttr = null;
@@ -68,9 +68,17 @@
                 i++;
             }
             System.out.println("Total Favorites" + i);
-        } catch (Exception te) {
-            System.out.println("Se presento un error en Twitter Favorites!!");
+        }catch (TwitterException te) {
+            if(te.getErrorCode() == 88){
+                out.println("<div align=\"center\"><h2>YOU HAVE REACHED YOUR RATE LIMIT FOR THIS RESOURCE</h2><br/></div>");
+            }else{
+                out.println("<div align=\"center\"><h2>" + te.getErrorMessage() + "</h2><br/></div>");
+            }
+            System.out.println("Error displaying mentions:" + te.getErrorMessage());
             te.printStackTrace();
+        }catch(Exception e){
+            System.out.println("Error displaying mentions" + e.getMessage());
+            e.printStackTrace();
         }
             out.println("</div>");
 %>

@@ -126,28 +126,28 @@
         
     <form type="dijit.form.Form" id="editedVideo" action="<%=paramRequest.getActionUrl().setAction("doUpdateVideo").setParameter("suri", objUri).setParameter("videoId", videoId)%>" method="post" onsubmit="submitForm('editedVideo'); try{document.getElementById('csLoading').style.display='inline';}catch(noe){}; return false;">
     <fieldset>
-        <legend><%=paramRequest.getLocaleString("title")%>:</legend>
+        <legend><%=SWBUtils.TEXT.encode(paramRequest.getLocaleString("title"), "UTF-8")%>:</legend>
         <div align="left">
             <input type="text" name="title" size="67" value="<%=title%>"/>
         </div>
     </fieldset>
     
     <fieldset>
-        <legend><%=paramRequest.getLocaleString("description")%>:</legend>
+        <legend><%=SWBUtils.TEXT.encode(paramRequest.getLocaleString("description"), "UTF-8")%>:</legend>
         <div align="left">
             <textarea rows="5" cols="50" name="description"><%=description%></textarea>
         </div>
     </fieldset>
     
     <fieldset>
-        <legend><%=paramRequest.getLocaleString("videoTags")%>:</legend>
+        <legend><%=SWBUtils.TEXT.encode(paramRequest.getLocaleString("videoTags"), "UTF-8")%>:</legend>
         <div align="left">
             <input type="text" name="keywords" size="67" value="<%=keywords%>"/>
         </div>
     </fieldset>
     
     <fieldset>
-        <legend><%=paramRequest.getLocaleString("category")%>:</legend>
+        <legend><%=SWBUtils.TEXT.encode(paramRequest.getLocaleString("category"), "UTF-8")%>:</legend>
         <div align="left">
             <select name="category">
                 <%
@@ -164,7 +164,7 @@
         </div>
     </fieldset>
     <fieldset>
-        <legend><%=paramRequest.getLocaleString("privacy")%>:</legend>
+        <legend><%=SWBUtils.TEXT.encode(paramRequest.getLocaleString("privacy"), "UTF-8")%>:</legend>
         <div align="left">
             <select name="privacy">
                 <%
@@ -188,23 +188,6 @@
     </fieldset>
             <div align="center"><button dojoType="dijit.form.Button" type="submit"><%=paramRequest.getLocaleString("update")%></button></div>
     </form>
-
-<%
-    if(description.isEmpty()){
-%>
-    <fieldset>
-        <legend>Description:</legend>
-        <div align="left"><%=description%></div>
-    </fieldset>
-<%
-    }
-%>
-
-
-
-
-
-
 </div>
 
 <%  

@@ -67,9 +67,17 @@
                 i++;
             }
             System.out.println("Total Mentions:" + i);
-        } catch (Exception te) {
-            System.out.println("Se presento un error en Twitter Mentions!!");
+        }catch (TwitterException te) {
+            if(te.getErrorCode() == 88){
+                out.println("<div align=\"center\"><h2>YOU HAVE REACHED YOUR RATE LIMIT FOR THIS RESOURCE</h2><br/></div>");
+            }else{
+                out.println("<div align=\"center\"><h2>" + te.getErrorMessage() + "</h2><br/></div>");
+            }
+            System.out.println("Error displaying mentions:" + te.getErrorMessage());
             te.printStackTrace();
+        }catch(Exception e){
+            System.out.println("Error displaying mentions" + e.getMessage());
+            e.printStackTrace();
         }
             out.println("</div>");
 %>    
