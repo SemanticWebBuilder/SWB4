@@ -39,13 +39,10 @@ public class Ordinal extends org.semanticwb.bsc.formelement.base.OrdinalBase
         if (obj == null) {
             obj = new SemanticObject();
         }
-        boolean DOJO   = false;
         
-        if (type.equals("dojo")) {
-            DOJO = true;
-        }
+        boolean dojo = type.equals("dojo");
 
-        StringBuilder   ret      = new StringBuilder();
+        StringBuilder  ret      = new StringBuilder();
         String         name     = propName;
         String         label    = prop.getDisplayName(lang);
         SemanticObject sobj     = prop.getDisplayProperty();
@@ -56,24 +53,20 @@ public class Ordinal extends org.semanticwb.bsc.formelement.base.OrdinalBase
 
         if (sobj != null) {
             DisplayProperty dobj = new DisplayProperty(sobj);
-
-            pmsg     = dobj.getPromptMessage();
-            imsg     = dobj.getInvalidMessage();
+            pmsg = dobj.getPromptMessage(lang);
+            imsg = dobj.getInvalidMessage(lang);
             disabled = dobj.isDisabled();
         }
-
-        if (DOJO) {
+        
+        if (dojo) {
             if (required && imsg == null) {
                 imsg = label + " es requerido.";
-
                 if (lang.equals("en")) {
                     imsg = label + " is required.";
                 }
             }
-
             if (pmsg == null) {
                 pmsg = "Captura " + label + ".";
-
                 if (lang.equals("en")) {
                     pmsg = "Enter " + label + ".";
                 }
@@ -82,76 +75,43 @@ public class Ordinal extends org.semanticwb.bsc.formelement.base.OrdinalBase
         
         String ext = disabled ? " disabled=\"disabled\"":"";
         
-        String value = request.getParameter(propName);
-        if(value == null)
-        {
+        String value = null;
+        if(obj.getDateProperty(prop)!=null) {
             value = obj.getProperty(prop);
-        }
-        if(value == null)
-        {
-            value = "";
+        }else {
+            value = request.getParameter(propName)==null?"":request.getParameter(propName);
         }
         
-if(type.equals("dojo")) {
-    setAttribute("isValid",
-                 "return validateElement('" + propName + "','" + getValidateURL(obj, prop)
-                 + "',this.textbox.value);");
-}else {
-    setAttribute("isValid", null);
-}
+        if(type.equals("dojo")) {
+            setAttribute("isValid",
+                         "return validateElement('" + propName + "','" + getValidateURL(obj, prop)
+                         + "',this.textbox.value);");
+        }else {
+            setAttribute("isValid", null);
+        }
         
         if(mode.equals("edit") || mode.equals("create")) {
             ret.append("<input name=\"").append(name).append("\" size=\"30\" value=\"").append(value).append("\"");
-
-            if(DOJO)
+            if(dojo)
             {
                 ret.append(" dojoType=\"dijit.form.ValidationTextBox\"");
-            }
-
-            if(DOJO)
-            {
                 ret.append(" required=\"").append(required).append("\"");
-            }
-
-            if(DOJO)
-            {
                 ret.append(" promptMessage=\"").append(pmsg).append("\"");
-            }
-//System.out.println("getRegExp()="+getRegExp());
-            if(DOJO)
-            {
-                ret.append(((getRegExp() != null)
-                            ? (" regExp=\"" + getRegExp() + "\"")
-                            : ""));
-            }
-            
-            if(DOJO)
-            {
+                ret.append((getRegExp() != null ? (" regExp=\"" + getRegExp() + "\"") : ""));
                 ret.append(" invalidMessage=\"").append(imsg).append("\"");
+                ret.append(" trim=\"true\"");
+                ret.append(" ").append(getAttributes());
+                ret.append(" style=\"width:300px;\"");
+                ret.append(ext);
+                
             }
-
-            ret.append(" ").append(getAttributes());
-//System.out.println("getMaxLength()="+getMaxLength());
-            if(getMaxLength()>0)
-            {
+            if(getMaxLength()>0) {
                 ret.append(" maxlength=\"").append(getMaxLength()).append("\"");
             }
-            
-            if(DOJO)
-            {
-                ret.append(" trim=\"true\"");
-            }
-
-            ret.append(" style=\"width:300px;\"");
-            ret.append(ext);
             ret.append("/>");
-
-            if(DOJO)
-            {
-                if(!mode.equals("create") && prop.isLocaleable() && !obj.isVirtual())
-                {
-                    ret.append(" <a href=\"#\" onClick=\"javascript:showDialog('").append(SWBPlatform.getContextPath()).append("/swbadmin/jsp/propLocaleEdit.jsp?suri=").append(obj.getEncodedURI()).append("&prop=").append(prop.getEncodedURI()).append("','Idiomas de la Propiedad ").append(prop.getDisplayName(lang)).append("');\">locale</a>");
-                }
+            
+            if(!mode.equals("create") && prop.isLocaleable() && !obj.isVirtual()) {
+                ret.append(" <a href=\"#\" onClick=\"javascript:showDialog('").append(SWBPlatform.getContextPath()).append("/swbadmin/jsp/propLocaleEdit.jsp?suri=").append(obj.getEncodedURI()).append("&prop=").append(prop.getEncodedURI()).append("','Idiomas de la Propiedad ").append(prop.getDisplayName(lang)).append("');\">locale</a>");
             }
         }
         else if (mode.equals("view"))
@@ -164,7 +124,8 @@ if(type.equals("dojo")) {
     @Override
     public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) throws FormValidateException
     {
-//System.out.println("\n\nvalidate.....");
+System.out.println("Ordinal  validate.....");
+System.out.println("obj="+obj);
         int ordinal;
         try            
         {
@@ -173,8 +134,9 @@ if(type.equals("dojo")) {
         }   
         catch(Exception pe)
         {            
-            throw new FormValidateException("El valor debe ser numérico y no puede repetirse");
+            throw new FormValidateException("El valor debe ser numérico y no debe repetirse");
         }
+System.out.println("ordinal="+ordinal);
         
         SWBModel model = (SWBModel)obj.getModel().getModelObject().createGenericInstance();
         Iterator<SemanticObject> it = model.getSemanticModel().listInstancesOfClass(obj.getSemanticClass());
@@ -183,6 +145,8 @@ if(type.equals("dojo")) {
             if( obj.equals(so) ) {
                 continue;
             }
+System.out.println("so="+so);
+System.out.println(prop+" = "+so.getIntProperty(prop));
             if(ordinal == so.getIntProperty(prop))
             {
                 throw new FormValidateException("El valor debe ser numérico y no puede repetirse");

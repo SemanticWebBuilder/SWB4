@@ -79,8 +79,8 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
 
         if (sobj != null) {
             DisplayProperty dobj = new DisplayProperty(sobj);
-            pmsg = dobj.getPromptMessage();
-            imsg = dobj.getInvalidMessage();
+            pmsg = dobj.getPromptMessage(lang);
+            imsg = dobj.getInvalidMessage(lang);
             disabled = dobj.isDisabled();
         }
 
