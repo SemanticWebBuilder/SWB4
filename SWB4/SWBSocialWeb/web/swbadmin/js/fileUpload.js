@@ -15,6 +15,11 @@ var fileUpload_Callback = function(data,ioArgs,widgetRef){
     }
 }
 
+var fileUpload_Callback2 = function(data,ioArgs,widgetRef){   
+     
+	fileUpload_Callback(data,ioArgs,widgetRef);  
+    };
+
 var fileUploadCounter = 0;
 function fileUpload_addNewUpload(pname,filters,url)
 {
