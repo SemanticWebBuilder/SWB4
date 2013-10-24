@@ -1,6 +1,7 @@
 package org.semanticwb.bsc;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
@@ -33,13 +34,22 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
     }
     
     private List<Period> sortPeriods(boolean ascendent) {
-        List<Period> periods = SWBUtils.Collections.copyIterator(listPeriods());
+        List<Period> periods = SWBUtils.Collections.copyIterator(super.listPeriods());
         if(ascendent) {
             Collections.sort(periods);
         }else {            
             Collections.sort(periods, Collections.reverseOrder());            
         }
         return periods;
+    }
+
+    @Override
+    public Iterator<Period> listPeriods() {
+        return sortPeriods().iterator();
+    }
+    
+    public Iterator<Period> listPeriods(boolean ascendent) {
+        return sortPeriods(ascendent).iterator();
     }
     
     public List<Period> listValidPeriods() {
