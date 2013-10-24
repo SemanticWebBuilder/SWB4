@@ -353,6 +353,7 @@
       *                 porque ya hay una red hacia donde se va a responder
       *                 true-> debe de seleccionar una red
       *                 false-> ya hay una red seleccionada (la red que recibio el mensaje)
+      * //TODO: REVISAR DE NUEVO LAS VALIDACIONES PORQUE SE PUEDE RESPONDER DE OTRAS REDES!!!
       */       
      function checksRedesPhoto(objUri, sourceCall, selectNetwork){
           var frm = document.getElementById(objUri+sourceCall+'frmUploadPhoto');
@@ -482,4 +483,101 @@ function disableSelect(source){
             }
         }
     }  
+}
+function reloadSocialTab(uri){
+    var objid=uri;
+    var tab = dijit.byId(objid);
+    if(tab)
+    {
+        var arr=tab.getChildren();
+        for (var n = 0; n < arr.length; n++)
+        {
+            if(arr[n].selected === true){        
+                arr[n].refresh();
+                break;
+            }
+        }
+    }
+}
+
+function validateImages(uri, formId){
+    console.log(uri);
+    var obj = document.getElementById(uri);
+    var images = new Array();
+    var children = obj.childNodes;
+    var haveFacebook = false;
+    var haveTwitter = false;
+    
+    if(children != null && children.length > 0){
+        lookForInputs(children, images);
+    }
+    for(i = 0; i < images.length; i++){
+        console.log("->" + images[i]);
+    }
+    if(images.length === 0){
+        alert("Debes adjuntar al menos una imagen");
+        return false;
+    }
+    var frm = document.getElementById(formId);
+    
+    if(frm.checkRedes == null){//No networks
+        alert("Debes crear primero una red en donde publicar");
+        return false;
+    }
+
+    if(frm.checkRedes.length == null){
+        if(frm.checkRedes.checked){//there is only one network
+            checkRed = true;
+            if(frm.checkRedes.name.indexOf("#social_Twitter:") != -1){
+                haveTwitter = true;
+                //console.log('twitterFOUND');
+            }
+            if(frm.checkRedes.name.indexOf("#social_Facebook:") != -1){
+                haveFacebook = true
+                //console.log('FacebookFOUND');
+            }
+        }
+    }else{
+          for (i = 0; i < frm.checkRedes.length; i++) {
+              if (frm.checkRedes[i].checked){//Network is selected
+                  if(frm.checkRedes[i].name.indexOf("#social_Twitter:") != -1){
+                      haveTwitter = true;
+                      //console.log('twitterFOUND');
+                  }
+                  if(frm.checkRedes[i].name.indexOf("#social_Facebook:") != -1){
+                      haveFacebook = true
+                      //console.log('FacebookFOUND');
+                  }
+              }
+          }
+    }
+    console.log("haveFacebook:" + haveFacebook);
+    console.log("haveTwitter:" + haveTwitter);
+    if(haveTwitter){
+        for(i = 0; i < images.length; i++){
+            var image = images[i].toLowerCase();
+            var imgExt = image.substring(image.lastIndexOf(".") + 1);
+            console.log("imgExt:" + imgExt);
+        }
+    }
+    
+    return false;
+}
+
+function lookForInputs(children, images){
+    if(children == null){
+        return;
+    }else{
+        for(var i = 0; i < children.length; i++){
+            //console.log(children[i]);
+            if(children[i].nodeName === "INPUT"){
+                if(children[i].value != null && children[i].value != "")
+                {
+                    images.push(children[i].value);
+                }
+            }
+            var siblings = children[i].childNodes;            
+            lookForInputs(siblings, images);
+        }
+    }
 }
