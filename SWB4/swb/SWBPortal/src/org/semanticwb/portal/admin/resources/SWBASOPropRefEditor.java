@@ -70,6 +70,9 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
     
     /** The base. */
     Resource base = null;
+    
+    static String NO_INHERIT = "notInherit";
+    static String AND_EVAL = "andEval";
 
     /* (non-Javadoc)
      * @see org.semanticwb.portal.api.GenericResource#doIndex(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
@@ -149,6 +152,13 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
         SemanticClass cls = obj.getSemanticClass();
         String title = cls.getName();
 
+        log.debug("Antes de revisar instancia de tipo Referensable");
+        boolean validateInherit = Boolean.FALSE;
+        if(obj.createGenericInstance() instanceof Referensable || obj.getSemanticClass().isSubClass(Referensable.swb_Referensable)){
+            validateInherit = Boolean.TRUE;
+            log.debug("Instancia de tipo Referensable");
+        }
+        
         StringBuilder inheritHeader = new StringBuilder();
 
         out.println("<script type=\"text/javascript\">");
@@ -176,6 +186,40 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
 
             //System.out.println(idp+" prop:"+prop+" dom:"+prop.getDomainClass()+" tp:"+prop.isObjectProperty()+" range:"+prop.getRange()+" cls:"+prop.getRangeClass());
 
+            SemanticProperty spinHerit = null;
+            SemanticProperty spandEval = null;
+            Iterator<SemanticProperty> itsemprops = obj.getSemanticClass().listProperties();
+            String inicioidp = spro.getName();
+            String inicioidpref = spref!=null?spref.getName():"";
+            if(null!=inicioidp&&inicioidp.endsWith("Ref")){
+                if(inicioidp.startsWith("has")){
+                    inicioidp = inicioidp.substring(3);
+                }
+            }
+            log.debug("idp: "+inicioidp);
+            
+            if(null!=inicioidpref&&inicioidpref.endsWith("Ref")){
+                if(inicioidpref.startsWith("has")){
+                    inicioidpref = inicioidpref.substring(3);
+                }
+            }
+            log.debug("idpref: "+inicioidpref);
+            
+            while (itsemprops.hasNext()) {
+                SemanticProperty semanticProperty = itsemprops.next();
+                log.debug("propiedad:" + semanticProperty.getDisplayName() + "---" + semanticProperty.getName());
+                if(semanticProperty.getName().startsWith(AND_EVAL+inicioidp)||semanticProperty.getName().startsWith(AND_EVAL+inicioidpref)){ //validateInherit&&
+                    spandEval = semanticProperty;
+                     log.debug("Contiene propiedad de AND evaluation "+semanticProperty.getName());
+                }
+                if(semanticProperty.getName().startsWith(NO_INHERIT+inicioidp)||semanticProperty.getName().startsWith(NO_INHERIT+inicioidpref)){ //validateInherit&&
+                    spinHerit = semanticProperty;
+                     log.debug("Contiene propiedad de noInherit "+semanticProperty.getName());
+                }
+            }
+            
+            
+            
             log.debug("CLASE: " + clsprop.getClassName());
             HashMap hmprop = new HashMap();
             Iterator<SemanticProperty> ite_sp = clsprop.listProperties();
@@ -206,6 +250,33 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             int numcols = 0;
             title = clsprop.getName();
             out.println("<div class=\"swbform\">");
+            if(spandEval != null ||spinHerit!=null){
+                out.println("<p align=\"right\">");
+                if (spandEval != null) {
+                    SWBResourceURL urlAnd = paramRequest.getActionUrl();
+                    urlAnd.setParameter("suri", id);
+                    urlAnd.setAction(AND_EVAL);
+                    urlAnd.setParameter("sprop", idp);
+                    urlAnd.setParameter("spropref", idpref);
+                    urlAnd.setParameter(spandEval.getName(), spandEval.getURI());
+
+                    String value = getValueSemProp(obj, spandEval);
+                    String checked = null != value && value.equals("true") ? "checked" : "";
+                    out.println("<input type=\"checkbox\" id=\"" + id + AND_EVAL + "\" name=\"" + AND_EVAL + "\" value=\"1\" " + checked + " onclick=\"submitUrl('" + urlAnd + "',this);\" /><label for=\"" + id + AND_EVAL + "\" >" + paramRequest.getLocaleString("lbl_andEval") + "</label>&nbsp;&nbsp;");
+                }
+                if(spinHerit!=null){
+                    SWBResourceURL urlNoInherit = paramRequest.getActionUrl();
+                    urlNoInherit.setParameter("suri", id);
+                    urlNoInherit.setAction(NO_INHERIT);
+                    urlNoInherit.setParameter("sprop", idp);
+                    urlNoInherit.setParameter("spropref", idpref);
+                    urlNoInherit.setParameter(spinHerit.getName(), spinHerit.getURI());
+                    String value = getValueSemProp(obj, spinHerit);
+                    String checked = null!=value&&value.equals("true")?"checked":""; 
+                    out.println("<input type=\"checkbox\" id=\""+id+NO_INHERIT+"\" name=\""+NO_INHERIT+"\" value=\"1\" "+checked+" onclick=\"submitUrl('" + urlNoInherit + "',this);\" /><label for=\""+id+NO_INHERIT+"\" >"+paramRequest.getLocaleString("lbl_noInherit")+"</label>");
+                }
+                out.println("</p>");
+            }
             out.println("<fieldset>");
             inheritHeader.append("<fieldset>");
             inheritHeader.append("<legend>");
@@ -1576,6 +1647,74 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             response.setRenderParameter("statmsg", response.getLocaleString("statmsg3") + " " + name + ".");
             response.setMode(response.Mode_EDIT);
 
+        } else if(AND_EVAL.equals(action)){
+            
+            String prop_uri = null;
+            Enumeration<String> parametros = request.getParameterNames();
+           while(parametros.hasMoreElements()){
+               String paramName = parametros.nextElement();
+               if(paramName.startsWith(AND_EVAL)){
+                   prop_uri = request.getParameter(paramName);
+                   break;
+               }
+           }
+           if(prop_uri!=null){
+                SemanticProperty prop = ont.getSemanticProperty(prop_uri);
+                String booVal = getValueSemProp(obj, prop);
+                if(booVal!=null&&"true".equals(booVal)){
+                    obj.removeProperty(prop);
+                    response.setRenderParameter("statmsg", response.getLocaleString("statmsg8"));
+                } else {
+                    obj.setBooleanProperty(prop, true);
+                    response.setRenderParameter("statmsg", response.getLocaleString("statmsg7"));
+                }
+           } else {
+            response.setRenderParameter("statmsg", response.getLocaleString("statmsg9"));
+           }
+           if (id != null) {
+                response.setRenderParameter("suri", id);
+            }
+            if (sprop != null) {
+                response.setRenderParameter("sprop", sprop);
+            }
+            if (spropref != null) {
+                response.setRenderParameter("spropref", spropref);
+            }
+            
+        }else if(NO_INHERIT.equals(action)){
+            
+            String prop_uri = null;
+            Enumeration<String> parametros = request.getParameterNames();
+           while(parametros.hasMoreElements()){
+               String paramName = parametros.nextElement();
+               if(paramName.startsWith(NO_INHERIT)){
+                   prop_uri = request.getParameter(paramName);
+                   break;
+               }
+           }
+           if(prop_uri!=null){
+                SemanticProperty prop = ont.getSemanticProperty(prop_uri);
+                String booVal = getValueSemProp(obj, prop);
+                if(booVal!=null&&"true".equals(booVal)){
+                    obj.removeProperty(prop);
+                    response.setRenderParameter("statmsg", response.getLocaleString("statmsg8"));
+                } else {
+                    obj.setBooleanProperty(prop, true);
+                    response.setRenderParameter("statmsg", response.getLocaleString("statmsg7"));
+                }
+           } else {
+            response.setRenderParameter("statmsg", response.getLocaleString("statmsg9"));
+           }
+           if (id != null) {
+                response.setRenderParameter("suri", id);
+            }
+            if (sprop != null) {
+                response.setRenderParameter("sprop", sprop);
+            }
+            if (spropref != null) {
+                response.setRenderParameter("spropref", spropref);
+            }
+            
         }
     }
 
