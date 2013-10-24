@@ -712,42 +712,42 @@ ret.append("\n  </tr> ");
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doEditStyle(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        Resource base = getResourceBase();
-        String stel = request.getParameter("stel");
-        String[] tkns = stel.split("@",3);
-
-        HashMap tabs = (HashMap)si.getMm(base.getId());
-        if( tabs!=null && tkns[1].length()>0 ) {
-            try {
-                HashMap t = (HashMap)tabs.get(tkns[0]);
-                if(tkns[2].equalsIgnoreCase("empty") || tkns[2].length()==0)
-                    t.remove(tkns[1]);
-                else
-                    t.put(tkns[1], tkns[2]);
-                StringBuilder css = new StringBuilder();
-                Iterator<String> ittabs = tabs.keySet().iterator();
-                while(ittabs.hasNext()) {
-                    String tab = ittabs.next();
-                    css.append(tab);
-                    css.append("{");
-                    HashMap selectors = (HashMap)tabs.get(tab);
-                    Iterator<String> its = selectors.keySet().iterator();
-                    while(its.hasNext()) {
-                        String l = its.next();
-                        css.append(l+":"+selectors.get(l)+";");
-                    }
-                    css.append("}");
-                }
-                base.setAttribute("css", css.toString());
-                try{
-                    base.updateAttributesToDB();
-                }catch(Exception e){
-                    log.error("Error al guardar la hoja de estilos del recurso: "+base.getId() +"-"+ base.getTitle(), e);
-                }
-            }catch(IndexOutOfBoundsException iobe) {
-                log.error("Error al editar la hoja de estilos del recurso: "+base.getId() +"-"+ base.getTitle(), iobe);
-            }
-        }
+//        Resource base = getResourceBase();
+//        String stel = request.getParameter("stel");
+//        String[] tkns = stel.split("@",3);
+//
+//        HashMap tabs = (HashMap)si.getMm(base.getId());
+//        if( tabs!=null && tkns[1].length()>0 ) {
+//            try {
+//                HashMap t = (HashMap)tabs.get(tkns[0]);
+//                if(tkns[2].equalsIgnoreCase("empty") || tkns[2].length()==0)
+//                    t.remove(tkns[1]);
+//                else
+//                    t.put(tkns[1], tkns[2]);
+//                StringBuilder css = new StringBuilder();
+//                Iterator<String> ittabs = tabs.keySet().iterator();
+//                while(ittabs.hasNext()) {
+//                    String tab = ittabs.next();
+//                    css.append(tab);
+//                    css.append("{");
+//                    HashMap selectors = (HashMap)tabs.get(tab);
+//                    Iterator<String> its = selectors.keySet().iterator();
+//                    while(its.hasNext()) {
+//                        String l = its.next();
+//                        css.append(l+":"+selectors.get(l)+";");
+//                    }
+//                    css.append("}");
+//                }
+//                base.setAttribute("css", css.toString());
+//                try{
+//                    base.updateAttributesToDB();
+//                }catch(Exception e){
+//                    log.error("Error al guardar la hoja de estilos del recurso: "+base.getId() +"-"+ base.getTitle(), e);
+//                }
+//            }catch(IndexOutOfBoundsException iobe) {
+//                log.error("Error al editar la hoja de estilos del recurso: "+base.getId() +"-"+ base.getTitle(), iobe);
+//            }
+//        }
     }
 
     /**
