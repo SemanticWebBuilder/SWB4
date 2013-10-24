@@ -22,20 +22,14 @@
  */
 package org.semanticwb.process.model;
 
-import bsh.Interpreter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.GenericIterator;
-import org.semanticwb.model.SWBClass;
-import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
-import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
-import org.semanticwb.platform.SemanticProperty;
 
 /**
  * Clase que encapsula las propiedades y funciones de un proceso.
@@ -50,6 +44,7 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
     {
         swp_parentWebPage.registerObserver(new SemanticObserver() 
         {
+            @Override
             public void notify(SemanticObject obj, Object prop, String lang, String action)
             {
                 //System.out.println("obj:"+obj+" prop:"+prop+" action:"+action);
@@ -100,6 +95,7 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
      * Regresa las ItemAware y la Classes relacionadas con el proceso (ItemAware Globales)
      * @return
      */
+    @Override
     public List<ItemAware> listRelatedItemAware()
     {
         //System.out.println("getRelatedItemAwareClasses:"+this);
@@ -125,6 +121,7 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
      * Regresa las ItemAware y la Classes relacionadas con el proceso (ItemAware Globales)
      * @return
      */
+    @Override
     public List<ItemAware> listHerarquicalRelatedItemAware()
     {
         //System.out.println("getHerarquicalRelatedItemAwareClasses:"+this);
