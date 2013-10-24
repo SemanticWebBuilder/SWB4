@@ -349,7 +349,7 @@ Document doc=gadget.getDocument(socialuser.getLanguage(),socialuser.getCountry()
 <br>
 
 <script type="text/javascript">
-    <!--
+    
     function closeWindow()
     {
         this.location='<%=add%>';
@@ -408,5 +408,5 @@ Document doc=gadget.getDocument(socialuser.getLanguage(),socialuser.getCountry()
        }
     }
 
-    -->
+    
 </script>
