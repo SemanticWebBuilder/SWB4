@@ -62,12 +62,11 @@ public class InitiativeManager extends GenericResource {
             Iterator<Initiative> itInit = bsc.listInitiatives();
                 
             PrintWriter out = response.getWriter();
-            out.println("<script type=\"text/javascript\">\n");
-            out.println("  dojo.require('dojo.parser');\n");
-            out.println("  dojo.require('dijit.layout.ContentPane');\n");
-            out.println("  dojo.require('dijit.form.Form');\n");
-            out.println("  dojo.require('dijit.form.CheckBox');\n");
-            out.println("</script>\n");
+            out.println("<script type=\"text/javascript\">");
+            out.println("  dojo.require('dojo.parser');");
+            out.println("  dojo.require('dijit.layout.ContentPane');");
+            out.println("  dojo.require('dijit.form.CheckBox');");
+            out.println("</script>");
 
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>\n");
