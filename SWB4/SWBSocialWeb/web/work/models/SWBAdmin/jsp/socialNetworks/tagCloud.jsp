@@ -194,7 +194,7 @@
 	</canvas>
 </div>
 
-<div>
+<div hidden="true">
     <ul id="tags<%=randomId%>">
 <%
 try{
