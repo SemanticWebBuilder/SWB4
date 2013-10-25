@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ComplexGatewayBase extends org.semanticwb.process.model.Gateway implements org.semanticwb.model.Sortable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class ComplexGatewayBase extends org.semanticwb.process.model.Gateway implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
    /**
    * N√∫mero de tokens o flujos completados necesarios para que la compuerta se active cuando se usa como compuerta convergente.

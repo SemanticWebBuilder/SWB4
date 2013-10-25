@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ActivityBase extends org.semanticwb.process.model.FlowNode implements org.semanticwb.model.Sortable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Referensable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable
+public abstract class ActivityBase extends org.semanticwb.process.model.FlowNode implements org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RuleRefable,org.semanticwb.process.model.ResourceAssignmentable
 {
     public static final org.semanticwb.platform.SemanticClass swp_Activity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Activity");
    /**
@@ -365,6 +365,42 @@ public abstract class ActivityBase extends org.semanticwb.process.model.FlowNode
     }
 
 /**
+* Gets the NotInheritRoleRef property
+* @return boolean with the NotInheritRoleRef
+*/
+    public boolean isNotInheritRoleRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_notInheritRoleRef);
+    }
+
+/**
+* Sets the NotInheritRoleRef property
+* @param value long with the NotInheritRoleRef
+*/
+    public void setNotInheritRoleRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_notInheritRoleRef, value);
+    }
+
+/**
+* Gets the NotInheritUserGroupRef property
+* @return boolean with the NotInheritUserGroupRef
+*/
+    public boolean isNotInheritUserGroupRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_notInheritUserGroupRef);
+    }
+
+/**
+* Sets the NotInheritUserGroupRef property
+* @param value long with the NotInheritUserGroupRef
+*/
+    public void setNotInheritUserGroupRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_notInheritUserGroupRef, value);
+    }
+
+/**
 * Gets the ResourceAssignationRule property
 * @return int with the ResourceAssignationRule
 */
@@ -380,6 +416,24 @@ public abstract class ActivityBase extends org.semanticwb.process.model.FlowNode
     public void setResourceAssignationRule(int value)
     {
         getSemanticObject().setIntProperty(swp_resourceAssignationRule, value);
+    }
+
+/**
+* Gets the NotInheritRuleRef property
+* @return boolean with the NotInheritRuleRef
+*/
+    public boolean isNotInheritRuleRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_notInheritRuleRef);
+    }
+
+/**
+* Sets the NotInheritRuleRef property
+* @param value long with the NotInheritRuleRef
+*/
+    public void setNotInheritRuleRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_notInheritRuleRef, value);
     }
    /**
    * Gets all the org.semanticwb.model.RuleRef
@@ -454,6 +508,24 @@ public abstract class ActivityBase extends org.semanticwb.process.model.FlowNode
              ret=(org.semanticwb.model.RuleRef)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the AndEvalUserGroupRef property
+* @return boolean with the AndEvalUserGroupRef
+*/
+    public boolean isAndEvalUserGroupRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_andEvalUserGroupRef);
+    }
+
+/**
+* Sets the AndEvalUserGroupRef property
+* @param value long with the AndEvalUserGroupRef
+*/
+    public void setAndEvalUserGroupRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_andEvalUserGroupRef, value);
     }
    /**
    * Gets all the org.semanticwb.model.UserGroupRef
@@ -602,5 +674,41 @@ public abstract class ActivityBase extends org.semanticwb.process.model.FlowNode
              ret=(org.semanticwb.model.RoleRef)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the AndEvalRoleRef property
+* @return boolean with the AndEvalRoleRef
+*/
+    public boolean isAndEvalRoleRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_andEvalRoleRef);
+    }
+
+/**
+* Sets the AndEvalRoleRef property
+* @param value long with the AndEvalRoleRef
+*/
+    public void setAndEvalRoleRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_andEvalRoleRef, value);
+    }
+
+/**
+* Gets the AndEvalRuleRef property
+* @return boolean with the AndEvalRuleRef
+*/
+    public boolean isAndEvalRuleRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_andEvalRuleRef);
+    }
+
+/**
+* Sets the AndEvalRuleRef property
+* @param value long with the AndEvalRuleRef
+*/
+    public void setAndEvalRuleRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_andEvalRuleRef, value);
     }
 }

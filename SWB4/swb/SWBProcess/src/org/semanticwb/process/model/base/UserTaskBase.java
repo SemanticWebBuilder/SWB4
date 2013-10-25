@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class UserTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Sortable,org.semanticwb.model.Traceable,org.semanticwb.process.model.Callable,org.semanticwb.model.Resourceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Trashable,org.semanticwb.model.TemplateRefable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ActivityConfable
+public abstract class UserTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RuleRefable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.process.model.Callable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Resourceable
 {
     public static final org.semanticwb.platform.SemanticProperty swp_notificationTime=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#notificationTime");
     public static final org.semanticwb.platform.SemanticClass swp_WrapperTaskWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#WrapperTaskWebPage");
@@ -811,6 +811,24 @@ public abstract class UserTaskBase extends org.semanticwb.process.model.Task imp
     }
 
 /**
+* Gets the NotInheritTemplateRef property
+* @return boolean with the NotInheritTemplateRef
+*/
+    public boolean isNotInheritTemplateRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_notInheritTemplateRef);
+    }
+
+/**
+* Sets the NotInheritTemplateRef property
+* @param value long with the NotInheritTemplateRef
+*/
+    public void setNotInheritTemplateRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_notInheritTemplateRef, value);
+    }
+
+/**
 * Gets the Undeleteable property
 * @return boolean with the Undeleteable
 */
@@ -844,6 +862,24 @@ public abstract class UserTaskBase extends org.semanticwb.process.model.Task imp
     public void setLinkNextUserTask(boolean value)
     {
         getSemanticObject().setBooleanProperty(swp_linkNextUserTask, value);
+    }
+
+/**
+* Gets the NotInheritCalendarRef property
+* @return boolean with the NotInheritCalendarRef
+*/
+    public boolean isNotInheritCalendarRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_notInheritCalendarRef);
+    }
+
+/**
+* Sets the NotInheritCalendarRef property
+* @param value long with the NotInheritCalendarRef
+*/
+    public void setNotInheritCalendarRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_notInheritCalendarRef, value);
     }
    /**
    * Gets all the org.semanticwb.model.CalendarRef

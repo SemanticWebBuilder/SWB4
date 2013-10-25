@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class GraphicalElementBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Sortable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class GraphicalElementBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swp_ConnectionObject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ConnectionObject");
     public static final org.semanticwb.platform.SemanticProperty swp_hasInputConnectionObjectInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasInputConnectionObjectInv");
@@ -378,24 +378,6 @@ public abstract class GraphicalElementBase extends org.semanticwb.process.model.
     public void setHeight(int value)
     {
         getSemanticObject().setIntProperty(swp_height, value);
-    }
-
-/**
-* Gets the Index property
-* @return int with the Index
-*/
-    public int getIndex()
-    {
-        return getSemanticObject().getIntProperty(swb_index);
-    }
-
-/**
-* Sets the Index property
-* @param value long with the Index
-*/
-    public void setIndex(int value)
-    {
-        getSemanticObject().setIntProperty(swb_index, value);
     }
 
 /**

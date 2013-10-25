@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class RepositoryFileBase extends org.semanticwb.process.model.RepositoryElement implements org.semanticwb.model.Traceable,org.semanticwb.model.Searchable,org.semanticwb.model.Activeable,org.semanticwb.model.Hitable,org.semanticwb.model.Expirable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Versionable,org.semanticwb.model.Descriptiveable
+public abstract class RepositoryFileBase extends org.semanticwb.process.model.RepositoryElement implements org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.Expirable,org.semanticwb.model.RoleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Searchable,org.semanticwb.model.Versionable,org.semanticwb.model.Hitable
 {
     public static final org.semanticwb.platform.SemanticClass swp_RepositoryFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#RepositoryFile");
    /**
