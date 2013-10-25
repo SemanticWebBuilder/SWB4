@@ -391,13 +391,10 @@ function checksRedesPhoto(objUri, sourceCall, selectNetwork){
         return true;
     }
 }
-function checksRedesText(objUri, sourceCall, selectNetwork){
+function checksRedesText(objUri, sourceCall){
     var frm = document.getElementById(objUri+sourceCall+'frmUploadText');
     var checkRed = false;
           
-    if(selectNetwork == false){//Ya hay una red seleccionada porque se esta respondiendo
-        return true;
-    }
     if(frm.checkRedes == null){//No networks
         alert("Debes crear primero una red en donde publicar");
         return false;
