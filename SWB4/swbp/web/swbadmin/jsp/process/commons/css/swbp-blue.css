@@ -1,0 +1,385 @@
+*{
+  font-family: Verdana,Geneva,sans-serif;
+}
+
+.swbp-body {
+  background: url("images/body.png") no-repeat scroll right 176px transparent;
+}
+
+html, body {
+    height:100%;
+}
+
+.row {
+  margin:0;
+}
+/********************************************** HEADER ***********************************************/
+.swbp-header {
+  background: #e8e8e8; /* Old browsers */
+  background: -moz-linear-gradient(top, #e8e8e8 0%, #dfdfdf 50%, #dfdfdf 51%, #878787 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e8e8e8), color-stop(50%,#dfdfdf), color-stop(51%,#dfdfdf), color-stop(100%,#878787)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #e8e8e8 0%,#dfdfdf 50%,#dfdfdf 51%,#878787 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #e8e8e8 0%,#dfdfdf 50%,#dfdfdf 51%,#878787 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #e8e8e8 0%,#dfdfdf 50%,#dfdfdf 51%,#878787 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #e8e8e8 0%,#dfdfdf 50%,#dfdfdf 51%,#878787 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e8e8e8', endColorstr='#878787',GradientType=0 ); /* IE6-9 */
+}
+
+.swbp-header .swbp-brand {
+  background: url(images/cabecera-logo.png);
+  width: 230px;
+  height: 48px;
+}
+
+/********************************************** TOOLBAR ***********************************************/
+.swbp-toolbar {
+  border-top: 1px solid #006600;
+  border-bottom: 1px solid white;
+  font-size: 14px;
+  background: url(images/menu-fondo-blue.jpg) repeat-x;
+  font-family: Verdana, Geneva, sans-serif;
+}
+
+.swbp-toolbar .swbp-nav {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.swbp-toolbar .swbp-nav > li {
+  float: left;
+  min-width: 90px;
+  height: 75px;
+  text-align: center;
+  list-style: none;
+}
+
+.swbp-toolbar .swbp-nav > li > a,
+.swbp-toolbar .swbp-nav > li > a:hover,
+.swbp-toolbar .swbp-nav > li.active > a  {
+  color:#aabcd9;
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 14px;
+  display: block;
+  height: 100%;
+  padding: 0 15px;
+  text-decoration:none;
+}
+
+.swbp-toolbar .swbp-nav > li > a {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.swbp-toolbar .swbp-nav > li > a:hover {
+  color:#fff;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+  text-decoration:none;
+}
+
+.swbp-toolbar .swbp-nav > li > a > i {
+  position: relative;
+  top: 4px;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin-top: 12px;
+  margin-bottom: 9px;
+  font-size: 30px;
+}
+
+.swbp-toolbar .swbp-nav > li.active > a {
+  color:#fff;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+}
+
+.swbp-toolbar .swbp-nav > li > a > span {
+  display: block;
+  padding-bottom: 2px;
+}
+
+/********************************************** TOOLBAR COLLAPSIBLE ***********************************************/
+.swbp-toolbar-collapsed {
+  background-color:#295266;
+  border: none;
+  color:#fff;
+}
+
+/*Texto del logo*/
+.swbp-toolbar-collapsed .navbar-header .navbar-brand {
+  color:#fff;
+}
+
+/*Botón de menú*/
+.swbp-toolbar-collapsed .navbar-header .navbar-toggle {
+  border-color:#fff;
+}
+
+.swbp-toolbar-collapsed .navbar-header .navbar-toggle:hover,
+.swbp-toolbar-collapsed .navbar-header .navbar-toggle:focus {
+  background-color:#295266;
+}
+
+.swbp-toolbar-collapsed .navbar-header .navbar-toggle .icon-bar {
+  background-color:#fff;
+}
+
+.swbp-toolbar-collapsed .navbar-collapse {
+  border:none;
+  box-shadow:none;
+}
+
+.swbp-toolbar-collapsed .navbar-nav > li > a {
+    color:#aabcd9;
+}
+
+.swbp-toolbar-collapsed .navbar-nav > li > a:hover {
+  color:#fff;
+}
+
+/********************************************** USER MENU ***********************************************/
+.swbp-user-menu {
+  padding:5px 15px 0 0;
+  background: url("images/fondo-bajomenu.jpg") repeat-x scroll 0 0 transparent;
+  height:65px;
+}
+
+.swbp-user-menu a, .swbp-user-menu a:hover, .swbp-user-menu a:focus {
+  color:#295266;
+  text-decoration: none;
+}
+
+.swbp-user-menu .dropdown-menu > li > a:hover,
+.swbp-user-menu .dropdown-menu > li > a:focus {
+  background-color:#295266;
+}
+
+/********************************************** LEFT BAR ***********************************************/
+.swbp-leftbar {
+  float:left;
+  font-size:12px;
+  max-width:190px;
+  background: url("images/lateral-linea.png") no-repeat scroll right top transparent;
+}
+
+.swbp-left-menu .list-unstyled {
+  margin-top:10px;
+}
+
+.swbp-left-menu .list-unstyled > li {
+  margin: 0 0 3px;
+  padding: 7px 0 7px 0;
+}
+
+.swbp-left-menu .list-unstyled li > a {
+  text-decoration:none;
+  color:#666666;
+}
+
+.swbp-left-menu .list-unstyled li > a:hover,
+.swbp-left-menu .list-unstyled li > a:focus {
+  color:#295266;
+}
+
+.swbp-btn-start {
+  color:#fff;
+  background-color:#295266;
+  border-color: darkblue;
+  width:160px;
+}
+
+.swbp-btn-start:hover {
+  color:#fff;
+  border-color: darkblue;
+  background-color:#ba1a00;
+  width:160px;
+}
+
+/********************************************** CONTENT ***********************************************/
+.container {
+    padding: 0;
+    margin: 0;
+    min-width: 100%;
+    width: 100%;
+}
+
+.swbp-content-wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+}
+
+.swbp-content {
+  font-size:12px;
+  color:#4C4C4C;
+}
+
+.swbp-content a,
+.swbp-content a:visited {
+  text-decoration:none;
+  color:#666666;
+}
+
+.swbp-content a:hover,
+.swbp-content a:focus {
+  color:#295266;
+}
+
+.swbp-table thead > tr > th {
+  color:#fff;
+  background-color:blue;
+  border:none;
+  background: url("images/fondoTableThead-blue.jpg") repeat-x center top transparent;
+}
+
+.swbp-table thead > tr > th a,
+.swbp-table thead > tr > th a:visited,
+.swbp-table thead > tr > th a:hover {
+    color:#fff;
+}
+
+.swbp-table tbody > tr > td {
+    vertical-align:baseline;
+}
+
+.swbp-table tbody > tr > td.swbp-status {
+    font-size: 20px;
+}
+
+.swbp-table tbody > tr > td.swbp-actions {
+    min-width:230px;
+}
+
+.swbp-content .panel-heading {
+    background-image: -webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#fdfdfd),color-stop(100%,#eaeaea));
+    background-image: -webkit-linear-gradient(top,#fdfdfd,#eaeaea);
+    background-image: -moz-linear-gradient(top,#fdfdfd,#eaeaea);
+    background-image: -o-linear-gradient(top,#fdfdfd,#eaeaea);
+    background-image: linear-gradient(top,#fdfdfd,#eaeaea);
+}
+
+.swbp-content .processChartPie {
+    /*border:1px solid gray;
+    border-radius: 5px;
+    margin:4px;*/
+    min-width:200px;
+}
+
+.swbp-ontime {
+    color:green;
+}
+
+.swbp-delayed {
+    color:red;
+}
+
+.swbp-content .btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.swbp-content .btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 999px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    background: red;
+    cursor: inherit;
+    display: block;
+}
+
+/********************************************** PAGINATION ***********************************************/
+.swbp-pagination {
+  border-top:1px solid #a8acc6;
+  font-size:12px;
+  color:#4C4C4C;
+}
+
+.swbp-pagination .swbp-pagination-nav > ul > li > a {
+  text-decoration:none;
+  color:#4C4C4C;
+}
+
+.swbp-pagination .swbp-pagination-nav > ul > li.active > a {
+  text-decoration:none;
+  color:#fff;
+  background-color:#295266;
+  border-color:#295266;
+}
+
+.swbp-pagination-info {
+  margin:23px 0;
+}
+
+/********************************************** FOOTER ***********************************************/
+.swbp-content-wrapper {
+    /* Negative indent footer by it's height */
+    margin: 0 auto -30px;
+}
+
+.swbp-footer {
+    color:#4C4C4C;
+    margin-top: 30px;
+    background-color: lightgray;
+    height: 30px;
+    font-family: Verdana,Geneva,sans-serif;
+    font-size: 10px;
+    display: none;
+}
+
+.swbp-footer .container {
+    padding:8px;
+}
+
+/********************************************** CHARTS ***********************************************/
+.chartToolTip {
+    background-color: white;
+    border: 2px solid #aaaaaa;
+    border-radius: 4px;
+    padding: 3px;
+    vertical-align: middle;
+}
+
+.chartToolTip p {
+    text-align: center;
+    cursor: pointer;
+}
+
+/********************************************** DOJO FIXES ***********************************************/
+h3.dijitCalendarYearLabel  {
+    font-size: 12pt;
+}
+
+#processForm label{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+/******************************************* BOOTSTRAP OVERRIDES ****************************************/
+
+.form-control:focus {
+    border-color: #bfcced;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(151, 164, 196, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(151, 164, 196, 0.6);
+}
+
+.btn-success {
+    background-color: #295266;
+    border-color: #295266;
+}
+
+.btn-success:hover {
+    background-color:#0076ba;
+    border-color: #295266;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+    color: #fff;
+    text-decoration: none;
+    background-color: #295266;
+}
