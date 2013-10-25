@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta. 
    */
-public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable,org.semanticwb.model.Traceable,org.semanticwb.model.Tagable
+public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable
 {
    /**
    * Clase a Cambiar despues por "Relacional".Clase en la cual se almacenan los usuarios que escriben los PostIn que llegan. No se puso como identificador de las instancias de esta clase el id que maneja el usuario en la red social, ya que un identificador de una red social, puede ser el mismo para otra red social, pero obviamnete para otro usuario.Es por ello que se puso como AutoGenID esta clase y por ello se maneja por separado el id de un usuario en una determinada red social, esto en la propiedad snu_id.
@@ -35,6 +35,10 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
    */
     public static final org.semanticwb.platform.SemanticProperty social_postSentimentalEmoticonType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postSentimentalEmoticonType");
    /**
+   * Creación del PostIn. Este campo es un indice para poderlo tomar como ordenamiento via Sparql, por eso no se toma el de Descriptable.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_pi_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#pi_created");
+   /**
    * Veces que ha sido re-enviado o compartido el post
    */
     public static final org.semanticwb.platform.SemanticProperty social_postShared=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postShared");
@@ -50,6 +54,10 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
    * Dispositivo desde el que se ha enviado el post
    */
     public static final org.semanticwb.platform.SemanticProperty social_postSource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postSource");
+   /**
+   * Tipo de PostIn. 1=Message;2=Photo;3:Video. Estan con variables estaticas en la clase PostIn.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_pi_type=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#pi_type");
    /**
    * Clase que contendra los streams que configurados para cada usuario
    */
@@ -131,29 +139,6 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
             return (getPostIn(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.social.PostIn with a determined ModifiedBy
-       * @param value ModifiedBy of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.social.PostIn
-       * @return Iterator with all the org.semanticwb.social.PostIn
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.PostIn> listPostInByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.PostIn with a determined ModifiedBy
-       * @param value ModifiedBy of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.social.PostIn
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.PostIn> listPostInByModifiedBy(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.social.PostIn with a determined PostInSocialNetworkUser
        * @param value PostInSocialNetworkUser of the type org.semanticwb.social.SocialNetworkUser
        * @param model Model of the org.semanticwb.social.PostIn
@@ -220,29 +205,6 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
         public static java.util.Iterator<org.semanticwb.social.PostIn> listPostInByGeoStateMap(org.semanticwb.social.CountryState value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_geoStateMap,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.PostIn with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.social.PostIn
-       * @return Iterator with all the org.semanticwb.social.PostIn
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.PostIn> listPostInByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.PostIn with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.social.PostIn
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.PostIn> listPostInByCreator(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -425,39 +387,6 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
     }
 
 /**
-* Gets the Description property
-* @return String with the Description
-*/
-    public String getDescription()
-    {
-        return getSemanticObject().getProperty(swb_description);
-    }
-
-/**
-* Sets the Description property
-* @param value long with the Description
-*/
-    public void setDescription(String value)
-    {
-        getSemanticObject().setProperty(swb_description, value);
-    }
-
-    public String getDescription(String lang)
-    {
-        return getSemanticObject().getProperty(swb_description, null, lang);
-    }
-
-    public String getDisplayDescription(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_description, lang);
-    }
-
-    public void setDescription(String description, String lang)
-    {
-        getSemanticObject().setProperty(swb_description, description, lang);
-    }
-
-/**
 * Gets the PostPlace property
 * @return String with the PostPlace
 */
@@ -494,36 +423,21 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
     }
 
 /**
-* Gets the Title property
-* @return String with the Title
+* Gets the Pi_created property
+* @return java.util.Date with the Pi_created
 */
-    public String getTitle()
+    public java.util.Date getPi_created()
     {
-        return getSemanticObject().getProperty(swb_title);
+        return getSemanticObject().getDateProperty(social_pi_created);
     }
 
 /**
-* Sets the Title property
-* @param value long with the Title
+* Sets the Pi_created property
+* @param value long with the Pi_created
 */
-    public void setTitle(String value)
+    public void setPi_created(java.util.Date value)
     {
-        getSemanticObject().setProperty(swb_title, value);
-    }
-
-    public String getTitle(String lang)
-    {
-        return getSemanticObject().getProperty(swb_title, null, lang);
-    }
-
-    public String getDisplayTitle(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(swb_title, title, lang);
+        getSemanticObject().setDateProperty(social_pi_created, value);
     }
 
 /**
@@ -599,6 +513,24 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
     public void setPostSource(String value)
     {
         getSemanticObject().setProperty(social_postSource, value);
+    }
+
+/**
+* Gets the Pi_type property
+* @return int with the Pi_type
+*/
+    public int getPi_type()
+    {
+        return getSemanticObject().getIntProperty(social_pi_type);
+    }
+
+/**
+* Sets the Pi_type property
+* @param value long with the Pi_type
+*/
+    public void setPi_type(int value)
+    {
+        getSemanticObject().setIntProperty(social_pi_type, value);
     }
    /**
    * Sets the value for the property PostInStream

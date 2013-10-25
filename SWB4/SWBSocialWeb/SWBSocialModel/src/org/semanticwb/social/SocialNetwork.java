@@ -23,6 +23,7 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
      * Metodo que funciona para realizar ciertas acciones despues de enviado un post a una red social
      *
      */
+    /*
     public void addSentPost(PostOut post, String socialPostId, SocialNetwork socialNetwork)
     {
         SWBModel swbModel=SWBContext.getSWBModel(post.getSemanticObject().getModel().getName());
@@ -71,6 +72,7 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
             }
         }
     }
+    * */
     
     /**
      * Metodo que agrega un postIn a un objeto (instancia) de la clase PostListenerContainer, el cual sirve para buscar por mes y año, todos los Post de entrada 
@@ -79,7 +81,7 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
      * @param socialPostId
      * @param socialNetwork 
      */
-
+    /*
     public void addReceivedPost(PostIn post, String socialPostId, SocialNetwork socialNetwork)
     {
         SWBModel swbModel=SWBContext.getSWBModel(post.getSemanticObject().getModel().getName());
@@ -87,7 +89,7 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
         //Se crea un objeto de persistencia siempre y cuando no este creado para un ciero año y mes, de lo
         //contrario, se reutiliza uno para ese año y mes.
         //Una vez esto, se agrega el post al objeto creado o reutilizado.
-       Date date=post.getCreated();
+       Date date=post.getPi_created();
        PostInContainer plcContainer=PostInContainer.getPostListenerContainerByDate(date, swbModel);
        plcContainer.addPlc_Post(post);
        plcContainer.setPlc_SocialNetworkInv(socialNetwork);
@@ -120,7 +122,7 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
         }
         * */
 
-    }
+    //}
 
 
     /*

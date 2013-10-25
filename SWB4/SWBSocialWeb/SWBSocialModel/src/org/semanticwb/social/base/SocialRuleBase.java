@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase principal para manejo de reglas en swbSocial 
    */
-public abstract class SocialRuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.XMLable,org.semanticwb.model.Traceable,org.semanticwb.social.Relationable,org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode
+public abstract class SocialRuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.Relationable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.model.FilterableClass,org.semanticwb.model.XMLable,org.semanticwb.model.Filterable
 {
    /**
    * Clase padre de todas las acciones posibles en swbsocial

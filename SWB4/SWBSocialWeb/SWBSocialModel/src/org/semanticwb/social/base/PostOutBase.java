@@ -4,8 +4,12 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales. Esta clase no se relaciona con una red social (con la clase SocialNetwork) porque un post de salida (desde la herramienta) podría ser enviado a diferentes redes sociales, sin embargo, es el mismo post de salida. Donde esta a que red social se envía esta en las instancias de la clase PostContainer. 
    */
-public abstract class PostOutBase extends org.semanticwb.social.Post implements org.semanticwb.model.CalendarRefable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable,org.semanticwb.model.Traceable,org.semanticwb.model.Tagable,org.semanticwb.model.Referensable
+public abstract class PostOutBase extends org.semanticwb.social.Post implements org.semanticwb.model.Tagable,org.semanticwb.model.Traceable,org.semanticwb.social.PostDataable,org.semanticwb.model.Referensable,org.semanticwb.social.PostTextable,org.semanticwb.model.CalendarRefable
 {
+   /**
+   * Tipo de PostOut. 1=Message;2=Photo;3:Video. Estan con variables estaticas en la clase PostOut.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_po_type=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#po_type");
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta.
    */
@@ -14,6 +18,10 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
    * PostIn que sirvió como origen de esta instancia de PostOut
    */
     public static final org.semanticwb.platform.SemanticProperty social_postInSource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postInSource");
+   /**
+   * Creación del PostOut. Este campo es un indice para poderlo tomar como ordenamiento via Sparql, por eso no se toma el de Descriptable.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_pout_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#pout_created");
    /**
    * Relación de Privacidad entre PostOut y las redes sociales a las cuales se envía.
    */
@@ -400,6 +408,98 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
         super(base);
     }
    /**
+   * Sets the value for the property ModifiedBy
+   * @param value ModifiedBy to set
+   */
+
+    public void setModifiedBy(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
+    }
+   /**
+   * Remove the value for ModifiedBy property
+   */
+
+    public void removeModifiedBy()
+    {
+        getSemanticObject().removeProperty(swb_modifiedBy);
+    }
+
+   /**
+   * Gets the ModifiedBy
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getModifiedBy()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
+    }
+
+/**
+* Gets the Po_type property
+* @return int with the Po_type
+*/
+    public int getPo_type()
+    {
+        return getSemanticObject().getIntProperty(social_po_type);
+    }
+
+/**
+* Sets the Po_type property
+* @param value long with the Po_type
+*/
+    public void setPo_type(int value)
+    {
+        getSemanticObject().setIntProperty(social_po_type, value);
+    }
+   /**
    * Sets the value for the property PostInSource
    * @param value PostInSource to set
    */
@@ -436,6 +536,24 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
              ret=(org.semanticwb.social.PostIn)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Pout_created property
+* @return java.util.Date with the Pout_created
+*/
+    public java.util.Date getPout_created()
+    {
+        return getSemanticObject().getDateProperty(social_pout_created);
+    }
+
+/**
+* Sets the Pout_created property
+* @param value long with the Pout_created
+*/
+    public void setPout_created(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(social_pout_created, value);
     }
    /**
    * Gets all the org.semanticwb.social.PostOutPrivacyRelation
@@ -493,6 +611,44 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
     public void setIsMsgShared(boolean value)
     {
         getSemanticObject().setBooleanProperty(social_isMsgShared, value);
+    }
+   /**
+   * Sets the value for the property Creator
+   * @param value Creator to set
+   */
+
+    public void setCreator(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
+    }
+   /**
+   * Remove the value for Creator property
+   */
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(swb_creator);
+    }
+
+   /**
+   * Gets the Creator
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getCreator()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Gets all the org.semanticwb.social.SocialNetwork

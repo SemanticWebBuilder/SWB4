@@ -108,6 +108,11 @@ public class SWBSocialUtil implements SWBAppObject {
     static private ArrayList<String> aSentimentWords=new ArrayList();
     static private int NUMDAYS2REFRESH_USERDATA=5;
     
+    public static final int POST_TYPE_MESSAGE=1;
+    public static final int POST_TYPE_PHOTO=2;
+    public static final int POST_TYPE_VIDEO=3;
+    
+    
     
     //private static Properties prop = new Properties();
 
@@ -2006,15 +2011,23 @@ public class SWBSocialUtil implements SWBAppObject {
                     post.setSocialTopic(socialTopic); 
                     //Convierto a un post de salida para poderle agregar cada red social a la que se envía dicho post
                     PostOut postOut = (PostOut) post;
+                    
+                    Calendar calendario = Calendar.getInstance();
+                    System.out.println("FECHA AL POSTOUT:"+calendario.getTime());
+                    postOut.setPout_created(calendario.getTime());   //Para fines de indexado para ordenamientos con Sparql
+                    
                     //Si el PostOut que se acaba de crear, fue en consecuencia de una respuesta de una PostIn, este se agrega al nuevo PostOut
                     if(postIn!=null)    
                     {
                         postOut.setPostInSource(postIn);
                     }
                     
-                    //System.out.println("sendNewPost-1");
-                    if (toPost.equals("video"))
+                    if (toPost.equals("msg"))
                     {
+                        postOut.setPo_type(POST_TYPE_MESSAGE);
+                    }else if (toPost.equals("video"))
+                    {
+                        postOut.setPo_type(POST_TYPE_VIDEO);
                         //Guardado de Categorias
                         //System.out.println("sendNewPost-2");
                         if(request.getParameterValues(Video.social_category.getName())!=null)
@@ -2039,6 +2052,9 @@ public class SWBSocialUtil implements SWBAppObject {
                                 ((Video)postOut).setCategory(values);
                         }
                         
+                    }else if (toPost.equals("photo"))
+                    {
+                        postOut.setPo_type(POST_TYPE_PHOTO);
                     }
                     
                     //Le agrego las redes sociales a las cuales se enviara el postOut, si se creó de una contestación, 
