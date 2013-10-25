@@ -630,10 +630,12 @@ public class SentimentalDataClassifier {
                 if(externalPost.getPostType().equals(SWBSocialUtil.MESSAGE))
                 {
                     postIn=MessageIn.ClassMgr.createMessageIn(model);
+                    postIn.setPi_type(SWBSocialUtil.POST_TYPE_MESSAGE);   //Para fines de indexado para ordenamientos con Sparql
                 }else if(externalPost.getPostType().equals(SWBSocialUtil.PHOTO) && externalPost.lisPictures().hasNext())
                 {
                     postIn=PhotoIn.ClassMgr.createPhotoIn(model);
                     PhotoIn photoIn=(PhotoIn)postIn;
+                    photoIn.setPi_type(SWBSocialUtil.POST_TYPE_PHOTO);    //Para fines de indexado para ordenamientos con Sparql
                     if(externalPost.lisPictures().hasNext())
                     {
                         String sphoto=(String)externalPost.lisPictures().next();
@@ -647,6 +649,7 @@ public class SentimentalDataClassifier {
                     postIn=VideoIn.ClassMgr.createVideoIn(model);
                     VideoIn videoIn=(VideoIn)postIn;
                     videoIn.setVideo(externalPost.getVideo());
+                    videoIn.setPi_type(SWBSocialUtil.POST_TYPE_VIDEO);    //Para fines de indexado para ordenamientos con Sparql
                     if(externalPost.getCategory()!=null)
                     {
                         //Para categorias de youtube, si despues se manejan mas categorias para otras redes sociales de video, sería un bloque similar al siguiente
@@ -671,10 +674,16 @@ public class SentimentalDataClassifier {
                     postIn.setMsg_Text(externalPost.getMessage());
                 }
                 postIn.setSocialNetMsgId(externalPost.getPostId());
+                
+                Calendar calendario = Calendar.getInstance();
+                System.out.println("FECHA AL POSTIN:"+calendario.getTime());
+                postIn.setPi_created(calendario.getTime());   //Para fines de indexado para ordenamientos con Sparql
+                
+                /*
                 if(externalPost.getDescription()!=null)
                 {
                     postIn.setDescription(externalPost.getDescription());
-                }
+                }*/
                 //System.out.println("CREÓ EL MENSAJE CON TEXTO:"+postIn.getMsg_Text());
                 postIn.setPostInSocialNetwork(socialNetwork);
                 postIn.setPostInStream(stream);

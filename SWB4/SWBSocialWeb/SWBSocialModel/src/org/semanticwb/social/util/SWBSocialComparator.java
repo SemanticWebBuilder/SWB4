@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 import org.semanticwb.model.Traceable;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.social.Message;
 import org.semanticwb.social.MessageIn;
@@ -54,6 +55,234 @@ public class SWBSocialComparator implements Comparator {
      */
     public int compare(java.lang.Object obj1, java.lang.Object obj2) {
         return 0;
+    }
+    
+    
+     /**
+     * Sort by created set.
+     *
+     * @param it the it
+     * @param ascendente the ascendente
+     * @return the sets the
+     */
+    public static Set sortByCreatedSet(Iterator it, boolean ascendente)
+    {
+        TreeSet set = null;
+        if (it == null)
+        {
+            return null;
+        }
+        if (ascendente)
+        {
+            set = new TreeSet(new Comparator()
+            {
+                public int compare(Object o1, Object o2)
+                {
+                    Date d1;
+                    Date d2;
+                    if (o1 instanceof SemanticObject)
+                    {
+                        d1 = ((SemanticObject) o1).getDateProperty(PostIn.social_pi_created);
+                        d2 = ((SemanticObject) o2).getDateProperty(PostIn.social_pi_created);
+                    } else
+                    {
+                        d1 = ((PostIn) o1).getPi_created();
+                        d2 = ((PostIn) o2).getPi_created();
+                    }
+
+                    if (d1 == null && d2 != null)
+                    {
+                        return -1;
+                    }
+                    if (d1 != null && d2 == null)
+                    {
+                        return 1;
+                    }
+                    if (d1 == null && d2 == null)
+                    {
+                        return -1;
+                    } else
+                    {
+                        int ret = d1.getTime() > d2.getTime() ? 1 : -1;
+                        return ret;
+                    }
+                }
+            });
+        } else
+        {
+            set = new TreeSet(new Comparator()
+            {
+                public int compare(Object o1, Object o2)
+                {
+                    Date d1;
+                    Date d2;
+                    if (o1 instanceof SemanticObject)
+                    {
+                        d1 = ((SemanticObject) o1).getDateProperty(PostIn.social_pi_created);
+                        d2 = ((SemanticObject) o2).getDateProperty(PostIn.social_pi_created);
+                    } else
+                    {
+                        System.out.println("o1:"+o1+",o2:"+o2);
+                        d1 = ((PostIn) o1).getPi_created();
+                        d2 = ((PostIn) o2).getPi_created();
+                    }
+                    if (d1 == null && d2 != null)
+                    {
+                        return -1;
+                    }
+                    if (d1 != null && d2 == null)
+                    {
+                        return 1;
+                    }
+                    if (d1 == null && d2 == null)
+                    {
+                        return -1;
+                    } else
+                    {
+                        int ret = d1.getTime() > d2.getTime() ? -1 : 1;
+                        return ret;
+                    }
+
+                }
+            });
+        }
+
+        while (it.hasNext())
+        {
+            set.add(it.next());
+        }
+
+        return set;
+    }
+    
+    
+    /**
+     * Sort by created set.
+     *
+     * @param it the it
+     * @param ascendente the ascendente
+     * @return the sets the
+     */
+    public static Set sortByPostOutCreatedSet(Iterator it, boolean ascendente)
+    {
+        TreeSet set = null;
+        if (it == null)
+        {
+            return null;
+        }
+        if (ascendente)
+        {
+            set = new TreeSet(new Comparator()
+            {
+                public int compare(Object o1, Object o2)
+                {
+                    Date d1;
+                    Date d2;
+                    if (o1 instanceof SemanticObject)
+                    {
+                        d1 = ((SemanticObject) o1).getDateProperty(PostOut.social_pout_created);
+                        d2 = ((SemanticObject) o2).getDateProperty(PostOut.social_pout_created);
+                    } else
+                    {
+                        d1 = ((PostOut) o1).getPout_created();
+                        d2 = ((PostOut) o2).getPout_created();
+                    }
+
+                    if (d1 == null && d2 != null)
+                    {
+                        return -1;
+                    }
+                    if (d1 != null && d2 == null)
+                    {
+                        return 1;
+                    }
+                    if (d1 == null && d2 == null)
+                    {
+                        return -1;
+                    } else
+                    {
+                        int ret = d1.getTime() > d2.getTime() ? 1 : -1;
+                        return ret;
+                    }
+                }
+            });
+        } else
+        {
+            set = new TreeSet(new Comparator()
+            {
+                public int compare(Object o1, Object o2)
+                {
+                    Date d1;
+                    Date d2;
+                    if (o1 instanceof SemanticObject)
+                    {
+                        d1 = ((SemanticObject) o1).getDateProperty(PostOut.social_pout_created);
+                        d2 = ((SemanticObject) o2).getDateProperty(PostOut.social_pout_created);
+                    } else
+                    {
+                        System.out.println("o1:"+o1+",o2:"+o2);
+                        d1 = ((PostOut) o1).getPout_created();
+                        d2 = ((PostOut) o2).getPout_created();
+                    }
+                    if (d1 == null && d2 != null)
+                    {
+                        return -1;
+                    }
+                    if (d1 != null && d2 == null)
+                    {
+                        return 1;
+                    }
+                    if (d1 == null && d2 == null)
+                    {
+                        return -1;
+                    } else
+                    {
+                        int ret = d1.getTime() > d2.getTime() ? -1 : 1;
+                        return ret;
+                    }
+
+                }
+            });
+        }
+
+        while (it.hasNext())
+        {
+            set.add(it.next());
+        }
+
+        return set;
+    }
+    
+    
+    /**
+     * Sort by created set.
+     *
+     * @param it the it
+     * @param ascendente the ascendente
+     * @return the sets the
+     */
+    public static Set convertArray2TreeSet(Iterator it)
+    {
+        TreeSet set = null;
+        if (it == null)
+        {
+            return null;
+        }
+       
+        set = new TreeSet(new Comparator()
+        {
+            public int compare(Object o1, Object o2)
+            {
+                return 1;
+            }
+        });
+        
+        while (it.hasNext())
+        {
+            set.add(it.next());
+        }
+        
+        return set;
     }
 
     /**
