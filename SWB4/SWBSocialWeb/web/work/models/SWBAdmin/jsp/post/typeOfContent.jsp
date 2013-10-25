@@ -516,9 +516,7 @@
             </form>
         </div>
     </div>
-    <div id="showPhotos" dojoType="dijit.Dialog" title="Mostrar Fotos" style="overflow: auto;" >
-        <jsp:include flush="true" page="showPhotos.jsp" />
-    </div>
+
 
     <%} else if (contentType.equals("uploadVideo")) {       ///////////////////////////////POSTEO DE VIDEOS/////////////////////////////
         System.out.println("Entra a TypeOfContent..2");
