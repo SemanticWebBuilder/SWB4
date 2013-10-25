@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class RepositoryDirectoryBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Tagable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Hiddenable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Rankable,org.semanticwb.model.Expirable,org.semanticwb.model.Referensable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Countryable,org.semanticwb.model.Undeleteable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Traceable,org.semanticwb.model.Searchable,org.semanticwb.model.Resourceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.FilterableNode,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Indexable,org.semanticwb.model.UserGroupRefable,org.semanticwb.process.model.OwnerPropertyable,org.semanticwb.model.Viewable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
+public abstract class RepositoryDirectoryBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.RoleRefable,org.semanticwb.model.Viewable,org.semanticwb.model.Countryable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Indexable,org.semanticwb.process.model.OwnerPropertyable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Searchable,org.semanticwb.model.Resourceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.Expirable,org.semanticwb.model.Localeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Rankable,org.semanticwb.model.Trashable,org.semanticwb.model.Tagable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Hiddenable,org.semanticwb.model.PFlowRefable
 {
     public static final org.semanticwb.platform.SemanticClass swp_RepositoryElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#RepositoryElement");
     public static final org.semanticwb.platform.SemanticProperty swp_hasRepositoryElementInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasRepositoryElementInv");
@@ -75,29 +75,6 @@ public abstract class RepositoryDirectoryBase extends org.semanticwb.model.WebPa
             return (getRepositoryDirectory(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined AssMember
-       * @param value AssMember of the type org.semanticwb.model.AssMember
-       * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByAssMember(org.semanticwb.model.AssMember value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasAssMemberInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined AssMember
-       * @param value AssMember of the type org.semanticwb.model.AssMember
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByAssMember(org.semanticwb.model.AssMember value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasAssMemberInv,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
@@ -118,6 +95,236 @@ public abstract class RepositoryDirectoryBase extends org.semanticwb.model.WebPa
         public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined ThisTypeAssociation
+       * @param value ThisTypeAssociation of the type org.semanticwb.model.Association
+       * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByThisTypeAssociation(org.semanticwb.model.Association value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisTypeAssociationInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined ThisTypeAssociation
+       * @param value ThisTypeAssociation of the type org.semanticwb.model.Association
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByThisTypeAssociation(org.semanticwb.model.Association value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisTypeAssociationInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined TemplateRef
+       * @param value TemplateRef of the type org.semanticwb.model.TemplateRef
+       * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByTemplateRef(org.semanticwb.model.TemplateRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasTemplateRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined TemplateRef
+       * @param value TemplateRef of the type org.semanticwb.model.TemplateRef
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByTemplateRef(org.semanticwb.model.TemplateRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasTemplateRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined Language
+       * @param value Language of the type org.semanticwb.model.Language
+       * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByLanguage(org.semanticwb.model.Language value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_language, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined Language
+       * @param value Language of the type org.semanticwb.model.Language
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByLanguage(org.semanticwb.model.Language value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_language,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByRuleRef(org.semanticwb.model.RuleRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined WebPageVirtualChild
+       * @param value WebPageVirtualChild of the type org.semanticwb.model.WebPage
+       * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByWebPageVirtualChild(org.semanticwb.model.WebPage value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasWebPageVirtualChild, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined WebPageVirtualChild
+       * @param value WebPageVirtualChild of the type org.semanticwb.model.WebPage
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByWebPageVirtualChild(org.semanticwb.model.WebPage value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasWebPageVirtualChild,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined PFlowRef
+       * @param value PFlowRef of the type org.semanticwb.model.PFlowRef
+       * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByPFlowRef(org.semanticwb.model.PFlowRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasPFlowRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined PFlowRef
+       * @param value PFlowRef of the type org.semanticwb.model.PFlowRef
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByPFlowRef(org.semanticwb.model.PFlowRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasPFlowRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined UserGroupRef
+       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
+       * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByUserGroupRef(org.semanticwb.model.UserGroupRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined UserGroupRef
+       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByUserGroupRef(org.semanticwb.model.UserGroupRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined CalendarRef
+       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
+       * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByCalendarRef(org.semanticwb.model.CalendarRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined CalendarRef
+       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByCalendarRef(org.semanticwb.model.CalendarRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined FriendlyURL
+       * @param value FriendlyURL of the type org.semanticwb.model.FriendlyURL
+       * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByFriendlyURL(org.semanticwb.model.FriendlyURL value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasFriendlyURL, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined FriendlyURL
+       * @param value FriendlyURL of the type org.semanticwb.model.FriendlyURL
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByFriendlyURL(org.semanticwb.model.FriendlyURL value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasFriendlyURL,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined AssMember
+       * @param value AssMember of the type org.semanticwb.model.AssMember
+       * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByAssMember(org.semanticwb.model.AssMember value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasAssMemberInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined AssMember
+       * @param value AssMember of the type org.semanticwb.model.AssMember
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByAssMember(org.semanticwb.model.AssMember value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasAssMemberInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -190,52 +397,6 @@ public abstract class RepositoryDirectoryBase extends org.semanticwb.model.WebPa
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined ThisTypeAssociation
-       * @param value ThisTypeAssociation of the type org.semanticwb.model.Association
-       * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByThisTypeAssociation(org.semanticwb.model.Association value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisTypeAssociationInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined ThisTypeAssociation
-       * @param value ThisTypeAssociation of the type org.semanticwb.model.Association
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByThisTypeAssociation(org.semanticwb.model.Association value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisTypeAssociationInv,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined TemplateRef
-       * @param value TemplateRef of the type org.semanticwb.model.TemplateRef
-       * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByTemplateRef(org.semanticwb.model.TemplateRef value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasTemplateRef, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined TemplateRef
-       * @param value TemplateRef of the type org.semanticwb.model.TemplateRef
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByTemplateRef(org.semanticwb.model.TemplateRef value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasTemplateRef,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined Country
        * @param value Country of the type org.semanticwb.model.Country
        * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
@@ -282,52 +443,6 @@ public abstract class RepositoryDirectoryBase extends org.semanticwb.model.WebPa
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined Language
-       * @param value Language of the type org.semanticwb.model.Language
-       * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByLanguage(org.semanticwb.model.Language value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_language, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined Language
-       * @param value Language of the type org.semanticwb.model.Language
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByLanguage(org.semanticwb.model.Language value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_language,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined RepositoryElement
-       * @param value RepositoryElement of the type org.semanticwb.process.model.RepositoryElement
-       * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByRepositoryElement(org.semanticwb.process.model.RepositoryElement value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasRepositoryElementInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined RepositoryElement
-       * @param value RepositoryElement of the type org.semanticwb.process.model.RepositoryElement
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByRepositoryElement(org.semanticwb.process.model.RepositoryElement value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasRepositoryElementInv,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
@@ -351,26 +466,26 @@ public abstract class RepositoryDirectoryBase extends org.semanticwb.model.WebPa
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined RuleRef
-       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined RepositoryElement
+       * @param value RepositoryElement of the type org.semanticwb.process.model.RepositoryElement
        * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
        * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByRepositoryElement(org.semanticwb.process.model.RepositoryElement value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasRepositoryElementInv, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined RuleRef
-       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined RepositoryElement
+       * @param value RepositoryElement of the type org.semanticwb.process.model.RepositoryElement
        * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByRuleRef(org.semanticwb.model.RuleRef value)
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByRepositoryElement(org.semanticwb.process.model.RepositoryElement value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasRepositoryElementInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -420,29 +535,6 @@ public abstract class RepositoryDirectoryBase extends org.semanticwb.model.WebPa
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined WebPageVirtualChild
-       * @param value WebPageVirtualChild of the type org.semanticwb.model.WebPage
-       * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByWebPageVirtualChild(org.semanticwb.model.WebPage value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasWebPageVirtualChild, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined WebPageVirtualChild
-       * @param value WebPageVirtualChild of the type org.semanticwb.model.WebPage
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByWebPageVirtualChild(org.semanticwb.model.WebPage value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasWebPageVirtualChild,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined VirtualParent
        * @param value VirtualParent of the type org.semanticwb.model.WebPage
        * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
@@ -466,52 +558,6 @@ public abstract class RepositoryDirectoryBase extends org.semanticwb.model.WebPa
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined PFlowRef
-       * @param value PFlowRef of the type org.semanticwb.model.PFlowRef
-       * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByPFlowRef(org.semanticwb.model.PFlowRef value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasPFlowRef, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined PFlowRef
-       * @param value PFlowRef of the type org.semanticwb.model.PFlowRef
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByPFlowRef(org.semanticwb.model.PFlowRef value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasPFlowRef,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined UserGroupRef
-       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
-       * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByUserGroupRef(org.semanticwb.model.UserGroupRef value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined UserGroupRef
-       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByUserGroupRef(org.semanticwb.model.UserGroupRef value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined RoleRef
        * @param value RoleRef of the type org.semanticwb.model.RoleRef
        * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
@@ -532,52 +578,6 @@ public abstract class RepositoryDirectoryBase extends org.semanticwb.model.WebPa
         public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByRoleRef(org.semanticwb.model.RoleRef value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined CalendarRef
-       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
-       * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByCalendarRef(org.semanticwb.model.CalendarRef value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined CalendarRef
-       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByCalendarRef(org.semanticwb.model.CalendarRef value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined FriendlyURL
-       * @param value FriendlyURL of the type org.semanticwb.model.FriendlyURL
-       * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByFriendlyURL(org.semanticwb.model.FriendlyURL value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasFriendlyURL, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined FriendlyURL
-       * @param value FriendlyURL of the type org.semanticwb.model.FriendlyURL
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByFriendlyURL(org.semanticwb.model.FriendlyURL value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasFriendlyURL,value.getSemanticObject(),sclass));
             return it;
         }
     }

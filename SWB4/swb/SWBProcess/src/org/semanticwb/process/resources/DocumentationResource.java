@@ -152,10 +152,9 @@ public class DocumentationResource extends GenericAdmResource {
             request.setAttribute("suri", request.getParameter("suri"));
             if (suri != null) {
                 ProcessElement pe = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
-                Documentation doc = null;
-                if (pe.listDocumentations().hasNext()) {
-                    doc = pe.getDocumentation();
-                } else {
+                Documentation doc = pe.getDocumentation();
+                if(doc==null)
+                {
                     //Si no existe documentación, crearla
                     doc = Documentation.ClassMgr.createDocumentation(paramRequest.getWebPage().getWebSite());
                     //Agregar la documentación al elemento

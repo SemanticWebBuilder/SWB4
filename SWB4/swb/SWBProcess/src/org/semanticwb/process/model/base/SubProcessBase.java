@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class SubProcessBase extends org.semanticwb.process.model.Activity implements org.semanticwb.process.model.Containerable,org.semanticwb.process.model.BPMNSerializable,org.semanticwb.model.Sortable,org.semanticwb.model.Traceable,org.semanticwb.model.TemplateRefable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ActivityConfable
+public abstract class SubProcessBase extends org.semanticwb.process.model.Activity implements org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RuleRefable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.process.model.BPMNSerializable,org.semanticwb.process.model.Containerable
 {
     public static final org.semanticwb.platform.SemanticClass swp_SubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#SubProcess");
    /**
@@ -529,6 +529,24 @@ public abstract class SubProcessBase extends org.semanticwb.process.model.Activi
              ret=(org.semanticwb.model.TemplateRef)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the NotInheritTemplateRef property
+* @return boolean with the NotInheritTemplateRef
+*/
+    public boolean isNotInheritTemplateRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_notInheritTemplateRef);
+    }
+
+/**
+* Sets the NotInheritTemplateRef property
+* @param value long with the NotInheritTemplateRef
+*/
+    public void setNotInheritTemplateRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_notInheritTemplateRef, value);
     }
    /**
    * Gets all the org.semanticwb.process.model.GraphicalElement

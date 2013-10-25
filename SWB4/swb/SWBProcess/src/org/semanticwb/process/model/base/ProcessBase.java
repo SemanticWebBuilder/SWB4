@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.process.model.Containerable,org.semanticwb.process.model.BPMNSerializable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.process.model.Callable,org.semanticwb.model.Resourceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Expirable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Referensable,org.semanticwb.process.model.OwnerPropertyable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable
+public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.Expirable,org.semanticwb.model.RoleRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.UserGroupRefable,org.semanticwb.process.model.OwnerPropertyable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RuleRefable,org.semanticwb.process.model.Callable,org.semanticwb.model.Activeable,org.semanticwb.process.model.BPMNSerializable,org.semanticwb.model.FilterableNode,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Resourceable,org.semanticwb.process.model.Containerable
 {
    /**
    * Objeto que define un Role dentro de un repositorio de usuarios aplicable a un Usuario para filtrar componente, seccion, plantillas, etc.
@@ -548,6 +548,24 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     {
         super(base);
     }
+
+/**
+* Gets the NotInheritRoleRef property
+* @return boolean with the NotInheritRoleRef
+*/
+    public boolean isNotInheritRoleRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_notInheritRoleRef);
+    }
+
+/**
+* Sets the NotInheritRoleRef property
+* @param value long with the NotInheritRoleRef
+*/
+    public void setNotInheritRoleRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_notInheritRoleRef, value);
+    }
    /**
    * Sets the value for the property AdministrationRole
    * @param value AdministrationRole to set
@@ -855,6 +873,24 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     }
 
 /**
+* Gets the NotInheritUserGroupRef property
+* @return boolean with the NotInheritUserGroupRef
+*/
+    public boolean isNotInheritUserGroupRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_notInheritUserGroupRef);
+    }
+
+/**
+* Sets the NotInheritUserGroupRef property
+* @param value long with the NotInheritUserGroupRef
+*/
+    public void setNotInheritUserGroupRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_notInheritUserGroupRef, value);
+    }
+
+/**
 * Gets the Expiration property
 * @return java.util.Date with the Expiration
 */
@@ -962,6 +998,24 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     public void setDeleted(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb_deleted, value);
+    }
+
+/**
+* Gets the NotInheritRuleRef property
+* @return boolean with the NotInheritRuleRef
+*/
+    public boolean isNotInheritRuleRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_notInheritRuleRef);
+    }
+
+/**
+* Sets the NotInheritRuleRef property
+* @param value long with the NotInheritRuleRef
+*/
+    public void setNotInheritRuleRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_notInheritRuleRef, value);
     }
 
 /**
@@ -1156,6 +1210,24 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     {
         getSemanticObject().setBooleanProperty(swp_filterByOwnerUserGroup, value);
     }
+
+/**
+* Gets the NotInheritTemplateRef property
+* @return boolean with the NotInheritTemplateRef
+*/
+    public boolean isNotInheritTemplateRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_notInheritTemplateRef);
+    }
+
+/**
+* Sets the NotInheritTemplateRef property
+* @param value long with the NotInheritTemplateRef
+*/
+    public void setNotInheritTemplateRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_notInheritTemplateRef, value);
+    }
    /**
    * Gets all the org.semanticwb.process.model.OwnerProperty
    * @return A GenericIterator with all the org.semanticwb.process.model.OwnerProperty
@@ -1259,6 +1331,42 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
              ret=(org.semanticwb.process.model.GraphicalElement)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the AndEvalUserGroupRef property
+* @return boolean with the AndEvalUserGroupRef
+*/
+    public boolean isAndEvalUserGroupRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_andEvalUserGroupRef);
+    }
+
+/**
+* Sets the AndEvalUserGroupRef property
+* @param value long with the AndEvalUserGroupRef
+*/
+    public void setAndEvalUserGroupRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_andEvalUserGroupRef, value);
+    }
+
+/**
+* Gets the NotInheritCalendarRef property
+* @return boolean with the NotInheritCalendarRef
+*/
+    public boolean isNotInheritCalendarRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_notInheritCalendarRef);
+    }
+
+/**
+* Sets the NotInheritCalendarRef property
+* @param value long with the NotInheritCalendarRef
+*/
+    public void setNotInheritCalendarRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_notInheritCalendarRef, value);
     }
    /**
    * Gets all the org.semanticwb.model.UserGroupRef
@@ -1493,6 +1601,24 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     }
 
 /**
+* Gets the AndEvalRoleRef property
+* @return boolean with the AndEvalRoleRef
+*/
+    public boolean isAndEvalRoleRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_andEvalRoleRef);
+    }
+
+/**
+* Sets the AndEvalRoleRef property
+* @param value long with the AndEvalRoleRef
+*/
+    public void setAndEvalRoleRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_andEvalRoleRef, value);
+    }
+
+/**
 * Gets the Data property
 * @return String with the Data
 */
@@ -1508,6 +1634,24 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     public void setData(String value)
     {
         getSemanticObject().setProperty(swp_serializationData, value);
+    }
+
+/**
+* Gets the AndEvalRuleRef property
+* @return boolean with the AndEvalRuleRef
+*/
+    public boolean isAndEvalRuleRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_andEvalRuleRef);
+    }
+
+/**
+* Sets the AndEvalRuleRef property
+* @param value long with the AndEvalRuleRef
+*/
+    public void setAndEvalRuleRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_andEvalRuleRef, value);
     }
 
    /**

@@ -4,7 +4,7 @@ package org.semanticwb.process.model.base;
    /**
    * Nodo raiz de Eventos Finales 
    */
-public abstract class EndEventNodeBase extends org.semanticwb.process.model.ThrowEvent implements org.semanticwb.model.Sortable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class EndEventNodeBase extends org.semanticwb.process.model.ThrowEvent implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
    /**
    * Nodo raiz de Eventos Finales
