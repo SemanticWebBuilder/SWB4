@@ -4,6 +4,7 @@ package org.semanticwb.bsc.admin.resources;
 import com.arthurdo.parser.HtmlException;
 import com.arthurdo.parser.HtmlStreamTokenizer;
 import com.arthurdo.parser.HtmlTag;
+import com.hp.hpl.jena.rdf.model.Statement;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -912,11 +913,32 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         
         String ret = null;
         SWBFormMgr formMgr = new SWBFormMgr(elementBSC, null, SWBFormMgr.MODE_VIEW);
-        SemanticProperty semprop = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propUri);
+        SemanticProperty semProp = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propUri);
 
-        FormElement formElement = formMgr.getFormElement(semprop);
-        if (formElement != null) {
-            ret = formElement.renderElement(request, elementBSC, semprop, semprop.getName(), SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_VIEW, lang);
+        //Codigo prueba para obtener el displayElement
+        Statement st = semProp.getRDFProperty().getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty("http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
+        if (st != null) {
+            //Se obtiene: SemanticProperty: displayElement de la propiedad en cuestion (prop)
+            SemanticObject soDisplayElement = SemanticObject.createSemanticObject(st.getResource());
+            if (soDisplayElement != null) {
+                SemanticObject formElement = soDisplayElement.getObjectProperty(org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement"));
+                if (formElement != null) {
+                    FormElement fe = (FormElement) formElement.createGenericInstance();
+                    if (fe != null) {
+                        if (formMgr.getSemanticObject() != null) {
+                            fe.setModel(formMgr.getSemanticObject().getModel());
+                        }
+                        ret = fe.renderElement(request, elementBSC, semProp, semProp.getName(), SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_VIEW, lang);
+                    }
+                }
+            }
+        }
+        
+        if (ret == null) {
+            FormElement formElement = formMgr.getFormElement(semProp);
+            if (formElement != null) {
+                ret = formElement.renderElement(request, elementBSC, semProp, semProp.getName(), SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_VIEW, lang);
+            }
         }
         return ret != null ? ret : "";
     }

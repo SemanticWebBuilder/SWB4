@@ -1,6 +1,7 @@
 package org.semanticwb.bsc.admin.resources;
 
 
+import com.hp.hpl.jena.rdf.model.Statement;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -136,35 +137,21 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                     String propertyValue = null; //para las propiedades tipo objeto
                     //Para mostrar los valores de las propiedades, de acuerdo a los FormElements asignados a cada propiedad:
                     propertyValue = renderPropertyValue(request, semObj, elementProperty.getURI(), lang);
-                    propertyValue = propertyValue.replace("</span>", "");
+                    /*propertyValue = propertyValue.replace("</span>", "");
                     if (propertyValue.indexOf(">") > 0) {
                         propertyValue = propertyValue.substring(propertyValue.indexOf(">") + 1);
-                    }
-                    /*
-                    if (semWorkClass.equals(Objective.bsc_Objective)) {
-                        Objective objective = (Objective) semObj.createGenericInstance();
-                        if (elementProperty.isDataTypeProperty() &&
-                                !elementProperty.getName().equals("title")) {
-                            if (elementProperty.isBoolean()) {
-                                propertyValue = "" + objective.getSemanticObject().getBooleanProperty(elementProperty);
-                            } else {
-                                propertyValue = "" + objective.getSemanticObject().getProperty(elementProperty);
-                            }
-                        } else {
-                            if (!elementProperty.getName().equals("title")) {
-                                propertyValue = objective.renderObjectPropertyValue(elementProperty, lang, thisPeriod);
-                            } else {
-                                //Para que muestre el prefijo y titulo concatenados
-                                propertyValue = objective.renderObjectiveName(lang);
-                            }
-                        }
-                        
                     }*/
                     try {
                         row.put(elementProperty.getName(), propertyValue);
                     } catch (JSONException jsone) {
                         SummaryViewManager.log.error("En la creacion de objetos JSON", jsone);
                     }
+                }
+                //Agrega la uri de cada instancia para poder crear las ligas a las vistas detalle
+                try {
+                    row.put("uri", semObj.getURI());
+                } catch (JSONException jsone) {
+                    SummaryViewManager.log.error("En la creacion de objetos JSON", jsone);
                 }
                 //Agrega el objeto "renglón" a la estructura del grid
                 items.put(row);
@@ -174,31 +161,6 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             } catch (JSONException jsone) {
                 SummaryViewManager.log.error("En la creacion de objetos JSON", jsone);
             }
-            
-            //Declara el código HTML para inclusión de Dojo.Grid y sus estilos
-            output.append("<script type=\"text/javascript\">\n");
-            output.append("  dojo.require('dojo.parser');\n");
-            output.append("  dojo.require('dojox.layout.ContentPane');\n");
-            output.append("  dojo.require('dijit.form.Form');\n");
-            output.append("  dojo.require('dijit.form.Button');\n");
-            output.append("  dojo.require('dijit.form.MultiSelect');\n");
-            output.append("  dojo.require('dojox.grid.DataGrid');\n");
-            output.append("  dojo.require('dojo.data.ItemFileReadStore');\n");
-            output.append("  var structure = ");
-            try {
-                output.append(structure.toString(2));
-            } catch (JSONException jsone) {
-                SummaryViewManager.log.error("En la escritura de store del grid", jsone);
-                output.append("{}");
-            }
-            output.append(";");
-            output.append("</script>\n");
-            output.append("<link rel=\"stylesheet\" href=\"/swbadmin/js/dojo/dojox/grid/resources/Grid.css\"/>\n");
-            output.append("<link rel=\"stylesheet\" href=\"/swbadmin/js/dojo/dojox/grid/resources/soriaGrid.css\"/>\n");
-            output.append("<style type=\"text/css\">\n");
-            output.append("  .dojoxGrid table { margin: 0; } html, body { width: 100%; height: 100%;");
-            output.append(" margin: 0; }\n");
-            output.append("</style>\n");
             
             //Obtiene encabezados de tabla y propiedades para filtros
             GenericIterator<PropertyListItem> viewPropertiesList = activeView.listPropertyListItems();
@@ -223,6 +185,70 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                     }
                 }
             }
+            
+            //Declara el código HTML para inclusión de Dojo.Grid y sus estilos
+            output.append("<script type=\"text/javascript\">\n");
+            output.append("  dojo.require('dojo.parser');\n");
+            output.append("  dojo.require('dojox.layout.ContentPane');\n");
+            output.append("  dojo.require('dijit.form.Form');\n");
+            output.append("  dojo.require('dijit.form.Button');\n");
+            output.append("  dojo.require('dijit.form.MultiSelect');\n");
+            output.append("  dojo.require('dojox.grid.DataGrid');\n");
+            output.append("  dojo.require('dojo.data.ItemFileReadStore');\n");
+            output.append("  var structure = ");
+            try {
+                output.append(structure.toString(2));
+            } catch (JSONException jsone) {
+                SummaryViewManager.log.error("En la escritura de store del grid", jsone);
+                output.append("{}");
+            }
+            output.append(";\n");
+            /* -------------------------------------------------------------- */
+            output.append("  ");
+            output.append("  var myStore, myGrid;\n");
+            output.append("  dojo.addOnLoad(function() {\n");
+            output.append("    myStore = new dojo.data.ItemFileReadStore({\n");
+            output.append("      data : structure\n");
+            output.append("    });\n");
+            output.append("    myGrid = new dojox.grid.DataGrid({\n");
+            output.append("      store: myStore,\n");
+            output.append("      structure: [\n");
+            // Coloca cada columna en la estructura del grid
+            for (int i = 0; i < headingsArray.size(); i++) {
+                if (i > 0) {
+                    output.append(",\n");
+                } else {
+                    output.append("\n");
+                }
+                String[] heading = headingsArray.get(i);
+                if (heading != null && heading.length > 1) {
+                    output.append("        {\n");
+                    output.append("          name: \"" + heading[1] + "\", field: \"" + heading[0] + "\", width: \"auto\",\n");
+                    output.append("          formatter: function(content, rowIndex, cell) {\n");
+                    output.append("            var toReturn = content;\n");
+                    output.append("            while (content.indexOf(\"&lt\") > -1) {\n");
+                    output.append("              toReturn = content.replace(\"&lt;\", \"<\");\n");
+                    output.append("              content = toReturn;\n");
+                    output.append("            }\n");
+                    output.append("            return toReturn;\n");
+                    output.append("          }\n");
+                    output.append("        }");
+                }
+            }
+            output.append("      ]\n");
+            output.append("    }, \"grid\");\n");
+            output.append("    myGrid.startup();\n");
+            //output.append("    ;\n");
+            //output.append("    ;\n");
+            output.append("  });\n");
+            output.append("</script>\n");
+            output.append("<link rel=\"stylesheet\" href=\"/swbadmin/js/dojo/dojox/grid/resources/Grid.css\"/>\n");
+            output.append("<link rel=\"stylesheet\" href=\"/swbadmin/js/dojo/dojox/grid/resources/soriaGrid.css\"/>\n");
+            output.append("<style type=\"text/css\">\n");
+            output.append("  .dojoxGrid table { margin: 0; } html, body { width: 100%; height: 100%;");
+            output.append(" margin: 0; }\n");
+            output.append("</style>\n");
+            
             //Se evalúa el mostrar la forma para filtrado en grid
             if (filters != null && showFiltering) {
                 output.append("<div>\n");
@@ -274,7 +300,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                         output.append("') {\n");
                         output.append("                    myGrid.setQuery({");
                         output.append(heading[0]);
-                        output.append(": choosenValue.value + '*'});\n");
+                        output.append(": '*' + choosenValue.value + '*'});\n");
                         output.append("                  }\n");
                     }
                 }
@@ -288,12 +314,17 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                 output.append("  </form>\n");
                 output.append("</div>\n");
             }
+            
+            output.append("<div id=\"grid\" style=\"width: 80%; height: 800px;\"></div>\n");
+
+            /* Si se construye programaticamente el grid, hay que quitar esto.
             output.append("<span dojoType=\"dojo.data.ItemFileReadStore\" data=\"structure\" jsId=\"myStore\">\n");
             output.append("</span>\n");
             output.append("<table dojoType=\"dojox.grid.DataGrid\" jsId=\"myGrid\" store=\"myStore\" query=\"{ ");//
             output.append(identifier);
             output.append(": '*' }\"\n");
             output.append("  clientSort=\"true\" style=\"width: 80%; height: 800px;\" rowSelector=\"20px\">\n");  //rowsPerPage=\"20\" 
+            output.append("  ");
             //Declara el th de cada propiedad con la etiqueta correspondiente
             output.append("  <thead>\n");
             output.append("    <tr>\n");
@@ -311,6 +342,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             output.append("    </tr>\n");
             output.append("  </thead>\n");
             output.append("</table>\n");
+            */
         }
         out.println(output.toString());
     }
@@ -421,6 +453,31 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                         baseListHtml.append("\">");
                         baseListHtml.append(prop.getDisplayName(lang));
                         baseListHtml.append("</option>\n");
+                    }
+                    
+                    //Codigo prueba para obtener el displayElement
+                    Statement st = prop.getRDFProperty().getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty("http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
+                    if (st != null) {
+                        //Se obtiene: SemanticProperty: displayElement de la propiedad en cuestion (prop)
+                        SemanticObject soDisplayElement = SemanticObject.createSemanticObject(st.getResource());
+                        if (soDisplayElement != null) {
+                            System.out.println("El objeto " + soDisplayElement.getURI() + " es de Class: " + soDisplayElement.getClass() + "\n");
+                            System.out.println("Display element para " + prop.getName() + ": " + soDisplayElement.getURI());
+                            SemanticObject formElement = soDisplayElement.getObjectProperty(org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement"));
+                            if (formElement != null) {
+                                FormElement fe = (FormElement) formElement.createGenericInstance();
+                                if (fe != null) {
+                                    if (formMgr.getSemanticObject() != null) {
+                                        fe.setModel(formMgr.getSemanticObject().getModel());
+                                    }
+                                    System.out.println("FormElement: " + fe.getURI() + "\nModel para FE: " + fe.getModel());
+                                    System.out.println("RENDER: \n" + fe.renderElement(request, viewSemObject.getSemanticObject(), prop, prop.getName(), SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_VIEW, lang));
+                                } else {
+                                    System.out.println("Al parecer, así no es");
+                                }
+
+                            }
+                        }
                     }
                 }
                 //y otro con las de viewList
@@ -1158,12 +1215,35 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         
         String ret = null;
         SWBFormMgr formMgr = new SWBFormMgr(elementBSC, null, SWBFormMgr.MODE_VIEW);
-        SemanticProperty semprop = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propUri);
-
-        FormElement formElement = formMgr.getFormElement(semprop);
-        if (formElement != null) {
-            ret = formElement.renderElement(request, elementBSC, semprop, semprop.getName(), SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_VIEW, lang);
+        SemanticProperty semProp = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propUri);
+        
+        
+        //Codigo prueba para obtener el displayElement
+        Statement st = semProp.getRDFProperty().getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty("http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
+        if (st != null) {
+            //Se obtiene: SemanticProperty: displayElement de la propiedad en cuestion (prop)
+            SemanticObject soDisplayElement = SemanticObject.createSemanticObject(st.getResource());
+            if (soDisplayElement != null) {
+                SemanticObject formElement = soDisplayElement.getObjectProperty(org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement"));
+                if (formElement != null) {
+                    FormElement fe = (FormElement) formElement.createGenericInstance();
+                    if (fe != null) {
+                        if (formMgr.getSemanticObject() != null) {
+                            fe.setModel(formMgr.getSemanticObject().getModel());
+                        }
+                        ret = fe.renderElement(request, elementBSC, semProp, semProp.getName(), SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_VIEW, lang);
+                    }
+                }
+            }
         }
+        
+        if (ret == null) {
+            FormElement formElement = formMgr.getFormElement(semProp);
+            if (formElement != null) {
+                ret = formElement.renderElement(request, elementBSC, semProp, semProp.getName(), SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_VIEW, lang);
+            }
+        }
+        
         return ret != null ? ret : "";
     }
 }
