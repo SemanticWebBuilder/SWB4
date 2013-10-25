@@ -253,6 +253,7 @@ public class OfficeSmartTag extends XmlRpcObject implements IOfficeSmartTag
      * @return the tokens
      * @throws Exception the exception
      */
+    @Override
     public String[] getTokens(String text) throws Exception
     {
         ArrayList<String> getTokens = new ArrayList<String>();
