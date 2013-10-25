@@ -483,7 +483,7 @@ if (!user.isSigned()) {
         } else {
             %>
             <div class="alert alert-warning">
-                <span class="fa fa-exclamation-triangle"></span> <strong><%=paramRequest.getLocaleString("noTasks")%></strong>
+                <p><%=paramRequest.getLocaleString("noTasks")%></p>
             </div>
             <%
         }

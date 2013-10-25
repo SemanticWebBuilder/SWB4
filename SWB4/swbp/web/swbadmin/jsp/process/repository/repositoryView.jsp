@@ -62,13 +62,13 @@ if (!user.isSigned()) {
                 <table class="table table-hover swbp-table">
                     <thead>
                         <tr>
-                            <th><a href="<%=urlOrder.setParameter("sort", "title")%>"><span class="fa fa-sort-asc"></span></a> <%=paramRequest.getLocaleString("msgTHFileName")%></th>
-                            <th><a href="<%=urlOrder.setParameter("sort", "type")%>"><span class="fa fa-sort-asc"></span></a> <%=paramRequest.getLocaleString("msgType")%></th>
+                            <th><%=paramRequest.getLocaleString("msgTHFileName")%> <a href="<%=urlOrder.setParameter("sort", "title")%>"><span class="fa fa-sort-asc"></span></a></th>
+                            <th><%=paramRequest.getLocaleString("msgType")%> <a href="<%=urlOrder.setParameter("sort", "type")%>"><span class="fa fa-sort-asc"></span></a></th>
                             <th><%=paramRequest.getLocaleString("msgVersion")%></th>
-                            <th><a href="<%=urlOrder.setParameter("sort", "date")%>"><span class="fa fa-sort-asc"></span></a> <%=paramRequest.getLocaleString("msgLastDateModification")%></th>
-                            <th><a href="<%=urlOrder.setParameter("sort", "usr")%>"><span class="fa fa-sort-asc"></span></a> <%=paramRequest.getLocaleString("msgVersionUser")%></th>
-                            <th><a href="<%=urlOrder.setParameter("sort", "gpousr")%>"><span class="fa fa-sort-asc"></span></a> <%=paramRequest.getLocaleString("msgTHArea")%></th>
-                            <th><a href="<%=urlOrder.setParameter("sort", "status")%>"><span class="fa fa-sort-asc"></span></a> <%=paramRequest.getLocaleString("msgTHStatus")%></th>
+                            <th><%=paramRequest.getLocaleString("msgLastDateModification")%> <a href="<%=urlOrder.setParameter("sort", "date")%>"><span class="fa fa-sort-asc"></span></a></th>
+                            <th><%=paramRequest.getLocaleString("msgVersionUser")%> <a href="<%=urlOrder.setParameter("sort", "usr")%>"><span class="fa fa-sort-asc"></span></a></th>
+                            <th><%=paramRequest.getLocaleString("msgTHArea")%> <a href="<%=urlOrder.setParameter("sort", "gpousr")%>"><span class="fa fa-sort-asc"></span></a></th>
+                            <th><%=paramRequest.getLocaleString("msgTHStatus")%> <a href="<%=urlOrder.setParameter("sort", "status")%>"><span class="fa fa-sort-asc"></span></a></th>
                             <th><%=paramRequest.getLocaleString("msgTHAction")%></th>
                         </tr>
                     </thead>
@@ -100,7 +100,7 @@ if (!user.isSigned()) {
                             <td><%=rf.getOwnerUserGroup()==null?"--":rf.getOwnerUserGroup().getDisplayTitle(lang)%></td>
                             <td><%=rf.getStatus()==null?"--":rf.getStatus().getDisplayTitle(lang)%></td>
                             <td class="swbp-actions">
-                                <a href="<%=propsUrl%>" title="<%=paramRequest.getLocaleString("msgInfo")%>" class="btn btn-default" data-toggle="modal" data-target="#modalDialog"><span class="fa fa-exclamation-triangle"></span></a>
+                                <a href="<%=propsUrl%>" title="<%=paramRequest.getLocaleString("msgInfo")%>" class="btn btn-default" data-toggle="modal" data-target="#modalDialog"><span class="fa fa-exclamation-circle"></span></a>
                                 <%if (luser == 3 || (vi.getCreator() != null && vi.getCreator().equals(user) && luser > 1)) {
                                     SWBResourceURL urlremove = paramRequest.getActionUrl();
                                     urlremove.setAction("removefile");
