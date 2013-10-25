@@ -158,9 +158,8 @@
                 <%
                     int posicion = 0;
                     String postOutNull = messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_CREATE);
-                    posicion = postOutNull.indexOf("/");
-                    postOutNull = postOutNull.substring(0, posicion - 2) + "required" + postOutNull.substring(posicion - 2, postOutNull.length());
-
+                    posicion = postOutNull.indexOf("style");
+                    postOutNull = postOutNull.substring(0, posicion - 1) + " required " + postOutNull.substring(posicion, postOutNull.length());
                     String postOutNNull = messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_EDIT);
                     posicion = postOutNNull.indexOf("style");
                     postOutNNull = postOutNNull.substring(0, posicion-1) + " required " + postOutNNull.substring(posicion , postOutNNull.length());
@@ -347,11 +346,11 @@
                     <%
                         int position = 0;
                         String create = photoMgr.renderElement(request, Photo.social_msg_Text, photoMgr.MODE_CREATE);
-                        position = create.indexOf("/");
-                        create = create.substring(0, position - 2) + "required" + create.substring(position - 2, create.length());
+                        position = create.indexOf("style");
+                        create = create.substring(0, position - 1) + " required " + create.substring(position, create.length());
                         String edit = photoMgr.renderElement(request, Photo.social_msg_Text, photoMgr.MODE_EDIT);
-                        position = edit.indexOf("/");
-                        edit = edit.substring(0, position - 2) + "required" + edit.substring(position - 2, edit.length());
+                        position = edit.indexOf("style");
+                        edit = edit.substring(0, position - 1) + " required " + edit.substring(position , edit.length());
                     %>
                    <!-- <div class="campo"><%=postOut == null ? photoMgr.renderElement(request, Photo.social_msg_Text, photoMgr.MODE_CREATE) : photoMgr.renderElement(request, Photo.social_msg_Text, photoMgr.MODE_EDIT)%></div>-->
                     <div class="campo"><%=postOut == null ? create : edit%></div>
