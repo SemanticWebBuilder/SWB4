@@ -223,7 +223,7 @@
 
                 %>
 
-                <button class="submit" type="submit" onclick="checksRedesText('<%=objUri%>','<%=sourceCall%>', <%=(postInSN == null || postIn != null ? "true" : "false")%>);"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+                <button class="submit" type="submit" onclick="return checksRedesText('<%=objUri%>','<%=sourceCall%>');"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
 
             </div>      
             <%
