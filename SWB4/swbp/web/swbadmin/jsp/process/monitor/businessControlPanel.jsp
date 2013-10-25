@@ -176,7 +176,7 @@ if (!user.isSigned()) {
 if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
     SWBResourceURL optsUrl = paramRequest.getRenderUrl();
     %>
-    <h2><%=paramRequest.getLocaleString("titleMonitor")%></h2>
+    <!--h2><%--paramRequest.getLocaleString("titleMonitor")--%></h2-->
     <ul class="list-unstyled list-inline">
         <li>
             <div class="dropdown">
@@ -500,7 +500,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
     } else {
         %>
         <div class="alert alert-warning">
-            <span class="fa fa-exclamation-triangle"></span> <strong><%=paramRequest.getLocaleString("msgNoInfo")%></strong>
+            <p><%=paramRequest.getLocaleString("msgNoInfo")%></p
         </div>
         <%
     }

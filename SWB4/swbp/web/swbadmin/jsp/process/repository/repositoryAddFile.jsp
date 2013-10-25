@@ -72,8 +72,8 @@ if (!user.isSigned()) {
         <div class="panel-heading swbp-panel-title">
             <h1 class="panel-title"><strong><%=paramRequest.getLocaleString("msgAdd")%>&nbsp;<%=re != null?paramRequest.getLocaleString("msgVersionOf")+" ":""%> <%=(re != null && re instanceof RepositoryURL)?paramRequest.getLocaleString("msgDocLink"):paramRequest.getLocaleString("msgFile")%></strong></h1>
         </div>
-        <div class="panel-body">
-            <form class="form-horizontal" role="form" action="<%=createURL%>" method="post" enctype="multipart/form-data">
+        <form class="form-horizontal" role="form" action="<%=createURL%>" method="post" enctype="multipart/form-data">
+            <div class="panel-body">
                 <%if (re != null) {%>
                 <input type="hidden" name="fid" value="<%=re.getURI()%>"/>
                 <%}%>
@@ -183,6 +183,7 @@ if (!user.isSigned()) {
                         </div>
                     </div>
                 <%}%>
+                </div>
                 <div class="panel-footer text-right">
                     <!--label for="" class="col-lg-2"></label-->
                     <!--div class="col-lg-3 text-right"-->
@@ -192,7 +193,6 @@ if (!user.isSigned()) {
                 </div>
             </form>
         </div>
-    </div>
     </div>
     <script>
         <%if (re == null) {%>
