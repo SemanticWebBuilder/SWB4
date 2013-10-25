@@ -2135,10 +2135,9 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                     NodeIterator nit = nodeFolder.getNodes(REP_FOLDER);
                     while (nit.hasNext())
                     {
-                        Node subnodofolder = nit.nextNode();
-                        boolean hasChilds = false;
+                        Node subnodofolder = nit.nextNode();                        
                         NodeIterator nc = subnodofolder.getNodes(REP_FOLDER);
-                        hasChilds = nc.hasNext();
+                        boolean hasChilds = nc.hasNext();
                         String title = subnodofolder.getProperty("swb:title").getString();
                         String uuid = subnodofolder.getUUID();
                         SemanticFolderRepository sf = new SemanticFolderRepository();

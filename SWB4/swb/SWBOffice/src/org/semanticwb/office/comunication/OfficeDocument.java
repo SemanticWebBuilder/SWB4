@@ -3208,9 +3208,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @throws Exception the exception
      */
     public Session getSession(String repositoryName, org.semanticwb.model.User user) throws Exception
-    {
-        Session session = null;
-        session = loader.openSession(repositoryName, user);
+    {        
+        Session session = loader.openSession(repositoryName, user);
         return session;
     }
 
@@ -3660,6 +3659,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param type the type
      * @throws Exception the exception
      */
+    @Override
     public void validateContentValues(String repositoryName, PropertyInfo[] properties, Object[] values, String type) throws Exception
     {
         OfficeManager officemanager = loader.getOfficeManager(repositoryName);
@@ -3819,7 +3819,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            //e.printStackTrace();
             log.error(e);
         }
         return needsSendToPublish;
@@ -3855,6 +3855,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param message the message
      * @throws Exception the exception
      */
+    @Override
     public void sendToAuthorize(ResourceInfo info, org.semanticwb.office.interfaces.PFlow flow, String message) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
