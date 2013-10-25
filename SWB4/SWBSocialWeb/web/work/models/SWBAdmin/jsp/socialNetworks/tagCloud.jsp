@@ -194,7 +194,7 @@
 	</canvas>
 </div>
 
-<div hidden="true">
+<div>
     <ul id="tags<%=randomId%>">
 <%
 try{
@@ -209,6 +209,9 @@ try{
             Map.Entry tag = (Map.Entry)itSorted.next();//entry
             //System.out.println(i + " : " + tag);
 
+            if(tag.getKey().toString().isEmpty()){
+                continue;
+            }
             if(i==1){//The word at the top is the most frequent, so it must have 100                
                 out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"submitUrl('" + renderURL.setParameter("search", (String)tag.getKey()) + "',this); return false;\">" + tag.getKey() + "</a></li>");
             }else{
