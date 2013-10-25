@@ -162,9 +162,9 @@
                     postOutNull = postOutNull.substring(0, posicion - 2) + "required" + postOutNull.substring(posicion - 2, postOutNull.length());
 
                     String postOutNNull = messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_EDIT);
-                    posicion = postOutNNull.indexOf("/");
-                    postOutNNull = postOutNNull.substring(0, posicion - 2) + "required" + postOutNNull.substring(posicion - 2, postOutNNull.length());
-
+                    posicion = postOutNNull.indexOf("style");
+                    postOutNNull = postOutNNull.substring(0, posicion-1) + " required " + postOutNNull.substring(posicion , postOutNNull.length());
+                    
                 %>
                <!-- <div class="campo"><%=postOut == null ? messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_CREATE) : messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_EDIT)%></div>-->
                 <div class="campo"><%=postOut == null ? postOutNull : postOutNNull%></div>
