@@ -23,7 +23,7 @@
 
 <%
     String suri=(String)request.getAttribute("suri");
-    //System.out.println("suri UserH:"+suri);
+    System.out.println("suri UserH:"+suri);
     if(suri==null) return; 
     org.semanticwb.model.User user = paramRequest.getUser();
     if (request.getAttribute("swbSocialUser") == null) {
@@ -34,7 +34,7 @@
     if (semObj == null) {
         return;
     }
-    //System.out.println("semObj:"+semObj);
+    System.out.println("semObj-User:"+semObj);
 
     WebSite wsite = WebSite.ClassMgr.getWebSite(semObj.getModel().getName());
     if (wsite == null) {
@@ -53,7 +53,7 @@
     if (userPhoto == null) {
         userPhoto = "/swbadmin/css/images/profileDefImg.jpg";
     }
-
+    System.out.println("JspJ1");
 %>
 
 <div class="swbform swbpopup usr-pop">
@@ -73,6 +73,7 @@
                 //System.out.println(" ver 1");
                 long cont=0;
                 SemanticObject semObjTab=SemanticObject.getSemanticObject(suri);
+                System.out.println("JspJ2:"+semObjTab);
                 if(semObjTab.getGenericInstance() instanceof Stream) 
                 {
                     //System.out.println(" ver 1.1");
@@ -81,7 +82,9 @@
                     while(itPostIns.hasNext())
                     {
                         PostIn postIn=itPostIns.next();
-                        if(postIn.getPostInStream().getURI().equals(stream.getURI()))
+                        System.out.println("JspJ2.1KP:"+postIn);
+                        System.out.println("JspJ3KP:"+postIn.getPostInStream());
+                        if(postIn.getPostInStream()!=null && postIn.getPostInStream().getURI().equals(stream.getURI()))
                         {
                             cont++; 
                         }
@@ -100,7 +103,7 @@
                         }
                     }                    
                 }
-                //System.out.println(" ver 2");
+                System.out.println(" ver 2");
                 SWBResourceURL url = paramRequest.getRenderUrl();
                 url.setMode(SWBResourceURL.Action_EDIT);
                 url.setParameter("swbSocialUser", socialNetUser.getId());
