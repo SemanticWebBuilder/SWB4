@@ -76,6 +76,11 @@ public class Series extends org.semanticwb.bsc.tracing.base.SeriesBase implement
         compare = getIndex() > anotherSeries.getIndex() ? 1 : -1;
         return compare;
     }
+
+    @Override
+    public Measure getMeasure() {
+        return getMeasureByPeriod(getIndicator().getLastPeriod());
+    }
     
     public Measure getMeasureByPeriod(Period period)
     {
