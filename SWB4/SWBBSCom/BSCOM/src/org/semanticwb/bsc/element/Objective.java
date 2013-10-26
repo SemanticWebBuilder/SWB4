@@ -146,7 +146,7 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     }
     
     public List<State> listValidStates() {
-        List<State> validStates = SWBUtils.Collections.filterIterator(listStates(), new GenericFilterRule<State>() {
+        List<State> validStates = SWBUtils.Collections.filterIterator(super.listStates(), new GenericFilterRule<State>() {
                                                         @Override
                                                         public boolean filter(State s) {
                                                             User user = SWBContext.getSessionUser();
@@ -154,6 +154,17 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
                                                         }            
                                                     });
         return validStates;
+    }
+    
+    public List<Period> listValidPeriods() {
+        List<Period> validPeriods = SWBUtils.Collections.filterIterator(super.listPeriods(), new GenericFilterRule<Period>() {
+                                                        @Override
+                                                        public boolean filter(Period s) {
+                                                            User user = SWBContext.getSessionUser();
+                                                            return !s.isValid() || !user.haveAccess(s);
+                                                        }            
+                                                    });
+        return validPeriods;
     }
 
     @Override
