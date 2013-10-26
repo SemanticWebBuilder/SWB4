@@ -74,7 +74,7 @@ public class EvaluationRule extends org.semanticwb.bsc.tracing.base.EvaluationRu
         if(Operation.ClassMgr.hasOperation(getOperationId(), getSeries().getIndicator().getBSC())) {
             Operation op = Operation.ClassMgr.getOperation(getOperationId(), getSeries().getIndicator().getBSC());
             double value1 = getSeries().getMeasureByPeriod(period).getValue();
-            double value2 = getAnotherSeries().getMeasureByPeriod(period).getValue();
+            double value2 = getAnotherSeries()==null?0:getAnotherSeries().getMeasureByPeriod(period).getValue();
             Object[][] f = lexerFactor();
             if(f!=null) {
                 if(f.length==1) {
