@@ -122,7 +122,7 @@ public class MeasuresManager extends GenericAdmResource {
                     {
                         period = measurablesPeriods.next();
 
-                        Measure measure = series.getMeasureByPeriod(period);
+                        Measure measure = series.getMeasure(period);
                         if(measure == null) {
                             measure = Measure.ClassMgr.createMeasure(period.getBSC());
                             PeriodStatus ps = PeriodStatus.ClassMgr.createPeriodStatus(period.getBSC());
@@ -272,7 +272,7 @@ public class MeasuresManager extends GenericAdmResource {
                     if(Period.ClassMgr.hasPeriod(pid, bsc))
                     {
                         Period period = Period.ClassMgr.getPeriod(pid, bsc);
-                        Measure measure = series.getMeasureByPeriod(period);
+                        Measure measure = series.getMeasure(period);
                         PeriodStatus ps;
                         if(measure == null) {
                             measure = Measure.ClassMgr.createMeasure(bsc);
