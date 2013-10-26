@@ -79,10 +79,10 @@ public class Series extends org.semanticwb.bsc.tracing.base.SeriesBase implement
 
     @Override
     public Measure getMeasure() {
-        return getMeasureByPeriod(getIndicator().getLastPeriod());
+        return getMeasure(getIndicator().getLastPeriod());
     }
     
-    public Measure getMeasureByPeriod(Period period)
+    public Measure getMeasure(Period period)
     {
         Iterator<Measure> measures = listMeasures();
         Measure measure = null;
