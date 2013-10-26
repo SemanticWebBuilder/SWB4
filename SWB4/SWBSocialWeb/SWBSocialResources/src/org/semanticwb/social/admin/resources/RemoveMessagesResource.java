@@ -234,9 +234,9 @@ public class RemoveMessagesResource extends GenericResource {
                             while(itPostIns.hasNext())
                             {
                                 PostIn postIn=itPostIns.next();
-                                if(postIn.getCreated()!=null)
+                                if(postIn.getPi_created()!=null)
                                 {
-                                    if(postIn.getCreated().compareTo(date)<0)
+                                    if(postIn.getPi_created().compareTo(date)<0)
                                     {
                                         //System.out.println("postIn a eliminar:"+postIn.getCreated());
                                         postIn.remove();

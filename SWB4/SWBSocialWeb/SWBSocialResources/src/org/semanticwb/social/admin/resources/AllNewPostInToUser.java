@@ -356,7 +356,7 @@ public class AllNewPostInToUser extends GenericResource {
 
                 //Creation Time
                 out.println("<td>");
-                out.println(SWBUtils.TEXT.getTimeAgo(postIn.getCreated(), lang));
+                out.println(SWBUtils.TEXT.getTimeAgo(postIn.getPi_created(), lang));
                 out.println("</td>");
 
                 //Sentiment
