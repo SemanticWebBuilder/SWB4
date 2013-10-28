@@ -53,7 +53,7 @@ function updateChart(chartContainer, title, data) {
     
     //replace container content
     $(chartContainer).html("<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%'></svg>");
-    console.log("outerradius:"+outerradius);
+    
     //create arcs function
     var arc = d3.svg.arc()
         .outerRadius(radius - outerradius)
