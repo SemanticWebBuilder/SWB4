@@ -491,7 +491,7 @@ public class FacebookWall extends GenericResource {
                         if(!postData.isNull("message")){
                             message = postData.getString("message");
                         }
-                        
+                        /*
                         if(postData.has("link") && postData.has("name")){
                             System.out.println("<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>");
                             postIn.setTitle("<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>");//Link o Title
@@ -500,11 +500,11 @@ public class FacebookWall extends GenericResource {
                             if(!message.isEmpty())
                                 message = message + ":" + "<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>";
                             
-                        }
-                        
+                        }*/
+                        /*
                         if(postData.has("description")){
                             postIn.setDescription(postData.getString("description"));
-                        }
+                        }*/
                         
                         if(!message.isEmpty()){
                             postIn.setMsg_Text(message);
@@ -553,10 +553,10 @@ public class FacebookWall extends GenericResource {
                         if(!message.isEmpty())
                             message = message + ": " + "<a href=\"" + postData.getString("source") + "\" target=\"_blank\">View video</a>";
                     }
-
+                    /*
                     if(postData.has("description")){
                         postIn.setDescription(postData.getString("description"));
-                    }
+                    }*/
                         
                     System.out.println("THE MESSAGE******\n" + message);
                     System.out.println("THE STORY******\n" + story);
