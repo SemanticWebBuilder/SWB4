@@ -114,7 +114,6 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     }
     
     public boolean updateAppraisal(Period period) {
-        System.out.println("actualizando objetivo para "+period.getTitle());
         boolean res = Boolean.FALSE;
         State status = null;
         
