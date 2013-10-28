@@ -34,31 +34,35 @@ function updateChart(chartContainer, title, data) {
     var width, 
         height,
         radius,
-        offset = 20;
+        offset = 20,
+        outerradius;
+
     var pie = d3.layout.pie()
         .sort(null)
         .value(function(d) {
             return d.value; 
         });
+        
     var sum = d3.sum(data, function(d){
         return d.value;
     });
 
     height = width = $(chartContainer).parent().width();
     radius = (height-(height*.2)) / 2;
-
+    outerradius = radius * 0.08;
+    
     //replace container content
     $(chartContainer).html("<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%'></svg>");
-
+    console.log("outerradius:"+outerradius);
     //create arcs function
     var arc = d3.svg.arc()
-        .outerRadius(radius - 15)
+        .outerRadius(radius - outerradius)
         .innerRadius(0);
 
     //create outter arcs function
     var arcOver = d3.svg.arc()
-        .outerRadius(radius - 5)
-        .innerRadius(radius-15);
+        .outerRadius(radius - outerradius)
+        .innerRadius(radius);
 
     //Add graph contents
     var svg = d3.select(chartContainer+" svg")
