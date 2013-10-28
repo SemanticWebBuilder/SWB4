@@ -1248,7 +1248,7 @@ public class SWBSocialUtil implements SWBAppObject {
             strb1.append("<div id=\"pagination\">");
             if (npage > snpages) {
                pageURL.setParameter("page", ""+1);
-               strb1.append("<span><a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">Primero</a></span><span><a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">&lt;&lt;</a></span>");
+               strb1.append("<span><a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">&lt;&lt;</a></span>");
             }
             if (npage > 1) {
                pageURL.setParameter("page", ""+(npage - 1));
@@ -1304,7 +1304,7 @@ public class SWBSocialUtil implements SWBAppObject {
             }
             if (npage < totPages-snpages) {
                     pageURL.setParameter("page", ""+(totPages));
-                    strb1.append("<span><a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">&gt;&gt;</a></span><span><a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">Último</a></span>");
+                    strb1.append("<span><a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">&gt;&gt;</a></span>");
             }
             strb1.append("<span class=\"pag-space\"></span>");
 
