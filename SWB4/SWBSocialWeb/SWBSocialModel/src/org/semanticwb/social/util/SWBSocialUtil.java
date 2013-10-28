@@ -1241,14 +1241,18 @@ public class SWBSocialUtil implements SWBAppObject {
      /*
       * Controls pagination
       */
-     public static String getContentByPage(long totPages, int npage,int snpages, String stxtant, String stxtsig, SWBResourceURL pageURL)
+     public static String getContentByPage(long totPages, int npage,int snpages,SWBResourceURL pageURL)
      {
         StringBuilder strb1 = new StringBuilder();
         try {
             strb1.append("<div id=\"pagination\">");
+            if (npage > snpages) {
+               pageURL.setParameter("page", ""+1);
+               strb1.append("<span><a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">Primero</a></span><span><a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">&lt;&lt;</a></span>");
+            }
             if (npage > 1) {
                pageURL.setParameter("page", ""+(npage - 1));
-               strb1.append("<span><a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">&lt;"+ stxtant + "</a></span>");
+               strb1.append("<span><a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">&lt;</a></span>");
             }
             long ini = 1;
             long fin = snpages;
@@ -1285,6 +1289,7 @@ public class SWBSocialUtil implements SWBAppObject {
                 }
             }*/
 
+            strb1.append("<span class=\"pag-space\"></span>");
             for (long i = ini; i <= fin; i++) {
                 if (i != npage) {
                    pageURL.setParameter("page", ""+i); 
@@ -1295,8 +1300,13 @@ public class SWBSocialUtil implements SWBAppObject {
             }
             if (npage < totPages) {
                     pageURL.setParameter("page", ""+(npage + 1));
-                    strb1.append("<span><a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">" + stxtsig + "&gt;</a></span>");
+                    strb1.append("<span><a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">&gt;</a></span>");
             }
+            if (npage < totPages-snpages) {
+                    pageURL.setParameter("page", ""+(totPages));
+                    strb1.append("<span><a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">&gt;&gt;</a></span><span><a href=\"#\" onClick=\"submitUrl('" + pageURL + "',this); return false;\">Último</a></span>");
+            }
+            strb1.append("<span class=\"pag-space\"></span>");
 
             strb1.append("</div>");
 
