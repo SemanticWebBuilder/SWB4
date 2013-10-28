@@ -1,6 +1,7 @@
 package org.semanticwb.bsc.element;
 
 import java.util.Collections;
+import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.model.GenericIterator;
 import java.util.Iterator;
 import java.util.List;
@@ -112,6 +113,70 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
         super.setPrefix(value);
     }
     
+    public boolean updateAppraisal(Period period) {
+        System.out.println("actualizando objetivo para "+period.getTitle());
+        boolean res = Boolean.FALSE;
+        State status = null;
+        
+        PeriodStatus appraisal = getPeriodStatus(period);
+        if(appraisal==null) {
+            appraisal = PeriodStatus.ClassMgr.createPeriodStatus(getBSC());
+            appraisal.setPeriod(period);
+            addPeriodStatus(appraisal);
+            
+            status =  getState();
+        }else {
+            status = appraisal.getStatus();
+        }
+        
+        Iterator<Indicator> indicators = listValidIndicators().iterator();
+        while(indicators.hasNext()) {
+            Series star = indicators.next().getStar();
+            if(star==null) {
+                continue;
+            }
+            if( star.getMeasure(period).getEvaluation().getStatus().compareTo(status)>0 ) {
+                status = star.getMeasure(period).getEvaluation().getStatus();
+                res = Boolean.TRUE;
+            }
+        }
+        appraisal.setStatus(status);
+        return res;
+    }
+    
+    public State getMinimumState() {
+        List<State> states = sortStates();
+        try {
+            return states.get(0);
+        }catch(IndexOutOfBoundsException e) {
+        
+        }
+        return null;
+    }
+    
+    public State getState(Period period) {
+        State status = null;
+        PeriodStatus ps = getPeriodStatus(period);
+        if(ps!=null) {
+            status = ps.getStatus()==null?getMinimumState():ps.getStatus();
+        }
+        return status;
+    }
+    
+    public PeriodStatus getPeriodStatus(Period period) {
+        Iterator<PeriodStatus> appraisals = listPeriodStatuses();
+        PeriodStatus appraisal = null;
+        while(appraisals.hasNext())
+        {
+            appraisal = appraisals.next();
+            if(appraisal.getPeriod().equals(period))
+            {
+                return appraisal;
+            }
+        }
+        return null;
+    }
+    
     private List<Period> sortPeriods() {
         return sortPeriods(true);
     }
@@ -120,10 +185,24 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
         List<Period> periods = SWBUtils.Collections.copyIterator(super.listPeriods());
         if(ascendent) {
             Collections.sort(periods);
-        }else {            
+        }else {             
             Collections.sort(periods, Collections.reverseOrder());            
         }
         return periods;
+    }
+    
+    private List<State> sortStates() {
+        return sortStates(true);
+    }
+    
+    private List<State> sortStates(boolean ascendent) {
+        List<State> states = SWBUtils.Collections.copyIterator(super.listStates());
+        if(ascendent) {
+            Collections.sort(states);
+        }else {            
+            Collections.sort(states, Collections.reverseOrder());
+        }
+        return states;
     }
     
     public Indicator getLastIndicator() {
@@ -166,7 +245,18 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
                                                     });
         return validPeriods;
     }
-
+    
+    public List<Indicator> listValidIndicators() {
+        List<Indicator> validIndicators = SWBUtils.Collections.filterIterator(super.listIndicators(), new GenericFilterRule<Indicator>() {
+                                                        @Override
+                                                        public boolean filter(Indicator s) {
+                                                            User user = SWBContext.getSessionUser();
+                                                            return !s.isValid() || !user.haveAccess(s);
+                                                        }            
+                                                    });
+        return validIndicators;
+    }
+    
     @Override
     public void removeState(State value) {
         // Eliminar en cascada el estado de los indicadores del objetivo
@@ -176,8 +266,6 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
         }
         super.removeState(value);
     }
-    
-    
     
     @Override
     public void removeAllState()
