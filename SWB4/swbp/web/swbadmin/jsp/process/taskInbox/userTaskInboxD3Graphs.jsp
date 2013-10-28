@@ -1,5 +1,5 @@
 <%-- 
-    Document   : userTaskInboxGoogleGraphs
+    Document   : userTaskInboxD3Graphs
     Created on : 30/07/2013, 12:57:38 PM
     Author     : Hasdai Pacheco <ebenezer.sanchez@infotec.com.mx>
 --%>
