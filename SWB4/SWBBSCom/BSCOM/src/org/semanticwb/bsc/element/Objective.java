@@ -134,7 +134,7 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
             if(star==null) {
                 continue;
             }
-            if( star.getMeasure(period).getEvaluation().getStatus().compareTo(status)>0 ) {
+            if( star.getMeasure(period).getEvaluation().getStatus().compareTo(status)<0 ) {
                 status = star.getMeasure(period).getEvaluation().getStatus();
                 res = Boolean.TRUE;
             }
