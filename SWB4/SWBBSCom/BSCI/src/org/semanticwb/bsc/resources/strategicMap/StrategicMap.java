@@ -107,7 +107,10 @@ public class StrategicMap extends GenericResource {
         String colorRelOT = base.getData("colorRelOT") == null ? "" : base.getData("colorRelOT");
         String colorRelTO = base.getData("colorRelTO") == null ? "" : base.getData("colorRelTO");
         String colorRelTT = base.getData("colorRelTT") == null ? "" : base.getData("colorRelTT");
-
+        String ty_vision = base.getData("ty_vision") == null ? "" : base.getData("ty_vision");
+        String bg_vision = base.getData("bg_vision") == null ? "" : base.getData("bg_vision");
+        String ty_mision = base.getData("ty_mision") == null ? "" : base.getData("ty_mision");
+        String bg_mision = base.getData("bg_mision") == null ? "" : base.getData("bg_mision");
 
         sb.append("<script type=\"text/javascript\">\n");
         sb.append("  dojo.require('dijit.form.Form');\n");
@@ -117,7 +120,9 @@ public class StrategicMap extends GenericResource {
         sb.append("var swOk=0, optionObj;");
         sb.append("\nfunction jsValida()");
         sb.append("{");
-        sb.append("   var ele=document.getElementById(\"frmAdm" + id + "\");");
+        sb.append("   var ele=document.getElementById(\"frmAdm");
+        sb.append(id);
+        sb.append("\");");
         sb.append("   var ele1=document.getElementById(\"widthHorizontalObjective\");");
         sb.append("   var ele2=document.getElementById(\"widthVerticalObjective\");");
         sb.append("   var ele3=document.getElementById(\"widthHorizontalDifferentiator\");");
@@ -161,152 +166,226 @@ public class StrategicMap extends GenericResource {
         sb.append("\n</script>");
 
         sb.append("\n<div class=\"swbform\">");
-        sb.append("\n<form type=\"dijit.form.Form\" class=\"swbform\" id=\"frmAdm" + id);
-        sb.append("\" onsubmit=\"return jsValida()\" name=\"frmAdm" + id + "\" action=\"" + url);
+        sb.append("\n<form type=\"dijit.form.Form\" class=\"swbform\" id=\"frmAdm");
+        sb.append(id);
+        sb.append("\" onsubmit=\"return jsValida()\" name=\"frmAdm");
+        sb.append(id);
+        sb.append("\" action=\"");
+        sb.append(url);
         sb.append("\" method=\"post\" >");
-        sb.append("\n<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
+        sb.append("\n<input type=\"hidden\" name=\"suri\" value=\"");
+        sb.append(id);
+        sb.append("\">");
         sb.append("\n<fieldset>");
-        sb.append("\n<legend>Configuración Perspectivas</legend>");
+        sb.append("\n<legend>");
+        sb.append(paramRequest.getLocaleString("configPerspec"));
+        sb.append("</legend>");
         sb.append("\n<ul class=\"swbform-ul\">");
 
         sb.append("\n<li class=\"swbform-li\"><label for=\"amountPerspective\" class=\"swbform-label\">");
-        sb.append("Cant maxima de texto a mostrar: </label>");
-        sb.append("\n<input id=\"amountPerspective\" name=\"amountPerspective\" type=\"text\" regExp=\"\\d+\"");
-        sb.append("value=\"" + amountPerspective + "\" dojoType=\"dijit.form.ValidationTextBox\" ");
-        sb.append("promptMessage=\"Captura cantidad.\" invalidMessage=\"El valor proporcionado debe ser númerico.\">");
+        sb.append(paramRequest.getLocaleString("amountText"));
+        sb.append(": </label>");
+        sb.append("\n<input id=\"amountPerspective\" name=\"amountPerspective\" type=\"text\" ");
+        sb.append(" regExp=\"\\d+\" value=\"");
+        sb.append(amountPerspective);
+        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\" ");
+        sb.append("promptMessage=\"Captura cantidad.\" invalidMessage=\"El valor proporcionado debe");
+        sb.append(" ser númerico.\">");
         sb.append("\n</li>");
         sb.append("\n</ul>");
         Iterator<Perspective> itPers = Perspective.ClassMgr.listPerspectives(ws);
         while (itPers.hasNext()) {
             Perspective perspective = itPers.next();
-            String showTitlePerspective = base.getData("show_perspective" 
-                    + perspective.getId()) == null ? "" : base.getData("show_perspective"
-                    + perspective.getId());
             String colorTextPerspective = base.getData("ty_perspective" + perspective.getId())
                     == null ? "" : base.getData("ty_perspective" + perspective.getId());
             String viewPerspective = base.getData("perspective" + id + perspective.getId()) == null ? ""
                     : base.getData("perspective" + id + perspective.getId());
 
-            String select = showTitlePerspective.equals("") ? "" : "checked";
             sb.append("\n<ul class=\"swbform-ul\">");
-            sb.append("\n<li class=\"swbform-li\">" + perspective.getTitle() + ": </li>");
+            sb.append("\n<li class=\"swbform-li\">");
+            sb.append(perspective.getTitle());
+            sb.append(": </li>");
 
-            sb.append("\n<li class=\"swbform-li\"><input id=\"show_perspective" + perspective.getId());
-            sb.append("\" name=\"show_perspective" + perspective.getId() + "\" ");
-            sb.append("type=\"checkbox\" value=\"show_perspective" + perspective.getId() + "\" ");
-            sb.append(" data-dojo-type=\"dijit.form.CheckBox\" " + select + " class=\"swbform-label\">");
-            sb.append("\n<label for=\"show_perspective" + perspective.getId() + "\">");
-            sb.append("Mostra titulo horizontal:</label></li>");
-            sb.append("\n</li>");
-
-            select = viewPerspective.equals("") ? "" : "checked";
-            sb.append("\n<li class=\"swbform-li\"><input id=\"perspective" + id + perspective.getId());
-            sb.append("\" name=\"perspective" + id + perspective.getId());
-            sb.append("\" type=\"checkbox\" value=\"" + perspective.getId() + "\" ");
-            sb.append(" data-dojo-type=\"dijit.form.CheckBox\" " + select + " class=\"swbform-label\">");
-            sb.append("\n<label for=\"perspective" + id + perspective.getId() + "\">");
-            sb.append("\nMostrar vista en forma horizontal</label></li>");
+            String select = viewPerspective.equals("") ? "" : "checked";
+            sb.append("\n<li class=\"swbform-li\"><input id=\"perspective");
+            sb.append(id);
+            sb.append(perspective.getId());
+            sb.append("\" name=\"perspective");
+            sb.append(id);
+            sb.append(perspective.getId());
+            sb.append("\" type=\"checkbox\" value=\"");
+            sb.append(perspective.getId());
+            sb.append("\" ");
+            sb.append(" data-dojo-type=\"dijit.form.CheckBox\" ");
+            sb.append(select);
+            sb.append(" class=\"swbform-label\">");
+            sb.append("\n<label for=\"perspective");
+            sb.append(id);
+            sb.append(perspective.getId());
+            sb.append("\">");
+            sb.append(paramRequest.getLocaleString("showPerspective"));
+            sb.append("\n</label></li>");
             sb.append("\n</ul>");
 
             String strPers = "ty_perspective" + perspective.getId();
-            sb.append("\n<li class=\"swbform-li\"><label for=\"" + strPers + "\" class=\"swbform-label\">");
-            sb.append("Color de letra titulo: </label>");
-            sb.append("\n<input id=\"" + strPers + "\" name=\"" + strPers + "\" type=\"text\" ");
-            sb.append("value=\"" + colorTextPerspective + "\" dojoType=\"dijit.form.ValidationTextBox\">");
+            sb.append("\n<li class=\"swbform-li\"><label for=\"");
+            sb.append(strPers);
+            sb.append("\" class=\"swbform-label\">");
+            sb.append(paramRequest.getLocaleString("letterColor"));
+            sb.append(": </label>");
+            sb.append("\n<input id=\"");
+            sb.append(strPers);
+            sb.append("\" name=\"");
+            sb.append(strPers);
+            sb.append("\" type=\"text\" ");
+            sb.append("value=\"");
+            sb.append(colorTextPerspective);
+            sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
             sb.append("\n</li>");
-
         }
 
         sb.append("\n</fieldset>");
-
-        sb.append("\n<div id=\"configcol/" + id + "\" dojoType=\"dijit.TitlePane\" title=\"Configurar Temas\"  ");
+        sb.append("\n<div id=\"configcol\\/");
+        sb.append(id);
+        sb.append("\" dojoType=\"dijit.TitlePane\" title=\"");
+        sb.append(paramRequest.getLocaleString("configThemes"));
+        sb.append("\"  ");
         sb.append("open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
         sb.append("\n<fieldset>");
-        sb.append("\n<legend>Configurar Temas</legend>");
+        sb.append("\n<legend>");
+        sb.append(paramRequest.getLocaleString("configThemes"));
+        sb.append("</legend>");
         sb.append("\n<ul class=\"swbform-ul\">");
 
         sb.append("\n<li class=\"swbform-li\"><label for=\"amountTheme\" class=\"swbform-label\">");
-        sb.append("Cant maxima de texto a mostrar: </label>");
+        sb.append(paramRequest.getLocaleString("amountText"));
+        sb.append(": </label>");
         sb.append("\n<input id=\"amountTheme\" name=\"amountTheme\" type=\"text\" regExp=\"\\d+\"");
-        sb.append("value=\"" + amountTheme + "\" dojoType=\"dijit.form.ValidationTextBox\" ");
-        sb.append("promptMessage=\"Captura cantidad.\" invalidMessage=\"El valor proporcionado debe ser númerico.\">");
+        sb.append(" value=\"");
+        sb.append(amountTheme);
+        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\" ");
+        sb.append("promptMessage=\"Captura cantidad.\" invalidMessage=\"El valor proporcionado debe ");
+        sb.append("ser númerico.\">");
         sb.append("\n</li>");
         sb.append("\n</ul>");
 
         Iterator<Theme> itTheme = Theme.ClassMgr.listThemes(ws);
         while (itTheme.hasNext()) {
             Theme theme = itTheme.next();
-            String colorBgTheme = base.getData("bg_theme" + "_" + theme.getId()) == null ? ""
-                    : base.getData("bg_theme" + "_" + theme.getId());
-            String colorTxtTheme = base.getData("ty_theme" + "_" + theme.getId()) == null ? ""
-                    : base.getData("ty_theme" + "_" + theme.getId());
+            String colorBgTheme = base.getData("bg_theme_" + theme.getId()) == null ? ""
+                    : base.getData("bg_theme_" + theme.getId());
+            String colorTxtTheme = base.getData("ty_theme_" + theme.getId()) == null ? ""
+                    : base.getData("ty_theme_" + theme.getId());
             sb.append("\n<ul class=\"swbform-ul\">");
-            sb.append("\n<li class=\"swbform-li\">" + theme.getTitle() + ": </li>");
+            sb.append("\n<li class=\"swbform-li\">");
+            sb.append(theme.getTitle());
+            sb.append(": </li>");
 
-            String strTheme = "ty_theme" + "_" + theme.getId();
-            sb.append("\n<li class=\"swbform-li\"><label for=\"" + strTheme + "\" class=\"swbform-label\">");
-            sb.append("Color de letra para titulo: </label>");
-            sb.append("\n<input id=\"" + strTheme + "\" name=\"" + strTheme + "\" type=\"text\" ");
-            sb.append("value=\"" + colorBgTheme + "\" dojoType=\"dijit.form.ValidationTextBox\">");
+            String strTheme = "ty_theme_" + theme.getId();
+            sb.append("\n<li class=\"swbform-li\"><label for=\"");
+            sb.append(strTheme);
+            sb.append("\" class=\"swbform-label\">");
+            sb.append(paramRequest.getLocaleString("letterColor"));
+            sb.append(": </label>");
+            sb.append("\n<input id=\"");
+            sb.append(strTheme);
+            sb.append("\" name=\"");
+            sb.append(strTheme);
+            sb.append("\" type=\"text\" ");
+            sb.append("value=\"");
+            sb.append(colorTxtTheme);
+            sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
             sb.append("\n</li>");
 
-            String strTheme1 = "bg_theme" + "_" + theme.getId();
-            sb.append("\n<li class=\"swbform-li\"><label for=\"" + strTheme1 + "\" class=\"swbform-label\">");
-            sb.append("Color de Fondo: </label>");
-            sb.append("\n<input id=\"" + strTheme1 + "\" name=\"" + strTheme1 + "\" type=\"text\" ");
-            sb.append("value=\"" + colorTxtTheme + "\" dojoType=\"dijit.form.ValidationTextBox\">");
+            String strTheme1 = "bg_theme_" + theme.getId();
+            sb.append("\n<li class=\"swbform-li\"><label for=\"");
+            sb.append(strTheme1);
+            sb.append("\" class=\"swbform-label\">");
+            sb.append(paramRequest.getLocaleString("bgColor"));
+            sb.append(": </label>");
+            sb.append("\n<input id=\"");
+            sb.append(strTheme1);
+            sb.append("\" name=\"");
+            sb.append(strTheme1);
+            sb.append("\" type=\"text\" ");
+            sb.append("value=\"");
+            sb.append(colorBgTheme);
+            sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
             sb.append("\n</li>");
-
             sb.append("\n</ul>");
-
         }
         sb.append("\n</fieldset>");
         sb.append("\n</div>");
 
-
-        sb.append("\n<div id=\"configObj/" + id + "\" dojoType=\"dijit.TitlePane\" title=\"Configurar Objectivos\"  ");
+        sb.append("\n<div id=\"configObj\\/");
+        sb.append(id);
+        sb.append("\" dojoType=\"dijit.TitlePane\" title=\"");
+        sb.append(paramRequest.getLocaleString("configObjec"));
+        sb.append("\"  ");
         sb.append("open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
         sb.append("\n<fieldset>");
-        sb.append("\n<legend>Configurar Objectivos</legend>");
+        sb.append("\n<legend>");
+        sb.append(paramRequest.getLocaleString("configObjec"));
+        sb.append("</legend>");
         sb.append("\n<ul class=\"swbform-ul\">");
 
         sb.append("\n<li class=\"swbform-li\"><label for=\"widthHorizontalObjective\" class=\"swbform-label\">");
-        sb.append("Alto objetivo forma horizontal: </label>");
+        sb.append(paramRequest.getLocaleString("heightHoriz"));
+        sb.append(": </label>");
         sb.append("\n<input id=\"widthHorizontalObjective\" name=\"widthHorizontalObjective\" type=\"text\" ");
-        sb.append("regExp=\"\\d+\" value=\"" + widthHorizontalObjective + "\" ");
+        sb.append("regExp=\"\\d+\" value=\"");
+        sb.append(widthHorizontalObjective);
+        sb.append("\" ");
         sb.append("dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"Captura cantidad.\"");
         sb.append(" invalidMessage=\"El valor proporcionado debe ser númerico.\">");
         sb.append("\n</li>");
 
         sb.append("\n<li class=\"swbform-li\"><label for=\"widthVerticalObjective\" class=\"swbform-label\">");
-        sb.append("Alto objetivo forma vertical: </label>");
+        sb.append(paramRequest.getLocaleString("heightVert"));
+        sb.append(": </label>");
         sb.append("\n<input id=\"widthVerticalObjective\" name=\"widthVerticalObjective\" type=\"text\" ");
-        sb.append("regExp=\"\\d+\" value=\"" + widthVerticalObjective + "\"");
+        sb.append("regExp=\"\\d+\" value=\"");
+        sb.append(widthVerticalObjective);
+        sb.append("\"");
         sb.append(" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"Captura cantidad.\"");
         sb.append(" invalidMessage=\"El valor proporcionado debe ser númerico.\">");
         sb.append("\n</li>");
 
         sb.append("\n<li class=\"swbform-li\"><label for=\"amountObjective\" class=\"swbform-label\">");
-        sb.append("Cant maxima de texto a mostrar: </label>");
+        sb.append(paramRequest.getLocaleString("amountText"));
+        sb.append(": </label>");
         sb.append("\n<input id=\"amountObjective\" name=\"amountObjective\" type=\"text\" regExp=\"\\d+\"");
-        sb.append("value=\"" + amountObjective + "\" dojoType=\"dijit.form.ValidationTextBox\" ");
-        sb.append("promptMessage=\"Captura cantidad.\" invalidMessage=\"El valor proporcionado debe ser númerico.\">");
+        sb.append(" value=\"");
+        sb.append(amountObjective);
+        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\" ");
+        sb.append("promptMessage=\"Captura cantidad.\" invalidMessage=\"El valor proporcionado debe ");
+        sb.append("ser númerico.\">");
         sb.append("\n</li>");
+        sb.append("\n</ul>");
 
         sb.append("\n</fieldset>");
         sb.append("\n</div>");
 
 
-        sb.append("\n<div id=\"configGDiffere/" + id + "\" dojoType=\"dijit.TitlePane\" title=\"Grupos de diferenciadores\"  ");
+        sb.append("\n<div id=\"configGDiffere\\/");
+        sb.append(id);
+        sb.append("\" dojoType=\"dijit.TitlePane\" title=\"");
+        sb.append(paramRequest.getLocaleString("configGDiff"));
+        sb.append("\"  ");
         sb.append("open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
         sb.append("\n<fieldset>");
-        sb.append("\n<legend>Configurar Grupos de diferenciadores</legend>");
+        sb.append("\n<legend>");
+        sb.append(paramRequest.getLocaleString("configGDiff"));
+        sb.append("</legend>");
         sb.append("\n<ul class=\"swbform-ul\">");
 
         sb.append("\n<li class=\"swbform-li\"><label for=\"amountDifferentiatorGroup\" class=\"swbform-label\">");
-        sb.append("Cant maxima de texto a mostrar: </label>");
+        sb.append(paramRequest.getLocaleString("amountText"));
+        sb.append(": </label>");
         sb.append("\n<input id=\"amountDifferentiatorGroup\" name=\"amountDifferentiatorGroup\" type=\"text\" ");
-        sb.append("regExp=\"\\d+\" value=\"" + amountDifferentiatorGroup + "\"");
+        sb.append("regExp=\"\\d+\" value=\"");
+        sb.append(amountDifferentiatorGroup);
+        sb.append("\"");
         sb.append(" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"Captura cantidad.\"");
         sb.append(" invalidMessage=\"El valor proporcionado debe ser númerico.\">");
         sb.append("\n</li>");
@@ -314,27 +393,46 @@ public class StrategicMap extends GenericResource {
         Iterator<DifferentiatorGroup> itDiffeG = DifferentiatorGroup.ClassMgr.listDifferentiatorGroups(ws);
         while (itDiffeG.hasNext()) {
             DifferentiatorGroup diffG = itDiffeG.next();
-            String colorBgTheme = base.getData("bg_diffG" + "_" + diffG.getId()) == null ? ""
-                    : base.getData("bg_diffG" + "_" + diffG.getId());
-            String colorTxtTheme = base.getData("ty_diffG" + "_" + diffG.getId()) == null ? ""
-                    : base.getData("ty_diffG" + "_" + diffG.getId());
+            String colorBgTheme = base.getData("bg_diffG_" + diffG.getId()) == null ? ""
+                    : base.getData("bg_diffG_" + diffG.getId());
+            String colorTxtTheme = base.getData("ty_diffG_" + diffG.getId()) == null ? ""
+                    : base.getData("ty_diffG_" + diffG.getId());
             sb.append("\n<ul class=\"swbform-ul\">");
-            sb.append("\n<li class=\"swbform-li\">" + diffG.getTitle() + ": </li>");
+            sb.append("\n<li class=\"swbform-li\">");
+            sb.append(diffG.getTitle());
+            sb.append(": </li>");
 
-            String strTheme = "ty_diffG" + "_" + diffG.getId();
-            sb.append("\n<li class=\"swbform-li\"><label for=\"" + strTheme + "\" class=\"swbform-label\">");
-            sb.append("Color de letra para titulo: </label>");
-            sb.append("\n<input id=\"" + strTheme + "\" name=\"" + strTheme + "\" type=\"text\" ");
-            sb.append("value=\"" + colorBgTheme + "\" dojoType=\"dijit.form.ValidationTextBox\">");
+            String strTheme = "ty_diffG_" + diffG.getId();
+            sb.append("\n<li class=\"swbform-li\"><label for=\"");
+            sb.append(strTheme);
+            sb.append("\" class=\"swbform-label\">");
+            sb.append(paramRequest.getLocaleString("letterColor"));
+            sb.append(": </label>");
+            sb.append("\n<input id=\"");
+            sb.append(strTheme);
+            sb.append("\" name=\"");
+            sb.append(strTheme);
+            sb.append("\" type=\"text\" ");
+            sb.append("value=\"");
+            sb.append(colorTxtTheme);
+            sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
             sb.append("\n</li>");
 
-            String strTheme1 = "bg_diffG" + "_" + diffG.getId();
-            sb.append("\n<li class=\"swbform-li\"><label for=\"" + strTheme1 + "\" class=\"swbform-label\">");
-            sb.append("Color de Fondo: </label>");
-            sb.append("\n<input id=\"" + strTheme1 + "\" name=\"" + strTheme1 + "\" type=\"text\" ");
-            sb.append("value=\"" + colorTxtTheme + "\" dojoType=\"dijit.form.ValidationTextBox\">");
+            String strTheme1 = "bg_diffG_" + diffG.getId();
+            sb.append("\n<li class=\"swbform-li\"><label for=\"");
+            sb.append(strTheme1);
+            sb.append("\" class=\"swbform-label\">");
+            sb.append(paramRequest.getLocaleString("bgColor"));
+            sb.append(": </label>");
+            sb.append("\n<input id=\"");
+            sb.append(strTheme1);
+            sb.append("\" name=\"");
+            sb.append(strTheme1);
+            sb.append("\" type=\"text\" ");
+            sb.append("value=\"");
+            sb.append(colorBgTheme);
+            sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
             sb.append("\n</li>");
-
             sb.append("\n</ul>");
 
         }
@@ -342,64 +440,187 @@ public class StrategicMap extends GenericResource {
         sb.append("\n</div>");
 
 
-        sb.append("\n<div id=\"configDife/" + id + "\" dojoType=\"dijit.TitlePane\" title=\"Configurar Diferenciadores\"  ");
+        sb.append("\n<div id=\"configDife\\/");
+        sb.append(id);
+        sb.append("\" dojoType=\"dijit.TitlePane\" title=\"");
+        sb.append(paramRequest.getLocaleString("configDiff"));
+        sb.append("\"  ");
         sb.append("open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
         sb.append("\n<fieldset>");
-        sb.append("\n<legend>Configurar Diferenciadores</legend>");
+        sb.append("\n<legend>");
+        sb.append(paramRequest.getLocaleString("configDiff"));
+        sb.append("</legend>");
         sb.append("\n<ul class=\"swbform-ul\">");
 
         sb.append("\n<li class=\"swbform-li\">");
         sb.append("\n<label for=\"widthHorizontalDifferentiator\" class=\"swbform-label\">");
-        sb.append("Alto objetivo forma horizontal: </label>");
+        sb.append(paramRequest.getLocaleString("heightHoriz"));
+        sb.append(": </label>");
         sb.append("\n<input id=\"widthHorizontalDifferentiator\" name=\"widthHorizontalDifferentiator\" ");
         sb.append("type=\"text\" regExp=\"\\d+\" ");
-        sb.append("value=\"" + widthHorizontalDifferentiator + "\" dojoType=\"dijit.form.ValidationTextBox\" ");
-        sb.append("promptMessage=\"Captura cantidad.\" invalidMessage=\"El valor proporcionado debe ser númerico.\">");
+        sb.append("value=\"");
+        sb.append(widthHorizontalDifferentiator);
+        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\" ");
+        sb.append("promptMessage=\"Captura cantidad.\" invalidMessage=\"El valor proporcionado ");
+        sb.append("debe ser númerico.\">");
         sb.append("\n</li>");
 
         sb.append("\n<li class=\"swbform-li\">");
         sb.append("\n<label for=\"amountDifferentiator\" class=\"swbform-label\">");
-        sb.append("Cant maxima de texto a mostrar: </label>");
+        sb.append(paramRequest.getLocaleString("amountText"));
+        sb.append(": </label>");
         sb.append("\n<input id=\"amountDifferentiator\" name=\"amountDifferentiator\" type=\"text\" ");
-        sb.append("regExp=\"\\d+\" value=\"" + amountDifferentiator + "\" dojoType=\"dijit.form.ValidationTextBox\" ");
-        sb.append("promptMessage=\"Captura cantidad.\" invalidMessage=\"El valor proporcionado debe ser númerico.\">");
+        sb.append("regExp=\"\\d+\" value=\"");
+        sb.append(amountDifferentiator);
+        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\" ");
+        sb.append("promptMessage=\"Captura cantidad.\" invalidMessage=\"El valor proporcionado debe ");
+        sb.append("ser númerico.\">");
         sb.append("\n</li>");
         sb.append("\n</ul>");
         sb.append("\n</fieldset>");
         sb.append("\n</div>");
 
-        sb.append("\n<div id=\"configCausal/" + id + "\" dojoType=\"dijit.TitlePane\" title=\"Causa Efecto\"  ");
+        sb.append("\n<div id=\"configCausal\\/");
+        sb.append(id);
+        sb.append("\" dojoType=\"dijit.TitlePane\" title=\"");
+        sb.append(paramRequest.getLocaleString("confCausal"));
+        sb.append("\"  ");
         sb.append("open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
         sb.append("\n<fieldset>");
-        sb.append("\n<legend>Configurar Relaciones Causa Efecto</legend>");
+        sb.append("\n<legend>");
+        sb.append(paramRequest.getLocaleString("confCausal"));
+        sb.append("</legend>");
         sb.append("\n<ul class=\"swbform-ul\">");
 
         sb.append("\n<li class=\"swbform-li\">");
         sb.append("\n<label for=\"colorRelOO\" class=\"swbform-label\">");
-        sb.append("Clase CSS Causa efecto Obj a Obj: </label>");
+        sb.append(paramRequest.getLocaleString("cssOO"));
+        sb.append(": </label>");
         sb.append("\n<input id=\"colorRelOO\" name=\"colorRelOO\" type=\"text\" ");
-        sb.append("value=\"" + colorRelOO + "\" dojoType=\"dijit.form.ValidationTextBox\">");
+        sb.append("value=\"");
+        sb.append(colorRelOO);
+        sb.append( "\" dojoType=\"dijit.form.ValidationTextBox\">");
         sb.append("\n</li>");
 
         sb.append("\n<li class=\"swbform-li\">");
         sb.append("\n<label for=\"colorRelOT\" class=\"swbform-label\">");
-        sb.append("Clase CSS Causa efecto Obj a Tema: </label>");
+        sb.append(paramRequest.getLocaleString("cssOT"));
+        sb.append(": </label>");
         sb.append("\n<input id=\"colorRelOT\" name=\"colorRelOT\" type=\"text\" ");
-        sb.append("value=\"" + colorRelOT + "\" dojoType=\"dijit.form.ValidationTextBox\">");
+        sb.append("value=\"");
+        sb.append(colorRelOT);
+        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
         sb.append("\n</li>");
 
         sb.append("\n<li class=\"swbform-li\">");
         sb.append("\n<label for=\"colorRelTO\" class=\"swbform-label\">");
-        sb.append("Clase CSS Causa efecto Tema a Obj: </label>");
+        sb.append(paramRequest.getLocaleString("cssTO"));
+        sb.append(": </label>");
         sb.append("\n<input id=\"colorRelTO\" name=\"colorRelTO\" type=\"text\" ");
-        sb.append("value=\"" + colorRelTO + "\" dojoType=\"dijit.form.ValidationTextBox\">");
+        sb.append("value=\"");
+        sb.append(colorRelTO);
+        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
         sb.append("\n</li>");
 
         sb.append("\n<li class=\"swbform-li\">");
         sb.append("\n<label for=\"colorRelTT\" class=\"swbform-label\">");
-        sb.append("Clase CSS Causa efecto Tema a Tema: </label>");
+        sb.append(paramRequest.getLocaleString("cssTT"));
+        sb.append(": </label>");
         sb.append("\n<input id=\"colorRelTT\" name=\"colorRelTT\" type=\"text\" ");
-        sb.append("value=\"" + colorRelTT + "\" dojoType=\"dijit.form.ValidationTextBox\">");
+        sb.append("value=\"");
+        sb.append(colorRelTT);
+        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
+        sb.append("\n</li>");
+        String select = base.getData("margins") == null ? "" : "checked";
+        sb.append("\n<li class=\"swbform-li\"><input id=\"margins");
+        sb.append("\" name=\"margins");
+        sb.append("\" type=\"checkbox\" value=\"margins\" ");
+        sb.append(" data-dojo-type=\"dijit.form.CheckBox\" ");
+        sb.append(select);
+        sb.append(" class=\"swbform-label\">");
+        sb.append("\n<label for=\"margins\">");
+        sb.append(paramRequest.getLocaleString("addMargin"));
+        sb.append("\n</label></li>");
+
+        sb.append("\n</ul>");
+
+        sb.append("\n</fieldset>");
+        sb.append("\n</div>");
+
+        sb.append("\n<div id=\"configHeaders\\/");
+        sb.append(id);
+        sb.append("\" dojoType=\"dijit.TitlePane\" title=\"");
+        sb.append(paramRequest.getLocaleString("configVM"));
+        sb.append("\"  ");
+        sb.append("open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
+        sb.append("\n<fieldset>");
+        sb.append("\n<legend>");
+        sb.append(paramRequest.getLocaleString("configVM"));
+        sb.append("</legend>");
+        sb.append("\n<ul class=\"swbform-ul\">");
+
+        String strVision = "ty_vision";
+        sb.append("\n<li class=\"swbform-li\"><label for=\"");
+        sb.append(strVision);
+        sb.append("\" class=\"swbform-label\">");
+        sb.append(paramRequest.getLocaleString("letterColorV"));
+        sb.append(": </label>");
+        sb.append("\n<input id=\"");
+        sb.append(strVision);
+        sb.append("\" name=\"");
+        sb.append(strVision);
+        sb.append("\" type=\"text\" ");
+        sb.append("value=\"");
+        sb.append(ty_vision);
+        sb.append( "\" dojoType=\"dijit.form.ValidationTextBox\">");
+        sb.append("\n</li>");
+
+        String strVision1 = "bg_vision";
+        sb.append("\n<li class=\"swbform-li\"><label for=\"");
+        sb.append(strVision1);
+        sb.append("\" class=\"swbform-label\">");
+        sb.append(paramRequest.getLocaleString("bgColorV"));
+        sb.append(": </label>");
+        sb.append("\n<input id=\"");
+        sb.append(strVision1);
+        sb.append( "\" name=\"");
+        sb.append(strVision1);
+        sb.append("\" type=\"text\" ");
+        sb.append("value=\"");
+        sb.append(bg_vision);
+        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
+        sb.append("\n</li>");
+
+        String strMision = "ty_mision";
+        sb.append("\n<li class=\"swbform-li\"><label for=\"");
+        sb.append(strMision);
+        sb.append("\" class=\"swbform-label\">");
+        sb.append(paramRequest.getLocaleString("letterColorM"));
+        sb.append(": </label>");
+        sb.append("\n<input id=\"");
+        sb.append(strMision);
+        sb.append("\" name=\"");
+        sb.append(strMision);
+        sb.append("\" type=\"text\" ");
+        sb.append("value=\"");
+        sb.append(ty_mision);
+        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
+        sb.append("\n</li>");
+
+        String strMision1 = "bg_mision";
+        sb.append("\n<li class=\"swbform-li\"><label for=\"");
+        sb.append(strMision1);
+        sb.append("\" class=\"swbform-label\">");
+        sb.append(paramRequest.getLocaleString("bgColorM"));
+        sb.append(": </label>");
+        sb.append("\n<input id=\"");
+        sb.append(strMision1);
+        sb.append("\" name=\"");
+        sb.append(strMision1);
+        sb.append("\" type=\"text\" ");
+        sb.append("value=\"");
+        sb.append(bg_mision);
+        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
         sb.append("\n</li>");
         sb.append("\n</ul>");
 
@@ -407,9 +628,12 @@ public class StrategicMap extends GenericResource {
         sb.append("\n</div>");
 
         sb.append("\n<fieldset>");
-        sb.append("\n <button dojoType=\"dijit.form.Button\" type=\"submit\" value=\"Submit\" >Guardar");
+        sb.append("\n <button dojoType=\"dijit.form.Button\" type=\"submit\" value=\"Submit\" >");
+        sb.append(paramRequest.getLocaleString("save"));
         sb.append("</button>&nbsp;");
-        sb.append("\n <button dojoType=\"dijit.form.Button\" type=\"reset\" value=\"Reset\">Cancelar</button>");
+        sb.append("\n <button dojoType=\"dijit.form.Button\" type=\"reset\" value=\"Reset\">");
+        sb.append(paramRequest.getLocaleString("cancel"));
+        sb.append("</button>");
         sb.append("\n</fieldset>");
 
         sb.append("\n</form>");
@@ -417,8 +641,12 @@ public class StrategicMap extends GenericResource {
         if ((request.getParameter("statusMsg")) != null
                 && (!request.getParameter("statusMsg").isEmpty())) {
             sb.append("\n<script type=\"text/javascript\" language=\"JavaScript\">");
-            sb.append("\n   alert('" + request.getParameter("statusMsg") + "');");
-            sb.append("\n   window.location.href='" + paramRequest.getRenderUrl().setAction("edit") + "';");
+            sb.append("\n   alert('");
+            sb.append(request.getParameter("statusMsg"));
+            sb.append("');");
+            sb.append("\n   window.location.href='");
+            sb.append(paramRequest.getRenderUrl().setAction("edit"));
+            sb.append("';");
             sb.append("\n</script>");
         }
         out.println(sb.toString());
@@ -444,15 +672,17 @@ public class StrategicMap extends GenericResource {
         String id = base.getId();
         if ("update".equals(action)) {
             Enumeration enumAttri = request.getParameterNames();
-            
+
             Iterator<Perspective> itPers = Perspective.ClassMgr.listPerspectives(ws);
             while (itPers.hasNext()) {
                 Perspective perspective = itPers.next();
                 String showTitlePerspective = "show_" + perspective.getTitle() + perspective.getId();
                 String viewPerspective = "perspective" + id + perspective.getId();
-                base.setData(showTitlePerspective,null);
-                base.setData(viewPerspective,null);
+                base.setData(showTitlePerspective, null);
+                base.setData(viewPerspective, null);
             }
+            base.setData("margins", null);
+
             while (enumAttri.hasMoreElements()) {
                 Object elem = enumAttri.nextElement();
                 String data = (String) request.getParameter(elem.toString());
