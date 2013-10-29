@@ -1879,7 +1879,7 @@ public class SocialSentPost extends GenericResource {
         HashMap hmapResult = filtros(swbSocialUser, webSite, searchWord, request, socialTopic, page);
 
         //long nRec = ((Long) hmapResult.get("countResult")).longValue();
-        Set<PostOut> setso = ((Set) hmapResult.get("itResult"));
+        Iterator<PostOut> setso = ((Iterator) hmapResult.get("itResult"));
 
 
         String classifyBySentiment = SWBSocialUtil.Util.getModelPropertyValue(webSite, SWBSocialUtil.CLASSIFYSENTMGS_PROPNAME);
@@ -1894,11 +1894,11 @@ public class SocialSentPost extends GenericResource {
         }
     }
 
-    private void createExcel(Set<PostOut> setso, SWBParamRequest paramRequest, String classifyBySentiment, HttpServletResponse response, SocialTopic socialTopic) {
+    private void createExcel(Iterator<PostOut> setso, SWBParamRequest paramRequest, String classifyBySentiment, HttpServletResponse response, SocialTopic socialTopic) {
         try {
 
             // Defino el Libro de Excel
-            Iterator v = setso.iterator();
+            //Iterator v = setso.iterator();
             String title = socialTopic.getTitle();
 
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -1950,8 +1950,8 @@ public class SocialSentPost extends GenericResource {
             boolean needAuthorization = false;
             //boolean send2Flow = false;
 
-            while (v.hasNext()) {
-                PostOut postIn = (PostOut) v.next();
+            while (setso != null && setso.hasNext()) {
+                PostOut postIn = (PostOut) setso.next();
 
                 Row troww = sheet.createRow((short) i);
 
