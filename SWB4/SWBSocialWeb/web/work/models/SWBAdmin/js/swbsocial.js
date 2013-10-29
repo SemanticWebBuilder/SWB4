@@ -39,16 +39,16 @@ function appendHtmlAt(url, tagid, location){
                     }
                 }
             }else {
-                //alert("No existe ningun elemento con id " + tagid);
+            //alert("No existe ningun elemento con id " + tagid);
             }
             return response;
         },
         error: function(response)
         {
             if(dojo.byId(tagid)) {
-                //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
+            //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
             }else {
-                //alert("No existe ningun elemento con id " + tagid);
+            //alert("No existe ningun elemento con id " + tagid);
             }
             return response;
         },
@@ -81,7 +81,7 @@ function postSocialHtml(url, tagid)
         {
             alert(response.status);
             if(dojo.byId(tagid)) {
-                //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
+            //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
             }else {
                 console.log('Tag not found: ' + tagid);
             }
@@ -123,7 +123,7 @@ function postSocialHtmlListeners(url, tagid)
             }
                   
             if(dojo.byId(tagid)) {
-                //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
+            //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
             }else {
                 console.log('Tag not found: ' + tagid);
             }
@@ -296,7 +296,7 @@ function saveInterval(url){
         url: url,
         load: function(response, ioArgs)
         {
-            //console.log('Saving interval:' + response)
+        //console.log('Saving interval:' + response)
         },
         error: function(response, ioArgs){
             console.log("Error saving interval!");
@@ -501,7 +501,8 @@ function reloadSocialTab(uri){
     }
 }
 
-function validateImages(uri, formId){
+function validateImages(uri, formId, modified, numPhotos){
+
     var obj = document.getElementById(uri);
     var images = new Array();
     var children = obj.childNodes;
@@ -515,10 +516,18 @@ function validateImages(uri, formId){
         lookForInputs(children, images);
     }
 
-    if(images.length === 0){
+    if(modified == 1){
+        if(numPhotos == 0){            
+            alert("Debes adjuntar al menos una imagen modified");
+            return false;
+        }
+    
+    }else if(images.length === 0){
         alert("Debes adjuntar al menos una imagen");
         return false;
     }
+    
+    
     var frm = document.getElementById(formId);
     
     if(frm.checkRedes == null){//No networks
@@ -535,11 +544,11 @@ function validateImages(uri, formId){
                 checkYT = true;
                 if(frm.checkRedes.name.indexOf("#social_Twitter:") != -1){
                     haveTwitter = true;
-                    //console.log('twitterFOUND');
+                //console.log('twitterFOUND');
                 }
                 if(frm.checkRedes.name.indexOf("#social_Facebook:") != -1){
                     haveFacebook = true
-                    //console.log('FacebookFOUND');
+                //console.log('FacebookFOUND');
                 }
             }
         }else{
@@ -548,11 +557,11 @@ function validateImages(uri, formId){
                     checkYT = true;
                     if(frm.checkRedes[i].name.indexOf("#social_Twitter:") != -1){
                         haveTwitter = true;
-                        //console.log('twitterFOUND');
+                    //console.log('twitterFOUND');
                     }
                     if(frm.checkRedes[i].name.indexOf("#social_Facebook:") != -1){
                         haveFacebook = true
-                        //console.log('FacebookFOUND');
+                    //console.log('FacebookFOUND');
                     }
                 }
             }
@@ -583,7 +592,7 @@ function validateImages(uri, formId){
     var count = 0;
     //if(haveTwitter){
     for(i = 0; i < typeFile.length; i++){
-       console.log("typeFile"+typeFile[i]);
+        console.log("typeFile"+typeFile[i]);
         
         for(j=0; j < images.length ; j++ ){
             var image = images[j].toLowerCase();
@@ -594,7 +603,7 @@ function validateImages(uri, formId){
             }            
                 
         }
-        //}
+    //}
     }
     
     if(count != images.length  ){
@@ -679,18 +688,18 @@ function validateVideo(id, formId){
         if(frm.checkRedes.length == null){
             if(frm.checkRedes.checked){
                 checkRed = true;
-                    if(frm.checkRedes.name.indexOf("#social_Youtube:") != -1){
-                        haveYoutube = true;
-                    }
-                    if(frm.checkRedes.name.indexOf("#social_Facebook:") != -1){
-                        haveFacebook = true
-                    }
+                if(frm.checkRedes.name.indexOf("#social_Youtube:") != -1){
+                    haveYoutube = true;
+                }
+                if(frm.checkRedes.name.indexOf("#social_Facebook:") != -1){
+                    haveFacebook = true
+                }
             }
         }else{
             for (j = 0; j < frm.checkRedes.length; j++) {
                 if (frm.checkRedes[j].checked){
                     checkRed = true;
-                        if(frm.checkRedes.name.indexOf("#social_Youtube:") != -1){
+                    if(frm.checkRedes.name.indexOf("#social_Youtube:") != -1){
                         haveYoutube = true;
                     }
                     if(frm.checkRedes.name.indexOf("#social_Facebook:") != -1){
@@ -716,7 +725,7 @@ function validateVideo(id, formId){
     if(haveFacebook){        
         for(i = 0; i < arrFacebook.length; i++){
             
-            if(nameFile.indexOf(arrFacebook[i]) != -1){ //la extension si es valida    
+            if(nameFile.toLowerCase().indexOf(arrFacebook[i]) != -1){ //la extension si es valida    
                 countFacebook++;
                 break;
             }            
@@ -725,7 +734,7 @@ function validateVideo(id, formId){
     
     if(haveYoutube){        
         for(i = 0; i < arrYoutube.length; i++){
-            if(nameFile.indexOf(arrYoutube[i]) != -1){ //la extension si es valida    
+            if(nameFile.toLowerCase().indexOf(arrYoutube[i]) != -1){ //la extension si es valida    
                 countYoutube++;
                 break;
             }            
