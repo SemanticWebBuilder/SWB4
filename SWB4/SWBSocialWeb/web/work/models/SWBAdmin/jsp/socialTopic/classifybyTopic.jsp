@@ -30,7 +30,7 @@
     Post post = (Post) semObjPost.getGenericInstance();
 
     SocialTopic socialTopic = post.getSocialTopic();
-
+    
     User user = paramRequest.getUser();
 
     SWBResourceURL actionUrl = paramRequest.getActionUrl();
@@ -47,41 +47,31 @@
             <%=paramRequest.getLocaleString("actualTopic")%>:
         </span>
 
-        <%
-            if (socialTopic == null) {
-                System.out.println("postUri-5");
-        %>
-        ---           
-        <%
-        } else {
-            System.out.println("postUri-6");
-        %>  
-
-        <%=socialTopic.getDisplayTitle(user.getLanguage())%>  
+        <%=socialTopic!=null?socialTopic.getDisplayTitle(user.getLanguage()):""%>  
 
     </p>
-    <%
-        }
-    %>
+    
     <form id="<%=semObjPost.getSemanticClass().getClassId()%>/classbTopicForm" dojoType="dijit.form.Form" class="swbform" method="post" action="<%=actionUrl%>" method="post" onsubmit="submitForm('<%=semObjPost.getSemanticClass().getClassId()%>/classbTopicForm');return false;"> 
         <p>
             <span><%=paramRequest.getLocaleString("chooseTopic")%>:</span>
             <select name="newSocialTopic">
                 <option value="none"><%=paramRequest.getLocaleString("none")%></option>
                 <%
-                    System.out.println("postUri-7");
                     Iterator<SocialTopic> itSocialTopics = SocialTopic.ClassMgr.listSocialTopics(wsite);
                     while (itSocialTopics.hasNext()) {
-                        System.out.println("postUri-8");
                         SocialTopic siteSocialTopic = itSocialTopics.next();
-                        if ((socialTopic == null || !siteSocialTopic.getURI().equals(socialTopic.getURI()))) {
-                %>
-                <option value="<%=siteSocialTopic.getURI()%>"><%=siteSocialTopic.getDisplayTitle(user.getLanguage())%></option>
-                <%
-                } else if (socialTopic != null && siteSocialTopic.getURI().equals(socialTopic.getURI())) {
-                %>
-                <option value="<%=siteSocialTopic.getURI()%>" selected="true"><%=siteSocialTopic.getDisplayTitle(user.getLanguage())%></option>  
-                <%
+                        if(siteSocialTopic.isActive() && !siteSocialTopic.isDeleted())
+                        {                                                       
+                            if ((socialTopic == null || !siteSocialTopic.getURI().equals(socialTopic.getURI()))) 
+                            {
+                                %>
+                                <option value="<%=siteSocialTopic.getURI()%>"><%=siteSocialTopic.getDisplayTitle(user.getLanguage())%></option>
+                                <%
+                                } else if (socialTopic != null && siteSocialTopic.getURI().equals(socialTopic.getURI())) {
+                                %>
+                                <option value="<%=siteSocialTopic.getURI()%>" selected="true"><%=siteSocialTopic.getDisplayTitle(user.getLanguage())%></option>  
+                                <%
+                            }
                         }
                     }
                 %> 
