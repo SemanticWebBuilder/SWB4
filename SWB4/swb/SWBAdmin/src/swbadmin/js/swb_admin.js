@@ -49,7 +49,9 @@
       dojo.require("dojox.fx");
       
       dojo.require("dojox.form.BusyButton");
-      dojo.require("dojox.form.FileInputAuto");
+      //dojo.require("dojox.form.FileInputAuto");
+      dojo.require("dojox.form.Uploader");
+      //dojo.require("dojox.form.uploader.FileList");
       dojo.require("dojox.form.TimeSpinner");
       dojo.require("dojox.layout.ContentPane");
 
