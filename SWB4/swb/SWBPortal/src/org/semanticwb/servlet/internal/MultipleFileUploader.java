@@ -152,7 +152,7 @@ public class MultipleFileUploader implements InternalServlet
         //System.out.println("user: " + user.getFullName() + ":" + user.isSigned());
         if (ServletFileUpload.isMultipartContent(request))
         {
-            response.setContentType("text/html");
+            response.setContentType("application/json");
             List<UploadedFile> archivos = UploaderFileCacheUtils.get(cad); //System.out.println("archivos:"+archivos);
             String subcad = "f" + archivos.size() + cad.substring(4); //si no existe archivos, debemos ignorar el request, el NPE nos facilita salir
             if (archivos != null)
@@ -196,16 +196,16 @@ public class MultipleFileUploader implements InternalServlet
                             lastUploadedFileName = fileName;
                         }
                     }
-                    response.getWriter().println("<html><body><textarea>{status:\"success\", detail:\""+lastUploadedFileName+"\"}</textarea></body></html>");
+                    response.getWriter().println("{\"status\":\"success\", \"detail\":\""+lastUploadedFileName+"\"}");
                 } catch (Exception ex)
                 {
-                    response.getWriter().println("<html><body><textarea>{status:\"error\", detail:\""+ex.getMessage()+"\"}</textarea></body></html>");
+                    response.getWriter().println("{\"status\":\"error\", \"detail\":\""+ex.getMessage()+"\"}");
                     throw new SWBRuntimeException("Uploading file", ex);
                 }
 
             } else
             {
-                response.getWriter().println("<html><body><textarea>{status:\"error\", detail:\"UploadService not pre-registered\"}</textarea></body></html>");
+                response.getWriter().println("{\"status\":\"error\", \"detail\":\"UploadService not pre-registered\"}");
 //                response.sendError(500, "UploadService not pre-registered");
             }
         } else if (user.isSigned())
@@ -218,7 +218,7 @@ public class MultipleFileUploader implements InternalServlet
 
         } else
         {
-            response.getWriter().println("<html><body><textarea>{status:\"error\", detail:\"Not enough privileges\"}</textarea></body></html>");
+            response.getWriter().println("{\"status\":\"error\", \"detail\":\"Not enough privileges\"}");
 //            response.sendError(403, "Not enough privileges");
         }
 
@@ -266,8 +266,8 @@ public class MultipleFileUploader implements InternalServlet
         buffer.append("    <head>\n");
         buffer.append("        <title>Flash HTML</title>\n");
         buffer.append("        <link href=\""+SWBPortal.getContextPath()+"/swbadmin/js/dojo/dijit/themes/dijit.css\" rel=\"stylesheet\" />\n");
-        buffer.append("        <link href=\""+SWBPortal.getContextPath()+"/swbadmin/js/dojo/dijit/themes/tundra/form/Button.css\" rel=\"stylesheet\" />\n");
-        buffer.append("        <link href=\""+SWBPortal.getContextPath()+"/swbadmin/js/dojo/dijit/themes/tundra/ProgressBar.css\" rel=\"stylesheet\" />\n");
+     //   buffer.append("        <link href=\""+SWBPortal.getContextPath()+"/swbadmin/js/dojo/dijit/themes/tundra/form/Button.css\" rel=\"stylesheet\" />\n");
+     //   buffer.append("        <link href=\""+SWBPortal.getContextPath()+"/swbadmin/js/dojo/dijit/themes/tundra/ProgressBar.css\" rel=\"stylesheet\" />\n");
         buffer.append("        <link href=\""+SWBPortal.getContextPath()+"/swbadmin/js/dojo/dojox/form/resources/FileUploader.css\" rel=\"stylesheet\" />\n");
         buffer.append("        <script>\n");
         buffer.append("            var f;\n");

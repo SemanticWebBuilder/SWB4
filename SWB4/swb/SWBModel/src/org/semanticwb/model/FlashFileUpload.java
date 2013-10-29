@@ -45,6 +45,7 @@ import org.semanticwb.util.UploaderFileCacheUtils;
 // TODO: Auto-generated Javadoc
 /**
  * The Class FlashFileUpload.
+ * @deprecated 
  */
 public class FlashFileUpload extends org.semanticwb.model.base.FlashFileUploadBase 
 {
