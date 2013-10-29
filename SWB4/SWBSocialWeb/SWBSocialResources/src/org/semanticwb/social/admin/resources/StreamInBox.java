@@ -1904,9 +1904,10 @@ public class StreamInBox extends GenericResource {
                         aListFilter=executeQueryArray(sQuery, wsite);
                     }
                 } else { //Todos, sin filtros. A esta opción nunca debería entrar
-                    System.out.println("ENTRA FILTROSG2");
                     streamPostIns=Integer.parseInt(getAllPostInStream_Query(0, 0, true, stream));
+                    System.out.println("ENTRA FILTROSG2-1:"+streamPostIns);
                     sQuery=getAllPostInStream_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream); 
+                    System.out.println("ENTRA FILTROSG2-2:"+sQuery);
                     aListFilter=executeQueryArray(sQuery, wsite);
                 }
             }
