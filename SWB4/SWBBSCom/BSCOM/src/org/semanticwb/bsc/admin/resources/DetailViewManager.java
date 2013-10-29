@@ -14,7 +14,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import javax.servlet.http.*;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,7 +23,10 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
+import org.semanticwb.bsc.PeriodStatusAssignable;
+import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.*;
+import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.utils.DetailView;
 import org.semanticwb.bsc.utils.PropertiesComparator;
 import org.semanticwb.model.FormElement;
@@ -511,7 +513,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         
         PrintWriter out = response.getWriter();
         StringBuilder output = new StringBuilder(256);
-        String message = validateInput(request);
+        String message = validateInput(request, paramRequest);
 
         output.append("<div>\n");
 
@@ -520,7 +522,19 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             String suri = request.getParameter("suri");
             SemanticObject semObj = SemanticObject.getSemanticObject(suri);
             //Declarar variable para el per&iacte;odo, obteniendo el valor del request
+            String modelName = paramRequest.getWebPage().getWebSiteId();
+            String periodId = request.getSession().getAttribute(modelName) != null
+                                ? (String) request.getSession().getAttribute(modelName)
+                                : null;
+            Period period = Period.ClassMgr.getPeriod(periodId, paramRequest.getWebPage().getWebSite());
+            PeriodStatus periodStatus = null;
             //Si el semObj es hijo de PeriodStatusAssignable se debe:
+            GenericObject generic = semObj.getGenericInstance();
+            if (generic != null && generic instanceof Objective) {
+//                PeriodStatusAssignable stateable = (PeriodStatusAssignable) generic;
+                Objective objective = (Objective) generic;
+                periodStatus = objective.getPeriodStatus(period);
+            }
             //-Agregar encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
             // para el per&iacte;odo especificado y el t&iacte;tulo del objeto, para lo que:
             //    - Se pide el listado de objetos PeriodStatus asociado al semObj
@@ -528,6 +542,14 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             //    - Cuando el per&iacte;odo del PeriodStatus = per&iacte;odo del request:
             //        - Se obtiene el status correspondiente y su &iacte;cono relacionado
             //        - Se agrega el &iacte;cono al encabezado y el t&iacte;tulo del objeto semObj
+            if (periodStatus != null) {
+                output.append("<div><img src=\"");
+                output.append(periodStatus.getStatus().getIcon());
+                output.append("\" border=\"0\" alt=\"status:\" title=\"");
+                output.append(periodStatus.getStatus().getTitle());
+                output.append("\">");
+                output.append("</div>");
+            }
 
             if (reader != null) {
                 output.append(generateDisplay(request, paramRequest, reader, semObj));
@@ -759,10 +781,11 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     /**
      * Realiza validaciones a los datos de entrada para el despliegue de informaci&oacute;n
      * @param request petici&oacute;n HTTP realizada por el cliente
+     * @param paramRequest un objeto de la plataforma de SWB con datos adicionales de la petici&oacute;n
      * @return un String que representa una llave del archivo de propiedades que corresponde
      *         al mensaje de error que describe el problema encontrado en los datos, null de lo contrario.
      */
-    private String validateInput(HttpServletRequest request) {
+    private String validateInput(HttpServletRequest request, SWBParamRequest paramRequest) {
         
         String suri = request.getParameter("suri");
         SemanticObject semObj = SemanticObject.getSemanticObject(suri);
@@ -771,7 +794,12 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 ? this.getWorkClass().transformToSemanticClass()
                 : null;
         String messageType = null;
-        //TODO:Declarar una variable para evaluar al período especificado
+        
+        //Variable para evaluar al período especificado
+        String modelName = paramRequest.getWebPage().getWebSiteId(); //genericObject.getSemanticObject().getModel().getName();
+        String periodId = request.getSession().getAttribute(modelName) != null
+                            ? (String) request.getSession().getAttribute(modelName)
+                            : null;
 
         //Revisa configuración del recurso
         if (workClassSC == null) {
@@ -814,11 +842,11 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             }
         }
 
-        //TODO: Revisa existencia de un período con el identificador recibido en el request
+        //Revisa existencia de un período con el identificador recibido en la sesión
         //Si no existe el período, asignar el tipo de mensaje a "periodNotExistent"
-        //if (variableDelPeriodo == null) {
-        //	messageType = "periodNotExistent";
-        //}
+        if (periodId != null && !Period.ClassMgr.hasPeriod(periodId, paramRequest.getWebPage().getWebSite())) {
+            messageType = "periodNotExistent";
+        }
 
         return messageType;
     }

@@ -12,6 +12,7 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.bsc.formelement.base.ObjectiveAlignmentBase;
+import org.semanticwb.model.GenericObject;
 
 
     /**
@@ -161,8 +162,27 @@ public class ObjectiveAlignment extends ObjectiveAlignmentBase {
             ret.append("</select>");
 
         } else if (mode.equals("view")) {
-            ret.append("<span _id=\"" + name + "\" name=\"" + name + "\">");
-            ret.append(displayedValue + "</span>");
+            if (value != null) {
+                GenericObject genObj = value.createGenericInstance();
+                String objectType = null;
+                if (genObj instanceof Objective) {
+                    objectType = Objective.bsc_Objective.getName();
+                    //TODO: Eliminar despues la linea siguiente, porque la liga debe indicar el website correspondiente
+                    objectType = null;
+                }
+                ret.append("<span _id=\"" + name + "\" name=\"" + name + "\">");
+                if (objectType != null) {
+                    ret.append("<a href=\"" + objectType + "?suri=" + genObj.getURI());
+                    ret.append("\">");
+                }
+                ret.append(displayedValue);
+                if (objectType != null) {
+                    ret.append("</a>");
+                }
+                ret.append("</span>");
+            } else {
+                ret.append("<span _id=\"" + name + "\" name=\"" + name + "\"></span>");
+            }
         }
         return ret.toString();
     }
