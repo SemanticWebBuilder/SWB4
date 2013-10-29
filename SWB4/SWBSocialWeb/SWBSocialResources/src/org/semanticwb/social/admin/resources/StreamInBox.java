@@ -1905,17 +1905,21 @@ public class StreamInBox extends GenericResource {
                     }
                 } else { //Todos, sin filtros. A esta opción nunca debería entrar
                     streamPostIns=Integer.parseInt(getAllPostInStream_Query(0, 0, true, stream));
-                    System.out.println("ENTRA FILTROSG2-1:"+streamPostIns);
-                    sQuery=getAllPostInStream_Query(0L, streamPostIns, false, stream); 
-                    System.out.println("ENTRA FILTROSG2-2:"+sQuery);
-                    aListFilter=executeQueryArray(sQuery, wsite);
+                    if(streamPostIns>0)
+                    {
+                        System.out.println("ENTRA FILTROSG2-1:"+streamPostIns);
+                        sQuery=getAllPostInStream_Query(0L, streamPostIns, false, stream); 
+                        System.out.println("ENTRA FILTROSG2-2:"+sQuery);
+                        aListFilter=executeQueryArray(sQuery, wsite);
+                    }
                 }
             }
             //System.out.println("streamPostIns-Antes de:"+streamPostIns);
+            /*
             if(streamPostIns==0L)
             {
                 streamPostIns=Integer.parseInt(getAllPostInStream_Query(0, 0, true, stream));
-            }
+            }*/
             System.out.println("StreamPostIns:"+streamPostIns);
             hampResult.put("countResult", Long.valueOf(streamPostIns));
         }
@@ -1925,14 +1929,14 @@ public class StreamInBox extends GenericResource {
             itposts = aListFilter.iterator();
             System.out.println("Entra a ORDEBAR -2");
             //setso = SWBSocialComparator.convertArray2TreeSet(itposts);
-        }else{
+        }/*else{
             System.out.println("******ENTRA A HACER TOSDOSSSSS******");
             streamPostIns=Long.parseLong(getAllPostInStream_Query(0, 0, true, stream));
             sQuery=getAllPostInStream_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream); 
             aListFilter=executeQueryArray(sQuery, wsite);
             itposts = aListFilter.iterator();
             hampResult.put("countResult", Long.valueOf(streamPostIns));
-        }
+        }*/
         hampResult.put("itResult", itposts);
         
         return hampResult;
