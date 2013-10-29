@@ -249,7 +249,7 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
     }
     
     public List<Series> listValidSerieses() {
-        List<Series> validSerieses = SWBUtils.Collections.filterIterator(listSerieses(), new GenericFilterRule<Series>() {
+        List<Series> validSerieses = SWBUtils.Collections.filterIterator(super.listSerieses(), new GenericFilterRule<Series>() {
                                                                         @Override
                                                                         public boolean filter(Series s) {
                                                                             User user = SWBContext.getSessionUser();
