@@ -1305,7 +1305,7 @@ public class SocialTopicInBox extends GenericResource {
         HashMap hmapResult = filtros(swbSocialUser, webSite, searchWord, request, socialTopic, page);
 
         //long nRec=((Long)hmapResult.get("countResult")).longValue();
-        Set<PostIn> setso = ((Set) hmapResult.get("itResult"));
+        Iterator<PostIn> setso = ((Iterator) hmapResult.get("itResult"));
 
         try {
 
@@ -1318,10 +1318,10 @@ public class SocialTopicInBox extends GenericResource {
     }
 
     
-    public void createExcel(Set<PostIn> setso, SWBParamRequest paramRequest, int page, HttpServletResponse response, SocialTopic socialTopic) { // era stream
+    public void createExcel(Iterator<PostIn> setso, SWBParamRequest paramRequest, int page, HttpServletResponse response, SocialTopic socialTopic) { // era stream
         try {
             // Defino el Libro de Excel
-            Iterator v = setso.iterator();
+            //Iterator v = setso.iterator();
             String title = socialTopic.getTitle();
 
 
@@ -1367,8 +1367,8 @@ public class SocialTopicInBox extends GenericResource {
             int i = 3;
             CellStyle cellStyle = wb.createCellStyle();
 
-            while (v.hasNext()) {
-                PostIn postIn = (PostIn) v.next();
+            while (setso != null && setso.hasNext()) {
+                PostIn postIn = (PostIn) setso.next();
                              
                     Row troww = sheet.createRow((short) i);
                 
