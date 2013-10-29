@@ -743,9 +743,13 @@ public class StreamInBox extends GenericResource {
 
         //Iterator<PostIn> itposts = setso.iterator();
         
+        System.out.append("nRec-George29:"+nRec);
+        
         
         while (itposts!=null && itposts.hasNext()) {
             PostIn postIn = itposts.next();
+            
+            System.out.append("nRec-George29/postIn:"+postIn);
 
             out.println("<tr>");
 
@@ -1801,7 +1805,6 @@ public class StreamInBox extends GenericResource {
             aListFilter=executeQueryArray(sQuery, wsite);
             hampResult.put("countResult", Long.valueOf(streamPostIns));
         } else {
-            
             if (searchWord != null && searchWord.trim().length()>0) {
                 //System.out.println("ES POR BUSQUEDA:"+searchWord);
                 itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), streamPostIns, 0L, "timems desc"), true));
@@ -1895,11 +1898,13 @@ public class StreamInBox extends GenericResource {
                             aListFilter=executeQueryArray(sQuery, wsite);
                         }
                     }else{  //Todos, sin filtros
+                        System.out.println("ENTRA FILTROSG1");
                         streamPostIns=Integer.parseInt(getAllPostInStream_Query(0, 0, true, stream));
                         sQuery=getAllPostInStream_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream); 
                         aListFilter=executeQueryArray(sQuery, wsite);
                     }
                 } else { //Todos, sin filtros. A esta opción nunca debería entrar
+                    System.out.println("ENTRA FILTROSG2");
                     streamPostIns=Integer.parseInt(getAllPostInStream_Query(0, 0, true, stream));
                     sQuery=getAllPostInStream_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream); 
                     aListFilter=executeQueryArray(sQuery, wsite);
@@ -1910,14 +1915,14 @@ public class StreamInBox extends GenericResource {
             {
                 streamPostIns=Integer.parseInt(getAllPostInStream_Query(0, 0, true, stream));
             }
-            //System.out.println("StreamPostIns:"+streamPostIns);
+            System.out.println("StreamPostIns:"+streamPostIns);
             hampResult.put("countResult", Long.valueOf(streamPostIns));
         }
 
-        System.out.println("aListFilter SIZE:"+aListFilter);
+        //System.out.println("aListFilter SIZE:"+aListFilter);
         if (aListFilter.size() > 0) {
             itposts = aListFilter.iterator();
-            //System.out.println("Entra a ORDEBAR -2");
+            System.out.println("Entra a ORDEBAR -2");
             //setso = SWBSocialComparator.convertArray2TreeSet(itposts);
         }else{
             System.out.println("******ENTRA A HACER TOSDOSSSSS******");
@@ -2426,12 +2431,15 @@ public class StreamInBox extends GenericResource {
                 while(it.hasNext())
                 {
                     String name=it.next();
+                    System.out.println("name en executeQueryG:"+name);
                     if(name.equalsIgnoreCase("c1"))
                     {
                         RDFNode node=qs.get(name);
+                        System.out.println("node en executeQuery:"+node);
+                        System.out.println("node en executeQuery-1:"+node.asLiteral());
                         String val="";
                         if(node.isLiteral())val=node.asLiteral().getLexicalForm();
-                        //System.out.println("val:"+val);
+                        System.out.println("val en executeQuery:"+val);
                         return val;
                     }
                 }
