@@ -751,8 +751,9 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     System.out.println("2ND OPTION: MAKING SINGLE POST WITH PICTURE");
                 }
                 jsonResponse = new JSONObject(facebookResponse);
+                fileStream.close();
             }
-
+            
             System.out.println("THIS IS THE RESPONSE PHOTO:" + jsonResponse);
             if (jsonResponse != null && jsonResponse.has("id")) {
                 SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, jsonResponse.get("id").toString(), null);
@@ -833,6 +834,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     SWBFileInputStream fileStream = new SWBFileInputStream(videoFile);
                     facebookResponse = postFileRequest(params, url, video.getVideo(), fileStream, "POST", "video");
                     System.out.println("2ND OPTION: MAKING SINGLE POST WITH VIDEO");
+                    fileStream.close();
                 }
                 jsonResponse = new JSONObject(facebookResponse);
             }
