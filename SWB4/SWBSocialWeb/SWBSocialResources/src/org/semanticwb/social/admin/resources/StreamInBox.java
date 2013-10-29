@@ -1790,7 +1790,7 @@ public class StreamInBox extends GenericResource {
      * Method which controls the filters allowed in this class
      */
     private HashMap filtros(String swbSocialUser, WebSite wsite, String searchWord, HttpServletRequest request, Stream stream, int nPage) {
-        System.out.println("stream k Llega a Filtros:"+stream);
+        System.out.println("stream k Llega a Filtros--George29/10/2013:"+stream);
         //System.out.println("filtros/searchWord:"+searchWord);
         //Set<PostIn> setso = new TreeSet();
         long streamPostIns=0L;
@@ -1906,7 +1906,7 @@ public class StreamInBox extends GenericResource {
                 } else { //Todos, sin filtros. A esta opción nunca debería entrar
                     streamPostIns=Integer.parseInt(getAllPostInStream_Query(0, 0, true, stream));
                     System.out.println("ENTRA FILTROSG2-1:"+streamPostIns);
-                    sQuery=getAllPostInStream_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream); 
+                    sQuery=getAllPostInStream_Query(0L, streamPostIns, false, stream); 
                     System.out.println("ENTRA FILTROSG2-2:"+sQuery);
                     aListFilter=executeQueryArray(sQuery, wsite);
                 }
