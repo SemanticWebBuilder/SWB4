@@ -1099,7 +1099,7 @@ public class StreamInBoxNoTopic extends GenericResource {
 
         HashMap hmapResult=filtros(swbSocialUser, webSite, searchWord, request, stream, page);
         
-        Set<PostIn> setso=((Set)hmapResult.get("itResult"));
+        Iterator<PostIn> setso=((Iterator)hmapResult.get("itResult"));
 
         try {
 
