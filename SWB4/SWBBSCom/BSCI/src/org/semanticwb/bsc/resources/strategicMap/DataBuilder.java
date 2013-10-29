@@ -4,7 +4,6 @@
  */
 package org.semanticwb.bsc.resources.strategicMap;
 
-import java.lang.String;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -35,7 +34,6 @@ import org.semanticwb.model.WebSite;
  *
  */
 public class DataBuilder {
-    //Pendiente checar que pasa con los elementos de alto de objetivos y diferenciadores horizontal / vertical
 
     private static Logger log = SWBUtils.getLogger(DataBuilder.class);
 
@@ -56,7 +54,7 @@ public class DataBuilder {
         JSONArray allPerspectives = new JSONArray();
         JSONObject headers = new JSONObject();
         try {
-            headers.put("headers", getDataHeaders(bsc));
+            headers.put("headers", getDataHeaders(bsc, base));
         } catch (JSONException ex) {
             log.error("Error getHeaders: " + ex);
         }
@@ -82,20 +80,34 @@ public class DataBuilder {
      * @return objeto de tipo {@code JSONObject} con los datos de la cabera de
      * un BSC mision, vision y logo
      */
-    private JSONObject getDataHeaders(BSC bsc) {
+    private JSONObject getDataHeaders(BSC bsc, Resource base) {
         JSONObject headers = new JSONObject();
         try {
             String logo = "";
             if ((bsc.getLogo() != null) && (bsc.getLogo().trim().length() > 0)) {
                 logo = SWBPortal.getWebWorkPath() + bsc.getWorkPath() + "/" + bsc.getLogo();
-                //BSC.bsc_logo.getName()+ "_" + bsc.getId() 
-                //+ "_" + bsc.getLogo();
             }
             String vision = bsc.getVision() == null ? "" : bsc.getVision();
             String mision = bsc.getMission() == null ? "" : bsc.getMission();
+            String bg_mision = ((base.getData("bg_mision") == null) || 
+                    (base.getData("bg_mision").equals(""))) ? "white" : 
+                    base.getData("bg_mision");
+            String ty_mision = ((base.getData("ty_mision") == null) || 
+                    (base.getData("ty_mision").equals(""))) ? "#666" : 
+                    base.getData("ty_mision");
+            String ty_vision = ((base.getData("ty_vision") == null) || 
+                    (base.getData("ty_vision").equals(""))) ? "#666" : 
+                    base.getData("ty_vision");
+            String bg_vision = (((base.getData("bg_vision") == null) || (
+                    base.getData("bg_vision").equals("")))) ? "white" : 
+                    base.getData("bg_vision");
             headers.put("logo", logo);
             headers.put("vision", vision);
             headers.put("mision", mision);
+            headers.put("bg_mision", bg_mision);
+            headers.put("ty_mision", ty_mision);
+            headers.put("ty_vision", ty_vision);
+            headers.put("bg_vision", bg_vision);
         } catch (JSONException ex) {
             log.error("Failed to get data from bsc " + ex);
         }
@@ -130,11 +142,8 @@ public class DataBuilder {
                 || (base.getData("amountPerspective").equals("")))
                 ? 200 : Integer.parseInt(base.getData("amountPerspective"));
         title = SWBUtils.TEXT.cropText(title, sizeTitle);
-        boolean titleHorizontal = (base.getData("show_perspective" 
-                + perspective.getId())) == null ? false : true;
-        String colorText = (base.getData("ty_perspective" + "_" + perspective.getId())
-                == null) ? "black" : base.getData("ty_perspective" + "_"
-                + perspective.getId());
+        String colorText = (base.getData("ty_perspective" + perspective.getId())
+                == null) ? "#666" : base.getData("ty_perspective" + perspective.getId());
         Iterator itTheme = perspective.listThemes();
 
         if (itTheme.hasNext()) {
@@ -174,7 +183,6 @@ public class DataBuilder {
             dataPerspective.put("index", index);
             dataPerspective.put("showHorizontal", showHorizontal);
             dataPerspective.put("title", title);
-            dataPerspective.put("titleHorizontal", titleHorizontal);
             dataPerspective.put("colorText", colorText);
             dataPerspective.put("arrayThemes", arrayThemes);
             dataPerspective.put("countTheme", countTheme);
@@ -214,11 +222,11 @@ public class DataBuilder {
                 arrayObjectives.put(getDataObjective(base, objective, period));
                 countObjectives++;
             }
-            String colorText = (base.getData("ty_theme" + "_" + theme.getId())
-                    == null) ? "black" : base.getData("ty_theme" + "_"
+            String colorText = (base.getData("ty_theme_" + theme.getId())
+                    == null) ? "black" : base.getData("ty_theme_"
                     + theme.getId());
-            String bgcolor = (base.getData("bg_theme" + "_" + theme.getId()) == null)
-                    ? "white" : base.getData("bg_theme" + "_" + theme.getId());
+            String bgcolor = (base.getData("bg_theme_" + theme.getId()) == null)
+                    ? "white" : base.getData("bg_theme_" + theme.getId());
             String title = theme.getTitle();
             int sizeTitle = ((base.getData("amountTheme") == null)
                     || (base.getData("amountTheme").trim().length() == 0))
@@ -268,17 +276,15 @@ public class DataBuilder {
                     countDifferentiator++;
                 }
             }
-            String colorText = (base.getData("ty_diffG" + "_"
-                    + differentiatorGroup.getId())) == null ? "black" : (base.getData("ty_diffG"
-                    + "_" + differentiatorGroup.getId()));
-            String bgcolor = (base.getData("bg_diffG" + "_"
-                    + differentiatorGroup.getId()) == null) ? "white" : (base.getData("bg_diffG"
-                    + "_" + differentiatorGroup.getId()));
+            String colorText = (base.getData("ty_diffG_" + differentiatorGroup.getId())) == null
+                     ? "black" : (base.getData("ty_diffG_" + differentiatorGroup.getId()));
+            String bgcolor = (base.getData("bg_diffG_" + differentiatorGroup.getId()) == null) 
+                    ? "white" : (base.getData("bg_diffG_" + differentiatorGroup.getId()));
             String title = differentiatorGroup.getTitle();
             int sizeTitle = ((base.getData("amountDifferentiator") == null)
                     || ((base.getData("amountDifferentiator") != null)
                     && (base.getData("amountDifferentiator").trim().length() == 0)))
-                    ? 200 : Integer.parseInt(base.getData("amountDifferntiator"));
+                    ? 200 : Integer.parseInt(base.getData("amountDifferentiator"));
             title = SWBUtils.TEXT.cropText(title, sizeTitle);
             try {
                 dataDiffeGroup.put("colorText", colorText);
@@ -348,9 +354,9 @@ public class DataBuilder {
     private JSONObject getDataDifferentiator(Resource base, Differentiator differentiator) {
         JSONObject dataDifferentiator = new JSONObject();
         String title = differentiator.getTitle();
-        int sizeTitle = ((base.getData("amountDistinctive") == null)
-                || (base.getData("amountDistinctive").trim().length() == 0))
-                ? 200 : Integer.parseInt(base.getData("amountDistinctive"));
+        int sizeTitle = ((base.getData("amountDifferentiator") == null)
+                || (base.getData("amountDifferentiator").trim().length() == 0))
+                ? 200 : Integer.parseInt(base.getData("amountDifferentiator"));
         title = SWBUtils.TEXT.cropText(title, sizeTitle);
         try {
             dataDifferentiator.put("title", title);
