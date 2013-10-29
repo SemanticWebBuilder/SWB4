@@ -49,7 +49,7 @@ public class TextField extends org.semanticwb.bsc.formelement.base.TextFieldBase
                 viewString.append("<a href=\"");
                 viewString.append(genObject.getClass().getSimpleName());
                 viewString.append("?suri=");
-                viewString.append(obj.getURI());
+                viewString.append(obj.getEncodedURI());
                 viewString.append("\" >");
             }
             viewString.append(obj.getProperty(prop));
