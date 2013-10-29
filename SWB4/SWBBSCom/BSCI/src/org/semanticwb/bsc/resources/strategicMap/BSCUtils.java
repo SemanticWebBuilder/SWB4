@@ -15,7 +15,6 @@ import org.semanticwb.bsc.Sortable;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.bsc.element.Objective;
-import org.semanticwb.bsc.element.Perspective;
 import org.semanticwb.bsc.element.Theme;
 import org.semanticwb.bsc.tracing.MeasurementFrequency;
 import org.semanticwb.bsc.tracing.PeriodStatus;
@@ -68,7 +67,7 @@ public class BSCUtils {
             if (periodStatus.getPeriod().equals(period)) {
                 State state = periodStatus.getStatus();
                 if (state != null) {
-                    icon = state.getIcon() == null ? "" : state.getIcon();
+                    icon = state.getIconClass() == null ? "defaulIcon" : state.getIconClass();
                 }
             }
         }
@@ -131,24 +130,30 @@ public class BSCUtils {
         return validSorteable;
     }
 
-    public static List<Sortable> listValidParent(Iterator<Sortable> itSortable, Perspective perspective) {
+    /**
+     * Valida que la lista proporcionada y los padres de los objetos sean v&aacute;lidos y 
+     * activos, valida que el tema del objeto Objective no sea igual al tema proporcionado
+     * @param itSortable Lista de objetos a comparar
+     * @param themeCurrent Tema que ser&aacute; utilizado para evaluar objetivos 
+     * v&uacute;lidos
+     * @return  Lista con objetos v&uacute;alidos
+     */
+    public static List<Sortable> listValidParent(Iterator<Sortable> itSortable,
+            Theme themeCurrent) {
         List<Sortable> validSorteable = new ArrayList<Sortable>();
         while (itSortable.hasNext()) {
             org.semanticwb.bsc.Sortable sort = itSortable.next();
             if (sort instanceof Theme) {
                 Theme theme = (Theme) sort;
                 if ((theme.getPerspective().isActive()) && (theme.getPerspective().isValid())) {
-                    if (perspective == null || (!theme.getPerspective().equals(perspective))) {
-                        validSorteable.add(sort);
-                    }
+                    validSorteable.add(sort);
                 }
             } else if (sort instanceof Objective) {
                 Objective objective = (Objective) sort;
                 if ((objective.getTheme().isActive() && objective.getTheme().isValid())
                         && (objective.getTheme().getPerspective().isActive()
                         && objective.getTheme().getPerspective().isValid())) {
-                    if (perspective == null || (!objective.getTheme().getPerspective()
-                            .equals(perspective))) {
+                    if ((themeCurrent == null) || (!objective.getTheme().equals(themeCurrent))) {
                         validSorteable.add(sort);
                     }
                 }
@@ -194,6 +199,11 @@ public class BSCUtils {
         return arraySizeColThemes;
     }
 
+    /**
+     * Obtiene el tama&ntilde;o del ancho para cada diferenciador
+     * @param countDiff n&uacute;mero de diferenciadores
+     * @return tama&ntilde;o para cada diferenciador
+     */
     public static double getSizeDifferentiator(int countDiff) {
         double size = 0;
         if (countDiff == 0) {

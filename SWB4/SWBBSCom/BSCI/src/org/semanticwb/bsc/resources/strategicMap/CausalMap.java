@@ -13,7 +13,6 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.model.Resource;
-import org.semanticwb.model.WebSite;
 
 /**
  * Patrón de diseño: Decorador (Componente concreto). Define un objeto al cual
@@ -56,9 +55,10 @@ public class CausalMap extends ComponentMap {
     private StringBuilder paintBaseMap(Resource base, JSONArray data) {
         StringBuilder sb = new StringBuilder();
         try {
-            JSONObject headers = (JSONObject) data.get(0);//visibility:visible
-            sb.append("<div id=\"container\" name=\"container\" style=\" z-index:5; position:absolute;");
-            sb.append(" width:100%;height:100%; float:left; visibility:visible \"\">");
+            JSONObject headers = (JSONObject) data.get(0);
+            sb.append("<div id=\"containerMap\" style=\"z-index:5; position:absolute;");
+            sb.append(" width:100%;height:100%; float:left; visibility:visible;\"");
+            sb.append(" name=\"containerMap\">");
             sb.append(paintDivHeader(headers).toString());
             JSONArray perspectives = (JSONArray) data.get(1);
             for (int i = 0; i < perspectives.length(); i++) {
@@ -84,17 +84,46 @@ public class CausalMap extends ComponentMap {
         StringBuilder sb = new StringBuilder();
         try {
             JSONObject headerData = (JSONObject) header.get("headers");
+            String bgColorM = (String) headerData.get("bg_mision");
+            String bgColorV = (String) headerData.get("bg_vision");
+            String colorM = (String) headerData.get("ty_mision");
+            String colorV = (String) headerData.get("ty_vision");
             sb.append("<div style=\"clear:both; width:100%;float:left;height:120px\">");
             sb.append("     \n<div style=\"width:30%;float:left;height:110px;margin-top:10px;");
             sb.append("       text-align:center; margin-right:3%;\">");
+            sb.append("       \n<div class=\"headers\" style=\"width:100%;float:left;background-color:");
+            sb.append(bgColorM);
+            sb.append(";color:");
+            sb.append(colorM);
+            sb.append(";clear:both;text-align:center;width:100%;border:1px solid black;");
+            sb.append("border-bottom-style:none\">");
+            sb.append("         MISION");
+            sb.append("       \n</div>");
+            sb.append("       \n<div class=\"txtHeaders\" style=\"width:100%;float:left;height:87px;");
+            sb.append("         text-align:center;width:100%;border:1px solid black; \">");
             sb.append(headerData.get("mision"));
+            sb.append("        \n</div>");
             sb.append("     \n</div>");
-            sb.append("     \n<div style=\"width:34%;float:left;height:110px;margin-top:10px;\">");
-            sb.append("      \n<img src=\"" + headerData.get("logo") + "\">");
+            sb.append("     \n<div style=\"width:34%;float:left;height:110px;margin-top:10px;");
+            sb.append("text-align:center\">");
+            sb.append("      \n<img src=\"");
+            sb.append(headerData.get("logo"));
+            sb.append("\">");
             sb.append("     \n</div>");
             sb.append("     \n<div style=\"width:30%;float:left;height:110px;margin-top:10px;");
             sb.append("       text-align:center; margin-left:2%; margin-right:1%\">");
+            sb.append("       \n<div class=\"headers\" style=\"width:100%;float:left;background-color:");
+            sb.append(bgColorV);
+            sb.append(";color:");
+            sb.append(colorV);
+            sb.append(";clear:both;text-align:center;width:100%;border:1px solid black;");
+            sb.append("border-bottom-style:none\">");
+            sb.append("         VISION");
+            sb.append("       \n</div>");
+            sb.append("       \n<div class=\"txtHeaders\" style=\"width:100%;float:left;height:87px;");
+            sb.append("         text-align:center;width:100%;border:1px solid black; \">");
             sb.append(headerData.get("vision"));
+            sb.append("        \n</div>");
             sb.append("     \n</div>");
             sb.append("\n</div>");
         } catch (JSONException ex) {
@@ -132,23 +161,19 @@ public class CausalMap extends ComponentMap {
             if ((countTheme > 0) || (countDifferentiator > 0)) {
                 String titlePers = perspective.get("title").toString();
                 sb.append("\n<div style=\"clear:both; width:5%;float:left;\" class=\"titlePersp\">");
-                if (perspective.getBoolean("titleHorizontal")) {
-                    sb.append("\n<div style=\"clear:both; width:100%;float:left;text-align:center;color:\"");
-                    sb.append(perspective.get("colorText") + "\";\">");
-                    sb.append(titlePers);
-                    sb.append("\n</div>");
-                } else {
-                    for (int i = 0; i < titlePers.length(); i++) {
-                        sb.append("         <div style=\"width:100%; text-align:center;color:\"");
-                        sb.append(perspective.get("colorText") + "\";\">" + titlePers.charAt(i) + "</div>");
-                    }
-                }
+                sb.append("\n<div style=\"clear:both; width:100%;float:left;text-align:center;color:");
+                sb.append(perspective.get("colorText")); 
+                sb.append(";\">");
+                sb.append(titlePers);
+                sb.append("\n</div>");
                 sb.append("\n</div>");
                 sb.append("     \n<div style=\"width:92%;float:left;\">");
                 if (countDifferentiator > 0) {
-                    JSONArray arrayDifferentiatorGroup = (JSONArray) perspective.get("arrayDifferentiatorGroup");
-                    sb.append(paintDivGroupDifferentiator(arrayDifferentiatorGroup, countDifferentiator, base));
-                }                
+                    JSONArray arrayDifferentiatorGroup = (JSONArray) perspective.
+                            get("arrayDifferentiatorGroup");
+                    sb.append(paintDivGroupDifferentiator(arrayDifferentiatorGroup, 
+                            countDifferentiator, base));
+                }
                 sb.append("     \n<div style=\"width:100%;float:left;\">");
                 JSONArray arrayThemes = (JSONArray) perspective.get("arrayThemes");
                 if ((countTheme > 0) && (perspective.getBoolean("showHorizontal"))) {
@@ -179,18 +204,21 @@ public class CausalMap extends ComponentMap {
     private StringBuilder paintDivHorizontalView(Resource base, JSONArray arrayThemes, int countTheme) {
         StringBuilder sb = new StringBuilder();
         //Array que tendra la cantidad de objetivos por tema
-        int[] objsForTheme = getObjectivesForTheme(arrayThemes, countTheme);//new int[countTheme]; 
+        int[] objsForTheme = getObjectivesForTheme(arrayThemes, countTheme);
         //Array con el tamanio de temas a lo ancho
         int[] arraySizeColThemes = BSCUtils.getSizeColumnsTheme(countTheme);
-
         for (int i = 0; i < arraySizeColThemes.length; i++) {
             //Si el tema no es el final asigna 95% sino asigna 100%
             int widthColTheme = (arraySizeColThemes.length - 1) == i ? 100 : 95;
             int[] configuration = configurationMargin(objsForTheme[i]);
             try {
                 JSONObject objObject = arrayThemes.getJSONObject(i);
-                sb.append("         <div style=\"width:" + arraySizeColThemes[i] + "%;float:left;\">");
-                sb.append("             <div style=\"float:left; width:" + widthColTheme + "%;\">");
+                sb.append("         <div style=\"width:"); 
+                sb.append(arraySizeColThemes[i]);
+                sb.append("%;float:left;\">");
+                sb.append("             <div style=\"float:left; width:");
+                sb.append(widthColTheme);
+                sb.append("%;\">");
 
                 String backgroundColor = (String) objObject.get("bgcolor");
                 backgroundColor = ((backgroundColor == null) || (backgroundColor.trim().length() < 1)
@@ -199,40 +227,36 @@ public class CausalMap extends ComponentMap {
                 fontColor = ((fontColor == null) || (fontColor.trim().length() < 1)
                         || (objObject.getBoolean("isHidden"))) ? "black" : fontColor;
                 sb.append("                 ");
-                
-//                sb.append("                 <div style=\"background-color:" + backgroundColor + ";color:" + fontColor + ";clear:both;text-align:center;width:"
-//                        + sizedColumn + "%;border:1px solid black;border-left:" + increMarginObjIni
-//                        + "px solid black;border-right:" + increMarginObjFin + "px solid black;border-bottom-style:none\">");
-//                sb.append("                 " + objObject.get("name"));
-//                sb.append("                 </div>");
-                
-                sb.append("\n <div style=\"background-color:" + backgroundColor + ";color:" + fontColor);
-                sb.append("; clear:both; text-align:center;height:20px; width:" + configuration[0] + "%;");
-                sb.append(" border:1px solid black; border-left:" + configuration[1] + "px ");
-                sb.append(" solid black;border-right:"+ configuration[2] + "px solid black;");
-                sb.append("border-bottom-style:none");
-                //solid black;
-                //if (!objObject.getBoolean("isHidden")) {
-                //    sb.append(" ");
-                //} else {
-                //    sb.append(" white;");
-                //}
-                //sb.append(" border-right:" +  + "px solid");
-//                if (!objObject.getBoolean("isHidden")) {
-//                    sb.append(" black;");
-//                } else {
-//                    sb.append(" white;");
-//                }
-//                sb.append(" border-bottom-style:none\"");
+                String colorBorder = "black;";
+                if (objObject.getBoolean("isHidden")) {
+                    colorBorder = "white";
+                }
+                sb.append("\n <div style=\"background-color:");
+                sb.append(backgroundColor);
+                sb.append(";color:");
+                sb.append(fontColor);
+                sb.append("; clear:both; text-align:center;height:20px; width:");
+                sb.append(configuration[0]);
+                sb.append("%; border:1px solid ");
+                sb.append(colorBorder);
+                sb.append(" border-left:");
+                sb.append(configuration[1]);
+                sb.append("px  solid ");
+                sb.append(colorBorder);
+                sb.append(" border-right:");
+                sb.append(configuration[2]);
+                sb.append("px solid ");
+                sb.append(colorBorder);
+                sb.append(" border-bottom-style:none");
                 sb.append("\" class=\"titleTheme\">");
                 if (!objObject.getBoolean("isHidden")) {
-                sb.append("\n                 " + objObject.get("title"));
+                    sb.append(objObject.get("title"));
                 }
                 sb.append("\n                 </div>");
                 JSONArray arrayObjecs = (JSONArray) objObject.get("arrayObjectives");
                 sb.append(paintDivObjective(arrayObjecs, base, objsForTheme[i], configuration[0], true));
-                sb.append("             </div>");
-                sb.append("         </div>");
+                sb.append("\n             </div>");
+                sb.append("\n         </div>");
             } catch (JSONException ex) {
                 log.error("Exception paint horizontal view " + ex);
             }
@@ -275,23 +299,28 @@ public class CausalMap extends ComponentMap {
                 String fontColor = (String) objObject.get("colorText");
                 fontColor = ((fontColor == null) || (fontColor.trim().length() < 1)
                         || (objObject.getBoolean("isHidden"))) ? "black" : fontColor;
-
-                sb.append("         <div style=\"width:" + arraySizeColThemes[i] + "%;float:left;\">");
-
-                sb.append("             <div style=\"background-color:" + backgroundColor + ";color:" + fontColor);
-                sb.append("; clear:both;text-align:center;height:20px;width:" + widthColTheme + "%;border:1px solid ");
+                sb.append("         <div style=\"width:");
+                sb.append(arraySizeColThemes[i]);
+                sb.append("%;float:left;\">");
+                sb.append("             <div style=\"background-color:");
+                sb.append(backgroundColor);
+                sb.append(";color:");
+                sb.append(fontColor);
+                sb.append("; clear:both;text-align:center;height:20px;width:");
+                sb.append(widthColTheme);
+                sb.append("%;border:1px solid ");
                 if (!objObject.getBoolean("isHidden")) {
                     sb.append(" black; border-bottom:none;\" class=\"titleTheme\">");
                 } else {
                     sb.append(" white border-bottom-style:none;\" class=\"titleTheme\">");
                 }
                 if (!objObject.getBoolean("isHidden")) {
-                    sb.append("                 " + objObject.get("title"));
+                    sb.append(objObject.get("title"));
                 }
-                sb.append("             </div>");
+                sb.append("\n             </div>");
 
                 sb.append(paintDivObjective(arrayObjecs, objsForTheme[i], elemHigher, widthColTheme, heigthConfig));
-                sb.append("         </div>");
+                sb.append("\n         </div>");
             } catch (JSONException ex) {
                 log.error("Exception in paintDivVerticalView: " + ex);
             }
@@ -319,23 +348,24 @@ public class CausalMap extends ComponentMap {
         for (int i = 0; i < differenForGroupDifferentiator.length; i++) {
             sb.append("     <div style=\"width:100%;float:left; margin-bottom:20px;\">");
 
-            int[] arraySizeColDifferentiator = BSCUtils.getSizeColumnsTheme(differenForGroupDifferentiator[i]);
             double sizeDiff = BSCUtils.getSizeDifferentiator(differenForGroupDifferentiator[i]);
             try {
                 JSONObject objObjectDistinctive = arrayDifferentiatorGroup.getJSONObject(i);
                 JSONArray arrayObjecs = (JSONArray) objObjectDistinctive.get("arrayDifferentiator");
                 String backgroundColor = (String) objObjectDistinctive.get("bgcolor");
-                backgroundColor = ((backgroundColor == null) || (backgroundColor.trim().length() < 1)) ? "white"
-                        : backgroundColor;
+                backgroundColor = ((backgroundColor == null) || (backgroundColor.trim().length() < 1)) 
+                        ? "white" : backgroundColor;
                 String fontColor = (String) objObjectDistinctive.get("colorText");
                 fontColor = ((fontColor == null) || (fontColor.trim().length() < 1)) ? "black" : fontColor;
-                sb.append("     <div style=\"background-color:" + backgroundColor + ";color:" + fontColor);
-                sb.append(";clear:both;text-align:center;");
-                sb.append("width:100%;border:1px solid black;\" class=\"groupDiff\">");//border-bottom-style:none
-                sb.append("     " + objObjectDistinctive.get("title") + "");
-                sb.append("     </div>");
+                sb.append("     <div style=\"background-color:");
+                sb.append(backgroundColor);
+                sb.append(";color:");
+                sb.append(fontColor);
+                sb.append(";clear:both;text-align:center; width:100%;");
+                sb.append("border:1px solid black;border-bottom-style:none;\" class=\"groupDiff\">");
+                sb.append(objObjectDistinctive.get("title"));
+                sb.append("\n     </div>");
                 sb.append(paintDivDifferentiator(sizeDiff, arrayObjecs, base));
-
             } catch (JSONException ex) {
                 log.error("Exception in paintDivGroupDifferentiator: " + ex);
             }
@@ -378,21 +408,28 @@ public class CausalMap extends ComponentMap {
             JSONArray arrayDifferentiator, Resource base) {
         StringBuilder sb = new StringBuilder();
         String height = "120";
-        if (base.getData("widthDifferentiator") != null) {
-            height = base.getData("widthDifferentiator");
+        if (base.getData("widthHorizontalDifferentiator") != null) {
+            height = base.getData("widthHorizontalDifferentiator");
         }
         for (int j = 0; j < arrayDifferentiator.length(); j++) {
-            int widthColTheme = 100;//(arraySizeColDistinctive.length - 1) == j ? 100 : 95;
+            int widthColTheme = 100;
             try {
                 JSONObject distObj = (JSONObject) arrayDifferentiator.get(j);
-                String title = (String) distObj.get("title");//arraySizeColDifferentiator[j]
-                sb.append("         <div style=\"width:" + arraySizeColDifferentiator + "%;float:left;");
-                sb.append("height:" + height + "px;\" class=\"diff\">");
-                sb.append("             <div style=\"background-color:white;text-align:center;width:"
-                        + widthColTheme + "%;border:1px solid black;height:" + height + "px;\">");
-                sb.append("                 " + title);
-                sb.append("             </div>");
-                sb.append("         </div>");
+                String title = (String) distObj.get("title");
+                sb.append("         <div style=\"width:");
+                sb.append(arraySizeColDifferentiator);
+                sb.append("%;float:left;");
+                sb.append("height:");
+                sb.append(height);
+                sb.append("px;\" class=\"diff\">");
+                sb.append("             <div style=\"background-color:white;text-align:center;width:");
+                sb.append(widthColTheme);
+                sb.append("%;border:1px solid black;height:");
+                sb.append(height);
+                sb.append("px;\">");
+                sb.append(title);
+                sb.append("\n             </div>");
+                sb.append("\n         </div>");
             } catch (JSONException ex) {
                 log.error("Exception get differentiator: " + ex);
             }
@@ -520,26 +557,39 @@ public class CausalMap extends ComponentMap {
     private StringBuilder paintDataObjective(String[] dataObjective, int widthCol, int heigthCol,
             String borderPaint) {
         StringBuilder sb = new StringBuilder();
-        sb.append("             <div style=\"background-color:white;text-align:center;width:" + widthCol + "%;height:");
-        sb.append(heigthCol + "px;float:left; " + borderPaint + "\" class=\"objectives\">");
+        sb.append("             <div style=\"background-color:white;text-align:center;width:");
+        sb.append(widthCol);
+        sb.append("%;height:");
+        sb.append(heigthCol);
+        sb.append("px;float:left; ");
+        sb.append(borderPaint);
+        sb.append("\" class=\"objectives\">");
         try {
-            sb.append("             <a href=\"" + dataObjective[5] + "\">" + dataObjective[0] + "</a>");
+            sb.append("             <a href=\"");
+            sb.append(dataObjective[5]);
+            sb.append("\">");
+            sb.append(dataObjective[0]);
+            sb.append("</a>");
             sb.append("             <p>");
-            sb.append("                 <span style=\"padding:10px;\" class=\"icon\">");
-            if (dataObjective[1].length() > 1) {
-                sb.append("<img src=\"" + dataObjective[1] + "\"/>");
-            }
+            sb.append("                <span style=\"padding:10px;\" class=\"prefix\">");
+            sb.append(dataObjective[2]);
             sb.append("</span>");
-            sb.append("                <span style=\"padding:10px;\" class=\"prefix\">" + dataObjective[2] + "</span>");
-            sb.append("                <span style=\"padding:10px;\" class=\"periodicity\">" + dataObjective[3] + "</span>");
-            sb.append("                <span style=\"padding:10px;\" class=\"sponsor\">" + dataObjective[4] + "</span>");
+            sb.append("                <span style=\"padding:10px;\" class=\"periodicity\">");
+            sb.append(dataObjective[3]);
+            sb.append("</span>");
+            sb.append("                <span style=\"padding:10px;\" class=\"sponsor\">");
+            sb.append(dataObjective[4]);
+            sb.append("</span>");
+            sb.append("                 <span style=\"padding:10px;\" class=\"");
+            sb.append(dataObjective[1]);
+            sb.append("\">");
+            sb.append("</span>");
             sb.append("            </p>");
         } catch (ArrayIndexOutOfBoundsException ex) {
             log.error("Exception try get ArrayIndex,  paintDataObjective: " + ex);
         }
         sb.append("             </div>");
         return sb;
-
     }
 
     /**
