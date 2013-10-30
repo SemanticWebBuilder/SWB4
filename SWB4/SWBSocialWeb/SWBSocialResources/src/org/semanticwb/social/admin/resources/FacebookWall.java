@@ -20,6 +20,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -451,6 +452,7 @@ public class FacebookWall extends GenericResource {
                 
                 if(postType.equals("status") || postType.equals("link") || postType.equals("checkin")){
                     postIn=MessageIn.ClassMgr.createMessageIn(model);
+                    postIn.setPi_type(SWBSocialUtil.POST_TYPE_MESSAGE);
                     if(postType.equals("status")){
                         if(!postData.isNull("message")){
                             message = postData.getString("message");
@@ -519,6 +521,8 @@ public class FacebookWall extends GenericResource {
                     postIn.setPostInSocialNetwork(socialNetwork);
                     postIn.setPostInStream(null);
                     postIn.setPostInSocialNetworkUser(socialNetUser);
+                    Calendar calendario = Calendar.getInstance();
+                    postIn.setPi_created(calendario.getTime());
                     //Sets the social topic
                     if(request.getParameter("newSocialTopic").equals("none"))
                     {
@@ -534,6 +538,7 @@ public class FacebookWall extends GenericResource {
                     response.setRenderParameter("postUri", postIn.getURI());
                 }else if(postType.equals("video") || postType.equals("swf")){
                     postIn=VideoIn.ClassMgr.createVideoIn(model);
+                    postIn.setPi_type(SWBSocialUtil.POST_TYPE_VIDEO);   
                     //Get message and/or story
                     if(!postData.isNull("message")){
                         message = postData.getString("message");
@@ -582,6 +587,8 @@ public class FacebookWall extends GenericResource {
                     postIn.setPostInSocialNetwork(socialNetwork);
                     postIn.setPostInStream(null);
                     postIn.setPostInSocialNetworkUser(socialNetUser);
+                    Calendar calendario = Calendar.getInstance();
+                    postIn.setPi_created(calendario.getTime());
                     //Sets the social topic
                     if(request.getParameter("newSocialTopic").equals("none"))
                     {
@@ -598,6 +605,7 @@ public class FacebookWall extends GenericResource {
                     response.setRenderParameter("postUri", postIn.getURI());
                 }else if(postType.equals("photo")){
                     postIn=PhotoIn.ClassMgr.createPhotoIn(model);
+                    postIn.setPi_type(SWBSocialUtil.POST_TYPE_PHOTO);   
                     //Get message and/or story
                     if(!postData.isNull("message")){
                         message = postData.getString("message");
@@ -642,6 +650,8 @@ public class FacebookWall extends GenericResource {
                     postIn.setPostInSocialNetwork(socialNetwork);
                     postIn.setPostInStream(null);
                     postIn.setPostInSocialNetworkUser(socialNetUser);
+                    Calendar calendario = Calendar.getInstance();
+                    postIn.setPi_created(calendario.getTime());
                     //Sets the social topic
                     if(request.getParameter("newSocialTopic").equals("none"))
                     {
@@ -657,204 +667,6 @@ public class FacebookWall extends GenericResource {
                     System.out.println("********************STATUS guardado OK");
                     response.setRenderParameter("postUri", postIn.getURI());
                 }
-/*                
-                postIn=MessageIn.ClassMgr.createMessageIn(model);
-                postIn = MessageIn.ClassMgr.createMessageIn(model);
-                postIn.setSocialNetMsgId(postData.getString("id"));
-                postIn.setPostInSocialNetwork(socialNetwork);                 
-                postIn.setPostInStream(null);
-                * */
-                
-//                postIn.set
-                                
-               
-                /*
-                //postIn.se
-                if(postType.equals("photo")){
-                if(!postData.isNull("story")){
-                    story = (!postData.isNull("story")) ? postData.getString("story").replace(postData.getJSONObject("from").getString("name"), "") : "" ;
-                    if(!postData.isNull("story_tags")){//Users tagged in story
-                        story = getTagsFromPost(postData.getJSONObject("story_tags"), story, renderURL);
-                    }
-                }
-              
-                if(!postData.isNull("message")){
-                    message = postData.getString("message");
-                    if(!postData.isNull("message_tags")){//Users tagged in story
-                        message = getTagsFromPost(postData.getJSONObject("message_tags"), message, renderURL);
-                    }
-                }
-                if(!postData.isNull("caption")){
-                    caption = postData.getString("caption").replace("\n", "</br>");
-                }
-                if(postData.has("application")){
-                    if(postData.getJSONObject("application").getString("name").equals("Foursquare")){
-                        foursquareLink = getPostFromId(postData.getString("id"), null, facebook);
-                        isFoursquare = true;
-                        System.out.println("\n\n\nFOURSQUARE CREATED:" +  foursquareLink);
-                        message = "Checked in";
-                    }
-                }
-                //Story or message or both!!
-                //or "status_type": "shared_story", tagged_in_photo
-                
-            }else if(postType.equals("video")){
-                if(!postData.isNull("message")){
-                    message = postData.getString("message") + " THIS IS A VIDEO!!";
-                }
-            }else if(postType.equals("swf")){
-                if(!postData.isNull("message")){
-                    message = postData.getString("message");
-                    if(!postData.isNull("message_tags")){//Users tagged in story
-                        JSONObject storyTags = postData.getJSONObject("message_tags");
-                        message = getTagsFromPost(storyTags, message, renderURL);
-                    }
-                }            
-            }*/
-                /*
-                ExternalPost external = new ExternalPost();
-                                external.setPostId(postsData.getJSONObject(k).getString("id"));
-                                external.setCreatorId(postsData.getJSONObject(k).getJSONObject("from").getString("id"));
-                                external.setCreatorName(postsData.getJSONObject(k).getJSONObject("from").getString("name"));
-                                external.setCreationTime(postsData.getJSONObject(k).getString("created_time"));
-                                external.setUpdateTime(postsData.getJSONObject(k).getString("updated_time"));
-                                if (postsData.getJSONObject(k).has("message")) {
-                                    external.setMessage(postsData.getJSONObject(k).getString("message"));
-                                }
-                                if (postsData.getJSONObject(k).has("description")) {
-                                    external.setDescription(postsData.getJSONObject(k).getString("description"));
-                                }
-                                if (postsData.getJSONObject(k).has("icon")) {
-                                    external.setIcon(postsData.getJSONObject(k).getString("icon"));
-                                }
-                                if (postsData.getJSONObject(k).has("link")) {
-                                    external.setLink(postsData.getJSONObject(k).getString("link"));
-                                }
-                                if (postsData.getJSONObject(k).has("picture")) {
-                                    
-                                    //external.setPicture(postsData.getJSONObject(k).getString("picture"));
-                                    ArrayList pictures = new ArrayList();
-                                    pictures.add(postsData.getJSONObject(k).getString("picture"));
-                                    external.setPictures(pictures);
-                                }
-                                if (postsData.getJSONObject(k).has("name")) {
-                                    external.setPostName(postsData.getJSONObject(k).getString("name"));
-                                }
-                                if (postsData.getJSONObject(k).has("type")) {
-                                    if(postsData.getJSONObject(k).getString("type").equals("status")){//Status -> message
-                                        if(postsData.getJSONObject(k).has("message")){
-                                            external.setPostType(SWBSocialUtil.MESSAGE);
-                                        }else{
-                                            continue;
-                                        }                                        
-                                    }else if(postsData.getJSONObject(k).getString("type").equals("photo")){//Photo
-                                        if (postsData.getJSONObject(k).has("picture")) {
-                                            //external.setPicture(postsData.getJSONObject(k).getString("picture"));
-                                            ArrayList pictures = new ArrayList();
-                                            pictures.add(postsData.getJSONObject(k).getString("picture"));
-                                            external.setPictures(pictures);
-                                            external.setPostType(SWBSocialUtil.PHOTO);
-                                        }else{//If has message, create it as message
-                                            if(postsData.getJSONObject(k).has("message")){
-                                                external.setPostType(SWBSocialUtil.MESSAGE);
-                                            }else{
-                                                continue;
-                                            }
-                                        }
-                                    }else if(postsData.getJSONObject(k).getString("type").equals("video")){
-                                        if(postsData.getJSONObject(k).has("source")){
-                                            external.setVideo(postsData.getJSONObject(k).getString("source"));
-                                            external.setPostType(SWBSocialUtil.VIDEO);
-                                        }else{//If has message, create it as message
-                                            if(postsData.getJSONObject(k).has("message")){
-                                                external.setPostType(SWBSocialUtil.MESSAGE);
-                                            }else{
-                                                continue;
-                                            }
-                                        }
-                                    }else if(postsData.getJSONObject(k).getString("type").equals("link")){
-                                        if(postsData.getJSONObject(k).has("message")){
-                                            external.setPostType(SWBSocialUtil.MESSAGE);
-                                        }else{
-                                            continue;
-                                        }
-                                    }
-*/                                    
-                //postIn.setMsg_Text(status.getText());                                
-                
-                //I have the post
-                
-                /*
-                Status status = twitter.showStatus(id);
-                String creatorId = status.getUser().getId() + "";
-                SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
-                SocialNetworkUser socialNetUser = SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(""+status.getUser().getId(), socialNetwork, model);
-                               
-                
-                PostIn post = PostIn.getPostInbySocialMsgId(model, status.getId()+"");
-                if(post != null){
-                    log.error("The post with id :" + post.getSocialNetMsgId() + " already exists");
-                    return;
-                }
-                
-                PostIn postIn = null; //The post
-                postIn = MessageIn.ClassMgr.createMessageIn(model);
-                postIn.setSocialNetMsgId(status.getId()+"");
-                postIn.setMsg_Text(status.getText());
-                postIn.setPostInSocialNetwork(socialNetwork);
-                postIn.setPostInStream(null);
-                
-                if(socialNetUser != null){//User already exists
-                    System.out.println("The user already exists: " + socialNetUser.getSnu_name() + " - " + socialNetUser.getSnu_id() +"="+ status.getUser().getId());
-                    int userKloutScore = 0;
-                    int days=SWBSocialUtil.Util.Datediff(socialNetUser.getUpdated(), Calendar.getInstance().getTime());
-                    if(days > 5){  //Si ya pasaron 5 o mas días de que se actualizó la info del usuario, entonces busca su score en Klout
-                        System.out.println("YA PASARON MAS DE 5 DÍAS, BUSCAR KLOUT DE USUARIO...");
-                        Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
-                        userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
-                        System.out.println("userKloutScore K TRAJO:" + userKloutScore);
-                        socialNetUser.setSnu_klout(userKloutScore);
-                    }
-
-                }else{//User does not exist, create it
-                    System.out.println("USUARIO NO EXISTE EN EL SISTEMA, REVISAR QUE KLOUT TIENE");
-                    Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
-                    int userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue();
-                    User twitterUser = twitter.showUser(status.getUser().getId());                    
-                    
-                    socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);//Create a socialNetworkUser
-                    socialNetUser.setSnu_id(status.getUser().getId()+"");
-                    socialNetUser.setSnu_klout(userKloutScore);
-                    socialNetUser.setSnu_name("@"+status.getUser().getScreenName());
-                    socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject());
-                    if(twitterUser != null){
-                        socialNetUser.setCreated(twitterUser.getCreatedAt());
-                        socialNetUser.setFollowers(twitterUser.getFollowersCount());
-                        socialNetUser.setFriends(twitterUser.getFriendsCount());
-                    }else{
-                        socialNetUser.setCreated(new Date());
-                        socialNetUser.setFollowers(0);
-                        socialNetUser.setFriends(0);
-                    }
-                }
-                //SocialNetworkUser socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);//Create a socialNetworkUser
-                
-                postIn.setPostInSocialNetworkUser(socialNetUser);
-                
-                if(request.getParameter("newSocialTopic").equals("none"))
-                {
-                    postIn.setSocialTopic(null);
-                }else {
-                    SemanticObject semObjSocialTopic=SemanticObject.getSemanticObject(request.getParameter("newSocialTopic"));
-                    if(semObjSocialTopic!=null)
-                    {
-                        SocialTopic socialTopic=(SocialTopic)semObjSocialTopic.createGenericInstance();
-                        postIn.setSocialTopic(socialTopic);//Asigns socialTipic
-                    }
-                }
-                response.setRenderParameter("postUri", postIn.getURI());
-                System.out.println("POST CREADO CORRECTAMENTE: " + postIn.getId() + " ** " + postIn.getSocialNetMsgId());
-                * * */
             }catch(Exception e){
                 System.out.println("Error trying to setSocialTopic:" + e);
             }
@@ -991,7 +803,7 @@ public class FacebookWall extends GenericResource {
                 out.println("   var spanId = dijit.byId('" + facebook.getId() + postID + LIKE + currentTab +  "');");
                 String likeStatus = null;
                 if(iLikedPost){
-                    likeStatus =" <a href=\"#\" class=\"like\" onclick=\"postSocialHtml('" + actionURL.setAction("doUnlike").setParameter("postID", likeResp.getString("id")).setParameter("currentTab", currentTab)+ "','" + facebook.getId() + postID + INFORMATION + currentTab + "');return false;" +"\"><span>" + paramRequest.getLocaleString("undoLike") +"</span></a>";
+                    likeStatus =" <a href=\"#\" class=\"nolike\" onclick=\"postSocialHtml('" + actionURL.setAction("doUnlike").setParameter("postID", likeResp.getString("id")).setParameter("currentTab", currentTab)+ "','" + facebook.getId() + postID + INFORMATION + currentTab + "');return false;" +"\"><span>" + paramRequest.getLocaleString("undoLike") +"</span></a>";
                     if(request.getParameter("error") != null){
                         out.println("   showStatus('ERROR: " +request.getParameter("error") +"');");
                     }else{
@@ -1112,10 +924,10 @@ public class FacebookWall extends GenericResource {
             String fbid = request.getParameter("fbid");
             String postUri = request.getParameter("postUri");
             SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", id).setParameter("postUri", postUri).setParameter("currentTab", currentTab);
-            String url= "<a href=\"#\" title=\"" + paramRequest.getLocaleString("reclassify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','" + paramRequest.getLocaleString("reclassify") + " post'); return false;\"><span>" + paramRequest.getLocaleString("reclassify") + "</span></a>";
+            String url= "<a href=\"#\" class=\"clasifica\" title=\"" + paramRequest.getLocaleString("reclassify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','" + paramRequest.getLocaleString("reclassify") + " post'); return false;\"><span>" + paramRequest.getLocaleString("reclassify") + "</span></a>";
             out.println("<span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
             out.println("<script type=\"dojo/method\">");
-            out.println("   hideDialog(); ");            
+            out.println("   hideDialog(); ");
             out.println("   try{");///////////Falta poner el id de FACEBOOK
             out.println("   var spanId = dijit.byId('" + fbid + id + TOPIC + currentTab +  "');");            
             out.println("   spanId.attr('content', '" + url.replace("'", "\\'") +"');");           
@@ -1123,6 +935,9 @@ public class FacebookWall extends GenericResource {
             out.println("   showStatus('Tema asociado correctamente');");
             out.println("</script>");
             out.println("</span>");
+            
+            
+            
             //response.setRenderParameter("currentTab", request.getParameter("currentTab"));
             //response.setRenderParameter("id", idStatus);
         }else if(mode.equals("reAssignedPost")){
@@ -2177,11 +1992,11 @@ public class FacebookWall extends GenericResource {
                                     socialT = post.getSocialTopic().getTitle();
                                 }
                                 SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("id")).setParameter("postUri", post.getURI()).setParameter("currentTab", tabSuffix);
-                                    writer.write("<a href=\"#\" title=\"" + "Tema actual: " +  socialT + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                                    writer.write("<a href=\"#\" class=\"clasifica\" title=\"" + "Tema actual: " +  socialT + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
                                     + paramRequest.getLocaleString("reclassify") + " post'); return false;\"><span>" + paramRequest.getLocaleString("reclassify") + "</span></a>");
                             }else{
                                 SWBResourceURL clasifybyTopic = renderURL.setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("id")).setParameter("currentTab", tabSuffix);
-                                writer.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("classify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                                writer.write("<a href=\"#\" class=\"clasifica\" title=\"" + paramRequest.getLocaleString("classify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
                                 + paramRequest.getLocaleString("classify") + " Post'); return false;\"><span>" + paramRequest.getLocaleString("classify") + "</span></a>");
                             }
                         }else{
@@ -2192,7 +2007,7 @@ public class FacebookWall extends GenericResource {
                     }else if(actions.getJSONObject(i).getString("name").equals("Like")){//I can like
                         writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + LIKE + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");                        
                         if(iLikedPost){
-                            writer.write(" <a href=\"#\" class=\"like\" onclick=\"postSocialHtml('" + actionURL.setAction("doUnlike").setParameter("postID", postsData.getString("id")).setParameter("currentTab", tabSuffix) + "','" + facebook.getId() +  postsData.getString("id") + INFORMATION + tabSuffix + "');return false;" +"\"><span>" + paramRequest.getLocaleString("undoLike") +"</span></a>");
+                            writer.write(" <a href=\"#\" class=\"nolike\" onclick=\"postSocialHtml('" + actionURL.setAction("doUnlike").setParameter("postID", postsData.getString("id")).setParameter("currentTab", tabSuffix) + "','" + facebook.getId() +  postsData.getString("id") + INFORMATION + tabSuffix + "');return false;" +"\"><span>" + paramRequest.getLocaleString("undoLike") +"</span></a>");
                         }else{
                             writer.write(" <a href=\"#\" class=\"like\" onclick=\"postSocialHtml('" + actionURL.setAction("doLike").setParameter("postID", postsData.getString("id")).setParameter("currentTab", tabSuffix) + "','" + facebook.getId() + postsData.getString("id") + INFORMATION + tabSuffix + "');return false;" +"\"><span>" + paramRequest.getLocaleString("like") +"</span></a>");
                         }
@@ -2386,11 +2201,11 @@ public class FacebookWall extends GenericResource {
                                 socialT = post.getSocialTopic().getTitle();
                             }
                         SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("post_id")).setParameter("postUri", post.getURI()).setParameter("currentTab", tabSuffix);
-                            writer.write("<a href=\"#\" title=\"" + "Tema actual: " + socialT + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                            writer.write("<a href=\"#\" class=\"clasifica\" title=\"" + "Tema actual: " + socialT + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
                             + paramRequest.getLocaleString("reclassify") + " post'); return false;\"><span>" + paramRequest.getLocaleString("reclassify") + "</span></a>");
                     }else{
                         SWBResourceURL clasifybyTopic = renderURL.setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("post_id")).setParameter("currentTab", tabSuffix);
-                        writer.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("classify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                        writer.write("<a href=\"#\" class=\"clasifica\" title=\"" + paramRequest.getLocaleString("classify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
                         + paramRequest.getLocaleString("classify") + " Post'); return false;\"><span>" + paramRequest.getLocaleString("classify") + "</span></a>");
                     }
                     writer.write("   </span>");
@@ -2401,7 +2216,7 @@ public class FacebookWall extends GenericResource {
             if(canLike){
                 writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("post_id") + LIKE + PICTURES_TAB + "\" dojoType=\"dojox.layout.ContentPane\">");
                 if(likeInfo != null && likeInfo.getBoolean("user_likes")){
-                    writer.write(" <a href=\"#\" class=\"like\" onclick=\"postSocialHtml('" + actionURL.setAction("doUnlike").setParameter("postID", postsData.getString("post_id")).setParameter("currentTab", PICTURES_TAB) + "','" + facebook.getId() + postsData.getString("post_id") + INFORMATION + PICTURES_TAB + "');return false;" +"\"><span>" + paramRequest.getLocaleString("undoLike") +"</span></a>");
+                    writer.write(" <a href=\"#\" class=\"nolike\" onclick=\"postSocialHtml('" + actionURL.setAction("doUnlike").setParameter("postID", postsData.getString("post_id")).setParameter("currentTab", PICTURES_TAB) + "','" + facebook.getId() + postsData.getString("post_id") + INFORMATION + PICTURES_TAB + "');return false;" +"\"><span>" + paramRequest.getLocaleString("undoLike") +"</span></a>");
                 }else{
                     writer.write(" <a href=\"#\" class=\"like\" onclick=\"postSocialHtml('" + actionURL.setAction("doLike").setParameter("postID", postsData.getString("post_id")).setParameter("currentTab", PICTURES_TAB) + "','" + facebook.getId() + postsData.getString("post_id") + INFORMATION + PICTURES_TAB + "');return false;" +"\"><span>" + paramRequest.getLocaleString("like") +"</span></a>");
                 }
@@ -2575,11 +2390,11 @@ public class FacebookWall extends GenericResource {
                                 socialT = post.getSocialTopic().getTitle();
                             }
                         SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("post_id")).setParameter("postUri", post.getURI()).setParameter("currentTab", tabSuffix);
-                            writer.write("<a href=\"#\" title=\"" + "Tema actual: " + socialT + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                            writer.write("<a href=\"#\" class=\"clasifica\" title=\"" + "Tema actual: " + socialT + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
                             + paramRequest.getLocaleString("reclassify") + " post'); return false;\"><span>" + paramRequest.getLocaleString("reclassify") + "</span></a>");
                     }else{
                         SWBResourceURL clasifybyTopic = renderURL.setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("post_id")).setParameter("currentTab", tabSuffix);
-                        writer.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("classify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                        writer.write("<a href=\"#\" class=\"clasifica\" title=\"" + paramRequest.getLocaleString("classify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
                         + paramRequest.getLocaleString("classify") + " Post'); return false;\"><span>" + paramRequest.getLocaleString("classify") + "</span></a>");
                     }
                     writer.write("   </span>");
@@ -2590,7 +2405,7 @@ public class FacebookWall extends GenericResource {
             if(canLike){
                 writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("post_id") + LIKE + VIDEOS_TAB + "\" dojoType=\"dojox.layout.ContentPane\">");
                 if(likeInfo != null && likeInfo.getBoolean("user_likes")){
-                    writer.write(" <a href=\"#\" class=\"like\" onclick=\"postSocialHtml('" + actionURL.setAction("doUnlike").setParameter("postID", postsData.getString("post_id")).setParameter("currentTab", VIDEOS_TAB) + "','" + facebook.getId() + postsData.getString("post_id") + INFORMATION + VIDEOS_TAB + "');return false;" +"\"><span>" + paramRequest.getLocaleString("undoLike") +"</span></a>");
+                    writer.write(" <a href=\"#\" class=\"nolike\" onclick=\"postSocialHtml('" + actionURL.setAction("doUnlike").setParameter("postID", postsData.getString("post_id")).setParameter("currentTab", VIDEOS_TAB) + "','" + facebook.getId() + postsData.getString("post_id") + INFORMATION + VIDEOS_TAB + "');return false;" +"\"><span>" + paramRequest.getLocaleString("undoLike") +"</span></a>");
                 }else{
                     writer.write(" <a href=\"#\" class=\"like\" onclick=\"postSocialHtml('" + actionURL.setAction("doLike").setParameter("postID", postsData.getString("post_id")).setParameter("currentTab", VIDEOS_TAB) + "','" + facebook.getId() + postsData.getString("post_id") + INFORMATION + VIDEOS_TAB + "');return false;" +"\"><span>" + paramRequest.getLocaleString("like") +"</span></a>");
                 }
