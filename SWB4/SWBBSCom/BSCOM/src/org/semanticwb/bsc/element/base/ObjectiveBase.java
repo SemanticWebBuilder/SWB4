@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Activeable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Status,org.semanticwb.model.Filterable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Serializable,org.semanticwb.bsc.Causal,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Sortable,org.semanticwb.bsc.Committable,org.semanticwb.model.Traceable,org.semanticwb.bsc.PeriodStatusAssignable,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.Seasonable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Referensable,org.semanticwb.bsc.Preference
+public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.PeriodStatusAssignable,org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.Help,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.Updateable,org.semanticwb.bsc.Serializable,org.semanticwb.bsc.Preference,org.semanticwb.bsc.Status,org.semanticwb.model.Filterable,org.semanticwb.bsc.Seasonable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Sortable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Roleable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Causal,org.semanticwb.model.FilterableNode
 {
    /**
    * Persiste los atributos de un indicador
@@ -353,6 +353,29 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
         public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Objective with a determined Role
+       * @param value Role of the type org.semanticwb.model.Role
+       * @param model Model of the org.semanticwb.bsc.element.Objective
+       * @return Iterator with all the org.semanticwb.bsc.element.Objective
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByRole(org.semanticwb.model.Role value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Objective with a determined Role
+       * @param value Role of the type org.semanticwb.model.Role
+       * @return Iterator with all the org.semanticwb.bsc.element.Objective
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByRole(org.semanticwb.model.Role value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -946,6 +969,24 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
         //Override this method in Objective object
         getSemanticObject().setProperty(bsc_prefix, value,false);
     }
+
+/**
+* Gets the Recommendations property
+* @return String with the Recommendations
+*/
+    public String getRecommendations()
+    {
+        return getSemanticObject().getProperty(bsc_recommendations);
+    }
+
+/**
+* Sets the Recommendations property
+* @param value long with the Recommendations
+*/
+    public void setRecommendations(String value)
+    {
+        getSemanticObject().setProperty(bsc_recommendations, value);
+    }
    /**
    * Gets all the org.semanticwb.bsc.element.Objective
    * @return A GenericIterator with all the org.semanticwb.bsc.element.Objective
@@ -1011,6 +1052,24 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
          }
          return ret;
     }
+
+/**
+* Gets the Analysis property
+* @return String with the Analysis
+*/
+    public String getAnalysis()
+    {
+        return getSemanticObject().getProperty(bsc_analysis);
+    }
+
+/**
+* Sets the Analysis property
+* @param value long with the Analysis
+*/
+    public void setAnalysis(String value)
+    {
+        getSemanticObject().setProperty(bsc_analysis, value);
+    }
    /**
    * Sets the value for the property ParentObjective
    * @param value ParentObjective to set
@@ -1048,24 +1107,6 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
              ret=(org.semanticwb.bsc.element.Objective)obj.createGenericInstance();
          }
          return ret;
-    }
-
-/**
-* Gets the Commited property
-* @return boolean with the Commited
-*/
-    public boolean isCommited()
-    {
-        return getSemanticObject().getBooleanProperty(bsc_commited);
-    }
-
-/**
-* Sets the Commited property
-* @param value long with the Commited
-*/
-    public void setCommited(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(bsc_commited, value);
     }
    /**
    * Sets the value for the property Sponsor

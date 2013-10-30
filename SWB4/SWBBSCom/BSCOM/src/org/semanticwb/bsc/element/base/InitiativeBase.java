@@ -1,16 +1,21 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Roleable,org.semanticwb.model.UserGroupable,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.Sortable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Status,org.semanticwb.model.Filterable,org.semanticwb.bsc.Committable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Help,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Updateable,org.semanticwb.bsc.Schedule,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable
+public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Traceable,org.semanticwb.bsc.Help,org.semanticwb.model.FilterableClass,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Updateable,org.semanticwb.model.Roleable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Status,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Schedule,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_totalInvestment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#totalInvestment");
     public static final org.semanticwb.platform.SemanticProperty bsc_businessCase=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#businessCase");
-    public static final org.semanticwb.platform.SemanticProperty bsc_risponsableInitiative=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#risponsableInitiative");
+    public static final org.semanticwb.platform.SemanticProperty bsc_percentageProgress=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#percentageProgress");
     public static final org.semanticwb.platform.SemanticClass bsc_Deliverable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Deliverable");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasDeliverable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasDeliverable");
     public static final org.semanticwb.platform.SemanticProperty bsc_area=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#area");
     public static final org.semanticwb.platform.SemanticProperty bsc_estimatedStart=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#estimatedStart");
     public static final org.semanticwb.platform.SemanticProperty bsc_estimatedEnd=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#estimatedEnd");
+   /**
+   * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
+    public static final org.semanticwb.platform.SemanticProperty bsc_initiativeFacilitator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#initiativeFacilitator");
     public static final org.semanticwb.platform.SemanticProperty bsc_investmentAmount=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#investmentAmount");
     public static final org.semanticwb.platform.SemanticClass bsc_Initiative=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Initiative");
    /**
@@ -248,6 +253,29 @@ public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCEleme
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Initiative> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.bsc.element.Initiative with a determined InitiativeFacilitator
+       * @param value InitiativeFacilitator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.bsc.element.Initiative
+       * @return Iterator with all the org.semanticwb.bsc.element.Initiative
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Initiative> listInitiativeByInitiativeFacilitator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Initiative> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_initiativeFacilitator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Initiative with a determined InitiativeFacilitator
+       * @param value InitiativeFacilitator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.bsc.element.Initiative
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Initiative> listInitiativeByInitiativeFacilitator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Initiative> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_initiativeFacilitator,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
     public static InitiativeBase.ClassMgr getInitiativeClassMgr()
@@ -284,38 +312,38 @@ public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCEleme
 
 /**
 * Gets the BusinessCase property
-* @return String with the BusinessCase
+* @return boolean with the BusinessCase
 */
-    public String getBusinessCase()
+    public boolean isBusinessCase()
     {
-        return getSemanticObject().getProperty(bsc_businessCase);
+        return getSemanticObject().getBooleanProperty(bsc_businessCase);
     }
 
 /**
 * Sets the BusinessCase property
 * @param value long with the BusinessCase
 */
-    public void setBusinessCase(String value)
+    public void setBusinessCase(boolean value)
     {
-        getSemanticObject().setProperty(bsc_businessCase, value);
+        getSemanticObject().setBooleanProperty(bsc_businessCase, value);
     }
 
 /**
 * Gets the PercentageProgress property
-* @return float with the PercentageProgress
+* @return String with the PercentageProgress
 */
-    public float getPercentageProgress()
+    public String getPercentageProgress()
     {
-        return getSemanticObject().getFloatProperty(bsc_percentageProgress);
+        return getSemanticObject().getProperty(bsc_percentageProgress);
     }
 
 /**
 * Sets the PercentageProgress property
 * @param value long with the PercentageProgress
 */
-    public void setPercentageProgress(float value)
+    public void setPercentageProgress(String value)
     {
-        getSemanticObject().setFloatProperty(bsc_percentageProgress, value);
+        getSemanticObject().setProperty(bsc_percentageProgress, value);
     }
 
 /**
@@ -399,42 +427,6 @@ public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCEleme
              ret=(org.semanticwb.bsc.accessory.State)obj.createGenericInstance();
          }
          return ret;
-    }
-
-/**
-* Gets the Index property
-* @return int with the Index
-*/
-    public int getIndex()
-    {
-        return getSemanticObject().getIntProperty(bsc_index);
-    }
-
-/**
-* Sets the Index property
-* @param value long with the Index
-*/
-    public void setIndex(int value)
-    {
-        getSemanticObject().setIntProperty(bsc_index, value);
-    }
-
-/**
-* Gets the RisponsableInitiative property
-* @return String with the RisponsableInitiative
-*/
-    public String getRisponsableInitiative()
-    {
-        return getSemanticObject().getProperty(bsc_risponsableInitiative);
-    }
-
-/**
-* Sets the RisponsableInitiative property
-* @param value long with the RisponsableInitiative
-*/
-    public void setRisponsableInitiative(String value)
-    {
-        getSemanticObject().setProperty(bsc_risponsableInitiative, value);
     }
 
 /**
@@ -593,24 +585,6 @@ public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCEleme
     }
 
 /**
-* Gets the Commited property
-* @return boolean with the Commited
-*/
-    public boolean isCommited()
-    {
-        return getSemanticObject().getBooleanProperty(bsc_commited);
-    }
-
-/**
-* Sets the Commited property
-* @param value long with the Commited
-*/
-    public void setCommited(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(bsc_commited, value);
-    }
-
-/**
 * Gets the ActualStart property
 * @return java.util.Date with the ActualStart
 */
@@ -662,6 +636,44 @@ public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCEleme
     public void setEstimatedEnd(java.util.Date value)
     {
         getSemanticObject().setDateProperty(bsc_estimatedEnd, value);
+    }
+   /**
+   * Sets the value for the property InitiativeFacilitator
+   * @param value InitiativeFacilitator to set
+   */
+
+    public void setInitiativeFacilitator(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(bsc_initiativeFacilitator, value.getSemanticObject());
+        }else
+        {
+            removeInitiativeFacilitator();
+        }
+    }
+   /**
+   * Remove the value for InitiativeFacilitator property
+   */
+
+    public void removeInitiativeFacilitator()
+    {
+        getSemanticObject().removeProperty(bsc_initiativeFacilitator);
+    }
+
+   /**
+   * Gets the InitiativeFacilitator
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getInitiativeFacilitator()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_initiativeFacilitator);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**
