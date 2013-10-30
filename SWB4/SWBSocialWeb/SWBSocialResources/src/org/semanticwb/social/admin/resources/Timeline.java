@@ -373,6 +373,9 @@ public class Timeline extends GenericResource{
                 postIn.setMsg_Text(status.getText());
                 postIn.setPostInSocialNetwork(socialNetwork);
                 postIn.setPostInStream(null);
+                Calendar calendario = Calendar.getInstance();
+                postIn.setPi_created(calendario.getTime());
+                postIn.setPi_type(SWBSocialUtil.POST_TYPE_MESSAGE);
                 
                 boolean checkKlout=false; 
                 try{
@@ -510,7 +513,7 @@ public class Timeline extends GenericResource{
                 out.println("<span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
                 out.println("<script type=\"dojo/method\">");
                 out.println("   var spanId = dijit.byId('" + semTwitter.getId() + originalId + RETWEET + currentTab +  "');");
-                out.println("   spanId.attr('content', '" + "<a href=\"\" class=\"retweet\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = \\'<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>\\';}catch(noe){} postSocialHtml(\\'" + actionURL.setParameter("retweetId", retweetId+"").setParameter("id", originalId+"").setParameter("currentTab", currentTab) + "\\',\\'" + semTwitter.getId() + originalStatus.getId() + INFORMATION + currentTab + "\\');return false;" +"\"><span>" + paramRequest.getLocaleString("undoRetweet") +"</span></a>" +"')");
+                out.println("   spanId.attr('content', '" + "<a href=\"\" class=\"noretweet\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = \\'<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>\\';}catch(noe){} postSocialHtml(\\'" + actionURL.setParameter("retweetId", retweetId+"").setParameter("id", originalId+"").setParameter("currentTab", currentTab) + "\\',\\'" + semTwitter.getId() + originalStatus.getId() + INFORMATION + currentTab + "\\');return false;" +"\"><span>" + paramRequest.getLocaleString("undoRetweet") +"</span></a>" +"')");
                 out.println("   showStatus('" + paramRequest.getLocaleString("retweetSent") +"');");
                 out.println("</script>");
                 out.println("</span>");
@@ -907,7 +910,7 @@ public class Timeline extends GenericResource{
             SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
             Twitter semTwitter = (Twitter) semanticObject.createGenericInstance();
             
-            String url= "<a href=\"#\" title=\"" + paramRequest.getLocaleString("reclassify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','" + paramRequest.getLocaleString("reclassify") + " tweet'); return false;\">" + paramRequest.getLocaleString("reclassify") +"</a>";
+            String url= "<a href=\"#\" class=\"clasifica\" title=\"" + paramRequest.getLocaleString("reclassify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','" + paramRequest.getLocaleString("reclassify") + " tweet'); return false;\">" + paramRequest.getLocaleString("reclassify") +"</a>";
             out.println("<span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
             out.println("<script type=\"dojo/method\">");
             out.println("   hideDialog(); ");            
@@ -1212,11 +1215,11 @@ public class Timeline extends GenericResource{
                 if(socialUserExtAttr != null && socialUserExtAttr.isUserCanReTopicMsg()){
                     if(postURI != null){//If post already exists
                         SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", status.getId()+"").setParameter("postUri", postURI).setParameter("currentTab", tabSuffix);
-                        writer.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reclassify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                        writer.write("<a href=\"#\" class=\"clasifica\" title=\"" + paramRequest.getLocaleString("reclassify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
                             + paramRequest.getLocaleString("reclassify") +" tweet'); return false;\"><span>" + paramRequest.getLocaleString("reclassify") + "</span></a>");
                     }else{//If posts does not exists 
                         SWBResourceURL clasifybyTopic = renderURL.setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", status.getId()+"").setParameter("currentTab", tabSuffix);
-                        writer.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("classify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                        writer.write("<a href=\"#\" class=\"clasifica\" title=\"" + paramRequest.getLocaleString("classify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
                             + paramRequest.getLocaleString("classify") + " tweet'); return false;\"><span>" + paramRequest.getLocaleString("classify") + "</span></a>");
                     }
                 }else{
@@ -1432,10 +1435,10 @@ public class Timeline extends GenericResource{
         try{
             if(originalStatus.isFavorited()){
                 actionURL.setAction("undoFavorite");
-                favorite = "<a href=\"#\"  onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + actionURL.setParameter("id", originalStatus.getId()+"").setParameter("currentTab", tabSuffix) + "','" + semTwitter.getId() + originalStatus.getId() + INFORMATION + tabSuffix + "'); return false;" +"\"><span>" + paramRequest.getLocaleString("undoFavorite")  + "</span></a> ";
+                favorite = "<a href=\"#\" class=\"nofavorito\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + actionURL.setParameter("id", originalStatus.getId()+"").setParameter("currentTab", tabSuffix) + "','" + semTwitter.getId() + originalStatus.getId() + INFORMATION + tabSuffix + "'); return false;" +"\"><span>" + paramRequest.getLocaleString("undoFavorite")  + "</span></a> ";
             }else{
                 actionURL.setAction("doFavorite");
-                favorite = "<a href=\"#\"  onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + actionURL.setParameter("id", originalStatus.getId()+"").setParameter("currentTab", tabSuffix) + "','" + semTwitter.getId() + originalStatus.getId() + INFORMATION + tabSuffix +  "'); return false;" +"\"><span>" + paramRequest.getLocaleString("favorite") + "</span></a> ";
+                favorite = "<a href=\"#\" class=\"favorito\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + actionURL.setParameter("id", originalStatus.getId()+"").setParameter("currentTab", tabSuffix) + "','" + semTwitter.getId() + originalStatus.getId() + INFORMATION + tabSuffix +  "'); return false;" +"\"><span>" + paramRequest.getLocaleString("favorite") + "</span></a> ";
             }
         }catch(Exception e){
             log.error("Problem checking if tweet is favorite ",  e);
@@ -1473,7 +1476,7 @@ public class Timeline extends GenericResource{
                 System.out.println("SI es RT by ME inside update Status!!");
                 //actionURL.setAction("undoRT");
                 //out.write("<a href=\"#\"  onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + actionURL.setParameter("id", originalStatus.getId()+"").setParameter("currentTab", tabSuffix) + "','" + originalStatus.getId() + INFORMATION + tabSuffix + "'); return false;" +"\">Undo Retweet</a>");
-                out.write("<a class=\"retweet\" href=\"#\"  onclick=\"return false;" +"\"><span>" + paramRequest.getLocaleString("undoRetweet") +"</span></a>");
+                out.write("<a class=\"noretweet\" href=\"#\"  onclick=\"return false;" +"\"><span>" + paramRequest.getLocaleString("undoRetweet") +"</span></a>");
             }else if(originalStatus.getUser().getId() == currentUser){ //User cannot retweet its own tweet
                 System.out.println(" Is My Tweet ");
                 out.write("<span></span>");
