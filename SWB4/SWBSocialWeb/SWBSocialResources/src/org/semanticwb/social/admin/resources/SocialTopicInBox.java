@@ -1127,7 +1127,7 @@ public class SocialTopicInBox extends GenericResource {
         if (action.equals("changeSocialTopic")) {
             if (request.getParameter("postUri") != null && request.getParameter("newSocialTopic") != null) {
                 SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postUri"));
-                Post post = (Post) semObj.createGenericInstance();
+                PostIn post = (PostIn) semObj.createGenericInstance();
                 SocialTopic stOld = post.getSocialTopic();
                 if (request.getParameter("newSocialTopic").equals("none")) {
                     post.setSocialTopic(null);
@@ -1136,6 +1136,14 @@ public class SocialTopicInBox extends GenericResource {
                     if (semObjSocialTopic != null) {
                         SocialTopic socialTopic = (SocialTopic) semObjSocialTopic.createGenericInstance();
                         post.setSocialTopic(socialTopic);
+                        //Cambiamos de tema a los PostOut asociados al PostIn que acabamos de reclasificar
+                        Iterator<PostOut> itPostOuts=post.listpostOutResponseInvs(); 
+                        while(itPostOuts.hasNext())
+                        {
+                            PostOut postOut=itPostOuts.next();
+                            postOut.setSocialTopic(socialTopic);
+                        }
+                        //
                     }
                 }
                 response.setMode(SWBActionResponse.Mode_EDIT);
