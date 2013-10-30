@@ -1457,7 +1457,12 @@ public class Timeline extends GenericResource{
      */
     public static void updateStatusInformation(Status originalStatus, SWBResourceURL renderURL, String objUri, java.io.Writer out, SocialUserExtAttributes socialUserExtAttr, SWBParamRequest paramRequest){
         try{
-            out.write("<em>" + twitterHumanFriendlyDate(originalStatus.getCreatedAt(), paramRequest) + "</em> <strong><span>Retweeted: </span>" + originalStatus.getRetweetCount() + " " + paramRequest.getLocaleString("times") + " </strong>");
+            long retweets = originalStatus.getRetweetCount();
+            String times = paramRequest.getLocaleString("times");
+            if(retweets == 1){
+                times = paramRequest.getLocaleString("rtime");
+            }
+            out.write("<em>" + twitterHumanFriendlyDate(originalStatus.getCreatedAt(), paramRequest) + "</em> <strong><span>Retweeted: </span>" + originalStatus.getRetweetCount() + " " + times + " </strong>");
             
             if(socialUserExtAttr != null && socialUserExtAttr.isUserCanRespondMsg()){
             /*out.write("<a href=\"#\" onclick=\"showDialog('" + renderURL.setMode("replyTweet").setParameter("id", originalStatus.getId()+"").setParameter("userName", "@" +
