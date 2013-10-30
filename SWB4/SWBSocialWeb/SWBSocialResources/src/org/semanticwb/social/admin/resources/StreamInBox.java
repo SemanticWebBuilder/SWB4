@@ -1508,6 +1508,14 @@ public class StreamInBox extends GenericResource {
                     if (semObjSocialTopic != null) {
                         SocialTopic socialTopic = (SocialTopic) semObjSocialTopic.createGenericInstance();
                         post.setSocialTopic(socialTopic);
+                        //Cambiamos de tema a los PostOut asociados al PostIn que acabamos de reclasificar
+                            Iterator<PostOut> itPostOuts=post.listpostOutResponseInvs();
+                            while(itPostOuts.hasNext())
+                            {
+                                PostOut postOut=itPostOuts.next();
+                                postOut.setSocialTopic(socialTopic);
+                            }
+                        //
                     }
                 }
                 response.setMode(SWBActionResponse.Mode_EDIT);
@@ -1710,6 +1718,16 @@ public class StreamInBox extends GenericResource {
                         SocialTopic socialTopic=SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(postIn, postIn.getMsg_Text(), false);
                         if(socialTopic!=null)   //El sistema si pudo clasificar el postIn en uno de los SocialTopic del website
                         {
+                            //Cambiamos de tema a los PostOut asociados al PostIn que acabamos de reclasificar
+                                Iterator<PostOut> itPostOuts=postIn.listpostOutResponseInvs();
+                                while(itPostOuts.hasNext())
+                                {
+                                    PostOut postOut=itPostOuts.next();
+                                    postOut.setSocialTopic(socialTopic);
+                                }
+                            //
+                            //Tomamos todos los SocialTopics a los que se les asignaron PostIns para despues enviar correo a todos los 
+                            //usuarios de los grupos pertenecientes a los mismos.
                             if(!hMap.containsKey(socialTopic.getURI()))
                             {
                                 hMap.put(socialTopic.getURI(), 1);
@@ -1898,7 +1916,6 @@ public class StreamInBox extends GenericResource {
                             aListFilter=executeQueryArray(sQuery, wsite);
                         }
                     }else{  //Todos, sin filtros
-                        System.out.println("ENTRA FILTROSG1");
                         streamPostIns=Integer.parseInt(getAllPostInStream_Query(0, 0, true, stream));
                         sQuery=getAllPostInStream_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream); 
                         aListFilter=executeQueryArray(sQuery, wsite);
@@ -1907,9 +1924,7 @@ public class StreamInBox extends GenericResource {
                     streamPostIns=Integer.parseInt(getAllPostInStream_Query(0, 0, true, stream));
                     if(streamPostIns>0)
                     {
-                        System.out.println("ENTRA FILTROSG2-1:"+streamPostIns);
                         sQuery=getAllPostInStream_Query(0L, streamPostIns, false, stream); 
-                        System.out.println("ENTRA FILTROSG2-2:"+sQuery);
                         aListFilter=executeQueryArray(sQuery, wsite);
                     }
                 }
@@ -1927,7 +1942,7 @@ public class StreamInBox extends GenericResource {
         //System.out.println("aListFilter SIZE:"+aListFilter);
         if (aListFilter.size() > 0) {
             itposts = aListFilter.iterator();
-            System.out.println("Entra a ORDEBAR -2");
+            //System.out.println("Entra a ORDEBAR -2");
             //setso = SWBSocialComparator.convertArray2TreeSet(itposts);
         }/*else{
             System.out.println("******ENTRA A HACER TOSDOSSSSS******");
