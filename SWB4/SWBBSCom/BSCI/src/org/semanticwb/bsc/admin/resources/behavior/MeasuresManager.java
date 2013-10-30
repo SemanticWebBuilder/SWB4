@@ -14,7 +14,6 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.catalogs.Format;
-import org.semanticwb.bsc.tracing.EvaluationRule;
 import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.tracing.Series;
@@ -125,12 +124,12 @@ public class MeasuresManager extends GenericAdmResource {
                         Measure measure = series.getMeasure(period);
                         if(measure == null) {
                             measure = Measure.ClassMgr.createMeasure(period.getBSC());
+                            series.addMeasure(measure);
                             PeriodStatus ps = PeriodStatus.ClassMgr.createPeriodStatus(period.getBSC());
                             ps.setPeriod(period);
                             //ps.setStatus(series.getIndicator().getMinimumState());
                             measure.setEvaluation(ps);
                             measure.setValue(0);
-                            series.addMeasure(measure);
                         }else {
                             // Valida que el estado asignado a la medición aún este asignado al indicador. Sino lo elimina de la medición.
                             if(!series.getIndicator().hasState(measure.getEvaluation().getStatus())) {
@@ -276,10 +275,10 @@ public class MeasuresManager extends GenericAdmResource {
                         PeriodStatus ps;
                         if(measure == null) {
                             measure = Measure.ClassMgr.createMeasure(bsc);
+                            series.addMeasure(measure);
                             ps = PeriodStatus.ClassMgr.createPeriodStatus(bsc);
                             ps.setPeriod(period);
                             measure.setEvaluation(ps);
-                            series.addMeasure(measure);
                         }
                         if(val.isEmpty()) {
                             measure.setValue(0);
@@ -298,6 +297,7 @@ public class MeasuresManager extends GenericAdmResource {
                             }
                         }finally {
                             measure.evaluate();
+                            series.getIndicator().getObjective().updateAppraisal(period);
                         }
                     }
                 }
