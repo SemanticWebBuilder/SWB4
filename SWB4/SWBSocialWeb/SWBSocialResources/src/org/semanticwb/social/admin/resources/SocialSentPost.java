@@ -660,7 +660,7 @@ public class SocialSentPost extends GenericResource {
         Iterator<PostOut> itposts = (Iterator)hmapResult.get("itResult"); 
 
         //Iterator<PostOut> itposts = setso.iterator();
-        while (itposts.hasNext()) {
+        while (itposts!=null && itposts.hasNext()) {
             PostOut postOut = (PostOut) itposts.next();
 
 
