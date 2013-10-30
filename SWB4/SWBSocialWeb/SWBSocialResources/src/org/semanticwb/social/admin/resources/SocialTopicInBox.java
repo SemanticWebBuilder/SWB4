@@ -1695,7 +1695,7 @@ public class SocialTopicInBox extends GenericResource {
                     streamPostIns=Integer.parseInt(getAllPostInSocialTopic_Query(0, 0, true, socialTopic));
                     if(streamPostIns>0)
                     {
-                        sQuery=getAllPostInSocialTopic_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic); 
+                        sQuery=getAllPostInSocialTopic_Query(0L, streamPostIns, false, socialTopic); 
                         aListFilter=executeQueryArray(sQuery, wsite);
                     }
                 }
