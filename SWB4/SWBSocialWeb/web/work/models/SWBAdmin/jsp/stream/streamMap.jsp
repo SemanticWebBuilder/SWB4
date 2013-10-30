@@ -109,7 +109,7 @@
         {
             PostIn postIn=itPostIns.next();
             System.out.println("postIn Solin:"+postIn);
-            if(postIn.getCreated()!=null && postIn.getCreated().compareTo(date)>=0)
+            if(postIn.getPi_created()!=null && postIn.getPi_created().compareTo(date)>=0)
             {
                 System.out.println("postIn Solin-1:"+postIn);
                 
@@ -250,7 +250,7 @@
         while(restOfPostIns.hasNext())
         {
             PostIn postIn=restOfPostIns.next();
-            if(postIn.getCreated().compareTo(date)>=0)
+            if(postIn.getPi_created().compareTo(date)>=0) 
             {
                 //System.out.println("postIn Msg Todos:"+postIn.getMsg_Text()+":"+postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation());
                  //Para los PostIns que tienen un sentimiento positivo o negativo y ademas tienen latitud y longitud asociada
@@ -311,8 +311,7 @@
                             } 
                             %>
                             var postLocation='<%=SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation().replaceAll("'", ""), false)%>';
-                            var title='<%=postIn.getMsg_Text()!=null?SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false):postIn.getDescription()!=null?
-                                SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getDescription().replaceAll("'", ""), false):postIn.getTags()!=null?SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getTags().replaceAll("'", ""), false):"Sin Mensaje.."%>';
+                            var title='<%=postIn.getMsg_Text()!=null?SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false):postIn.getTags()!=null?SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getTags().replaceAll("'", ""), false):"Sin Mensaje.."%>';
                              geocoder.geocode( { 'address': postLocation}, function(results, status) { 
                                 if(status==google.maps.GeocoderStatus.OK){
                                     var marker =new google.maps.Marker({

@@ -135,7 +135,7 @@
                     && (slifeStage.equals("all") || (postInUser.getSnu_LifeStage() != null && postInUser.getSnu_LifeStage().getId().equals(slifeStage)))
                     && (sentimentalRelationShip.equals("all") || (postInUser.getSnu_relationShipStatus() > 0 && postInUser.getSnu_relationShipStatus() == Integer.parseInt(sentimentalRelationShip)))
                     && (scountryState.equals("all") || (postInCountryState != null && postInCountryState.getId().equals(scountryState)))
-                    && (postIn.getCreated().compareTo(dateSince) >= 0) && (postIn.getCreated().compareTo(dateTo) <= 0)) {
+                    && (postIn.getPi_created().compareTo(dateSince) >= 0) && (postIn.getPi_created().compareTo(dateTo) <= 0)) {
                 return true;
             }
         } else {

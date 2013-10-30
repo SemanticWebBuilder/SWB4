@@ -66,7 +66,7 @@
                     negatives++;
                 }
 
-                date = postIn.getCreated();
+                date = postIn.getPi_created();
         
                 calendario.setTime(date);
                 int year = calendario.get(Calendar.YEAR);
@@ -149,7 +149,7 @@
                     negatives_++;
                 }
 
-                date = postIn.getCreated();
+                date = postIn.getPi_created();
 
                 calendario.setTime(date);
 
