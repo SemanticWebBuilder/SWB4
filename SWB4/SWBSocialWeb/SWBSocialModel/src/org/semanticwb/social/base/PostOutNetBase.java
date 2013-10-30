@@ -10,6 +10,11 @@ public abstract class PostOutNetBase extends org.semanticwb.model.SWBClass
    * Identificador del mensaje en la red social
    */
     public static final org.semanticwb.platform.SemanticProperty social_po_socialNetMsgID=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#po_socialNetMsgID");
+    public static final org.semanticwb.platform.SemanticClass social_PostMonitor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostMonitor");
+   /**
+   * Si se elimina un PostOutNet que se elimine su PostMonitor asociado (En caso de que exista alguno).
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_postMonitorInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postMonitorInv");
    /**
    * Clase de tipo catálogo que define las privacidades para los Post
    */
@@ -125,6 +130,29 @@ public abstract class PostOutNetBase extends org.semanticwb.model.SWBClass
             return (getPostOutNet(id, model)!=null);
         }
        /**
+       * Gets all org.semanticwb.social.PostOutNet with a determined PostMonitorInv
+       * @param value PostMonitorInv of the type org.semanticwb.social.PostMonitor
+       * @param model Model of the org.semanticwb.social.PostOutNet
+       * @return Iterator with all the org.semanticwb.social.PostOutNet
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostOutNet> listPostOutNetByPostMonitorInv(org.semanticwb.social.PostMonitor value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutNet> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_postMonitorInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostOutNet with a determined PostMonitorInv
+       * @param value PostMonitorInv of the type org.semanticwb.social.PostMonitor
+       * @return Iterator with all the org.semanticwb.social.PostOutNet
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostOutNet> listPostOutNetByPostMonitorInv(org.semanticwb.social.PostMonitor value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutNet> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postMonitorInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.social.PostOutNet with a determined Po_privacy
        * @param value Po_privacy of the type org.semanticwb.social.PostOutPrivacy
        * @param model Model of the org.semanticwb.social.PostOutNet
@@ -225,6 +253,44 @@ public abstract class PostOutNetBase extends org.semanticwb.model.SWBClass
     public void setPo_socialNetMsgID(String value)
     {
         getSemanticObject().setProperty(social_po_socialNetMsgID, value);
+    }
+   /**
+   * Sets the value for the property PostMonitorInv
+   * @param value PostMonitorInv to set
+   */
+
+    public void setPostMonitorInv(org.semanticwb.social.PostMonitor value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(social_postMonitorInv, value.getSemanticObject());
+        }else
+        {
+            removePostMonitorInv();
+        }
+    }
+   /**
+   * Remove the value for PostMonitorInv property
+   */
+
+    public void removePostMonitorInv()
+    {
+        getSemanticObject().removeProperty(social_postMonitorInv);
+    }
+
+   /**
+   * Gets the PostMonitorInv
+   * @return a org.semanticwb.social.PostMonitor
+   */
+    public org.semanticwb.social.PostMonitor getPostMonitorInv()
+    {
+         org.semanticwb.social.PostMonitor ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_postMonitorInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.PostMonitor)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Sets the value for the property Po_privacy
