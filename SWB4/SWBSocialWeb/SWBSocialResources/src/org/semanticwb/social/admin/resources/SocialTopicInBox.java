@@ -1693,15 +1693,19 @@ public class SocialTopicInBox extends GenericResource {
                     }
                 } else { //Traer todo, NPage==0, en teoría jamas entraría a esta opción.
                     streamPostIns=Integer.parseInt(getAllPostInSocialTopic_Query(0, 0, true, socialTopic));
-                    sQuery=getAllPostInSocialTopic_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic); 
-                    aListFilter=executeQueryArray(sQuery, wsite);
+                    if(streamPostIns>0)
+                    {
+                        sQuery=getAllPostInSocialTopic_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic); 
+                        aListFilter=executeQueryArray(sQuery, wsite);
+                    }
                 }
             }
             System.out.println("streamPostIns-Antes de:"+streamPostIns);
+            /*
             if(streamPostIns==0L)
             {
                 streamPostIns=Integer.parseInt(getAllPostInSocialTopic_Query(0, 0, true, socialTopic));
-            }
+            }*/
             System.out.println("StreamPostIns:"+streamPostIns);
         
             hampResult.put("countResult", Long.valueOf(streamPostIns));
@@ -1713,13 +1717,13 @@ public class SocialTopicInBox extends GenericResource {
             itposts = aListFilter.iterator();
             //System.out.println("Entra a ORDEBAR -2");
             //setso = SWBSocialComparator.convertArray2TreeSet(itposts);
-        }else{
+        }/*else{
             streamPostIns=Integer.parseInt(getAllPostInSocialTopic_Query(0, 0, true, socialTopic));
             sQuery=getAllPostInSocialTopic_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic); 
             aListFilter=executeQueryArray(sQuery, wsite);
             itposts = aListFilter.iterator();
             hampResult.put("countResult", Long.valueOf(streamPostIns));
-        }
+        }*/
         hampResult.put("itResult", itposts);
 
         return hampResult;
