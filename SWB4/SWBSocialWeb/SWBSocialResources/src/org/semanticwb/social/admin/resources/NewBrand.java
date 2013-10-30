@@ -6,21 +6,15 @@ package org.semanticwb.social.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Device;
-import org.semanticwb.model.Language;
-import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.TemplateGroup;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
-import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticMgr;
@@ -54,7 +48,7 @@ public class NewBrand extends GenericResource {
                 String title = request.getParameter("wstitle");
                 String id = request.getParameter("wsid");
                 String usrRep = request.getParameter("wsrepository");
-                String wstype = request.getParameter("wstype");
+                //String wstype = request.getParameter("wstype");
 
                 WebSite site = null;
                 String ns="http://www." + id + ".swb#";
@@ -120,6 +114,7 @@ public class NewBrand extends GenericResource {
                     home.setSortName("z");
                     * */
                     //Crea grupo de templates de defecto
+                    /*
                     TemplateGroup grp = site.createTemplateGroup();
                     grp.setTitle("Default");
 
@@ -689,6 +684,7 @@ public class NewBrand extends GenericResource {
                     site.begin();
 
                     //Crea dispositivos de defecto
+                    /*
                     if (!site.hasDevice("pc")) {
                         Device dev = site.createDevice("pc");
                         dev.setTitle("PC");
@@ -758,6 +754,7 @@ public class NewBrand extends GenericResource {
                     lang.setTitle("Inglés");
                     lang.setTitle("Inglés", "es");
                     lang.setTitle("English", "en");
+                    * */
                     //Envia estatus a pantalla
                     
                     out.println("<script type=\"text/javascript\">");
@@ -803,7 +800,7 @@ public class NewBrand extends GenericResource {
      */
     private void getStep1(PrintWriter out, SWBResourceURL url, SWBParamRequest paramRequest)
     {
-        String lang=paramRequest.getUser().getLanguage();
+        //String lang=paramRequest.getUser().getLanguage();
         try {
             out.println("<div dojoType=\"dijit.layout.ContentPane\" style=\"border:0px; width:100%; height:100%\">");
             out.println("<form class=\"swbform\" id=\"frmImport1\" action=\"" + url.toString() + "\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('frmImport1');try{document.getElementById('csLoading').style.display='inline';}catch(noe){};return false;\" method=\"post\">");
