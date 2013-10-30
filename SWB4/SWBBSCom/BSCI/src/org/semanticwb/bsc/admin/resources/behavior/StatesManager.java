@@ -3,8 +3,10 @@ package org.semanticwb.bsc.admin.resources.behavior;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -100,8 +102,10 @@ public class StatesManager extends GenericResource {
                         out.println("<th>"+paramRequest.getLocaleString("lblActive")+"</th>");
                         out.println("</tr>");
                         out.println("</thead>");
-                        out.println("<tbody>");                    
-                        Iterator<State> groupedStates = stateGroup.listValidStates().iterator();
+                        out.println("<tbody>");
+                        List lstates = stateGroup.listValidStates();
+                        Collections.sort(lstates);
+                        Iterator<State> groupedStates = lstates.iterator();
                         boolean hasGroupedStates = groupedStates.hasNext();
                         while(groupedStates.hasNext()) {
                             State state = groupedStates.next();
@@ -245,21 +249,20 @@ public class StatesManager extends GenericResource {
                 Status status = (Status)obj.createGenericInstance();
 //                if(status.getState()!=null)
 //                {
-                    Iterator<State> groupedStates = null;
-                    
+                    List<State> lstates = null;
                     if(status instanceof Indicator) {
-                        groupedStates = ((Indicator)status).getObjective().listValidStates().iterator();
+                        lstates = ((Indicator)status).getObjective().listValidStates();
                     }else if( status instanceof Deliverable) {
                     }else if(status instanceof Objective || status instanceof Initiative) {
                         if(status.getState()!=null) {
-                            groupedStates = status.getState().getStateGroup().listValidStates().iterator();
+                            lstates = status.getState().getStateGroup().listValidStates();
                         }
                     }
                     
-                    
-                    
-                    if(groupedStates!=null && groupedStates.hasNext())
+                    if(lstates!=null && !lstates.isEmpty())
                     {
+                        Collections.sort(lstates);
+                        Iterator<State> groupedStates = lstates.iterator();
                         while(groupedStates.hasNext()) {
                             State state = groupedStates.next();
                             out.println("<tr>");
