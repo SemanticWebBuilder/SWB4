@@ -18,8 +18,10 @@
         //System.out.println("wsite0:"+wsite);
         //if(wsite instanceof SocialSite) 
         {
-            System.out.println("wsite:"+wsite);
+            
+            System.out.println("wsiteGe:"+wsite);
             int i=0;
+            /*
             Iterator <PostIn> itPostIns=PostIn.ClassMgr.listPostIns(wsite);
             while(itPostIns.hasNext())
             {
@@ -28,7 +30,8 @@
                 i++;
             }
             out.println("\n\n I Count:"+i);
-            
+            *  */
+            /*
             i=0;
             Iterator <MessageIn> itMessageIns=MessageIn.ClassMgr.listMessageIns(wsite);
             while(itMessageIns.hasNext())
@@ -48,17 +51,54 @@
                 i++;
             }
             System.out.println("I Photos Count:"+i);
-            
+            */
+            /*
             i=0;
             Iterator<SocialNetworkUser> itSocialNetUsers=SocialNetworkUser.ClassMgr.listSocialNetworkUsers(wsite);
             while(itSocialNetUsers.hasNext())
             {
                 SocialNetworkUser socialNetUser=itSocialNetUsers.next();
                 //socialNetUser.remove(); 
-                out.println("socialNetUser:"+socialNetUser);
+                out.println("socialNetUser:"+socialNetUser.getSnu_name());
+                //if(socialNetUser.getSnu_name().equals("@George24Mx"))
+                {
+                    System.out.println("PostIn de este cuate:"+socialNetUser.getSnu_name()+", postIns:");
+                    Iterator<PostIn> itPostIns=PostIn.ClassMgr.listPostInByPostInSocialNetworkUser(socialNetUser);
+                    while(itPostIns.hasNext())
+                    {
+                        PostIn postIn=itPostIns.next();
+                        System.out.println("De este cuate:"+postIn);
+                        //postIn.remove();
+                    }
+                }
+                //socialNetUser.remove();
                 i++;
             }
-            out.println("\n\n I Count Users:"+i);
+            */
+            
+            i=0;
+            
+            Iterator<PostOut> itPostOuts=PostOut.ClassMgr.listPostOuts(wsite);
+            while(itPostOuts.hasNext())
+            {
+                i++;
+                PostOut postOut=itPostOuts.next();
+                out.println("postOut:"+postOut+"\n\r");
+                //postOut.remove();
+            }
+            out.println("i:"+i);
+            
+            i=0;
+            
+            Iterator<PostOutNet> itPostOutsNets=PostOutNet.ClassMgr.listPostOutNets(wsite);
+            while(itPostOutsNets.hasNext())
+            {
+                i++;
+                PostOutNet postOutNet=itPostOutsNets.next();
+                out.println("postOutNet"+postOutNet+"\n\r");
+                //postOutNet.remove();
+            }
+            out.println("i:"+i);
         }
     }
 %>
