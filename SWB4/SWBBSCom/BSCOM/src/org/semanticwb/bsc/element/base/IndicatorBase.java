@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Persiste los atributos de un indicador 
    */
-public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Recognizable,org.semanticwb.model.Roleable,org.semanticwb.model.UserGroupable,org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Status,org.semanticwb.model.Filterable,org.semanticwb.bsc.Committable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Serializable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Seasonable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.model.Referensable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable
+public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Traceable,org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.Help,org.semanticwb.model.FilterableClass,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Updateable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Serializable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Status,org.semanticwb.bsc.Committable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Seasonable,org.semanticwb.model.FilterableNode,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Undeleteable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
@@ -38,6 +38,8 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_goals=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#goals");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasSeries=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasSeries");
+    public static final org.semanticwb.platform.SemanticClass bsc_Grapher=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Grapher");
+    public static final org.semanticwb.platform.SemanticProperty bsc_hasGrapher=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasGrapher");
    /**
    * Persiste información de una fórmula para el cálculo de un indicador
    */
@@ -374,6 +376,29 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
             return it;
         }
        /**
+       * Gets all org.semanticwb.bsc.element.Indicator with a determined Grapher
+       * @param value Grapher of the type org.semanticwb.bsc.accessory.Grapher
+       * @param model Model of the org.semanticwb.bsc.element.Indicator
+       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByGrapher(org.semanticwb.bsc.accessory.Grapher value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasGrapher, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Indicator with a determined Grapher
+       * @param value Grapher of the type org.semanticwb.bsc.accessory.Grapher
+       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByGrapher(org.semanticwb.bsc.accessory.Grapher value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasGrapher,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.bsc.element.Indicator with a determined Periodicity
        * @param value Periodicity of the type org.semanticwb.bsc.tracing.MeasurementFrequency
        * @param model Model of the org.semanticwb.bsc.element.Indicator
@@ -617,6 +642,24 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
         //Override this method in Indicator object
         getSemanticObject().setProperty(bsc_prefix, value,false);
     }
+
+/**
+* Gets the Recommendations property
+* @return String with the Recommendations
+*/
+    public String getRecommendations()
+    {
+        return getSemanticObject().getProperty(bsc_recommendations);
+    }
+
+/**
+* Sets the Recommendations property
+* @param value long with the Recommendations
+*/
+    public void setRecommendations(String value)
+    {
+        getSemanticObject().setProperty(bsc_recommendations, value);
+    }
    /**
    * Sets the value for the property Objective
    * @param value Objective to set
@@ -654,6 +697,24 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
              ret=(org.semanticwb.bsc.element.Objective)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Analysis property
+* @return String with the Analysis
+*/
+    public String getAnalysis()
+    {
+        return getSemanticObject().getProperty(bsc_analysis);
+    }
+
+/**
+* Sets the Analysis property
+* @param value long with the Analysis
+*/
+    public void setAnalysis(String value)
+    {
+        getSemanticObject().setProperty(bsc_analysis, value);
     }
 
 /**
@@ -845,6 +906,71 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
          if(obj!=null)
          {
              ret=(org.semanticwb.bsc.tracing.Series)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Gets all the org.semanticwb.bsc.accessory.Grapher
+   * @return A GenericIterator with all the org.semanticwb.bsc.accessory.Grapher
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.Grapher> listGraphers()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.Grapher>(getSemanticObject().listObjectProperties(bsc_hasGrapher));
+    }
+
+   /**
+   * Gets true if has a Grapher
+   * @param value org.semanticwb.bsc.accessory.Grapher to verify
+   * @return true if the org.semanticwb.bsc.accessory.Grapher exists, false otherwise
+   */
+    public boolean hasGrapher(org.semanticwb.bsc.accessory.Grapher value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(bsc_hasGrapher,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a Grapher
+   * @param value org.semanticwb.bsc.accessory.Grapher to add
+   */
+
+    public void addGrapher(org.semanticwb.bsc.accessory.Grapher value)
+    {
+        getSemanticObject().addObjectProperty(bsc_hasGrapher, value.getSemanticObject());
+    }
+   /**
+   * Removes all the Grapher
+   */
+
+    public void removeAllGrapher()
+    {
+        getSemanticObject().removeProperty(bsc_hasGrapher);
+    }
+   /**
+   * Removes a Grapher
+   * @param value org.semanticwb.bsc.accessory.Grapher to remove
+   */
+
+    public void removeGrapher(org.semanticwb.bsc.accessory.Grapher value)
+    {
+        getSemanticObject().removeObjectProperty(bsc_hasGrapher,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the Grapher
+   * @return a org.semanticwb.bsc.accessory.Grapher
+   */
+    public org.semanticwb.bsc.accessory.Grapher getGrapher()
+    {
+         org.semanticwb.bsc.accessory.Grapher ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasGrapher);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.accessory.Grapher)obj.createGenericInstance();
          }
          return ret;
     }
