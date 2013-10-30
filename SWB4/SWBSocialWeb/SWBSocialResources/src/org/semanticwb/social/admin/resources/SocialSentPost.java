@@ -2350,7 +2350,7 @@ public class SocialSentPost extends GenericResource {
                         socialTopicPostOut=Integer.parseInt(getAllPostOutSocialTopic_Query(0, 0, true, socialTopic));
                         if(socialTopicPostOut>0)
                         {
-                            sQuery=getAllPostOutSocialTopic_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic); 
+                            sQuery=getAllPostOutSocialTopic_Query(0L, socialTopicPostOut, false, socialTopic); 
                             aListFilter=executeQueryArray(sQuery, wsite);
                         }
                     }
