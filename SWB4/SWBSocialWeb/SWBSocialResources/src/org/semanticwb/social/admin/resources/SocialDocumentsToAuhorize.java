@@ -408,20 +408,20 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                     out.println("</div>");
                 }
 
-                out.println("<style type=\"text/css\">");
-                out.println("@import \"/swbadmin/js/dojo/dojo/resources/dojo.css\";");
-                out.println("@import \"/swbadmin/js/dojo/dijit/themes/soria/soria.css\";");
-                out.println("@import \"/swbadmin/css/swb.css\";");
-                out.println("@import \"/swbadmin/css/swbsocial.css\";");
-                out.println("@import \"/swbadmin/js/dojo/dojox/grid/resources/soriaGrid.css\";");
-                out.println("@import \"/swbadmin/js/dojo/dojox/grid/resources/Grid.css\";");
-                out.println("");
-                out.println("html, body, #main{");
-                out.println("overflow: auto;");
-                out.println("}");
-                out.println("</style>  ");
-                out.println("");
-                out.println("");
+//                out.println("<style type=\"text/css\">");
+//                out.println("@import \"/swbadmin/js/dojo/dojo/resources/dojo.css\";");
+//                out.println("@import \"/swbadmin/js/dojo/dijit/themes/soria/soria.css\";");
+//                out.println("@import \"/swbadmin/css/swb.css\";");
+//                out.println("@import \"/swbadmin/css/swbsocial.css\";");
+//                out.println("@import \"/swbadmin/js/dojo/dojox/grid/resources/soriaGrid.css\";");
+//                out.println("@import \"/swbadmin/js/dojo/dojox/grid/resources/Grid.css\";");
+//                out.println("");
+//                out.println("html, body, #main{");
+//                out.println("overflow: auto;");
+//                out.println("}");
+//                out.println("</style>  ");
+//                out.println("");
+//                out.println("");
 
 
 
@@ -485,9 +485,11 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                         out.println("<a class=\"ver\" title=\"" + paramRequest.getLocaleString("properties") + "\" onclick=\"view('" + urlpreview + "','" + id + "')\" href=\"#\"></a>");
                         if (SocialLoader.getPFlowManager().isReviewer(resource, user)) {
                             String imgedit = SWBPortal.getContextPath() + "/swbadmin/icons/editar_1.gif";
-                            out.println("<a title=\"" + paramRequest.getLocaleString("edit") + "\" href=\"#\" onclick=\"parent.selectTab('" + resource.getURI() + "','" + SWBPortal.getContextPath() + "/swbadmin/jsp/objectTab.jsp','" + "TEST" + "','bh_AdminPorltet');return false;\"><img  src=\"" + imgedit + "\"></a>");
+                            //out.println("<a title=\"" + paramRequest.getLocaleString("edit") + "\" href=\"#\" onclick=\"parent.selectTab('" + resource.getURI() + "','" + SWBPortal.getContextPath() + "/swbadmin/jsp/objectTab.jsp','" + "TEST" + "','bh_AdminPorltet');return false;\"><img  src=\"" + imgedit + "\"></a>");
+                            out.println("<a class=\"editar\" title=\"" + paramRequest.getLocaleString("edit") + "\" href=\"#\" onclick=\"parent.selectTab('" + resource.getURI() + "','" + SWBPortal.getContextPath() + "/swbadmin/jsp/objectTab.jsp','" + "TEST" + "','bh_AdminPorltet');return false;\"></a>");
                             String imgauthorize = SWBPortal.getContextPath() + "/swbadmin/icons/activa.gif";
-                            out.println("<a title=\"" + paramRequest.getLocaleString("authorize") + "\" href=\"#\" onclick=\"showAuthorize('" + resource.getURI() + "')\"><img  src=\"" + imgauthorize + "\"></a>");
+                            //out.println("<a title=\"" + paramRequest.getLocaleString("authorize") + "\" href=\"#\" onclick=\"showAuthorize('" + resource.getURI() + "')\"><img  src=\"" + imgauthorize + "\"></a>");
+                            out.println("<a class=\"autorizar\" title=\"" + paramRequest.getLocaleString("authorize") + "\" href=\"#\" onclick=\"showAuthorize('" + resource.getURI() + "')\"></a>");
                             String imgreject = SWBPortal.getContextPath() + "/swbadmin/images/delete.gif";
                             //out.println("<a title=\"" + paramRequest.getLocaleString("reject") + "\" href=\"#\" onclick=\"showReject('" + resource.getURI() + "')\"><img  src=\"" + imgreject + "\"></a>");
                             out.println("<a class=\"eliminar\" title=\"" + paramRequest.getLocaleString("reject") + "\" href=\"#\" onclick=\"showReject('" + resource.getURI() + "')\"></a>");
