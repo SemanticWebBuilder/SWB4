@@ -807,20 +807,20 @@ public class NewBrand extends GenericResource {
             //out.println("<form class=\"swbform\" id=\"frmImport1\" action=\"" + url.toString() + "\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('frmImport1'); return false;\" method=\"post\">");
             out.println("<fieldset>");
             out.println("<table>");
-            out.append("<tr><td align=\"right\">");
+            out.println("<tr><td align=\"right\">");
             out.println(paramRequest.getLocaleString("msgwsTitle")+" <em>*</em>");
             out.println("</td>");
-            out.append("<td>");
+            out.println("<td>");
             out.println("<input type=\"text\" name=\"wstitle\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Titulo.\" invalidMessage=\"Titulo es requerido.\" onkeyup=\"dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate()\" trim=\"true\" >");
             out.println("</td>");
-            out.append("</tr>");
-            out.append("<tr><td align=\"right\">");
+            out.println("</tr>");
+            out.println("<tr><td align=\"right\">");
             out.println(paramRequest.getLocaleString("msgwsID")+" <em>*</em>");
             out.println("</td>");
-            out.append("<td>");
+            out.println("<td>");
             out.println("<input type=\"text\" id=\"swb_create_id\" name=\"wsid\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject(this.textbox.value);\" invalidMessage=\"Identificador invalido.\" trim=\"true\" >");
             out.println("</td>");
-            out.append("</tr>");
+            out.println("</tr>");
             out.println("<input type=\"hidden\" name=\"wsrepository\" value=\"uradm\"/>"); 
             /*
             out.append("<tr><td align=\"right\">");
