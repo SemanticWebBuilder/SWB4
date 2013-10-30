@@ -2348,15 +2348,19 @@ public class SocialSentPost extends GenericResource {
                         }
                     } else { //Traer todo, NPage==0, en teoría jamas entraría a esta opción.
                         socialTopicPostOut=Integer.parseInt(getAllPostOutSocialTopic_Query(0, 0, true, socialTopic));
-                        sQuery=getAllPostOutSocialTopic_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic); 
-                        aListFilter=executeQueryArray(sQuery, wsite);
+                        if(socialTopicPostOut>0)
+                        {
+                            sQuery=getAllPostOutSocialTopic_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic); 
+                            aListFilter=executeQueryArray(sQuery, wsite);
+                        }
                     }
                 }
                 System.out.println("streamPostOuts-Antes de:"+socialTopicPostOut);
+                /*
                 if(socialTopicPostOut==0L)
                 {
                     socialTopicPostOut=Integer.parseInt(getAllPostOutSocialTopic_Query(0, 0, true, socialTopic));
-                }
+                }*/
                 System.out.println("StreamPostOuts:"+socialTopicPostOut);
 
                 hampResult.put("countResult", Long.valueOf(socialTopicPostOut));
@@ -2368,13 +2372,13 @@ public class SocialSentPost extends GenericResource {
                 itposts = aListFilter.iterator();
                 //System.out.println("Entra a ORDEBAR -2");
                 //setso = SWBSocialComparator.convertArray2TreeSet(itposts);
-            }else{
+            }/*else{
                 int socialTopicPostOut=Integer.parseInt(getAllPostOutSocialTopic_Query(0, 0, true, socialTopic));
                 sQuery=getAllPostOutSocialTopic_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic); 
                 aListFilter=executeQueryArray(sQuery, wsite);
                 itposts = aListFilter.iterator();
                 hampResult.put("countResult", Long.valueOf(socialTopicPostOut));
-            }
+            }*/
             hampResult.put("itResult", itposts);
 
             return hampResult;
