@@ -33,17 +33,27 @@
 
 <%
     String objUri = (String) request.getParameter("suri");
-%>
-<div class="swbform">
-<div align="center"><h2><%=facebookBean.getTitle()%> Videos.</h2><br/></div>
-<%
     System.out.println("SURI jsp: " + paramRequest.getMode().toString());
     SWBModel model=WebSite.ClassMgr.getWebSite(facebookBean.getSemanticObject().getModel().getName());
     HashMap<String, String> params = new HashMap<String, String>(3);//SELECT uid, name, first_name, middle_name, last_name FROM user WHERE uid = 1921576442
+    params.put("access_token", facebookBean.getAccessToken());
+    String username="";
+    String user = postRequest(params, "https://graph.facebook.com/me",
+                            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
+    System.out.println("user:"+ user);
+    JSONObject userObj = new JSONObject(user);
+    if(!userObj.isNull("name")){
+        username = userObj.getString("name");
+    }else{
+        username = facebookBean.getTitle();
+    }
+%>
+<div class="swbform">
+<div align="center"><h2><%=username%> Videos.</h2><br/></div>
+<%
     //TODO: it seems than 'likes' is deprecated and it must be replaced with like_info
     params.put("q", "{\"videos\": \"SELECT actor_id, created_time, like_info, post_id, attachment, message, description, description_tags, type, comment_info FROM stream WHERE filter_key IN " + 
                 "( SELECT filter_key FROM stream_filter WHERE uid = me() AND name = 'Video') ORDER BY created_time DESC LIMIT 50\", \"usernames\": \"SELECT uid, name FROM user WHERE uid IN (SELECT actor_id FROM #videos)\", \"pages\":\"SELECT page_id, name FROM page WHERE page_id IN (SELECT actor_id FROM #videos)\"}");
-    params.put("access_token", facebookBean.getAccessToken());
     
     //params1.put("access_token", "CAACEdEose0cBAKyWLxR6XedK1KrfMDVmqUQshOoZA2vGCnuqIyrekZCGQ9HZBc0FWKIXfNMexJGxxinNvtcvEnHGkBLpCCmEuPVgmUAddZCxcDWc1KigZCrYaDCSSoEUHIhda1G3y4tCZBq4ripHKZAw1steVi0NGYZD");    
     String fbResponse = getRequest(params, "https://graph.facebook.com/fql",

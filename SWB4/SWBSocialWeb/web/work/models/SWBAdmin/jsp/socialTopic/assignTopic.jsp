@@ -65,10 +65,12 @@
                         Iterator<SocialTopic> itSocialTopics=SocialTopic.ClassMgr.listSocialTopics(wsite);
                         while(itSocialTopics.hasNext())
                         {
-                           SocialTopic siteSocialTopic=itSocialTopics.next();                             
+                           SocialTopic siteSocialTopic=itSocialTopics.next();    
+                            if(siteSocialTopic.isActive() && !siteSocialTopic.isDeleted()){
                                %>
                                     <option value="<%=siteSocialTopic.getURI()%>"><%=siteSocialTopic.getDisplayTitle(user.getLanguage())%></option>
                                <%
+                            }
                         }
                    %> 
                 </select>
