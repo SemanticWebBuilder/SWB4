@@ -703,12 +703,14 @@ public class StrategicMap extends GenericResource {
      */
     private Period getPeriod(HttpServletRequest request, WebSite ws) {
         Period period = null;
-        if (request.getSession().getAttribute("period") != null) {
-            String dataPeriod = (String) request.getSession().getAttribute("period");
+        if (request.getSession().getAttribute(getResourceBase().getWebSiteId()) != null) {
+            String dataPeriod = (String) request.getSession().getAttribute(getResourceBase().getWebSiteId());
             period = Period.ClassMgr.getPeriod(dataPeriod, ws);
+        } else {
+            
         }
         //if(period == null) {
-        period = Period.ClassMgr.getPeriod("6", ws);
+//        period = Period.ClassMgr.getPeriod("6", ws);
         //}
         return period;
     }
