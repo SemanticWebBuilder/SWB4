@@ -1697,6 +1697,14 @@ public class StreamInBox extends GenericResource {
                             SocialTopic socialTopic=SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(postIn, postIn.getMsg_Text(), false);
                             if(socialTopic!=null)   //El sistema si pudo clasificar el postIn en uno de los SocialTopic del website
                             {
+                                //Cambiamos de tema a los PostOut asociados al PostIn que acabamos de reclasificar
+                                Iterator<PostOut> itPostOuts=postIn.listpostOutResponseInvs();
+                                while(itPostOuts.hasNext())
+                                {
+                                    PostOut postOut=itPostOuts.next();
+                                    postOut.setSocialTopic(socialTopic);
+                                }
+                                //
                                 if(!hMap.containsKey(socialTopic.getURI()))
                                 {
                                     hMap.put(socialTopic.getURI(), 1);
