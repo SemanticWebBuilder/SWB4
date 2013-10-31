@@ -480,7 +480,7 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                     out.println("<td class=\"accion\">");
                     try {
                         String id = resource.getEncodedURI().replace('%', '_').replace(':', '_').replace('/', '_');
-                        String imgview = SWBPortal.getContextPath() + "/swbadmin/icons/preview.gif";
+                        //String imgview = SWBPortal.getContextPath() + "/swbadmin/icons/preview.gif";
                         //out.println("<a class=\"ver\" title=\""+ paramRequest.getLocaleString("properties") +"\" onclick=\"view('"+urlpreview+"','"+ id +"')\" href=\"#\"><img src=\""+imgview+"\" alt=\""+paramRequest.getLocaleString("properties")+"\"></a>");
                         out.println("<a class=\"ver\" title=\"" + paramRequest.getLocaleString("properties") + "\" onclick=\"view('" + urlpreview + "','" + id + "')\" href=\"#\"></a>");
                         if (SocialLoader.getPFlowManager().isReviewer(resource, user)) {
@@ -587,7 +587,7 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                         urlpreviewPostIn.setParameter("postIn", resource.getPostInSource().getURI());
 
                         String idPreSource = resource.getEncodedURI().replace('%', '_').replace(':', '_').replace('/', '_');
-                        String imgviewSource = SWBPortal.getContextPath() + "/swbadmin/icons/preview.gif";
+                        String imgviewSource = SWBPortal.getContextPath() + "/swbadmin/css/images/ico-origen.png";
                         out.println("<a title=\"" + paramRequest.getLocaleString("properties") + "\" onclick=\"view('" + urlpreviewPostIn + "','" + idPreSource + "')\" href=\"#\"><img src=\"" + imgviewSource + "\" alt=\"" + paramRequest.getLocaleString("source") + "\"></a>");
                     } else {
                         out.println("---");
