@@ -17,6 +17,7 @@ import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.Perspective;
 import org.semanticwb.bsc.element.Theme;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
@@ -53,8 +54,8 @@ public class StrategicMap extends GenericResource {
         PrintWriter out = response.getWriter();
         WebSite ws = paramRequest.getWebPage().getWebSite();
         if (ws instanceof BSC) {
-            Period period = getPeriod(request, ws);
-            if ((ws != null) && (period != null)) {
+            Period period = getPeriod(request);
+            if (period != null) {
                 Resource base = paramRequest.getResourceBase();
                 BSC bsc = (BSC) ws;
                 CausalMap map = new CausalMap();
@@ -701,17 +702,18 @@ public class StrategicMap extends GenericResource {
      * @return un objeto {@code Periodo} que representa el Periodo actual
      * seleccionado
      */
-    private Period getPeriod(HttpServletRequest request, WebSite ws) {
+    private Period getPeriod(HttpServletRequest request) {
+        String id = getResourceBase().getWebSiteId();
+        WebSite ws = getResourceBase().getWebSite();
         Period period = null;
-        if (request.getSession().getAttribute(getResourceBase().getWebSiteId()) != null) {
-            String dataPeriod = (String) request.getSession().getAttribute(getResourceBase().getWebSiteId());
+        if (request.getSession().getAttribute(id) != null) {
+            String dataPeriod = (String) request.getSession().getAttribute(id);
             period = Period.ClassMgr.getPeriod(dataPeriod, ws);
-        } else {
-            
+        } 
+        if(period == null) {
+            BSC bsc = (BSC) ws;
+            period = bsc.listValidPeriods().iterator().next();
         }
-        //if(period == null) {
-//        period = Period.ClassMgr.getPeriod("6", ws);
-        //}
         return period;
     }
 }
