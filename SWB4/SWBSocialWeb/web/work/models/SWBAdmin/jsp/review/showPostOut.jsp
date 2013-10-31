@@ -20,16 +20,13 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
 
-<style type="text/css">
-            @import "/swbadmin/js/dojo/dojo/resources/dojo.css";
-            @import "/swbadmin/js/dojo/dijit/themes/soria/soria.css";
-            @import "/swbadmin/css/swb.css";
-            @import "/swbadmin/js/dojo/dojox/grid/resources/soriaGrid.css";
-            @import "/swbadmin/js/dojo/dojox/grid/resources/Grid.css";
+<style type="text/css">            
+            
+            @import "/swbadmin/css/swbsocial.css";          
             html, body, #main{
                 overflow: auto;
             }
-</style> 
+</style>
     
 <%
     org.semanticwb.model.User user = paramRequest.getUser();
