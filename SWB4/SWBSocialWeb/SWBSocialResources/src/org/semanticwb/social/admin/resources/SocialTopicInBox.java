@@ -1221,6 +1221,7 @@ public class SocialTopicInBox extends GenericResource {
 
                 //System.out.println("Entra a InBox_processAction-5");
                 response.setMode(SWBActionResponse.Mode_EDIT);
+                response.setRenderParameter("reloadTap", request.getParameter("suri"));
                 response.setRenderParameter("dialog", "close");
                 response.setRenderParameter("statusMsg", response.getLocaleString("msgResponseCreated"));
                 response.setRenderParameter("suri", stOld.getURI());
