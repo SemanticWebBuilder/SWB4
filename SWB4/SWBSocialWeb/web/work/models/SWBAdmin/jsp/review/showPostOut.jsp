@@ -85,9 +85,9 @@
             <table class="tabla1">
                 <thead>
                     <tr>
-                        <td><%=SWBSocialUtil.Util.getStringFromGenericLocale("sentiment", user.getLanguage())%></td>
-                        <td><%=SWBSocialUtil.Util.getStringFromGenericLocale("intensity", user.getLanguage())%></td>
-                        <td><%=SWBSocialUtil.Util.getStringFromGenericLocale("priority", user.getLanguage())%></td>            
+                        <th><%=SWBSocialUtil.Util.getStringFromGenericLocale("sentiment", user.getLanguage())%></th>
+                        <th><%=SWBSocialUtil.Util.getStringFromGenericLocale("intensity", user.getLanguage())%></th>
+                        <th><%=SWBSocialUtil.Util.getStringFromGenericLocale("priority", user.getLanguage())%></th>            
                     </tr>
                 </thead>
                 <tr>
