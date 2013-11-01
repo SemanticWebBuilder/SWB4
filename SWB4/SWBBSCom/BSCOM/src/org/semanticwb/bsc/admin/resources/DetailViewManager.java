@@ -340,8 +340,10 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             url.setAction("editView");
             if (viewSemObject.getViewFilePath() != null) {
                 //String resourceWorkPath = SWBPortal.getWorkPath() + viewSemObject.getWorkPath() + "/templateContent.html";
-                templateContent = SWBUtils.IO.getFileFromPath(viewSemObject.getViewFilePath());                
+                System.out.println("templatePath: " + viewSemObject.getViewFilePath());
+                templateContent = SWBUtils.IO.getFileFromPath(viewSemObject.getViewFilePath());
             }
+            System.out.println("templateContent: " + templateContent);
         } else if (operation.equals("add")) {
             modeUsed = SWBFormMgr.MODE_CREATE;
             formMgr = new SWBFormMgr(DetailView.sclass, null, modeUsed);
@@ -711,6 +713,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                         }
                         FileWriter writer = new FileWriter(file);
                         writer.write(configuration);
+                        System.out.println("Ya escribió contenido de archivo\n");
                         writer.flush();
                         writer.close();
                     } catch (IOException ioe) {
@@ -719,6 +722,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                     }
                     if (storePath) {
                         detailView.setViewFilePath(viewFilePath);
+                        System.out.println("Almacenó path en objeto DetailView: " + detailView.getId());
                     }
                 }
                 //Se actualiza informacion de Traceable
@@ -859,14 +863,14 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         
         String filePath = this.getActiveDetailView().getViewFilePath();
         FileReader reader = null;
-
+        System.out.println("Plantilla: " + filePath);
         try {
             reader = new FileReader(filePath);
         } catch (FileNotFoundException fnfe) {
             DetailViewManager.log.error("Al leer plantilla de vista detalle con Id: "
                     + this.getActiveDetailView().getId(), fnfe);
         }
-
+        System.out.println("plantilla nula: " + (reader != null ? "no" : "si"));
         return reader;
     }
     
