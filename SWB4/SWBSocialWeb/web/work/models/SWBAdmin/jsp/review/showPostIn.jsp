@@ -131,7 +131,7 @@
                         <iframe id="ytplayer" type="text/html" width="250" height="195"
                         src="<%=video.getVideo()%>" frameborder="0"/>
                 <%
-                    }else if(video.getVideo().equals("flash")){
+                    }else if(video.getVideo().contains(".swf")){
                 %>
                         <embed src="<%=video.getVideo()%>" width="250" height="195" autostart="false" type="application/x-shockwave-flash">
                 <%
