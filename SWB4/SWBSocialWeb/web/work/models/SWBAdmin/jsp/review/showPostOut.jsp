@@ -108,7 +108,7 @@
                         %>
                     </td>
                     <!--<td align="center">
-                    <%=SWBSocialUtil.Util.getStringFromGenericLocale("intensity", user.getLanguage())%>:<%=postOut.getPostIntesityType() == 0 ? paramRequest.getLocaleString("low") : postOut.getPostIntesityType() == 1 ? paramRequest.getLocaleString("medium") : postOut.getPostIntesityType() == 2 ? paramRequest.getLocaleString("high") : "---"%>
+                    <%//=SWBSocialUtil.Util.getStringFromGenericLocale("intensity", user.getLanguage())%>:<%//=postOut.getPostIntesityType() == 0 ? paramRequest.getLocaleString("low") : postOut.getPostIntesityType() == 1 ? paramRequest.getLocaleString("medium") : postOut.getPostIntesityType() == 2 ? paramRequest.getLocaleString("high") : "---"%>
                 </td>-->
                     <td>
                         <%
@@ -164,7 +164,9 @@
                     String sphoto = itPhotos.next();
             %>
 
-            <img src="<%=SWBPortal.getWebWorkPath()%><%=photo.getWorkPath()%>/<%=sphoto%>">
+            <span id="img<%=sphoto%>" style="width: 200px; height: 200px; border: thick #666666; overflow: hidden; position: relative;">
+                <a href="<%=SWBPortal.getWebWorkPath()%><%=photo.getWorkPath()%>/<%=sphoto%>" target="_blank" title="View full size"><img src="<%=SWBPortal.getWebWorkPath()%><%=photo.getWorkPath()%>/<%=sphoto%>" style="position: relative;" onload="imageLoad(this, 'img<%=sphoto%>');"/></a>
+            </span>
 
             <%
                 }
