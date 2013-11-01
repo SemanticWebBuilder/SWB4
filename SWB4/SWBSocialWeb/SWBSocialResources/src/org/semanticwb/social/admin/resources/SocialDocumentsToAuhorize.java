@@ -45,10 +45,13 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBParamRequestImp;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.social.Message;
+import org.semanticwb.social.Photo;
 import org.semanticwb.social.PostOut;
 import org.semanticwb.social.PostOutNet;
 import org.semanticwb.social.PostOutPrivacyRelation;
 import org.semanticwb.social.SocialNetwork;
+import org.semanticwb.social.Video;
 import org.semanticwb.social.util.SocialLoader;
 
 // TODO: Auto-generated Javadoc
@@ -162,6 +165,12 @@ public class SocialDocumentsToAuhorize extends GenericResource {
         out.println("overflow: auto;");
         out.println("}");
         out.println("</style>  ");
+        ///-We will have our own dialog inside iframe
+        out.println("<div dojoType=\"dijit.Dialog\" id=\"swbDialog\" title=\"Agregar\" onFocus=\"hideApplet(true);\" onBlur=\"if(!this.open)hideApplet(false);\" onHide=\"hideSocialDialog();\" onCancel=\"hideSocialDialog();\" >");
+        out.println("<div dojoType=\"dojox.layout.ContentPane\" id=\"swbDialogImp\" executeScripts=\"true\">");
+        out.println("Cargando...");
+        out.println("</div>");
+        out.println("</div>");
         out.println("");
         out.println("");
 
@@ -179,7 +188,7 @@ public class SocialDocumentsToAuhorize extends GenericResource {
             out.println("<script type=\"text/javascript\" charset=\"utf-8\" src=\"/swbadmin/js/swb_admin.js\"></script>");
             out.println("<script type=\"text/javascript\" charset=\"utf-8\" src=\"/work/models/SWBAdmin/js/swbsocial.js\" ></script>");
             //Jorge
-
+            
 
             out.println("<form class=\"swbform\" name='frmseecontentsToAuthorize' action='" + paramRequest.getRenderUrl() + "' method='post'>");
             out.println("<fieldset>");
@@ -241,7 +250,10 @@ public class SocialDocumentsToAuhorize extends GenericResource {
 
                     String id = resource.getEncodedURI().replace('%', '_').replace(':', '_').replace('/', '_');
                     String resTitle = resource.getMsg_Text() != null ? resource.getMsg_Text().replace('"', '\'') : "";
-                    out.println("<div dojoType=\"dijit.Dialog\" id=\"" + id + "\" title=\"" + paramRequest.getLocaleString("properties") + " (" + resTitle + ")\">");
+                    ///-There is not need to have hidden dialogs
+                    /*out.println("<div class=\"swbform swbpopup usr-pop\" dojoType=\"dijit.Dialog\" id=\"" + id + "\" title=\"" + paramRequest.getLocaleString("properties") + " (" + resTitle + ")\">");
+                    out.println("<div class=\"swbform swbpopup usr-pop\" dojoType=\"dijit.Dialog\" id=\"" + id + "\" title=\"" + paramRequest.getLocaleString("properties") + "\">");
+                    out.println("<div align=\"center\">");
                     out.println("<form class=\"swbform\">");
                     out.println("<fieldset>");
                     out.println("<table>");
@@ -271,10 +283,10 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                                 value = paramRequest.getLocaleString("novalue");
                             }
 
-                            out.println("<tr>");
-                            out.println("<td>" + label + "</td>");
-                            out.println("<td>" + value + "</td>");
-                            out.println("</tr>");
+                            ///out.println("<tr>");
+                            ///out.println("<td>" + label + "</td>");
+                            ///out.println("<td>" + value + "</td>");
+                            ///out.println("</tr>");
                         }
                     }
                     if (resource.getPflowInstance() != null) {
@@ -289,15 +301,23 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                         out.println("<td>" + resource.getSocialTopic().getDisplayTitle(lang) + "</td>");
                         out.println("</tr>");
                     }
-
-
+                    
+                    
                     out.println("</table>");
                     out.println("</fieldset>");
                     out.println("</form>");
                     out.println("</div>");
-
+                    //out.println("<div style=\"height:350px\" id='previewcontent" + id + "'>");
+                    out.println("<div id='previewcontent" + id + "'>");
+                    out.println("</div>");
+                    out.println("</div>");
+                    */
+                    
                     //Jorge
-                    out.println("<div dojoType=\"dijit.Dialog\" id=\"" + id + "_watchMoreNets\"  title=\"" + paramRequest.getLocaleString("associatedSocialNets") + " (" + resTitle + ")\">");
+                    //out.println("<div dojoType=\"dijit.Dialog\" id=\"" + id + "_watchMoreNets\"  title=\"" + paramRequest.getLocaleString("associatedSocialNets") + " (" + resTitle + ")\">");
+                    ///-Don't display the message
+                    out.println("<div dojoType=\"dijit.Dialog\" id=\"" + id + "_watchMoreNets\"  title=\"" + paramRequest.getLocaleString("associatedSocialNets") + "\">");
+                    out.println("<ul>");
                     int cont = 1;
                     String nets = "";
                     Iterator<SocialNetwork> itPostSocialNets = resource.listSocialNetworks();
@@ -345,6 +365,7 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                         }
                     }
                     out.println(nets);
+                    out.println("</ul>");
                     out.println("</div>");
                     //Jorge
                 }
@@ -444,6 +465,9 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                 out.println(paramRequest.getLocaleString("action"));
                 out.println("</th>");
                 out.println("<th>");
+                out.println(paramRequest.getLocaleString("type"));
+                out.println("</th>");
+                out.println("<th>");
                 out.println(paramRequest.getLocaleString("title"));
                 out.println("</th>");
                 out.println("<th>");
@@ -482,7 +506,9 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                         String id = resource.getEncodedURI().replace('%', '_').replace(':', '_').replace('/', '_');
                         //String imgview = SWBPortal.getContextPath() + "/swbadmin/icons/preview.gif";
                         //out.println("<a class=\"ver\" title=\""+ paramRequest.getLocaleString("properties") +"\" onclick=\"view('"+urlpreview+"','"+ id +"')\" href=\"#\"><img src=\""+imgview+"\" alt=\""+paramRequest.getLocaleString("properties")+"\"></a>");
-                        out.println("<a class=\"ver\" title=\"" + paramRequest.getLocaleString("properties") + "\" onclick=\"view('" + urlpreview + "','" + id + "')\" href=\"#\"></a>");
+                        //out.println("<a class=\"ver\" title=\"" + paramRequest.getLocaleString("properties") + "\" onclick=\"view('" + urlpreview + "','" + id + "')\" href=\"#\">Ver 1</a>");
+                        ///-Call show Dialog and don't use iframe
+                        out.println("<a class=\"ver\" title=\"" + paramRequest.getLocaleString("properties") + "\" onclick=\"showDialog('" + urlpreview + "','" + paramRequest.getLocaleString("postOutMsg") + "'); return false;\" href=\"#\"></a>");
                         if (SocialLoader.getPFlowManager().isReviewer(resource, user)) {
                             String imgedit = SWBPortal.getContextPath() + "/swbadmin/icons/editar_1.gif";
                             //out.println("<a title=\"" + paramRequest.getLocaleString("edit") + "\" href=\"#\" onclick=\"parent.selectTab('" + resource.getURI() + "','" + SWBPortal.getContextPath() + "/swbadmin/jsp/objectTab.jsp','" + "TEST" + "','bh_AdminPorltet');return false;\"><img  src=\"" + imgedit + "\"></a>");
@@ -500,6 +526,9 @@ public class SocialDocumentsToAuhorize extends GenericResource {
 
                     out.println("</td>");
 
+                    out.println("<td width='10%'>");
+                    out.println(resource instanceof Message ? "<img title=\"Texto\" src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-txt.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("message") + "  \">" : resource instanceof Photo ? "<img title=\"Imagen\" src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-img.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("photo") + "  \">" : resource instanceof Video ? "<img title=\"Video\" src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-vid.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("video") + "  \">" : "---");
+                    out.println("</td>");
 
 
                     out.println("<td width='40%'>");
@@ -588,7 +617,10 @@ public class SocialDocumentsToAuhorize extends GenericResource {
 
                         String idPreSource = resource.getEncodedURI().replace('%', '_').replace(':', '_').replace('/', '_');
                         String imgviewSource = SWBPortal.getContextPath() + "/swbadmin/css/images/ico-origen.png";
-                        out.println("<a title=\"" + paramRequest.getLocaleString("properties") + "\" onclick=\"view('" + urlpreviewPostIn + "','" + idPreSource + "')\" href=\"#\"><img src=\"" + imgviewSource + "\" alt=\"" + paramRequest.getLocaleString("source") + "\"></a>");
+                        //out.println("<a title=\"" + paramRequest.getLocaleString("properties") + "\" onclick=\"view('" + urlpreviewPostIn + "','" + idPreSource + "')\" href=\"#\"><img src=\"" + imgviewSource + "\" alt=\"" + paramRequest.getLocaleString("source") + "\">ver 2</a>");
+                        ///-Call show Dialog and don't use iframe
+                        out.println("<a title=\"" + paramRequest.getLocaleString("properties") + "\" onclick=\"showDialog('" + urlpreviewPostIn + "','" + paramRequest.getLocaleString("postInMsg") + "'); return false;\" href=\"#\"><img src=\"" + imgviewSource + "\" alt=\"" + paramRequest.getLocaleString("source") + "\"></a>");
+                        //onclick=\"showDialog('" + clasifybyTopic + "','" + paramRequest.getLocaleString("reclassify") + " post'); return false;\"
                     } else {
                         out.println("---");
                     }
@@ -645,12 +677,12 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                 out.println("   document.swbfrmResourcesAuhotrize.submit();");
                 out.println("}");
 
-                out.println("function view(url,id)");
+                /*out.println("function view(url,id)");
                 out.println("{");
-                out.println("   var tDiv = document.getElementById(\"previewcontent\");");
-                out.println("   tDiv.innerHTML=\"<iframe width='100%' height='500' src='\"+ url +\"'></iframe>\";");
+                out.println("   var tDiv = document.getElementById('previewcontent' + id);");
+                out.println("   tDiv.innerHTML=\"<iframe width='100%' height='500px' src='\"+ url +\"'></iframe>\";");
                 out.println("   dijit.byId(id).show()");
-                out.println("}");
+                out.println("}");*/
 
                 out.println("function viewMoreNets(id)");
                 out.println("{");
