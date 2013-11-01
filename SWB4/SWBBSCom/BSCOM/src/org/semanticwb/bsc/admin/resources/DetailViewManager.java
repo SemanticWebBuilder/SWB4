@@ -50,6 +50,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     /** Realiza operaciones en la bitacora de eventos. */
     private static Logger log = SWBUtils.getLogger(GenericSemResource.class);
 
+    private static final String TEMPLATE_FILENAME = "/templateContent.html";
+    
     /**
      * Genera una instancia de este recurso
      */
@@ -338,16 +340,9 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             modeUsed = SWBFormMgr.MODE_EDIT;
             formMgr = new SWBFormMgr(DetailView.bsc_DetailView, viewSemObject.getSemanticObject(), modeUsed);
             url.setAction("editView");
-            if (viewSemObject.getViewFilePath() != null) {
-                //String resourceWorkPath = SWBPortal.getWorkPath() + viewSemObject.getWorkPath() + "/templateContent.html";
-                System.out.println("templatePath: " + viewSemObject.getViewFilePath());
-                templateContent = SWBUtils.IO.getFileFromPath(viewSemObject.getViewFilePath());
-            } else {
-                String filePath = SWBPortal.getWorkPath() + viewSemObject.getWorkPath() + "/templateContent.html";
-                System.out.println("\nRuta de archivo reconstruida!!!\n" + filePath);
-                templateContent = SWBUtils.IO.getFileFromPath(filePath);
-            }
-            System.out.println("templateContent: " + templateContent);
+            String filePath = SWBPortal.getWorkPath() + 
+                    viewSemObject.getWorkPath() + DetailViewManager.TEMPLATE_FILENAME;
+            templateContent = SWBUtils.IO.getFileFromPath(filePath);
         } else if (operation.equals("add")) {
             modeUsed = SWBFormMgr.MODE_CREATE;
             formMgr = new SWBFormMgr(DetailView.sclass, null, modeUsed);
@@ -710,14 +705,13 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                         if (!filePath.exists()) {
                             filePath.mkdirs();
                         }
-                        viewFilePath += "/templateContent.html";
+                        viewFilePath += DetailViewManager.TEMPLATE_FILENAME;
                         File file = new File(viewFilePath);
-                        if (!file.exists()) {
+                        if (detailView.getViewFilePath() == null) {
                             storePath = true;
                         }
                         FileWriter writer = new FileWriter(file);
                         writer.write(configuration);
-                        System.out.println("Ya escribió contenido de archivo\n");
                         writer.flush();
                         writer.close();
                     } catch (IOException ioe) {
@@ -726,7 +720,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                     }
                     if (storePath) {
                         detailView.setViewFilePath(viewFilePath);
-                        System.out.println("Almacenó path en objeto DetailView: " + detailView.getId());
                     }
                 }
                 //Se actualiza informacion de Traceable
@@ -865,16 +858,15 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      */
     private FileReader retrieveTemplate() {
         
-        String filePath = this.getActiveDetailView().getViewFilePath();
+        String filePath = SWBPortal.getWorkPath() + 
+                    this.getActiveDetailView().getWorkPath() + DetailViewManager.TEMPLATE_FILENAME;
         FileReader reader = null;
-        System.out.println("Plantilla: " + filePath);
         try {
             reader = new FileReader(filePath);
         } catch (FileNotFoundException fnfe) {
             DetailViewManager.log.error("Al leer plantilla de vista detalle con Id: "
                     + this.getActiveDetailView().getId(), fnfe);
         }
-        System.out.println("plantilla nula: " + (reader != null ? "no" : "si"));
         return reader;
     }
     
