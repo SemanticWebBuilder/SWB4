@@ -547,7 +547,7 @@ public class FacebookWall extends GenericResource {
                         story = getTagsFromPost(postData.getJSONObject("story_tags"), story);
                     }
                         
-                    if(postData.has("source") && postData.has("name")){
+                    /*if(postData.has("source") && postData.has("name")){
                         if(!story.isEmpty())
                             story = story + ": " + "<a href=\"" + postData.getString("source") + "\" target=\"_blank\">" + postData.getString("name") + "</a>";
                         if(!message.isEmpty())
@@ -557,7 +557,7 @@ public class FacebookWall extends GenericResource {
                             story = story + ": " + "<a href=\"" + postData.getString("source") + "\" target=\"_blank\">View video</a>";
                         if(!message.isEmpty())
                             message = message + ": " + "<a href=\"" + postData.getString("source") + "\" target=\"_blank\">View video</a>";
-                    }
+                    }*/
                     /*
                     if(postData.has("description")){
                         postIn.setDescription(postData.getString("description"));
@@ -614,7 +614,7 @@ public class FacebookWall extends GenericResource {
                         story = getTagsFromPost(postData.getJSONObject("story_tags"), story);
                     }
                         
-                    if(postData.has("picture") && postData.has("name")){
+                    /*if(postData.has("picture") && postData.has("name")){
                         if(!story.isEmpty())
                             story = story + ": " + "<a href=\"" + postData.getString("picture").replace("_s.", "_n.") + "\" target=\"_blank\">" + postData.getString("name") + "</a>";
                         if(!message.isEmpty())
@@ -624,7 +624,7 @@ public class FacebookWall extends GenericResource {
                             story = story + ": " + "<a href=\"" + postData.getString("picture").replace("_s.", "_n.") + "\" target=\"_blank\">View picture</a>";
                         if(!message.isEmpty())
                             message = message + ": " + "<a href=\"" + postData.getString("picture").replace("_s.", "_n.") + "\" target=\"_blank\">View picture</a>";
-                    }
+                    }*/
                     
                     
                     /*
