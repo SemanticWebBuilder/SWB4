@@ -342,6 +342,10 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 //String resourceWorkPath = SWBPortal.getWorkPath() + viewSemObject.getWorkPath() + "/templateContent.html";
                 System.out.println("templatePath: " + viewSemObject.getViewFilePath());
                 templateContent = SWBUtils.IO.getFileFromPath(viewSemObject.getViewFilePath());
+            } else {
+                String filePath = SWBPortal.getWorkPath() + viewSemObject.getWorkPath() + "/templateContent.html";
+                System.out.println("\nRuta de archivo reconstruida!!!\n" + filePath);
+                templateContent = SWBUtils.IO.getFileFromPath(filePath);
             }
             System.out.println("templateContent: " + templateContent);
         } else if (operation.equals("add")) {
