@@ -125,10 +125,27 @@
                 } else if (semObj.getGenericInstance() instanceof VideoIn) {
                     VideoIn video = (VideoIn) semObj.getGenericInstance();
                    
-                %>    
-
-                <td>
-                    <br/><embed src="<%=video.getVideo()%>" width="250" height="195" autostart="false" type="application/x-shockwave-flash">    
+                    out.print("<td>");
+                    if(video.getVideo().contains("youtube")){
+                    %>
+                        <iframe id="ytplayer" type="text/html" width="250" height="195"
+                        src="<%=video.getVideo()%>" frameborder="0"/>
+                <%
+                    }else if(video.getVideo().equals("flash")){
+                %>
+                        <embed src="<%=video.getVideo()%>" width="250" height="195" autostart="false" type="application/x-shockwave-flash">
+                <%
+                    }else{
+                %>
+                            <video width="250" height="195" controls autoplay>
+                              <source src="<%=video.getVideo()%>" type="video/mp4">
+                              <object data="<%=video.getVideo()%>" width="250" height="195">
+                                <embed width="250" height="195" src="<%=video.getVideo()%>">
+                              </object>
+                            </video>
+                <%
+                    }
+                %>
                     <br/><br/><%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
                 </td>
 
