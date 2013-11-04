@@ -82,8 +82,9 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     parsedString += ",";
                 }                
                 i++;
-            }            
+            }
         }        
+        System.out.println("PARSED STRING:"  + parsedString);
         return parsedString;
     }
 
@@ -261,7 +262,8 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                          Pudo haber agregado un nuevo termino y trajo resultados, debe de guardarse
                          Pudo haberse quitado un termino del stream entonces debe de removerse del nextdatetosearch
                          */
-                        String phrasesInStream = stream.getPhrase() != null ? stream.getPhrase() : "";
+                        //String phrasesInStream = stream.getPhrase() != null ? stream.getPhrase() : "";
+                        String phrasesInStream = getPhrases(stream.getPhrase());
                         String[] phrasesArray = phrasesInStream.split(",");
                         String[] oldLimits = socialStreamSerch.getNextDatetoSearch().split(":");
                         String[] newLimits = limits.toString().split(":");
