@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.semanticwb.bsc.resources;
 
 import java.io.IOException;
@@ -17,22 +13,25 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
 /**
- * Permite al usuario seleccionar un Scorecard para visualizar en el navegador la información asociada.
+ * Permite al usuario seleccionar un Scorecard para visualizar en el navegador la informaci&oacute;n asociada.
  * @author Jose.Jimenez
  */
 public class BSCSelector extends GenericResource {
 
     /**
      * Genera la interface para que el usuario seleccione el Scorecard deseado y se
-     * muestre la nueva pestaña de navegador con la información del Scorecard seleccionado.
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException 
+     * muestre la nueva pesta&ntilde;a de navegador con la informaci&oacute;n del Scorecard seleccionado.
+     * @param request la petici&oacute;n enviada por el cliente
+     * @param response la respuesta generada a la petici&oacute;n recibida
+     * @param paramRequest un objeto de la plataforma de SWB con datos adicionales de la petici&oacute;n
+     * @throws SWBResourceException si durante la ejecuci&oacute;n no se cuenta con los recursos necesarios
+     *          para atender la petici&oacute;n
+     * @throws IOException si durante la ejecuci&oacute;n ocurre alg&uacute;n problema 
+     *          con la generaci&oacute;n o escritura de la respuesta
      */
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doView(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         
         PrintWriter out = response.getWriter();
         StringBuilder output = new StringBuilder(64);
@@ -45,7 +44,10 @@ public class BSCSelector extends GenericResource {
         //funcion de javascript para mandar la forma que contiene el select
         output.append("<script type=\"text/javascript\">\n");
         output.append("function showScorecard(element) {\n");
-	output.append("  var context = \"" + SWBPortal.getDistributorPath() + (SWBPlatform.getContextPath() != "" ? "/" + SWBPlatform.getContextPath() : "") + "\";\n");
+	output.append("  var context = \"");
+        output.append(SWBPortal.getDistributorPath());
+        output.append((SWBPlatform.getContextPath() != "" ? "/" + SWBPlatform.getContextPath() : ""));
+        output.append("\";\n");
 	output.append("  var path;\n");
         output.append("  if (element && element[element.selectedIndex].value != \"\") {\n");
         output.append("    var value = element[element.selectedIndex].value.split(',');\n");
