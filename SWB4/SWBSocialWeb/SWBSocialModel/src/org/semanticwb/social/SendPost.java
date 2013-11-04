@@ -33,7 +33,20 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
         {
             WebSite wsite=WebSite.ClassMgr.getWebSite(action.getSemanticObject().getModel().getName());
             SendPost sendPost=(SendPost)action;
-            if(wsite!=null && (sendPost.getMsg_Text()!=null || sendPost.listPhotos().hasNext() || sendPost.getVideo()!=null))
+            //Se revisa si almenos una red social de las asociadas a la la acción es valida (No borrada y Activa)
+            boolean atLeastOneIsValid=false;
+            Iterator<SocialNetwork> itSendPostNets=sendPost.listSocialNetworkses();
+            while(itSendPostNets.hasNext())
+            {
+                SocialNetwork socialNet=itSendPostNets.next();
+                if(!socialNet.isDeleted() && socialNet.isActive())
+                {
+                    atLeastOneIsValid=true;
+                    break;
+                }
+            }
+            //Termina revisión de si almenos una red social de las asociadas a la la acción es valida (No borrada y Activa)
+            if(atLeastOneIsValid && wsite!=null && (sendPost.getMsg_Text()!=null || sendPost.listPhotos().hasNext() || sendPost.getVideo()!=null))
             {
                 
                 if(sendPost.getVideo()!=null)   //Envía Video
@@ -63,10 +76,13 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
                         while(itSendPostActionSocialNets.hasNext())
                         {
                             SocialNetwork socialNet=itSendPostActionSocialNets.next();
-                            //Si es diferente de la del postIn, ya que esa ya se había agregado
-                            if(!socialNet.getURI().equals(postIn.getPostInSocialNetwork().getURI()))
+                            if(!socialNet.isDeleted() && socialNet.isActive())
                             {
-                                video.addSocialNetwork(socialNet);
+                                //Si es diferente de la del postIn, ya que esa ya se había agregado
+                                if(!socialNet.getURI().equals(postIn.getPostInSocialNetwork().getURI()))
+                                {
+                                    video.addSocialNetwork(socialNet);
+                                }
                             }
                         }
                         
@@ -123,11 +139,14 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
                         while(itSendPostActionSocialNets.hasNext())
                         {
                             SocialNetwork socialNet=itSendPostActionSocialNets.next();
-                            //Si es diferente de la del postIn, ya que esa ya se había agregado
-                            if(!socialNet.getURI().equals(postIn.getPostInSocialNetwork().getURI()))
+                            if(!socialNet.isDeleted() && socialNet.isActive())
                             {
-                                photo.addSocialNetwork(socialNet);
-                                System.out.println("Copio....:2:"+socialNet);
+                                //Si es diferente de la del postIn, ya que esa ya se había agregado
+                                if(!socialNet.getURI().equals(postIn.getPostInSocialNetwork().getURI()))
+                                {
+                                    photo.addSocialNetwork(socialNet);
+                                    System.out.println("Copio....:2:"+socialNet);
+                                }
                             }
                         }
                         
@@ -154,10 +173,13 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
                         while(itSendPostActionSocialNets.hasNext())
                         {
                             SocialNetwork socialNet=itSendPostActionSocialNets.next();
-                            //Si es diferente de la del postIn, ya que esa ya se había agregado
-                            if(!socialNet.getURI().equals(postIn.getPostInSocialNetwork().getURI()))
+                            if(!socialNet.isDeleted() && socialNet.isActive())
                             {
-                                message.addSocialNetwork(socialNet);
+                                //Si es diferente de la del postIn, ya que esa ya se había agregado
+                                if(!socialNet.getURI().equals(postIn.getPostInSocialNetwork().getURI()))
+                                {
+                                    message.addSocialNetwork(socialNet);
+                                }
                             }
                         }
                         
