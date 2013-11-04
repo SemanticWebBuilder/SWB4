@@ -72,10 +72,11 @@
 <%
         
         SWBModel model=WebSite.ClassMgr.getWebSite(facebookBean.getSemanticObject().getModel().getName());
-        params.put("limit", "50");    
+        params.put("limit", "50");
+        params.put("fields", "id,from,to,message,message_tags,story,story_tags,picture,caption,link,object_id,application,source,name,description,properties,icon,actions,privacy,type,status_type,created_time,likes.summary(true),comments.limit(5).summary(true),place,icon");
         String since = (String)session.getAttribute("since");
         System.out.println("session.getAttribute(since):" + session.getAttribute("since"));
-
+        
         //GETS ONLY MY POSTS
         String fbResponse = postRequest(params, "https://graph.facebook.com/me/feed",
                             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
