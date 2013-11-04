@@ -51,6 +51,41 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     public Facebook(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
+    
+    /**
+     * Formats phrases according to Query requirements.
+     * Removes duplicate words and formats the string.
+     * @param stream - phrases to search delimited by pipe
+     * @return Formated phrases.
+     */
+    private String getPhrases(String phrase){
+        String parsedString = null;
+        HashSet<String> parsedPhrases = new HashSet<String>();
+        if (phrase != null && !phrase.isEmpty()) {
+            parsedString = "";
+            String[] phrasesStream = phrase.split(","); //Delimiter
+            String tmp;
+            int noOfPhrases = phrasesStream.length;
+            for (int i = 0; i < noOfPhrases; i++) {
+                if(!phrasesStream[i].trim().isEmpty()){
+                    tmp = phrasesStream[i].trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for one only one space
+                    parsedPhrases.add(tmp);
+                }
+            }
+            
+            Iterator<String> words = parsedPhrases.iterator();
+            noOfPhrases = parsedPhrases.size();
+            int i = 0;
+            while(words.hasNext()){
+                parsedString += words.next();
+                if ((i + 1) < noOfPhrases) {
+                    parsedString += ",";
+                }                
+                i++;
+            }            
+        }        
+        return parsedString;
+    }
 
     /**
      * Ejecuta las operaciones para extraer informaci&oacute;n de Facebook, en
@@ -66,29 +101,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         HashMap<String, String> params = new HashMap<String, String>(2);
         params.put("access_token", this.getAccessToken());
         boolean canGetMoreResults = true;
-        //String phrasesInStream = stream.getPhrase() != null ? stream.getPhrase() : ""; paco
-        String phrasesInStream = "";
-        String[] phrases_InStream = stream.getPhrase().split(",");
-        HashMap map = new HashMap();
-        for (int i = 0; i < phrases_InStream.length; i++) {
-            String string = phrases_InStream[i].trim();
-            map.put(string, i);
+        String phrasesInStream = getPhrases(stream.getPhrase());
+        if(phrasesInStream == null || phrasesInStream.isEmpty()){
+            return;
         }
-
-        Iterator it = map.entrySet().iterator();
-        int i =0;
-        while (it.hasNext()) {
-            Map.Entry m = (Map.Entry) it.next();
-            String value = (String) m.getKey();            
-             if (i == 0) {
-                phrasesInStream += value;
-            } else {
-                phrasesInStream += "," + value;
-            }
-             i++;
-        }
-       
-
         int queriesNumber = phrasesInStream.split(",").length * 2;//int queriesNumber = phrasesInStream.split("\\|").length * 2;
         HashMap<String, String>[] queriesArray = new HashMap[queriesNumber];
 
@@ -109,6 +125,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
                     //Se analiza la respuesta de Facebook y se extraen los datos de los mensajes
                     canGetMoreResults = parseResponse(fbResponse, stream, queriesArray, iterations++);
+                }
+                
+                if(!stream.isActive()){//If the stream has been disabled stop listening
+                    canGetMoreResults = false;
                 }
 
             } while (canGetMoreResults);
