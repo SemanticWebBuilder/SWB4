@@ -351,11 +351,15 @@ public class SemanticMgr implements SWBInstanceObject
 
         //m_schema.getRDFOntModel().listStatements(null, RDF.type, RDFS.Class);
 
-        Iterator<SemanticClass> tpcit = new SemanticClassIterator(m_schema.getRDFOntModel().listClasses());
-        while (tpcit.hasNext()) {
+        Iterator<SemanticClass> tpcit = new SemanticClassIterator(m_schema.getRDFOntModel().listClasses(),true);
+        while (tpcit.hasNext()) 
+        {
             SemanticClass cls = tpcit.next();
             //System.out.println("register class:"+cls);
-            vocabulary.registerClass(cls,false);
+            if(cls!=null)
+            {
+                vocabulary.registerClass(cls,false);
+            }
         }
         vocabulary.filterProperties();        
         //System.out.println("voc ini");

@@ -433,11 +433,11 @@ public class SemanticLiteral
         if(obj instanceof Date)
         {
             ret=(Date)obj;
-        }else
+        }else if(obj!=null)
         {
             try
             {
-                String aux=(String)obj;
+                String aux=obj.toString();
                 if(aux!=null && aux.length()>0)
                 {
                     ret=new Date(SWBUtils.TEXT.iso8601DateParse(aux).getTime());
