@@ -1744,7 +1744,7 @@ public class SemanticObject
         }
         return list.iterator();
     }
-
+    
     /**
      * Regresa lista de objetos activos y no borrados relacionados por la propiedad
      * Si no encuentra en el objeto busca en los padres.
@@ -1755,16 +1755,45 @@ public class SemanticObject
      */
     public Iterator<SemanticObject> listInheritProperties(SemanticProperty prop)
     {
+        return listInheritProperties(prop, new ArrayList());
+    }    
+
+    /**
+     * Regresa lista de objetos activos y no borrados relacionados por la propiedad
+     * Si no encuentra en el objeto busca en los padres.
+     *
+     * @param prop the prop
+     * @return the iterator
+     * @return
+     */
+    private Iterator<SemanticObject> listInheritProperties(SemanticProperty prop, ArrayList arr)
+    {
+        if(arr.contains(this))
+        {
+            log.error("Error: circular reference:"+prop+" obj:"+this+" "+arr);
+            return listObjectProperties(prop);
+        }else
+        {
+            arr.add(this);
+        }
         Iterator it=listObjectProperties(prop);
         if(prop.isInheritProperty())
         {
             it=filterValidObjects(it);
             if(!it.hasNext())
             {
-                SemanticObject parent=getHerarquicalParent();
-                if(parent!=null)
+                //TOOD:revisar como definir propirdad de no herencia
+                SemanticProperty noinherit=null;
+                //System.out.println("prop:"+prop);
+                noinherit=getSemanticClass().getProperty("notInherit"+prop.getName().substring(3));
+                //System.out.println("noinherit:"+noinherit);
+                if(noinherit==null || (noinherit!=null && getBooleanProperty(noinherit)==false))
                 {
-                    it=parent.listInheritProperties(prop);
+                    SemanticObject parent=getHerarquicalParent();
+                    if(parent!=null)
+                    {
+                        it=parent.listInheritProperties(prop,arr);
+                    }
                 }
             }
         }
