@@ -89,7 +89,7 @@ if (ProcessForm.ACT_UPDPROP.equals(action)) {
                                 Role role = roles.next();
                                 String selected = _roles.contains(role.getId())?"selected":"";
                                 --%>
-                                <option <%=selected%> value="<%=role.getId()%>"><%=role.getDisplayTitle(lang)%></option>
+                                <option <%--selected%> value="<%=role.getId()%>"><%=role.getDisplayTitle(lang)%></option>
                                 <%--
                             }
                             --%>
