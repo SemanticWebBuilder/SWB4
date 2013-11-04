@@ -253,6 +253,16 @@ public class ListenerMgr implements SWBAppObject {
         System.out.println("ListerJ5");
         if(stream!=null && stream.isActive() && !stream.isDeleted() && stream.getPhrase()!=null && stream.getPhrase().trim().length()>0 && stream.listSocialNetworks().hasNext())
         {
+            Iterator<SocialNetwork> itNets=stream.listSocialNetworks();
+            while(itNets.hasNext())
+            {
+                SocialNetwork socialNets=itNets.next();
+                if(!socialNets.isActive() || socialNets.isDeleted())
+                {
+                    return false;
+                }
+            }
+            
             //Si es isKeepAliveManager==true, no importaría si no le ponen un tiempo para que este llamandose el thread, 
             //ya que este es llamado internamente desde cada red social que maneje esta caracteristica
             System.out.println("IsKeppAlive:"+stream.isKeepAliveManager()+",poolTime:"+stream.getPoolTime());
