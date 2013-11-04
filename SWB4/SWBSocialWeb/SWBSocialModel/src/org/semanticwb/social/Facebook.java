@@ -66,7 +66,29 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         HashMap<String, String> params = new HashMap<String, String>(2);
         params.put("access_token", this.getAccessToken());
         boolean canGetMoreResults = true;
-        String phrasesInStream = stream.getPhrase() != null ? stream.getPhrase() : "";
+        //String phrasesInStream = stream.getPhrase() != null ? stream.getPhrase() : ""; paco
+        String phrasesInStream = "";
+        String[] phrases_InStream = stream.getPhrase().split(",");
+        HashMap map = new HashMap();
+        for (int i = 0; i < phrases_InStream.length; i++) {
+            String string = phrases_InStream[i].trim();
+            map.put(string, i);
+        }
+
+        Iterator it = map.entrySet().iterator();
+        int i =0;
+        while (it.hasNext()) {
+            Map.Entry m = (Map.Entry) it.next();
+            String value = (String) m.getKey();            
+             if (i == 0) {
+                phrasesInStream += value;
+            } else {
+                phrasesInStream += "," + value;
+            }
+             i++;
+        }
+       
+
         int queriesNumber = phrasesInStream.split(",").length * 2;//int queriesNumber = phrasesInStream.split("\\|").length * 2;
         HashMap<String, String>[] queriesArray = new HashMap[queriesNumber];
 
@@ -151,11 +173,11 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             for (int i = 0; i < queriesArray.length; i++) {
 
                 /*String newQuery = queriesArray[i].containsKey("nextQuery")
-                        ? queriesArray[i].get("nextQuery") : "";*/
+                 ? queriesArray[i].get("nextQuery") : "";*/
                 String newQuery = queriesArray[i].containsKey("previousQuery")
                         ? queriesArray[i].get("previousQuery") : "";
 
-                if(newQuery == null ){
+                if (newQuery == null) {
                     newQuery = "";
                 }
                 //System.out.println("MOSTRANDO query a Parsear storeSearchLimits:"  + newQuery);
@@ -168,14 +190,14 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     params = newQuery.substring(newQuery.indexOf("?") + 1).split("&");
                     for (int j = 0; j < params.length; j++) {
                         /*if (params[j].startsWith("until=")) {
-                            if (i > 0) {
-                                limits.append(":");  //se agrega separador entre valores
-                            }
-                            limits.append("search_");
-                            limits.append(queriesArray[i].get("phrase"));
-                            limits.append("=");
-                            limits.append(params[j].split("=")[1]);
-                        }*/
+                         if (i > 0) {
+                         limits.append(":");  //se agrega separador entre valores
+                         }
+                         limits.append("search_");
+                         limits.append(queriesArray[i].get("phrase"));
+                         limits.append("=");
+                         limits.append(params[j].split("=")[1]);
+                         }*/
                         if (params[j].startsWith("since=")) {
                             if (i > 0) {
                                 limits.append(":");  //se agrega separador entre valores
@@ -203,58 +225,58 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 }
             }
             /*if (limits.length() > 0) {
-                SocialNetStreamSearch socialStreamSerch = SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
-                if (socialStreamSerch != null) {
-                    socialStreamSerch.setNextDatetoSearch(limits.toString());
-                }
-                //this.setNextDatetoSearch(limits.toString());
-                System.out.println("SAVING DATA:" + limits);
-            }*/
+             SocialNetStreamSearch socialStreamSerch = SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
+             if (socialStreamSerch != null) {
+             socialStreamSerch.setNextDatetoSearch(limits.toString());
+             }
+             //this.setNextDatetoSearch(limits.toString());
+             System.out.println("SAVING DATA:" + limits);
+             }*/
             if (limits.length() > 0) {
                 SocialNetStreamSearch socialStreamSerch = SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
-                if (socialStreamSerch != null){
-                    if(socialStreamSerch.getNextDatetoSearch() != null && !socialStreamSerch.getNextDatetoSearch().isEmpty()){
+                if (socialStreamSerch != null) {
+                    if (socialStreamSerch.getNextDatetoSearch() != null && !socialStreamSerch.getNextDatetoSearch().isEmpty()) {
                         /*Pudo haber traido resultados para ambos casos, actualizar ambos ids
-                          Pudo haber traido solo un id y si del otro no trajo nada pero se encuentra en el stream y debe de usarse el de la última vez
-                          Pudo haber agregado un nuevo termino y trajo resultados, debe de guardarse
-                          Pudo haberse quitado un termino del stream entonces debe de removerse del nextdatetosearch
-                        */
+                         Pudo haber traido solo un id y si del otro no trajo nada pero se encuentra en el stream y debe de usarse el de la última vez
+                         Pudo haber agregado un nuevo termino y trajo resultados, debe de guardarse
+                         Pudo haberse quitado un termino del stream entonces debe de removerse del nextdatetosearch
+                         */
                         String phrasesInStream = stream.getPhrase() != null ? stream.getPhrase() : "";
                         String[] phrasesArray = phrasesInStream.split(",");
                         String[] oldLimits = socialStreamSerch.getNextDatetoSearch().split(":");
                         String[] newLimits = limits.toString().split(":");
                         String finalLimits = "";
-                        
-                        
-                        for(int j = 0; j < newLimits.length; j++){
+
+
+                        for (int j = 0; j < newLimits.length; j++) {
                             System.out.println("\t\tnew-->" + newLimits[j] + "<--");
                         }
                         System.out.println("\n");
-                        for(int j = 0; j < oldLimits.length; j++){
+                        for (int j = 0; j < oldLimits.length; j++) {
                             System.out.println("\t\told-->" + oldLimits[j] + "<--");
                         }
                         System.out.println("\n");
-                        for(int j = 0; j < phrasesArray.length; j++){
+                        for (int j = 0; j < phrasesArray.length; j++) {
                             System.out.println("\t\tstream-->" + phrasesArray[j] + "<--");
                         }
                         System.out.println("\n");
-                        for(int i = 0; i < phrasesArray.length; i++ ){//Iterate the phrases in stream                            
+                        for (int i = 0; i < phrasesArray.length; i++) {//Iterate the phrases in stream                            
                             //LA REFERENCIA SON LAS FRASES EN EL STREAM COMO TAL!!!
                             //para cada palabra buscarla en los nuevos limites
                             //si no la encuentra buscarla en lo que hay en el nextdatetosearch
-                            
+
                             //si no la encuentra no agrega nada
                             //si hay más palabras en el nextdatetosearch no las toma en cuenta porque está buscando sobre las frases del stream
                             String wordInStream = phrasesArray[i];
                             System.out.println("looking for:" + wordInStream);
-                            
+
                             boolean foundInNewLimits = false;
                             //Buscar primero en los limites nuevos                            
-                            for(int j = 0; j < newLimits.length; j++){
-                                if(!newLimits[j].isEmpty()){
-                                    String newLimit = newLimits[j].substring(newLimits[j].indexOf("_")+1, newLimits[j].lastIndexOf("="));
+                            for (int j = 0; j < newLimits.length; j++) {
+                                if (!newLimits[j].isEmpty()) {
+                                    String newLimit = newLimits[j].substring(newLimits[j].indexOf("_") + 1, newLimits[j].lastIndexOf("="));
                                     System.out.println("NEW-" + newLimit + "-vs-" + wordInStream);
-                                    if(wordInStream.equals(newLimit)){//Se encontro en los limites nuevos
+                                    if (wordInStream.equals(newLimit)) {//Se encontro en los limites nuevos
                                         finalLimits += newLimits[j] + ":";
                                         foundInNewLimits = true;
                                         System.out.println("FOUND IN NEW LIMITS:" + newLimits[j]);
@@ -262,30 +284,30 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                     }
                                 }
                             }
-                            
-                            if(foundInNewLimits == false){//Se va a buscar en los datos almacenados en el nextdatetosearch
+
+                            if (foundInNewLimits == false) {//Se va a buscar en los datos almacenados en el nextdatetosearch
                                 System.out.println("NO ENCONTRADO EN LOS LIMITES NUEVOS:" + wordInStream);
-                                for(int j = 0; j < oldLimits.length ; j++){
-                                    if(!oldLimits[j].isEmpty()){
-                                        String oldLimit = oldLimits[j].substring(oldLimits[j].indexOf("_")+1, oldLimits[j].lastIndexOf("="));
+                                for (int j = 0; j < oldLimits.length; j++) {
+                                    if (!oldLimits[j].isEmpty()) {
+                                        String oldLimit = oldLimits[j].substring(oldLimits[j].indexOf("_") + 1, oldLimits[j].lastIndexOf("="));
                                         System.out.println("old-" + oldLimit + "-vs-" + wordInStream);
-                                        if(wordInStream.equals(oldLimit)){
+                                        if (wordInStream.equals(oldLimit)) {
                                             finalLimits += oldLimits[j] + ":";
                                             System.out.println("FOUND IN OLD STORED LIMITS:" + oldLimits[j]);
                                             break;
-                                        }                                        
+                                        }
                                     }
                                 }
                             }
                             //Si no la encontro en los limites nuevos ni en los anteriores entonces no la guarda
                         }
-                        
-                        if(finalLimits.length()>1){
-                            finalLimits = finalLimits.substring(0,finalLimits.length()-1);
+
+                        if (finalLimits.length() > 1) {
+                            finalLimits = finalLimits.substring(0, finalLimits.length() - 1);
                         }
                         System.out.println("SAVING DATA:" + finalLimits);
                         socialStreamSerch.setNextDatetoSearch(finalLimits);
-                    }else{
+                    } else {
                         System.out.println("\n\n\nSAVING DATA fOR FIRST TIME!!!:" + limits.toString());
                         socialStreamSerch.setNextDatetoSearch(limits.toString());
                     }
@@ -572,7 +594,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                             String previousPage = null;
                             if (dataOnBody.has("paging")) {
                                 nextPage = dataOnBody.getJSONObject("paging").getString("next");
-                                if(iterations == 0){
+                                if (iterations == 0) {
                                     previousPage = dataOnBody.getJSONObject("paging").getString("previous");
                                 }
                             } else if (isResponseEmpty) {
@@ -584,7 +606,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                             }
 
                             queriesArray[j].put("nextQuery", nextPage);
-                            if(iterations == 0 && previousPage != null){//Only the first time saves previousPage
+                            if (iterations == 0 && previousPage != null) {//Only the first time saves previousPage
                                 //System.out.println("\t guardando previousPage:" + previousPage);
                                 queriesArray[j].put("previousQuery", previousPage);
                             }
@@ -1449,33 +1471,33 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                         userInfo.put("followers", 0);
                     }
 
-                    
+
                     if (parseUsrInf.has("current_location") && !parseUsrInf.isNull("current_location")) {
                         JSONObject location = parseUsrInf.getJSONObject("current_location");
                         /*
-                        //Latitude
-                        if (location.has("latitude") && !location.isNull("latitude")) {
-                            userInfo.put("latitude", location.getDouble("latitude"));
-                        }
-                        //Longitude
-                        if (location.has("longitude") && !location.isNull("longitude")) {
-                            userInfo.put("longitude", location.getDouble("longitude"));
-                        }
-                        //Country Code
-                        if (location.has("country") && !location.isNull("country")) {
-                            if (location.getString("country").toLowerCase().contains("mexico")) {
-                                userInfo.put("country_code", "MX");
-                            } else if (location.getString("country").toLowerCase().contains("united states")) {
-                                userInfo.put("country_code", "US");
-                            }
-                        }
-                        * */
+                         //Latitude
+                         if (location.has("latitude") && !location.isNull("latitude")) {
+                         userInfo.put("latitude", location.getDouble("latitude"));
+                         }
+                         //Longitude
+                         if (location.has("longitude") && !location.isNull("longitude")) {
+                         userInfo.put("longitude", location.getDouble("longitude"));
+                         }
+                         //Country Code
+                         if (location.has("country") && !location.isNull("country")) {
+                         if (location.getString("country").toLowerCase().contains("mexico")) {
+                         userInfo.put("country_code", "MX");
+                         } else if (location.getString("country").toLowerCase().contains("united states")) {
+                         userInfo.put("country_code", "US");
+                         }
+                         }
+                         * */
                         //Name of the place
                         if (location.has("name") && !location.isNull("name")) {
                             userInfo.put("place_name", location.getString("name"));
                         }
                     }
-                    
+
 
                     //Gender
                     if (parseUsrInf.has("sex") && !parseUsrInf.isNull("sex")) {
@@ -1525,14 +1547,14 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
                     //work
                     /*
-                    JSONArray jArrayWork = null;
-                    if (parseUsrInf.has("work") && !parseUsrInf.isNull("work")) {
-                        jArrayWork = parseUsrInf.getJSONArray("work");
-                        userInfo.put("work", jArrayWork);
-                    } else {
-                        jArrayWork = new JSONArray();
-                        userInfo.put("work", jArrayWork);
-                    }*/
+                     JSONArray jArrayWork = null;
+                     if (parseUsrInf.has("work") && !parseUsrInf.isNull("work")) {
+                     jArrayWork = parseUsrInf.getJSONArray("work");
+                     userInfo.put("work", jArrayWork);
+                     } else {
+                     jArrayWork = new JSONArray();
+                     userInfo.put("work", jArrayWork);
+                     }*/
                 }
                 System.out.println("parseUsrInf:" + parseUsrInf);
                 //if(parseUsrInf.has(id))
@@ -1555,30 +1577,30 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         }
         return true;
     }
-    
-    private String privacyValue(PostOut postout){
-        Iterator<PostOutPrivacyRelation> privacyRelation = PostOutPrivacyRelation.ClassMgr.listPostOutPrivacyRelationByPopr_postOut(postout);        
+
+    private String privacyValue(PostOut postout) {
+        Iterator<PostOutPrivacyRelation> privacyRelation = PostOutPrivacyRelation.ClassMgr.listPostOutPrivacyRelationByPopr_postOut(postout);
         String privacy = "EVERYONE";//Default Value
-        try{
-            while(privacyRelation.hasNext()){
+        try {
+            while (privacyRelation.hasNext()) {
                 PostOutPrivacyRelation privacyR = privacyRelation.next();
-                if(privacyR.getPopr_socialNetwork().getURI().equals(this.getURI())){
-                    if(privacyR.getPopr_privacy() != null){                        
+                if (privacyR.getPopr_socialNetwork().getURI().equals(this.getURI())) {
+                    if (privacyR.getPopr_privacy() != null) {
                         //For facebook PUBLIC->EVERYONE
                         //And PRIVATE->SELF
                         System.out.println("PRIVACY--->" + privacyR.getPopr_privacy().getId() + "<---");
-                        if(privacyR.getPopr_privacy().getId().equals("PUBLIC")){
+                        if (privacyR.getPopr_privacy().getId().equals("PUBLIC")) {
                             privacy = "EVERYONE";
-                        }else if(privacyR.getPopr_privacy().getId().equals("PRIVATE")){
+                        } else if (privacyR.getPopr_privacy().getId().equals("PRIVATE")) {
                             privacy = "SELF";
-                        }else{
+                        } else {
                             privacy = privacyR.getPopr_privacy().getId();
                         }
                     }
                 }
             }
-        }catch(Exception e){
-            log.error("Problem setting privacy:", e );
+        } catch (Exception e) {
+            log.error("Problem setting privacy:", e);
         }
         System.out.println("PRIVACY:" + privacy);
         return privacy;
