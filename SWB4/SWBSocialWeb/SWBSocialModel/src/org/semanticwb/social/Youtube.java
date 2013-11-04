@@ -789,7 +789,11 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         ArrayList<ExternalPost> aListExternalPost = new ArrayList();
         String searchPhrases = getPhrases(stream.getPhrase());
         String category = "";
-
+        
+        if(searchPhrases == null || searchPhrases.isEmpty()){
+            return;
+        }
+        
         Iterator<YouTubeCategory> it = listYoutubeCategories();
         if (it.hasNext()) {//The first category
             category = it.next().getId();
@@ -799,6 +803,12 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             category = category + "|" + it.next().getId();
         }
 
+        int blockOfVideos = 0; //this is the default Value, 
+        if(stream.getBlockofMsgToClassify() > 0){
+            blockOfVideos = stream.getBlockofMsgToClassify();
+        }
+        System.out.println("Message Block Youtube:" + blockOfVideos);
+        
         int limit = 500;
         int maxResults = 50;
         int totalResources = 0;
@@ -852,19 +862,12 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                         }
                         String categoryItem = id.getString("category");
 
-                        //JSONObject player = id.getJSONObject("player");
-                        //String url = player.getString("default");
-                        //String url = player.getString("default");
-                        //The url of the video is http://www.youtube.com/v/ID_VIDEO
-                        //System.out.println("uploaded:" + uploadedStr + " -- " + lastVideoID);
-                        //Temporal
                         Date uploaded = formatter.parse(id.getString("uploaded"));
                         if (uploaded.before(lastVideoID) || uploaded.equals(lastVideoID)) {
                             System.out.println("Terminar la busqueda, limite alcanzado");
                             canGetMoreVideos = false;
                             break;
                         } else {
-                            //System.out.println("entra al else... Guardando..");
                             external.setPostId(idItem);
                             external.setCreatorId(uploader);
                             external.setCreatorName(uploader);
@@ -886,6 +889,15 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                             setLastVideoID(uploadedStr, stream);//uploadedStr
                         }
                         totalResources++;
+                    }
+                    
+                    if((blockOfVideos > 0) && (aListExternalPost.size() >= blockOfVideos)){//Classify the block of videos
+                        System.out.println("CLASSIFYING:" + aListExternalPost.size());
+                        new Classifier((ArrayList <ExternalPost>)aListExternalPost.clone(), stream, this, false);
+                        aListExternalPost.clear();
+                    }
+                    if(!stream.isActive()){//If the stream has been disabled stop listening
+                        canGetMoreVideos = false;
                     }
                     if (canGetMoreVideos == false) {
                         System.out.println("Terminando... " + "<=" + lastVideoID);
@@ -918,11 +930,13 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             String tmp;
             int noOfPhrases = phrasesStream.length;
             for (int i = 0; i < noOfPhrases; i++) {
-                tmp = phrasesStream[i].trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for one only one space
-                //parsedPhrases += ((tmp.contains(" ")) ? ("\"" + tmp + "\"") : tmp); // if spaces found, it means more than one word in a phrase
-                parsedPhrases += "\"" + tmp + "\""; // if spaces found, it means more than one word in a phrase
-                if ((i + 1) < noOfPhrases) {
-                    parsedPhrases += "|";
+                if(!phrasesStream[i].trim().isEmpty()){
+                    tmp = phrasesStream[i].trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for one only one space
+                    //parsedPhrases += ((tmp.contains(" ")) ? ("\"" + tmp + "\"") : tmp); // if spaces found, it means more than one word in a phrase
+                    parsedPhrases += "\"" + tmp + "\""; // if spaces found, it means more than one word in a phrase
+                    if ((i + 1) < noOfPhrases) {
+                        parsedPhrases += "|";
+                    }
                 }
             }
         }

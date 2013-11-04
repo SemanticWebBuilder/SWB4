@@ -296,13 +296,15 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             String tmp;
             int noOfPhrases = phrasesStream.length;
             for (int i = 0; i < noOfPhrases; i++) {
-                tmp = phrasesStream[i].trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for one only one space
-                parsedPhrases += ((tmp.contains(" ")) ? ("\"" + tmp + "\"") : tmp); // if spaces found, it means more than one word in a phrase
-                if ((i + 1) < noOfPhrases) {
-                    parsedPhrases += " OR ";
+                if(!phrasesStream[i].trim().isEmpty()){
+                    tmp = phrasesStream[i].trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for one only one space
+                    parsedPhrases += ((tmp.contains(" ")) ? ("\"" + tmp + "\"") : tmp); // if spaces found, it means more than one word in a phrase
+                    if ((i + 1) < noOfPhrases) {
+                        parsedPhrases += " OR ";
+                    }
                 }
             }
-        }        
+        }
         return parsedPhrases;
     }
 
@@ -319,12 +321,16 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         if(stream.getBlockofMsgToClassify() > 0){
             blockOfTweets = stream.getBlockofMsgToClassify();
         }
-        System.out.println("BLOQUE DE MENSAJES:" + blockOfTweets);
+        System.out.println("Message Block Twitter:" + blockOfTweets);
         
         try{            
             long lastTweetID = getLastTweetID(stream); //gets the value stored in NextDatetoSearch
             twitter4j.Twitter twitter = new TwitterFactory(configureOAuth().build()).getInstance();            
             String searchPhrases = getPhrases(stream.getPhrase());
+            if(searchPhrases == null || searchPhrases.isEmpty()){
+                return;
+            }
+            
             twitter4j.Query query = new Query(searchPhrases);
             query.setCount(100); //max tweets by request
             
@@ -333,13 +339,11 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             long currentTweetID = 0L;
             aListExternalPost = new ArrayList();
             do{
-                //aListExternalPost = new ArrayList();
                 try{
                     //System.out.println("QUERY: " + query);
                     twitter4j.QueryResult result = twitter.search(query);
                     int noOfTweets = result.getTweets().size();
                     //System.out.println("\ntweets by request: " + noOfTweets);                    
-                    //System.out.println("Iteracion: " + iteration);
                     
                     if(noOfTweets == 0){
                         //System.out.println("No more tweets available for the current query!!");
@@ -403,7 +407,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                                     currentTweetID = status.getId();
                                     tweetsReceived++;
                                     
-                                    if((blockOfTweets > 0) && (aListExternalPost.size() >= blockOfTweets)){
+                                    if((blockOfTweets > 0) && (aListExternalPost.size() >= blockOfTweets)){//Classify the block of tweets
                                         System.out.println("CLASSIFYING:" + aListExternalPost.size());
                                         new Classifier((ArrayList <ExternalPost>)aListExternalPost.clone(), stream, this, false);
                                         aListExternalPost.clear();
@@ -411,7 +415,14 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                                 }
                             }
                         }
-
+                        
+                        if(!stream.isActive()){//If the stream has been disabled stop listening
+                            canGetMoreTweets = false;
+                        }
+                        //Sometimes the api gets the same tweet several times!!!
+                        if(noOfTweets <= 10){//Got more messages than the requested->There are no more messages.
+                            canGetMoreTweets = false;
+                        }
                         if(iteration == 1){
                             //System.out.println("MaxTweetID:" + result.getMaxId());
                             setLastTweetID(result.getMaxId(), stream);//Save ID of the most recent Tweet
@@ -434,14 +445,10 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                     log.error("Error getting tweets SEARCH"  + ex );
                     canGetMoreTweets = false;
                 }
-//                if(aListExternalPost.size()>0){
-//                    new Classifier(aListExternalPost, stream, this);
-//                }
-                
             }while(canGetMoreTweets && tweetsReceived <17000);  //Maximo permitido para extraer de twitter c/15 minutos
             
             if(aListExternalPost.size()>0){
-                System.out.println("CLASSIFYING FINALLY:" + aListExternalPost.size());
+                //System.out.println("CLASSIFYING FINALLY:" + aListExternalPost.size());
                 new Classifier(aListExternalPost, stream, this, false);
             }
             //System.out.println("TOTAL TWEETS RECEIVED:" + tweetsReceived);
@@ -484,7 +491,6 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             System.exit(-1);
         }
         */
-
     }
 
 
