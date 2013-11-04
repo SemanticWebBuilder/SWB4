@@ -4,6 +4,7 @@
     Author     : javier.solis.g
 --%>
 
+<%@page import="com.hp.hpl.jena.rdf.model.RDFNode"%>
 <%@page import="com.hp.hpl.jena.query.QueryExecution"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="com.hp.hpl.jena.query.QuerySolution"%>
@@ -72,7 +73,7 @@
         QueryExecution qe=site.getSemanticModel().sparQLQuery(query);
         ResultSet rs=qe.execSelect();
         
-        {
+       {
             out.println("<tr>");
             Iterator<String> it=rs.getResultVars().iterator();
             while(it.hasNext())
@@ -94,7 +95,11 @@
             {
                 String name=it.next();
                 out.println("<td>");
-                out.println(qs.get(name));
+                RDFNode node=qs.get(name);
+                String val="";
+                if(node!=null&&node.isLiteral())val=node.asLiteral().getLexicalForm();
+                else if(node!=null&&node.isResource())val=node.asResource().getURI();
+                out.println(val);
                 out.println("</td>");
             }
             out.println("</tr>");

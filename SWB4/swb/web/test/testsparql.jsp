@@ -21,7 +21,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>SparQL Query Test!</h1>
+        <h1>SWB SparQL Query Test!</h1>
 <%
     String query=request.getParameter("query");
     if(query==null)
@@ -30,6 +30,7 @@
                     "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                     "PREFIX prop: <http://www.swb.com/prop#>\n" +
                     "PREFIX onto: <http://www.swb.com/ontology#>\n" +
+                    "PREFIX swb: <http://www.semanticwebbuilder.org/swb4/ontology#>\n" +
                     "\n" +
 //                    "select ?nombre ?telefono ?estado ?nempresa ?telempresa\n" +
 //                    "select (count(?s) as ?c)\n" +
@@ -97,8 +98,8 @@
                 out.println("<td>");
                 RDFNode node=qs.get(name);
                 String val="";
-                if(node.isLiteral())val=node.asLiteral().getLexicalForm();
-                else if(node.isResource())val=node.asResource().getURI();
+                if(node!=null&&node.isLiteral())val=node.asLiteral().getLexicalForm();
+                else if(node!=null&&node.isResource())val=node.asResource().getURI();
                 out.println(val);
                 out.println("</td>");
             }
