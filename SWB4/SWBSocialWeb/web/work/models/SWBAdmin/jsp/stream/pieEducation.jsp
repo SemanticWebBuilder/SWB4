@@ -205,7 +205,7 @@
          if(highSchool == 0 && college == 0 &&  graduate ==0 && undefined==0 ){
                    
             JSONObject node3=new JSONObject();
-            node3.put("label", "Neutros"); 
+            node3.put("label", SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)); 
             node3.put("value1", "0");
             node3.put("value2", "100");
             node3.put("color", "#eae8e3");
