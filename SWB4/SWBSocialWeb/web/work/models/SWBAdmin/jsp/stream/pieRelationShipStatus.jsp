@@ -160,7 +160,7 @@
             } else {
                 node1.put("color", "#eae8e3");
             }
-            node1.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("single", lang)+": " + single + " Positivos : " + positivesSingle + " Negativos: " + negativesSingle + " Neutros: " + neutralsSingle);
+            node1.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("single", lang)+": " + single + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesSingle + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesSingle + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsSingle);
             node1.put("chartclass", "possClass");
             node.put(node1);
         }
@@ -177,7 +177,7 @@
             } else {
                 node2.put("color", "#eae8e3");
             }
-            node2.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("married", lang)+": " + married + " Positivos : " + positivesMarried + " Negativos: " + negativesMarried + " Neutros: " + neutralsMarried);
+            node2.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("married", lang)+": " + married + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+"  : " + positivesMarried + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesMarried + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsMarried);
             node2.put("chartclass", "possClass");
             node.put(node2);
         }
@@ -194,7 +194,7 @@
             } else {
                 node3.put("color", "#eae8e3");
             }
-            node3.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("divorced", lang)+": " + divorced + " Positivos : " + positivesDivorced + " Negativos: " + negativesDivorced + " Neutros: " + neutralsDivorced);
+            node3.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("divorced", lang)+": " + divorced + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+"  : " + positivesDivorced + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesDivorced + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsDivorced);
             node3.put("chartclass", "possClass");
             node.put(node3);
         }
@@ -211,7 +211,7 @@
             } else {
                 node4.put("color", "#eae8e3");
             }
-            node4.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("widowed", lang)+": " + widowed + " Positivos : " + positivesWidowed + " Negativos: " + negativesWidowed + " Neutros: " + neutralsWidowed);
+            node4.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("widowed", lang)+": " + widowed + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesWidowed +SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+ " : " + negativesWidowed + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsWidowed);
             node4.put("chartclass", "possClass");
             node.put(node4);
         }
@@ -228,7 +228,7 @@
             } else {
                 node5.put("color", "#eae8e3");
             }
-            node5.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("undefinedRelation", lang)+": " + undefined + " Positivos : " + positivesUndefined+ " Negativos: " + negativesUndefined+ " Neutros: " + neutralsUndefined);
+            node5.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("undefinedRelation", lang)+": " + undefined + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+"  : " + positivesUndefined+ SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesUndefined+ SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsUndefined);
             node5.put("chartclass", "possClass");
             node.put(node5);
         }
