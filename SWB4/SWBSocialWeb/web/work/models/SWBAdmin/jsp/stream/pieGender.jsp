@@ -176,7 +176,7 @@
         if (male == 0 && female == 0 && other == 0) {
 
             JSONObject node3 = new JSONObject();
-            node3.put("label", "Neutros");
+            node3.put("label", SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang));
             node3.put("value1", "0");
             node3.put("value2", "100");
             node3.put("color", "#eae8e3");
