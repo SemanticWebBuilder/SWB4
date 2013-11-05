@@ -95,6 +95,7 @@ public class PeriodsManager extends GenericResource {
             out.println("  <table width=\"98%\">"); 
             out.println("   <thead>");
             out.println("    <tr>");
+            out.println("     <th>" + paramRequest.getLocaleString("lbl_index") + "</th>");
             out.println("     <th>" + paramRequest.getLocaleString("lbl_period") + "</th>");
             out.println("     <th>" + paramRequest.getLocaleString("lbl_fromDate") + "</th>");            
             out.println("     <th>" + paramRequest.getLocaleString("lbl_toDate") + "</th>");            
@@ -145,6 +146,7 @@ public class PeriodsManager extends GenericResource {
 
                     //mostrar las columnas del listado con sus valores
                     out.println("    <tr>");
+                    out.append("      <td>"+period.getOrden()+"</td>");
                     out.println("     <td>");
                     out.print("<a href=\"#\" onclick=\"addNewTab('" + period.getURI() + "','");
                     out.print(SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + title);
@@ -173,7 +175,7 @@ public class PeriodsManager extends GenericResource {
                     }
                     out.println("     </td>");
 
-                    out.println("     <td>" + 
+                    out.println("     <td align=\"center\">" + 
                             (period.isActive()
                              ? paramRequest.getLocaleString("lbl_isActive")
                              : paramRequest.getLocaleString("lbl_isNotActive")) +
