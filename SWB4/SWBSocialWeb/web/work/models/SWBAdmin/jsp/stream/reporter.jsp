@@ -67,11 +67,16 @@
 
 
     <style type="text/css">
+         
         @import "/swbadmin/js/dojo/dojo/resources/dojo.css"; 
         @import "/swbadmin/js/dojo/dojo/resources/dnd.css";
         @import "/swbadmin/js/dojo/dijit/themes/soria/soria.css";
         @import "/swbadmin/js/dojo/dojox/layout/resources/ExpandoPane.css";
         @import "/swbadmin/js/dojo/dojox/form/resources/FileInput.css";
+        @import "/swbadmin/css/swbsocial.css";          
+            html, body, #main{
+                overflow: auto;
+            }
     </style>
     <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false"></script>
     <script type="text/javascript" charset="utf-8" src="/swbadmin/js/swb.js"></script>
@@ -139,7 +144,7 @@
                     </select>
                 </div>
                 <div id="statuslove-box">
-                    <label for="sentimental">Estatus Sentimental</label>
+                    <label for="sentimental">Estado civil</label>
                     <select name="sentimentalRelationShip">
                         <option value="all">Todos</option>
                         <option value="<%=SocialNetworkUser.USER_RELATION_SINGLE%>" <%=sentimentalRelationShip.equals("" + SocialNetworkUser.USER_RELATION_SINGLE) ? "selected" : ""%>>Soltero</option>
