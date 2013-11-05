@@ -324,7 +324,7 @@ public class DataBuilder {
         WebPage wp = ws.getWebPage(Objective.class.getSimpleName());
         String url = "#";
         if(wp != null) {
-            url = wp.getUrl() + "?suri=" + wp.getURI();
+            url = wp.getUrl() + "?suri=" + wp.getEncodedURI();
         }
         try {
             dataObjective.put("title", title);
