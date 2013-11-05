@@ -103,7 +103,11 @@
             if(te.getErrorCode() == 88){
                 out.println("<div align=\"center\"><h2>YOU HAVE REACHED YOUR RATE LIMIT FOR THIS RESOURCE</h2><br/></div>");
             }else{
-                out.println("<div align=\"center\"><h2>" + te.getErrorMessage() + "</h2><br/></div>");
+                String message = te.getErrorMessage();
+                if(message == null){
+                    message = "Network problem?";
+                }
+                out.println("<div align=\"center\"><h2>" + message + "</h2><br/></div>");
             }
             System.out.println("Error displaying timeline:" + te.getErrorMessage());
             te.printStackTrace();
