@@ -521,7 +521,7 @@ th {
     width: 25%;
     text-align: right;
 	font-weight: normal;
-}*/
+}*/
 	
 /*.swbform fieldset fieldset label {
 	display: block;
@@ -696,6 +696,7 @@ div.sitesectiontree ul.treeres {
 }
 /*------------------- select tree  ----*/
 
+#swbPreviewTab { margin:0 !important; padding:0 !important;}
 
 
 /*ANTI SORIA*/
@@ -760,7 +761,7 @@ background:none !important; border:none !important; padding:0 !important;}
 .soria .dijitAccordionTitle          { background:url(images/titleBar.png) repeat-x left top #FAFAFA !important; color:#685521 !important; }
 .soria .dijitAccordionTitle-selected { background:url(images/accordionItemActive.png) repeat-x left top #FAFAFA !important; color:#5F4324 !important; } 
 .soria .dijitTreeNodeSelected .dijitTreeLabel { background:none;} /*Seleccionado*/
-.soria .dijitAccordionContainer-dijitContentPane { background-color:#EAEAEA; padding:0px !important; width:100% !important;} /*FONDO donde viene el árbol*/
+.soria .dijitAccordionContainer-dijitContentPane { background-color:#EAEAEA; padding:0px !important; width:100% !important;} /*FONDO donde viene el ??rbol*/
 .soria .dijitTreeIsRoot { background: url(images/bg-dijitTreeIsRoot.gif) !important; margin-bottom:1px;} /*MARCA*/
 .soria .dijitTreeLabel { font-weight:bold !important;}
 .soria .dijitAccordionArrow { float:right;}
@@ -1004,10 +1005,11 @@ background: #FFA51E !important;}
 .soria .dijitTabContainerTop-container { border-color:#ffb13D !important;}
 
 /*POP UP */
-.soria .dijitDialog 		{ border:solid 1px #6B3A08;}
+.soria .dijitDialog 		{ border:solid 1px #6B3A08; top:105px !important;}
 .soria .dijitDialogTitleBar { background:url(images/titleBar.png) repeat-x}
 .soria .dijitDialog .dijitDialogTitle { color:#6B3A08;}
 .dijitDialogUnderlay { background:#000;}
+.dijitDialogUnderlayWrapper { top:0 !important;} /*Pop up transparente*/
 
 /*NUEVOS ICONOS*/
 .swbIconRssGrp,
@@ -1196,7 +1198,7 @@ border-radius: 2px; /*IE */
 /*TABLA 1*/
 .tabla1  { border-collapse:collapse; margin:auto;font-size:12px; font-family:Arial, Helvetica, sans-serif; width:100%;}
 .tabla1 caption      { display:none;}
-.tabla1 th           { color:#CC6600; padding:0px; border-left:1px solid #FFF; border-right: 1px solid #FFF; background:#FFC46A}
+.tabla1 th           { color:#CC6600; padding:0px; border-left:1px solid #FFF; border-right: 1px solid #FFF; background:#FFC46A; text-align:center;}
 .tabla1 th a		 { display:block; width:100%; height:2.2em; background:#FFC46A; color:#CC6600; text-decoration:none;}
 .tabla1 th a:hover   { background:#FFBA50;}
 .tabla1 th a:active  { background:#FFD38F;}
@@ -1209,8 +1211,8 @@ border-radius: 2px; /*IE */
 .tabla1 td.accion	 { text-align:left; white-space:nowrap;}
 .tabla1 td.accion a	 { width:25px; height:25px; display: inline-block; /*float:left;*/ margin:5px 2px 0 0; }
 .tabla1 td img		 { margin-top:3px}
-.tabla1 td.mensaje	 { width:20%;}
-th.accion, th.mensaje { background:#FFC46A;}
+.tabla1 td.mensaje	 { width:20%; text-align:left; word-break:break-all;}
+th.accion, th.mensaje { background:#FFC46A; text-align:center;}
 th.accion span, th.mensaje span 		 { margin:0 !important; position:relative; top:-6px; }
 
 .ascen, .ascen:hover, .ascen:active, 
@@ -1236,15 +1238,22 @@ th.accion span, th.mensaje span 		 { margin:0 !important; position:relative; top
 .answver       { background: url(images/ico-answver1.png)}
 .answver:hover { background: url(images/ico-answver2.png)}
 
+.editar       { background: url(images/ico-editar1.png)}
+.editar:hover { background: url(images/ico-editar2.png)}
+.aflujo       { background: url(images/ico-aflujo1.png)}
+.aflujo:hover { background: url(images/ico-aflujo2.png)}
+.autorizar       { background: url(images/ico-autoriza1.png)}
+.autorizar:hover { background: url(images/ico-autoriza2.png)}
+
 
 /*REDES*/
 .clear { clear:both;}
 .timelinefacebook p:first-child { margin-top:0; padding:10px; border-bottom:solid 1px #fafafa;}
-.timeline a { color:#FF6600;}
+.timeline a { color:#FF9900;}
 .timeline   { border:solid 1px #CCC; background:#fdfdfd; margin-bottom:20px;}
 .timeline img     { margin-right:5px;}
 .timelineusr	  { min-height:55px; margin-left:15px;}
-.timelineusr a    { float:left; }
+.timelineusr a img { float:left; }
 .timelineusr img  { border:solid 1px #CCC; }
 .timelineusr p	  { margin:0 0 10px 60px;}
 .timeline ul      { margin-left:17px; border-top:dotted 1px #e1e1e1; padding:10px 0 0 60px;}
@@ -1258,17 +1267,39 @@ th.accion span, th.mensaje span 		 { margin:0 !important; position:relative; top
 .timelinefacebook span em { color:#FF6600 !important; font-weight:normal !important}
 .timelinedate strong,
 .timelinefacebook .timelineresume strong { background:url(images/like.png) no-repeat; font-weight:normal; padding-left:21px;}
-.timelinetweeter .timelineresume strong { background:url(images/retweet1.png) no-repeat; font-weight:normal; padding-left:21px;}
+.timelinetweeter .timelineresume strong { background:url(images/retweet1.png) no-repeat 0px -2px; font-weight:normal; padding-left:21px;}
 .timelinedate strong span,
 .timelineresume strong span { display:none;}
 .timelinemore a { font-weight:normal !important; padding-left:40px;}
 .timelinemore a span { background:#F60; color:#FFFFFF !important; display:inline-block; font-weight:bold; height:13px; line-height:12px; margin-right:5px; position:relative; text-align:center; top:-2px; width:13px;
 border-radius:2px; -moz-border-radius:2px; -webkit-border-radius:2px; -khtml-border-radius:2px;}
 
-.timelineresume { border-top:solid 1px #fafafa; padding:6px 10px 4px; color:#666;}
-.timelineresume a { margin:0 10px;}
-.timelineresume .like { background:url(images/like2.png) no-repeat; padding-left:20px;}
-.timelineresume .retweet { background:url(images/retweet2.png) no-repeat; padding-left:20px;}
+.timelineresume { border-top:solid 1px #fafafa; padding:6px 10px 4px !important; color:#666;}
+.timelineresume a { margin:0 5px; padding:2px 6px 2px 20px; color:#FFF; text-decoration:none;
+border-radius:3px;
+-moz-border-radius:3px;
+-webkit-border-radius:3px;
+-khtml-border-radius:3px;}
+.timelineresume span:first-child em { font-weight:normal;color:#666; background:url(images/reloj.png) no-repeat 0px 0px; padding-left:18px;}
+
+.timelineresume .like 			 { background:url(images/like3.png) no-repeat 1px 1px #f90; padding-left:20px;}
+.timelineresume .like:hover		 { background:url(images/like3.png) no-repeat 1px 1px #f60; padding-left:20px;}
+.timelineresume .retweet 		 { background:url(images/retweet3.png) no-repeat 2px -1px #f90; padding-left:20px;}
+.timelineresume .retweet:hover   { background:url(images/retweet3.png) no-repeat 2px -1px #f60; padding-left:20px;}
+.timelineresume .favorito 		 { background:url(images/favorite3.png) no-repeat 1px 1px #f90; padding-left:20px;}
+.timelineresume .favorito:hover  { background:url(images/favorite3.png) no-repeat 1px 1px #f60; padding-left:20px;}
+.timelineresume .clasifica		 { background:url(images/clasifica3.png) no-repeat 1px 2px #f90; padding-left:20px;}
+.timelineresume .clasifica:hover { background:url(images/clasifica3.png) no-repeat 1px 2px #f60; padding-left:20px;}
+
+.timelineresume .nolike 			 { background:url(images/like4.png) no-repeat 1px 1px #f90; padding-left:20px;}
+.timelineresume .nolike:hover		 { background:url(images/like4.png) no-repeat 1px 1px #f60; padding-left:20px;}
+.timelineresume .noretweet 			 { background:url(images/retweet4.png) no-repeat 2px -1px #f90; padding-left:20px;}
+.timelineresume .noretweet:hover 	 { background:url(images/retweet4.png) no-repeat 2px -1px #f60; padding-left:20px;}
+.timelineresume .nofavorito 		 { background:url(images/favorite4.png) no-repeat 1px 1px #f90; padding-left:20px;}
+.timelineresume .nofavorito:hover 	 { background:url(images/favorite4.png) no-repeat 1px 1px #f60; padding-left:20px;}
+.timelineresume .noclasifica		 { background:url(images/clasifica4.png) no-repeat 1px 2px #f90; padding-left:20px;}
+.timelineresume .noclasifica:hover   { background:url(images/clasifica4.png) no-repeat 1px 2px #f60; padding-left:20px;}
+
 
 
 .timelineimg	 { margin:5px 15px 10px 77px;}
@@ -1311,10 +1342,16 @@ border-radius:2px; -moz-border-radius:2px; -webkit-border-radius:2px; -khtml-bor
 .usr-pop 			 { padding:10px; text-align:center;}
 .usr-pop  p          { margin:0 0 10px 0; text-align:left;}
 .usr-pop  p strong 	 { color:#FF6600;}
-.usr-pop .perfil     { background:#FAFAFA; border:1px solid #CCCCCC; float:left; padding:5px; margin-right:10px; text-align:center;}
+.usr-pop .perfil     { background:#FAFAFA; border:1px solid #CCCCCC; float:left; padding:5px; margin-right:10px; margin-bottom:25px; text-align:center;}
 .usr-pop .perfil img {  }
 .usr-pop .perfil p   { margin:5px 0 0 0 !important;}
 .usr-pop .perfilgral { margin:auto; width:330px;}
+
+.perfilgral .like a, .perfilgral .retweet a, .perfilgral .favorite a	{ text-decoration:none; padding:2px 0px 0px 20px; color:#333;}	
+.perfilgral .like a		{ background:url(images/like2.png) no-repeat;}
+.perfilgral .retweet a	{ background:url(images/retweet2.png) no-repeat;}
+.perfilgral .favorite a	{ background:url(images/favorite2.png) no-repeat;}
+
 
 .msj-div			 { background:url(images/msj-div.jpg) center top no-repeat; height:10px; position:relative; top:-1px;}
 .msj-inf			 { padding:0 10px;}
@@ -1332,13 +1369,23 @@ box-shadow:0 0 5px #CCCCCC;}
 -webkit-box-shadow:0 0 5px #CCCCCC;
 box-shadow:0 0 5px #CCCCCC;}
 
-#pagSumary, #pagination	{ text-align:center;} 
-#pagSumary	{}
-
+#page	{ text-align:center;}
+#pagSumary, #pagination	{ text-align:center; font-size:13px;} 
+#pagSumary	{ color:#666;}
 #pagination			{}
-#pagination	a   	{ display:inline-block; background:#efefef;}
-#pagination	a:hover { background:#CCC;}
-#pagination	span	{}
+#pagination	a,
+#pagination strong	{ display:inline-block; font-weight:normal; letter-spacing:-1px; width:26px; text-decoration:none; margin:0 1px; padding: 3px 0 4px;
+border-radius:2px;
+-moz-border-radius:2px;
+-webkit-border-radius:2px;
+-khtml-border-radius:2px;}
+#pagination	a   	{ background:#efefef; color:#999;}
+#pagination strong	{ background:#f8861f; color:#FFF; text-shadow:1px 1px 0px #724400; }
+#pagination	a:hover { background: #999; color:#FFF;}
+#pagination	span	{ }
+#pagination	span a	{ padding:3px 5px 4px; width:35px;}
+#pagination	span a:hover { }
+#pagination .pag-space	 { display:inline-block; width:10px; }
 
 /*RSS*/
 .rssContent		 { font-family:Arial, Helvetica, sans-serif; font-size:12px;}
@@ -1367,7 +1414,7 @@ border-radius:2px;
 #msj-eliminar			{ margin:20px;}
 #msj-eliminar p			{ margin:25px 0}
 .eliminar-boton 		{ float:left; height:110px; width:110px; text-align:center; margin:0 50px 0 0;}
-.eliminar-boton a		{ text-decoration:none; display:block; height:110px;} 
+.eliminar-boton a		{ text-decoration:none; display:block; height:110px; cursor:pointer;} 
 .eliminar-boton em		{ text-decoration:none; display:none;}
 
 .eliminar-boton strong	{ font-style:normal; font-size:18px; position:relative; top:45px;}
@@ -1378,6 +1425,13 @@ border-radius:2px;
 .salida-on					{ background:url(images/eliminar-salida-on.png) no-repeat;}
 .salida-off					{ background:url(images/eliminar-salida-off.png) no-repeat;}
 
+#strm-eliminar			{ margin:20px;}
+#strm-eliminar .eliminar-boton strong { top:8px;}
+.streamtot-on				{ background:url(images/eliminar-stream-total-on.png) no-repeat;}
+.streamtot-off				{ background:url(images/eliminar-stream-total-off.png) no-repeat;}
+.streamsin-on				{ background:url(images/eliminar-stream-sinclas-on.png) no-repeat;}
+.streamsin-off				{ background:url(images/eliminar-stream-sinclas-off.png) no-repeat;}
+
 .eliminar-date	{ background:#f6f6f6; border:solid 1px #ccc; text-align:center; height:104px; width:210px; display:inline-block;
 border-radius:12px; 
 -moz-border-radius:12px;
@@ -1387,9 +1441,8 @@ border-radius:12px;
 .eliminar-date input { border:solid 1px #ccc; background: url(images/eliminar-cal.png) no-repeat center right #FFF; padding:3px; text-align:center;}
 
 /*barra*/
-.barra			{ background:#eff3f4; border:solid 1px #CCC;}
-.barra *		{ font-family:Tahoma, Geneva, sans-serif;} 
-.barra a		{ text-decoration:none; color:#333; display:inline-block; padding:6px 10px 6px 31px; margin:5px; border:solid 1px #eff3f4;
+fieldset.barra	{ background:#eff3f4; border:solid 1px #CCC; padding: 0 !important;}
+.barra a		{ text-decoration:none; color:#666; display:inline-block; padding:6px 10px 6px 31px; margin:5px 1px; border:solid 1px #eff3f4;
 border-radius:3px; 
 -moz-border-radius:3px;
 -webkit-border-radius:3px;
@@ -1397,17 +1450,44 @@ border-radius:3px;
 .barra a:hover	{ border:solid 1px #dddfe0; background-color:#f7f9fa !important;}
 
 .barra .excel		{ background:url(images/ico-exp-excel.png) no-repeat 5px 2px !important;}
-.barra .excelall	{ background:url(images/ico-exp-exceltodo.png) no-repeat 5px 2px !important;}
+.barra .excelall	{ background:url(images/ico-exp-exceltodo.png) no-repeat 5px 1px !important;}
 .barra .reclasif	{ background:url(images/ico-reclasificar.png) no-repeat 5px 2px !important;}
-.barra .tagcloud	{ background:url(images/ico-tagcloud.png) no-repeat 5px 2px !important;}
+.barra .btnCloud	{ background:url(images/ico-tagcloud.png) no-repeat 5px 2px !important;}
 
-.barra form	{ float:right; margin:7px 10px;}
+.barra form	{ float:right; margin:3px 5px 0px;}
 .barra input[type=text]	  { border:solid 1px #CCC; color:#333; padding:4px; width:250px;
 border-radius:2px; 
 -moz-border-radius:2px;
 -webkit-border-radius:2px;
 -khtml-border-radius:2px;}
 .barra input[type=button] { background:url(images/btn-busca.png) no-repeat; border:none; display:inline-block; width:25px; height:25px;}
+
+.barra form .dijitButtonNode	{ background: url(images/btn-busca.png) no-repeat !important; border:none !important; width:25px; height:25px; margin-top:1px;}
+.barra form .dijitButtonNode .dijitButtonText { display:none !important;}
+
+/*GRAFICAS DE PIE*/
+#pieGenderParent, #pieEducationParent, #pieRelationParent, #profileGeoLocationParent, #lifeStageParent	{
+	border:solid 1px #ccc;
+}
+#pieGenderParent h1, #pieEducationParent h1, #pieRelationParent h1, #profileGeoLocationParent h1, #lifeStageParent h1	{
+	
+}
+
+#pieGenderParent			{}
+#pieGender					{}
+
+#pieEducationParent			{}
+#pieEducation				{}
+
+#pieRelationParent			{}
+#pieRelation				{}
+
+#profileGeoLocationParent	{}
+#profileGeoLocation			{}
+
+#lifeStageParent			{}
+#lifeStage 					{}
+
 
 
 
