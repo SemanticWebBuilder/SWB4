@@ -8,6 +8,7 @@
                 <input type="CHECKBOX" name="amaps" label="Buscar en todos los sitios" value="1"/>
                 <input type="TEXT" name="tpini" label="Buscar apartir de la Categoria"/>
                 <input type="TEXT" name="cls" label="Buscar solo clases del tipo"/>
+                <input type="TEXT" name="pageSize" label="Elementos por Página"/>
                 </fieldset>
                 <fieldset>
 		<input type="SUBMIT" name="btnSave"  value="Guardar" />
