@@ -4,6 +4,7 @@
     Author     : gabriela.rosales
 --%>
 <%@page contentType="text/json" pageEncoding="UTF-8"%> 
+<%@page import="org.semanticwb.social.util.SWBSocialUtil"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.social.*"%>
 <%@page import="java.util.Iterator"%>
@@ -189,7 +190,7 @@
 
 
         if (child > 0) {
-            System.out.println("entro en single");
+            
             JSONObject node1 = new JSONObject();
             node1.put("label", childTitle);
             node1.put("value1", "" + child);
@@ -201,7 +202,7 @@
             } else {
                 node1.put("color", "#eae8e3");
             }
-            node1.put("label2", childTitle+" " + child + " Positivos: " + positivesChild + " Negativos: " + negativesChild + " Neutros: " + neutralsChild);
+            node1.put("label2", childTitle+" " + child + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesChild + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesChild + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsChild);
             node1.put("chartclass", "possClass");
             node.put(node1);
         }
@@ -219,7 +220,7 @@
             } else {
                 node2.put("color", "#eae8e3");
             }
-            node2.put("label2",youngTitle+ " " + young + " Positivos: " + positivesYoung + " Negativos: " + negativesYoung + " Neutros: " + neutralsYoung);
+            node2.put("label2",youngTitle+ " " + young + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesYoung + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesYoung + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsYoung);
             node2.put("chartclass", "possClass");
             node.put(node2);
         }
@@ -237,7 +238,7 @@
             } else {
                 node3.put("color", "#eae8e3");
             }
-            node3.put("label2", teenTitle+" " + teenAge + " Positivos: " + positivesteenAge + " Negativos: " + negativesteenAge + " Neutros: " + neutralsteenAge);
+            node3.put("label2", teenTitle+" " + teenAge + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesteenAge + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesteenAge + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsteenAge);
             node3.put("chartclass", "possClass");
             node.put(node3);
         }
@@ -254,7 +255,7 @@
             } else {
                 node4.put("color", "#eae8e3");
             }
-            node4.put("label2", youngAdultTitle+"  " + youngAdult + " Positivos: " + positivesyoungAdult + " Negativos: " + negativesyoungAdult + " Neutros: " + neutralsyoungAdult);
+            node4.put("label2", youngAdultTitle+"  " + youngAdult + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesyoungAdult + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesyoungAdult + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsyoungAdult);
             node4.put("chartclass", "possClass");
             node.put(node4);
         }
@@ -272,7 +273,7 @@
             } else {
                 node5.put("color", "#eae8e3");
             }
-            node5.put("label2", adultTitle+" " + adult + " Positivos: " + positivesAdult + " Negativos: " + negativesAdult + " Neutros: " + neutralsAdult);
+            node5.put("label2", adultTitle+" " + adult + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesAdult + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesAdult + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsAdult);
             node5.put("chartclass", "possClass");
             node.put(node5);
         }
@@ -290,7 +291,7 @@
             } else {
                 node6.put("color", "#eae8e3");
             }
-            node6.put("label2",thirdTitle+ " " + thirdAge + " Positivos: " + positivesthirdAge + " Negativos: " + negativesthirdAge + " Neutros: " + neutralsthirdAge);
+            node6.put("label2",thirdTitle+ " " + thirdAge + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesthirdAge + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesthirdAge + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsthirdAge);
             node6.put("chartclass", "possClass");
             node.put(node6);
         }
@@ -299,7 +300,7 @@
          if(child == 0 && young ==0 && teenAge  == 0 && youngAdult ==0 && adult==0 && thirdAge==0 ){
                    
             JSONObject node3=new JSONObject();
-            node3.put("label", "Neutros"); 
+            node3.put("label", SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)); 
             node3.put("value1", "0");
             node3.put("value2", "100");
             node3.put("color", "#eae8e3");
