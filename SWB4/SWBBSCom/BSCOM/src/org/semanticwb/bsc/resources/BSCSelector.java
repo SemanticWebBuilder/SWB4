@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.bsc.BSC;
+import org.semanticwb.model.User;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -40,6 +41,7 @@ public class BSCSelector extends GenericResource {
         //Obtener listado de instancias de Scorecards
         Iterator<BSC> todosBsc = BSC.ClassMgr.listBSCs();
         int bscCount = 0;
+        User user = paramRequest.getUser();
         
         //funcion de javascript para mandar la forma que contiene el select
         output.append("<script type=\"text/javascript\">\n");
@@ -64,7 +66,7 @@ public class BSCSelector extends GenericResource {
             //Recorrer el listado de Scorecards
             while (todosBsc.hasNext()) {
                 BSC nextBsc = (BSC) todosBsc.next();
-                if (nextBsc.isActive()) {
+                if (nextBsc.isActive() && user.haveAccess(nextBsc)) {
                     bscCount++;
                     String optionValue = nextBsc != currentBsc 
                             ? nextBsc.getId() + "," + nextBsc.getHomePage().getId()
