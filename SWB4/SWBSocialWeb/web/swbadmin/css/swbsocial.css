@@ -1488,7 +1488,21 @@ border-radius:2px;
 #lifeStageParent			{}
 #lifeStage 					{}
 
-
+/*REPORTEADOR*/
+#reporteador	{}
+p .promediosen  { margin-bottom:1.5em; margin-top:0px }
+.combosFilter	{ color: #666;}
+.combosFilter label	{ display:inline-block; width:84px;}
+#genero-box, #estudios-box, #etapa-box, #statuslove-box, #estado-box, #mapa-fecha, #mapa-buscar {
+width: 98%;	height: 22px; padding-left:36px; padding-bottom:10px;}
+#genero-box		{ background: url(images/ico-genero2.png) no-repeat; }
+#estudios-box	{ background: url(images/ico-estudios2.png) no-repeat;}
+#etapa-box		{ background: url(images/ico-etapas2.png) no-repeat; }
+#statuslove-box { background: url(images/ico-statuslove2.png) no-repeat;}
+#estado-box		{ background: url(images/ico-estado2.png) no-repeat;}
+#mapa-fecha		{ background: url(images/ico-fechai2.png) no-repeat; height:17px; padding-right:20px; padding-top:5px;}
+#mapa-buscar    { padding-top: 16px;}
+#mapa-buscar button{ margin-right: 14px }
 
 
 
