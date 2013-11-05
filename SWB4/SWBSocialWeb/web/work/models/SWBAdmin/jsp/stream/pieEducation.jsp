@@ -145,7 +145,7 @@
             } else {
                 node1.put("color", "#eae8e3");
             }
-            node1.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("highSchool", lang)+" :" + highSchool + " Positivos :" + positiveshighSchool + " Negativos: " + negativeshighSchool + " Neutros :" + neutralshighSchool);
+            node1.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("highSchool", lang)+" :" + highSchool + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" :" + positiveshighSchool + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+ " : " + negativeshighSchool + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+"  :" + neutralshighSchool);
 
             node1.put("chartclass", "possClass");
             node.put(node1);
@@ -163,7 +163,7 @@
             } else {
                 node2.put("color", "#eae8e3");
             }
-            node2.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("college", lang)+" :" + college + " Positivos :" + positivescollege + " Negativos: " + negativescollege + " Neutros :" + neutralscollege);
+            node2.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("college", lang)+" :" + college + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+ " :" + positivescollege +   SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" :" + negativescollege + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+"  :" + neutralscollege);
             node2.put("chartclass", "possClass");
             node.put(node2);
         }
@@ -180,7 +180,7 @@
             } else {
                 node3.put("color", "#eae8e3");
             }
-            node3.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("graduate", lang)+" :" + graduate + " Positivos :" + positivesgraduate + " Negativos: " + negativesgraduate + " Neutros :" + neutralsgraduate);
+            node3.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("graduate", lang)+" :" + graduate + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+ " :" + positivesgraduate  + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+ " : " + negativesgraduate + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+"  :" + neutralsgraduate);
             node3.put("chartclass", "possClass");
             node.put(node3);
         }
@@ -197,7 +197,7 @@
             } else {
                 node4.put("color", "#eae8e3");
             }
-            node4.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("undefinedEducation", lang)+" :" + undefined + " Positivos :" + positivesundefined + " Negativos: " + negativesundefined + " Neutros :" + neutralsundefined);
+            node4.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("undefinedEducation", lang)+" :" + undefined + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+":" + positivesundefined  + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" :" + negativesundefined  + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+ " :" + neutralsundefined);
             node4.put("chartclass", "possClass");
             node.put(node4);
         }
