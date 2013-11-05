@@ -108,10 +108,8 @@
 
 
 
-<fieldset>
-    <table>
-        <tr>
-            <td width="70%">
+
+    
                 <div id="pieGenderParent">
                     <div id="pieGender">
                         <h1><%=SWBSocialUtil.Util.getStringFromGenericLocale("gender", lang)%></h1>
@@ -239,8 +237,7 @@
                     
 
                 </script>
-            </td>
-            <td width="30%">
+           
                 <div id="pieEducationParent" class="swbform">
                     <h1><%=SWBSocialUtil.Util.getStringFromGenericLocale("education", lang)%></h1>
                     <div id="pieEducation">                  
@@ -365,11 +362,7 @@
                     });              
                 
                 </script>
-            </td>
-        </tr>
-
-        <tr>
-            <td>
+            
                 <div  id="pieRelationParent">
                     <div id="pieRelationShipStatus">
                         <h1><%=SWBSocialUtil.Util.getStringFromGenericLocale("relationShip", lang)%></h1>
@@ -483,9 +476,7 @@
                     });
 
                 </script>
-            </td>
-            <td>
-
+           
                 <div id="profileGeoLocationParent">
                     <div id="profileGeoLocation">
                         <h1><%=SWBSocialUtil.Util.getStringFromGenericLocale("location", lang)%></h1>
@@ -599,11 +590,7 @@
                     });
 
                 </script>
-            </td>
-        </tr>
-
-        <tr>
-            <td>
+            
                 <div id="lifeStageParent">
                     <div id="profileLifeStage">
                         <h1><%=SWBSocialUtil.Util.getStringFromGenericLocale("lifeStage", lang)%></h1>
@@ -714,10 +701,7 @@
                         }         
                     });
                 </script>
-            </td>
-            <td></td>
-        </tr>
-    </table>
-</fieldset>
+            
+
 
 
