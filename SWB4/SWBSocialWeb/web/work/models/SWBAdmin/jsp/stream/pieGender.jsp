@@ -127,7 +127,7 @@
             } else {
                 node1.put("color", "#eae8e3");
             }
-            node1.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("male", lang) + ": " + male + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesMale + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang) + " :" + negativesMale + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsMale);
+            node1.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("male", lang) + ": " + male + " " +SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesMale +  " " +SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang) + " :" + negativesMale + " " + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsMale);
             node1.put("chartclass", "possClass");
             node.put(node1);
         }
@@ -144,7 +144,7 @@
             } else {
                 node2.put("color", "#eae8e3");
             }
-            node2.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("female", lang) + ": " + female + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesFemale + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang) + " :" + negativesFemale + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsFemale);
+            node2.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("female", lang) + ": " + female + " " + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesFemale + " " + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang) + " :" + negativesFemale +  " " +SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsFemale);
             node2.put("chartclass", "possClass");
             node.put(node2);
         }
@@ -162,7 +162,7 @@
             } else {
                 node3.put("color", "#eae8e3");
             }
-            node3.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("other", lang) + ": " + other + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang) + "  : " + positivesOther + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang) + "  :" + negativesOther + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsOther);
+            node3.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("other", lang) + ": " + other + " " + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang) + "  : " + positivesOther +  " " +SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang) + "  :" + negativesOther +  " " + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsOther);
             node3.put("chartclass", "possClass");
             node.put(node3);
         }
