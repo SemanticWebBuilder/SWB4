@@ -113,13 +113,13 @@ public class DataTableResource extends GenericResource {
             out.println(period.getTitle());            
             out.println("</td>");
             out.println("<td>");
-            try {
-                State state = star.getMeasure(period).getEvaluation().getStatus();
-                String title = state.getTitle(lang)==null?state.getTitle():state.getTitle(lang);
-                out.println("<span class=\""+(state.getIconClass()==null?"state-undefined":state.getIconClass())+"\">"+title+"</span>");
-            }catch(Exception e) {
-                out.println("--");
+            State state = star.getMeasure(period).getEvaluation().getStatus();
+            if(state==null) {
+                state = indicator.getMinimumState();
+                star.getMeasure(period).getEvaluation().setStatus(state);
             }
+            String title = state.getTitle(lang)==null?state.getTitle():state.getTitle(lang);
+            out.println("<span class=\""+(state.getIconClass()==null?"state-undefined":state.getIconClass())+"\">"+title+"</span>");
             out.println("</td>");
             for(Series series:serieses) {
                 out.println("<td>");
@@ -127,6 +127,7 @@ public class DataTableResource extends GenericResource {
                 if(inTime && !series.isReadOnly() && userCanEdit()) {
                     SWBResourceURL url = paramRequest.getActionUrl();
                     url.setAction(SWBResourceURL.Action_EDIT);
+                    url.setParameter("suri", suri);
                     url.setParameter("pid", period.getId());
                     url.setParameter("sid", series.getId());
                     out.println(renderUpdateInline(prx+series.getId(), url.toString(), value, false, "dijit.form.TextBox", "swb-ile"));
@@ -153,24 +154,13 @@ public class DataTableResource extends GenericResource {
         Resource base = getResourceBase();
         PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();
-
-        String resourceUpdatedMessage = paramRequest.getLocaleString("usrmsg_Inline_doAdmin_msgRecursoActualizado");
-        String fieldsetText = paramRequest.getLocaleString("usrmsg_StaticText_doAdmin_fieldsetMessage");
-        String rolesNotFoundText = paramRequest.getLocaleString("usrmsg_StaticText_doAdmin_rolesNotFoundText");
-        String listMessage = paramRequest.getLocaleString("usrmsg_StaticText_doAdmin_listMessage");
-        String rolesMessage = paramRequest.getLocaleString("usrmsg_StaticText_doAdmin_rolesMessage");
-        String userGroupsMessage = paramRequest.getLocaleString("usrmsg_StaticText_doAdmin_userGroupsMessage");
-        String staticText1 = paramRequest.getLocaleString("usrmsg_StaticText_doAdmin_staticText1");
-        String staticText2 = paramRequest.getLocaleString("usrmsg_StaticText_doAdmin_staticText2");
-        String buttonText = paramRequest.getLocaleString("usrmsg_StaticText_doAdmin_buttonText");
-        String buttonResetText = paramRequest.getLocaleString("usrmsg_StaticText_doAdmin_buttonResetText");
-        String lang = user.getLanguage();
+        final String lang = user.getLanguage();
 
         String action  = paramRequest.getAction();
         if(SWBParamRequest.Action_ADD.equals(action)) {
             out.println("<script type=\"text/javascript\">");
             out.println("<!--");
-            out.println("   alert('" + resourceUpdatedMessage + " " + base.getId() + "');");
+            out.println("   alert('"+paramRequest.getLocaleString("msg_Admin_OkUpdateResource")+" "+base.getId() + "');");
             out.println("   location='" + paramRequest.getRenderUrl().setAction(paramRequest.Action_EDIT).toString() + "';");
             out.println("-->");
             out.println("</script>");
@@ -181,27 +171,21 @@ public class DataTableResource extends GenericResource {
         String str_role = base.getAttribute("editRole", "0");
 
         SWBResourceURL urlAction = paramRequest.getActionUrl();
-        urlAction.setAction(SWBParamRequest.Action_EDIT);
+        urlAction.setAction(SWBParamRequest.Action_ADD);
 
         out.println("<div class=\"swbform\">");
-        out.println("<form id=\"" + base.getId() + "/InLineEditRes\" name=\"" + getResourceBase().getId() + "/InLineEditRes\" action=\""+urlAction+"\" method=\"post\" >");
+        out.println("<form id=\"" + base.getId() + "/InLineEditRes\" name=\"" + base.getId() + "/InLineEditRes\" action=\""+urlAction+"\" method=\"post\" >");
         out.println("<fieldset>");
         out.println("<legend>");
-        out.println(fieldsetText);
+        out.println(paramRequest.getLocaleString("lbl_Admin_Basic"));
         out.println("</legend>");
         out.println("<ul class=\"swbform-ul\">");
-        String strTemp = "<option value=\"-1\">" + rolesNotFoundText + "</option>"; //Texto mostrado en la lista en caso de no existir roles
         
         String selected = str_role.equals("0")?" selected=\"selected\" ":"";
        
         StringBuilder strRules = new StringBuilder();
-        strRules.append("\n<option value=\"0\" ");
-        strRules.append(selected);
-        strRules.append(">");
-        strRules.append(listMessage);
-        strRules.append("</option>");
         strRules.append("\n<optgroup label=\"");
-        strRules.append(rolesMessage);
+        strRules.append(paramRequest.getLocaleString("lbl_Admin_Roles"));
         strRules.append("\">");
         Iterator<Role> iRoles = wsite.getUserRepository().listRoles();
         while (iRoles.hasNext()) {
@@ -217,7 +201,7 @@ public class DataTableResource extends GenericResource {
         }
         strRules.append("\n</optgroup>");
         strRules.append("\n<optgroup label=\"");
-        strRules.append(userGroupsMessage );
+        strRules.append(paramRequest.getLocaleString("lbl_Admin_UserGroups"));
         strRules.append("\">");
         Iterator<UserGroup> iugroups = wsite.getUserRepository().listUserGroups();
         while (iugroups.hasNext()) {
@@ -228,49 +212,43 @@ public class DataTableResource extends GenericResource {
             strRules.append("\"");
             strRules.append(selected);
             strRules.append(">");
-            strRules.append(oUG.getDisplayTitle(lang));
+            strRules.append(oUG.getDisplayTitle(lang)==null?oUG.getTitle():oUG.getDisplayTitle(lang));
             strRules.append("</option>");
         }
         strRules.append("\n</optgroup>");
-//        if (strRules.toString().length() > 0) {
-//            strTemp = strRules.toString();
-//        }
-        out.println("   <li class=\"swbform-li\">");
-        out.println("       <label for=\"leyenda1\" class=\"swbform-label\">"+staticText1+"</label>");
-        out.print("     </li>");
         
         out.println("   <li class=\"swbform-li\">");
-        out.println("       <label for=\"editar\" class=\"swbform-label\">"+staticText2+"</label>");
+        out.println("       <label for=\"editar\" class=\"swbform-label\">"+paramRequest.getLocaleString("lbl_Admin_GrantPermissions")+"</label>");
         out.println("       <select name=\"editar\">" + strRules + "</select>");
         out.print("     </li>");
         
         out.println("   <li class=\"swbform-li\">");
-        out.println("       <label for=\"autosave\" class=\"swbform-label\">Guardar automáticamente</label>");
-        out.println("       <input type=\"checkbox\" name=\"autosave\" id=\"autosave\" value=\"true\" "+(Boolean.parseBoolean(base.getAttribute("autosave"))?"checked=\"checked\"":"")+" dojoType=\"dijit.form.CheckBox\" promptMessage=\"Se guardan los datos al abandonar el campo de texto o mostrar controles para guardar y cancelar\" />");
+        out.println("       <label for=\"autosave\" class=\"swbform-label\">"+paramRequest.getLocaleString("lbl_Admin_Autosave")+"</label>");
+        out.println("       <input type=\"checkbox\" name=\"autosave\" id=\"autosave\" value=\"true\" "+(Boolean.parseBoolean(base.getAttribute("autosave"))?"checked=\"checked\"":"")+" dojoType=\"dijit.form.CheckBox\" promptMessage=\""+paramRequest.getLocaleString("msg_Admin_PrompAutosave")+"\" />");
         out.print("     </li>");
         out.println("   <li class=\"swbform-li\">");
-        out.println("       <label for=\"left\" class=\"swbform-label\">Tiempo antes</label>");
-        out.println("       <input type=\"text\" name=\"left\" id=\"left\" maxlength=\"2\" value=\""+base.getAttribute("left","")+"\" regExp=\"\\d{1,2}\" dojoType=\"dijit.form.ValidationTextBox\" invalidMessage=\"Tamaño incorrecto\"  promptMessage=\"Tiempo antes de que termine el período para empezar a capturar mediciones\" />");
+        out.println("       <label for=\"left\" class=\"swbform-label\">"+paramRequest.getLocaleString("lbl_Admin_Before")+"</label>");
+        out.println("       <input type=\"text\" name=\"left\" id=\"left\" maxlength=\"2\" value=\""+base.getAttribute("left","7")+"\" regExp=\"\\d{1,2}\" dojoType=\"dijit.form.ValidationTextBox\" invalidMessage=\""+paramRequest.getLocaleString("msg_Admin_IncorrectAmount")+"\"  promptMessage=\""+paramRequest.getLocaleString("msg_Admin_PrompAmountBefore")+"\" />");
         out.print("     </li>");
         out.println("   <li class=\"swbform-li\">");
-        out.println("       <label for=\"right\" class=\"swbform-label\">Tiempo después</label>");
-        out.println("       <input type=\"text\" name=\"right\" id=\"right\" maxlength=\"2\" value=\""+base.getAttribute("right","")+"\" regExp=\"\\d{1,2}\" dojoType=\"dijit.form.ValidationTextBox\" invalidMessage=\"Tamaño incorrecto\"  promptMessage=\"Tiempo después de que termine el período para empezar a capturar mediciones\" />");
+        out.println("       <label for=\"right\" class=\"swbform-label\">"+paramRequest.getLocaleString("lbl_Admin_After")+"</label>");
+        out.println("       <input type=\"text\" name=\"right\" id=\"right\" maxlength=\"2\" value=\""+base.getAttribute("right","7")+"\" regExp=\"\\d{1,2}\" dojoType=\"dijit.form.ValidationTextBox\" invalidMessage=\""+paramRequest.getLocaleString("msg_Admin_IncorrectAmount")+"\"  promptMessage=\""+paramRequest.getLocaleString("msg_Admin_PrompAmountAfter")+"\" />");
         out.print("     </li>");
         out.println("   <li class=\"swbform-li\">");
-        out.println("       <label for=\"time\" class=\"swbform-label\">Tiempo</label>");
+        out.println("       <label for=\"time\" class=\"swbform-label\">"+paramRequest.getLocaleString("lbl_Admin_UnitOfTime")+"</label>");
         out.println("       <select name=\"time\" dojoType=\"dijit.form.FilteringSelect\">");
-        out.println("         <option "+(base.getAttribute("time","").equals(Integer.toString(Calendar.DATE))?"selected=\"selectted\"":"")+" value=\""+Calendar.DATE+"\">Día</option>");
-        out.println("         <option "+(base.getAttribute("time","").equals(Integer.toString(Calendar.WEEK_OF_MONTH))?"selected=\"selectted\"":"")+" value=\""+Calendar.WEEK_OF_MONTH+"\">Semana del mes</option>");
-        out.println("         <option "+(base.getAttribute("time","").equals(Integer.toString(Calendar.WEEK_OF_YEAR))?"selected=\"selectted\"":"")+" value=\""+Calendar.WEEK_OF_YEAR+"\">Semana del año</option>");
-        out.println("         <option "+(base.getAttribute("time","").equals(Integer.toString(Calendar.MONTH))?"selected=\"selectted\"":"")+" value=\""+Calendar.MONTH+"\">Mes</option>");
-        out.println("         <option "+(base.getAttribute("time","").equals(Integer.toString(Calendar.YEAR))?"selected=\"selectted\"":"")+" value=\""+Calendar.YEAR+"\">Año</option>");
+        out.println("         <option "+(base.getAttribute("time",Integer.toString(Calendar.DATE)).equals(Integer.toString(Calendar.DATE))?"selected=\"selectted\"":"")+" value=\""+Calendar.DATE+"\">"+paramRequest.getLocaleString("lbl_Admin_Date") +"</option>");
+        out.println("         <option "+(base.getAttribute("time","").equals(Integer.toString(Calendar.WEEK_OF_MONTH))?"selected=\"selectted\"":"")+" value=\""+Calendar.WEEK_OF_MONTH+"\">"+paramRequest.getLocaleString("lbl_Admin_WeekOfMonth") +"</option>");
+        out.println("         <option "+(base.getAttribute("time","").equals(Integer.toString(Calendar.WEEK_OF_YEAR))?"selected=\"selectted\"":"")+" value=\""+Calendar.WEEK_OF_YEAR+"\">"+paramRequest.getLocaleString("lbl_Admin_WeekOfYear") +"</option>");
+        out.println("         <option "+(base.getAttribute("time","").equals(Integer.toString(Calendar.MONTH))?"selected=\"selectted\"":"")+" value=\""+Calendar.MONTH+"\">"+paramRequest.getLocaleString("lbl_Admin_Month") +"</option>");
+        out.println("         <option "+(base.getAttribute("time","").equals(Integer.toString(Calendar.YEAR))?"selected=\"selectted\"":"")+" value=\""+Calendar.YEAR+"\">"+paramRequest.getLocaleString("lbl_Admin_Year") +"</option>");
         out.println("       </select>");
         out.print("     </li>");
         out.print("</ul>");
         out.println("</fieldset>");
         out.println("<fieldset>");
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"btn\" >" + buttonText + "</button>");
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"reset\" name=\"btn\" >" + buttonResetText + "</button>");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"btn\" >" + paramRequest.getLocaleString("lbl_Admin_Save") + "</button>");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"reset\" name=\"btn\" >" + paramRequest.getLocaleString("lbl_Admin_Reset") + "</button>");
         out.println("</fieldset>");
         out.println("</form>");
         out.println("</div>");
@@ -280,8 +258,9 @@ public class DataTableResource extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         Resource base = getResourceBase();
         String action = response.getAction();
-        
-        if(SWBActionResponse.Action_EDIT.equals(action)) {
+
+        if(SWBActionResponse.Action_ADD.equals(action))
+        {
             String attr = request.getParameter("editar");
             if(attr != null) {
                 base.setAttribute("editRole", attr);                
@@ -310,89 +289,84 @@ public class DataTableResource extends GenericResource {
             base.setAttribute("time", attr);
             
             try {
-                getResourceBase().updateAttributesToDB();
+                base.updateAttributesToDB();
             }catch(Exception e) {
                 log.error("Error al guardar Role/UserGroup para acceso al InlineEdit.",e);
             }finally {
                 response.setAction(response.Action_ADD);
             }
         }
-        
-        
-        String data = request.getParameter("value");
-        
-        WebSite model = base.getWebSite();
-        String pid = request.getParameter("pid");
-        String sid = request.getParameter("sid");
-        if(Period.ClassMgr.hasPeriod(pid, model) && Series.ClassMgr.hasSeries(sid, model)) {
-            Period period = Period.ClassMgr.getPeriod(pid, model);
-            Series series = Series.ClassMgr.getSeries(sid, model);
-            Measure measure = series.getMeasure(period);
-            if(measure == null) {
-                measure = Measure.ClassMgr.createMeasure(model);
-                PeriodStatus ps = PeriodStatus.ClassMgr.createPeriodStatus(model);
-                ps.setPeriod(period);
-                measure.setEvaluation(ps);
-                series.addMeasure(measure);
+        else
+        {
+            final String suri = request.getParameter("suri");
+            response.setRenderParameter("suri", suri);
+
+            SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+            SemanticObject sobj = ont.getSemanticObject(suri);
+            if(sobj==null) {
+                response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchSemanticElement"));
+                return;
             }
             
-            float value = 0;
-            try {
-                value = Float.parseFloat(data);
-            }catch(NumberFormatException nfe) {
-                try {
-                    Number number = series.getFormatter().parse(data);
-                    value = number.floatValue();
-                }catch(ParseException pe) {
-                    value = 0;
-                }catch(Exception e) {
-                    value = 0;
+            String data = request.getParameter("value");
+            WebSite model = base.getWebSite();
+            String pid = request.getParameter("pid");
+            String sid = request.getParameter("sid");
+            if(Period.ClassMgr.hasPeriod(pid, model) && Series.ClassMgr.hasSeries(sid, model)) {
+                Period period = Period.ClassMgr.getPeriod(pid, model);
+                Series series = Series.ClassMgr.getSeries(sid, model);
+                Measure measure = series.getMeasure(period);
+                if(measure == null) {
+                    measure = Measure.ClassMgr.createMeasure(model);
+                    PeriodStatus ps = PeriodStatus.ClassMgr.createPeriodStatus(model);
+                    ps.setPeriod(period);
+                    measure.setEvaluation(ps);
+                    series.addMeasure(measure);
                 }
-            }finally {
-                measure.setValue(value);
-                measure.evaluate();
-                series.getIndicator().getObjective().updateAppraisal(period);
+
+                float value = 0;
+                try {
+                    value = Float.parseFloat(data);
+                }catch(NumberFormatException nfe) {
+                    try {
+                        Number number = series.getFormatter().parse(data);
+                        value = number.floatValue();
+                    }catch(ParseException pe) {
+                        value = 0;
+                    }catch(Exception e) {
+                        value = 0;
+                    }
+                }finally {
+                    measure.setValue(value);
+                    measure.evaluate();
+                    series.getIndicator().getObjective().updateAppraisal(period);
+                }
+            }else {
+
             }
-        }else {
-            
         }
-        
     }
     
     private boolean isInMeasurementTime(final Period period) {
+        Resource base = getResourceBase();
         int tleft, tright, type;
         try {
-            tleft = Integer.parseInt(getResourceBase().getAttribute("left", "0"));
+            tleft = Integer.parseInt(base.getAttribute("left", "7"));
         }catch(NumberFormatException e) {
             tleft = 0;
         }
         try {
-            tright = Integer.parseInt(getResourceBase().getAttribute("right", "0"));
+            tright = Integer.parseInt(base.getAttribute("right", "7"));
         }catch(NumberFormatException e) {
             tright = 0;
         }
-        String time = getResourceBase().getAttribute("time");
-        switch(time) {
-            case "DATE":
-                type = Calendar.DATE;
-                break;
-            case "WEEK_OF_MONTH":
-                type = Calendar.WEEK_OF_MONTH;
-                break;
-            case "WEEK_OF_YEAR":
-                type = Calendar.WEEK_OF_YEAR;
-                break;
-            case "MONTH":
-                type = Calendar.MONTH;
-                break;
-            case "YEAR":
-                type = Calendar.YEAR;
-                break;
-            default:
-                type = Calendar.DATE;
-                break;
+        
+        
+        try {
+            type = Integer.parseInt(base.getAttribute("time",Integer.toString(Calendar.DATE)));
+        }catch(NumberFormatException nfe) {
+            type = Calendar.DATE;
         }
-        type = Calendar.DATE;
         
         GregorianCalendar current = new GregorianCalendar();
         Date end = period.getEnd();
@@ -458,17 +432,16 @@ public class DataTableResource extends GenericResource {
         script.append("    editor: \""+editor+"\",");
         script.append("    editorParams: {trim:true, required:true},");
         script.append("    width: '80px',");
-        script.append("    value: 'hola',");
         script.append("    onChange: function(value){");
-        script.append("           getSyncHtml('" + url + (url.contains("?")?"&":"?") + "value='+value);");
+        //script.append("           getSyncHtml('" + url + (url.contains("?")?"&":"?") + "value='+value);");
+        script.append("           location.href='" + url + (url.contains("?")?"&":"?") + "value='+value;");
         script.append("      }");
         script.append("    }, 'eb_" + objId + "');");
         script.append("  }");
         script.append("); iledit_"+objId+".startup();\n");
         script.append("-->\n");
         script.append("</script>\n");
-        //script.append("<span id=\"eb_" + objId + "\" class=\""+cssClass+"\">" + data + "</span>");
-        script.append("<span id=\"eb_" + objId + "\" class=\""+cssClass+"\"></span>");
+        script.append("<span id=\"eb_" + objId + "\" class=\""+cssClass+"\">" + data + "</span>");
         return script.toString();
     }
 }
