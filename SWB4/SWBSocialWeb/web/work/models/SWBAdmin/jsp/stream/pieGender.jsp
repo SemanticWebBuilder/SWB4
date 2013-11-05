@@ -25,39 +25,34 @@
         ArrayList genderFemale = new ArrayList();
         ArrayList genderother = new ArrayList();
         Iterator<PostIn> itObjPostIns = null;
-        //System.out.println("itObjPostIns"+itObjPostIns.hasNext());
+
         if (semObj.getGenericInstance() instanceof Stream) {
-            System.out.println("entro al if");
             Stream stream = (Stream) semObj.getGenericInstance();
             itObjPostIns = stream.listPostInStreamInvs();
             System.out.println("itObjPostIns" + itObjPostIns.hasNext());
-        } else if (semObj.getGenericInstance() instanceof SocialTopic) {
-            System.out.println("entro al else if");
+        } else if (semObj.getGenericInstance() instanceof SocialTopic) {            
             SocialTopic socialTopic = (SocialTopic) semObj.getGenericInstance();
             itObjPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
         }
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
-            //if (postIn.getPostInSocialNetworkUser().getSnu_gender() != null  ) {
-            
-            System.out.println("");
-                if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_MALE) {
-                    male++;
-                    genderMale.add(postIn);
-                } else if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_FEMALE) {
-                    female++;
-                    genderFemale.add(postIn);
-                } else if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_UNDEFINED) {
-                    other++;
-                    genderother.add(postIn);
-                }
-            //}
 
+            if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_MALE) {
+                male++;
+                genderMale.add(postIn);
+            } else if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_FEMALE) {
+                female++;
+                genderFemale.add(postIn);
+            } else if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_UNDEFINED) {
+                other++;
+                genderother.add(postIn);
+            }
+           
         }
 
         Iterator gMale = genderMale.iterator();
         int neutralsMale = 0, positivesMale = 0, negativesMale = 0;
-        System.out.println("salioooooooo");
+
         while (gMale.hasNext()) {
             PostIn postIn = (PostIn) gMale.next();
             if (postIn.getPostSentimentalType() == 0) {
@@ -68,7 +63,6 @@
                 negativesMale++;
             }
         }
-        System.out.println("saliooooooo1");
 
 
         Iterator gFemale = genderFemale.iterator();
@@ -83,7 +77,7 @@
                 negativesFemale++;
             }
         }
-        System.out.println("    salioooooooo 33333333");
+
 
         Iterator gOther = genderother.iterator();
         int neutralsOther = 0, positivesOther = 0, negativesOther = 0;
@@ -100,7 +94,7 @@
             }
         }
 
-        
+
         System.out.println("saliooo 44");
         float intTotalVotos = male + female + other;
 
@@ -133,7 +127,7 @@
             } else {
                 node1.put("color", "#eae8e3");
             }
-            node1.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("male", lang)+": " + male + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesMale + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" :" + negativesMale + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsMale);
+            node1.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("male", lang) + ": " + male + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesMale + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang) + " :" + negativesMale + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsMale);
             node1.put("chartclass", "possClass");
             node.put(node1);
         }
@@ -150,14 +144,14 @@
             } else {
                 node2.put("color", "#eae8e3");
             }
-            node2.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("female", lang)+": " + female + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesFemale + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" :" + negativesFemale + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsFemale);
+            node2.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("female", lang) + ": " + female + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesFemale + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang) + " :" + negativesFemale + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsFemale);
             node2.put("chartclass", "possClass");
             node.put(node2);
         }
 
         if (other > 0) {
             JSONObject node3 = new JSONObject();
-            node3.put("label",  SWBSocialUtil.Util.getStringFromGenericLocale("other", lang));
+            node3.put("label", SWBSocialUtil.Util.getStringFromGenericLocale("other", lang));
             node3.put("value1", "" + other);
             node3.put("value2", "" + round(intPorcentajeOther));
 
@@ -168,7 +162,7 @@
             } else {
                 node3.put("color", "#eae8e3");
             }
-            node3.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("other", lang)+": " + other + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+"  : " + positivesOther + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+ "  :" + negativesOther + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsOther);
+            node3.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("other", lang) + ": " + other + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang) + "  : " + positivesOther + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang) + "  :" + negativesOther + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsOther);
             node3.put("chartclass", "possClass");
             node.put(node3);
         }
@@ -196,9 +190,7 @@
     }
 %>
 <%
-    System.out.println("entro al piegender");
     if (request.getParameter("objUri") != null) {
-        System.out.println("if");
         SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("objUri"));
         System.out.println("semOnj" + semObj);
         String lang = request.getParameter("lang");
