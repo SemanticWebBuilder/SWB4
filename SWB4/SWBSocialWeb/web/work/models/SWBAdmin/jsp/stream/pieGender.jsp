@@ -122,7 +122,7 @@
         if (male > 0) {
 
             JSONObject node1 = new JSONObject();
-            node1.put("label", "Masculino");
+            node1.put("label", SWBSocialUtil.Util.getStringFromGenericLocale("male", lang));
             node1.put("value1", "" + male);
             node1.put("value2", "" + round(intPorcentajeMale));
 
@@ -140,7 +140,7 @@
 
         if (female > 0) {
             JSONObject node2 = new JSONObject();
-            node2.put("label", "Femenino: ");
+            node2.put("label", SWBSocialUtil.Util.getStringFromGenericLocale("female", lang));
             node2.put("value1", "" + female);
             node2.put("value2", "" + round(intPorcentajeFemale));
             if (positivesFemale > negativesFemale && positivesFemale > neutralsFemale) {
@@ -157,7 +157,7 @@
 
         if (other > 0) {
             JSONObject node3 = new JSONObject();
-            node3.put("label", "Otro: ");
+            node3.put("label",  SWBSocialUtil.Util.getStringFromGenericLocale("other", lang));
             node3.put("value1", "" + other);
             node3.put("value2", "" + round(intPorcentajeOther));
 
