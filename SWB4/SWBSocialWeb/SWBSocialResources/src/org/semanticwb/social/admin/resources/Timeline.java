@@ -223,30 +223,37 @@ public class Timeline extends GenericResource{
         }
         System.out.println("Action:" + response.getAction());
         if(action.equals("doRT")){ //Makes the retweet
+            response.setRenderParameter("suri", objUri);
+            response.setRenderParameter("currentTab", request.getParameter("currentTab"));
             try {
                 Long id = Long.parseLong(request.getParameter("id"));
                 System.out.println("Tweet to RT in doRT:" + id);
                 response.setRenderParameter("retweetId", twitter.retweetStatus(id).getId()+""); //When a RT is made a new id is created and it's used to undo the RT
                 response.setRenderParameter("id", id+"");                                       //Id of original status
-                response.setRenderParameter("suri", objUri);
-                response.setRenderParameter("currentTab", request.getParameter("currentTab"));
                 System.out.println("Retwit!");
                 response.setMode("retweetSent"); //show RT Message and update div
             } catch (TwitterException ex) {
                 log.error("Error when trying to retweet ", ex);
+                response.setRenderParameter("id", request.getParameter("id"));
+                response.setRenderParameter("action",action);
+                response.setMode("onError");
             }
         }else if(action.equals("undoRT")){
+            response.setRenderParameter("suri", objUri);
+            response.setRenderParameter("currentTab", request.getParameter("currentTab"));
             try {
                 System.out.println("Undoing Retweet!!");
                 Long retweetId = Long.parseLong(request.getParameter("retweetId"));
-                Long originalId = Long.parseLong(request.getParameter("id"));
-                response.setRenderParameter("suri", objUri);
-                response.setRenderParameter("currentTab", request.getParameter("currentTab"));
+                Long originalId = Long.parseLong(request.getParameter("id"));                
                 twitter.destroyStatus(retweetId); //Destroy Tweet generated when you Retweeted
                 response.setRenderParameter("id", originalId+"");
                 response.setMode("unretweetSent"); //show RT Message and update div                
             } catch (TwitterException ex) {
                 log.error("Error when trying to undo retweet ", ex);
+                response.setRenderParameter("retweetId", request.getParameter("retweetId"));
+                response.setRenderParameter("id", request.getParameter("id"));
+                response.setRenderParameter("action",action);
+                response.setMode("onError");
             }
         }else if(action.equals("sendReply")){
             try {
@@ -488,7 +495,47 @@ public class Timeline extends GenericResource{
         }else if(mode!= null && mode.equals("getMoreDM")){//Gets more Direct Messages
             System.out.println("brings additional DIRECT MESSAGES");
             doGetMoreDMsgs(request, response, paramRequest);
+        }else if(mode!= null && mode.equals("onError")) {//Handles error
+            SWBResourceURL renderURL = paramRequest.getRenderUrl();
+            SWBResourceURL actionURL = paramRequest.getActionUrl();
+            String action = request.getParameter("action");
+            renderURL.setParameter("suri", request.getParameter("suri"));
+            actionURL.setParameter("suri", request.getParameter("suri"));
+            Long originalId = Long.parseLong(request.getParameter("id"));
+            String currentTab = request.getParameter("currentTab");
+            SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
+            Twitter semTwitter = (Twitter) semanticObject.createGenericInstance();
+            
+            try {
+                Status originalStatus =  twitter.showStatus(originalId);//get the original tweet                
+                org.semanticwb.model.User user = paramRequest.getUser();
+                SocialUserExtAttributes socialUserExtAttr = null;
+                if(user.isSigned()){
+                    socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+                }
+                updateStatusInformation(originalStatus, renderURL, objUri, out, socialUserExtAttr, paramRequest);
+                
+                actionURL.setAction(action);
+//                StringBuilder output = new StringBuilder();
+                // updates only the DOM of the 'Retweet' message to change it for 'Undo retweet' and change URL also*/
+                out.println("<span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
+                out.println("<script type=\"dojo/method\">");
+                out.println("   var spanId = dijit.byId('" + semTwitter.getId() + originalId + RETWEET + currentTab +  "');");
+                if(action.equals("doRT")){
+                    out.println("   spanId.attr('content', '" + "<a href=\"\" class=\"retweet\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = \\'<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>\\';}catch(noe){} postSocialHtml(\\'" + actionURL.setParameter("id", originalId+"").setParameter("currentTab", currentTab) + "\\',\\'" + semTwitter.getId() + originalStatus.getId() + INFORMATION + currentTab + "\\');return false;" +"\"><span>" + paramRequest.getLocaleString("retweet") +"</span></a>" +"')");
+                }else if(action.equals("undoRT")){
+                    actionURL.setParameter("retweetId", request.getParameter("retweetId"));
+                    out.println("   spanId.attr('content', '" + "<a href=\"\" class=\"noretweet\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = \\'<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>\\';}catch(noe){} postSocialHtml(\\'" + actionURL.setParameter("id", originalId+"").setParameter("currentTab", currentTab) + "\\',\\'" + semTwitter.getId() + originalStatus.getId() + INFORMATION + currentTab + "\\');return false;" +"\"><span>" + paramRequest.getLocaleString("undoRetweet") +"</span></a>" +"')");
+                }
+                out.println("   showStatus('" + paramRequest.getLocaleString("failedRequest") + "');");
+                out.println("</script>");
+                out.println("</span>");
+//                out.println(output.toString());
+            } catch (Exception ex) {
+                log.error("onError ", ex);
+            }
         }else if(mode!= null && mode.equals("retweetSent")){//Displays updated data of retweeted tweet
+            System.out.println("RETWEET SENT!!!");
             SWBResourceURL renderURL = paramRequest.getRenderUrl();
             SWBResourceURL actionURL = paramRequest.getActionUrl();
             renderURL.setParameter("suri", request.getParameter("suri"));
@@ -500,7 +547,7 @@ public class Timeline extends GenericResource{
             Twitter semTwitter = (Twitter) semanticObject.createGenericInstance();
             
             try {
-                Status originalStatus =  twitter.showStatus(originalId);//get the original tweet
+                Status originalStatus =  twitter.showStatus(originalId);//get the original tweet                
                 org.semanticwb.model.User user = paramRequest.getUser();
                 SocialUserExtAttributes socialUserExtAttr = null;
                 if(user.isSigned()){
@@ -544,7 +591,7 @@ public class Timeline extends GenericResource{
                 out.println("<span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
                 out.println("<script type=\"dojo/method\">");
                 out.println("   var spanId = dijit.byId('" + semTwitter.getId() + originalId + RETWEET + currentTab + "');");
-                out.println("   spanId.attr('content', '" + "<a href=\"#\" class=\"retweet\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = \\'<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>\\';}catch(noe){} postSocialHtml(\\'" + actionURL.setParameter("id", originalId+"").setParameter("currentTab", currentTab) + "\\',\\'" + originalId + INFORMATION + currentTab + "\\');return false;" +"\"><span>" + paramRequest.getLocaleString("retweet") + "</a></span>" +"')");
+                out.println("   spanId.attr('content', '" + "<a href=\"#\" class=\"retweet\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = \\'<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>\\';}catch(noe){} postSocialHtml(\\'" + actionURL.setParameter("id", originalId+"").setParameter("currentTab", currentTab) + "\\',\\'" + semTwitter.getId() + originalId + INFORMATION + currentTab + "\\');return false;" +"\"><span>" + paramRequest.getLocaleString("retweet") + "</a></span>" +"')");
                 out.println("   showStatus('" + paramRequest.getLocaleString("unretweetSent") + "');");
                 out.println("</script>");
                 out.println("</span>");
