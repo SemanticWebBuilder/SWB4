@@ -166,11 +166,11 @@ public class SocialDocumentsToAuhorize extends GenericResource {
         out.println("}");
         out.println("</style>  ");
         ///-We will have our own dialog inside iframe
-        out.println("<div dojoType=\"dijit.Dialog\" id=\"swbDialog\" title=\"Agregar\" onFocus=\"hideApplet(true);\" onBlur=\"if(!this.open)hideApplet(false);\" onHide=\"hideSocialDialog();\" onCancel=\"hideSocialDialog();\" >");
+        /*out.println("<div dojoType=\"dijit.Dialog\" id=\"swbDialog\" title=\"Agregar\" onFocus=\"hideApplet(true);\" onBlur=\"if(!this.open)hideApplet(false);\" onHide=\"hideSocialDialog();\" onCancel=\"hideSocialDialog();\" >");
         out.println("<div dojoType=\"dojox.layout.ContentPane\" id=\"swbDialogImp\" executeScripts=\"true\">");
         out.println("Cargando...");
         out.println("</div>");
-        out.println("</div>");
+        out.println("</div>");*/
         out.println("");
         out.println("");
 
@@ -508,7 +508,7 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                         //out.println("<a class=\"ver\" title=\""+ paramRequest.getLocaleString("properties") +"\" onclick=\"view('"+urlpreview+"','"+ id +"')\" href=\"#\"><img src=\""+imgview+"\" alt=\""+paramRequest.getLocaleString("properties")+"\"></a>");
                         //out.println("<a class=\"ver\" title=\"" + paramRequest.getLocaleString("properties") + "\" onclick=\"view('" + urlpreview + "','" + id + "')\" href=\"#\">Ver 1</a>");
                         ///-Call show Dialog and don't use iframe
-                        out.println("<a class=\"ver\" title=\"" + paramRequest.getLocaleString("properties") + "\" onclick=\"showDialog('" + urlpreview + "','" + paramRequest.getLocaleString("postOutMsg") + "'); return false;\" href=\"#\"></a>");
+                        out.println("<a class=\"ver\" title=\"" + paramRequest.getLocaleString("properties") + "\" onclick=\"parent.showDialog('" + urlpreview + "','" + paramRequest.getLocaleString("postOutMsg") + "'); return false;\" href=\"#\"></a>");
                         if (SocialLoader.getPFlowManager().isReviewer(resource, user)) {
                             String imgedit = SWBPortal.getContextPath() + "/swbadmin/icons/editar_1.gif";
                             //out.println("<a title=\"" + paramRequest.getLocaleString("edit") + "\" href=\"#\" onclick=\"parent.selectTab('" + resource.getURI() + "','" + SWBPortal.getContextPath() + "/swbadmin/jsp/objectTab.jsp','" + "TEST" + "','bh_AdminPorltet');return false;\"><img  src=\"" + imgedit + "\"></a>");
@@ -619,7 +619,7 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                         String imgviewSource = SWBPortal.getContextPath() + "/swbadmin/css/images/ico-origen.png";
                         //out.println("<a title=\"" + paramRequest.getLocaleString("properties") + "\" onclick=\"view('" + urlpreviewPostIn + "','" + idPreSource + "')\" href=\"#\"><img src=\"" + imgviewSource + "\" alt=\"" + paramRequest.getLocaleString("source") + "\">ver 2</a>");
                         ///-Call show Dialog and don't use iframe
-                        out.println("<a title=\"" + paramRequest.getLocaleString("properties") + "\" onclick=\"showDialog('" + urlpreviewPostIn + "','" + paramRequest.getLocaleString("postInMsg") + "'); return false;\" href=\"#\"><img src=\"" + imgviewSource + "\" alt=\"" + paramRequest.getLocaleString("source") + "\"></a>");
+                        out.println("<a title=\"" + paramRequest.getLocaleString("properties") + "\" onclick=\"parent.showDialog('" + urlpreviewPostIn + "','" + paramRequest.getLocaleString("postInMsg") + "'); return false;\" href=\"#\"><img src=\"" + imgviewSource + "\" alt=\"" + paramRequest.getLocaleString("source") + "\"></a>");
                         //onclick=\"showDialog('" + clasifybyTopic + "','" + paramRequest.getLocaleString("reclassify") + " post'); return false;\"
                     } else {
                         out.println("---");
