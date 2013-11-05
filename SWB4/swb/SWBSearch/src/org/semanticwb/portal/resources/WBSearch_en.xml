@@ -8,6 +8,7 @@
                 <input type="CHECKBOX" name="amaps" label="Search all sites" value="1"/>
                 <input type="TEXT" name="tpini" label="Category"/>
                 <input type="TEXT" name="cls" label="Class"/>
+                <input type="TEXT" name="pageSize" label="Page size"/>
                 </fieldset>
                 <fieldset>
 		<input type="SUBMIT" name="btnSave"  value="Save" />

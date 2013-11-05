@@ -224,6 +224,12 @@ public class WBSearch extends GenericAdmResource
                     }
                     
                     max=results.size();
+                    int pageSize=10;
+                    try
+                    {
+                        pageSize=Integer.parseInt(getResourceBase().getAttribute("pageSize","10"));
+                    }catch(Exception e){log.error(e);}
+                    results.setPageLength(pageSize);
                     ipageLength=results.getPageLength();
                     search.setAttribute("size", ""+max);
                 
