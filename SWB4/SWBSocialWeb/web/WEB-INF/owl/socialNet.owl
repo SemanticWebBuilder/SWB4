@@ -1838,7 +1838,16 @@
     <rdfs:label xml:lang="es">Bloque de mensajes a clasificar</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_blockofMsgToClassify">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swbxf:propInvalidMessage>Valor debe ser mayor o igual a 1000</swbxf:propInvalidMessage>
+        <swbxf:propInvalidMessage xml:lang="en">Value must be greather o equal than 1000</swbxf:propInvalidMessage>
+        <swbxf:formElement>
+          <swbxf:Text rdf:ID="TextInt_blockofMsgToClassify">
+            <swbxf:textRegExp rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >\b[1-9][0-9]{3,4}\b</swbxf:textRegExp>
+            <swb:maxLength rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >8</swb:maxLength>
+          </swbxf:Text>
+        </swbxf:formElement>
         <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >80</swb:index>
@@ -1854,10 +1863,19 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_stream_PoolTime">
+        <swbxf:propInvalidMessage>Valor debe ser mayor o igual a 10</swbxf:propInvalidMessage>
+        <swbxf:propInvalidMessage xml:lang="en">Value must be greather or equal than 10</swbxf:propInvalidMessage>
+        <swbxf:formElement>
+          <swbxf:Text rdf:ID="Text_PoolTime">
+            <swb:maxLength rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >8</swb:maxLength>
+            <swbxf:textRegExp rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >\b[1-9][0-9]{1,7}\b</swbxf:textRegExp>
+          </swbxf:Text>
+        </swbxf:formElement>
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >60</swb:index>
-        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:label xml:lang="es">Tiempo para Busqueda de Información</rdfs:label>
@@ -1886,6 +1904,11 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
     <rdfs:comment>Creación del PostOut. Este campo es un indice para poderlo tomar como ordenamiento via Sparql, por eso no se toma el de Descriptable.</rdfs:comment>
     <rdfs:domain rdf:resource="#PostOut"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="minValue">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:comment>Valor Minimo Integer</rdfs:comment>
+    <rdfs:label>Valor minimo</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="postIntensityValue">
     <rdfs:domain rdf:resource="#Post"/>
@@ -2404,6 +2427,7 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Interface>
+  <swb:FormElement rdf:ID="FormElement_1"/>
   <swbxf:DisplayProperty rdf:ID="dp_countryCodetoSearch">
     <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
     <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
