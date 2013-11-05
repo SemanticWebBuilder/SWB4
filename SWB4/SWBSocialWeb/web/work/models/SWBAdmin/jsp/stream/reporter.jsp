@@ -100,196 +100,207 @@
     </script>
 </head>
 <body class="soria">
-<h1><%=SWBSocialUtil.Util.getStringFromGenericLocale("sentimentProm", user.getLanguage())%>: <%=title%></h1>
+    <div id="reporteador" class="swbform">
+        <p class="promediosen"><%=SWBSocialUtil.Util.getStringFromGenericLocale("sentimentProm", user.getLanguage())%>:<span> <%=title%></span></p>
+        <form id="<%=semObj.getSemanticClass().getClassId()%>/reporterFilter" name="<%=semObj.getSemanticClass().getClassId()%>/reporterFilter" dojoType="dijit.form.Form" class="swbform" method="post" action="<%=url%>" method="post" onsubmit="submitForm('<%=semObj.getSemanticClass().getClassId()%>/reporterFilter');return false;"> 
+            <div class="combosFilter">
+                <div id="genero-box">
+                    <label for="gen">Genero</label>
+                    <select name="gender">
+                        <option value="all">Todos</option>
+                        <option value="<%=SocialNetworkUser.USER_GENDER_MALE%>" <%=gender.equals("" + SocialNetworkUser.USER_GENDER_MALE) ? "selected" : ""%>>Hombre</option> 
+                        <option value="<%=SocialNetworkUser.USER_GENDER_FEMALE%>" <%=gender.equals("" + SocialNetworkUser.USER_GENDER_FEMALE) ? "selected" : ""%>>Mujer</option>
+                        <option value="<%=SocialNetworkUser.USER_GENDER_UNDEFINED%>" <%=gender.equals("" + SocialNetworkUser.USER_GENDER_UNDEFINED) ? "selected" : ""%>>Indefinido</option>
+                    </select>
+                </div>
+                <div id="estudios-box">
+                    <label for="school">Estudios</label>
+                    <select name="schoolGrade">
+                        <option value="all">Todos</option>
+                        <option value="<%=SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL%>" <%=schoolGrade.equals("" + SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL) ? "selected" : ""%>>Secundaria, Preparatoria</option>
+                        <option value="<%=SocialNetworkUser.USER_EDUCATION_COLLEGE%>" <%=schoolGrade.equals("" + SocialNetworkUser.USER_EDUCATION_COLLEGE) ? "selected" : ""%>>Universidad</option>
+                        <option value="<%=SocialNetworkUser.USER_EDUCATION_GRADUATE%>" <%=schoolGrade.equals("" + SocialNetworkUser.USER_EDUCATION_GRADUATE) ? "selected" : ""%>>PostGrado</option>
+                        <option value="<%=SocialNetworkUser.USER_EDUCATION_UNDEFINED%>" <%=schoolGrade.equals("" + SocialNetworkUser.USER_EDUCATION_UNDEFINED) ? "selected" : ""%>>Indefinido</option>
+                    </select>
+                </div>
+                <div id="etapa-box">
+                    <label for="life">Etapa</label>
+                    <select name="lifeStage">
+                        <option value="all">Todos</option>
+                        <%
+                            Iterator<LifeStage> itLifeStages = SWBComparator.sortByCreated(LifeStage.ClassMgr.listLifeStages(SWBContext.getAdminWebSite()));
+                            while (itLifeStages.hasNext()) {
+                                LifeStage lifeStage = itLifeStages.next();
+                        %>
+                        <option value="<%=lifeStage.getId()%>" <%=slifeStage.equals(lifeStage.getId()) ? "selected" : ""%>><%=lifeStage.getTitle(user.getLanguage())%></option>
+                        <%
+                            }
+                        %>
+                    </select>
+                </div>
+                <div id="statuslove-box">
+                    <label for="sentimental">Estatus Sentimental</label>
+                    <select name="sentimentalRelationShip">
+                        <option value="all">Todos</option>
+                        <option value="<%=SocialNetworkUser.USER_RELATION_SINGLE%>" <%=sentimentalRelationShip.equals("" + SocialNetworkUser.USER_RELATION_SINGLE) ? "selected" : ""%>>Soltero</option>
+                        <option value="<%=SocialNetworkUser.USER_RELATION_MARRIED%>" <%=sentimentalRelationShip.equals("" + SocialNetworkUser.USER_RELATION_MARRIED) ? "selected" : ""%>>Casado</option>
+                        <option value="<%=SocialNetworkUser.USER_RELATION_DIVORCED%>" <%=sentimentalRelationShip.equals("" + SocialNetworkUser.USER_RELATION_DIVORCED) ? "selected" : ""%>>Divorciado</option>
+                        <option value="<%=SocialNetworkUser.USER_RELATION_WIDOWED%>" <%=sentimentalRelationShip.equals("" + SocialNetworkUser.USER_RELATION_WIDOWED) ? "selected" : ""%>>Viudo</option>
+                        <option value="<%=SocialNetworkUser.USER_RELATION_UNDEFINED%>" <%=sentimentalRelationShip.equals("" + SocialNetworkUser.USER_RELATION_UNDEFINED) ? "selected" : ""%>>Indefinido</option>
+                    </select>
+                </div>
 
-<div class="swbform">
-    <form id="<%=semObj.getSemanticClass().getClassId()%>/reporterFilter" name="<%=semObj.getSemanticClass().getClassId()%>/reporterFilter" dojoType="dijit.form.Form" class="swbform" method="post" action="<%=url%>" method="post" onsubmit="submitForm('<%=semObj.getSemanticClass().getClassId()%>/reporterFilter');return false;"> 
-        <div class="combosFilter">
-            <p>Genero</p>
-            <select name="gender">
-                <option value="all">Todos</option>
-                <option value="<%=SocialNetworkUser.USER_GENDER_MALE%>" <%=gender.equals("" + SocialNetworkUser.USER_GENDER_MALE) ? "selected" : ""%>>Hombre</option> 
-                <option value="<%=SocialNetworkUser.USER_GENDER_FEMALE%>" <%=gender.equals("" + SocialNetworkUser.USER_GENDER_FEMALE) ? "selected" : ""%>>Mujer</option>
-                <option value="<%=SocialNetworkUser.USER_GENDER_UNDEFINED%>" <%=gender.equals("" + SocialNetworkUser.USER_GENDER_UNDEFINED) ? "selected" : ""%>>Indefinido</option>
-            </select>
-            <p>Estudios</p>
-            <select name="schoolGrade">
-                <option value="all">Todos</option>
-                <option value="<%=SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL%>" <%=schoolGrade.equals("" + SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL) ? "selected" : ""%>>Secundaria, Preparatoria</option>
-                <option value="<%=SocialNetworkUser.USER_EDUCATION_COLLEGE%>" <%=schoolGrade.equals("" + SocialNetworkUser.USER_EDUCATION_COLLEGE) ? "selected" : ""%>>Universidad</option>
-                <option value="<%=SocialNetworkUser.USER_EDUCATION_GRADUATE%>" <%=schoolGrade.equals("" + SocialNetworkUser.USER_EDUCATION_GRADUATE) ? "selected" : ""%>>PostGrado</option>
-                <option value="<%=SocialNetworkUser.USER_EDUCATION_UNDEFINED%>" <%=schoolGrade.equals("" + SocialNetworkUser.USER_EDUCATION_UNDEFINED) ? "selected" : ""%>>Indefinido</option>
-            </select>
-            <p>Etapa</p>
-            <select name="lifeStage">
-                <option value="all">Todos</option>
-                <%
-                    Iterator<LifeStage> itLifeStages = SWBComparator.sortByCreated(LifeStage.ClassMgr.listLifeStages(SWBContext.getAdminWebSite()));
-                    while (itLifeStages.hasNext()) {
-                        LifeStage lifeStage = itLifeStages.next();
-                %>
-                <option value="<%=lifeStage.getId()%>" <%=slifeStage.equals(lifeStage.getId()) ? "selected" : ""%>><%=lifeStage.getTitle(user.getLanguage())%></option>
-                <%
-                    }
-                %>
-            </select>
-            <p>Estatus Sentimental</p>
-            <select name="sentimentalRelationShip">
-                <option value="all">Todos</option>
-                <option value="<%=SocialNetworkUser.USER_RELATION_SINGLE%>" <%=sentimentalRelationShip.equals("" + SocialNetworkUser.USER_RELATION_SINGLE) ? "selected" : ""%>>Soltero</option>
-                <option value="<%=SocialNetworkUser.USER_RELATION_MARRIED%>" <%=sentimentalRelationShip.equals("" + SocialNetworkUser.USER_RELATION_MARRIED) ? "selected" : ""%>>Casado</option>
-                <option value="<%=SocialNetworkUser.USER_RELATION_DIVORCED%>" <%=sentimentalRelationShip.equals("" + SocialNetworkUser.USER_RELATION_DIVORCED) ? "selected" : ""%>>Divorciado</option>
-                <option value="<%=SocialNetworkUser.USER_RELATION_WIDOWED%>" <%=sentimentalRelationShip.equals("" + SocialNetworkUser.USER_RELATION_WIDOWED) ? "selected" : ""%>>Viudo</option>
-                <option value="<%=SocialNetworkUser.USER_RELATION_UNDEFINED%>" <%=sentimentalRelationShip.equals("" + SocialNetworkUser.USER_RELATION_UNDEFINED) ? "selected" : ""%>>Indefinido</option>
-            </select>
-            <p>Estado</p>
-            <select name="countryState">
-                <option value="all">Todos</option>
-                <%
-                    Iterator<org.semanticwb.social.Country> itCountries = org.semanticwb.social.Country.ClassMgr.listCountries(SWBContext.getAdminWebSite());
-                    while (itCountries.hasNext()) {
-                        org.semanticwb.social.Country country = itCountries.next();
-                        Iterator<CountryState> itCountryStates = CountryState.ClassMgr.listCountryStateByCountry(country, SWBContext.getAdminWebSite());
-                        while (itCountryStates.hasNext()) {
-                            CountryState countryState = itCountryStates.next();
-                %>
-                <option value="<%=countryState.getId()%>" <%=scountryState.equals(countryState.getId()) ? "selected" : ""%>><%=country.getTitle()%>/<%=countryState.getTitle()%></option>
-                <%
-                        }
-                    }
-                %>    
-            </select>
+                <div id="estado-box">
+                    <label for="country">Estado</label>
+                    <select name="countryState">
+                        <option value="all">Todos</option>
+                        <%
+                            Iterator<org.semanticwb.social.Country> itCountries = org.semanticwb.social.Country.ClassMgr.listCountries(SWBContext.getAdminWebSite());
+                            while (itCountries.hasNext()) {
+                                org.semanticwb.social.Country country = itCountries.next();
+                                Iterator<CountryState> itCountryStates = CountryState.ClassMgr.listCountryStateByCountry(country, SWBContext.getAdminWebSite());
+                                while (itCountryStates.hasNext()) {
+                                    CountryState countryState = itCountryStates.next();
+                        %>
+                        <option value="<%=countryState.getId()%>" <%=scountryState.equals(countryState.getId()) ? "selected" : ""%>><%=country.getTitle()%>/<%=countryState.getTitle()%></option>
+                        <%
+                                }
+                            }
+                        %>    
+                    </select>
+                </div>
 
-            <p>
-                Fecha inicio: 
-                <input type="text" name="sinceDate" id="sinceDate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true">
-                Fecha fin: 
-                <input type="text" name="toDate" id="toDate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true">
-            </p>
-            <p>
+                <div id="mapa-fecha">
+                    <label>Del día</label>
+                    <input type="text" name="sinceDate" id="sinceDate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true">
+                    <label for="toDate"> al día:</label>
+                    <input type="text" name="toDate" id="toDate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true">
+
+                </div>
+                    <div id="mapa-buscar">
                 <button dojoType="dijit.form.Button" type="submit" onclick="showPie('<%=semObj.getSemanticClass().getClassId()%>/reporterFilter');return false; "><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
                 <button dojoType="dijit.form.Button" type="submit"  onclick="exportExcel('<%=semObj.getSemanticClass().getClassId()%>/reporterFilter');return false;">Exportar Excel </button>
-            </p>
-        </div>
-    </form>
-</div>
-<%
-    if (paramRequest.getAction().equals("showChart")) {
-        String args = "?objUri=" + semObj.getEncodedURI();
-        String lang = paramRequest.getUser().getLanguage();
-        args += "&lang=" + lang;
-        args += "&gender=" + gender;
-        args += "&schoolGrade=" + schoolGrade;
-        args += "&slifeStage=" + slifeStage;
-        args += "&sentimentalRelationShip=" + sentimentalRelationShip;
-        args += "&scountryState=" + scountryState;
-        args += "&sinceDate=" + sinceDate;
-        args += "&toDate=" + toDate;
-%>
-<script src="http://d3js.org/d3.v3.min.js"></script>
+                    </div>
+            </div>
+        </form>
+    </div>
+    <%
+        if (paramRequest.getAction().equals("showChart")) {
+            String args = "?objUri=" + semObj.getEncodedURI();
+            String lang = paramRequest.getUser().getLanguage();
+            args += "&lang=" + lang;
+            args += "&gender=" + gender;
+            args += "&schoolGrade=" + schoolGrade;
+            args += "&slifeStage=" + slifeStage;
+            args += "&sentimentalRelationShip=" + sentimentalRelationShip;
+            args += "&scountryState=" + scountryState;
+            args += "&sinceDate=" + sinceDate;
+            args += "&toDate=" + toDate;
+    %>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
 
-<script>
+    <script>
 
-    var width = 960,
-    height = 500,
-    radius = Math.min(width, height) / 2;
+        var width = 960,
+        height = 500,
+        radius = Math.min(width, height) / 2;
 
-    var arc = d3.svg.arc()
-    .outerRadius(radius - 10)
-    .innerRadius(0);
+        var arc = d3.svg.arc()
+        .outerRadius(radius - 10)
+        .innerRadius(0);
         
-    var arcOver = d3.svg.arc()
-    .outerRadius(radius - 5)
-    .innerRadius(radius-15);
+        var arcOver = d3.svg.arc()
+        .outerRadius(radius - 5)
+        .innerRadius(radius-15);
         
 
-    var pie = d3.layout.pie()
-    .sort(null)
-    .value(function(d) { return d.value2; });
+        var pie = d3.layout.pie()
+        .sort(null)
+        .value(function(d) { return d.value2; });
 
-    var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+        var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .append("g")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-    d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/reporterChartData.jsp<%=args%>", function(error, data) {
+        d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/reporterChartData.jsp<%=args%>", function(error, data) {
 
-        var gl = svg.selectAll(".arcOver")
-        .data(pie(data))
-        .enter().append("g")
-        .attr("class", "arcOver")
-        .style("visibility","hidden");
+            var gl = svg.selectAll(".arcOver")
+            .data(pie(data))
+            .enter().append("g")
+            .attr("class", "arcOver")
+            .style("visibility","hidden");
         
-        gl.append("path")
-        .attr("d", arcOver)
-        .style("fill-opacity", "0.3")
-        .style("fill", function(d) { return d.data.color; });
+            gl.append("path")
+            .attr("d", arcOver)
+            .style("fill-opacity", "0.3")
+            .style("fill", function(d) { return d.data.color; });
 
 
-        var tooltips = svg.select("#pieGender")
-        .data(pie(data))
-        .enter().append("div")
-        .attr("class","chartToolTip")
-        .style("display", "none")
-        .style("position", "absolute")
-        .style("z-index", "10");
+            var tooltips = svg.select("#pieGender")
+            .data(pie(data))
+            .enter().append("div")
+            .attr("class","chartToolTip")
+            .style("display", "none")
+            .style("position", "absolute")
+            .style("z-index", "10");
 
-        tooltips.append("p")
-        .append("span")
-        .html(function(d) {                
-            return "<strong>"+d.data.label+"</strong><br>"+d.data.value1+"/"+d.data.value2+"%" ;           
-        });       
+            tooltips.append("p")
+            .append("span")
+            .html(function(d) {                
+                return "<strong>"+d.data.label+"</strong><br>"+d.data.value1+"/"+d.data.value2+"%" ;           
+            });       
         
-        var g = svg.selectAll(".arc")
-        .data(pie(data))
-        .enter().append("g")
-        .attr("class", "arc")
-        .on("mouseover", function(d, i) {
-            d3.select(gl[0][i]).style("visibility","visible"); 
+            var g = svg.selectAll(".arc")
+            .data(pie(data))
+            .enter().append("g")
+            .attr("class", "arc")
+            .on("mouseover", function(d, i) {
+                d3.select(gl[0][i]).style("visibility","visible"); 
                            
-            d3.select(tooltips[0][i])
-            .style("display","block");
-        })
-        .on("mouseout", function(d, i) {
-            d3.select(gl[0][i]).style("visibility","hidden"); 
-            d3.select(tooltips[0][i])
-            .style("display","none");
-            d3.select(gl[0][i]).style("fill",function(d) {
-                return d.data.color;
+                d3.select(tooltips[0][i])
+                .style("display","block");
+            })
+            .on("mouseout", function(d, i) {
+                d3.select(gl[0][i]).style("visibility","hidden"); 
+                d3.select(tooltips[0][i])
+                .style("display","none");
+                d3.select(gl[0][i]).style("fill",function(d) {
+                    return d.data.color;
+                });
+            })
+            .on("mousemove", function(d, i) {
+                d3.select(tooltips[0][i])
+                .style("top", d3.event.pageY-10+"px")
+                .style("left", d3.event.pageX+10+"px")
             });
-        })
-        .on("mousemove", function(d, i) {
-            d3.select(tooltips[0][i])
-            .style("top", d3.event.pageY-10+"px")
-            .style("left", d3.event.pageX+10+"px")
-        });
 
-        //Create slices
-        g.append("path")
-        .attr("d", arc)
-        .style("stroke", "white")
-        .style("stroke-width", "2")
-        .style("fill", function(d, i) {
-            return  d.data.color;
-        });
+            //Create slices
+            g.append("path")
+            .attr("d", arc)
+            .style("stroke", "white")
+            .style("stroke-width", "2")
+            .style("fill", function(d, i) {
+                return  d.data.color;
+            });
                         
-        svg.append("text")
-        .append("text")
-        .text("title")
-        .style("text-anchor","middle")
-        .style("fill","black")
-        .style("font-size","10pt")
-        .style("font-weight","bold")
-        .attr("x","0")
-        .attr("y",function(d) {
-            return - width/2;
-        }); 
-    });
+            svg.append("text")
+            .append("text")
+            .text("title")
+            .style("text-anchor","middle")
+            .style("fill","black")
+            .style("font-size","10pt")
+            .style("font-weight","bold")
+            .attr("x","0")
+            .attr("y",function(d) {
+                return - width/2;
+            }); 
+        });
         
-</script>
-<%
-    }
-%>
+    </script>
+    <%
+        }
+    %>
 
 </body>
