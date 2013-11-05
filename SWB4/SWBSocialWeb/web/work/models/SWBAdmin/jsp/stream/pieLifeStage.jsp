@@ -202,7 +202,7 @@
             } else {
                 node1.put("color", "#eae8e3");
             }
-            node1.put("label2", childTitle+" " + child + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesChild + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesChild + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsChild);
+            node1.put("label2", childTitle+" " + child + " " +SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesChild + " " +SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesChild +  " " +SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsChild);
             node1.put("chartclass", "possClass");
             node.put(node1);
         }
@@ -220,7 +220,7 @@
             } else {
                 node2.put("color", "#eae8e3");
             }
-            node2.put("label2",youngTitle+ " " + young + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesYoung + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesYoung + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsYoung);
+            node2.put("label2",youngTitle+ " " + young +  " " +SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesYoung + " " + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesYoung + " " + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsYoung);
             node2.put("chartclass", "possClass");
             node.put(node2);
         }
@@ -238,7 +238,7 @@
             } else {
                 node3.put("color", "#eae8e3");
             }
-            node3.put("label2", teenTitle+" " + teenAge + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesteenAge + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesteenAge + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsteenAge);
+            node3.put("label2", teenTitle+" " + teenAge + " " + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesteenAge + " " + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesteenAge + " " + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsteenAge);
             node3.put("chartclass", "possClass");
             node.put(node3);
         }
@@ -255,7 +255,7 @@
             } else {
                 node4.put("color", "#eae8e3");
             }
-            node4.put("label2", youngAdultTitle+"  " + youngAdult + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesyoungAdult + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesyoungAdult + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsyoungAdult);
+            node4.put("label2", youngAdultTitle+"  " + youngAdult + " " + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesyoungAdult + " " + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesyoungAdult +  " " +SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsyoungAdult);
             node4.put("chartclass", "possClass");
             node.put(node4);
         }
@@ -273,7 +273,7 @@
             } else {
                 node5.put("color", "#eae8e3");
             }
-            node5.put("label2", adultTitle+" " + adult + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesAdult + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesAdult + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsAdult);
+            node5.put("label2", adultTitle+" " + adult + " " + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesAdult +  " " +SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesAdult + " " + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsAdult);
             node5.put("chartclass", "possClass");
             node.put(node5);
         }
@@ -291,7 +291,7 @@
             } else {
                 node6.put("color", "#eae8e3");
             }
-            node6.put("label2",thirdTitle+ " " + thirdAge + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesthirdAge + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesthirdAge + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsthirdAge);
+            node6.put("label2",thirdTitle+ " " + thirdAge + " " + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesthirdAge +  " " +SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesthirdAge +  " " +SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsthirdAge);
             node6.put("chartclass", "possClass");
             node.put(node6);
         }
