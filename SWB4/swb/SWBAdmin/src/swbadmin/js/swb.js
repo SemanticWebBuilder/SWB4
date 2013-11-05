@@ -903,12 +903,15 @@ function reloadTreeNode(store, item)
     //alert("arr:"+arr[0].id);
     var items = arr[0].children;
     //alert("nitem:"+items.length);
-    for (var i = 0; i < items.length; i++)
+    if(items)
     {
-        addItem(store, items[i], item);
+        for (var i = 0; i < items.length; i++)
+        {
+            addItem(store, items[i], item);
+        }
+        store.save();
+        setDefaultCursor(item);        
     }
-    store.save();
-    setDefaultCursor(item);
 }
 
 function addItemByURI(store, parent, uri)
