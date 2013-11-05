@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Resource;
+import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.Searchable;
 import org.semanticwb.model.User;
 import org.semanticwb.portal.indexer.FileSearchWrapper;
@@ -54,8 +56,20 @@ public class FileParser extends GenericParser {
         Searchable page = ((FileSearchWrapper) gen).getSearchable();
         if (page == null) {
             return null;
+        }else
+        {
+            if(page instanceof Resource)
+            {
+                Resourceable res=((Resource)page).getResourceable();
+                if(res instanceof Searchable)
+                {
+                    page=(Searchable)res;
+                }
+            }
         }
-        return super.getIndexCategory(page);
+        String ret=super.getIndexCategory(page);
+        //System.out.println("getIndexCategory:"+ret+" "+gen);
+        return ret;
     }
 
     @Override
