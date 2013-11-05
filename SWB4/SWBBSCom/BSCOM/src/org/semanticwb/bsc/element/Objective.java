@@ -131,7 +131,7 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
         Iterator<Indicator> indicators = listValidIndicators().iterator();
         while(indicators.hasNext()) {
             Series star = indicators.next().getStar();
-            if(star==null) {
+            if(star==null || star.getMeasure(period)==null) {
                 continue;
             }
             if( star.getMeasure(period).getEvaluation().getStatus().compareTo(status)<0 ) {
