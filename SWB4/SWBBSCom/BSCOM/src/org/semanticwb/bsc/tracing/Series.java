@@ -84,12 +84,16 @@ public class Series extends org.semanticwb.bsc.tracing.base.SeriesBase implement
     
     public Measure getMeasure(Period period)
     {
+        if(period==null) {
+            return null;
+        }
+        
         Iterator<Measure> measures = listMeasures();
         Measure measure = null;
         while(measures.hasNext())
         {
             measure = measures.next();
-            if(measure.getEvaluation().getPeriod().equals(period))
+            if(measure.getEvaluation()!=null && period.equals(measure.getEvaluation().getPeriod()))
             {
                 return measure;
             }
