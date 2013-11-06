@@ -160,7 +160,7 @@
                     <%
                     if(videoFormat.equals("youtube")){
                     %>
-                        <iframe id="ytplayer" type="text/html" width="250" height="195" src="<%=video.getVideo()%>" frameborder="0"/>
+                        <iframe id="ytplayer" type="text/html" width="250" height="195" src="<%=video.getVideo()%>" frameborder="0"></iframe>
                      <%
                     }else  if (videoFormat.equals("flv")) {
                     %>
@@ -211,9 +211,9 @@
                         }
                     %>
                     <td>
-
                     <%
-                        if (postIn.getPostSentimentalType() == 0) {
+                    System.out.println("SentimentJG:"+postIn.getPostSentimentalType());
+                    if (postIn.getPostSentimentalType() == 0) {
                     %>
                     ---
                     <% } else if (postIn.getPostSentimentalType() == 1) {
@@ -226,7 +226,7 @@
                     <%
                         }
                     %>
-                </td>
+                  </td>
                 <td>
                     <!--<%=postIn.getPostIntesityType() == 0 ? paramRequest.getLocaleString("low") : postIn.getPostSentimentalType() == 1 ? paramRequest.getLocaleString("medium") : postIn.getPostSentimentalType() == 2 ? paramRequest.getLocaleString("high") : "---"%>-->
 
