@@ -206,7 +206,12 @@
             %>    
 
             <%
-                if (videoFormat.equals("flv")) {
+            if(videoFormat.equals("youtube")){
+            %>
+                <iframe id="ytplayer" type="text/html" width="250" height="195" src="<%=SWBPortal.getWebWorkPath()%><%=video.getWorkPath()%>/<%=video.getVideo()%>" frameborder="0"></iframe>
+             <%
+            }else
+            if (videoFormat.equals("flv")) {
             %>
 
             <%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
