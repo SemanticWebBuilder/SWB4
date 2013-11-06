@@ -1072,7 +1072,7 @@ public class CausalArrows extends Decorator {
                     JSONObject arrayTheme = (JSONObject) perspective.get("arrayTheme");
                     if (arrayTheme.has(indexTheme + "")) {
                         JSONObject themeData = (JSONObject) arrayTheme.get(indexTheme + "");
-                        if (themeData.has(indexTheme + "")) {
+                        if (themeData.has("arrayObjective")) {
                             JSONObject arrayObjective = (JSONObject) themeData.get("arrayObjective");
                             if (themeData.has("arrayObjective")) {
                                 boolean find = false;
