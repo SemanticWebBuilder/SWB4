@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Persiste los atributos de un indicador 
    */
-public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Committable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Serializable,org.semanticwb.bsc.Help,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Roleable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Status,org.semanticwb.model.Filterable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableClass,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.Seasonable
+public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Updateable,org.semanticwb.model.UserGroupable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Committable,org.semanticwb.model.Filterable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.model.Roleable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.bsc.Serializable,org.semanticwb.bsc.Status,org.semanticwb.bsc.Seasonable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Recognizable
 {
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
@@ -642,6 +642,24 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
         //Override this method in Indicator object
         getSemanticObject().setProperty(bsc_prefix, value,false);
     }
+
+/**
+* Gets the Recommendations property
+* @return String with the Recommendations
+*/
+    public String getRecommendations()
+    {
+        return getSemanticObject().getProperty(bsc_recommendations);
+    }
+
+/**
+* Sets the Recommendations property
+* @param value long with the Recommendations
+*/
+    public void setRecommendations(String value)
+    {
+        getSemanticObject().setProperty(bsc_recommendations, value);
+    }
    /**
    * Sets the value for the property Objective
    * @param value Objective to set
@@ -679,6 +697,24 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
              ret=(org.semanticwb.bsc.element.Objective)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Analysis property
+* @return String with the Analysis
+*/
+    public String getAnalysis()
+    {
+        return getSemanticObject().getProperty(bsc_analysis);
+    }
+
+/**
+* Sets the Analysis property
+* @param value long with the Analysis
+*/
+    public void setAnalysis(String value)
+    {
+        getSemanticObject().setProperty(bsc_analysis, value);
     }
 
 /**
