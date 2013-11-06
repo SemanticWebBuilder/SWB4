@@ -49,11 +49,6 @@ public class BSCUtils {
                 } catch (IndexOutOfBoundsException ex) {
                     initials = "";
                 }
-//                String fullname = sponsor.getFullName() == null ? "" : sponsor.getFullName();
-//                String[] dataName = fullname.split(" ");
-//                for (int i = 0; i < dataName.length; i++) {
-//                    initials = initials + dataName[i].substring(0, 1);
-//                }
             }
         }
         return initials;
