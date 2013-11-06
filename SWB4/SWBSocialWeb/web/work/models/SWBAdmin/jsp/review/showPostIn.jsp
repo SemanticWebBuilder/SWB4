@@ -124,8 +124,9 @@
                 <%
                 } else if (semObj.getGenericInstance() instanceof VideoIn) {
                     VideoIn video = (VideoIn) semObj.getGenericInstance();
-                   
-                    out.print("<td>");
+                    %>
+                    <td>
+                    <%    
                     String videoFormat = "";
                     String videoUrl = video.getVideo();
                     String fileext = null;
@@ -210,6 +211,7 @@
 
                 <%
                     }
+                %>    
                     <br/><br/><%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
                 </td>
 
