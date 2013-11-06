@@ -58,7 +58,7 @@ System.out.println("mode="+mode);
         
         
         PrintWriter out = response.getWriter();
-        String modelId = "DADT";
+        String modelId = "DAC";
         WebSite ws = WebSite.ClassMgr.getWebSite(modelId);
         if(ws==null) {
             out.println("sitio "+modelId+" es nulo");
@@ -236,7 +236,7 @@ System.out.println("inds="+inds);
                                 out.println("<tr>");
                                 period = measurablesPeriods.next();
                                 out.println("<td>"+period.getTitle()+"</td>");
-                                measure = star.getMeasureByPeriod(period);
+                                measure = star.getMeasure(period);
                                 try {
                                     value = "<td>"+measure.getEvaluation().getStatus().getTitle()+"</td>";
                                 }catch(Exception e) {
@@ -247,7 +247,7 @@ System.out.println("inds="+inds);
                                 for(int i=0; i<serieses.size(); i++)
                                 {
                                     s = serieses.get(i);
-                                    measure = s.getMeasureByPeriod(period);
+                                    measure = s.getMeasure(period);
     //                                value = measure==null?"--":formatters[i].format(measure.getValue());
                                     value = measure==null?"--":s.getFormatter().format(measure.getValue());
                                     if(s.isReadOnly()) {
@@ -266,6 +266,8 @@ System.out.println("inds="+inds);
                                 }
                                 out.println("</tr>");
                             }
+                        }else {
+                            out.println("no hay STAR definida");
                         }
                     }
                 }else {
