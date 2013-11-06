@@ -119,7 +119,7 @@
                     <%
                         }
                     %>     
-                    <%=SWBUtils.TEXT.encode(photo.getMsg_Text(), "utf8")%>
+                    <br/><%=SWBUtils.TEXT.encode(photo.getMsg_Text(), "utf8")%>
                 </td>
                 <%
                 } else if (semObj.getGenericInstance() instanceof VideoIn) {
