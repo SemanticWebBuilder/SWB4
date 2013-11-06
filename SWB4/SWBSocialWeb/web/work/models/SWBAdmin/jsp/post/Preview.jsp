@@ -23,22 +23,22 @@
 
 <%
     String suri = request.getParameter("suri");
-
     String suriSite = request.getParameter("suriSite");
     SocialWebPage swb = (SocialWebPage) SemanticObject.createSemanticObject(suriSite).createGenericInstance();
     Language l = (Language) SemanticObject.createSemanticObject(suri).createGenericInstance();
     String description = swb.getDescription(l.getId()) == null ? "" : swb.getDescription(l.getId());
-     WebPage ws = (WebPage) swb ; 
+       
+    WebPage ws = (WebPage) swb;
     StringBuilder address = new StringBuilder(128);
-    address.append("http://").append(request.getServerName()).append(":").append(request.getServerPort()).append(ws.getUrl());
-    
+    address.append("http://").append(request.getServerName()).append(":").append(request.getServerPort()).append(SWBPortal.getWebWorkPath()).append("/").append("models").append("/").append(swb.getWebSite().getId()).append("/").append("WebPage").append("/").append(swb.getId()).append("/").append(SocialWebPage.social_socialwpPhoto.getName() + "_" + swb.getId() + "_" + swb.getSocialwpPhoto());
+
     SWBResourceURL urlAction = paramRequest.getActionUrl();
     urlAction.setParameter("toPost", "photo");
     WebSite wsite = paramRequest.getWebPage().getWebSite();
     urlAction.setParameter("wsite", wsite.getSemanticObject().getModel().getName());
     String sphoto = swb.getSocialwpPhoto();
+    
 %>
-
 
 <body>
     <div id="pub-detalle">
@@ -63,7 +63,7 @@
 
                     <tr>
                         <td>
-                            <img src="<%=SWBPortal.getWebWorkPath()%><%=swb.getWorkPath()%>/<%=SocialWebPage.social_socialwpPhoto.getName()%>_<%=swb.getId()%>_<%=sphoto%>">
+                            <img width="400" height="400" src="<%=SWBPortal.getWebWorkPath()%><%=swb.getWorkPath()%>/<%=SocialWebPage.social_socialwpPhoto.getName()%>_<%=swb.getId()%>_<%=sphoto%>">
 
                         </td>
                     </tr>
