@@ -54,7 +54,8 @@ public class DataTableResource extends GenericResource {
         User user = paramRequest.getUser();
         if(user==null || !user.isSigned())
         {
-            response.sendError(403);
+            //response.sendError(403);
+            response.flushBuffer();
             return;
         }
         final String lang = user.getLanguage();
