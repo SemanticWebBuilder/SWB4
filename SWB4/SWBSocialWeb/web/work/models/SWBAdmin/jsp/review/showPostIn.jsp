@@ -155,7 +155,7 @@
                 %>    
 
                 <%
-                if(video.getVideo().contains("youtube")){
+                if(videoFormat.equals("youtube")){
                 %>
                     <iframe id="ytplayer" type="text/html" width="250" height="195"
                     src="<%=video.getVideo()%>" frameborder="0"/>
