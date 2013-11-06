@@ -41,13 +41,19 @@ public class BSCUtils {
         String initials = "";
         if (sponsor != null) {
             initials = sponsor.getSemanticObject().getProperty(sponsor.getSemanticObject().getSemanticClass().getProperty("usrInitials"));
-            //System.out.println(objective.getSponsor().getSemanticObject().getProperty(objective.getSponsor().getSemanticObject().getSemanticClass().getProperty("usrInitials")));
-            if (initials == null) {
-                String fullname = sponsor.getFullName() == null ? "" : sponsor.getFullName();
-                String[] dataName = fullname.split(" ");
-                for (int i = 0; i < dataName.length; i++) {
-                    initials = initials + dataName[i].substring(0, 1);
+            if ((initials == null) || (initials != null && initials.equals("null"))) {
+                try {
+                    initials = sponsor.getFirstName().substring(0, 1)
+                            + sponsor.getLastName().substring(0, 1)
+                            + (sponsor.getSecondLastName() == null ? "" : sponsor.getSecondLastName().substring(0, 1));
+                } catch (IndexOutOfBoundsException ex) {
+                    initials = "";
                 }
+//                String fullname = sponsor.getFullName() == null ? "" : sponsor.getFullName();
+//                String[] dataName = fullname.split(" ");
+//                for (int i = 0; i < dataName.length; i++) {
+//                    initials = initials + dataName[i].substring(0, 1);
+//                }
             }
         }
         return initials;
