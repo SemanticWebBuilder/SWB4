@@ -152,12 +152,12 @@ public class DataBuilder {
                 Theme theme = (Theme) itTheme.next();
                 JSONObject dataTheme = getDataTheme(period, base, theme);
                 try {
-                    if (dataTheme.getInt("countObjectives") > 0) {
+                    if (dataTheme.has("countObjectives") && dataTheme.getInt("countObjectives") > 0) {
                         arrayThemes.put(dataTheme);
                         countTheme++;
                     }
                 } catch (JSONException ex) {
-                    log.error("Exception try get countObjectives: " + ex);
+                    log.error("Exception try get countObjectives (DataBuilder): " + ex);
                 }
             }
         }
@@ -174,7 +174,7 @@ public class DataBuilder {
                             countDiffGroup++;
                         }
                     } catch (JSONException ex) {
-                        log.error("Exception try get countObjectives: " + ex);
+                        log.error("Exception try get countDifferentiator: " + ex);
                     }
                 }
             }
@@ -334,6 +334,7 @@ public class DataBuilder {
             dataObjective.put("prefix", prefix);
             dataObjective.put("url", url);
             dataObjective.put("index", objective.getIndex() + "");
+            dataObjective.put("id", objective.getId());
         } catch (JSONException ex) {
             log.error("Error try get data Objective: " + ex);
         }

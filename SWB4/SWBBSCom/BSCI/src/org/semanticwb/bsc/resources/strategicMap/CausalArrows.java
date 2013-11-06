@@ -423,11 +423,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yA1 = new BigDecimal(heightPer[0]);
             BigDecimal yA3 = new BigDecimal(initPerspective);
             BigDecimal yA4 = yA3.multiply(tam2);
-            
+
             BigDecimal yA5 = yA3.multiply(tam20).multiply(tam2);
-            BigDecimal baseYdiff =  getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
+            BigDecimal baseYdiff = getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
             BigDecimal baseYdiff2 = yA5.subtract(baseYdiff);
-            
+
             BigDecimal yA = tam120.add(yA1).add(baseYdiff2);
             if (useMargins) {
                 yA.add(yA4).add(yA3);
@@ -461,7 +461,7 @@ public class CausalArrows extends Decorator {
             y1 = y2;
             BigDecimal yD1 = new BigDecimal(heightPer[0]);
             BigDecimal yD4 = yA3.multiply(tam2);
-            
+
             BigDecimal yD6 = tam18.subtract(incrementTam);
             BigDecimal yD = tam120.add(yD1).add(baseYdiff2).add(yD6);
             if (useMargins) {
@@ -568,7 +568,7 @@ public class CausalArrows extends Decorator {
             BigDecimal baseY1a1 = new BigDecimal(initObjective).multiply(tam1);
 
             BigDecimal baseY1a2 = new BigDecimal(initPerspective).multiply(tam20).multiply(tam2);
-            BigDecimal baseYdiff =  getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
+            BigDecimal baseYdiff = getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
             BigDecimal baseYdiff2 = baseY1a2.subtract(baseYdiff);
 
             BigDecimal baseY1a3 = new BigDecimal(initObjective).subtract(tam1);
@@ -594,7 +594,7 @@ public class CausalArrows extends Decorator {
             BigDecimal y1a = new BigDecimal(heightPer[0]);
             BigDecimal y1b = new BigDecimal(heightPer[1]);
             BigDecimal y1c = new BigDecimal(initPerspective);
-            
+
             BigDecimal y1e = tam18.subtract(incrementTam);
             BigDecimal y1f = y1c.subtract(tam1).multiply(tam2).add(y1b);
             BigDecimal y1g = y1a.add(baseYdiff2).add(tam120).add(y1e);
@@ -691,7 +691,7 @@ public class CausalArrows extends Decorator {
      * contador de l&iacute;neas utilizados
      */
     private HashMap paintLinesSameThemeTheme(int startPerspectiveIndex, int startThemeIndex,
-            int finalThemeIndex, int countLine, String classLine, JSONObject jsonArrows, 
+            int finalThemeIndex, int countLine, String classLine, JSONObject jsonArrows,
             String triangleEnd) {
         HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
@@ -728,11 +728,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yA0 = new BigDecimal(startPerspectiveIndex);
             BigDecimal yA2 = new BigDecimal(heightPer[1]);
             BigDecimal yA3 = yA0.subtract(tam1).multiply(tam2).add(tam1);
-            
+
             BigDecimal yA4 = yA0.subtract(tam1).multiply(tam20).multiply(tam2);
-            BigDecimal baseYdiff =  getGroupDiffOnly(jsonArrows, startPerspectiveIndex).multiply(tam20);
+            BigDecimal baseYdiff = getGroupDiffOnly(jsonArrows, startPerspectiveIndex).multiply(tam20);
             BigDecimal baseYdiff2 = yA4.subtract(baseYdiff);
-            
+
             BigDecimal yA = yA1.add(tam120).add(baseYdiff2).add(tam20);
             if (useMargins) {
                 yA.add(yA2).add(yA3);
@@ -771,11 +771,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yD0 = new BigDecimal(startPerspectiveIndex);
             BigDecimal yD2 = new BigDecimal(heightPer[1]);
             BigDecimal yD3 = yD0.subtract(tam1).multiply(tam2).add(tam1);
-            
+
             BigDecimal yD4 = yD0.subtract(tam1).multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, startPerspectiveIndex).multiply(tam20);
-            baseYdiff2 = yD4.subtract(baseYdiff);            
-            
+            baseYdiff = getGroupDiffOnly(jsonArrows, startPerspectiveIndex).multiply(tam20);
+            baseYdiff2 = yD4.subtract(baseYdiff);
+
             BigDecimal yD = yD1.add(tam120).add(baseYdiff2).add(tam20);
             if (useMargins) {
                 yD.add(yD2).add(yD3);
@@ -853,11 +853,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yA0 = new BigDecimal(startPerspectiveIndex);
             BigDecimal yA2 = new BigDecimal(heightPer[1]);
             BigDecimal yA3 = yA0.subtract(tam1).multiply(tam2).add(tam1);
-            
+
             BigDecimal yA4 = yA0.subtract(tam1).multiply(tam20).multiply(tam2);
-            BigDecimal baseYdiff =  getGroupDiffOnly(jsonArrows, startPerspectiveIndex).multiply(tam20);
+            BigDecimal baseYdiff = getGroupDiffOnly(jsonArrows, startPerspectiveIndex).multiply(tam20);
             BigDecimal baseYdiff2 = yA4.subtract(baseYdiff);
-            
+
             BigDecimal yA = yA1.add(tam120).add(baseYdiff2).add(tam20);
             if (useMargins) {
                 yA.add(yA2).add(yA3);
@@ -888,11 +888,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yC2 = new BigDecimal(heightPer[1]);
             BigDecimal yC3 = new BigDecimal(finalPerspectiveIndex);
             BigDecimal yC4 = yC3.subtract(tam1).multiply(tam2).add(tam1);
-            
+
             BigDecimal yC5 = yC3.subtract(tam1).multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, finalPerspectiveIndex - 1).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, finalPerspectiveIndex - 1).multiply(tam20);
             baseYdiff2 = yC5.subtract(baseYdiff);
-            
+
             BigDecimal yC = yC1.add(tam120).add(baseYdiff2).add(incrementTam);
             if (useMargins) {
                 yC.add(yC2).add(yC4);
@@ -929,11 +929,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yD0 = new BigDecimal(finalPerspectiveIndex);
             BigDecimal yD2 = new BigDecimal(heightPer[1]);
             BigDecimal yD3 = yD0.subtract(tam1).multiply(tam2).add(tam1);
-            
+
             BigDecimal yD4 = yD0.subtract(tam1).multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, finalPerspectiveIndex).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, finalPerspectiveIndex).multiply(tam20);
             baseYdiff2 = yD4.subtract(baseYdiff);
-            
+
             BigDecimal yD = yD1.add(tam120).add(baseYdiff2).add(tam20);
             if (useMargins) {
                 yD.add(yD2).add(yD3);
@@ -1027,18 +1027,22 @@ public class CausalArrows extends Decorator {
     private int findIndexTheme(int indexPerspective, JSONObject jsonArrows, Theme theme) {
         int indexTheme = 0;
         try {
-            JSONObject perspective = (JSONObject) jsonArrows.get("" + indexPerspective);
-            JSONObject arrayTheme = (JSONObject) perspective.get("arrayTheme");
-            boolean find = false;
-            int i = 1;
-            while ((i <= arrayTheme.length()) && (!find)) {
-                JSONObject obj = (JSONObject) arrayTheme.get(i + "");
-                int index = obj.getInt("index");
-                if (theme.getIndex() == index) {
-                    indexTheme = i;
-                    find = true;
+            if (jsonArrows.has("" + indexPerspective)) {
+                JSONObject perspective = (JSONObject) jsonArrows.get("" + indexPerspective);
+                if (perspective.has("arrayTheme")) {
+                    JSONObject arrayTheme = (JSONObject) perspective.get("arrayTheme");
+                    boolean find = false;
+                    int i = 1;
+                    while ((i <= arrayTheme.length()) && (!find)) {
+                        JSONObject obj = (JSONObject) arrayTheme.get(i + "");
+                        int index = obj.getInt("index");
+                        if (theme.getIndex() == index) {
+                            indexTheme = i;
+                            find = true;
+                        }
+                        i++;
+                    }
                 }
-                i++;
             }
         } catch (JSONException ex) {
             log.error("Exception findIndexTheme: " + ex);
@@ -1062,20 +1066,30 @@ public class CausalArrows extends Decorator {
     private int findIndexObjective(int indexPerspective, JSONObject jsonArrows, int indexTheme, Objective objective) {
         int indexObjective = 0;
         try {
-            JSONObject perspective = (JSONObject) jsonArrows.get("" + indexPerspective);
-            JSONObject arrayTheme = (JSONObject) perspective.get("arrayTheme");
-            JSONObject themeData = (JSONObject) arrayTheme.get(indexTheme + "");
-            JSONObject arrayObjective = (JSONObject) themeData.get("arrayObjective");
-            boolean find = false;
-            int i = 1;
-            while ((i <= arrayObjective.length()) && (!find)) {
-                JSONObject obj = (JSONObject) arrayObjective.get(i + "");
-                int index = obj.getInt("index");
-                if (objective.getIndex() == index) {
-                    indexObjective = i;
-                    find = true;
+            if (jsonArrows.has("" + indexPerspective)) {
+                JSONObject perspective = (JSONObject) jsonArrows.get("" + indexPerspective);
+                if (perspective.has("arrayTheme")) {
+                    JSONObject arrayTheme = (JSONObject) perspective.get("arrayTheme");
+                    if (arrayTheme.has(indexTheme + "")) {
+                        JSONObject themeData = (JSONObject) arrayTheme.get(indexTheme + "");
+                        if (themeData.has(indexTheme + "")) {
+                            JSONObject arrayObjective = (JSONObject) themeData.get("arrayObjective");
+                            if (themeData.has("arrayObjective")) {
+                                boolean find = false;
+                                int i = 1;
+                                while ((i <= arrayObjective.length()) && (!find)) {
+                                    JSONObject obj = (JSONObject) arrayObjective.get(i + "");
+                                    int index = obj.getInt("index");
+                                    if (objective.getIndex() == index) {
+                                        indexObjective = i;
+                                        find = true;
+                                    }
+                                    i++;
+                                }
+                            }
+                        }
+                    }
                 }
-                i++;
             }
         } catch (JSONException ex) {
             log.error("Exception findIndexObjective: " + ex);
@@ -1350,7 +1364,7 @@ public class CausalArrows extends Decorator {
                                     classLine, countForRelation, true, triangleEnd);
                         } else {
                             map = paintOTVIndexContinuos(startPerspectiveIndex, startThemeIndex,
-                                    startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex, 
+                                    startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex,
                                     jsonArrows, countLine, classLine, countForRelation, triangleEnd);
                         }
                     } else if (startPerspectiveIndex == finalPerspectiveIndex) {
@@ -1448,7 +1462,7 @@ public class CausalArrows extends Decorator {
                                     classLine, countForRelation, false, triangleEnd);
                         } else {
                             map = paintOTVIndexContinuos(startPerspectiveIndex, startThemeIndex,
-                                    startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex, 
+                                    startObjetiveIndex, finalPerspectiveIndex, finalThemeIndex, finalObjetiveIndex,
                                     jsonArrows, countLine, classLine, countForRelation, triangleEnd);
                         }
                     } else if (startPerspectiveIndex == finalPerspectiveIndex) {
@@ -1569,11 +1583,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yA1 = new BigDecimal(heightPer[0]);
             BigDecimal yA3 = new BigDecimal(initPerspective);
             BigDecimal yA4 = yA3.multiply(tam2);
-            
+
             BigDecimal yA5 = yA3.multiply(tam20).multiply(tam2);
-            BigDecimal baseYdiff =  getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
+            BigDecimal baseYdiff = getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
             BigDecimal baseYdiff2 = yA5.subtract(baseYdiff);
-            
+
             BigDecimal yA = tam120.add(yA1).add(baseYdiff2);
             if (useMargins) {
                 yA.add(yA4).add(yA3);
@@ -1608,11 +1622,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yC2 = new BigDecimal(heightPer[1]);
             BigDecimal yC3 = new BigDecimal(finalPerspectiveIndex);
             BigDecimal yC4 = yC3.subtract(tam1).multiply(tam2).add(tam1);
-            
+
             BigDecimal yC5 = yC3.subtract(tam1).multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, finalPerspectiveIndex).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, finalPerspectiveIndex).multiply(tam20);
             baseYdiff2 = yC5.subtract(baseYdiff);
-            
+
             BigDecimal yC = yC1.add(tam120).add(baseYdiff2).add(incrementTam);
             if (useMargins) {
                 yC.add(yC2).add(yC4);
@@ -1646,11 +1660,11 @@ public class CausalArrows extends Decorator {
                     finalizePerspective));
             BigDecimal yD2 = new BigDecimal(heightPer[1]);
             BigDecimal yD3 = yC3.subtract(tam1).multiply(tam2).add(tam1);
-            
+
             BigDecimal yD4 = yC3.subtract(tam1).multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
             baseYdiff2 = yD4.subtract(baseYdiff);
-            
+
             BigDecimal yD = yD1.add(tam120).add(baseYdiff2).add(tam20);
             if (useMargins) {
                 yD.add(yD2).add(yD3);
@@ -1745,11 +1759,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yA1 = new BigDecimal(heightPer[0]);
             BigDecimal yA3 = new BigDecimal(initPerspective);
             BigDecimal yA4 = yA3.multiply(tam2);
-            
+
             BigDecimal yA5 = yA3.multiply(tam20).multiply(tam2);
-            BigDecimal baseYdiff =  getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
-            BigDecimal baseYdiff2 = yA5.subtract(baseYdiff);            
-            
+            BigDecimal baseYdiff = getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
+            BigDecimal baseYdiff2 = yA5.subtract(baseYdiff);
+
             BigDecimal yA = tam120.add(yA1).add(baseYdiff2);
             if (useMargins) {
                 yA.add(yA4).add(yA3);
@@ -1790,11 +1804,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yD1 = new BigDecimal(heightPer[0]);
             BigDecimal yD2 = new BigDecimal(heightPer[1]);
             BigDecimal yD3 = yD0.subtract(tam1).multiply(tam2).add(tam1);
-            
+
             BigDecimal yD4 = yD0.subtract(tam1).multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, finalPerspectiveIndex).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, finalPerspectiveIndex).multiply(tam20);
             baseYdiff2 = yD4.subtract(baseYdiff);
-            
+
             BigDecimal yD = yD1.add(tam120).add(baseYdiff2).add(tam20);
             if (useMargins) {
                 yD.add(yD2).add(yD3);
@@ -1887,11 +1901,11 @@ public class CausalArrows extends Decorator {
                     subtract(getHeightDifferentiator(jsonArrows, initPerspective))
                     .divide(new BigDecimal(arraysObjects.length()), MathContext.DECIMAL128);
             BigDecimal yA5 = yA3.subtract(tam1).multiply(tam2).add(yA2);
-            
+
             BigDecimal yA6 = yA3.multiply(tam20).multiply(tam2);
-            BigDecimal baseYdiff =  getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
+            BigDecimal baseYdiff = getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
             BigDecimal baseYdiff2 = yA6.subtract(baseYdiff);
-            
+
             BigDecimal yA7 = yA3a.subtract(tam1).multiply(yA4);
             BigDecimal yA8 = yA4.divide(tam2, MathContext.DECIMAL128);
             BigDecimal yA = yA1.add(baseYdiff2).add(yA7).add(yA8).add(tam120).
@@ -1917,11 +1931,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yB2 = new BigDecimal(heightPer[1]);
             BigDecimal yB3 = new BigDecimal(finalizePerspective);
             BigDecimal yB4 = yB3.subtract(tam1).multiply(tam2).add(tam1);
-            
+
             BigDecimal yB5 = yB3.subtract(tam1).multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
             baseYdiff2 = yB5.subtract(baseYdiff);
-            
+
             BigDecimal yB = yB1.add(tam120).add(baseYdiff2).add(incrementTam);
             if (useMargins) {
                 yB.add(yB2).add(yB4);
@@ -1955,11 +1969,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yC0 = new BigDecimal(finalizePerspective);
             BigDecimal yC2 = new BigDecimal(heightPer[1]);
             BigDecimal yC3 = yC0.subtract(tam1).multiply(tam2).add(tam1);
-            
+
             BigDecimal yC4 = yC0.subtract(tam1).multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
             baseYdiff2 = yC4.subtract(baseYdiff);
-            
+
             BigDecimal yC = yC1.add(tam120).add(baseYdiff2).add(tam20);
             if (useMargins) {
                 yC.add(yC2).add(yC3);
@@ -2064,11 +2078,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yA2 = new BigDecimal(heightPer[1]);
             BigDecimal yA3 = new BigDecimal(initPerspective);
             BigDecimal yA4 = yA3.subtract(tam1).multiply(tam2).add(yA2);
-            
+
             BigDecimal yA5 = yA3.multiply(tam20).multiply(tam2);
-            BigDecimal baseYdiff =  getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
+            BigDecimal baseYdiff = getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
             BigDecimal baseYdiff2 = yA5.subtract(baseYdiff);
-            
+
             BigDecimal yA6 = new BigDecimal(initObjective);
             BigDecimal yA7 = yA6.subtract(tam1).multiply(heightObjective1);
             BigDecimal yA8 = heightObjective1.divide(tam2, MathContext.DECIMAL128);
@@ -2094,11 +2108,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yB2 = new BigDecimal(heightPer[1]);
             BigDecimal yB3 = new BigDecimal(initPerspective);
             BigDecimal yB4 = yB3.subtract(tam1).multiply(tam2).add(yB2);
-            
+
             BigDecimal yB5 = yB3.multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, finalizePerspective - 1).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, finalizePerspective - 1).multiply(tam20);
             baseYdiff2 = yB5.subtract(baseYdiff);
-            
+
             BigDecimal yB = tam120.add(yB1).add(baseYdiff2).add(incrementTam);
             if (useMargins) {
                 yB.add(yB4).add(yB3);
@@ -2131,11 +2145,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yC0 = new BigDecimal(finalizePerspective);
             BigDecimal yC2 = new BigDecimal(heightPer[1]);
             BigDecimal yC3 = yC0.subtract(tam1).multiply(tam2).add(tam1);
-            
+
             BigDecimal yC4 = yC0.subtract(tam1).multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
             baseYdiff2 = yC4.subtract(baseYdiff);
-            
+
             BigDecimal yC = yC1.add(tam120).add(baseYdiff2).add(tam20);
             if (useMargins) {
                 yC.add(yC2).add(yC3);
@@ -2226,11 +2240,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yA2 = new BigDecimal(heightPer[1]);
             BigDecimal yA3 = new BigDecimal(initPerspective);
             BigDecimal yA4 = yA3.subtract(tam1).multiply(tam2).add(yA2);
-            
+
             BigDecimal yA5 = yA3.multiply(tam20).multiply(tam2);
-            BigDecimal baseYdiff =  getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
+            BigDecimal baseYdiff = getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
             BigDecimal baseYdiff2 = yA5.subtract(baseYdiff);
-            
+
             BigDecimal yA6 = new BigDecimal(initObjective);
             BigDecimal yA7 = yA6.subtract(tam1).multiply(heightObjective1);
             BigDecimal yA8 = heightObjective1.divide(tam2, MathContext.DECIMAL128);
@@ -2255,11 +2269,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yB2 = new BigDecimal(heightPer[1]);
             BigDecimal yB3 = new BigDecimal(initPerspective);
             BigDecimal yB4 = yB3.subtract(tam1).multiply(tam2).add(yB2);
-            
+
             BigDecimal yB5 = yB3.multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
             baseYdiff2 = yB5.subtract(baseYdiff);
-            
+
             BigDecimal yB6 = tam18.subtract(incrementTam);
             BigDecimal yB = tam120.add(yB1).add(baseYdiff2).add(yB6);
             if (useMargins) {
@@ -2286,11 +2300,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yD2 = new BigDecimal(heightPer[1]);
             BigDecimal yD3 = new BigDecimal(finalizePerspective);
             BigDecimal yD4 = yD3.subtract(tam1).multiply(tam2).add(tam1);
-            
+
             BigDecimal yD5 = yD3.subtract(tam1).multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
             baseYdiff2 = yD5.subtract(baseYdiff);
-            
+
             BigDecimal yD = yD1.add(tam120).add(baseYdiff2).add(incrementTam);
             if (useMargins) {
                 yD.add(yD2).add(yD4);
@@ -2324,11 +2338,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yE0 = new BigDecimal(finalizePerspective);
             BigDecimal yE2 = new BigDecimal(heightPer[1]);
             BigDecimal yE3 = yE0.subtract(tam1).multiply(tam2).add(tam1);
-            
+
             BigDecimal yE4 = yE0.subtract(tam1).multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
             baseYdiff2 = yE4.subtract(baseYdiff);
-            
+
             BigDecimal yE = yE1.add(tam120).add(baseYdiff2).add(tam20);
             if (useMargins) {
                 yE.add(yE2).add(yE3);
@@ -2538,11 +2552,11 @@ public class CausalArrows extends Decorator {
                     divide(new BigDecimal(arraysObjects.length()), MathContext.DECIMAL128);
 
             BigDecimal yA5 = yA3.subtract(tam1).multiply(tam2).add(yA2);
-            
+
             BigDecimal yA6 = yA3.subtract(tam1).multiply(tam20).multiply(tam2);
-            BigDecimal baseYdiff =  getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
+            BigDecimal baseYdiff = getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
             BigDecimal baseYdiff2 = yA6.subtract(baseYdiff);
-            
+
             BigDecimal yA7 = yA3a.subtract(tam1).multiply(yA4);
             BigDecimal yA8 = yA4.divide(tam2, MathContext.DECIMAL128);
             BigDecimal yA = yA1.add(baseYdiff2).add(tam120).add(yA7).add(yA8).
@@ -2566,11 +2580,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yB1 = new BigDecimal(heightPer[0]);
             BigDecimal yB3 = new BigDecimal(finalizePerspective);
             BigDecimal yB4 = yB3.multiply(tam2);
-            
+
             BigDecimal yB5 = yB3.multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
             baseYdiff2 = yB5.subtract(baseYdiff);
-            
+
             BigDecimal yB6 = tam18.subtract(incrementTam);
             BigDecimal yB = yB1.add(tam120).add(baseYdiff2).add(yB6);
             if (useMargins) {
@@ -2603,11 +2617,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yD1 = new BigDecimal(heightPer[0]);
             BigDecimal yD3 = new BigDecimal(finalizePerspective);
             BigDecimal yD4 = yD3.multiply(tam2);
-            
+
             BigDecimal yD5 = yD3.multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
             baseYdiff2 = yD5.subtract(baseYdiff);
-            
+
             BigDecimal yD6 = tam18.subtract(incrementTam);
             BigDecimal yD = tam120.add(yD1).add(baseYdiff2).add(yD6);
             if (useMargins) {
@@ -2724,11 +2738,11 @@ public class CausalArrows extends Decorator {
                     subtract(getHeightDifferentiator(jsonArrows, initPerspective)).
                     divide(new BigDecimal(arraysObjects.length()), MathContext.DECIMAL128);
             BigDecimal baseY1a1 = new BigDecimal(initObjective).multiply(tam1);
-            
+
             BigDecimal baseY1a2 = new BigDecimal(initPerspective).multiply(tam20).multiply(tam2);
-            BigDecimal baseYdiff =  getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
+            BigDecimal baseYdiff = getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
             BigDecimal baseYdiff2 = baseY1a2.subtract(baseYdiff);
-            
+
             BigDecimal baseY1a3 = new BigDecimal(initObjective).subtract(tam1);
             BigDecimal baseY1a31 = baseY1a3.multiply(heightObjective1a);
             BigDecimal baseY1a4 = heightObjective1a.divide(tam2, MathContext.DECIMAL128);
@@ -2780,11 +2794,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yC1 = new BigDecimal(heightPer[0]);
             BigDecimal yC3 = new BigDecimal(finalizePerspective);
             BigDecimal yC4 = yC3.multiply(tam2);
-            
+
             BigDecimal yC5 = yC3.multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
             baseYdiff2 = yC5.subtract(baseYdiff);
-            
+
             BigDecimal yC6 = tam18.subtract(incrementTam);
             BigDecimal yC = tam120.add(yC1).add(baseYdiff2).add(yC6);
             if (useMargins) {
@@ -2817,11 +2831,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yD1 = new BigDecimal(heightPer[0]);
             BigDecimal yD3 = new BigDecimal(finalizePerspective);
             BigDecimal yD4 = yD3.multiply(tam2);
-            
+
             BigDecimal yD5 = yD3.multiply(tam20).multiply(tam2);
             baseYdiff = getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
             baseYdiff2 = yD5.subtract(baseYdiff);
-            
+
             BigDecimal yD6 = tam18.subtract(incrementTam);
             BigDecimal yD = tam120.add(yD1).add(baseYdiff2).add(yD6);
             if (useMargins) {
@@ -2937,14 +2951,14 @@ public class CausalArrows extends Decorator {
             BigDecimal xA = divTitl.add(xA1).add(xA3).add(xA4);
             x1 = xA.doubleValue();
             x2 = x1;
-            BigDecimal yA1 = new BigDecimal(heightPer[0]); 
+            BigDecimal yA1 = new BigDecimal(heightPer[0]);
             BigDecimal yA3 = new BigDecimal(initPerspective);
             BigDecimal yA4 = yA3.multiply(tam2);
-            
+
             BigDecimal yA5 = yA3.multiply(tam20).multiply(tam2);
-            BigDecimal baseYdiff =  getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
+            BigDecimal baseYdiff = getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
             BigDecimal baseYdiff2 = yA5.subtract(baseYdiff);
-            
+
             BigDecimal yA = tam120.add(yA1).add(baseYdiff2);
             if (useMargins) {
                 yA.add(yA4).add(yA3);
@@ -2975,11 +2989,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yC1 = new BigDecimal(heightPer[0]);
             BigDecimal yC3 = new BigDecimal(finalizePerspective);
             BigDecimal yC4 = yC3.multiply(tam2);
-            
+
             BigDecimal yC5 = yC3.multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
             baseYdiff2 = yC5.subtract(baseYdiff);
-            
+
             BigDecimal yC6 = tam18.subtract(incrementTam);
             BigDecimal yC = tam120.add(yC1).add(baseYdiff2).add(yC6);
             if (useMargins) {
@@ -3012,11 +3026,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yD1 = new BigDecimal(heightPer[0]);
             BigDecimal yD3 = new BigDecimal(finalizePerspective);
             BigDecimal yD4 = yD3.multiply(tam2);
-            
+
             BigDecimal yD5 = yD3.multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
             baseYdiff2 = yD5.subtract(baseYdiff);
-            
+
             BigDecimal yD6 = tam18.subtract(incrementTam);
             BigDecimal yD = tam120.add(yD1).add(baseYdiff2).add(yD6);
             if (useMargins) {
@@ -3074,7 +3088,7 @@ public class CausalArrows extends Decorator {
     private HashMap paintOOIndexContinuos(int startPerspectiveIndex, int startThemeIndex,
             int startObjetiveIndex, int finalPerspectiveIndex, int finalThemeIndex,
             int finalObjetiveIndex, JSONObject jsonArrows, int countLine, String classLine,
-            int countForRelation, String triangleEnd ) {
+            int countForRelation, String triangleEnd) {
         HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
         int initPerspective = startPerspectiveIndex;
@@ -3126,11 +3140,11 @@ public class CausalArrows extends Decorator {
                     subtract(getHeightDifferentiator(jsonArrows, initPerspective)).
                     divide(new BigDecimal(arraysObjects.length()), MathContext.DECIMAL128);
             BigDecimal yA7 = yA4.subtract(tam1).multiply(yA6);
-            
+
             BigDecimal yA8 = yA3.multiply(tam20).multiply(tam2);
-            BigDecimal baseYdiff =  getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
+            BigDecimal baseYdiff = getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
             BigDecimal baseYdiff2 = yA8.subtract(baseYdiff);
-            
+
             BigDecimal yA9 = yA6.divide(tam2, MathContext.DECIMAL128);
             BigDecimal yACom = yA1.add(yA7).add(baseYdiff2).add(yA9).add(tam120).
                     add(incrementTam);
@@ -3164,11 +3178,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yB6 = yB5.subtract(tam1).multiply(tam2);
             BigDecimal yB7 = yB3.subtract(tam1).multiply(yB4);
             BigDecimal yB8 = yB4.divide(tam2, MathContext.DECIMAL128);
-            
+
             BigDecimal yB9 = yB5.multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
             baseYdiff2 = yB9.subtract(baseYdiff);
-            
+
             BigDecimal yB = yB1.add(yB7).add(yB8).add(baseYdiff2).add(tam120)
                     .add(incrementTam);
             if (useMargins) {
@@ -3282,11 +3296,11 @@ public class CausalArrows extends Decorator {
                     subtract(getHeightDifferentiator(jsonArrows, initPerspective)).
                     divide(new BigDecimal(arraysObjects.length()), MathContext.DECIMAL128);
             BigDecimal baseY1a1 = new BigDecimal(initObjective).multiply(tam1);
-            
+
             BigDecimal baseY1a2 = new BigDecimal(initPerspective).multiply(tam20).multiply(tam2);
-            BigDecimal baseYdiff =  getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
+            BigDecimal baseYdiff = getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
             BigDecimal baseYdiff2 = baseY1a2.subtract(baseYdiff);
-            
+
             BigDecimal baseY1a3 = new BigDecimal(initObjective).subtract(tam1);
             BigDecimal baseY1a31 = baseY1a3.multiply(heightObjective1a);
             BigDecimal baseY1a4 = heightObjective1a.divide(tam2, MathContext.DECIMAL128);
@@ -3313,11 +3327,11 @@ public class CausalArrows extends Decorator {
             BigDecimal y1a = new BigDecimal(heightPer[0]);
             BigDecimal y1b = new BigDecimal(heightPer[1]);
             BigDecimal y1c = new BigDecimal(initPerspective);
-            
+
             BigDecimal y1d = y1c.multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, initPerspective).multiply(tam20);
             baseYdiff2 = y1d.subtract(baseYdiff);
-            
+
             BigDecimal y1e = tam18.subtract(incrementTam);
             BigDecimal y1f = y1c.subtract(tam1).multiply(tam2).add(y1b);
             BigDecimal y1g = y1a.add(baseYdiff2).add(tam120).add(y1e);
@@ -3343,11 +3357,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yb = new BigDecimal(heightPer[0]);
             BigDecimal yb0 = new BigDecimal(heightPer[1]);
             BigDecimal yb1 = new BigDecimal(finalizePerspective);
-            
+
             BigDecimal yb2 = yb1.multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
             baseYdiff2 = yb2.subtract(baseYdiff);
-            
+
             BigDecimal yb3 = yb1.multiply(tam1);
             BigDecimal yb4 = yb1.multiply(tam2).add(yb0);
             BigDecimal resultY2b = yb.add(baseYdiff2).add(tam120).add(incrementTam);
@@ -3387,11 +3401,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yc = new BigDecimal(heightPer[0]).add(getHeightDifferentiator(jsonArrows,
                     finalizePerspective));
             BigDecimal yca = yb1.subtract(tam1).multiply(tam2).add(new BigDecimal(heightPer[1]));
-            
+
             BigDecimal ycb = yb1.multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
             baseYdiff2 = ycb.subtract(baseYdiff);
-            
+
             BigDecimal ycb0 = new BigDecimal(finalizeObjective);
             BigDecimal ycd = ycb0.subtract(tam1).multiply(heightObjective1a);
             BigDecimal yce = heightObjective1a.divide(tam2, MathContext.DECIMAL128);
@@ -3529,11 +3543,11 @@ public class CausalArrows extends Decorator {
             BigDecimal yB2 = new BigDecimal(heightPer[1]);
             BigDecimal yB3 = new BigDecimal(finalizePerspective);
             BigDecimal yB4 = yB3.multiply(tam2).add(yB2);
-            
+
             BigDecimal yB5 = yB3.multiply(tam20).multiply(tam2);
-            BigDecimal baseYdiff =  getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
+            BigDecimal baseYdiff = getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
             BigDecimal baseYdiff2 = yB5.subtract(baseYdiff);
-            
+
             BigDecimal yB = yB1.add(tam120).add(incrementTam).add(baseYdiff2);
             if (useMargins) {
                 yB.add(yB4);
@@ -3579,11 +3593,11 @@ public class CausalArrows extends Decorator {
                     subtract(getHeightDifferentiator(jsonArrows, finalizePerspective)).
                     divide(new BigDecimal(arraysObjectsFinal.length()), MathContext.DECIMAL128);
             BigDecimal yC4 = yB3.subtract(tam1).multiply(tam2).add(yC2);
-            
+
             BigDecimal yC5 = yB3.multiply(tam20).multiply(tam2);
-            baseYdiff =  getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
+            baseYdiff = getGroupDiffOnly(jsonArrows, finalizePerspective).multiply(tam20);
             baseYdiff2 = yC5.subtract(baseYdiff);
-            
+
             BigDecimal yC6 = new BigDecimal(finalizeObjective);
             BigDecimal yC7 = yC6.subtract(tam1).multiply(yC3);
             BigDecimal yC8 = yC3.divide(tam2, MathContext.DECIMAL128);
@@ -3753,7 +3767,7 @@ public class CausalArrows extends Decorator {
                 JSONObject obj = (JSONObject) jsonArrow.get(i + "");
                 int maxObj = obj.getInt("maxObjectives");
                 int heightDiff = obj.getInt("heightDiffe");
-                if(maxObj == 0 && heightDiff > 0) {
+                if (maxObj == 0 && heightDiff > 0) {
                     count++;
                 }
             }
