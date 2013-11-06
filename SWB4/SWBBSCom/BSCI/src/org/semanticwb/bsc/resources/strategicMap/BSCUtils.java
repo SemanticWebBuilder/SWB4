@@ -40,10 +40,14 @@ public class BSCUtils {
     public static String getSponsor(User sponsor) {
         String initials = "";
         if (sponsor != null) {
-            String fullname = sponsor.getFullName() == null ? "" : sponsor.getFullName();
-            String[] dataName = fullname.split(" ");
-            for (int i = 0; i < dataName.length; i++) {
-                initials = initials + dataName[i].substring(0, 1);
+            initials = sponsor.getSemanticObject().getProperty(sponsor.getSemanticObject().getSemanticClass().getProperty("usrInitials"));
+            //System.out.println(objective.getSponsor().getSemanticObject().getProperty(objective.getSponsor().getSemanticObject().getSemanticClass().getProperty("usrInitials")));
+            if (initials == null) {
+                String fullname = sponsor.getFullName() == null ? "" : sponsor.getFullName();
+                String[] dataName = fullname.split(" ");
+                for (int i = 0; i < dataName.length; i++) {
+                    initials = initials + dataName[i].substring(0, 1);
+                }
             }
         }
         return initials;
@@ -61,16 +65,16 @@ public class BSCUtils {
      */
     public static String getIconPeriodStatus(Period period, Objective objective) {
         String icon = "indefinido";
-        
+
 //        Iterator<PeriodStatus> listPeriodSta = objective.listPeriodStatuses();
 //        while (listPeriodSta.hasNext()) {
 //            PeriodStatus periodStatus = listPeriodSta.next();
 //            if (periodStatus.getPeriod().equals(period)) {
 //                State state = periodStatus.getStatus();
-                State state = objective.getState(period);
-                if (state != null) {
-                    icon = state.getIconClass() == null ? "indefinido" : state.getIconClass();
-                }
+        State state = objective.getState(period);
+        if (state != null) {
+            icon = state.getIconClass() == null ? "indefinido" : state.getIconClass();
+        }
 //            }
 //        }
         return icon;
@@ -133,12 +137,14 @@ public class BSCUtils {
     }
 
     /**
-     * Valida que la lista proporcionada y los padres de los objetos sean v&aacute;lidos y 
-     * activos, valida que el tema del objeto Objective no sea igual al tema proporcionado
+     * Valida que la lista proporcionada y los padres de los objetos sean
+     * v&aacute;lidos y activos, valida que el tema del objeto Objective no sea
+     * igual al tema proporcionado
+     *
      * @param itSortable Lista de objetos a comparar
-     * @param themeCurrent Tema que ser&aacute; utilizado para evaluar objetivos 
+     * @param themeCurrent Tema que ser&aacute; utilizado para evaluar objetivos
      * v&uacute;lidos
-     * @return  Lista con objetos v&uacute;alidos
+     * @return Lista con objetos v&uacute;alidos
      */
     public static List<Sortable> listValidParent(Iterator<Sortable> itSortable,
             Theme themeCurrent) {
@@ -203,6 +209,7 @@ public class BSCUtils {
 
     /**
      * Obtiene el tama&ntilde;o del ancho para cada diferenciador
+     *
      * @param countDiff n&uacute;mero de diferenciadores
      * @return tama&ntilde;o para cada diferenciador
      */
