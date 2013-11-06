@@ -463,13 +463,14 @@ public class CausalMap extends ComponentMap {
         for (int j = 0; j < arraySizeColObjectives.length; j++) {
             try {
                 JSONObject objetive = (JSONObject) objectives.get(j);
-                String[] dataObjective = new String[6];
+                String[] dataObjective = new String[7];
                 dataObjective[0] = (String) objetive.get("title");
                 dataObjective[1] = (String) objetive.get("icon");
                 dataObjective[2] = (String) objetive.get("prefix");
                 dataObjective[3] = (String) objetive.get("periodicity");
                 dataObjective[4] = (String) objetive.get("sponsor");
                 dataObjective[5] = (String) objetive.get("url");
+                dataObjective[6] = (String) objetive.get("id");
 
                 String styleColObjetive = (amountObjective - 1) == j ? "" : "border-right-style:none";
                 String borderPaint = "border:1px solid black; " + styleColObjetive;
@@ -520,13 +521,14 @@ public class CausalMap extends ComponentMap {
         try {
             for (int j = 0; j < countObjtheme; j++) {
                 JSONObject objetive = (JSONObject) arrayObjecs.get(j);
-                String[] dataObje = new String[6];
+                String[] dataObje = new String[7];
                 dataObje[0] = (String) objetive.get("title");
                 dataObje[1] = (String) objetive.get("icon");
                 dataObje[2] = (String) objetive.get("prefix");
                 dataObje[3] = (String) objetive.get("periodicity");
                 dataObje[4] = (String) objetive.get("sponsor");
                 dataObje[5] = (String) objetive.get("url");
+                dataObje[6] = (String) objetive.get("id");
 
                 String styleNone = (j < (countObjtheme - 1)) ? " border-bottom-style:none;" : "";
                 String styleNone2 = "";
@@ -563,7 +565,9 @@ public class CausalMap extends ComponentMap {
         sb.append(heigthCol);
         sb.append("px;float:left; ");
         sb.append(borderPaint);
-        sb.append("\" class=\"objectives\">");
+        sb.append("\" class=\"objectives_");
+        sb.append(dataObjective[6]);
+        sb.append("\">");
         try {
             sb.append("             <a href=\"");
             sb.append(dataObjective[5]);
@@ -609,7 +613,7 @@ public class CausalMap extends ComponentMap {
                 int idObj = Integer.parseInt(arrayObjectives.get("countObjectives").toString());
                 objsForTheme[theme] = idObj;
             } catch (JSONException ex) {
-                log.error("Exception try get countObjectives: " + ex);
+                log.error("Exception try get countObjectives (CausalMap): " + ex);
             } catch (NumberFormatException ex) {
                 log.error("Exception try convert number getObjectivesForTheme: " + ex);
             }
@@ -637,7 +641,7 @@ public class CausalMap extends ComponentMap {
                 int idDistint = Integer.parseInt(arrayDiff.get("countDifferentiator").toString());
                 diffForGroupDifferentiator[differentiator] = idDistint;
             } catch (JSONException ex) {
-                log.error("Exception try get countObjectives: " + ex);
+                log.error("Exception try get countDifferentiator: " + ex);
             } catch (NumberFormatException ex1) {
                 log.error("Exception try convert number: " + ex1);
             }
