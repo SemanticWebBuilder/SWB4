@@ -153,72 +153,64 @@
                             videoFormat = "wmv";
                         }
                     } else {%>
-                <p><h1>VIDEO NO DISPONIBLE</p></h1>
-                <%            }
-                %>    
+                    <p><h1>VIDEO NO DISPONIBLE</p></h1>
+                    <%            }
+                    %>    
 
-                <%
-                if(videoFormat.equals("youtube")){
-                %>
-                    <iframe id="ytplayer" type="text/html" width="250" height="195"
-                    src="<%=video.getVideo()%>" frameborder="0"/>
-                 <%
-                }else  if (videoFormat.equals("flv")) {
-                %>
-                <object id="video" type="application/x-shockwave-flash" data="<%=SWBPlatform.getContextPath()%>/swbadmin/player_flv_maxi.swf" width="400" height="200">
-                    <param name="movie" value="<%=SWBPlatform.getContextPath()%>/swbadmin/player_flv_maxi.swf" />
-                    <param name="FlashVars" value="flv=<%=video.getVideo()%>"/>
-                </object>
-                <%
-                } else if (videoFormat.equals("flash")) {
-                %>
-                <object width="400" height="200" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"   codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0"> 
-                    <param name="SRC" value="<%=video.getVideo()%>">
-                    <embed src="<%=video.getVideo()%>" width="400" height="200"></embed>
-                </object>
-
-
-
-                <%} else if (videoFormat.equals("mp4")) {
-                %>   
-                <video width="400" height="200" controls>
-                    <source src="<%=video.getVideo()%>" type="video/mp4">
-                    <object data="<%=video.getVideo()%>" width="400" height="200">
-                        <embed src="<%=video.getVideo()%>" width="400" height="200" autostart="false">    
+                    <%
+                    if(videoFormat.equals("youtube")){
+                    %>
+                        <iframe id="ytplayer" type="text/html" width="250" height="195" src="<%=video.getVideo()%>" frameborder="0"/>
+                     <%
+                    }else  if (videoFormat.equals("flv")) {
+                    %>
+                    <object id="video" type="application/x-shockwave-flash" data="<%=SWBPlatform.getContextPath()%>/swbadmin/player_flv_maxi.swf" width="400" height="200">
+                        <param name="movie" value="<%=SWBPlatform.getContextPath()%>/swbadmin/player_flv_maxi.swf" />
+                        <param name="FlashVars" value="flv=<%=video.getVideo()%>"/>
                     </object>
-                </video>
-
-                <%
-                } else if (videoFormat.equals("wav")) {
-                %>
-                <object width="400" height="200" classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
-                    <param name="src" value="<%=video.getVideo()%>">
-                    <param name="controller" value="true">
-                </object>
-
-                <%
-                } else if (videoFormat.equals("wmv")) {
-                %>    
-                <object width="400" height="200" type="video/x-ms-asf" url="<%=video.getVideo()%>" data="<%=video.getVideo()%>" classid="CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6">
-                    <param name="url" value="<%=video.getVideo()%>">
-                    <param name="filename" value="<%=video.getVideo()%>">
-                    <param name="autostart" value="1">
-                    <param name="uiMode" value="full">
-                    <param name="autosize" value="1">
-                    <param name="playcount" value="1"> 
-                    <embed type="application/x-mplayer2" src="<%=video.getVideo()%>" width="400" height="200" autostart="true" showcontrols="true" pluginspage="http://www.microsoft.com/Windows/MediaPlayer/"></embed>
-                </object>
-
-                <%
-                    }
-                %>    
-                    <br/><br/><%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
-                </td>
-
-                <%
-                    }
-                %>
-                <td>
+                    <%
+                    } else if (videoFormat.equals("flash")) {
+                    %>
+                    <object width="400" height="200" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"   codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0"> 
+                        <param name="SRC" value="<%=video.getVideo()%>">
+                        <embed src="<%=video.getVideo()%>" width="400" height="200"></embed>
+                    </object>
+                    <%} else if (videoFormat.equals("mp4")) {
+                    %>   
+                    <video width="400" height="200" controls>
+                        <source src="<%=video.getVideo()%>" type="video/mp4">
+                        <object data="<%=video.getVideo()%>" width="400" height="200">
+                            <embed src="<%=video.getVideo()%>" width="400" height="200" autostart="false">    
+                        </object>
+                    </video>
+                    <%
+                    } else if (videoFormat.equals("wav")) {
+                    %>
+                    <object width="400" height="200" classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
+                        <param name="src" value="<%=video.getVideo()%>">
+                        <param name="controller" value="true">
+                    </object>
+                    <%
+                    } else if (videoFormat.equals("wmv")) {
+                    %>    
+                    <object width="400" height="200" type="video/x-ms-asf" url="<%=video.getVideo()%>" data="<%=video.getVideo()%>" classid="CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6">
+                        <param name="url" value="<%=video.getVideo()%>">
+                        <param name="filename" value="<%=video.getVideo()%>">
+                        <param name="autostart" value="1">
+                        <param name="uiMode" value="full">
+                        <param name="autosize" value="1">
+                        <param name="playcount" value="1"> 
+                        <embed type="application/x-mplayer2" src="<%=video.getVideo()%>" width="400" height="200" autostart="true" showcontrols="true" pluginspage="http://www.microsoft.com/Windows/MediaPlayer/"></embed>
+                    </object>
+                    <%
+                        }
+                    %>    
+                        <br/><br/><%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
+                    </td>
+                    <%
+                        }
+                    %>
+                    <td>
 
                     <%
                         if (postIn.getPostSentimentalType() == 0) {
