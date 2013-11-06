@@ -71,7 +71,7 @@
 <fieldset>
     <div class="swbform">
         <div id="pub-detalle">
-            <form name="formLanguage" id="formLanguage">    
+            <form name="formLanguage<%=swb.getId()%>" id="formLanguage<%=swb.getId()%>">    
                 <table>
                     <tr>
                         <td colspan="3" style="text-align: center;" class="titulo">Seleccione un idioma:</td>        
@@ -81,7 +81,7 @@
                     </tr>
                     <tr>
                         <td style="text-align: left;">
-                            <select name="selectLanguage" id="selectLanguage" onchange="javascript:postHtml('<%=url.setMode("preview")%>?suri='+escape(document.formLanguage.selectLanguage[document.formLanguage.selectLanguage.selectedIndex].value)+'&suriSite=<%=URLEncoder.encode(suri) %>', 'selectlanguage');"> 
+                            <select name="selectLanguage<%=swb.getId()%>" id="selectLanguage<%=swb.getId()%>" onchange="javascript:postHtml('<%=url.setMode("preview")%>?suri='+escape(document.formLanguage<%=swb.getId()%>.selectLanguage<%=swb.getId()%>[document.formLanguage<%=swb.getId()%>.selectLanguage<%=swb.getId()%>.selectedIndex].value)+'&suriSite=<%=URLEncoder.encode(suri) %>', 'selectlanguage<%=swb.getId()%>');"> 
                                <option value=""><---Seleccione:----></option>
                                 <%
                                     Iterator language = swb.getWebSite().listLanguages();
@@ -104,7 +104,7 @@
             </form>  
         </div>
     </div>
-    <div id="selectlanguage" dojoType="dijit.layout.ContentPane">
+    <div id="selectlanguage<%=swb.getId()%>" dojoType="dijit.layout.ContentPane">
     </div>
 </fieldset>
 
