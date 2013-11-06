@@ -122,15 +122,15 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
             appraisal = PeriodStatus.ClassMgr.createPeriodStatus(getBSC());
             appraisal.setPeriod(period);
             addPeriodStatus(appraisal);
-            
-            status =  getState();
         }else {
             status = appraisal.getStatus();
         }
+        status = getMaximumState();
         
         Iterator<Indicator> indicators = listValidIndicators().iterator();
         while(indicators.hasNext()) {
-            Series star = indicators.next().getStar();
+            Indicator indicator = indicators.next();
+            Series star = indicator.getStar();
             if(star==null || star.getMeasure(period)==null) {
                 continue;
             }
@@ -145,6 +145,16 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     
     public State getMinimumState() {
         List<State> states = sortStates();
+        try {
+            return states.get(0);
+        }catch(IndexOutOfBoundsException e) {
+        
+        }
+        return null;
+    }
+    
+    public State getMaximumState() {
+        List<State> states = sortStates(false);
         try {
             return states.get(0);
         }catch(IndexOutOfBoundsException e) {
