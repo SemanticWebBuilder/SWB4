@@ -3,10 +3,11 @@ package org.semanticwb.bsc.formelement;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.bsc.Status;
 import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.bsc.accessory.StateGroup;
 import org.semanticwb.bsc.element.Indicator;
+import org.semanticwb.bsc.element.Perspective;
+import org.semanticwb.bsc.element.Theme;
 import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericIterator;
@@ -79,6 +80,22 @@ public class OrdinalCategorical extends org.semanticwb.bsc.formelement.base.Ordi
                     continue;
                 }
                 if(ordinal == s.getIndex())
+                {
+                    throw new FormValidateException("El valor debe ser numérico y no puede repetirse");
+                }
+            }
+        }
+        else if(genObj instanceof Theme)
+        {
+            Theme theme = (Theme)genObj;
+            Perspective parent = theme.getPerspective();
+            GenericIterator<Theme> it = parent.listThemes();
+            while(it.hasNext()) {
+                Theme t = it.next();
+                if( theme.equals(t) ) {
+                    continue;
+                }
+                if(ordinal == t.getIndex())
                 {
                     throw new FormValidateException("El valor debe ser numérico y no puede repetirse");
                 }
