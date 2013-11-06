@@ -60,14 +60,14 @@ public class BSCUtils {
      * @return objeto de tipo {@code String} con la ruta del icono
      */
     public static String getIconPeriodStatus(Period period, Objective objective) {
-        String icon = "";
+        String icon = "indefinida";
         Iterator<PeriodStatus> listPeriodSta = objective.listPeriodStatuses();
         while (listPeriodSta.hasNext()) {
             PeriodStatus periodStatus = listPeriodSta.next();
             if (periodStatus.getPeriod().equals(period)) {
                 State state = periodStatus.getStatus();
                 if (state != null) {
-                    icon = state.getIconClass() == null ? "defaulIcon" : state.getIconClass();
+                    icon = state.getIconClass() == null ? "indefinida" : state.getIconClass();
                 }
             }
         }
