@@ -212,7 +212,6 @@
                     %>
                     <td>
                     <%
-                    System.out.println("SentimentJG:"+postIn.getPostSentimentalType());
                     if (postIn.getPostSentimentalType() == 0) {
                     %>
                     ---
