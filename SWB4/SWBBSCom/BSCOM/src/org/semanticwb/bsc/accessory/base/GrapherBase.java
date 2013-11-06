@@ -1,11 +1,10 @@
 package org.semanticwb.bsc.accessory.base;
 
 
-public abstract class GrapherBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.model.Roleable,org.semanticwb.model.FilterableNode,org.semanticwb.model.RuleRefable
+public abstract class GrapherBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Help,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Roleable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_titleY=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#titleY");
     public static final org.semanticwb.platform.SemanticProperty bsc_titleX=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#titleX");
-    public static final org.semanticwb.platform.SemanticProperty bsc_parameterX=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#parameterX");
     public static final org.semanticwb.platform.SemanticClass bsc_Series=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Series");
     public static final org.semanticwb.platform.SemanticProperty bsc_serieGraph=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#serieGraph");
     public static final org.semanticwb.platform.SemanticProperty bsc_titleGraph=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#titleGraph");
@@ -272,24 +271,6 @@ public abstract class GrapherBase extends org.semanticwb.bsc.accessory.BSCAccess
     public void setTitleX(String value)
     {
         getSemanticObject().setProperty(bsc_titleX, value);
-    }
-
-/**
-* Gets the ParameterX property
-* @return String with the ParameterX
-*/
-    public String getParameterX()
-    {
-        return getSemanticObject().getProperty(bsc_parameterX);
-    }
-
-/**
-* Sets the ParameterX property
-* @param value long with the ParameterX
-*/
-    public void setParameterX(String value)
-    {
-        getSemanticObject().setProperty(bsc_parameterX, value);
     }
    /**
    * Sets the value for the property SerieGraph
