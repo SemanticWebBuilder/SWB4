@@ -326,10 +326,109 @@ public class YoutubeWall extends GenericResource{
                 log.error("Error in editVideo() for requestDispatcher" , e);
             }
         }else if(mode != null && mode.equals("videoUpdated")){
-            out.println("<script type=\"javascript\">");
-            out.println("   hideDialog(); ");
-            out.println("   showStatus('" + paramRequest.getLocaleString("videoEdited") + "');");
-            out.println("</script>");
+            try{
+                String videoId = (String) request.getParameter("videoId");
+                if(videoId == null || objUri == null){
+                    return;
+                }
+
+                SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
+                Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();
+
+                String video = getFullVideoFromId(videoId, semanticYoutube.getAccessToken());
+                JSONObject videoResp = new JSONObject(video);
+
+                String title = "";
+                String description = "";
+                String privacy = "";
+                String thumbnail ="";
+                JSONObject information = videoResp.getJSONObject("entry");
+                JSONArray accessControl = null;
+
+                if(!information.isNull("yt$accessControl")){
+                    accessControl = information.getJSONArray("yt$accessControl");
+                }
+
+                if(!information.isNull("title")){
+                    title = information.getJSONObject("title").getString("$t");
+                    title = SWBUtils.TEXT.encode(title, "UTF-8");
+                }
+                if(!information.isNull("media$group")){
+                    if(!information.getJSONObject("media$group").isNull("media$description")){
+                        if(!information.getJSONObject("media$group").getJSONObject("media$description").isNull("$t")){
+                            description = information.getJSONObject("media$group").getJSONObject("media$description").getString("$t");                
+                            description = SWBUtils.TEXT.encode(description, "UTF-8");
+                        }
+                    }
+
+                    if(!information.getJSONObject("media$group").isNull("yt$private")){//If video is private
+                        privacy = "PRIVATE";
+                    }else{//If is not private check if public or unlisted
+                        for(int i = 0; i < accessControl.length(); i++){
+                            JSONObject control = accessControl.getJSONObject(i);
+                            if(!control.isNull("action") && !control.isNull("permission")){
+                                if(control.getString("action").equalsIgnoreCase("list")){
+                                    if(control.getString("permission").equalsIgnoreCase("allowed")){
+                                        privacy = "PUBLIC";
+                                    }else if(control.getString("permission").equalsIgnoreCase("denied")){
+                                        privacy = "NOT_LISTED";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    if(!information.getJSONObject("media$group").isNull("media$thumbnail")){
+                        JSONArray thumbArray = information.getJSONObject("media$group").getJSONArray("media$thumbnail");
+                        for(int i = 0; i < thumbArray.length(); i++){
+                            JSONObject entryThumb = thumbArray.getJSONObject(i);
+                            if(entryThumb.has("yt$name")){
+                                if(entryThumb.getString("yt$name").equals("hqdefault")){
+                                    thumbnail = entryThumb.getString("url");
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    
+                    if(!information.getJSONObject("media$group").getJSONObject("media$description").isNull("$t")){
+                        description = information.getJSONObject("media$group").getJSONObject("media$description").getString("$t");                
+                        description = SWBUtils.TEXT.encode(description, "UTF-8");
+                    }
+                }
+                StringBuilder output = new StringBuilder();                
+                
+                output.append("<p>");
+                output.append(title);
+                output.append("</p>");
+
+                output.append("<div class=\"timelineimg\">");
+                output.append(" <span>");                                
+
+                output.append("      <span id=\"img" + semanticYoutube.getId() + videoId + "\" style=\"width: 250px; height: 250px; border: thick #666666; overflow: hidden; position: relative;\">");
+                    output.append("      <a href=\"#\" onclick=\"showDialog(\\'"+ paramRequest.getRenderUrl().setMode("displayVideo").setParameter("videoUrl", URLEncoder.encode("http://www.youtube.com/v/" + videoId, "UTF-8")) +
+                            "\\',\\'" + title + "\\'); return false;\"><img src=\"" + thumbnail + "\" style=\"position: relative;\" onerror=\"this.src =\\'" + thumbnail + "\\'\" onload=\"imageLoad(" + "this, \\'img" + semanticYoutube.getId() + videoId + "\\');\"/></a>");
+                    output.append("      </span>");
+                output.append(" </span>");
+                
+                output.append("<p class=\"imgtitle\">");
+                output.append(  title);
+                output.append("</p>");
+                
+                output.append("<p class =\"imgdesc\">");
+                output.append( description.isEmpty() ?  "&nbsp;" : description.replace("\n", "</br>"));
+                output.append("</p>");
+                output.append("</div>");//End First section
+                
+                out.println("<script type=\"javascript\">");
+                out.println("   var edited = document.getElementById('" + semanticYoutube.getId() + "/" + videoId + "/detail" +"');");                
+                out.println("   edited.innerHTML='" + output.toString() + "'");
+                out.println("   showStatus('" + paramRequest.getLocaleString("videoEdited") + "');");
+                out.println("   hideDialog(); ");
+                out.println("</script>");
+            }catch(Exception e){
+                log.error("Error al traer datos del video ", e);
+            }
         }else if(mode != null && mode.equals("videoDeleted")){
             String videoId = request.getParameter("videoId");
 
@@ -581,7 +680,9 @@ public class YoutubeWall extends GenericResource{
             }
             response.setMode("reAssignedPost");
         }else if(action.equals("doUpdateVideo")){
-            doUpdateVideo(request);
+            doUpdateVideo(request);            
+            response.setRenderParameter("videoId", request.getParameter("videoId"));
+            response.setRenderParameter("suri", request.getParameter("suri"));
             response.setMode("videoUpdated");
         }else if (action.equals("doDeleteVideo")){
             doDeleteVideo(request);
@@ -704,6 +805,7 @@ public class YoutubeWall extends GenericResource{
             writer.close();                        
             BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String docxml = readerl.readLine();
+            System.out.println("THIS IS WHAT I READ:" + docxml);
             //System.out.println("THE READ:" + docxml);
 
         }catch(Exception ex){
@@ -899,6 +1001,7 @@ public class YoutubeWall extends GenericResource{
         try{
             out.write("<div id=\"" + semanticYoutube.getId() +"/" + video.getString("id") + "\" class=\"timeline timelinefacebook\" dojoType=\"dojox.layout.ContentPane\">");
                 //Username and story
+                out.write("<div id=\"" + semanticYoutube.getId() + "/" + video.getString("id") + "/detail" + "\">");
                 out.write("<p>");
                 out.write(video.getString("title"));
                 out.write("</p>");
@@ -928,7 +1031,7 @@ public class YoutubeWall extends GenericResource{
                 out.write( video.isNull("description") ?  "&nbsp;" : video.getString("description").replace("\n", "</br>"));
                 out.write("</p>");
                 out.write("</div>");//End First section
-                
+                out.write("</div>");
                 
                 out.write("<div class=\"clear\"></div>");//Clear
                 
@@ -1295,4 +1398,22 @@ public class YoutubeWall extends GenericResource{
         }        
         return date;
     }
+    
+    
+    public static String getFullVideoFromId(String id, String accessToken){
+        HashMap<String, String> params = new HashMap<String, String>(3);    
+        params.put("v", "2");
+        params.put("alt","json");
+    
+        String response = null;
+        try{
+         response = getRequest(params, "https://gdata.youtube.com/feeds/api/videos/" + id,
+                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", accessToken);
+
+        }catch(Exception e){
+            System.out.println("Error getting video information"  + e.getMessage());
+        }
+        return response;
+    }
+
 }
