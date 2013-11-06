@@ -587,7 +587,7 @@ public class CausalMap extends ComponentMap {
             sb.append("                 <span style=\"padding:10px;\" class=\"");
             sb.append(dataObjective[1]);
             sb.append("\">");
-            sb.append("</span>");
+            sb.append("&nbsp;</span>");
             sb.append("            </p>");
         } catch (ArrayIndexOutOfBoundsException ex) {
             log.error("Exception try get ArrayIndex,  paintDataObjective: " + ex);
