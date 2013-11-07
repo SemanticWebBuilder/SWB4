@@ -38,8 +38,7 @@ public class GraphGeneration extends GenericAdmResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         //super.doView(request, response, paramsRequest); //To change body of generated methods, choose Tools | Templates.
         PrintWriter out = response.getWriter();
-        //String suri = request.getParameter("suri");
-        String suri = "http://www.DAC.swb#bsc_Indicator:2";
+        String suri = request.getParameter("suri");
         SemanticObject semanticObj = SemanticObject.createSemanticObject(suri);
 
         if (semanticObj != null) {
