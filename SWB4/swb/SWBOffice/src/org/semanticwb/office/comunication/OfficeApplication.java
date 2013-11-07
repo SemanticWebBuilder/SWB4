@@ -87,7 +87,6 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
 import org.semanticwb.office.interfaces.SemanticRepository;
 import org.semanticwb.office.interfaces.SemanticFolderRepository;
 import org.semanticwb.office.interfaces.SemanticFileRepository;
-import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.resource.office.sem.ExcelResource;
 import org.semanticwb.resource.office.sem.PPTResource;
 import org.semanticwb.resource.office.sem.WordResource;
@@ -100,9 +99,7 @@ import org.semanticwb.resource.office.sem.WordResource;
  */
 public class OfficeApplication extends XmlRpcObject implements IOfficeApplication, FlowNotification
 {
-
-    /** The Constant swb_office. */
-    private static final SemanticClass swb_office = org.semanticwb.repository.office.OfficeDocument.swboffice_OfficeDocument;
+    
     /** The Constant SWB_FILEREP_DELETED. */
     private static final String SWB_FILEREP_DELETED = "swbfilerep:deleted";
     /** The Constant REP_FILE. */
@@ -196,14 +193,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     {
         WebSite website = SWBContext.getWebSite(site.id);
         WebPage page = website.getWebPage(pageid);
-        if (page == null)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return page != null;
     }
 
     /**
@@ -340,10 +330,10 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             String cm_category = loader.getOfficeManager(repositoryName).getCategoryType();
             String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
             Query query;
-            if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
+            if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf(WEBBUILDER) != -1)
             {
                 String statement = "SELECT DISTINCT ?x WHERE {?x " + cm_title + " ?title FILTER (?title=\"" + title + "\")  }";
-                query = session.getWorkspace().getQueryManager().createQuery(statement, "SPARQL");
+                query = session.getWorkspace().getQueryManager().createQuery(statement, SPARQL);
             }
             else
             {
@@ -381,6 +371,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
 
         return UUID;
     }
+    private static final String SPARQL = "SPARQL";
+    private static final String WEBBUILDER = "webbuilder";
 
     /**
      * Can delete category.
@@ -472,10 +464,10 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             String cm_category = loader.getOfficeManager(repositoryName).getCategoryType();
             String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
             Query query;
-            if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
+            if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf(WEBBUILDER) != -1)
             {
                 String statement = "SELECT DISTINCT ?x WHERE {?x " + cm_title + " ?title FILTER (?title=\"" + title + "\") }";
-                query = session.getWorkspace().getQueryManager().createQuery(statement, "SPARQL");
+                query = session.getWorkspace().getQueryManager().createQuery(statement, SPARQL);
             }
             else
             {
@@ -533,7 +525,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             ArrayList<CategoryInfo> categories = new ArrayList<CategoryInfo>();
             String cm_category = loader.getOfficeManager(repositoryName).getCategoryType();
             QueryManager manager = session.getWorkspace().getQueryManager();
-            Query query = manager.createQuery("SELECT ?x WHERE { ?x swbrep:name ?name FILTER (?name=\"" + cm_category + "\") }", "SPARQL");
+            Query query = manager.createQuery("SELECT ?x WHERE { ?x swbrep:name ?name FILTER (?name=\"" + cm_category + "\") }", SPARQL);
             QueryResult result = query.execute();
             NodeIterator it = result.getNodes();
             while (it.hasNext())
@@ -773,7 +765,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
                 String cm_officeType = loader.getOfficeManager(repositoryName).getPropertyType();
                 Query query = null;
-                if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
+                if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf(WEBBUILDER) != -1)
                 {
                     StringBuilder statement = new StringBuilder("SELECT DISTINCT ?x ");
 
@@ -828,7 +820,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                         statement.append("\") ");
                     }
                     statement.append(" } ");
-                    query = session.getWorkspace().getQueryManager().createQuery(statement.toString(), "SPARQL");
+                    query = session.getWorkspace().getQueryManager().createQuery(statement.toString(), SPARQL);
 
                 }
                 else
@@ -858,7 +850,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                                 info.respositoryName = repositoryName;
                                 info.categoryId = parent.getUUID();
                                 info.categoryTitle = parent.getProperty(cm_title).getValue().getString();
-                                info.created = node.getProperty("jcr:created").getDate().getTime();
+                                info.created = node.getProperty(JCR_CREATED).getDate().getTime();
                                 contents.add(info);
                             }
                         }
@@ -897,7 +889,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                                     info.respositoryName = repositoryName;
                                     info.categoryId = parent.getUUID();
                                     info.categoryTitle = parent.getProperty(cm_title).getValue().getString();
-                                    info.created = node.getProperty("jcr:created").getDate().getTime();
+                                    info.created = node.getProperty(JCR_CREATED).getDate().getTime();
                                     contents.add(info);
                                 }
                             }
@@ -943,6 +935,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         });
         return contents;
     }
+    private static final String JCR_CREATED = "jcr:created";
 
     /**
      * Search.
@@ -1937,7 +1930,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                         boolean hasChilds = false;
                         NodeIterator nc = nodofolder.getNodes(REP_FOLDER);
                         hasChilds = nc.hasNext();
-                        String title = nodofolder.getProperty("swb:title").getString();
+                        String title = nodofolder.getProperty(SWB_TITLE).getString();
                         String uuid = nodofolder.getUUID();
                         SemanticFolderRepository sf = new SemanticFolderRepository();
                         sf.name = title;
@@ -1950,6 +1943,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
         return getSemanticFolderRepositories.toArray(new SemanticFolderRepository[getSemanticFolderRepositories.size()]);
     }
+    private static final String SWB_TITLE = "swb:title";
 
     public String createCategory(User user, String repositoryName, String title, String description) throws Exception
     {
@@ -1963,10 +1957,10 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             String cm_category = loader.getOfficeManager(repositoryName).getCategoryType();
             String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
             Query query;
-            if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
+            if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf(WEBBUILDER) != -1)
             {
                 String statement = "SELECT DISTINCT ?x WHERE {?x " + cm_title + " ?title FILTER (?title=\"" + title + "\")  }";
-                query = session.getWorkspace().getQueryManager().createQuery(statement, "SPARQL");
+                query = session.getWorkspace().getQueryManager().createQuery(statement, SPARQL);
             }
             else
             {
@@ -2081,8 +2075,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                             }
                             if (!isdeleted)
                             {
-                                String title = nodoFile.getProperty("swb:title").getString();
-                                Date created = nodoFile.getProperty("jcr:created").getDate().getTime();
+                                String title = nodoFile.getProperty(SWB_TITLE).getString();
+                                Date created = nodoFile.getProperty(JCR_CREATED).getDate().getTime();
                                 SemanticFileRepository sf = new SemanticFileRepository();
                                 sf.uuid = nodoFile.getUUID();
                                 sf.title = title;
@@ -2123,8 +2117,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         {
             Resourceable resourceable = resourceables.next();
             if (resourceable instanceof WebPage)
-            {
-                WebPage wp = (WebPage) resourceable;
+            {                
                 Session session = null;
                 String idrep = docRepNS(website);
                 if (idrep != null)
@@ -2138,7 +2131,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                         Node subnodofolder = nit.nextNode();                        
                         NodeIterator nc = subnodofolder.getNodes(REP_FOLDER);
                         boolean hasChilds = nc.hasNext();
-                        String title = subnodofolder.getProperty("swb:title").getString();
+                        String title = subnodofolder.getProperty(SWB_TITLE).getString();
                         String uuid = subnodofolder.getUUID();
                         SemanticFolderRepository sf = new SemanticFolderRepository();
                         sf.name = title;
@@ -2198,8 +2191,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                             }
                             if (!isdeleted)
                             {
-                                String title = nodoFile.getProperty("swb:title").getString();
-                                Date created = nodoFile.getProperty("jcr:created").getDate().getTime();
+                                String title = nodoFile.getProperty(SWB_TITLE).getString();
+                                Date created = nodoFile.getProperty(JCR_CREATED).getDate().getTime();
                                 SemanticFileRepository sf = new SemanticFileRepository();
                                 sf.uuid = nodoFile.getUUID();
                                 sf.title = title;
