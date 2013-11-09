@@ -4,6 +4,7 @@
     Author     : jorge.jimenez
 --%>
 
+<%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
 <%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page contentType="text/html" pageEncoding="ISO-8859-1"%>
@@ -47,32 +48,32 @@
             <tr>
                 <th>
                     <span>
-                        <%=SWBSocialUtil.Util.getStringFromGenericLocale("previewdocument", user.getLanguage())%>
+                        <%=SWBSocialResUtil.Util.getStringFromGenericLocale("previewdocument", user.getLanguage())%>
                     </span>
                 </th>
                 <th>
                     <span>
-                        <%=SWBSocialUtil.Util.getStringFromGenericLocale("message", user.getLanguage())%>
+                        <%=SWBSocialResUtil.Util.getStringFromGenericLocale("message", user.getLanguage())%>
                     </span>
                 </th>
                 <th>
                     <span>
-                        <%=SWBSocialUtil.Util.getStringFromGenericLocale("postType", user.getLanguage())%>
+                        <%=SWBSocialResUtil.Util.getStringFromGenericLocale("postType", user.getLanguage())%>
                     </span>
                 </th>
                 <th>
                     <span>
-                        <%=SWBSocialUtil.Util.getStringFromGenericLocale("network", user.getLanguage())%>
+                        <%=SWBSocialResUtil.Util.getStringFromGenericLocale("network", user.getLanguage())%>
                     </span>
                 </th>
                 <th>
                     <span>
-                        <%=SWBSocialUtil.Util.getStringFromGenericLocale("created", user.getLanguage())%>
+                        <%=SWBSocialResUtil.Util.getStringFromGenericLocale("created", user.getLanguage())%>
                     </span>
                 </th>
                 <th>
                     <span>
-                        <%=SWBSocialUtil.Util.getStringFromGenericLocale("updated", user.getLanguage())%>
+                        <%=SWBSocialResUtil.Util.getStringFromGenericLocale("updated", user.getLanguage())%>
                     </span>
                 </th>
                 <%
@@ -81,12 +82,12 @@
 
                 <th>
                     <span>
-                        <%=SWBSocialUtil.Util.getStringFromGenericLocale("sentiment", user.getLanguage())%>
+                        <%=SWBSocialResUtil.Util.getStringFromGenericLocale("sentiment", user.getLanguage())%>
                     </span>
                 </th>
                 <th>
                     <span>
-                        <%=SWBSocialUtil.Util.getStringFromGenericLocale("intensity", user.getLanguage())%>
+                        <%=SWBSocialResUtil.Util.getStringFromGenericLocale("intensity", user.getLanguage())%>
                     </span>
                 </th>
                 <%
@@ -94,7 +95,7 @@
                 %>
                 <th>
                     <span>
-                        <%=SWBSocialUtil.Util.getStringFromGenericLocale("status", user.getLanguage())%>
+                        <%=SWBSocialResUtil.Util.getStringFromGenericLocale("status", user.getLanguage())%>
                     </span>
                 </th>
             </tr>
@@ -114,7 +115,7 @@
                     <%
                         SWBResourceURL urlPrev = paramRequest.getRenderUrl().setMode(Mode_SHOWPOSTOUT).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postOut", postOut.getURI());
                     %>     
-                    <a href="#"  class="ver" title="<%=SWBSocialUtil.Util.getStringFromGenericLocale("previewdocument", user.getLanguage())%>" onclick="showDialog('<%=urlPrev%>','<%=SWBSocialUtil.Util.getStringFromGenericLocale("previewdocument", user.getLanguage())%>'); 
+                    <a href="#"  class="ver" title="<%=SWBSocialResUtil.Util.getStringFromGenericLocale("previewdocument", user.getLanguage())%>" onclick="showDialog('<%=urlPrev%>','<%=SWBSocialResUtil.Util.getStringFromGenericLocale("previewdocument", user.getLanguage())%>'); 
                         return false;"></a>
 
                 </td>
@@ -127,17 +128,17 @@
                     <%
                         if (postOut instanceof Message) {
                     %>
-                    <!--<%=SWBSocialUtil.Util.getStringFromGenericLocale("message", user.getLanguage())%>-->
+                    <!--<%=SWBSocialResUtil.Util.getStringFromGenericLocale("message", user.getLanguage())%>-->
                     <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/tipo-txt.jpg" border="0" width="25" height="25">
                     <%
                     } else if (postOut instanceof Photo) {
                     %>    
-                    <!--<%=SWBSocialUtil.Util.getStringFromGenericLocale("photo", user.getLanguage())%>-->
+                    <!--<%=SWBSocialResUtil.Util.getStringFromGenericLocale("photo", user.getLanguage())%>-->
                     <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/css/images/tipo-img.jpg" width="25" height="25">
                     <%
                     } else if (postOut instanceof Video) {
                     %>
-                    <!--<%=SWBSocialUtil.Util.getStringFromGenericLocale("video", user.getLanguage())%> -->
+                    <!--<%=SWBSocialResUtil.Util.getStringFromGenericLocale("video", user.getLanguage())%> -->
                     <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/css/images/tipo-vid.jpg" border="0" width="25" height="25">
                     <%
                         }
@@ -194,21 +195,21 @@
                 </td>
                 <!--Intensity-->
                 <!--<td align="center">
-                    <%=postOut.getPostIntesityType() == 0 ? SWBSocialUtil.Util.getStringFromGenericLocale("low", user.getLanguage()) : postOut.getPostIntesityType() == 1 ? SWBSocialUtil.Util.getStringFromGenericLocale("medium", user.getLanguage()) : postOut.getPostIntesityType() == 2 ? SWBSocialUtil.Util.getStringFromGenericLocale("high", user.getLanguage()) : "---"%>
+                    <%=postOut.getPostIntesityType() == 0 ? SWBSocialResUtil.Util.getStringFromGenericLocale("low", user.getLanguage()) : postOut.getPostIntesityType() == 1 ? SWBSocialResUtil.Util.getStringFromGenericLocale("medium", user.getLanguage()) : postOut.getPostIntesityType() == 2 ? SWBSocialResUtil.Util.getStringFromGenericLocale("high", user.getLanguage()) : "---"%>
                 </td>
                 <td>-->
                     <td>
                     <%
                         if (postOut.getPostIntesityType() == 0) {
                     %>
-                    <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/ibaja.png" width="25" height="25" alt="<%=SWBSocialUtil.Util.getStringFromGenericLocale("low", user.getLanguage())%>">
+                    <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/ibaja.png" width="25" height="25" alt="<%=SWBSocialResUtil.Util.getStringFromGenericLocale("low", user.getLanguage())%>">
                     <%        } else if (postOut.getPostIntesityType() == 1) {
                     %>    
-                    <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/imedia.png" width="25" height="25" alt="<%=SWBSocialUtil.Util.getStringFromGenericLocale("medium", user.getLanguage())%>">
+                    <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/imedia.png" width="25" height="25" alt="<%=SWBSocialResUtil.Util.getStringFromGenericLocale("medium", user.getLanguage())%>">
                     <%
                     } else if (postOut.getPostIntesityType() == 2) {
                     %>
-                    <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/ialta.png" width="25" height="25" alt="<%=SWBSocialUtil.Util.getStringFromGenericLocale("high", user.getLanguage())%>">
+                    <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/ialta.png" width="25" height="25" alt="<%=SWBSocialResUtil.Util.getStringFromGenericLocale("high", user.getLanguage())%>">
                     <%
                     } else {
                     %>
@@ -251,7 +252,7 @@
                             {
                                 postOut.setPublished(true);
                     %>       
-                    <%=SWBSocialUtil.Util.getStringFromGenericLocale("published", user.getLanguage())%>
+                    <%=SWBSocialResUtil.Util.getStringFromGenericLocale("published", user.getLanguage())%>
                     <%
                     } else {
                         //System.out.println("postOut:" + postOut + ",status:" + postOut.getPflowInstance());                        
@@ -263,16 +264,16 @@
                     <%
                     } else {
                     %>   
-                    <%=SWBSocialUtil.Util.getStringFromGenericLocale("toReview", user.getLanguage())%> 
+                    <%=SWBSocialResUtil.Util.getStringFromGenericLocale("toReview", user.getLanguage())%> 
                     <%
                         }
                     } else if (postOut.getPflowInstance().getStatus() == 3) {
                     %>    
-                    <%=SWBSocialUtil.Util.getStringFromGenericLocale("publish", user.getLanguage())%> 
+                    <%=SWBSocialResUtil.Util.getStringFromGenericLocale("publish", user.getLanguage())%> 
                     <%
                     } else {
                     %>
-                    <%=SWBSocialUtil.Util.getStringFromGenericLocale("publishing", user.getLanguage())%> 
+                    <%=SWBSocialResUtil.Util.getStringFromGenericLocale("publishing", user.getLanguage())%> 
                     <%
                         }
                     } else {    //El PostOut ya se envío
@@ -282,11 +283,11 @@
                                 sFlowRejected = postOut.getPflowInstance().getPflow().getDisplayTitle(user.getLanguage());
                             }
                     %>    
-                    <%=SWBSocialUtil.Util.getStringFromGenericLocale("rejected", user.getLanguage())%>(<%=sFlowRejected%>)
+                    <%=SWBSocialResUtil.Util.getStringFromGenericLocale("rejected", user.getLanguage())%>(<%=sFlowRejected%>)
                     <%
                     } else if (isInFlow && needAuthorization && !isAuthorized) {
                     %>    
-                    <%=SWBSocialUtil.Util.getStringFromGenericLocale("inFlow", user.getLanguage())%>(<%=postOut.getPflowInstance().getPflow().getDisplayTitle(user.getLanguage())%>)
+                    <%=SWBSocialResUtil.Util.getStringFromGenericLocale("inFlow", user.getLanguage())%>(<%=postOut.getPflowInstance().getPflow().getDisplayTitle(user.getLanguage())%>)
                     <%
                                 }
                             }
@@ -294,7 +295,7 @@
                     } else {
                             System.out.println("else final");
                     %>
-                    <%=SWBSocialUtil.Util.getStringFromGenericLocale("published", user.getLanguage())%>
+                    <%=SWBSocialResUtil.Util.getStringFromGenericLocale("published", user.getLanguage())%>
                     <%
                         }
                     %>

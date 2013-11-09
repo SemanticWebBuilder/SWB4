@@ -3,6 +3,7 @@
     Created on : 08-ago-2013, 11:41:35
     Author     : jorge.jimenez
 --%>
+<%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page contentType="text/html" pageEncoding="ISO-8859-1"%>
 <%@page import="org.semanticwb.social.*"%>
@@ -112,7 +113,7 @@
     
                 <div id="pieGenderParent">
                     <div id="pieGender">
-                        <h1><%=SWBSocialUtil.Util.getStringFromGenericLocale("gender", lang)%></h1>
+                        <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("gender", lang)%></h1>
                     </div>
                 </div>
                 <script src="http://d3js.org/d3.v3.min.js"></script>   
@@ -239,7 +240,7 @@
                 </script>
            
                 <div id="pieEducationParent" class="swbform">
-                    <h1><%=SWBSocialUtil.Util.getStringFromGenericLocale("education", lang)%></h1>
+                    <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("education", lang)%></h1>
                     <div id="pieEducation">                  
 
                     </div>
@@ -365,7 +366,7 @@
             
                 <div  id="pieRelationParent">
                     <div id="pieRelationShipStatus">
-                        <h1><%=SWBSocialUtil.Util.getStringFromGenericLocale("relationShip", lang)%></h1>
+                        <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("relationShip", lang)%></h1>
                     </div>
                 </div>
                 <script>
@@ -479,7 +480,7 @@
            
                 <div id="profileGeoLocationParent">
                     <div id="profileGeoLocation">
-                        <h1><%=SWBSocialUtil.Util.getStringFromGenericLocale("location", lang)%></h1>
+                        <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("location", lang)%></h1>
                     </div>
                 </div>
                 <script>
@@ -593,7 +594,7 @@
             
                 <div id="lifeStageParent">
                     <div id="profileLifeStage">
-                        <h1><%=SWBSocialUtil.Util.getStringFromGenericLocale("lifeStage", lang)%></h1>
+                        <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("lifeStage", lang)%></h1>
                     </div>
                 </div>
                 <script>

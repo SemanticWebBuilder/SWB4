@@ -3,6 +3,8 @@
     Created on : 11-jul-2013, 16:25:27
     Author     : jorge.jimenez
 --%>
+
+<%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
 <%@page import="org.semanticwb.social.util.SWBSocialUtil"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.social.*"%>
@@ -30,9 +32,9 @@
     if(semObj==null) return;
     User user=paramRequest.getUser(); 
     
-    String stateMsg=SWBSocialUtil.Util.getStringFromGenericLocale("state", user.getLanguage());
-    String positivesMsg=SWBSocialUtil.Util.getStringFromGenericLocale("positives", user.getLanguage());
-    String negativesMsg=SWBSocialUtil.Util.getStringFromGenericLocale("negatives", user.getLanguage());
+    String stateMsg=SWBSocialResUtil.Util.getStringFromGenericLocale("state", user.getLanguage());
+    String positivesMsg=SWBSocialResUtil.Util.getStringFromGenericLocale("positives", user.getLanguage());
+    String negativesMsg=SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", user.getLanguage());
     
     int streamMapView=Integer.parseInt(paramRequest.getResourceBase().getAttribute("streamMapView", "1"));
     
@@ -257,7 +259,7 @@
                 if(postIn.getLatitude()!=0 && postIn.getLongitude()!=0 && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==2 || streamMapView==4))
                 {
                      cont1++;
-                     String msg=SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false);
+                     String msg=SWBSocialResUtil.Util.replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false);
 
                     %>
                            var tmpIcon;
@@ -310,8 +312,8 @@
                             <%
                             } 
                             %>
-                            var postLocation='<%=SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation().replaceAll("'", ""), false)%>';
-                            var title='<%=postIn.getMsg_Text()!=null?SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false):postIn.getTags()!=null?SWBSocialUtil.Util.replaceSpecialCharacters(postIn.getTags().replaceAll("'", ""), false):"Sin Mensaje.."%>';
+                            var postLocation='<%=SWBSocialResUtil.Util.replaceSpecialCharacters(postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation().replaceAll("'", ""), false)%>';
+                            var title='<%=postIn.getMsg_Text()!=null?SWBSocialResUtil.Util.replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false):postIn.getTags()!=null?SWBSocialResUtil.Util.replaceSpecialCharacters(postIn.getTags().replaceAll("'", ""), false):"Sin Mensaje.."%>';
                              geocoder.geocode( { 'address': postLocation}, function(results, status) { 
                                 if(status==google.maps.GeocoderStatus.OK){
                                     var marker =new google.maps.Marker({

@@ -4,7 +4,7 @@
     Author     : jorge.jimenez
 --%>
 
-
+<%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
 <%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page contentType="text/html" pageEncoding="ISO-8859-1"%>
@@ -65,8 +65,8 @@
                 <!-- <%=socialNetUser.getSnu_SocialNetworkObj() != null ? socialNetUser.getSnu_SocialNetworkObj().getId() : "---"%>-->
             </p>
         </div>
-        <p><strong><%=socialNetUser.getFollowers()%></strong> <%=SWBSocialUtil.Util.getStringFromGenericLocale("followers", user.getLanguage())%></p>
-        <p><strong><%=socialNetUser.getFriends()%></strong> <%=SWBSocialUtil.Util.getStringFromGenericLocale("friends", user.getLanguage())%></p>
+        <p><strong><%=socialNetUser.getFollowers()%></strong> <%=SWBSocialResUtil.Util.getStringFromGenericLocale("followers", user.getLanguage())%></p>
+        <p><strong><%=socialNetUser.getFriends()%></strong> <%=SWBSocialResUtil.Util.getStringFromGenericLocale("friends", user.getLanguage())%></p>
         <p><strong><%=socialNetUser.getSnu_klout()%></strong> Klout</p>
         <p>   
             <%

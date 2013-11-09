@@ -6,6 +6,7 @@
 --%>
 <%@page import="org.semanticwb.social.util.SocialLoader"%>
 <%@page import="org.semanticwb.social.util.SWBSocialUtil"%>
+<%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
 <%@page import="org.semanticwb.social.*"%>
 <%@page import="org.semanticwb.SWBUtils"%>
@@ -178,7 +179,7 @@
                         Iterator<SocialPFlowRef> itSocialPFlowRefs = socialTopic.listInheritPFlowRefs();
                 %>    
                 <p>
-                <div class="etiqueta"><label for="socialFlow"><%=SWBSocialUtil.Util.getStringFromGenericLocale("publishFlow", user.getLanguage())%></label></div>
+                <div class="etiqueta"><label for="socialFlow"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("publishFlow", user.getLanguage())%></label></div>
                 <div class="campo">
                     <select name="socialFlow" id="flu">
                         <%
@@ -203,7 +204,7 @@
                             }
                             if (noFlows) {
                         %>
-                        <option value=""><%=SWBSocialUtil.Util.getStringFromGenericLocale("withOutFlow", user.getLanguage())%></option>
+                        <option value=""><%=SWBSocialResUtil.Util.getStringFromGenericLocale("withOutFlow", user.getLanguage())%></option>
                         <%
                             }
                         %>   
@@ -212,7 +213,7 @@
 
 
                 <%if (!noFlows && firstTime) {%>
-                <div class="etiqueta"><label for="socialFlowComment"><%=SWBSocialUtil.Util.getStringFromGenericLocale("comment", user.getLanguage())%></label></div>
+                <div class="etiqueta"><label for="socialFlowComment"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("comment", user.getLanguage())%></label></div>
                 <div class="campo">
                     <textarea name="socialFlowComment" id="socialFlowComment" cols="35" rows="5"></textarea>
                 </div>
@@ -222,7 +223,7 @@
 
                 %>
 
-                <button class="submit" type="submit" onclick="return checksRedesText('<%=objUri%>','<%=sourceCall%>');"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+                <button class="submit" type="submit" onclick="return checksRedesText('<%=objUri%>','<%=sourceCall%>');"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
 
             </div>      
             <%
@@ -230,7 +231,7 @@
             %>
             <div class="pub-redes">
                 <p class="titulo">Redes disponibles</p>
-                <ul><b><%=SWBSocialUtil.Util.getStringFromGenericLocale("chooseSocialNets", user.getLanguage())%></b></ul>
+                <ul><b><%=SWBSocialResUtil.Util.getStringFromGenericLocale("chooseSocialNets", user.getLanguage())%></b></ul>
                 <%
                     Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
                     while (it.hasNext()) {
@@ -385,7 +386,7 @@
                         if (socialTopic != null) {
                             Iterator<SocialPFlowRef> itSocialPFlowRefs = socialTopic.listInheritPFlowRefs();
                     %> 
-                    <div class="etiqueta"><label for="socialFlow"><%=SWBSocialUtil.Util.getStringFromGenericLocale("publishFlow", user.getLanguage())%></label></div>
+                    <div class="etiqueta"><label for="socialFlow"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("publishFlow", user.getLanguage())%></label></div>
                     <div class="campo">
 
                         </p>
@@ -413,7 +414,7 @@
                                 }
                                 if (noFlows) {
                             %>
-                            <option value=""><%=SWBSocialUtil.Util.getStringFromGenericLocale("withOutFlow", user.getLanguage())%></option>
+                            <option value=""><%=SWBSocialResUtil.Util.getStringFromGenericLocale("withOutFlow", user.getLanguage())%></option>
                             <%
                                 }
                             %>
@@ -421,7 +422,7 @@
                     </div>
                     <%if (!noFlows && firstTime) {%>
                     <p>
-                    <div class="etiqueta"><label for="socialFlowComment"><%=SWBSocialUtil.Util.getStringFromGenericLocale("comment", user.getLanguage())%></label></div>
+                    <div class="etiqueta"><label for="socialFlowComment"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("comment", user.getLanguage())%></label></div>
                     <div class="campo">
                         <textarea name="socialFlowComment" id="socialFlowComment" cols="35" rows="5"></textarea>
                     </div>
@@ -430,8 +431,8 @@
                             }
                         }
                     %>
-                    <button class="submit" type="submit" onclick="return validateImages('hasPhoto_new_#swbsocial_<%=objUri + sourceCall%>_dynamic','<%=objUri + sourceCall%>frmUploadPhoto');"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
-                    <!--<button class="submit" type="submit" onclick="return validateTypeFile('hasPhoto_new_dynamic4'); checksRedesPhoto('<%=objUri%>','<%=sourceCall%>',<%=(postInSN == null || postIn != null ? "true" : "false")%>);"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>-->
+                    <button class="submit" type="submit" onclick="return validateImages('hasPhoto_new_#swbsocial_<%=objUri + sourceCall%>_dynamic','<%=objUri + sourceCall%>frmUploadPhoto');"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+                    <!--<button class="submit" type="submit" onclick="return validateTypeFile('hasPhoto_new_dynamic4'); checksRedesPhoto('<%=objUri%>','<%=sourceCall%>',<%=(postInSN == null || postIn != null ? "true" : "false")%>);"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>-->
                 </div>
 
                 <%
@@ -439,7 +440,7 @@
                 %>
                 <div class="pub-redes">
                     <p class="titulo">Redes disponibles</p>
-                    <ul><b><%=SWBSocialUtil.Util.getStringFromGenericLocale("chooseSocialNets", user.getLanguage())%></b></ul>
+                    <ul><b><%=SWBSocialResUtil.Util.getStringFromGenericLocale("chooseSocialNets", user.getLanguage())%></b></ul>
                     <%
                         System.out.println("redes disponibles");
                         Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
@@ -707,7 +708,7 @@
                     %>     
                     <p>
 
-                    <div class="etiqueta"><label for="socialFlow"><%=SWBSocialUtil.Util.getStringFromGenericLocale("publishFlow", user.getLanguage())%></label></div>
+                    <div class="etiqueta"><label for="socialFlow"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("publishFlow", user.getLanguage())%></label></div>
                     <div class="campo">
                         <%
                             if (postIn != null) {
@@ -738,7 +739,7 @@
                                 }
                                 if (noFlows) {
                             %>
-                            <option value=""><%=SWBSocialUtil.Util.getStringFromGenericLocale("withOutFlow", user.getLanguage())%></option>
+                            <option value=""><%=SWBSocialResUtil.Util.getStringFromGenericLocale("withOutFlow", user.getLanguage())%></option>
                             <%
                                 }
                             %>
@@ -747,7 +748,7 @@
                     </p>
                     <p>
                         <%if (!noFlows && firstTime) {%>
-                    <div class="etiqueta"><label for="socialFlowComment"><%=SWBSocialUtil.Util.getStringFromGenericLocale("comment", user.getLanguage())%></label></div>
+                    <div class="etiqueta"><label for="socialFlowComment"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("comment", user.getLanguage())%></label></div>
                     <div class="campo">
                         <textarea name="socialFlowComment" id="socialFlowComment" cols="35" rows="5"></textarea>
                     </div>
@@ -756,7 +757,7 @@
                         }
                     %>  
                     </p>
-                    <button class="submit" type="submit" onclick="return validateVideo('<%="video_new_defaultAuto" + objUri + sourceCall%>', '<%=objUri + sourceCall%>frmUploadVideo')"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+                    <button class="submit" type="submit" onclick="return validateVideo('<%="video_new_defaultAuto" + objUri + sourceCall%>', '<%=objUri + sourceCall%>frmUploadVideo')"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
                 </div>
 
                 <%

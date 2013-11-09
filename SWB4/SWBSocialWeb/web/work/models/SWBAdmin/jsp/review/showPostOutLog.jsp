@@ -4,6 +4,7 @@
     Author     : jorge.jimenez
 --%>
 
+<%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
 <%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page contentType="text/html" pageEncoding="ISO-8859-1"%>
@@ -68,7 +69,7 @@
                     String msgText = postOutNet.getURI();
                     if (postOutNet.getError() != null) {
                         msgText = SWBUtils.TEXT.scape4Script(postOutNet.getError());
-                        msgText = SWBSocialUtil.Util.replaceSpecialCharacters(msgText, false);
+                        msgText = SWBSocialResUtil.Util.replaceSpecialCharacters(msgText, false);
                     }
                     %>
                     
