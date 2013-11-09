@@ -4,10 +4,6 @@
  */
 package org.semanticwb.social.admin.resources;
 
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -17,7 +13,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
-import java.util.Set;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,7 +35,6 @@ import org.semanticwb.model.Activeable;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.PFlowInstance;
 import org.semanticwb.model.Resource;
-import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Trashable;
 import org.semanticwb.model.User;
@@ -56,24 +50,20 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.rdf.sparql.SWBQueryExecution;
 import org.semanticwb.social.Message;
 import org.semanticwb.social.Photo;
-import org.semanticwb.social.PostIn;
 import org.semanticwb.social.PostOut;
 import org.semanticwb.social.PostOutNet;
 import org.semanticwb.social.PostOutPrivacyRelation;
 import org.semanticwb.social.SocialFlow.SocialPFlowMgr;
 import org.semanticwb.social.SocialNetwork;
-import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.SocialUserExtAttributes;
-import org.semanticwb.social.Stream;
 import org.semanticwb.social.Video;
-import org.semanticwb.social.util.SWBSocialComparator;
 import org.semanticwb.social.util.SWBSocialUtil;
 import org.semanticwb.social.util.SocialLoader;
+import org.semanticwb.social.SWBSocial;
 
 /**
  *
@@ -954,7 +944,7 @@ public class SocialSentPost extends GenericResource {
 
 
 
-            out.println("<td>");
+            out.println("<td class=\"status\">");
             //El PostOut No se ha enviado, aqui se daría la posibilidad de que un usuario lo envíe.
             //System.out.println("msg..:"+postOut.getMsg_Text());
             //System.out.println("Ya esta publicado..:"+postOut.isPublished());
@@ -978,7 +968,7 @@ public class SocialSentPost extends GenericResource {
                 {
                     //System.out.println("SE SUPONE QUE ESTA PUBLICADO...");
                     postOut.setPublished(true);
-                    out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">Publicado</a>");
+                    out.println("<a class=\"status3\" href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">Publicado</a>");
                 } else {
                     //System.out.println("SOCIALSENTPOST1");
                     if (!needAuthorization || postOut.getPflowInstance().getStatus() == 3) {
@@ -995,7 +985,7 @@ public class SocialSentPost extends GenericResource {
                          }*/
                         ///System.out.println("isInFlow:"+isInFlow+",needAuthorization:"+needAuthorization+",postOutwithPostOutNets:"+postOutwithPostOutNets+",someOneIsNotPublished:"+someOneIsNotPublished+",FlowStatus:"+postOut.getPflowInstance()!=null?postOut.getPflowInstance().getStatus():"NO TIENE FLUJO");
                         if (someOneIsNotPublished) {
-                            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">" + paramRequest.getLocaleString("toReview") + "</a>"); //No ha sido publicado en todas las redes sociales que debiera, abrir dialogo para mostrar todos los PostOutNtes del PostOut
+                            out.println("<a class=\"status1\" href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">" + paramRequest.getLocaleString("toReview") + "</a>"); //No ha sido publicado en todas las redes sociales que debiera, abrir dialogo para mostrar todos los PostOutNtes del PostOut
                         } else if (isInFlow && needAuthorization && postOut.getPflowInstance() != null && postOut.getPflowInstance().getStatus() == 3) {
                             out.println("<a href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />" + paramRequest.getLocaleString("publish") + "</a>");
                         } else if (!isInFlow && !needAuthorization && !postOutwithPostOutNets) {
@@ -1019,7 +1009,7 @@ public class SocialSentPost extends GenericResource {
                 }
             } else {
                 //System.out.println("ESE POST ESTA PUBLICADO..");
-                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">" + paramRequest.getLocaleString("published") + "</a>");
+                out.println("<a class=\"status3\" href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">" + paramRequest.getLocaleString("published") + "</a>");
             }
             out.println("</td>");
 
@@ -2248,39 +2238,18 @@ public class SocialSentPost extends GenericResource {
             User user = User.ClassMgr.getUser(swbSocialUser, SWBContext.getAdminWebSite());
             streamPostIns=Integer.parseInt(getAllPostOutbyAdminUser_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic, user));
             sQuery=getAllPostOutbyAdminUser_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic, user);
-            aListFilter=executeQueryArray(sQuery, wsite);
+            aListFilter=SWBSocial.executeQueryArrayPostOuts(sQuery, wsite);  
             hampResult.put("countResult", Long.valueOf(streamPostIns));
         } else {
-            long socialTopicPostOut=0L;
-            if (searchWord != null && searchWord.trim().length()>0) {
-                itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId(), socialTopicPostOut , 0L, "timems desc"), true));
-                while (itposts.hasNext()) {
-                    PostOut postOut = itposts.next();
-                    if (postOut.getTags() != null && postOut.getTags().toLowerCase().indexOf(searchWord.toLowerCase()) > -1) {
-                        socialTopicPostOut++;
-                        aListFilter.add(postOut);
-
-                    } else if (postOut.getMsg_Text() != null && postOut.getMsg_Text().toLowerCase().indexOf(searchWord.toLowerCase()) > -1) {
-                        socialTopicPostOut++;
-                        aListFilter.add(postOut);
-
-                    }
-                }
-            }else
-            {
-                /*
-                SocialTopicPostOut = wsite.getSemanticModel().countStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId());
-                if (nPage != 0) {
-                    itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId(), Integer.valueOf((RECPERPAGE)).longValue(), Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), "timems desc"), true));
-                } else {
-                    itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostOut.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostOut.sclass.getClassGroupId(), SocialTopicPostOut , 0L, "timems desc"), true));
-
-                }*/
-                System.out.println("NO ES POR BUSQUEDA,nPage:"+nPage);
+                long socialTopicPostOut=0L;
                 if (nPage != 0) 
                 {
                     System.out.println("Toma solo la página..:"+nPage);
-                    if(request.getParameter("orderBy")!=null)
+                    if (searchWord != null && searchWord.trim().length()>0) {
+                        streamPostIns=Integer.parseInt(getPostOutTopicbyWord_Query(0, 0, true, socialTopic, searchWord.trim()));
+                        sQuery=getPostOutTopicbyWord_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic, searchWord.trim()); 
+                        aListFilter=SWBSocial.executeQueryArray(sQuery, wsite); 
+                    }else if(request.getParameter("orderBy")!=null)
                     {
                         if(request.getParameter("orderBy").equals("PostTypeUp"))    //Tipo de Mensaje Up
                         {
@@ -2328,7 +2297,7 @@ public class SocialSentPost extends GenericResource {
                         System.out.println("sQuery a Ejecutar..:"+sQuery+"...FIN...");
                         if(sQuery!=null)
                         {
-                           aListFilter=executeQueryArray(sQuery, wsite);
+                           aListFilter=SWBSocial.executeQueryArrayPostOuts(sQuery, wsite);
                         }
                         }else{  //No seleccionaron ningún ordenamiento
                             /*       
@@ -2337,17 +2306,17 @@ public class SocialSentPost extends GenericResource {
                             itposts = setso.iterator();*/
                             socialTopicPostOut=Integer.parseInt(getAllPostOutSocialTopic_Query(0, 0, true, socialTopic));
                             sQuery=getAllPostOutSocialTopic_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic); 
-                            aListFilter=executeQueryArray(sQuery, wsite);
+                            aListFilter=SWBSocial.executeQueryArrayPostOuts(sQuery, wsite);
                         }
                     } else { //Traer todo, NPage==0, en teoría jamas entraría a esta opción.
                         socialTopicPostOut=Integer.parseInt(getAllPostOutSocialTopic_Query(0, 0, true, socialTopic));
                         if(socialTopicPostOut>0)
                         {
                             sQuery=getAllPostOutSocialTopic_Query(0L, socialTopicPostOut, false, socialTopic); 
-                            aListFilter=executeQueryArray(sQuery, wsite);
+                            aListFilter=SWBSocial.executeQueryArrayPostOuts(sQuery, wsite);
                         }
                     }
-                }
+                
                 System.out.println("streamPostOuts-Antes de:"+socialTopicPostOut);
                 /*
                 if(socialTopicPostOut==0L)
@@ -2393,7 +2362,8 @@ public class SocialSentPost extends GenericResource {
            "\n";
            if(isCount)
            {
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2411,11 +2381,47 @@ public class SocialSentPost extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;
     }
     
+    
+    private String getPostOutTopicbyWord_Query(long offset, long limit, boolean isCount, SocialTopic socialTopic, String word)
+    {
+        String query=
+           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+           "\n";
+           if(isCount)
+           {
+               //query+="select count(*)\n";    
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+           }else query+="select *\n";
+           
+           query+=
+           "where {\n" +
+           "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
+           "  ?postUri social:msg_Text ?msgText. \n" +       
+           "  ?postUri social:pout_created ?postOutCreated. \n" +
+           "  FILTER regex(?msgText, \""+word+"\", \"i\"). " + 
+           "  }\n";
+
+           query+="ORDER BY desc(?postOutCreated) \n";
+           
+           query+="OFFSET "+offset +"\n";
+           if(limit>0)
+           {
+             query+="LIMIT "+limit;   
+           }
+           if(isCount)
+           {
+               System.out.println("Query Count:"+query);
+               WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+               query=SWBSocial.executeQuery(query, wsite);
+           }
+        return query;
+    }
     
     /*
      * gets all PostIn by specific SocialNetUser
@@ -2429,7 +2435,8 @@ public class SocialSentPost extends GenericResource {
            "\n";
            if(isCount)
            {
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2449,7 +2456,7 @@ public class SocialSentPost extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;
     }
@@ -2466,7 +2473,8 @@ public class SocialSentPost extends GenericResource {
            "\n";
            if(isCount)
            {
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2493,7 +2501,7 @@ public class SocialSentPost extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;
     }
@@ -2511,7 +2519,8 @@ public class SocialSentPost extends GenericResource {
            "\n";
            if(isCount)
            {
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2540,7 +2549,7 @@ public class SocialSentPost extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
@@ -2558,7 +2567,8 @@ public class SocialSentPost extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2582,7 +2592,7 @@ public class SocialSentPost extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
@@ -2600,7 +2610,8 @@ public class SocialSentPost extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2625,7 +2636,7 @@ public class SocialSentPost extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
@@ -2642,7 +2653,8 @@ public class SocialSentPost extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2671,7 +2683,7 @@ public class SocialSentPost extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
@@ -2688,7 +2700,8 @@ public class SocialSentPost extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2717,7 +2730,7 @@ public class SocialSentPost extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
@@ -2735,7 +2748,8 @@ public class SocialSentPost extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2763,7 +2777,7 @@ public class SocialSentPost extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
@@ -2781,7 +2795,8 @@ public class SocialSentPost extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2810,12 +2825,12 @@ public class SocialSentPost extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
     
-   
+   /*
    private String executeQuery(String query, WebSite wsite)
    {
         System.out.println("Entra a executeQuery..:"+query);
@@ -2877,7 +2892,7 @@ public class SocialSentPost extends GenericResource {
         }
         return aResult;
    }
-    
+    */
 
     private void doShowPhotos(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
 
