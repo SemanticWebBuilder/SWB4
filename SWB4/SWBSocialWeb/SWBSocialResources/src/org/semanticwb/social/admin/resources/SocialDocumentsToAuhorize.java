@@ -38,7 +38,6 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -74,7 +73,7 @@ public class SocialDocumentsToAuhorize extends GenericResource {
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        System.out.println("Entrando al process Request:" + paramRequest.getMode());        
+        System.out.println("Entrando al process Request:" + paramRequest.getMode());
         final String mode = paramRequest.getMode();
         if (Mode_SOURCE.equals(mode)) {
             doShowSource(request, response, paramRequest);
@@ -86,12 +85,12 @@ public class SocialDocumentsToAuhorize extends GenericResource {
             PrintWriter out = response.getWriter();
             out.println("<script type=\"text/javascript\">");
             out.println("   hideDialog();");
-            out.println("   var objid= 'http://www.semanticwb.org/SWBAdmin#WebPage:social_mnui_AuthorizeMgs/tab';");
+            out.println("   var objid= '" + paramRequest.getWebPage().getURI() +"/tab';");
             out.println("   var tab = dijit.byId(objid);");
             out.println("   if(tab){");
             out.println("       tab.refresh()");
             out.println("   }");
-            out.println("   showStatus('muahaha!');");
+            out.println("   showStatus('" + paramRequest.getLocaleString("updatedMessage") +  "');");
             out.println("</script>");
         }else{
             super.processRequest(request, response, paramRequest);
@@ -104,14 +103,12 @@ public class SocialDocumentsToAuhorize extends GenericResource {
      */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        System.out.println("Entrando al process Action");
         System.out.println("**************************processAction:");
         System.out.println(request.getParameter("site"));
         System.out.println(request.getParameter("res"));
         System.out.println(request.getParameter("wbaction"));
         System.out.println(request.getParameter("firstLoad"));
         System.out.println(request.getParameter("msg"));
-        System.out.println("**************************processAction:");
         User user = response.getUser();
         response.setRenderParameter("site", request.getParameter("site"));
         response.setRenderParameter("firstLoad", request.getParameter("firstLoad"));
@@ -143,13 +140,7 @@ public class SocialDocumentsToAuhorize extends GenericResource {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.semanticwb.portal.api.GenericResource#doEdit(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
-     */
-    @Override
-    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-    }
-
+    
     /* (non-Javadoc)
      * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
      */
@@ -201,44 +192,23 @@ public class SocialDocumentsToAuhorize extends GenericResource {
             out.println("</style>  ");
             out.println("");
             out.println("");
-
-            /*out.println("<script type=\"text/javascript\">");
-            out.println("dojo.require(\"dijit.Dialog\");");
-            out.println("dojo.require(\"dijit.form.Button\");");
-            out.println("dojo.require(\"dijit.form.Textarea\");");
-            out.println("dojo.require(\"dijit.form.Form\");");
-            out.println("dojo.require(\"dojox.form.DropDownSelect\");");
-            out.println("</script>");
-            
-            //Jorge
-            out.println("<script type=\"text/javascript\" src=\"/swbadmin/js/dojo/dojo/dojo.js\" ></script>");
-            out.println("<script type=\"text/javascript\" charset=\"utf-8\" src=\"/swbadmin/js/swb.js\"></script>");
-            out.println("<script type=\"text/javascript\" charset=\"utf-8\" src=\"/swbadmin/js/swb_admin.js\"></script>");
-            out.println("<script type=\"text/javascript\" charset=\"utf-8\" src=\"/work/models/SWBAdmin/js/swbsocial.js\" ></script>");
-            //Jorge
-            //out.println("<div dojoType=\"dojox.layout.ContentPane\">");
-            */
-            }else{
+        }else{
                 System.out.println("THIS IS ANOTHER CALL (=" + firstLoad);
-            }
+        }
 
             out.println("<form type=\"dijit.form.Form\" class=\"swbform\" id=\"frmseecontentsToAuthorize\" name=\"frmseecontentsToAuthorize\" action=\"" + paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT) + "\" method=\"post\">");
             out.println("<fieldset>");
             out.println("<input type='hidden' name='firstLoad' value='false'></input>");
-            //out.println("<select name='site' dojoType=\"dojox.form.DropDownSelect\" autocomplete=\"false\">");
-            out.println("<select name='site' onchange=\"submitForm(\'frmseecontentsToAuthorize\')\" >");
+            out.println("<select name='site' onchange=\"submitForm(\'frmseecontentsToAuthorize\')\">");
             sites = SWBContext.listWebSites();
             while (sites.hasNext()) {
                 WebSite site = sites.next();
                 if (!(site.getId().equals(SWBContext.WEBSITE_ADMIN) || site.getId().equals(SWBContext.WEBSITE_GLOBAL) || site.getId().equals(SWBContext.WEBSITE_ONTEDITOR)) && site.isValid()) {
-
                     if (sitetoShow.getId().equals(site.getId())) {
                         out.println("<option selected=\"true\" value='" + site.getId() + "'>" + site.getTitle() + "</option>");
                     } else {
                         out.println("<option value='" + site.getId() + "'>" + site.getTitle() + "</option>");
                     }
-
-                    //}
                 }
             }
             out.println("</select>");
@@ -271,9 +241,6 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                 resources = SocialLoader.getPFlowManager().getContentsAtFlowOfUser(user, sitetoShow);
             }
 
-            if(firstLoad == null){
-                //out.print("<div id=\"resourcesDiv\" dojoType=\"dojox.layout.ContentPane\">");
-            }
             if (resources.length > 0) {
                 // create dialog                                
                 out.println("<form class=\"swbform\" method='post' action='#'>");
@@ -350,7 +317,7 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                     out.println(resource.getMsg_Text() != null ? SWBUtils.TEXT.encode(resource.getMsg_Text(),"UTF-8") : "");
                     out.println("</td>");
                     out.println("<td width='10%'>");
-                    out.println(resource.getSocialTopic().getTitle() != null ? SWBUtils.TEXT.encode(resource.getMsg_Text(),"UTF-8") : "");
+                    out.println(resource.getSocialTopic().getTitle() != null ? SWBUtils.TEXT.encode(resource.getSocialTopic().getTitle(),"UTF-8") : "");
                     out.println("</td>");
                     out.println("<td width='10%'>");
                     out.println(SWBUtils.TEXT.encode(resource.getPflowInstance().getPflow().getDisplayTitle(lang),"UTF-8"));
@@ -409,10 +376,7 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                     out.println(nets);
 
                     if (cont > 1) {
-                        //SWBResourceURL urlshowmoreNets = paramRequest.getRenderUrl().setMode(Mode_ShowMoreNets).setCallMethod(SWBResourceURL.Call_DIRECT); 
-                        //String id = resource.getEncodedURI().replace('%', '_').replace(':', '_').replace('/', '_');
-                        //out.println("<p><a href=\"#\" onclick=\"showDialog('" + urlshowmoreNets.setParameter("postUri", resource.getURI()) + "','" + paramRequest.getLocaleString("associatedSocialNets") + "'); return false;\">"+paramRequest.getLocaleString("watchMore")+"</a></p>");
-                        out.println("<p><a title=\"" + SWBUtils.TEXT.encode(paramRequest.getLocaleString("watchMore"),"UTF-8") + "\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode(Mode_ShowMoreNets).setParameter("postUri", resource.getURI()) + "','" + paramRequest.getLocaleString("watchMore") + "'); return false;\" href=\"#\">" + SWBUtils.TEXT.encode(paramRequest.getLocaleString("watchMore"),"UTF-8") + "</p></a>");
+                        out.println("<p><a title=\"" + SWBUtils.TEXT.encode(paramRequest.getLocaleString("watchMore"),"UTF-8") + "\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode(Mode_ShowMoreNets).setParameter("postUri", resource.getURI()) + "','" + SWBUtils.TEXT.encode(paramRequest.getLocaleString("watchMore"), "UTF-8") + "'); return false;\" href=\"#\">" + SWBUtils.TEXT.encode(paramRequest.getLocaleString("watchMore"),"UTF-8") + "</p></a>");
                     }
 
                     out.println("</td>");
@@ -430,7 +394,6 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                         urlpreviewPostIn.setParameter("wsite", wsite.getId());
                         urlpreviewPostIn.setParameter("postIn", resource.getPostInSource().getURI());
 
-                        String idPreSource = resource.getEncodedURI().replace('%', '_').replace(':', '_').replace('/', '_');
                         String imgviewSource = SWBPortal.getContextPath() + "/swbadmin/css/images/ico-origen.png";
                         //out.println("<a title=\"" + paramRequest.getLocaleString("properties") + "\" onclick=\"view('" + urlpreviewPostIn + "','" + idPreSource + "')\" href=\"#\"><img src=\"" + imgviewSource + "\" alt=\"" + paramRequest.getLocaleString("source") + "\">ver 2</a>");
                         ///-Call show Dialog and don't use iframe
@@ -449,69 +412,6 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                 out.println("</table>");
                 out.println("<fieldset>");
                 out.println("</form>");
-
-                out.println("<script type=\"text/javascript\">");
-
-                out.println("function closeAuthorize()");
-                out.println("{");
-                out.println("   var dialog=dijit.byId('dialogautorize');");
-                out.println("   dialog.hide();");
-                out.println("}");
-
-                out.println("function showAuthorize(id)");
-                out.println("{");
-                out.println("   document.swbfrmResourcesAuhotrize.res.value=id;");
-                out.println("   document.swbfrmResourcesAuhotrize.msg.value='';");
-                out.println("   var dialog=dijit.byId('dialogautorize');");
-                out.println("   dialog.show();");
-                out.println("}");
-
-                out.println("function closeReject()");
-                out.println("{");
-                out.println("   var dialog=dijit.byId('dialogreject');");
-                out.println("   dialog.hide();");
-                out.println("}");
-
-                out.println("function showReject(id)");
-                out.println("{");
-                out.println("   document.swbfrmResourcesReject.res.value=id;");
-                out.println("   document.swbfrmResourcesReject.msg.value='';");
-                out.println("   var dialog=dijit.byId('dialogreject');");
-                out.println("   dialog.show();");
-                out.println("}");
-
-                out.println("function authorize()");
-                out.println("{");
-                out.println("   if(document.swbfrmResourcesAuhotrize.msg.value=='')");
-                out.println("   {");
-                out.println("       alert('" + paramRequest.getLocaleString("messageRequired") + "');");
-                out.println("       return;");
-                out.println("   }");
-                out.println("   var dialog=dijit.byId('dialogautorize');");
-                out.println("   dialog.hide();");
-                out.println("   document.swbfrmResourcesAuhotrize.submit();");
-                out.println("}");
-
-
-                out.println("function viewMoreNets(id)");
-                out.println("{");
-                out.println("   dijit.byId(id).show()");
-                out.println("}");
-
-
-
-                out.println("function reject()");
-                out.println("{");
-                out.println("   if(document.swbfrmResourcesReject.msg.value=='')");
-                out.println("   {");
-                out.println("       alert('" + paramRequest.getLocaleString("messageRequired") + "');");
-                out.println("       return;");
-                out.println("   }");
-                out.println("   var dialog=dijit.byId('dialogreject');");
-                out.println("   dialog.hide();");
-                out.println("   document.swbfrmResourcesReject.submit();");
-                out.println("}");
-                out.println("</script>");
             } else {
                 out.println("<div class=\"swbform\">");
                 out.println("<p>" + paramRequest.getLocaleString("messageNoContents") + "</p>");
@@ -584,68 +484,6 @@ public class SocialDocumentsToAuhorize extends GenericResource {
         }
     }
 
-    
-    public void doShowPrivacy(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        PrintWriter  out = response.getWriter();
-        String resourceId = request.getParameter("resourceId");
-        String site = request.getParameter("site");
-        PostOut resource = PostOut.ClassMgr.getPostOut(resourceId, null);
-        User user = paramRequest.getUser();
-        WebSite sitetoShow = null;
-        
-        if (site != null) {
-            sitetoShow = SWBContext.getWebSite(site);
-        }
-        //out.println("<div dojoType=\"dijit.Dialog\" id=\"" + id + "_watchMoreNets\"  title=\"" + paramRequest.getLocaleString("associatedSocialNets") + "\">");
-        out.println("<div>");
-        out.println("<ul>");
-        int cont = 1;
-        String nets = "";
-        Iterator<SocialNetwork> itPostSocialNets = resource.listSocialNetworks();
-        while (itPostSocialNets.hasNext()) {
-            SocialNetwork socialNet = itPostSocialNets.next();
-            String sSocialNet = socialNet.getDisplayTitle(user.getLanguage());
-            if (sSocialNet != null && sSocialNet.trim().length() > 0) {
-                String sPrivacy = null;
-                try {
-                    Iterator<PostOutPrivacyRelation> itpostOutPriRel = PostOutPrivacyRelation.ClassMgr.listPostOutPrivacyRelationByPopr_postOut(resource, sitetoShow);
-                    while (itpostOutPriRel.hasNext()) {
-                        PostOutPrivacyRelation poPrivRel = itpostOutPriRel.next();
-                        if (poPrivRel.getPopr_socialNetwork().getURI().equals(socialNet.getURI())) {
-                            sPrivacy = poPrivRel.getPopr_privacy().getTitle(user.getLanguage());
-                        }
-                    }
-                    if (sPrivacy == null) {
-                        Iterator<PostOutNet> itpostOutNet = PostOutNet.ClassMgr.listPostOutNetBySocialPost(resource, sitetoShow);
-                        while (itpostOutNet.hasNext()) {
-                            PostOutNet postOutnet = itpostOutNet.next();
-                            if (postOutnet.getSocialNetwork().getURI().equals(socialNet.getURI()) && postOutnet.getPo_privacy() != null) {
-                                sPrivacy = postOutnet.getPo_privacy().getTitle(user.getLanguage());
-                            }
-                        }
-                    }
-                } catch (Exception ignored) {
-                }
-
-                if (sPrivacy == null) {
-                    sPrivacy = paramRequest.getLocaleString("public");
-                }
-
-                //Termina privacidad
-                if (cont == 1) {
-                    nets = "<li>" + sSocialNet + "(" + sPrivacy + ")" + "</li>";
-                    cont++;
-                } else {
-                    nets += "<li>" + sSocialNet + "(" + sPrivacy + ")" + "</li>";
-                }
-            }
-        }
-        out.println(nets);
-        out.println("</ul>");
-        out.println("</div>");
-    }
-
-
     public void doAcceptOrReject(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         String resourceId = request.getParameter("resourceId");
@@ -694,41 +532,6 @@ public class SocialDocumentsToAuhorize extends GenericResource {
         out.println("</table>");
         out.println("</form>");
         //out.println("</div>");
-/*
-        out.println("<div dojoType=\"dijit.Dialog\" id=\"dialogreject\" title=\"" + paramRequest.getLocaleString("reject") + "\">");
-        out.println("<form name='swbfrmResourcesReject' class=\"swbform\" method='post' action='" + paramRequest.getActionUrl() + "'>");
-        out.println("<input type='hidden' name='wbaction' value='r'></input>");
-        out.println("<input type='hidden' name='res' value=''></input>");
-        out.println("<input type='hidden' name='site' value='" + sitetoShow.getId() + "'></input>");
-        out.println("<table>");
-        out.println("<tr>");
-        out.println("<td>");
-        out.println(paramRequest.getLocaleString("msg"));
-        out.println("</td>");
-        out.println("<td>");
-        out.println("<textarea rows='6' cols='30' name=\"msg\">");
-        out.println("</textarea>");
-        out.println("</td>");
-        out.println("</tr>");
-        out.println("<tr>");
-        out.println("<td align='center' colspan='2'>");
-        out.println("<button onClick='reject();' dojoType=\"dijit.form.Button\" name='reject' id='reject' type='button'>" + paramRequest.getLocaleString("reject") + "</button>");
-        out.println("&nbsp;&nbsp;&nbsp;&nbsp;<button onClick=\"closeReject();\" dojoType=\"dijit.form.Button\" name=\"cancel2\" id=\"cancel2\" type=\"button\">" + paramRequest.getLocaleString("cancel") + "</button>");
-        out.println("</td>");
-        out.println("</tr>");
-        out.println("</table>");
-        out.println("</form>");
-        out.println("</div>");
-*/
-    }
 
-
-    public void doReject(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        super.doHelp(request, response, paramRequest);
     }
-    
-    
-        
-    
-    
 }
