@@ -114,13 +114,24 @@ public class DataTableResource extends GenericResource {
             out.println(period.getTitle());            
             out.println("</td>");
             out.println("<td>");
-            State state = star.getMeasure(period).getEvaluation().getStatus();
-            if(state==null) {
-                state = indicator.getMinimumState();
-                star.getMeasure(period).getEvaluation().setStatus(state);
+            if(star.getMeasure(period)!=null) {
+//                Measure measure = Measure.ClassMgr.createMeasure(period.getBSC());
+//                star.addMeasure(measure);
+//                PeriodStatus ps = PeriodStatus.ClassMgr.createPeriodStatus(period.getBSC());
+//                ps.setPeriod(period);
+//                measure.setEvaluation(ps);
+//                measure.setValue(0);
+            
+                State state = star.getMeasure(period).getEvaluation().getStatus();
+                if(state==null) {
+                    state = indicator.getMinimumState();
+                    star.getMeasure(period).getEvaluation().setStatus(state);
+                }
+                String title = state.getTitle(lang)==null?state.getTitle():state.getTitle(lang);
+                out.println("<span class=\""+(state.getIconClass()==null?"state-undefined":state.getIconClass())+"\">"+title+"</span>");
+            }else {
+                out.println("--");
             }
-            String title = state.getTitle(lang)==null?state.getTitle():state.getTitle(lang);
-            out.println("<span class=\""+(state.getIconClass()==null?"state-undefined":state.getIconClass())+"\">"+title+"</span>");
             out.println("</td>");
             for(Series series:serieses) {
                 out.println("<td>");
