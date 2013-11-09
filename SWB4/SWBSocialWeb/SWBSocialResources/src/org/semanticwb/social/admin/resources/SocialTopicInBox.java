@@ -69,6 +69,7 @@ import org.semanticwb.social.SocialUserExtAttributes;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.VideoIn;
+import org.semanticwb.social.admin.resources.util.SWBSocialResUtil;
 import org.semanticwb.social.util.SWBSocialComparator;
 import org.semanticwb.social.util.SWBSocialUtil;
 import org.semanticwb.social.util.SocialLoader;
@@ -768,7 +769,7 @@ public class SocialTopicInBox extends GenericResource {
 
             String text = SWBUtils.TEXT.scape4Script(postIn.getMsg_Text());
 
-            text = SWBSocialUtil.Util.replaceSpecialCharacters(text, false);
+            text = SWBSocialResUtil.Util.replaceSpecialCharacters(text, false);
 
             if(userCanRemoveMsg)
             {
@@ -823,7 +824,7 @@ public class SocialTopicInBox extends GenericResource {
             if (postIn.getMsg_Text() != null) {
                 if (postIn.getMsg_Text().length() > 200) {
                     String msg2Show = postIn.getMsg_Text().substring(0, 200);
-                    msg2Show = SWBSocialUtil.Util.createHttpLink(msg2Show);
+                    msg2Show = SWBSocialResUtil.Util.createHttpLink(msg2Show);
                     out.println(msg2Show);
                 } else {
                     out.println(postIn.getMsg_Text());
@@ -982,7 +983,7 @@ public class SocialTopicInBox extends GenericResource {
             * */
             
             //out.println(SWBSocialUtil.Util.getContentByPage(totalPages, nPage, PAGES2VIEW, paramRequest.getLocaleString("pageBefore"), paramRequest.getLocaleString("pageNext"), pageURL));
-            out.println(SWBSocialUtil.Util.getContentByPage(totalPages, nPage, PAGES2VIEW, pageURL));
+            out.println(SWBSocialResUtil.Util.getContentByPage(totalPages, nPage, PAGES2VIEW, pageURL));
             out.println("</div>");
         }
 

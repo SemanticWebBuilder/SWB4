@@ -40,6 +40,7 @@ import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.SocialUserExtAttributes;
 import org.semanticwb.social.Twitter;
+import org.semanticwb.social.admin.resources.util.SWBSocialResUtil;
 import org.semanticwb.social.util.SWBSocialUtil;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
@@ -396,7 +397,7 @@ public class Timeline extends GenericResource{
                 if(socialNetUser != null){//User already exists
                     System.out.println("The user already exists: " + socialNetUser.getSnu_name() + " - " + socialNetUser.getSnu_id() +"="+ status.getUser().getId());
                     int userKloutScore = 0;
-                    int days=SWBSocialUtil.Util.Datediff(socialNetUser.getUpdated(), Calendar.getInstance().getTime());
+                    int days=SWBSocialResUtil.Util.Datediff(socialNetUser.getUpdated(), Calendar.getInstance().getTime());
                     if(days > 5 && checkKlout){  //Si ya pasaron 5 o mas días de que se actualizó la info del usuario, entonces busca su score en Klout
                         System.out.println("YA PASARON MAS DE 5 DÍAS, BUSCAR KLOUT DE USUARIO...");
                         Kloutable socialNetKloutAble=(Kloutable) socialNetwork;

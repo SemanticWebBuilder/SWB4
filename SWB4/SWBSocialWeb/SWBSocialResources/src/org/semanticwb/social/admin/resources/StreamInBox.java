@@ -59,6 +59,7 @@ import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SocialUserExtAttributes;
 import java.util.Date;
 import org.semanticwb.social.SWBSocial;
+import org.semanticwb.social.admin.resources.util.SWBSocialResUtil;
 /**
  *
  * @author jorge.jimenez
@@ -722,7 +723,7 @@ public class StreamInBox extends GenericResource {
         } catch (Exception ignored) {
             nPage = 1;
         }
-        System.out.println("nPage a Filtros HOOOOOOOOOOOOOOOOOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA:"+nPage);
+        System.out.println("nPage a Filtros:"+nPage);
         HashMap hmapResult = filtros(swbSocialUser, wsite, searchWord, request, stream, nPage);
 
         long nRec = ((Long) hmapResult.get("countResult")).longValue();
@@ -753,7 +754,7 @@ public class StreamInBox extends GenericResource {
 
             String text = SWBUtils.TEXT.scape4Script(postIn.getMsg_Text());
 
-            text = SWBSocialUtil.Util.replaceSpecialCharacters(text, false);
+            text = SWBSocialResUtil.Util.replaceSpecialCharacters(text, false);
 
             if(userCanRemoveMsg)
             {
@@ -816,7 +817,7 @@ public class StreamInBox extends GenericResource {
             if (postIn.getMsg_Text() != null) {
                 if (postIn.getMsg_Text().length() > 200) {
                     String msg2Show = postIn.getMsg_Text().substring(0, 200);
-                    msg2Show = SWBSocialUtil.Util.createHttpLink(msg2Show);
+                    msg2Show = SWBSocialResUtil.Util.createHttpLink(msg2Show);
                     out.println(msg2Show);
                 } else {
                     out.println(postIn.getMsg_Text());
@@ -1015,7 +1016,7 @@ public class StreamInBox extends GenericResource {
             //position=Posición en (arriba, abajo, ambos), esto no aplicaría para este uso
             
             //out.println(SWBSocialUtil.Util.getContentByPage(totalPages, nPage, PAGES2VIEW, paramRequest.getLocaleString("pageBefore"), paramRequest.getLocaleString("pageNext"), pageURL));
-            out.println(SWBSocialUtil.Util.getContentByPage(totalPages, nPage, PAGES2VIEW, pageURL));
+            out.println(SWBSocialResUtil.Util.getContentByPage(totalPages, nPage, PAGES2VIEW, pageURL));
             out.println("</div>");
         }
 
@@ -1521,7 +1522,7 @@ public class StreamInBox extends GenericResource {
 
                 if (inputTextValue != null) {
                     //System.out.println("Text Completo:"+inputTextValue);
-                    inputTextValue = SWBSocialUtil.Util.removePrepositions(inputTextValue);
+                    inputTextValue = SWBSocialUtil.Strings.removePrepositions(inputTextValue);
                     //System.out.println("Text Sin Prepo:"+inputTextValue);
 
                     String[] phrases = inputTextValue.split(";");
