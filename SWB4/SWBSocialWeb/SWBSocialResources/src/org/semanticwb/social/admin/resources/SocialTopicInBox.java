@@ -59,6 +59,7 @@ import org.semanticwb.social.PhotoIn;
 import org.semanticwb.social.Post;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.PostOut;
+import org.semanticwb.social.SWBSocial;
 import org.semanticwb.social.SentimentalLearningPhrase;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
@@ -336,7 +337,7 @@ public class SocialTopicInBox extends GenericResource {
         //ENDS TAG CLOUD
         
         //out.println("<span  class=\"spanFormat\">");
-        out.println("<form id=\"" + id + "/fsearchSocialT\" name=\"" + id + "/fsearchSocialT\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearchSocialT');return false;\">");
+        out.println("<form id=\"" + id + "/fsearchSocialT\" name=\"" + id + "/fsearchSocialT\" method=\"post\" action=\"" + urls.setMode(SWBResourceURL.Mode_EDIT) + "\" onsubmit=\"submitForm('" + id + "/fsearchSocialT');return false;\">");
         out.println("<div align=\"right\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
         out.println("<input type=\"hidden\" name=\"noSaveSess\" value=\"1\">");
@@ -1593,28 +1594,16 @@ public class SocialTopicInBox extends GenericResource {
             SocialNetworkUser socialNetUser = SocialNetworkUser.ClassMgr.getSocialNetworkUser(swbSocialUser, wsite);
             streamPostIns=Integer.parseInt(getAllPostInbyNetUser_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic, socialNetUser));
             sQuery=getAllPostInbyNetUser_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic, socialNetUser);
-            aListFilter=executeQueryArray(sQuery, wsite);
+            aListFilter=SWBSocial.executeQueryArray(sQuery, wsite);
             hampResult.put("countResult", Long.valueOf(streamPostIns));
         } else {
-            if (searchWord != null && searchWord.trim().length()>0) {
-                System.out.println("ES POR BUSQUEDA:"+searchWord);
-                itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_socialTopic.getRDFProperty(), socialTopic.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), streamPostIns, 0L, "timems desc"), true));
-                while (itposts.hasNext()) {
-                    PostIn postIn = itposts.next();
-                    if (postIn.getTags() != null && postIn.getTags().toLowerCase().indexOf(searchWord.toLowerCase()) > -1) {
-                        streamPostIns++;
-                        aListFilter.add(postIn);
-                    } else if (postIn.getMsg_Text() != null && postIn.getMsg_Text().toLowerCase().indexOf(searchWord.toLowerCase()) > -1) {
-                        streamPostIns++;
-                        aListFilter.add(postIn);
-                    }
-                }
-            }else{
-                System.out.println("NO ES POR BUSQUEDA,nPage:"+nPage);
                 if (nPage != 0) 
                 {
-                    System.out.println("Toma solo la página..:"+nPage);
-                    if(request.getParameter("orderBy")!=null)
+                    if (searchWord != null && searchWord.trim().length()>0) {
+                        streamPostIns=Integer.parseInt(getPostInTopicbyWord_Query(0, 0, true, socialTopic, searchWord.trim()));
+                        sQuery=getPostInTopicbyWord_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic, searchWord.trim()); 
+                        aListFilter=SWBSocial.executeQueryArray(sQuery, wsite); 
+                    }else if(request.getParameter("orderBy")!=null)
                     {
                         if(request.getParameter("orderBy").equals("PostTypeUp"))    //Tipo de Mensaje Up
                         {
@@ -1688,7 +1677,7 @@ public class SocialTopicInBox extends GenericResource {
                         System.out.println("sQuery a Ejecutar..:"+sQuery+"...FIN...");
                         if(sQuery!=null)
                         {
-                           aListFilter=executeQueryArray(sQuery, wsite);
+                           aListFilter=SWBSocial.executeQueryArray(sQuery, wsite);
                         }
                     }else{  //No seleccionaron ningún ordenamiento
                         /*
@@ -1698,17 +1687,17 @@ public class SocialTopicInBox extends GenericResource {
                         * */
                         streamPostIns=Integer.parseInt(getAllPostInSocialTopic_Query(0, 0, true, socialTopic));
                         sQuery=getAllPostInSocialTopic_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic); 
-                        aListFilter=executeQueryArray(sQuery, wsite);
+                        aListFilter=SWBSocial.executeQueryArray(sQuery, wsite);
                     }
                 } else { //Traer todo, NPage==0, en teoría jamas entraría a esta opción.
                     streamPostIns=Integer.parseInt(getAllPostInSocialTopic_Query(0, 0, true, socialTopic));
                     if(streamPostIns>0)
                     {
                         sQuery=getAllPostInSocialTopic_Query(0L, streamPostIns, false, socialTopic); 
-                        aListFilter=executeQueryArray(sQuery, wsite);
+                        aListFilter=SWBSocial.executeQueryArray(sQuery, wsite);
                     }
                 }
-            }
+            
             System.out.println("streamPostIns-Antes de:"+streamPostIns);
             /*
             if(streamPostIns==0L)
@@ -1755,7 +1744,8 @@ public class SocialTopicInBox extends GenericResource {
            "\n";
            if(isCount)
            {
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -1774,7 +1764,44 @@ public class SocialTopicInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
+           }
+        return query;
+    }
+    
+    
+    private String getPostInTopicbyWord_Query(long offset, long limit, boolean isCount, SocialTopic socialTopic, String word)
+    {
+        String query=
+           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+           "\n";
+           if(isCount)
+           {
+               //query+="select count(*)\n";    
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+           }else query+="select *\n";
+           
+           query+=
+           "where {\n" +
+           "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
+           "  ?postUri social:msg_Text ?msgText. \n" +       
+           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  FILTER regex(?msgText, \""+word+"\", \"i\"). " + 
+           "  }\n";
+
+           query+="ORDER BY desc(?postInCreated) \n";
+           
+           query+="OFFSET "+offset +"\n";
+           if(limit>0)
+           {
+             query+="LIMIT "+limit;   
+           }
+           if(isCount)
+           {
+               System.out.println("Query Count:"+query);
+               WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;
     }
@@ -1791,7 +1818,8 @@ public class SocialTopicInBox extends GenericResource {
            "\n";
            if(isCount)
            {
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -1811,7 +1839,7 @@ public class SocialTopicInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;
     }
@@ -1829,7 +1857,8 @@ public class SocialTopicInBox extends GenericResource {
            "\n";
            if(isCount)
            {
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -1856,7 +1885,7 @@ public class SocialTopicInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;
     }
@@ -1874,7 +1903,8 @@ public class SocialTopicInBox extends GenericResource {
            "\n";
            if(isCount)
            {
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -1901,7 +1931,7 @@ public class SocialTopicInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
@@ -1919,7 +1949,8 @@ public class SocialTopicInBox extends GenericResource {
            "\n";
            if(isCount)
            {
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -1948,7 +1979,7 @@ public class SocialTopicInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
@@ -1966,7 +1997,8 @@ public class SocialTopicInBox extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -1991,7 +2023,7 @@ public class SocialTopicInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
@@ -2008,7 +2040,8 @@ public class SocialTopicInBox extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2035,7 +2068,7 @@ public class SocialTopicInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
@@ -2052,7 +2085,8 @@ public class SocialTopicInBox extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2079,7 +2113,7 @@ public class SocialTopicInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
@@ -2096,7 +2130,8 @@ public class SocialTopicInBox extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2125,7 +2160,7 @@ public class SocialTopicInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
@@ -2142,7 +2177,8 @@ public class SocialTopicInBox extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2170,7 +2206,7 @@ public class SocialTopicInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
@@ -2187,7 +2223,8 @@ public class SocialTopicInBox extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2216,7 +2253,7 @@ public class SocialTopicInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
@@ -2234,7 +2271,8 @@ public class SocialTopicInBox extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2261,12 +2299,12 @@ public class SocialTopicInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
    
-   
+   /*
    private String executeQuery(String query, WebSite wsite)
    {
         System.out.println("Entra a executeQuery..:"+query);
@@ -2328,4 +2366,5 @@ public class SocialTopicInBox extends GenericResource {
         }
         return aResult;
    }
+   * */
 }

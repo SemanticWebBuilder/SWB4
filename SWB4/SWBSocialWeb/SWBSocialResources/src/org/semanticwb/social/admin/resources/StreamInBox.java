@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -54,23 +53,12 @@ import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.User;
-import org.semanticwb.platform.SemanticIterator;
-import org.semanticwb.rdf.sparql.SWBQueryExecution;
 import org.semanticwb.social.Kloutable;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SocialUserExtAttributes;
-
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import java.util.Date;
-import java.util.TreeSet;
-import org.semanticwb.model.SWBComparator;
-import org.semanticwb.social.util.SWBSocialComparator;
-
+import org.semanticwb.social.SWBSocial;
 /**
  *
  * @author jorge.jimenez
@@ -340,7 +328,7 @@ public class StreamInBox extends GenericResource {
         out.println("<a href=\"#\" onclick=\"showDialog('" + tagUrl + "','" + paramRequest.getLocaleString("tagLabel") + "'); return false;\" class=\"btnCloud\">"+paramRequest.getLocaleString("btnCloud")+"</a>");
         
         //out.println("<span  class=\"spanFormat\">");
-        out.println("<form id=\"" + id + "/fsearchwp\" name=\"" + id + "/fsearchwp\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearchwp');return false;\">");
+        out.println("<form id=\"" + id + "/fsearchwp\" name=\"" + id + "/fsearchwp\" method=\"post\" action=\"" + urls.setMode(SWBResourceURL.Mode_EDIT) + "\" onsubmit=\"submitForm('" + id + "/fsearchwp');return false;\">");
         out.println("<div align=\"right\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
         out.println("<input type=\"hidden\" name=\"noSaveSess\" value=\"1\">");
@@ -727,14 +715,14 @@ public class StreamInBox extends GenericResource {
             checkKlout=false;
         }
 
-
+        
         int nPage;
         try {
             nPage = Integer.parseInt(request.getParameter("page"));
         } catch (Exception ignored) {
             nPage = 1;
         }
-        
+        System.out.println("nPage a Filtros HOOOOOOOOOOOOOOOOOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA:"+nPage);
         HashMap hmapResult = filtros(swbSocialUser, wsite, searchWord, request, stream, nPage);
 
         long nRec = ((Long) hmapResult.get("countResult")).longValue();
@@ -1816,7 +1804,7 @@ public class StreamInBox extends GenericResource {
      * Method which controls the filters allowed in this class
      */
     private HashMap filtros(String swbSocialUser, WebSite wsite, String searchWord, HttpServletRequest request, Stream stream, int nPage) {
-        System.out.println("stream k Llega a Filtros--George29/10/2013:"+stream);
+        System.out.println("stream k Llega a Filtros--George08/11/2013:"+nPage);
         //System.out.println("filtros/searchWord:"+searchWord);
         //Set<PostIn> setso = new TreeSet();
         long streamPostIns=0L;
@@ -1828,28 +1816,17 @@ public class StreamInBox extends GenericResource {
             SocialNetworkUser socialNetUser = SocialNetworkUser.ClassMgr.getSocialNetworkUser(swbSocialUser, wsite);
             streamPostIns=Integer.parseInt(getAllPostInbyNetUser_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream, socialNetUser));
             sQuery=getAllPostInbyNetUser_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream, socialNetUser);
-            aListFilter=executeQueryArray(sQuery, wsite);
+            aListFilter=SWBSocial.executeQueryArray(sQuery, wsite); 
             hampResult.put("countResult", Long.valueOf(streamPostIns));
         } else {
-            if (searchWord != null && searchWord.trim().length()>0) {
-                //System.out.println("ES POR BUSQUEDA:"+searchWord);
-                itposts = new GenericIterator(new SemanticIterator(wsite.getSemanticModel().listStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), PostIn.sclass.getClassGroupId(), streamPostIns, 0L, "timems desc"), true));
-                while (itposts.hasNext()) {
-                    PostIn postIn = itposts.next();
-                    if (postIn.getTags() != null && postIn.getTags().toLowerCase().indexOf(searchWord.toLowerCase()) > -1) {
-                        streamPostIns++;
-                        aListFilter.add(postIn);
-                    } else if (postIn.getMsg_Text() != null && postIn.getMsg_Text().toLowerCase().indexOf(searchWord.toLowerCase()) > -1) {
-                        streamPostIns++;
-                        aListFilter.add(postIn);
-                    }
-                }
-            }else{
-                System.out.println("NO ES POR BUSQUEDA,nPage:"+nPage);
+                System.out.println("nPageJ:"+nPage+",searchWord:"+searchWord+",nPage:"+nPage);
                 if (nPage != 0) 
                 {
-                    System.out.println("Toma solo la página..:"+nPage);
-                    if(request.getParameter("orderBy")!=null)
+                    if (searchWord != null && searchWord.trim().length()>0) {
+                        streamPostIns=Integer.parseInt(getPostInStreambyWord_Query(0, 0, true, stream, searchWord.trim()));
+                        sQuery=getPostInStreambyWord_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream, searchWord.trim()); 
+                        aListFilter=SWBSocial.executeQueryArray(sQuery, wsite); 
+                    }else if(request.getParameter("orderBy")!=null)
                     {
                         if(request.getParameter("orderBy").equals("PostTypeUp"))    //Tipo de Mensaje Up
                         {
@@ -1921,29 +1898,29 @@ public class StreamInBox extends GenericResource {
                         //System.out.println("sQuery a Ejecutar..:"+sQuery+"...FIN...");
                         if(sQuery!=null)
                         {
-                            aListFilter=executeQueryArray(sQuery, wsite);
+                            aListFilter=SWBSocial.executeQueryArray(sQuery, wsite);
                         }
                     }else{  //Todos, sin filtros
                         streamPostIns=Integer.parseInt(getAllPostInStream_Query(0, 0, true, stream));
+                        System.out.println("ENTRA AQUI--STREAMINBOX...TODOS-1:"+streamPostIns);
                         sQuery=getAllPostInStream_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream); 
-                        aListFilter=executeQueryArray(sQuery, wsite);
+                        aListFilter=SWBSocial.executeQueryArray(sQuery, wsite);
                     }
-                } else { //Todos, sin filtros. A esta opción nunca debería entrar
+                } else { //Todos, sin filtros. Opción que entra para exportación a Excel
                     streamPostIns=Integer.parseInt(getAllPostInStream_Query(0, 0, true, stream));
                     if(streamPostIns>0)
                     {
                         sQuery=getAllPostInStream_Query(0L, streamPostIns, false, stream); 
-                        aListFilter=executeQueryArray(sQuery, wsite);
+                        aListFilter=SWBSocial.executeQueryArray(sQuery, wsite);
                     }
                 }
-            }
             //System.out.println("streamPostIns-Antes de:"+streamPostIns);
             /*
             if(streamPostIns==0L)
             {
                 streamPostIns=Integer.parseInt(getAllPostInStream_Query(0, 0, true, stream));
             }*/
-            System.out.println("StreamPostIns:"+streamPostIns);
+            System.out.println("StreamPostIns InBox:"+streamPostIns);
             hampResult.put("countResult", Long.valueOf(streamPostIns));
         }
 
@@ -1977,7 +1954,8 @@ public class StreamInBox extends GenericResource {
            "\n";
            if(isCount)
            {
-               query+="select count(*)\n";
+               //query+="select count(*)\n";    
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -1995,8 +1973,45 @@ public class StreamInBox extends GenericResource {
            }
            if(isCount)
            {
+               System.out.println("Query Count:"+query);
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
+           }
+        return query;
+    }
+    
+    private String getPostInStreambyWord_Query(long offset, long limit, boolean isCount, Stream stream, String word)
+    {
+        String query=
+           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+           "\n";
+           if(isCount)
+           {
+               //query+="select count(*)\n";    
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+           }else query+="select *\n";
+           
+           query+=
+           "where {\n" +
+           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
+           "  ?postUri social:msg_Text ?msgText. \n" +       
+           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  FILTER regex(?msgText, \""+word+"\", \"i\"). " + 
+           "  }\n";
+
+           query+="ORDER BY desc(?postInCreated) \n";
+           
+           query+="OFFSET "+offset +"\n";
+           if(limit>0)
+           {
+             query+="LIMIT "+limit;   
+           }
+           if(isCount)
+           {
+               System.out.println("Query Count:"+query);
+               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;
     }
@@ -2012,7 +2027,8 @@ public class StreamInBox extends GenericResource {
            "\n";
            if(isCount)
            {
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2032,7 +2048,7 @@ public class StreamInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;
     }
@@ -2046,7 +2062,8 @@ public class StreamInBox extends GenericResource {
            "\n";
            if(isCount)
            {
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena 
            }else query+="select *\n";
            
            query+=
@@ -2073,7 +2090,7 @@ public class StreamInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;
     }
@@ -2087,7 +2104,8 @@ public class StreamInBox extends GenericResource {
            "\n";
            if(isCount)
            {
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2114,7 +2132,7 @@ public class StreamInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
@@ -2127,7 +2145,8 @@ public class StreamInBox extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2155,7 +2174,7 @@ public class StreamInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
         
@@ -2169,7 +2188,8 @@ public class StreamInBox extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2193,7 +2213,7 @@ public class StreamInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
         
@@ -2207,7 +2227,8 @@ public class StreamInBox extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2234,7 +2255,7 @@ public class StreamInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
@@ -2247,7 +2268,8 @@ public class StreamInBox extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2274,7 +2296,7 @@ public class StreamInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
@@ -2287,7 +2309,8 @@ public class StreamInBox extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2316,7 +2339,7 @@ public class StreamInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
@@ -2329,7 +2352,8 @@ public class StreamInBox extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2357,7 +2381,7 @@ public class StreamInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
@@ -2370,7 +2394,8 @@ public class StreamInBox extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2399,7 +2424,7 @@ public class StreamInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
@@ -2413,7 +2438,8 @@ public class StreamInBox extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
            }else query+="select *\n";
            
            query+=
@@ -2440,72 +2466,9 @@ public class StreamInBox extends GenericResource {
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=executeQuery(query, wsite);
+               query=SWBSocial.executeQuery(query, wsite);
            }
         return query;   
     }
-   
-   
-   private String executeQuery(String query, WebSite wsite)
-   {
-        if(query!=null)
-        {
-            QueryExecution qe=new SWBQueryExecution(wsite.getSemanticModel().getRDFModel(), query);
-            ResultSet rs=qe.execSelect();
-            while(rs.hasNext())
-            {
-                QuerySolution qs=rs.next();
-                Iterator<String> it=rs.getResultVars().iterator();
-                while(it.hasNext())
-                {
-                    String name=it.next();
-                    System.out.println("name en executeQueryG:"+name);
-                    if(name.equalsIgnoreCase("c1"))
-                    {
-                        RDFNode node=qs.get(name);
-                        System.out.println("node en executeQuery:"+node);
-                        System.out.println("node en executeQuery-1:"+node.asLiteral());
-                        String val="";
-                        if(node.isLiteral())val=node.asLiteral().getLexicalForm();
-                        System.out.println("val en executeQuery:"+val);
-                        return val;
-                    }
-                }
-            }
-        }
-        return "0";
-   }
-   
-   private ArrayList executeQueryArray(String query, WebSite wsite)
-   {
-        ArrayList aResult=new ArrayList();
-        QueryExecution qe=new SWBQueryExecution(wsite.getSemanticModel().getRDFModel(), query);
-        ResultSet rs=qe.execSelect();
-        while(rs!=null && rs.hasNext())
-        {
-            QuerySolution qs=rs.next();
-            Iterator<String> it=rs.getResultVars().iterator();
-            while(it.hasNext())
-            {
-                String name=it.next();
-                if(name.equalsIgnoreCase("postUri"))
-                {
-                    //System.out.println("sQuery a Ejecutar..name:"+name);
-                    RDFNode node=qs.get(name);
-                    String val="";
-                    if(node.isResource()){
-                        val=node.asResource().getURI();
-                        //System.out.println("ValGeorgeResource:"+val);
-                        SemanticObject semObj=SemanticObject.createSemanticObject(val, wsite.getSemanticModel()); 
-                        //System.out.println("semObj:"+semObj);
-                        PostIn postIn=(PostIn)semObj.createGenericInstance();
-                        //System.out.println("semObj/PostIn:"+postIn);
-                        aResult.add(postIn);
-                    }
-                }
-            }
-        }
-        return aResult;
-   }
    
 }
