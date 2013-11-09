@@ -4,10 +4,6 @@
  */
 package org.semanticwb.social.admin.resources;
 
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -15,7 +11,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,39 +30,29 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticIterator;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.rdf.sparql.SWBQueryExecution;
-import org.semanticwb.social.Message;
 import org.semanticwb.social.MessageIn;
-import org.semanticwb.social.Photo;
 import org.semanticwb.social.PhotoIn;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.PostOut;
-import org.semanticwb.social.PostOutNet;
 import org.semanticwb.social.SWBSocial;
 import org.semanticwb.social.SentimentalLearningPhrase;
-import org.semanticwb.social.SocialFlow.SocialPFlowMgr;
-import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.SocialUserExtAttributes;
 import org.semanticwb.social.Stream;
-import org.semanticwb.social.Video;
 import org.semanticwb.social.VideoIn;
-import org.semanticwb.social.util.SWBSocialComparator;
+import org.semanticwb.social.admin.resources.util.SWBSocialResUtil;
 import org.semanticwb.social.util.SWBSocialUtil;
-import org.semanticwb.social.util.SocialLoader;
 
 /**
  *
@@ -727,7 +712,7 @@ public class StreamInBoxNoTopic extends GenericResource {
 
             String text = SWBUtils.TEXT.scape4Script(postIn.getMsg_Text());
 
-            text = SWBSocialUtil.Util.replaceSpecialCharacters(text, false);
+            text = SWBSocialResUtil.Util.replaceSpecialCharacters(text, false);
 
             if(userCanRemoveMsg)
             {
@@ -772,7 +757,7 @@ public class StreamInBoxNoTopic extends GenericResource {
             if (postIn.getMsg_Text() != null) {
                 if (postIn.getMsg_Text().length() > 200) {
                     String msg2Show = postIn.getMsg_Text().substring(0, 200);
-                    msg2Show = SWBSocialUtil.Util.createHttpLink(msg2Show);
+                    msg2Show = SWBSocialResUtil.Util.createHttpLink(msg2Show);
                     out.println(msg2Show);
                 } else {
                     out.println(postIn.getMsg_Text());
@@ -933,7 +918,7 @@ public class StreamInBoxNoTopic extends GenericResource {
             * */
           
             //out.println(SWBSocialUtil.Util.getContentByPage(totalPages, nPage, PAGES2VIEW, paramRequest.getLocaleString("pageBefore"), paramRequest.getLocaleString("pageNext"), pageURL));
-            out.println(SWBSocialUtil.Util.getContentByPage(totalPages, nPage, PAGES2VIEW, pageURL));
+            out.println(SWBSocialResUtil.Util.getContentByPage(totalPages, nPage, PAGES2VIEW, pageURL));
             out.println("</div>");
         }
 

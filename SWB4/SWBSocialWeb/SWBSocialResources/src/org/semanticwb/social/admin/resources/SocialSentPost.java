@@ -64,6 +64,7 @@ import org.semanticwb.social.Video;
 import org.semanticwb.social.util.SWBSocialUtil;
 import org.semanticwb.social.util.SocialLoader;
 import org.semanticwb.social.SWBSocial;
+import org.semanticwb.social.admin.resources.util.SWBSocialResUtil;
 
 /**
  *
@@ -719,7 +720,7 @@ public class SocialSentPost extends GenericResource {
             String msgText = postOut.getURI();
             if (postOut.getMsg_Text() != null) {
                 msgText = SWBUtils.TEXT.scape4Script(postOut.getMsg_Text());
-                msgText = SWBSocialUtil.Util.replaceSpecialCharacters(msgText, false);
+                msgText = SWBSocialResUtil.Util.replaceSpecialCharacters(msgText, false);
             }
 
             if (userCanRemoveMsg) {
@@ -1059,7 +1060,7 @@ public class SocialSentPost extends GenericResource {
              out.println("</div>");
              * */
             //out.println(SWBSocialUtil.Util.getContentByPage(totalPages, nPage, PAGES2VIEW, paramRequest.getLocaleString("pageBefore"), paramRequest.getLocaleString("pageNext"), pageURL));
-            out.println(SWBSocialUtil.Util.getContentByPage(totalPages, nPage, PAGES2VIEW, pageURL));
+            out.println(SWBSocialResUtil.Util.getContentByPage(totalPages, nPage, PAGES2VIEW, pageURL));
             out.println("</div>");
         }
 
