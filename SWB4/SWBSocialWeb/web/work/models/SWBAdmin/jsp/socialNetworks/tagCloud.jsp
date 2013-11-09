@@ -3,6 +3,8 @@
     Created on : 14/06/2013, 09:53:02 AM
     Author     : francisco.jimenez
 --%>
+
+<%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
 <%@page import="org.jsoup.safety.Whitelist"%>
 <%@page import="org.jsoup.Jsoup"%>
 <%@page import="org.semanticwb.social.SocialTopic"%>
@@ -162,9 +164,9 @@
             //TODO:ver si mejor desde que se clasifica el mensaje, se guarda en alguna nueva propiedad
             //el mensaje normalizado, replaceSpecialCharacters y removePuntualSigns.
             //msg=SWBSocialUtil.Classifier.normalizer(msg).getNormalizedPhrase();
-            msg = SWBSocialUtil.Util.removePrepositions(msg);
+            msg = SWBSocialUtil.Strings.removePrepositions(msg); 
             msg = Jsoup.clean(msg, Whitelist.simpleText());
-            msg = SWBSocialUtil.Util.replaceSpecialCharactersAndHtmlCodes(msg, false);
+            msg = SWBSocialResUtil.Util.replaceSpecialCharactersAndHtmlCodes(msg, false);
             msg = SWBSocialUtil.Strings.removePuntualSigns(msg, socialAdminSite);
             
             String[] mgsWords=msg.split("\\s+");  //Dividir valores
