@@ -3,6 +3,8 @@
     Created on : 02-oct-2013, 13:42:38
     Author     : jorge.jimenez
 --%>
+
+<%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
 <%@page import="org.semanticwb.social.util.SocialLoader"%>
 <%@page import="org.semanticwb.social.util.SWBSocialUtil"%>
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
@@ -80,7 +82,7 @@
                 </select>
             </div>    
             
-            <button class="submit" type="submit" ><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+            <button class="submit" type="submit" ><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
         </form>    
     <%
     }else if(action.equals("viewMsg"))
@@ -157,7 +159,7 @@
                 </select>
             </div>    
             
-            <button class="submit" type="submit" ><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+            <button class="submit" type="submit" ><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
         </form>    
     <%
     }else {  //Opción por defecto

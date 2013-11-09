@@ -4,6 +4,7 @@
     Author     : jorge.jimenez
 --%>
 
+<%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
 <%@page import="org.semanticwb.SWBPortal"%> 
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page contentType="text/html" pageEncoding="ISO-8859-1"%>
@@ -85,9 +86,9 @@
             <table class="tabla1">
                 <thead>
                     <tr>
-                        <th><%=SWBSocialUtil.Util.getStringFromGenericLocale("sentiment", user.getLanguage())%></th>
-                        <th><%=SWBSocialUtil.Util.getStringFromGenericLocale("intensity", user.getLanguage())%></th>
-                        <th><%=SWBSocialUtil.Util.getStringFromGenericLocale("priority", user.getLanguage())%></th>            
+                        <th><%=SWBSocialResUtil.Util.getStringFromGenericLocale("sentiment", user.getLanguage())%></th>
+                        <th><%=SWBSocialResUtil.Util.getStringFromGenericLocale("intensity", user.getLanguage())%></th>
+                        <th><%=SWBSocialResUtil.Util.getStringFromGenericLocale("priority", user.getLanguage())%></th>            
                     </tr>
                 </thead>
                 <tr>
@@ -114,14 +115,14 @@
                         <%
                             if (postOut.getPostIntesityType() == 0) {
                         %>
-                        <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/ibaja.png" width="25" height="25" alt="<%=SWBSocialUtil.Util.getStringFromGenericLocale("low", user.getLanguage())%>">
+                        <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/ibaja.png" width="25" height="25" alt="<%=SWBSocialResUtil.Util.getStringFromGenericLocale("low", user.getLanguage())%>">
                         <%        } else if (postOut.getPostIntesityType() == 1) {
                         %>    
-                        <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/imedia.png" width="25" height="25" alt="<%=SWBSocialUtil.Util.getStringFromGenericLocale("medium", user.getLanguage())%>">
+                        <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/imedia.png" width="25" height="25" alt="<%=SWBSocialResUtil.Util.getStringFromGenericLocale("medium", user.getLanguage())%>">
                         <%
                         } else if (postOut.getPostIntesityType() == 2) {
                         %>
-                        <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/ialta.png" width="25" height="25" alt="<%=SWBSocialUtil.Util.getStringFromGenericLocale("high", user.getLanguage())%>">
+                        <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/ialta.png" width="25" height="25" alt="<%=SWBSocialResUtil.Util.getStringFromGenericLocale("high", user.getLanguage())%>">
                         <%
                         } else {
                         %>
@@ -129,7 +130,7 @@
                         <%}%>
                     </td>
                     <td align="center">
-                        <%=postOut.isIsPrioritary() ? SWBSocialUtil.Util.getStringFromGenericLocale("yes", user.getLanguage()) : SWBSocialUtil.Util.getStringFromGenericLocale("not", user.getLanguage())%>
+                        <%=postOut.isIsPrioritary() ? SWBSocialResUtil.Util.getStringFromGenericLocale("yes", user.getLanguage()) : SWBSocialUtil.Util.getStringFromGenericLocale("not", user.getLanguage())%>
                     </td> 
                 </tr>
             </table>

@@ -4,7 +4,7 @@
     Author     : jorge.jimenez
 --%>
 
-
+<%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="java.net.URLDecoder"%>
 <%@page import="org.semanticwb.SWBPlatform"%>

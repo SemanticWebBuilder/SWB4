@@ -3,7 +3,7 @@
     Created on : 03-jun-2013, 13:01:48
     Author     : jorge.jimenez
 --%>
-
+<%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
 <%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page contentType="text/html" pageEncoding="ISO-8859-1"%>
@@ -57,8 +57,8 @@
             <img src="<%=userPhoto%>"/>
             <p><%=socialNetworkUser.getSnu_name()%></p>
         </div>
-        <p><strong><%=socialNetworkUser.getFollowers()%></strong> <%=SWBSocialUtil.Util.getStringFromGenericLocale("followers", user.getLanguage())%></p>
-        <p><strong><%=socialNetworkUser.getFriends()%></strong> <%=SWBSocialUtil.Util.getStringFromGenericLocale("friends", user.getLanguage())%></p>
+        <p><strong><%=socialNetworkUser.getFollowers()%></strong> <%=SWBSocialResUtil.Util.getStringFromGenericLocale("followers", user.getLanguage())%></p>
+        <p><strong><%=socialNetworkUser.getFriends()%></strong> <%=SWBSocialResUtil.Util.getStringFromGenericLocale("friends", user.getLanguage())%></p>
         <p><strong><%=socialNetworkUser.getSnu_klout()%></strong> Klout</p>
 
         <div class="clear"></div>
@@ -253,7 +253,7 @@
                     <%=postIn.getPostPlace() == null ? "---" : postIn.getPostPlace()%>
                 </td> 
                 <td align="center">
-                    <%=postIn.isIsPrioritary() ? SWBSocialUtil.Util.getStringFromGenericLocale("yes", user.getLanguage()) : SWBSocialUtil.Util.getStringFromGenericLocale("not", user.getLanguage())%>
+                    <%=postIn.isIsPrioritary() ? SWBSocialResUtil.Util.getStringFromGenericLocale("yes", user.getLanguage()) : SWBSocialResUtil.Util.getStringFromGenericLocale("not", user.getLanguage())%>
                 </td> 
             </tr>
 

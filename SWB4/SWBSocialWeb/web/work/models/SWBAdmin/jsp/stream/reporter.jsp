@@ -3,6 +3,8 @@
     Created on : 09-oct-2013, 10:41:08
     Author     : jorge.jimenez
 --%>
+
+<%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
 <%@page contentType="text/html" pageEncoding="ISO-8859-1"%>
 <%@page import="org.semanticwb.social.*"%>
 <%@page import="java.util.Iterator"%>
@@ -106,7 +108,7 @@
 </head>
 <body class="soria">
     <div id="reporteador" class="swbform">
-        <p class="promediosen"><%=SWBSocialUtil.Util.getStringFromGenericLocale("sentimentProm", user.getLanguage())%>:<span> <%=title%></span></p>
+        <p class="promediosen"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("sentimentProm", user.getLanguage())%>:<span> <%=title%></span></p>
         <form id="<%=semObj.getSemanticClass().getClassId()%>/reporterFilter" name="<%=semObj.getSemanticClass().getClassId()%>/reporterFilter" dojoType="dijit.form.Form" class="swbform" method="post" action="<%=url%>" method="post" onsubmit="submitForm('<%=semObj.getSemanticClass().getClassId()%>/reporterFilter');return false;"> 
             <div class="combosFilter">
                 <div id="genero-box">
@@ -183,7 +185,7 @@
 
                 </div>
                     <div id="mapa-buscar">
-                <button dojoType="dijit.form.Button" type="submit" onclick="showPie('<%=semObj.getSemanticClass().getClassId()%>/reporterFilter');return false; "><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+                <button dojoType="dijit.form.Button" type="submit" onclick="showPie('<%=semObj.getSemanticClass().getClassId()%>/reporterFilter');return false; "><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
                 <button dojoType="dijit.form.Button" type="submit"  onclick="exportExcel('<%=semObj.getSemanticClass().getClassId()%>/reporterFilter');return false;">Exportar Excel </button>
                     </div>
             </div>

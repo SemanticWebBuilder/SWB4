@@ -3,6 +3,8 @@
     Created on : 03-oct-2013, 19:51:58
     Author     : gabriela.rosales
 --%>
+
+<%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
 <%@page contentType="text/json" pageEncoding="UTF-8"%> 
 <%@page import="org.semanticwb.social.util.SWBSocialUtil"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
@@ -116,7 +118,7 @@
         if (male > 0) {
 
             JSONObject node1 = new JSONObject();
-            node1.put("label", SWBSocialUtil.Util.getStringFromGenericLocale("male", lang));
+            node1.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("male", lang));
             node1.put("value1", "" + male);
             node1.put("value2", "" + round(intPorcentajeMale));
 
@@ -127,14 +129,14 @@
             } else {
                 node1.put("color", "#eae8e3");
             }
-            node1.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("male", lang) + ": " + male + " " +SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesMale +  " " +SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang) + " :" + negativesMale + " " + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsMale);
+            node1.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("male", lang) + ": " + male + " " +SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesMale +  " " +SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " :" + negativesMale + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsMale);
             node1.put("chartclass", "possClass");
             node.put(node1);
         }
 
         if (female > 0) {
             JSONObject node2 = new JSONObject();
-            node2.put("label", SWBSocialUtil.Util.getStringFromGenericLocale("female", lang));
+            node2.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("female", lang));
             node2.put("value1", "" + female);
             node2.put("value2", "" + round(intPorcentajeFemale));
             if (positivesFemale > negativesFemale && positivesFemale > neutralsFemale) {
@@ -144,14 +146,14 @@
             } else {
                 node2.put("color", "#eae8e3");
             }
-            node2.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("female", lang) + ": " + female + " " + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesFemale + " " + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang) + " :" + negativesFemale +  " " +SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsFemale);
+            node2.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("female", lang) + ": " + female + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesFemale + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " :" + negativesFemale +  " " +SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsFemale);
             node2.put("chartclass", "possClass");
             node.put(node2);
         }
 
         if (other > 0) {
             JSONObject node3 = new JSONObject();
-            node3.put("label", SWBSocialUtil.Util.getStringFromGenericLocale("other", lang));
+            node3.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("other", lang));
             node3.put("value1", "" + other);
             node3.put("value2", "" + round(intPorcentajeOther));
 
@@ -162,7 +164,7 @@
             } else {
                 node3.put("color", "#eae8e3");
             }
-            node3.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("other", lang) + ": " + other + " " + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang) + "  : " + positivesOther +  " " +SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang) + "  :" + negativesOther +  " " + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsOther);
+            node3.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("other", lang) + ": " + other + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + "  : " + positivesOther +  " " +SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + "  :" + negativesOther +  " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsOther);
             node3.put("chartclass", "possClass");
             node.put(node3);
         }
@@ -170,7 +172,7 @@
         if (male == 0 && female == 0 && other == 0) {
 
             JSONObject node3 = new JSONObject();
-            node3.put("label", SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang));
+            node3.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang));
             node3.put("value1", "0");
             node3.put("value2", "100");
             node3.put("color", "#eae8e3");

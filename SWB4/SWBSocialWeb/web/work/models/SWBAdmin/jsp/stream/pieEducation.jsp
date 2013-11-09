@@ -3,6 +3,8 @@
     Created on : 03-oct-2013, 19:51:58
     Author     : gabriela.rosales
 --%>
+
+<%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
 <%@page import="org.semanticwb.social.util.SWBSocialUtil"%>
 <%@page contentType="text/json" pageEncoding="UTF-8"%> 
 <%@page import="org.semanticwb.platform.SemanticObject"%>
@@ -135,7 +137,7 @@
 
         if (highSchool > 0) {
             JSONObject node1 = new JSONObject();
-            node1.put("label", SWBSocialUtil.Util.getStringFromGenericLocale("highSchool", lang));
+            node1.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("highSchool", lang));
             node1.put("value1", "" + highSchool);
             node1.put("value2", "" + round(intPorcentajehighSchool));
             if (positiveshighSchool > negativeshighSchool && positiveshighSchool > neutralshighSchool) {
@@ -145,7 +147,7 @@
             } else {
                 node1.put("color", "#eae8e3");
             }
-            node1.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("highSchool", lang)+" :" + highSchool +  " " + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+" :" + positiveshighSchool +  " " +SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+ " : " + negativeshighSchool + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+"  :" + neutralshighSchool);
+            node1.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("highSchool", lang)+" :" + highSchool +  " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang)+" :" + positiveshighSchool +  " " +SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang)+ " : " + negativeshighSchool + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang)+"  :" + neutralshighSchool);
 
             node1.put("chartclass", "possClass");
             node.put(node1);
@@ -153,7 +155,7 @@
 
         if (college > 0) {
             JSONObject node2 = new JSONObject();
-            node2.put("label", SWBSocialUtil.Util.getStringFromGenericLocale("college", lang));
+            node2.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("college", lang));
             node2.put("value1", "" + college);
             node2.put("value2", "" + round(intPorcentajecollege));
             if (positivescollege > negativescollege && positivescollege > neutralscollege) {
@@ -163,14 +165,14 @@
             } else {
                 node2.put("color", "#eae8e3");
             }
-            node2.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("college", lang)+" :" + college +  " " +SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+ " :" + positivescollege +  " " +  SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" :" + negativescollege +  " " +SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+"  :" + neutralscollege);
+            node2.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("college", lang)+" :" + college +  " " +SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang)+ " :" + positivescollege +  " " +  SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang)+" :" + negativescollege +  " " +SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang)+"  :" + neutralscollege);
             node2.put("chartclass", "possClass");
             node.put(node2);
         }
 
         if (graduate > 0) {
             JSONObject node3 = new JSONObject();
-            node3.put("label", SWBSocialUtil.Util.getStringFromGenericLocale("graduate", lang));
+            node3.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("graduate", lang));
             node3.put("value1", "" + graduate);
             node3.put("value2", "" + round(intPorcentajegraduate));
             if (positivesgraduate > negativesgraduate && positivesgraduate > neutralsgraduate) {
@@ -180,14 +182,14 @@
             } else {
                 node3.put("color", "#eae8e3");
             }
-            node3.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("graduate", lang)+" :" + graduate + " " + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+ " :" + positivesgraduate  + " " + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+ " : " + negativesgraduate +  " " + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+"  :" + neutralsgraduate);
+            node3.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("graduate", lang)+" :" + graduate + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang)+ " :" + positivesgraduate  + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang)+ " : " + negativesgraduate +  " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang)+"  :" + neutralsgraduate);
             node3.put("chartclass", "possClass");
             node.put(node3);
         }
 
         if (undefined > 0) {
             JSONObject node4 = new JSONObject();
-            node4.put("label", SWBSocialUtil.Util.getStringFromGenericLocale("undefinedEducation", lang));
+            node4.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("undefinedEducation", lang));
             node4.put("value1", "" + undefined);
             node4.put("value2", "" + round(intPorcentajeundefined));
             if (positivesundefined > negativesundefined && positivesundefined > neutralsundefined) {
@@ -197,7 +199,7 @@
             } else {
                 node4.put("color", "#eae8e3");
             }
-            node4.put("label2", SWBSocialUtil.Util.getStringFromGenericLocale("undefinedEducation", lang)+" :" + undefined + " " + SWBSocialUtil.Util.getStringFromGenericLocale("positives", lang)+":" + positivesundefined  + " " + SWBSocialUtil.Util.getStringFromGenericLocale("negatives", lang)+" :" + negativesundefined  +  " " + SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)+ " :" + neutralsundefined);
+            node4.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("undefinedEducation", lang)+" :" + undefined + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang)+":" + positivesundefined  + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang)+" :" + negativesundefined  +  " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang)+ " :" + neutralsundefined);
             node4.put("chartclass", "possClass");
             node.put(node4);
         }
@@ -205,7 +207,7 @@
          if(highSchool == 0 && college == 0 &&  graduate ==0 && undefined==0 ){
                    
             JSONObject node3=new JSONObject();
-            node3.put("label", SWBSocialUtil.Util.getStringFromGenericLocale("neutral", lang)); 
+            node3.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang)); 
             node3.put("value1", "0");
             node3.put("value2", "100");
             node3.put("color", "#eae8e3");
