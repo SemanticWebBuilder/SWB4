@@ -1235,7 +1235,7 @@ public class StreamInBoxNoTopic extends GenericResource {
                     streamPostIns=Integer.parseInt(getPostInWithOutTopic_Query(0, 0, true, stream));
                     if(streamPostIns>0)
                     {
-                        sQuery=getPostInWithOutTopic_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        sQuery=getPostInWithOutTopic_Query(0L, Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
                         aListFilter=SWBSocial.executeQueryArray(sQuery, wsite);   
                     }
                 }
