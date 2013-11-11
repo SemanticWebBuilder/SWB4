@@ -42,19 +42,17 @@ public class SocialWebPageToSocialNets extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         final String myPath = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/post/socialWebPageToSocialNets.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(myPath);
-         PrintWriter out=response.getWriter();
-          if(request.getParameter("statusMsg")!=null)
-        {
+        PrintWriter out = response.getWriter();
+        if (request.getParameter("statusMsg") != null) {
             out.println("<script type=\"text/javascript\">");
-            out.println("   showStatus('"+request.getParameter("statusMsg")+"');");       
-            if(request.getParameter("reloadTab")!=null)
-            {
+            out.println("   showStatus('" + request.getParameter("statusMsg") + "');");
+            if (request.getParameter("reloadTab") != null) {
                 out.println(" reloadTab('" + request.getParameter("reloadTab") + "');");//so
-            }            
+            }
             out.println("</script>");
-            
+
         }
-          
+
         if (dis != null) {
             try {
                 request.setAttribute("paramRequest", paramRequest);
@@ -81,7 +79,7 @@ public class SocialWebPageToSocialNets extends GenericResource {
         request.setAttribute("suriSite", request.getParameter("suriSite"));
         request.setAttribute("paramRequest", paramRequest);
 
-        
+
         try {
             rd.include(request, response);
         } catch (ServletException ex) {
@@ -91,22 +89,24 @@ public class SocialWebPageToSocialNets extends GenericResource {
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-          
-        if (response.getAction().equals("uploadPhoto")) {           
+
+        if (response.getAction().equals("uploadPhoto")) {
             String idSWB = URLDecoder.decode(request.getParameter("swb"));
             SocialWebPage swb = (SocialWebPage) SemanticObject.createSemanticObject(idSWB).createGenericInstance();
             SocialNetwork socialNetwork = null;
-            Iterator i = swb.listSocialNetses();              
-            
+            Iterator i = swb.listSocialNetses();
+
             String suri = request.getParameter("suri");
             Language l = (Language) SemanticObject.createSemanticObject(suri).createGenericInstance();
 
-            WebPage ws = (WebPage) swb ; 
+            WebPage ws = (WebPage) swb;
             StringBuilder address = new StringBuilder(128);
-            address.append("http://").append(request.getServerName()).append(":").append(request.getServerPort()).append(SWBPortal.getWebWorkPath()).append("/").append("models").append("/").append(swb.getWebSite().getId()).append("/").append("WebPage").append("/").append(swb.getId()).append("/").append(SocialWebPage.social_socialwpPhoto.getName() + "_" + swb.getId() + "_" + swb.getSocialwpPhoto());
-       
-           
-           
+            address.append("http://").append(request.getServerName());
+            if (request.getServerPort() != 80) {
+                address.append(":").append(request.getServerPort());
+            }
+            address.append(SWBPortal.getWebWorkPath()).append("/").append("models").append("/").append(swb.getWebSite().getId()).append("/").append("WebPage").append("/").append(swb.getId()).append("/").append(SocialWebPage.social_socialwpPhoto.getName() + "_" + swb.getId() + "_" + swb.getSocialwpPhoto());
+
             while (i.hasNext()) {
 
                 socialNetwork = (SocialNetwork) i.next();
@@ -115,21 +115,16 @@ public class SocialWebPageToSocialNets extends GenericResource {
                 if (socialNetwork instanceof Facebook) {
                     Facebook facebook = (Facebook) semanticObject.createGenericInstance();
 
-                     facebook.postPhotoSocialNets(facebook, swb, l, address);
-                }
-
-                else if (socialNetwork instanceof Twitter) {
+                    facebook.postPhotoSocialNets(facebook, swb, l, address);
+                } else if (socialNetwork instanceof Twitter) {
                     Twitter twitter = (Twitter) semanticObject.createGenericInstance();
-                    twitter.postPhotoSocialNets(twitter, swb, l,  address);
-                  
+                    twitter.postPhotoSocialNets(twitter, swb, l, address);
+
                 }
             }
-                    response.setMode(SWBResourceURL.Mode_VIEW);
-                    response.setRenderParameter("statusMsg", "Publicado");
-                    
+            response.setMode(SWBResourceURL.Mode_VIEW);
+            response.setRenderParameter("statusMsg", "Publicado");
+
         }
-    }   
-    
-    
-    
+    }
 }
