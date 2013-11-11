@@ -1248,7 +1248,7 @@ public class StreamInBox extends GenericResource {
 
 
             sheet.setDisplayGridlines(false);
-            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 14));
+            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 13));
 
             // creo una nueva fila
             Row trow = sheet.createRow((short) 0);
