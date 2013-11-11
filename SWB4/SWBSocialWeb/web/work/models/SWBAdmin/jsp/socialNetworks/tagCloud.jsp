@@ -4,6 +4,9 @@
     Author     : francisco.jimenez
 --%>
 
+<%@page import="java.util.Date"%>
+<%@page import="java.util.TreeSet"%>
+<%@page import="java.util.Set"%>
 <%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
 <%@page import="org.jsoup.safety.Whitelist"%>
 <%@page import="org.jsoup.Jsoup"%>
@@ -61,6 +64,99 @@
         int min=1 , max=Integer.MAX_VALUE;
         return rand.nextInt(max - min + 1) + min;
     }
+
+    /**
+     * Sort by created.
+     * 
+     * @param it the it
+     * @param ascendente the ascendente
+     * @return the iterator
+     */
+    public static Iterator sortByCreated(Iterator it, boolean ascendente) {
+        return sortByCreatedSet(it, ascendente).iterator();
+    }
+
+    /**
+     * Sort by created set.
+     * 
+     * @param it the it
+     * @param ascendente the ascendente
+     * @return the sets the
+     */
+    public static Set sortByCreatedSet(Iterator it, boolean ascendente) {
+        TreeSet set = null;
+        if(it==null)
+        {
+            return null;
+        }
+        if (ascendente) {
+            set = new TreeSet(new Comparator() {
+                public int compare(Object o1, Object o2) {
+                    Date d1 = null;
+                    Date d2 = null;
+                    if(o1 instanceof PostIn)
+                    {
+                        d1 = ((PostIn)o1).getPi_created();
+                        d2 = ((PostIn)o2).getPi_created();
+                    }
+                    
+                    if(d1==null && d2!=null)
+                    {
+                        return -1;
+                    }
+                    if(d1!=null && d2==null)
+                    {
+                        return 1;
+                    }
+                    if(d1==null && d2==null)
+                    {
+                        return -1;
+                    }
+                    else
+                    {                    
+                        int ret = d1.getTime()>d2.getTime()? 1 : -1;
+                        return ret;
+                    }
+                }
+            });
+        } else {
+            set = new TreeSet(new Comparator() {
+                public int compare(Object o1, Object o2) {
+                    Date d1 = null;
+                    Date d2 = null;
+                    if(o1 instanceof PostIn)
+                    {
+                        d1 = ((PostIn)o1).getPi_created();
+                        d2 = ((PostIn)o2).getPi_created();
+                    }
+                    if(d1==null && d2!=null)
+                    {
+                        return -1;
+                    }
+                    if(d1!=null && d2==null)
+                    {
+                        return 1;
+                    }
+                    if(d1==null && d2==null)
+                    {
+                        return -1;
+                    }
+                    else
+                    {
+                        int ret = d1.getTime()>d2.getTime()? -1 : 1;
+                        return ret;
+                    }
+                    
+                }
+            });
+        }
+
+        while (it.hasNext()) {
+            set.add(it.next());
+        }
+
+        return set;
+    }
 %>
 
 <%
@@ -80,13 +176,13 @@
             System.out.println("is stream");
             stream = (Stream)semObj.getGenericInstance();
             itPostIns=stream.listPostInStreamInvs();//The posts
-            itPostIns = SWBComparator.sortByCreatedSet(itPostIns, false).iterator();
+            itPostIns = sortByCreatedSet(itPostIns, true).iterator();//Newer first
             //SWBUtils.Collections.sizeOf(stream.listPostInStreamInvs());//Number of recovered posts
         }else if(semObj.createGenericInstance() instanceof SocialTopic){//Tag Cloud for social topic
             System.out.println("is social topic");
             socialT = (SocialTopic)semObj.getGenericInstance();
             itPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialT, socialT.getSocialSite());//The posts
-            itPostIns = SWBComparator.sortByCreatedSet(itPostIns, false).iterator();
+            itPostIns = sortByCreatedSet(itPostIns, true).iterator();//Newer first
             //SWBUtils.Collections.sizeOf(PostIn.ClassMgr.listPostInBySocialTopic(socialT, socialT.getSocialSite()));//Number of recovered posts
         }else{
             return;
