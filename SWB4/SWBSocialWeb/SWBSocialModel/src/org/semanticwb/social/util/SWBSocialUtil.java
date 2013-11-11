@@ -4,13 +4,8 @@
  */
 package org.semanticwb.social.util;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.StringReader;
 import java.net.SocketException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -18,7 +13,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.StringTokenizer;
 import javaQuery.j2ee.tinyURL;
 import javax.servlet.http.HttpServletRequest;
@@ -27,19 +21,17 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
-import org.semanticwb.social.Country;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.ModelProperty;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
-import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.UserGroupRef;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.SWBActionResponse;
-import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.social.Country;
 import org.semanticwb.social.CountryState;
 import org.semanticwb.social.Kloutable;
 import org.semanticwb.social.Message;
@@ -1952,6 +1944,173 @@ public class SWBSocialUtil implements SWBAppObject {
     
     
     public static class Util{
+        
+         public static boolean isPointInsideCoodinates(double latitude, double longitude, GeoLocation[] geolocation)
+        {
+            if(latitude==0 || longitude==0 || geolocation==null) return false;
+            
+            double south=geolocation[0].getLatitudeInDegrees();
+            double west=geolocation[0].getLongitudeInDegrees();
+            double north=geolocation[1].getLatitudeInDegrees();
+            double east=geolocation[1].getLongitudeInDegrees();
+            if(north>=latitude && south<=latitude && east>=longitude && west<=longitude)
+            {
+                return true;
+            }
+            return false;
+        }
+         
+         /*
+         * Metodo que obtiene un país mediante los parametros recibidos
+         * @param latitude latitude a buscar en la lista de paises
+         * @param longitude longitude a buscar en la lista de paises
+         * @return Country que cumple con las coordenadas recibidas
+         * @return null si no encontró las coodenadas en ningún país del catálogo
+         */
+        public static Country getMessageMapCountry(float latitude, float longitude)
+        {
+            if(latitude!=0 && longitude!=0)
+            {
+                Iterator <Country> itCountries=Country.ClassMgr.listCountries(SWBContext.getAdminWebSite());
+                while(itCountries.hasNext())
+                {
+                    Country country=itCountries.next();
+                    //Si se cumple el siguiente if, el mensaje proviene del estado en cuestio.
+                    if(country.getNorth()>=latitude && country.getSouth()<=latitude && 
+                            country.getEast()>=longitude && country.getWest()<=longitude)
+                    {
+                        return country;
+                    }
+                }
+            }
+            return null; 
+        }
+        
+        
+        /*
+         * Metodo que obtiene un estado de un país mediante los parametros recibidos
+         * @param country país a buscar
+         * @param latitude latitude a buscar en un país
+         * @param longitude longitude a buscar en un país
+         * @return CountryState Estado del país donde encontro las coordenadas
+         * @return null si no encontró las coodenadas en ningún estato del país recibido
+         */
+        public static CountryState getMessageMapState(Country country, float latitude, float longitude)
+        {
+            if(country!=null && latitude!=0 && longitude!=0)
+            {
+                Iterator <CountryState> itCountryStates=country.listStatesInvs();
+                while(itCountryStates.hasNext())
+                {
+                    CountryState countryState=itCountryStates.next();
+                    //Si se cumple el siguiente if, el mensaje proviene del estado en cuestio.
+                    if(countryState.getNorth()>=latitude && countryState.getSouth()<=latitude && 
+                            countryState.getEast()>=longitude && countryState.getWest()<=longitude)
+                    {
+                        return countryState;
+                    }
+                }
+            }
+            return null; 
+        }
+        
+        
+        
+         //Returns person's age based in his/her bornDate
+         public static int calculateAge(Date bornDate) 
+         {
+            Calendar cal = Calendar.getInstance(); // current date
+            int currYear = cal.get(Calendar.YEAR);
+            int currMonth = cal.get(Calendar.MONTH);
+            int currDay = cal.get(Calendar.DAY_OF_MONTH);
+            cal.setTime(bornDate); // now born date
+            int years = currYear - cal.get(Calendar.YEAR);
+            int bornMonth = cal.get(Calendar.MONTH);
+            if (bornMonth == currMonth) { // same month
+                return cal.get(Calendar.DAY_OF_MONTH) <= currDay ? years: years - 1;
+            } else {
+                return bornMonth < currMonth ? years : years - 1;
+            }
+	}
+        
+         //Diferencias entre dos fechas
+        //@param fechaInicial La fecha de inicio
+        //@param fechaFinal  La fecha de fin
+        //@return Retorna el numero de dias entre dos fechas
+        public static int Datediff(Date fechaInicial, Date fechaFinal) {
+
+            DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
+            String fechaInicioString = df.format(fechaInicial);
+            try {
+                fechaInicial = df.parse(fechaInicioString);
+            } catch (ParseException ex) {
+            }
+
+            String fechaFinalString = df.format(fechaFinal);
+            try {
+                fechaFinal = df.parse(fechaFinalString);
+            } catch (ParseException ex) {
+            }
+
+            long fechaInicialMs = fechaInicial.getTime();
+            long fechaFinalMs = fechaFinal.getTime();
+            long diferencia = fechaFinalMs - fechaInicialMs;
+            double dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+            return ((int) dias);
+        }
+
+        /*
+         * Renplaza tags de emails, documentar este tipo de tags que puede poner el usuario en los mensajes de 
+         * correos.
+         */
+        public static String replaceTags(String message, PostIn postIn, SocialSite socialSite, Stream stream, SocialNetwork socialNetwork) 
+        {
+            try 
+            {
+                message = SWBUtils.TEXT.replaceAll(message, "{brand.title}", socialSite.getTitle());
+                message = SWBUtils.TEXT.replaceAll(message, "{stream.title}", stream.getTitle());
+                message = SWBUtils.TEXT.replaceAll(message, "{net.title}", socialNetwork.getTitle());
+                if(postIn.getSocialTopic()!=null)
+                {
+                    message = SWBUtils.TEXT.replaceAll(message, "{postIn.topic}", postIn.getSocialTopic().getTitle());
+                }
+                if(postIn.getPostInSocialNetworkUser()!=null)
+                {
+                    message = SWBUtils.TEXT.replaceAll(message, "{postIn.user}", postIn.getPostInSocialNetworkUser().getSnu_name());
+                    message = SWBUtils.TEXT.replaceAll(message, "{postIn.userklout}", ""+postIn.getPostInSocialNetworkUser().getSnu_klout()); 
+                }
+
+                message = SWBUtils.TEXT.replaceAll(message, "{post.message}", postIn.getMsg_Text());
+            } catch (Exception e) {
+                log.error(e);
+            }
+
+            return message;
+        }
+        
+         /**
+         * Replaces full urls with shorten urls.
+         * @param text with full urls
+         * @return text with shorten urls
+         */
+        public static String shortUrl(String urlLong) {
+            String parsedMessage = "";
+            if (urlLong != null && !urlLong.isEmpty()) {
+                String delimiter = " ";
+                String[] temp = urlLong.split(delimiter);
+                for (int i = 0; i < temp.length; i++) {
+                    if ((temp[i].startsWith("http://") || temp[i].startsWith("https://")) && ((temp[i].length() > 9))) {
+                        tinyURL tU = new tinyURL();
+                        temp[i] = tU.getTinyURL(temp[i]);
+                    }
+                    parsedMessage += temp[i] + " ";
+                }
+            }
+            return parsedMessage;
+        }
+        
+        
+        
         /**
          * Metodo que obtiene el valor de la propiedad que le llega como
          * parametro en un determinado modelo
