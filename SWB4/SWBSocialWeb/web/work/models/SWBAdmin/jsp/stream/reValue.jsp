@@ -68,11 +68,11 @@
                     ---
                     <%        } else if (postIn.getPostSentimentalType() == 1) {
                     %>    
-                    <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/feelpos.png" width="25" height="25" title="Sentimiento positivo">
+                    <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/pos.png" width="25" height="25" title="Sentimiento positivo">
                     <%
                     } else if (postIn.getPostSentimentalType() == 2) {
                     %>
-                    <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/feelneg.png" width="25" height="25" title="Sentimiento negativo">
+                    <img src="<%=SWBPortal.getContextPath()%>/swbadmin/css/images/neg.png" width="25" height="25" title="Sentimiento negativo">
                     <%
                         }
                     %>
