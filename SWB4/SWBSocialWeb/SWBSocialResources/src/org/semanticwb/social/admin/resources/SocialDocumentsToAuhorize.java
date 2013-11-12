@@ -196,41 +196,46 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                 System.out.println("THIS IS ANOTHER CALL (=" + firstLoad);
         }
 
-            out.println("<form type=\"dijit.form.Form\" class=\"swbform\" id=\"frmseecontentsToAuthorize\" name=\"frmseecontentsToAuthorize\" action=\"" + paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT) + "\" method=\"post\">");
-            out.println("<fieldset>");
-            out.println("<input type='hidden' name='firstLoad' value='false'></input>");
-            out.println("<select name='site' onchange=\"submitForm(\'frmseecontentsToAuthorize\')\">");
-            sites = SWBContext.listWebSites();
-            while (sites.hasNext()) {
-                WebSite site = sites.next();
-                if (!(site.getId().equals(SWBContext.WEBSITE_ADMIN) || site.getId().equals(SWBContext.WEBSITE_GLOBAL) || site.getId().equals(SWBContext.WEBSITE_ONTEDITOR)) && site.isValid()) {
-                    if (sitetoShow.getId().equals(site.getId())) {
-                        out.println("<option selected=\"true\" value='" + site.getId() + "'>" + site.getTitle() + "</option>");
-                    } else {
-                        out.println("<option value='" + site.getId() + "'>" + site.getTitle() + "</option>");
-                    }
+        out.println("<div class=\"swbform\">");
+        out.println("<div id=\"pub-detalle\">");
+        out.println("</br>");
+        out.println("<form type=\"dijit.form.Form\" id=\"frmseecontentsToAuthorize\" name=\"frmseecontentsToAuthorize\" action=\"" + paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT) + "\" method=\"post\">");
+        //out.println("<fieldset>");
+        out.println("<input type='hidden' name='firstLoad' value='false'></input>");
+        out.println("Selecciona un sitio:");
+        out.println("<select name='site' onchange=\"submitForm(\'frmseecontentsToAuthorize\')\">");
+        sites = SWBContext.listWebSites();
+        while (sites.hasNext()) {
+            WebSite site = sites.next();
+            if (!(site.getId().equals(SWBContext.WEBSITE_ADMIN) || site.getId().equals(SWBContext.WEBSITE_GLOBAL) || site.getId().equals(SWBContext.WEBSITE_ONTEDITOR)) && site.isValid()) {
+                if (sitetoShow.getId().equals(site.getId())) {
+                    out.println("<option selected=\"true\" value='" + site.getId() + "'>" + site.getTitle() + "</option>");
+                } else {
+                    out.println("<option value='" + site.getId() + "'>" + site.getTitle() + "</option>");
                 }
             }
-            out.println("</select>");
-            String selected = "";
-            if (show == 1) {
-                selected = "checked";
-            }
-            out.println("<input " + selected + " onClick=\"submitForm(\'frmseecontentsToAuthorize\')\" dojoType=\"dijit.form.RadioButton\" type='radio' id='show1' name='show' value='1'/>" + paramRequest.getLocaleString("all") + "");
-            selected = "";
-            if (show == 2) {
-                selected = "checked";
-            }
-            out.println("<input " + selected + " onClick=\"submitForm(\'frmseecontentsToAuthorize\')\" dojoType=\"dijit.form.RadioButton\" type='radio' id='show2'  name='show' value='2'/>" + paramRequest.getLocaleString("mydocuments") + "");
-            selected = "";
-            if (show == 3) {
-                selected = "checked";
-            }
+        }
+        out.println("</select>");
+        String selected = "";
+        if (show == 1) {
+            selected = "checked";
+        }
+        out.println("<input " + selected + " onClick=\"submitForm(\'frmseecontentsToAuthorize\')\" dojoType=\"dijit.form.RadioButton\" type='radio' id='show1' name='show' value='1'/>" + paramRequest.getLocaleString("all") + "");
+        selected = "";
+        if (show == 2) {
+            selected = "checked";
+        }
+        out.println("<input " + selected + " onClick=\"submitForm(\'frmseecontentsToAuthorize\')\" dojoType=\"dijit.form.RadioButton\" type='radio' id='show2'  name='show' value='2'/>" + paramRequest.getLocaleString("mydocuments") + "");
+        selected = "";
+        if (show == 3) {
+            selected = "checked";
+        }
 
-            out.println("<input " + selected + " onClick=\"submitForm(\'frmseecontentsToAuthorize\')\" dojoType=\"dijit.form.RadioButton\" type='radio' id='show3' name='show' value='3'/>" + paramRequest.getLocaleString("forauthorize") + "");
-            out.println("</fieldset>");
-            out.println("</form>");          
-
+        out.println("<input " + selected + " onClick=\"submitForm(\'frmseecontentsToAuthorize\')\" dojoType=\"dijit.form.RadioButton\" type='radio' id='show3' name='show' value='3'/>" + paramRequest.getLocaleString("forauthorize") + "");
+        //out.println("</fieldset>");
+        out.println("</form>");          
+        out.println("</div>");
+        out.println("</div>");
         if (sitetoShow != null) {
             PostOut[] resources;
             if (show == 1) {
@@ -252,7 +257,6 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                 out.println(SWBUtils.TEXT.encode(paramRequest.getLocaleString("action"), "UTF-8"));
                 out.println("</th>");
                 out.println("<th>");
-                out.println(paramRequest.getLocaleString("type"));
                 out.println(SWBUtils.TEXT.encode(paramRequest.getLocaleString("type"), "UTF-8"));
                 out.println("</th>");
                 out.println("<th>");
