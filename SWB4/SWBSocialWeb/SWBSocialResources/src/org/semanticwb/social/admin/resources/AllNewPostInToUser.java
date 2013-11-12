@@ -7,8 +7,11 @@ package org.semanticwb.social.admin.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -272,7 +275,7 @@ public class AllNewPostInToUser extends GenericResource {
 
         if (itposts != null && itposts.hasNext()) {
 
-            Set<PostIn> setso = SWBComparator.sortByCreatedSet(itposts, false);
+            Set<PostIn> setso = sortByCreatedSet(itposts, false);
             itposts = null;
 
             int recPerPage = 20;//if(resBase.getItemsbyPage()>0) recPerPage=resBase.getItemsbyPage();            
@@ -581,5 +584,87 @@ public class AllNewPostInToUser extends GenericResource {
                 }
             }
         }
+    }
+
+    /**
+     * Sort by created set.
+     * 
+     * @param it the it
+     * @param ascendente the ascendente
+     * @return the sets the
+     */
+    public static Set sortByCreatedSet(Iterator it, boolean ascendente) {
+        TreeSet set = null;
+        if(it==null)
+        {
+            return null;
+        }
+        if (ascendente) {
+            set = new TreeSet(new Comparator() {
+                public int compare(Object o1, Object o2) {
+                    Date d1 = null;
+                    Date d2 = null;
+                    if(o1 instanceof PostIn)
+                    {
+                        d1 = ((PostIn)o1).getPi_created();
+                        d2 = ((PostIn)o2).getPi_created();
+                    }
+                    
+                    if(d1==null && d2!=null)
+                    {
+                        return -1;
+                    }
+                    if(d1!=null && d2==null)
+                    {
+                        return 1;
+                    }
+                    if(d1==null && d2==null)
+                    {
+                        return -1;
+                    }
+                    else
+                    {                    
+                        int ret = d1.getTime()>d2.getTime()? 1 : -1;
+                        return ret;
+                    }
+                }
+            });
+        } else {
+            set = new TreeSet(new Comparator() {
+                public int compare(Object o1, Object o2) {
+                    Date d1 = null;
+                    Date d2 = null;
+                    if(o1 instanceof PostIn)
+                    {
+                        d1 = ((PostIn)o1).getPi_created();
+                        d2 = ((PostIn)o2).getPi_created();
+                    }
+                    if(d1==null && d2!=null)
+                    {
+                        return -1;
+                    }
+                    if(d1!=null && d2==null)
+                    {
+                        return 1;
+                    }
+                    if(d1==null && d2==null)
+                    {
+                        return -1;
+                    }
+                    else
+                    {
+                        int ret = d1.getTime()>d2.getTime()? -1 : 1;
+                        return ret;
+                    }
+                    
+                }
+            });
+        }
+
+        while (it.hasNext()) {
+            set.add(it.next());
+        }
+
+        return set;
     }
 }
