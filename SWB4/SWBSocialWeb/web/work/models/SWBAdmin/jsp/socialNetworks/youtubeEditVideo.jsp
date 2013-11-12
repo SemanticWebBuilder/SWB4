@@ -128,7 +128,7 @@
     <fieldset>
         <legend><%=SWBUtils.TEXT.encode(paramRequest.getLocaleString("title"), "UTF-8")%>:</legend>
         <div align="left">
-            <input type="text" name="title" size="67" value="<%=title%>"/>
+            <input type="text" required="true" onblur="this.value=dojo.trim(this.value);" name="title" size="67" value="<%=title%>"/>
         </div>
     </fieldset>
     
