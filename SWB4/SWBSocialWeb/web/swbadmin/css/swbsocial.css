@@ -32,7 +32,6 @@ border-radius:2px; /*opera y CSS3*/
     width: 252px;
     height: 26px;
     padding: 0px 0px 0px 0px;
-    background-image: url('../images/swb-logo.jpg');
     margin: expression('0px 0px -7px 0px'); /*IE*/
 }
 
@@ -700,7 +699,7 @@ div.sitesectiontree ul.treeres {
 
 
 /*ANTI SORIA*/
-.swbLogo {background: url(images/swb-logo.png) no-repeat !important; height:41px !important; padding:0; width:189px !important; margin:0px 60px 0px 10px !important}
+.swbLogo {background: url(images/swb-social.png) no-repeat !important; height:41px !important; padding:0; width:189px !important; margin:0px 60px 0px 10px !important}
 .soria .dijitToolbar { background:url(images/bg-cabecera.png) #505b5f !important; height:50px !important;}
 #mainSplit { top:50px !important;}
 
@@ -711,10 +710,10 @@ div.sitesectiontree ul.treeres {
 .soria .dijitTitlePane .dijitClosed .dijitArrowNode,
 .soria .dijitTitlePane .dijitOpen .dijitArrowNode,
 .soria .dijitAccordionTitle-selected .dijitAccordionArrow { float:right;}
-.soria .dijitToolbar .dijitButtonNode button { font-size:0.9em; color:#a9b2bb; padding-top:0px; height:45px;}
+.soria .dijitToolbar .dijitButtonNode button { font-size:1em; color:#C9D2DB; padding-top:0px; height:45px;}
 .soria .dijitToolbar .dijitButtonNode button:hover { color:#ff6600; background:none;}
-.soria .dijitToolbar .dijitArrowButtonInner       {background: url(images/spriteArrows.png) no-repeat 0px 0px !important; position:relative; top:15px;}
-.soria .dijitToolbar .dijitArrowButtonInner:hover {background: url(images/spriteArrows.png) no-repeat 0px -10px !important; position:relative; top:15px;}
+.soria .dijitToolbar .dijitArrowButtonInner       {background: url(images/spriteArrows.png) no-repeat 0px 0px !important; position:relative; top:17px;}
+.soria .dijitToolbar .dijitArrowButtonInner:hover {background: url(images/spriteArrows.png) no-repeat 0px -10px !important; position:relative; top:17px;}
 .soria .dijitToolbar .dijitButtonText { position:relative; top:15px;}
 
 .soria .dojoxGridCell { font-size:12px; color:#666;}
@@ -761,7 +760,7 @@ background:none !important; border:none !important; padding:0 !important;}
 .soria .dijitAccordionTitle          { background:url(images/titleBar.png) repeat-x left top #FAFAFA !important; color:#685521 !important; }
 .soria .dijitAccordionTitle-selected { background:url(images/accordionItemActive.png) repeat-x left top #FAFAFA !important; color:#5F4324 !important; } 
 .soria .dijitTreeNodeSelected .dijitTreeLabel { background:none;} /*Seleccionado*/
-.soria .dijitAccordionContainer-dijitContentPane { background-color:#EAEAEA; padding:0px !important; width:100% !important;} /*FONDO donde viene el ??rbol*/
+.soria .dijitAccordionContainer-dijitContentPane { background-color:#EAEAEA; padding:0px !important; width:100% !important;} /*FONDO donde viene el ?rbol*/
 .soria .dijitTreeIsRoot { background: url(images/bg-dijitTreeIsRoot.gif) !important; margin-bottom:1px;} /*MARCA*/
 .soria .dijitTreeLabel { font-weight:bold !important;}
 .soria .dijitAccordionArrow { float:right;}
@@ -1005,7 +1004,7 @@ background: #FFA51E !important;}
 .soria .dijitTabContainerTop-container { border-color:#ffb13D !important;}
 
 /*POP UP */
-.soria .dijitDialog 		{ border:solid 1px #6B3A08; top:105px !important;}
+.soria .dijitDialog 		{ border:solid 1px #6B3A08; /*top:105px !important;*/}
 .soria .dijitDialogTitleBar { background:url(images/titleBar.png) repeat-x}
 .soria .dijitDialog .dijitDialogTitle { color:#6B3A08;}
 .dijitDialogUnderlay { background:#000;}
@@ -1245,6 +1244,14 @@ th.accion span, th.mensaje span 		 { margin:0 !important; position:relative; top
 .autorizar       { background: url(images/ico-autoriza1.png)}
 .autorizar:hover { background: url(images/ico-autoriza2.png)}
 
+td.status	{ padding:0 !important; text-align:center; vertical-align:top;}
+td.status a		 	{ display:inline-block; width:55px; word-wrap:break-word; word-break:break-all; padding-top:18px;  }
+td.status strong	{ display:none;}
+.status1	{ background:url(images/ico-status1-revisar.png) no-repeat top center;}
+.status2	{ background:url(images/ico-status2-publicando.png) no-repeat top center;}
+.status3	{ background:url(images/ico-status3-publicado.png) no-repeat top center;}
+.status4	{ background:url(images/ico-status4-rechazado.png) no-repeat center 2px; line-height:12px; padding-top:18px; text-decoration:none;}
+
 
 /*REDES*/
 .clear { clear:both;}
@@ -1264,7 +1271,7 @@ th.accion span, th.mensaje span 		 { margin:0 !important; position:relative; top
 .timeline li em,
 .timelineresume em{ font-style:normal; margin-right:15px;}
 .timelinedate	  { color: #666; }
-.timelinefacebook span em { color:#FF6600 !important; font-weight:normal !important}
+.timelinefacebook span em { color:#666 !important; font-weight:normal !important}
 .timelinedate strong,
 .timelinefacebook .timelineresume strong { background:url(images/like.png) no-repeat; font-weight:normal; padding-left:21px;}
 .timelinetweeter .timelineresume strong { background:url(images/retweet1.png) no-repeat 0px -2px; font-weight:normal; padding-left:21px;}
@@ -1280,7 +1287,7 @@ border-radius:3px;
 -moz-border-radius:3px;
 -webkit-border-radius:3px;
 -khtml-border-radius:3px;}
-.timelineresume span:first-child em { font-weight:normal;color:#666; background:url(images/reloj.png) no-repeat 0px 0px; padding-left:18px;}
+.timelineresume span:first-child em { font-weight:normal; color:#666 !important ; background:url(images/reloj.png) no-repeat 0px 0px; padding-left:18px;}
 
 .timelineresume .like 			 { background:url(images/like3.png) no-repeat 1px 1px #f90; padding-left:20px;}
 .timelineresume .like:hover		 { background:url(images/like3.png) no-repeat 1px 1px #f60; padding-left:20px;}
@@ -1290,6 +1297,14 @@ border-radius:3px;
 .timelineresume .favorito:hover  { background:url(images/favorite3.png) no-repeat 1px 1px #f60; padding-left:20px;}
 .timelineresume .clasifica		 { background:url(images/clasifica3.png) no-repeat 1px 2px #f90; padding-left:20px;}
 .timelineresume .clasifica:hover { background:url(images/clasifica3.png) no-repeat 1px 2px #f60; padding-left:20px;}
+
+.timelineresume .editarYoutube	 		{ background:url(images/ico-editar3.png) no-repeat 1px 1px #f90; padding-left:20px;}
+.timelineresume .editarYoutube:hover	{ background:url(images/ico-editar3.png) no-repeat 1px 1px #f60; padding-left:20px;}
+.timelineresume .eliminarYoutube	 	{ background:url(images/ico-eliminar3.png) no-repeat 1px 1px #f90; padding-left:20px;}
+.timelineresume .eliminarYoutube:hover	{ background:url(images/ico-eliminar3.png) no-repeat 1px 1px #f60; padding-left:20px;}
+
+
+
 
 .timelineresume .nolike 			 { background:url(images/like4.png) no-repeat 1px 1px #f90; padding-left:20px;}
 .timelineresume .nolike:hover		 { background:url(images/like4.png) no-repeat 1px 1px #f60; padding-left:20px;}
@@ -1503,6 +1518,104 @@ width: 98%;	height: 22px; padding-left:36px; padding-bottom:10px;}
 #mapa-fecha		{ background: url(images/ico-fechai2.png) no-repeat; height:17px; padding-right:20px; padding-top:5px;}
 #mapa-buscar    { padding-top: 16px;}
 #mapa-buscar button{ margin-right: 14px }
+
+
+/*Vista Previa*/
+body#vistaPrevia 	{ background:url(images/portada-fondobody.png) repeat-x;}
+#vistaPrevia h1		{ display:block; background:url(images/swb-social-.png) no-repeat 30px 30px; width:480px; height:145px; margin:0px !important}
+#VistaCont			{ background: url(images/opacity95.png) ; padding:20px 5px 20px 20px; margin:0 20px; box-shadow:0 0 5px #CCC; border:solid 1px #CCC;
+border-radius:5px; 
+-moz-border-radius:5px; 
+-webkit-border-radius:5px;
+-khtml-border-radius:5px }
+#vistaPrevia h2		{ color:#535e62; font-size:18px; padding:5px 0 4px 38px; margin:0; display:inline-block; width:95%}
+
+#vistaPrevia span	  { display:none;}
+#vistaPrevia #gral	  { background:url(images/portada-fondogral.jpg) top right no-repeat;}
+#vistaPrevia #name	  { color:#F60; font-size:25px; font-weight: bold; letter-spacing:1px; padding-bottom:10px; border-bottom:solid 1px #e1e1e1; width:99%;}
+
+#vistaPrevia #favs, #vistaPrevia #movs	{ background:url(images/vistaPrevia-h2fondo.gif) repeat-x 0px 1px; float:left; margin-right:2px;}
+	/* favoritos */
+#vistaPrevia #favs	  { width:40%; }
+#vistaPrevia #favs h2 { background:url(images/ico-portada-fav.png) no-repeat 10px 6px; }
+#vistaPrevia #favs h3 { margin:10px 0 5px 10px; color:#ff8700; font-size:12px;}
+#vistaPrevia #favs img{ position:relative; top:4px; margin-right:3px; }
+#vistaPrevia #favs ul { margin:0 0 15px 12px; padding:0;}
+#vistaPrevia #favs li { list-style-type:none; margin:0 0 2px 20px;}
+#vistaPrevia #favs a  { text-decoration:none; color: #505B5F !important;}
+#vistaPrevia #favs a:hover { color:#FF6600 !important;}
+	/* mensajes */
+#vistaPrevia #movs	    { width:59%;}
+#vistaPrevia #movs-cont { left:-30px; position:relative;}
+#vistaPrevia #movs h2 { background:url(images/ico-portada-msj.png) no-repeat 10px 8px;}
+#msj-tabs		{ float:left; left:0px; position:relative; top:30px; width:31px; z-index:10;}
+#msj-tabs a		{ width:31px; height:30px; display:inline-block;margin-bottom:10px; float:left;}
+#msj-tabs span	{}
+.recibidos		{ background:url(images/tab-recibido-1.png) no-repeat;}
+.recibidos-sel	{ background:url(images/tab-recibido-2.png) no-repeat;}
+.enviados		{ background:url(images/tab-enviado-1.png) no-repeat;}
+.enviados-sel	{ background:url(images/tab-enviado-2.png) no-repeat;}
+.nuevo			{ background:url(images/tab-nuevo-1.png) no-repeat;}
+.nuevo-sel		{ background:url(images/tab-nuevo-2.png) no-repeat;}
+
+#msj-panel		   { border-left:1px solid #c8cbcc; float:left; left:-1px; min-height:140px; padding:0 0 0 4%; position:relative; width:89%;}
+p.msj-fecha		   { color:#FF8700; font-weight:bold; text-align:center; border-top:solid 1px #FF8700; margin:30px 0 0;}
+p.msj-fecha strong { position:relative; font-weight:normal; background:#FFF; padding:0 10px; top:-10px;}
+div.msj-cont	{ margin-bottom:5px; padding:5px;
+border-radius:5px;
+-moz-border-radius:5px;
+-webkit-border-radius:5px; 
+-khtml-border-radius:5px;}
+div.msj-cont a	{ display:inline-block; width:19px; height:19px; float:left; margin-right:5px;}
+div.msj-prior	{ background:#FFF7E2;}
+div.msj-cont .msj-eliminar	 	  { background:url(images/msj-eliminarport-1.png)}
+div.msj-cont .msj-eliminar:hover  { background:url(images/msj-eliminarport-2.png)}
+div.msj-cont .msj-responder	  	  { background:url(images/msj-reenviarport-1.png)}
+div.msj-cont .msj-responder:hover { background:url(images/msj-reenviarport-2.png)}
+div.msj-cont .msj-editar	  	  { background:url(images/msj-editarport-1.png)}
+div.msj-cont .msj-editar:hover 	  { background:url(images/msj-editarport-2.png)}
+div.msj-cont p em				  { color:#FF8700; font-style:normal; display:inline-block; padding-top:1px;}
+div.msj-cont p					  { color:#505B5F; margin:0 0 0 50px;}
+
+.msjnvo	*		     { color:#505B5F !important}
+.msjnvo label		 {}
+.msjnvo-msj	label	 { display:block; margin:20px 0 10px; }
+.msjnvo-msj textarea { width:100%; border:solid 1px #CCC; height:100px; padding:5px 0px 5px 5px; font-family:Arial, Helvetica, sans-serif; font-size:12px;}
+
+.msjnvo-prio	    				{ position:relative; top:4px;}
+.msjnvo-prio input[type=checkbox]	{ display:none; cursor:pointer;}
+.msjnvo-prio label					{ cursor:pointer; z-index:1; /* transition:all .5s ease;*/ background:url(images/msj-prioritario-1.png) no-repeat 5px 7px #FFF; color:#999 !important; border:solid 1px #CCC; border-top:none; padding:7px 7px 6px 25px;
+border-radius:0px 0px 3px 3px;
+-moz-border-radius:0px 0px 3px 3px;
+-webkit-border-radius:0px 0px 3px 3px; 
+-khtml-border-radius:0px 0px 3px 3px;}
+.msjnvo-prio input[type=checkbox]:checked + label { background:url(images/msj-prioritario-2.png) no-repeat 5px 7px #FFF; color:#FF8700 !important; }
+
+.msjnvo-usrs		 { margin-bottom:20px; }
+.msjnvo-usrs label   { display:block; margin:30px 0 10px;}
+.msjnvo-usrs select  { width:100%; border:solid 1px #CCC; height:135px; padding:5px;}
+.msjnvo-usrs option  { padding:5px 2px;}
+
+
+/*FIREFOX NUEVA VERSI?N
+.dijitLayoutContainer	{ position: static !important;}
+.dijitContentPane 		{ height: 100% !important; }
+.soria .dijitTabContainerTop-dijitContentPane, 
+.soria .dijitTabContainerLeft-dijitContentPane, 
+.soria .dijitTabContainerBottom-dijitContentPane, 
+.soria .dijitTabContainerRight-dijitContentPane, 
+.soria .dijitAccordionContainer-dijitContentPane { height: 100% !important; }
+.soria .dijitTabContainerTop-container 			 { height: 100% !important;}
+*/
+
+#status	{ background:#515c60 !important; border:none !important; box-shadow:0 0 3px #ccc; }
+
+
+/*GRAFICAS*/
+iframe { border:none;}
+#pieGenderParent	{}
+#pieGender			{}
+
 
 
 
