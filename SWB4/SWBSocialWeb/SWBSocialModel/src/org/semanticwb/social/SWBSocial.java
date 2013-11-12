@@ -34,15 +34,15 @@ public class SWBSocial {
                 while(it.hasNext())
                 {
                     String name=it.next();
-                    System.out.println("name en executeQueryG:"+name);
+                    //System.out.println("name en executeQueryG:"+name);
                     if(name.equalsIgnoreCase("c1"))
                     {
                         RDFNode node=qs.get(name);
-                        System.out.println("node en executeQuery:"+node);
-                        System.out.println("node en executeQuery-1:"+node.asLiteral());
+                        //System.out.println("node en executeQuery:"+node);
+                        //System.out.println("node en executeQuery-1:"+node.asLiteral());
                         String val="";
                         if(node.isLiteral())val=node.asLiteral().getLexicalForm();
-                        System.out.println("val en executeQuery:"+val);
+                        //System.out.println("val en executeQuery:"+val);
                         return val;
                     }
                 }
