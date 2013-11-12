@@ -131,13 +131,6 @@
         } catch (Exception te) {
             System.out.println("Se presento un error en User Profile!!");            
             te.printStackTrace();
-            System.out.println("\n\n\n");
-            System.out.println("TwitterBean: " +  twitterBean);
-            System.out.println("Consumer  K:" +  twitterBean.getConfiguration().getOAuthConsumerKey());
-            System.out.println("Consumer  S:" +  twitterBean.getConfiguration().getOAuthConsumerSecret());
-            System.out.println("Acess T  K:" +  twitterBean.getConfiguration().getOAuthAccessToken());
-            System.out.println("Acess T  S:" +  twitterBean.getConfiguration().getOAuthAccessTokenSecret());
-            
         }
 %>
 </div>
