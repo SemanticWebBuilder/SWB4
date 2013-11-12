@@ -130,7 +130,7 @@
                         <%}%>
                     </td>
                     <td align="center">
-                        <%=postOut.isIsPrioritary() ? SWBSocialResUtil.Util.getStringFromGenericLocale("yes", user.getLanguage()) : SWBSocialUtil.Util.getStringFromGenericLocale("not", user.getLanguage())%>
+                        <%=postOut.isIsPrioritary() ? SWBSocialResUtil.Util.getStringFromGenericLocale("yes", user.getLanguage()) : SWBSocialResUtil.Util.getStringFromGenericLocale("not", user.getLanguage())%>
                     </td> 
                 </tr>
             </table>
