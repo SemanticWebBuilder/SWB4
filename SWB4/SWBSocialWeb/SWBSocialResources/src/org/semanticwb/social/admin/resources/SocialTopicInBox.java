@@ -4,10 +4,6 @@
  */
 package org.semanticwb.social.admin.resources;
 
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -17,7 +13,6 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -38,25 +33,20 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Resource;
-import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticIterator;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.rdf.sparql.SWBQueryExecution;
 import org.semanticwb.social.Message;
 import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.Photo;
 import org.semanticwb.social.PhotoIn;
-import org.semanticwb.social.Post;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.PostOut;
 import org.semanticwb.social.SWBSocial;
@@ -70,7 +60,6 @@ import org.semanticwb.social.Stream;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.admin.resources.util.SWBSocialResUtil;
-import org.semanticwb.social.util.SWBSocialComparator;
 import org.semanticwb.social.util.SWBSocialUtil;
 import org.semanticwb.social.util.SocialLoader;
 
@@ -1606,6 +1595,8 @@ public class SocialTopicInBox extends GenericResource {
                         aListFilter=SWBSocial.executeQueryArray(sQuery, wsite); 
                     }else if(request.getParameter("orderBy")!=null)
                     {
+                        streamPostIns=Integer.parseInt(getAllPostInStream_Query(socialTopic));
+                        
                         if(request.getParameter("orderBy").equals("PostTypeUp"))    //Tipo de Mensaje Up
                         {
                             sQuery=getPostInType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
@@ -1617,11 +1608,11 @@ public class SocialTopicInBox extends GenericResource {
                         } else if (request.getParameter("orderBy").equals("networkDown")) {
                             sQuery=getPostInNet_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("streamUp")) {
-                            streamPostIns=Integer.parseInt(getPostInStream_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
+                            //streamPostIns=Integer.parseInt(getPostInStream_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
                             System.out.println("streamPostIns en streamUp:"+streamPostIns);
                             sQuery=getPostInStream_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("streamDown")) {
-                            streamPostIns=Integer.parseInt(getPostInStream_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
+                            //streamPostIns=Integer.parseInt(getPostInStream_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
                             System.out.println("streamPostIns en streamDown:"+streamPostIns);
                             sQuery=getPostInStream_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("cretedUp")) {
@@ -1647,21 +1638,21 @@ public class SocialTopicInBox extends GenericResource {
                         } else if (request.getParameter("orderBy").equals("userDown")) {
                             sQuery=getPostInUserName_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("followersUp")) {
-                            
+                            sQuery=getAllPostInbyFollowers_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("followersDown")) {
-                            
+                            sQuery=getAllPostInbyFollowers_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("repliesUp")) {
-                            //setso = SWBSocialComparator.sortByReplies(itposts, true);
+                            sQuery=getAllPostInbyShared_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("repliesDown")) {
-                            //setso = SWBSocialComparator.sortByReplies(itposts, false);
+                            sQuery=getAllPostInbyShared_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("friendsUp")) {
-                            //setso = SWBSocialComparator.sortByFriends(itposts, true);
+                            sQuery=getAllPostInbyFriends_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("friendsDown")) {
-                            //setso = SWBSocialComparator.sortByFriends(itposts, false);
+                            sQuery=getAllPostInbyFriends_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("kloutUp")) {
-                            //setso = SWBSocialComparator.sortByKlout(itposts, true);
+                            sQuery=getAllPostInbyKlout_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("kloutDown")) {
-                            //setso = SWBSocialComparator.sortByKlout(itposts, false);
+                            sQuery=getAllPostInbyKlout_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("placeUp")) {
                             streamPostIns=Integer.parseInt(getPostInPlace_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
                             sQuery=getPostInPlace_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
@@ -1731,6 +1722,25 @@ public class SocialTopicInBox extends GenericResource {
     
      //////////////SPARQL FILTERS//////////////////////
     
+     /*
+     * Metodo que obtiene todos los PostIns
+     */
+    private String getAllPostInStream_Query(SocialTopic socialTopic)
+    {
+        String query=
+           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" + "\n";
+           query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+           query+=
+           "where {\n" +
+           "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
+           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  }\n";
+            WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+            query=SWBSocial.executeQuery(query, wsite);
+        return query;
+    }
+    
     /*
      * gets all PostIn in a Stream
      */
@@ -1755,12 +1765,15 @@ public class SocialTopicInBox extends GenericResource {
            "  ?postUri social:pi_created ?postInCreated. \n" +
            "  }\n";
 
-           query+="ORDER BY desc(?postInCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
+           if(!isCount)
            {
-             query+="LIMIT "+limit;   
+            query+="ORDER BY desc(?postInCreated) \n";
+
+            query+="OFFSET "+offset +"\n";
+            if(limit>0)
+            {
+              query+="LIMIT "+limit;   
+            }
            }
            if(isCount)
            {
@@ -1791,12 +1804,15 @@ public class SocialTopicInBox extends GenericResource {
            "  FILTER regex(?msgText, \""+word+"\", \"i\"). " + 
            "  }\n";
 
-           query+="ORDER BY desc(?postInCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
+           if(!isCount)
            {
-             query+="LIMIT "+limit;   
+            query+="ORDER BY desc(?postInCreated) \n";
+
+            query+="OFFSET "+offset +"\n";
+            if(limit>0)
+            {
+              query+="LIMIT "+limit;   
+            }
            }
            if(isCount)
            {
@@ -1830,12 +1846,15 @@ public class SocialTopicInBox extends GenericResource {
            "  ?postUri social:pi_created ?postInCreated." + "\n" +
            "  }\n";
 
-           query+="ORDER BY desc(?postInCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
+           if(!isCount)
            {
-             query+="LIMIT "+limit;   
+                query+="ORDER BY desc(?postInCreated) \n";
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -1844,6 +1863,214 @@ public class SocialTopicInBox extends GenericResource {
            }
         return query;
     }
+    
+    
+     /*
+     * gets all PostIn by specific SocialNetUser
+     */
+    private String getAllPostInbyShared_Query(String orderType, long offset, long limit, boolean isCount, SocialTopic socialTopic)
+    {
+        String query=
+           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+           "\n";
+           if(isCount)
+           {
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+           }else query+="select *\n";
+           
+           query+=
+           "where {\n" +
+           "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
+           "  ?postUri social:pi_created ?postInCreated." + "\n" +
+           "   OPTIONAL { " + "\n" +
+           "        ?postUri social:postShared ?postShared. " + "\n" +
+           "   } "  + "\n" +
+           "  }\n";
+
+           if(!isCount)
+           {
+            if(orderType==null || orderType.equalsIgnoreCase("up"))
+            {
+                query+="ORDER BY asc(?postShared) ";
+            }else
+            {
+                query+="ORDER BY desc(?postShared) ";
+            }
+            query+="desc(?postInCreated)";
+           
+            query+="OFFSET "+offset +"\n";
+            if(limit>0)
+            {
+              query+="LIMIT "+limit;   
+            }
+           }
+           if(isCount)
+           {
+               WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+               query=SWBSocial.executeQuery(query, wsite);
+           }
+        return query;
+    }
+    
+    
+    
+     /*
+     * gets all PostIn by specific SocialNetUser
+     */
+    private String getAllPostInbyFollowers_Query(String orderType, long offset, long limit, boolean isCount, SocialTopic socialTopic)
+    {
+        String query=
+           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+           "\n";
+           if(isCount)
+           {
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+           }else query+="select *\n";
+           
+           query+=
+           "where {\n" +
+           "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
+           "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n" + 
+           "  ?postUri social:pi_created ?postInCreated." + "\n" +
+           "   OPTIONAL { " + "\n" +
+           "        ?postInSocialNetUsr social:followers ?userFollowers. " + "\n" +
+           "   } "  + "\n" +
+           "  }\n";
+
+           if(!isCount)
+           {
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?userFollowers) ";
+                }else
+                {
+                    query+="ORDER BY desc(?userFollowers) ";
+                }
+                query+="desc(?postInCreated)";
+
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
+           }
+           if(isCount)
+           {
+               WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+               query=SWBSocial.executeQuery(query, wsite);
+           }
+        return query;
+    }            
+    
+    
+    /*
+     * gets all PostIn by specific SocialNetUser
+     */
+    private String getAllPostInbyFriends_Query(String orderType, long offset, long limit, boolean isCount, SocialTopic socialTopic)
+    {
+        String query=
+           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+           "\n";
+           if(isCount)
+           {
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+           }else query+="select *\n";
+           
+           query+=
+           "where {\n" +
+           "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
+           "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n" + 
+           "  ?postUri social:pi_created ?postInCreated." + "\n" +
+           "   OPTIONAL { " + "\n" +
+           "        ?postInSocialNetUsr social:friends ?userFriends. " + "\n" +
+           "   } "  + "\n" +
+           "  }\n";
+
+           if(!isCount)
+           {
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?userFriends) ";
+                }else
+                {
+                    query+="ORDER BY desc(?userFriends) ";
+                }
+                //query+="desc(?postInCreated)";
+
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
+           }
+           if(isCount)
+           {
+               WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+               query=SWBSocial.executeQuery(query, wsite);
+           }
+        return query;
+    }    
+    
+    
+    /*
+     * gets all PostIn by specific SocialNetUser
+     */
+    private String getAllPostInbyKlout_Query(String orderType, long offset, long limit, boolean isCount, SocialTopic socialTopic)
+    {
+        String query=
+           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+           "\n";
+           if(isCount)
+           {
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+           }else query+="select *\n";
+           
+           query+=
+           "where {\n" +
+           "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
+           "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n" + 
+           "  ?postUri social:pi_created ?postInCreated." + "\n" +
+           "   OPTIONAL { " + "\n" +
+           "        ?postInSocialNetUsr social:snu_klout ?userKlout. " + "\n" +
+           "   } "  + "\n" +
+           "  }\n";
+
+           if(!isCount)
+           {
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?userKlout) ";
+                }else
+                {
+                    query+="ORDER BY desc(?userKlout) ";
+                }
+                //query+="desc(?postInCreated)";
+
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
+           }
+                
+           if(isCount)
+           {
+               WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+               query=SWBSocial.executeQuery(query, wsite);
+           }
+        return query;
+    }    
     
     
     private String getPostInType_Query(String orderType, long offset, long limit, boolean isCount, SocialTopic socialTopic)
@@ -1869,19 +2096,22 @@ public class SocialTopicInBox extends GenericResource {
            "  ?postUri social:pi_created ?postInCreated. \n" +
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?postInType) ";
-           }else
-           {
-               query+="ORDER BY desc(?postInType) ";
-           }
-           query+="desc(?postInCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?postInType) ";
+                }else
+                {
+                    query+="ORDER BY desc(?postInType) ";
+                }
+                query+="desc(?postInCreated) \n";
+                
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -1915,19 +2145,22 @@ public class SocialTopicInBox extends GenericResource {
            "  ?postUri social:pi_created ?postInCreated. \n" +
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?postInSocialNet) ";
-           }else
-           {
-               query+="ORDER BY desc(?postInSocialNet) ";
-           }
-           query+="desc(?postInCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?postInSocialNet) ";
+                }else
+                {
+                    query+="ORDER BY desc(?postInSocialNet) ";
+                }
+                query+="desc(?postInCreated) \n";
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -1963,19 +2196,22 @@ public class SocialTopicInBox extends GenericResource {
            "         }" +                           
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?piStream) ";
-           }else
-           {
-               query+="ORDER BY desc(?piStream) ";
-           }
-           query+="desc(?postInCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?piStream) ";
+                }else
+                {
+                    query+="ORDER BY desc(?piStream) ";
+                }
+                query+="desc(?postInCreated) \n";
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -2008,18 +2244,21 @@ public class SocialTopicInBox extends GenericResource {
            "  ?postUri social:pi_created ?postInCreated." + "\n" + 
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?postInCreated) \n";
-           }else
-           {
-               query+="ORDER BY desc(?postInCreated) \n";
-           }
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?postInCreated) \n";
+                }else
+                {
+                    query+="ORDER BY desc(?postInCreated) \n";
+                }
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -2052,19 +2291,22 @@ public class SocialTopicInBox extends GenericResource {
            "  ?postUri social:pi_created ?postInCreated." + "\n" + 
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?postSentimentalType) ";
-           }else
-           {
-               query+="ORDER BY desc(?postSentimentalType) ";
-           }
-           query+="desc(?postInCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?postSentimentalType) ";
+                }else
+                {
+                    query+="ORDER BY desc(?postSentimentalType) ";
+                }
+                query+="desc(?postInCreated) \n";
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -2097,19 +2339,22 @@ public class SocialTopicInBox extends GenericResource {
            "  ?postUri social:pi_created ?postInCreated." + "\n" + 
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?postIntensityType) ";
-           }else
-           {
-               query+="ORDER BY desc(?postIntensityType) ";
-           }
-           query+="desc(?postInCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?postIntensityType) ";
+                }else
+                {
+                    query+="ORDER BY desc(?postIntensityType) ";
+                }
+                query+="desc(?postInCreated) \n";
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -2144,19 +2389,22 @@ public class SocialTopicInBox extends GenericResource {
            "         }" + 
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?feelingEmot) ";
-           }else
-           {
-               query+="ORDER BY desc(?feelingEmot) ";
-           }
-           query+="desc(?postInCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?feelingEmot) ";
+                }else
+                {
+                    query+="ORDER BY desc(?feelingEmot) ";
+                }
+                query+="desc(?postInCreated) \n";
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -2190,19 +2438,22 @@ public class SocialTopicInBox extends GenericResource {
            "  ?postUri social:pi_created ?postInCreated. \n" +
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?userName) ";
-           }else
-           {
-               query+="ORDER BY desc(?userName) ";
-           }
-           query+="desc(?postInCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?userName) ";
+                }else
+                {
+                    query+="ORDER BY desc(?userName) ";
+                }
+                query+="desc(?postInCreated) \n";
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -2237,19 +2488,22 @@ public class SocialTopicInBox extends GenericResource {
            "         }" +         
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?postInPlace) ";
-           }else
-           {
-               query+="ORDER BY desc(?postInPlace) ";
-           }
-           query+="desc(?postInCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?postInPlace) ";
+                }else
+                {
+                    query+="ORDER BY desc(?postInPlace) ";
+                }
+                query+="desc(?postInCreated) \n";
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -2283,19 +2537,22 @@ public class SocialTopicInBox extends GenericResource {
            "  ?postUri social:pi_created ?postInCreated. \n" +
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?isPriority) ";
-           }else
-           {
-               query+="ORDER BY desc(?isPriority) ";
-           }
-           query+="desc(?postInCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?isPriority) ";
+                }else
+                {
+                    query+="ORDER BY desc(?isPriority) ";
+                }
+                query+="desc(?postInCreated) \n";
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {

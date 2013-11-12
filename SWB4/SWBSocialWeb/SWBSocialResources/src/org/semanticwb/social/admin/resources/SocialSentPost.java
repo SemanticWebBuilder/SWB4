@@ -2230,28 +2230,28 @@ public class SocialSentPost extends GenericResource {
      * Method which controls the filters allowed in this class
      */
     private HashMap filtros(String swbSocialUser, WebSite wsite, String searchWord, HttpServletRequest request, SocialTopic socialTopic, int nPage) {
-        long streamPostIns=0L;
+        long socialTopicPostOut=0L;
         String sQuery=null;
         ArrayList<PostOut> aListFilter = new ArrayList();
         HashMap hampResult = new HashMap();
         Iterator<PostOut> itposts = null;
         if (swbSocialUser != null) {
             User user = User.ClassMgr.getUser(swbSocialUser, SWBContext.getAdminWebSite());
-            streamPostIns=Integer.parseInt(getAllPostOutbyAdminUser_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic, user));
+            socialTopicPostOut=Integer.parseInt(getAllPostOutbyAdminUser_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic, user));
             sQuery=getAllPostOutbyAdminUser_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic, user);
             aListFilter=SWBSocial.executeQueryArrayPostOuts(sQuery, wsite);  
-            hampResult.put("countResult", Long.valueOf(streamPostIns));
+            hampResult.put("countResult", Long.valueOf(socialTopicPostOut));
         } else {
-                long socialTopicPostOut=0L;
                 if (nPage != 0) 
                 {
                     System.out.println("Toma solo la página..:"+nPage);
                     if (searchWord != null && searchWord.trim().length()>0) {
-                        streamPostIns=Integer.parseInt(getPostOutTopicbyWord_Query(0, 0, true, socialTopic, searchWord.trim()));
+                        socialTopicPostOut=Integer.parseInt(getPostOutTopicbyWord_Query(0, 0, true, socialTopic, searchWord.trim()));
                         sQuery=getPostOutTopicbyWord_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic, searchWord.trim()); 
                         aListFilter=SWBSocial.executeQueryArray(sQuery, wsite); 
                     }else if(request.getParameter("orderBy")!=null)
                     {
+                        socialTopicPostOut=Integer.parseInt(getAllPostOutSocialTopic_Query(socialTopic));
                         if(request.getParameter("orderBy").equals("PostTypeUp"))    //Tipo de Mensaje Up
                         {
                             sQuery=getPostOutType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
@@ -2259,11 +2259,11 @@ public class SocialSentPost extends GenericResource {
                         {
                             sQuery=getPostOutType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("origenUp")) {
-                            socialTopicPostOut=Integer.parseInt(getPostOutSource_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
+                            //socialTopicPostOut=Integer.parseInt(getPostOutSource_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
                             System.out.println("socialTopicPostOut en origenUp:"+socialTopicPostOut);
                             sQuery=getPostOutSource_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("origenDown")) {
-                            socialTopicPostOut=Integer.parseInt(getPostOutSource_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
+                            //socialTopicPostOut=Integer.parseInt(getPostOutSource_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
                             System.out.println("socialTopicPostOut en  origenDown:"+socialTopicPostOut);
                             sQuery=getPostOutSource_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("cretedUp")) {
@@ -2279,10 +2279,10 @@ public class SocialSentPost extends GenericResource {
                         } else if (request.getParameter("orderBy").equals("intensityDown")) {
                             sQuery=getPostOutIntensityType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("updatedUp")) {
-                            socialTopicPostOut=Integer.parseInt(getPostOutUpdated_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
+                            //socialTopicPostOut=Integer.parseInt(getPostOutUpdated_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
                             sQuery=getPostOutUpdated_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("updatedDown")) {
-                            socialTopicPostOut=Integer.parseInt(getPostOutUpdated_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
+                            //socialTopicPostOut=Integer.parseInt(getPostOutUpdated_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
                             sQuery=getPostOutUpdated_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("userUp")) {
                             sQuery=getPostOutUserName_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
@@ -2352,6 +2352,26 @@ public class SocialSentPost extends GenericResource {
     //////////////SPARQL FILTERS//////////////////////
     
     
+     /*
+     * Metodo que obtiene todos los PostIns
+     */
+    private String getAllPostOutSocialTopic_Query(SocialTopic socialTopic)
+    {
+        String query=
+           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" + "\n";
+           query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+           query+=
+           "where {\n" +
+           "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
+           "  ?postUri social:pout_created ?postOutCreated." + "\n" + 
+           "  }\n";
+            WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+            query=SWBSocial.executeQuery(query, wsite);
+        return query;
+    }
+    
+    
     private String getAllPostOutSocialTopic_Query(long offset, long limit, boolean isCount, SocialTopic socialTopic)
     {
         System.out.println("getPostInType_SparqlQuery/offset:"+offset);
@@ -2372,12 +2392,16 @@ public class SocialSentPost extends GenericResource {
            "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
            "  ?postUri social:pout_created ?postOutCreated." + "\n" + 
            "  }\n";
-           query+="ORDER BY desc(?postOutCreated) ";
            
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
+           if(!isCount)
            {
-             query+="LIMIT "+limit;   
+                query+="ORDER BY desc(?postOutCreated) ";
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -2408,12 +2432,15 @@ public class SocialSentPost extends GenericResource {
            "  FILTER regex(?msgText, \""+word+"\", \"i\"). " + 
            "  }\n";
 
-           query+="ORDER BY desc(?postOutCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
+           if(!isCount)
            {
-             query+="LIMIT "+limit;   
+                query+="ORDER BY desc(?postOutCreated) \n";
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -2447,12 +2474,15 @@ public class SocialSentPost extends GenericResource {
            "  ?postUri social:pout_created ?postOutCreated." + "\n" +
            "  }\n";
 
-           query+="ORDER BY desc(?postOutCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
+           if(!isCount)
            {
-             query+="LIMIT "+limit;   
+                query+="ORDER BY desc(?postOutCreated) \n";
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -2485,19 +2515,22 @@ public class SocialSentPost extends GenericResource {
            "  ?postUri social:pout_created ?postOutCreated." + "\n" + 
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?posOutType) ";
-           }else
-           {
-               query+="ORDER BY desc(?posOutType) ";
-           }
-           query+="desc(?postOutCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?posOutType) ";
+                }else
+                {
+                    query+="ORDER BY desc(?posOutType) ";
+                }
+                query+="desc(?postOutCreated) \n";
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -2533,19 +2566,22 @@ public class SocialSentPost extends GenericResource {
            "         }" +         
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?posOutSource) ";
-           }else
-           {
-               query+="ORDER BY desc(?posOutSource) ";
-           }
-           query+="desc(?postOutCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?posOutSource) ";
+                }else
+                {
+                    query+="ORDER BY desc(?posOutSource) ";
+                }
+                query+="desc(?postOutCreated) \n";
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -2578,17 +2614,20 @@ public class SocialSentPost extends GenericResource {
            "  ?postUri social:pout_created ?postOutCreated." + "\n" + 
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?postOutCreated) \n";
-           }else
-           {
-               query+="ORDER BY desc(?postOutCreated) \n";
-           }
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?postOutCreated) \n";
+                }else
+                {
+                    query+="ORDER BY desc(?postOutCreated) \n";
+                }
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -2622,17 +2661,20 @@ public class SocialSentPost extends GenericResource {
            "  ?postUri swb:updated ?postOutUpdated." + "\n" + 
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?postOutUpdated) \n";
-           }else
-           {
-               query+="ORDER BY desc(?postOutUpdated) \n";
-           }
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?postOutUpdated) \n";
+                }else
+                {
+                    query+="ORDER BY desc(?postOutUpdated) \n";
+                }
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -2667,19 +2709,22 @@ public class SocialSentPost extends GenericResource {
            "         }" + 
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?postSentimentalType) ";
-           }else
-           {
-               query+="ORDER BY desc(?postSentimentalType) ";
-           }
-           query+="desc(?postOutCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?postSentimentalType) ";
+                }else
+                {
+                    query+="ORDER BY desc(?postSentimentalType) ";
+                }
+                query+="desc(?postOutCreated) \n";
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -2714,19 +2759,22 @@ public class SocialSentPost extends GenericResource {
            "         }" +    
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?postIntensityType) ";
-           }else
-           {
-               query+="ORDER BY desc(?postIntensityType) ";
-           }
-           query+="desc(?postOutCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?postIntensityType) ";
+                }else
+                {
+                    query+="ORDER BY desc(?postIntensityType) ";
+                }
+                query+="desc(?postOutCreated) \n";
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -2746,6 +2794,7 @@ public class SocialSentPost extends GenericResource {
         String query=
            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
            "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+           "PREFIX swb: <http://www.semanticwebbuilder.org/swb4/ontology#>" +      
            "\n";
            if(isCount)
            { 
@@ -2761,19 +2810,22 @@ public class SocialSentPost extends GenericResource {
            "  ?postUri social:pout_created ?postOutCreated." + "\n" + 
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?postOutCreator) ";
-           }else
-           {
-               query+="ORDER BY desc(?postOutCreator) ";
-           }
-           query+="desc(?postOutCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?postOutCreator) ";
+                }else
+                {
+                    query+="ORDER BY desc(?postOutCreator) ";
+                }
+                query+="desc(?postOutCreated) \n";
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -2809,19 +2861,22 @@ public class SocialSentPost extends GenericResource {
            "         }" +            
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?postOutStatus) ";
-           }else
-           {
-               query+="ORDER BY desc(?postOutStatus) ";
-           }
-           query+="desc(?postOutCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?postOutStatus) ";
+                }else
+                {
+                    query+="ORDER BY desc(?postOutStatus) ";
+                }
+                query+="desc(?postOutCreated) \n";
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
