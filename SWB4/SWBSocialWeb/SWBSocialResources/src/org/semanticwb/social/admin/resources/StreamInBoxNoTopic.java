@@ -1131,7 +1131,7 @@ public class StreamInBoxNoTopic extends GenericResource {
      * Method which controls the filters allowed in this class
      */
     private HashMap filtros(String swbSocialUser, WebSite wsite, String searchWord, HttpServletRequest request, Stream stream, int nPage) {
-        System.out.println("Stream:"+stream.getURI());
+        System.out.println("Stream:"+stream.getURI()+",orderByJ:"+request.getParameter("orderBy")+",page:"+nPage);
         long streamPostIns=0L;
         String sQuery=null;
         ArrayList<PostIn> aListFilter = new ArrayList();
@@ -1154,13 +1154,19 @@ public class StreamInBoxNoTopic extends GenericResource {
                     {
                         if(request.getParameter("orderBy").equals("PostTypeUp"))    //Tipo de Mensaje Up
                         {
+                            streamPostIns=Integer.parseInt(getPostInType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            System.out.println("HOOOOLAAAASSSSSPostTypeUp-jeje/streamPostIns*******************:"+streamPostIns);
                             sQuery=getPostInType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
                         }else if(request.getParameter("orderBy").equals("PostTypeDown"))    //Tipo de Mensaje Down
                         {
+                            streamPostIns=Integer.parseInt(getPostInType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            System.out.println("HOOOOLAAAASSSSSPostTypeDown-jeje/streamPostIns*******************:"+streamPostIns);
                             sQuery=getPostInType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
                         }else if (request.getParameter("orderBy").equals("networkUp")) {
+                            streamPostIns=Integer.parseInt(getPostInNet_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
                             sQuery=getPostInNet_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
                         } else if (request.getParameter("orderBy").equals("networkDown")) {
+                            streamPostIns=Integer.parseInt(getPostInNet_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
                             sQuery=getPostInNet_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
                         } else if (request.getParameter("orderBy").equals("topicUp")) {
                             streamPostIns=Integer.parseInt(getPostInTopic_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
@@ -1191,21 +1197,31 @@ public class StreamInBoxNoTopic extends GenericResource {
                         } else if (request.getParameter("orderBy").equals("userDown")) {
                             sQuery=getPostInUserName_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
                         } else if (request.getParameter("orderBy").equals("followersUp")) {
-                            
+                            streamPostIns=Integer.parseInt(getAllPostInbyFollowers_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            sQuery=getAllPostInbyFollowers_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                            System.out.println("NoTopicFollowersUp/streamPostIns:"+streamPostIns+",Query:"+sQuery);
                         } else if (request.getParameter("orderBy").equals("followersDown")) {
-                            
+                            streamPostIns=Integer.parseInt(getAllPostInbyFollowers_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            sQuery=getAllPostInbyFollowers_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                            System.out.println("NoTopicFollowersDown/streamPostIns:"+streamPostIns+",Query:"+sQuery);
                         } else if (request.getParameter("orderBy").equals("repliesUp")) {
-                            //setso = SWBSocialComparator.sortByReplies(itposts, true);
+                            streamPostIns=Integer.parseInt(getAllPostInbyShared_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            sQuery=getAllPostInbyShared_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
                         } else if (request.getParameter("orderBy").equals("repliesDown")) {
-                            //setso = SWBSocialComparator.sortByReplies(itposts, false);
+                            streamPostIns=Integer.parseInt(getAllPostInbyShared_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            sQuery=getAllPostInbyShared_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
                         } else if (request.getParameter("orderBy").equals("friendsUp")) {
-                            //setso = SWBSocialComparator.sortByFriends(itposts, true);
+                            streamPostIns=Integer.parseInt(getAllPostInbyFriends_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            sQuery=getAllPostInbyFriends_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
                         } else if (request.getParameter("orderBy").equals("friendsDown")) {
-                            //setso = SWBSocialComparator.sortByFriends(itposts, false);
+                            streamPostIns=Integer.parseInt(getAllPostInbyFriends_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                             sQuery=getAllPostInbyFriends_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
                         } else if (request.getParameter("orderBy").equals("kloutUp")) {
-                            //setso = SWBSocialComparator.sortByKlout(itposts, true);
+                            streamPostIns=Integer.parseInt(getAllPostInbyKlout_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            sQuery=getAllPostInbyKlout_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
                         } else if (request.getParameter("orderBy").equals("kloutDown")) {
-                            //setso = SWBSocialComparator.sortByKlout(itposts, false);
+                            streamPostIns=Integer.parseInt(getAllPostInbyKlout_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            sQuery=getAllPostInbyKlout_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
                         } else if (request.getParameter("orderBy").equals("placeUp")) {
                             streamPostIns=Integer.parseInt(getPostInPlace_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
                             sQuery=getPostInPlace_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
@@ -1224,7 +1240,7 @@ public class StreamInBoxNoTopic extends GenericResource {
                         {
                             //streamPostIns=Integer.parseInt(getPostInPlace_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
                             aListFilter=SWBSocial.executeQueryArray(sQuery, wsite);
-                            streamPostIns=aListFilter.size();
+                            System.out.println("Al ejecutar Query size:"+aListFilter.size());
                         }
                     }else{  //No seleccionaron ningún ordenamiento
                         streamPostIns=Integer.parseInt(getPostInWithOutTopic_Query(0, 0, true, stream));
@@ -1265,6 +1281,30 @@ public class StreamInBoxNoTopic extends GenericResource {
 
     //////////////SPARQL FILTERS//////////////////////
     
+    /*
+     * Metodo que obtiene todos los PostIns sin Tema.
+     */
+    private String getAllPostInStream_Query(Stream stream)
+    {
+        String query=
+           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+           "\n";
+            //query+="select count(*)\n";    
+            query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+           query+=
+           "where {\n" +
+           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
+           "  OPTIONAL {" +
+                "?postUri social:socialTopic ?postInTopic. \n" +
+           "    } \n" +
+           "  FILTER(!bound(?postInTopic)) \n" +        
+           "  }\n";
+            WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+            query=SWBSocial.executeQuery(query, wsite);
+        return query;
+    }    
+    
     private String getPostInWithOutTopic_Query(long offset, long limit, boolean isCount, Stream stream)
     {
         System.out.println("getPostInType_SparqlQuery/offset:"+offset);
@@ -1289,12 +1329,15 @@ public class StreamInBoxNoTopic extends GenericResource {
            "    } \n" +
            "  FILTER(!bound(?postInTopic)) \n" +
            "  }\n";
-           query+="ORDER BY desc(?postInCreated) \n ";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
+           if(!isCount)
            {
-             query+="LIMIT "+limit;   
+            query+="ORDER BY desc(?postInCreated) \n ";
+
+            query+="OFFSET "+offset +"\n";
+            if(limit>0)
+            {
+              query+="LIMIT "+limit;   
+            }
            }
            if(isCount)
            {
@@ -1326,12 +1369,15 @@ public class StreamInBoxNoTopic extends GenericResource {
            "  FILTER regex(?msgText, \""+word+"\", \"i\"). " + 
            "  }\n";
 
-           query+="ORDER BY desc(?postInCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
+           if(!isCount)
            {
-             query+="LIMIT "+limit;   
+            query+="ORDER BY desc(?postInCreated) \n";
+
+            query+="OFFSET "+offset +"\n";
+            if(limit>0)
+            {
+              query+="LIMIT "+limit;   
+            }
            }
            if(isCount)
            {
@@ -1341,6 +1387,217 @@ public class StreamInBoxNoTopic extends GenericResource {
            }
         return query;
     }
+    
+    
+    
+    /*
+     * gets all PostIn by specific SocialNetUser
+     */
+    private String getAllPostInbyShared_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
+    {
+        String query=
+           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+           "\n";
+           if(isCount)
+           {
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+           }else query+="select *\n";
+           
+           query+=
+           "where {\n" +
+           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
+           "  ?postUri social:postShared ?postShared." + "\n" +
+           "   OPTIONAL { " + "\n" +
+           "        ?postUri social:socialTopic ?postInTopic. \n" +
+           "   } "  + "\n" +
+           "  FILTER(!bound(?postInTopic)) \n" +
+           "  }\n";
+
+           if(!isCount)
+           {
+            if(orderType==null || orderType.equalsIgnoreCase("up"))
+            {
+                query+="ORDER BY asc(?postShared) ";
+            }else
+            {
+                query+="ORDER BY desc(?postShared) ";
+            }
+            query+="desc(?postInCreated)";
+            
+            query+="OFFSET "+offset +"\n";
+            if(limit>0)
+            {
+              query+="LIMIT "+limit;   
+            }
+           }
+           
+           if(isCount)
+           {
+               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+               query=SWBSocial.executeQuery(query, wsite);
+           }
+        return query;
+    }
+    
+    
+    
+     /*
+     * gets all PostIn by specific SocialNetUser
+     */
+    private String getAllPostInbyFollowers_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
+    {
+        String query=
+           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+           "\n";
+           if(isCount)
+           {
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+           }else query+="select *\n";
+           
+           query+=
+           "where {\n" +
+           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
+           "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n" + 
+           "  ?postInSocialNetUsr social:followers ?userFollowers. " + "\n" +
+           "   OPTIONAL { " + "\n" +
+           "        ?postUri social:socialTopic ?postInTopic. \n" +
+           "   } "  + "\n" +
+           "  FILTER(!bound(?postInTopic)) \n" +
+           "  }\n";
+
+           if(!isCount)
+           {
+               
+            if(orderType==null || orderType.equalsIgnoreCase("up"))
+            {
+                query+="ORDER BY asc(?userFollowers) ";
+            }else
+            {
+                query+="ORDER BY desc(?userFollowers) ";
+            }
+            query+="desc(?postInCreated)";   
+               
+            query+="OFFSET "+offset +"\n";
+            if(limit>0)
+            {
+              query+="LIMIT "+limit;   
+            }
+           }
+           if(isCount)
+           {
+               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+               query=SWBSocial.executeQuery(query, wsite);
+           }
+        return query;
+    }            
+    
+    
+    /*
+     * gets all PostIn by specific SocialNetUser
+     */
+    private String getAllPostInbyFriends_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
+    {
+        String query=
+           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+           "\n";
+           if(isCount)
+           {
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+           }else query+="select *\n";
+           
+           query+=
+           "where {\n" +
+           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
+           "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n" +         
+           "  ?postInSocialNetUsr social:friends ?userFriends. " + "\n" +
+           "   OPTIONAL { " + "\n" +
+           "        ?postUri social:socialTopic ?postInTopic. \n" +
+           "   } "  + "\n" +
+           "  FILTER(!bound(?postInTopic)) \n" +
+           "  }\n";
+
+           if(!isCount)
+           {
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?userFriends) ";
+                }else
+                {
+                    query+="ORDER BY desc(?userFriends) ";
+                }
+                //query+="desc(?postInCreated)";
+               
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
+           }
+           if(isCount)
+           {
+               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+               query=SWBSocial.executeQuery(query, wsite);
+           }
+        return query;
+    }    
+    
+    
+    /*
+     * gets all PostIn by specific SocialNetUser
+     */
+    private String getAllPostInbyKlout_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
+    {
+        String query=
+           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+           "\n";
+           if(isCount)
+           {
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+           }else query+="select *\n";
+           
+           query+=
+           "where {\n" +
+           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
+           "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n" +         
+           "  ?postInSocialNetUsr social:snu_klout ?userKlout. " + "\n" +
+           "   OPTIONAL { " + "\n" +
+           "        ?postUri social:socialTopic ?postInTopic. \n" +
+           "   } "  + "\n" +
+           "  FILTER(!bound(?postInTopic)) \n" +
+           "  }\n";
+           
+           if(!isCount)
+           {
+               if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?userKlout) ";
+                }else
+                {
+                    query+="ORDER BY desc(?userKlout) ";
+                }
+                //query+="desc(?postInCreated)";
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
+           }
+           if(isCount)
+           {
+               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+               query=SWBSocial.executeQuery(query, wsite);
+           }
+        return query;
+    }  
+    
     
     
     /*
@@ -1354,7 +1611,8 @@ public class StreamInBoxNoTopic extends GenericResource {
            "\n";
            if(isCount)
            {
-               query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+               //query+="select count(*)\n";
            }else query+="select *\n";
            
            query+=
@@ -1364,12 +1622,14 @@ public class StreamInBoxNoTopic extends GenericResource {
            "  ?postUri social:pi_created ?postInCreated." + "\n" +
            "  }\n";
 
-           query+="ORDER BY desc(?postInCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
+           if(!isCount)
            {
-             query+="LIMIT "+limit;   
+            query+="ORDER BY desc(?postInCreated) \n";
+            query+="OFFSET "+offset +"\n";
+            if(limit>0)
+            {
+              query+="LIMIT "+limit;   
+            }
            }
            if(isCount)
            {
@@ -1392,7 +1652,8 @@ public class StreamInBoxNoTopic extends GenericResource {
            "\n";
            if(isCount)
            {
-               query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+               //query+="select count(*)\n";
            }else query+="select *\n";
            
            query+=
@@ -1406,20 +1667,21 @@ public class StreamInBoxNoTopic extends GenericResource {
            "  FILTER(!bound(?postInTopic)) \n" +
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?postInType) ";
-           }else
-           {
-               query+="ORDER BY desc(?postInType) ";
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?postInCreated) \n";
+                }else{
+                    query+="ORDER BY desc(?postInCreated) \n";
+                }
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
-           query+="desc(?postInCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
-           }
+           System.out.println("Query INBOXTopics:"+query);
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
@@ -1441,7 +1703,8 @@ public class StreamInBoxNoTopic extends GenericResource {
            "\n";
            if(isCount)
            {
-               query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+               //query+="select count(*)\n";
            }else query+="select *\n";
            
            query+=
@@ -1455,19 +1718,21 @@ public class StreamInBoxNoTopic extends GenericResource {
            "  FILTER(!bound(?postInTopic)) \n" +        
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?postInSocialNet) ";
-           }else
-           {
-               query+="ORDER BY desc(?postInSocialNet) ";
-           }
-           query+="desc(?postInCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?postInSocialNet) ";
+                }else
+                {
+                    query+="ORDER BY desc(?postInSocialNet) ";
+                }
+                query+="desc(?postInCreated) \n";
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -1485,7 +1750,8 @@ public class StreamInBoxNoTopic extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+               //query+="select count(*)\n";
            }else query+="select *\n";
            
            query+=
@@ -1498,20 +1764,22 @@ public class StreamInBoxNoTopic extends GenericResource {
            "    } \n" +
            "  FILTER(!bound(?postInTopic)) \n" +        
            "  }\n";
-
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?socialTopic) ";
-           }else
-           {
-               query+="ORDER BY desc(?socialTopic) ";
-           }
-           query+="desc(?postInCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?socialTopic) ";
+                }else
+                {
+                    query+="ORDER BY desc(?socialTopic) ";
+                }
+                query+="desc(?postInCreated) \n";
+                
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -1534,7 +1802,8 @@ public class StreamInBoxNoTopic extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+               //query+="select count(*)\n";
            }else query+="select *\n";
            
            query+=
@@ -1547,17 +1816,21 @@ public class StreamInBoxNoTopic extends GenericResource {
            "  FILTER(!bound(?postInTopic)) \n" +        
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?postInCreated) \n";
-           }else
-           {
-               query+="ORDER BY desc(?postInCreated) \n";
-           }
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?postInCreated) \n";
+                }else
+                {
+                    query+="ORDER BY desc(?postInCreated) \n";
+                }
+               
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -1580,6 +1853,7 @@ public class StreamInBoxNoTopic extends GenericResource {
            "\n";
            if(isCount)
            { 
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
                query+="select count(*)\n";
            }else query+="select *\n";
            
@@ -1594,19 +1868,22 @@ public class StreamInBoxNoTopic extends GenericResource {
            "  FILTER(!bound(?postInTopic)) \n" +        
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?postSentimentalType) ";
-           }else
-           {
-               query+="ORDER BY desc(?postSentimentalType) ";
-           }
-           query+="desc(?postInCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?postSentimentalType) ";
+                }else
+                {
+                    query+="ORDER BY desc(?postSentimentalType) ";
+                }
+                query+="desc(?postInCreated) \n";
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -1628,7 +1905,8 @@ public class StreamInBoxNoTopic extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+               //query+="select count(*)\n";
            }else query+="select *\n";
            
            query+=
@@ -1642,19 +1920,22 @@ public class StreamInBoxNoTopic extends GenericResource {
            "  FILTER(!bound(?postInTopic)) \n" +
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?postIntensityType) ";
-           }else
-           {
-               query+="ORDER BY desc(?postIntensityType) ";
-           }
-           query+="desc(?postInCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?postIntensityType) ";
+                }else
+                {
+                    query+="ORDER BY desc(?postIntensityType) ";
+                }
+                query+="desc(?postInCreated) \n";
+                
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -1676,7 +1957,8 @@ public class StreamInBoxNoTopic extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+               //query+="select count(*)\n";
            }else query+="select *\n";
            
            query+=
@@ -1687,20 +1969,23 @@ public class StreamInBoxNoTopic extends GenericResource {
            "    ?postUri social:postSentimentalEmoticonType ?feelingEmot." + "\n" + 
            "    }" +
            "  }\n";
-
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
-           {
-               query+="ORDER BY asc(?feelingEmot) ";
-           }else
-           {
-               query+="ORDER BY desc(?feelingEmot) ";
-           }
-           query+="desc(?postInCreated) \n";
            
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
+           if(!isCount)
            {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?feelingEmot) ";
+                }else
+                {
+                    query+="ORDER BY desc(?feelingEmot) ";
+                }
+                query+="desc(?postInCreated) \n";
+                
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -1722,7 +2007,8 @@ public class StreamInBoxNoTopic extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+               //query+="select count(*)\n";
            }else query+="select *\n";
            
            query+=
@@ -1733,19 +2019,22 @@ public class StreamInBoxNoTopic extends GenericResource {
            "  ?postUri social:pi_created ?postInCreated. \n" +
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?userName) ";
-           }else
-           {
-               query+="ORDER BY desc(?userName) ";
-           }
-           query+="desc(?postInCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?userName) ";
+                }else
+                {
+                    query+="ORDER BY desc(?userName) ";
+                }
+                query+="desc(?postInCreated) \n";
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -1767,7 +2056,8 @@ public class StreamInBoxNoTopic extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+               //query+="select count(*)\n";
            }else query+="select *\n";
            
            query+=
@@ -1778,20 +2068,23 @@ public class StreamInBoxNoTopic extends GenericResource {
            "  ?postUri social:postPlace ?postInPlace." + "\n" + 
            "     }" +
            "  }\n";
-
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
-           {
-               query+="ORDER BY asc(?postInPlace) ";
-           }else
-           {
-               query+="ORDER BY desc(?postInPlace) ";
-           }
-           query+="desc(?postInCreated) \n";
            
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
+           if(!isCount)
            {
-             query+="LIMIT "+limit;   
+               if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?postInPlace) ";
+                }else
+                {
+                    query+="ORDER BY desc(?postInPlace) ";
+                }
+                query+="desc(?postInCreated) \n";
+                
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
@@ -1814,7 +2107,8 @@ public class StreamInBoxNoTopic extends GenericResource {
            "\n";
            if(isCount)
            { 
-               query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+               //query+="select count(*)\n";
            }else query+="select *\n";
            
            query+=
@@ -1828,19 +2122,22 @@ public class StreamInBoxNoTopic extends GenericResource {
            "  FILTER(!bound(?postInTopic)) \n" +               
            "  }\n";
 
-           if(orderType==null || orderType.equalsIgnoreCase("up"))
+           if(!isCount)
            {
-               query+="ORDER BY asc(?isPriority) ";
-           }else
-           {
-               query+="ORDER BY desc(?isPriority) ";
-           }
-           query+="desc(?postInCreated) \n";
-           
-           query+="OFFSET "+offset +"\n";
-           if(limit>0)
-           {
-             query+="LIMIT "+limit;   
+                if(orderType==null || orderType.equalsIgnoreCase("up"))
+                {
+                    query+="ORDER BY asc(?isPriority) ";
+                }else
+                {
+                    query+="ORDER BY desc(?isPriority) ";
+                }
+                query+="desc(?postInCreated) \n";
+                
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
            }
            if(isCount)
            {
