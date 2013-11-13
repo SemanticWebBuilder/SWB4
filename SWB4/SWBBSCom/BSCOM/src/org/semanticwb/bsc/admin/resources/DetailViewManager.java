@@ -132,7 +132,10 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             //Se genera el código HTML del encabezado de la tabla que muestra el listado de vistas
             listCode.append("<div class=\"swbform\">\n");
             listCode.append("  <fieldset>\n");
-            listCode.append("    <legend>" + paramRequest.getLocaleString("lbl_objectsType") + workClassSC.getName() + "</legend>");
+            listCode.append("    <legend>");
+            listCode.append(paramRequest.getLocaleString("lbl_objectsType"));
+            listCode.append(workClassSC.getName());
+            listCode.append("</legend>");
             listCode.append("    <table width=\"98%\" >\n");
             listCode.append("      <thead>\n");
             listCode.append("        <tr>\n");
@@ -172,91 +175,91 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 listOfViews = SWBComparator.sortByDisplayName(listOfViews, lang);
                 
                 try {
-                //Se agrega al listado cada vista creada
-                while (listOfViews.hasNext()) {
-                    DetailView view = (DetailView) listOfViews.next();
-                    
-                    SWBResourceURL urlEdit = paramRequest.getRenderUrl();
-                    urlEdit.setParameter("operation", "edit");
-                    urlEdit.setParameter("viewUri", view.getURI());
-                    urlEdit.setMode("editTemplate");
-                    
-                    SWBResourceURL urlDelete = paramRequest.getActionUrl();
-                    urlDelete.setAction("deleteView");
-                    urlDelete.setParameter("svUri", view.getURI());
-                    
-                    SWBResourceURL urlMakeActive = paramRequest.getActionUrl();
-                    urlMakeActive.setAction("makeActive");
-                    urlMakeActive.setParameter("svUri", view.getURI());
-                    
-                    //Se genera el HTML para las opciones de edición, eliminación
-                    listCode.append("        <tr>\n");
-                    listCode.append("          <td>\n");
-                    listCode.append("            <a href=\"void(0);\" title=\"");
-                    listCode.append(paramRequest.getLocaleString("ttl_lnkEdit"));
-                    listCode.append("\" onclick=\"submitUrl('");
-                    listCode.append(urlEdit);
-                    listCode.append("', this);return false;\"><img src=\"");
-                    listCode.append(SWBPlatform.getContextPath());
-                    listCode.append("/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"");
-                    listCode.append(paramRequest.getLocaleString("ttl_lnkEdit"));
-                    listCode.append("\"></a>\n");
-                    listCode.append("            <a href=\"void(0);\" title=\"");
-                    listCode.append(paramRequest.getLocaleString("ttl_lnkDelete"));
-                    listCode.append("\" onclick=\"if (confirm('");
-                    listCode.append(paramRequest.getLocaleString("msg_confirmRemove"));
-                    listCode.append(SWBUtils.TEXT.scape4Script(view.getTitle() != null ? view.getTitle() : "xxx"));
-                    listCode.append("?')){submitUrl('");
-                    listCode.append(urlDelete);
-                    listCode.append("', this);}return false;\"><img src=\"");
-                    listCode.append(SWBPlatform.getContextPath());
-                    listCode.append("/swbadmin/images/delete.gif\" border=\"0\" alt=\"");
-                    listCode.append(paramRequest.getLocaleString("ttl_lnkDelete"));
-                    listCode.append("\"></a>\n");
-                    listCode.append("          </td>\n");
-                    listCode.append("          <td>");
-                    listCode.append("            <a href=\"void(0);\" title=\"");
-                    listCode.append(paramRequest.getLocaleString("ttl_lnkEdit"));
-                    listCode.append("\" onclick=\"submitUrl('");
-                    listCode.append(urlEdit);
-                    listCode.append("', this);return false;\">");
-                    listCode.append(view.getTitle() != null ? view.getTitle() : "xxx");
-                    listCode.append("</a>\n");
-                    listCode.append("          </td>\n");
-                    listCode.append("          <td>");
-                    listCode.append(view.getModifiedBy() != null ? view.getModifiedBy().getFullName() : "xxx");
-                    listCode.append("          </td>\n");
-                    listCode.append("          <td>");
-                    listCode.append(view.getUpdated() != null ? view.getUpdated() : "xxx");
-                    listCode.append("          </td>\n");
-                    listCode.append("          <td align=\"center\">");
-                    
-                    if (this.getActiveDetailView() == null || (this.getActiveDetailView() != null
-                            && !this.getActiveDetailView().getURI().equals(view.getURI()))) {
-                        //Código HTML para asignación como contenido
-                        listCode.append("          <input type=\"radio\" dojoType=\"dijit.form.RadioButton\" ");
-                        listCode.append("name=\"asContent\" id=\"asContent");
-                        listCode.append(view.getId());
-                        listCode.append("\" value=\"");
-                        listCode.append(view.getId());
+                    //Se agrega al listado cada vista creada
+                    while (listOfViews.hasNext()) {
+                        DetailView view = (DetailView) listOfViews.next();
+
+                        SWBResourceURL urlEdit = paramRequest.getRenderUrl();
+                        urlEdit.setParameter("operation", "edit");
+                        urlEdit.setParameter("viewUri", view.getURI());
+                        urlEdit.setMode("editTemplate");
+
+                        SWBResourceURL urlDelete = paramRequest.getActionUrl();
+                        urlDelete.setAction("deleteView");
+                        urlDelete.setParameter("svUri", view.getURI());
+
+                        SWBResourceURL urlMakeActive = paramRequest.getActionUrl();
+                        urlMakeActive.setAction("makeActive");
+                        urlMakeActive.setParameter("svUri", view.getURI());
+
+                        //Se genera el HTML para las opciones de edición, eliminación
+                        listCode.append("        <tr>\n");
+                        listCode.append("          <td>\n");
+                        listCode.append("            <a href=\"void(0);\" title=\"");
+                        listCode.append(paramRequest.getLocaleString("ttl_lnkEdit"));
                         listCode.append("\" onclick=\"submitUrl('");
-                        listCode.append(urlMakeActive);
-                        listCode.append("', this.domNode);return false;\">");
-                    } else if (this.getActiveDetailView() != null
-                            && this.getActiveDetailView().getURI().equals(view.getURI())) {
-                        listCode.append("          <input type=\"radio\" dojoType=\"dijit.form.RadioButton\" ");
-                        listCode.append("name=\"asContent\" id=\"asContent");
-                        listCode.append(view.getId());
-                        listCode.append("\" value=\"");
-                        listCode.append(view.getId());
-                        listCode.append("\" checked=\"checked\" onclick=\"submitUrl('");
-                        listCode.append(urlMakeActive);
-                        listCode.append("', this.domNode);return false;\">");
+                        listCode.append(urlEdit);
+                        listCode.append("', this);return false;\"><img src=\"");
+                        listCode.append(SWBPlatform.getContextPath());
+                        listCode.append("/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"");
+                        listCode.append(paramRequest.getLocaleString("ttl_lnkEdit"));
+                        listCode.append("\"></a>\n");
+                        listCode.append("            <a href=\"void(0);\" title=\"");
+                        listCode.append(paramRequest.getLocaleString("ttl_lnkDelete"));
+                        listCode.append("\" onclick=\"if (confirm('");
+                        listCode.append(paramRequest.getLocaleString("msg_confirmRemove"));
+                        listCode.append(SWBUtils.TEXT.scape4Script(view.getTitle() != null ? view.getTitle() : "xxx"));
+                        listCode.append("?')){submitUrl('");
+                        listCode.append(urlDelete);
+                        listCode.append("', this);}return false;\"><img src=\"");
+                        listCode.append(SWBPlatform.getContextPath());
+                        listCode.append("/swbadmin/images/delete.gif\" border=\"0\" alt=\"");
+                        listCode.append(paramRequest.getLocaleString("ttl_lnkDelete"));
+                        listCode.append("\"></a>\n");
+                        listCode.append("          </td>\n");
+                        listCode.append("          <td>");
+                        listCode.append("            <a href=\"void(0);\" title=\"");
+                        listCode.append(paramRequest.getLocaleString("ttl_lnkEdit"));
+                        listCode.append("\" onclick=\"submitUrl('");
+                        listCode.append(urlEdit);
+                        listCode.append("', this);return false;\">");
+                        listCode.append(view.getTitle() != null ? view.getTitle() : "xxx");
+                        listCode.append("</a>\n");
+                        listCode.append("          </td>\n");
+                        listCode.append("          <td>");
+                        listCode.append(view.getModifiedBy() != null ? view.getModifiedBy().getFullName() : "xxx");
+                        listCode.append("          </td>\n");
+                        listCode.append("          <td>");
+                        listCode.append(view.getUpdated() != null ? view.getUpdated() : "xxx");
+                        listCode.append("          </td>\n");
+                        listCode.append("          <td align=\"center\">");
+
+                        if (this.getActiveDetailView() == null || (this.getActiveDetailView() != null
+                                && !this.getActiveDetailView().getURI().equals(view.getURI()))) {
+                            //Código HTML para asignación como contenido
+                            listCode.append("          <input type=\"radio\" dojoType=\"dijit.form.RadioButton\" ");
+                            listCode.append("name=\"asContent\" id=\"asContent");
+                            listCode.append(view.getId());
+                            listCode.append("\" value=\"");
+                            listCode.append(view.getId());
+                            listCode.append("\" onclick=\"submitUrl('");
+                            listCode.append(urlMakeActive);
+                            listCode.append("', this.domNode);return false;\">");
+                        } else if (this.getActiveDetailView() != null
+                                && this.getActiveDetailView().getURI().equals(view.getURI())) {
+                            listCode.append("          <input type=\"radio\" dojoType=\"dijit.form.RadioButton\" ");
+                            listCode.append("name=\"asContent\" id=\"asContent");
+                            listCode.append(view.getId());
+                            listCode.append("\" value=\"");
+                            listCode.append(view.getId());
+                            listCode.append("\" checked=\"checked\" onclick=\"submitUrl('");
+                            listCode.append(urlMakeActive);
+                            listCode.append("', this.domNode);return false;\">");
+                        }
+                        listCode.append("          </td>\n");
+                        listCode.append("        </tr>\n");
+
                     }
-                    listCode.append("          </td>\n");
-                    listCode.append("        </tr>\n");
-                    
-                }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -277,7 +280,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         }
 
         //Muestra mensaje sobre resultado de la operacion realizada
-        if ((statusMsg != null && !statusMsg.isEmpty()) || (statusErr != null && !statusErr.isEmpty())) {
+        if ((statusMsg != null && !statusMsg.isEmpty()) ||
+                (statusErr != null && !statusErr.isEmpty())) {
             listCode.append("<div dojoType=\"dojox.layout.ContentPane\">\n");
             listCode.append("    <script type=\"dojo/method\">\n");
             if (statusMsg != null) {
@@ -338,7 +342,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 throw new SWBResourceException("View URI is null while editing");
             }
             modeUsed = SWBFormMgr.MODE_EDIT;
-            formMgr = new SWBFormMgr(DetailView.bsc_DetailView, viewSemObject.getSemanticObject(), modeUsed);
+            formMgr = new SWBFormMgr(DetailView.bsc_DetailView,
+                        viewSemObject.getSemanticObject(), modeUsed);
             url.setAction("editView");
             String filePath = SWBPortal.getWorkPath() + 
                     viewSemObject.getWorkPath() + DetailViewManager.TEMPLATE_FILENAME;
@@ -362,7 +367,10 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         output.append("');return false;\" method=\"post\" action=\"");
         output.append(url.toString());
         output.append("\">\n");
-        output.append("                <input type=\"hidden\" id=\"urlForProperties\" name=\"urlForProperties\" value=\"" + propertiesUrl + "\">\n");
+        output.append("                <input type=\"hidden\" id=\"urlForProperties\" name=\"urlForProperties\" value=\"");
+        output.append(propertiesUrl);
+        output.append("\">\n");
+                
         if (operation.equals("edit")) {
             output.append("                <input type=\"hidden\" id=\"svUri");
             output.append(this.getId());
@@ -438,11 +446,20 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         output.append("");
         output.append("<div dojoType=\"dojox.layout.ContentPane\">\n");
         output.append("    <script type=\"dojo/method\">\n");
-        output.append("      var oFCKeditor = new FCKeditor( 'FCKeditorDetailView" + this.getId() + "' ) ;\n");
-        output.append("      oFCKeditor.BasePath = '" + SWBPlatform.getContextPath() + "/swbadmin/js/fckeditor/';\n");
-        output.append("      oFCKeditor.Config['CustomConfigurationsPath'] = " + SWBPlatform.getContextPath() + "'/swbadmin/js/fckeditor/fckconfig_inserter.js';\n");
+        output.append("      var oFCKeditor = new FCKeditor( 'FCKeditorDetailView");
+        output.append(this.getId());
+        output.append("' ) ;\n");
+        output.append("      oFCKeditor.BasePath = '");
+        output.append(SWBPlatform.getContextPath());
+        output.append("/swbadmin/js/fckeditor/';\n");
+        
+        output.append("      oFCKeditor.Config['CustomConfigurationsPath'] = ");
+        output.append(SWBPlatform.getContextPath());
+        output.append("'/swbadmin/js/fckeditor/fckconfig_inserter.js';\n");
         output.append("      oFCKeditor.ReplaceTextarea();\n");
-        output.append("      oFCKeditor.urlInsertHtmlData = '" + SWBUtils.TEXT.scape4Script(propertiesUrl) + "' ;\n");
+        output.append("      oFCKeditor.urlInsertHtmlData = '");
+        output.append(SWBUtils.TEXT.scape4Script(propertiesUrl));
+        output.append("' ;\n");
         output.append("    </script>\n");
         output.append("</div>\n");
         output.append("                </td>\n");
@@ -457,9 +474,15 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         output.append("\" type=\"button\">");
         output.append(paramRequest.getLocaleString("lbl_btnSubmit"));
         output.append("      <script type=\"dojo/method\" event=\"onClick\" args=\"evt\">\n");
-        output.append("        var oEditor = FCKeditorAPI.GetInstance('FCKeditorDetailView" + this.getId() + "') ;\n");
-        output.append("        document.getElementById('FCKeditorDetailView" + this.getId() + "').value = oEditor.GetData();\n");
-        output.append("        submitForm(\"detailViewForm" + this.getId() + "\");\n");
+        output.append("        var oEditor = FCKeditorAPI.GetInstance('FCKeditorDetailView");
+        output.append(this.getId());
+        output.append("') ;\n");
+        output.append("        document.getElementById('FCKeditorDetailView");
+        output.append(this.getId());
+        output.append("').value = oEditor.GetData();\n");
+        output.append("        submitForm(\"detailViewForm");
+        output.append(this.getId());
+        output.append("\");\n");
         output.append("        return false;\n");
         output.append("      </script>\n");
         output.append("    </button>\n");
@@ -587,7 +610,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         SemanticClass semWorkClass = this.getWorkClass().transformToSemanticClass();
         String lang = paramRequest.getUser().getLanguage();
         //Iterator<SemanticProperty> basePropertiesList = SWBComparator.sortByDisplayName(, lang);
-        ArrayList<SemanticProperty> propsList = (ArrayList<SemanticProperty>) SWBUtils.Collections.copyIterator(semWorkClass.listSortProperties());
+        ArrayList<SemanticProperty> propsList = 
+                (ArrayList<SemanticProperty>) SWBUtils.Collections.copyIterator(semWorkClass.listSortProperties());
         Collections.sort(propsList, new PropertiesComparator());
         Iterator<SemanticProperty> basePropertiesList = propsList.iterator();
         JSONArray array = new JSONArray();
@@ -597,7 +621,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             try {
                 while (basePropertiesList.hasNext()) {
                     SemanticProperty prop = basePropertiesList.next();
-                    if (prop.getDisplayProperty() != null) {
+                    if (prop.getDisplayProperty() != null || displayElementExists(prop)) {
                         //Se crea una estructura de JSON con los datos de las propiedades de la clase en la variable array
                         JSONObject object = new JSONObject();
                         object.put("name", prop.getName());
@@ -942,21 +966,25 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         String ret = null;
         SWBFormMgr formMgr = new SWBFormMgr(elementBSC, null, SWBFormMgr.MODE_VIEW);
         SemanticProperty semProp = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propUri);
-
-        //Codigo prueba para obtener el displayElement
-        Statement st = semProp.getRDFProperty().getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty("http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
+        //Codigo para obtener el displayElement
+        Statement st = semProp.getRDFProperty().getProperty(
+                SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(
+                "http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
         if (st != null) {
             //Se obtiene: SemanticProperty: displayElement de la propiedad en cuestion (prop)
             SemanticObject soDisplayElement = SemanticObject.createSemanticObject(st.getResource());
             if (soDisplayElement != null) {
-                SemanticObject formElement = soDisplayElement.getObjectProperty(org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement"));
+                SemanticObject formElement = soDisplayElement.getObjectProperty(
+                        org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(
+                        "http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement"));
                 if (formElement != null) {
                     FormElement fe = (FormElement) formElement.createGenericInstance();
                     if (fe != null) {
                         if (formMgr.getSemanticObject() != null) {
                             fe.setModel(formMgr.getSemanticObject().getModel());
                         }
-                        ret = fe.renderElement(request, elementBSC, semProp, semProp.getName(), SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_VIEW, lang);
+                        ret = fe.renderElement(request, elementBSC, semProp, semProp.getName(),
+                                SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_VIEW, lang);
                     }
                 }
             }
@@ -965,9 +993,28 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         if (ret == null) {
             FormElement formElement = formMgr.getFormElement(semProp);
             if (formElement != null) {
-                ret = formElement.renderElement(request, elementBSC, semProp, semProp.getName(), SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_VIEW, lang);
+                ret = formElement.renderElement(request, elementBSC, semProp, semProp.getName(),
+                        SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_VIEW, lang);
             }
         }
         return ret != null ? ret : "";
+    }
+    
+    /**
+     * Verifica la existencia de un valor para el displayElement de una propiedad en la ontolog&iacute;a
+     * @param property la propiedad sem&aacute;ntica de la que se requiere el displayElement
+     * @return {@literal true} si existe un valor para el displayElement en la ontolog&iacute;a, {@literal false} de lo contrario
+     */
+    private boolean displayElementExists(SemanticProperty property) {
+        
+        boolean exists = false;
+        
+        Statement st = property.getRDFProperty().getProperty(
+                SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(
+                "http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
+        if (st != null) {
+            exists = true;
+        }
+        return exists;
     }
 }
