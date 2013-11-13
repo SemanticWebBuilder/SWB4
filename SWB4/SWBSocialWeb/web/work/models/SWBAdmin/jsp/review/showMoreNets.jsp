@@ -1,10 +1,4 @@
 <%-- 
-    Document   : showMoreNets
-    Created on : 15-oct-2013, 15:53:50
-    Author     : jorge.jimenez
---%>
-
-<%-- 
     Document   : showPostIn
     Created on : 03-jun-2013, 13:01:48
     Author     : jorge.jimenez
@@ -49,6 +43,12 @@
         SocialNetwork socialNet = itPostSocialNets.next();
         //System.out.println("socialNet-1:"+socialNet);
         String sSocialNet = socialNet.getDisplayTitle(user.getLanguage());
+        String netIcon = "";
+        if(socialNet instanceof Youtube){
+            netIcon = "<img class=\"swbIconYouTube\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>";
+        }else{
+            netIcon = "<img class=\"swbIcon" + socialNet.getClass().getSimpleName() + "\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>";
+        }
         //System.out.println("socialNet-2:"+sSocialNet);
         if (sSocialNet != null && sSocialNet.trim().length() > 0) {
             //System.out.println("socialNet-3:"+sSocialNet);
@@ -80,10 +80,10 @@
 
             //Termina privacidad
             if (cont==1) {
-                nets = "<li>" + sSocialNet+"("+sPrivacy+")"+"</li>";
+                nets = "<li>" + netIcon + sSocialNet+"("+sPrivacy+")"+"</li>";
                 cont++;
             } else {
-                nets += "<li>"+ sSocialNet+"("+sPrivacy+")"+"</li>";
+                nets += "<li>"+  netIcon +sSocialNet+"("+sPrivacy+")"+"</li>";
             }
         }
     }
