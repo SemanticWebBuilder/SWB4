@@ -51,6 +51,7 @@ import org.semanticwb.social.PostOutNet;
 import org.semanticwb.social.PostOutPrivacyRelation;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.Video;
+import org.semanticwb.social.Youtube;
 import org.semanticwb.social.util.SocialLoader;
 
 // TODO: Auto-generated Javadoc
@@ -343,7 +344,13 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                         SocialNetwork socialNet = itPostSocialNets.next();
                         //System.out.println("socialNet-1:"+socialNet);
                         String sSocialNet = socialNet.getDisplayTitle(lang);
+                        String netIcon = "";
                         //System.out.println("socialNet-2:"+sSocialNet);
+                        if(socialNet instanceof Youtube){
+                            netIcon = "<img class=\"swbIconYouTube\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>";
+                        }else{
+                            netIcon = "<img class=\"swbIcon" + socialNet.getClass().getSimpleName() + "\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>";
+                        }
                         if (sSocialNet != null && sSocialNet.trim().length() > 0) {
                             //System.out.println("socialNet-3:"+sSocialNet);
                             //Sacar privacidad
@@ -371,7 +378,7 @@ public class SocialDocumentsToAuhorize extends GenericResource {
 
                             //Termina privacidad
                             if (cont == 1) {
-                                nets = "<p>" + sSocialNet + "(" + sPrivacy + ")" + "</p>";
+                                nets = "<p>" + netIcon +  sSocialNet + "(" + sPrivacy + ")" + "</p>";
                             } else {//Nunca entraría aquí con lo que se determinó, de solo mostrar la primera red social y un "ver mas", en caso de haber mas, se deja este códigp por si cambia esta regla en lo futuro.
                                 nets += "<p>" + sSocialNet + "(" + sPrivacy + ")" + "</p>";
                             }
