@@ -64,6 +64,7 @@ import org.semanticwb.social.Video;
 import org.semanticwb.social.util.SWBSocialUtil;
 import org.semanticwb.social.util.SocialLoader;
 import org.semanticwb.social.SWBSocial;
+import org.semanticwb.social.Youtube;
 import org.semanticwb.social.admin.resources.util.SWBSocialResUtil;
 
 /**
@@ -856,6 +857,12 @@ public class SocialSentPost extends GenericResource {
                 SocialNetwork socialNet = itPostSocialNets.next();
                 //System.out.println("socialNet-1:"+socialNet);
                 String sSocialNet = socialNet.getDisplayTitle(lang);
+                String netIcon = "";
+                if(socialNet instanceof Youtube){
+                    netIcon = "<img class=\"swbIconYouTube\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>";
+                }else{
+                    netIcon = "<img class=\"swbIcon" + socialNet.getClass().getSimpleName() + "\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>";
+                }
                 //System.out.println("socialNet-2:"+sSocialNet);
                 if (sSocialNet != null && sSocialNet.trim().length() > 0) {
                     //System.out.println("socialNet-3:"+sSocialNet);
@@ -884,7 +891,7 @@ public class SocialSentPost extends GenericResource {
 
                     //Termina privacidad
                     if (cont == 1) {
-                        nets = "<p>" + sSocialNet + "(" + sPrivacy + ")" + "</p>";
+                        nets = "<p>" + netIcon + sSocialNet + "(" + sPrivacy + ")" + "</p>";
                     } else {//Nunca entraría aquí con lo que se determinó, de solo mostrar la primera red social y un "ver mas", en caso de haber mas, se deja este códigp por si cambia esta regla en lo futuro.
                         nets += "<p>" + sSocialNet + "(" + sPrivacy + ")" + "</p>";
                     }

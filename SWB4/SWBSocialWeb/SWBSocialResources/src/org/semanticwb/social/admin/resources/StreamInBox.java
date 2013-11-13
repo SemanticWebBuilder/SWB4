@@ -59,6 +59,7 @@ import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SocialUserExtAttributes;
 import java.util.Date;
 import org.semanticwb.social.SWBSocial;
+import org.semanticwb.social.Youtube;
 import org.semanticwb.social.admin.resources.util.SWBSocialResUtil;
 /**
  *
@@ -734,7 +735,7 @@ public class StreamInBox extends GenericResource {
         
         //System.out.append("nRec-George29:"+nRec);
         
-        
+
         while (itposts!=null && itposts.hasNext()) {
             PostIn postIn = itposts.next();
             
@@ -849,6 +850,11 @@ public class StreamInBox extends GenericResource {
             //SocialNetwork
             out.println("<td>");
             out.println(postIn.getPostInSocialNetwork().getDisplayTitle(lang));
+            if(postIn.getPostInSocialNetwork() instanceof Youtube){
+                out.println("</br><img class=\"swbIconYouTube\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>");
+            }else{
+                out.println("</br><img class=\"swbIcon" + postIn.getPostInSocialNetwork().getClass().getSimpleName() + "\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>");
+            }
             out.println("</td>");
 
 

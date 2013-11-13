@@ -59,6 +59,7 @@ import org.semanticwb.social.SocialUserExtAttributes;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.VideoIn;
+import org.semanticwb.social.Youtube;
 import org.semanticwb.social.admin.resources.util.SWBSocialResUtil;
 import org.semanticwb.social.util.SWBSocialUtil;
 import org.semanticwb.social.util.SocialLoader;
@@ -844,6 +845,11 @@ public class SocialTopicInBox extends GenericResource {
             //SocialNetwork
             out.println("<td>");
             out.println(postIn.getPostInSocialNetwork().getDisplayTitle(lang));
+            if(postIn.getPostInSocialNetwork() instanceof Youtube){
+                out.println("</br><img class=\"swbIconYouTube\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>");
+            }else{
+                out.println("</br><img class=\"swbIcon" + postIn.getPostInSocialNetwork().getClass().getSimpleName() + "\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>");
+            }
             out.println("</td>");
 
             //Stream
