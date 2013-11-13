@@ -444,8 +444,8 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                 //generar un listado de HTML con las propiedades en baseList menos las de viewList
                 while (basePropertiesList.hasNext()) {
                     SemanticProperty prop = basePropertiesList.next();
-                    if (!selectedOptions.containsValue(prop.getURI() +
-                            "|" + prop.getDisplayName(lang))) {
+                    if ((prop.getDisplayProperty() != null || displayElementExists(prop)) &&
+                            !selectedOptions.containsValue(prop.getURI() + "|" + prop.getDisplayName(lang))) {
                         
                         //generar HTML de la opcion
                         baseListHtml.append("                        <option value=\"");
@@ -453,31 +453,6 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                         baseListHtml.append("\">");
                         baseListHtml.append(prop.getDisplayName(lang));
                         baseListHtml.append("</option>\n");
-                    }
-                    
-                    //Codigo prueba para obtener el displayElement
-                    Statement st = prop.getRDFProperty().getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty("http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
-                    if (st != null) {
-                        //Se obtiene: SemanticProperty: displayElement de la propiedad en cuestion (prop)
-                        SemanticObject soDisplayElement = SemanticObject.createSemanticObject(st.getResource());
-                        if (soDisplayElement != null) {
-                            System.out.println("El objeto " + soDisplayElement.getURI() + " es de Class: " + soDisplayElement.getClass() + "\n");
-                            System.out.println("Display element para " + prop.getName() + ": " + soDisplayElement.getURI());
-                            SemanticObject formElement = soDisplayElement.getObjectProperty(org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement"));
-                            if (formElement != null) {
-                                FormElement fe = (FormElement) formElement.createGenericInstance();
-                                if (fe != null) {
-                                    if (formMgr.getSemanticObject() != null) {
-                                        fe.setModel(formMgr.getSemanticObject().getModel());
-                                    }
-                                    System.out.println("FormElement: " + fe.getURI() + "\nModel para FE: " + fe.getModel());
-                                    System.out.println("RENDER: \n" + fe.renderElement(request, viewSemObject.getSemanticObject(), prop, prop.getName(), SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_VIEW, lang));
-                                } else {
-                                    System.out.println("Al parecer, así no es");
-                                }
-
-                            }
-                        }
                     }
                 }
                 //y otro con las de viewList
@@ -505,7 +480,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             //obtener valores de propiedades del tipo de elemento (BSCElement) a usar
             while (basePropertiesList.hasNext()) {
                 SemanticProperty prop = basePropertiesList.next();
-                if (prop.getDisplayProperty() != null) {
+                if (prop.getDisplayProperty() != null || displayElementExists(prop)) {
                     //generar HTML de la opcion
                     baseListHtml.append("                        <option value=\"");
                     baseListHtml.append(prop.getURI());
@@ -1245,5 +1220,23 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         }
         
         return ret != null ? ret : "";
+    }
+    
+    /**
+     * Verifica la existencia de un valor para el displayElement de una propiedad en la ontolog&iacute;a
+     * @param property la propiedad sem&aacute;ntica de la que se requiere el displayElement
+     * @return {@literal true} si existe un valor para el displayElement en la ontolog&iacute;a, {@literal false} de lo contrario
+     */
+    private boolean displayElementExists(SemanticProperty property) {
+        
+        boolean exists = false;
+        
+        Statement st = property.getRDFProperty().getProperty(
+                SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(
+                "http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
+        if (st != null) {
+            exists = true;
+        }
+        return exists;
     }
 }
