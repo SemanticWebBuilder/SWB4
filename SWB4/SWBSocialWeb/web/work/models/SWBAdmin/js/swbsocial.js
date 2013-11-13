@@ -634,7 +634,7 @@ function lookForInputs(children, images){
 function validateVideo(id, formId){
     var nameFile = document.getElementById(id).value;
     var arrFacebook = [".3g2", ".3gp", ".3gpp" , ".asf", ".avi", ".dat", ".divx", ".dv", ".asf", ".f4v", ".flv", ".m2ts", ".m4v", ".mkv", ".mod", ".mov", ".mp4", ".mpe", ".mpeg", ".mpeg4", ".mpg", ".mts", ".nsv", ".ogm", ".nsv", ".ogv", ".qt", ".tod", ".ts", ".vob", ".wmv"];                           
-    var arrYoutube = ['.mp3','.jpg','.jpeg','.gif','.png','.bmp','.wav','.aac','.mswmm','.wlmp'];
+    var arrYoutube = ['mp3','.jpg','.jpeg','.gif','.png','.bmp','.wav','.aac','.mswmm','.wlmp'];
     var j =0 ;
     
     if(nameFile == ""){        
@@ -651,48 +651,65 @@ function validateVideo(id, formId){
 
     var frm = document.getElementById(formId);
     
-    if(frm.checkRedes == null && frm.checkYT == null){//No networks
+    if(frm.checkRedes == null){//No networks
         alert("Debes crear primero una red en donde publicar");
         return false;
     }
 
-    
+
     if(frm.checkYT != null){
+
         if(frm.checkYT.length == null){
             if(frm.checkYT.checked){//there is only one network
-                checkYT = true;               
-                haveYoutube = true;                
+                //checkRed = true;
+                checkYT = true;
+                if(frm.checkRedes.name.indexOf("#social_Youtube:") != -1){
+                    haveYoutube = true;
+                }
+                if(frm.checkRedes.name.indexOf("#social_Facebook:") != -1){
+                    haveFacebook = true
+                }
             }
         }else{
             for (i = 0; i < frm.checkYT.length; i++) {
                 if (frm.checkYT[i].checked){//Network is selected
-                    checkYT = true;                  
-                    haveYoutube = true;
-                    break;
-                   
+                    checkYT = true;
+                    if(frm.checkRedes[i].name.indexOf("#social_Youtube:") != -1){
+                        haveYoutube = true;
+                    }
+                    if(frm.checkRedes[i].name.indexOf("#social_Facebook:") != -1){
+                        haveFacebook = true
+                    }
                 }
             }
         }
     }
     if(frm.checkRedes != null){
-        
         if(frm.checkRedes.length == null){
             if(frm.checkRedes.checked){
-                checkRed = true;                
-                haveFacebook = true
+                checkRed = true;
+                if(frm.checkRedes.name.indexOf("#social_Youtube:") != -1){
+                    haveYoutube = true;
+                }
+                if(frm.checkRedes.name.indexOf("#social_Facebook:") != -1){
+                    haveFacebook = true
+                }
             }
-        
         }else{
             for (j = 0; j < frm.checkRedes.length; j++) {
                 if (frm.checkRedes[j].checked){
-                    checkRed = true;                
-                    haveFacebook = true                
+                    checkRed = true;
+                    if(frm.checkRedes.name.indexOf("#social_Youtube:") != -1){
+                        haveYoutube = true;
+                    }
+                    if(frm.checkRedes.name.indexOf("#social_Facebook:") != -1){
+                        haveFacebook = true
+                    }
                     break;
                 }
             }
         }
     }
-
     
     if(checkYT == false && checkRed == false){
         alert("Debes seleccionar al menos una red");
@@ -703,19 +720,16 @@ function validateVideo(id, formId){
     var countFacebook = 0;
     var countYoutube =0
 
- 
+
+  
     if(haveFacebook){        
-        for(i = 0; i < arrFacebook.length; i++){            
+        for(i = 0; i < arrFacebook.length; i++){
+            
             if(nameFile.toLowerCase().indexOf(arrFacebook[i]) != -1){ //la extension si es valida    
                 countFacebook++;
                 break;
             }            
         } 
-        if(countFacebook == 0 ){
-            alert('Extension de archivo no valida');
-            return false; 
-        
-        }
     }
     
     if(haveYoutube){        
@@ -725,14 +739,13 @@ function validateVideo(id, formId){
                 break;
             }            
         } 
-        if(countYoutube != 0){
-            alert('Extension de archivo no valida');
-            return false; 
-        
-        }
     }
     
-  
+    if(countFacebook == 0 || countYoutube != 0){
+        alert('Extension de archivo no valida');
+        return false; 
+        
+    }
     
     return true;
 }
