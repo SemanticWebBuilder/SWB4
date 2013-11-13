@@ -15,11 +15,10 @@
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.social.SocialFlow.SocialPFlowMgr"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
-<jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
 
 <%
-    User user = paramRequest.getUser();
+    User user = (User)request.getAttribute("user");  
     UserFavorite fav = user.getUserFavorite();
     HashMap sSite = new HashMap();
     ArrayList streamArray = new ArrayList();
