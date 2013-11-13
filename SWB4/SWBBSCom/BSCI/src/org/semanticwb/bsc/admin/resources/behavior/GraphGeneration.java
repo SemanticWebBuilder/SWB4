@@ -6,16 +6,11 @@ package org.semanticwb.bsc.admin.resources.behavior;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.Iterator;
-import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.bsc.accessory.Grapher;
 import org.semanticwb.bsc.accessory.Period;
-import static org.semanticwb.bsc.admin.resources.behavior.MeasuresManager.Default_FORMAT_PATTERN;
-import org.semanticwb.bsc.catalogs.Format;
 import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.Series;
@@ -24,7 +19,7 @@ import org.semanticwb.bsc.utils.UndefinedFrequencyException;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.portal.api.GenericAdmResource;
+import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
@@ -32,7 +27,7 @@ import org.semanticwb.portal.api.SWBResourceException;
  *
  * @author ana.garcias
  */
-public class GraphGeneration extends GenericAdmResource {
+public class GraphGeneration extends GenericResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
