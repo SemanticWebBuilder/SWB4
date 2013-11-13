@@ -51,7 +51,7 @@
     %>
     <h3>
         <a href="javascript:parent.addNewTab('<%=socialSite.getURI()%>','<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/objectTab.jsp','<%=SWBUtils.TEXT.scape4Script(socialSite.getDisplayTitle(user.getLanguage()))%>');">
-            <img class="swbIconSocialTopic" src="/swbadmin/css/images/trans.png"/>  
+            <img class="swbIconSocialSite" src="/swbadmin/css/images/trans.png"/>  
             <%=socialSite.getTitle()%>
         </a>
     </h3>
@@ -176,5 +176,13 @@
 
         System.out.println("-------------->cade" + list);
         return list;
+    }
+    
+    
+    public HashMap favoritesSocialSite(HashMap hm, SemanticObject sobj){
+        
+        HashMap map = new HashMap();       
+        
+        return map;
     }
 %>
