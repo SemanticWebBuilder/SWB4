@@ -75,7 +75,7 @@ public class MultiSelect extends org.semanticwb.bsc.formelement.base.MultiSelect
                     viewString.append("  <li>");
                     if (showLink) {
                         viewString.append("<a href=\"");
-                        viewString.append(semanticObject.getClass().getSimpleName());
+                        viewString.append(rangeClass.getName());
                         viewString.append("?suri=");
                         viewString.append(semanticObject.getEncodedURI());
                         viewString.append("\" >");
