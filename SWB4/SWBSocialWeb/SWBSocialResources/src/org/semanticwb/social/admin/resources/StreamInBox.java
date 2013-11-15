@@ -709,14 +709,16 @@ public class StreamInBox extends GenericResource {
         out.println("<tbody>");
         
         //Revisa si el sitio indica que se revise el Klout, por defecto si lo hace.
+        /*
         boolean checkKlout=false; 
         try{
             checkKlout=Boolean.parseBoolean(SWBSocialUtil.Util.getModelPropertyValue(wsite, "checkKlout"));
         }catch(Exception ignored)
         {
             checkKlout=false;
-        }
+        }*/
 
+        int streamKloutValue=stream.getStream_KloutValue();
         
         int nPage;
         try {
@@ -939,13 +941,18 @@ public class StreamInBox extends GenericResource {
             {
                 //System.out.println("checkKlout--J:"+checkKlout);
                 //Looking for user klout
-                if(postIn.getPostInSocialNetwork().getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable) && socialNetUser.getSnu_klout()==0 && checkKlout)
+                if(postIn.getPostInSocialNetwork().getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable) && socialNetUser.getSnu_klout()<streamKloutValue)
                 {
                     //System.out.println("checkKlout--J1:"+checkKlout+",socialNetUser:"+socialNetUser+",id:"+socialNetUser.getId()+",socialNetUser:"+socialNetUser.getSnu_id());
                     HashMap userKloutDat=SWBSocialUtil.Classifier.classifybyKlout(postIn.getPostInSocialNetwork(), stream, socialNetUser, socialNetUser.getSnu_id(), true);
                     userKloutScore=((Integer)userKloutDat.get("userKloutScore")).intValue();
                     socialNetUser.setSnu_klout(userKloutScore);
-                    out.println(userKloutScore);
+                    if(userKloutScore<streamKloutValue) //El klout del postIn es menor al del stream, talvez cuando entro el postIn el stream tenía definido un valor de filtro de klout menor al de este momento.
+                    {
+                        out.println("<font color=\"#FF6600\">"+userKloutScore+"</font>");
+                    }else{
+                        out.println(userKloutScore);
+                    }
                     //System.out.println("checkKlout--J2:"+userKloutScore+", NO VOLVERA A PONER KLOUT PARA ESTE USER:"+socialNetUser);
                 }else{
                     out.println(socialNetUser.getSnu_klout());
