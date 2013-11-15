@@ -31,6 +31,7 @@ import org.semanticwb.bsc.admin.resources.base.SummaryViewManagerBase;
 import org.semanticwb.bsc.utils.PropertiesComparator;
 import org.semanticwb.model.FormElement;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticOntology;
@@ -82,6 +83,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         PrintWriter out = response.getWriter();
         StringBuilder output = new StringBuilder(128);
         String lang = paramRequest.getUser().getLanguage();
+        User user = paramRequest.getUser();
         
         if (this.getActiveView() == null) {
             output.append(paramRequest.getLocaleString("msg_noContentView"));
@@ -96,8 +98,9 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             Iterator<GenericObject> allInstances = website.listInstancesOfClass(semWorkClass);
             String identifier = null; //de los elementos del grid
             String filters = null;
-            Period thisPeriod = request.getParameter("periodId") != null
-                    ? Period.ClassMgr.getPeriod(request.getParameter("periodId"), website)
+            String periodId = (String) request.getSession(true).getAttribute(website.getId());
+            Period thisPeriod = periodId != null
+                    ? Period.ClassMgr.getPeriod(periodId, website)
                     : null;
             
             //Define el identificador a utilizar de acuerdo al tipo de objetos a presentar
@@ -126,6 +129,10 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             while (allInstances.hasNext()) {
                 GenericObject generic = allInstances.next();
                 SemanticObject semObj = generic.getSemanticObject();
+                boolean isActive = semObj.getBooleanProperty(org.semanticwb.model.Activeable.swb_active, true);
+                if (!user.haveAccess(generic) || !isActive) {
+                    continue;
+                }
                 GenericIterator<PropertyListItem> viewPropertiesList = activeView.listPropertyListItems();
                 
                 JSONObject row = new JSONObject();
