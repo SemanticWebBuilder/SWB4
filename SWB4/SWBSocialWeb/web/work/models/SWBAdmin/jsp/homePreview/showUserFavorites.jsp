@@ -169,10 +169,11 @@
             }
         }
 
+        /*
         Iterator i = list.iterator();
         while (i.hasNext()) {
             System.out.println("++++++" + i.next());
-        }
+        }*/
 
         System.out.println("-------------->cade" + list);
         return list;

@@ -223,6 +223,19 @@
 
                 %>
 
+                <!--Calendario Rapido-->
+                <div class="msgFastCalendar">
+                    <p id="msgTitle">Programar envío de mensaje</p>
+                <%
+                    String inidate=new Date().toString();
+                    String starthour="";
+                    System.out.println("inidate:"+inidate);
+                %>
+                Día:<input type="text" name="postOut_inidate" id="postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=inidate%>">
+                Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="postOut_starthour"  value="<%=(starthour!=null&&starthour.trim().length() > 0 ? "T"+starthour+":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
+                </div>
+                <!--Termina Calendario Rapido-->
+                
                 <button class="submit" type="submit" onclick="return checksRedesText('<%=objUri%>','<%=sourceCall%>');"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
 
             </div>      
