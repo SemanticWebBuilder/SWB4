@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales. Esta clase no se relaciona con una red social (con la clase SocialNetwork) porque un post de salida (desde la herramienta) podría ser enviado a diferentes redes sociales, sin embargo, es el mismo post de salida. Donde esta a que red social se envía esta en las instancias de la clase PostContainer. 
    */
-public abstract class PostOutBase extends org.semanticwb.social.Post implements org.semanticwb.model.Referensable,org.semanticwb.social.PostDataable,org.semanticwb.model.Tagable,org.semanticwb.social.PostTextable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Traceable
+public abstract class PostOutBase extends org.semanticwb.social.Post implements org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable
 {
    /**
    * Tipo de PostOut. 1=Message;2=Photo;3:Video. Estan con variables estaticas en la clase SWBSocialUtil.
@@ -67,6 +67,14 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
    */
     public static final org.semanticwb.platform.SemanticClass social_SocialPFlowInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialPFlowInstance");
     public static final org.semanticwb.platform.SemanticProperty social_pflowInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#pflowInstance");
+   /**
+   * Clase que se encarga de administrar un calendario para un mensaje de Salida (PostOut). Un PostOut puede tener solo un calendario.
+   */
+    public static final org.semanticwb.platform.SemanticClass social_FastCalendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#FastCalendar");
+   /**
+   * Calendario asociado a un PostOut. Un PostOut solo puede tener como maximo un fastCalendar. Cuando elimino un PostOut, se elimina su FastCalendar (En caso de que tenga uno asociado).
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_fastCalendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#fastCalendar");
    /**
    * Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales. Esta clase no se relaciona con una red social (con la clase SocialNetwork) porque un post de salida (desde la herramienta) podría ser enviado a diferentes redes sociales, sin embargo, es el mismo post de salida. Donde esta a que red social se envía esta en las instancias de la clase PostContainer.
    */
@@ -390,6 +398,29 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
         public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByPflowInstance(org.semanticwb.social.SocialPFlowInstance value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_pflowInstance,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostOut with a determined FastCalendar
+       * @param value FastCalendar of the type org.semanticwb.social.FastCalendar
+       * @param model Model of the org.semanticwb.social.PostOut
+       * @return Iterator with all the org.semanticwb.social.PostOut
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByFastCalendar(org.semanticwb.social.FastCalendar value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_fastCalendar, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostOut with a determined FastCalendar
+       * @param value FastCalendar of the type org.semanticwb.social.FastCalendar
+       * @return Iterator with all the org.semanticwb.social.PostOut
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByFastCalendar(org.semanticwb.social.FastCalendar value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_fastCalendar,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -911,6 +942,44 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
          if(obj!=null)
          {
              ret=(org.semanticwb.social.SocialPFlowInstance)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property FastCalendar
+   * @param value FastCalendar to set
+   */
+
+    public void setFastCalendar(org.semanticwb.social.FastCalendar value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(social_fastCalendar, value.getSemanticObject());
+        }else
+        {
+            removeFastCalendar();
+        }
+    }
+   /**
+   * Remove the value for FastCalendar property
+   */
+
+    public void removeFastCalendar()
+    {
+        getSemanticObject().removeProperty(social_fastCalendar);
+    }
+
+   /**
+   * Gets the FastCalendar
+   * @return a org.semanticwb.social.FastCalendar
+   */
+    public org.semanticwb.social.FastCalendar getFastCalendar()
+    {
+         org.semanticwb.social.FastCalendar ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_fastCalendar);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.FastCalendar)obj.createGenericInstance();
          }
          return ret;
     }

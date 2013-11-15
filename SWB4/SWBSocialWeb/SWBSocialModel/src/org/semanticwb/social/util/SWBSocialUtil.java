@@ -59,6 +59,7 @@ import org.semanticwb.social.Stream;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.Videoable;
 import org.semanticwb.social.util.lucene.SpanishAnalizer;
+import org.semanticwb.social.FastCalendar;
 
 /**
  *
@@ -98,7 +99,7 @@ public class SWBSocialUtil implements SWBAppObject {
     static public double EART_RADIUS_MI = 3958.762079; //Millas
     static private ArrayList<String> aPrepositions=new ArrayList();
     static private ArrayList<String> aSentimentWords=new ArrayList();
-    static private int NUMDAYS2REFRESH_USERDATA=5;
+    //static private int NUMDAYS2REFRESH_USERDATA=5;
     
     public static final int POST_TYPE_MESSAGE=1;
     public static final int POST_TYPE_PHOTO=2;
@@ -200,6 +201,7 @@ public class SWBSocialUtil implements SWBAppObject {
         hmapChanges.put("bb", "b");
         hmapChanges.put("c", "k");
 
+        /*
         //Revisión de propiedad de sitio Admin que indica el número de días que se mantendra en cache datos del usuario
         if(SWBSocialUtil.Util.getModelPropertyValue(SWBContext.getAdminWebSite(), "numDaysToCheckKlout")!=null)
         {
@@ -210,7 +212,7 @@ public class SWBSocialUtil implements SWBAppObject {
                 NUMDAYS2REFRESH_USERDATA=5;
             }
         }
-        
+        */
         
         //Carga preposiciones a memoría
         loadPrepositions();
@@ -719,10 +721,12 @@ public class SWBSocialUtil implements SWBAppObject {
         /*
          * Functions which returns the value (number of days) set up in numDaysToCheckKlout Admin site property
          */
+        /*
         public static int getDaysToRefreshData()
         {
             return NUMDAYS2REFRESH_USERDATA;
         }
+        */
         
         /*
          * funtion which reviews the klout of specific user.
@@ -1448,9 +1452,47 @@ public class SWBSocialUtil implements SWBAppObject {
                     //Convierto a un post de salida para poderle agregar cada red social a la que se envía dicho post
                     PostOut postOut = (PostOut) post;
                     
+                    //Para fines de indexado para ordenamientos con Sparql
                     Calendar calendario = Calendar.getInstance();
                     System.out.println("FECHA AL POSTOUT:"+calendario.getTime());
-                    postOut.setPout_created(calendario.getTime());   //Para fines de indexado para ordenamientos con Sparql
+                    postOut.setPout_created(calendario.getTime());   
+                    //Termina guardado de fecha para fines de indexado para ordenamientos con sparql
+                    
+                    String postOutInitDate=request.getParameter("postOut_inidate");
+                    String postOutInitHour=request.getParameter("postOut_starthour");
+                    
+                    System.out.println("postOutInitDate-Jorge:"+postOutInitDate+",postOutInitHour:"+postOutInitHour);
+                    if(postOutInitDate!=null && postOutInitDate.trim().length()>0)
+                    {
+                        postOutInitDate=SWBSocialUtil.Util.changeFormat(postOutInitDate, 1);
+                        postOutInitHour = postOutInitHour.substring(1, 6);
+                        
+                        //System.out.println("postOutInitDate-1**:"+postOutInitDate+",postOutInitHour-1**:"+postOutInitHour);
+                    
+                        FastCalendar newFastCalendarInstance=FastCalendar.ClassMgr.createFastCalendar(wsite);
+                        Date date2SendPostOut=new Date(postOutInitDate);
+                        
+                        StringTokenizer st   = new StringTokenizer(postOutInitHour, ":");
+                        int             h    = 0,
+                                        m    = 0;
+                        try {
+                            h = Integer.parseInt(st.nextToken());
+
+                            if (st.hasMoreTokens()) {
+                                m = Integer.parseInt(st.nextToken());
+                            }                           
+                        } catch (Exception noe) {
+                            // No error
+                        }
+                        System.out.println("H a poner:"+h);
+                        System.out.println("M a poner:"+m);
+                        date2SendPostOut.setHours(h);
+                        date2SendPostOut.setMinutes(m);
+                        
+                        newFastCalendarInstance.setFc_date(date2SendPostOut);
+                        postOut.setFastCalendar(newFastCalendarInstance);
+                    }
+                    
                     
                     //Si el PostOut que se acaba de crear, fue en consecuencia de una respuesta de una PostIn, este se agrega al nuevo PostOut
                     if(postIn!=null)    
@@ -1540,8 +1582,9 @@ public class SWBSocialUtil implements SWBAppObject {
                     
                     //Clasificar mensaje de salida, esto siempre y cuando exista la propiedad "classifySentMgs" igual a true en el sitio
                     //en donde se acaba de crear el PostOut
-                    String isSentMgstoClassify=SWBSocialUtil.Util.getModelPropertyValue(wsite, SWBSocialUtil.CLASSIFYSENTMGS_PROPNAME);
-                    if(isSentMgstoClassify!=null && isSentMgstoClassify.equalsIgnoreCase("true")) //Los mensajes de salida si se deben clasificar por sentimientos e intensidad, tal como los de entrada.
+                    //String isSentMgstoClassify=SWBSocialUtil.Util.getModelPropertyValue(wsite, SWBSocialUtil.CLASSIFYSENTMGS_PROPNAME);
+                    boolean isTopicCheckedbySentimentPostOuts=socialTopic.isCheckSentPostSentiment();
+                    if(isTopicCheckedbySentimentPostOuts) //Los mensajes de salida si se deben clasificar por sentimientos e intensidad, tal como los de entrada.
                     {
                         //System.out.println("Entra a Clasificar mensaje de Salida...");
                         String text2Classify=null;
@@ -1586,7 +1629,7 @@ public class SWBSocialUtil implements SWBAppObject {
                         if(strMessage==null) strMessage="";
                         SocialLoader.getPFlowManager().sendResourceToAuthorize(postOut, socialPFlow, strMessage);
                         //sendPostOutToAuthorize(postOut, socialPFlow, socialFlowComment);
-                    } else {
+                    } else if(postOut.getFastCalendar()==null){ //Si no tiene un FastCalendar, ya publicalo desde aquí, de lo contrario no lo publiques, en su momento sera publicado desde SWBSocialCalendarMgr
                         //Revisa las redes sociales a las cuales se tiene que enviar el Post
                         //String[] socialUris = socialUri.split("\\|");  //Dividir valores
                         //System.out.println("Se publicaJ-3");
@@ -1597,6 +1640,7 @@ public class SWBSocialUtil implements SWBAppObject {
                 log.error(e);
             }
         }
+        
         
         /*
          * Publica un PostOut que llegue como parametro
@@ -1945,7 +1989,43 @@ public class SWBSocialUtil implements SWBAppObject {
     
     public static class Util{
         
-         public static boolean isPointInsideCoodinates(double latitude, double longitude, GeoLocation[] geolocation)
+        
+        
+       public static String changeFormat(String fecha, int formato)
+       {
+            String nf = fecha;
+            String y = "";
+            String m = "";
+            String d = "";
+            if (formato == 1) {
+                StringTokenizer st = new StringTokenizer(fecha, "-");
+                if (st.hasMoreTokens()) {
+                    y = st.nextToken();
+                    if (st.hasMoreTokens()) {
+                        m = st.nextToken();
+                    }
+                    if (st.hasMoreTokens()) {
+                        d = st.nextToken();
+                    }
+                    nf = m + "/" + d + "/" + y;
+                }
+            } else if (formato == 2) {
+                StringTokenizer st = new StringTokenizer(fecha, "/");
+                if (st.hasMoreTokens()) {
+                    m = st.nextToken();
+                    if (st.hasMoreTokens()) {
+                        d = st.nextToken();
+                    }
+                    if (st.hasMoreTokens()) {
+                        y = st.nextToken();
+                    }
+                    nf = y + "-" + m + "-" + d;
+                }
+            }
+            return nf;
+        }
+        
+        public static boolean isPointInsideCoodinates(double latitude, double longitude, GeoLocation[] geolocation)
         {
             if(latitude==0 || longitude==0 || geolocation==null) return false;
             

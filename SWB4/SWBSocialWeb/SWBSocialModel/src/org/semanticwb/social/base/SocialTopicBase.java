@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Catalogo de temas de un modelo (Marca) 
    */
-public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.social.SocialPFlowRefable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Tagable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable
+public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Tagable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Referensable,org.semanticwb.social.SocialPFlowRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable
 {
    /**
    * Catalogo de temas de un modelo (Marca)
@@ -12,6 +12,10 @@ public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass impl
     public static final org.semanticwb.platform.SemanticClass social_SocialTopic=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialTopic");
     public static final org.semanticwb.platform.SemanticProperty social_hasChildSocialTopicInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasChildSocialTopicInv");
     public static final org.semanticwb.platform.SemanticProperty social_parentSocialTopic=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#parentSocialTopic");
+   /**
+   * Propiedad que indica si en el Tema también se revisara sentimientos e intensidad en los mensajes de salida.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_checkSentPostSentiment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#checkSentPostSentiment");
    /**
    * Clase a Cambiar despues por "Relacional", esta y todas sus hijas. Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta..
    */
@@ -447,6 +451,24 @@ public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass impl
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+/**
+* Gets the CheckSentPostSentiment property
+* @return boolean with the CheckSentPostSentiment
+*/
+    public boolean isCheckSentPostSentiment()
+    {
+        return getSemanticObject().getBooleanProperty(social_checkSentPostSentiment);
+    }
+
+/**
+* Sets the CheckSentPostSentiment property
+* @param value long with the CheckSentPostSentiment
+*/
+    public void setCheckSentPostSentiment(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(social_checkSentPostSentiment, value);
     }
 
 /**

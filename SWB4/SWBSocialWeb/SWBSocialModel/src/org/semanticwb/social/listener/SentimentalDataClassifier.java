@@ -72,7 +72,8 @@ public class SentimentalDataClassifier {
     Stream stream=null;
     SocialNetwork socialNetwork=null;
     boolean classifyGeoLocation=false;
-    boolean checkKlout=false;
+    org.semanticwb.social.SocialSite wsite=null;
+    //boolean checkKlout=false;
     
     /*
     public SentimentalDataClassifier(PostIn post, String postData)
@@ -82,13 +83,17 @@ public class SentimentalDataClassifier {
         initAnalysis();
     }
     * */
-    public SentimentalDataClassifier(ExternalPost externalPost, Stream stream, SocialNetwork socialNetwork, boolean classifyGeoLocation, boolean checkKlout)
+    public SentimentalDataClassifier(ExternalPost externalPost, Stream stream, SocialNetwork socialNetwork, boolean classifyGeoLocation)
     {
+        if(!stream.isValid()) return;
+        
         this.externalPost=externalPost;
         this.stream=stream;
         this.socialNetwork=socialNetwork;
         this.classifyGeoLocation=classifyGeoLocation;
-        this.checkKlout=checkKlout;
+        this.wsite=org.semanticwb.social.SocialSite.ClassMgr.getSocialSite(stream.getSocialSite().getId());
+        System.out.println("wsite en SentimentalDataClassifier:"+wsite);
+        //this.checkKlout=checkKlout;
         
         
         //System.out.println("En SentimentalDataClassifier:"+this.externalPost);
@@ -325,19 +330,24 @@ public class SentimentalDataClassifier {
             socialNetUser=SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(""+creatorId, socialNetwork, model);
             boolean createPostbyKlout=false;
             boolean upDateSocialUserNetworkData=false;
+            int days2RefreshUserData=5; //Minumun, if this number is less, the performance could be affected
+            if((wsite).getNumDaysToRefreshUserData()>5)
+            {
+                days2RefreshUserData=wsite.getNumDaysToRefreshUserData();
+            }
             int days=0;
             if(socialNetUser!=null)
             {
                 days=SWBSocialUtil.Util.Datediff(socialNetUser.getUpdated(), Calendar.getInstance().getTime());
-                if(days>=SWBSocialUtil.Classifier.getDaysToRefreshData())
+                if(days>=days2RefreshUserData)
                 {
                     upDateSocialUserNetworkData=true;
                 }
             }
             
-            System.out.println("checkKlout en Clasificador..:"+checkKlout);
+            System.out.println("checkKlout en Clasificador..:"+stream.getStream_KloutValue());
             int userKloutScore=0;
-            if(checkKlout && stream.getStream_KloutValue()>0 && socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable))
+            if(stream.getStream_KloutValue()>0 && socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable))
             {
                 System.out.println("creatorId en Sentimental:"+creatorId);
                 HashMap userKloutDat=SWBSocialUtil.Classifier.classifybyKlout(socialNetwork, stream, socialNetUser, creatorId, upDateSocialUserNetworkData);

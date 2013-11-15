@@ -79,6 +79,9 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
     public Youtube(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
+    static {
+        Youtube.social_Youtube.registerObserver(new SocialNetSemanticObserver());
+    }
 
     /* public void postVideo(Video video) {
      System.out.println("Video K llega a Youtube:" + video);
