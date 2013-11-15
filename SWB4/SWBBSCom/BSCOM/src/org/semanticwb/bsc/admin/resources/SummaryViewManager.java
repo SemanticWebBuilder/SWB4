@@ -17,6 +17,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
+import org.semanticwb.bsc.Seasonable;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.utils.SummaryView;
 import org.semanticwb.bsc.utils.PropertyListItem;
@@ -130,7 +131,11 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                 GenericObject generic = allInstances.next();
                 SemanticObject semObj = generic.getSemanticObject();
                 boolean isActive = semObj.getBooleanProperty(org.semanticwb.model.Activeable.swb_active, true);
-                if (!user.haveAccess(generic) || !isActive) {
+                boolean hasPeriod = true;
+                if (thisPeriod != null) {
+                    hasPeriod = semObj.hasObjectProperty(Seasonable.bsc_hasPeriod, thisPeriod.getSemanticObject());
+                }
+                if (!user.haveAccess(generic) || !isActive || !hasPeriod) {
                     continue;
                 }
                 GenericIterator<PropertyListItem> viewPropertiesList = activeView.listPropertyListItems();
