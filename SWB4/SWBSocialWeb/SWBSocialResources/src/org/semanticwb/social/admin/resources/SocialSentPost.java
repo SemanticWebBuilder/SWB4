@@ -9,10 +9,12 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.StringTokenizer;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +34,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Activeable;
-import org.semanticwb.model.GenericIterator;
+import org.semanticwb.model.CalendarRef;
 import org.semanticwb.model.PFlowInstance;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
@@ -40,7 +42,6 @@ import org.semanticwb.model.Trashable;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticIterator;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
@@ -50,6 +51,7 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.social.FastCalendar;
 import org.semanticwb.social.Message;
 import org.semanticwb.social.Photo;
 import org.semanticwb.social.PostOut;
@@ -110,6 +112,7 @@ public class SocialSentPost extends GenericResource {
     private static final int PAGES2VIEW = 15; //Number of pages 2 display in pagination.
     private static final String Mode_ShowUsrHistory = "showUsrHistory";
     private static final String Mode_ShowMoreNets = "showMoreNets";
+    private static final String Mode_ShowFastCalendar = "showFastCalendar";
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -130,7 +133,9 @@ public class SocialSentPost extends GenericResource {
             doShowUserHistory(request, response, paramRequest);
         } else if (Mode_ShowMoreNets.equals(mode)) {
             doShowMoreNets(request, response, paramRequest);
-        } else if (mode.equals("exportExcel")) {
+        } else if(Mode_ShowFastCalendar.equals(mode)){
+            doShowFastCalendar(request, response, paramRequest);
+        }else if (mode.equals("exportExcel")) {
             try {
                 doGenerateReport(request, response, paramRequest);
             } catch (Exception e) {
@@ -187,7 +192,7 @@ public class SocialSentPost extends GenericResource {
         //System.out.println("Llega a doEdit:"+request.getParameter("suri"));
 
         String id = request.getParameter("suri");
-        //System.out.println("SocialSentPost/Edit/id:"+id);
+        System.out.println("SocialSentPost/Edit/id:"+id);
         if (id == null) {
             return;
         }
@@ -209,6 +214,8 @@ public class SocialSentPost extends GenericResource {
         //Resource base = getResourceBase();
         //User user = paramRequest.getUser();
 
+        
+        System.out.println("Entra a Edit, reload:"+request.getParameter("dialog"));
         out.println("<script type=\"javascript\">");
         if (request.getParameter("dialog") != null && request.getParameter("dialog").equals("close")) {
             out.println(" hideDialog(); ");
@@ -697,11 +704,11 @@ public class SocialSentPost extends GenericResource {
             }
 
             // fin validación de botones en relacion a flujos
-
+            /*
             boolean readyToPublish = false;
             if (!postOut.isPublished() && !needAuthorization) {
                 readyToPublish = true;
-            }
+            }*/
 
             //System.out.println("isInFlow:"+isInFlow);
             //System.out.println("needAuthorization:"+needAuthorization);
@@ -815,6 +822,30 @@ public class SocialSentPost extends GenericResource {
                 } else if (isInFlow && isAuthorized) {
                     out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enlinea.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("Caccepted") + "\">");
                 }
+                if(postOut.getFastCalendar()!=null)
+                {
+                    SWBResourceURL urlFastCalendars = paramRequest.getRenderUrl().setMode(Mode_ShowFastCalendar).setCallMethod(SWBResourceURL.Call_DIRECT);
+                    out.println("<a href=\"#\" onclick=\"showDialog('" + urlFastCalendars.setParameter("postUri", postOut.getURI()) + "','" + paramRequest.getLocaleString("associatedFastCalendar") + "'); return false;\">FC</a>");
+                }
+            }
+            boolean oneCalendarIsActive=false;
+            Iterator <CalendarRef> itCalendarsRefs=postOut.listCalendarRefs();
+            while(itCalendarsRefs.hasNext())
+            {
+                CalendarRef calRef=itCalendarsRefs.next();
+                if(calRef.isValid())
+                {
+                    oneCalendarIsActive=true;
+                    break;
+                }
+            }
+            String strClass = "";
+            if (postOut.listCalendarRefs().hasNext()) {
+                strClass = "class=\"swbIconSocialCalendar\"";
+            }
+            if(oneCalendarIsActive)
+            {
+                out.println("<a " + strClass + " href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + msgText + "');return false;\" title=\"" + msgText + "\">CA</a>");
             }
 
 
@@ -827,10 +858,7 @@ public class SocialSentPost extends GenericResource {
                 msgText = SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(postOut.getMsg_Text()), 25);
                 msgText = msgText.replaceAll("\n", " ");
             }
-            String strClass = "";
-            if (postOut.listCalendarRefs().hasNext()) {
-                strClass = "class=\"swbIconSocialCalendar\"";
-            }
+            
             if (!postOut.isPublished()) {
                 out.println("<a " + strClass + " href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + msgText + "');return false;\" title=\"" + msgText + "\">" + msgText + "</a>");
             } else {  //Si ya esta publicado
@@ -995,11 +1023,26 @@ public class SocialSentPost extends GenericResource {
                         if (someOneIsNotPublished) {
                             out.println("<a class=\"status1\" href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">" + paramRequest.getLocaleString("toReview") + "</a>"); //No ha sido publicado en todas las redes sociales que debiera, abrir dialogo para mostrar todos los PostOutNtes del PostOut
                         } else if (isInFlow && needAuthorization && postOut.getPflowInstance() != null && postOut.getPflowInstance().getStatus() == 3) {
-                            out.println("<a href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />" + paramRequest.getLocaleString("publish") + "</a>");
+                            if(postOut.getFastCalendar()!=null)
+                            {
+                                out.println("A cumplir Calendario..");
+                            }else{
+                                out.println("<a href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />" + paramRequest.getLocaleString("publish") + "</a>");
+                            }
                         } else if (!isInFlow && !needAuthorization && !postOutwithPostOutNets) {
-                            out.println(paramRequest.getLocaleString("publishing") + "..");
+                            if(postOut.getFastCalendar()!=null)
+                            {
+                                out.println("A cumplir Calendario..");
+                            }else{
+                                out.println(paramRequest.getLocaleString("publishing") + "..");
+                            }
                         } else {
-                            out.println("<a href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />" + paramRequest.getLocaleString("publish") + "</a>");
+                            if(postOut.getFastCalendar()!=null)
+                            {
+                                out.println("A cumplir Calendario..");
+                            }else{
+                                out.println("<a href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />" + paramRequest.getLocaleString("publish") + "</a>");
+                            }
                         }
                     } else {    //El PostOut ya se envío
                         //System.out.println("SOCIALSENTPOST2");
@@ -1368,6 +1411,25 @@ public class SocialSentPost extends GenericResource {
             }
         }
     }
+            
+    /*
+     * Muestra FastCalendar de un PostOut, en dado caso de que tenga uno
+     */
+    private void doShowFastCalendar(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
+        final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showFastCalendar.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        if (dis != null) {
+            try {
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
+                request.setAttribute("postOut", semObject);
+                request.setAttribute("paramRequest", paramRequest);
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
+    }            
+            
 
     /**
      * Review sem prop.
@@ -1505,6 +1567,18 @@ public class SocialSentPost extends GenericResource {
                     if (postOut.getPflowInstance() != null) {
                         postOut.getPflowInstance().setStatus(2);
                         postOut.getPflowInstance().setStep(null);
+                    }
+                    if(postOut.getFastCalendar()!=null)
+                    {
+                        try
+                        {
+                            org.semanticwb.social.FastCalendar fastCalendar=postOut.getFastCalendar();
+                            postOut.removeFastCalendar();
+                            fastCalendar.remove();
+                        }catch(Exception ignore)
+                        {
+                            
+                        }
                     }
                     //Termina
                     //postOut.setPublished(true); 
@@ -1841,9 +1915,74 @@ public class SocialSentPost extends GenericResource {
                 response.setRenderParameter("postOut", request.getParameter("postOut"));
                 
             }else if (action.equals("deletePhoto")) {
-            response.setRenderParameter("postOut", request.getParameter("postOut"));
-            doDeletePhoto(request, response);
-        }
+                response.setRenderParameter("postOut", request.getParameter("postOut"));
+                doDeletePhoto(request, response);
+            }else if (action.equals("uploadFastCalendar"))
+            {
+                if(request.getParameter("postOut")!=null)
+                {
+                    SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("postOut"));
+                    PostOut postOut=(PostOut)semObj.getGenericInstance();
+                    
+                    String postOutInitDate=request.getParameter("postOut_inidate");
+                    String postOutInitHour=request.getParameter("postOut_starthour");
+                    
+                    System.out.println("postOutInitDate-Jorge en SocialSentPost:"+postOutInitDate+",postOutInitHour:"+postOutInitHour);
+                    if(postOutInitDate!=null && postOutInitDate.trim().length()>0)
+                    {
+                        FastCalendar fastCalendar=null;
+                        if(postOut.getFastCalendar()!=null)
+                        {
+                            fastCalendar=postOut.getFastCalendar();
+                        }
+                        if(fastCalendar==null)
+                        {
+                           WebSite wsite=WebSite.ClassMgr.getWebSite(postOut.getSemanticObject().getModel().getName());
+                           fastCalendar=FastCalendar.ClassMgr.createFastCalendar(wsite);
+                        }
+                            
+                        postOutInitDate=SWBSocialUtil.Util.changeFormat(postOutInitDate, 1);
+                        postOutInitHour = postOutInitHour.substring(1, 6);
+                        
+                        System.out.println("postOutInitDate-1**:"+postOutInitDate+",postOutInitHour-1**:"+postOutInitHour);
+                    
+                        
+                        Date date2SendPostOut=new Date(postOutInitDate);
+                        
+                        StringTokenizer st   = new StringTokenizer(postOutInitHour, ":");
+                        int             h    = 0,
+                                        m    = 0;
+                        try {
+                            h = Integer.parseInt(st.nextToken());
+
+                            if (st.hasMoreTokens()) {
+                                m = Integer.parseInt(st.nextToken());
+                            }                           
+                        } catch (Exception noe) {
+                            // No error
+                        }
+                        System.out.println("H a poner:"+h);
+                        System.out.println("M a poner:"+m);
+                        date2SendPostOut.setHours(h);
+                        date2SendPostOut.setMinutes(m);
+                        
+                        fastCalendar.setFc_date(date2SendPostOut);
+                        postOut.setFastCalendar(fastCalendar);
+                    }else{
+                        if(postOut.getFastCalendar()!=null)
+                        {
+                            FastCalendar fastCalendar=postOut.getFastCalendar();
+                            postOut.removeFastCalendar();
+                            fastCalendar.remove();
+                        }
+                    }
+                    response.setMode(SWBResourceURL.Mode_EDIT);
+                    response.setRenderParameter("suri", postOut.getSocialTopic().getURI());
+                    response.setRenderParameter("dialog", "close");
+                    response.setRenderParameter("statusMsg", response.getLocaleLogString("calendarUpdated"));
+                    response.setRenderParameter("reloadTab", postOut.getSocialTopic().getURI());
+                }
+            }
             
         } catch (Exception e) {
             log.error(e);
