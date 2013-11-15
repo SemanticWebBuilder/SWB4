@@ -59,6 +59,7 @@ public class ClassifierThread extends java.lang.Thread {
     @Override
     public void run()
     {
+        /*
         boolean checkKlout=false; 
         try{
            WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName()); 
@@ -66,14 +67,17 @@ public class ClassifierThread extends java.lang.Thread {
         }catch(Exception ignored)
         {
            checkKlout=false;
-        }
+        }*/
         try
         {
-          Iterator<ExternalPost> itExternalThreads=aListExternalPost.iterator();  
-          while(itExternalThreads.hasNext())
+          if(stream.isValid())
           {
-              ExternalPost externalPost=itExternalThreads.next();
-              new SentimentalDataClassifier(externalPost, stream, socialNetwork, classifyGeoLocation, checkKlout);
+            Iterator<ExternalPost> itExternalThreads=aListExternalPost.iterator();  
+            while(itExternalThreads.hasNext())
+            {
+                ExternalPost externalPost=itExternalThreads.next();
+                new SentimentalDataClassifier(externalPost, stream, socialNetwork, classifyGeoLocation);
+            }
           }
            /*
             String words2classify = null;

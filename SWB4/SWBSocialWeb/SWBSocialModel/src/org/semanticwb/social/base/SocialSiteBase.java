@@ -4,8 +4,12 @@ package org.semanticwb.social.base;
    /**
    * Clase que hereda de swb:WebSite. Es un tipo de website Social. De esta manera se puede contar con todos los elementos en el arbol de navegación en la administración, y otros elementos utiles para Social Site. 
    */
-public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.model.Countryable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable
+public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Countryable,org.semanticwb.model.FilterableNode,org.semanticwb.model.OntologyDepable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Indexable
 {
+   /**
+   * Número de Días antes de que se refresque información del usuario en las redes sociales
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_numDaysToRefreshUserData=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#numDaysToRefreshUserData");
    /**
    * Acción específica mediante la cual se envía un correo electrónico
    */
@@ -402,6 +406,24 @@ public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implem
     public SocialSiteBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the NumDaysToRefreshUserData property
+* @return int with the NumDaysToRefreshUserData
+*/
+    public int getNumDaysToRefreshUserData()
+    {
+        return getSemanticObject().getIntProperty(social_numDaysToRefreshUserData);
+    }
+
+/**
+* Sets the NumDaysToRefreshUserData property
+* @param value long with the NumDaysToRefreshUserData
+*/
+    public void setNumDaysToRefreshUserData(int value)
+    {
+        getSemanticObject().setIntProperty(social_numDaysToRefreshUserData, value);
     }
 
     public org.semanticwb.social.SendEmail getSendEmail(String id)

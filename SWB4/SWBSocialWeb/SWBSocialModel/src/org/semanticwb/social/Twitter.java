@@ -68,6 +68,9 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     public Twitter(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
+    static {
+        Twitter.social_Twitter.registerObserver(new SocialNetSemanticObserver());
+    }
 
     @Override
     public void postMsg(Message message) {

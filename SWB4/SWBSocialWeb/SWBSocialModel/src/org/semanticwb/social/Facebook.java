@@ -1,7 +1,6 @@
 package org.semanticwb.social;
 
 import javax.servlet.http.HttpServletRequest;
-import org.semanticwb.portal.api.SWBActionResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -9,7 +8,6 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import javaQuery.j2ee.tinyURL;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.JSONArray;
@@ -21,7 +19,6 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.io.SWBFile;
 import org.semanticwb.io.SWBFileInputStream;
 import org.semanticwb.model.Language;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.social.listener.Classifier;
@@ -50,6 +47,9 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
     public Facebook(org.semanticwb.platform.SemanticObject base) {
         super(base);
+    }
+    static {
+        Facebook.social_Facebook.registerObserver(new SocialNetSemanticObserver());
     }
     
     /**

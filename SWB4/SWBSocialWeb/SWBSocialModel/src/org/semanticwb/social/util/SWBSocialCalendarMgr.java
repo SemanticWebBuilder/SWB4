@@ -5,6 +5,8 @@
 package org.semanticwb.social.util;
 
 import java.net.SocketException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -15,6 +17,7 @@ import org.semanticwb.model.GenericObject;
 import org.semanticwb.social.PostOut;
 import org.semanticwb.social.SocialCalendar;
 import org.semanticwb.social.SocialFlow.SocialPFlowMgr;
+import org.semanticwb.social.FastCalendar;
 
 /**
  * Clase controlada de los calendarios sociales en SWBSocial, esta clase ejecuta un proceso cada minuto el cual va a revisar todos
@@ -35,7 +38,7 @@ public class SWBSocialCalendarMgr {
 
     public SWBSocialCalendarMgr() {
         try {
-            //System.out.println("Entra a SWBSocialCalendarMgr...");
+            System.out.println("Entra a SWBSocialCalendarMgr...");
             int periodTime = 60 * MILISEG_IN_SEGUNDO; //Un minuto
             Timer timer = new Timer();
             timer.schedule(new SWBSocialCalendarMgr.CallCalendarTask(), 0, periodTime);
@@ -62,7 +65,7 @@ public class SWBSocialCalendarMgr {
          * que como lo hago en este momento, pudiera utilizar Calendar directamente.
          */
         public void run() {
-            //System.out.println("Revisar todos los calendarios de todas las marcas");
+            System.out.println("Revisar todos los calendarios de todas las marcas");
             SocialPFlowMgr pfmgr = SocialLoader.getPFlowManager();
             Iterator<SocialCalendar> itSCalendars = SocialCalendar.ClassMgr.listSocialCalendars();
             while (itSCalendars.hasNext()) {
@@ -90,8 +93,11 @@ public class SWBSocialCalendarMgr {
                                             if (postOut.isPublished() || (!postOut.isPublished() && !pfmgr.needAnAuthorization(postOut))) {
                                                 try {
                                                     //System.out.println("El postOut puede y sera publicado por Calendario");
-                                                    SWBSocialUtil.PostOutUtil.publishPost(postOut);
-                                                    sCalendar.addPostOut_published(postOut);
+                                                    if(postOut.getFastCalendar()==null)
+                                                    {
+                                                        SWBSocialUtil.PostOutUtil.publishPost(postOut);
+                                                        sCalendar.addPostOut_published(postOut);
+                                                    }
                                                     //System.out.println("El postOut ha sido publicado por Calendario");
                                                 } catch (SocketException se) {
                                                     //System.out.println("El postOut ha SUFRIDO ERROR AL PUBLICARSE POR CALENDARIO...");
@@ -110,6 +116,60 @@ public class SWBSocialCalendarMgr {
                     }
                 }
             }
+            
+            //FastCalendars
+            Iterator<FastCalendar> itFastCalendars=FastCalendar.ClassMgr.listFastCalendars();
+            while(itFastCalendars.hasNext())
+            {
+                FastCalendar fastCalendar=itFastCalendars.next();
+                if(eval(fastCalendar))
+                {
+                    PostOut postOut=fastCalendar.getPostOutFastCalendarInv();
+                    if(!postOut.isPublished() && !pfmgr.needAnAuthorization(postOut))   //Si no ha sido publicado y no necesita autorizacón en flujos
+                    {
+                        try
+                        {
+                            SWBSocialUtil.PostOutUtil.publishPost(postOut);
+                            postOut.removeFastCalendar();
+                            fastCalendar.remove();
+                        }catch(Exception e)
+                        {
+                            postOut.removeFastCalendar();
+                            fastCalendar.remove();
+                            log.error(e);
+                        }
+                    }else{  //Si ya fué evaluado correctamente (llego la fecha y hora para publicarlo), pero no cumple con algún flujo, se elimina el FastCalendar, cuando termine en el flujo se podra publicar el PostOut normalmente.
+                        postOut.removeFastCalendar();
+                        fastCalendar.remove();
+                    }
+                }
+            }
+            //Termina FastCalendars 
         }
     }
+    
+    
+    /**
+     * Eval.
+     * 
+     * @param today the today
+     * @param interval the interval
+     * @return true, if successful
+     * @throws Exception the exception
+     */
+    private static boolean eval(FastCalendar fastCalendar){
+        Date inidate = fastCalendar.getFc_date();
+        Date today=new Date();
+        System.out.println("inidate:"+inidate+",today:"+today);
+        System.out.println("inidate Year:"+inidate.getYear()+",inidate Month:"+inidate.getMonth()+",inidate Day:"+inidate.getDay()+",inidate Min:"+inidate.getMinutes());
+        System.out.println("today Year:"+today.getYear()+",today Month:"+today.getMonth()+",today Day:"+today.getDay()+",today Min:"+today.getMinutes());
+        if(inidate.getYear()==today.getYear() && inidate.getMonth()==today.getMonth() && inidate.getDay()==today.getDay() && inidate.getHours()==today.getHours() && inidate.getMinutes()<=today.getMinutes())
+        {
+            System.out.println("Si son Iguales...");
+            return true;
+        }
+        return false;
+    }
+    
+    
 }

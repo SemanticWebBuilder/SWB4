@@ -680,22 +680,25 @@ public class SocialPFlowMgr {
                                         //System.out.println("ESTA LISTO PARA PUBLICAR EL POSTOut en SocialPFlowMgr/approveResource,notification:"+notification);
                                         try
                                         {
-                                            System.out.println("Se va a publicar Jorge-20 CHECATE ESTO AMIGO:1");
-                                            SWBSocialUtil.PostOutUtil.publishPost(resource);
-                                            publishedMsgmailToMsgAuthor(resource);
-                                            if(resource.getPflowInstance()!=null)
+                                            if(resource.getFastCalendar()==null)
                                             {
-                                                System.out.println("Se va a publicar Jorge-20 CHECATE ESTO AMIGO:1--PONE STATUS DE 2...");
-                                                resource.getPflowInstance().setStatus(2);
-                                                resource.getPflowInstance().setStep("swbSocialPublished");   
+                                                System.out.println("Se va a publicar Jorge-20 CHECATE ESTO AMIGO:1");
+                                                SWBSocialUtil.PostOutUtil.publishPost(resource);
+                                                publishedMsgmailToMsgAuthor(resource);
+                                                if(resource.getPflowInstance()!=null)
+                                                {
+                                                    System.out.println("Se va a publicar Jorge-20 CHECATE ESTO AMIGO:1--PONE STATUS DE 2...");
+                                                    resource.getPflowInstance().setStatus(2);
+                                                    resource.getPflowInstance().setStep("swbSocialPublished");   
+                                                }
+                                                //resource.setPublished(true);
+                                                /*
+                                                if (notification != null)
+                                                {
+                                                    //System.out.println("En approveResource--13:"+notification);
+                                                    notification.publish(resource);
+                                                }*/
                                             }
-                                            //resource.setPublished(true);
-                                            /*
-                                            if (notification != null)
-                                            {
-                                                //System.out.println("En approveResource--13:"+notification);
-                                                notification.publish(resource);
-                                            }*/
                                         }catch(Exception se)
                                         {
                                             log.error(se);
@@ -822,21 +825,24 @@ public class SocialPFlowMgr {
                             {
                                 try
                                 {
-                                    System.out.println("Se va a publicar Jorge-20:3");
-                                    SWBSocialUtil.PostOutUtil.publishPost(resource);
-                                    publishedMsgmailToMsgAuthor(resource);
-                                    if(resource.getPflowInstance()!=null)
+                                    if(resource.getFastCalendar()==null)
                                     {
-                                        resource.getPflowInstance().setStatus(2);
-                                        resource.getPflowInstance().setStep(null);   
+                                        System.out.println("Se va a publicar Jorge-20:3");
+                                        SWBSocialUtil.PostOutUtil.publishPost(resource);
+                                        publishedMsgmailToMsgAuthor(resource);
+                                        if(resource.getPflowInstance()!=null)
+                                        {
+                                            resource.getPflowInstance().setStatus(2);
+                                            resource.getPflowInstance().setStep(null);   
+                                        }
+                                        //resource.setPublished(true);
+                                        /*
+                                        if (notification != null)
+                                        {
+                                            System.out.println("En approveResource--13:"+notification);
+                                            notification.publish(resource);
+                                        }*/
                                     }
-                                    //resource.setPublished(true);
-                                    /*
-                                    if (notification != null)
-                                    {
-                                        System.out.println("En approveResource--13:"+notification);
-                                        notification.publish(resource);
-                                    }*/
                                 }catch(Exception se)
                                 {
                                     log.error(se);
