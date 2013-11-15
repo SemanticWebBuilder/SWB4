@@ -571,6 +571,8 @@ public class CausalMap extends ComponentMap {
         try {
             sb.append("             <a href=\"");
             sb.append(dataObjective[5]);
+            sb.append("\" class=\"");
+            sb.append(dataObjective[1]);
             sb.append("\">");
             sb.append(dataObjective[0]);
             sb.append("</a>");
@@ -584,9 +586,9 @@ public class CausalMap extends ComponentMap {
             sb.append("                <span style=\"padding:10px;\" class=\"sponsor\">");
             sb.append(dataObjective[4]);
             sb.append("</span>");
-            sb.append("                 <span style=\"padding:10px;\" class=\"");
-            sb.append(dataObjective[1]);
-            sb.append("\">");
+//            sb.append("                 <span style=\"padding:10px;\" class=\"");
+//            sb.append(dataObjective[1]);
+//            sb.append("\">");
             sb.append("&nbsp;</span>");
             sb.append("            </p>");
         } catch (ArrayIndexOutOfBoundsException ex) {
