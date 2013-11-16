@@ -32,6 +32,8 @@ import org.semanticwb.bsc.utils.PropertiesComparator;
 import org.semanticwb.model.FormElement;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.Text;
+import org.semanticwb.model.TextArea;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
@@ -785,6 +787,19 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             this.setActiveDetailView(detailView);
             statusMsg = "msg_ContentViewAssigned";
             listingRedirect = true;
+        } else if ("updateProp".equals(action)) {
+            String objectUri = request.getParameter("suri");
+            String propUri = request.getParameter("propUri");
+            String propValue = request.getParameter("value");
+            System.out.println("En processAction para actualizar props: " + propUri);
+            SemanticObject semanticObject = objectUri != null ? SemanticObject.getSemanticObject(objectUri) : null;
+            SemanticProperty semProp = org.semanticwb.SWBPlatform.getSemanticMgr(
+                    ).getVocabulary().getSemanticProperty(propUri);
+            
+            if (semanticObject != null && propUri != null && propValue != null) {
+                semanticObject.setProperty(semProp, propValue);
+                System.out.println("Nuevo Valor: " + propValue);
+            }
         } else {
             super.processAction(request, response);
         }
@@ -853,14 +868,17 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         if (messageType == null && this.getActiveDetailView() == null) {
             messageType = "withNoActiveView";
         }
+        /*
         if (messageType == null && this.getActiveDetailView() != null &&
                 this.getActiveDetailView().getViewFilePath() == null) {
             messageType = "activeViewWithNoFile";
-        }
+        }*/
         if (messageType == null && this.getActiveDetailView() != null &&
                 this.getActiveDetailView().getViewFilePath() != null) {
             //Revisar que al menos exista un archivo con la ruta y nombre almacenados en this.getActiveDetailView().getViewFilePath()
-            File templateFile = new File(this.getActiveDetailView().getViewFilePath());
+            File templateFile = new File(SWBPortal.getWorkPath() + 
+                    this.getActiveDetailView().getWorkPath() +
+                    DetailViewManager.TEMPLATE_FILENAME);
             //si no es el caso, asignar el tipo de mensaje:
             if (!templateFile.exists()) {
                 messageType = "activeViewWithNoFile";
@@ -913,6 +931,10 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         HtmlStreamTokenizer tok = new HtmlStreamTokenizer(template);
         HtmlTag tag = new HtmlTag();
         String lang = paramRequest.getUser().getLanguage();
+        SWBResourceURL url = paramRequest.getActionUrl();
+        url.setAction("updateProp");
+        url.setParameter("suri", request.getParameter("suri"));
+        request.setAttribute("urlRequest", url.toString());
 
         while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
             int ttype = tok.getTokenType();
@@ -979,12 +1001,21 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                         "http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement"));
                 if (formElement != null) {
                     FormElement fe = (FormElement) formElement.createGenericInstance();
+                    //Revisar tipo de FormElement para saber si aplicar el InLineEdit
+                    GenericObject generic = formElement.createGenericInstance();
+                    boolean applyInlineEdit = false;
+                    
+                    if (generic instanceof Text || generic instanceof TextArea) {
+                        applyInlineEdit = true;
+                    }
                     if (fe != null) {
                         if (formMgr.getSemanticObject() != null) {
                             fe.setModel(formMgr.getSemanticObject().getModel());
                         }
                         ret = fe.renderElement(request, elementBSC, semProp, semProp.getName(),
-                                SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_VIEW, lang);
+                                SWBFormMgr.TYPE_XHTML,
+                                applyInlineEdit ? "inlineEdit" : SWBFormMgr.MODE_VIEW,
+                                lang);
                     }
                 }
             }
