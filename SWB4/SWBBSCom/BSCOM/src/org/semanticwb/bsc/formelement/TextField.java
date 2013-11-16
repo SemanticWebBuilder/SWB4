@@ -57,6 +57,44 @@ public class TextField extends org.semanticwb.bsc.formelement.base.TextFieldBase
                 viewString.append("</a>");
             }
             toReturn = viewString.toString();
+        } else if (mode.equals("inlineEdit")) {
+            StringBuilder viewString = new StringBuilder(128);
+            String value = obj.getProperty(prop);
+            String objectId = obj.getSemanticClass().getClassCodeName() + obj.getId() +
+                    propName;
+            String url = (String) request.getAttribute("urlRequest");
+            
+            viewString.append("<script type=\"text/javascript\">\n");
+            viewString.append("  <!--\n");
+            viewString.append("    var iledit_" + objectId + ";");
+            viewString.append("    dojo.addOnLoad( function() {");
+            viewString.append("      iledit_" + objectId + " = new dijit.InlineEditBox({");
+            viewString.append("        id: \"ile_" + objectId + "\",");
+            viewString.append("        autoSave: false,");
+            viewString.append("        editor: \"dijit.form.ValidationTextBox\",");
+            viewString.append("        editorParams: {trim:true, required:true},");
+            viewString.append("        width: '80px',");
+            viewString.append("        onChange: function(value) {");
+            viewString.append("          var xmlhttp;\n");
+            viewString.append("          if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari\n");
+            viewString.append("            xmlhttp=new XMLHttpRequest();\n");
+            viewString.append("          } else {// code for IE6, IE5\n");
+            viewString.append("            xmlhttp=new ActiveXObject(\"Microsoft.XMLHTTP\");\n");
+            viewString.append("          }\n");
+            viewString.append("          xmlhttp.onreadystatechange=function() {\n");
+            viewString.append("            if (xmlhttp.readyState==4 && xmlhttp.status==200) {\n");
+            viewString.append("              location.reload(true);\n");
+            viewString.append("            }\n");
+            viewString.append("          }\n");
+            viewString.append("          xmlhttp.open(\"GET\", \"" + url + "?propUri=" + prop.getEncodedURI() + "&value=\"+value, true);\n");
+            viewString.append("          xmlhttp.send();\n");
+            viewString.append("        }");
+            viewString.append("      }, 'eb_" + objectId + "');");
+            viewString.append("    }); iledit_" + objectId + ".startup();\n");
+            viewString.append("-->\n");
+            viewString.append("</script>\n");
+            viewString.append("<span id=\"eb_" + objectId + "\" class=\"swb-ile\">" + value + "</span>");
+            toReturn = viewString.toString();
         }
         if (toReturn == null) {
             toReturn = "";
