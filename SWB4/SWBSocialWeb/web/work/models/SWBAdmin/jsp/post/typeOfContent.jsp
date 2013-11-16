@@ -227,11 +227,23 @@
                 <div class="msgFastCalendar">
                     <p id="msgTitle">Programar envío de mensaje</p>
                 <%
-                    String inidate=new Date().toString();
+                    String date=new Date().toString();
                     String starthour="";
-                    System.out.println("inidate:"+inidate);
+                    if(postOut!=null && postOut.getFastCalendar()!=null)
+                    {
+                        try
+                        {
+                            String minutes="00";
+                            Date initDate=postOut.getFastCalendar().getFc_date();                            
+                            date=getDateFormat(initDate);
+                            if(initDate.getMinutes()!=0) minutes=""+initDate.getMinutes(); 
+                            String hour=""+initDate.getHours();
+                            if(hour.length()==1) hour="0"+hour; 
+                            starthour=hour+":"+minutes;
+                        }catch(Exception ignore){}
+                    }    
                 %>
-                Día:<input type="text" name="postOut_inidate" id="postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=inidate%>">
+                Día:<input type="text" name="postOut_inidate" id="postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
                 Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="postOut_starthour"  value="<%=(starthour!=null&&starthour.trim().length() > 0 ? "T"+starthour+":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
                 </div>
                 <!--Termina Calendario Rapido-->
@@ -448,10 +460,23 @@
                     <div class="msgFastCalendar">
                         <p id="msgTitle">Programar envío de mensaje</p>
                     <%
-                        String inidate=new Date().toString();
+                        String date=new Date().toString();
                         String starthour="";
+                        if(postOut!=null && postOut.getFastCalendar()!=null)
+                        {
+                            try
+                            {
+                                String minutes="00";
+                                Date initDate=postOut.getFastCalendar().getFc_date();                            
+                                date=getDateFormat(initDate);
+                                if(initDate.getMinutes()!=0) minutes=""+initDate.getMinutes(); 
+                                String hour=""+initDate.getHours();
+                                if(hour.length()==1) hour="0"+hour; 
+                                starthour=hour+":"+minutes;
+                            }catch(Exception ignore){}
+                        }    
                     %>
-                    Día:<input type="text" name="postOut_inidate" id="postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=inidate%>">
+                    Día:<input type="text" name="postOut_inidate" id="postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
                     Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="postOut_starthour"  value="<%=(starthour!=null&&starthour.trim().length() > 0 ? "T"+starthour+":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
                     </div>
                     <!--Termina Calendario Rapido-->
@@ -786,10 +811,23 @@
                     <div class="msgFastCalendar">
                         <p id="msgTitle">Programar envío de mensaje</p>
                     <%
-                        String inidate=new Date().toString();
+                        String date=new Date().toString();
                         String starthour="";
+                        if(postOut!=null && postOut.getFastCalendar()!=null)
+                        {
+                            try
+                            {
+                                String minutes="00";
+                                Date initDate=postOut.getFastCalendar().getFc_date();                            
+                                date=getDateFormat(initDate);
+                                if(initDate.getMinutes()!=0) minutes=""+initDate.getMinutes(); 
+                                String hour=""+initDate.getHours();
+                                if(hour.length()==1) hour="0"+hour; 
+                                starthour=hour+":"+minutes;
+                            }catch(Exception ignore){}
+                        }    
                     %>
-                    Día:<input type="text" name="postOut_inidate" id="postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=inidate%>">
+                    Día:<input type="text" name="postOut_inidate" id="postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
                     Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="postOut_starthour"  value="<%=(starthour!=null&&starthour.trim().length() > 0 ? "T"+starthour+":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
                     </div>
                     <!--Termina Calendario Rapido-->
@@ -906,3 +944,32 @@
             }
         }
     %>
+    
+    
+    <%!
+    private String getDateFormat(Date date) 
+    {
+        StringTokenizer st = new StringTokenizer(date.toString(), "-"); 
+        String nf = date.toString(); 
+        String y = "";
+        String m = "";
+        String d = "";
+        if (st.hasMoreTokens()) {
+            y = st.nextToken();
+            if (st.hasMoreTokens()) {
+                m = st.nextToken();
+            }
+            if (st.hasMoreTokens()) {
+                d = st.nextToken();
+                int pos=-1;
+                pos=d.indexOf(" ");
+                if(pos>-1)
+                {
+                    d=d.substring(0, pos);
+                }
+            }
+            nf = y + "-" + m + "-" + d;
+        }
+        return nf;
+    }
+    %>             
