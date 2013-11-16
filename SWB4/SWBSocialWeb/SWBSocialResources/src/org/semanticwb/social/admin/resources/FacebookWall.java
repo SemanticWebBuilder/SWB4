@@ -20,15 +20,18 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.*;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -48,16 +51,21 @@ import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.social.Message;
 import org.semanticwb.social.MessageIn;
+import org.semanticwb.social.Photo;
 import org.semanticwb.social.PhotoIn;
 import org.semanticwb.social.Post;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
+import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.SocialUserExtAttributes;
+import org.semanticwb.social.Video;
 import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.util.SWBSocialUtil;
+import org.semanticwb.social.util.SocialLoader;
 
 /**
  *
@@ -383,7 +391,7 @@ public class FacebookWall extends GenericResource {
                     System.out.println("Reply-End");
                 //twitter.updateStatus(new StatusUpdate(answer).inReplyToStatusId(id));
                 response.setRenderParameter("repliedPost", "ok");
-                response.setMode("postSent");                
+                response.setMode("postSent");
             } catch (Exception ex) {
                 log.error("Error when trying to reply ", ex);
             }//**ini
@@ -692,6 +700,60 @@ public class FacebookWall extends GenericResource {
                 }
             }
             response.setMode("reAssignedPost");
+        }else if (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo")) {
+            //System.out.println("Entra a InBox_processAction-2:"+request.getParameter("objUri"));
+            if (request.getParameter("objUri") != null) {
+                //System.out.println("Entra a InBox_processAction-3");
+                PostIn postIn = (PostIn) SemanticObject.getSemanticObject(request.getParameter("objUri")).createGenericInstance();
+                SocialTopic stOld = postIn.getSocialTopic();
+                ///
+                WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
+                String socialUri = "";
+                int j = 0;
+                Enumeration<String> enumParams = request.getParameterNames();
+                while (enumParams.hasMoreElements()) {
+                    String paramName = enumParams.nextElement();
+                    if (paramName.startsWith("http://")) {//get param name starting with http:// -> URIs
+                        if (socialUri.trim().length() > 0) {
+                            socialUri += "|";
+                        }
+                        socialUri += paramName;
+                        j++;
+                    }
+                }
+                
+                ArrayList aSocialNets = new ArrayList();//Social nets where the post will be published
+                String[] socialUris = socialUri.split("\\|");  //Dividir valores
+                if( j > 0 && wsite != null){
+                    for (int i = 0; i < socialUris.length; i++) {
+                        String tmp_socialUri = socialUris[i];
+                        SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri, wsite.getSemanticModel());
+                        SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
+                        //Se agrega la red social de salida al post
+                        aSocialNets.add(socialNet);
+                    }
+                }
+                                
+                String toPost = request.getParameter("toPost");
+                String socialFlow = request.getParameter("socialFlow");
+                SocialPFlow socialPFlow = null;
+                if (socialFlow != null && socialFlow.trim().length() > 0) {
+                    socialPFlow = (SocialPFlow) SemanticObject.createSemanticObject(socialFlow).createGenericInstance();
+                    //Revisa si el flujo de publicación soporte el tipo de postOut, de lo contrario, asinga null a spflow, para que no 
+                    //asigne flujo al mensaje de salida., Esto también esta validado desde el jsp typeOfContent
+                    if ((toPost.equals("msg") && !SocialLoader.getPFlowManager().isManagedByPflow(socialPFlow, Message.sclass))
+                            || (toPost.equals("photo") && !SocialLoader.getPFlowManager().isManagedByPflow(socialPFlow, Photo.sclass))
+                            || (toPost.equals("video") && !SocialLoader.getPFlowManager().isManagedByPflow(socialPFlow, Video.sclass))) {
+                        socialPFlow = null;
+                    }
+                }
+
+                //System.out.println("Entra a InBox_processAction-4");
+                SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, toPost, request, response);
+
+                response.setRenderParameter("repliedPost", "ok");
+                response.setMode("postSent");
+            }
         }
     }
 //**fin
@@ -726,6 +788,8 @@ public class FacebookWall extends GenericResource {
         }else if(mode != null && mode.equals("getMoreVideos")){
             System.out.println("brings more VIDEOS - OLDER");
             doGetMoreVideos(request, response, paramRequest);
+        }else if (paramRequest.getMode().equals("post")) {
+            doCreatePost(request, response, paramRequest);
         }else if(mode!= null && mode.equals("likeSent") || mode.equals("unlikeSent")){//Displays updated data of liked/unliked status
             String postID = request.getParameter("postID");
             String objUri = request.getParameter("suri");
@@ -824,24 +888,199 @@ public class FacebookWall extends GenericResource {
                 log.error("Error when trying to like/unlike post ", ex);
             }
         }else if(mode!= null && mode.equals("replyPost")){//Displays dialog to create post
-            actionURL.setParameter("postID", request.getParameter("postID"));
-            actionURL.setParameter("suri", request.getParameter("suri"));
+            System.out.println("SOCIAL NETWORK IN setSocialTopic: " + request.getParameter("suri"));
+            
+            Facebook facebook = null;
+            String idPost = request.getParameter("postID");            
+            String objUri = request.getParameter("suri");            
+            try {
+                facebook = (Facebook)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+            }catch(Exception e){
+                log.error("Error getting the SocialNetwork " + e);
+                return;
+            }
+            
+            SocialNetwork socialNetwork = null;
+            try {
+                socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+            }catch(Exception e){
+                log.error("Error getting the SocialNetwork " + e);
+                return;
+            }
+            SocialNetworkUser socialNetUser = null;
+            
+            SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());            
+            PostIn postIn = null;
+            try {
+                postIn = PostIn.getPostInbySocialMsgId(model, idPost);
+                    
+                if(postIn == null){
+                    JSONObject postData = getPostFromFullId(idPost, facebook);
+                    System.out.println("This is the post: " + postData);
+                    socialNetUser = SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(postData.getJSONObject("from").getString("id"), socialNetwork, model);
 
-            out.println("<form type=\"dijit.form.Form\" id=\"createPost\" action=\"" +  actionURL.setAction("sendReply") + "\" method=\"post\" onsubmit=\"submitForm('createPost'); try{document.getElementById('csLoading').style.display='inline';}catch(noe){}; return false;\">");            
-            out.println("<fieldset>");
-            out.println("<table>");
-            out.println("<tr>"); 
-            out.println("   <td>");
-            out.println("       <textarea type=\"dijit.form.Textarea\" name=\"replyText\" id=\"replyText\" rows=\"4\" cols=\"50\"></textarea>");
-            out.println("   </td>");
-            out.println("</tr>");
-            out.println("<tr>");
-            out.println("       <td style=\"text-align: center;\"><button dojoType=\"dijit.form.Button\" type=\"submit\">Reply</button></td>");
-            out.println("</tr>");
-            out.println("</table>");
-            out.println("</fieldset>");
-            out.println("</form>");
-            out.println("<span id=\"csLoading\" style=\"width: 100px; display: none\" align=\"center\">&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\"/></span>");
+                    if(socialNetUser == null){
+                        System.out.println("\n\nEL USUARIO NO EXISTE");
+                    }else{
+                        System.out.println("\n\nEL USUARIO EXISTE: " + socialNetUser.getSnu_id());
+                    }
+
+                    if(socialNetUser == null){
+                        socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);//Create a socialNetworkUser
+                        socialNetUser.setSnu_id(postData.getJSONObject("from").getString("id"));
+                        socialNetUser.setSnu_name(postData.getJSONObject("from").getString("name"));
+                        socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject());
+                        socialNetUser.setSnu_photoUrl("https://graph.facebook.com/" + postData.getJSONObject("from").getString("id") + "/picture?width=150&height=150");
+                        socialNetUser.setCreated(new Date());
+                        //TODO: Llamar al getUserInfoById
+                        socialNetUser.setFollowers(0);
+                        socialNetUser.setFriends(0);
+                        System.out.println("YA SE CREO EL USUARIO!!!");
+                    }
+                                 
+                    String postType = "";
+                    if(postData.has("type")){
+                        postType = postData.getString("type");
+                    }else if(postData.has("picture") && postData.has("name") && postData.has("link") && postData.has("description")){
+                        postType = "link";
+                    }
+                    String message = "";
+                    String story = "";
+
+                    if(postType.equals("status") || postType.equals("link") || postType.equals("checkin")){
+                        postIn=MessageIn.ClassMgr.createMessageIn(model);
+                        postIn.setPi_type(SWBSocialUtil.POST_TYPE_MESSAGE);
+                        if(postType.equals("status")){
+                            if(!postData.isNull("message")){
+                                message = postData.getString("message");
+                            }else if(!postData.isNull("story")){
+                                story = (!postData.isNull("story")) ? postData.getString("story") : "";
+                                story = getTagsFromPost(postData.getJSONObject("story_tags"), story);
+                            }                        
+                            if(!message.isEmpty()){
+                                postIn.setMsg_Text(message);
+                            }else if(!story.isEmpty()){
+                                postIn.setMsg_Text(story);
+                            }
+
+                            System.out.println("********************STATUS guardado OK");
+                        }else if(postType.equals("link")){
+                            if(!postData.isNull("story")){
+                                story = (!postData.isNull("story")) ? postData.getString("story") : "";
+                                story = getTagsFromPost(postData.getJSONObject("story_tags"), story);
+                            }
+                            if(!postData.isNull("message")){
+                                message = postData.getString("message");
+                            }
+
+                            if(!message.isEmpty()){
+                                postIn.setMsg_Text(message);
+                            }else if(!story.isEmpty()){
+                                postIn.setMsg_Text(story);
+                            }
+                            System.out.println("********************LINK guardado OK");
+                        }
+
+                        //Information of post IN
+                        postIn.setSocialNetMsgId(postData.getString("id"));
+                        postIn.setPostInSocialNetwork(socialNetwork);
+                        postIn.setPostInStream(null);
+                        postIn.setPostInSocialNetworkUser(socialNetUser);
+                        Calendar calendario = Calendar.getInstance();
+                        postIn.setPi_created(calendario.getTime());
+                        
+                    }else if(postType.equals("video") || postType.equals("swf")){
+                        postIn=VideoIn.ClassMgr.createVideoIn(model);
+                        postIn.setPi_type(SWBSocialUtil.POST_TYPE_VIDEO);   
+                        //Get message and/or story
+                        if(!postData.isNull("message")){
+                            message = postData.getString("message");
+                        }else if(!postData.isNull("story")){
+                            story = (!postData.isNull("story")) ? postData.getString("story") : "";
+                            story = getTagsFromPost(postData.getJSONObject("story_tags"), story);
+                        }
+
+                        System.out.println("THE MESSAGE******\n" + message);
+                        System.out.println("THE STORY******\n" + story);
+                        if(!message.isEmpty()){
+                            System.out.println("SETTING MESSAGE");
+                            postIn.setMsg_Text(message);
+                        }else if(!story.isEmpty()){
+                            System.out.println("SETTING STORY");
+                            postIn.setMsg_Text(story);
+                        }else{
+                            System.out.println("SETTING ONLY THE NAME!!!!!");
+                            postIn.setMsg_Text("<a href=\"" + postData.getString("source") + "\" target=\"_blank\">" + postData.getString("name") +"</a>");
+                        }
+
+                        if(postData.has("source")){
+                            System.out.println("Setting the VIDEO");
+                            VideoIn videoIn=(VideoIn)postIn;
+                            videoIn.setVideo(postData.getString("source"));
+                        }
+
+                        //Information of post IN
+                        postIn.setSocialNetMsgId(postData.getString("id"));
+                        postIn.setPostInSocialNetwork(socialNetwork);
+                        postIn.setPostInStream(null);
+                        postIn.setPostInSocialNetworkUser(socialNetUser);
+                        Calendar calendario = Calendar.getInstance();
+                        postIn.setPi_created(calendario.getTime());
+                        
+                        System.out.println("********************VIDEO guardado OK");
+                        //response.setRenderParameter("postUri", postIn.getURI());
+                    }else if(postType.equals("photo")){
+                        postIn=PhotoIn.ClassMgr.createPhotoIn(model);
+                        postIn.setPi_type(SWBSocialUtil.POST_TYPE_PHOTO);   
+                        //Get message and/or story
+                        if(!postData.isNull("message")){
+                            message = postData.getString("message");
+                        }else if(!postData.isNull("story")){
+                            story = (!postData.isNull("story")) ? postData.getString("story") : "";
+                            story = getTagsFromPost(postData.getJSONObject("story_tags"), story);
+                        }
+
+                        System.out.println("\tMESSAGE:" + message);
+                        System.out.println("\tSTORY:" + story);
+                        if(!message.isEmpty()){
+                            postIn.setMsg_Text(message);
+                        }else if(!story.isEmpty()){
+                            postIn.setMsg_Text(story);
+                        }
+
+                        if(postData.has("picture")){
+                            String photo=postData.getString("picture");
+                            PhotoIn photoIn=(PhotoIn)postIn;
+                            photoIn.addPhoto(photo);
+                        }
+
+                        //Information of post IN
+                        postIn.setSocialNetMsgId(postData.getString("id"));
+                        postIn.setPostInSocialNetwork(socialNetwork);
+                        postIn.setPostInStream(null);
+                        postIn.setPostInSocialNetworkUser(socialNetUser);
+                        Calendar calendario = Calendar.getInstance();
+                        postIn.setPi_created(calendario.getTime());                        
+                        System.out.println("********************STATUS guardado OK");
+                        //response.setRenderParameter("postUri", postIn.getURI());
+                    }
+                }
+            }catch(Exception e){
+                log.error("Error trying to setSocialTopic: ", e);
+            }
+            
+            final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/postInResponse.jsp";
+            RequestDispatcher dis = request.getRequestDispatcher(path);
+            if (dis != null) {
+                try {
+                    request.setAttribute("postUri", SemanticObject.createSemanticObject(postIn.getURI()));
+                    request.setAttribute("paramRequest", paramRequest);
+                    dis.include(request, response);
+                } catch (Exception e) {
+                    log.error(e);
+                }
+            }
+            //Post saved
         }else if(mode!= null && mode.equals("postSent")){//Hides dialog used to create Post
             if(request.getParameter("repliedPost") != null && request.getParameter("repliedPost").equals("ok")){
                 out.println("<script type=\"text/javascript\">");
@@ -1972,9 +2211,9 @@ public class FacebookWall extends GenericResource {
             if(actions != null && actions.length() > 0){//Available actions for the post
                 for (int i = 0; i < actions.length(); i++) {
                     if(actions.getJSONObject(i).getString("name").equals("Comment") && socialUserExtAttr.isUserCanRespondMsg()){//I can comment                        
-                        /*writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + REPLY + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
-                            writer.write(" <a href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyPost").setParameter("postID", postsData.getString("id")) + "','Reply to " + postsData.getJSONObject("from").getString("name") + "');return false;\"><span>Reply</span></a>  ");
-                        writer.write("   </span>");*/
+                        writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + REPLY + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
+                            writer.write(" <a class=\"clasifica\" href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyPost").setParameter("postID", postsData.getString("id")) + "','Reply to " + postsData.getJSONObject("from").getString("name") + "');return false;\"><span>Reply</span></a>  ");
+                        writer.write("   </span>");
                         
                         if(linkLike != null){
                             /*writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + REPLY + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
@@ -2765,5 +3004,19 @@ public class FacebookWall extends GenericResource {
             log.error("Problem found computing time of post. ", e);
         }        
         return date;
+    }
+     
+     public void doCreatePost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/post/typeOfContent.jsp");
+        request.setAttribute("contentType", request.getParameter("valor"));
+        request.setAttribute("wsite", request.getParameter("wsite"));
+        request.setAttribute("objUri", request.getParameter("objUri"));
+        request.setAttribute("paramRequest", paramRequest);
+
+        try {
+            rd.include(request, response);
+        } catch (ServletException ex) {
+            log.error("Error al enviar los datos a typeOfContent.jsp " + ex.getMessage());
+        }
     }
 }

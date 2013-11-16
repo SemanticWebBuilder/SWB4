@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -32,16 +34,21 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.Kloutable;
+import org.semanticwb.social.Message;
 import org.semanticwb.social.MessageIn;
+import org.semanticwb.social.Photo;
 import org.semanticwb.social.Post;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
+import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.SocialUserExtAttributes;
 import org.semanticwb.social.Twitter;
+import org.semanticwb.social.Video;
 import org.semanticwb.social.admin.resources.util.SWBSocialResUtil;
 import org.semanticwb.social.util.SWBSocialUtil;
+import org.semanticwb.social.util.SocialLoader;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 /**
@@ -215,7 +222,7 @@ public class Timeline extends GenericResource{
         String objUri = request.getParameter("suri");
         System.out.println("suri in processAction:" + objUri);
         twitter4j.Twitter twitter = twitterUsers.get(objUri);
-        if(twitter == null){//When executing an action if can't recover a valid twitter, create it
+        if(twitter == null && !action.equals("postMessage") && !action.equals("uploadPhoto")){//When executing an action if can't recover a valid twitter, create it
             SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
             Twitter semanticTwitter = (Twitter) semanticObject.createGenericInstance();
             twitter = new TwitterFactory(configureOAuth(semanticTwitter).build()).getInstance();            
@@ -471,6 +478,60 @@ public class Timeline extends GenericResource{
                 }
             }
             response.setMode("reAssignedPost");
+        }else if (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo")) {
+            //System.out.println("Entra a InBox_processAction-2:"+request.getParameter("objUri"));
+            if (request.getParameter("objUri") != null) {
+                //System.out.println("Entra a InBox_processAction-3");
+                PostIn postIn = (PostIn) SemanticObject.getSemanticObject(request.getParameter("objUri")).createGenericInstance();
+                SocialTopic stOld = postIn.getSocialTopic();
+                ///
+                WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
+                String socialUri = "";
+                int j = 0;
+                Enumeration<String> enumParams = request.getParameterNames();
+                while (enumParams.hasMoreElements()) {
+                    String paramName = enumParams.nextElement();
+                    if (paramName.startsWith("http://")) {//get param name starting with http:// -> URIs
+                        if (socialUri.trim().length() > 0) {
+                            socialUri += "|";
+                        }
+                        socialUri += paramName;
+                        j++;
+                    }
+                }
+                
+                ArrayList aSocialNets = new ArrayList();//Social nets where the post will be published
+                String[] socialUris = socialUri.split("\\|");  //Dividir valores
+                if( j > 0 && wsite != null){
+                    for (int i = 0; i < socialUris.length; i++) {
+                        String tmp_socialUri = socialUris[i];
+                        SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri, wsite.getSemanticModel());
+                        SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
+                        //Se agrega la red social de salida al post
+                        aSocialNets.add(socialNet);
+                    }
+                }
+                                
+                String toPost = request.getParameter("toPost");
+                String socialFlow = request.getParameter("socialFlow");
+                SocialPFlow socialPFlow = null;
+                if (socialFlow != null && socialFlow.trim().length() > 0) {
+                    socialPFlow = (SocialPFlow) SemanticObject.createSemanticObject(socialFlow).createGenericInstance();
+                    //Revisa si el flujo de publicación soporte el tipo de postOut, de lo contrario, asinga null a spflow, para que no 
+                    //asigne flujo al mensaje de salida., Esto también esta validado desde el jsp typeOfContent
+                    if ((toPost.equals("msg") && !SocialLoader.getPFlowManager().isManagedByPflow(socialPFlow, Message.sclass))
+                            || (toPost.equals("photo") && !SocialLoader.getPFlowManager().isManagedByPflow(socialPFlow, Photo.sclass))
+                            || (toPost.equals("video") && !SocialLoader.getPFlowManager().isManagedByPflow(socialPFlow, Video.sclass))) {
+                        socialPFlow = null;
+                    }
+                }
+
+                //System.out.println("Entra a InBox_processAction-4");
+                SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, toPost, request, response);
+
+                response.setRenderParameter("repliedTweet", "ok");
+                response.setMode("tweetSent");
+            }
         }
     }
     
@@ -608,26 +669,107 @@ public class Timeline extends GenericResource{
                 out.println("</script>");
             }
         }else if(mode!= null && mode.equals("replyTweet")){//Displays dialog to create tweet
-            String userName = request.getParameter("userName");
-            SWBResourceURL actionURL = paramRequest.getActionUrl();
-            actionURL.setParameter("id", request.getParameter("id"));
-            actionURL.setParameter("suri", request.getParameter("suri"));
+            //Create first the post BEGIN
+            SocialNetwork socialNetwork = null;
+            Long id = Long.parseLong(request.getParameter("id"));
+            PostIn postIn = null; //The post
+            try {
+                socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+            }catch(Exception e){
+                System.out.println("Error getting the SocialNetwork " + e);
+                return;
+            }
+            
+            try {
+                Status status = twitter.showStatus(id);
+                String creatorId = status.getUser().getId() + "";
+                SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
+                SocialNetworkUser socialNetUser = SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(""+status.getUser().getId(), socialNetwork, model);
+                
+                postIn = PostIn.getPostInbySocialMsgId(model, status.getId()+"");
+                if(postIn == null){                    
+                    postIn = MessageIn.ClassMgr.createMessageIn(model);
+                    postIn.setSocialNetMsgId(status.getId()+"");
+                    postIn.setMsg_Text(status.getText());
+                    postIn.setPostInSocialNetwork(socialNetwork);
+                    postIn.setPostInStream(null);
+                    Calendar calendario = Calendar.getInstance();
+                    postIn.setPi_created(calendario.getTime());
+                    postIn.setPi_type(SWBSocialUtil.POST_TYPE_MESSAGE);                
 
-            out.println("<form type=\"dijit.form.Form\" id=\"createTweet\" action=\"" +  actionURL.setAction("sendReply") + "\" method=\"post\" onsubmit=\"submitForm('createTweet'); try{document.getElementById('csLoading').style.display='inline';}catch(noe){}; return false;\">");            
-            out.println("<fieldset>");
-            out.println("<table>");
-            out.println("<tr>"); 
-            out.println("   <td>");
-            out.println("       <textarea type=\"dijit.form.Textarea\" name=\"replyText\" id=\"replyText\" rows=\"4\" cols=\"50\">" + userName + "</textarea>");
-            out.println("   </td>");
-            out.println("</tr>");
-            out.println("<tr>");
-            out.println("       <td style=\"text-align: center;\"><button dojoType=\"dijit.form.Button\" type=\"submit\">Reply</button></td>");
-            out.println("</tr>");
-            out.println("</table>");
-            out.println("</fieldset>");
-            out.println("</form>");
-            out.println("<span id=\"csLoading\" style=\"width: 100px; display: none\" align=\"center\">&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\"/></span>");
+
+                    if(socialNetUser != null){//User already exists
+                        System.out.println("The user already exists: " + socialNetUser.getSnu_name() + " - " + socialNetUser.getSnu_id() +"="+ status.getUser().getId());
+                        int userKloutScore = 0;
+                        int days=SWBSocialUtil.Util.Datediff(socialNetUser.getUpdated(), Calendar.getInstance().getTime());
+                        if(days > 5){  //Si ya pasaron 5 o mas días de que se actualizó la info del usuario, entonces busca su score en Klout
+                            System.out.println("YA PASARON MAS DE 5 DÍAS, BUSCAR KLOUT DE USUARIO...");
+                            Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
+                            userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
+                            System.out.println("userKloutScore K TRAJO:" + userKloutScore);
+                            socialNetUser.setSnu_klout(userKloutScore);
+                        }
+
+                    }else{//User does not exist, create it
+                        System.out.println("USUARIO NO EXISTE EN EL SISTEMA, REVISAR QUE KLOUT TIENE");
+                        int userKloutScore = 0;
+
+                        Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
+                        userKloutScore = Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue();
+                        User twitterUser = twitter.showUser(status.getUser().getId());                    
+
+                        socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);//Create a socialNetworkUser
+                        socialNetUser.setSnu_id(status.getUser().getId()+"");
+                        socialNetUser.setSnu_klout(userKloutScore);
+                        System.out.println("setting user name = " + status.getUser().getScreenName());
+                        socialNetUser.setSnu_name("@"+status.getUser().getScreenName());
+                        socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject());
+                        socialNetUser.setSnu_photoUrl(status.getUser().getBiggerProfileImageURL());
+                        if(twitterUser != null){
+                            socialNetUser.setCreated(twitterUser.getCreatedAt());
+                            socialNetUser.setFollowers(twitterUser.getFollowersCount());
+                            socialNetUser.setFriends(twitterUser.getFriendsCount());
+                        }else{
+                            socialNetUser.setCreated(new Date());
+                            socialNetUser.setFollowers(0);
+                            socialNetUser.setFriends(0);
+                        }
+                    }
+                    //SocialNetworkUser socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);//Create a socialNetworkUser
+
+                    postIn.setPostInSocialNetworkUser(socialNetUser);
+
+                    if(request.getParameter("newSocialTopic") == null || request.getParameter("newSocialTopic").equals("none"))
+                    {
+                        postIn.setSocialTopic(null);
+                    }else {
+                        SemanticObject semObjSocialTopic=SemanticObject.getSemanticObject(request.getParameter("newSocialTopic"));
+                        if(semObjSocialTopic!=null)
+                        {
+                            SocialTopic socialTopic=(SocialTopic)semObjSocialTopic.createGenericInstance();
+                            postIn.setSocialTopic(socialTopic);//Asigns socialTipic
+                        }
+                    }
+                    System.out.println("POST CREADO CORRECTAMENTE: " + postIn.getId() + " ** " + postIn.getSocialNetMsgId());
+                }else{
+                    System.out.println("El post ya existe y se está creando otra respuesta");
+                }
+            }catch(Exception e){
+                log.error("Error trying to setSocialTopic ", e);
+            }
+            //Create first the post END
+            
+            final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/postInResponse.jsp";
+            RequestDispatcher dis = request.getRequestDispatcher(path);
+            if (dis != null) {
+                try {
+                    request.setAttribute("postUri", SemanticObject.createSemanticObject(postIn.getURI()));
+                    request.setAttribute("paramRequest", paramRequest);
+                    dis.include(request, response);
+                } catch (Exception e) {
+                    log.error(e);
+                }
+            }
         }else if(mode!= null && mode.equals("replyDM")){//Displays dialog to create tweet
             SWBResourceURL actionURL = paramRequest.getActionUrl();
             actionURL.setParameter("userId", request.getParameter("userId"));
@@ -982,6 +1124,8 @@ public class Timeline extends GenericResource{
                 HttpSession session = request.getSession(true);
                 session.setAttribute(objUri + "pooling", request.getParameter("interval"));
             }
+        }else if (paramRequest.getMode().equals("post")) {
+            doCreatePost(request, response, paramRequest);
         }else{
             super.processRequest(request, response, paramRequest);
         }
@@ -1513,10 +1657,10 @@ public class Timeline extends GenericResource{
             out.write("<em>" + twitterHumanFriendlyDate(originalStatus.getCreatedAt(), paramRequest) + "</em> <strong><span>Retweeted: </span>" + originalStatus.getRetweetCount() + " " + times + " </strong>");
             
             if(socialUserExtAttr != null && socialUserExtAttr.isUserCanRespondMsg()){
-            /*out.write("<a href=\"#\" onclick=\"showDialog('" + renderURL.setMode("replyTweet").setParameter("id", originalStatus.getId()+"").setParameter("userName", "@" +
+            out.write("<a href=\"#\" class=\"clasifica\" onclick=\"showDialog('" + renderURL.setMode("replyTweet").setParameter("id", originalStatus.getId()+"").setParameter("userName", "@" +
                     originalStatus.getUser().getScreenName()).setParameter("suri", objUri) +
                     "','Reply to @"  + originalStatus.getUser().getScreenName() + "');return false;\"><span>Reply</span></a> ");
-            */
+            
             }
         }catch(Exception ex){
             System.out.println("Error checking updating Tweet Status!" + ex.getMessage());
@@ -1578,5 +1722,20 @@ public class Timeline extends GenericResource{
             log.error("Problem found computing time of post. ", e);
         }        
         return date;
+    }
+    
+    
+    public void doCreatePost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/post/typeOfContent.jsp");
+        request.setAttribute("contentType", request.getParameter("valor"));
+        request.setAttribute("wsite", request.getParameter("wsite"));
+        request.setAttribute("objUri", request.getParameter("objUri"));
+        request.setAttribute("paramRequest", paramRequest);
+
+        try {
+            rd.include(request, response);
+        } catch (ServletException ex) {
+            log.error("Error al enviar los datos a typeOfContent.jsp " + ex.getMessage());
+        }
     }
 }
