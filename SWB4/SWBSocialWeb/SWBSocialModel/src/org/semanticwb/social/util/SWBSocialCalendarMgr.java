@@ -122,9 +122,12 @@ public class SWBSocialCalendarMgr {
             while(itFastCalendars.hasNext())
             {
                 FastCalendar fastCalendar=itFastCalendars.next();
+                PostOut postOut=fastCalendar.getPostOutFastCalendarInv();
+                if(postOut==null) fastCalendar.remove();
+                Date inidate = fastCalendar.getFc_date();
+                Date today=new Date();
                 if(eval(fastCalendar))
                 {
-                    PostOut postOut=fastCalendar.getPostOutFastCalendarInv();
                     if(!postOut.isPublished() && !pfmgr.needAnAuthorization(postOut))   //Si no ha sido publicado y no necesita autorizacón en flujos
                     {
                         try
@@ -142,7 +145,15 @@ public class SWBSocialCalendarMgr {
                         postOut.removeFastCalendar();
                         fastCalendar.remove();
                     }
-                }
+                }else if(inidate.compareTo(today)<0)    //La fecha ya es pasada, eliminar el FastCalendar.
+                {
+                     //System.out.println("Se elimina FastCalendar de PostOut:"+postOut+", porque ya paso la fecha..que mancheados...:"+postOut);
+                     if(postOut!=null)
+                     {
+                        postOut.removeFastCalendar();
+                        fastCalendar.remove();
+                     }
+                }        
             }
             //Termina FastCalendars 
         }

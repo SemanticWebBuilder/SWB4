@@ -1376,6 +1376,49 @@ public class SWBSocialUtil implements SWBAppObject {
         }
         
         
+        private static void manageFastCalendar2PostOut(HttpServletRequest request, PostOut postOut)
+        {
+            if(postOut==null) return;
+            WebSite wsite=WebSite.ClassMgr.getWebSite(postOut.getSemanticObject().getModel().getName());
+            String postOutInitDate=request.getParameter("postOut_inidate");
+            String postOutInitHour=request.getParameter("postOut_starthour");
+
+            System.out.println("postOutInitDate-Jorge:"+postOutInitDate+",postOutInitHour:"+postOutInitHour);
+            if(postOutInitDate!=null && postOutInitDate.trim().length()>0)
+            {
+                postOutInitDate=SWBSocialUtil.Util.changeFormat(postOutInitDate, 1);
+                postOutInitHour = postOutInitHour.substring(1, 6);
+
+                //System.out.println("postOutInitDate-1**:"+postOutInitDate+",postOutInitHour-1**:"+postOutInitHour);
+
+                FastCalendar newFastCalendarInstance=FastCalendar.ClassMgr.createFastCalendar(wsite);
+                Date date2SendPostOut=new Date(postOutInitDate);
+
+                StringTokenizer st   = new StringTokenizer(postOutInitHour, ":");
+                int             h    = 0,
+                                m    = 0;
+                try {
+                    h = Integer.parseInt(st.nextToken());
+
+                    if (st.hasMoreTokens()) {
+                        m = Integer.parseInt(st.nextToken());
+                    }                           
+                } catch (Exception noe) {
+                    // No error
+                }
+                System.out.println("H a poner:"+h);
+                System.out.println("M a poner:"+m);
+                date2SendPostOut.setHours(h);
+                date2SendPostOut.setMinutes(m);
+
+                System.out.println("Se agrega FastCalendar a PostOut:"+postOut);
+                newFastCalendarInstance.setFc_date(date2SendPostOut);
+                postOut.setFastCalendar(newFastCalendarInstance);
+            }
+            //Termina Manejo de FastCalendar
+        }
+        
+        
         
         
         public static void editPostOut(PostOut postout, SocialPFlow socialPFlow, ArrayList<SocialNetwork> aSocialNets, WebSite wsite, String toPost, HttpServletRequest request, SWBActionResponse response) 
@@ -1398,6 +1441,10 @@ public class SWBSocialUtil implements SWBAppObject {
                     
                     //Convierto a un post de salida para poderle agregar cada red social a la que se envía dicho post
                     PostOut postOut = (PostOut) post;
+                    
+                    //Comienza manejo de FastCalendar
+                    manageFastCalendar2PostOut(request, postOut);
+                    //Termina manejo de FastCalendar
                     
                     //Le agrego las redes sociales a las cuales se enviara el postOut, si se creó de una contestación, 
                     //sería solo una red social la que vendría en el parametro "aSocialNets", pero como esto es una edición,
@@ -1458,41 +1505,9 @@ public class SWBSocialUtil implements SWBAppObject {
                     postOut.setPout_created(calendario.getTime());   
                     //Termina guardado de fecha para fines de indexado para ordenamientos con sparql
                     
-                    String postOutInitDate=request.getParameter("postOut_inidate");
-                    String postOutInitHour=request.getParameter("postOut_starthour");
-                    
-                    System.out.println("postOutInitDate-Jorge:"+postOutInitDate+",postOutInitHour:"+postOutInitHour);
-                    if(postOutInitDate!=null && postOutInitDate.trim().length()>0)
-                    {
-                        postOutInitDate=SWBSocialUtil.Util.changeFormat(postOutInitDate, 1);
-                        postOutInitHour = postOutInitHour.substring(1, 6);
-                        
-                        //System.out.println("postOutInitDate-1**:"+postOutInitDate+",postOutInitHour-1**:"+postOutInitHour);
-                    
-                        FastCalendar newFastCalendarInstance=FastCalendar.ClassMgr.createFastCalendar(wsite);
-                        Date date2SendPostOut=new Date(postOutInitDate);
-                        
-                        StringTokenizer st   = new StringTokenizer(postOutInitHour, ":");
-                        int             h    = 0,
-                                        m    = 0;
-                        try {
-                            h = Integer.parseInt(st.nextToken());
-
-                            if (st.hasMoreTokens()) {
-                                m = Integer.parseInt(st.nextToken());
-                            }                           
-                        } catch (Exception noe) {
-                            // No error
-                        }
-                        System.out.println("H a poner:"+h);
-                        System.out.println("M a poner:"+m);
-                        date2SendPostOut.setHours(h);
-                        date2SendPostOut.setMinutes(m);
-                        
-                        newFastCalendarInstance.setFc_date(date2SendPostOut);
-                        postOut.setFastCalendar(newFastCalendarInstance);
-                    }
-                    
+                    //Comienza manejo de FastCalendar
+                    manageFastCalendar2PostOut(request, postOut);
+                    //Termina manejo de FastCalendar
                     
                     //Si el PostOut que se acaba de crear, fue en consecuencia de una respuesta de una PostIn, este se agrega al nuevo PostOut
                     if(postIn!=null)    
