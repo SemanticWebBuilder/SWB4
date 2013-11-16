@@ -242,11 +242,11 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
     {
         super.execute(user);
         
-        runActionCode(user, UserTask.START_ACTIONCODE);
-        
         //System.out.println("execute("+user+")");
         FlowNode type=getFlowNodeType();
         type.execute(this, user);
+        
+        runActionCode(user, UserTask.START_ACTIONCODE);
     }
 
     @Override
@@ -639,5 +639,11 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
             canAccess=type.haveAccess(user);
         }
         return canAccess;
-    }    
+    }
+
+    @Override
+    public void setAssignedto(User user) {
+        super.setAssignedto(user);
+        runActionCode(user, UserTask.ASSIGN_ACTIONCODE);
+    }
 }
