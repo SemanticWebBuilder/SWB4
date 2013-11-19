@@ -1,5 +1,5 @@
 <%-- 
-    Document   : userTaskInboxNewCase
+    Document   : repoitoryAddFile.jsp
     Created on : 3/09/2013, 11:41:28 AM
     Author     : Hasdai Pacheco <ebenezer.sanchez@infotec.com.mx>
 --%>
@@ -66,7 +66,7 @@ if (!user.isSigned()) {
     SWBResourceURL viewURL = paramRequest.getRenderUrl().setMode(SWBParamRequest.Mode_VIEW);
     SWBResourceURL createURL = paramRequest.getActionUrl().setAction(ProcessFileRepository.ACT_NEWFILE);
     %>
-    <script src="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/repository/fileRepositoryUtils.js" charset="utf"></script>
+    <script src="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/repository/fileRepositoryUtils.js" charset="utf-8"></script>
     <div class="col-lg-offset-3 col-lg-6">
     <div class="panel panel-default swbp-panel">
         <div class="panel-heading swbp-panel-title">
