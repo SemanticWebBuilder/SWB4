@@ -192,7 +192,7 @@ public class SocialSentPost extends GenericResource {
         //System.out.println("Llega a doEdit:"+request.getParameter("suri"));
 
         String id = request.getParameter("suri");
-        System.out.println("SocialSentPost/Edit/id:"+id);
+        //System.out.println("SocialSentPost/Edit/id:"+id);
         if (id == null) {
             return;
         }
@@ -215,7 +215,7 @@ public class SocialSentPost extends GenericResource {
         //User user = paramRequest.getUser();
 
         
-        System.out.println("Entra a Edit, reload:"+request.getParameter("dialog"));
+        //System.out.println("Entra a Edit, reload:"+request.getParameter("dialog"));
         out.println("<script type=\"javascript\">");
         if (request.getParameter("dialog") != null && request.getParameter("dialog").equals("close")) {
             out.println(" hideDialog(); ");
@@ -680,7 +680,7 @@ public class SocialSentPost extends GenericResource {
 
             needAuthorization = pfmgr.needAnAuthorization(postOut);
 
-            System.out.println("Necesita autorización: " + needAuthorization + ",postOut:" + postOut);
+            //System.out.println("Necesita autorización: " + needAuthorization + ",postOut:" + postOut);
 
             /*
              if (!isInFlow && !needAuthorization) {
@@ -752,7 +752,7 @@ public class SocialSentPost extends GenericResource {
 
 
             //Nuevo agregado por Jorge el 15/Oct/2013
-            System.out.println("PostUri-GyA:" + postOut.getURI());
+            //System.out.println("PostUri-GyA:" + postOut.getURI());
             boolean postOutwithPostOutNets = false;
             boolean someOneIsNotPublished = false;
             SWBResourceURL urlPostOutNets = paramRequest.getRenderUrl().setMode(Mode_ShowPostOutNets).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postOut", postOut.getURI()).setParameter("suri", id);
@@ -760,10 +760,10 @@ public class SocialSentPost extends GenericResource {
                 Iterator<PostOutNet> itPostOutNets = PostOutNet.ClassMgr.listPostOutNetBySocialPost(postOut, wsite);
                 while (itPostOutNets.hasNext()) {
                     PostOutNet postOutNet = itPostOutNets.next();
-                    System.out.println("postOutNet-GyA:" + postOutNet);
+                    //System.out.println("postOutNet-GyA:" + postOutNet);
                     postOutwithPostOutNets = true;
                     if (postOutNet.getStatus() == 0) {
-                        System.out.println("postOutNet-1/status-GyA:" + postOutNet.getStatus());
+                        //System.out.println("postOutNet-1/status-GyA:" + postOutNet.getStatus());
                         someOneIsNotPublished = true;
                         break;
                     }
@@ -985,7 +985,7 @@ public class SocialSentPost extends GenericResource {
             //System.out.println("msg..:"+postOut.getMsg_Text());
             //System.out.println("Ya esta publicado..:"+postOut.isPublished());
 
-            System.out.println("PostUri:" + postOut.getURI());
+            //System.out.println("PostUri:" + postOut.getURI());
 
             if (!postOut.isPublished()) {
 
@@ -1901,11 +1901,11 @@ public class SocialSentPost extends GenericResource {
                     }
                 }
             } else if (action.equals("removePostOutNet") && request.getParameter("postOutNetUri") != null) {
-                System.out.println("SocialSentPost/postOutNetUri");
+                //System.out.println("SocialSentPost/postOutNetUri");
                 SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postOutNetUri"));
                 PostOutNet postOutNet = (PostOutNet) semObj.getGenericInstance();
                 if (postOutNet != null) {
-                    System.out.println("SocialSentPost/postOutNetUri a la goma");
+                    //System.out.println("SocialSentPost/postOutNetUri a la goma");
                     postOutNet.remove();
                 }
                 response.setRenderParameter("suri", request.getParameter("suri"));
@@ -1919,6 +1919,7 @@ public class SocialSentPost extends GenericResource {
                 doDeletePhoto(request, response);
             }else if (action.equals("uploadFastCalendar"))
             {
+                System.out.println("PostOut/ProcessActionSentPost:"+request.getParameter("postOut"));
                 if(request.getParameter("postOut")!=null)
                 {
                     SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("postOut"));
