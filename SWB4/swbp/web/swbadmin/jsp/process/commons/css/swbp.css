@@ -290,6 +290,17 @@ html, body {
     display: block;
 }
 
+.swbp-breadcrumb {
+    background: none;
+    border-bottom: 1px solid green;
+    border-radius: 0;
+    padding-bottom: 5px;
+}
+
+.swbp-breadcrumb .swbp-breadcrumb-title {
+    font-weight: bold;
+}
+
 /********************************************** PAGINATION ***********************************************/
 .swbp-pagination {
   border-top:1px solid #8F9A83;
