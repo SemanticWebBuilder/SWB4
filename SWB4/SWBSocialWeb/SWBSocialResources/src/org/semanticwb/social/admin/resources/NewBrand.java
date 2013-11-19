@@ -24,6 +24,7 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.repository.Workspace;
+import org.semanticwb.social.SocialTopic;
 
 /**
  *
@@ -104,6 +105,9 @@ public class NewBrand extends GenericResource {
                     //workspace.setUn
                     site.addSubModel(workspace);
                     workspace.getSemanticObject().getModel().setTraceable(true);
+                    
+                    
+                    SocialTopic.ClassMgr.createSocialTopic("DefaultTopic", site);
                     
                     //PARA SWBSOCIAL SITES NO EXISTIRA UNA SECCIÓN HOME.
                     /*
