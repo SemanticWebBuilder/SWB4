@@ -107,7 +107,11 @@ public class NewBrand extends GenericResource {
                     workspace.getSemanticObject().getModel().setTraceable(true);
                     
                     
-                    SocialTopic.ClassMgr.createSocialTopic("DefaultTopic", site);
+                    org.semanticwb.social.SocialTopic socialTopic=SocialTopic.ClassMgr.createSocialTopic("DefaultTopic", site);
+                    socialTopic.setTitle("Defecto", "es");
+                    socialTopic.setTitle("Defect", "en");
+                    socialTopic.setActive(true);
+                    
                     
                     //PARA SWBSOCIAL SITES NO EXISTIRA UNA SECCIÓN HOME.
                     /*
