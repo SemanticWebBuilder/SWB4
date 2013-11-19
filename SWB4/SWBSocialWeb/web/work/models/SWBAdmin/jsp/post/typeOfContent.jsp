@@ -17,7 +17,6 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
 <%
-    System.out.println("Entra a TypeOfContent..1");
     WebSite wsite = null;
     if (request.getParameter("wsite") != null) {
         wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
@@ -50,6 +49,7 @@
     PostOut postOut = null;
     String postOutPFlowUri = null;
     ArrayList apostOutNets = new ArrayList();
+    ArrayList<String> apostOutCalendars=new ArrayList(); 
     boolean firstTime = false;
     if (semObj.getSemanticClass().isSubClass(PostIn.social_PostIn)) {//Publish in response to PostIn
         postIn = (PostIn) semObj.createGenericInstance();
@@ -79,6 +79,17 @@
         if (postOut.getPflowInstance() != null && postOut.getPflowInstance().getPflow() != null) {
             postOutPFlowUri = postOut.getPflowInstance().getPflow().getURI();
             //System.out.println("postOutPFlowUri++G++:" + postOutPFlowUri);
+        }
+        if(postOut.listCalendarRefs().hasNext())
+        {
+            Iterator<CalendarRef> itCalendarRefs=postOut.listCalendarRefs();
+            while(itCalendarRefs.hasNext())
+            {
+                CalendarRef calendarRef=itCalendarRefs.next();
+                if(calendarRef.isActive() && calendarRef.getCalendar()!=null){
+                    apostOutCalendars.add(calendarRef.getCalendar().getURI());
+                }
+            }
         }
     }
     if (contentType == null) {
@@ -247,6 +258,26 @@
                 Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="postOut_starthour"  value="<%=(starthour!=null&&starthour.trim().length() > 0 ? "T"+starthour+":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
                 </div>
                 <!--Termina Calendario Rapido-->
+                <!--Comienzan Calendarios Avanzados-->
+                <select name="postOutAdvCal" id="postOutAdvCal" multiple="multiple">
+                <%
+                    boolean existSelected=false;
+                    Iterator <SocialCalendar> itSocialCalendars=SocialCalendar.ClassMgr.listSocialCalendars(wsite);
+                    while(itSocialCalendars.hasNext())
+                    {
+                        String selected="";
+                        SocialCalendar socialCalendar=itSocialCalendars.next();
+                        if(apostOutCalendars.contains(socialCalendar.getURI())) {
+                            selected="selected=selected";
+                            existSelected=true;
+                        }
+                        %>
+                        <option value="<%=socialCalendar.getURI()%>" <%=selected%>><%=socialCalendar.getTitle()%></option>
+                        <%
+                    }
+                %>
+                </select>
+                <!--Terminan Calendarios Avanzados-->
                 
                 <button class="submit" type="submit" onclick="return checksRedesText('<%=objUri%>','<%=sourceCall%>');"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
 
@@ -480,6 +511,26 @@
                     Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="postOut_starthour"  value="<%=(starthour!=null&&starthour.trim().length() > 0 ? "T"+starthour+":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
                     </div>
                     <!--Termina Calendario Rapido-->
+                    <!--Comienzan Calendarios Avanzados-->
+                    <select name="postOutAdvCal" id="postOutAdvCal" multiple="multiple">
+                    <%
+                        boolean existSelected=false;
+                        Iterator <SocialCalendar> itSocialCalendars=SocialCalendar.ClassMgr.listSocialCalendars(wsite);
+                        while(itSocialCalendars.hasNext())
+                        {
+                            String selected="";
+                            SocialCalendar socialCalendar=itSocialCalendars.next();
+                            if(apostOutCalendars.contains(socialCalendar.getURI())) {
+                                selected="selected=selected";
+                                existSelected=true;
+                            }
+                            %>
+                            <option value="<%=socialCalendar.getURI()%>" <%=selected%>><%=socialCalendar.getTitle()%></option>
+                            <%
+                        }
+                    %>
+                    </select>
+                    <!--Terminan Calendarios Avanzados-->
                     
                     <button class="submit" type="submit" onclick="return validateImages('hasPhoto_new_#swbsocial_<%=objUri + sourceCall%>_dynamic','<%=objUri + sourceCall%>frmUploadPhoto');"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
                     <!--<button class="submit" type="submit" onclick="return validateTypeFile('hasPhoto_new_dynamic4'); checksRedesPhoto('<%=objUri%>','<%=sourceCall%>',<%=(postInSN == null || postIn != null ? "true" : "false")%>);"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>-->
@@ -831,6 +882,26 @@
                     Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="postOut_starthour"  value="<%=(starthour!=null&&starthour.trim().length() > 0 ? "T"+starthour+":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
                     </div>
                     <!--Termina Calendario Rapido-->
+                    <!--Comienzan Calendarios Avanzados-->
+                    <select name="postOutAdvCal" id="postOutAdvCal" multiple="multiple">
+                    <%
+                        boolean existSelected=false;
+                        Iterator <SocialCalendar> itSocialCalendars=SocialCalendar.ClassMgr.listSocialCalendars(wsite);
+                        while(itSocialCalendars.hasNext())
+                        {
+                            String selected="";
+                            SocialCalendar socialCalendar=itSocialCalendars.next();
+                            if(apostOutCalendars.contains(socialCalendar.getURI())) {
+                                selected="selected=selected";
+                                existSelected=true;
+                            }
+                            %>
+                            <option value="<%=socialCalendar.getURI()%>" <%=selected%>><%=socialCalendar.getTitle()%></option>
+                            <%
+                        }
+                    %>
+                    </select>
+                    <!--Terminan Calendarios Avanzados-->
                     <button class="submit" type="submit" onclick="return validateVideo('<%="video_new_defaultAuto" + objUri + sourceCall%>', '<%=objUri + sourceCall%>frmUploadVideo')"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
                 </div>
 
