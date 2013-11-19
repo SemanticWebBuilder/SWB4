@@ -17,6 +17,7 @@
 <%@page import="org.semanticwb.social.util.*"%>
 <%@page import="java.util.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
+<%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
 
 <ul class="showMoreNets">
 <%
@@ -37,6 +38,8 @@
     
     if(postOut.getFastCalendar()!=null)
     {
+        User user=paramRequest.getUser(); 
+        
         FastCalendar fastCalendar=postOut.getFastCalendar();
         Date inidate=fastCalendar.getFc_date();
         //System.out.println("inidate:"+inidate);
@@ -82,7 +85,9 @@
             %>
                 D&iacute;a:<input type="text" name="postOut_inidate" id="inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=nf%>"> 
                 Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="postOut_starthour_<%=starthour%>"  value="<%=(starthour!=null&&starthour.trim().length() > 0 ? "T"+starthour+":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
-                <p><button dojoType="dijit.form.Button" type="submit" ><%=paramRequest.getLocaleString("btnSend")%></button></p>
+                <p><button dojoType="dijit.form.Button" type="submit" ><%=paramRequest.getLocaleString("btnSend")%></button>
+                    <button dojoType="dijit.form.Button" type="submit" ><%=SWBSocialResUtil.Util.getStringFromGenericLocale("removeCal", user.getLanguage())%></button>
+                </p>
             </form>
         </div>      
        <%         
