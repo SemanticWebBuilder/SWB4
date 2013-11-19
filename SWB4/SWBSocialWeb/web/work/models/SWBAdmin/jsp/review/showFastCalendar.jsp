@@ -86,10 +86,19 @@
                 D&iacute;a:<input type="text" name="postOut_inidate" id="inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=nf%>"> 
                 Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="postOut_starthour_<%=starthour%>"  value="<%=(starthour!=null&&starthour.trim().length() > 0 ? "T"+starthour+":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
                 <p><button dojoType="dijit.form.Button" type="submit" ><%=paramRequest.getLocaleString("btnSend")%></button>
-                    <button dojoType="dijit.form.Button" type="submit" ><%=SWBSocialResUtil.Util.getStringFromGenericLocale("removeCal", user.getLanguage())%></button>
+                    <button dojoType="dijit.form.Button" type="submit" onClick="setDefaultValues();"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("removeCal", user.getLanguage())%></button>
                 </p>
             </form>
         </div>      
+            <script type="text/javascript">
+                function setDefaultValues()  
+                {
+                    var forma=document.forms["<%=postOut.getId()%>/uploadFastCalendarForm"];
+                    forma.postOut_inidate.value="";
+                    forma.postOut_starthour.value="";
+                    return true;
+                }
+            </script>
        <%         
     }else{
         %>
