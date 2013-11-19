@@ -5,7 +5,6 @@
 package org.semanticwb.social.util;
 
 import java.net.SocketException;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Timer;

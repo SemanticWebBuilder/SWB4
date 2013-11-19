@@ -21,6 +21,7 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
+import org.semanticwb.model.CalendarRef;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.ModelProperty;
 import org.semanticwb.model.SWBContext;
@@ -1375,7 +1376,9 @@ public class SWBSocialUtil implements SWBAppObject {
             }
         }
         
-        
+        /*
+         * Method that assign a fastCalendar to PostOut
+         */
         private static void manageFastCalendar2PostOut(HttpServletRequest request, PostOut postOut)
         {
             if(postOut==null) return;
@@ -1383,7 +1386,7 @@ public class SWBSocialUtil implements SWBAppObject {
             String postOutInitDate=request.getParameter("postOut_inidate");
             String postOutInitHour=request.getParameter("postOut_starthour");
 
-            System.out.println("postOutInitDate-Jorge:"+postOutInitDate+",postOutInitHour:"+postOutInitHour);
+            //System.out.println("postOutInitDate-Jorge:"+postOutInitDate+",postOutInitHour:"+postOutInitHour);
             if(postOutInitDate!=null && postOutInitDate.trim().length()>0)
             {
                 postOutInitDate=SWBSocialUtil.Util.changeFormat(postOutInitDate, 1);
@@ -1406,18 +1409,56 @@ public class SWBSocialUtil implements SWBAppObject {
                 } catch (Exception noe) {
                     // No error
                 }
-                System.out.println("H a poner:"+h);
-                System.out.println("M a poner:"+m);
+                //System.out.println("H a poner:"+h);
+                //System.out.println("M a poner:"+m);
                 date2SendPostOut.setHours(h);
                 date2SendPostOut.setMinutes(m);
 
-                System.out.println("Se agrega FastCalendar a PostOut:"+postOut);
+                //System.out.println("Se agrega FastCalendar a PostOut:"+postOut);
                 newFastCalendarInstance.setFc_date(date2SendPostOut);
                 postOut.setFastCalendar(newFastCalendarInstance);
             }
             //Termina Manejo de FastCalendar
         }
         
+        
+        /*
+         * Method that assign a AdvCalendar(normal swb calendar) to PostOut
+         */
+        private static void manageAdvCalendar2PostOut(HttpServletRequest request, PostOut postOut)
+        {
+            if(postOut==null) return;
+            WebSite wsite=WebSite.ClassMgr.getWebSite(postOut.getSemanticObject().getModel().getName());
+            //Primero se eliminan todas las referencias a CalendarRefs que tenga el PostOut
+            Iterator<CalendarRef> itCalendarRefs=postOut.listCalendarRefs();
+            while(itCalendarRefs.hasNext())
+            {
+                CalendarRef calRef=itCalendarRefs.next();
+                postOut.removeCalendarRef(calRef);
+                calRef.remove();
+            }
+            
+            String[] strCalendar=request.getParameterValues("postOutAdvCal");
+            if(strCalendar!=null)
+            {
+                for(int i=0;i<strCalendar.length;i++)
+                {
+                    String semObjUri=strCalendar[i];
+                    try
+                    {
+                        SemanticObject semObjCalendar=SemanticObject.getSemanticObject(semObjUri);
+                        org.semanticwb.model.Calendar calendar=(org.semanticwb.model.Calendar)semObjCalendar.getGenericInstance();
+                        if(calendar!=null)
+                        {
+                            CalendarRef calRef=CalendarRef.ClassMgr.createCalendarRef(wsite);
+                            calRef.setCalendar(calendar);
+                            calRef.setActive(true);
+                            postOut.addCalendarRef(calRef);
+                        }
+                    }catch(Exception ignore){}
+                }
+            }
+        }
         
         
         
@@ -1442,9 +1483,15 @@ public class SWBSocialUtil implements SWBAppObject {
                     //Convierto a un post de salida para poderle agregar cada red social a la que se envía dicho post
                     PostOut postOut = (PostOut) post;
                     
+                    System.out.println("Entra a editPostOut..."+postout);
+                    
                     //Comienza manejo de FastCalendar
                     manageFastCalendar2PostOut(request, postOut);
                     //Termina manejo de FastCalendar
+                    //Comienza manejo de AdvanceCalendar
+                    manageAdvCalendar2PostOut(request, postOut);
+                    //Termina manejo de AdvanceCalendar
+                    
                     
                     //Le agrego las redes sociales a las cuales se enviara el postOut, si se creó de una contestación, 
                     //sería solo una red social la que vendría en el parametro "aSocialNets", pero como esto es una edición,
@@ -1501,13 +1548,17 @@ public class SWBSocialUtil implements SWBAppObject {
                     
                     //Para fines de indexado para ordenamientos con Sparql
                     Calendar calendario = Calendar.getInstance();
-                    System.out.println("FECHA AL POSTOUT:"+calendario.getTime());
+                    //System.out.println("FECHA AL POSTOUT:"+calendario.getTime());
                     postOut.setPout_created(calendario.getTime());   
                     //Termina guardado de fecha para fines de indexado para ordenamientos con sparql
                     
                     //Comienza manejo de FastCalendar
                     manageFastCalendar2PostOut(request, postOut);
                     //Termina manejo de FastCalendar
+                    
+                    //Comienza manejo de AdvanceCalendar
+                    manageAdvCalendar2PostOut(request, postOut);
+                    //Termina manejo de AdvanceCalendar
                     
                     //Si el PostOut que se acaba de crear, fue en consecuencia de una respuesta de una PostIn, este se agrega al nuevo PostOut
                     if(postIn!=null)    
@@ -1644,7 +1695,7 @@ public class SWBSocialUtil implements SWBAppObject {
                         if(strMessage==null) strMessage="";
                         SocialLoader.getPFlowManager().sendResourceToAuthorize(postOut, socialPFlow, strMessage);
                         //sendPostOutToAuthorize(postOut, socialPFlow, socialFlowComment);
-                    } else if(postOut.getFastCalendar()==null){ //Si no tiene un FastCalendar, ya publicalo desde aquí, de lo contrario no lo publiques, en su momento sera publicado desde SWBSocialCalendarMgr
+                    } else if(postOut.getFastCalendar()==null && !postOut.listCalendarRefs().hasNext()){ //Si no tiene un FastCalendar, ni un Calendar, ya publicalo desde aquí, de lo contrario no lo publiques, en su momento sera publicado desde SWBSocialCalendarMgr
                         //Revisa las redes sociales a las cuales se tiene que enviar el Post
                         //String[] socialUris = socialUri.split("\\|");  //Dividir valores
                         //System.out.println("Se publicaJ-3");
