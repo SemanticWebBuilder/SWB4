@@ -1984,6 +1984,7 @@ public class StreamInBox extends GenericResource {
            "where {\n" +
            "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
            "  }\n";
+           //System.out.println("query:"+query);
             WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
             query=SWBSocial.executeQuery(query, wsite);
         return query;
