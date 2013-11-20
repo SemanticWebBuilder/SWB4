@@ -251,7 +251,7 @@ public class ListenerMgr implements SWBAppObject {
     private static boolean createTimer(Stream stream)
     {
         System.out.println("ListerJ5");
-        if(stream!=null && stream.isActive() && !stream.isDeleted() && stream.getPhrase()!=null && stream.getPhrase().trim().length()>0 && stream.listSocialNetworks().hasNext())
+        if(stream.getSocialSite().isValid() && stream!=null && stream.isActive() && !stream.isDeleted() && stream.getPhrase()!=null && stream.getPhrase().trim().length()>0 && stream.listSocialNetworks().hasNext())
         {
             Iterator<SocialNetwork> itNets=stream.listSocialNetworks();
             while(itNets.hasNext())

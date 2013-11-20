@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que contendra los streams que configurados para cada usuario 
    */
-public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.social.Geolocable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Trashable,org.semanticwb.model.Referensable,org.semanticwb.social.SocialRuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable
+public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Geolocable,org.semanticwb.model.Filterable,org.semanticwb.social.SocialRuleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Referensable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable
 {
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
@@ -43,6 +43,10 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
    */
     public static final org.semanticwb.platform.SemanticProperty social_stream_PoolTime=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#stream_PoolTime");
    /**
+   * Maxima cantidad de registros (mensajes) que almacenara un stream
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_stream_maxMsg=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#stream_maxMsg");
+   /**
    * Propiedad que indica si el stream va manejar conexiones abiertas en las cuentas de redes sociales que así lo permitan, en este momento solo twitter con su "Stream Api" lo maneja.
    */
     public static final org.semanticwb.platform.SemanticProperty social_keepAliveManager=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#keepAliveManager");
@@ -50,6 +54,10 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
    * Frase a monitorear en un determinado stream, cada stream tiene sus propias frasea a monitorear.
    */
     public static final org.semanticwb.platform.SemanticProperty social_stream_phrase=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#stream_phrase");
+   /**
+   * Número mximo de días que un mensaje va a permanecer en el stream antes de ser eliminado del mismo.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_stream_maxDays=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#stream_maxDays");
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta.
    */
@@ -682,6 +690,24 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     }
 
 /**
+* Gets the Stream_maxMsg property
+* @return int with the Stream_maxMsg
+*/
+    public int getStream_maxMsg()
+    {
+        return getSemanticObject().getIntProperty(social_stream_maxMsg);
+    }
+
+/**
+* Sets the Stream_maxMsg property
+* @param value long with the Stream_maxMsg
+*/
+    public void setStream_maxMsg(int value)
+    {
+        getSemanticObject().setIntProperty(social_stream_maxMsg, value);
+    }
+
+/**
 * Gets the KeepAliveManager property
 * @return boolean with the KeepAliveManager
 */
@@ -733,6 +759,24 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     public void setDeleted(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb_deleted, value);
+    }
+
+/**
+* Gets the Stream_maxDays property
+* @return int with the Stream_maxDays
+*/
+    public int getStream_maxDays()
+    {
+        return getSemanticObject().getIntProperty(social_stream_maxDays);
+    }
+
+/**
+* Sets the Stream_maxDays property
+* @param value long with the Stream_maxDays
+*/
+    public void setStream_maxDays(int value)
+    {
+        getSemanticObject().setIntProperty(social_stream_maxDays, value);
     }
 
 /**

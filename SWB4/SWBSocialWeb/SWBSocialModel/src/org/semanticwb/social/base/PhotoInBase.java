@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase en donde se almacenan todos los post de tipo Photo y que entran por el Listener 
    */
-public abstract class PhotoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable,org.semanticwb.social.PostImageable
+public abstract class PhotoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostImageable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable
 {
    /**
    * Clase en donde se almacenan todos los post de tipo Photo y que entran por el Listener

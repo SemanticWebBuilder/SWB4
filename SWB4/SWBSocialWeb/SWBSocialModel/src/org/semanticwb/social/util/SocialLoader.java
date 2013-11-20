@@ -38,9 +38,14 @@ public class SocialLoader implements SWBAppObject {
             System.out.println("Entra a Cargar:SocialLoader");
             pflowMgr = new SocialPFlowMgr();    //Sin threads
             pflowMgr.init(); //Sin threads
-            new SWBSocialCalendarMgr(); //Se dispara un solo thread c/minuto + los threads que se disparen en c/listener en ese minuto (si aplicara)
-            new ListenerMgr();  //Trae un Thread
-            new MonitorMgr();   //Trae un Thread
+            new SWBSocialCalendarMgr(); //Se dispara un solo thread c/minuto + los threads que se disparen en c/red social en ese minuto (si aplicara)
+            new ListenerMgr();  //Trae un Thread + los threads que se disparen en c/red social en ese minuto (si aplicara)
+            new MonitorMgr();   //Trae un Thread + los threads que se disparen en c/red social en ese minuto (si aplicara)
+            
+            new StreamCleanerMsgbyNumber(); //Eliminador automatico por número de postIns en streams. Se levanta un thread cada minuto.
+            
+            new StreamCleanerMsgbyDays(); //Eliminador automatico por número de días de postIns en streams. Se levanta un thread cada 24 hrs.
+            
             new SWBSocialUtil().createInstance(); //Sin threads
             
              //Charges the unique PostMonitor instance
