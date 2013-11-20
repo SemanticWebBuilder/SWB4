@@ -362,86 +362,70 @@ public class Timeline extends GenericResource{
                 SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
                 SocialNetworkUser socialNetUser = SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(""+status.getUser().getId(), socialNetwork, model);
                 
-                /*if(socialNetUser != null){//User exists and might or migth not have posts
-                    Iterator<PostIn> userPosts = PostIn.ClassMgr.listPostInByPostInSocialNetworkUser(socialNetUser, model);
-                    while(userPosts.hasNext()){
-                        PostIn post = userPosts.next();
-                        if(post.getSocialNetMsgId().equals(idStatus)){//Post have been saved before
-                            System.out.println("The post with message:\n"  + post.getMsg_Text() );
-                            System.out.println("And ID:" + post.getSocialNetMsgId() + " EXISTS!!!");
-                            //response.setMode("assignedPost");
-                            return;
-                        }
-                    }
-                
-                }*/
-                
                 PostIn post = PostIn.getPostInbySocialMsgId(model, status.getId()+"");
-                if(post != null){
-                    log.error("The post with id :" + post.getSocialNetMsgId() + " already exists");
-                    return;
-                }
-                
                 PostIn postIn = null; //The post
-                postIn = MessageIn.ClassMgr.createMessageIn(model);
-                postIn.setSocialNetMsgId(status.getId()+"");
-                postIn.setMsg_Text(status.getText());
-                postIn.setPostInSocialNetwork(socialNetwork);
-                postIn.setPostInStream(null);
-                Calendar calendario = Calendar.getInstance();
-                postIn.setPi_created(calendario.getTime());
-                postIn.setPi_type(SWBSocialUtil.POST_TYPE_MESSAGE);
-                
-                boolean checkKlout=false; 
-                try{
-                   WebSite wsite=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName()); 
-                   checkKlout=Boolean.parseBoolean(SWBSocialUtil.Util.getModelPropertyValue(wsite, "checkKlout"));
-                }catch(Exception ignored)
-                {
-                   checkKlout=false;
-                }
-                
-                if(socialNetUser != null){//User already exists
-                    System.out.println("The user already exists: " + socialNetUser.getSnu_name() + " - " + socialNetUser.getSnu_id() +"="+ status.getUser().getId());
-                    int userKloutScore = 0;
-                    int days=SWBSocialUtil.Util.Datediff(socialNetUser.getUpdated(), Calendar.getInstance().getTime());
-                    if(days > 5 && checkKlout){  //Si ya pasaron 5 o mas días de que se actualizó la info del usuario, entonces busca su score en Klout
-                        System.out.println("YA PASARON MAS DE 5 DÍAS, BUSCAR KLOUT DE USUARIO...");
-                        Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
-                        userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
-                        System.out.println("userKloutScore K TRAJO:" + userKloutScore);
-                        socialNetUser.setSnu_klout(userKloutScore);
+                if(post == null){                                                    
+                    postIn = MessageIn.ClassMgr.createMessageIn(model);
+                    postIn.setSocialNetMsgId(status.getId()+"");
+                    postIn.setMsg_Text(status.getText());
+                    postIn.setPostInSocialNetwork(socialNetwork);
+                    postIn.setPostInStream(null);
+                    Calendar calendario = Calendar.getInstance();
+                    postIn.setPi_created(calendario.getTime());
+                    postIn.setPi_type(SWBSocialUtil.POST_TYPE_MESSAGE);
+
+                    boolean checkKlout=false; 
+                    try{
+                       WebSite wsite=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName()); 
+                       checkKlout=Boolean.parseBoolean(SWBSocialUtil.Util.getModelPropertyValue(wsite, "checkKlout"));
+                    }catch(Exception ignored)
+                    {
+                       checkKlout=false;
                     }
 
-                }else{//User does not exist, create it
-                    System.out.println("USUARIO NO EXISTE EN EL SISTEMA, REVISAR QUE KLOUT TIENE");
-                    int userKloutScore = 0;
-                    if(checkKlout){
-                        Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
-                        userKloutScore = Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue();
+                    if(socialNetUser != null){//User already exists
+                        System.out.println("The user already exists: " + socialNetUser.getSnu_name() + " - " + socialNetUser.getSnu_id() +"="+ status.getUser().getId());
+                        int userKloutScore = 0;
+                        int days=SWBSocialUtil.Util.Datediff(socialNetUser.getUpdated(), Calendar.getInstance().getTime());
+                        if(days > 5 && checkKlout){  //Si ya pasaron 5 o mas días de que se actualizó la info del usuario, entonces busca su score en Klout
+                            System.out.println("YA PASARON MAS DE 5 DÍAS, BUSCAR KLOUT DE USUARIO...");
+                            Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
+                            userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
+                            System.out.println("userKloutScore K TRAJO:" + userKloutScore);
+                            socialNetUser.setSnu_klout(userKloutScore);
+                        }
+
+                    }else{//User does not exist, create it
+                        System.out.println("USUARIO NO EXISTE EN EL SISTEMA, REVISAR QUE KLOUT TIENE");
+                        int userKloutScore = 0;
+                        if(checkKlout){
+                            Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
+                            userKloutScore = Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue();
+                        }
+                        User twitterUser = twitter.showUser(status.getUser().getId());                    
+
+                        socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);//Create a socialNetworkUser
+                        socialNetUser.setSnu_id(status.getUser().getId()+"");
+                        socialNetUser.setSnu_klout(userKloutScore);
+                        socialNetUser.setSnu_name("@"+status.getUser().getScreenName());
+                        socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject());
+                        socialNetUser.setSnu_photoUrl(status.getUser().getBiggerProfileImageURL());
+                        if(twitterUser != null){
+                            socialNetUser.setCreated(twitterUser.getCreatedAt());
+                            socialNetUser.setFollowers(twitterUser.getFollowersCount());
+                            socialNetUser.setFriends(twitterUser.getFriendsCount());
+                        }else{
+                            socialNetUser.setCreated(new Date());
+                            socialNetUser.setFollowers(0);
+                            socialNetUser.setFriends(0);
+                        }
                     }
-                    User twitterUser = twitter.showUser(status.getUser().getId());                    
-                    
-                    socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);//Create a socialNetworkUser
-                    socialNetUser.setSnu_id(status.getUser().getId()+"");
-                    socialNetUser.setSnu_klout(userKloutScore);
-                    socialNetUser.setSnu_name("@"+status.getUser().getScreenName());
-                    socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject());
-                    socialNetUser.setSnu_photoUrl(status.getUser().getBiggerProfileImageURL());
-                    if(twitterUser != null){
-                        socialNetUser.setCreated(twitterUser.getCreatedAt());
-                        socialNetUser.setFollowers(twitterUser.getFollowersCount());
-                        socialNetUser.setFriends(twitterUser.getFriendsCount());
-                    }else{
-                        socialNetUser.setCreated(new Date());
-                        socialNetUser.setFollowers(0);
-                        socialNetUser.setFriends(0);
-                    }
+                    //SocialNetworkUser socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);//Create a socialNetworkUser
+
+                    postIn.setPostInSocialNetworkUser(socialNetUser);
+                }else{
+                    postIn = post;
                 }
-                //SocialNetworkUser socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);//Create a socialNetworkUser
-                
-                postIn.setPostInSocialNetworkUser(socialNetUser);
-                
                 if(request.getParameter("newSocialTopic").equals("none"))
                 {
                     postIn.setSocialTopic(null);
@@ -456,7 +440,7 @@ public class Timeline extends GenericResource{
                 response.setRenderParameter("postUri", postIn.getURI());
                 System.out.println("POST CREADO CORRECTAMENTE: " + postIn.getId() + " ** " + postIn.getSocialNetMsgId());
             }catch(Exception e){
-                System.out.println("Error trying to setSocialTopic");
+                log.error("Error trying to setSocialTopic", e);
             }
             response.setRenderParameter("suri", socialNetwork.getURI());
             response.setRenderParameter("currentTab", request.getParameter("currentTab"));
@@ -739,20 +723,18 @@ public class Timeline extends GenericResource{
 
                     postIn.setPostInSocialNetworkUser(socialNetUser);
 
-                    if(request.getParameter("newSocialTopic") == null || request.getParameter("newSocialTopic").equals("none"))
-                    {
+                    SocialTopic defaultSocialTopic = SocialTopic.ClassMgr.getSocialTopic("DefaultTopic", model);
+                    if(defaultSocialTopic != null){
+                        postIn.setSocialTopic(defaultSocialTopic);//Asigns socialTipic
+                        System.out.println("Setting social topic:" + defaultSocialTopic);
+                    }else{
                         postIn.setSocialTopic(null);
-                    }else {
-                        SemanticObject semObjSocialTopic=SemanticObject.getSemanticObject(request.getParameter("newSocialTopic"));
-                        if(semObjSocialTopic!=null)
-                        {
-                            SocialTopic socialTopic=(SocialTopic)semObjSocialTopic.createGenericInstance();
-                            postIn.setSocialTopic(socialTopic);//Asigns socialTipic
-                        }
+                        System.out.println("Setting to null");
                     }
-                    System.out.println("POST CREADO CORRECTAMENTE: " + postIn.getId() + " ** " + postIn.getSocialNetMsgId());
+                      
+                    System.out.println("Post created ok: " + postIn.getId() + " ** " + postIn.getSocialNetMsgId());
                 }else{
-                    System.out.println("El post ya existe y se está creando otra respuesta");
+                    System.out.println("Creating another response");
                 }
             }catch(Exception e){
                 log.error("Error trying to setSocialTopic ", e);
