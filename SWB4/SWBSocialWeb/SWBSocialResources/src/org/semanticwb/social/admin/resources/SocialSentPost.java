@@ -208,7 +208,7 @@ public class SocialSentPost extends GenericResource {
 
 
         WebSite wsite = WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-        String classifyBySentiment = SWBSocialUtil.Util.getModelPropertyValue(wsite, SWBSocialUtil.CLASSIFYSENTMGS_PROPNAME);
+        boolean classifyBySentiment = socialTopic.isCheckSentPostSentiment();
 
         PrintWriter out = response.getWriter();
         //Resource base = getResourceBase();
@@ -476,7 +476,7 @@ public class SocialSentPost extends GenericResource {
         out.println("</a>");
         out.println("</th>");
 
-        if (classifyBySentiment != null && classifyBySentiment.equalsIgnoreCase("true")) {
+        if (classifyBySentiment) {
             String nameClassSentiment = "ascen";
             String typeOrderSentiment = "Ordenar Ascendente";
             urlOderby.setParameter("orderBy", "sentimentDown");
@@ -960,7 +960,7 @@ public class SocialSentPost extends GenericResource {
             out.println(SWBUtils.TEXT.getTimeAgo(postOut.getUpdated(), lang));
             out.println("</td>");
 
-            if (classifyBySentiment != null && classifyBySentiment.equalsIgnoreCase("true")) {
+            if (classifyBySentiment) {
                 //Sentiment
                 out.println("<td align=\"center\">");
                 if (postOut.getPostSentimentalType() == 0) {
