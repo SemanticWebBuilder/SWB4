@@ -757,8 +757,8 @@ public class SocialTopicInBox extends GenericResource {
             urlr.setParameter("page", "" + nPage);
             urlr.setAction(SWBResourceURL.Action_REMOVE);
 
-            String text = SWBUtils.TEXT.scape4Script(postIn.getMsg_Text());
-
+            String text = SWBUtils.TEXT.scape4Script(postIn.getMsg_Text() == null ? "" : postIn.getMsg_Text());
+            
             text = SWBSocialResUtil.Util.replaceSpecialCharacters(text, false);
 
             if(userCanRemoveMsg)
