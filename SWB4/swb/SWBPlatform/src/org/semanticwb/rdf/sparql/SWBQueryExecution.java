@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.remotetriplestore.RGraph;
 
 /**
@@ -52,6 +53,12 @@ public class SWBQueryExecution implements QueryExecution
         processor=new SparqlProcessor();
         processor.process(model, query);
     }
+    
+    
+    public String getInternalQuery()
+    {
+        return processor.getIternalQuery(""+((RGraph)model.getGraph()).getId());
+    }    
     
     @Override
     public ResultSet execSelect()
@@ -79,8 +86,13 @@ public class SWBQueryExecution implements QueryExecution
                 }
             }  
             System.out.println(iquery);
-        }
+        }        
         
+        return execInternalQuery(q);
+    }       
+    
+    public ResultSet execInternalQuery(String q)
+    {
         Connection con=SWBUtils.DB.getDefaultConnection();
         try
         {
