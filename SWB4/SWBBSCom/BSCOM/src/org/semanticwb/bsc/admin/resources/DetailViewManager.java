@@ -568,21 +568,23 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             //    - Cuando el per&iacte;odo del PeriodStatus = per&iacte;odo del request:
             //        - Se obtiene el status correspondiente y su &iacte;cono relacionado
             //        - Se agrega el &iacte;cono al encabezado y el t&iacte;tulo del objeto semObj
+            output.append("<div");
             if (periodStatus != null) {
-                output.append("<div><img src=\"");
-                output.append(periodStatus.getStatus().getIcon());
-                output.append("\" border=\"0\" alt=\"status:\" title=\"");
-                output.append(periodStatus.getStatus().getTitle());
-                output.append("\">");
-                output.append("</div>");
+                if (periodStatus.getStatus().getIconClass() != null) {
+                    output.append(" class=\"");
+                    output.append(periodStatus.getStatus().getIconClass());
+                    output.append("\"");
+                }
             }
+            output.append(">");
+            output.append(semObj.getDisplayName());
+            output.append("</div>\n");
 
             if (reader != null) {
                 output.append(generateDisplay(request, paramRequest, reader, semObj));
             } else {
                 output.append(paramRequest.getLocaleString("fileNotRead"));
             }
-
         } else { //Si la información de entrada no es válida
             output.append(paramRequest.getLocaleString(message));
         }
@@ -791,14 +793,12 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             String objectUri = request.getParameter("suri");
             String propUri = request.getParameter("propUri");
             String propValue = request.getParameter("value");
-            System.out.println("En processAction para actualizar props: " + propUri);
             SemanticObject semanticObject = objectUri != null ? SemanticObject.getSemanticObject(objectUri) : null;
             SemanticProperty semProp = org.semanticwb.SWBPlatform.getSemanticMgr(
                     ).getVocabulary().getSemanticProperty(propUri);
             
             if (semanticObject != null && propUri != null && propValue != null) {
                 semanticObject.setProperty(semProp, propValue);
-                System.out.println("Nuevo Valor: " + propValue);
             }
         } else {
             super.processAction(request, response);

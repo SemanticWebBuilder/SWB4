@@ -36,6 +36,8 @@ public class TextAreaElement extends org.semanticwb.bsc.formelement.base.TextAre
         } else if (mode.equals("view")) {
             toReturn = obj.getProperty(prop);
         } else if (mode.equals("inlineEdit")) {
+            /*Al utilizar este modo, se debe incluir en el HTML las instrucciones 
+             * dojo.require del InkineEditBox y dijit.form.Textarea, al menos*/
             StringBuilder viewString = new StringBuilder(128);
             String value = obj.getProperty(prop);
             String objectId = obj.getSemanticClass().getClassCodeName() + obj.getId() +
@@ -64,7 +66,7 @@ public class TextAreaElement extends org.semanticwb.bsc.formelement.base.TextAre
             viewString.append("              location.reload(true);\n");
             viewString.append("            }\n");
             viewString.append("          }\n");
-            viewString.append("          xmlhttp.open(\"GET\", \"" + url + "?propUri=" + prop.getEncodedURI() + "&value=\"+value, true);\n");
+            viewString.append("          xmlhttp.open(\"GET\", \"" + url + "&propUri=" + prop.getEncodedURI() + "&value=\"+value, true);\n");
             viewString.append("          xmlhttp.send();\n");
             viewString.append("        }");
             viewString.append("      }, 'eb_" + objectId + "');");
