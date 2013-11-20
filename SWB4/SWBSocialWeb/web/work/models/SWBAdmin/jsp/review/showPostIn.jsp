@@ -98,7 +98,7 @@
                     if (semObj.getGenericInstance() instanceof MessageIn) {
                         MessageIn message = (MessageIn) semObj.getGenericInstance();
                 %>
-                <td><span><%=SWBUtils.TEXT.encode(message.getMsg_Text(), "utf8")%></span>
+                <td><span><%=SWBUtils.TEXT.encode(message.getMsg_Text() == null ? "" : message.getMsg_Text(), "utf8")%></span>
                 </td>
                 <%
                 } else if (semObj.getGenericInstance() instanceof PhotoIn) {
@@ -119,7 +119,7 @@
                     <%
                         }
                     %>     
-                    <br/><%=SWBUtils.TEXT.encode(photo.getMsg_Text(), "utf8")%>
+                    <br/><%=SWBUtils.TEXT.encode(photo.getMsg_Text() == null ? "" : photo.getMsg_Text(), "utf8")%>
                 </td>
                 <%
                 } else if (semObj.getGenericInstance() instanceof VideoIn) {
@@ -205,7 +205,7 @@
                     <%
                         }
                     %>    
-                        <br/><br/><%=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf8")%>
+                        <br/><br/><%=SWBUtils.TEXT.encode(video.getMsg_Text() == null ? "" : video.getMsg_Text(), "utf8")%>
                     </td>
                     <%
                         }
