@@ -1541,7 +1541,7 @@ public class StreamInBox extends GenericResource {
                     String[] phrases = inputTextValue.split(";");
                     ///System.out.println("Entra a processA/reValue-2:"+phrases);
                     int nv = Integer.parseInt(request.getParameter("nv"));
-                    //System.out.println("Entra a processA/reValue-3:"+nv);
+                    //System.out.println("Entra a processA/reValue-3:"+nv);¿¿8
                     int dpth = Integer.parseInt(request.getParameter("dpth"));
                     //System.out.println("Entra a processA/reValue-4:"+dpth);
                     SentimentalLearningPhrase slp;
