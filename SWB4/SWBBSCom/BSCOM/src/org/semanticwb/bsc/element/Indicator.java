@@ -131,7 +131,8 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
     }
     
     private List<State> sortStates(boolean ascendent) {
-        List<State> states = SWBUtils.Collections.copyIterator(listStates());
+        //List<State> states = SWBUtils.Collections.copyIterator(listStates());
+        List<State> states = listValidStates();
         if(ascendent) {
             Collections.sort(states);
         }else {            
@@ -274,6 +275,9 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
         List<State> validStates = SWBUtils.Collections.filterIterator(listStates(), new GenericFilterRule<State>() {
                                                                         @Override
                                                                         public boolean filter(State s) {
+                                                                            if(s==null) {
+                                                                                return true;
+                                                                            }
                                                                             User user = SWBContext.getSessionUser();
                                                                             return !s.isValid() || !user.haveAccess(s);
                                                                         }            

@@ -22,6 +22,12 @@ public class EvaluationRule extends org.semanticwb.bsc.tracing.base.EvaluationRu
     @Override
     public int compareTo(EvaluationRule anotherRule) {
         int compare = 0;
+        if(getAppraisal()==null) {
+            return -1;
+        }
+        if(anotherRule.getAppraisal()==null) {
+            return 1;
+        }
         compare = getAppraisal().compareTo(anotherRule.getAppraisal());
         return compare;
     }
