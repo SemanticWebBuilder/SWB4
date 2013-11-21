@@ -137,8 +137,13 @@ public class SWBSocialCalendarMgr {
                         try
                         {
                             SWBSocialUtil.PostOutUtil.publishPost(postOut);
+                            if (postOut.getPflowInstance() != null) {
+                                postOut.getPflowInstance().setStatus(2);
+                                postOut.getPflowInstance().setStep(null);
+                            }
                             postOut.removeFastCalendar();
                             fastCalendar.remove();
+                            
                         }catch(Exception e)
                         {
                             postOut.removeFastCalendar();
