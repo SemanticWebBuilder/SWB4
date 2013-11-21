@@ -792,7 +792,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         boolean listingRedirect = false;
         boolean formRedirect = false;
         boolean storePath = false;
-        System.out.println("action: " + action);
         if (!"addView".equals(action)) {
             detailView = SemanticObject.getSemanticObject(detailViewUri) != null
                     ? ((DetailView) SemanticObject.getSemanticObject(
@@ -881,11 +880,9 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             statusMsg = "msg_ContentViewAssigned";
             listingRedirect = true;
         } else if (action.equalsIgnoreCase("setPerm")) {
-            System.out.println("En setPerm");
             Resource base = getResourceBase();
             
             String userType = request.getParameter("updatePermit" + this.getId());
-            System.out.println("En parametro: " + userType);
             if (userType != null && !userType.isEmpty()) {
                 base.setAttribute("editRole", userType);
                 statusMsg = "msg_PermissionAssigned";
@@ -1114,11 +1111,9 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                     
                     if (generic instanceof Text || generic instanceof TextArea) {
                         applyInlineEdit = true;
-                        System.out.println("Aplicar inlineEdit (Text/TextArea): " + applyInlineEdit);
                     }
                     if (!userCanEdit()) {
                         applyInlineEdit = false;
-                        System.out.println("Aplicar inlineEdit (permisos): " + applyInlineEdit);
                     }
                     if (fe != null) {
                         if (formMgr.getSemanticObject() != null) {
