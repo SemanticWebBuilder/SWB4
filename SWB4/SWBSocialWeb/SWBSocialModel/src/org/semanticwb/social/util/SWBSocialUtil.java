@@ -1395,9 +1395,12 @@ public class SWBSocialUtil implements SWBAppObject {
                 postOutInitDate=SWBSocialUtil.Util.changeFormat(postOutInitDate, 1);
                 postOutInitHour = postOutInitHour.substring(1, 6);
 
-                //System.out.println("postOutInitDate-1**:"+postOutInitDate+",postOutInitHour-1**:"+postOutInitHour);
+                System.out.println("manageFastCalendar2PostOut/wsite:"+wsite);
 
                 FastCalendar newFastCalendarInstance=FastCalendar.ClassMgr.createFastCalendar(wsite);
+                
+                System.out.println("manageFastCalendar2PostOut/wsite/newFastCalendarInstance:"+newFastCalendarInstance);
+                
                 Date date2SendPostOut=new Date(postOutInitDate);
 
                 StringTokenizer st   = new StringTokenizer(postOutInitHour, ":");
