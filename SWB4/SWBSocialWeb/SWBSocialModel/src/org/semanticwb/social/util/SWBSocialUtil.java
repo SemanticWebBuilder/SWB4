@@ -1530,8 +1530,7 @@ public class SWBSocialUtil implements SWBAppObject {
         public static void sendNewPost(PostIn postIn, org.semanticwb.social.SocialTopic socialTopic, SocialPFlow socialPFlow, ArrayList<SocialNetwork> aSocialNets, WebSite wsite, String toPost, HttpServletRequest request, SWBActionResponse response) 
         {
             try {
-                //if(postIn==null && socialTopic!=null) wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-                //System.out.println("sendNewPost/toPost:"+toPost);
+                if(postIn==null || socialTopic==null || toPost==null) return;
                 SWBFormMgr mgr = null;
                 if (toPost.equals("msg")) {
                     mgr = new SWBFormMgr(Message.sclass, wsite.getSemanticObject(), null);
