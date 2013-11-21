@@ -1021,21 +1021,21 @@ public class SocialSentPost extends GenericResource {
                         } else if (isInFlow && needAuthorization && postOut.getPflowInstance() != null && postOut.getPflowInstance().getStatus() == 3) {
                             if(postOut.getFastCalendar()!=null)
                             {
-                                out.println("<strong>A cumplir Calendario..</strong>");
+                                out.println("<strong>A cumplir Calendario..</strong>A cumplir Calendario..");
                             }else{
                                 out.println("<a class=\"status6\" href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />" + paramRequest.getLocaleString("publish") + "</a>");
                             }
                         } else if (!isInFlow && !needAuthorization && !postOutwithPostOutNets) {
                             if(postOut.getFastCalendar()!=null)
                             {
-                                out.println("<strong>A cumplir Calendario..</strong>");
+                                out.println("<strong>A cumplir Calendario..</strong>A cumplir Calendario..");
                             }else{
                                 out.println("<strong>"+paramRequest.getLocaleString("publishing") +"</strong>");    //Aqui no debe haber liga, que lo cheque roger desde estilo
                             }
                         } else {
                             if(postOut.getFastCalendar()!=null)
                             {
-                                out.println("<strong>A cumplir Calendario..</strong>");
+                                out.println("<strong>A cumplir Calendario..</strong>A cumplir Calendario..");
                             }else{
                                 out.println("<a class=\"status6\" href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />" + paramRequest.getLocaleString("publish") + "</a>");
                             }
