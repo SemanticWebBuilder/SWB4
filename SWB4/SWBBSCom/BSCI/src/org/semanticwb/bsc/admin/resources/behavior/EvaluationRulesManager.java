@@ -173,12 +173,20 @@ public class EvaluationRulesManager extends GenericAdmResource {
                 urlchoose.setParameter("suri", suri);
                 urlchoose.setParameter("sval", rule.getURI());
                 out.println("   <td>");
-                out.println("<a href=\"#\" onclick=\"addNewTab('" + rule.getAppraisal().getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + (rule.getAppraisal().getTitle(lang)==null?(rule.getAppraisal().getTitle()==null?"Sin título":rule.getAppraisal().getTitle().replaceAll("'","")):rule.getAppraisal().getTitle(lang).replaceAll("'","")) + "');return false;\" >" + (rule.getAppraisal().getTitle(lang)==null?(rule.getAppraisal().getTitle()==null?"Sin título":rule.getAppraisal().getTitle().replaceAll("'","")):rule.getAppraisal().getTitle(lang).replaceAll("'","")) + "</a>");
+                if(rule.getAppraisal()==null) {
+                    out.println("--");
+                }else {
+                    out.println("<a href=\"#\" onclick=\"addNewTab('" + rule.getAppraisal().getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + (rule.getAppraisal().getTitle(lang)==null?(rule.getAppraisal().getTitle()==null?"Sin título":rule.getAppraisal().getTitle().replaceAll("'","")):rule.getAppraisal().getTitle(lang).replaceAll("'","")) + "');return false;\" >" + (rule.getAppraisal().getTitle(lang)==null?(rule.getAppraisal().getTitle()==null?"Sin título":rule.getAppraisal().getTitle().replaceAll("'","")):rule.getAppraisal().getTitle(lang).replaceAll("'","")) + "</a>");
+                }
                 out.println("   </td>");
                 
                 // Grupo del estado
                 out.println("   <td>");
-                out.println((rule.getAppraisal().getStateGroup().getTitle(lang)==null?(rule.getAppraisal().getStateGroup().getTitle()==null?"Sin título":rule.getAppraisal().getStateGroup().getTitle().replaceAll("'","")):rule.getAppraisal().getStateGroup().getTitle(lang).replaceAll("'","")));
+                if(rule.getAppraisal()==null) {
+                    out.println("--");
+                }else {
+                    out.println((rule.getAppraisal().getStateGroup().getTitle(lang)==null?(rule.getAppraisal().getStateGroup().getTitle()==null?"Sin título":rule.getAppraisal().getStateGroup().getTitle().replaceAll("'","")):rule.getAppraisal().getStateGroup().getTitle(lang).replaceAll("'","")));
+                }
                 out.println("   </td>");
                 
                 // Lista de operadores
