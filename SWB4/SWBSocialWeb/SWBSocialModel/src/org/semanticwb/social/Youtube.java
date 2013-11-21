@@ -1166,7 +1166,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                     return;
                 }
                 
-                String urlComment = "http://gdata.youtube.com/feeds/api/videos/" + videoId + "/comments";
+                String urlComment = "https://gdata.youtube.com/feeds/api/videos/" + videoId + "/comments";
                 URL url;
                 HttpURLConnection conn = null;
                 try {
@@ -1217,6 +1217,14 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                 }catch(Exception ex){                    
                     SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, null, ex.getMessage());
                     log.error("Problem posting comment ", ex);
+                    try{
+                        System.out.println("ERROR:" + getResponse(conn.getErrorStream()));                
+                        if(conn.getResponseMessage() != null){
+                            log.error("Error code:" + conn.getResponseCode() + " " + conn.getErrorStream());
+                        }
+                    }catch(Exception e){
+                    
+                    }
                 }
                 
             }else{
