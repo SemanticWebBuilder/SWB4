@@ -106,10 +106,10 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 //getPostContainer().getPost().setSocialNetPostId("");
             }catch (TwitterException te) {
                 SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, null, te.getErrorMessage());
-                log.error("Twitter exception posting twitter message" + te);
+                log.error("Twitter exception posting twitter message", te);
             }catch(Exception e ){
                 SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, null, e.getMessage());
-                log.error("Exception posting twitter message" + e);
+                log.error("Exception posting twitter message", e);
             }
         }
     }
@@ -180,10 +180,10 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 
             }catch (TwitterException te) {
                 SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, null, te.getErrorMessage());
-                log.error("Twitter exception posting twitter message" + te);
+                log.error("Twitter exception posting twitter message ", te);
             }catch(Exception e ){
                 SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, null, e.getMessage());
-                log.error("Exception posting twitter message" + e);
+                log.error("Exception posting twitter message ", e);
             }
             //System.out.println("Mensaje de Photo de Twitter:" + description);
             //System.out.println("Photo de Twitter:" + photoSend);
@@ -253,7 +253,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 
             }catch(NumberFormatException nfe){
                 lastTweetID = 0L;
-                log.error("----------Error in getLastTweetID():"  + nfe);
+                log.error("----------Error in getLastTweetID():",  nfe);
                 System.out.println("----------Invalid value found in NextDatetoSearch(). Set to 0");
             }
         }else{
@@ -280,7 +280,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 log.error("Do not save the Tweet ID because stored value is equal or greater than the received");
             }
         }catch(NumberFormatException nfe){
-            log.error("Error in setLastTweetID():"  +nfe);
+            log.error("Error in setLastTweetID():", nfe);
             //System.out.println("Problem Storing NextDatetoSearch");
         }
     }
@@ -437,15 +437,15 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                     }
                 }catch(TwitterException te){
                     if(te.getErrorCode() == 88){
-                        log.error("Error getting tweets SEARCH - RATE LIMIT EXCCEDED:"  + te );
+                        log.error("Error getting tweets SEARCH - RATE LIMIT EXCCEDED:", te );
                     }
                     if(te.getErrorCode() == 89){
-                        log.error("Error getting tweets SEARCH - AUTHENTICACION CREDENTIALS MISSING OR INCORRECT"  + te );
+                        log.error("Error getting tweets SEARCH - AUTHENTICACION CREDENTIALS MISSING OR INCORRECT", te );
                     }
-                    log.error("Error getting tweets SEARCH:"  + te );
+                    log.error("Error getting tweets SEARCH:", te );
                     canGetMoreTweets = false;
                 }catch(Exception ex){
-                    log.error("Error getting tweets SEARCH"  + ex );
+                    log.error("Error getting tweets SEARCH", ex);
                     canGetMoreTweets = false;
                 }
             }while(canGetMoreTweets && tweetsReceived <17000);  //Maximo permitido para extraer de twitter c/15 minutos
@@ -456,7 +456,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             }
             //System.out.println("TOTAL TWEETS RECEIVED:" + tweetsReceived);
         }catch(Exception e){            
-            log.error("Error in listen():"  + e );
+            log.error("Error in listen():",  e );
         }
         
         /*
@@ -786,9 +786,9 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             sup.setMedia(new File(photoToPublish));
             stat = twitter.updateStatus(sup);
        } catch (UnsupportedEncodingException ex) {
-            log.error("Exception" + ex);
+            log.error("Exception", ex);
         } catch (TwitterException ex) {
-            log.error("Exception" + ex);
+            log.error("Exception", ex);
             if (401 == ex.getStatusCode()) {
                 
             }
