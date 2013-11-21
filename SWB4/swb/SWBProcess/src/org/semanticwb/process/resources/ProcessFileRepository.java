@@ -39,10 +39,12 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.Role;
+import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.VersionInfo;
@@ -618,7 +620,7 @@ public class ProcessFileRepository extends GenericResource {
         } else if (type.indexOf(".xsl") != -1) {
             file = "XSLT file";
         } else {
-            file = "URL file";
+            file = "URL location";
         }
         return file;
     }
@@ -687,9 +689,9 @@ public class ProcessFileRepository extends GenericResource {
      * @param paramRequest The SWBParamRequest.
      * @return Lista con los archivos del repositorio.
      */
-    private List<RepositoryElement> listFiles(HttpServletRequest request, SWBParamRequest paramRequest) {
-        List<RepositoryElement> ret = new ArrayList<RepositoryElement>();
-        HashMap<String, RepositoryElement> hmNodes = new HashMap<String, RepositoryElement>();
+    private List<GenericObject> listFiles(HttpServletRequest request, SWBParamRequest paramRequest) {
+        List<GenericObject> ret = new ArrayList<GenericObject>();
+        HashMap<String, GenericObject> hmNodes = new HashMap<String, GenericObject>();
         User user = paramRequest.getUser();
         String lang = "es";
         
@@ -712,13 +714,13 @@ public class ProcessFileRepository extends GenericResource {
             //SORTING
             Iterator<RepositoryFile> itrf = repoDir.listRepositoryElements();
             while (itrf.hasNext()) {
-                RepositoryElement repoFile = itrf.next();
-                VersionInfo version = repoFile.getActualVersion();
+                GenericObject repoFile = itrf.next();
+                VersionInfo version = ((RepositoryElement)repoFile).getActualVersion();
                 String skey = repoFile.getId();
 
                 boolean showFile = Boolean.FALSE;
-                if (repoFile.getOwnerUserGroup() != null) {
-                    UserGroup ugpo = repoFile.getOwnerUserGroup();
+                if (((RepositoryElement)repoFile).getOwnerUserGroup() != null) {
+                    UserGroup ugpo = ((RepositoryElement)repoFile).getOwnerUserGroup();
                     String ugid = null;
                     if (ugpo != null) {
                         ugid = ugpo.getId();
@@ -733,31 +735,31 @@ public class ProcessFileRepository extends GenericResource {
                 if (!showFile || version == null) continue;
 
                 if (orderBy.equals("title")) {
-                    skey = repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
+                    skey = ((RepositoryElement)repoFile).getDisplayTitle(lang) + " - " + repoFile.getId();
                 } else if (orderBy.equals("date")) {
-                    skey = version.getCreated().getTime() + " - " + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
+                    skey = version.getCreated().getTime() + " - " + ((RepositoryElement)repoFile).getDisplayTitle(lang) + " - " + repoFile.getId();
                 } else if (orderBy.equals("type")) {
                     String file = version.getVersionFile();
                     String type = getFileType(file);
-                    skey = type + "-" + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
+                    skey = type + "-" + ((RepositoryElement)repoFile).getDisplayTitle(lang) + " - " + repoFile.getId();
                 } else if (orderBy.equals("usr")) {
                     User usrc = version.getCreator();
-                    skey = " - " + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
+                    skey = " - " + ((RepositoryElement)repoFile).getDisplayTitle(lang) + " - " + repoFile.getId();
                     if (usrc != null) {
                         skey = usrc.getFullName() + skey;
                     }
                 } else if (orderBy.equals("gpousr")) {
-                    if (repoFile.getOwnerUserGroup() == null) {
+                    if (((RepositoryElement)repoFile).getOwnerUserGroup() == null) {
                         skey = " - " + " " + " - " + repoFile.getId();
                     } else {
-                        skey = " - " + repoFile.getOwnerUserGroup().getDisplayTitle(lang) + " - " + repoFile.getId();
+                        skey = " - " + ((RepositoryElement)repoFile).getOwnerUserGroup().getDisplayTitle(lang) + " - " + repoFile.getId();
                     }
 
                 } else if (orderBy.equals("status")) {
-                    if (repoFile.getStatus() == null) {
+                    if (((RepositoryElement)repoFile).getStatus() == null) {
                         skey = " - " + " " + " - " + repoFile.getId();
                     } else {
-                        skey = " - " + repoFile.getStatus().getDisplayTitle(lang) + " - " + repoFile.getId();
+                        skey = " - " + ((RepositoryElement)repoFile).getStatus().getDisplayTitle(lang) + " - " + repoFile.getId();
                     }
                 }
                 hmNodes.put(skey, repoFile);
