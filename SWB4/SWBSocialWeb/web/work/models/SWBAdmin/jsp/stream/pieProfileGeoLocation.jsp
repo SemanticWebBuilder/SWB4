@@ -26,7 +26,7 @@
 <%!
     JSONArray getObject(SemanticObject semObj, String lang, String idModel) throws Exception {
 
-        int neutrals = 0, positives = 0, negatives = 0;
+        int neutrals = 0, positives = 0, negatives = 0, totalPost = 0;
         Iterator<PostIn> itObjPostIns = null;
 
         if (semObj.getGenericInstance() instanceof Stream) {
@@ -52,79 +52,81 @@
 
 
         JSONArray node = new JSONArray();
-        int totalPost = 0;
         ArrayList<String> geoLocation = new ArrayList<String>();
         String cad = "1,0,0,0";
-        //System.out.println("--------------------------------------------->");
         while (itObjPostIns.hasNext()) {
-           // System.out.println("size" + size);
+
+            totalPost++;
             PostIn postIn = itObjPostIns.next();
             CountryState key = postIn.getGeoStateMap();
-            //System.out.println("");
-            if (key != null) {
-                //System.out.println("KEY" + key.getTitle());
-                map.put(key.getTitle(), map.containsKey(key.getTitle()) ? cad(map.get(key.getTitle()).toString(), postIn) : "1,1,0,0");
-                totalPost++;
+            //System.out.println("++++++++++++" + key);
+            String title = "";
+            if (key == null) {
+                title = "No definido";
+            } else {
+                title = key.getTitle();
+
             }
+            map.put(title, map.containsKey(title) ? cad(map.get(title).toString(), postIn) : "1,1,0,0");
+
+
 
             size++;
         }
         float intTotalVotos = map.size();
-        // System.out.println("TOTAL DE VOTOS: " + intTotalVotos);
 
-        //Positivo
-        //float intPorcentajePositive = ((float) positives * 100) / (float) intTotalVotos;
-        //System.out.println("TAMAÑO!" + map.size());
         Iterator i = map.entrySet().iterator();
         while (i.hasNext()) {
             Map.Entry e = (Map.Entry) i.next();
-            if (e.getKey() != null) {
-                // CountryState csss = (CountryState) e.getKey();
-                //System.out.println("cs: " + e.getValue());
-                String caden = (String) e.getValue();
-                String[] phrasesStream = caden.split(",");
-                neutrals = Integer.parseInt(phrasesStream[1]);
-                positives = Integer.parseInt(phrasesStream[2]);
-                negatives = Integer.parseInt(phrasesStream[3]);
+            //System.out.println("eeeeeeeee" + e.getKey());
+            //if (e.getKey() != null) {
+            // CountryState csss = (CountryState) e.getKey();
+            //System.out.println("cs: " + e.getValue());
+            String caden = (String) e.getValue();
+            String[] phrasesStream = caden.split(",");
+            neutrals = Integer.parseInt(phrasesStream[1]);
+            positives = Integer.parseInt(phrasesStream[2]);
+            negatives = Integer.parseInt(phrasesStream[3]);
 
-                //System.out.println("KEYY" + e.getKey() + " \t VALUE  " + e.getValue());
-                JSONObject node1 = new JSONObject();
-                node1.put("label", e.getKey());
-                node1.put("value1", "" + phrasesStream[0]);
+            //System.out.println("KEYY" + e.getKey() + " \t VALUE  " + e.getValue());
+            JSONObject node1 = new JSONObject();
+            String label = e.getKey().toString();
+            node1.put("label", label);
+            node1.put("value1", "" + phrasesStream[0]);
 
-                float number = Float.parseFloat(phrasesStream[0]);
-                //node1.put("value2", "" + round((float) Float.parseFloat(phrasesStream[0]) * 100) / (float) intTotalVotos);
-                if (positives > negatives && positives > neutrals) {
-                    //System.out.println("entro a positivos");
-                    number = Float.parseFloat(phrasesStream[1]);
-                    node1.put("value2", "" + round((float) number * 100) / (float) totalPost);
-                    node1.put("color", "#86c440");
-                } else if (negatives > neutrals) {
-                    //System.out.println("entro a negatios");
-                    number = Float.parseFloat(phrasesStream[2]);
-                    node1.put("value2", "" + round((float) number * 100) / (float) totalPost);
-                    node1.put("color", "#990000");
-                } else {
-                    //System.out.println("entro a neutrales");
-                    number = Float.parseFloat(phrasesStream[0]);
-                    node1.put("value2", "" + round((float) number * 100) / (float) totalPost);
-
-                    node1.put("color", "#eae8e3");
-                }
-                node1.put("label2", e.getKey() + " " + phrasesStream[0] + " Neutros: " + neutrals + " Positivos: " + positives + " Negativos: " + negatives);
-                node1.put("chartclass", "possClass");
-                node.put(node1);
+            float number = Float.parseFloat(phrasesStream[0]);
+            if (positives > negatives && positives > neutrals) {
+                number = Float.parseFloat(phrasesStream[1]);
+                node1.put("value2", "" + round((float) number * 100) / (float) totalPost);
+                node1.put("color", "#86c440");
+            } else if (negatives > neutrals) {
+                number = Float.parseFloat(phrasesStream[2]);
+                node1.put("value2", "" + round((float) number * 100) / (float) totalPost);
+                node1.put("color", "#990000");
             } else {
+                number = Float.parseFloat(phrasesStream[0]);
+                node1.put("value2", "" + round((float) number * 100) / (float) totalPost);
 
-                JSONObject node3 = new JSONObject();
-                node3.put("label", "Neutros");
-                node3.put("value1", "0");
-                node3.put("value2", "100");
-                node3.put("color", "#eae8e3");
-                node3.put("chartclass", "neuClass");
-                node3.put("label2", "Sin datos para procesar");
-                node.put(node3);
+                node1.put("color", "#eae8e3");
             }
+            node1.put("label2", e.getKey() + " " + phrasesStream[0] + " Neutros: " + neutrals + " Positivos: " + positives + " Negativos: " + negatives);
+            node1.put("chartclass", "possClass");
+            node1.put("label3", "Total de Post: " + totalPost);
+
+            node.put(node1);
+            //  } else {
+
+            // JSONObject node3 = new JSONObject();
+            //node3.put("label", "Neutros");
+            //node3.put("value1", "0");
+            // node3.put("value2", "100");
+            //  node3.put("color", "#eae8e3");
+            // node3.put("chartclass", "neuClass");
+            //  node3.put("label2", "Sin datos para procesar");
+            //  node3.put("label3", "Total de Post: " + totalPost);
+
+            //  node.put(node3);
+            // }
         }
 
 
@@ -138,6 +140,8 @@
             node3.put("color", "#eae8e3");
             node3.put("chartclass", "neuClass");
             node3.put("label2", "Sin datos para procesar");
+            node3.put("label3", "Total de Post: " + totalPost);
+
             node.put(node3);
 
         }

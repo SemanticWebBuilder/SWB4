@@ -26,6 +26,7 @@
 <!DOCTYPE html>
 <%
     SWBResourceURL urlRender = paramRequest.getRenderUrl();
+    SWBResourceURL url = paramRequest.getRenderUrl();
 
     String suri = request.getParameter("suri");
     if (suri == null) {
@@ -39,7 +40,7 @@
     String lang = paramRequest.getUser().getLanguage();
     String idModel = paramRequest.getWebPage().getWebSiteId();
     args += "&lang=" + lang;
-    args += "&idModel="+ idModel;
+    args += "&idModel=" + idModel;
 
     String title = "";
     if (semObj.getGenericInstance() instanceof Descriptiveable) {
@@ -122,11 +123,21 @@
         }
     </script>
 </head>
+<style type="text/css">         
+    @import "/swbadmin/css/swbsocial.css";          
+    html, body, #main{
+        overflow: auto;
+    }
+</style>
 
 <fieldset>
     <div id="pieChart">
         <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("sentimentProm", lang)%>: <%=title%></h1>
+        <div class="barra">
+            <a href="<%=urlRender.setMode("exportExcel").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+        </div>
     </div>
+
     <script src="http://d3js.org/d3.v3.min.js"></script>    
     <script>
 
@@ -190,6 +201,11 @@
             .data(pie(data))
             .enter().append("g")
             .attr("class", "arc")
+            .on("click", function(d) {
+                var filter = d.data.label; 
+                var url = "<%=urlRender.setMode("exportExcel").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter;
+                document.location.href = url;
+            })
             .on("mouseover", function(d, i) {
                 d3.select(gl[0][i]).style("visibility","visible"); 
                 d3.select(tooltips[0][i])
@@ -203,6 +219,7 @@
                     return d.data.color;
                 });
             })
+          
             .on("mousemove", function(d, i) {
                 d3.select(tooltips[0][i])
                 .style("top", d3.event.pageY-10+"px")
@@ -237,14 +254,13 @@
     </script>
 
 
-    <h1>Mensajes recibidos de :<%=title%></h1>
+ <h1>Mensajes recibidos de :<%=title%></h1>
     <div class="pub-redes">
         <p class="titulo">Tipo de filtro que desea:</p> 
         <form name="formgraphBar" id="formgraphBar" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data" action="">
             <table>
                 <tr>
-
-                <select name="select_sh" id="select_sh"  dojoType="dijit.form.Select" onchange="javascript:postHtml('<%=urlRender.setMode("InfographBar")%>?selected='+escape(document.formgraphBar.select_sh[document.formgraphBar.select_sh.selectedIndex].value)+'&suri=<%=URLEncoder.encode(suri)%>', 'selectgraphBar');">
+                <select name="select_sh" id="select_sh"  dojoType="dijit.form.Select" onchange="javascript:postHtml('<%=url.setMode("InfographBar")%>?selected='+escape(document.formgraphBar.select_sh[document.formgraphBar.select_sh.selectedIndex].value)+'&suri=<%=URLEncoder.encode(suri)%>', 'selectgraphBar');">
                     <option value="0">--Seleccione--</option>
                     <option value="1">Anual</option>
                     <option value="2">Mensual</option>

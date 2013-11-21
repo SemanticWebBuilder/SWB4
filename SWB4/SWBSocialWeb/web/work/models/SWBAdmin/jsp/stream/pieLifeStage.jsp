@@ -22,7 +22,7 @@
 <%!
     JSONArray getObject(SemanticObject semObj, String lang, String idModel) throws Exception {
 
-        int  young = 0, child = 0, teenAge = 0, youngAdult = 0, adult = 0, thirdAge = 0;
+        int young = 0, child = 0, teenAge = 0, youngAdult = 0, adult = 0, thirdAge = 0, totalPost = 0, nodefined =0;
         Iterator<PostIn> itObjPostIns = null;
         if (semObj.getGenericInstance() instanceof Stream) {
             Stream stream = (Stream) semObj.getGenericInstance();
@@ -39,44 +39,61 @@
         ArrayList youngAdultArray = new ArrayList();
         ArrayList thirdAgeArray = new ArrayList();
         ArrayList adultArray = new ArrayList();
-        String youngTitle = "";
-        String youngAdultTitle = "";
-        String childTitle = "";
-        String teenTitle = "";
-        String adultTitle ="";
-        String thirdTitle ="";
+        ArrayList noDefine = new ArrayList();
+        String youngTitle = "Young";
+        String youngAdultTitle = "YoungAdult";
+        String childTitle = "Child";
+        String teenTitle = "TeenAge";
+        String adultTitle = "Adult";
+        String thirdTitle = "ThirdAge";
 
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
-            if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() != null) {
+            totalPost++;
+            if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() == null) {
+                nodefined++;
+                noDefine.add(postIn);                
+            } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Young")) {
+                young++;
+                youngArray.add(postIn);
+                //youngTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
+            } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Child")) {
+                child++;
+                childArray.add(postIn);
+                //childTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
+            } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("TeenAge")) {
+                teenAge++;
+                teenAgeArray.add(postIn);
+                //teenTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
+            } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("YoungAdult")) {
+                youngAdult++;
+                youngAdultArray.add(postIn);
+                //youngAdultTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
+            } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Adult")) {
+                adult++;
+                adultArray.add(postIn);
+                //adultTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
+            } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("ThirdAge")) {
+                thirdAge++;
+                thirdAgeArray.add(postIn);
+                //thirdTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
+            }
 
-                if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Young")) {
-                    young++;
-                    youngArray.add(postIn);
-                    youngTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
-                } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Child")) {
-                    child++;
-                    childArray.add(postIn);
-                    childTitle =  postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
-                } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("TeenAge")) {
-                    teenAge++;
-                    teenAgeArray.add(postIn);
-                    teenTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
-                } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("YoungAdult")) {
-                    youngAdult++;
-                    youngAdultArray.add(postIn);
-                    youngAdultTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
-                } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Adult")) {
-                    adult++;
-                    adultArray.add(postIn);
-                    adultTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
-                } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("ThirdAge")) {
-                    thirdAge++;
-                    thirdAgeArray.add(postIn);
-                    thirdTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
-                }
+        }
+        Iterator noDefined = noDefine.iterator();
+
+        int neutralsnoDefine = 0, positivesnoDefine = 0, negativesnoDefine = 0;
+        while (noDefined.hasNext()) {
+            PostIn pi = (PostIn) noDefined.next();
+            if (pi.getPostSentimentalType() == 0) {
+                neutralsnoDefine++;
+            } else if (pi.getPostSentimentalType() == 1) {
+                positivesnoDefine++;
+            } else if (pi.getPostSentimentalType() == 2) {
+                negativesnoDefine++;
             }
         }
+        
 
 
         Iterator youngI = youngArray.iterator();
@@ -165,34 +182,36 @@
             }
         }
 
-        
+
         float intTotalVotos = young + child + teenAge + youngAdult + adult + thirdAge;
 
         //Positivo
-        float intPorcentajeYoung = ((float) young * 100) / (float) intTotalVotos;
+        float intPorcentajenodefined = ((float) nodefined * 100) / (float) totalPost;
+        
+        float intPorcentajeYoung = ((float) young * 100) / (float) totalPost;
 
         //System.out.println("Votos Positivos:"+positives+", porcentaje:"+intPorcentajePositive); 
 
         //Negativo
-        float intPorcentajeChild = ((float) child * 100) / (float) intTotalVotos;
+        float intPorcentajeChild = ((float) child * 100) / (float) totalPost;
 
         //System.out.println("Votos negatives"+negatives+", porcentaje:"+intPorcentajeNegative); 
 
         //Neutro
-        float intPorcentajeTeenAge = ((float) teenAge * 100) / (float) intTotalVotos;
+        float intPorcentajeTeenAge = ((float) teenAge * 100) / (float) totalPost;
 
-        float intPorcentajeYoungAdult = ((float) youngAdult * 100) / (float) intTotalVotos;
+        float intPorcentajeYoungAdult = ((float) youngAdult * 100) / (float) totalPost;
 
         //System.out.println("Votos neutrals"+neutrals+", porcentaje:"+intPorcentajeNeutral);         
 
-        float intPorcentajeAdult = ((float) adult * 100) / (float) intTotalVotos;
-        float intPorcentajeThirdAge = ((float) thirdAge * 100) / (float) intTotalVotos;
+        float intPorcentajeAdult = ((float) adult * 100) / (float) totalPost;
+        float intPorcentajeThirdAge = ((float) thirdAge * 100) / (float) totalPost;
 
         JSONArray node = new JSONArray();
 
 
         if (child > 0) {
-            
+
             JSONObject node1 = new JSONObject();
             node1.put("label", childTitle);
             node1.put("value1", "" + child);
@@ -204,8 +223,10 @@
             } else {
                 node1.put("color", "#eae8e3");
             }
-            node1.put("label2", childTitle+" " + child + " " +SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesChild + " " +SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesChild +  " " +SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsChild);
+            node1.put("label2", childTitle + " " + child + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesChild + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesChild + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsChild);
             node1.put("chartclass", "possClass");
+            node1.put("label3", "Total de Post: " + totalPost);
+
             node.put(node1);
         }
 
@@ -222,8 +243,10 @@
             } else {
                 node2.put("color", "#eae8e3");
             }
-            node2.put("label2",youngTitle+ " " + young +  " " +SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesYoung + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesYoung + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsYoung);
+            node2.put("label2", youngTitle + " " + young + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesYoung + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesYoung + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsYoung);
             node2.put("chartclass", "possClass");
+            node2.put("label3", "Total de Post: " + totalPost);
+
             node.put(node2);
         }
 
@@ -240,8 +263,10 @@
             } else {
                 node3.put("color", "#eae8e3");
             }
-            node3.put("label2", teenTitle+" " + teenAge + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesteenAge + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesteenAge + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsteenAge);
+            node3.put("label2", teenTitle + " " + teenAge + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesteenAge + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesteenAge + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsteenAge);
             node3.put("chartclass", "possClass");
+            node3.put("label3", "Total de Post: " + totalPost);
+
             node.put(node3);
         }
 
@@ -257,15 +282,17 @@
             } else {
                 node4.put("color", "#eae8e3");
             }
-            node4.put("label2", youngAdultTitle+"  " + youngAdult + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesyoungAdult + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesyoungAdult +  " " +SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsyoungAdult);
+            node4.put("label2", youngAdultTitle + "  " + youngAdult + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesyoungAdult + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesyoungAdult + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsyoungAdult);
             node4.put("chartclass", "possClass");
+            node4.put("label3", "Total de Post: " + totalPost);
+
             node.put(node4);
         }
 
 
         if (adult > 0) {
             JSONObject node5 = new JSONObject();
-            node5.put("label", adultTitle );
+            node5.put("label", adultTitle);
             node5.put("value1", "" + adult);
             node5.put("value2", "" + round(intPorcentajeAdult));
             if (positivesAdult > negativesAdult && positivesAdult > neutralsAdult) {
@@ -275,8 +302,10 @@
             } else {
                 node5.put("color", "#eae8e3");
             }
-            node5.put("label2", adultTitle+" " + adult + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesAdult +  " " +SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesAdult + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsAdult);
+            node5.put("label2", adultTitle + " " + adult + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesAdult + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesAdult + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsAdult);
             node5.put("chartclass", "possClass");
+            node5.put("label3", "Total de Post: " + totalPost);
+
             node.put(node5);
         }
 
@@ -293,23 +322,33 @@
             } else {
                 node6.put("color", "#eae8e3");
             }
-            node6.put("label2",thirdTitle+ " " + thirdAge + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesthirdAge +  " " +SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesthirdAge +  " " +SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsthirdAge);
+            node6.put("label2", thirdTitle + " " + thirdAge + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesthirdAge + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesthirdAge + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsthirdAge);
             node6.put("chartclass", "possClass");
+            node6.put("label3", "Total de Post: " + totalPost);
+
             node.put(node6);
         }
 
-        
-         if(child == 0 && young ==0 && teenAge  == 0 && youngAdult ==0 && adult==0 && thirdAge==0 ){
-                   
-            JSONObject node3=new JSONObject();
-            node3.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang)); 
+
+        if (child == 0 && young == 0 && teenAge == 0 && youngAdult == 0 && adult == 0 && thirdAge == 0) {
+
+            JSONObject node3 = new JSONObject();
+            node3.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("nodefined", lang));
             node3.put("value1", "0");
-            node3.put("value2", "100");
-            node3.put("color", "#eae8e3");
+            node3.put("value2", ""+round(intPorcentajenodefined));
+            if (positivesnoDefine > negativesnoDefine && positivesnoDefine > neutralsnoDefine) {
+                node3.put("color", "#86c440");
+            } else if (negativesnoDefine > neutralsnoDefine) {
+                node3.put("color", "#990000");
+            } else {
+                node3.put("color", "#eae8e3");
+            }
             node3.put("chartclass", "neuClass");
-            node3.put("label2", "Sin datos para procesar");
+            node3.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("nodefined", lang)+ " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesnoDefine + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesnoDefine + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsnoDefine);
+            node3.put("label3", "Total de Post: " + totalPost);
+
             node.put(node3);
-        
+
         }
         return node;
     }
@@ -319,9 +358,9 @@
     }
 %>
 <%
-    
+
     if (request.getParameter("objUri") != null) {
-        
+
         SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("objUri"));
         String lang = request.getParameter("lang");
         String idModel = request.getParameter("idModel");

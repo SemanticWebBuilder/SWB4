@@ -51,7 +51,6 @@
     listAnio.add("2012");
 
     Iterator iAnio = listAnio.iterator();
-    SWBResourceURL url = paramRequest.getRenderUrl();
 
 %>
 <html>
@@ -61,7 +60,6 @@
 
             <%
                 if (selected.equals("1")) {
-
             %>
             <div id="graphBardivd" >
                 <form name="formgraphBarAnio" id="formgraphBarAnio" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data" action="">

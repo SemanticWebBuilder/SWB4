@@ -27,6 +27,7 @@
 <%
     SWBResourceURL urlRender = paramRequest.getRenderUrl();
 
+
     String suri = request.getParameter("suri");
     if (suri == null) {
         return;
@@ -83,7 +84,6 @@
                     var tag=dojo.byId(tagid);
                     if(tag){
                         var pan=dijit.byId(tagid);
-                        //alert("-"+tagid+"-"+tag+"-"+pan+"-");
                         if(pan && pan.attr)
                         {
                             pan.attr('content',response);
@@ -108,6 +108,82 @@
                 handleAs: "text"
             });
         }
+
+
+        function postHtml(url)
+        {
+            dojo.xhrPost({
+                url: url,
+             
+                error: function(response)
+                {
+                    if(dojo.byId(tagid)) {
+                        dojo.byId(tagid).innerHTML = "<p>OcurriÛ un error con respuesta:<br />" + response + "</p>";
+                    }else {
+                        alert("No existe ning˙n elemento con id " + tagid);
+                    }
+                    return response;
+                },
+                handleAs: "text"
+            });
+        }
+        
+        function post()
+        {
+            alert('entro');
+            var content='';
+                
+            
+            var url='<%=urlRender.setMode("exportExcel").setParameter("type", "education").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>';
+            var strToEval='dojo.xhrPost({form: url,timeout: 3000,content: {'+ content +' }})';
+               
+            var xhrArgs = {
+                form: url,
+                handleAs: "text",
+                load: function(data){
+                    //dojo.byId("response").innerHTML = "Form posted.";
+                    alert('respuesta: '+data);
+                    funcion();
+                },
+                error: function(error){
+                    alert('error'+error);
+                    // We'll 404 in the demo, but that's okay.  We don't have a 'postIt' service on the
+                    // docs server.
+                    //dojo.byId("response").innerHTML = "Form posted.";
+                }
+            }
+                
+            var deferred = dojo.xhrPost(xhrArgs);
+                
+                
+        }
+            
+        function sendform(id, funcion)
+        {
+            alert('entro al send form');
+            var _form = dojo.byId(id);
+                
+            var xhrArgs = {
+                form: _form,
+                handleAs: "text",
+                load: function(data){
+                    //dojo.byId("response").innerHTML = "Form posted.";
+                    alert('respuesta: '+data);
+                    funcion();
+                },
+                error: function(error){
+                    alert('error'+error);
+                    // We'll 404 in the demo, but that's okay.  We don't have a 'postIt' service on the
+                    // docs server.
+                    //dojo.byId("response").innerHTML = "Form posted.";
+                }
+            }
+                
+            var deferred = dojo.xhrPost(xhrArgs);
+                
+            return deferred;
+        }
+    
             
     
     </script>
@@ -119,14 +195,23 @@
 
 
 <div id="pieGenderParent">
+    <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("gender", lang)%></h1>
     <div id="pieGender">
-        <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("gender", lang)%></h1>
+        <div class="barra">
+            <a href="<%=urlRender.setMode("exportExcel").setParameter("type", "gender").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="pieGenderInfo">          
     </div>
 </div>
+
 <script src="http://d3js.org/d3.v3.min.js"></script>   
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 
 <script>
+
+        
     var xArray = new Array();
     var color = d3.scale.category10();
     var width = 760,
@@ -187,6 +272,11 @@
         .data(pie(data))
         .enter().append("g")
         .attr("class", "arc")
+        .on("click", function(d) {
+            var filter = d.data.label;            
+            var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "gender").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter;
+            document.location.href = url;
+        })
         .on("mouseover", function(d, i) {
             d3.select(gl[0][i]).style("visibility","visible"); 
                            
@@ -232,12 +322,23 @@
         for (var i = 0; i < data.length; i++) {               
             xArray.push(data[i].label2);                                            
         }  
+        
+        var total;
+        for (var x = 0; x < data.length; x++) {  
+            total = data[x].label3;
+            var paraTital = document.createElement("p");   
+            var node = document.createTextNode( total );
+            paraTital.appendChild(node);
+            var element=document.getElementById("pieGenderInfo");
+            element.appendChild(paraTital);
+            break;
+        } 
                                           
         for (var j = 0; j <xArray.length ; j++) {   
             var para = document.createElement("p");                                  
             var node = document.createTextNode( xArray[j] );
             para.appendChild(node);
-            var element=document.getElementById("pieGenderParent");
+            var element=document.getElementById("pieGenderInfo");
             element.appendChild(para);
         }
     });
@@ -248,10 +349,17 @@
 
 <div id="pieEducationParent">
     <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("education", lang)%></h1>
-    <div id="pieEducation">                  
-
+    <div id="pieEducation" >
+        <div class="barra">
+            <a href="<%=urlRender.setMode("exportExcel").setParameter("type", "education").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="pieEducationInfo">          
     </div>
 </div>
+
+
 <script>
 
     var educationArray = new Array();
@@ -315,6 +423,11 @@
         .data(pie(data))
         .enter().append("g")
         .attr("class", "arc")
+        .on("click", function(d) {
+            var filter = d.data.label;            
+            var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "education").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter;
+            document.location.href = url;
+        })                        
         .on("mouseover", function(d, i) {
             d3.select(gl[0][i]).style("visibility","visible"); 
             d3.select(tooltips[0][i])
@@ -354,7 +467,18 @@
         .attr("y",function(d) {
             return - width/2;
         });    
-                        
+              
+        var total;
+        for (var x = 0; x < data.length; x++) {  
+            total = data[x].label3;
+            var paraTital = document.createElement("p");   
+            var node = document.createTextNode( total );
+            paraTital.appendChild(node);
+            var element=document.getElementById("pieEducationInfo");
+            element.appendChild(paraTital);
+            break;
+        } 
+        
         for (var i = 0; i < data.length; i++) {               
             educationArray.push(data[i].label2);                                            
         }  
@@ -363,7 +487,7 @@
             var para = document.createElement("p");                                  
             var node = document.createTextNode( educationArray[j] );
             para.appendChild(node);
-            var element=document.getElementById("pieEducationParent");
+            var element=document.getElementById("pieEducationInfo");
             element.appendChild(para);
         }                      
                                   
@@ -374,6 +498,12 @@
 <div  id="pieRelationParent">
     <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("relationShip", lang)%></h1>
     <div id="pieRelationShipStatus">
+        <div class="barra">
+            <a href="<%=urlRender.setMode("exportExcel").setParameter("type", "relation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+        </div>    
+    </div>
+    <div class="clear"></div>
+    <div id="pieRelationInfo">          
     </div>
 </div>
 <script>
@@ -441,6 +571,11 @@
                 return d.data.color;
             });
         })
+        .on("click", function(d) {
+            var filter = d.data.label;            
+            var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "relation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter;
+            document.location.href = url;
+        })     
         .on("mousemove", function(d, i) {
             d3.select(tooltips[0][i])
             .style("top", d3.event.pageY-10+"px")
@@ -467,6 +602,17 @@
         .attr("y",function(d) {
             return - width/2;
         });
+        
+        var total;
+        for (var x = 0; x < data.length; x++) {  
+            total = data[x].label3;
+            var paraTital = document.createElement("p");   
+            var node = document.createTextNode( total );
+            paraTital.appendChild(node);
+            var element=document.getElementById("pieRelationInfo");
+            element.appendChild(paraTital);
+            break;
+        } 
                         
                         
         for (var i = 0; i < data.length; i++) {               
@@ -477,7 +623,7 @@
             var para = document.createElement("p");                                  
             var node = document.createTextNode( relationArray[j] );
             para.appendChild(node);
-            var element=document.getElementById("pieRelationParent");
+            var element=document.getElementById("pieRelationInfo");
             element.appendChild(para);
         } 
         
@@ -485,9 +631,150 @@
 
 </script>
 
+<div id="lifeStageParent">
+    <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("lifeStage", lang)%></h1>
+    <div id="profileLifeStage">
+        <div class="barra">
+            <a href="<%=urlRender.setMode("exportExcel").setParameter("type", "lifeStage").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+        </div> 
+    </div>
+    <div class="clear"></div>
+    <div id="pieLifeStageInfo">          
+    </div>
+</div>
+<script>
+
+    var width = 760,
+    height = 300,
+    radius = Math.min(width, height) / 2;
+    var lifeStageArray = new Array();
+    var arcLife = d3.svg.arc()
+    .outerRadius(radius - 10)
+    .innerRadius(0);
+
+    var pieLife = d3.layout.pie()
+    .sort(null)
+    .value(function(d) { return d.value2; });
+
+    var svgLife = d3.select("#profileLifeStage").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+    d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieLifeStage.jsp<%=args%>", function(error, data) {
+
+        var gl = svgLife.selectAll(".arcOver")
+        .data(pieE(data))
+        .enter().append("g")
+        .attr("class", "arcOver")
+        .style("visibility","hidden");
+            
+        gl.append("path")
+        .attr("d", arcOver)
+        .style("fill-opacity", "0.6")
+        .style("fill", function(d) { return d.data.color; });
+
+        var tooltips = svgLife.select("#profileGeoLocation")
+        .data(pie(data))
+        .enter().append("div")
+        .attr("class","chartToolTip")
+        .style("display", "none")
+        .style("position", "absolute")
+        .style("z-index", "10");
+
+        tooltips.append("p")
+        .append("span")
+        .html(function(d) {                
+            return "<strong>"+d.data.label+"</strong><br>"+d.data.value2+"%";
+        });       
+        
+        
+        var g = svgLife.selectAll(".arc")
+        .data(pie(data))
+        .enter().append("g")
+        .attr("class", "arc")
+        .on("mouseover", function(d, i) {
+            d3.select(gl[0][i]).style("visibility","visible"); 
+            d3.select(tooltips[0][i])
+            .style("display","block");
+        })
+        .on("mouseout", function(d, i) {
+            d3.select(gl[0][i]).style("visibility","hidden"); 
+            d3.select(tooltips[0][i])
+            .style("display","none");
+            d3.select(gl[0][i]).style("fill",function(d) {
+                return d.data.color;
+            });
+        })
+        .on("click", function(d) {
+            var filter = d.data.label;            
+            var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "lifeStage").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter;
+            document.location.href = url;
+        })  
+        .on("mousemove", function(d, i) {
+            d3.select(tooltips[0][i])
+            .style("top", d3.event.pageY-10+"px")
+            .style("left", d3.event.pageX+10+"px")
+        });
+
+        //Create slices
+        g.append("path")
+        .attr("d", arc)
+        .style("stroke", "white")
+        .style("stroke-width", "2")
+        .style("fill", function(d, i) {
+            return  d.data.color;
+        });
+
+        svgLife
+        .append("text")
+        .text("title")
+        .style("text-anchor","middle")
+        .style("fill","black")
+        .style("font-size","10pt")
+        .style("font-weight","bold")
+        .attr("x","0")
+        .attr("y",function(d) {
+            return - width/2;
+        });
+        
+        var total;
+        for (var x = 0; x < data.length; x++) {  
+            total = data[x].label3;
+            var paraTital = document.createElement("p");   
+            var node = document.createTextNode( total );
+            paraTital.appendChild(node);
+            var element=document.getElementById("pieLifeStageInfo");
+            element.appendChild(paraTital);
+            break;
+        } 
+           
+                        
+        for (var i = 0; i < data.length; i++) {               
+            lifeStageArray.push(data[i].label2);                                            
+        }  
+                                          
+        for (var j = 0; j <lifeStageArray.length ; j++) {   
+            var para = document.createElement("p");                                  
+            var node = document.createTextNode( lifeStageArray[j] );
+            para.appendChild(node);
+            var element=document.getElementById("pieLifeStageInfo");
+            element.appendChild(para);
+        }         
+    });
+</script>
+
+
 <div id="profileGeoLocationParent">
+    <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("location", lang)%></h1>
     <div id="profileGeoLocation">
-        <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("location", lang)%></h1>
+        <div class="barra">
+            <a href="<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+        </div> 
+    </div>
+    <div class="clear"></div>
+    <div id="pieGeolocationInfo">          
     </div>
 </div>
 <script>
@@ -556,6 +843,18 @@
                 return d.data.color;
             });
         })
+        .on("click", function(d) {
+            var filter = d.data.label;  
+            var acentos = "√¿¡ƒ¬»…À ÃÕœŒ“”÷‘Ÿ⁄‹€„‡·‰‚ËÈÎÍÏÌÔÓÚÛˆÙ˘˙¸˚—Ò«Á";
+            var original = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
+
+            for (var i=0; i<acentos.length; i++) {
+                filter = filter.replace(acentos.charAt(i), original.charAt(i));
+            }
+
+            var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter;
+            document.location.href = url;
+        }) 
         .on("mousemove", function(d, i) {
             d3.select(tooltips[0][i])
             .style("top", d3.event.pageY-10+"px")
@@ -582,6 +881,20 @@
         .attr("y",function(d) {
             return - width/2;
         });
+        
+        var total;
+        for (var x = 0; x < data.length; x++) {  
+            total = data[x].label3;
+            var paraTital = document.createElement("p");   
+            var node = document.createTextNode( total );
+            paraTital.appendChild(node);
+            var element=document.getElementById("pieGeolocationInfo");
+            element.appendChild(paraTital);
+            break;
+        } 
+            
+        
+        
                         
         for (var i = 0; i < data.length; i++) {               
             geoArray.push(data[i].label2);                                            
@@ -591,7 +904,7 @@
             var para = document.createElement("p");                                  
             var node = document.createTextNode( geoArray[j] );
             para.appendChild(node);
-            var element=document.getElementById("profileGeoLocationParent");
+            var element=document.getElementById("pieGeolocationInfo");
             element.appendChild(para);
         } 
         
@@ -599,116 +912,7 @@
 
 </script>
 
-<div id="lifeStageParent">
-    <div id="profileLifeStage">
-        <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("lifeStage", lang)%></h1>
-    </div>
-</div>
-<script>
 
-    var width = 760,
-    height = 300,
-    radius = Math.min(width, height) / 2;
-    var lifeStageArray = new Array();
-    var arcLife = d3.svg.arc()
-    .outerRadius(radius - 10)
-    .innerRadius(0);
-
-    var pieLife = d3.layout.pie()
-    .sort(null)
-    .value(function(d) { return d.value2; });
-
-    var svgLife = d3.select("#profileLifeStage").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-    d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieLifeStage.jsp<%=args%>", function(error, data) {
-
-        var gl = svgLife.selectAll(".arcOver")
-        .data(pieE(data))
-        .enter().append("g")
-        .attr("class", "arcOver")
-        .style("visibility","hidden");
-            
-        gl.append("path")
-        .attr("d", arcOver)
-        .style("fill-opacity", "0.6")
-        .style("fill", function(d) { return d.data.color; });
-
-        var tooltips = svgLife.select("#profileGeoLocation")
-        .data(pie(data))
-        .enter().append("div")
-        .attr("class","chartToolTip")
-        .style("display", "none")
-        .style("position", "absolute")
-        .style("z-index", "10");
-
-        tooltips.append("p")
-        .append("span")
-        .html(function(d) {                
-            return "<strong>"+d.data.label+"</strong><br>"+d.data.value2+"%";
-        });       
-        
-        
-        var g = svgLife.selectAll(".arc")
-        .data(pie(data))
-        .enter().append("g")
-        .attr("class", "arc")
-        .on("mouseover", function(d, i) {
-            d3.select(gl[0][i]).style("visibility","visible"); 
-            d3.select(tooltips[0][i])
-            .style("display","block");
-        })
-        .on("mouseout", function(d, i) {
-            d3.select(gl[0][i]).style("visibility","hidden"); 
-            d3.select(tooltips[0][i])
-            .style("display","none");
-            d3.select(gl[0][i]).style("fill",function(d) {
-                return d.data.color;
-            });
-        })
-        .on("mousemove", function(d, i) {
-            d3.select(tooltips[0][i])
-            .style("top", d3.event.pageY-10+"px")
-            .style("left", d3.event.pageX+10+"px")
-        });
-
-        //Create slices
-        g.append("path")
-        .attr("d", arc)
-        .style("stroke", "white")
-        .style("stroke-width", "2")
-        .style("fill", function(d, i) {
-            return  d.data.color;
-        });
-
-        svgLife
-        .append("text")
-        .text("title")
-        .style("text-anchor","middle")
-        .style("fill","black")
-        .style("font-size","10pt")
-        .style("font-weight","bold")
-        .attr("x","0")
-        .attr("y",function(d) {
-            return - width/2;
-        });
-                        
-        for (var i = 0; i < data.length; i++) {               
-            lifeStageArray.push(data[i].label2);                                            
-        }  
-                                          
-        for (var j = 0; j <lifeStageArray.length ; j++) {   
-            var para = document.createElement("p");                                  
-            var node = document.createTextNode( lifeStageArray[j] );
-            para.appendChild(node);
-            var element=document.getElementById("lifeStageParent");
-            element.appendChild(para);
-        }         
-    });
-</script>
 
 
 

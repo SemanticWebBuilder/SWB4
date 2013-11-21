@@ -27,8 +27,6 @@
     SocialWebPage swb = (SocialWebPage) SemanticObject.createSemanticObject(suriSite).createGenericInstance();
     Language l = (Language) SemanticObject.createSemanticObject(suri).createGenericInstance();
     String description = swb.getDescription(l.getId()) == null ? "" : swb.getDescription(l.getId());
-       System.out.println("entro al jsp");
-    WebPage ws = (WebPage) swb;
     StringBuilder address = new StringBuilder(128);
     address.append("http://").append(request.getServerName()).append(":").append(request.getServerPort()).append(SWBPortal.getWebWorkPath()).append("/").append("models").append("/").append(swb.getWebSite().getId()).append("/").append("WebPage").append("/").append(swb.getId()).append("/").append(SocialWebPage.social_socialwpPhoto.getName() + "_" + swb.getId() + "_" + swb.getSocialwpPhoto());
 
@@ -37,49 +35,22 @@
     WebSite wsite = paramRequest.getWebPage().getWebSite();
     urlAction.setParameter("wsite", wsite.getSemanticObject().getModel().getName());
     String sphoto = swb.getSocialwpPhoto();
-    
+
 %>
 
-<body>
-    <div id="pub-detalle">
-        <span class="sel-imgdiv"></span>
-        <div class="swbform">
-            <form dojoType="dijit.form.Form" id="frmUploadPhoto" action="<%=urlAction.setAction("uploadPhoto").setParameter("swb", URLEncoder.encode(swb.getURI())).setParameter("suri", suri)%>" method="post" onsubmit="submitForm('frmUploadPhoto'); return false;">
-                <table width="100%">
-                    <tr>
-                        <td colspan="3" style="text-align: left;" class="titulo">Previsualización:</td>        
-                    </tr>
-                    <tr>
-                        <td>
-                            <textarea readonly><%=description%></textarea>
-                        <td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <a href="<%=address%>"><%=address%></a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <img width="400" height="400" src="<%=SWBPortal.getWebWorkPath()%><%=swb.getWorkPath()%>/<%=SocialWebPage.social_socialwpPhoto.getName()%>_<%=swb.getId()%>_<%=sphoto%>">
-
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="3" style="text-align: left;">
-                            <button class="submit" type="" onclick="">Publicar</button>
-                        </td>
-                    </tr>
-                </table>                
+<div class="preview">
+    <div>
+        <p>Contenido a publicar: </p>
+        <br><br>
+        <%=description%>
+        <br><br>
+        <img width="300" height="300" src="<%=SWBPortal.getWebWorkPath()%><%=swb.getWorkPath()%>/<%=SocialWebPage.social_socialwpPhoto.getName()%>_<%=swb.getId()%>_<%=sphoto%>">
+        <br><br>
+        <a href="<%=address%>"><%=address%></a>
+        <br><br><br><br>
+        <center><form dojoType="dijit.form.Form" id="frmUploadPhoto" action="<%=urlAction.setAction("uploadPhoto").setParameter("swb", URLEncoder.encode(swb.getURI())).setParameter("suri", suri)%>" method="post" onsubmit="submitForm('frmUploadPhoto'); return false;">
+                <button class="submit" type="" onclick="">Publicar</button>
             </form>
-        </div>
+        </center>
     </div>
-    <div id="preview" dojoType="dijit.layout.ContentPane">
-    </div>
-
-
-
-</body>
+</div>
