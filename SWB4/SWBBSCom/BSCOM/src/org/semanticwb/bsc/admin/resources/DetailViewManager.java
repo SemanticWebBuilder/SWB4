@@ -19,11 +19,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
-import org.semanticwb.bsc.PeriodStatusAssignable;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.*;
 import org.semanticwb.bsc.tracing.PeriodStatus;
@@ -31,11 +31,17 @@ import org.semanticwb.bsc.utils.DetailView;
 import org.semanticwb.bsc.utils.PropertiesComparator;
 import org.semanticwb.model.FormElement;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.Resource;
+import org.semanticwb.model.Role;
 import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Text;
 import org.semanticwb.model.TextArea;
+import org.semanticwb.model.User;
+import org.semanticwb.model.UserGroup;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
@@ -125,14 +131,100 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         String statusMsg = request.getParameter("statusMsg");
         String statusErr = request.getParameter("statusErr");
         String objectsType = workClassSC != null ? workClassSC.getURI() : null;
+        Resource base = getResourceBase();
 
         if (bsc != null && objectsType != null) {
             SWBResourceURL urlCreate = paramRequest.getRenderUrl();
             urlCreate.setParameter("operation", "add");
             urlCreate.setMode("editTemplate");
 
+            SWBResourceURL url = paramRequest.getActionUrl();
+            url.setAction("setPerm");
             //Se genera el código HTML del encabezado de la tabla que muestra el listado de vistas
             listCode.append("<div class=\"swbform\">\n");
+            
+            listCode.append("<form dojoType=\"dijit.form.Form\" name=\"permissionsForm");
+            listCode.append(this.getId());
+            listCode.append("\" ");
+            listCode.append("id=\"permissionsForm");
+            listCode.append(this.getId());
+            listCode.append("\" class=\"swbform\" onsubmit=\"submitForm('permissionsForm");
+            listCode.append(this.getId());
+            listCode.append("');return false;\" method=\"post\" action=\"");
+            listCode.append(url.toString());
+            listCode.append("\">\n");
+            listCode.append("  <fieldset>\n");
+            listCode.append("    <legend>");
+            listCode.append(paramRequest.getLocaleString("lbl_grantsSelection"));
+            listCode.append("</legend>\n");
+            
+            //Para mostrar la seleccion de otorgamiento de permisos
+            String roleSelected = base.getAttribute("editRole", "");
+            StringBuilder strRules = new StringBuilder(256);
+            strRules.append("        <optgroup label=\"");
+            strRules.append(paramRequest.getLocaleString("lbl_roles"));
+            strRules.append("\">\n");
+            Iterator<Role> iRoles = this.getResource().getWebSite().getUserRepository().listRoles();
+            while (iRoles.hasNext()) {
+                Role oRole = iRoles.next();
+                strRules.append("        <option value=\"");
+                strRules.append(oRole.getURI());
+                strRules.append("\"");
+                strRules.append(roleSelected.equals(oRole.getURI()) ? " selected=\"selected\" " : "");
+                strRules.append(">");
+                strRules.append(oRole.getDisplayTitle(lang));
+                strRules.append("</option>\n");
+            }
+            strRules.append("        </optgroup>\n");
+            strRules.append("        <optgroup label=\"");
+            strRules.append(paramRequest.getLocaleString("lbl_userGroups"));
+            strRules.append("\">\n");
+            Iterator<UserGroup> iugroups = this.getResource().getWebSite().getUserRepository().listUserGroups();
+            while (iugroups.hasNext()) {
+                UserGroup oUG = iugroups.next();
+                strRules.append("        <option value=\"");
+                strRules.append(oUG.getURI());
+                strRules.append("\"");
+                strRules.append(roleSelected.equals(oUG.getURI()) ? " selected=\"selected\" " : "");
+                strRules.append(">");
+                strRules.append(oUG.getDisplayTitle(lang) == null ? oUG.getTitle() : oUG.getDisplayTitle(lang));
+                strRules.append("</option>\n");
+            }
+            strRules.append("        </optgroup>\n");
+            
+            listCode.append("  <ul class=\"swbform-ul\">\n");
+            listCode.append("    <li class=\"swbform-li\">\n");
+            listCode.append("      <label for=\"updatePermit\" class=\"swbform-label\">");
+            listCode.append(paramRequest.getLocaleString("lbl_permissionsSelect"));
+            listCode.append("</label>\n");
+            listCode.append("      <select name=\"updatePermit");
+            listCode.append(this.getId());
+            listCode.append("\">");
+            listCode.append(strRules);
+            listCode.append("       </select>\n");
+            listCode.append("     </li>\n");
+            listCode.append("  </ul>\n");
+            listCode.append("  </fieldset>\n");
+            listCode.append("  <fieldset>\n");
+            listCode.append("    <button dojoType=\"dijit.form.Button\" id=\"btnSavePerm");
+            listCode.append(this.getId());
+            listCode.append("\" type=\"button\">");
+            listCode.append(paramRequest.getLocaleString("lbl_btnSubmit"));
+            listCode.append("      <script type=\"dojo/method\" event=\"onClick\" args=\"evt\">\n");
+/*            listCode.append("        var selectPerm = dijit.byId('updatePermit");
+            listCode.append(this.getId());
+            listCode.append("');\n");
+            listCode.append("        if (selectPerm.selectedIndex > -1) {");*/
+            listCode.append("          submitForm(\"permissionsForm");
+            listCode.append(this.getId());
+            listCode.append("\");\n");
+            listCode.append("          return false;\n");
+//            listCode.append("        }\n");
+            listCode.append("      </script>\n");
+            listCode.append("    </button>\n");
+            listCode.append("  </fieldset>\n");
+            listCode.append("</form>\n");
+            
             listCode.append("  <fieldset>\n");
             listCode.append("    <legend>");
             listCode.append(paramRequest.getLocaleString("lbl_objectsType"));
@@ -557,7 +649,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             //Si el semObj es hijo de PeriodStatusAssignable se debe:
             GenericObject generic = semObj.getGenericInstance();
             if (generic != null && generic instanceof Objective) {
-//                PeriodStatusAssignable stateable = (PeriodStatusAssignable) generic;
                 Objective objective = (Objective) generic;
                 periodStatus = objective.getPeriodStatus(period);
             }
@@ -569,13 +660,14 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             //        - Se obtiene el status correspondiente y su &iacte;cono relacionado
             //        - Se agrega el &iacte;cono al encabezado y el t&iacte;tulo del objeto semObj
             output.append("<div");
-            if (periodStatus != null) {
-                if (periodStatus.getStatus().getIconClass() != null) {
-                    output.append(" class=\"");
-                    output.append(periodStatus.getStatus().getIconClass());
-                    output.append("\"");
-                }
+            output.append(" class=\"");
+            if (periodStatus != null && periodStatus.getStatus() != null && 
+                    periodStatus.getStatus().getIconClass() != null) {
+                output.append(periodStatus.getStatus().getIconClass());
+            } else {
+                output.append("indefinido");
             }
+            output.append("\"");
             output.append(">");
             output.append(semObj.getDisplayName());
             output.append("</div>\n");
@@ -700,7 +792,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         boolean listingRedirect = false;
         boolean formRedirect = false;
         boolean storePath = false;
-
+        System.out.println("action: " + action);
         if (!"addView".equals(action)) {
             detailView = SemanticObject.getSemanticObject(detailViewUri) != null
                     ? ((DetailView) SemanticObject.getSemanticObject(
@@ -783,12 +875,27 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 }
             }
             listingRedirect = true;
-
         } else if (action.equalsIgnoreCase("makeActive") && detailView != null) {
             //asignar a DetailViewAdm la instancia de DetailView correspondiente al uri recibido en request
             this.setActiveDetailView(detailView);
             statusMsg = "msg_ContentViewAssigned";
             listingRedirect = true;
+        } else if (action.equalsIgnoreCase("setPerm")) {
+            System.out.println("En setPerm");
+            Resource base = getResourceBase();
+            
+            String userType = request.getParameter("updatePermit" + this.getId());
+            System.out.println("En parametro: " + userType);
+            if (userType != null && !userType.isEmpty()) {
+                base.setAttribute("editRole", userType);
+                statusMsg = "msg_PermissionAssigned";
+                listingRedirect = true;
+                try {
+                    base.updateAttributesToDB();
+                } catch (SWBException swbe) {
+                    DetailViewManager.log.error("Al asignar permisos", swbe);
+                }
+            }
         } else if ("updateProp".equals(action)) {
             String objectUri = request.getParameter("suri");
             String propUri = request.getParameter("propUri");
@@ -1007,6 +1114,11 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                     
                     if (generic instanceof Text || generic instanceof TextArea) {
                         applyInlineEdit = true;
+                        System.out.println("Aplicar inlineEdit (Text/TextArea): " + applyInlineEdit);
+                    }
+                    if (!userCanEdit()) {
+                        applyInlineEdit = false;
+                        System.out.println("Aplicar inlineEdit (permisos): " + applyInlineEdit);
                     }
                     if (fe != null) {
                         if (formMgr.getSemanticObject() != null) {
@@ -1047,5 +1159,42 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             exists = true;
         }
         return exists;
+    }
+    
+    private boolean userCanEdit() {
+        boolean access = false;
+        String str_role = getResourceBase().getAttribute("editRole", null);
+        final User user = SWBContext.getSessionUser();
+        
+        if (user != null && str_role != null) {
+            SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+            GenericObject gobj = null;
+            try {
+                gobj = ont.getGenericObject(str_role);
+            } catch (Exception e) {
+                log.error("Errror InlineEdit.userCanEdit()", e);
+                return Boolean.FALSE;
+            }
+
+            UserGroup ugrp = null;
+            Role urole = null;
+
+            if (gobj != null) {
+                if (gobj instanceof UserGroup) {
+                    ugrp = (UserGroup) gobj;
+                    if (user.hasUserGroup(ugrp)) {
+                        access = true;
+                    }
+                } else if (gobj instanceof Role) {
+                    urole = (Role) gobj;
+                    if (user.hasRole(urole)) {
+                        access = true;
+                    }
+                }
+            } else {
+                access = false;
+            }
+        }
+        return access;
     }
 }
