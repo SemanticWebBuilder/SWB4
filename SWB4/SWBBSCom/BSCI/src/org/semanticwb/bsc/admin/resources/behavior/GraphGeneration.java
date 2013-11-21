@@ -83,39 +83,54 @@ public class GraphGeneration extends GenericResource {
                             out.println("key: \"Cumulative Return\",");
                             out.println("values: [");
                             //Recorre los periodos y sus valores para graficarlos
+                            int graphValues = 0;
                             while (measurablesPeriods.hasNext()) {
                                 period = measurablesPeriods.next();
                                 Measure measure = serieGraph.getMeasure(period);
                                 out.println("{");
                                 out.println("\"label\" : \"" + period.getTitle() + "\" ,");
-                                out.println("\"value\" : " + measure.getValue() + "");
+                                try {
+                                    out.println("\"value\" : " + measure.getValue() + "");
+                                } catch (Exception e) {
+                                    graphValues = 1;
+                                }
                                 out.println("} ,");
                             }
+                            if (graphValues == 0) {
 
-                            out.println(" ]");
-                            out.println("}");
-                            out.println("];");
-                            out.println("nv.addGraph(function() {");
-                            out.println("var chart = nv.models.discreteBarChart()");
-                            out.println(".x(function(d) { return d.label })");
-                            out.println(".y(function(d) { return d.value })");
-                            out.println(".staggerLabels(true)");
-                            out.println(".tooltips(false)");
-                            out.println(".showValues(true)");
-                            out.println(".transitionDuration(250);");
-                            out.println("chart.xAxis");
-                            out.println(".axisLabel(\"" + grapher.getTitleX() + "\");");
-                            out.println("chart.yAxis");
-                            out.println(".axisLabel(\"" + grapher.getTitleY() + "\");");
-                            out.println("chart.showXAxis(true);");
-                            out.println("chart.showYAxis(true);");
-                            out.println("d3.select('#chart1 svg')");
-                            out.println(".datum(historicalBarChart)");
-                            out.println(".call(chart);");
-                            out.println("nv.utils.windowResize(chart.update);");
-                            out.println("return chart;");
-                            out.println("});");
-                            out.println("</script>");
+                                out.println(" ]");
+                                out.println("}");
+                                out.println("];");
+                                out.println("nv.addGraph(function() {");
+                                out.println("var chart = nv.models.discreteBarChart()");
+                                out.println(".x(function(d) { return d.label })");
+                                out.println(".y(function(d) { return d.value })");
+                                out.println(".staggerLabels(true)");
+                                out.println(".tooltips(false)");
+                                out.println(".showValues(true)");
+                                out.println(".transitionDuration(250);");
+                                out.println("chart.xAxis");
+                                out.println(".axisLabel(\"" + grapher.getTitleX() + "\");");
+                                out.println("chart.yAxis");
+                                out.println(".axisLabel(\"" + grapher.getTitleY() + "\");");
+                                out.println("chart.showXAxis(true);");
+                                out.println("chart.showYAxis(true);");
+                                out.println("d3.select('#chart1 svg')");
+                                out.println(".datum(historicalBarChart)");
+                                out.println(".call(chart);");
+                                out.println("nv.utils.windowResize(chart.update);");
+                                out.println("return chart;");
+                                out.println("});");
+                                out.println("</script>");
+                            } else {
+                                out.println("<div class=\"swbform\">");
+                                out.println("<fieldset>");
+                                out.println("</fieldset>");
+                                out.println("<p>" + paramsRequest.getLocaleString("msgNotValues") + "</p>");
+                                out.println("</div>");
+                                out.flush();
+                                out.close();
+                            }
 
                         } else {
                             out.println("<div class=\"swbform\">");
