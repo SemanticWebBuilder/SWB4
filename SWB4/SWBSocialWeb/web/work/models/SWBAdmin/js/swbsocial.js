@@ -749,3 +749,8 @@ function validateVideo(id, formId){
     
     return true;
 }
+
+
+function count(id, idText){
+    document.getElementById(idText).value=document.getElementById(id).value.length
+}
