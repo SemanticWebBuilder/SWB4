@@ -34,12 +34,16 @@ public class TextAreaElement extends org.semanticwb.bsc.formelement.base.TextAre
         if (mode.equals("edit") || mode.equals("create")) {
             toReturn = super.renderElement(request, obj, prop, propName, type, mode, lang);
         } else if (mode.equals("view")) {
-            toReturn = obj.getProperty(prop);
+            toReturn = (obj.getProperty(prop) == null || 
+                    (obj.getProperty(prop) == null && "null".equals(obj.getProperty(prop)))
+                    ? " " : obj.getProperty(prop));
         } else if (mode.equals("inlineEdit")) {
             /*Al utilizar este modo, se debe incluir en el HTML las instrucciones 
              * dojo.require del InkineEditBox y dijit.form.Textarea, al menos*/
             StringBuilder viewString = new StringBuilder(128);
-            String value = obj.getProperty(prop);
+            String value = (obj.getProperty(prop) == null || 
+                    (obj.getProperty(prop) == null && "null".equals(obj.getProperty(prop)))
+                    ? " " : obj.getProperty(prop));
             String objectId = obj.getSemanticClass().getClassCodeName() + obj.getId() +
                     propName;
             String url = (String) request.getAttribute("urlRequest");
