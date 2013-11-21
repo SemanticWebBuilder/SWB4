@@ -41,10 +41,12 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.VersionInfo;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
@@ -57,6 +59,7 @@ import org.semanticwb.process.model.RepositoryDirectory;
 import org.semanticwb.process.model.RepositoryElement;
 import org.semanticwb.process.model.RepositoryFile;
 import org.semanticwb.process.model.RepositoryURL;
+import org.semanticwb.process.model.UserTask;
 
 /**
  *
@@ -64,12 +67,14 @@ import org.semanticwb.process.model.RepositoryURL;
  */
 public class ProcessFileRepository extends GenericResource {
 
-    private Logger log = SWBUtils.getLogger(ProcessFileRepository.class);
+    private final Logger log = SWBUtils.getLogger(ProcessFileRepository.class);
     public static final String MODE_GETFILE = "getFile";
     public static final String MODE_PROPS = "props";
     public static final String MODE_ADDFILE = "addFile";
+    public static final String MODE_ADDFOLDER = "addFolder";
     public static final String MODE_HISTORY = "versionHistory";
     public static final String ACT_NEWFILE = "newfile";
+    public static final String ACT_NEWFOLDER = "newfolder";
     public static final String DEFAULT_MIME_TYPE = "application/octet-stream";
     public static final String LVL_VIEW = "prop_view";
     public static final String LVL_MODIFY = "prop_modify";
@@ -88,6 +93,8 @@ public class ProcessFileRepository extends GenericResource {
             doHistory(request, response, paramRequest);
         } else if (MODE_ADDFILE.equals(mode)) {
             doAddFile(request, response, paramRequest);
+        } else if (MODE_ADDFOLDER.equals(mode)) {
+            doAddFolder(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
@@ -115,6 +122,17 @@ public class ProcessFileRepository extends GenericResource {
             rd.include(request, response);
         } catch (Exception ex) {
             log.error("Error including add.jsp", ex);
+        }
+    }
+    
+    public void doAddFolder(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String jsp = "/swbadmin/jsp/process/repository/repositoryAddFolder.jsp";
+        RequestDispatcher rd = request.getRequestDispatcher(jsp);
+        try {
+            request.setAttribute("paramRequest", paramRequest);
+            rd.include(request, response);
+        } catch (Exception ex) {
+            log.error("Error including addFolder.jsp", ex);
         }
     }
     
@@ -159,6 +177,7 @@ public class ProcessFileRepository extends GenericResource {
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("files", listFiles(request, paramRequest));
             request.setAttribute("luser", getLevelUser(paramRequest.getUser()));
+            request.setAttribute("path", getFolderPath((RepositoryDirectory)paramRequest.getWebPage()));
             rd.include(request, response);
         } catch (Exception ex) {
             log.error("Error including view.jsp", ex);
@@ -422,6 +441,8 @@ public class ProcessFileRepository extends GenericResource {
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
+        WebSite site = response.getWebPage().getWebSite();
+        
         if (action == null) {
             action = "";
         }
@@ -520,6 +541,33 @@ public class ProcessFileRepository extends GenericResource {
             }
             response.setMode(SWBActionResponse.Mode_ADMIN);
             response.setAction("edit");
+        } else if (ACT_NEWFOLDER.equals(action)) {
+            String dirTitle = request.getParameter("ftitle");
+            String dirID = request.getParameter("fid");
+            String dirDesc = request.getParameter("fdescription");
+            
+            if (response.getWebPage() instanceof RepositoryDirectory && RepositoryDirectory.ClassMgr.getRepositoryDirectory(dirID, site) == null) {
+                if (dirID != null && dirID.length() > 0 && dirTitle != null && dirTitle.length() > 0) {
+                    ResourceType rType = getResourceBase().getResourceType();
+                    RepositoryDirectory parentDir = (RepositoryDirectory) response.getWebPage();
+
+                    RepositoryDirectory newRepoDir = RepositoryDirectory.ClassMgr.createRepositoryDirectory(dirID, site);
+                    newRepoDir.setTitle(dirTitle);
+                    newRepoDir.setDescription(dirDesc);
+                    newRepoDir.setParent(parentDir);
+                    
+                    Resource res = site.createResource();
+                    res.setResourceType(rType);
+                    res.setTitle("REP_"+dirTitle);
+                    res.setActive(Boolean.TRUE);
+                    
+                    newRepoDir.addResource(res);
+                    newRepoDir.setActive(Boolean.TRUE);
+                }
+            }
+            response.setMode(SWBParamRequest.Mode_VIEW);
+        } else {
+            super.processAction(request, response);
         }
     }
 
@@ -620,6 +668,17 @@ public class ProcessFileRepository extends GenericResource {
             ret = path+"unknown.png";
         }
         return ret;
+    }
+    
+    private String getFolderPath (RepositoryDirectory root) {
+        String ret = root.getId();
+        
+        WebPage current = root.getParent();
+        while (current != null && current instanceof RepositoryDirectory) {
+            ret = current.getId() + "|" + ret;
+            current = current.getParent();
+        }
+        return ret.toString();
     }
     
     /**
