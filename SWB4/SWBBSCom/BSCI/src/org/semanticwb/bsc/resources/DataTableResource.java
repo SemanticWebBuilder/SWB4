@@ -396,7 +396,7 @@ public class DataTableResource extends GenericResource {
     
     private boolean userCanEdit() {
         boolean access = false;
-        String str_role = getResourceBase().getAttribute("editRole", "0");
+        String str_role = getResourceBase().getAttribute("editRole", null);
         final User user = SWBContext.getSessionUser();
         
         if(user!=null && str_role!=null)
