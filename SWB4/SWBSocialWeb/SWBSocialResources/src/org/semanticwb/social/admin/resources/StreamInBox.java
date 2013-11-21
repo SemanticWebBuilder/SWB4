@@ -741,7 +741,7 @@ public class StreamInBox extends GenericResource {
         while (itposts!=null && itposts.hasNext()) {
             PostIn postIn = itposts.next();
             
-            //System.out.append("nRec-George29/postIn:"+postIn);
+            //System.out.append("StreamInBox/postIn:"+postIn));
 
             out.println("<tr>");
 
@@ -1533,7 +1533,7 @@ public class StreamInBox extends GenericResource {
             try {
                 String inputTextValue = request.getParameter("fw");
 
-                if (inputTextValue != null) {
+                if (inputTextValue != null && inputTextValue.trim().length()>0) {
                     //System.out.println("Text Completo:"+inputTextValue);
                     inputTextValue = SWBSocialUtil.Strings.removePrepositions(inputTextValue);
                     //System.out.println("Text Sin Prepo:"+inputTextValue);
