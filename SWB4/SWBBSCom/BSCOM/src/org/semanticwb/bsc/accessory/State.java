@@ -17,7 +17,7 @@ public class State extends org.semanticwb.bsc.accessory.base.StateBase implement
 //        }
 //    }
     
-    @Override
+    @Override    
     public int compareTo(State anotherState) {
         if(anotherState==null) {
             return 1;

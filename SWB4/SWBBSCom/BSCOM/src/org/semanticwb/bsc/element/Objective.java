@@ -131,10 +131,11 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
         while(indicators.hasNext()) {
             Indicator indicator = indicators.next();
             Series star = indicator.getStar();
-            if(star==null || star.getMeasure(period)==null) {
+            if(star==null || star.getMeasure(period)==null || star.getMeasure(period).getEvaluation().getStatus()==null) {
                 continue;
             }
-            if( star.getMeasure(period).getEvaluation().getStatus().compareTo(status)<0 ) {
+            //if( star.getMeasure(period).getEvaluation().getStatus().compareTo(status)<0 ) {
+            if( status.compareTo(star.getMeasure(period).getEvaluation().getStatus())>0 ) {
                 status = star.getMeasure(period).getEvaluation().getStatus();
                 res = Boolean.TRUE;
             }
@@ -205,7 +206,11 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     }
     
     private List<State> sortStates(boolean ascendent) {
-        List<State> states = SWBUtils.Collections.copyIterator(super.listStates());
+        //List<State> states = SWBUtils.Collections.copyIterator(super.listStates());
+        List<State> states = listValidStates();
+        
+        
+        
         if(ascendent) {
             Collections.sort(states);
         }else {            
@@ -237,6 +242,9 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
         List<State> validStates = SWBUtils.Collections.filterIterator(super.listStates(), new GenericFilterRule<State>() {
                                                         @Override
                                                         public boolean filter(State s) {
+                                                            if(s==null) {
+                                                                return true;
+                                                            }
                                                             User user = SWBContext.getSessionUser();
                                                             return !s.isValid() || !user.haveAccess(s);
                                                         }            
