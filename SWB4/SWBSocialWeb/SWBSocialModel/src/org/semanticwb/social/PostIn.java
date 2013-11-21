@@ -23,6 +23,7 @@ public class PostIn extends org.semanticwb.social.base.PostInBase
         {
             SemanticObject obj=it.next();
             System.out.println("objJorge:"+obj);
+            System.out.println("objJorge GenInst:"+obj.getGenericInstance());
             if(obj.getGenericInstance() instanceof PostIn)
             {
                 PostIn postIn=(PostIn)obj.createGenericInstance();
