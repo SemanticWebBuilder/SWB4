@@ -97,7 +97,7 @@ public class CreatePost extends GenericResource {
             
             String toPost = request.getParameter("toPost");
             SocialPFlow spflow=null;
-            System.out.println("processA/socialFlow:"+request.getParameter("socialFlow"));
+            //System.out.println("processA/socialFlow:"+request.getParameter("socialFlow"));
             if(request.getParameter("socialFlow")!=null && request.getParameter("socialFlow").trim().length()>0)
             {
                 SemanticObject semObjSFlow=SemanticObject.getSemanticObject(request.getParameter("socialFlow"));
@@ -112,7 +112,7 @@ public class CreatePost extends GenericResource {
                     spflow=null;
                 }
             }
-            
+            //System.out.println("CreatePost/ProcessA-2");
             String socialUri = "";
             int j = 0;
             Enumeration<String> enumParams = request.getParameterNames();
