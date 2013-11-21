@@ -19,12 +19,15 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
@@ -43,15 +46,20 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.social.Message;
+import org.semanticwb.social.Photo;
 import org.semanticwb.social.Post;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
+import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.SocialUserExtAttributes;
+import org.semanticwb.social.Video;
 import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.Youtube;
 import org.semanticwb.social.util.SWBSocialUtil;
+import org.semanticwb.social.util.SocialLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -205,7 +213,129 @@ public class YoutubeWall extends GenericResource{
             }
             //response.getWriter().print("like / unlike sent");
         }else if(mode!= null && mode.equals("commentVideo")){//Displays dialog to create a comment
-            SWBResourceURL actionURL = paramRequest.getActionUrl();
+            SocialNetwork socialNetwork = null;
+            String videoId = request.getParameter("videoId");
+
+            try {
+                socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+            }catch(Exception e){
+                System.out.println("Error getting the SocialNetwork " + e);
+                return;
+            }
+            
+            try {
+                SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
+                System.out.println("BUSCANDO ESTE VIDEO:" + videoId);
+                System.out.println("EN ESTE MODELO:" + model);     
+                
+                PostIn postIn = PostIn.getPostInbySocialMsgId(model, videoId);
+                System.out.println("ESTE ES EL POST RECUPERADO:" + postIn );
+                System.out.println("\n\n");
+                
+                PostIn samePost = PostIn.ClassMgr.getPostIn(videoId, model);
+                System.out.println("Otra forma de recuperar el mismo post:" + samePost);
+                
+                if(postIn == null){//Responding for the first time, save the post
+                    HashMap<String, String> paramsVideo = new HashMap<String, String>(3);
+                    paramsVideo.put("v", "2");            
+                    paramsVideo.put("alt", "json");//https://gdata.youtube.com/feeds/api/videos/videoid?v=2
+                    String ytVideo= getRequest(paramsVideo, "https://gdata.youtube.com/feeds/api/videos/" + videoId,
+                                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", ((Youtube)socialNetwork).getAccessToken());
+                    JSONObject jsonVideo = new JSONObject(ytVideo);
+
+                    String title = "";
+                    String description = "";
+                    String creatorName = "";
+                    String creatorId =  "";
+
+                    if(jsonVideo.has("entry")){
+                        if(jsonVideo.getJSONObject("entry").has("title")){//Title
+                            title = jsonVideo.getJSONObject("entry").getJSONObject("title").getString("$t");
+                        }
+
+                        if(jsonVideo.getJSONObject("entry").has("media$group")){//Desc
+                            if(jsonVideo.getJSONObject("entry").getJSONObject("media$group").has("media$description")){
+                                description = jsonVideo.getJSONObject("entry").getJSONObject("media$group").getJSONObject("media$description").getString("$t");
+                            }
+                        }
+
+                        if(jsonVideo.getJSONObject("entry").has("author")){//User
+                            if(jsonVideo.getJSONObject("entry").getJSONArray("author").getJSONObject(0).has("name")){
+                                creatorName = jsonVideo.getJSONObject("entry").getJSONArray("author").getJSONObject(0).getJSONObject("name").getString("$t");
+                            }
+
+                            if(jsonVideo.getJSONObject("entry").getJSONArray("author").getJSONObject(0).has("yt$userId")){
+                                creatorId = jsonVideo.getJSONObject("entry").getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t");
+                            }
+                        }
+                    }
+
+                    //System.out.println("-" + title + "-" + description +"-" + creatorName + "-" + creatorId );
+                    SocialNetworkUser socialNetUser = SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(creatorId, socialNetwork, model);
+
+                    PostIn post = PostIn.getPostInbySocialMsgId(model, videoId);
+                    if(post != null){
+                        log.error("The post with id :" + post.getSocialNetMsgId() + " already exists");
+                        return;
+                    }
+                    
+                    postIn=VideoIn.ClassMgr.createVideoIn(model);
+                    postIn.setSocialNetMsgId(videoId);
+                    postIn.setMsg_Text(title + (description.isEmpty()? "" : " / " + description));
+                    postIn.setPostInSocialNetwork(socialNetwork);
+                    postIn.setPostInStream(null);
+                    Calendar calendario = Calendar.getInstance();
+                    postIn.setPi_created(calendario.getTime());
+                    postIn.setPi_type(SWBSocialUtil.POST_TYPE_VIDEO);
+
+                    VideoIn videoIn=(VideoIn)postIn;
+                    videoIn.setVideo(BASE_VIDEO_URL + videoId);
+
+                     if(socialNetUser == null){//User does not exist                    
+                        System.out.println("USUARIO NO EXISTE EN EL SISTEMA");
+                        socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);//Create a socialNetworkUser
+                        socialNetUser.setSnu_id(creatorId);
+                        socialNetUser.setSnu_name((creatorName.isEmpty()) ? creatorId : creatorName);
+                        socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject());                    
+                        socialNetUser.setCreated(new Date());
+                        socialNetUser.setFollowers(0);
+                        socialNetUser.setFriends(0);
+                    }else{
+                        System.out.println("YA EXISTE EN EL SISTEMA:" + socialNetUser);
+                    }
+
+                    postIn.setPostInSocialNetworkUser(socialNetUser);
+
+                    SocialTopic defaultSocialTopic = SocialTopic.ClassMgr.getSocialTopic("DefaultTopic", model);
+                    if(defaultSocialTopic != null){
+                        postIn.setSocialTopic(defaultSocialTopic);//Asigns socialTipic
+                        System.out.println("Setting social topic:" + defaultSocialTopic);
+                    }else{
+                        postIn.setSocialTopic(null);
+                        System.out.println("Setting to null");
+                    }
+                }
+                
+                //The post in has been created
+                final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/postInResponse.jsp";
+                RequestDispatcher dis = request.getRequestDispatcher(path);
+                if (dis != null) {
+                    try {
+                        request.setAttribute("postUri", SemanticObject.createSemanticObject(postIn.getURI()));
+                        request.setAttribute("paramRequest", paramRequest);
+                        dis.include(request, response);
+                    } catch (Exception e) {
+                        log.error(e);
+                    }
+                }
+
+                System.out.println("POST CREADO CORRECTAMENTE: " + postIn.getId() + " ** " + postIn.getSocialNetMsgId());
+            }catch(Exception e){
+                System.out.println("Error trying to setSocialTopic");
+                log.error("ERROR:", e);
+            }            
+            
+            /*SWBResourceURL actionURL = paramRequest.getActionUrl();
             actionURL.setParameter("videoId", request.getParameter("videoId"));
             actionURL.setParameter("suri", request.getParameter("suri"));
 
@@ -223,7 +353,7 @@ public class YoutubeWall extends GenericResource{
             out.println("</table>");
             out.println("</fieldset>");
             out.println("</form>");
-            out.println("<span id=\"csLoading\" style=\"width: 100px; display: none\" align=\"center\">&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\"/></span>");
+            out.println("<span id=\"csLoading\" style=\"width: 100px; display: none\" align=\"center\">&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\"/></span>");*/
         } else if (mode != null && mode.equals("commentComment")) {//Displays dialog to create a comment
             SWBResourceURL actionURL = paramRequest.getActionUrl();
             actionURL.setParameter("videoId", request.getParameter("videoId"));
@@ -449,6 +579,8 @@ public class YoutubeWall extends GenericResource{
             //out.println("   spanId.attr('content', 'PACONE');");
             //out.println("   spanId.domNode.style.visibility = 'hidden';");
             out.println("</script>");
+        }else if (paramRequest.getMode().equals("post")) {
+            doCreatePost(request, response, paramRequest);
         }else{
             super.processRequest(request, response, paramRequest);
         }
@@ -689,6 +821,58 @@ public class YoutubeWall extends GenericResource{
             response.setRenderParameter("videoId", request.getParameter("videoId"));
             response.setRenderParameter("suri", request.getParameter("suri"));
             response.setMode("videoDeleted");
+        }else if (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo")) {
+            //System.out.println("Entra a InBox_processAction-2:"+request.getParameter("objUri"));
+            if (request.getParameter("objUri") != null) {
+                //System.out.println("Entra a InBox_processAction-3");
+                PostIn postIn = (PostIn) SemanticObject.getSemanticObject(request.getParameter("objUri")).createGenericInstance();
+                SocialTopic stOld = postIn.getSocialTopic();
+                ///
+                WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
+                String socialUri = "";
+                int j = 0;
+                Enumeration<String> enumParams = request.getParameterNames();
+                while (enumParams.hasMoreElements()) {
+                    String paramName = enumParams.nextElement();
+                    if (paramName.startsWith("http://")) {//get param name starting with http:// -> URIs
+                        if (socialUri.trim().length() > 0) {
+                            socialUri += "|";
+                        }
+                        socialUri += paramName;
+                        j++;
+                    }
+                }
+                
+                ArrayList aSocialNets = new ArrayList();//Social nets where the post will be published
+                String[] socialUris = socialUri.split("\\|");  //Dividir valores
+                if( j > 0 && wsite != null){
+                    for (int i = 0; i < socialUris.length; i++) {
+                        String tmp_socialUri = socialUris[i];
+                        SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri, wsite.getSemanticModel());
+                        SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
+                        //Se agrega la red social de salida al post
+                        aSocialNets.add(socialNet);
+                    }
+                }
+                                
+                String toPost = request.getParameter("toPost");
+                String socialFlow = request.getParameter("socialFlow");
+                SocialPFlow socialPFlow = null;
+                if (socialFlow != null && socialFlow.trim().length() > 0) {
+                    socialPFlow = (SocialPFlow) SemanticObject.createSemanticObject(socialFlow).createGenericInstance();
+                    //Revisa si el flujo de publicación soporte el tipo de postOut, de lo contrario, asinga null a spflow, para que no 
+                    //asigne flujo al mensaje de salida., Esto también esta validado desde el jsp typeOfContent
+                    if ((toPost.equals("msg") && !SocialLoader.getPFlowManager().isManagedByPflow(socialPFlow, Message.sclass))
+                            || (toPost.equals("photo") && !SocialLoader.getPFlowManager().isManagedByPflow(socialPFlow, Photo.sclass))
+                            || (toPost.equals("video") && !SocialLoader.getPFlowManager().isManagedByPflow(socialPFlow, Video.sclass))) {
+                        socialPFlow = null;
+                    }
+                }
+
+                //System.out.println("Entra a InBox_processAction-4");
+                SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, toPost, request, response);
+                response.setMode("commentVideoSent");
+            }
         }
     }
     
@@ -1035,10 +1219,19 @@ public class YoutubeWall extends GenericResource{
                 
                 out.write("<div class=\"clear\"></div>");//Clear
                 
+                
+                //With the changes of November 2013
+                //I can not longer request the comments of a private video
+                boolean isPrivate = false;
+                if(!video.isNull("privacy") && video.getString("privacy").equalsIgnoreCase("private")){
+                    isPrivate = true;
+                }
+                
                 //Comments,start
                 String ytComments = "";
-                if(!video.isNull("commentCount") && video.getInt("commentCount")>0){
+                if(!video.isNull("commentCount") && video.getInt("commentCount")>0 && !isPrivate){
                     System.out.println("URL for comments:" );
+                    System.out.println("token:" + semanticYoutube.getAccessToken());
                     ytComments= getRequest(paramsComments, "https://gdata.youtube.com/feeds/api/videos/" + video.getString("id") + "/comments",
                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", semanticYoutube.getAccessToken());
                     JSONObject jsonComments = new JSONObject(ytComments);
@@ -1127,9 +1320,9 @@ public class YoutubeWall extends GenericResource{
                 out.write("</strong>");
                 out.write("</span>");
                 
-                /*out.write("   <span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
-                out.write(" <a href=\"\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("commentVideo").setParameter("suri", objUri).setParameter("videoId", video.getString("id")) + "','Comment to " + video.getString("title") + "');return false;\"><span>Comment</span></a>  ");                    
-                out.write("   </span>");*/
+                out.write("   <span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
+                out.write(" <a class=\"clasifica\" href=\"\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("commentVideo").setParameter("suri", objUri).setParameter("videoId", video.getString("id")) + "','Comment to " + video.getString("title") + "');return false;\"><span>Comment</span></a>  ");                    
+                out.write("   </span>");
 
                 postURI = null;
                 PostIn post = PostIn.getPostInbySocialMsgId(model, video.getString("id"));
@@ -1416,4 +1609,17 @@ public class YoutubeWall extends GenericResource{
         return response;
     }
 
+    public void doCreatePost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/post/typeOfContent.jsp");
+        request.setAttribute("contentType", request.getParameter("valor"));
+        request.setAttribute("wsite", request.getParameter("wsite"));
+        request.setAttribute("objUri", request.getParameter("objUri"));
+        request.setAttribute("paramRequest", paramRequest);
+
+        try {
+            rd.include(request, response);
+        } catch (ServletException ex) {
+            log.error("Error al enviar los datos a typeOfContent.jsp " + ex.getMessage());
+        }
+    }
 }
