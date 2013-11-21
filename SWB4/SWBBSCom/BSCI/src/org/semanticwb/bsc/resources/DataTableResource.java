@@ -3,6 +3,7 @@ package org.semanticwb.bsc.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Collections;
@@ -21,8 +22,6 @@ import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.tracing.Series;
-import org.semanticwb.bsc.utils.InappropriateFrequencyException;
-import org.semanticwb.bsc.utils.UndefinedFrequencyException;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.Role;
@@ -68,7 +67,7 @@ public class DataTableResource extends GenericResource {
         
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         SemanticObject sobj = ont.getSemanticObject(suri);
-        if(!(sobj.getGenericInstance() instanceof Indicator)) {
+        if(sobj==null || !(sobj.getGenericInstance() instanceof Indicator)) {
             response.getWriter().println("No hay indicador");
             return;
         }
@@ -354,8 +353,9 @@ public class DataTableResource extends GenericResource {
                     series.getIndicator().getObjective().updateAppraisal(period);
                 }
             }else {
-
+//TODO algo va aqui
             }
+            response.sendRedirect(response.getWebPage().getUrl()+"?suri="+URLEncoder.encode(suri,"UTF-8"));
         }
     }
     
