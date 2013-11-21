@@ -28,6 +28,7 @@
 
     PostOut postOut = null;
     postOut = (PostOut) semObj.createGenericInstance();
+    
 %>
 <html>
     <head>

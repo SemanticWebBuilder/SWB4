@@ -21,8 +21,8 @@
 
 <%!
     JSONArray getObject(SemanticObject semObj, String lang) throws Exception {
-      
-        int  single = 0, married = 0, divorced = 0, widowed = 0, undefined = 0;
+
+        int single = 0, married = 0, divorced = 0, widowed = 0, undefined = 0, totalPost = 0;
         ArrayList singleArray = new ArrayList();
         ArrayList marriedArray = new ArrayList();
         ArrayList divorcedArray = new ArrayList();
@@ -40,6 +40,7 @@
 
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
+            totalPost++;
 
             if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_SINGLE) {
                 single++;
@@ -53,7 +54,7 @@
             } else if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_WIDOWED) {
                 widowed++;
                 widowedArray.add(postIn);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_UNDEFINED) {
+            } else if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == 0) {
                 undefined++;
                 undefinedArray.add(postIn);
             }
@@ -132,26 +133,26 @@
         float intTotalVotos = undefined + single + married + divorced + widowed;
 
         //Positivo
-        float intPorcentajeSingle = ((float) single * 100) / (float) intTotalVotos;
+        float intPorcentajeSingle = ((float) single * 100) / (float) totalPost;
 
         //Negativo
-        float intPorcentajeMarried = ((float) married * 100) / (float) intTotalVotos;
+        float intPorcentajeMarried = ((float) married * 100) / (float) totalPost;
 
         //Neutro
-        float intPorcentajeDivorced = ((float) divorced * 100) / (float) intTotalVotos;
+        float intPorcentajeDivorced = ((float) divorced * 100) / (float) totalPost;
 
-        float intPorcentajeWidowed = ((float) widowed * 100) / (float) intTotalVotos;
+        float intPorcentajeWidowed = ((float) widowed * 100) / (float) totalPost;
 
 
-        float intPorcentajeundefined = ((float) undefined * 100) / (float) intTotalVotos;
+        float intPorcentajeundefined = ((float) undefined * 100) / (float) totalPost;
 
-      
+
         JSONArray node = new JSONArray();
 
 
         if (single > 0) {
             JSONObject node1 = new JSONObject();
-            node1.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("single", lang) );
+            node1.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("single", lang));
             node1.put("value1", "" + single);
             node1.put("value2", "" + round(intPorcentajeSingle));
             if (positivesSingle > negativesSingle && positivesSingle > neutralsSingle) {
@@ -161,8 +162,10 @@
             } else {
                 node1.put("color", "#eae8e3");
             }
-            node1.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("single", lang)+": " + single +  " " +SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesSingle +  " " +SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesSingle +  " " +SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsSingle);
+            node1.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("single", lang) + ": " + single + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesSingle + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesSingle + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsSingle);
             node1.put("chartclass", "possClass");
+            node1.put("label3", "Total de Post: " + totalPost);
+
             node.put(node1);
         }
 
@@ -178,8 +181,10 @@
             } else {
                 node2.put("color", "#eae8e3");
             }
-            node2.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("married", lang)+": " + married + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang)+"  : " + positivesMarried +  " " +SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesMarried +  " " +SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsMarried);
+            node2.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("married", lang) + ": " + married + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + "  : " + positivesMarried + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesMarried + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsMarried);
             node2.put("chartclass", "possClass");
+            node2.put("label3", "Total de Post: " + totalPost);
+
             node.put(node2);
         }
 
@@ -195,8 +200,10 @@
             } else {
                 node3.put("color", "#eae8e3");
             }
-            node3.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("divorced", lang)+": " + divorced +  " " +SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang)+"  : " + positivesDivorced +  " " +SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesDivorced + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsDivorced);
+            node3.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("divorced", lang) + ": " + divorced + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + "  : " + positivesDivorced + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesDivorced + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsDivorced);
             node3.put("chartclass", "possClass");
+            node3.put("label3", "Total de Post: " + totalPost);
+
             node.put(node3);
         }
 
@@ -212,8 +219,10 @@
             } else {
                 node4.put("color", "#eae8e3");
             }
-            node4.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("widowed", lang)+": " + widowed + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang)+" : " + positivesWidowed + " " +SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang)+ " : " + negativesWidowed + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsWidowed);
+            node4.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("widowed", lang) + ": " + widowed + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesWidowed + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesWidowed + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsWidowed);
             node4.put("chartclass", "possClass");
+            node4.put("label3", "Total de Post: " + totalPost);
+
             node.put(node4);
         }
 
@@ -229,23 +238,26 @@
             } else {
                 node5.put("color", "#eae8e3");
             }
-            node5.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("undefinedRelation", lang)+": " + undefined + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang)+"  : " + positivesUndefined+  " " +SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang)+" : " + negativesUndefined+  " " +SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang)+" : " + neutralsUndefined);
+            node5.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("undefinedRelation", lang) + ": " + undefined + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + "  : " + positivesUndefined + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesUndefined + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsUndefined);
             node5.put("chartclass", "possClass");
+            node5.put("label3", "Total de Post: " + totalPost);
+
             node.put(node5);
         }
-        
-        if(single == 0 && married == 0 && divorced==0 && widowed==0 && undefined==0 ){
-                   
-            JSONObject node3=new JSONObject();
-            node3.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang)); 
+
+        if (single == 0 && married == 0 && divorced == 0 && widowed == 0 && undefined == 0) {
+
+            JSONObject node3 = new JSONObject();
+            node3.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang));
             node3.put("value1", "0");
             node3.put("value2", "100");
             node3.put("color", "#eae8e3");
             node3.put("chartclass", "neuClass");
             node3.put("label2", "Sin datos para procesar");
+            node3.put("label3", "Total de Post: " + totalPost);
 
             node.put(node3);
-        
+
         }
 
         return node;

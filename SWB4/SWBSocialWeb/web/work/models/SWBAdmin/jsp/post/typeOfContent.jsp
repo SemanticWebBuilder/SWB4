@@ -49,7 +49,7 @@
     PostOut postOut = null;
     String postOutPFlowUri = null;
     ArrayList apostOutNets = new ArrayList();
-    ArrayList<String> apostOutCalendars=new ArrayList(); 
+    ArrayList<String> apostOutCalendars = new ArrayList();
     boolean firstTime = false;
     if (semObj.getSemanticClass().isSubClass(PostIn.social_PostIn)) {//Publish in response to PostIn
         postIn = (PostIn) semObj.createGenericInstance();
@@ -80,13 +80,11 @@
             postOutPFlowUri = postOut.getPflowInstance().getPflow().getURI();
             //System.out.println("postOutPFlowUri++G++:" + postOutPFlowUri);
         }
-        if(postOut.listCalendarRefs().hasNext())
-        {
-            Iterator<CalendarRef> itCalendarRefs=postOut.listCalendarRefs();
-            while(itCalendarRefs.hasNext())
-            {
-                CalendarRef calendarRef=itCalendarRefs.next();
-                if(calendarRef.isActive() && calendarRef.getCalendar()!=null){
+        if (postOut.listCalendarRefs().hasNext()) {
+            Iterator<CalendarRef> itCalendarRefs = postOut.listCalendarRefs();
+            while (itCalendarRefs.hasNext()) {
+                CalendarRef calendarRef = itCalendarRefs.next();
+                if (calendarRef.isActive() && calendarRef.getCalendar() != null) {
                     apostOutCalendars.add(calendarRef.getCalendar().getURI());
                 }
             }
@@ -160,8 +158,8 @@
 <div id="pub-detalle">
     <span class="sel-txtdiv"></span>
     <div class="swbform">
-          <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadText" action="<%=urlAction.setAction("postMessage")%>" onsubmit="submitForm('<%=objUri%><%=sourceCall%>frmUploadText');
-            return false;" method="post">
+        <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadText" action="<%=urlAction.setAction("postMessage")%>" onsubmit="submitForm('<%=objUri%><%=sourceCall%>frmUploadText');
+              return false;" method="post">
 
             <div class="pub-redes">
                 <%= messageFormMgr.getFormHiddens()%>
@@ -170,15 +168,26 @@
                 <%
                     int posicion = 0;
                     String postOutNull = messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_CREATE);
+
                     posicion = postOutNull.indexOf("style");
-                    postOutNull = postOutNull.substring(0, posicion - 1) + " required " + postOutNull.substring(posicion, postOutNull.length());
+                    //String id = objUri + sourceCall + "_textArea";
+                    String id = sourceCall+"_textArea"+objUri;
+
+                    postOutNull = postOutNull.substring(0, posicion - 1) + " required  onKeyDown=\"count('" + id + "','" + id + "_Text')\" onKeyUp=\"count('" + id + "','" + id + "_Text')\" id=\"" + id + "\" " + postOutNull.substring(posicion, postOutNull.length());
+
                     String postOutNNull = messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_EDIT);
                     posicion = postOutNNull.indexOf("style");
-                    postOutNNull = postOutNNull.substring(0, posicion-1) + " required " + postOutNNull.substring(posicion , postOutNNull.length());
-                    
+                    postOutNNull = postOutNNull.substring(0, posicion - 1) + " required onKeyDown=\"count('" + id + "','" + id + "_Text')\" onKeyUp=\"count('" + id + "','" + id + "_Text')\"  id=\"" + id + "\" " + postOutNNull.substring(posicion, postOutNNull.length());
+                    // System.out.println("postOutNNull"+postOutNNull);
+
+                    posicion = postOutNNull.indexOf(">");
+                    int posicion1 = postOutNNull.indexOf("</textarea>");
+                    String value = postOutNNull.substring(posicion + 1, posicion1);
+
+                    //System.out.println("imp"+value); 
                 %>
-               <!-- <div class="campo"><%=postOut == null ? messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_CREATE) : messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_EDIT)%></div>-->
-                <div class="campo"><%=postOut == null ? postOutNull : postOutNNull%></div>
+                               <!-- <div class="campo"><%=postOut == null ? messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_CREATE) : messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_EDIT)%></div>-->
+                <div class="campo"><%=postOut == null ? postOutNull : postOutNNull%><br> <%if (postOut == null) {%><input  id="<%=id%>_Text" name="<%=id%>_Text" type="text" size="4" class="nobord" readonly ><label class="labelInfo"><img class="swbIconTwitter" src="/swbadmin/css/images/trans.png"/> 140  <img class="swbIconFacebook" src="/swbadmin/css/images/trans.png"/> 2000  <img class="swbIconYouTube" src="/swbadmin/css/images/trans.png"/> 5000  </label><%} else {%><input id="<%=id%>_Text" name="<%=id%>_Text" type="text" size="4" class="nobord" readonly  value="<%=value.length()%>"><label class="labelInfo"><img class="swbIconTwitter" src="/swbadmin/css/images/trans.png"/> 140  <img class="swbIconFacebook" src="/swbadmin/css/images/trans.png"/> 2000  <img class="swbIconYouTube" src="/swbadmin/css/images/trans.png"/> 5000  </label><%}%></div>
                 </p>
                 <%
                     if (postIn != null && postOut == null) {
@@ -237,48 +246,55 @@
                 <!--Calendario Rapido-->
                 <div class="msgFastCalendar">
                     <p id="msgTitle">Programar envío de mensaje</p>
-                <%
-                    String date=new Date().toString();
-                    String starthour="";
-                    if(postOut!=null && postOut.getFastCalendar()!=null)
-                    {
-                        try
-                        {
-                            String minutes="00";
-                            Date initDate=postOut.getFastCalendar().getFc_date();                            
-                            date=getDateFormat(initDate);
-                            if(initDate.getMinutes()!=0) minutes=""+initDate.getMinutes(); 
-                            String hour=""+initDate.getHours();
-                            if(hour.length()==1) hour="0"+hour; 
-                            starthour=hour+":"+minutes;
-                        }catch(Exception ignore){}
-                    }    
-                %>
-                Día:<input type="text" name="postOut_inidate" id="postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
-                Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="postOut_starthour"  value="<%=(starthour!=null&&starthour.trim().length() > 0 ? "T"+starthour+":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
+                    <%
+                        String date = new Date().toString();
+                        String starthour = "";
+                        if (postOut != null && postOut.getFastCalendar() != null) {
+                            try {
+                                String minutes = "00";
+                                Date initDate = postOut.getFastCalendar().getFc_date();
+                                date = getDateFormat(initDate);
+                                if (initDate.getMinutes() != 0) {
+                                    minutes = "" + initDate.getMinutes();
+                                }
+                                String hour = "" + initDate.getHours();
+                                if (hour.length() == 1) {
+                                    hour = "0" + hour;
+                                }
+                                starthour = hour + ":" + minutes;
+                            } catch (Exception ignore) {
+                            }
+                        }
+                    %>
+                    Día:<input type="text" name="postOut_inidate" id="postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
+                    Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
                 </div>
                 <!--Termina Calendario Rapido-->
                 <!--Comienzan Calendarios Avanzados-->
-                <select name="postOutAdvCal" id="postOutAdvCal" multiple="multiple">
                 <%
-                    boolean existSelected=false;
-                    Iterator <SocialCalendar> itSocialCalendars=SocialCalendar.ClassMgr.listSocialCalendars(wsite);
-                    while(itSocialCalendars.hasNext())
-                    {
-                        String selected="";
-                        SocialCalendar socialCalendar=itSocialCalendars.next();
-                        if(apostOutCalendars.contains(socialCalendar.getURI())) {
-                            selected="selected=selected";
-                            existSelected=true;
-                        }
-                        %>
-                        <option value="<%=socialCalendar.getURI()%>" <%=selected%>><%=socialCalendar.getTitle()%></option>
-                        <%
-                    }
+                  if(SocialCalendar.ClassMgr.listSocialCalendars(wsite).hasNext())
+                  {
                 %>
+                <select name="postOutAdvCal" id="postOutAdvCal" multiple="multiple">
+                    <%
+                        boolean existSelected = false;
+                        Iterator<SocialCalendar> itSocialCalendars = SocialCalendar.ClassMgr.listSocialCalendars(wsite);
+                        while (itSocialCalendars.hasNext()) {
+                            String selected = "";
+                            SocialCalendar socialCalendar = itSocialCalendars.next();
+                            if (apostOutCalendars.contains(socialCalendar.getURI())) {
+                                selected = "selected=selected";
+                                existSelected = true;
+                            }
+                    %>
+                    <option value="<%=socialCalendar.getURI()%>" <%=selected%>><%=socialCalendar.getTitle()%></option>
+                    <%
+                        }
+                    %>
                 </select>
+                <%}%>
                 <!--Terminan Calendarios Avanzados-->
-                
+
                 <button class="submit" type="submit" onclick="return checksRedesText('<%=objUri%>','<%=sourceCall%>');"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
 
             </div>      
@@ -402,25 +418,33 @@
                     <div class="etiqueta"><label for="description"><%=Photo.social_msg_Text.getDisplayName()%>:</label></div>
                     <%
                         int position = 0;
+                        //String id = objUri + sourceCall + "_texAreaPhoto";
+                        String id = sourceCall+"_texAreaPhoto"+objUri;
+
                         String create = photoMgr.renderElement(request, Photo.social_msg_Text, photoMgr.MODE_CREATE);
                         position = create.indexOf("style");
-                        create = create.substring(0, position - 1) + " required " + create.substring(position, create.length());
+                        create = create.substring(0, position - 1) + " required  onKeyDown=\"count('" + id + "','" + id + "_Text')\" onKeyUp=\"count('" + id + "','" + id + "_Text')\" id=\"" + id + "\" " + create.substring(position, create.length());
+
+
                         String edit = photoMgr.renderElement(request, Photo.social_msg_Text, photoMgr.MODE_EDIT);
                         position = edit.indexOf("style");
-                        edit = edit.substring(0, position - 1) + " required " + edit.substring(position , edit.length());
+                        edit = edit.substring(0, position - 1) + " required onKeyDown=\"count('" + id + "','" + id + "_Text')\" onKeyUp=\"count('" + id + "','" + id + "_Text')\"  id=\"" + id + "\" " + edit.substring(position, edit.length());
+                        position = edit.indexOf(">");
+                        int posicion1 = edit.indexOf("</textarea>");
+                        String value = edit.substring(position + 1, posicion1);
                     %>
                    <!-- <div class="campo"><%=postOut == null ? photoMgr.renderElement(request, Photo.social_msg_Text, photoMgr.MODE_CREATE) : photoMgr.renderElement(request, Photo.social_msg_Text, photoMgr.MODE_EDIT)%></div>-->
-                    <div class="campo"><%=postOut == null ? create : edit%></div>
+                    <div class="campo"><%=postOut == null ? create : edit%> <%if (postOut == null) {%><input  id="<%=id%>_Text" name="<%=id%>_Text" type="text" size="4"class="nobord" readonly > <label class="labelInfo"><img class="swbIconTwitter" src="/swbadmin/css/images/trans.png"/> 140  <img class="swbIconFacebook" src="/swbadmin/css/images/trans.png"/> 2000  <img class="swbIconYouTube" src="/swbadmin/css/images/trans.png"/> 5000  </label><%} else {%><br><input id="<%=id%>_Text" name="<%=id%>_Text" type="text" size="4" class="nobord" readonly value="<%=value.length()%>"><label class="labelInfo"><img class="swbIconTwitter" src="/swbadmin/css/images/trans.png"/> 140  <img class="swbIconFacebook" src="/swbadmin/css/images/trans.png"/> 2000  <img class="swbIconYouTube" src="/swbadmin/css/images/trans.png"/> 5000  </label><%}%></div>
                     </p>
                     <p>
                         <%
                             if (postOut != null) {
                         %>
- 
+
                         <a href="#" title="Mostrar" onclick="showDialog('<%=urlAction.setAction("showPhotos").setParameter("postOut", postOut.toString())%>','<%=paramRequest.getLocaleString("source")%>'); return false;">Mostrar fotos</a>
 
-                        <%       
-                        }
+                        <%
+                            }
                         %>
                     </p>
                     <p>
@@ -490,48 +514,56 @@
                     <!--Calendario Rapido-->
                     <div class="msgFastCalendar">
                         <p id="msgTitle">Programar envío de mensaje</p>
-                    <%
-                        String date=new Date().toString();
-                        String starthour="";
-                        if(postOut!=null && postOut.getFastCalendar()!=null)
-                        {
-                            try
-                            {
-                                String minutes="00";
-                                Date initDate=postOut.getFastCalendar().getFc_date();                            
-                                date=getDateFormat(initDate);
-                                if(initDate.getMinutes()!=0) minutes=""+initDate.getMinutes(); 
-                                String hour=""+initDate.getHours();
-                                if(hour.length()==1) hour="0"+hour; 
-                                starthour=hour+":"+minutes;
-                            }catch(Exception ignore){}
-                        }    
-                    %>
-                    Día:<input type="text" name="postOut_inidate" id="postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
-                    Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="postOut_starthour"  value="<%=(starthour!=null&&starthour.trim().length() > 0 ? "T"+starthour+":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
+                        <%
+                            String date = new Date().toString();
+                            String starthour = "";
+                            if (postOut != null && postOut.getFastCalendar() != null) {
+                                try {
+                                    String minutes = "00";
+                                    Date initDate = postOut.getFastCalendar().getFc_date();
+                                    date = getDateFormat(initDate);
+                                    if (initDate.getMinutes() != 0) {
+                                        minutes = "" + initDate.getMinutes();
+                                    }
+                                    String hour = "" + initDate.getHours();
+                                    if (hour.length() == 1) {
+                                        hour = "0" + hour;
+                                    }
+                                    starthour = hour + ":" + minutes;
+                                } catch (Exception ignore) {
+                                }
+                            }
+                        %>
+                        Día:<input type="text" name="postOut_inidate" id="postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
+                        Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
                     </div>
                     <!--Termina Calendario Rapido-->
+                    <%
+                    if(SocialCalendar.ClassMgr.listSocialCalendars(wsite).hasNext())
+                    {
+                    %>
+                    
                     <!--Comienzan Calendarios Avanzados-->
                     <select name="postOutAdvCal" id="postOutAdvCal" multiple="multiple">
-                    <%
-                        boolean existSelected=false;
-                        Iterator <SocialCalendar> itSocialCalendars=SocialCalendar.ClassMgr.listSocialCalendars(wsite);
-                        while(itSocialCalendars.hasNext())
-                        {
-                            String selected="";
-                            SocialCalendar socialCalendar=itSocialCalendars.next();
-                            if(apostOutCalendars.contains(socialCalendar.getURI())) {
-                                selected="selected=selected";
-                                existSelected=true;
+                        <%
+                            boolean existSelected = false;
+                            Iterator<SocialCalendar> itSocialCalendars = SocialCalendar.ClassMgr.listSocialCalendars(wsite);
+                            while (itSocialCalendars.hasNext()) {
+                                String selected = "";
+                                SocialCalendar socialCalendar = itSocialCalendars.next();
+                                if (apostOutCalendars.contains(socialCalendar.getURI())) {
+                                    selected = "selected=selected";
+                                    existSelected = true;
+                                }
+                        %>
+                        <option value="<%=socialCalendar.getURI()%>" <%=selected%>><%=socialCalendar.getTitle()%></option>
+                        <%
                             }
-                            %>
-                            <option value="<%=socialCalendar.getURI()%>" <%=selected%>><%=socialCalendar.getTitle()%></option>
-                            <%
-                        }
-                    %>
+                        %>
                     </select>
+                    <%}%>
                     <!--Terminan Calendarios Avanzados-->
-                    
+
                     <button class="submit" type="submit" onclick="return validateImages('hasPhoto_new_#swbsocial_<%=objUri + sourceCall%>_dynamic','<%=objUri + sourceCall%>frmUploadPhoto');"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
                     <!--<button class="submit" type="submit" onclick="return validateTypeFile('hasPhoto_new_dynamic4'); checksRedesPhoto('<%=objUri%>','<%=sourceCall%>',<%=(postInSN == null || postIn != null ? "true" : "false")%>);"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>-->
                 </div>
@@ -647,8 +679,8 @@
     <div id="pub-detalle">
         <span class="sel-viddiv"></span>
         <div class="swbform">
-              <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadVideo" action="<%=urlAction.setAction("uploadVideo")%>" method="post" onsubmit="submitForm('<%=objUri%><%=sourceCall%>frmUploadVideo');
-                return false;">
+            <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadVideo" action="<%=urlAction.setAction("uploadVideo")%>" method="post" onsubmit="submitForm('<%=objUri%><%=sourceCall%>frmUploadVideo');
+                  return false;">
                 <%= videoMgr.getFormHiddens()%>
 
                 <div class="pub-redes">
@@ -676,8 +708,20 @@
                     <div class="campo"><%=postOut == null ? videoMgr.renderElement(request, Video.swb_title, videoMgr.MODE_CREATE) : videoMgr.renderElement(request, Video.swb_title, videoMgr.MODE_EDIT)%></div>
                     </p>
                     <p>
+                        <%
+                            int position = 0;
+                            //String id = objUri + sourceCall + "_texAreaVideo";
+                            String id = sourceCall+"_texAreaVideo"+objUri;
+
+                            String create = videoMgr.renderElement(request, Video.social_msg_Text, videoMgr.MODE_CREATE);
+                            position = create.indexOf("style");
+                            create = create.substring(0, position - 1) + " required  onKeyDown=\"count('" + id + "','" + id + "_Text')\" onKeyUp=\"count('" + id + "','" + id + "_Text')\" id=\"" + id + "\" " + create.substring(position, create.length());
+                            position = create.indexOf(">");
+                            int posicion1 = create.indexOf("</textarea>");
+                            String value = create.substring(position + 1, posicion1);
+                        %>
                     <div class="etiqueta"><label for="description"><%=Video.social_msg_Text.getDisplayName()%>:</label></div>
-                    <div class="campo"><%=videoMgr.renderElement(request, Video.social_msg_Text, videoMgr.MODE_CREATE)%></div>
+                    <div class="campo"><%=create%><br><input id="<%=id%>_Text" name="<%=id%>_Text" type="text" size="4" class="nobord" readonly value="<%=value.length()%>"><label class="labelInfo"><img class="swbIconTwitter" src="/swbadmin/css/images/trans.png"/> 140  <img class="swbIconFacebook" src="/swbadmin/css/images/trans.png"/> 2000  <img class="swbIconYouTube" src="/swbadmin/css/images/trans.png"/> 5000  </label></div>
                     </p>
                     <p>
                     <div class="etiqueta"><label for="keywords"><%=Video.swb_Tagable.getDisplayName(lang)%>:</label></div>
@@ -861,46 +905,53 @@
                     <!--Calendario Rapido-->
                     <div class="msgFastCalendar">
                         <p id="msgTitle">Programar envío de mensaje</p>
-                    <%
-                        String date=new Date().toString();
-                        String starthour="";
-                        if(postOut!=null && postOut.getFastCalendar()!=null)
-                        {
-                            try
-                            {
-                                String minutes="00";
-                                Date initDate=postOut.getFastCalendar().getFc_date();                            
-                                date=getDateFormat(initDate);
-                                if(initDate.getMinutes()!=0) minutes=""+initDate.getMinutes(); 
-                                String hour=""+initDate.getHours();
-                                if(hour.length()==1) hour="0"+hour; 
-                                starthour=hour+":"+minutes;
-                            }catch(Exception ignore){}
-                        }    
-                    %>
-                    Día:<input type="text" name="postOut_inidate" id="postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
-                    Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="postOut_starthour"  value="<%=(starthour!=null&&starthour.trim().length() > 0 ? "T"+starthour+":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
+                        <%
+                            String date = new Date().toString();
+                            String starthour = "";
+                            if (postOut != null && postOut.getFastCalendar() != null) {
+                                try {
+                                    String minutes = "00";
+                                    Date initDate = postOut.getFastCalendar().getFc_date();
+                                    date = getDateFormat(initDate);
+                                    if (initDate.getMinutes() != 0) {
+                                        minutes = "" + initDate.getMinutes();
+                                    }
+                                    String hour = "" + initDate.getHours();
+                                    if (hour.length() == 1) {
+                                        hour = "0" + hour;
+                                    }
+                                    starthour = hour + ":" + minutes;
+                                } catch (Exception ignore) {
+                                }
+                            }
+                        %>
+                        Día:<input type="text" name="postOut_inidate" id="postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
+                        Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
                     </div>
                     <!--Termina Calendario Rapido-->
+                    <%
+                        if(SocialCalendar.ClassMgr.listSocialCalendars(wsite).hasNext())
+                        {
+                    %>
                     <!--Comienzan Calendarios Avanzados-->
                     <select name="postOutAdvCal" id="postOutAdvCal" multiple="multiple">
-                    <%
-                        boolean existSelected=false;
-                        Iterator <SocialCalendar> itSocialCalendars=SocialCalendar.ClassMgr.listSocialCalendars(wsite);
-                        while(itSocialCalendars.hasNext())
-                        {
-                            String selected="";
-                            SocialCalendar socialCalendar=itSocialCalendars.next();
-                            if(apostOutCalendars.contains(socialCalendar.getURI())) {
-                                selected="selected=selected";
-                                existSelected=true;
+                        <%
+                            boolean existSelected = false;
+                            Iterator<SocialCalendar> itSocialCalendars = SocialCalendar.ClassMgr.listSocialCalendars(wsite);
+                            while (itSocialCalendars.hasNext()) {
+                                String selected = "";
+                                SocialCalendar socialCalendar = itSocialCalendars.next();
+                                if (apostOutCalendars.contains(socialCalendar.getURI())) {
+                                    selected = "selected=selected";
+                                    existSelected = true;
+                                }
+                        %>
+                        <option value="<%=socialCalendar.getURI()%>" <%=selected%>><%=socialCalendar.getTitle()%></option>
+                        <%
                             }
-                            %>
-                            <option value="<%=socialCalendar.getURI()%>" <%=selected%>><%=socialCalendar.getTitle()%></option>
-                            <%
-                        }
-                    %>
+                        %>
                     </select>
+                    <%}%>
                     <!--Terminan Calendarios Avanzados-->
                     <button class="submit" type="submit" onclick="return validateVideo('<%="video_new_defaultAuto" + objUri + sourceCall%>', '<%=objUri + sourceCall%>frmUploadVideo')"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
                 </div>
@@ -1015,32 +1066,30 @@
             }
         }
     %>
-    
-    
+
+
     <%!
-    private String getDateFormat(Date date) 
-    {
-        StringTokenizer st = new StringTokenizer(date.toString(), "-"); 
-        String nf = date.toString(); 
-        String y = "";
-        String m = "";
-        String d = "";
-        if (st.hasMoreTokens()) {
-            y = st.nextToken();
+        private String getDateFormat(Date date) {
+            StringTokenizer st = new StringTokenizer(date.toString(), "-");
+            String nf = date.toString();
+            String y = "";
+            String m = "";
+            String d = "";
             if (st.hasMoreTokens()) {
-                m = st.nextToken();
-            }
-            if (st.hasMoreTokens()) {
-                d = st.nextToken();
-                int pos=-1;
-                pos=d.indexOf(" ");
-                if(pos>-1)
-                {
-                    d=d.substring(0, pos);
+                y = st.nextToken();
+                if (st.hasMoreTokens()) {
+                    m = st.nextToken();
                 }
+                if (st.hasMoreTokens()) {
+                    d = st.nextToken();
+                    int pos = -1;
+                    pos = d.indexOf(" ");
+                    if (pos > -1) {
+                        d = d.substring(0, pos);
+                    }
+                }
+                nf = y + "-" + m + "-" + d;
             }
-            nf = y + "-" + m + "-" + d;
+            return nf;
         }
-        return nf;
-    }
     %>             

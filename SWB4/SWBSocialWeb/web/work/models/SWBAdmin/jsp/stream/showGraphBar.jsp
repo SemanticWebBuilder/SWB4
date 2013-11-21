@@ -21,7 +21,6 @@
 <%@page import="org.semanticwb.social.util.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%
-   
     String suri = request.getParameter("suri");
     if (suri == null) {
         return;

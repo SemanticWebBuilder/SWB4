@@ -115,7 +115,7 @@
                 </em>
                 <%=paramRequest.getLocaleString("phrases")%>
             </label>    
-            <textarea name="fw" id="fw" rows="2" cols="28" trim="true"></textarea>
+            <textarea name="fw" id="fw" rows="2" cols="28" trim="true" required="true"></textarea>
         </p>      
 
         <p>
