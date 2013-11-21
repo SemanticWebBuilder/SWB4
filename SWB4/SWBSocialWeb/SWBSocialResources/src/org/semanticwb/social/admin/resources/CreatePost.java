@@ -133,8 +133,8 @@ public class CreatePost extends GenericResource {
                     String[] socialUris = socialUri.split("\\|");  //Dividir valores
                     for (int i = 0; i < socialUris.length; i++) {
                         String tmp_socialUri = socialUris[i];
-                        SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri, wsite.getSemanticModel());
-                        SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
+                        SemanticObject semObject = SemanticObject.getSemanticObject(tmp_socialUri);
+                        SocialNetwork socialNet = (SocialNetwork) semObject.getGenericInstance();
                         //Se agrega la red social de salida al post
                         aSocialNets.add(socialNet);
                     }
