@@ -1,19 +1,23 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.Recognizable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Help,org.semanticwb.model.Roleable,org.semanticwb.bsc.Sortable,org.semanticwb.bsc.Serializable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Filterable
+public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Serializable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Sortable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Help,org.semanticwb.model.RuleRefable,org.semanticwb.model.Roleable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode
 {
    /**
    * Un DifferentiatorGroup es una clase que permitir contener uno o varios Differentiator que se dibujan en el mapa estratégico del scorecard.
    */
     public static final org.semanticwb.platform.SemanticClass bsc_DifferentiatorGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#DifferentiatorGroup");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasDifferentiatorGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasDifferentiatorGroup");
+    public static final org.semanticwb.platform.SemanticClass bsc_Perspective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Perspective");
+   /**
+   * Persiste información de las relaciones causa efecto que existe con otras Perspectivas
+   */
+    public static final org.semanticwb.platform.SemanticProperty bsc_hasCausalPerspective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasCausalPerspective");
    /**
    * Los temas estratégicos agrupan objetivos con fines en común. A su vez, los temas están agrupados dentro de las perspectivas.
    */
     public static final org.semanticwb.platform.SemanticClass bsc_Theme=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Theme");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasTheme=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasTheme");
-    public static final org.semanticwb.platform.SemanticClass bsc_Perspective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Perspective");
    /**
    * The semantic class that represents the currentObject
    */
@@ -155,6 +159,29 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
         public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByUserGroup(org.semanticwb.model.UserGroup value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroup,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Perspective with a determined CausalPerspective
+       * @param value CausalPerspective of the type org.semanticwb.bsc.element.Perspective
+       * @param model Model of the org.semanticwb.bsc.element.Perspective
+       * @return Iterator with all the org.semanticwb.bsc.element.Perspective
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByCausalPerspective(org.semanticwb.bsc.element.Perspective value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasCausalPerspective, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Perspective with a determined CausalPerspective
+       * @param value CausalPerspective of the type org.semanticwb.bsc.element.Perspective
+       * @return Iterator with all the org.semanticwb.bsc.element.Perspective
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByCausalPerspective(org.semanticwb.bsc.element.Perspective value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasCausalPerspective,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -366,6 +393,71 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
     {
         //Override this method in Perspective object
         getSemanticObject().setProperty(bsc_prefix, value,false);
+    }
+   /**
+   * Gets all the org.semanticwb.bsc.element.Perspective
+   * @return A GenericIterator with all the org.semanticwb.bsc.element.Perspective
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> listCausalPerspectives()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective>(getSemanticObject().listObjectProperties(bsc_hasCausalPerspective));
+    }
+
+   /**
+   * Gets true if has a CausalPerspective
+   * @param value org.semanticwb.bsc.element.Perspective to verify
+   * @return true if the org.semanticwb.bsc.element.Perspective exists, false otherwise
+   */
+    public boolean hasCausalPerspective(org.semanticwb.bsc.element.Perspective value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(bsc_hasCausalPerspective,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a CausalPerspective
+   * @param value org.semanticwb.bsc.element.Perspective to add
+   */
+
+    public void addCausalPerspective(org.semanticwb.bsc.element.Perspective value)
+    {
+        getSemanticObject().addObjectProperty(bsc_hasCausalPerspective, value.getSemanticObject());
+    }
+   /**
+   * Removes all the CausalPerspective
+   */
+
+    public void removeAllCausalPerspective()
+    {
+        getSemanticObject().removeProperty(bsc_hasCausalPerspective);
+    }
+   /**
+   * Removes a CausalPerspective
+   * @param value org.semanticwb.bsc.element.Perspective to remove
+   */
+
+    public void removeCausalPerspective(org.semanticwb.bsc.element.Perspective value)
+    {
+        getSemanticObject().removeObjectProperty(bsc_hasCausalPerspective,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the CausalPerspective
+   * @return a org.semanticwb.bsc.element.Perspective
+   */
+    public org.semanticwb.bsc.element.Perspective getCausalPerspective()
+    {
+         org.semanticwb.bsc.element.Perspective ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasCausalPerspective);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.element.Perspective)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Gets all the org.semanticwb.bsc.element.Theme
