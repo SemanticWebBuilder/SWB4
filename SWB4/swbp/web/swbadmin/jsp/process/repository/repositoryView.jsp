@@ -4,6 +4,7 @@
     Author     : Hasdai Pacheco <ebenezer.sanchez@infotec.com.mx>
 --%>
 
+<%@page import="org.semanticwb.process.model.RepositoryDirectory"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="org.semanticwb.process.model.RepositoryURL"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
@@ -21,6 +22,7 @@
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
 List<RepositoryElement> files = (List<RepositoryElement>) request.getAttribute("files");
+String path = (String) request.getAttribute("path");
 int luser = (Integer) request.getAttribute("luser");
 WebSite site = paramRequest.getWebPage().getWebSite();
 User user = paramRequest.getUser();
@@ -45,13 +47,47 @@ if (!user.isSigned()) {
     }
 } else {
     SWBResourceURL addUrl = paramRequest.getRenderUrl().setMode(ProcessFileRepository.MODE_ADDFILE);
+    SWBResourceURL addFolderUrl = paramRequest.getRenderUrl().setMode(ProcessFileRepository.MODE_ADDFOLDER);
     %>
     <ul class="list-unstyled list-inline">
         <li>
             <a href="<%=addUrl%>" class="btn btn-default"><span class="fa fa-plus"></span> <%=paramRequest.getLocaleString("addFile")%></a>
         </li>
+        <li>
+            <a href="<%=addFolderUrl%>" class="btn btn-default"><span class="fa fa-plus"></span> <%=paramRequest.getLocaleString("msgCreateDirectory")%></a>
+        </li>
     </ul>
+    <%if (path != null) {%>
+        <ol class="breadcrumb swbp-breadcrumb">
+            <li><span class="swbp-breadcrumb-title"><%=paramRequest.getLocaleString("msgLocation")%>:</span></li>
+            <%
+            if (path.indexOf("|") != -1) {
+                String [] pathelems = path.split("\\|");
+                for (int i = 0; i < pathelems.length; i++) {
+                    System.out.println(pathelems[i]);
+                    WebPage wp = site.getWebPage(pathelems[i]);
+                    
+                    if (wp.equals(paramRequest.getWebPage())) {
+                        %>
+                        <li class="active"><%=wp.getDisplayTitle(lang)%></li>
+                        <%
+                    } else {
+                        %>
+                        <li><a href="<%=wp.getUrl(lang)%>"><%=wp.getDisplayTitle(lang)%></a></li>
+                        <%
+                    }
+                }
+            } else {
+                WebPage wp = site.getWebPage(path);
+                %>
+                <li><a href="<%=wp.getUrl(lang)%>"><%=wp.getDisplayTitle(lang)%></a></li>
+                <%
+            }
+            %>
+        </ol>
     <%
+    }
+        
     if (!files.isEmpty()) {
         SWBResourceURL urlOrder = paramRequest.getRenderUrl();
 
