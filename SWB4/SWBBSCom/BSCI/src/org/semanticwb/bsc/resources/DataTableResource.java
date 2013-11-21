@@ -88,7 +88,7 @@ public class DataTableResource extends GenericResource {
         Iterator<Period> periods;
         try {
             periods = indicator.listMeasurablesPeriods();
-        }catch(UndefinedFrequencyException | InappropriateFrequencyException e) {
+        }catch(Exception e) {
             List<Period> lperiods = indicator.listValidPeriods();
             Collections.sort(lperiods);
             periods = lperiods.iterator();
@@ -425,8 +425,6 @@ public class DataTableResource extends GenericResource {
                         access = true;
                     }
                 }
-            }else {
-                access = true;
             }
         }
         return access;
