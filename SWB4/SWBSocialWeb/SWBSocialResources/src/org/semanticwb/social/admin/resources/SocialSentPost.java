@@ -825,7 +825,7 @@ public class SocialSentPost extends GenericResource {
                 if(postOut.getFastCalendar()!=null)
                 {
                     SWBResourceURL urlFastCalendars = paramRequest.getRenderUrl().setMode(Mode_ShowFastCalendar).setCallMethod(SWBResourceURL.Call_DIRECT);
-                    out.println("<a href=\"#\" onclick=\"showDialog('" + urlFastCalendars.setParameter("postUri", postOut.getURI()) + "','" + paramRequest.getLocaleString("associatedFastCalendar") + "'); return false;\">FC</a>");
+                    out.println("<a class=\"swbIconFC\" href=\"#\" onclick=\"showDialog('" + urlFastCalendars.setParameter("postUri", postOut.getURI()) + "','" + paramRequest.getLocaleString("associatedFastCalendar") + "'); return false;\">FC</a>");
                 }
             }
             boolean oneCalendarIsActive=false;
@@ -839,13 +839,9 @@ public class SocialSentPost extends GenericResource {
                     break;
                 }
             }
-            String strClass = "";
-            if (postOut.listCalendarRefs().hasNext()) {
-                strClass = "class=\"swbIconSocialCalendar\"";
-            }
             if(oneCalendarIsActive)
             {
-                out.println("<a " + strClass + " href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + msgText + "');return false;\" title=\"" + msgText + "\">CA</a>");
+                out.println("<a class=\"swbIconCA\" href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + msgText + "');return false;\" title=\"" + msgText + "\">CA</a>");
             }
 
 
@@ -860,9 +856,9 @@ public class SocialSentPost extends GenericResource {
             }
             
             if (!postOut.isPublished()) {
-                out.println("<a " + strClass + " href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + msgText + "');return false;\" title=\"" + msgText + "\">" + msgText + "</a>");
+                out.println("<a href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + msgText + "');return false;\" title=\"" + msgText + "\">" + msgText + "</a>");
             } else {  //Si ya esta publicado
-                out.println("<a " + strClass + " href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp?publish=true" + "','" + msgText + "');return false;\" title=\"" + msgText + "\">" + msgText + "</a>");
+                out.println("<a href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp?publish=true" + "','" + msgText + "');return false;\" title=\"" + msgText + "\">" + msgText + "</a>");
             }
             out.println("</td>");
 
@@ -1004,7 +1000,7 @@ public class SocialSentPost extends GenericResource {
                 {
                     //System.out.println("SE SUPONE QUE ESTA PUBLICADO...");
                     postOut.setPublished(true);
-                    out.println("<a class=\"status3\" href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">Publicado</a>");
+                    out.println("<a class=\"status3\" href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\"><strong>Publicado</strong></a>"); //Publicado
                 } else {
                     //System.out.println("SOCIALSENTPOST1");
                     if (!needAuthorization || postOut.getPflowInstance().getStatus() == 3) {
@@ -1021,27 +1017,27 @@ public class SocialSentPost extends GenericResource {
                          }*/
                         ///System.out.println("isInFlow:"+isInFlow+",needAuthorization:"+needAuthorization+",postOutwithPostOutNets:"+postOutwithPostOutNets+",someOneIsNotPublished:"+someOneIsNotPublished+",FlowStatus:"+postOut.getPflowInstance()!=null?postOut.getPflowInstance().getStatus():"NO TIENE FLUJO");
                         if (someOneIsNotPublished) {
-                            out.println("<a class=\"status1\" href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">" + paramRequest.getLocaleString("toReview") + "</a>"); //No ha sido publicado en todas las redes sociales que debiera, abrir dialogo para mostrar todos los PostOutNtes del PostOut
+                            out.println("<a class=\"status1\" href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\"><strong>" + paramRequest.getLocaleString("toReview") + "</strong></a>"); //No ha sido publicado en todas las redes sociales que debiera, abrir dialogo para mostrar todos los PostOutNtes del PostOut
                         } else if (isInFlow && needAuthorization && postOut.getPflowInstance() != null && postOut.getPflowInstance().getStatus() == 3) {
                             if(postOut.getFastCalendar()!=null)
                             {
-                                out.println("A cumplir Calendario..");
+                                out.println("<strong>A cumplir Calendario..</strong>");
                             }else{
-                                out.println("<a href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />" + paramRequest.getLocaleString("publish") + "</a>");
+                                out.println("<a class=\"status6\" href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />" + paramRequest.getLocaleString("publish") + "</a>");
                             }
                         } else if (!isInFlow && !needAuthorization && !postOutwithPostOutNets) {
                             if(postOut.getFastCalendar()!=null)
                             {
-                                out.println("A cumplir Calendario..");
+                                out.println("<strong>A cumplir Calendario..</strong>");
                             }else{
-                                out.println(paramRequest.getLocaleString("publishing") + "..");
+                                out.println("<strong>"+paramRequest.getLocaleString("publishing") +"</strong>");    //Aqui no debe haber liga, que lo cheque roger desde estilo
                             }
                         } else {
                             if(postOut.getFastCalendar()!=null)
                             {
-                                out.println("A cumplir Calendario..");
+                                out.println("<strong>A cumplir Calendario..</strong>");
                             }else{
-                                out.println("<a href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />" + paramRequest.getLocaleString("publish") + "</a>");
+                                out.println("<a class=\"status6\" href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />" + paramRequest.getLocaleString("publish") + "</a>");
                             }
                         }
                     } else {    //El PostOut ya se envío
@@ -1051,16 +1047,16 @@ public class SocialSentPost extends GenericResource {
                             if (postOut.getPflowInstance() != null && postOut.getPflowInstance().getPflow() != null) {
                                 sFlowRejected = postOut.getPflowInstance().getPflow().getDisplayTitle(lang);
                             }
-                            out.println(paramRequest.getLocaleString("rejected") + "(" + sFlowRejected + ")");
+                            out.println("<strong>"+paramRequest.getLocaleString("rejected") + "(" + sFlowRejected + ")</strong>");
                         } else if (isInFlow && needAuthorization && !isAuthorized) {
                             //System.out.println("postOut.getPflowInstance().getStatus():"+postOut.getPflowInstance().getStatus());
-                            out.println(paramRequest.getLocaleString("onFlow") + "(" + postOut.getPflowInstance().getPflow().getDisplayTitle(lang) + "/" + postOut.getPflowInstance().getStep() + ")");
+                            out.println("<strong>"+paramRequest.getLocaleString("onFlow") + "(" + postOut.getPflowInstance().getPflow().getDisplayTitle(lang) + "/" + postOut.getPflowInstance().getStep() + ")</strong>");
                         }
                     }
                 }
             } else {
                 //System.out.println("ESE POST ESTA PUBLICADO..");
-                out.println("<a class=\"status3\" href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">" + paramRequest.getLocaleString("published") + "</a>");
+                out.println("<a class=\"status3\" href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\"><strong>" + paramRequest.getLocaleString("published") + "</strong></a>");
             }
             out.println("</td>");
 
