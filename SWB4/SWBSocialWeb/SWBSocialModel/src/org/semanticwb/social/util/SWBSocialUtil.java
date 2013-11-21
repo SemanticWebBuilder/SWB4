@@ -954,6 +954,9 @@ public class SWBSocialUtil implements SWBAppObject {
            while(itSntPhases.hasNext())
            {
                SentimentalLearningPhrase sntLPhrase=itSntPhases.next();
+               
+               if(sntLPhrase.getPhrase()==null || sntLPhrase.getPhrase().trim().length()==0) continue;
+               
                //System.out.println("Frase Learn:"+sntLPhrase.getPhrase());
                HashMap hmap=new HashMap();
                hmap.put("text", text);
