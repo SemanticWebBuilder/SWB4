@@ -1532,8 +1532,9 @@ public class SWBSocialUtil implements SWBAppObject {
 
         public static void sendNewPost(PostIn postIn, org.semanticwb.social.SocialTopic socialTopic, SocialPFlow socialPFlow, ArrayList<SocialNetwork> aSocialNets, WebSite wsite, String toPost, HttpServletRequest request, SWBActionResponse response) 
         {
+            //System.out.println("CreatePost/SWBSocialUtil/sendNewPost-George24-1");
             try {
-                if(postIn==null || socialTopic==null || toPost==null) return;
+                if(socialTopic==null || toPost==null) return;
                 SWBFormMgr mgr = null;
                 if (toPost.equals("msg")) {
                     mgr = new SWBFormMgr(Message.sclass, wsite.getSemanticObject(), null);
@@ -1542,7 +1543,7 @@ public class SWBSocialUtil implements SWBAppObject {
                 } else if (toPost.equals("video")) {
                     mgr = new SWBFormMgr(Video.sclass, wsite.getSemanticObject(), null);
                 }
-                //System.out.println("sendNewPost/mgr:"+mgr);
+                //System.out.println("CreatePost/SWBSocialUtil/sendNewPost-George24-2"+mgr);
                 if (mgr != null) {
                     mgr.setFilterRequired(false);
                     SemanticObject sobj = mgr.processForm(request);
@@ -1550,6 +1551,7 @@ public class SWBSocialUtil implements SWBAppObject {
                     post.setSocialTopic(socialTopic); 
                     //Convierto a un post de salida para poderle agregar cada red social a la que se envía dicho post
                     PostOut postOut = (PostOut) post;
+                    //System.out.println("CreatePost/SWBSocialUtil/sendNewPost-3:"+postOut);
                     
                     //Para fines de indexado para ordenamientos con Sparql
                     Calendar calendario = Calendar.getInstance();
