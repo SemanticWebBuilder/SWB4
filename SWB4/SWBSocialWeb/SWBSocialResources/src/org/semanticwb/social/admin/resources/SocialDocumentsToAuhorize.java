@@ -318,9 +318,9 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                     out.println(resource instanceof Message ? "<img title=\"Texto\" src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-txt.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("message") + "  \">" : resource instanceof Photo ? "<img title=\"Imagen\" src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-img.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("photo") + "  \">" : resource instanceof Video ? "<img title=\"Video\" src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-vid.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("video") + "  \">" : "---");
                     if(resource.getSocialTopic()!=null)
                     {
-                        out.println("(");
                         boolean classifyBySentiment = resource.getSocialTopic().isCheckSentPostSentiment();
                         if (classifyBySentiment) {
+                        out.println("(");    
                         //Sentiment
                         //out.println("<td align=\"center\">");
                         if (resource.getPostSentimentalType() == 0) {
@@ -336,8 +336,8 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                         //out.println("<td>");
                         out.println(resource.getPostIntesityType() == 0 ? "<img alt=\"Baja\" src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/ibaja.png\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("low") + "  \">" : resource.getPostIntesityType() == 1 ? "<img alt=\"Media\" src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/imedia.png\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("medium") + "  \">" : resource.getPostIntesityType() == 2 ? "<img alt=\"Alta\" src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/ialta.png\" border=\"0\" alt=\" " + paramRequest.getLocaleString("high") + "  \">" : "---");
                         //out.println("</td>");
-                        }   
                         out.println(")");
+                        }   
                     }
                     
                     out.println("</td>");
