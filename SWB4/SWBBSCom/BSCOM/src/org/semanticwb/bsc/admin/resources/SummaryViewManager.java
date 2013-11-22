@@ -287,9 +287,17 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                     }
                 }
                 output.append("    </select>\n");
+                output.append("    <script type=\"text/javascript\">");
+                output.append("      function catchKeyStrokes(e) {");
+                output.append("        if (e.keyCode == 13) {");
+                output.append("          e.preventDefault ? e.preventDefault() : e.returnValue = false;");
+                output.append("          return false;");
+                output.append("        }");
+                output.append("      }");
+                output.append("    </script>");
                 output.append("    <input type=\"text\" name=\"filterValue\" id=\"filterValue");
                 output.append(this.getId());
-                output.append("\">\n");
+                output.append("\" onkeydown=\"catchKeyStrokes(event);\">\n");
                 //output.append("    <input type=\"button\" value=\"Apply\" onclick=\"javascript:filterTableData()\">\n");
                 output.append("      <span dojoType='dijit.form.Button'>\n");
                 output.append("          Aplicar\n");
