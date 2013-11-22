@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,12 +40,14 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.Traceable;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.VersionInfo;
@@ -57,6 +60,7 @@ import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.process.model.ItemAwareStatus;
 import org.semanticwb.process.model.RepositoryDirectory;
 import org.semanticwb.process.model.RepositoryElement;
 import org.semanticwb.process.model.RepositoryFile;
@@ -572,55 +576,59 @@ public class ProcessFileRepository extends GenericResource {
             super.processAction(request, response);
         }
     }
-
+    
     /**
      * Obtiene el tipo de archivo de acuerdo a su extensión.
-     * @param filename Nombre del archivo.
-     * @return Cadena con el tipo de archivo.
+     * @param filename
+     * @param lang
+     * @return 
      */
-    public static String getFileType(String filename) {
-        String file = "Document";
+    public static String getFileType(String filename, String lang) {
+        String bundle = ProcessFileRepository.class.getName();
+        Locale locale = new Locale(lang);
+        String file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeUNK", locale);
         String type = filename.toLowerCase();
+        
         if (type.indexOf(".bmp") != -1) {
-            file = "Image";
+            file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileImage", locale);;
         } else if (type.indexOf(".pdf") != -1) {
-            file = "Adobe Acrobat";
+            file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypePDF", locale);
         } else if (type.indexOf(".xls") != -1 || type.indexOf(".xlsx") != -1) {
-            file = "Microsoft Excel";
+            file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeXLS", locale);
         } else if (type.indexOf(".html") != -1 || type.indexOf(".htm") != -1) {
-            file = "HTML file";
+            file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeHTML", locale);
         } else if (type.indexOf("jpg") != -1 || type.indexOf("jpeg") != -1) {
-            file = "Image";
+            file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeImage", locale);
         } else if (type.indexOf(".ppt") != -1 || type.indexOf(".pptx") != -1) {
-            file = "Microsoft Power Point";
+            file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypePPT", locale);
         } else if (type.indexOf(".vsd") != -1) {
-            file = "Microsoft Visio";
+            file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeVSD", locale);
         } else if (type.indexOf(".mpp") != -1) {
-            file = "Microsoft Project";
+            file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeMPP", locale);
         } else if (type.indexOf(".mmap") != -1) {
-            file = "Mind Manager";
+            file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeMMAP", locale);
         } else if (type.indexOf(".exe") != -1) {
-            file = "Application";
+            file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeEXE", locale);
         } else if (type.indexOf(".txt") != -1) {
-            file = "Text file";
+            file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeTXT", locale);
         } else if (type.indexOf(".properties") != -1) {
-            file = "Properties file";
+            file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypePROP", locale);
         } else if (type.indexOf(".doc") != -1 || type.indexOf(".docx") != -1) {
-            file = "Microsoft Word";
+            file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeDOC", locale);
         } else if (type.indexOf(".xml") != -1) {
-            file = "XML file";
+            file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeXML", locale);
         } else if (type.indexOf(".gif") != -1 || type.indexOf(".png") != -1) {
-            file = "Image";
+            file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeImage", locale);
         } else if (type.indexOf(".avi") != -1) {
-            file = "Media file";
+            file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeVIDEO", locale);
         } else if (type.indexOf(".mp3") != -1) {
-            file = "Audio file";
+            file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeAUDIO", locale);
         } else if (type.indexOf(".wav") != -1) {
-            file = "Audio file";
+            file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeAUDIO", locale);
         } else if (type.indexOf(".xsl") != -1) {
-            file = "XSLT file";
+            file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeXSL", locale);
         } else {
-            file = "URL location";
+            file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeURL", locale);
         }
         return file;
     }
@@ -711,20 +719,37 @@ public class ProcessFileRepository extends GenericResource {
                 orderBy = "title";
             }
 
+            Iterator<RepositoryElement> _itrf = repoDir.listRepositoryElements();
+            while (_itrf.hasNext()) {
+                RepositoryElement repoFile = _itrf.next();
+                ret.add(repoFile);
+            }
+            
+            Iterator<RepositoryDirectory> folders = repoDir.listChilds();
+            while (folders.hasNext()) {
+                RepositoryDirectory folder = folders.next();
+                ret.add(folder);
+            }
+            
             //SORTING
-            Iterator<RepositoryFile> itrf = repoDir.listRepositoryElements();
+            Iterator<GenericObject> itrf = ret.iterator();
             while (itrf.hasNext()) {
-                GenericObject repoFile = itrf.next();
-                VersionInfo version = ((RepositoryElement)repoFile).getActualVersion();
-                String skey = repoFile.getId();
-
+                GenericObject gobj = itrf.next();
+                String type = (gobj instanceof RepositoryElement) ? "file" : "folder";
+                VersionInfo version = null;
+                UserGroup ownerGroup = null;
+                
+                //RepositoryFile repoFile = itrf.next();
+                if ("file".equals(type)) {
+                    version = ((RepositoryElement)gobj).getActualVersion();
+                    ownerGroup = ((RepositoryElement)gobj).getOwnerUserGroup();
+                }
+                
+                String skey = gobj.getId();
                 boolean showFile = Boolean.FALSE;
-                if (((RepositoryElement)repoFile).getOwnerUserGroup() != null) {
-                    UserGroup ugpo = ((RepositoryElement)repoFile).getOwnerUserGroup();
-                    String ugid = null;
-                    if (ugpo != null) {
-                        ugid = ugpo.getId();
-                    }
+                
+                if (ownerGroup != null) {
+                    String ugid = ownerGroup.getId();
                     if (null != ugid && ugid.equals(usrgpo_filter) || usrgpo_filter == null || usrgpo_filter.equals("")) {
                         showFile = Boolean.TRUE;
                     }
@@ -732,46 +757,67 @@ public class ProcessFileRepository extends GenericResource {
                     showFile = Boolean.TRUE;
                 }
 
-                if (!showFile || version == null) continue;
-
+                if ("file".equals(type) && (!showFile || version == null)) continue;
+                
                 if (orderBy.equals("title")) {
-                    skey = ((RepositoryElement)repoFile).getDisplayTitle(lang) + " - " + repoFile.getId();
+                    skey = ((Descriptiveable)gobj).getDisplayTitle(lang) + " - " + gobj.getId();
                 } else if (orderBy.equals("date")) {
-                    skey = version.getCreated().getTime() + " - " + ((RepositoryElement)repoFile).getDisplayTitle(lang) + " - " + repoFile.getId();
+                    if ("file".equals(type)) {
+                        skey = version.getCreated().getTime() + " - " + ((Descriptiveable)gobj).getDisplayTitle(lang) + " - " + gobj.getId();
+                    } else {
+                        skey = ((RepositoryDirectory)gobj).getCreated().getTime() + " - " + ((Descriptiveable)gobj).getDisplayTitle(lang) + " - " + gobj.getId();
+                    }
                 } else if (orderBy.equals("type")) {
-                    String file = version.getVersionFile();
-                    String type = getFileType(file);
-                    skey = type + "-" + ((RepositoryElement)repoFile).getDisplayTitle(lang) + " - " + repoFile.getId();
+                    String _type = "Directory";
+                    
+                    if ("file".equals(type)) {
+                        String file = version.getVersionFile();
+                        _type = getFileType(file, lang);
+                    }
+                    skey = _type + "-" + ((Descriptiveable)gobj).getDisplayTitle(lang) + " - " + gobj.getId();
                 } else if (orderBy.equals("usr")) {
-                    User usrc = version.getCreator();
-                    skey = " - " + ((RepositoryElement)repoFile).getDisplayTitle(lang) + " - " + repoFile.getId();
+                    User usrc = null;
+                    if ("file".equals(type)) {
+                        usrc = version.getCreator();
+                    } else {
+                        usrc = ((Traceable)gobj).getCreator();
+                    }
+                    
+                    skey = " - " + ((Descriptiveable)gobj).getDisplayTitle(lang) + " - " + gobj.getId();
                     if (usrc != null) {
                         skey = usrc.getFullName() + skey;
                     }
                 } else if (orderBy.equals("gpousr")) {
-                    if (((RepositoryElement)repoFile).getOwnerUserGroup() == null) {
-                        skey = " - " + " " + " - " + repoFile.getId();
+                    if (ownerGroup == null) {
+                        skey = " - " + " " + " - " + gobj.getId();
                     } else {
-                        skey = " - " + ((RepositoryElement)repoFile).getOwnerUserGroup().getDisplayTitle(lang) + " - " + repoFile.getId();
+                        skey = " - " + ownerGroup.getDisplayTitle(lang) + " - " + gobj.getId();
                     }
-
                 } else if (orderBy.equals("status")) {
-                    if (((RepositoryElement)repoFile).getStatus() == null) {
-                        skey = " - " + " " + " - " + repoFile.getId();
+                    ItemAwareStatus status = null;
+                    
+                    if ("file".equals(type)) {
+                        ((RepositoryElement)gobj).getStatus();
+                    }
+                    
+                    if (status == null) {
+                        skey = " - " + " " + " - " + gobj.getId();
                     } else {
-                        skey = " - " + ((RepositoryElement)repoFile).getStatus().getDisplayTitle(lang) + " - " + repoFile.getId();
+                        skey = " - " + status.getDisplayTitle(lang) + " - " + gobj.getId();
                     }
                 }
-                hmNodes.put(skey, repoFile);
+                hmNodes.put(skey, gobj);
             }
 
             ArrayList<String> list = new ArrayList<String>(hmNodes.keySet());
             Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
             Iterator<String> keys = list.iterator();
             
+            ret = new ArrayList<GenericObject>();
+            
             while (keys.hasNext()) {
                 String key = keys.next();
-                ret.add((RepositoryElement)hmNodes.get(key));
+                ret.add(hmNodes.get(key));                
             }
         }
         return ret;
