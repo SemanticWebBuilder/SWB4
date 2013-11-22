@@ -1452,8 +1452,8 @@ public class SWBSocialUtil implements SWBAppObject {
                     String semObjUri=strCalendar[i];
                     try
                     {
-                        SemanticObject semObjCalendar=SemanticObject.getSemanticObject(semObjUri);
-                        org.semanticwb.model.Calendar calendar=(org.semanticwb.model.Calendar)semObjCalendar.getGenericInstance();
+                        SemanticObject semObjCalendar=SemanticObject.createSemanticObject(semObjUri);
+                        org.semanticwb.model.Calendar calendar=(org.semanticwb.model.Calendar)semObjCalendar.createGenericInstance();
                         if(calendar!=null)
                         {
                             CalendarRef calRef=CalendarRef.ClassMgr.createCalendarRef(wsite);
@@ -1636,13 +1636,13 @@ public class SWBSocialUtil implements SWBAppObject {
                                     String privacy=netPrivacy.substring(pos+1);
                                     if(socialNet!=null && privacy!=null)
                                     {
-                                        SemanticObject semObjSocialNet=SemanticObject.getSemanticObject(socialNet);
+                                        SemanticObject semObjSocialNet=SemanticObject.createSemanticObject(socialNet);
                                         PostOutPrivacy postOutPrivacy=PostOutPrivacy.ClassMgr.getPostOutPrivacy(privacy, SWBContext.getAdminWebSite());
-                                        if(semObjSocialNet!=null && postOutPrivacy!=null && semObjSocialNet.getGenericInstance() instanceof SocialNetwork)
+                                        if(semObjSocialNet!=null && postOutPrivacy!=null && semObjSocialNet.createGenericInstance() instanceof SocialNetwork)
                                         {
                                             PostOutPrivacyRelation postOutPrivacyRel=PostOutPrivacyRelation.ClassMgr.createPostOutPrivacyRelation(wsite);
                                             postOutPrivacyRel.setPopr_postOut(postOut);
-                                            postOutPrivacyRel.setPopr_socialNetwork(((SocialNetwork)semObjSocialNet.getGenericInstance()));
+                                            postOutPrivacyRel.setPopr_socialNetwork(((SocialNetwork)semObjSocialNet.createGenericInstance()));
                                             postOutPrivacyRel.setPopr_privacy(postOutPrivacy);
                                         }
                                     }
