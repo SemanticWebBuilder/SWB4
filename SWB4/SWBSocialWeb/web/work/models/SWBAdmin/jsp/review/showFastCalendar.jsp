@@ -83,8 +83,8 @@
                 String starthour=hour+":"+minutes;
                 //System.out.println("Final starthour:"+starthour);
             %>
-                D&iacute;a:<input type="text" name="postOut_inidate" id="inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=nf%>"> 
-                Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="postOut_starthour_<%=starthour%>"  value="<%=(starthour!=null&&starthour.trim().length() > 0 ? "T"+starthour+":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
+                D&iacute;aG:<input type="text" name="postOut_inidate" id="<%=semObj.getId()%>_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=nf%>"> 
+                Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="<%=semObj.getId()%>_postOut_starthour_<%=starthour%>" value="<%=(starthour!=null&&starthour.trim().length() > 0 ? "T"+starthour+":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
                 <p><button dojoType="dijit.form.Button" type="submit" ><%=paramRequest.getLocaleString("btnSend")%></button>
                     <button dojoType="dijit.form.Button" type="submit" onClick="setDefaultValues();"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("removeCal", user.getLanguage())%></button>
                 </p>
