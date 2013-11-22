@@ -23,7 +23,7 @@
 
 <%
     org.semanticwb.model.User user = paramRequest.getUser();
-    System.out.println("ShowPostInResponses/postInJsp:" + request.getAttribute("postUri"));
+    //System.out.println("ShowPostInResponses/postInJsp:" + request.getAttribute("postUri"));
     if (request.getAttribute("postUri") == null) {
         return;
     }
@@ -101,13 +101,17 @@
             </tr>
         </thead>
             <%
-                SocialPFlowMgr pfmgr = SocialLoader.getPFlowManager();
-                Iterator<PostOut> itPostOuts = postIn.listpostOutResponseInvs();
-                while (itPostOuts.hasNext()) {
-                    PostOut postOut = itPostOuts.next();
-                    boolean isInFlow = false;
-                    boolean isAuthorized = false;
-                    boolean needAuthorization = false;
+            SocialPFlowMgr pfmgr = SocialLoader.getPFlowManager();
+            Iterator<PostOut> itPostOuts = postIn.listpostOutResponseInvs();
+            while (itPostOuts.hasNext()) 
+            {
+                PostOut postOut = itPostOuts.next();
+                boolean isInFlow = pfmgr.isInFlow(postOut);
+                boolean isAuthorized = false;
+                if(isInFlow){ 
+                    isAuthorized = pfmgr.isAuthorized(postOut);
+                }
+                boolean needAuthorization = pfmgr.needAnAuthorization(postOut);
             %>
             <tbody>
             <tr>
@@ -222,7 +226,8 @@
                 %>
                 <td>
                     <%
-                        if (!postOut.isPublished()) {
+                        if (!postOut.isPublished()) 
+                        {
                             String firstError = null;
                             boolean postOutwithPostOutNets = false;
                             boolean someOneIsNotPublished = false;
@@ -251,52 +256,88 @@
                             if (!isInFlow && postOutwithPostOutNets && !someOneIsNotPublished) //Se supone que por lo menos, hay publicado un PostOutNet del Post                         
                             {
                                 postOut.setPublished(true);
-                    %>       
-                    <%=SWBSocialResUtil.Util.getStringFromGenericLocale("published", user.getLanguage())%>
-                    <%
-                    } else {
-                        //System.out.println("postOut:" + postOut + ",status:" + postOut.getPflowInstance());                        
-                        if (!needAuthorization || postOut.getPflowInstance().getStatus() == 3) {
-                            if (someOneIsNotPublished) {
-                                if (firstError != null) {
-                    %>   
-                    <%=SWBUtils.TEXT.encode(firstError, "utf-8")%> 
-                    <%
-                    } else {
-                    %>   
-                    <%=SWBSocialResUtil.Util.getStringFromGenericLocale("toReview", user.getLanguage())%> 
-                    <%
-                        }
-                    } else if (postOut.getPflowInstance().getStatus() == 3) {
-                    %>    
-                    <%=SWBSocialResUtil.Util.getStringFromGenericLocale("publish", user.getLanguage())%> 
-                    <%
-                    } else {
-                    %>
-                    <%=SWBSocialResUtil.Util.getStringFromGenericLocale("publishing", user.getLanguage())%> 
-                    <%
-                        }
-                    } else {    //El PostOut ya se envío
-                        if (!isInFlow && needAuthorization && !isAuthorized) {
-                            String sFlowRejected = "---";
-                            if (postOut.getPflowInstance() != null && postOut.getPflowInstance().getPflow() != null) {
-                                sFlowRejected = postOut.getPflowInstance().getPflow().getDisplayTitle(user.getLanguage());
+                            %>       
+                            <%=SWBSocialResUtil.Util.getStringFromGenericLocale("published", user.getLanguage())%>
+                            <%
+                            } else 
+                            {
+                                //System.out.println("postOut:" + postOut + ",status:" + postOut.getPflowInstance());                        
+                                if (!needAuthorization || postOut.getPflowInstance().getStatus() == 3) 
+                                {
+                                    if (someOneIsNotPublished) 
+                                    {
+                                        if (firstError != null) 
+                                        {
+                                            %>   
+                                            <%=SWBUtils.TEXT.encode(firstError, "utf-8")%> 
+                                            <%
+                                        } else 
+                                        {
+                                        %>   
+                                            <%=SWBSocialResUtil.Util.getStringFromGenericLocale("toReview", user.getLanguage())%> 
+                                            <%
+                                        }
+                                    } else if (isInFlow && needAuthorization && postOut.getPflowInstance() != null && postOut.getPflowInstance().getStatus() == 3) 
+                                    {
+                                        if(postOut.getFastCalendar()!=null)
+                                        {%>
+                                            <%=SWBSocialResUtil.Util.getStringFromGenericLocale("toFinishFastCalendar", user.getLanguage())%> 
+                                        <%    
+                                        }else{
+                                            %>    
+                                                 <%=SWBSocialResUtil.Util.getStringFromGenericLocale("publish", user.getLanguage())%> 
+                                            <%
+                                        }
+                                    } else if (!isInFlow && !needAuthorization && !postOutwithPostOutNets)
+                                    {
+                                        if(postOut.getFastCalendar()!=null)
+                                        {
+                                        %>
+                                            <%=SWBSocialResUtil.Util.getStringFromGenericLocale("toFinishFastCalendar", user.getLanguage())%> 
+                                        <%    
+                                        }else
+                                        {
+                                            %>
+                                                <%=SWBSocialResUtil.Util.getStringFromGenericLocale("publishing", user.getLanguage())%> 
+                                            <%
+                                        }
+                                    }else 
+                                    {
+                                        if(postOut.getFastCalendar()!=null)
+                                        {
+                                            %>
+                                                <%=SWBSocialResUtil.Util.getStringFromGenericLocale("toFinishFastCalendar", user.getLanguage())%> 
+                                            <%
+                                        }else{
+                                            %>
+                                                <%=SWBSocialResUtil.Util.getStringFromGenericLocale("publish", user.getLanguage())%> 
+                                            <%
+                                        }
+                                    }
+                                }else 
+                                    {    //El PostOut ya se envío
+                                        if (!isInFlow && needAuthorization && !isAuthorized) 
+                                        {
+                                            String sFlowRejected = "---";
+                                            if (postOut.getPflowInstance() != null && postOut.getPflowInstance().getPflow() != null) {
+                                                sFlowRejected = postOut.getPflowInstance().getPflow().getDisplayTitle(user.getLanguage());
+                                            }
+                                            %>    
+                                            <%=SWBSocialResUtil.Util.getStringFromGenericLocale("rejected", user.getLanguage())%>(<%=sFlowRejected%>)
+                                            <%
+                                        } else if (isInFlow && needAuthorization && !isAuthorized) 
+                                        {
+                                            %>    
+                                            <%=SWBSocialResUtil.Util.getStringFromGenericLocale("inFlow", user.getLanguage())%>(<%=postOut.getPflowInstance().getPflow().getDisplayTitle(user.getLanguage())%>)
+                                            <%
+                                        }
+                                    }
                             }
-                    %>    
-                    <%=SWBSocialResUtil.Util.getStringFromGenericLocale("rejected", user.getLanguage())%>(<%=sFlowRejected%>)
-                    <%
-                    } else if (isInFlow && needAuthorization && !isAuthorized) {
-                    %>    
-                    <%=SWBSocialResUtil.Util.getStringFromGenericLocale("inFlow", user.getLanguage())%>(<%=postOut.getPflowInstance().getPflow().getDisplayTitle(user.getLanguage())%>)
-                    <%
-                                }
-                            }
-                        }
-                    } else {
-                            System.out.println("else final");
-                    %>
-                    <%=SWBSocialResUtil.Util.getStringFromGenericLocale("published", user.getLanguage())%>
-                    <%
+                        } else 
+                        {
+                                %>
+                                <%=SWBSocialResUtil.Util.getStringFromGenericLocale("published", user.getLanguage())%>
+                                <%
                         }
                     %>
                 </td>
