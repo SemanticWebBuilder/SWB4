@@ -72,7 +72,7 @@
             <label for="hasUsers">Selecciona los destinatarios:</label>
 
 
-            <select name="hasUsers" multiple size="5">
+            <select name="hasUsers" multiple size="5" required="true">
                 <%
                     Iterator<User> itUsers = SWBContext.getAdminRepository().listUsers();
                     while (itUsers.hasNext()) {
@@ -190,7 +190,7 @@
 
         <div class="msjnvo-usrs">
             <label for="hasUsers">Selecciona los destinatarios:</label>      
-            <select name="hasUsers" multiple size="5">
+            <select name="hasUsers" multiple size="5" required="true">
                 <%
                     Iterator<User> itUsers = SWBContext.getAdminRepository().listUsers();
                     while (itUsers.hasNext()) {
