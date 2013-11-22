@@ -4,6 +4,9 @@
     Author     : Hasdai Pacheco <ebenezer.sanchez@infotec.com.mx>
 --%>
 
+<%@page import="org.semanticwb.model.Traceable"%>
+<%@page import="org.semanticwb.model.Descriptiveable"%>
+<%@page import="org.semanticwb.model.GenericObject"%>
 <%@page import="org.semanticwb.process.model.RepositoryDirectory"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="org.semanticwb.process.model.RepositoryURL"%>
@@ -21,7 +24,7 @@
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-List<RepositoryElement> files = (List<RepositoryElement>) request.getAttribute("files");
+List<GenericObject> files = (List<GenericObject>) request.getAttribute("files");
 String path = (String) request.getAttribute("path");
 int luser = (Integer) request.getAttribute("luser");
 WebSite site = paramRequest.getWebPage().getWebSite();
@@ -64,7 +67,6 @@ if (!user.isSigned()) {
             if (path.indexOf("|") != -1) {
                 String [] pathelems = path.split("\\|");
                 for (int i = 0; i < pathelems.length; i++) {
-                    System.out.println(pathelems[i]);
                     WebPage wp = site.getWebPage(pathelems[i]);
                     
                     if (wp.equals(paramRequest.getWebPage())) {
@@ -91,7 +93,7 @@ if (!user.isSigned()) {
     if (!files.isEmpty()) {
         SWBResourceURL urlOrder = paramRequest.getRenderUrl();
 
-        Iterator<RepositoryElement> it = files.iterator();
+        Iterator<GenericObject> it = files.iterator();
         if (it.hasNext()) {
             %>
             <div class="table-responsive">
@@ -111,59 +113,125 @@ if (!user.isSigned()) {
                     <tbody>
                     <%
                     while (it.hasNext()) {
-                        RepositoryElement rf = it.next();
-                        VersionInfo vi = rf.getLastVersion();
+                        GenericObject go = it.next();
+                        
                         String urlIcon = SWBPlatform.getContextPath()+"/swbadmin/jsp/process/repository/css/images/url.png";
-                        String type = ProcessFileRepository.getFileType(vi.getVersionFile());
+                        String title = ((Descriptiveable)go).getDisplayTitle(lang);
+                        String type = paramRequest.getLocaleString("lblFileTypeFolder");
+                        String _type = "directory";
                         String modifier = "--";
-                        if (vi.getModifiedBy() != null && vi.getModifiedBy().getFullName().length() > 0) modifier = vi.getModifiedBy().getFullName();
-
-                        if (!(rf instanceof RepositoryURL)) {
-                            urlIcon = ProcessFileRepository.getFileIcon(vi.getVersionFile());
+                        String version = "--";
+                        String lastUpdated = "--";
+                        String status = "--";
+                        String ownerGroup = "--";
+                        
+                        if (go instanceof RepositoryElement) {
+                            RepositoryElement re = (RepositoryElement)go;
+                            VersionInfo vi = re.getLastVersion();
+                            type = ProcessFileRepository.getFileType(vi.getVersionFile(), lang);
+                            _type = (go instanceof RepositoryURL)?"url":"file";
+                            
+                            if (vi.getModifiedBy() != null && vi.getModifiedBy().getFullName().length() > 0) modifier = vi.getModifiedBy().getFullName();
+                            if (!(re instanceof RepositoryURL)) {
+                                urlIcon = ProcessFileRepository.getFileIcon(vi.getVersionFile());
+                            }
+                            
+                            version = vi.getVersionValue();
+                            if (vi.getUpdated() != null) {
+                                lastUpdated = format.format(vi.getUpdated());
+                            }
+                            
+                            if (re.getStatus() != null) {
+                                status = re.getStatus().getDisplayTitle(lang);
+                            }
+                            
+                            if (re.getOwnerUserGroup() != null) {
+                                ownerGroup = re.getOwnerUserGroup().getDisplayTitle(lang);
+                            }
+                        } else if (go instanceof RepositoryDirectory) {
+                            Traceable tr = (Traceable)go;
+                            if (tr.getModifiedBy() != null) {
+                                modifier = tr.getModifiedBy().getFullName();
+                            }
+                            urlIcon = SWBPlatform.getContextPath()+"/swbadmin/jsp/process/repository/css/images/folder.png";
+                            if (tr.getUpdated() != null) {
+                                lastUpdated = format.format(tr.getUpdated());
+                            }
                         }
-
+                        
                         SWBResourceURL propsUrl = paramRequest.getRenderUrl().setCallMethod(SWBParamRequest.Call_DIRECT);
                         propsUrl.setMode(ProcessFileRepository.MODE_PROPS);
-                        propsUrl.setParameter("fid", rf.getId());
-                        propsUrl.setParameter("type", (rf instanceof RepositoryURL)?"url":"file");
+                        propsUrl.setParameter("fid", go.getId());
+                        propsUrl.setParameter("type", _type);
                         %>
                         <tr>
-                            <td><img src="<%=urlIcon%>" alt="<%=type%>" title="<%=rf.getDisplayTitle(lang)%>" /><%=rf.getDisplayTitle(lang)%></td>
+                            <td><img src="<%=urlIcon%>" alt="<%=type%>" title="<%=title%>" /><%=title%></td>
                             <td><%=type%></td>
-                            <td><%=vi.getVersionValue()%></td>
-                            <td><%=vi.getUpdated()==null?"--":format.format(vi.getUpdated())%></td>
+                            <td><%=version%></td>
+                            <td><%=lastUpdated%></td>
                             <td><%=modifier%></td>
-                            <td><%=rf.getOwnerUserGroup()==null?"--":rf.getOwnerUserGroup().getDisplayTitle(lang)%></td>
-                            <td><%=rf.getStatus()==null?"--":rf.getStatus().getDisplayTitle(lang)%></td>
+                            <td><%=ownerGroup%></td>
+                            <td><%=status%></td>
                             <td class="swbp-actions">
                                 <a href="<%=propsUrl%>" title="<%=paramRequest.getLocaleString("msgInfo")%>" class="btn btn-default" data-toggle="modal" data-target="#modalDialog"><span class="fa fa-exclamation-circle"></span></a>
-                                <%if (luser == 3 || (vi.getCreator() != null && vi.getCreator().equals(user) && luser > 1)) {
+                                <%if (luser == 3 || (((Traceable)go).getCreator() != null && ((Traceable)go).getCreator().equals(user) && luser > 1)) {
                                     SWBResourceURL urlremove = paramRequest.getActionUrl();
                                     urlremove.setAction("removefile");
                                     urlremove.setParameter("act", "remove");
-                                    urlremove.setParameter("fid", rf.getURI());
+                                    urlremove.setParameter("fid", go.getURI());
                                     
-                                    addUrl.setParameter("fid", rf.getId());
-                                    addUrl.setParameter("type", (rf instanceof RepositoryURL?"url":"file"));
-                                    %>
-                                <a href="<%=urlremove%>" onclick="if (!confirm('<%=paramRequest.getLocaleString("msgAlertConfirmRemoveFile") + " " + rf.getTitle() + "?"%>')) return false;" title="<%=paramRequest.getLocaleString("msgAltDelete")%>" class="btn btn-default"><span class="fa fa-trash-o"></span></a>
-                                    <a href="<%=addUrl%>" title="<%=paramRequest.getLocaleString("msgAddVersion")%>" class="btn btn-default"><span class="fa fa-cloud-upload"></span></a>
+                                    addUrl.setParameter("fid", go.getId());
+                                    addUrl.setParameter("type", _type);
+                                    
+                                    boolean canDelete = true;
+                                    if (go instanceof RepositoryDirectory) {
+                                        RepositoryDirectory rdir = (RepositoryDirectory)go;
+                                        if (rdir.listRepositoryElements().hasNext()) {
+                                            canDelete = false;
+                                        }
+                                        
+                                        if (rdir.listChilds().hasNext()) {
+                                            canDelete = false;
+                                        }
+                                    }
+                                    
+                                    if (canDelete) {%>
+                                        <a href="<%=urlremove%>" onclick="if (!confirm('<%=paramRequest.getLocaleString("msgAlertConfirmRemoveFile") + " " + title + "?"%>')) return false;" title="<%=paramRequest.getLocaleString("msgAltDelete")%>" class="btn btn-default"><span class="fa fa-trash-o"></span></a>
+                                        <%
+                                    }
+                                    if (go instanceof RepositoryElement) {%>
+                                        <a href="<%=addUrl%>" title="<%=paramRequest.getLocaleString("msgAddVersion")%>" class="btn btn-default"><span class="fa fa-cloud-upload"></span></a>
                                     <%
+                                    }
                                 }
-                                if (luser > 0) {
-                                    SWBResourceURL urlDownload = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
-                                    urlDownload.setMode(ProcessFileRepository.MODE_GETFILE);
-                                    urlDownload.setParameter("fid", rf.getId());
-                                    urlDownload.setParameter("verNum", "" + vi.getVersionNumber());
+                                
+                                if (go instanceof RepositoryElement) {
+                                    RepositoryElement re = (RepositoryElement)go;
+                                    VersionInfo vi = re.getLastVersion();
+                                    if (vi != null) {
+                                        if (luser > 0) {
+                                            SWBResourceURL urlDownload = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
+                                            urlDownload.setMode(ProcessFileRepository.MODE_GETFILE);
+                                            urlDownload.setParameter("fid", go.getId());
+                                            urlDownload.setParameter("verNum", "" + vi.getVersionNumber());
+                                            %>
+                                            <a href="<%=re instanceof RepositoryFile?urlDownload:vi.getVersionFile()%>" title="<%=re instanceof RepositoryFile?paramRequest.getLocaleString("msgDownload"):paramRequest.getLocaleString("msgGoLink")%>" class="btn btn-default"><span class="fa <%=re instanceof RepositoryFile?"fa-cloud-download":"fa-external-link"%>"></i></a>
+                                            <%
+                                        }
+                                        if (vi.getPreviousVersion() != null) {
+                                            SWBResourceURL historyUrl = paramRequest.getRenderUrl().setMode(ProcessFileRepository.MODE_HISTORY);
+                                            historyUrl.setParameter("fid", go.getId());
+                                            historyUrl.setParameter("type", (re instanceof RepositoryURL?"url":"file"));
+                                            %>
+                                            <a href="<%=historyUrl%>" title="<%=paramRequest.getLocaleString("msgViewVersionHistory")%>" class="btn btn-default"><span class="fa fa-archive"></span></a>
+                                            <%
+                                        }
+                                    }
+                                }
+                                            
+                                if (go instanceof RepositoryDirectory) {
                                     %>
-                                    <a href="<%=rf instanceof RepositoryFile?urlDownload:vi.getVersionFile()%>" title="<%=rf instanceof RepositoryFile?paramRequest.getLocaleString("msgDownload"):paramRequest.getLocaleString("msgGoLink")%>" class="btn btn-default"><span class="fa <%=rf instanceof RepositoryFile?"fa-cloud-download":"fa-external-link"%>"></i></a>
-                                <%}
-                                if (vi.getPreviousVersion() != null) {
-                                    SWBResourceURL historyUrl = paramRequest.getRenderUrl().setMode(ProcessFileRepository.MODE_HISTORY);
-                                    historyUrl.setParameter("fid", rf.getId());
-                                    historyUrl.setParameter("type", (rf instanceof RepositoryURL?"url":"file"));
-                                    %>
-                                    <a href="<%=historyUrl%>" title="<%=paramRequest.getLocaleString("msgViewVersionHistory")%>" class="btn btn-default"><span class="fa fa-archive"></span></a>
+                                    <a href="<%=((RepositoryDirectory)go).getUrl()%>" title="<%=paramRequest.getLocaleString("msgOpenFolder")%>" class="btn btn-default"><span class="fa fa-folder-open"></span></a>
                                     <%
                                 }%>
                             </td>
