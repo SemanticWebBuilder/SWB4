@@ -593,19 +593,22 @@ public class User extends UserBase implements Principal
         if (obj instanceof RoleRefable)
         {
             Boolean temp=null;
+            boolean andeval=((RoleRefable)obj).isAndEvalRoleRef();
             Iterator<RoleRef> it = ((RoleRefable) obj).listInheritRoleRefs();
             while (it.hasNext())
             {
                 RoleRef ref = it.next();
-                //System.out.println("ref:"+ref+" role:"+ref.getRole());
-                if (hasRole(ref.getRole()))
+                if(ref!=null)
                 {
-                    temp = true;
-                    //System.out.println("hasRole:false");
-                    break;
-                }else
-                {
-                    temp = false;
+                    temp=hasRole(ref.getRole());
+                    //System.out.println("ref:"+ref+" role:"+ref.getRole());
+                    if (temp)
+                    {
+                        if(!andeval)break;
+                    }else
+                    {
+                        if(andeval)break;
+                    }
                 }
             }
             if(temp!=null)ret=temp;
@@ -613,18 +616,25 @@ public class User extends UserBase implements Principal
         if (ret && obj instanceof RuleRefable)
         {
             Boolean temp=null;
+            boolean andeval=((RuleRefable)obj).isAndEvalRuleRef();
             Iterator<RuleRef> it = ((RuleRefable) obj).listInheritRuleRefs();
             while (it.hasNext())
             {
                 RuleRef ref = it.next();
-                //System.out.println("ref:"+ref+" role:"+ref.getRole());
-                Rule rule = ref.getRule();
-                if (rule != null)
+                if(ref!=null)
                 {
-                    temp = Rule.getRuleMgr().eval(this, rule.getURI());
-                    if (temp)
+                    //System.out.println("ref:"+ref+" role:"+ref.getRole());
+                    Rule rule = ref.getRule();
+                    if (rule != null)
                     {
-                        break;
+                        temp = Rule.getRuleMgr().eval(this, rule.getURI());
+                        if (temp)
+                        {
+                            if(!andeval)break;
+                        }else
+                        {
+                            if(andeval)break;
+                        }
                     }
                 }
             }
@@ -633,19 +643,26 @@ public class User extends UserBase implements Principal
         if (ret && obj instanceof UserGroupRefable)
         {
             Boolean temp=null;
+            boolean andeval=((UserGroupRefable)obj).isAndEvalUserGroupRef();
             Iterator<UserGroupRef> it = ((UserGroupRefable) obj).listInheritUserGroupRefs();
             while (it.hasNext())
             {
                 UserGroupRef ref = it.next();
                 //System.out.println("ref:"+ref+" role:"+ref.getRole());
-                UserGroup usrgrp = ref.getUserGroup();
-                if (hasUserGroup(usrgrp))
+                if(ref!=null)
                 {
-                    temp = true;
-                    break;
-                }else
-                {
-                    temp = false;
+                    UserGroup usrgrp = ref.getUserGroup();
+                    if(usrgrp!=null)
+                    {
+                        temp=hasUserGroup(usrgrp);
+                        if (temp)
+                        {
+                            if(!andeval)break;
+                        }else
+                        {
+                            if(andeval)break;
+                        }
+                    }
                 }
             }
             if(temp!=null)ret=temp;
