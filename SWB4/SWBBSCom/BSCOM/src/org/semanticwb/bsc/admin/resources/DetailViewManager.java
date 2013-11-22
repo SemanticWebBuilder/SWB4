@@ -12,7 +12,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import javax.servlet.http.*;
 import org.json.JSONArray;
@@ -203,6 +206,65 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             listCode.append(strRules);
             listCode.append("       </select>\n");
             listCode.append("     </li>\n");
+            listCode.append("   <li class=\"swbform-li\">");
+            listCode.append("       <label for=\"left\" class=\"swbform-label\">");
+            listCode.append(paramRequest.getLocaleString("lbl_Admin_Before"));
+            listCode.append("</label>");
+            listCode.append("       <input type=\"text\" name=\"left\" id=\"left\" maxlength=\"2\" value=\"");
+            listCode.append(base.getAttribute("left","7"));
+            listCode.append("\" regExp=\"\\d{1,2}\" dojoType=\"dijit.form.ValidationTextBox\" invalidMessage=\"");
+            listCode.append(paramRequest.getLocaleString("msg_Admin_IncorrectAmount"));
+            listCode.append("\"  promptMessage=\"");
+            listCode.append(paramRequest.getLocaleString("msg_Admin_PrompAmountBefore"));
+            listCode.append("\" />");
+            listCode.append("     </li>");
+            listCode.append("   <li class=\"swbform-li\">");
+            listCode.append("       <label for=\"right\" class=\"swbform-label\">");
+            listCode.append(paramRequest.getLocaleString("lbl_Admin_After"));
+            listCode.append("</label>");
+            listCode.append("       <input type=\"text\" name=\"right\" id=\"right\" maxlength=\"2\" value=\"");
+            listCode.append(base.getAttribute("right","7"));
+            listCode.append("\" regExp=\"\\d{1,2}\" dojoType=\"dijit.form.ValidationTextBox\" invalidMessage=\"");
+            listCode.append(paramRequest.getLocaleString("msg_Admin_IncorrectAmount"));
+            listCode.append("\"  promptMessage=\"");
+            listCode.append(paramRequest.getLocaleString("msg_Admin_PrompAmountAfter"));
+            listCode.append("\" />");
+            listCode.append("     </li>");
+            listCode.append("   <li class=\"swbform-li\">");
+            listCode.append("       <label for=\"time\" class=\"swbform-label\">");
+            listCode.append(paramRequest.getLocaleString("lbl_Admin_UnitOfTime"));
+            listCode.append("</label>");
+            listCode.append("       <select name=\"time\" dojoType=\"dijit.form.FilteringSelect\">");
+            listCode.append("         <option");
+            listCode.append(base.getAttribute("time", Integer.toString(Calendar.DATE)).equals(Integer.toString(Calendar.DATE)) ? " selected=\"selected\"" : "");
+            listCode.append(" value=\"");
+            listCode.append(Calendar.DATE);
+            listCode.append("\">");
+            listCode.append(paramRequest.getLocaleString("lbl_Admin_Date"));
+            listCode.append("</option>");
+            listCode.append("         <option ");
+            listCode.append(base.getAttribute("time", "").equals(Integer.toString(Calendar.WEEK_OF_YEAR)) ? "selected=\"selected\"" : "");
+            listCode.append(" value=\"");
+            listCode.append(Calendar.WEEK_OF_YEAR);
+            listCode.append("\">");
+            listCode.append(paramRequest.getLocaleString("lbl_Admin_WeekOfYear"));
+            listCode.append("</option>");
+            listCode.append("         <option");
+            listCode.append(base.getAttribute("time", "").equals(Integer.toString(Calendar.MONTH)) ? " selected=\"selected\"" : "");
+            listCode.append(" value=\"");
+            listCode.append(Calendar.MONTH);
+            listCode.append("\">");
+            listCode.append(paramRequest.getLocaleString("lbl_Admin_Month"));
+            listCode.append("</option>");
+            listCode.append("         <option ");
+            listCode.append(base.getAttribute("time", "").equals(Integer.toString(Calendar.YEAR)) ? "selected=\"selected\"" : "");
+            listCode.append(" value=\"");
+            listCode.append(Calendar.YEAR);
+            listCode.append("\">");
+            listCode.append(paramRequest.getLocaleString("lbl_Admin_Year"));
+            listCode.append("</option>");
+            listCode.append("       </select>");
+            listCode.append("     </li>");
             listCode.append("  </ul>\n");
             listCode.append("  </fieldset>\n");
             listCode.append("  <fieldset>\n");
@@ -885,6 +947,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             String userType = request.getParameter("updatePermit" + this.getId());
             if (userType != null && !userType.isEmpty()) {
                 base.setAttribute("editRole", userType);
+                //TODO: Agregar almacenamiento de los nuevos atributos mostrados en doShowListing()
                 statusMsg = "msg_PermissionAssigned";
                 listingRedirect = true;
                 try {
@@ -1040,6 +1103,12 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         url.setParameter("suri", request.getParameter("suri"));
         request.setAttribute("urlRequest", url.toString());
 
+        String modelName = paramRequest.getWebPage().getWebSiteId();
+        String periodId = request.getSession().getAttribute(modelName) != null
+                            ? (String) request.getSession().getAttribute(modelName)
+                            : null;
+        Period period = Period.ClassMgr.getPeriod(periodId, paramRequest.getWebPage().getWebSite());
+        
         while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
             int ttype = tok.getTokenType();
 
@@ -1064,7 +1133,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                  */ else if (tag.getTagString().toLowerCase().equals("img") && tag.hasParam("tagProp")) {
                     String propUri = tag.getParam("tagProp");
                     if (propUri != null) {
-                        view.append(renderPropertyValue(request, elementBSC, propUri, lang));
+                        view.append(renderPropertyValue(request, elementBSC, propUri, lang, period));
                     }
                 }
             } else if (ttype == HtmlStreamTokenizer.TT_TEXT) {
@@ -1087,11 +1156,12 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * @return el despliegue del valor almacenado para la propiedad indicada
      */
     private String renderPropertyValue(HttpServletRequest request, SemanticObject elementBSC,
-            String propUri, String lang) {
+            String propUri, String lang, Period period) {
         
         String ret = null;
         SWBFormMgr formMgr = new SWBFormMgr(elementBSC, null, SWBFormMgr.MODE_VIEW);
         SemanticProperty semProp = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propUri);
+        
         //Codigo para obtener el displayElement
         Statement st = semProp.getRDFProperty().getProperty(
                 SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(
@@ -1112,7 +1182,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                     if (generic instanceof Text || generic instanceof TextArea) {
                         applyInlineEdit = true;
                     }
-                    if (!userCanEdit()) {
+                    if (!userCanEdit() || !isInMeasurementTime(period)) {
                         applyInlineEdit = false;
                     }
                     if (fe != null) {
@@ -1156,6 +1226,12 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         return exists;
     }
     
+    /**
+     * Determina si el usuario en sesi&oacute;n tiene los permisos necesarios para hacer 
+     * actualizaciones en la informaci&oacute;n del elemento presentado en la vista detalle.
+     * @return un boleano que representa la posibilidad del usuario de hacer actualizaciones ({@code true}),
+     *          de lo contrario devuelve {@code false}.
+     */
     private boolean userCanEdit() {
         boolean access = false;
         String str_role = getResourceBase().getAttribute("editRole", null);
@@ -1191,5 +1267,50 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             }
         }
         return access;
+    }
+    
+    /**
+     * Determina si la fecha actual pertenece al periodo de captura permitido para 
+     * el periodo indicado como argumento
+     * @param period periodo a evaluar contra la fecha actual
+     * @return un boleano que representa la validez de la fecha actual contra el periodo
+     *          de captura para el periodo indicado {@code true}, o {@code false} de lo contrario.
+     */
+    private boolean isInMeasurementTime(final Period period) {
+        
+        Resource base = getResourceBase();
+        int timeBefore = 0;
+        int timeAfter = 0;
+        int timeUnit = 0;
+        try {
+            timeBefore = Integer.parseInt(base.getAttribute("before", "7"));
+        } catch (NumberFormatException e) {
+            timeBefore = 0;
+        }
+        try {
+            timeAfter = Integer.parseInt(base.getAttribute("after", "7"));
+        } catch (NumberFormatException e) {
+            timeAfter = 0;
+        }
+        
+        try {
+            timeUnit = Integer.parseInt(base.getAttribute("timeUnit",
+                    Integer.toString(Calendar.DATE)));
+        } catch (NumberFormatException nfe) {
+            timeUnit = Calendar.DATE;
+        }
+        
+        GregorianCalendar current = new GregorianCalendar();
+        Date end = period.getEnd();
+        if (end == null) {
+            return false;
+        }
+        GregorianCalendar startDate = new GregorianCalendar();
+        startDate.setTime(end);
+        startDate.add(timeUnit, -timeBefore);
+        GregorianCalendar endDate = new GregorianCalendar();
+        endDate.setTime(end);
+        endDate.add(timeUnit, timeAfter);
+        return current.compareTo(startDate) >= 0 && current.compareTo(endDate) <= 0;
     }
 }
