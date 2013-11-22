@@ -347,7 +347,7 @@ public class SWBNewsLite extends GenericResource
             return;
         }
         String path = "/swbadmin/jsp/SWBNewsLite/editCategory.jsp";
-        SemanticObject obj = SemanticObject.getSemanticObject(uri);
+        SemanticObject obj = SemanticObject.createSemanticObject(uri);
         if (obj == null || !obj.getSemanticClass().equals(Category.sclass))
         {
             response.sendError(404);
@@ -557,7 +557,7 @@ public class SWBNewsLite extends GenericResource
             return;
         }
         String path = "/swbadmin/jsp/SWBNewsLite/edit.jsp";
-        SemanticObject obj = SemanticObject.getSemanticObject(uri);
+        SemanticObject obj = SemanticObject.createSemanticObject(uri);
         if (obj == null || !obj.getSemanticClass().equals(New.sclass))
         {
             response.sendError(404);
@@ -691,7 +691,7 @@ public class SWBNewsLite extends GenericResource
             response.sendError(404);
             return;
         }
-        SemanticObject obj = SemanticObject.getSemanticObject(uri);
+        SemanticObject obj = SemanticObject.createSemanticObject(uri);
         if (obj == null || !obj.getSemanticClass().equals(New.sclass))
         {
             response.sendError(404);
