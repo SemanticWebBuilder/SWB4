@@ -1083,7 +1083,7 @@ public class SemanticMgr implements SWBInstanceObject
     {
         //log.trace("processExternalChange: uri:" + uri + " puri:" + puri + " node:" + node+" "+action);  
         //System.out.println("processExternalChange:"+uri+" puri:" + puri + " node:;" + node+" "+action);  
-        SemanticObject obj=SemanticObject.getSemanticObject(uri);
+        SemanticObject obj=SemanticObject.getSemanticObjectFromCache(uri);
         if(obj==null)
         {
             SemanticObject.clearNotFoundURI(uri);            
