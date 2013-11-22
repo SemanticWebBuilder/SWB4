@@ -78,6 +78,7 @@ public class UserTask extends org.semanticwb.process.model.base.UserTaskBase
                 instance.setAssignedto(user);
             }
             instance.setAssigned(new Date());
+            
         }
     }
     
