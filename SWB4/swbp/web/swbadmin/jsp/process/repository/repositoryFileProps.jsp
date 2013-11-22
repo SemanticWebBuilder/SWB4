@@ -4,6 +4,10 @@
     Author     : Hasdai Pacheco <ebenezer.sanchez@infotec.com.mx>
 --%>
 
+<%@page import="org.semanticwb.model.Traceable"%>
+<%@page import="org.semanticwb.model.Descriptiveable"%>
+<%@page import="org.semanticwb.process.model.RepositoryDirectory"%>
+<%@page import="org.semanticwb.model.GenericObject"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="org.semanticwb.model.VersionInfo"%>
 <%@page import="org.semanticwb.process.model.RepositoryURL"%>
@@ -26,13 +30,15 @@ if (user != null && user.getLanguage() != null) {
 
 String fid = request.getParameter("fid");
 String type = request.getParameter("type");
-RepositoryElement re = null;
+GenericObject re = null;
 
 if (fid != null && type != null) {
     if ("file".equals(type)) {
         re = RepositoryFile.ClassMgr.getRepositoryFile(fid, site);
-    } else {
+    } else if ("url".equals(type)) {
         re = RepositoryURL.ClassMgr.getRepositoryURL(fid, site);
+    } else {
+        re = RepositoryDirectory.ClassMgr.getRepositoryDirectory(fid, site);
     }
 }
 
@@ -41,16 +47,22 @@ int intVer = 1;
 if (verNumber != null) {
     intVer = Integer.parseInt(verNumber);
 }
+
 VersionInfo ver = null;
-VersionInfo vl = re.getLastVersion();
-if (null != vl) {
-    ver = vl;
-    while (ver.getPreviousVersion() != null) {
-        if (ver.getVersionNumber() == intVer) {
-            break;
+VersionInfo vi = null;
+if (re instanceof RepositoryElement) {
+    VersionInfo vl = ((RepositoryElement)re).getLastVersion();
+    if (null != vl) {
+        ver = vl;
+        while (ver.getPreviousVersion() != null) {
+            if (ver.getVersionNumber() == intVer) {
+                break;
+            }
+            ver = ver.getPreviousVersion();
         }
-        ver = ver.getPreviousVersion();
     }
+    
+    vi = ((RepositoryElement)re).getLastVersion();
 }
 
 if (!user.isSigned()) {
@@ -78,51 +90,54 @@ if (!user.isSigned()) {
                 if (re == null) {
                     %><%
                 } else {
-                    VersionInfo vi = re.getLastVersion();
                 %>
                 <form class="form-horizontal" role="form">
                     <div class="form-group">
                       <label class="col-lg-5 control-label"><%=paramRequest.getLocaleString("msgTitle")%></label>
                       <div class="col-lg-7">
-                        <input class="form-control" type="text" disabled value="<%=re.getDisplayTitle(lang)%>"/>
+                          <input class="form-control" type="text" disabled value="<%=((Descriptiveable)re).getDisplayTitle(lang)%>"/>
                       </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-5 control-label"><%=re instanceof RepositoryFile?paramRequest.getLocaleString("msgFile"):paramRequest.getLocaleString("lblLink")%></label>
-                        <div class="col-lg-7">
-                        <%
-                        String val = "--";
-                        if (ver != null) {
-                            val = ver.getVersionFile();
-                        } else if (vi != null) {
-                            val = vi.getVersionFile();
-                        }
-                        %>
-                        <input class="form-control" type="text" disabled value="<%=val%>" />
+                    <%if (re instanceof RepositoryElement) {%>
+                        <div class="form-group">
+                            <label class="col-lg-5 control-label"><%=re instanceof RepositoryFile?paramRequest.getLocaleString("msgFile"):paramRequest.getLocaleString("lblLink")%></label>
+                            <div class="col-lg-7">
+                            <%
+                            String val = "--";
+                            if (ver != null) {
+                                val = ver.getVersionFile();
+                            } else if (vi != null) {
+                                val = vi.getVersionFile();
+                            }
+                            %>
+                            <input class="form-control" type="text" disabled value="<%=val%>" />
+                            </div>
                         </div>
-                    </div>
+                    <%}%>
                     <div class="form-group">
                       <label class="col-lg-5 control-label"><%=paramRequest.getLocaleString("msgDescription")%></label>
                       <div class="col-lg-7">
-                          <textarea class="form-control" disabled><%=re.getDisplayTitle(lang)!= null?re.getDisplayDescription(lang):"--"%></textarea>
+                          <textarea class="form-control" disabled><%=((Descriptiveable)re).getDisplayDescription(lang)!= null?((Descriptiveable)re).getDisplayDescription(lang):"--"%></textarea>
                       </div>
                     </div>
-                    <div class="form-group">
-                      <label class="col-lg-5 control-label"><%=paramRequest.getLocaleString("msgComments")%></label>
-                      <div class="col-lg-7">
-                        <textarea class="form-control" disabled><%=vi!=null?vi.getVersionComment():"--"%></textarea>
-                      </div>
-                    </div>
+                    <%if (re instanceof RepositoryElement) {%>
+                        <div class="form-group">
+                          <label class="col-lg-5 control-label"><%=paramRequest.getLocaleString("msgComments")%></label>
+                          <div class="col-lg-7">
+                            <textarea class="form-control" disabled><%=vi!=null?vi.getVersionComment():"--"%></textarea>
+                          </div>
+                        </div>
+                    <%}%>
                     <div class="form-group">
                       <label class="col-lg-5 control-label"><%=paramRequest.getLocaleString("msgVersionUser")%></label>
                       <div class="col-lg-7">
-                          <input class="form-control" type="text" disabled value="<%=re.getCreator()==null?"--":re.getCreator().getFullName()%>"/>
+                          <input class="form-control" type="text" disabled value="<%=((Traceable)re).getCreator()==null?"--":((Traceable)re).getCreator().getFullName()%>"/>
                       </div>
                     </div>
                     <div class="form-group">
                       <label class="col-lg-5 control-label"><%=paramRequest.getLocaleString("msgLastDateModification")%></label>
                       <div class="col-lg-7">
-                        <input class="form-control" type="text" disabled value="<%=re.getCreated()==null?"--":format.format(re.getCreated())%>"/>
+                        <input class="form-control" type="text" disabled value="<%=((Traceable)re).getCreated()==null?"--":format.format(((Traceable)re).getCreated())%>"/>
                       </div>
                     </div>
                 </form>
