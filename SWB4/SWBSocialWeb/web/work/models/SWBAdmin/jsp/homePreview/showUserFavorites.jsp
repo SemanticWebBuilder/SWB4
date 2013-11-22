@@ -31,11 +31,13 @@
 <ul>
     <%
         Iterator<SemanticObject> ite = SWBComparator.sortSermanticObjects(fav.listObjects());
+       
         while (ite.hasNext()) {
             SemanticObject objw = ite.next();
+
             String favorites = "";
-            if (objw.getGenericInstance() instanceof SocialSite) {
-                SocialSite socialSite = (SocialSite) objw.getGenericInstance();
+            if (objw.createGenericInstance() instanceof SocialSite) {
+                SocialSite socialSite = (SocialSite) objw.createGenericInstance();               
                 //System.out.println("\n\n\n\n\n<--------SOCIAL SITE" + socialSite);
                 sSite.put(socialSite.getURI(), cad(socialSite.getURI(), fav));
             }
@@ -47,7 +49,7 @@
             String s = e.getKey().toString();
             //System.out.println("s" + s);
             SemanticObject objS = SemanticObject.createSemanticObject(s);
-            SocialSite socialSite = (SocialSite) objS.getGenericInstance();
+            SocialSite socialSite = (SocialSite) objS.createGenericInstance();
     %>
     <h3>
         <a href="javascript:parent.addNewTab('<%=socialSite.getURI()%>','<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/objectTab.jsp','<%=SWBUtils.TEXT.scape4Script(socialSite.getDisplayTitle(user.getLanguage()))%>');">
@@ -61,10 +63,11 @@
         Iterator i = list.iterator();
         while (i.hasNext()) {
             String uri = i.next().toString();
+            //System.out.println("uri"+uri);
             SemanticObject obj = SemanticObject.createSemanticObject(uri);
-
+            //System.out.println("obj"+obj);
             if (obj.getGenericInstance() instanceof Stream) {
-                Stream stream = (Stream) obj.getGenericInstance();
+                Stream stream = (Stream) obj.createGenericInstance();
     %>
     <li>
         <a href="javascript:parent.addNewTab('<%=stream.getURI()%>','<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/objectTab.jsp','<%=SWBUtils.TEXT.scape4Script(stream.getDisplayTitle(user.getLanguage()))%>');">
@@ -73,7 +76,8 @@
     </li>
     <%
     } else if (obj.getGenericInstance() instanceof SocialTopic) {
-        SocialTopic socialTopic = (SocialTopic) obj.getGenericInstance();
+        //System.out.println("es un tema");
+        SocialTopic socialTopic = (SocialTopic) obj.createGenericInstance();
     %>
     <li>
         <a href="javascript:parent.addNewTab('<%=socialTopic.getURI()%>','<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/objectTab.jsp','<%=SWBUtils.TEXT.scape4Script(socialTopic.getDisplayTitle(user.getLanguage()))%>');">
@@ -82,7 +86,7 @@
     </li>
     <%
     } else if (obj.getGenericInstance() instanceof Rss) {
-        Rss rss = (Rss) obj.getGenericInstance();
+        Rss rss = (Rss) obj.createGenericInstance();
     %>
     <li>
         <a href="javascript:parent.addNewTab('<%=rss.getURI()%>','<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/objectTab.jsp','<%=SWBUtils.TEXT.scape4Script(rss.getDisplayTitle(user.getLanguage()))%>');">
@@ -91,7 +95,8 @@
     </li>
     <%
     } else if (obj.getGenericInstance() instanceof SocialNetwork) {
-        SocialNetwork socialNet = (SocialNetwork) obj.getGenericInstance();
+       // System.out.println("es una red social");
+        SocialNetwork socialNet = (SocialNetwork) obj.createGenericInstance();
     %>
     <li>
         <a href="javascript:parent.addNewTab('<%=socialNet.getURI()%>','<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/objectTab.jsp','<%=SWBUtils.TEXT.scape4Script(socialNet.getDisplayTitle(user.getLanguage()))%>');">
@@ -127,12 +132,14 @@
 
         ArrayList list = new ArrayList();
         Iterator<SemanticObject> ite = SWBComparator.sortSermanticObjects(fav.listObjects());
+        
+        //System.out.println("\n\n\n\nentra al metodo cad");
         while (ite.hasNext()) {
-            SemanticObject obj = ite.next();
-            //System.out.println("obj en el metdo cad"+obj);
+           SemanticObject obj = ite.next();
+          // System.out.println("-----"+obj);
             
             if (obj.getGenericInstance() instanceof Stream) {
-                Stream streamA = (Stream) obj.getGenericInstance();
+                Stream streamA = (Stream) obj.createGenericInstance();
                 SocialSite social = streamA.getSocialSite();
                 String uri = social.getURI();
                 //System.out.println("\nURI STREAM" + uri);
@@ -142,7 +149,7 @@
                 }
             }
             if (obj.getGenericInstance() instanceof SocialNetwork) {
-                SocialNetwork socialNetA = (SocialNetwork) obj.getGenericInstance();
+                SocialNetwork socialNetA = (SocialNetwork) obj.createGenericInstance();
                 String social = socialNetA.getSemanticObject().getModel().getModelObject().getURI();
                 //SemanticObject
                 //System.out.println("\nURI SOCIALNETWORK" + social);
@@ -153,7 +160,7 @@
 
             }
             if (obj.getGenericInstance() instanceof Rss) {
-                Rss rssA = (Rss) obj.getGenericInstance();
+                Rss rssA = (Rss) obj.createGenericInstance();
                 SocialSite social = rssA.getSocialSite();
                 String uri = social.getURI();
                // System.out.println("\nURI RSS" + uri);
@@ -164,7 +171,7 @@
 
             }
             if (obj.getGenericInstance() instanceof SocialTopic) {
-                SocialTopic social = (SocialTopic) obj.getGenericInstance();
+                SocialTopic social = (SocialTopic) obj.createGenericInstance();
                 SocialSite socialS = social.getSocialSite();
                 String uri = socialS.getURI();
                 //System.out.println("\nURI SOCIALTOPIC" + uri);
