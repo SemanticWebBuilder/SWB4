@@ -125,6 +125,7 @@ public class UserMsgBoard extends GenericResource{
                     SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("msgUri"));
                     UserMessage userMsg=(UserMessage)semObj.getGenericInstance();
                     userMsg.setUsrMsg(request.getParameter("usrMsg"));
+                    userMsg.removeAllUsers();
                     String[] values=request.getParameterValues("hasUsers");
                     for(int i=0;i<values.length;i++) 
                     {
