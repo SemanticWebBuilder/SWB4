@@ -639,7 +639,7 @@ public class SWBAFilters extends SWBATree {
                         String idObj=obj.getAttribute("id");
                         if(idObj!=null)
                         {
-                            SemanticObject objFilter=SemanticObject.getSemanticObject(idObj);
+                            SemanticObject objFilter=SemanticObject.createSemanticObject(idObj);
                             if(objFilter!=null)
                             {
                                 getNodesInFilter.add(objFilter);

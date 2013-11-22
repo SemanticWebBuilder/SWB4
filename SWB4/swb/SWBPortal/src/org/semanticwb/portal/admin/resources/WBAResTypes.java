@@ -106,7 +106,7 @@ public class WBAResTypes extends GenericResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
 
-        //SemanticObject sem=SemanticObject.getSemanticObject("sref");
+        //SemanticObject sem=SemanticObject.createSemanticObject("sref");
         //SemanticModel model=sem.getModel();
         //WebSite website = WebSite.getWebSite();
         String tm="sep";
