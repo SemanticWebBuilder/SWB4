@@ -128,7 +128,7 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
                         if(aux==null)
                         {
                             log.warn("Remove bad statement from cache:"+obj);
-                            SemanticObject o=SemanticObject.getSemanticObject(((Statement)obj).getResource().getURI());
+                            SemanticObject o=SemanticObject.getSemanticObjectFromCache(((Statement)obj).getResource().getURI());
                             if(o!=null)
                             {
                                 o.removeInv((Statement)obj);
@@ -141,7 +141,7 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
                         if(aux==null)
                         {
                             log.warn("Remove bad statement from cache:"+obj);
-                            SemanticObject o=SemanticObject.getSemanticObject(((Statement)obj).getSubject().getURI());
+                            SemanticObject o=SemanticObject.getSemanticObjectFromCache(((Statement)obj).getSubject().getURI());
                             if(o!=null)
                             {
                                 o.remove((Statement)obj,true);

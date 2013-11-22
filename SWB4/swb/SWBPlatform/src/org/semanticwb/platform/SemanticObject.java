@@ -365,7 +365,7 @@ public class SemanticObject
      * @return the semantic object
      * @return
      */
-    public static SemanticObject getSemanticObject(String uri)
+    public static SemanticObject getSemanticObjectFromCache(String uri)
     {
         SemanticObject ret=null;
         
@@ -377,6 +377,20 @@ public class SemanticObject
         }
         return ret;
     }    
+    
+    /**
+     * Regrea una instancia del SemanticObject en base al URI dado.
+     * Si el recurso no existe regresa null
+     *
+     * @param uri the uri
+     * @return the semantic object
+     * @return
+     */
+    public static SemanticObject getSemanticObject(String uri)
+    {
+        return createSemanticObject(uri,null);
+    }    
+    
     
     /**
      * Regrea una instancia del SemanticObject en base al URI dado.
@@ -442,7 +456,7 @@ public class SemanticObject
     {
         if(null==uri)return null;
         //if(null==uri || uri.length()>0)return null;
-        SemanticObject ret=getSemanticObject(uri);
+        SemanticObject ret=getSemanticObjectFromCache(uri);
         if(ret==null && !m_no_objs.containsKey(uri))
         {
             String i_uri=m_uris.putIfAbsent(uri, uri);
@@ -452,7 +466,7 @@ public class SemanticObject
 //            synchronized(SemanticObject.class)
             synchronized(i_uri)
             {
-                ret=getSemanticObject(uri);
+                ret=getSemanticObjectFromCache(uri);
                 if(ret==null && !m_no_objs.containsKey(uri))
                 {
 //                    System.out.println("Loading:"+uri);
@@ -867,15 +881,27 @@ public class SemanticObject
     
     /**
      * Regresa una instancia del GenericObject asociado
-     * Si ya existe una instancia la regresa, de lo contrario regresa null.
+     * Si ya existe una instancia en el cache la regresa, de lo contrario regresa null.
      *
+     * @return the generic instance
+     * @return
+     */
+    public GenericObject getGenericInstanceFromCache()
+    {
+        lastaccess=System.currentTimeMillis();
+        return m_genobj;        
+    }    
+    
+    /**
+     * Regresa una instancia del GenericObject asociado
+     * Si ya existe una instancia la regresa, de lo contrario la crea.
+     * 
      * @return the generic instance
      * @return
      */
     public GenericObject getGenericInstance()
     {
-        lastaccess=System.currentTimeMillis();
-        return m_genobj;
+        return createGenericInstance();
     }
     
     /**
@@ -1065,7 +1091,7 @@ public class SemanticObject
 
                     if(prop.isInverseOf())
                     {
-                        SemanticObject sobj=getSemanticObject(res.getURI());
+                        SemanticObject sobj=getSemanticObjectFromCache(res.getURI());
                         if(sobj!=null)sobj.removeInv(stmt);
                     }                 
                 }
@@ -1156,7 +1182,7 @@ public class SemanticObject
 
                 if(prop.isInverseOf())
                 {
-                    SemanticObject sobj=getSemanticObject(res.getURI());
+                    SemanticObject sobj=getSemanticObjectFromCache(res.getURI());
                     if(sobj!=null)
                     {
                         if(!sobj.getPropsInv().contains(stmt))
