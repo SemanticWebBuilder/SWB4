@@ -266,8 +266,8 @@
                             }
                         }
                     %>
-                    Día:<input type="text" name="postOut_inidate" id="postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
-                    Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
+                    Día:<input type="text" name="postOut_inidate" id="<%=objUri%>_postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
+                    Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="<%=objUri%>_postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
                 </div>
                 <!--Termina Calendario Rapido-->
                 <!--Comienzan Calendarios Avanzados-->
@@ -534,8 +534,8 @@
                                 }
                             }
                         %>
-                        Día:<input type="text" name="postOut_inidate" id="postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
-                        Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
+                        Día:<input type="text" name="postOut_inidate" id="<%=objUri%>_postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
+                        Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="<%=objUri%>_postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
                     </div>
                     <!--Termina Calendario Rapido-->
                     <%
@@ -925,8 +925,8 @@
                                 }
                             }
                         %>
-                        Día:<input type="text" name="postOut_inidate" id="postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
-                        Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
+                        Día:<input type="text" name="postOut_inidate" id="<%=objUri%>_postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
+                        Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="<%=objUri%>_postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
                     </div>
                     <!--Termina Calendario Rapido-->
                     <%
