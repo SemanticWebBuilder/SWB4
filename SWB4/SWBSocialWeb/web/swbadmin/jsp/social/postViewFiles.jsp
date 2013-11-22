@@ -20,7 +20,7 @@
 
 if(request.getParameter("uri") != null) 
 {
-    SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("uri"));
+    SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("uri"));
     if(semObj!=null)
     {
         ArrayList aPostImages=new ArrayList();
@@ -29,15 +29,15 @@ if(request.getParameter("uri") != null)
         File postDirectory=new File(path);
         if(postDirectory.exists() && postDirectory.isDirectory())
         {
-            if(semObj.getGenericInstance() instanceof Photo){
-                Photo photo = (Photo) semObj.getGenericInstance();
+            if(semObj.createGenericInstance() instanceof Photo){
+                Photo photo = (Photo) semObj.createGenericInstance();
                 Iterator<String> itPhotos = photo.listPhotos();
                 while (itPhotos.hasNext()) {
                     String sphoto = itPhotos.next();
                     aPostImages.add(sphoto);
                 }
-            }else if(semObj.getGenericInstance() instanceof Video){
-                Video video = (Video) semObj.getGenericInstance();
+            }else if(semObj.createGenericInstance() instanceof Video){
+                Video video = (Video) semObj.createGenericInstance();
                 if(video.getVideo() != null && !video.getVideo().isEmpty()){
                     aPostVideos.add(video.getVideo());
                 }
