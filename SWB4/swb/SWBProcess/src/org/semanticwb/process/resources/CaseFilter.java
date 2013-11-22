@@ -552,7 +552,7 @@ public class CaseFilter extends GenericResource {
             while (objit.hasNext()) {
                 String dao = "";
                 SemanticClass cls =  objit.next();
-                //SemanticObject sob = SemanticObject.getSemanticObject(obj.getURI());
+                //SemanticObject sob = SemanticObject.createSemanticObject(obj.getURI());
                 //SemanticClass cls = sob.getSemanticClass();
                 //System.out.println("SWBClass: " + obj.getURI() + " " + cls.getRootClass().getName() + " " + cls.getRootClass().getLabel(paramRequest.getUser().getLanguage()));
                 if (null!=cls.getRootClass().getLabel(paramRequest.getUser().getLanguage()))
@@ -951,7 +951,7 @@ public class CaseFilter extends GenericResource {
     }
 
     private String getLabelObject(SemanticClass obj, SWBParamRequest paramRequest) {
-        SemanticObject sob = SemanticObject.getSemanticObject(obj.getURI());
+        SemanticObject sob = SemanticObject.createSemanticObject(obj.getURI());
         SemanticClass cls = sob.getSemanticClass();
         if (null!=cls.getRootClass().getLabel(paramRequest.getUser().getLanguage()))
             return SWBUtils.TEXT.replaceSpecialCharacters(cls.getRootClass().getLabel(paramRequest.getUser().getLanguage()), true).replaceAll("_", " ");

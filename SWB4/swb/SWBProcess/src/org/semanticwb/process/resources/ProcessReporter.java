@@ -549,7 +549,7 @@ public class ProcessReporter extends GenericResource {
             while (objit.hasNext()) {
                 String dao = "";
                 SWBClass obj =  objit.next();
-                SemanticObject sob = SemanticObject.getSemanticObject(obj.getURI());
+                SemanticObject sob = SemanticObject.createSemanticObject(obj.getURI());
                 SemanticClass cls = sob.getSemanticClass();
                 //System.out.println("SWBClass: " + obj.getURI() + " " + cls.getRootClass().getName() + " " + cls.getRootClass().getLabel(paramRequest.getUser().getLanguage()));
                 if (null!=cls.getRootClass().getLabel(paramRequest.getUser().getLanguage()))
@@ -675,7 +675,7 @@ public class ProcessReporter extends GenericResource {
             while (objit.hasNext()) {
                 String dao = "";
                 SWBClass obj =  objit.next();
-                SemanticObject sob = SemanticObject.getSemanticObject(obj.getURI());
+                SemanticObject sob = SemanticObject.createSemanticObject(obj.getURI());
                 SemanticClass cls = sob.getSemanticClass();
                 //System.out.println("SWBClass: " + obj.getURI() + " " + cls.getRootClass().getName() + " " + cls.getRootClass().getLabel(paramRequest.getUser().getLanguage()));
                 if (null!=cls.getRootClass().getLabel(paramRequest.getUser().getLanguage()))

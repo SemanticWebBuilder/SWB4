@@ -240,7 +240,7 @@ public class ProcessExport extends GenericResource {
                     JSONObject tool = processTools.getJSONObject(i);
                     String clsName = tool.getString("class");
                     if (clsName.equals("org.semanticwb.process.model.ProcessFileTemplate")) {
-                        SemanticObject semObject = SemanticObject.getSemanticObject(tool.getString("uri"));
+                        SemanticObject semObject = SemanticObject.createSemanticObject(tool.getString("uri"));
                         if (semObject != null) {
                             String objPath = SWBPortal.getWorkPath()+semObject.getWorkPath()+"/";
                             File directory2Zip = new File(objPath);
@@ -267,7 +267,7 @@ public class ProcessExport extends GenericResource {
                                 for (int k = 0; k < resources.length(); k++) {
                                     JSONObject resource = resources.getJSONObject(k) ;
                                     if (!resource.optString("uri", "").equals("")) {
-                                        SemanticObject semObject = SemanticObject.getSemanticObject(resource.getString("uri"));
+                                        SemanticObject semObject = SemanticObject.createSemanticObject(resource.getString("uri"));
                                         if (semObject != null) {
                                             String objPath = SWBPortal.getWorkPath()+semObject.getWorkPath()+"/";
                                             File directory2Zip = new File(objPath);
@@ -850,7 +850,7 @@ public class ProcessExport extends GenericResource {
                 for (int i = 0; i < elements.length(); i++) {
                     JSONObject processJson = elements.getJSONObject(i);
                     String suri = processJson.getString("uri");
-                    SemanticObject sobj = SemanticObject.getSemanticObject(suri);
+                    SemanticObject sobj = SemanticObject.createSemanticObject(suri);
                     if (sobj == null) {
                         String id = suri.substring(suri.lastIndexOf(":")+1, suri.length());
                         Role role = site.getUserRepository().createRole(id);
@@ -1286,21 +1286,21 @@ public class ProcessExport extends GenericResource {
                 }
             }
 //                        if (!processJson.optString(Process.swp_administrationRole.getPropId(), "").equals("")) {
-//                            SemanticObject so = SemanticObject.getSemanticObject(processJson.getString(Process.swp_administrationRole.getPropId()));
+//                            SemanticObject so = SemanticObject.createSemanticObject(processJson.getString(Process.swp_administrationRole.getPropId()));
 //                            if (so != null) {
 //                                Role role = (Role)so.createGenericInstance();
 //                                process.setAdministrationRole(role);
 //                            }
 //                        }
 //                        if (!processJson.optString(Process.swp_notificationRole.getPropId(), "").equals("")) {
-//                            SemanticObject so = SemanticObject.getSemanticObject(processJson.getString(Process.swp_notificationRole.getPropId()));
+//                            SemanticObject so = SemanticObject.createSemanticObject(processJson.getString(Process.swp_notificationRole.getPropId()));
 //                            if (so != null) {
 //                                Role role = (Role)so.createGenericInstance();
 //                                process.setNotificationRole(role);
 //                            }
 //                        }
 //                        if (!processJson.optString(Process.swp_parentWebPage.getPropId(), "").equals("")) {
-//                            SemanticObject so = SemanticObject.getSemanticObject(processJson.getString(Process.swp_parentWebPage.getPropId()));
+//                            SemanticObject so = SemanticObject.createSemanticObject(processJson.getString(Process.swp_parentWebPage.getPropId()));
 //                            if (so != null) {
 //                                WebPage wp = (WebPage)so.createGenericInstance();
 //                                process.setParentWebPage(wp);
