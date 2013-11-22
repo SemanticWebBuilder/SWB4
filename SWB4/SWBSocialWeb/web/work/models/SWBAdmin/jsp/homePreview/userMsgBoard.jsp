@@ -111,30 +111,54 @@
 <div id="msj-panel">          
     <%
         Iterator<UserMessage> itUserMsg = UserMessage.ClassMgr.listUserMessageByFromUser(user, wsite);
+        HashMap hashBydate = new HashMap();
+        //ArrayList lista = new ArrayList();
         while (itUserMsg.hasNext()) {
             UserMessage userMsg = itUserMsg.next();
-            User u = userMsg.getModifiedBy();
+            //User u = userMsg.getModifiedBy();
             Date toDateD = userMsg.getCreated();
+            SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd-MM-yyyy");
+            //SimpleDateFormat hours = new SimpleDateFormat("hh:mm");
+            String fecha = formatoDelTexto.format(toDateD);
+            // String hoursS = hours.format(toDateD);
+            hashBydate.put(fecha, cad(userMsg, (ArrayList) hashBydate.get(fecha)));
+        }
+
+        Iterator i = hashBydate.entrySet().iterator();
+        while (i.hasNext()) {
+            Map.Entry e = (Map.Entry) i.next();
+            ArrayList list = (ArrayList) e.getValue();
+            ordenarDescendente(list);
+            Iterator x = list.iterator();
+
+    %>            
+    <p class="msj-fecha">
+        <strong>    
+            <%=e.getKey()%>
+        </strong>
+    </p>
+    <%
+        while (x.hasNext()) {
+            UserMessage um = (UserMessage) x.next();
+            Date toDateD = um.getCreated();
             SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd-MM-yyyy");
             SimpleDateFormat hours = new SimpleDateFormat("hh:mm");
             String fecha = formatoDelTexto.format(toDateD);
             String hoursS = hours.format(toDateD);
-           
-    %>            
-    <p class="msj-fecha">
-        <strong>    
-            <%=fecha%>
-        </strong>
-    </p>
+            User u = um.getModifiedBy();
+
+    %>
     <div class="msj-cont">
-        <a class="msj-eliminar" href="<%=paramRequest.getActionUrl().setAction("remMsg").setParameter("msgUri", userMsg.getURI())%>"><span>Eliminar</span></a>
-        <a class="msj-editar" href="<%=paramRequest.getRenderUrl().setAction("editMsg").setParameter("msgUri", userMsg.getURI())%>"><span>Editar</span></a>
+        <a class="msj-eliminar" href="<%=paramRequest.getActionUrl().setAction("remMsg").setParameter("msgUri", um.getURI())%>"><span>Eliminar</span></a>
+        <a class="msj-editar" href="<%=paramRequest.getRenderUrl().setAction("editMsg").setParameter("msgUri", um.getURI())%>"><span>Editar</span></a>
         <p><em><%=hoursS%> - <%=u.getName()%></em><p>
-        <p><%=userMsg.getUsrMsg()%></p>
+        <p><%=um.getUsrMsg()%></p>
     </div>
 
     <%
+            }
         }
+
     %>    
 
 </div>
@@ -190,30 +214,81 @@
 
     <%
         Iterator<UserMessage> itUserMsg = UserMessage.ClassMgr.listUserMessageByUsers(user, wsite);
+        HashMap hashBydate = new HashMap();
+        //ArrayList lista = new ArrayList();
         while (itUserMsg.hasNext()) {
             UserMessage userMsg = itUserMsg.next();
-            User u = userMsg.getModifiedBy();
             Date toDateD = userMsg.getCreated();
+            SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd-MM-yyyy");
+            String fecha = formatoDelTexto.format(toDateD);
+            hashBydate.put(fecha, cad(userMsg, (ArrayList) hashBydate.get(fecha)));
+        }
+
+         ArrayList<Date> list = new ArrayList<Date>();
+        Iterator i = hashBydate.entrySet().iterator();
+        while (i.hasNext()) {
+            Map.Entry e = (Map.Entry) i.next();
+             list = (ArrayList) e.getValue();
+             ordenarDescendente(list);
+            Iterator x = list.iterator();
+    %>
+    <p class="msj-fecha">
+        <strong><%=e.getKey()%></strong>
+    </p>
+    <%
+        while (x.hasNext()) {
+            UserMessage um = (UserMessage) x.next();
+            Date toDateD = um.getCreated();
             SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd-MM-yyyy");
             SimpleDateFormat hours = new SimpleDateFormat("hh:mm");
             String fecha = formatoDelTexto.format(toDateD);
             String hoursS = hours.format(toDateD);
+            User u = um.getModifiedBy();
+
     %>
-    <p class="msj-fecha">
-        <strong><%=fecha%></strong>
-    </p>
+
     <div class="msj-cont">
-        <a class="msj-eliminar" href="<%=paramRequest.getActionUrl().setAction("remMsg").setParameter("msgUri", userMsg.getURI())%>"><span>Eliminar</span></a>
+        <a class="msj-eliminar" href="<%=paramRequest.getActionUrl().setAction("remMsg").setParameter("msgUri", um.getURI())%>"><span>Eliminar</span></a>
         <!--<a class="" href="<%//=paramRequest.getRenderUrl().setAction("viewMsg").setParameter("msgUri", userMsg.getURI())%>"><span>Ver</span></a>-->
         <p><em><%=hoursS%>  -  <%=u.getName()%></em></p>
-        <p><%=userMsg.getUsrMsg()%></p>  
+        <p><%=um.getUsrMsg()%></p>  
     </div>
     <%
+            }
+
+
         }
     %>
 
-
 </div>
 <%
+    }
+
+%>
+
+<%!
+    public ArrayList cad(UserMessage cadena, ArrayList pi) {
+        
+        if (pi == null) {
+            pi = new ArrayList();
+        }
+        pi.add(cadena);
+        return pi;
+        
+    }
+
+    public void ordenarDescendente(ArrayList fechas) {
+
+        for (int i = 0; i < fechas.size(); i++) {
+            for (int j = 0; j < fechas.size(); j++) {
+                UserMessage  o = (UserMessage)fechas.get(i);
+                UserMessage oo = (UserMessage)fechas.get(j);
+               
+                if (o.getCreated().after(oo.getCreated())) {
+                    fechas.set(i, fechas.get(j));
+                    fechas.set(j, o);
+                }
+            }
+        }
     }
 %>
