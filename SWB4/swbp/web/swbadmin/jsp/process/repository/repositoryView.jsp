@@ -246,7 +246,7 @@ if (!user.isSigned()) {
         }
     } else {
     %>
-    <div class="alert alert-block alert-warning fade in">
+    <div class="alert alert-block alert-warning">
         <p><%=paramRequest.getLocaleString("msgNoFiles")%></p>
     </div>
     <%
