@@ -1030,7 +1030,7 @@ public class SocialSentPost extends GenericResource {
                             {
                                 out.println("<span class=\"status5\" title=\"Cumplir Calendario\"><strong>Cumplir Calendario</strong></span>");
                             }else{
-                                out.println("<strong>"+paramRequest.getLocaleString("publishing") +"</strong>");    //Aqui no debe haber liga, que lo cheque roger desde estilo
+                                out.println("<span class=\"status2\" title=\"Publicando\"><strong>"+paramRequest.getLocaleString("publishing") +"</strong></span>");    //Aqui no debe haber liga, que lo cheque roger desde estilo
                             }
                         } else {
                             if(postOut.getFastCalendar()!=null)
