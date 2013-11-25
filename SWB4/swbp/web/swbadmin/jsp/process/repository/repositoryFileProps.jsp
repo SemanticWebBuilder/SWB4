@@ -145,6 +145,9 @@ if (!user.isSigned()) {
                 }
                 %>
             </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-success" data-dismiss="modal"><%=paramRequest.getLocaleString("lblButtonClose")%></a>
+            </div>
         </div>
     </div>
 <%
