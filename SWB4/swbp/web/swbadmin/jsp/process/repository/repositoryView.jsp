@@ -62,7 +62,9 @@ if (!user.isSigned()) {
     </ul>
     <%if (path != null) {%>
         <ol class="breadcrumb swbp-breadcrumb">
-            <li><span class="swbp-breadcrumb-title"><%=paramRequest.getLocaleString("msgLocation")%>:</span></li>
+            <li>
+                <span class="swbp-breadcrumb-title"><%=paramRequest.getLocaleString("msgLocation")%>:</span>
+            </li>
             <%
             if (path.indexOf("|") != -1) {
                 String [] pathelems = path.split("\\|");
@@ -165,7 +167,28 @@ if (!user.isSigned()) {
                         propsUrl.setParameter("type", _type);
                         %>
                         <tr>
-                            <td><img src="<%=urlIcon%>" alt="<%=type%>" title="<%=title%>" /><%=title%></td>
+                            <td>
+                                <img src="<%=urlIcon%>" alt="<%=type%>" title="<%=title%>"/>
+                                <%if (go instanceof RepositoryElement) {
+                                    RepositoryElement re = (RepositoryElement)go;
+                                    VersionInfo vi = re.getLastVersion();
+                                    if (vi != null) {
+                                        if (luser > 0) {
+                                            SWBResourceURL urlDownload = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
+                                            urlDownload.setMode(ProcessFileRepository.MODE_GETFILE);
+                                            urlDownload.setParameter("fid", go.getId());
+                                            urlDownload.setParameter("verNum", "" + vi.getVersionNumber());
+                                            %>
+                                            <a <%=re instanceof RepositoryURL?"target=\"_blank\"":""%> href="<%=re instanceof RepositoryFile?urlDownload:vi.getVersionFile()%>"><%=title%></a>
+                                            <%
+                                        }
+                                    }
+                                } else if (go instanceof RepositoryDirectory) {
+                                    %>
+                                    <a href="<%=((RepositoryDirectory)go).getUrl()%>" title="<%=paramRequest.getLocaleString("msgOpenFolder")%>"><%=title%></a>
+                                    <%
+                                }%>
+                            </td>
                             <td><%=type%></td>
                             <td><%=version%></td>
                             <td><%=lastUpdated%></td>
@@ -175,14 +198,6 @@ if (!user.isSigned()) {
                             <td class="swbp-actions">
                                 <a href="<%=propsUrl%>" title="<%=paramRequest.getLocaleString("msgInfo")%>" class="btn btn-default" data-toggle="modal" data-target="#modalDialog"><span class="fa fa-exclamation-circle"></span></a>
                                 <%if (luser == 3 || (((Traceable)go).getCreator() != null && ((Traceable)go).getCreator().equals(user) && luser > 1)) {
-                                    SWBResourceURL urlremove = paramRequest.getActionUrl();
-                                    urlremove.setAction("removefile");
-                                    urlremove.setParameter("act", "remove");
-                                    urlremove.setParameter("fid", go.getURI());
-                                    
-                                    addUrl.setParameter("fid", go.getId());
-                                    addUrl.setParameter("type", _type);
-                                    
                                     boolean canDelete = true;
                                     if (go instanceof RepositoryDirectory) {
                                         RepositoryDirectory rdir = (RepositoryDirectory)go;
@@ -195,13 +210,21 @@ if (!user.isSigned()) {
                                         }
                                     }
                                     
-                                    if (canDelete) {%>
+                                    if (canDelete) {
+                                        SWBResourceURL urlremove = paramRequest.getActionUrl();
+                                        urlremove.setAction("removefile");
+                                        urlremove.setParameter("act", "remove");
+                                        urlremove.setParameter("fid", go.getURI());
+                                        %>
                                         <a href="<%=urlremove%>" onclick="if (!confirm('<%=paramRequest.getLocaleString("msgAlertConfirmRemoveFile") + " " + title + "?"%>')) return false;" title="<%=paramRequest.getLocaleString("msgAltDelete")%>" class="btn btn-default"><span class="fa fa-trash-o"></span></a>
                                         <%
                                     }
-                                    if (go instanceof RepositoryElement) {%>
+                                    if (go instanceof RepositoryElement) {
+                                        addUrl.setParameter("fid", go.getId());
+                                        addUrl.setParameter("type", _type);
+                                        %>
                                         <a href="<%=addUrl%>" title="<%=paramRequest.getLocaleString("msgAddVersion")%>" class="btn btn-default"><span class="fa fa-cloud-upload"></span></a>
-                                    <%
+                                        <%
                                     }
                                 }
                                 
@@ -209,15 +232,6 @@ if (!user.isSigned()) {
                                     RepositoryElement re = (RepositoryElement)go;
                                     VersionInfo vi = re.getLastVersion();
                                     if (vi != null) {
-                                        if (luser > 0) {
-                                            SWBResourceURL urlDownload = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
-                                            urlDownload.setMode(ProcessFileRepository.MODE_GETFILE);
-                                            urlDownload.setParameter("fid", go.getId());
-                                            urlDownload.setParameter("verNum", "" + vi.getVersionNumber());
-                                            %>
-                                            <a href="<%=re instanceof RepositoryFile?urlDownload:vi.getVersionFile()%>" title="<%=re instanceof RepositoryFile?paramRequest.getLocaleString("msgDownload"):paramRequest.getLocaleString("msgGoLink")%>" class="btn btn-default"><span class="fa <%=re instanceof RepositoryFile?"fa-cloud-download":"fa-external-link"%>"></i></a>
-                                            <%
-                                        }
                                         if (vi.getPreviousVersion() != null) {
                                             SWBResourceURL historyUrl = paramRequest.getRenderUrl().setMode(ProcessFileRepository.MODE_HISTORY);
                                             historyUrl.setParameter("fid", go.getId());
@@ -228,12 +242,7 @@ if (!user.isSigned()) {
                                         }
                                     }
                                 }
-                                            
-                                if (go instanceof RepositoryDirectory) {
-                                    %>
-                                    <a href="<%=((RepositoryDirectory)go).getUrl()%>" title="<%=paramRequest.getLocaleString("msgOpenFolder")%>" class="btn btn-default"><span class="fa fa-folder-open"></span></a>
-                                    <%
-                                }%>
+                                %>
                             </td>
                         </tr>
                         <%
