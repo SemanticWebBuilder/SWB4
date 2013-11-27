@@ -23,7 +23,15 @@
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.social.SocialNetwork"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
-<div class="netStreamsRelation">
+<style type="text/css">            
+            
+            @import "/swbadmin/css/swbsocial.css";          
+            html, body, #main{
+                overflow: auto;
+            }
+</style>
+<div id="relaciones">
+    <p>Relacionados:</p>
     <ul>
 <%
     User user=paramRequest.getUser();
@@ -35,7 +43,7 @@
     if(semObj.getGenericInstance() instanceof SocialNetwork)
     {
         %>
-            <p id="streamName">Streams Relacionados</p>
+            <!--<p id="streamName">Streams Relacionados</p>-->
         <%
         SocialNetwork socialNetwork=(SocialNetwork)semObj.getGenericInstance();
         Iterator<Stream> itStreams=Stream.ClassMgr.listStreamBySocialNetwork(socialNetwork,wsite);
@@ -45,7 +53,7 @@
             %>
             <li>
                 <a href="javascript:parent.addNewTab('<%=stream.getURI()%>','<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/objectTab.jsp','<%=SWBUtils.TEXT.scape4Script(stream.getDisplayTitle(user.getLanguage()))%>');">
-                   <%=stream.getTitle()%>
+                   <img class="swbIconStream" src="/swbadmin/css/images/trans.png"><%=stream.getTitle()%>
                 </a>
             </li>
             <%
@@ -54,7 +62,7 @@
    {
        SocialRule socialRule=(SocialRule)semObj.getGenericInstance();
        %>
-            <p id="streamName">Streams Relacionados</p>
+          <!--  <p id="streamName">Streams Relacionados</p>-->
        <%
        Iterator <SocialRuleRef> itSocialRuleRefs=socialRule.listSocialRuleRefInvs();
        while(itSocialRuleRefs.hasNext())
@@ -69,7 +77,7 @@
                 %>
                 <li>
                     <a href="javascript:parent.addNewTab('<%=stream.getURI()%>','<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/objectTab.jsp','<%=SWBUtils.TEXT.scape4Script(stream.getDisplayTitle(user.getLanguage()))%>');">
-                       <%=stream.getTitle()%>
+                        <img class="swbIconStream" src="/swbadmin/css/images/trans.png"> <%=stream.getTitle()%>
                     </a>
                 </li>
                 <%
@@ -80,7 +88,7 @@
    {
        SocialPFlow socialPflow=(SocialPFlow)semObj.getGenericInstance();
        %>
-            <p id="streamName">Temas Relacionados</p>
+            <!--<p id="streamName">Temas Relacionados</p>-->
        <%
        Iterator <SocialPFlowRef> itSocialPflowRefs=socialPflow.listSocialPFlowRefInvs();
        while(itSocialPflowRefs.hasNext())
@@ -95,7 +103,7 @@
                 %>
                 <li>
                     <a href="javascript:parent.addNewTab('<%=socialTopic.getURI()%>','<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/objectTab.jsp','<%=SWBUtils.TEXT.scape4Script(socialTopic.getDisplayTitle(user.getLanguage()))%>');">
-                       <%=socialTopic.getTitle()%>
+                       <img class="swbIconSocialTopic" src="/swbadmin/css/images/trans.png"><%=socialTopic.getTitle()%>
                     </a>
                 </li>
                 <%
@@ -106,7 +114,7 @@
    {
        SocialCalendar socialCalendar=(SocialCalendar)semObj.getGenericInstance();
        %>
-            <p id="streamName">Mensajes Relacionados</p>
+           <!-- <p id="streamName">Mensajes Relacionados</p>-->
        <%
        Iterator <CalendarRef> itSocialPflowRefs=socialCalendar.listCalendarRefInvs();
        while(itSocialPflowRefs.hasNext())
@@ -121,7 +129,7 @@
                 %>
                 <li>
                     <a href="javascript:parent.addNewTab('<%=postOut.getURI()%>','<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/objectTab.jsp','<%=SWBUtils.TEXT.scape4Script(postOut.getId())%>');"> 
-                        <%=SWBUtils.TEXT.scape4Script(postOut.getMsg_Text()!=null&&postOut.getMsg_Text().length()>100?postOut.getMsg_Text().substring(0, 100):postOut.getMsg_Text()!=null?postOut.getMsg_Text():postOut.getId())%>
+                      <img class="swbIconSocialRule" src="/swbadmin/css/images/trans.png">  <%=SWBUtils.TEXT.scape4Script(postOut.getMsg_Text()!=null&&postOut.getMsg_Text().length()>100?postOut.getMsg_Text().substring(0, 100):postOut.getMsg_Text()!=null?postOut.getMsg_Text():postOut.getId())%>
                     </a>
                     <%if(postOut.getSocialTopic()!=null){%>
                         (Tema:
