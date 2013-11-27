@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.rdf.sparql.SWBQueryExecution;
+//import org.semanticwb.rdf.sparql.SWBQueryExecution;
 /**
  *
  * @author jorge.jimenez
@@ -74,9 +74,16 @@ public class SWBSocial {
                         //System.out.println("ValGeorgeResource:"+val);
                         SemanticObject semObj=SemanticObject.createSemanticObject(val, wsite.getSemanticModel()); 
                         //System.out.println("semObj:"+semObj);
-                        PostIn postIn=(PostIn)semObj.createGenericInstance();
-                        //System.out.println("semObj/PostIn:"+postIn);
-                        aResult.add(postIn);
+                        if(semObj.createGenericInstance() instanceof PostIn){
+                            PostIn postIn=(PostIn)semObj.createGenericInstance();
+                             aResult.add(postIn);
+                             //System.out.println("semObj/PostIn:"+postIn);
+                        }else if(semObj.createGenericInstance() instanceof PostOut){
+                            PostOut postOut = (PostOut)semObj.createGenericInstance();
+                             aResult.add(postOut);
+                             //System.out.println("semObj/postOut:"+postOut);
+                        }         
+                       
                     }
                 }
             }
