@@ -159,6 +159,9 @@ public class BSCUtils {
                 }
             } else if (sort instanceof Objective) {
                 Objective objective = (Objective) sort;
+                if(objective==null || objective.getTheme()==null) {
+                    continue;
+                }
                 if ((objective.getTheme().isActive() && objective.getTheme().isValid())
                         && (objective.getTheme().getPerspective().isActive()
                         && objective.getTheme().getPerspective().isValid())) {
