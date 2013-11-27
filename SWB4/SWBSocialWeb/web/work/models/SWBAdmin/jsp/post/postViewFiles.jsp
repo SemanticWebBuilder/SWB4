@@ -19,6 +19,9 @@
 <%@page import="java.io.File"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
+<body id="PostViewFiles">
+     <div class="PostViewFilesDiv">        
+
 <%
     if(request.getAttribute("imageList")!=null && request.getAttribute("semObj")!=null)
     {
@@ -39,3 +42,5 @@
     }
 
 %>
+     </div>
+</body>
