@@ -225,15 +225,8 @@ public class YoutubeWall extends GenericResource{
             
             try {
                 SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
-                System.out.println("BUSCANDO ESTE VIDEO:" + videoId);
-                System.out.println("EN ESTE MODELO:" + model);     
                 
                 PostIn postIn = PostIn.getPostInbySocialMsgId(model, videoId);
-                System.out.println("ESTE ES EL POST RECUPERADO:" + postIn );
-                System.out.println("\n\n");
-                
-                PostIn samePost = PostIn.ClassMgr.getPostIn(videoId, model);
-                System.out.println("Otra forma de recuperar el mismo post:" + samePost);
                 
                 if(postIn == null){//Responding for the first time, save the post
                     HashMap<String, String> paramsVideo = new HashMap<String, String>(3);
@@ -273,12 +266,6 @@ public class YoutubeWall extends GenericResource{
                     //System.out.println("-" + title + "-" + description +"-" + creatorName + "-" + creatorId );
                     SocialNetworkUser socialNetUser = SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(creatorId, socialNetwork, model);
 
-                    PostIn post = PostIn.getPostInbySocialMsgId(model, videoId);
-                    if(post != null){
-                        log.error("The post with id :" + post.getSocialNetMsgId() + " already exists");
-                        return;
-                    }
-                    
                     postIn=VideoIn.ClassMgr.createVideoIn(model);
                     postIn.setSocialNetMsgId(videoId);
                     postIn.setMsg_Text(title + (description.isEmpty()? "" : " / " + description));
@@ -739,39 +726,37 @@ public class YoutubeWall extends GenericResource{
                 SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
                 SocialNetworkUser socialNetUser = SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(creatorId, socialNetwork, model);
                                 
-                PostIn post = PostIn.getPostInbySocialMsgId(model, videoId);
-                if(post != null){
-                    log.error("The post with id :" + post.getSocialNetMsgId() + " already exists");
-                    return;
-                }
-                
-                PostIn postIn = null; //The post
-                postIn=VideoIn.ClassMgr.createVideoIn(model);
-                postIn.setSocialNetMsgId(videoId);
-                postIn.setMsg_Text(title + (description.isEmpty()? "" : " / " + description));
-                postIn.setPostInSocialNetwork(socialNetwork);
-                postIn.setPostInStream(null);
-                Calendar calendario = Calendar.getInstance();
-                postIn.setPi_created(calendario.getTime());
-                postIn.setPi_type(SWBSocialUtil.POST_TYPE_VIDEO);
-                
-                VideoIn videoIn=(VideoIn)postIn;
-                videoIn.setVideo(BASE_VIDEO_URL + videoId);
-                
-                 if(socialNetUser == null){//User does not exist                    
-                    System.out.println("USUARIO NO EXISTE EN EL SISTEMA");
-                    socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);//Create a socialNetworkUser
-                    socialNetUser.setSnu_id(creatorId);
-                    socialNetUser.setSnu_name((creatorName.isEmpty()) ? creatorId : creatorName);
-                    socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject());                    
-                    socialNetUser.setCreated(new Date());
-                    socialNetUser.setFollowers(0);
-                    socialNetUser.setFriends(0);
+                PostIn postIn = PostIn.getPostInbySocialMsgId(model, videoId);
+                if(postIn == null){
+                    postIn=VideoIn.ClassMgr.createVideoIn(model);
+                    postIn.setSocialNetMsgId(videoId);
+                    postIn.setMsg_Text(title + (description.isEmpty()? "" : " / " + description));
+                    postIn.setPostInSocialNetwork(socialNetwork);
+                    postIn.setPostInStream(null);
+                    Calendar calendario = Calendar.getInstance();
+                    postIn.setPi_created(calendario.getTime());
+                    postIn.setPi_type(SWBSocialUtil.POST_TYPE_VIDEO);
+
+                    VideoIn videoIn=(VideoIn)postIn;
+                    videoIn.setVideo(BASE_VIDEO_URL + videoId);
+
+                     if(socialNetUser == null){//User does not exist                    
+                        System.out.println("USUARIO NO EXISTE EN EL SISTEMA");
+                        socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);//Create a socialNetworkUser
+                        socialNetUser.setSnu_id(creatorId);
+                        socialNetUser.setSnu_name((creatorName.isEmpty()) ? creatorId : creatorName);
+                        socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject());                    
+                        socialNetUser.setCreated(new Date());
+                        socialNetUser.setFollowers(0);
+                        socialNetUser.setFriends(0);
+                    }else{
+                        System.out.println("YA EXISTE EN EL SISTEMA:" + socialNetUser);
+                    }
+
+                    postIn.setPostInSocialNetworkUser(socialNetUser);
                 }else{
-                    System.out.println("YA EXISTE EN EL SISTEMA:" + socialNetUser);
+                    log.error("The post with id :" + postIn.getSocialNetMsgId() + " already exists, making another response");
                 }
-                
-                postIn.setPostInSocialNetworkUser(socialNetUser);
                 
                 if(request.getParameter("newSocialTopic").equals("none")){
                     postIn.setSocialTopic(null);
