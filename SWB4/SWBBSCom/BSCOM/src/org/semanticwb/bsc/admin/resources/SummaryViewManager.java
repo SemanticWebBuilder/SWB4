@@ -255,11 +255,11 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                     output.append("        }");
                 }
             }
-            output.append("      ]\n");
+            output.append("      ],\n");
+            output.append("      rowSelector: '10px', \n");
+            output.append("      autoHeight: true \n");
             output.append("    }, \"grid\");\n");
             output.append("    myGrid.startup();\n");
-            //output.append("    ;\n");
-            //output.append("    ;\n");
             output.append("  });\n");
             output.append("</script>\n");
             output.append("<link rel=\"stylesheet\" href=\"/swbadmin/js/dojo/dojox/grid/resources/Grid.css\"/>\n");
