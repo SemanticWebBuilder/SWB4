@@ -197,7 +197,9 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             
             listCode.append("  <ul class=\"swbform-ul\">\n");
             listCode.append("    <li class=\"swbform-li\">\n");
-            listCode.append("      <label for=\"updatePermit\" class=\"swbform-label\">");
+            listCode.append("      <label for=\"updatePermit");
+            listCode.append(this.getId());
+            listCode.append("\" class=\"swbform-label\">");
             listCode.append(paramRequest.getLocaleString("lbl_permissionsSelect"));
             listCode.append("</label>\n");
             listCode.append("      <select name=\"updatePermit");
@@ -207,61 +209,61 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             listCode.append("       </select>\n");
             listCode.append("     </li>\n");
             listCode.append("   <li class=\"swbform-li\">");
-            listCode.append("       <label for=\"left\" class=\"swbform-label\">");
-            listCode.append(paramRequest.getLocaleString("lbl_Admin_Before"));
+            listCode.append("       <label for=\"before\" class=\"swbform-label\">");
+            listCode.append(paramRequest.getLocaleString("lbl_timeBefore"));
             listCode.append("</label>");
-            listCode.append("       <input type=\"text\" name=\"left\" id=\"left\" maxlength=\"2\" value=\"");
-            listCode.append(base.getAttribute("left","7"));
+            listCode.append("       <input type=\"text\" name=\"before\" id=\"before\" maxlength=\"2\" value=\"");
+            listCode.append(base.getAttribute("before", "7"));
             listCode.append("\" regExp=\"\\d{1,2}\" dojoType=\"dijit.form.ValidationTextBox\" invalidMessage=\"");
-            listCode.append(paramRequest.getLocaleString("msg_Admin_IncorrectAmount"));
+            listCode.append(paramRequest.getLocaleString("err_incorrectAmount"));
             listCode.append("\"  promptMessage=\"");
-            listCode.append(paramRequest.getLocaleString("msg_Admin_PrompAmountBefore"));
+            listCode.append(paramRequest.getLocaleString("msg_promptTimeBefore"));
             listCode.append("\" />");
             listCode.append("     </li>");
             listCode.append("   <li class=\"swbform-li\">");
-            listCode.append("       <label for=\"right\" class=\"swbform-label\">");
-            listCode.append(paramRequest.getLocaleString("lbl_Admin_After"));
+            listCode.append("       <label for=\"after\" class=\"swbform-label\">");
+            listCode.append(paramRequest.getLocaleString("lbl_timeAfter"));
             listCode.append("</label>");
-            listCode.append("       <input type=\"text\" name=\"right\" id=\"right\" maxlength=\"2\" value=\"");
-            listCode.append(base.getAttribute("right","7"));
+            listCode.append("       <input type=\"text\" name=\"after\" id=\"after\" maxlength=\"2\" value=\"");
+            listCode.append(base.getAttribute("after", "7"));
             listCode.append("\" regExp=\"\\d{1,2}\" dojoType=\"dijit.form.ValidationTextBox\" invalidMessage=\"");
-            listCode.append(paramRequest.getLocaleString("msg_Admin_IncorrectAmount"));
+            listCode.append(paramRequest.getLocaleString("err_incorrectAmount"));
             listCode.append("\"  promptMessage=\"");
-            listCode.append(paramRequest.getLocaleString("msg_Admin_PrompAmountAfter"));
+            listCode.append(paramRequest.getLocaleString("msg_promptTimeAfter"));
             listCode.append("\" />");
             listCode.append("     </li>");
             listCode.append("   <li class=\"swbform-li\">");
-            listCode.append("       <label for=\"time\" class=\"swbform-label\">");
-            listCode.append(paramRequest.getLocaleString("lbl_Admin_UnitOfTime"));
+            listCode.append("       <label for=\"timeUnit\" class=\"swbform-label\">");
+            listCode.append(paramRequest.getLocaleString("lbl_unitOfTime"));
             listCode.append("</label>");
-            listCode.append("       <select name=\"time\" dojoType=\"dijit.form.FilteringSelect\">");
+            listCode.append("       <select id=\"timeUnit\" name=\"timeUnit\" dojoType=\"dijit.form.FilteringSelect\">");
             listCode.append("         <option");
-            listCode.append(base.getAttribute("time", Integer.toString(Calendar.DATE)).equals(Integer.toString(Calendar.DATE)) ? " selected=\"selected\"" : "");
+            listCode.append(base.getAttribute("unitTime", Integer.toString(Calendar.DATE)).equals(Integer.toString(Calendar.DATE)) ? " selected=\"selected\"" : "");
             listCode.append(" value=\"");
             listCode.append(Calendar.DATE);
             listCode.append("\">");
-            listCode.append(paramRequest.getLocaleString("lbl_Admin_Date"));
+            listCode.append(paramRequest.getLocaleString("lbl_dayMeasure"));
             listCode.append("</option>");
             listCode.append("         <option ");
-            listCode.append(base.getAttribute("time", "").equals(Integer.toString(Calendar.WEEK_OF_YEAR)) ? "selected=\"selected\"" : "");
+            listCode.append(base.getAttribute("unitTime", "").equals(Integer.toString(Calendar.WEEK_OF_YEAR)) ? "selected=\"selected\"" : "");
             listCode.append(" value=\"");
             listCode.append(Calendar.WEEK_OF_YEAR);
             listCode.append("\">");
-            listCode.append(paramRequest.getLocaleString("lbl_Admin_WeekOfYear"));
+            listCode.append(paramRequest.getLocaleString("lbl_weekMeasure"));
             listCode.append("</option>");
             listCode.append("         <option");
-            listCode.append(base.getAttribute("time", "").equals(Integer.toString(Calendar.MONTH)) ? " selected=\"selected\"" : "");
+            listCode.append(base.getAttribute("unitTime", "").equals(Integer.toString(Calendar.MONTH)) ? " selected=\"selected\"" : "");
             listCode.append(" value=\"");
             listCode.append(Calendar.MONTH);
             listCode.append("\">");
-            listCode.append(paramRequest.getLocaleString("lbl_Admin_Month"));
+            listCode.append(paramRequest.getLocaleString("lbl_monthMeasure"));
             listCode.append("</option>");
             listCode.append("         <option ");
-            listCode.append(base.getAttribute("time", "").equals(Integer.toString(Calendar.YEAR)) ? "selected=\"selected\"" : "");
+            listCode.append(base.getAttribute("unitTime", "").equals(Integer.toString(Calendar.YEAR)) ? "selected=\"selected\"" : "");
             listCode.append(" value=\"");
             listCode.append(Calendar.YEAR);
             listCode.append("\">");
-            listCode.append(paramRequest.getLocaleString("lbl_Admin_Year"));
+            listCode.append(paramRequest.getLocaleString("lbl_yearMeasure"));
             listCode.append("</option>");
             listCode.append("       </select>");
             listCode.append("     </li>");
@@ -944,28 +946,50 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         } else if (action.equalsIgnoreCase("setPerm")) {
             Resource base = getResourceBase();
             
+            //TODO: capturar valores de : before after timeUnit
             String userType = request.getParameter("updatePermit" + this.getId());
+            String atribBefore = request.getParameter("before");
+            String atribAfter = request.getParameter("after");
+            String propTimeUnit = request.getParameter("timeUnit");
             if (userType != null && !userType.isEmpty()) {
                 base.setAttribute("editRole", userType);
-                //TODO: Agregar almacenamiento de los nuevos atributos mostrados en doShowListing()
-                statusMsg = "msg_PermissionAssigned";
-                listingRedirect = true;
-                try {
-                    base.updateAttributesToDB();
-                } catch (SWBException swbe) {
-                    DetailViewManager.log.error("Al asignar permisos", swbe);
-                }
+            } else {
+                base.removeAttribute("editRole");
+            }
+            if (atribBefore != null && !atribBefore.isEmpty()) {
+                base.setAttribute("before", atribBefore);
+            } else {
+                base.removeAttribute("before");
+            }
+            if (atribAfter != null && !atribAfter.isEmpty()) {
+                base.setAttribute("after", atribAfter);
+            } else {
+                base.removeAttribute("after");
+            }
+            if (propTimeUnit != null && !propTimeUnit.isEmpty()) { 
+                base.setAttribute("unitTime", propTimeUnit);
+            } else {
+                base.removeAttribute("unitTime");
+            }
+            statusMsg = "msg_PermissionAssigned";
+            listingRedirect = true;
+            try {
+                base.updateAttributesToDB();
+            } catch (SWBException swbe) {
+                DetailViewManager.log.error("Al asignar permisos", swbe);
             }
         } else if ("updateProp".equals(action)) {
             String objectUri = request.getParameter("suri");
             String propUri = request.getParameter("propUri");
             String propValue = request.getParameter("value");
+            
             SemanticObject semanticObject = objectUri != null ? SemanticObject.getSemanticObject(objectUri) : null;
             SemanticProperty semProp = org.semanticwb.SWBPlatform.getSemanticMgr(
                     ).getVocabulary().getSemanticProperty(propUri);
             
             if (semanticObject != null && propUri != null && propValue != null) {
-                semanticObject.setProperty(semProp, propValue);
+                String value = SWBUtils.XML.replaceXMLTags(propValue);
+                semanticObject.setProperty(semProp, value);
             }
         } else {
             super.processAction(request, response);
@@ -1294,7 +1318,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         }
         
         try {
-            timeUnit = Integer.parseInt(base.getAttribute("timeUnit",
+            timeUnit = Integer.parseInt(base.getAttribute("unitTime",
                     Integer.toString(Calendar.DATE)));
         } catch (NumberFormatException nfe) {
             timeUnit = Calendar.DATE;
