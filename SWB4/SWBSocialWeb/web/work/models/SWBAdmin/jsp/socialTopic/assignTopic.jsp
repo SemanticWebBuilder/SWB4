@@ -19,6 +19,7 @@
     String objUri = (String)request.getAttribute("suri");//Suri SocialNetwork
     SocialNetwork socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
     WebSite wsite=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());   
+    SWBModel model=WebSite.ClassMgr.getWebSite(wsite.getId());
     User user=paramRequest.getUser();
     SWBResourceURL actionUrl = paramRequest.getActionUrl();
     
@@ -26,6 +27,11 @@
     actionUrl.setParameter("suri", objUri);
     actionUrl.setParameter("id", request.getParameter("id"));
     actionUrl.setParameter("currentTab", request.getParameter("currentTab"));
+    String currentTopic = "--";
+    PostIn postIn = PostIn.getPostInbySocialMsgId(model, request.getParameter("id"));
+    if(postIn != null && postIn.getSocialTopic()!= null){
+        currentTopic = postIn.getSocialTopic().getDisplayTitle(user.getLanguage());
+    }
     %>
     <div class="swbform">
     <fieldset>
@@ -40,7 +46,7 @@
         
         <tr>
             <td align="center">
-                ---
+                <%= currentTopic%>
             </td>        
         </tr>
         </tbody>
