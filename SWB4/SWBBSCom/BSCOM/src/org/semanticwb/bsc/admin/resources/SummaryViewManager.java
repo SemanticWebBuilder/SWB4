@@ -103,6 +103,8 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             Period thisPeriod = periodId != null
                     ? Period.ClassMgr.getPeriod(periodId, website)
                     : null;
+//            boolean idIncluded = false;  //Indica si identifier esta incluido en las propiedades de la vista
+//            boolean idEvaluated = false; //Indica si ya se realizó la verificación de que el identificador esta incluido en la vista
             
             //Define el identificador a utilizar de acuerdo al tipo de objetos a presentar
             if (semWorkClass.equals(Objective.bsc_Objective)) {
@@ -149,19 +151,25 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                     String propertyValue = null; //para las propiedades tipo objeto
                     //Para mostrar los valores de las propiedades, de acuerdo a los FormElements asignados a cada propiedad:
                     propertyValue = renderPropertyValue(request, semObj, elementProperty.getURI(), lang);
-                    /*propertyValue = propertyValue.replace("</span>", "");
-                    if (propertyValue.indexOf(">") > 0) {
-                        propertyValue = propertyValue.substring(propertyValue.indexOf(">") + 1);
-                    }*/
                     try {
                         row.put(elementProperty.getName(), propertyValue);
                     } catch (JSONException jsone) {
                         SummaryViewManager.log.error("En la creacion de objetos JSON", jsone);
                     }
+                    //Si identifier esta incluido en la vista se modifican las banderas
+/*                    if (!idEvaluated && identifier.equals(elementProperty.getName())) {
+                        idEvaluated = true;
+                        idIncluded = true;
+                    }*/
                 }
+                
+                //Se utiliza el URI como identificador de los elementos del grid
                 //Agrega la uri de cada instancia para poder crear las ligas a las vistas detalle
                 try {
                     row.put("uri", semObj.getURI());
+/*                    if (!idIncluded) {
+                        row.put(identifier, semObj.getId());
+                    }*/
                 } catch (JSONException jsone) {
                     SummaryViewManager.log.error("En la creacion de objetos JSON", jsone);
                 }
@@ -435,6 +443,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         SummaryView viewSemObject = !viewUri.isEmpty()
                 ? (SummaryView) SemanticObject.getSemanticObject(viewUri).createGenericInstance()
                 : null;
+        short propsInObject = (short) propsList.size();
 
         if (operation.equals("edit")) {
             if (viewSemObject == null) {
@@ -602,7 +611,9 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         output.append("</span><br>\n");
         output.append("                    <select id=\"baseList");
         output.append(this.getId());
-        output.append("\" dojoType=\"dijit.form.MultiSelect\" size=\"10\" style=\"min-width:150px;\">\n");
+        output.append("\" dojoType=\"dijit.form.MultiSelect\" size=\"");
+        output.append(propsInObject > 10 ? "20" : "10");
+        output.append("\" style=\"min-width:150px;\">\n");
         output.append(baseListHtml);
         output.append("                    </select>\n");
         output.append("                </div>\n");
@@ -662,7 +673,9 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         output.append("</span><br>\n");
         output.append("                    <select id=\"viewList");
         output.append(this.getId());
-        output.append("\" dojoType=\"dijit.form.MultiSelect\" name=\"viewList\" size=\"10\" style=\"min-width:150px;\">\n");
+        output.append("\" dojoType=\"dijit.form.MultiSelect\" name=\"viewList\" size=\"");
+        output.append(propsInObject > 10 ? "20" : "10");
+        output.append("\" style=\"min-width:150px;\">\n");
         if (operation.equals("edit") && viewListHtml.length() > 0) {
             output.append(viewListHtml);
         }
