@@ -690,6 +690,7 @@ public class FacebookWall extends GenericResource {
                             postIn.setSocialTopic(socialTopic);//Asigns socialTipic
                         }
                     }
+                    response.setRenderParameter("postUri", postIn.getURI());
                 }
             }catch(Exception e){
                 log.error("Error trying to setSocialTopic:", e);
@@ -1197,7 +1198,7 @@ public class FacebookWall extends GenericResource {
                     log.error("Error on doReclassifyTopic: " + e);
                 }
             }
-        }else if(mode.equals("assignedPost")){
+        }else if(mode.equals("assignedPost")){            
             String id = request.getParameter("id");
             String fbid = request.getParameter("fbid");
             String postUri = request.getParameter("postUri");
