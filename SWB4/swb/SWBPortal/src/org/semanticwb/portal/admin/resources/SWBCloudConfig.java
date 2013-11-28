@@ -57,7 +57,7 @@ public final class SWBCloudConfig extends GenericResource {
         if (SWBPortal.getCloud()==null){
             out.println("<fieldset class=\"swbform\"><legend>Information</legend>"
                     + "<form></br></br></br></br></br>"
-                    + "This function only works in an EC2 AWS"
+                    + "This function only works in an Cloud Environment..."
                     + "</br></br></br></br></br>"
                     + "</br></br></br></br></br></form></fieldset>");
         } else {
