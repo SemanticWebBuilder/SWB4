@@ -741,10 +741,8 @@ public class SocialTopicInBox extends GenericResource {
 
         while (itposts!=null &&  itposts.hasNext()) {
             PostIn postIn = itposts.next();
-            
-            
-            System.out.println("postIn en InBox TOPIC:" + PostIn.getPostInbySocialMsgId(wsite, postIn.getSocialNetMsgId()));
-
+                        
+            //System.out.println("postIn en InBox TOPIC:" + PostIn.getPostInbySocialMsgId(wsite, postIn.getSocialNetMsgId()));
 
             out.println("<tr>");
 
