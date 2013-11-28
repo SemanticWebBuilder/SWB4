@@ -1,6 +1,8 @@
 package org.semanticwb.bsc.formelement;
 
 import javax.servlet.http.HttpServletRequest;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -9,8 +11,17 @@ import org.semanticwb.platform.SemanticProperty;
    * Utilizado en la generación de vistas resumen y detalle 
    */
 public class TextAreaElement extends org.semanticwb.bsc.formelement.base.TextAreaElementBase {
+
     
+    /**
+     * Realiza operaciones de registro de eventos en bit&cora
+     */
+    private static Logger log = SWBUtils.getLogger(Ordinal.class);
     
+    /**
+     * Crea instancias de este objeto utilizando como objeto base el referido en la ejecuci&oacute;n
+     * @param base 
+     */
     public TextAreaElement(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
@@ -21,6 +32,18 @@ public class TextAreaElement extends org.semanticwb.bsc.formelement.base.TextAre
         return renderElement(request, obj, prop, prop.getName(), type, mode, lang);
     }
 
+    /**
+     * Genera el c&oacute;digo HTML para representar el valor almacenado en la interface del usuario
+     * @param request la petici&oacute;n HTTP generada por el cliente
+     * @param obj el objeto al que pertenece la propiedad del valor de inter&eacute;s
+     * @param prop la propiedad del valor de inter&eacute;s a representar en la interface
+     * @param propName el nombre de la propiedad del valor de inter&eacute;s a representar en la interface
+     * @param type el tipo de representacio&acute;n utilizado en la interface (dojo, XHTML)
+     * @param mode el modo en que se desea la representaci&oacute;n del valor ({@literal create}, {@literal edit},
+     *              {@literal view} o {@literal inlineEdit})
+     * @param lang el lenguaje utilizado en la representaci&oacute;n del valor
+     * @return un {@code String} que representa el valor de la propiedad especificada considerando el tipo y modo indicados
+     */
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj,
             SemanticProperty prop, String propName, String type, String mode,
@@ -37,13 +60,15 @@ public class TextAreaElement extends org.semanticwb.bsc.formelement.base.TextAre
             toReturn = (obj.getProperty(prop) == null || 
                     (obj.getProperty(prop) == null && "null".equals(obj.getProperty(prop)))
                     ? "" : obj.getProperty(prop));
+            toReturn = SWBUtils.XML.replaceXMLTags(toReturn);
         } else if (mode.equals("inlineEdit")) {
             /*Al utilizar este modo, se debe incluir en el HTML las instrucciones 
-             * dojo.require del InkineEditBox y dijit.form.Textarea, al menos*/
+             * dojo.require del InlineEditBox y dijit.form.Textarea, al menos*/
             StringBuilder viewString = new StringBuilder(128);
             String value = (obj.getProperty(prop) == null || 
                     (obj.getProperty(prop) == null && "null".equals(obj.getProperty(prop)))
                     ? "" : obj.getProperty(prop));
+            
             String objectId = obj.getSemanticClass().getClassCodeName() + obj.getId() +
                     propName;
             String url = (String) request.getAttribute("urlRequest");
@@ -63,8 +88,13 @@ public class TextAreaElement extends org.semanticwb.bsc.formelement.base.TextAre
             viewString.append("        autoSave: false,");
             viewString.append("        editor: \"dijit.form.Textarea\",");
             viewString.append("        editorParams: {trim:true, required:true},");
-            viewString.append("        width: '80px',");
+            viewString.append("        width: '80%',");
             viewString.append("        onChange: function(value) {");
+            viewString.append("          var toSend = value;\n");
+            viewString.append("          while (value.indexOf(\"<\") > -1) {\n");
+            viewString.append("            toSend = value.replace(\"<\", \"&lt;\");\n");
+            viewString.append("            value = toSend;\n");
+            viewString.append("          }\n");
             viewString.append("          getSyncHtml('");
             viewString.append(url);
             viewString.append("&propUri=");
@@ -91,6 +121,31 @@ public class TextAreaElement extends org.semanticwb.bsc.formelement.base.TextAre
             toReturn = "";
         }
         return toReturn;
+    }
+    
+    @Override
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
+        process(request, obj, prop, prop.getName());
+    }
+
+    /**
+     * Procesa la informaci&oacute;n recibida para almacenarla en la propiedad del objeto indicado
+     * @param request la petici&oacute;n HTTP generada por el cliente
+     * @param obj el objeto al que pertenece la propiedad de inter&eacute;s
+     * @param prop la propiedad del objeto a la que se desea asociar la informaci&oacute;n recibida
+     * @param propName el nombre de la propiedad especificada
+     */
+    @Override
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) {
+        
+        String value = request.getParameter(propName);
+        try {
+            if (value != null && !value.isEmpty()) {
+                obj.setProperty(prop, SWBUtils.XML.replaceXMLTags(value));
+            }
+        } catch (Exception e) {
+            log.error(e);
+        }
     }
     
 }
