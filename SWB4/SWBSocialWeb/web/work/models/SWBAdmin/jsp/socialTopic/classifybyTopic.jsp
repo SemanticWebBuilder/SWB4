@@ -38,6 +38,11 @@
     actionUrl.setParameter("postUri", post.getURI());
     actionUrl.setParameter("wsite", wsite.getURI());
     actionUrl.setParameter("suri",request.getParameter("suri"));
+    String responseFromStream = request.getParameter("fromStream");
+    String typeOfSubmit="submitForm";
+    if(responseFromStream != null && !responseFromStream.trim().isEmpty()){
+        typeOfSubmit = "submitFormPostIn";
+    }
 %>
 
 <div class="swbform swbpopup retema-pop">   
@@ -51,7 +56,7 @@
 
     </p>
     
-    <form id="<%=semObjPost.getSemanticClass().getClassId()%>/classbTopicForm" dojoType="dijit.form.Form" class="swbform" method="post" action="<%=actionUrl%>" method="post" onsubmit="submitForm('<%=semObjPost.getSemanticClass().getClassId()%>/classbTopicForm');return false;"> 
+    <form id="<%=semObjPost.getSemanticClass().getClassId()%>/classbTopicForm" dojoType="dijit.form.Form" class="swbform" method="post" action="<%=actionUrl%>" method="post" onsubmit="<%=typeOfSubmit%>('<%=semObjPost.getSemanticClass().getClassId()%>/classbTopicForm', '<%=post.getURI()%>');return false;"> 
         <p>
             <span><%=paramRequest.getLocaleString("chooseTopic")%>:</span>
             <select name="newSocialTopic">
