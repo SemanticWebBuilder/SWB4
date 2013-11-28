@@ -265,8 +265,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             output.append("<link rel=\"stylesheet\" href=\"/swbadmin/js/dojo/dojox/grid/resources/Grid.css\"/>\n");
             output.append("<link rel=\"stylesheet\" href=\"/swbadmin/js/dojo/dojox/grid/resources/soriaGrid.css\"/>\n");
             output.append("<style type=\"text/css\">\n");
-            output.append("  .dojoxGrid table { margin: 0; } html, body { width: 100%; height: 100%;");
-            output.append(" margin: 0; }\n");
+            output.append("  .dojoxGrid table { margin: 0; } ");
             output.append("</style>\n");
             
             //Se evalúa el mostrar la forma para filtrado en grid
@@ -343,7 +342,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                 output.append("</div>\n");
             }
             
-            output.append("<div id=\"grid\" style=\"width: 80%; height: 800px;\"></div>\n");
+            output.append("<div id=\"grid\"></div>\n");
 
             /* Si se construye programaticamente el grid, hay que quitar esto.
             output.append("<span dojoType=\"dojo.data.ItemFileReadStore\" data=\"structure\" jsId=\"myStore\">\n");
