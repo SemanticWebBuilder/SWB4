@@ -752,5 +752,121 @@ function validateVideo(id, formId){
 
 
 function count(id, idText){
-    document.getElementById(idText).value=document.getElementById(id).value.length
+    document.getElementById(idText).value=document.getElementById(id).value.length;
+}
+
+function submitFormPostIn(formid, postUri)
+{
+    var obj = dojo.byId(formid);
+    var objd = dijit.byId(formid);
+    var fid = formid;
+    //alert("id:"+formid+" "+"dojo:"+obj +" dijit:"+objd);
+    if (!obj && objd) //si la forma esta dentro de un dialog
+    {
+        obj = objd.domNode;
+        fid = obj;
+    }
+
+    if (!objd || objd.isValid())
+    {
+        try
+        {
+            //dojo.fadeOut({node: formid, duration: 1000}).play();
+            dojo.fx.wipeOut({node: formid, duration: 500}).play();
+        } catch (noe) {
+        }
+
+        try {
+            var framesNames = "";
+            for (var i = 0; i < window.frames.length; i++) 
+            {
+                try
+                {
+                    framesNames += window.frames[i].name;
+                    if (framesNames && framesNames.indexOf("_editArea") != -1) {
+                        area = window.frames[framesNames].editArea;
+                        id = framesNames.substr(6);
+                        document.getElementById(id).value = area.textarea.value;
+                    }
+                }catch(e){}
+            }
+        } catch (ex) {
+        }
+
+        //alert("entra2");
+        dojo.xhrPost({
+            // The page that parses the POST request
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            //handleAs: "text",
+
+            url: obj.action,
+            // Name of the Form we want to submit
+            form: fid,
+            // Loads this function if everything went ok
+            load: function(data)
+            {
+                try{
+                    var tag=document.getElementById(postUri);
+                    if(tag){                
+                            tag.innerHTML = data;
+                            var arrScript = tag.getElementsByTagName('script')
+                            for (var n = 0; n < arrScript.length; n++){
+                                eval(arrScript[n].innerHTML)//run script inside div
+                            }
+                            //console.log("RECEIVED:" + data);
+                    }else {
+                        console.log('Tag not found: ' + postUri);
+                    }
+                }catch (e) {
+                    alert(e.message);
+                }                
+            },
+            // Call this function if an error happened
+            error: function(error) {
+                alert('Error: ', error);
+            }
+        });
+    } else
+    {
+        alert("Datos Inv?lidos...");
+    }
+}
+
+function postSocialPostInHtml(url, tagid)
+{
+    dojo.xhrPost({
+        url: url,
+        load: function(response)
+        {
+            var tag=dojo.byId(tagid);
+            if(tag){
+                var pan=dijit.byId(tagid);
+                if(pan && pan.attr)
+                {
+                    pan.attr('content',response);
+                }else
+                {
+                    tag.innerHTML = response;
+                    var arrScript = tag.getElementsByTagName('script')
+                    for (var n = 0; n < arrScript.length; n++){
+                        eval(arrScript[n].innerHTML)//run script inside div
+                    }
+                }
+            }else {
+                console.log('Tag not found: ' + tagid);
+            }
+            return response;
+        },
+        error: function(response)
+        {
+            alert(response.status);
+            if(dojo.byId(tagid)) {
+            //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
+            }else {
+                console.log('Tag not found: ' + tagid);
+            }
+            return response;
+        },
+        handleAs: "text"
+    });
 }
