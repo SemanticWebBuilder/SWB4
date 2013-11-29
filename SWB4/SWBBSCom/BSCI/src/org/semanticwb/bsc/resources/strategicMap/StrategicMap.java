@@ -108,6 +108,7 @@ public class StrategicMap extends GenericResource {
         String colorRelOT = base.getData("colorRelOT") == null ? "" : base.getData("colorRelOT");
         String colorRelTO = base.getData("colorRelTO") == null ? "" : base.getData("colorRelTO");
         String colorRelTT = base.getData("colorRelTT") == null ? "" : base.getData("colorRelTT");
+        String colorRelPP = base.getData("colorRelPP") == null ? "" : base.getData("colorRelPP");
         String ty_vision = base.getData("ty_vision") == null ? "" : base.getData("ty_vision");
         String bg_vision = base.getData("bg_vision") == null ? "" : base.getData("bg_vision");
         String ty_mision = base.getData("ty_mision") == null ? "" : base.getData("ty_mision");
@@ -532,6 +533,17 @@ public class StrategicMap extends GenericResource {
         sb.append(colorRelTT);
         sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
         sb.append("\n</li>");
+        
+        sb.append("\n<li class=\"swbform-li\">");
+        sb.append("\n<label for=\"colorRelPP\" class=\"swbform-label\">");
+        sb.append(paramRequest.getLocaleString("cssPP"));
+        sb.append(": </label>");
+        sb.append("\n<input id=\"colorRelPP\" name=\"colorRelPP\" type=\"text\" ");
+        sb.append("value=\"");
+        sb.append(colorRelPP);
+        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
+        sb.append("\n</li>");        
+        
         String select = base.getData("margins") == null ? "" : "checked";
         sb.append("\n<li class=\"swbform-li\"><input id=\"margins");
         sb.append("\" name=\"margins");
