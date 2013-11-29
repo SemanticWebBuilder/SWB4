@@ -158,7 +158,7 @@
 <div id="pub-detalle">
     <span class="sel-txtdiv"></span>
     <div class="swbform">
-          <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadText" action="<%=urlAction.setAction("postMessage")%>" onsubmit="submitForm('<%=objUri%><%=sourceCall%>frmUploadText');
+        <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadText" action="<%=urlAction.setAction("postMessage")%>" onsubmit="submitForm('<%=objUri%><%=sourceCall%>frmUploadText');
               return false;" method="post">
 
             <div class="pub-redes">
@@ -171,7 +171,7 @@
 
                     posicion = postOutNull.indexOf("style");
                     //String id = objUri + sourceCall + "_textArea";
-                    String id = sourceCall + "_textArea" + objUri;
+                    String id = sourceCall+"_textArea"+objUri;
 
                     postOutNull = postOutNull.substring(0, posicion - 1) + " required  onKeyDown=\"count('" + id + "','" + id + "_Text')\" onKeyUp=\"count('" + id + "','" + id + "_Text')\" id=\"" + id + "\" " + postOutNull.substring(posicion, postOutNull.length());
 
@@ -185,8 +185,8 @@
                     String value = postOutNNull.substring(posicion + 1, posicion1);
 
                     //System.out.println("imp"+value); 
-%>
-                                                               <!-- <div class="campo"><%=postOut == null ? messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_CREATE) : messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_EDIT)%></div>-->
+                %>
+                               <!-- <div class="campo"><%=postOut == null ? messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_CREATE) : messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_EDIT)%></div>-->
                 <div class="campo"><%=postOut == null ? postOutNull : postOutNNull%><br> <%if (postOut == null) {%><input  id="<%=id%>_Text" name="<%=id%>_Text" type="text" size="4" class="nobord" readonly ><label class="labelInfo"><img class="swbIconTwitter" src="/swbadmin/css/images/trans.png"/> 140  <img class="swbIconFacebook" src="/swbadmin/css/images/trans.png"/> 2000  <img class="swbIconYouTube" src="/swbadmin/css/images/trans.png"/> 5000  </label><%} else {%><input id="<%=id%>_Text" name="<%=id%>_Text" type="text" size="4" class="nobord" readonly  value="<%=value.length()%>"><label class="labelInfo"><img class="swbIconTwitter" src="/swbadmin/css/images/trans.png"/> 140  <img class="swbIconFacebook" src="/swbadmin/css/images/trans.png"/> 2000  <img class="swbIconYouTube" src="/swbadmin/css/images/trans.png"/> 5000  </label><%}%></div>
                 </p>
                 <%
@@ -242,147 +242,142 @@
                     }
 
                 %>
-                <div class="etiqueta"><label>Calendarios de envío: </label></div>
+
                 <!--Calendario Rapido-->
-                <div id="pub-calendar">
-                    <div class="calendar-fast">
-                        <p>Individual</p>
-                        <%
-                            String date = new Date().toString();
-                            String starthour = "";
-                            if (postOut != null && postOut.getFastCalendar() != null) {
-                                try {
-                                    String minutes = "00";
-                                    Date initDate = postOut.getFastCalendar().getFc_date();
-                                    date = getDateFormat(initDate);
-                                    if (initDate.getMinutes() != 0) {
-                                        minutes = "" + initDate.getMinutes();
-                                    }
-                                    String hour = "" + initDate.getHours();
-                                    if (hour.length() == 1) {
-                                        hour = "0" + hour;
-                                    }
-                                    starthour = hour + ":" + minutes;
-                                } catch (Exception ignore) {
+                <div class="msgFastCalendar">
+                    <p id="msgTitle">Programar envío de mensaje</p>
+                    <%
+                        String date = new Date().toString();
+                        String starthour = "";
+                        if (postOut != null && postOut.getFastCalendar() != null) {
+                            try {
+                                String minutes = "00";
+                                Date initDate = postOut.getFastCalendar().getFc_date();
+                                date = getDateFormat(initDate);
+                                if (initDate.getMinutes() != 0) {
+                                    minutes = "" + initDate.getMinutes();
                                 }
+                                String hour = "" + initDate.getHours();
+                                if (hour.length() == 1) {
+                                    hour = "0" + hour;
+                                }
+                                starthour = hour + ":" + minutes;
+                            } catch (Exception ignore) {
                             }
-                        %>
-                        <div>Día:<input type="text" name="postOut_inidate" id="<%=objUri%>_postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
-                            Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="<%=objUri%>_postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
-                        </div>
-                    </div>
-                    <!--Termina Calendario Rapido-->
-                    <!--Comienzan Calendarios Avanzados-->
-
-                    <%
-                        if (SocialCalendar.ClassMgr.listSocialCalendars(wsite).hasNext()) {
+                        }
                     %>
-                    <div class="calendar-advanced"> 
-                        <p>Globales</p>
-                        <select name="postOutAdvCal" id="postOutAdvCal" multiple="multiple">
-                            <%
-                                boolean existSelected = false;
-                                Iterator<SocialCalendar> itSocialCalendars = SocialCalendar.ClassMgr.listSocialCalendars(wsite);
-                                while (itSocialCalendars.hasNext()) {
-                                    String selected = "";
-                                    SocialCalendar socialCalendar = itSocialCalendars.next();
-                                    if (apostOutCalendars.contains(socialCalendar.getURI())) {
-                                        selected = "selected=selected";
-                                        existSelected = true;
-                                    }
-                            %>
-                            <option value="<%=socialCalendar.getURI()%>" <%=selected%>><%=socialCalendar.getTitle()%></option>
-                            <%
-                                }
-                            %>
-                        </select>
-                    </div>
-                    <%}%>
-                    <!--Terminan Calendarios Avanzados-->
-
-                    <button class="submit" type="submit" onclick="return checksRedesText('<%=objUri%>','<%=sourceCall%>');"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
-
-                </div>      
+                    Día:<input type="text" name="postOut_inidate" id="<%=objUri%>_postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
+                    Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="<%=objUri%>_postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
+                </div>
+                <!--Termina Calendario Rapido-->
+                <!--Comienzan Calendarios Avanzados-->
                 <%
-                    if (postInSN == null || postIn != null) {
+                  if(SocialCalendar.ClassMgr.listSocialCalendars(wsite).hasNext())
+                  {
                 %>
-                <div class="pub-redes">
-                    <p class="titulo">Redes disponibles</p>
-                    <ul><b><%=SWBSocialResUtil.Util.getStringFromGenericLocale("chooseSocialNets", user.getLanguage())%></b></ul>
+                <select name="postOutAdvCal" id="postOutAdvCal" multiple="multiple">
                     <%
-                        Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
-                        while (it.hasNext()) {
-                            SocialNetwork socialNetwork = (SocialNetwork) it.next();
-                            if (socialNetwork instanceof Messageable && socialNetwork.isActive() && socialNetwork.isValid()) {
-                                if (socialNetwork instanceof Youtube && postIn == null && postOut == null) {//Only show youtube networks if is a response
+                        boolean existSelected = false;
+                        Iterator<SocialCalendar> itSocialCalendars = SocialCalendar.ClassMgr.listSocialCalendars(wsite);
+                        while (itSocialCalendars.hasNext()) {
+                            String selected = "";
+                            SocialCalendar socialCalendar = itSocialCalendars.next();
+                            if (apostOutCalendars.contains(socialCalendar.getURI())) {
+                                selected = "selected=selected";
+                                existSelected = true;
+                            }
+                    %>
+                    <option value="<%=socialCalendar.getURI()%>" <%=selected%>><%=socialCalendar.getTitle()%></option>
+                    <%
+                        }
+                    %>
+                </select>
+                <%}%>
+                <!--Terminan Calendarios Avanzados-->
+
+                <button class="submit" type="submit" onclick="return checksRedesText('<%=objUri%>','<%=sourceCall%>');"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+
+            </div>      
+            <%
+                if (postInSN == null || postIn != null) {
+            %>
+            <div class="pub-redes">
+                <p class="titulo">Redes disponibles</p>
+                <ul><b><%=SWBSocialResUtil.Util.getStringFromGenericLocale("chooseSocialNets", user.getLanguage())%></b></ul>
+                <%
+                    Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
+                    while (it.hasNext()) {
+                        SocialNetwork socialNetwork = (SocialNetwork) it.next();
+                        if (socialNetwork instanceof Messageable && socialNetwork.isActive() && socialNetwork.isValid()) {
+                            if (socialNetwork instanceof Youtube && postIn == null && postOut == null) {//Only show youtube networks if is a response
+                                continue;
+                            }
+                            boolean isSelected = false;
+                            //System.out.println("Las Redes:" + socialNetwork);
+                            if (apostOutNets.contains(socialNetwork.getURI())) {
+                                //System.out.println("La Chida--:" + socialNetwork);
+                                isSelected = true;
+                            }
+                            String typeClass = "";
+                            if (postIn != null) {//If it is a response to some post, show only the nets of the post Type
+                                if (!socialNetwork.getClass().equals(postIn.getPostInSocialNetwork().getClass())) {
                                     continue;
                                 }
-                                boolean isSelected = false;
-                                //System.out.println("Las Redes:" + socialNetwork);
-                                if (apostOutNets.contains(socialNetwork.getURI())) {
-                                    //System.out.println("La Chida--:" + socialNetwork);
-                                    isSelected = true;
-                                }
-                                String typeClass = "";
-                                if (postIn != null) {//If it is a response to some post, show only the nets of the post Type
-                                    if (!socialNetwork.getClass().equals(postIn.getPostInSocialNetwork().getClass())) {
+                            }
+                            if (postOut != null) {//If it is a response to some post, show only the nets of the post Type
+                                if (postOut.getPostInSource() != null) {
+                                    if (!socialNetwork.getClass().equals(postOut.getPostInSource().getPostInSocialNetwork().getClass())) {
                                         continue;
                                     }
                                 }
-                                if (postOut != null) {//If it is a response to some post, show only the nets of the post Type
-                                    if (postOut.getPostInSource() != null) {
-                                        if (!socialNetwork.getClass().equals(postOut.getPostInSource().getPostInSocialNetwork().getClass())) {
-                                            continue;
-                                        }
-                                    }
-                                }
+                            }
 
-                                if (socialNetwork instanceof Youtube) {
-                                    typeClass = "ico-ytb";
-                                } else if (socialNetwork instanceof Facebook) {
-                                    typeClass = "ico-fcb";
-                                } else if (socialNetwork instanceof Twitter) {
-                                    typeClass = "ico-twt";
-                                }
-                                String selected = "";
-                                if (isSelected) {
-                                    selected = "checked=\"true\"";
-                                }
+                            if (socialNetwork instanceof Youtube) {
+                                typeClass = "ico-ytb";
+                            } else if (socialNetwork instanceof Facebook) {
+                                typeClass = "ico-fcb";
+                            } else if (socialNetwork instanceof Twitter) {
+                                typeClass = "ico-twt";
+                            }
+                            String selected = "";
+                            if (isSelected) {
+                                selected = "checked=\"true\"";
+                            }
+                %>
+                <li class="<%=typeClass%>">
+                    <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" <%=selected%> onClick="disableSelect(this);"/>
+                    <label for="t1"><span></span><%=socialNetwork.getTitle()%></label> 
+                    <%
+                        if (socialNetwork instanceof Facebook && postIn == null && postOut == null) {
                     %>
-                    <li class="<%=typeClass%>">
-                        <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" <%=selected%> onClick="disableSelect(this);"/>
-                        <label for="t1"><span></span><%=socialNetwork.getTitle()%></label> 
+                    <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
+                        <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">PUBLIC</option>
                         <%
-                            if (socialNetwork instanceof Facebook && postIn == null && postOut == null) {
+                            for (int i = 0; i < selectFacebook.size(); i++) {
                         %>
-                        <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
-                            <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">PUBLIC</option>
-                            <%
-                                for (int i = 0; i < selectFacebook.size(); i++) {
-                            %>
-                            <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i)%>"><%=selectFacebook.get(i)%></option>
-                            <%
-                                }
-                            %>
-                        </select>
+                        <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i)%>"><%=selectFacebook.get(i)%></option>
                         <%
                             }
                         %>
-                    </li>                                    
+                    </select>
                     <%
-                                }
-                            }
-                        }/* else {
-                         SocialNetwork socialNet = (SocialNetwork) SemanticObject.getSemanticObject(postInSN).createGenericInstance();
-                         if (socialNet == null) {
-                         return;
-                         }*/
+                        }
                     %>
-                    <!--<input type="hidden" name="socialNetUri" value="<%//=socialNet.getURI()%>"/>-->
-                    <%
-                        //}
-%>
-                </div>
+                </li>                                    
+                <%
+                            }
+                        }
+                    }/* else {
+                     SocialNetwork socialNet = (SocialNetwork) SemanticObject.getSemanticObject(postInSN).createGenericInstance();
+                     if (socialNet == null) {
+                     return;
+                     }*/
+                %>
+                <!--<input type="hidden" name="socialNetUri" value="<%//=socialNet.getURI()%>"/>-->
+                <%
+                    //}
+                %>
+            </div>
         </form> 
     </div>
     <%} else if (contentType.equals("uploadPhoto")) {       ///////////////////////////////POSTEO DE FOTOS/////////////////////////////
@@ -410,7 +405,7 @@
         //StringBuffer ret = new StringBuffer();
         SemanticObject obj2 = new SemanticObject(paramRequest.getWebPage().getWebSite().getSemanticModel(), Photo.sclass);
         //System.out.println("postOut en Photo:"+postOut);
-%>
+    %>
     <div id="pub-detalle">
         <span class="sel-imgdiv"></span>
         <div class="swbform">
@@ -424,7 +419,7 @@
                     <%
                         int position = 0;
                         //String id = objUri + sourceCall + "_texAreaPhoto";
-                        String id = sourceCall + "_texAreaPhoto" + objUri;
+                        String id = sourceCall+"_texAreaPhoto"+objUri;
 
                         String create = photoMgr.renderElement(request, Photo.social_msg_Text, photoMgr.MODE_CREATE);
                         position = create.indexOf("style");
@@ -517,147 +512,140 @@
                         }
                     %>
                     <!--Calendario Rapido-->
+                    <div class="msgFastCalendar">
+                        <p id="msgTitle">Programar envío de mensaje</p>
+                        <%
+                            String date = new Date().toString();
+                            String starthour = "";
+                            if (postOut != null && postOut.getFastCalendar() != null) {
+                                try {
+                                    String minutes = "00";
+                                    Date initDate = postOut.getFastCalendar().getFc_date();
+                                    date = getDateFormat(initDate);
+                                    if (initDate.getMinutes() != 0) {
+                                        minutes = "" + initDate.getMinutes();
+                                    }
+                                    String hour = "" + initDate.getHours();
+                                    if (hour.length() == 1) {
+                                        hour = "0" + hour;
+                                    }
+                                    starthour = hour + ":" + minutes;
+                                } catch (Exception ignore) {
+                                }
+                            }
+                        %>
+                        Día:<input type="text" name="postOut_inidate" id="<%=objUri%>_postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
+                        Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="<%=objUri%>_postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
+                    </div>
+                    <!--Termina Calendario Rapido-->
+                    <%
+                    if(SocialCalendar.ClassMgr.listSocialCalendars(wsite).hasNext())
+                    {
+                    %>
+                    
+                    <!--Comienzan Calendarios Avanzados-->
+                    <select name="postOutAdvCal" id="postOutAdvCal" multiple="multiple">
+                        <%
+                            boolean existSelected = false;
+                            Iterator<SocialCalendar> itSocialCalendars = SocialCalendar.ClassMgr.listSocialCalendars(wsite);
+                            while (itSocialCalendars.hasNext()) {
+                                String selected = "";
+                                SocialCalendar socialCalendar = itSocialCalendars.next();
+                                if (apostOutCalendars.contains(socialCalendar.getURI())) {
+                                    selected = "selected=selected";
+                                    existSelected = true;
+                                }
+                        %>
+                        <option value="<%=socialCalendar.getURI()%>" <%=selected%>><%=socialCalendar.getTitle()%></option>
+                        <%
+                            }
+                        %>
+                    </select>
+                    <%}%>
+                    <!--Terminan Calendarios Avanzados-->
 
-                    <div class="etiqueta"><label>Calendarios de envío: </label></div>
-                    <div id="pub-calendar">
-                        <div class="calendar-fast">
-                            <p>Individual</p>
-                            <%
-                                String date = new Date().toString();
-                                String starthour = "";
-                                if (postOut != null && postOut.getFastCalendar() != null) {
-                                    try {
-                                        String minutes = "00";
-                                        Date initDate = postOut.getFastCalendar().getFc_date();
-                                        date = getDateFormat(initDate);
-                                        if (initDate.getMinutes() != 0) {
-                                            minutes = "" + initDate.getMinutes();
-                                        }
-                                        String hour = "" + initDate.getHours();
-                                        if (hour.length() == 1) {
-                                            hour = "0" + hour;
-                                        }
-                                        starthour = hour + ":" + minutes;
-                                    } catch (Exception ignore) {
+                    <button class="submit" type="submit" onclick="return validateImages('hasPhoto_new_#swbsocial_<%=objUri + sourceCall%>_dynamic','<%=objUri + sourceCall%>frmUploadPhoto');"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+                    <!--<button class="submit" type="submit" onclick="return validateTypeFile('hasPhoto_new_dynamic4'); checksRedesPhoto('<%=objUri%>','<%=sourceCall%>',<%=(postInSN == null || postIn != null ? "true" : "false")%>);"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>-->
+                </div>
+
+                <%
+                    if (postInSN == null || postIn != null) {
+                %>
+                <div class="pub-redes">
+                    <p class="titulo">Redes disponibles</p>
+                    <ul><b><%=SWBSocialResUtil.Util.getStringFromGenericLocale("chooseSocialNets", user.getLanguage())%></b></ul>
+                    <%
+                        System.out.println("redes disponibles");
+                        Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
+                        while (it.hasNext()) {
+                            SocialNetwork socialNetwork = (SocialNetwork) it.next();
+                            if (socialNetwork instanceof Photoable && socialNetwork.isActive() && socialNetwork.isValid()) {
+                                String typeClass = "";
+                                boolean isSelected = false;
+                                if (apostOutNets.contains(socialNetwork.getURI())) {
+                                    System.out.println("Net found--:" + socialNetwork);
+                                    isSelected = true;
+                                }
+                                if (postIn != null) {//If it is a response to some post, show only the nets of the post Type
+                                    if (!socialNetwork.getClass().equals(postIn.getPostInSocialNetwork().getClass())) {
+                                        continue;
                                     }
                                 }
-                            %>
-                            <div>Día:<input type="text" name="postOut_inidate" id="<%=objUri%>_postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
-                                Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="<%=objUri%>_postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
-                            </div>
-                        </div>
-                        <!--Termina Calendario Rapido-->
-                        <%
-                            if (SocialCalendar.ClassMgr.listSocialCalendars(wsite).hasNext()) {
-                        %>
-
-                        <!--Comienzan Calendarios Avanzados-->
-                        <div class="calendar-advanced"> 
-                            <p>Globales</p>   
-
-                            <select name="postOutAdvCal" id="postOutAdvCal" multiple="multiple">
-                                <%
-                                    boolean existSelected = false;
-                                    Iterator<SocialCalendar> itSocialCalendars = SocialCalendar.ClassMgr.listSocialCalendars(wsite);
-                                    while (itSocialCalendars.hasNext()) {
-                                        String selected = "";
-                                        SocialCalendar socialCalendar = itSocialCalendars.next();
-                                        if (apostOutCalendars.contains(socialCalendar.getURI())) {
-                                            selected = "selected=selected";
-                                            existSelected = true;
-                                        }
-                                %>
-                                <option value="<%=socialCalendar.getURI()%>" <%=selected%>><%=socialCalendar.getTitle()%></option>
-                                <%
-                                    }
-                                %>
-                            </select>
-                        </div>
-                        <%}%>
-                        <!--Terminan Calendarios Avanzados-->
-
-                        <button class="submit" type="submit" onclick="return validateImages('hasPhoto_new_#swbsocial_<%=objUri + sourceCall%>_dynamic','<%=objUri + sourceCall%>frmUploadPhoto');"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
-                        <!--<button class="submit" type="submit" onclick="return validateTypeFile('hasPhoto_new_dynamic4'); checksRedesPhoto('<%=objUri%>','<%=sourceCall%>',<%=(postInSN == null || postIn != null ? "true" : "false")%>);"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>-->
-                    </div>
-
-                    <%
-                        if (postInSN == null || postIn != null) {
-                    %>
-                    <div class="pub-redes">
-                        <p class="titulo">Redes disponibles</p>
-                        <ul><b><%=SWBSocialResUtil.Util.getStringFromGenericLocale("chooseSocialNets", user.getLanguage())%></b></ul>
-                        <%
-                            System.out.println("redes disponibles");
-                            Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
-                            while (it.hasNext()) {
-                                SocialNetwork socialNetwork = (SocialNetwork) it.next();
-                                if (socialNetwork instanceof Photoable && socialNetwork.isActive() && socialNetwork.isValid()) {
-                                    String typeClass = "";
-                                    boolean isSelected = false;
-                                    if (apostOutNets.contains(socialNetwork.getURI())) {
-                                        System.out.println("Net found--:" + socialNetwork);
-                                        isSelected = true;
-                                    }
-                                    if (postIn != null) {//If it is a response to some post, show only the nets of the post Type
-                                        if (!socialNetwork.getClass().equals(postIn.getPostInSocialNetwork().getClass())) {
+                                if (postOut != null) {//If it is a response to some post, show only the nets of the post Type
+                                    if (postOut.getPostInSource() != null) {
+                                        if (!socialNetwork.getClass().equals(postOut.getPostInSource().getPostInSocialNetwork().getClass())) {
                                             continue;
                                         }
                                     }
-                                    if (postOut != null) {//If it is a response to some post, show only the nets of the post Type
-                                        if (postOut.getPostInSource() != null) {
-                                            if (!socialNetwork.getClass().equals(postOut.getPostInSource().getPostInSocialNetwork().getClass())) {
-                                                continue;
-                                            }
-                                        }
-                                    }
+                                }
 
-                                    if (socialNetwork instanceof Youtube) {
-                                        typeClass = "ico-ytb";
-                                    } else if (socialNetwork instanceof Facebook) {
-                                        typeClass = "ico-fcb";
-                                    } else if (socialNetwork instanceof Twitter) {
-                                        typeClass = "ico-twt";
-                                    }
+                                if (socialNetwork instanceof Youtube) {
+                                    typeClass = "ico-ytb";
+                                } else if (socialNetwork instanceof Facebook) {
+                                    typeClass = "ico-fcb";
+                                } else if (socialNetwork instanceof Twitter) {
+                                    typeClass = "ico-twt";
+                                }
 
-                                    String selected = "";
-                                    if (isSelected) {
-                                        selected = "checked=\"true\"";
-                                    }
+                                String selected = "";
+                                if (isSelected) {
+                                    selected = "checked=\"true\"";
+                                }
+                    %>
+                    <li class="<%=typeClass%>">
+                        <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" <%=selected%> onClick="disableSelect(this);"/>
+                        <label for="t1"><span></span><%=socialNetwork.getTitle()%></label>
+                        <%
+                            if (socialNetwork instanceof Facebook && postIn == null && postOut == null) {
                         %>
-                        <li class="<%=typeClass%>">
-                            <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" <%=selected%> onClick="disableSelect(this);"/>
-                            <label for="t1"><span></span><%=socialNetwork.getTitle()%></label>
+                        <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
+                            <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">PUBLIC</option>
                             <%
-                                if (socialNetwork instanceof Facebook && postIn == null && postOut == null) {
+                                for (int i = 0; i < selectFacebook.size(); i++) {
                             %>
-                            <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
-                                <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">PUBLIC</option>
-                                <%
-                                    for (int i = 0; i < selectFacebook.size(); i++) {
-                                %>
-                                <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i)%>"><%=selectFacebook.get(i)%></option>
-                                <%
-                                    }
-                                %>
-                            </select>
+                            <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i)%>"><%=selectFacebook.get(i)%></option>
                             <%
                                 }
                             %>
-                        </li>
-                        <%
-                                }
-                            }
-                        } else {
-                            SocialNetwork socialNet = (SocialNetwork) SemanticObject.getSemanticObject(postInSN).createGenericInstance();
-                            if (socialNet == null) {
-                                return;
-                            }
-                        %>
-                        <input type="hidden" name="socialNetUri" value="<%=socialNet.getURI()%>"/>
+                        </select>
                         <%
                             }
                         %>
-                    </div>
+                    </li>
+                    <%
+                            }
+                        }
+                    } else {
+                        SocialNetwork socialNet = (SocialNetwork) SemanticObject.getSemanticObject(postInSN).createGenericInstance();
+                        if (socialNet == null) {
+                            return;
+                        }
+                    %>
+                    <input type="hidden" name="socialNetUri" value="<%=socialNet.getURI()%>"/>
+                    <%
+                        }
+                    %>
+                </div>
             </form>
         </div>
     </div>
@@ -691,8 +679,8 @@
     <div id="pub-detalle">
         <span class="sel-viddiv"></span>
         <div class="swbform">
-              <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadVideo" action="<%=urlAction.setAction("uploadVideo")%>" method="post" onsubmit="submitForm('<%=objUri%><%=sourceCall%>frmUploadVideo');
-                return false;">
+            <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadVideo" action="<%=urlAction.setAction("uploadVideo")%>" method="post" onsubmit="submitForm('<%=objUri%><%=sourceCall%>frmUploadVideo');
+                  return false;">
                 <%= videoMgr.getFormHiddens()%>
 
                 <div class="pub-redes">
@@ -723,7 +711,7 @@
                         <%
                             int position = 0;
                             //String id = objUri + sourceCall + "_texAreaVideo";
-                            String id = sourceCall + "_texAreaVideo" + objUri;
+                            String id = sourceCall+"_texAreaVideo"+objUri;
 
                             String create = videoMgr.renderElement(request, Video.social_msg_Text, videoMgr.MODE_CREATE);
                             position = create.indexOf("style");
@@ -915,168 +903,162 @@
                     %>  
                     </p>
                     <!--Calendario Rapido-->
-                    <div class="etiqueta"><label>Calendarios de envío: </label></div>
+                    <div class="msgFastCalendar">
+                        <p id="msgTitle">Programar envío de mensaje</p>
+                        <%
+                            String date = new Date().toString();
+                            String starthour = "";
+                            if (postOut != null && postOut.getFastCalendar() != null) {
+                                try {
+                                    String minutes = "00";
+                                    Date initDate = postOut.getFastCalendar().getFc_date();
+                                    date = getDateFormat(initDate);
+                                    if (initDate.getMinutes() != 0) {
+                                        minutes = "" + initDate.getMinutes();
+                                    }
+                                    String hour = "" + initDate.getHours();
+                                    if (hour.length() == 1) {
+                                        hour = "0" + hour;
+                                    }
+                                    starthour = hour + ":" + minutes;
+                                } catch (Exception ignore) {
+                                }
+                            }
+                        %>
+                        Día:<input type="text" name="postOut_inidate" id="<%=objUri%>_postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
+                        Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="<%=objUri%>_postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
+                    </div>
+                    <!--Termina Calendario Rapido-->
+                    <%
+                        if(SocialCalendar.ClassMgr.listSocialCalendars(wsite).hasNext())
+                        {
+                    %>
+                    <!--Comienzan Calendarios Avanzados-->
+                    <select name="postOutAdvCal" id="postOutAdvCal" multiple="multiple">
+                        <%
+                            boolean existSelected = false;
+                            Iterator<SocialCalendar> itSocialCalendars = SocialCalendar.ClassMgr.listSocialCalendars(wsite);
+                            while (itSocialCalendars.hasNext()) {
+                                String selected = "";
+                                SocialCalendar socialCalendar = itSocialCalendars.next();
+                                if (apostOutCalendars.contains(socialCalendar.getURI())) {
+                                    selected = "selected=selected";
+                                    existSelected = true;
+                                }
+                        %>
+                        <option value="<%=socialCalendar.getURI()%>" <%=selected%>><%=socialCalendar.getTitle()%></option>
+                        <%
+                            }
+                        %>
+                    </select>
+                    <%}%>
+                    <!--Terminan Calendarios Avanzados-->
+                    <button class="submit" type="submit" onclick="return validateVideo('<%="video_new_defaultAuto" + objUri + sourceCall%>', '<%=objUri + sourceCall%>frmUploadVideo')"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+                </div>
 
-                    <div id="pub-calendar">
-                        <div class="calendar-fast">                            
-                            <p>Individual</p>
-                            <%
-                                String date = new Date().toString();
-                                String starthour = "";
-                                if (postOut != null && postOut.getFastCalendar() != null) {
-                                    try {
-                                        String minutes = "00";
-                                        Date initDate = postOut.getFastCalendar().getFc_date();
-                                        date = getDateFormat(initDate);
-                                        if (initDate.getMinutes() != 0) {
-                                            minutes = "" + initDate.getMinutes();
-                                        }
-                                        String hour = "" + initDate.getHours();
-                                        if (hour.length() == 1) {
-                                            hour = "0" + hour;
-                                        }
-                                        starthour = hour + ":" + minutes;
-                                    } catch (Exception ignore) {
+                <%
+                    if (postInSN == null || postIn != null) {
+                %>
+                <div class="pub-redes">
+                    <p class="titulo">Redes disponibles</p>
+                    <ul><b>selecciona las redes a las cuales deseas publicar</b></ul>
+                    <%
+                        Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
+                        while (it.hasNext()) {
+                            SocialNetwork socialNetwork = (SocialNetwork) it.next();
+                            if (socialNetwork instanceof Videoable && socialNetwork.isActive() && socialNetwork.isValid()) {
+                                String typeClass = "";
+                                boolean isSelected = false;
+                                if (apostOutNets.contains(socialNetwork.getURI())) {
+                                    System.out.println("Net found--:" + socialNetwork);
+                                    isSelected = true;
+                                }
+
+                                if (postIn != null) {//If it is a response to some post, show only the nets of the post Type
+                                    if (!socialNetwork.getClass().equals(postIn.getPostInSocialNetwork().getClass())) {
+                                        continue;
                                     }
                                 }
-                            %>
-                            <div>Día:<input type="text" name="postOut_inidate" id="<%=objUri%>_postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
-                                Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="<%=objUri%>_postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
-                            </div>
-                        </div>
-                        <!--Termina Calendario Rapido-->
-                        <%
-                            if (SocialCalendar.ClassMgr.listSocialCalendars(wsite).hasNext()) {
-                        %>
-                        <!--Comienzan Calendarios Avanzados-->
-                        <div class="calendar-advanced"> 
-                            <p>Globales</p>   
-                            <select name="postOutAdvCal" id="postOutAdvCal" multiple="multiple">
-                                <%
-                                    boolean existSelected = false;
-                                    Iterator<SocialCalendar> itSocialCalendars = SocialCalendar.ClassMgr.listSocialCalendars(wsite);
-                                    while (itSocialCalendars.hasNext()) {
-                                        String selected = "";
-                                        SocialCalendar socialCalendar = itSocialCalendars.next();
-                                        if (apostOutCalendars.contains(socialCalendar.getURI())) {
-                                            selected = "selected=selected";
-                                            existSelected = true;
-                                        }
-                                %>
-                                <option value="<%=socialCalendar.getURI()%>" <%=selected%>><%=socialCalendar.getTitle()%></option>
-                                <%
-                                    }
-                                %>
-                            </select>
-                        </div>
-                        <%}%>
-                        <!--Terminan Calendarios Avanzados-->
-                        <button class="submit" type="submit" onclick="return validateVideo('<%="video_new_defaultAuto" + objUri + sourceCall%>', '<%=objUri + sourceCall%>frmUploadVideo')"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
-                    </div>
-
-                    <%
-                        if (postInSN == null || postIn != null) {
-                    %>
-                    <div class="pub-redes">
-                        <p class="titulo">Redes disponibles</p>
-                        <ul><b>selecciona las redes a las cuales deseas publicar</b></ul>
-                        <%
-                            Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
-                            while (it.hasNext()) {
-                                SocialNetwork socialNetwork = (SocialNetwork) it.next();
-                                if (socialNetwork instanceof Videoable && socialNetwork.isActive() && socialNetwork.isValid()) {
-                                    String typeClass = "";
-                                    boolean isSelected = false;
-                                    if (apostOutNets.contains(socialNetwork.getURI())) {
-                                        System.out.println("Net found--:" + socialNetwork);
-                                        isSelected = true;
-                                    }
-
-                                    if (postIn != null) {//If it is a response to some post, show only the nets of the post Type
-                                        if (!socialNetwork.getClass().equals(postIn.getPostInSocialNetwork().getClass())) {
+                                if (postOut != null) {//If it is a response to some post, show only the nets of the post Type
+                                    if (postOut.getPostInSource() != null) {
+                                        if (!socialNetwork.getClass().equals(postOut.getPostInSource().getPostInSocialNetwork().getClass())) {
                                             continue;
                                         }
                                     }
-                                    if (postOut != null) {//If it is a response to some post, show only the nets of the post Type
-                                        if (postOut.getPostInSource() != null) {
-                                            if (!socialNetwork.getClass().equals(postOut.getPostInSource().getPostInSocialNetwork().getClass())) {
-                                                continue;
-                                            }
-                                        }
-                                    }
-                                    if (socialNetwork instanceof Youtube) {
-                                        typeClass = "ico-ytb";
-                                    } else if (socialNetwork instanceof Facebook) {
-                                        typeClass = "ico-fcb";
-                                    } else if (socialNetwork instanceof Twitter) {
-                                        typeClass = "ico-twt";
-                                    }
+                                }
+                                if (socialNetwork instanceof Youtube) {
+                                    typeClass = "ico-ytb";
+                                } else if (socialNetwork instanceof Facebook) {
+                                    typeClass = "ico-fcb";
+                                } else if (socialNetwork instanceof Twitter) {
+                                    typeClass = "ico-twt";
+                                }
 
-                                    String selected = "";
-                                    if (isSelected) {
-                                        selected = "checked=\"true\"";
-                                    }
+                                String selected = "";
+                                if (isSelected) {
+                                    selected = "checked=\"true\"";
+                                }
 
-                                    if (socialNetwork instanceof Youtube) {
+                                if (socialNetwork instanceof Youtube) {
+                    %>
+                    <li class="<%=typeClass%>">
+                        <input id="checkYT" type="checkbox" name="<%=socialNetwork.getURI()%>" onClick="showListCategory('<%=objUri%>','<%=sourceCall%>'); disableSelect(this);" <%=selected%>/>
+                        <label><span></span><%=socialNetwork.getTitle()%></label>
+                        <%
+                            if (socialNetwork instanceof Youtube && postIn == null && postOut == null) {
                         %>
-                        <li class="<%=typeClass%>">
-                            <input id="checkYT" type="checkbox" name="<%=socialNetwork.getURI()%>" onClick="showListCategory('<%=objUri%>','<%=sourceCall%>'); disableSelect(this);" <%=selected%>/>
-                            <label><span></span><%=socialNetwork.getTitle()%></label>
+                        <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
+                            <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">PUBLIC</option>
                             <%
-                                if (socialNetwork instanceof Youtube && postIn == null && postOut == null) {
+                                for (int i = 0; i < selectYoutube.size(); i++) {
                             %>
-                            <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
-                                <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">PUBLIC</option>
-                                <%
-                                    for (int i = 0; i < selectYoutube.size(); i++) {
-                                %>
-                                <option value="<%=socialNetwork.getURI() + "|" + selectYoutube.get(i)%>"><%=selectYoutube.get(i)%></option>
-                                <%
-                                    }
-                                %>
-                            </select>
+                            <option value="<%=socialNetwork.getURI() + "|" + selectYoutube.get(i)%>"><%=selectYoutube.get(i)%></option>
                             <%
                                 }
                             %>
-                        </li>
+                        </select>
                         <%
-                        } else {
+                            }
                         %>
-                        <li class="<%=typeClass%>">
-                            <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" <%=selected%> onClick="disableSelect(this);"/>
-                            <label><span></span><%=socialNetwork.getTitle()%></label>
+                    </li>
+                    <%
+                    } else {
+                    %>
+                    <li class="<%=typeClass%>">
+                        <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" <%=selected%> onClick="disableSelect(this);"/>
+                        <label><span></span><%=socialNetwork.getTitle()%></label>
+                        <%
+                            if (socialNetwork instanceof Facebook && postIn == null) {
+                        %>
+                        <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
+                            <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">PUBLIC</option>
                             <%
-                                if (socialNetwork instanceof Facebook && postIn == null) {
+                                for (int i = 0; i < selectFacebook.size(); i++) {
                             %>
-                            <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
-                                <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">PUBLIC</option>
-                                <%
-                                    for (int i = 0; i < selectFacebook.size(); i++) {
-                                %>
-                                <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i)%>"><%=selectFacebook.get(i)%></option>
-                                <%
-                                    }
-                                %>
-                            </select>
+                            <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i)%>"><%=selectFacebook.get(i)%></option>
                             <%
                                 }
                             %>
-                        </li>
+                        </select>
                         <%
-                                    }
+                            }
+                        %>
+                    </li>
+                    <%
                                 }
                             }
-                        } else {
-                            SocialNetwork socialNet = (SocialNetwork) SemanticObject.getSemanticObject(postInSN).createGenericInstance();
-                            if (socialNet == null) {
-                                return;
-                            }
-                        %>
-                        <input type="hidden" name="socialNetUri" value="<%=socialNet.getURI()%>"/>
-                        <%
-                            }
-                        %>
-                    </div>
+                        }
+                    } else {
+                        SocialNetwork socialNet = (SocialNetwork) SemanticObject.getSemanticObject(postInSN).createGenericInstance();
+                        if (socialNet == null) {
+                            return;
+                        }
+                    %>
+                    <input type="hidden" name="socialNetUri" value="<%=socialNet.getURI()%>"/>
+                    <%
+                        }
+                    %>
+                </div>
             </form>
         </div>
     </div>
