@@ -61,6 +61,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     /** Realiza operaciones en la bitacora de eventos. */
     private static Logger log = SWBUtils.getLogger(GenericSemResource.class);
 
+    /** Representa el nombre del archivo asociado a las plantillas creadas con este recurso */
     private static final String TEMPLATE_FILENAME = "/templateContent.html";
     
     /**
@@ -275,15 +276,10 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             listCode.append("\" type=\"button\">");
             listCode.append(paramRequest.getLocaleString("lbl_btnSubmit"));
             listCode.append("      <script type=\"dojo/method\" event=\"onClick\" args=\"evt\">\n");
-/*            listCode.append("        var selectPerm = dijit.byId('updatePermit");
-            listCode.append(this.getId());
-            listCode.append("');\n");
-            listCode.append("        if (selectPerm.selectedIndex > -1) {");*/
             listCode.append("          submitForm(\"permissionsForm");
             listCode.append(this.getId());
             listCode.append("\");\n");
             listCode.append("          return false;\n");
-//            listCode.append("        }\n");
             listCode.append("      </script>\n");
             listCode.append("    </button>\n");
             listCode.append("  </fieldset>\n");
@@ -708,6 +704,13 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             String periodId = request.getSession().getAttribute(modelName) != null
                                 ? (String) request.getSession().getAttribute(modelName)
                                 : null;
+            //Si no hay sesión, la petición puede ser directa (una liga en un correo). Crear sesión y atributo:
+            if (periodId == null) {
+                periodId = request.getParameter(modelName) != null ? request.getParameter(modelName) : null;
+                if (periodId != null) {
+                    request.getSession(true).setAttribute(modelName, periodId);
+                }
+            }
             Period period = Period.ClassMgr.getPeriod(periodId, paramRequest.getWebPage().getWebSite());
             PeriodStatus periodStatus = null;
             //Si el semObj es hijo de PeriodStatusAssignable se debe:
@@ -716,7 +719,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 Objective objective = (Objective) generic;
                 periodStatus = objective.getPeriodStatus(period);
             }
-            //-Agregar encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
+            //-Agrega encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
             // para el per&iacte;odo especificado y el t&iacte;tulo del objeto, para lo que:
             //    - Se pide el listado de objetos PeriodStatus asociado al semObj
             //    - Se recorre uno por uno los PeriodStatus relacionados
@@ -768,8 +771,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
         SemanticClass semWorkClass = this.getWorkClass().transformToSemanticClass();
-        String lang = paramRequest.getUser().getLanguage();
-        //Iterator<SemanticProperty> basePropertiesList = SWBComparator.sortByDisplayName(, lang);
         ArrayList<SemanticProperty> propsList = 
                 (ArrayList<SemanticProperty>) SWBUtils.Collections.copyIterator(semWorkClass.listSortProperties());
         Collections.sort(propsList, new PropertiesComparator());
@@ -793,7 +794,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 structure = array.toString(2);
             } catch (JSONException jsone) {
                 structure = "";
-                DetailViewManager.log.error("Al generar estructura de JSON con propiedades semánticas", jsone);
+                DetailViewManager.log.error("Al generar estructura de JSON con propiedades semanticas", jsone);
             }
         }
         //Se regresa como respuesta la estructura de JSON creada
@@ -826,8 +827,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     }
 
     /**
-     * Realiza las operaciones de almacenamiento o eliminación de información de las 
-     * vistas detalle administradas, asi como la asignación de una vista detalle seleccionada
+     * Realiza las operaciones de almacenamiento o eliminaci&oacute;n de informaci&oacute;n de las 
+     * vistas detalle administradas, asi como la asignaci&oacute;n de una vista detalle seleccionada
      * como contenido.
      * @param request la petici&oacute;n enviada por el cliente
      * @param response la respuesta generada a la petici&oacute;n recibida
@@ -946,7 +947,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         } else if (action.equalsIgnoreCase("setPerm")) {
             Resource base = getResourceBase();
             
-            //TODO: capturar valores de : before after timeUnit
             String userType = request.getParameter("updatePermit" + this.getId());
             String atribBefore = request.getParameter("before");
             String atribAfter = request.getParameter("after");
@@ -1026,13 +1026,16 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 : null;
         String messageType = null;
         
-        //Variable para evaluar al período especificado
-        String modelName = paramRequest.getWebPage().getWebSiteId(); //genericObject.getSemanticObject().getModel().getName();
+        //Variable para evaluar al periodo especificado
+        String modelName = paramRequest.getWebPage().getWebSiteId();
         String periodId = request.getSession().getAttribute(modelName) != null
                             ? (String) request.getSession().getAttribute(modelName)
                             : null;
-
-        //Revisa configuración del recurso
+        if (periodId == null) {
+            periodId = request.getParameter(modelName) != null ? request.getParameter(modelName) : null;
+        }
+        
+        //Revisa configuracion del recurso
         if (workClassSC == null) {
             messageType = "workClassNotConfigured";
         }
@@ -1076,8 +1079,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             }
         }
 
-        //Revisa existencia de un período con el identificador recibido en la sesión
-        //Si no existe el período, asignar el tipo de mensaje a "periodNotExistent"
+        //Revisa existencia de un periodo con el identificador recibido en la sesion
+        //Si no existe el periodo, asignar el tipo de mensaje a "periodNotExistent"
         if (periodId != null && !Period.ClassMgr.hasPeriod(periodId, paramRequest.getWebPage().getWebSite())) {
             messageType = "periodNotExistent";
         }
@@ -1139,7 +1142,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             if (ttype == HtmlStreamTokenizer.TT_TAG) {
 
                 try {
-                    //si no es un tag de imagen, que continúe con el siguiente
+                    //si no es un tag de imagen, que continue con el siguiente
                     tok.parseTag(tok.getStringValue(), tag);
                 } catch (HtmlException htmle) {
                     DetailViewManager.log.error("Al parsear plantilla vista detalle, " + 
@@ -1150,11 +1153,11 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                     view.append(tag.toString());
                 } else if (tag.getTagString().toLowerCase().equals("img") && !tag.hasParam("tagProp")) {
                     view.append(tag.toString());
-                }
+                }  else if (tag.getTagString().toLowerCase().equals("img") && tag.hasParam("tagProp")) {
                 /*
                  Si es un tag de imagen y tiene el atributo tagProp
                  obtener el valor del atributo tagProp que contiene el uri de la propiedad
-                 */ else if (tag.getTagString().toLowerCase().equals("img") && tag.hasParam("tagProp")) {
+                 */
                     String propUri = tag.getParam("tagProp");
                     if (propUri != null) {
                         view.append(renderPropertyValue(request, elementBSC, propUri, lang, period));
@@ -1267,7 +1270,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             try {
                 gobj = ont.getGenericObject(str_role);
             } catch (Exception e) {
-                log.error("Errror InlineEdit.userCanEdit()", e);
+                DetailViewManager.log.error("Error InlineEdit.userCanEdit()", e);
                 return Boolean.FALSE;
             }
 
