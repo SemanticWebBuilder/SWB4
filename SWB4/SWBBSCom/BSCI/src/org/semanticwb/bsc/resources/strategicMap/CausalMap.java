@@ -567,7 +567,7 @@ public class CausalMap extends ComponentMap {
         sb.append(borderPaint);
         sb.append("\" class=\"objectives_");
         sb.append(dataObjective[6]);
-        sb.append("\">");
+        sb.append(" objectives \">");
         try {
             sb.append("             <a href=\"");
             sb.append(dataObjective[5]);

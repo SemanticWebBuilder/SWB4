@@ -44,6 +44,7 @@ public class CausalArrows extends Decorator {
     private double y1 = 0;
     private double y2 = 0;
     private int countForRelation = 1;
+    private int countForPerspective = 1;
     private BigDecimal divTitl = new BigDecimal(divTitle);
     private BigDecimal divContainerCo = new BigDecimal(divContainerCols);
     private BigDecimal divSizeColum = new BigDecimal(divSizeColumn);
@@ -53,7 +54,7 @@ public class CausalArrows extends Decorator {
     private BigDecimal tam1 = new BigDecimal(1);
     private BigDecimal tam2 = new BigDecimal(2);
     private BigDecimal tam100 = new BigDecimal(100);
-    private BigDecimal tam04 = new BigDecimal("0.5");
+    private BigDecimal tam04 = new BigDecimal("0.4");
 
     /**
      * Construye una instancia de tipo {@code CausalArrows}
@@ -242,6 +243,27 @@ public class CausalArrows extends Decorator {
                     }
                 }
             }
+
+            Iterator itPerspe = perspective.listCausalPerspectives();
+            itPerspe = BSCUtils.sortObjSortable(itPerspe).listIterator();
+            if (itPerspe.hasNext()) {
+                //aqui continuar
+                Perspective perspeFinal = (Perspective)itPerspe.next();
+                String classLine = ((base.getData("colorRelPP") == null)
+                        || (base.getData("colorRelPP").trim().length() == 0))
+                        ? "arrow" : base.getData("colorRelPP");
+                int startPerspectiveIndex = findIndexPerspective(perspective, dataStructure);
+                int finalPerspectiveIndex = findIndexPerspective(perspeFinal, dataStructure);
+                HashMap map = paintPerspPersp(startPerspectiveIndex, finalPerspectiveIndex, dataStructure.length(),
+                        countLinesAttributes, classLine, dataStructure, "#triangle-end5");
+                itMap = map.entrySet().iterator();
+                while (itMap.hasNext()) {
+                    Entry entry = itMap.next();
+                    countLinesAttributes = Integer.parseInt(entry.getKey().toString());
+                    StringBuilder sb1 = (StringBuilder) entry.getValue();
+                    sbAttributeLines.append(sb1);
+                }
+            }
         }
         sbStatementLines.append(createLinesSVG(countLinesAttributes));
         sb.append(getJavascript(sbStatementLines, sbAttributeLines));
@@ -348,6 +370,59 @@ public class CausalArrows extends Decorator {
         }
         map1.put(countLine, sb);
         return map1;
+    }
+
+    private HashMap paintPerspPersp(int initPerspective, int finalizePerspective, int elements,
+            int countLine, String classLine, JSONObject jsonArrows, String triangleEnd) {
+        HashMap map = new HashMap();
+        StringBuilder sb = new StringBuilder();
+        try {
+            JSONObject startPers = (JSONObject) jsonArrows.get(initPerspective + "");
+            JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
+            BigDecimal elem = tam1.divide(new BigDecimal(elements), MathContext.DECIMAL128);
+            BigDecimal x1A = new BigDecimal(countForPerspective).multiply(elem);
+            x1 = x1A.doubleValue();
+            x2 = x1;
+            double sizePers = 0;
+            JSONObject obj;
+            for (int i = 1; i <= (initPerspective - 1); i++) {
+                obj = (JSONObject) jsonArrows.get(i + "");
+                sizePers = sizePers + obj.getInt("height");
+                if(obj.getInt("heightDiffe") > 0) {
+                    sizePers = sizePers + 40 + 2;
+                    
+                }
+            }
+            sizePers = sizePers + (1 * (startPers.getInt("height")/3));
+            
+            sizePers = sizePers + 142;
+            
+            y1 = sizePers;
+            sizePers = 0;
+            for (int i = 1; i <= (finalizePerspective - 1); i++) {
+                obj = (JSONObject) jsonArrows.get(i + "");
+                sizePers = sizePers + obj.getInt("height");
+                if(obj.getInt("heightDiffe") > 0) {
+                    sizePers = sizePers + 40 + 2;
+                }                
+            }
+            sizePers = sizePers + (2 * (finalPers.getInt("height")/3));
+            sizePers = sizePers + 142;
+            
+            y2 = sizePers;
+            if (initPerspective > finalizePerspective) {
+                sb.append(paintLines(countLine, x2, x1, y1, y2, classLine));
+                //sb.append(paintLineTriangle(countLine, triangleEnd));
+            } else {
+                sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
+            }
+            sb.append(paintLineTriangle(countLine, triangleEnd));
+            countLine++;
+        } catch (JSONException ex) {
+            log.error("Error in " + ex);
+        }
+        map.put(countLine, sb);
+        return map;
     }
 
     /**
@@ -1176,7 +1251,7 @@ public class CausalArrows extends Decorator {
         sb.append(allLines);
         sb.append("\n         svg.setAttribute(\"width\", \"100%\");");
         sb.append("\n         svg.setAttribute(\"height\", \"100%\");");
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 1; i <= 5; i++) {
             sb.append(getDownArrow(i));
         }
         sb.append(allAttributeLines);
@@ -1207,7 +1282,9 @@ public class CausalArrows extends Decorator {
         sb.append("\n         marker.setAttribute(\"markerWidth\", 6);");
         sb.append("\n         marker.setAttribute(\"markerHeight\", 6);");
         sb.append("\n         marker.setAttribute(\"orient\", \"auto\");");
-        sb.append("\n         marker.setAttribute(\"class\", \"arrow\");");
+        sb.append("\n         marker.setAttribute(\"class\", \"arrow");
+        sb.append(i);
+        sb.append("\");");
         sb.append("\n         var path = document.createElementNS(\"http://www.w3.org/2000/svg\", \"path\");");
         sb.append("\n         marker.appendChild(path);");
         sb.append("\n         path.setAttribute(\"d\", \"M 0 0 L 10 5 L 0 10 z\");");
