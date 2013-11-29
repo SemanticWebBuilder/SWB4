@@ -90,21 +90,26 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             output.append(paramRequest.getLocaleString("msg_noContentView"));
         } else {
             SummaryView activeView = this.getActiveView();
-//	TODO: Obtener el periodo de consulta actual
         
-//	Se obtiene el conjunto de instancias correspondientes al valor de workClass, en el sitio, de las que 
-//	se tiene captura de datos en el (TODO:) periodo obtenido
+        //Se obtiene el conjunto de instancias correspondientes al valor de workClass, en el sitio, de las que 
+        //se tiene captura de datos en el periodo obtenido
             SemanticClass semWorkClass = this.getWorkClass().transformToSemanticClass();
             WebSite website = this.getResourceBase().getWebSite();
             Iterator<GenericObject> allInstances = website.listInstancesOfClass(semWorkClass);
             String identifier = null; //de los elementos del grid
             String filters = null;
             String periodId = (String) request.getSession(true).getAttribute(website.getId());
+            //Si no hay sesion, la peticion puede ser directa (una liga en un correo). Crear sesion y atributo:
+            if (periodId == null) {
+                periodId = request.getParameter(website.getId()) != null
+                           ? request.getParameter(website.getId()) : null;
+                if (periodId != null) {
+                    request.getSession(true).setAttribute(website.getId(), periodId);
+                }
+            }
             Period thisPeriod = periodId != null
                     ? Period.ClassMgr.getPeriod(periodId, website)
                     : null;
-//            boolean idIncluded = false;  //Indica si identifier esta incluido en las propiedades de la vista
-//            boolean idEvaluated = false; //Indica si ya se realizó la verificación de que el identificador esta incluido en la vista
             
             //Define el identificador a utilizar de acuerdo al tipo de objetos a presentar
             if (semWorkClass.equals(Objective.bsc_Objective)) {
@@ -120,7 +125,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                 identifier = paramRequest.getLocaleString("value_DeliverableId");
                 filters = paramRequest.getLocaleString("value_DeliverableFilter");
             }
-            //objeto JSON que almacenará la estructura del grid de Dojo
+            //objeto JSON que almacenara la estructura del grid de Dojo
             JSONObject structure = new JSONObject();
             JSONArray items = new JSONArray();
             try {
@@ -156,24 +161,16 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                     } catch (JSONException jsone) {
                         SummaryViewManager.log.error("En la creacion de objetos JSON", jsone);
                     }
-                    //Si identifier esta incluido en la vista se modifican las banderas
-/*                    if (!idEvaluated && identifier.equals(elementProperty.getName())) {
-                        idEvaluated = true;
-                        idIncluded = true;
-                    }*/
                 }
                 
                 //Se utiliza el URI como identificador de los elementos del grid
                 //Agrega la uri de cada instancia para poder crear las ligas a las vistas detalle
                 try {
                     row.put("uri", semObj.getURI());
-/*                    if (!idIncluded) {
-                        row.put(identifier, semObj.getId());
-                    }*/
                 } catch (JSONException jsone) {
                     SummaryViewManager.log.error("En la creacion de objetos JSON", jsone);
                 }
-                //Agrega el objeto "renglón" a la estructura del grid
+                //Agrega el objeto "renglon" a la estructura del grid
                 items.put(row);
             }
             try {
@@ -206,7 +203,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                 }
             }
             
-            //Declara el código HTML para inclusión de Dojo.Grid y sus estilos
+            //Declara el codigo HTML para inclusion de Dojo.Grid y sus estilos
             output.append("<script type=\"text/javascript\">\n");
             output.append("  dojo.require('dojo.parser');\n");
             output.append("  dojo.require('dojox.layout.ContentPane');\n");
@@ -243,7 +240,11 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                 String[] heading = headingsArray.get(i);
                 if (heading != null && heading.length > 1) {
                     output.append("        {\n");
-                    output.append("          name: \"" + heading[1] + "\", field: \"" + heading[0] + "\", width: \"auto\",\n");
+                    output.append("          name: \"");
+                    output.append(heading[1]);
+                    output.append("\", field: \"");
+                    output.append(heading[0]);
+                    output.append("\", width: \"auto\",\n");
                     output.append("          formatter: function(content, rowIndex, cell) {\n");
                     output.append("            var toReturn = content;\n");
                     output.append("            while (content.indexOf(\"&lt\") > -1) {\n");
@@ -268,7 +269,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             output.append("  .dojoxGrid table { margin: 0; } ");
             output.append("</style>\n");
             
-            //Se evalúa el mostrar la forma para filtrado en grid
+            //Se evalua el mostrar la forma para filtrado en grid
             if (filters != null && showFiltering) {
                 output.append("<div>\n");
                 output.append("  <form dojoType=\"dijit.form.Form\" name=\"filter\" id=\"filterForm");
@@ -305,10 +306,9 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                 output.append("    <input type=\"text\" name=\"filterValue\" id=\"filterValue");
                 output.append(this.getId());
                 output.append("\" onkeydown=\"catchKeyStrokes(event);\">\n");
-                //output.append("    <input type=\"button\" value=\"Apply\" onclick=\"javascript:filterTableData()\">\n");
                 output.append("      <span dojoType='dijit.form.Button'>\n");
                 output.append("          Aplicar\n");
-                //función de javascript para aplicación de filtro en Grid:
+                //funcion de javascript para aplicacion de filtro en Grid:
                 output.append("          <script type=\"dojo/method\" event='onClick' args='evt'>\n");
                 output.append("                var choosenCriteria = document.getElementById('filterCriteria");
                 output.append(this.getId());
@@ -318,7 +318,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                 output.append("');\n");
                 output.append("                if (choosenValue.value != '') {\n");
                 
-                //Evalúa entre los diferentes criterios de filtrado
+                //Evalua entre los diferentes criterios de filtrado
                 for (int i = 0; i < headingsArray.size(); i++) {
                     String[] heading = headingsArray.get(i);
                     if (heading != null && heading.length > 2 && heading[2].equals("true")) {
@@ -344,32 +344,6 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             
             output.append("<div id=\"grid\"></div>\n");
 
-            /* Si se construye programaticamente el grid, hay que quitar esto.
-            output.append("<span dojoType=\"dojo.data.ItemFileReadStore\" data=\"structure\" jsId=\"myStore\">\n");
-            output.append("</span>\n");
-            output.append("<table dojoType=\"dojox.grid.DataGrid\" jsId=\"myGrid\" store=\"myStore\" query=\"{ ");//
-            output.append(identifier);
-            output.append(": '*' }\"\n");
-            output.append("  clientSort=\"true\" style=\"width: 80%; height: 800px;\" rowSelector=\"20px\">\n");  //rowsPerPage=\"20\" 
-            output.append("  ");
-            //Declara el th de cada propiedad con la etiqueta correspondiente
-            output.append("  <thead>\n");
-            output.append("    <tr>\n");
-            
-            for (int i = 0; i < headingsArray.size(); i++) {
-                String[] heading = headingsArray.get(i);
-                if (heading != null && heading.length > 1) {
-                    output.append("      <th width=\"auto\" field=\"");
-                    output.append(heading[0]);
-                    output.append("\">");
-                    output.append(heading[1]);
-                    output.append("</th>\n");
-                }
-            }
-            output.append("    </tr>\n");
-            output.append("  </thead>\n");
-            output.append("</table>\n");
-            */
         }
         out.println(output.toString());
     }
@@ -433,7 +407,8 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         
         //Poner validacion de clase a utilizar, debe ser descendiente de BSCElement
         String lang = paramRequest.getUser().getLanguage();
-        ArrayList<SemanticProperty> propsList = (ArrayList<SemanticProperty>) SWBUtils.Collections.copyIterator(semWorkClass.listProperties());
+        ArrayList<SemanticProperty> propsList = (ArrayList<SemanticProperty>) 
+                SWBUtils.Collections.copyIterator(semWorkClass.listProperties());
         Collections.sort(propsList, new PropertiesComparator());
         Iterator<SemanticProperty> basePropertiesList = propsList.iterator();
         SWBFormMgr formMgr = null;
@@ -835,17 +810,15 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         output.append("                                return false;\n");
         output.append("                            </script>\n");
         output.append("    </button>\n");
-        //if (operation.equals("edit")) {
-            SWBResourceURL urlCancel = paramRequest.getRenderUrl();
-            urlCancel.setMode(SWBResourceURLImp.Mode_ADMIN);
-            urlCancel.setParameter("operation", "add");
-            output.append("    <button dojoType=\"dijit.form.Button\" ");
-            output.append("type=\"button\" onClick=\"reloadTab('");
-            output.append(this.getResource().getURI());
-            output.append("');\">\n");
-            output.append(paramRequest.getLocaleString("lbl_btnCancel"));
-            output.append("    </button>\n");
-        //}
+        SWBResourceURL urlCancel = paramRequest.getRenderUrl();
+        urlCancel.setMode(SWBResourceURLImp.Mode_ADMIN);
+        urlCancel.setParameter("operation", "add");
+        output.append("    <button dojoType=\"dijit.form.Button\" ");
+        output.append("type=\"button\" onClick=\"reloadTab('");
+        output.append(this.getResource().getURI());
+        output.append("');\">\n");
+        output.append(paramRequest.getLocaleString("lbl_btnCancel"));
+        output.append("    </button>\n");
         output.append("</fieldset>\n");
         output.append("            </form>\n");
         output.append("        </div>\n");
@@ -1141,7 +1114,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
 
                 if (this.getActiveView() == null || (this.getActiveView() != null
                         && !this.getActiveView().getURI().equals(view.getURI()))) {
-                    //Código HTML para asignación como contenido
+                    //Codigo HTML para asignacion como contenido
                     listCode.append("          <input type=\"radio\" dojoType=\"dijit.form.RadioButton\" ");
                     listCode.append("name=\"asContent\" id=\"asContent");
                     listCode.append(view.getId());

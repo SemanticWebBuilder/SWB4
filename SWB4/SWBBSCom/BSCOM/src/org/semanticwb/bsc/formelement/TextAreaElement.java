@@ -77,36 +77,32 @@ public class TextAreaElement extends org.semanticwb.bsc.formelement.base.TextAre
             viewString.append("  <!--\n");
             viewString.append("    var iledit_");
             viewString.append(objectId);
-            viewString.append(";");
-            viewString.append("    dojo.addOnLoad( function() {");
+            viewString.append(";\n");
+            viewString.append("    dojo.addOnLoad( function() {\n");
             viewString.append("      iledit_");
             viewString.append(objectId);
-            viewString.append(" = new dijit.InlineEditBox({");
+            viewString.append(" = new dijit.InlineEditBox({\n");
             viewString.append("        id: \"ile_");
             viewString.append(objectId);
-            viewString.append("\",");
-            viewString.append("        autoSave: false,");
-            viewString.append("        editor: \"dijit.form.Textarea\",");
-            viewString.append("        editorParams: {trim:true, required:true},");
-            viewString.append("        width: '80%',");
-            viewString.append("        onChange: function(value) {");
-            viewString.append("          var toSend = value;\n");
-            viewString.append("          while (value.indexOf(\"<\") > -1) {\n");
-            viewString.append("            toSend = value.replace(\"<\", \"&lt;\");\n");
-            viewString.append("            value = toSend;\n");
-            viewString.append("          }\n");
+            viewString.append("\",\n");
+            viewString.append("        autoSave: false,\n");
+            viewString.append("        editor: \"dijit.form.Textarea\",\n");
+            viewString.append("        editorParams: {trim:true, required:true},\n");
+            viewString.append("        width: '80%',\n");
+            viewString.append("        onChange: function(value) {\n");
             viewString.append("          getSyncHtml('");
             viewString.append(url);
             viewString.append("&propUri=");
             viewString.append(prop.getEncodedURI());
             viewString.append("&value='+value);\n");
-            viewString.append("        }");
+            viewString.append("        }\n");
             viewString.append("      }, 'eb_");
             viewString.append(objectId);
-            viewString.append("');");
-            viewString.append("    }); iledit_");
+            viewString.append("');\n");
+            viewString.append("      iledit_");
             viewString.append(objectId);
             viewString.append(".startup();\n");
+            viewString.append("    });\n");
             viewString.append("-->\n");
             viewString.append("</script>\n");
             viewString.append("<span id=\"eb_");
@@ -123,6 +119,12 @@ public class TextAreaElement extends org.semanticwb.bsc.formelement.base.TextAre
         return toReturn;
     }
     
+    /**
+     * Procesa la informaci&oacute;n recibida para almacenarla en la propiedad del objeto indicado
+     * @param request la petici&oacute;n HTTP generada por el cliente
+     * @param obj el objeto al que pertenece la propiedad de inter&eacute;s
+     * @param prop la propiedad del objeto a la que se desea asociar la informaci&oacute;n recibida
+     */
     @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
         process(request, obj, prop, prop.getName());
