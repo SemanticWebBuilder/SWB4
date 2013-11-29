@@ -29,7 +29,7 @@
         }
     }
 %>
-    <form id="login/form" dojoType="dijit.form.Form" class="swbform" action="<%=org.semanticwb.SWBPlatform.getContextPath()%>/swbadmin/jsp/login.jsp"  onsubmit="submitForm('login/form');return false;" method="post">
+    <form id="login_form" dojoType="dijit.form.Form" class="swbform" action="<%=org.semanticwb.SWBPlatform.getContextPath()%>/swbadmin/jsp/login.jsp"  onsubmit="submitForm('login_form');return false;" method="post">
 	<fieldset>
       <table >
         <tr >
