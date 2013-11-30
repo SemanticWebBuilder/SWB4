@@ -1462,7 +1462,8 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     @Override
     public JSONObject getUserInfobyId(String userId) {
         HashMap<String, String> params = new HashMap<String, String>(2);
-        params.put("q", "SELECT friend_count, subscriber_count, current_location, sex, relationship_status, birthday_date, email, education, work  FROM user WHERE uid = " + userId);
+        //params.put("q", "SELECT friend_count, subscriber_count, current_location, sex, relationship_status, birthday_date, email, education, work  FROM user WHERE uid = " + userId);
+        params.put("q", "{\"usuario\": \"SELECT friend_count FROM user WHERE uid = " + userId + "\", \"pagina\": \"SELECT fan_count  FROM page WHERE page_id = " + userId + "\"}");
         params.put("access_token", this.getAccessToken());
 
         JSONObject userInfo = new JSONObject();
@@ -1471,13 +1472,32 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
             try {
                 JSONObject parseUsrInf = new JSONObject(fbResponse);
+                JSONObject user = null;
+                JSONObject page = null;
+                
+                
+                System.out.println("THE RESPONSE:" + parseUsrInf);
                 if (!parseUsrInf.has("data")) {
                     log.error("Not data found for id:" + userId);
                     return null;
                 }
-                JSONArray usrData = parseUsrInf.getJSONArray("data");
-                if (usrData.length() == 1) {
-                    parseUsrInf = usrData.getJSONObject(0);
+                JSONArray data = parseUsrInf.getJSONArray("data");
+                for(int i = 0; i < data.length(); i++){
+                    JSONObject entry = data.getJSONObject(i);
+                    if(!entry.isNull("name") && entry.getString("name").equals("pagina")){
+                        if(entry.getJSONArray("fql_result_set").length() == 1){
+                            page = entry.getJSONArray("fql_result_set").getJSONObject(0);
+                        }
+                    }else if(!entry.isNull("name") && entry.getString("name").equals("usuario")){
+                        if(entry.getJSONArray("fql_result_set").length() == 1){
+                            user = entry.getJSONArray("fql_result_set").getJSONObject(0);
+                        }
+                    }
+                }
+                
+                //JSONArray usrData = parseUsrInf.getJSONArray("data");
+                if (user != null) {
+                    parseUsrInf = user;
 
                     //Check if fields exists and if they're not null
                     //Friends
@@ -1577,6 +1597,14 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                      jArrayWork = new JSONArray();
                      userInfo.put("work", jArrayWork);
                      }*/
+                }else if (page != null) {
+                    //parseUsrInf = usrData.getJSONObject(0);
+                    parseUsrInf = page;
+                    if (parseUsrInf.has("fan_count") && !parseUsrInf.isNull("fan_count")) {
+                        userInfo.put("followers", parseUsrInf.getLong("fan_count"));
+                    } else {
+                        userInfo.put("followers", 0);
+                    }
                 }
                 System.out.println("parseUsrInf:" + parseUsrInf);
                 //if(parseUsrInf.has(id))
