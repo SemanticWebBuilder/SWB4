@@ -130,6 +130,9 @@ if (!user.isSigned()) {
                         if (go instanceof RepositoryElement) {
                             System.out.println("---1");
                             RepositoryElement re = (RepositoryElement)go;
+                            
+                            if (re == null) System.out.println("---re nulo");
+                            
                             VersionInfo vi = re.getLastVersion();
                             if (vi != null) {
                                 type = ProcessFileRepository.getFileType(vi.getVersionFile(), lang);
