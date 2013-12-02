@@ -500,7 +500,6 @@ public class ProcessFileRepository extends GenericResource {
                 }
                 //System.out.println("fname: "+fname);
                 repoFile.storeFile(fname, new ByteArrayInputStream(bcont), fcomment, incremento, repoEleStat);
-                
             } else {
                 RepositoryURL repoUrl = null;
                 boolean incremento = Boolean.FALSE;
@@ -584,6 +583,8 @@ public class ProcessFileRepository extends GenericResource {
      * @return 
      */
     public static String getFileType(String filename, String lang) {
+        if (filename == null) return null;
+        
         String bundle = ProcessFileRepository.class.getName();
         Locale locale = new Locale(lang);
         String file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeUNK", locale);
