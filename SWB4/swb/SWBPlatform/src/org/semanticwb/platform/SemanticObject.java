@@ -924,12 +924,12 @@ public class SemanticObject
      */
     public GenericObject createGenericInstance()
     {
-        GenericObject gen=getGenericInstance();
+        GenericObject gen=getGenericInstanceFromCache();
         if(gen==null)
         {
             synchronized(this)
             {
-                gen=getGenericInstance();
+                gen=getGenericInstanceFromCache();
                 if(gen==null)
                 {
                     gen=createNewGenericIntance();
