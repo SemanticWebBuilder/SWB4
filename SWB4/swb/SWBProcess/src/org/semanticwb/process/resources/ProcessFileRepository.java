@@ -640,6 +640,7 @@ public class ProcessFileRepository extends GenericResource {
      * @return Cadena con la ruta al icono del archivo.
      */
     public static String getFileIcon(String fileName) {
+        if (fileName == null) return null;
         String path = SWBPlatform.getContextPath()+"/swbadmin/jsp/process/repository/css/images/";
         String ret = "";
         String type = fileName.toLowerCase();
