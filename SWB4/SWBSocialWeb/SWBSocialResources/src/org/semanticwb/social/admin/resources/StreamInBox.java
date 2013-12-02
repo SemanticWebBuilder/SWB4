@@ -2794,7 +2794,11 @@ public class StreamInBox extends GenericResource {
         //User
         out.println("<td>");
         SWBResourceURL urlshowUsrHistory = paramRequest.getRenderUrl().setMode(Mode_ShowUsrHistory).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("suri", objUri);
-        out.println(postIn.getPostInSocialNetworkUser() != null ? "<a href=\"#\" onclick=\"showDialog('" + urlshowUsrHistory.setParameter("swbSocialUser", postIn.getPostInSocialNetworkUser().getURI()) + "','" + paramRequest.getLocaleString("userHistory") + "'); return false;\">" + SWBUtils.TEXT.encode(postIn.getPostInSocialNetworkUser().getSnu_name(),"UTF-8") + "</a>" : paramRequest.getLocaleString("withoutUser"));
+        if(firstLoad){
+            out.println(postIn.getPostInSocialNetworkUser() != null ? "<a href=\"#\" onclick=\"showDialog('" + urlshowUsrHistory.setParameter("swbSocialUser", postIn.getPostInSocialNetworkUser().getURI()) + "','" + paramRequest.getLocaleString("userHistory") + "'); return false;\">" + postIn.getPostInSocialNetworkUser().getSnu_name() + "</a>" : paramRequest.getLocaleString("withoutUser"));
+        }else{
+            out.println(postIn.getPostInSocialNetworkUser() != null ? "<a href=\"#\" onclick=\"showDialog('" + urlshowUsrHistory.setParameter("swbSocialUser", postIn.getPostInSocialNetworkUser().getURI()) + "','" + paramRequest.getLocaleString("userHistory") + "'); return false;\">" + SWBUtils.TEXT.encode(postIn.getPostInSocialNetworkUser().getSnu_name(),"UTF-8") + "</a>" : paramRequest.getLocaleString("withoutUser"));
+        }
         out.println("</td>");
 
         //Followers
