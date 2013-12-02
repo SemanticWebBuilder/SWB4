@@ -129,6 +129,7 @@ if (!user.isSigned()) {
                         
                         if (go instanceof RepositoryElement) {
                             System.out.println("---1");
+                            if (go == null) System.out.println("---go nulo");
                             RepositoryElement re = (RepositoryElement)go;
                             
                             if (re == null) System.out.println("---re nulo");
