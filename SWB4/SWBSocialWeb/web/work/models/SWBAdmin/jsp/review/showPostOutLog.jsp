@@ -36,7 +36,7 @@
     PostOut postOut=(PostOut)semObj.getGenericInstance();
     %>
       <div class="swbform" style="width: 500px">
-        <table style="width: 100%">
+        <table class="tabla1">
             <thead>
                 <tr>
                     <th><%=paramRequest.getLocaleString("actions")%></th>
@@ -56,7 +56,7 @@
         PostOutNet postOutNet=itPostOutNets.next();
         %>
             <tr>
-                <td>
+                <td class="accion">
                 <%
                 if(postOutNet.getError()!=null)
                 {
@@ -73,7 +73,7 @@
                     }
                     %>
                     
-                        <a href="#" title="<%=paramRequest.getLocaleString("remove")%>" class="eliminar" onclick="if(confirm('<%=paramRequest.getLocaleString("confirm_remove")%>  <%=msgText%> ?')){ submitUrl('<%=urlr%>',this); } else { return false;}">Eliminar</a>
+                        <a href="#" class="eliminar" title="<%=paramRequest.getLocaleString("remove")%>" class="eliminar" onclick="if(confirm('<%=paramRequest.getLocaleString("confirm_remove")%>  <%=msgText%> ?')){ submitUrl('<%=urlr%>',this); } else { return false;}"></a>
                 <%
                 }
                 %>
