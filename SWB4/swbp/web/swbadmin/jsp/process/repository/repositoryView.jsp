@@ -128,18 +128,13 @@ if (!user.isSigned()) {
                         String ownerGroup = "--";
                         
                         if (go instanceof RepositoryElement) {
-                            System.out.println("---1");
-                            if (go == null) System.out.println("---go nulo");
                             RepositoryElement re = (RepositoryElement)go;
-                            
-                            if (re == null) System.out.println("---re nulo");
                             
                             VersionInfo vi = re.getLastVersion();
                             if (vi != null) {
                                 type = ProcessFileRepository.getFileType(vi.getVersionFile(), lang);
                             }
                             _type = (go instanceof RepositoryURL)?"url":"file";
-                            System.out.println("---2");
                             if (vi != null && vi.getModifiedBy() != null && vi.getModifiedBy().getFullName().length() > 0) modifier = vi.getModifiedBy().getFullName();
                             if (vi != null && !(re instanceof RepositoryURL)) {
                                 urlIcon = ProcessFileRepository.getFileIcon(vi.getVersionFile());
@@ -149,7 +144,6 @@ if (!user.isSigned()) {
                             if (vi != null && vi.getUpdated() != null) {
                                 lastUpdated = format.format(vi.getUpdated());
                             }
-                            System.out.println("---3");
                             
                             if (re.getStatus() != null) {
                                 status = re.getStatus().getDisplayTitle(lang);
@@ -158,7 +152,6 @@ if (!user.isSigned()) {
                             if (re.getOwnerUserGroup() != null) {
                                 ownerGroup = re.getOwnerUserGroup().getDisplayTitle(lang);
                             }
-                            System.out.println("---4");
                         } else if (go instanceof RepositoryDirectory) {
                             Traceable tr = (Traceable)go;
                             if (tr.getModifiedBy() != null) {
