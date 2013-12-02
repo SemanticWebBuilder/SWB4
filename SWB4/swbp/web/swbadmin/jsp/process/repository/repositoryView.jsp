@@ -131,11 +131,13 @@ if (!user.isSigned()) {
                             System.out.println("---1");
                             RepositoryElement re = (RepositoryElement)go;
                             VersionInfo vi = re.getLastVersion();
-                            type = ProcessFileRepository.getFileType(vi.getVersionFile(), lang);
+                            if (vi != null) {
+                                type = ProcessFileRepository.getFileType(vi.getVersionFile(), lang);
+                            }
                             _type = (go instanceof RepositoryURL)?"url":"file";
                             System.out.println("---2");
                             if (vi != null && vi.getModifiedBy() != null && vi.getModifiedBy().getFullName().length() > 0) modifier = vi.getModifiedBy().getFullName();
-                            if (!(re instanceof RepositoryURL)) {
+                            if (vi != null && !(re instanceof RepositoryURL)) {
                                 urlIcon = ProcessFileRepository.getFileIcon(vi.getVersionFile());
                             }
                             
