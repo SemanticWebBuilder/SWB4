@@ -49,7 +49,7 @@
 <div class="swbform swbpopup usr-pop">
     <div class="perfilgral">
         <div class="perfil">
-            <img src="<%=userPhoto%>"/>        
+            <img style="width:150px" src="<%=userPhoto%>"/>        
             <p align="center">
                 <%=SWBUtils.TEXT.encode(userCreator.getFullName(), "utf-8")%>
             </p>
