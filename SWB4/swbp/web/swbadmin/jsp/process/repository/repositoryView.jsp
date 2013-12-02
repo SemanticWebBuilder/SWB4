@@ -133,13 +133,13 @@ if (!user.isSigned()) {
                             type = ProcessFileRepository.getFileType(vi.getVersionFile(), lang);
                             _type = (go instanceof RepositoryURL)?"url":"file";
                             
-                            if (vi.getModifiedBy() != null && vi.getModifiedBy().getFullName().length() > 0) modifier = vi.getModifiedBy().getFullName();
+                            if (vi != null && vi.getModifiedBy() != null && vi.getModifiedBy().getFullName().length() > 0) modifier = vi.getModifiedBy().getFullName();
                             if (!(re instanceof RepositoryURL)) {
                                 urlIcon = ProcessFileRepository.getFileIcon(vi.getVersionFile());
                             }
                             
-                            version = vi.getVersionValue();
-                            if (vi.getUpdated() != null) {
+                            version = (vi != null)?vi.getVersionValue():"--";
+                            if (vi != null && vi.getUpdated() != null) {
                                 lastUpdated = format.format(vi.getUpdated());
                             }
                             
