@@ -128,11 +128,12 @@ if (!user.isSigned()) {
                         String ownerGroup = "--";
                         
                         if (go instanceof RepositoryElement) {
+                            System.out.println("---1");
                             RepositoryElement re = (RepositoryElement)go;
                             VersionInfo vi = re.getLastVersion();
                             type = ProcessFileRepository.getFileType(vi.getVersionFile(), lang);
                             _type = (go instanceof RepositoryURL)?"url":"file";
-                            
+                            System.out.println("---2");
                             if (vi != null && vi.getModifiedBy() != null && vi.getModifiedBy().getFullName().length() > 0) modifier = vi.getModifiedBy().getFullName();
                             if (!(re instanceof RepositoryURL)) {
                                 urlIcon = ProcessFileRepository.getFileIcon(vi.getVersionFile());
@@ -142,6 +143,7 @@ if (!user.isSigned()) {
                             if (vi != null && vi.getUpdated() != null) {
                                 lastUpdated = format.format(vi.getUpdated());
                             }
+                            System.out.println("---3");
                             
                             if (re.getStatus() != null) {
                                 status = re.getStatus().getDisplayTitle(lang);
@@ -150,6 +152,7 @@ if (!user.isSigned()) {
                             if (re.getOwnerUserGroup() != null) {
                                 ownerGroup = re.getOwnerUserGroup().getDisplayTitle(lang);
                             }
+                            System.out.println("---4");
                         } else if (go instanceof RepositoryDirectory) {
                             Traceable tr = (Traceable)go;
                             if (tr.getModifiedBy() != null) {
