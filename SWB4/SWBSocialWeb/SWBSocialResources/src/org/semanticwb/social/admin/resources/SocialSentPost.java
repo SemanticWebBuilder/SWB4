@@ -4,6 +4,7 @@
  */
 package org.semanticwb.social.admin.resources;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -142,9 +143,7 @@ public class SocialSentPost extends GenericResource {
                 System.out.println("Error reprt:" + e);
             }
         } else if (Mode_ShowPhotos.equals(mode)) {
-            
             doShowPhotos(request, response, paramRequest);
-
         }  else {
             super.processRequest(request, response, paramRequest);
         }
@@ -3125,19 +3124,61 @@ public class SocialSentPost extends GenericResource {
         String po = request.getParameter("postOut");
 
         SemanticObject semObj = SemanticObject.getSemanticObject(po);
+        
+        if(semObj.createGenericInstance() instanceof Photo)
+        {
+            Photo photo = (Photo) semObj.getGenericInstance();
+            Iterator i = photo.listPhotos();
 
-        Photo photo = (Photo) semObj.getGenericInstance();
-        Iterator i = photo.listPhotos();
+            while (i.hasNext()) {
+                String ca =  (String) i.next();
+                if (ca.equals(idPhoto)) {
+                    photo.removePhoto(idPhoto);
+                    File file=new File(SWBPortal.getWorkPath()+photo.getWorkPath()+"/"+idPhoto);
+                    if(file.exists())
+                    {
+                        file.delete();
+                        File directory=file.getParentFile();
+                        if(directory.isDirectory())
+                        {
+                            if(directory.listFiles().length==0)
+                            {
+                                directory.delete();
+                            }
+                        }
+                    }
+                    break;
+                }                      
+                response.setMode("showPhotos");
+                response.setRenderParameter("postOut", request.getParameter("postOut"));
+            }
+        }else if(semObj.createGenericInstance() instanceof Message)
+        {
+            Message message = (Message) semObj.getGenericInstance();
+            Iterator i = message.listFiles();
 
-        while (i.hasNext()) {
-            String ca =  (String) i.next();
-            if (ca.equals(idPhoto)) {
-                photo.removePhoto(idPhoto);
-                break;
-            }                      
-            
-            response.setMode("showPhotos");
-            response.setRenderParameter("postOut", request.getParameter("postOut"));
+            while (i.hasNext()) {
+                String ca =  (String) i.next();
+                if (ca.equals(idPhoto)) {
+                    message.removeFile(idPhoto);
+                    File file=new File(SWBPortal.getWorkPath()+message.getWorkPath()+"/"+idPhoto);
+                    if(file.exists())
+                    {
+                        file.delete();
+                        File directory=file.getParentFile();
+                        if(directory.isDirectory())
+                        {
+                            if(directory.listFiles().length==0)
+                            {
+                                directory.delete();
+                            }
+                        }
+                    }
+                    break;
+                }                      
+                response.setMode("showPhotos");
+                response.setRenderParameter("postOut", request.getParameter("postOut"));
+            }
         }
     }
     
