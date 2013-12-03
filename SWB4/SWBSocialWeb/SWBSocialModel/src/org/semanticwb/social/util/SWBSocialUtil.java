@@ -1393,7 +1393,14 @@ public class SWBSocialUtil implements SWBAppObject {
             if(postOutInitDate!=null && postOutInitDate.trim().length()>0)
             {
                 postOutInitDate=SWBSocialUtil.Util.changeFormat(postOutInitDate, 1);
-                postOutInitHour = postOutInitHour.substring(1, 6);
+                
+                try
+                {
+                     postOutInitHour = postOutInitHour.substring(1, 6);
+                }catch(Exception e)
+                {
+                    postOutInitHour="00:00";
+                }
 
                 System.out.println("manageFastCalendar2PostOut/wsite:"+wsite);
 
