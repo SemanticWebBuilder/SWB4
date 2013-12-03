@@ -156,7 +156,6 @@
                     <p class="docAsoc">Documentos asociados</p>
                 <%
             }
-            String sclass="DocFormat_undefined";
             Iterator<String> itDocs = message.listFiles();
             while (itDocs.hasNext()) {
                 String sdoc = itDocs.next();
@@ -164,21 +163,22 @@
                 if (sFileTmp.startsWith(pname)) {
                     sFileTmp = sFileTmp.substring(pname.length() + 1);
                 }
+                String sclass="DocFormat_undefined";
                 if(sFileTmp.endsWith(".xlsx") || sFileTmp.endsWith(".xlsm") || sFileTmp.endsWith(".xltx") || sFileTmp.endsWith(".xltm") || sFileTmp.endsWith(".xlsb") || sFileTmp.endsWith(".xlam"))sclass="DocFormat_excel";
-                else if(sFileTmp.endsWith(".docx") || sFileTmp.endsWith(".docm") || sFileTmp.endsWith(".dotx") || sFileTmp.endsWith(".dotm"))sclass="DocFormat_word";
+                else if(sFileTmp.endsWith(".doc") || sFileTmp.endsWith(".docx") || sFileTmp.endsWith(".docm") || sFileTmp.endsWith(".dotx") || sFileTmp.endsWith(".dotm"))sclass="DocFormat_word";
                 else if(sFileTmp.endsWith(".pptx") || sFileTmp.endsWith(".pptm") || sFileTmp.endsWith(".potx") || sFileTmp.endsWith(".ppsx"))sclass="DocFormat_powerPoint";
                 else if(sFileTmp.endsWith(".pdf"))sclass="DocFormat_pdf";
                 else if(sFileTmp.endsWith(".zip") || sFileTmp.endsWith(".rar"))sclass="DocFormat_zip";
                 else if(sFileTmp.endsWith(".mp4") || sFileTmp.endsWith(".swf") || sFileTmp.endsWith(".flv") || sFileTmp.endsWith(".wav") || sFileTmp.endsWith(".wmv") || sFileTmp.endsWith(".mov"))sclass="DocFormat_video";
                 else if(sFileTmp.endsWith(".jpg") || sFileTmp.endsWith(".png") || sFileTmp.endsWith(".gif") || sFileTmp.endsWith(".jpeg") || sFileTmp.endsWith(".bmp"))sclass="DocFormat_image";
-            %>
-            <p <%=sclass%>>
-            <span id="img<%=sdoc%>" style="width: 200px; height: 200px; border: thick #666666; overflow: hidden; position: relative;">
-                <a href="<%=SWBPortal.getWebWorkPath()%><%=message.getWorkPath()%>/<%=sdoc%>" target="_blank" title="View full size"><%=sFileTmp%></a>
-            </span>
-            </p>
+                %>
+                <p class="<%=sclass%>">
+                <span id="img<%=sdoc%>" style="width: 200px; height: 200px; border: thick #666666; overflow: hidden; position: relative;">
+                    <a href="<%=SWBPortal.getWebWorkPath()%><%=message.getWorkPath()%>/<%=sdoc%>" target="_blank" title="View full size"><%=sFileTmp%></a>
+                </span>
+                </p>
 
-            <%
+                <%
                 }
             } else if (semObj.getGenericInstance() instanceof Photo) {
                 Photo photo = (Photo) semObj.getGenericInstance();
