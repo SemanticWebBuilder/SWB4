@@ -74,7 +74,7 @@ if (!user.isSigned()) {
                         SWBResourceURL propsUrl = paramRequest.getRenderUrl().setCallMethod(SWBParamRequest.Call_DIRECT);
                         propsUrl.setMode(ProcessFileRepository.MODE_PROPS);
                         propsUrl.setParameter("fid", rf.getId());
-                        propsUrl.setParameter("type", (rf instanceof RepositoryURL)?paramRequest.getLocaleString("msgDocLink"):paramRequest.getLocaleString("msgFile"));
+                        propsUrl.setParameter("type", (rf instanceof RepositoryURL)?"url":"file");
                         propsUrl.setParameter("verNum", String.valueOf(vi.getVersionNumber()));
                         %>
                         <tr>
