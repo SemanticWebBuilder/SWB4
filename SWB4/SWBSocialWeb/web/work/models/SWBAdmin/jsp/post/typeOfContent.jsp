@@ -164,7 +164,8 @@
             <div class="pub-redes">
                 <%= messageFormMgr.getFormHiddens()%>
                 <p class="titulo">Detalles de la publicaci&oacute;n</p>
-                <p><div class="etiqueta"><label for="msj"><%=Message.social_Message.getDisplayName(lang)%>: </label></div>
+                <p>
+                <div class="etiqueta"><label for="msj"><%=Message.social_Message.getDisplayName(lang)%>: </label></div>
                 <%
                     int posicion = 0;
                     String postOutNull = messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_CREATE);
@@ -189,6 +190,29 @@
                                                                <!-- <div class="campo"><%=postOut == null ? messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_CREATE) : messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_EDIT)%></div>-->
                 <div class="campo"><%=postOut == null ? postOutNull : postOutNNull%><br> <%if (postOut == null) {%><input  id="<%=id%>_Text" name="<%=id%>_Text" type="text" size="4" class="nobord" readonly ><label class="labelInfo"><img class="swbIconTwitter" src="/swbadmin/css/images/trans.png"/> 140  <img class="swbIconFacebook" src="/swbadmin/css/images/trans.png"/> 2000  <img class="swbIconYouTube" src="/swbadmin/css/images/trans.png"/> 5000  </label><%} else {%><input id="<%=id%>_Text" name="<%=id%>_Text" type="text" size="4" class="nobord" readonly  value="<%=value.length()%>"><label class="labelInfo"><img class="swbIconTwitter" src="/swbadmin/css/images/trans.png"/> 140  <img class="swbIconFacebook" src="/swbadmin/css/images/trans.png"/> 2000  <img class="swbIconYouTube" src="/swbadmin/css/images/trans.png"/> 5000  </label><%}%></div>
                 </p>
+                <!--Documents-->
+                 <p>
+                    <%
+                        if (postOut != null) {
+                    %>
+
+                    <a href="#" title="Mostrar" onclick="showDialog('<%=urlAction.setAction("showPhotos").setParameter("postOut", postOut.toString())%>','<%=paramRequest.getLocaleString("source")%>'); return false;">Mostrar documentos</a>
+
+                    <%
+                        }
+                    %>
+                </p>
+                <p>
+                    <div class="etiqueta"><label for="file"><%=messageFormMgr.renderLabel(request, FileAble.social_hasFile, messageFormMgr.MODE_CREATE)%>: </label></div>
+                    <%
+                        SemanticObject obj2 = new SemanticObject(paramRequest.getWebPage().getWebSite().getSemanticModel(), Message.sclass);
+                        String formElementStr = messageFormMgr.getFormElement(FileAble.social_hasFile).renderElement(request, obj2, FileAble.social_hasFile, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang);
+                        formElementStr = formElementStr.replaceFirst("hasFile_new", "hasFile_new_#swbsocial_" + objUri + sourceCall);
+                        formElementStr = formElementStr.replaceFirst("hasFile_new_dynamic", "hasFile_new_#swbsocial_" + objUri + sourceCall + "_dynamic");
+                    %>       
+                    <%=formElementStr%>
+                </p>
+                <!--Ends Documents-->
                 <%
                     if (postIn != null && postOut == null) {
                         socialTopic = postIn.getSocialTopic();
