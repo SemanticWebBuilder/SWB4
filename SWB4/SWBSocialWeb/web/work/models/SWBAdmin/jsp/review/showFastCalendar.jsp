@@ -71,6 +71,16 @@
         //System.out.println(cal.);
         SWBResourceURL urlAction = paramRequest.getActionUrl();
         urlAction.setParameter("postOut", postOut.getURI());
+        
+        //Current date and time
+        Date todayDate = new Date();
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.setTime(todayDate);
+        int currentYear = cal.get(java.util.Calendar.YEAR);
+        int currentMonth = cal.get(java.util.Calendar.MONTH) + 1;
+        int currentDay = cal.get(java.util.Calendar.DAY_OF_MONTH);
+        int currentHour = cal.get(java.util.Calendar.HOUR_OF_DAY);
+        int currentMin = cal.get(java.util.Calendar.MINUTE);
         %>
         <div class="msgFastCalendar">
             <p id="msgTitle">Programar env&iacute;o de mensaje</p>
@@ -83,8 +93,8 @@
                 String starthour=hour+":"+minutes;
                 //System.out.println("Final starthour:"+starthour);
             %>
-                D&iacute;a:<input type="text" name="postOut_inidate" id="<%=semObj.getId()%>_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=nf%>"> 
-                Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="<%=semObj.getId()%>_postOut_starthour_<%=starthour%>" value="<%=(starthour!=null&&starthour.trim().length() > 0 ? "T"+starthour+":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
+                D&iacute;a:<input type="text" name="postOut_inidate" id="<%=semObj.getId()%>_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=nf%>" constraints="{min:'<%=currentYear%>-<%=String.format("%02d", currentMonth)%>-<%=String.format("%02d", currentDay)%>'}"> 
+                Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="<%=semObj.getId()%>_postOut_starthour_<%=starthour%>" value="<%=(starthour!=null&&starthour.trim().length() > 0 ? "T"+starthour+":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm',min:'T<%=String.format("%02d", currentHour)%>:<%=String.format("%02d", currentMin)%>:00'} />
                 <p><button dojoType="dijit.form.Button" type="submit" ><%=paramRequest.getLocaleString("btnSend")%></button>
                     <button dojoType="dijit.form.Button" type="submit" onClick="setDefaultValues();"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("removeCal", user.getLanguage())%></button>
                 </p>
