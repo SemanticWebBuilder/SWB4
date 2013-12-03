@@ -60,8 +60,19 @@
         <p>
             <span><%=paramRequest.getLocaleString("chooseTopic")%>:</span>
             <select name="newSocialTopic">
+                <%
+                    boolean isFromStream = true;
+                    if(post instanceof PostIn){
+                        PostIn postIn = (PostIn)post;
+                        if(postIn.getPostInStream() == null){
+                            isFromStream = false;
+                        }
+                    }
+                    if(isFromStream){//Mostrar la opcion 'Ninguno' solo cuando viene de stream
+                %>
                 <option value="none"><%=paramRequest.getLocaleString("none")%></option>
                 <%
+                    }
                     Iterator<SocialTopic> itSocialTopics = SocialTopic.ClassMgr.listSocialTopics(wsite);
                     while (itSocialTopics.hasNext()) {
                         SocialTopic siteSocialTopic = itSocialTopics.next();
