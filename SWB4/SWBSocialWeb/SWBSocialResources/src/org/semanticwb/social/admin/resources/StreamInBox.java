@@ -138,6 +138,9 @@ public class StreamInBox extends GenericResource {
                 log.error(e);
             }
         }else if(mode.equals(Mode_UPDATEPOSTIN)){
+            response.setContentType("text/html; charset=ISO-8859-1");
+            response.setHeader("Cache-Control", "no-cache");
+            response.setHeader("Pragma", "no-cache");
             PrintWriter out= response.getWriter();
             out.println("<script type=\"javascript\">");
             out.println("   hideDialog(); ");
@@ -2664,18 +2667,9 @@ public class StreamInBox extends GenericResource {
             if (postIn.getMsg_Text().length() > 200) {
                 String msg2Show = postIn.getMsg_Text().substring(0, 200);
                 msg2Show = SWBSocialResUtil.Util.createHttpLink(msg2Show);
-                if(firstLoad){
-                    out.println(msg2Show);
-                }else{
-                    out.println(SWBUtils.TEXT.encode(msg2Show, "UTF-8"));
-                }
+                out.println(msg2Show);                
             } else {
-                //out.println(postIn.getMsg_Text());
-                if(firstLoad){
-                    out.println(postIn.getMsg_Text());
-                }else{
-                    out.println(SWBUtils.TEXT.encode(postIn.getMsg_Text(), "UTF-8"));
-                }
+                out.println(postIn.getMsg_Text());
             }
         } /*else if (postIn.getDescription() != null) {
             if (postIn.getDescription().length() > 200) {
@@ -2685,17 +2679,9 @@ public class StreamInBox extends GenericResource {
             }
         } */else if (postIn.getTags() != null) {
             if (postIn.getTags().length() > 200) {
-                if(firstLoad){
                     out.println(postIn.getTags().substring(0, 200));
-                }else{
-                    out.println(SWBUtils.TEXT.encode(postIn.getTags().substring(0, 200),"UTF-8"));
-                }
             } else {
-                if(firstLoad){
-                    out.println(postIn.getTags());
-                }else{
-                    out.println(SWBUtils.TEXT.encode(postIn.getTags(),"UTF-8"));
-                }
+                out.println(postIn.getTags());
             }
         } else {
             out.println("---");
@@ -2711,11 +2697,7 @@ public class StreamInBox extends GenericResource {
 
         //SocialNetwork
         out.println("<td>");
-        if(firstLoad){
-            out.println(postIn.getPostInSocialNetwork().getDisplayTitle(lang));
-        }else{
-            out.println(SWBUtils.TEXT.encode(postIn.getPostInSocialNetwork().getDisplayTitle(lang),"UTF-8"));
-        }
+        out.println(postIn.getPostInSocialNetwork().getDisplayTitle(lang));
         if(postIn.getPostInSocialNetwork() instanceof Youtube){
             out.println("</br><img class=\"swbIconYouTube\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>");
         }else{
@@ -2727,11 +2709,7 @@ public class StreamInBox extends GenericResource {
         //SocialTopic
         out.println("<td>");
         if (postIn.getSocialTopic() != null) {
-            if(firstLoad){
-                out.println(postIn.getSocialTopic().getDisplayTitle(lang));
-            }else{
-                out.println(SWBUtils.TEXT.encode(postIn.getSocialTopic().getDisplayTitle(lang),"UTF-8"));
-            }
+            out.println(postIn.getSocialTopic().getDisplayTitle(lang));
         } else {
             out.println("---");
         }
@@ -2742,17 +2720,9 @@ public class StreamInBox extends GenericResource {
         //System.out.println("FechaTimeAgo:"+postIn.getPi_created());
         if(postIn.getPi_created()!=null)
         {
-            if(firstLoad){
-                out.println(SWBUtils.TEXT.getTimeAgo(postIn.getPi_created(), lang));
-            }else{
-                out.println(SWBUtils.TEXT.encode(SWBUtils.TEXT.getTimeAgo(postIn.getPi_created(), lang),"UTF-8"));
-            }
+            out.println(SWBUtils.TEXT.getTimeAgo(postIn.getPi_created(), lang));
         }else{
-            if(firstLoad){
-                out.println(SWBUtils.TEXT.getTimeAgo(new Date(), lang));
-            }else{
-                out.println(SWBUtils.TEXT.encode(SWBUtils.TEXT.getTimeAgo(new Date(), lang), "UTF-8"));
-            }
+            out.println(SWBUtils.TEXT.getTimeAgo(new Date(), lang));
         }
         out.println("</td>");
 
@@ -2794,11 +2764,7 @@ public class StreamInBox extends GenericResource {
         //User
         out.println("<td>");
         SWBResourceURL urlshowUsrHistory = paramRequest.getRenderUrl().setMode(Mode_ShowUsrHistory).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("suri", objUri);
-        if(firstLoad){
-            out.println(postIn.getPostInSocialNetworkUser() != null ? "<a href=\"#\" onclick=\"showDialog('" + urlshowUsrHistory.setParameter("swbSocialUser", postIn.getPostInSocialNetworkUser().getURI()) + "','" + paramRequest.getLocaleString("userHistory") + "'); return false;\">" + postIn.getPostInSocialNetworkUser().getSnu_name() + "</a>" : paramRequest.getLocaleString("withoutUser"));
-        }else{
-            out.println(postIn.getPostInSocialNetworkUser() != null ? "<a href=\"#\" onclick=\"showDialog('" + urlshowUsrHistory.setParameter("swbSocialUser", postIn.getPostInSocialNetworkUser().getURI()) + "','" + paramRequest.getLocaleString("userHistory") + "'); return false;\">" + SWBUtils.TEXT.encode(postIn.getPostInSocialNetworkUser().getSnu_name(),"UTF-8") + "</a>" : paramRequest.getLocaleString("withoutUser"));
-        }
+        out.println(postIn.getPostInSocialNetworkUser() != null ? "<a href=\"#\" onclick=\"showDialog('" + urlshowUsrHistory.setParameter("swbSocialUser", postIn.getPostInSocialNetworkUser().getURI()) + "','" + paramRequest.getLocaleString("userHistory") + "'); return false;\">" + postIn.getPostInSocialNetworkUser().getSnu_name() + "</a>" : paramRequest.getLocaleString("withoutUser"));        
         out.println("</td>");
 
         //Followers
@@ -2844,11 +2810,7 @@ public class StreamInBox extends GenericResource {
 
         //Place
         out.println("<td>");
-        if(firstLoad){
-            out.println(postIn.getPostPlace() == null ? "---" : postIn.getPostPlace());
-        }else{
-            out.println(postIn.getPostPlace() == null ? "---" : SWBUtils.TEXT.encode(postIn.getPostPlace(), "UTF-8"));
-        }
+        out.println(postIn.getPostPlace() == null ? "---" : postIn.getPostPlace());        
         out.println("</td>");
 
         //Priority
