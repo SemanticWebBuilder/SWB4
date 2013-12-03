@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.accessory.base;
 
 
-public abstract class GrapherBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Roleable,org.semanticwb.model.Undeleteable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Help
+public abstract class GrapherBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Roleable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.UserGroupable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.model.Undeleteable
 {
     public static final org.semanticwb.platform.SemanticClass bsc_Series=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Series");
     public static final org.semanticwb.platform.SemanticProperty bsc_serieGraph2=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#serieGraph2");
