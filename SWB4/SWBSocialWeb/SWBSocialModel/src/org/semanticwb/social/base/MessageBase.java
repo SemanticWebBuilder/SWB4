@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que sera creada cuando un post sea de tipo mensaje 
    */
-public abstract class MessageBase extends org.semanticwb.social.PostOut implements org.semanticwb.model.CalendarRefable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.social.PostTextable
+public abstract class MessageBase extends org.semanticwb.social.PostOut implements org.semanticwb.social.PostTextable,org.semanticwb.social.FileAble,org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.social.PostDataable,org.semanticwb.model.Tagable,org.semanticwb.model.Traceable
 {
    /**
    * Clase que sera creada cuando un post sea de tipo mensaje
@@ -374,5 +374,32 @@ public abstract class MessageBase extends org.semanticwb.social.PostOut implemen
     public MessageBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public java.util.Iterator<String> listFiles()
+    {
+        java.util.ArrayList<String> values=new java.util.ArrayList<String>();
+        java.util.Iterator<org.semanticwb.platform.SemanticLiteral> it=getSemanticObject().listLiteralProperties(social_hasFile);
+        while(it.hasNext())
+        {
+                org.semanticwb.platform.SemanticLiteral literal=it.next();
+                values.add(literal.getString());
+        }
+        return values.iterator();
+    }
+
+    public void addFile(String value)
+    {
+        getSemanticObject().addLiteralProperty(social_hasFile, new org.semanticwb.platform.SemanticLiteral(value));
+    }
+
+    public void removeAllFile()
+    {
+        getSemanticObject().removeProperty(social_hasFile);
+    }
+
+    public void removeFile(String value)
+    {
+        getSemanticObject().removeLiteralProperty(social_hasFile,new org.semanticwb.platform.SemanticLiteral(value));
     }
 }
