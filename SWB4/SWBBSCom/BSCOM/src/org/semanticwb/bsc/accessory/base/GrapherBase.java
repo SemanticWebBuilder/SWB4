@@ -1,11 +1,12 @@
 package org.semanticwb.bsc.accessory.base;
 
 
-public abstract class GrapherBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Help,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Roleable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable
+public abstract class GrapherBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Roleable,org.semanticwb.model.Undeleteable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Help
 {
+    public static final org.semanticwb.platform.SemanticClass bsc_Series=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Series");
+    public static final org.semanticwb.platform.SemanticProperty bsc_serieGraph2=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#serieGraph2");
     public static final org.semanticwb.platform.SemanticProperty bsc_titleY=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#titleY");
     public static final org.semanticwb.platform.SemanticProperty bsc_titleX=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#titleX");
-    public static final org.semanticwb.platform.SemanticClass bsc_Series=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Series");
     public static final org.semanticwb.platform.SemanticProperty bsc_serieGraph=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#serieGraph");
     public static final org.semanticwb.platform.SemanticProperty bsc_titleGraph=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#titleGraph");
     public static final org.semanticwb.platform.SemanticClass bsc_Grapher=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Grapher");
@@ -104,6 +105,29 @@ public abstract class GrapherBase extends org.semanticwb.bsc.accessory.BSCAccess
         public static java.util.Iterator<org.semanticwb.bsc.accessory.Grapher> listGrapherByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.Grapher> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.accessory.Grapher with a determined SerieGraph2
+       * @param value SerieGraph2 of the type org.semanticwb.bsc.tracing.Series
+       * @param model Model of the org.semanticwb.bsc.accessory.Grapher
+       * @return Iterator with all the org.semanticwb.bsc.accessory.Grapher
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.Grapher> listGrapherBySerieGraph2(org.semanticwb.bsc.tracing.Series value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.Grapher> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_serieGraph2, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.accessory.Grapher with a determined SerieGraph2
+       * @param value SerieGraph2 of the type org.semanticwb.bsc.tracing.Series
+       * @return Iterator with all the org.semanticwb.bsc.accessory.Grapher
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.Grapher> listGrapherBySerieGraph2(org.semanticwb.bsc.tracing.Series value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.Grapher> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_serieGraph2,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -235,6 +259,44 @@ public abstract class GrapherBase extends org.semanticwb.bsc.accessory.BSCAccess
     public GrapherBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+   /**
+   * Sets the value for the property SerieGraph2
+   * @param value SerieGraph2 to set
+   */
+
+    public void setSerieGraph2(org.semanticwb.bsc.tracing.Series value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(bsc_serieGraph2, value.getSemanticObject());
+        }else
+        {
+            removeSerieGraph2();
+        }
+    }
+   /**
+   * Remove the value for SerieGraph2 property
+   */
+
+    public void removeSerieGraph2()
+    {
+        getSemanticObject().removeProperty(bsc_serieGraph2);
+    }
+
+   /**
+   * Gets the SerieGraph2
+   * @return a org.semanticwb.bsc.tracing.Series
+   */
+    public org.semanticwb.bsc.tracing.Series getSerieGraph2()
+    {
+         org.semanticwb.bsc.tracing.Series ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_serieGraph2);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.tracing.Series)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**
