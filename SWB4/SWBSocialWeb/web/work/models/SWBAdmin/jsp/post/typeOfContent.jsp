@@ -10,7 +10,7 @@
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
 <%@page import="org.semanticwb.social.*"%>
 <%@page import="org.semanticwb.SWBUtils"%>
-<%@page import="java.util.*"%>
+<%//@page import="java.util.*"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.social.SocialFlow.SocialPFlowMgr"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
@@ -266,9 +266,18 @@
                                 } catch (Exception ignore) {
                                 }
                             }
+                            //Current date and time for restrictions
+                            Date todayDate = new Date();
+                            java.util.Calendar cal = java.util.Calendar.getInstance();
+                            cal.setTime(todayDate);
+                            int year = cal.get(java.util.Calendar.YEAR);
+                            int month = cal.get(java.util.Calendar.MONTH) + 1;
+                            int day = cal.get(java.util.Calendar.DAY_OF_MONTH);
+                            int hour = cal.get(java.util.Calendar.HOUR_OF_DAY);
+                            int minute = cal.get(java.util.Calendar.MINUTE);
                         %>
-                        <div>Día:<input type="text" name="postOut_inidate" id="<%=objUri%>_postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
-                            Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="<%=objUri%>_postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
+                        <div>Día:<input type="text" name="postOut_inidate" id="<%=objUri%>_postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>" constraints="{min:'<%=year%>-<%=String.format("%02d", month)%>-<%=String.format("%02d", day)%>'}">
+                            Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="<%=objUri%>_postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "")%>" constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm',min:'T<%=String.format("%02d", hour)%>:<%=String.format("%02d", minute)%>:00'} />
                         </div>
                     </div>
                     <!--Termina Calendario Rapido-->
