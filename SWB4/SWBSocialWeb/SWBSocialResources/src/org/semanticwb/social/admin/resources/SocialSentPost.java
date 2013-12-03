@@ -981,7 +981,7 @@ public class SocialSentPost extends GenericResource {
             //System.out.println("msg..:"+postOut.getMsg_Text());
             //System.out.println("Ya esta publicado..:"+postOut.isPublished());
 
-            //System.out.println("PostUri:" + postOut.getURI());
+           //System.out.println("PostUri:" + postOut.getURI()+", published:"+postOut.isPublished());
 
             if (!postOut.isPublished()) {
 
@@ -1017,26 +1017,34 @@ public class SocialSentPost extends GenericResource {
                          }*/
                         ///System.out.println("isInFlow:"+isInFlow+",needAuthorization:"+needAuthorization+",postOutwithPostOutNets:"+postOutwithPostOutNets+",someOneIsNotPublished:"+someOneIsNotPublished+",FlowStatus:"+postOut.getPflowInstance()!=null?postOut.getPflowInstance().getStatus():"NO TIENE FLUJO");
                         if (someOneIsNotPublished) {
+                            //System.out.println("ENTRA SENTPOST-STATUS-1");
                             out.println("<a class=\"status1\" href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\"><strong>" + paramRequest.getLocaleString("toReview") + "</strong></a>"); //No ha sido publicado en todas las redes sociales que debiera, abrir dialogo para mostrar todos los PostOutNtes del PostOut
                         } else if (isInFlow && needAuthorization && postOut.getPflowInstance() != null && postOut.getPflowInstance().getStatus() == 3) {
                             if(postOut.getFastCalendar()!=null)
                             {
+                                //System.out.println("ENTRA SENTPOST-STATUS-2");
                                 out.println("<span class=\"status5\" title=\"Cumplir Calendario\"><strong>Cumplir Calendario</strong></span>");
                             }else{
-                                out.println("<a class=\"status6\" href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />" + paramRequest.getLocaleString("publish") + "</a>");
+                                //System.out.println("ENTRA SENTPOST-STATUS-2");
+                                out.println("<a class=\"status6\" href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" title=\""+ paramRequest.getLocaleString("publish") + "\" /></a>");
                             }
                         } else if (!isInFlow && !needAuthorization && !postOutwithPostOutNets) {
+                            //System.out.println("ENTRA SENTPOST-STATUS-4");
                             if(postOut.getFastCalendar()!=null)
                             {
                                 out.println("<span class=\"status5\" title=\"Cumplir Calendario\"><strong>Cumplir Calendario</strong></span>");
                             }else{
-                                out.println("<span class=\"status2\" title=\"Publicando\"><strong>"+paramRequest.getLocaleString("publishing") +"</strong></span>");    //Aqui no debe haber liga, que lo cheque roger desde estilo
+                                //out.println("<span class=\"status2\" title=\"Publicando\"><strong>"+paramRequest.getLocaleString("publishing") +"</strong></span>");    //Aqui no debe haber liga, que lo cheque roger desde estilo
+                                out.println("<a class=\"status6\" href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" / title=\""+ paramRequest.getLocaleString("publish") + "\"></a>");
                             }
                         } else {
+                            //System.out.println("ENTRA SENTPOST-STATUS-5");
                             if(postOut.getFastCalendar()!=null)
                             {
+                                //System.out.println("ENTRA SENTPOST-STATUS-6");
                                 out.println("<span class=\"status5\" title=\"Cumplir Calendario\"><strong>Cumplir Calendario</strong></span>");
                             }else{
+                                //System.out.println("ENTRA SENTPOST-STATUS-7");
                                 out.println("<a class=\"status6\" href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" /><strong>" + paramRequest.getLocaleString("publish") + "</strong></a>");
                             }
                         }
