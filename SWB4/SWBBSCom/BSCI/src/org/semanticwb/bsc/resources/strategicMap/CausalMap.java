@@ -160,7 +160,9 @@ public class CausalMap extends ComponentMap {
             int countDifferentiator = Integer.parseInt(perspective.get("countDiffGroup").toString());
             if ((countTheme > 0) || (countDifferentiator > 0)) {
                 String titlePers = perspective.get("title").toString();
-                sb.append("\n<div style=\"clear:both; width:5%;float:left;\" class=\"titlePersp\">");
+                sb.append("\n<div style=\"clear:both; width:5%;float:left;\" class=\"titlePersp titlePersp");
+                sb.append(perspective.get("id"));
+                sb.append("\">");
                 sb.append("\n<div style=\"clear:both; width:100%;float:left;text-align:center;color:");
                 sb.append(perspective.get("colorText")); 
                 sb.append(";\">");
@@ -222,7 +224,7 @@ public class CausalMap extends ComponentMap {
 
                 String backgroundColor = (String) objObject.get("bgcolor");
                 backgroundColor = ((backgroundColor == null) || (backgroundColor.trim().length() < 1)
-                        || (objObject.getBoolean("isHidden"))) ? "white" : backgroundColor;
+                        || (objObject.getBoolean("isHidden"))) ? "transparent" : backgroundColor;
                 String fontColor = (String) objObject.get("colorText");
                 fontColor = ((fontColor == null) || (fontColor.trim().length() < 1)
                         || (objObject.getBoolean("isHidden"))) ? "black" : fontColor;
@@ -295,7 +297,7 @@ public class CausalMap extends ComponentMap {
                 JSONArray arrayObjecs = (JSONArray) objObject.get("arrayObjectives");
                 String backgroundColor = (String) objObject.get("bgcolor");
                 backgroundColor = ((backgroundColor == null) || (backgroundColor.trim().length() < 1)
-                        || (objObject.getBoolean("isHidden"))) ? "white" : backgroundColor;
+                        || (objObject.getBoolean("isHidden"))) ? "transparent" : backgroundColor;
                 String fontColor = (String) objObject.get("colorText");
                 fontColor = ((fontColor == null) || (fontColor.trim().length() < 1)
                         || (objObject.getBoolean("isHidden"))) ? "black" : fontColor;
