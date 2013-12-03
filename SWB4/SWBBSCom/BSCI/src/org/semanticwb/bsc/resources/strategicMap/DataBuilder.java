@@ -181,6 +181,7 @@ public class DataBuilder {
         }
         try {
             dataPerspective.put("index", index);
+            dataPerspective.put("id", perspective.getId());
             dataPerspective.put("showHorizontal", showHorizontal);
             dataPerspective.put("title", title);
             dataPerspective.put("colorText", colorText);
