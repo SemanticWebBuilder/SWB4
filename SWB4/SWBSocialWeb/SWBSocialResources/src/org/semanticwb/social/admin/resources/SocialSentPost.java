@@ -825,7 +825,7 @@ public class SocialSentPost extends GenericResource {
                 if(postOut.getFastCalendar()!=null)
                 {
                     SWBResourceURL urlFastCalendars = paramRequest.getRenderUrl().setMode(Mode_ShowFastCalendar).setCallMethod(SWBResourceURL.Call_DIRECT);
-                    out.println("<a class=\"swbIconFC\" href=\"#\" onclick=\"showDialog('" + urlFastCalendars.setParameter("postUri", postOut.getURI()) + "','" + paramRequest.getLocaleString("associatedFastCalendar") + "'); return false;\">FC</a>");
+                    out.println("<a class=\"swbIconFC\" title=\"Mensaje calendarizado\" href=\"#\" onclick=\"showDialog('" + urlFastCalendars.setParameter("postUri", postOut.getURI()) + "','" + paramRequest.getLocaleString("associatedFastCalendar") + "'); return false;\"></a>");
                 }
             }
             boolean oneCalendarIsActive=false;
