@@ -589,12 +589,12 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         output.append("&nbsp; \n");
         output.append("                  </label>\n");
         output.append("                </td>\n");
-        output.append("                <td align=\"left\" width=\"650px\" height=\"350px\">\n");
+        output.append("                <td align=\"left\" width=\"850px\" height=\"600px\">\n");
         output.append("                  <textarea name=\"FCKeditorDetailView");
         output.append(this.getId());
         output.append("\" id=\"FCKeditorDetailView");
         output.append(this.getId());
-        output.append("\" style=\"width:500px; height:450px;\" cols=\"50\" rows=\"25\">");
+        output.append("\">");
         output.append(templateContent);
         output.append("</textarea>\n");
         output.append("");
@@ -602,11 +602,10 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         output.append("    <script type=\"dojo/method\">\n");
         output.append("      var oFCKeditor = new FCKeditor( 'FCKeditorDetailView");
         output.append(this.getId());
-        output.append("' ) ;\n");
+        output.append("', '100%', '100%' ) ;\n");
         output.append("      oFCKeditor.BasePath = '");
         output.append(SWBPlatform.getContextPath());
         output.append("/swbadmin/js/fckeditor/';\n");
-        
         output.append("      oFCKeditor.Config['CustomConfigurationsPath'] = ");
         output.append(SWBPlatform.getContextPath());
         output.append("'/swbadmin/js/fckeditor/fckconfig_inserter.js';\n");
