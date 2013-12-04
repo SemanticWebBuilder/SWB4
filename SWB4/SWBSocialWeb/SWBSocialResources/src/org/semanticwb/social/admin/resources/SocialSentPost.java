@@ -1054,10 +1054,10 @@ public class SocialSentPost extends GenericResource {
                             if (postOut.getPflowInstance() != null && postOut.getPflowInstance().getPflow() != null) {
                                 sFlowRejected = postOut.getPflowInstance().getPflow().getDisplayTitle(lang);
                             }
-                            out.println("<span class=\"status4\" title=\""+paramRequest.getLocaleString("rejected")+"\"><strong>"+paramRequest.getLocaleString("rejected") + "(" + sFlowRejected + ")</strong></span>");
+                            out.println("<span class=\"status4\" title=\""+paramRequest.getLocaleString("rejected")+"\"><strong>"+paramRequest.getLocaleString("rejected") + "</strong>" + sFlowRejected + "</span>");
                         } else if (isInFlow && needAuthorization && !isAuthorized) {
                             //System.out.println("postOut.getPflowInstance().getStatus():"+postOut.getPflowInstance().getStatus());
-                            out.println("<span class=\"status7\" title=\""+paramRequest.getLocaleString("onFlow")+"\"><strong>"+paramRequest.getLocaleString("onFlow") + "(" + postOut.getPflowInstance().getPflow().getDisplayTitle(lang) + "/" + postOut.getPflowInstance().getStep() + ")</strong></span>");
+                            out.println("<span class=\"status7\" title=\""+paramRequest.getLocaleString("onFlow")+"\"><strong>"+paramRequest.getLocaleString("onFlow") + "</strong>"  + postOut.getPflowInstance().getStep() + ":"+postOut.getPflowInstance().getPflow().getDisplayTitle(lang)+"</span>");
                         }
                     }
                 }
