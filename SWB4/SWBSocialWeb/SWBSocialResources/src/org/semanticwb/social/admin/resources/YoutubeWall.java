@@ -434,6 +434,9 @@ public class YoutubeWall extends GenericResource{
                 log.error("Error in processRequest() for requestDispatcher" , e);
             }
         }else if(mode!=null && mode.equals("editVideo")){
+            response.setContentType("text/html; charset=ISO-8859-1");
+            response.setHeader("Cache-Control", "no-cache");
+            response.setHeader("Pragma", "no-cache");
             String jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/youtubeEditVideo.jsp";
             RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
             try {
