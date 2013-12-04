@@ -149,10 +149,22 @@
 
     %>
     <div class="msj-cont">
+         <%
+            if (um.isUserPriority()) {
+        %>
+        <div class="msj-cont msj-prior">
+            <%            }
+            %>
         <a class="msj-eliminar" href="<%=paramRequest.getActionUrl().setAction("remMsg").setParameter("msgUri", um.getURI())%>"><span>Eliminar</span></a>
         <a class="msj-editar" href="<%=paramRequest.getRenderUrl().setAction("editMsg").setParameter("msgUri", um.getURI())%>"><span>Editar</span></a>
         <p><em><%=hoursS%> - <%=u.getName()%></em><p>
         <p><%=um.getUsrMsg()%></p>
+         <%
+            if (um.isUserPriority()) {
+        %>
+        </div>
+            <%            }
+            %>
     </div>
 
     <%
@@ -224,12 +236,12 @@
             hashBydate.put(fecha, cad(userMsg, (ArrayList) hashBydate.get(fecha)));
         }
 
-         ArrayList<Date> list = new ArrayList<Date>();
+        ArrayList<Date> list = new ArrayList<Date>();
         Iterator i = hashBydate.entrySet().iterator();
         while (i.hasNext()) {
             Map.Entry e = (Map.Entry) i.next();
-             list = (ArrayList) e.getValue();
-             ordenarDescendente(list);
+            list = (ArrayList) e.getValue();
+            ordenarDescendente(list);
             Iterator x = list.iterator();
     %>
     <p class="msj-fecha">
@@ -248,10 +260,22 @@
     %>
 
     <div class="msj-cont">
-        <a class="msj-eliminar" href="<%=paramRequest.getActionUrl().setAction("remMsg").setParameter("msgUri", um.getURI())%>"><span>Eliminar</span></a>
-        <!--<a class="" href="<%//=paramRequest.getRenderUrl().setAction("viewMsg").setParameter("msgUri", userMsg.getURI())%>"><span>Ver</span></a>-->
-        <p><em><%=hoursS%>  -  <%=u.getName()%></em></p>
-        <p><%=um.getUsrMsg()%></p>  
+        <%
+            if (um.isUserPriority()) {
+        %>
+        <div class="msj-cont msj-prior">
+            <%            }
+            %>
+            <a class="msj-eliminar" href="<%=paramRequest.getActionUrl().setAction("remMsg").setParameter("msgUri", um.getURI())%>"><span>Eliminar</span></a>
+            <!--<a class="" href="<%//=paramRequest.getRenderUrl().setAction("viewMsg").setParameter("msgUri", userMsg.getURI())%>"><span>Ver</span></a>-->
+            <p><em><%=hoursS%>  -  <%=u.getName()%></em></p>
+            <p><%=um.getUsrMsg()%></p>  
+            <%
+                if (um.isUserPriority()) {
+            %>
+        </div>
+        <%            }
+        %>
     </div>
     <%
             }
@@ -268,22 +292,22 @@
 
 <%!
     public ArrayList cad(UserMessage cadena, ArrayList pi) {
-        
+
         if (pi == null) {
             pi = new ArrayList();
         }
         pi.add(cadena);
         return pi;
-        
+
     }
 
     public void ordenarDescendente(ArrayList fechas) {
 
         for (int i = 0; i < fechas.size(); i++) {
             for (int j = 0; j < fechas.size(); j++) {
-                UserMessage  o = (UserMessage)fechas.get(i);
-                UserMessage oo = (UserMessage)fechas.get(j);
-               
+                UserMessage o = (UserMessage) fechas.get(i);
+                UserMessage oo = (UserMessage) fechas.get(j);
+
                 if (o.getCreated().after(oo.getCreated())) {
                     fechas.set(i, fechas.get(j));
                     fechas.set(j, o);
