@@ -15,6 +15,7 @@ import org.semanticwb.bsc.accessory.Grapher;
 import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.model.GenericIterator;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
@@ -44,6 +45,8 @@ public class GraphConfig extends GenericResource {
         SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD);
         Indicator indic = null;
         if (semObj != null) {
+            GenericObject in = semObj.createGenericInstance();
+            if(in instanceof Indicator){
             indic = (Indicator) semObj.createGenericInstance();
             //Trae la lista valida de series
             List<Series> series = indic.listValidSerieses();
@@ -65,18 +68,16 @@ public class GraphConfig extends GenericResource {
             //Valida si tiene series validas asigandas
             if (!series.isEmpty()) {
                 String titleGraph = "";
-                String titleX = "";
-                String titleY = "";
                 Series serieGraph = null;
+                Series serieGraph2 = null;
                 //Valida si ya tiene un graficador configurado
                 Iterator<Grapher> itGraph = new GenericIterator<Grapher>(
                     semObj.listObjectProperties(Indicator.bsc_hasGrapher));
                 if (itGraph.hasNext()) {
                     Grapher grapher = itGraph.next();
                     titleGraph = grapher.getTitleGraph();
-                    titleX = grapher.getTitleX();
-                    titleY = grapher.getTitleY();
                     serieGraph = grapher.getSerieGraph();
+                    serieGraph2 = grapher.getSerieGraph2();
                 }
                 out.println("<fieldset>\n");
                 out.println("<table width=\"94%\">");
@@ -99,19 +100,18 @@ public class GraphConfig extends GenericResource {
                     out.println(" >" + serieValidX.getTitle() + "</option>");
                     }
                 }
+                out.println("</select><select name=\"serieGraph2\">");
+                for (Series serieValid2 : series) {
+                    if(serieGraph2 == null){
+                        out.println("<option value=\"" + serieValid2.getId() + "\">" +serieValid2.getTitle() + "</option>");
+                    }
+                    else{
+                    out.println("<option value=\"" + serieValid2.getId() + "\"");
+                    out.println(serieValid2.getId().equals(String.valueOf(serieGraph2.getId())) ? " selected=\"selected\"" : "");
+                    out.println(" >" + serieValid2.getTitle() + "</option>");
+                    }
+                }
                 out.println("</select></td>");
-                out.println("</tr>");
-                out.println("<thead>");
-                out.println("<tr>");
-                out.println("<th>" + paramRequest.getLocaleString("lbl_titleX") + "</th>");
-                out.println("<th>" + paramRequest.getLocaleString("lbl_titleY") + "</th>");
-                out.println("</tr>");
-                out.println("</thead>");
-                out.println("<tr>");
-                out.println("<td><input name=\"titleX\" size=\"30\" type=\"text\" value=\"" + titleX + "\"></input>");
-                out.println("</td>");
-                out.println("<td><input name=\"titleY\" size=\"30\" type=\"text\" value=\"" + titleY + "\"></input>");
-                out.println("</td>");
                 out.println("</tr>");
                 out.println("</table>");
                 out.println("</fieldset>\n");
@@ -138,6 +138,7 @@ public class GraphConfig extends GenericResource {
                 out.println("</div>");
             }
         }
+        }
     }
 
     @Override
@@ -151,11 +152,10 @@ public class GraphConfig extends GenericResource {
 
         if (SWBResourceURL.Action_ADD.equalsIgnoreCase(action)) {
             String titleGraph = request.getParameter("titleGraph") == null ? "" : request.getParameter("titleGraph");
-            String titleX = request.getParameter("titleX") == null ? "" : request.getParameter("titleX");
-            String titleY = request.getParameter("titleY") == null ? "" : request.getParameter("titleY");
             String serieGraph = request.getParameter("serieGraph") == null ? "" : request.getParameter("serieGraph");
+            String serieGraph2 = request.getParameter("serieGraph2") == null ? "" : request.getParameter("serieGraph2");
             Series serie = Series.ClassMgr.getSeries(serieGraph, model);
-
+            Series serie2 = Series.ClassMgr.getSeries(serieGraph2, model);
             //Guarda la configuracion en Grapher
             Indicator indicator = (Indicator) semObj.createGenericInstance();
             Iterator<Grapher> itGraph = new GenericIterator<Grapher>(
@@ -164,17 +164,15 @@ public class GraphConfig extends GenericResource {
             if (itGraph.hasNext()) {
                 Grapher grapher = itGraph.next();
                 grapher.setSerieGraph(serie);
+                grapher.setSerieGraph2(serie2);
                 grapher.setTitleGraph(titleGraph);
-                grapher.setTitleX(titleX);
-                grapher.setTitleY(titleY);
 
             } else //Agrega el graficador al indicador
             {
                 Grapher grapher = Grapher.ClassMgr.createGrapher(model);
                 grapher.setSerieGraph(serie);
+                grapher.setSerieGraph2(serie2);
                 grapher.setTitleGraph(titleGraph);
-                grapher.setTitleX(titleX);
-                grapher.setTitleY(titleY);
                 indicator.addGrapher(grapher);
             }
         }
