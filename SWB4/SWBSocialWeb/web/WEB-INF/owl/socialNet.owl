@@ -1903,6 +1903,30 @@
     <rdfs:comment>Valor Minimo Integer</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="hasFile">
+    <rdfs:label xml:lang="en">Document</rdfs:label>
+    <rdfs:label xml:lang="es">Documento</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasFile">
+        <rdfs:comment>Cargador de documentos para social. Fotos de maximo 5,000,000 bytes. Este se utiliza para los PostOut de tipo texto.</rdfs:comment>
+        <swbxf:formElement>
+          <swb:DojoFileUpload rdf:ID="DocumentUpload">
+            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+            >5000000</swbxf:fileMaxSize>
+          </swb:DojoFileUpload>
+        </swbxf:formElement>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>Propiedad en donde se almacenan archivos en el servidor</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain>
+      <swb:Interface rdf:ID="FileAble">
+        <rdfs:comment>Interface en la que se define un elemento de tipo file, que funciona para subir archivos al servidor.</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="#PostDataable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:domain>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="postIntensityValue">
     <rdfs:comment>Valor que es resultado del algoritmo de intensidad, mediante este valor se puede determinar si la intencidad es alta, media o baja. Este valor solo lo guardo como referencia, sin embargo el realmente importante es el resultado, el cual se encuentra en la propiedad postIntensity. Evaluar si BORRO esta propiedad o la dejo ahi como pura referencia.</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
@@ -2560,6 +2584,7 @@
     <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
   </swbxf:DisplayProperty>
   <swb:Class rdf:ID="Message">
+    <rdfs:subClassOf rdf:resource="#FileAble"/>
     <rdfs:comment xml:lang="es">Clase que sera creada cuando un post sea de tipo mensaje</rdfs:comment>
     <rdfs:label xml:lang="en">Message</rdfs:label>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
