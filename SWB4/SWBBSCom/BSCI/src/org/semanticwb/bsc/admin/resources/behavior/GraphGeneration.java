@@ -46,11 +46,14 @@ public class GraphGeneration extends GenericResource {
                 if (itGraph.hasNext()) {
                     Grapher grapher = itGraph.next();
                     Series serieGraph = grapher.getSerieGraph();
+                    Series serieGraph2 = grapher.getSerieGraph2();
                     //Valida que la serie guardada este activa
-                    if (serieGraph.isActive() && serieGraph.isValid()) {
-                        Iterator<Period> measurablesPeriods = null;
+                    if (serieGraph.isActive() && serieGraph.isValid() && serieGraph2.isActive() && serieGraph2.isValid()) {
+                        Iterator<Period> measurablesPeriods1 = null;
+                        Iterator<Period> measurablesPeriods2 = null;
                         try {
-                            measurablesPeriods = serieGraph.getIndicator().listMeasurablesPeriods();
+                            measurablesPeriods1 = serieGraph.getIndicator().listMeasurablesPeriods();
+                            measurablesPeriods2 = serieGraph2.getIndicator().listMeasurablesPeriods();
                         } catch (UndefinedFrequencyException ex) {
                             out.println("<div class=\"swbform\">");
                             out.println("<fieldset>");
@@ -68,69 +71,76 @@ public class GraphGeneration extends GenericResource {
                             out.flush();
                             out.close();
                         }
-                        Period period;
-                        //Valida que la serie guardada contenga periodos asignados
-                        if (measurablesPeriods.hasNext()) {
+                        Period period, period2;
+                        //Valida que la serie1 y la serie2 contengan periodos asignados
+                        if (measurablesPeriods1.hasNext() && measurablesPeriods2.hasNext()) {
                             //Genera la grafica
-                            out.println("<div id=\"chart1\">");
+                            out.println("<div id=\"chart1\" class=\'with-3d-shadow with-transitions\'>");
                             out.println("<h4 align=\"center\">" + grapher.getTitleGraph());
                             out.println("<svg></svg>");
                             out.println("</h4>");
                             out.println("</div>");
                             out.println("<script type=\"text/javascript\">");
-                            out.println("historicalBarChart = [");
+                            out.println("long_short_data = [");
                             out.println("{");
-                            out.println("key: \"Cumulative Return\",");
+                            out.println("key: \"" + grapher.getSerieGraph().getTitle() + "\" ,");
+                            out.println("color: '#d62728',");
                             out.println("values: [");
-                            //Recorre los periodos y sus valores para graficarlos
-                            int graphValues = 0;
-                            while (measurablesPeriods.hasNext()) {
-                                period = measurablesPeriods.next();
+                            //Recorre los periodos y valores de la serie1 para graficarlos
+                            while (measurablesPeriods1.hasNext()) {
+                                period = measurablesPeriods1.next();
                                 Measure measure = serieGraph.getMeasure(period);
                                 out.println("{");
                                 out.println("\"label\" : \"" + period.getTitle() + "\" ,");
                                 try {
                                     out.println("\"value\" : " + measure.getValue() + "");
                                 } catch (Exception e) {
-                                    graphValues = 1;
+                                    out.println("\"value\" : 0.0 ");
                                 }
-                                out.println("} ,");
-                            }
-                            if (graphValues == 0) {
-
+                                out.println("},");
+                                }
                                 out.println(" ]");
-                                out.println("}");
+                                out.println("},");
+                                //segunda serie a graficar
+                                out.println("{");
+                                out.println("key: \""  + grapher.getSerieGraph2().getTitle() + "\" ,");
+                                out.println("color: '#1f77b4',");
+                                out.println("values: [");
+                                //Recorre los periodos y valores de la serie2 para graficarlos
+                                while (measurablesPeriods2.hasNext()) {
+                                period2 = measurablesPeriods2.next();
+                                Measure measure2 = serieGraph2.getMeasure(period2);
+                                out.println("{");
+                                out.println("\"label\" : \"" + period2.getTitle() + "\" ,");
+                                try {
+                                    out.println("\"value\" : " + measure2.getValue() + "");
+                                } catch (Exception e) {
+                                    out.println("\"value\" : 0.0 ");
+                                }
+                                out.println("},");
+                                }
+                                
+                                out.println("]");
+                                out.println(" }");
                                 out.println("];");
+                                out.println("var chart;");
                                 out.println("nv.addGraph(function() {");
-                                out.println("var chart = nv.models.discreteBarChart()");
+                                out.println("chart = nv.models.multiBarHorizontalChart()");
                                 out.println(".x(function(d) { return d.label })");
                                 out.println(".y(function(d) { return d.value })");
-                                out.println(".staggerLabels(true)");
-                                out.println(".tooltips(false)");
-                                out.println(".showValues(true)");
-                                out.println(".transitionDuration(250);");
-                                out.println("chart.xAxis");
-                                out.println(".axisLabel(\"" + grapher.getTitleX() + "\");");
+                                out.println(".margin({top: 30, right: 20, bottom: 50, left: 175})");
+                                out.println(".transitionDuration(250)");
+                                out.println(".showControls(false);");
                                 out.println("chart.yAxis");
-                                out.println(".axisLabel(\"" + grapher.getTitleY() + "\");");
-                                out.println("chart.showXAxis(true);");
-                                out.println("chart.showYAxis(true);");
+                                out.println(".tickFormat(d3.format(',.2f'));");
                                 out.println("d3.select('#chart1 svg')");
-                                out.println(".datum(historicalBarChart)");
+                                out.println(".datum(long_short_data)");
                                 out.println(".call(chart);");
                                 out.println("nv.utils.windowResize(chart.update);");
                                 out.println("return chart;");
                                 out.println("});");
                                 out.println("</script>");
-                            } else {
-                                out.println("<div class=\"swbform\">");
-                                out.println("<fieldset>");
-                                out.println("</fieldset>");
-                                out.println("<p>" + paramsRequest.getLocaleString("msgNotValues") + "</p>");
-                                out.println("</div>");
-                                out.flush();
-                                out.close();
-                            }
+                            
 
                         } else {
                             out.println("<div class=\"swbform\">");
