@@ -254,7 +254,7 @@ public class CausalArrows extends Decorator {
                         ? "arrow" : base.getData("colorRelPP");
                 int startPerspectiveIndex = findIndexPerspective(perspective, dataStructure);
                 int finalPerspectiveIndex = findIndexPerspective(perspeFinal, dataStructure);
-                HashMap map = paintPerspPersp(startPerspectiveIndex, finalPerspectiveIndex, dataStructure.length(),
+                HashMap map = paintPerspPersp(startPerspectiveIndex, finalPerspectiveIndex, //dataStructure.length(),
                         countLinesAttributes, classLine, dataStructure, "#triangle-end5");
                 itMap = map.entrySet().iterator();
                 while (itMap.hasNext()) {
@@ -372,15 +372,16 @@ public class CausalArrows extends Decorator {
         return map1;
     }
 
-    private HashMap paintPerspPersp(int initPerspective, int finalizePerspective, int elements,
+    private HashMap paintPerspPersp(int initPerspective, int finalizePerspective, //int elements,
             int countLine, String classLine, JSONObject jsonArrows, String triangleEnd) {
         HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
         try {
             JSONObject startPers = (JSONObject) jsonArrows.get(initPerspective + "");
             JSONObject finalPers = (JSONObject) jsonArrows.get(finalizePerspective + "");
-            BigDecimal elem = tam1.divide(new BigDecimal(elements), MathContext.DECIMAL128);
-            BigDecimal x1A = new BigDecimal(countForPerspective).multiply(elem);
+            //BigDecimal elem = tam1.divide(new BigDecimal(elements), MathContext.DECIMAL128);
+            //BigDecimal x1A = new BigDecimal(countForPerspective).multiply(elem);
+            BigDecimal x1A = new BigDecimal("4.5");
             x1 = x1A.doubleValue();
             x2 = x1;
             double sizePers = 0;
@@ -390,12 +391,12 @@ public class CausalArrows extends Decorator {
                 sizePers = sizePers + obj.getInt("height");
                 if(obj.getInt("heightDiffe") > 0) {
                     sizePers = sizePers + 40 + 2;
-                    
                 }
+                sizePers = sizePers + 42; //titulo del tema y espacio entre temas
             }
-            sizePers = sizePers + (1 * (startPers.getInt("height")/3));
+            sizePers = sizePers + (1 * ((startPers.getInt("height") + 22)/3)); //considera titulo del tema
             
-            sizePers = sizePers + 142;
+            sizePers = sizePers + 142;//espacio para mision y vision
             
             y1 = sizePers;
             sizePers = 0;
@@ -405,8 +406,9 @@ public class CausalArrows extends Decorator {
                 if(obj.getInt("heightDiffe") > 0) {
                     sizePers = sizePers + 40 + 2;
                 }                
+                sizePers = sizePers + 42; //titulo del tema y espacio entre temas
             }
-            sizePers = sizePers + (2 * (finalPers.getInt("height")/3));
+            sizePers = sizePers + (2 * ((finalPers.getInt("height") + 22)/3)); //considera titulo del tema
             sizePers = sizePers + 142;
             
             y2 = sizePers;
