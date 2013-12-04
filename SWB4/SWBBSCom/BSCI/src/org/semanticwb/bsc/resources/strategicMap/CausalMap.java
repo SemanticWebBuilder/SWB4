@@ -90,7 +90,7 @@ public class CausalMap extends ComponentMap {
             String colorV = (String) headerData.get("ty_vision");
             sb.append("<div style=\"clear:both; width:100%;float:left;height:120px\">");
             sb.append("     \n<div style=\"width:30%;float:left;height:110px;margin-top:10px;");
-            sb.append("       text-align:center; margin-right:3%;\">");
+            sb.append("       text-align:center; margin-left:5%;\">");
             sb.append("       \n<div class=\"headers\" style=\"width:100%;float:left;background-color:");
             sb.append(bgColorM);
             sb.append(";color:");
@@ -104,14 +104,14 @@ public class CausalMap extends ComponentMap {
             sb.append(headerData.get("mision"));
             sb.append("        \n</div>");
             sb.append("     \n</div>");
-            sb.append("     \n<div style=\"width:34%;float:left;height:110px;margin-top:10px;");
+            sb.append("     \n<div style=\"width:31%;float:left;height:110px;margin-top:10px;");
             sb.append("text-align:center\">");
             sb.append("      \n<img src=\"");
             sb.append(headerData.get("logo"));
             sb.append("\">");
             sb.append("     \n</div>");
             sb.append("     \n<div style=\"width:30%;float:left;height:110px;margin-top:10px;");
-            sb.append("       text-align:center; margin-left:2%; margin-right:1%\">");
+            sb.append("       text-align:center; margin-right:3%; margin-right:1%\">");
             sb.append("       \n<div class=\"headers\" style=\"width:100%;float:left;background-color:");
             sb.append(bgColorV);
             sb.append(";color:");
