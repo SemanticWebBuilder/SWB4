@@ -61,6 +61,8 @@ public class StrategicMap extends GenericResource {
                 CausalMap map = new CausalMap();
                 CausalArrows arrows = new CausalArrows(map);
                 out.println(arrows.draw(bsc, period, base));
+            } else {
+                out.println("<p>" + paramRequest.getLocaleString("errorPeriod") + "</p>");
             }
         }
     }
@@ -722,10 +724,10 @@ public class StrategicMap extends GenericResource {
             String dataPeriod = (String) request.getSession().getAttribute(id);
             period = Period.ClassMgr.getPeriod(dataPeriod, ws);
         } 
-        if(period == null) {
-            BSC bsc = (BSC) ws;
-            period = bsc.listValidPeriods().iterator().next();
-        }
+//        if(period == null) {
+//            BSC bsc = (BSC) ws;
+//            period = bsc.listValidPeriods().iterator().next();
+//        }
         return period;
     }
 }
