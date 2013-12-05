@@ -29,6 +29,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.*;
+import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.utils.DetailView;
 import org.semanticwb.bsc.utils.PropertiesComparator;
@@ -717,7 +718,14 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             if (generic != null && generic instanceof Objective) {
                 Objective objective = (Objective) generic;
                 periodStatus = objective.getPeriodStatus(period);
+            } else if (generic != null && generic instanceof Indicator) {
+                Indicator indicator = (Indicator) generic;
+                Measure measure = indicator.getStar().getMeasure(period);
+                if (measure != null && measure.getEvaluation() != null) {
+                    periodStatus = measure.getEvaluation();
+                }
             }
+            
             //-Agrega encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
             // para el per&iacte;odo especificado y el t&iacte;tulo del objeto, para lo que:
             //    - Se pide el listado de objetos PeriodStatus asociado al semObj
