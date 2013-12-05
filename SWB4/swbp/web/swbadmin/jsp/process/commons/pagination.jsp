@@ -4,8 +4,9 @@
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
 String pNum = request.getParameter("p");
 
-int maxPages = (Integer) request.getAttribute("maxPages");
 int pageNum = 1;
+int maxPages = 1;
+if (request.getAttribute("maxPages") != null) maxPages = (Integer) request.getAttribute("maxPages");
 
 if (pNum != null && !pNum.trim().equals("")) {
     pageNum = Integer.valueOf(pNum);
