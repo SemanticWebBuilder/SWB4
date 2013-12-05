@@ -92,9 +92,9 @@ public class DataTableResource extends GenericResource {
             Collections.sort(lperiods);
             periods = lperiods.iterator();
         }
-        out.println("<div class=\"swbform\">");
-        out.println("<fieldset>");
-        out.println("<table border=\"1\" width=\"98%\">"); 
+//        out.println("<div class=\"swbform\">");
+//        out.println("<fieldset>");
+        out.println("<table class=\"detail data-table\">"); 
         out.println("<thead>");
         out.println("<tr>");
         out.println("<th>Periodo</th>");
@@ -152,8 +152,8 @@ public class DataTableResource extends GenericResource {
         }
         out.println("</tbody>");
         out.println("</table>");
-        out.println("</fieldset>");
-        out.println("</div>");
+//        out.println("</fieldset>");
+//        out.println("</div>");
     }
     
     @Override
