@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.net.SocketException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -58,6 +59,7 @@ import org.semanticwb.social.Kloutable;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SocialUserExtAttributes;
 import java.util.Date;
+import java.util.Locale;
 import org.semanticwb.social.SWBSocial;
 import org.semanticwb.social.Youtube;
 import org.semanticwb.social.admin.resources.util.SWBSocialResUtil;
@@ -325,6 +327,9 @@ public class StreamInBox extends GenericResource {
         if (page == null) {
             page = "1";
         }
+        
+        
+        
         //out.println("<span  class=\"spanFormat\">");
         //out.println("<form id=\"" + id + "/importCurrentPage\" name=\"" + id + "/importCurrentPage\" method=\"post\" action=\"" + urls.setMode("exportExcel").setParameter("pages", page).setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("orderBy", orderBy) + "\" >");
         //out.println("<div align=\"right\">");
@@ -378,6 +383,25 @@ public class StreamInBox extends GenericResource {
         //out.println("</span>");
         
         out.println("</div>");
+        out.println("</fieldset>");
+        
+        
+        int streamKloutValue=stream.getStream_KloutValue();
+        
+        int nPage;
+        try {
+            nPage = Integer.parseInt(request.getParameter("page"));
+        } catch (Exception ignored) {
+            nPage = 1;
+        }
+        //System.out.println("nPage a Filtros:"+nPage);
+        HashMap hmapResult = filtros(swbSocialUser, wsite, searchWord, request, stream, nPage);
+
+        long nRec = ((Long) hmapResult.get("countResult")).longValue();
+        //Set<PostIn> setso = ((Set) hmapResult.get("itResult"));
+        NumberFormat nf2 = NumberFormat.getInstance(Locale.US);
+        out.println("<fieldset>");
+        out.println("<p class=\"totItems\">"+nf2.format(nRec)+"</p>");
         out.println("</fieldset>");
 
         out.println("<fieldset>");
@@ -755,26 +779,11 @@ public class StreamInBox extends GenericResource {
             checkKlout=false;
         }*/
 
-        int streamKloutValue=stream.getStream_KloutValue();
-        
-        int nPage;
-        try {
-            nPage = Integer.parseInt(request.getParameter("page"));
-        } catch (Exception ignored) {
-            nPage = 1;
-        }
-        //System.out.println("nPage a Filtros:"+nPage);
-        HashMap hmapResult = filtros(swbSocialUser, wsite, searchWord, request, stream, nPage);
-
-        long nRec = ((Long) hmapResult.get("countResult")).longValue();
-        //Set<PostIn> setso = ((Set) hmapResult.get("itResult"));
-        Iterator<PostIn> itposts = (Iterator)hmapResult.get("itResult"); 
-
         //Iterator<PostIn> itposts = setso.iterator();
         
         //System.out.append("nRec-George29:"+nRec);
         
-
+        Iterator<PostIn> itposts = (Iterator)hmapResult.get("itResult"); 
         while (itposts!=null && itposts.hasNext()) {
             PostIn postIn = itposts.next();
             

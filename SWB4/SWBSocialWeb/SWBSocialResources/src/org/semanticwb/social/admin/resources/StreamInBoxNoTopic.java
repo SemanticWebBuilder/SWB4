@@ -8,9 +8,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -293,6 +295,22 @@ public class StreamInBoxNoTopic extends GenericResource {
         //out.println("</span>");
         
         out.println("</div>");
+        out.println("</fieldset>");
+        
+        int nPage;
+        try {
+            nPage = Integer.parseInt(request.getParameter("page"));
+        } catch (Exception ignored) {
+            nPage = 1;
+        }
+        
+        HashMap hmapResult=filtros(swbSocialUser, wsite, searchWord, request, stream, nPage);
+        
+        long nRec=((Long)hmapResult.get("countResult")).longValue();
+        
+        NumberFormat nf2 = NumberFormat.getInstance(Locale.US);
+        out.println("<fieldset>");
+        out.println("<p class=\"totItems\">"+nf2.format(nRec)+"</p>");
         out.println("</fieldset>");
 
         out.println("<fieldset>");
@@ -635,18 +653,6 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("<tbody>");
 
 
-        int nPage;
-        try {
-            nPage = Integer.parseInt(request.getParameter("page"));
-        } catch (Exception ignored) {
-            nPage = 1;
-        }
-        
-        HashMap hmapResult=filtros(swbSocialUser, wsite, searchWord, request, stream, nPage);
-        
-        long nRec=((Long)hmapResult.get("countResult")).longValue();
-        Iterator<PostIn> itposts = (Iterator)hmapResult.get("itResult"); 
-
         //Filtros
 
 
@@ -683,6 +689,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         }
         
 
+        Iterator<PostIn> itposts = (Iterator)hmapResult.get("itResult"); 
         //Una vez que ya se cuantos elementos son, ya que ya se hizo una primera iteración sobre todos los PostIn, hago una segunda
         //iteración ya para mostrar esos ultimos elementos, esto de hacer 2 iteraciones no es muy bueno, TODO: ver con Javier si vemos
         //otra mejor opción.

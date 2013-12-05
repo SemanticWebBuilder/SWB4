@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -345,9 +346,29 @@ public class SocialSentPost extends GenericResource {
 
         out.println("</div>");
         out.println("</fieldset>");
+       
+        
+        String swbSocialUser = request.getParameter("swbSocialUser");
 
+        int nPage;
+        try {
+            nPage = Integer.parseInt(request.getParameter("page"));
+        } catch (Exception ignored) {
+            nPage = 1;
+        }
+
+        HashMap hmapResult = filtros(swbSocialUser, wsite, searchWord, request, socialTopic, nPage);
+
+        long nRec = ((Long) hmapResult.get("countResult")).longValue();
+        
+        NumberFormat nf2 = NumberFormat.getInstance(Locale.US);
         out.println("<fieldset>");
-
+        out.println("<p class=\"totItems\">"+nf2.format(nRec)+"</p>");
+        out.println("</fieldset>");
+        
+        
+        out.println("<fieldset>");
+        
         out.println("<table class=\"tabla1\" >");
         out.println("<thead>");
         out.println("<tr>");
@@ -665,18 +686,7 @@ public class SocialSentPost extends GenericResource {
              * */
         }
 
-        String swbSocialUser = request.getParameter("swbSocialUser");
-
-        int nPage;
-        try {
-            nPage = Integer.parseInt(request.getParameter("page"));
-        } catch (Exception ignored) {
-            nPage = 1;
-        }
-
-        HashMap hmapResult = filtros(swbSocialUser, wsite, searchWord, request, socialTopic, nPage);
-
-        long nRec = ((Long) hmapResult.get("countResult")).longValue();
+        
         //Set<PostOut> setso = ((Set) hmapResult.get("itResult"));
         Iterator<PostOut> itposts = (Iterator)hmapResult.get("itResult"); 
 
