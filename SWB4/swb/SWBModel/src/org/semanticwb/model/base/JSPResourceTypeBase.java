@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto por medio del cual se define un tipo de componente o recurso, con especializacion de estilo JSP 
    */
-public abstract class JSPResourceTypeBase extends org.semanticwb.model.ResourceType implements org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode
+public abstract class JSPResourceTypeBase extends org.semanticwb.model.ResourceType implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_rtJspPath=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#rtJspPath");
    /**

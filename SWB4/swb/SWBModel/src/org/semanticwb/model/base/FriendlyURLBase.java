@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class FriendlyURLBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Countryable,org.semanticwb.model.Localeable
+public abstract class FriendlyURLBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Countryable,org.semanticwb.model.Traceable,org.semanticwb.model.Localeable
 {
    /**
    * Una Página Web es el elemento de SemanticWebBuilder a través del cual se estructura la información del portal.

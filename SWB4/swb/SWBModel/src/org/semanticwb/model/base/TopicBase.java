@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Superclase utilizada por compatibilidad con estandar TopicMaps 
    */
-public abstract class TopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Tagable
+public abstract class TopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Tagable,org.semanticwb.model.Traceable
 {
    /**
    * Miembro participante dentro de una asociacion en la especificacion de TopicMaps

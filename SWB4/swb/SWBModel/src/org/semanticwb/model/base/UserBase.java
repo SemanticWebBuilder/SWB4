@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso. 
    */
-public abstract class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.Expirable,org.semanticwb.model.UserGroupable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Roleable
+public abstract class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Roleable,org.semanticwb.model.Expirable,org.semanticwb.model.Filterable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_usrFirstName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrFirstName");
    /**
@@ -18,6 +18,8 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
    */
     public static final org.semanticwb.platform.SemanticClass swb_AdminFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#AdminFilter");
     public static final org.semanticwb.platform.SemanticProperty swb_hasAdminFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasAdminFilter");
+    public static final org.semanticwb.platform.SemanticClass swb_UserFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserFilter");
+    public static final org.semanticwb.platform.SemanticProperty swb_userFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userFilter");
     public static final org.semanticwb.platform.SemanticProperty swb_usrSecurityAnswer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrSecurityAnswer");
     public static final org.semanticwb.platform.SemanticProperty swb_usrReqConfirm=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrReqConfirm");
     public static final org.semanticwb.platform.SemanticProperty swb_hasUserType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUserType");
@@ -181,6 +183,29 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
         public static java.util.Iterator<org.semanticwb.model.User> listUserByAdminFilter(org.semanticwb.model.AdminFilter value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasAdminFilter,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.User with a determined UserFilter
+       * @param value UserFilter of the type org.semanticwb.model.UserFilter
+       * @param model Model of the org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.model.User
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.User> listUserByUserFilter(org.semanticwb.model.UserFilter value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_userFilter, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.User with a determined UserFilter
+       * @param value UserFilter of the type org.semanticwb.model.UserFilter
+       * @return Iterator with all the org.semanticwb.model.User
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.User> listUserByUserFilter(org.semanticwb.model.UserFilter value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_userFilter,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -500,6 +525,44 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
          if(obj!=null)
          {
              ret=(org.semanticwb.model.AdminFilter)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property UserFilter
+   * @param value UserFilter to set
+   */
+
+    public void setUserFilter(org.semanticwb.model.UserFilter value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_userFilter, value.getSemanticObject());
+        }else
+        {
+            removeUserFilter();
+        }
+    }
+   /**
+   * Remove the value for UserFilter property
+   */
+
+    public void removeUserFilter()
+    {
+        getSemanticObject().removeProperty(swb_userFilter);
+    }
+
+   /**
+   * Gets the UserFilter
+   * @return a org.semanticwb.model.UserFilter
+   */
+    public org.semanticwb.model.UserFilter getUserFilter()
+    {
+         org.semanticwb.model.UserFilter ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_userFilter);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.UserFilter)obj.createGenericInstance();
          }
          return ret;
     }
