@@ -378,9 +378,6 @@ public class StreamInBox extends GenericResource {
         out.println("</div>");
         out.println("</fieldset>");
         
-        
-        int streamKloutValue=stream.getStream_KloutValue();
-        
         int nPage;
         try {
             nPage = Integer.parseInt(request.getParameter("page"));
@@ -781,13 +778,13 @@ public class StreamInBox extends GenericResource {
             PostIn postIn = itposts.next();
             
             //System.out.append("StreamInBox/postIn:"+postIn));
-            if(postIn.isIsPrioritary()) out.println("<div class=\"msj-cont msj-prior\">");
+            String sClass="";
+            if(postIn.isIsPrioritary()) sClass="class=\"msj-cont msj-prior\"";
             
-            out.println("<tr id=\"" + postIn.getURI() + "\">");
+            out.println("<tr id=\"" + postIn.getURI() + "\" "+sClass+">");
             printPostIn(request, postIn, paramRequest, response, true);
             out.println("</tr>");
             
-            if(postIn.isIsPrioritary()) out.println("</div>");
         }
 
         out.println("</tbody>");
