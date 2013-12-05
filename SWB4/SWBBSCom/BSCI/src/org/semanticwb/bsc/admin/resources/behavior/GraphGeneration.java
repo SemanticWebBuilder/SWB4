@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.bsc.accessory.Grapher;
 import org.semanticwb.bsc.accessory.Period;
+import org.semanticwb.bsc.catalogs.Format;
 import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.Series;
@@ -72,6 +73,8 @@ public class GraphGeneration extends GenericResource {
                             out.close();
                         }
                         Period period, period2;
+                        Format formatSerie1 = serieGraph.getFormat();
+                        Format formatSerie2 = serieGraph2.getFormat();
                         //Valida que la serie1 y la serie2 contengan periodos asignados
                         if (measurablesPeriods1.hasNext() && measurablesPeriods2.hasNext()) {
                             //Genera la grafica
@@ -83,7 +86,7 @@ public class GraphGeneration extends GenericResource {
                             out.println("<script type=\"text/javascript\">");
                             out.println("long_short_data = [");
                             out.println("{");
-                            out.println("key: \"" + grapher.getSerieGraph().getTitle() + "\" ,");
+                            out.println("key: \"" + grapher.getSerieGraph().getTitle() + " en " + formatSerie1.getTitle() + "\" ,");
                             out.println("color: '#d62728',");
                             out.println("values: [");
                             //Recorre los periodos y valores de la serie1 para graficarlos
@@ -103,7 +106,7 @@ public class GraphGeneration extends GenericResource {
                                 out.println("},");
                                 //segunda serie a graficar
                                 out.println("{");
-                                out.println("key: \""  + grapher.getSerieGraph2().getTitle() + "\" ,");
+                                out.println("key: \"" + grapher.getSerieGraph2().getTitle() + " en " + formatSerie2.getTitle()+ "\" ,");
                                 out.println("color: '#1f77b4',");
                                 out.println("values: [");
                                 //Recorre los periodos y valores de la serie2 para graficarlos
