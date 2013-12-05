@@ -211,7 +211,7 @@ public class StreamInBox extends GenericResource {
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         User user=paramRequest.getUser();
-        String lang = paramRequest.getUser().getLanguage();
+        //String lang = paramRequest.getUser().getLanguage();
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -226,6 +226,8 @@ public class StreamInBox extends GenericResource {
 
         Stream stream = (Stream) SemanticObject.getSemanticObject(id).getGenericInstance();
         WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+        
+        System.out.println("stream:"+stream.getURI());
 
         PrintWriter out = response.getWriter();
         
