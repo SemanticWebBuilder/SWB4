@@ -720,9 +720,11 @@ public class StrategicMap extends GenericResource {
         String id = getResourceBase().getWebSiteId();
         WebSite ws = getResourceBase().getWebSite();
         Period period = null;
-        if (request.getSession().getAttribute(id) != null) {
-            String dataPeriod = (String) request.getSession().getAttribute(id);
-            period = Period.ClassMgr.getPeriod(dataPeriod, ws);
+        if (request.getSession(true).getAttribute(id) != null) {
+            String pid = (String) request.getSession(true).getAttribute(id);
+            if(Period.ClassMgr.hasPeriod(pid, ws)) {
+                period = Period.ClassMgr.getPeriod(pid, ws);
+            }
         } 
 //        if(period == null) {
 //            BSC bsc = (BSC) ws;
