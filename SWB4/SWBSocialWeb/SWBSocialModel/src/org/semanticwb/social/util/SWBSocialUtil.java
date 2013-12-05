@@ -61,6 +61,7 @@ import org.semanticwb.social.Video;
 import org.semanticwb.social.Videoable;
 import org.semanticwb.social.util.lucene.SpanishAnalizer;
 import org.semanticwb.social.FastCalendar;
+import org.semanticwb.social.SWBSocial;
 
 /**
  *
@@ -2288,6 +2289,49 @@ public class SWBSocialUtil implements SWBAppObject {
                 }
             }
             return null;
+        }
+    }
+    
+    public static class sparql
+    {
+         private ArrayList getStreamSocialTopics(Stream stream)
+         {
+            String query=
+               "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+               "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+               "\n";
+
+               query+="select DISTINCT ?socialTopic" +"\n";
+               query+=
+               "where {\n" +
+               " ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
+               " ?postUri social:socialTopic ?socialTopic.  \n" +
+               " ?postUri social:pi_created ?postInCreated. \n" +
+               "  }\n";
+
+               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+               return SWBSocial.executeQueryArray(query, wsite);
+
+        }
+
+        private ArrayList getStreamSocialNetworks(Stream stream)
+        {
+            String query=
+               "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+               "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+               "\n";
+
+               query+="select DISTINCT ?socialNetwork" +"\n";
+               query+=
+               "where {\n" +
+               " ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
+               " ?postUri social:postInSocialNetwork ?socialNetwork.  \n" +
+               " ?postUri social:pi_created ?postInCreated. \n" +
+               "  }\n";
+
+               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+               return SWBSocial.executeQueryArray(query, wsite);
+
         }
     }
     
