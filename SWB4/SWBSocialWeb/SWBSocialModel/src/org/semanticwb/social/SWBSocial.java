@@ -118,5 +118,32 @@ public class SWBSocial {
         }
         return aResult;
    }
+   
+   public static ArrayList executeQueryArraySemObj(String query, WebSite wsite)
+   {
+        ArrayList aResult=new ArrayList();
+        QueryExecution qe=wsite.getSemanticModel().sparQLQuery(query);
+        ResultSet rs=qe.execSelect();
+        while(rs!=null && rs.hasNext())
+        {
+            QuerySolution qs=rs.next();
+            Iterator<String> it=rs.getResultVars().iterator();
+            while(it.hasNext())
+            {
+                String name=it.next();
+                if(name.equalsIgnoreCase("semObj"))
+                {
+                    RDFNode node=qs.get(name);
+                    String val="";
+                    if(node.isResource()){
+                        val=node.asResource().getURI();
+                        SemanticObject semObj=SemanticObject.createSemanticObject(val, wsite.getSemanticModel()); 
+                        aResult.add(semObj);
+                    }
+                }
+            }
+        }
+        return aResult;
+   }
     
 }
