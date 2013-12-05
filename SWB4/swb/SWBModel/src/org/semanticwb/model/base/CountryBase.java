@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Catalogo de paises 
    */
-public abstract class CountryBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable
+public abstract class CountryBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable
 {
    /**
    * Catalogo de paises
