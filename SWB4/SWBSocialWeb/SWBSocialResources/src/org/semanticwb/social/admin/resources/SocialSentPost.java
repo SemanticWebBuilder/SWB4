@@ -309,6 +309,29 @@ public class SocialSentPost extends GenericResource {
          out.println("</fieldset>");
          * */
         out.println("<a href=\"" + urls.setMode("exportExcel").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("pages", "0").setParameter("orderBy", orderBy) + "\" class=\"excelall\">" + paramRequest.getLocaleString("importAll") + "</a>");
+        
+        
+        SWBResourceURL urlScheduledPost = paramRequest.getRenderUrl();
+        urls.setParameter("act", "");
+        urls.setParameter("suri", id);
+        
+        out.println("<form id=\"" + id + "/fviewScheduledPost\" name=\"" + id + "/fviewScheduledPost\" method=\"post\" action=\"" + urlScheduledPost.setMode(SWBResourceURL.Mode_EDIT).setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", id) + "\" onsubmit=\"submitForm('" + id + "/fviewScheduledPost');return false;\">");
+        out.println(paramRequest.getLocaleString("showComboFilters")+":<select name=\"orderBy\">");
+        out.println("<option value=\"\">"+paramRequest.getLocaleString("all")+"</option>");
+        out.println("<option value=\"viewFCPost\">"+paramRequest.getLocaleString("indivCal")+"</option>");
+        out.println("<option value=\"viewACPost\">"+paramRequest.getLocaleString("globalCal")+"</option>");
+        out.println("</select>");
+        out.println("<input type=\"submit\" name\"fviewScheduledPost_Go\" value=\""+paramRequest.getLocaleString("btnGo") + "\"/>"); //
+        out.println("</form>");
+        
+        /*
+        if(request.getParameter("orderBy").equals("viewScheduled"))
+        {
+            out.println("<a href=\"" + urls.setParameter("orderBy", "viewScheduled").setCallMethod(SWBResourceURL.Call_DIRECT) + "\" class=\"viewScheduled\">" + paramRequest.getLocaleString("viewScheduled") + "</a>");
+        }else{
+            out.println("<a href=\"" + urls.setCallMethod(SWBResourceURL.Call_DIRECT) + "\" class=\"viewAllPostOut\">" + paramRequest.getLocaleString("viewAllPostOuts") + "</a>");
+        }*/
+        
 
         //out.println("<span  class=\"spanFormat\">");
         out.println("<form id=\"" + id + "/fsearchwp\" name=\"" + id + "/fsearchwp\" method=\"post\" action=\"" + urls.setMode(SWBResourceURL.Mode_EDIT) + "\" onsubmit=\"submitForm('" + id + "/fsearchwp');return false;\">");
@@ -824,7 +847,7 @@ public class SocialSentPost extends GenericResource {
                 if(postOut.getFastCalendar()!=null)
                 {
                     SWBResourceURL urlFastCalendars = paramRequest.getRenderUrl().setMode(Mode_ShowFastCalendar).setCallMethod(SWBResourceURL.Call_DIRECT);
-                    out.println("<a class=\"swbIconFC\" title=\"Mensaje calendarizado\" href=\"#\" onclick=\"showDialog('" + urlFastCalendars.setParameter("postUri", postOut.getURI()) + "','" + paramRequest.getLocaleString("associatedFastCalendar") + "'); return false;\"></a>");
+                    out.println("<a class=\"swbIconFC\" title=\""+paramRequest.getLocaleString("indivCalendar")+"\" href=\"#\" onclick=\"showDialog('" + urlFastCalendars.setParameter("postUri", postOut.getURI()) + "','" + paramRequest.getLocaleString("associatedFastCalendar") + "'); return false;\"></a>");
                 }
             }
             boolean oneCalendarIsActive=false;
@@ -840,7 +863,7 @@ public class SocialSentPost extends GenericResource {
             }
             if(oneCalendarIsActive)
             {
-                out.println("<a class=\"swbIconCA\" href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + msgText + "');return false;\" title=\"" + msgText + "\">CA</a>");
+                out.println("<a class=\"swbIconCA\" href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + msgText + "');return false;\" title=\"" + paramRequest.getLocaleString("globalCalendar") + "\"></a>");
             }
 
 
@@ -1718,7 +1741,7 @@ public class SocialSentPost extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
 
         String action = response.getAction();
-        System.out.println("SocialSentPost/processAction-1:" + action);
+        //System.out.println("SocialSentPost/processAction-1:" + action);
         try {
             if (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo")) {
                 try {
@@ -1922,7 +1945,6 @@ public class SocialSentPost extends GenericResource {
                 doDeletePhoto(request, response);
             }else if (action.equals("uploadFastCalendar"))
             {
-                System.out.println("PostOut/ProcessActionSentPost:"+request.getParameter("postOut"));
                 if(request.getParameter("postOut")!=null)
                 {
                     SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("postOut"));
@@ -1931,7 +1953,6 @@ public class SocialSentPost extends GenericResource {
                     String postOutInitDate=request.getParameter("postOut_inidate");
                     String postOutInitHour=request.getParameter("postOut_starthour");
                     
-                    System.out.println("postOutInitDate-Jorge en SocialSentPost:"+postOutInitDate+",postOutInitHour:"+postOutInitHour);
                     if(postOutInitDate!=null && postOutInitDate.trim().length()>0)
                     {
                         FastCalendar fastCalendar=null;
@@ -1948,7 +1969,7 @@ public class SocialSentPost extends GenericResource {
                         postOutInitDate=SWBSocialUtil.Util.changeFormat(postOutInitDate, 1);
                         postOutInitHour = postOutInitHour.substring(1, 6);
                         
-                        System.out.println("postOutInitDate-1**:"+postOutInitDate+",postOutInitHour-1**:"+postOutInitHour);
+                        //System.out.println("postOutInitDate-1**:"+postOutInitDate+",postOutInitHour-1**:"+postOutInitHour);
                     
                         
                         Date date2SendPostOut=new Date(postOutInitDate);
@@ -1965,8 +1986,8 @@ public class SocialSentPost extends GenericResource {
                         } catch (Exception noe) {
                             // No error
                         }
-                        System.out.println("H a poner:"+h);
-                        System.out.println("M a poner:"+m);
+                        //System.out.println("H a poner:"+h);
+                        //System.out.println("M a poner:"+m);
                         date2SendPostOut.setHours(h);
                         date2SendPostOut.setMinutes(m);
                         
@@ -2162,10 +2183,8 @@ public class SocialSentPost extends GenericResource {
                         Iterator<PostOutNet> itPostOutNets = PostOutNet.ClassMgr.listPostOutNetBySocialPost(postIn, paramRequest.getWebPage().getWebSite());
                         while (itPostOutNets.hasNext()) {
                             PostOutNet postOutNet = itPostOutNets.next();
-                            System.out.println("postOutNet:" + postOutNet);
                             postOutwithPostOutNets = true;
                             if (postOutNet.getStatus() == 0) {
-                                System.out.println("postOutNet-1/status:" + postOutNet.getStatus());
                                 someOneIsNotPublished = true;
                                 break;
                             }
@@ -2214,10 +2233,8 @@ public class SocialSentPost extends GenericResource {
                         Iterator<PostOutNet> itPostOutNets = PostOutNet.ClassMgr.listPostOutNetBySocialPost(postIn, paramRequest.getWebPage().getWebSite());
                         while (itPostOutNets.hasNext()) {
                             PostOutNet postOutNet = itPostOutNets.next();
-                            System.out.println("postOutNet:" + postOutNet);
                             postOutwithPostOutNets = true;
                             if (postOutNet.getStatus() == 0) {
-                                System.out.println("postOutNet-1/status:" + postOutNet.getStatus());
                                 someOneIsNotPublished = true;
                                 break;
                             }
@@ -2394,12 +2411,24 @@ public class SocialSentPost extends GenericResource {
         } else {
                 if (nPage != 0) 
                 {
-                    System.out.println("Toma solo la página..:"+nPage);
-                    if (searchWord != null && searchWord.trim().length()>0) {
+                    if(request.getParameter("orderBy")!=null && (request.getParameter("orderBy").equals("viewFCPost") || request.getParameter("orderBy").equals("viewACPost")))
+                    {
+                        if(request.getParameter("orderBy").equals("viewFCPost"))
+                        {   //Si se selecciono que mostrara solo los que estan con FastCalendars
+                            socialTopicPostOut=Integer.parseInt(getAllPostOutFC_Query(0, 0, true, socialTopic));
+                            sQuery=getAllPostOutFC_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic); 
+                            aListFilter=SWBSocial.executeQueryArrayPostOuts(sQuery, wsite);
+                        }else if(request.getParameter("orderBy").equals("viewACPost"))
+                        {   //Si se selecciono que mostrara solo los que estan con Advance Calendars
+                            socialTopicPostOut=Integer.parseInt(getAllPostOutAC_Query(0, 0, true, socialTopic));
+                            sQuery=getAllPostOutAC_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic); 
+                            aListFilter=SWBSocial.executeQueryArrayPostOuts(sQuery, wsite);
+                        }
+                    }else if (searchWord != null && searchWord.trim().length()>0) {
                         socialTopicPostOut=Integer.parseInt(getPostOutTopicbyWord_Query(0, 0, true, socialTopic, searchWord.trim()));
                         sQuery=getPostOutTopicbyWord_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic, searchWord.trim()); 
                         aListFilter=SWBSocial.executeQueryArray(sQuery, wsite); 
-                    }else if(request.getParameter("orderBy")!=null)
+                    }else if(request.getParameter("orderBy")!=null && !request.getParameter("orderBy").isEmpty())
                     {
                         socialTopicPostOut=Integer.parseInt(getAllPostOutSocialTopic_Query(socialTopic));
                         if(request.getParameter("orderBy").equals("PostTypeUp"))    //Tipo de Mensaje Up
@@ -2410,11 +2439,9 @@ public class SocialSentPost extends GenericResource {
                             sQuery=getPostOutType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("origenUp")) {
                             //socialTopicPostOut=Integer.parseInt(getPostOutSource_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
-                            System.out.println("socialTopicPostOut en origenUp:"+socialTopicPostOut);
                             sQuery=getPostOutSource_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("origenDown")) {
                             //socialTopicPostOut=Integer.parseInt(getPostOutSource_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
-                            System.out.println("socialTopicPostOut en  origenDown:"+socialTopicPostOut);
                             sQuery=getPostOutSource_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("cretedUp")) {
                             sQuery=getPostOutCreated_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
@@ -2442,10 +2469,8 @@ public class SocialSentPost extends GenericResource {
                             sQuery=getPostOutStatus_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
                         } else if (request.getParameter("orderBy").equals("statusDown")) {
                             sQuery=getPostOutStatus_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
-                        }
-                        
+                        } 
                         //Termina Armado de Query
-                        System.out.println("sQuery a Ejecutar..:"+sQuery+"...FIN...");
                         if(sQuery!=null)
                         {
                            aListFilter=SWBSocial.executeQueryArrayPostOuts(sQuery, wsite);
@@ -2468,13 +2493,13 @@ public class SocialSentPost extends GenericResource {
                         }
                     }
                 
-                System.out.println("streamPostOuts-Antes de:"+socialTopicPostOut);
+                //System.out.println("streamPostOuts-Antes de:"+socialTopicPostOut);
                 /*
                 if(socialTopicPostOut==0L)
                 {
                     socialTopicPostOut=Integer.parseInt(getAllPostOutSocialTopic_Query(0, 0, true, socialTopic));
                 }*/
-                System.out.println("StreamPostOuts:"+socialTopicPostOut);
+                //System.out.println("StreamPostOuts:"+socialTopicPostOut);
 
                 hampResult.put("countResult", Long.valueOf(socialTopicPostOut));
             }
@@ -2503,7 +2528,7 @@ public class SocialSentPost extends GenericResource {
     
     
      /*
-     * Metodo que obtiene todos los PostIns
+     * Metodo que obtiene todos los PostOuts
      */
     private String getAllPostOutSocialTopic_Query(SocialTopic socialTopic)
     {
@@ -2524,9 +2549,6 @@ public class SocialSentPost extends GenericResource {
     
     private String getAllPostOutSocialTopic_Query(long offset, long limit, boolean isCount, SocialTopic socialTopic)
     {
-        System.out.println("getPostInType_SparqlQuery/offset:"+offset);
-        System.out.println("getPostInType_SparqlQuery/limit:"+limit);
-        System.out.println("getPostInType_SparqlQuery/isCount:"+isCount);
         String query=
            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
            "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
@@ -2594,11 +2616,9 @@ public class SocialSentPost extends GenericResource {
            }
            if(isCount)
            {
-               System.out.println("Query Count:"+query);
                WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
                query=SWBSocial.executeQuery(query, wsite);
            }
-           System.out.println("return query"+query);
         return query;
     }
     
@@ -2645,10 +2665,6 @@ public class SocialSentPost extends GenericResource {
     
     private String getPostOutType_Query(String orderType, long offset, long limit, boolean isCount, SocialTopic socialTopic)
     {
-        System.out.println("getPostInType_SparqlQuery/orderType:"+orderType);
-        System.out.println("getPostInType_SparqlQuery/offset:"+offset);
-        System.out.println("getPostInType_SparqlQuery/limit:"+limit);
-        System.out.println("getPostInType_SparqlQuery/isCount:"+isCount);
         String query=
            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
            "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
@@ -2694,10 +2710,6 @@ public class SocialSentPost extends GenericResource {
     
     private String getPostOutSource_Query(String orderType, long offset, long limit, boolean isCount, SocialTopic socialTopic)
     {
-        System.out.println("getPostInType_SparqlQuery/orderType:"+orderType);
-        System.out.println("getPostInType_SparqlQuery/offset:"+offset);
-        System.out.println("getPostInType_SparqlQuery/limit:"+limit);
-        System.out.println("getPostInType_SparqlQuery/isCount:"+isCount);
         String query=
            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
            "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
@@ -2745,10 +2757,6 @@ public class SocialSentPost extends GenericResource {
     
     private String getPostOutCreated_Query(String orderType, long offset, long limit, boolean isCount, SocialTopic socialTopic)
     {
-        System.out.println("getPostInType_SparqlQuery/orderType:"+orderType);
-        System.out.println("getPostInType_SparqlQuery/offset:"+offset);
-        System.out.println("getPostInType_SparqlQuery/limit:"+limit);
-        System.out.println("getPostInType_SparqlQuery/isCount:"+isCount);
         String query=
            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
            "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
@@ -2790,10 +2798,6 @@ public class SocialSentPost extends GenericResource {
     
     private String getPostOutUpdated_Query(String orderType, long offset, long limit, boolean isCount, SocialTopic socialTopic)
     {
-        System.out.println("getPostInType_SparqlQuery/orderType:"+orderType);
-        System.out.println("getPostInType_SparqlQuery/offset:"+offset);
-        System.out.println("getPostInType_SparqlQuery/limit:"+limit);
-        System.out.println("getPostInType_SparqlQuery/isCount:"+isCount);
         String query=
            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
            "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
@@ -2837,10 +2841,6 @@ public class SocialSentPost extends GenericResource {
     
     private String getPostOutSentimentalType_Query(String orderType, long offset, long limit, boolean isCount, SocialTopic socialTopic)
     {
-        System.out.println("getPostInType_SparqlQuery/orderType:"+orderType);
-        System.out.println("getPostInType_SparqlQuery/offset:"+offset);
-        System.out.println("getPostInType_SparqlQuery/limit:"+limit);
-        System.out.println("getPostInType_SparqlQuery/isCount:"+isCount);
         String query=
            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
            "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
@@ -2887,10 +2887,6 @@ public class SocialSentPost extends GenericResource {
     
     private String getPostOutIntensityType_Query(String orderType, long offset, long limit, boolean isCount, SocialTopic socialTopic)
     {
-        System.out.println("getPostInType_SparqlQuery/orderType:"+orderType);
-        System.out.println("getPostInType_SparqlQuery/offset:"+offset);
-        System.out.println("getPostInType_SparqlQuery/limit:"+limit);
-        System.out.println("getPostInType_SparqlQuery/isCount:"+isCount);
         String query=
            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
            "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
@@ -2938,10 +2934,6 @@ public class SocialSentPost extends GenericResource {
     
     private String getPostOutUserName_Query(String orderType, long offset, long limit, boolean isCount, SocialTopic socialTopic)
     {
-        System.out.println("getPostInType_SparqlQuery/orderType:"+orderType);
-        System.out.println("getPostInType_SparqlQuery/offset:"+offset);
-        System.out.println("getPostInType_SparqlQuery/limit:"+limit);
-        System.out.println("getPostInType_SparqlQuery/isCount:"+isCount);
         String query=
            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
            "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
@@ -2989,10 +2981,6 @@ public class SocialSentPost extends GenericResource {
     
    private String getPostOutStatus_Query(String orderType, long offset, long limit, boolean isCount, SocialTopic socialTopic)
     {
-        System.out.println("getPostInType_SparqlQuery/orderType:"+orderType);
-        System.out.println("getPostInType_SparqlQuery/offset:"+offset);
-        System.out.println("getPostInType_SparqlQuery/limit:"+limit);
-        System.out.println("getPostInType_SparqlQuery/isCount:"+isCount);
         String query=
            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
            "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
@@ -3036,6 +3024,82 @@ public class SocialSentPost extends GenericResource {
            }
         return query;   
     }
+   
+   private String getAllPostOutFC_Query(long offset, long limit, boolean isCount, SocialTopic socialTopic)
+    {
+        String query=
+           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+           "\n";
+           if(isCount)
+           { 
+               //query+="select count(*)\n";
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+           }else query+="select *\n";
+           
+           query+=
+           "where {\n" +
+           "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
+           "  ?postUri social:fastCalendar ?fastCalendar." + "\n" + 
+           "  ?fastCalendar social:fc_date ?fc_date. " + "\n" + 
+           "  }\n";
+
+           if(!isCount)
+           {
+                query+="ORDER BY asc(?fc_date) ";
+                
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
+           }
+           if(isCount)
+           {
+               WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+               query=SWBSocial.executeQuery(query, wsite);
+           }
+        return query;   
+    }
+   
+   
+   private String getAllPostOutAC_Query(long offset, long limit, boolean isCount, SocialTopic socialTopic)
+    {
+        String query=
+           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#> \n" +
+           "PREFIX swb: <http://www.semanticwebbuilder.org/swb4/ontology#> \n" +
+           "\n";
+           if(isCount)
+           { 
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+           }else query+="select *\n";
+           
+           query+=
+           "where {\n" +
+           "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
+           "  ?postUri swb:hasCalendarRef ?hasAdvCal." + "\n" + 
+           "  ?postUri social:pout_created ?postOutCreated. " + "\n" + 
+           "  }\n";
+
+           if(!isCount)
+           {
+                query+="ORDER BY asc(?postOutCreated) ";
+                
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
+           }
+           if(isCount)
+           {
+               WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+               query=SWBSocial.executeQuery(query, wsite);
+           }
+        return query;   
+    }
+   
     
    /*
    private String executeQuery(String query, WebSite wsite)
