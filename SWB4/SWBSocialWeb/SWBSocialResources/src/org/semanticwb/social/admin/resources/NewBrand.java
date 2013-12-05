@@ -108,8 +108,8 @@ public class NewBrand extends GenericResource {
                     
                     
                     org.semanticwb.social.SocialTopic socialTopic=SocialTopic.ClassMgr.createSocialTopic("DefaultTopic", site);
-                    socialTopic.setTitle("Defecto", "es");
-                    socialTopic.setTitle("Defect", "en");
+                    socialTopic.setTitle("Predeterminado", "es");
+                    socialTopic.setTitle("Default", "en");
                     socialTopic.setActive(true);
                     
                     

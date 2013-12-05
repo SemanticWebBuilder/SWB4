@@ -24,6 +24,7 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.PostIn;
+import org.semanticwb.social.SWBSocial;
 import org.semanticwb.social.Stream;
 
 /**
@@ -164,6 +165,7 @@ public class RemoveMessagesResource extends GenericResource {
                         out.println("   showStatus('Mensajes eliminados');");            
                     out.println("</script>");
                 }
+                
             }catch(Exception e)
             {
                 System.out.println(e.getMessage()); 
