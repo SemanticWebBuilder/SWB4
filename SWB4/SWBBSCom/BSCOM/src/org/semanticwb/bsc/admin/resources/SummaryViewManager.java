@@ -17,6 +17,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
+import org.semanticwb.bsc.PeriodStatusAssignable;
 import org.semanticwb.bsc.Seasonable;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.utils.SummaryView;
@@ -29,6 +30,7 @@ import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.bsc.admin.resources.base.SummaryViewManagerBase;
+import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.utils.PropertiesComparator;
 import org.semanticwb.model.FormElement;
 import org.semanticwb.model.GenericObject;
@@ -99,6 +101,8 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             String identifier = null; //de los elementos del grid
             String filters = null;
             String periodId = (String) request.getSession(true).getAttribute(website.getId());
+            boolean addStatus = false;
+            
             //Si no hay sesion, la peticion puede ser directa (una liga en un correo). Crear sesion y atributo:
             if (periodId == null) {
                 periodId = request.getParameter(website.getId()) != null
@@ -125,6 +129,9 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                 identifier = paramRequest.getLocaleString("value_DeliverableId");
                 filters = paramRequest.getLocaleString("value_DeliverableFilter");
             }
+            if (semWorkClass.hasProperty(PeriodStatusAssignable.bsc_hasPeriodStatus.getName())) {
+                addStatus = true;
+            }
             //objeto JSON que almacenara la estructura del grid de Dojo
             JSONObject structure = new JSONObject();
             JSONArray items = new JSONArray();
@@ -148,6 +155,39 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                 GenericIterator<PropertyListItem> viewPropertiesList = activeView.listPropertyListItems();
                 
                 JSONObject row = new JSONObject();
+                StringBuilder status = new StringBuilder(128);
+                
+                if (addStatus) {
+                    PeriodStatus perStat = null;
+                    if (generic instanceof Objective) {
+                        Objective obj = (Objective) generic;
+                        perStat = obj.getPeriodStatus(thisPeriod);
+                    }
+                    if (perStat != null && perStat.getStatus() != null) {
+                        if (perStat.getStatus().getIcon() != null) {
+                            status.append("<img src=\"");
+                            status.append(perStat.getStatus().getIcon());
+                            status.append("\" title=\"");
+                            status.append(perStat.getStatus().getTitle());
+                            status.append("\" />");
+                        } else {
+                            status.append("<span class=\"");
+                            status.append(perStat.getStatus().getIconClass());
+                            status.append("\">");
+                            status.append(perStat.getStatus().getTitle());
+                            status.append("</span>");
+                        }
+                    } else {
+                            status.append("<span class=\"indefinido\">Indefinido</span>");
+                    }
+                    try {
+                        row.put("Status", status.toString());
+                    } catch (JSONException jsone) {
+                        SummaryViewManager.log.error("En la creacion de objetos JSON", jsone);
+                    }
+                    
+                }
+                
                 //Por cada propiedad en la vista:
                 while (viewPropertiesList.hasNext()) {
                     PropertyListItem propListItem = viewPropertiesList.next();
@@ -182,6 +222,16 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             //Obtiene encabezados de tabla y propiedades para filtros
             GenericIterator<PropertyListItem> viewPropertiesList = activeView.listPropertyListItems();
             ArrayList<String[]> headingsArray = new ArrayList<String[]>(16);
+            
+            if (addStatus) {
+                String[] statusHeading = {
+                    "Status",
+                    "Estado",
+                    "false"
+                };
+                headingsArray.add(statusHeading);
+            }
+            
             boolean showFiltering = false;
             if (viewPropertiesList != null) {
                 while (viewPropertiesList.hasNext()) {
