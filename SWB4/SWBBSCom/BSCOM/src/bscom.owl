@@ -680,10 +680,10 @@
             >true</swb:autogenId>
             <swb:displayObject>
               <swbxf:DisplayObject rdf:ID="do_DifferentiatorGroup">
-                <rdfs:label xml:lang="es">Grupo de diferenciadores</rdfs:label>
-                <rdfs:label xml:lang="en">Differentiating Group</rdfs:label>
                 <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                >swbstrgyIconStates</swb:iconClass>
+                >swbstrgyIconGroupDifferentiators</swb:iconClass>
+                <rdfs:label xml:lang="en">Group of Differentiators</rdfs:label>
+                <rdfs:label xml:lang="es">Grupo de diferenciadores</rdfs:label>
               </swbxf:DisplayObject>
             </swb:displayObject>
             <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -1490,7 +1490,7 @@
         <swb:displayObject>
           <swbxf:DisplayObject rdf:ID="do_Differentiator">
             <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbstrgyIconStates</swb:iconClass>
+            >swbstrgyIconDifferentiator</swb:iconClass>
             <rdfs:label xml:lang="es">Diferenciador</rdfs:label>
             <rdfs:label xml:lang="en">Differentiator</rdfs:label>
           </swbxf:DisplayObject>
