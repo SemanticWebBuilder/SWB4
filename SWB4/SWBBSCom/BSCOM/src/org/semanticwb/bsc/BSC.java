@@ -56,6 +56,9 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
         List<Period> validPeriods = SWBUtils.Collections.filterIterator(listPeriods(), new GenericFilterRule<Period>() {
                                                                         @Override
                                                                         public boolean filter(Period p) {
+                                                                            if(p==null) {
+                                                                                return true;
+                                                                            }
                                                                             User user = SWBContext.getSessionUser();
                                                                             return !p.isValid() || !user.haveAccess(p);
                                                                         }            
