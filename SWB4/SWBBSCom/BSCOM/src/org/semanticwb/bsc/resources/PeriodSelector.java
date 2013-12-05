@@ -1,12 +1,12 @@
 package org.semanticwb.bsc.resources;
 
-import com.hp.hpl.jena.graph.query.Element;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 import java.util.TimeZone;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,6 +43,12 @@ public class PeriodSelector extends GenericResource {
             if (current.compareTo(left) >= 0 && current.compareTo(right) <= 0) {
                 return period;
             }
+        }
+        try {
+            BSC bsc = (BSC)getResourceBase().getWebSite();
+            Period period = bsc.listValidPeriods().iterator().next();
+            return period;
+        }catch(NoSuchElementException nse) {
         }
         return null;
     }
