@@ -692,7 +692,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         StringBuilder output = new StringBuilder(256);
         String message = validateInput(request, paramRequest);
 
-        output.append("<div>\n");
+        output.append("<div id=\"detalle\" class=\"detalleObjetivo\">\n");
 
         if (message == null) {
             FileReader reader = retrieveTemplate();
@@ -725,7 +725,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             //    - Cuando el per&iacte;odo del PeriodStatus = per&iacte;odo del request:
             //        - Se obtiene el status correspondiente y su &iacte;cono relacionado
             //        - Se agrega el &iacte;cono al encabezado y el t&iacte;tulo del objeto semObj
-            output.append("<div");
+            output.append("<h2");
             output.append(" class=\"");
             if (periodStatus != null && periodStatus.getStatus() != null && 
                     periodStatus.getStatus().getIconClass() != null) {
@@ -736,7 +736,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             output.append("\"");
             output.append(">");
             output.append(semObj.getDisplayName());
-            output.append("</div>\n");
+            output.append("</h2>\n");
 
             if (reader != null) {
                 output.append(generateDisplay(request, paramRequest, reader, semObj));
