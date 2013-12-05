@@ -80,8 +80,13 @@ public class CausalArrows extends Decorator {
     @Override
     public StringBuilder draw(BSC bsc, Period period, Resource base) {
         StringBuilder sb = new StringBuilder();
+        //sb.append("<div id=\"pruebaContenedorMapa\">");
+        sb.append("\n <div style=\"width:100%;height:100%");/*100%*/
+        //sb.append(heightAll);
+        sb.append(";float:left;\" id=\"causalMap\" name=\"causalMap\">");
         sb.append(super.draw(bsc, period, base));
         sb.append(paintArrows(getStructureDataArrows(base, bsc, period), base, bsc, period));
+        sb.append("</div>");
         return sb;
     }
 
@@ -506,9 +511,9 @@ public class CausalArrows extends Decorator {
             BigDecimal baseYdiff2 = yA5.subtract(baseYdiff);
 
             BigDecimal yA = tam120.add(yA1).add(baseYdiff2);
-            if (useMargins) {
+//            if (useMargins) {
                 yA.add(yA4).add(yA3);
-            }
+//            }
             y1 = yA.doubleValue();
             BigDecimal xB1 = tam18.subtract(incrementTam);
             BigDecimal yB = yA.add(xB1);
@@ -541,9 +546,9 @@ public class CausalArrows extends Decorator {
 
             BigDecimal yD6 = tam18.subtract(incrementTam);
             BigDecimal yD = tam120.add(yD1).add(baseYdiff2).add(yD6);
-            if (useMargins) {
+//            if (useMargins) {
                 yD.add(yD4).add(yA3);
-            }
+//            }
             y2 = yD.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
@@ -552,9 +557,9 @@ public class CausalArrows extends Decorator {
             x2 = x1;
             y1 = y2;
             BigDecimal yE = tam120.add(yD1).add(baseYdiff2);
-            if (useMargins) {
+//            if (useMargins) {
                 yE.add(yD4).add(yA3);
-            }
+//            }
             y2 = yE.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             sb.append(paintLineTriangle(countLine, triangleEnd));
@@ -655,9 +660,9 @@ public class CausalArrows extends Decorator {
                     initPerspective));
             BigDecimal baseY1 = baseY1a5.add(tam120).add(incrementTam).
                     add(baseYdiff2).add(baseY1a31).add(baseY1a4);
-            if (useMargins) {
+//            if (useMargins) {
                 baseY1.add(baseY1a).add(baseY1a1);
-            }
+//            }
 
             y1 = baseY1.doubleValue();
             y2 = y1;
@@ -675,9 +680,9 @@ public class CausalArrows extends Decorator {
             BigDecimal y1e = tam18.subtract(incrementTam);
             BigDecimal y1f = y1c.subtract(tam1).multiply(tam2).add(y1b);
             BigDecimal y1g = y1a.add(baseYdiff2).add(tam120).add(y1e);
-            if (useMargins) {
+//            if (useMargins) {
                 y1g.add(y1f).add(y1c);
-            }
+//            }
             y2 = y1g.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
@@ -719,9 +724,9 @@ public class CausalArrows extends Decorator {
             BigDecimal yce = heightObjective1a.divide(tam2, MathContext.DECIMAL128);
             BigDecimal resultY2c = yc.add(baseYdiff2).add(ycd).add(yce).add(tam120).
                     add(incrementTam);
-            if (useMargins) {
+//            if (useMargins) {
                 resultY2c.add(yca).add(ycb0);
-            }
+//            }
             y2 = resultY2c.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
@@ -811,9 +816,9 @@ public class CausalArrows extends Decorator {
             BigDecimal baseYdiff2 = yA4.subtract(baseYdiff);
 
             BigDecimal yA = yA1.add(tam120).add(baseYdiff2).add(tam20);
-            if (useMargins) {
+//            if (useMargins) {
                 yA.add(yA2).add(yA3);
-            }
+//            }
             y1 = yA.doubleValue();
             BigDecimal yB1 = tam18.subtract(incrementTam);
             BigDecimal yB = yA.subtract(yB1);
@@ -854,9 +859,9 @@ public class CausalArrows extends Decorator {
             baseYdiff2 = yD4.subtract(baseYdiff);
 
             BigDecimal yD = yD1.add(tam120).add(baseYdiff2).add(tam20);
-            if (useMargins) {
+//            if (useMargins) {
                 yD.add(yD2).add(yD3);
-            }
+//            }
 
             y2 = yD.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
@@ -936,9 +941,9 @@ public class CausalArrows extends Decorator {
             BigDecimal baseYdiff2 = yA4.subtract(baseYdiff);
 
             BigDecimal yA = yA1.add(tam120).add(baseYdiff2).add(tam20);
-            if (useMargins) {
+//            if (useMargins) {
                 yA.add(yA2).add(yA3);
-            }
+//            }
             y1 = yA.doubleValue();
             BigDecimal yB1 = tam18.subtract(incrementTam);
             BigDecimal yB = yA.subtract(yB1);
@@ -971,9 +976,9 @@ public class CausalArrows extends Decorator {
             baseYdiff2 = yC5.subtract(baseYdiff);
 
             BigDecimal yC = yC1.add(tam120).add(baseYdiff2).add(incrementTam);
-            if (useMargins) {
+//            if (useMargins) {
                 yC.add(yC2).add(yC4);
-            }
+//            }
             y2 = yC.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
@@ -1012,9 +1017,9 @@ public class CausalArrows extends Decorator {
             baseYdiff2 = yD4.subtract(baseYdiff);
 
             BigDecimal yD = yD1.add(tam120).add(baseYdiff2).add(tam20);
-            if (useMargins) {
+//            if (useMargins) {
                 yD.add(yD2).add(yD3);
-            }
+//            }
 
             y2 = yD.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
@@ -1218,13 +1223,15 @@ public class CausalArrows extends Decorator {
         int[] height = getHeigthPerspectives(dataArrows.length(), dataArrows);
         int heightAll = height[0] + height[1] + (dataArrows.length() * 40) + 120
                 + (dataArrows.length() * 2) + 20 + 10;
-        sb.append("\n <div style=\"position:absolute;width:100%;height:");
+        sb.append("\n <div style=\"position:absolute;width:100%;height:");/*width:100%;*/
         sb.append(heightAll);
         sb.append("px;float:left;z-index:1\" id=\"arrowLayer\" name=\"arrowLayer\">");
         sb.append("\n </div>");
         sb.append("\n <script type=\"text/javascript\">");
         sb.append("\n         dojo.addOnLoad( function(){");
-        sb.append("\n             calculateDivs();}");
+        sb.append("\n             calculateDivs();");
+        //sb.append("\n             document.getElementById('arrowLayer').style.width = \"auto\";");
+        sb.append("}");
         sb.append("\n         );");
         sb.append("\n </script>");
         return sb;
@@ -1668,9 +1675,9 @@ public class CausalArrows extends Decorator {
             BigDecimal baseYdiff2 = yA5.subtract(baseYdiff);
 
             BigDecimal yA = tam120.add(yA1).add(baseYdiff2);
-            if (useMargins) {
+//            if (useMargins) {
                 yA.add(yA4).add(yA3);
-            }
+//            }
             y1 = yA.doubleValue();
             BigDecimal xB1 = tam18.subtract(incrementTam);
             BigDecimal yB = yA.add(xB1);
@@ -1707,9 +1714,9 @@ public class CausalArrows extends Decorator {
             baseYdiff2 = yC5.subtract(baseYdiff);
 
             BigDecimal yC = yC1.add(tam120).add(baseYdiff2).add(incrementTam);
-            if (useMargins) {
+//            if (useMargins) {
                 yC.add(yC2).add(yC4);
-            }
+//            }
             y2 = yC.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
@@ -1745,9 +1752,9 @@ public class CausalArrows extends Decorator {
             baseYdiff2 = yD4.subtract(baseYdiff);
 
             BigDecimal yD = yD1.add(tam120).add(baseYdiff2).add(tam20);
-            if (useMargins) {
+//            if (useMargins) {
                 yD.add(yD2).add(yD3);
-            }
+//            }
             y2 = yD.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (isValid) {
@@ -1844,9 +1851,9 @@ public class CausalArrows extends Decorator {
             BigDecimal baseYdiff2 = yA5.subtract(baseYdiff);
 
             BigDecimal yA = tam120.add(yA1).add(baseYdiff2);
-            if (useMargins) {
+//            if (useMargins) {
                 yA.add(yA4).add(yA3);
-            }
+//            }
             y1 = yA.doubleValue();
             BigDecimal xB1 = tam18.subtract(incrementTam);
             BigDecimal yB = yA.add(xB1);
@@ -1889,9 +1896,9 @@ public class CausalArrows extends Decorator {
             baseYdiff2 = yD4.subtract(baseYdiff);
 
             BigDecimal yD = yD1.add(tam120).add(baseYdiff2).add(tam20);
-            if (useMargins) {
+//            if (useMargins) {
                 yD.add(yD2).add(yD3);
-            }
+//            }
             y2 = yD.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (isValid) {
@@ -1989,9 +1996,9 @@ public class CausalArrows extends Decorator {
             BigDecimal yA8 = yA4.divide(tam2, MathContext.DECIMAL128);
             BigDecimal yA = yA1.add(baseYdiff2).add(yA7).add(yA8).add(tam120).
                     add(incrementTam);
-            if (useMargins) {
+//            if (useMargins) {
                 yA.add(yA5).add(yA3a);
-            }
+//            }
             y1 = yA.doubleValue();
             y2 = y1;
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
@@ -2016,9 +2023,9 @@ public class CausalArrows extends Decorator {
             baseYdiff2 = yB5.subtract(baseYdiff);
 
             BigDecimal yB = yB1.add(tam120).add(baseYdiff2).add(incrementTam);
-            if (useMargins) {
+//            if (useMargins) {
                 yB.add(yB2).add(yB4);
-            }
+//            }
             y2 = yB.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             countLine++;
@@ -2054,9 +2061,9 @@ public class CausalArrows extends Decorator {
             baseYdiff2 = yC4.subtract(baseYdiff);
 
             BigDecimal yC = yC1.add(tam120).add(baseYdiff2).add(tam20);
-            if (useMargins) {
+//            if (useMargins) {
                 yC.add(yC2).add(yC3);
-            }
+//            }
             y2 = yC.doubleValue();
             sb.append(paintLines(countLine, x1, x2, y1, y2, classLine));
             if (relationObjective) {
