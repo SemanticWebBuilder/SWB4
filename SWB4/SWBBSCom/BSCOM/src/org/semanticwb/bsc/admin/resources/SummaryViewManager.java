@@ -229,7 +229,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                     "Estado",
                     "false"
                 };
-                headingsArray.add(statusHeading);
+                headingsArray.add(0, statusHeading);
             }
             
             boolean showFiltering = false;
@@ -238,6 +238,11 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                     PropertyListItem propListItem = viewPropertiesList.next();
                     SemanticProperty property = propListItem.getElementProperty(
                                                 ).transformToSemanticProperty();
+                    int arrayIndex = propListItem.getPropertyOrder();
+                    if (addStatus) { //Si se agrego la columna de status, las demas se recorren
+                        arrayIndex++;
+                    }
+
                     if (propListItem != null && property != null) {
                         String[] heading = {
                                             property.getName(),
@@ -245,7 +250,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                                             (filters != null && filters.contains(property.getName()))
                                             ? "true" : "false"
                                            };
-                        headingsArray.add(heading);
+                        headingsArray.add(arrayIndex, heading);
                         if (filters != null && filters.contains(property.getName())) {
                             showFiltering = true;
                         }
