@@ -2294,43 +2294,43 @@ public class SWBSocialUtil implements SWBAppObject {
     
     public static class sparql
     {
-         private ArrayList getStreamSocialTopics(Stream stream)
+         public static ArrayList getStreamSocialTopics(Stream stream)
          {
             String query=
                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
                "\n";
 
-               query+="select DISTINCT ?socialTopic" +"\n";
+               query+="select DISTINCT ?semObj" +"\n";
                query+=
                "where {\n" +
                " ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-               " ?postUri social:socialTopic ?socialTopic.  \n" +
+               " ?postUri social:socialTopic ?semObj.  \n" +
                " ?postUri social:pi_created ?postInCreated. \n" +
                "  }\n";
 
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               return SWBSocial.executeQueryArray(query, wsite);
+               return SWBSocial.executeQueryArraySemObj(query, wsite);
 
         }
 
-        private ArrayList getStreamSocialNetworks(Stream stream)
+        public static ArrayList getStreamSocialNetworks(Stream stream)
         {
             String query=
                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
                "\n";
 
-               query+="select DISTINCT ?socialNetwork" +"\n";
+               query+="select DISTINCT ?semObj" +"\n";
                query+=
                "where {\n" +
                " ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-               " ?postUri social:postInSocialNetwork ?socialNetwork.  \n" +
+               " ?postUri social:postInSocialNetwork ?semObj.  \n" +
                " ?postUri social:pi_created ?postInCreated. \n" +
                "  }\n";
 
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               return SWBSocial.executeQueryArray(query, wsite);
+               return SWBSocial.executeQueryArraySemObj(query, wsite);
 
         }
     }
