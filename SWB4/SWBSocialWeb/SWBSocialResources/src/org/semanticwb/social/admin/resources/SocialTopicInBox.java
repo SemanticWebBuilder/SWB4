@@ -748,9 +748,10 @@ public class SocialTopicInBox extends GenericResource {
         while (itposts!=null &&  itposts.hasNext()) {
             PostIn postIn = itposts.next();
                         
-            if(postIn.isIsPrioritary()) out.println("<div class=\"msj-cont msj-prior\">");
+            String sClass="";
+            if(postIn.isIsPrioritary()) sClass="class=\"msj-cont msj-prior\"";
             
-            out.println("<tr>");
+            out.println("<tr "+sClass+">"); 
 
             //Show Actions
             out.println("<td class=\"accion\">");
@@ -935,7 +936,6 @@ public class SocialTopicInBox extends GenericResource {
 
             out.println("</tr>");
             
-            if(postIn.isIsPrioritary()) out.println("</div>");
         }
         out.println("</tbody>");
         out.println("</table>");
