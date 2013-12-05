@@ -704,8 +704,8 @@ public class StreamInBoxNoTopic extends GenericResource {
              continue;
              } //Es decir, se listarían solo los que no tengan aun un SocialTopic asociado.
              * */
-
-           
+            if(postIn.isIsPrioritary()) out.println("<div class=\"msj-cont msj-prior\">");
+            
             out.println("<tr>");
 
             //Show Actions
@@ -879,6 +879,8 @@ public class StreamInBoxNoTopic extends GenericResource {
 
 
             out.println("</tr>");
+            
+            if(postIn.isIsPrioritary()) out.println("</div>");
         }
         out.println("</tbody>");
         out.println("</table>");

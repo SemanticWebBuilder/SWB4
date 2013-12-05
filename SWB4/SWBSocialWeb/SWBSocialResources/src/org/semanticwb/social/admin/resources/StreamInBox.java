@@ -229,24 +229,17 @@ public class StreamInBox extends GenericResource {
         Stream stream = (Stream) SemanticObject.getSemanticObject(id).getGenericInstance();
         WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
         
-        System.out.println("stream:"+stream.getURI());
+        //System.out.println("stream:"+stream.getURI());
 
         PrintWriter out = response.getWriter();
         
         //Manejo de permisos
-        boolean userCanRemoveMsg=false;
         boolean userCanRetopicMsg=false;
-        boolean userCanRevalueMsg=false;
-        boolean userCanRespondMsg=false;
         SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
         if(socialUserExtAttr!=null)
         {
-            userCanRemoveMsg=socialUserExtAttr.isUserCanRemoveMsg();
             userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
-            userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
-            userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
         }
-
 
         if (request.getParameter("leyendReconfirm") != null) {
             
@@ -788,11 +781,13 @@ public class StreamInBox extends GenericResource {
             PostIn postIn = itposts.next();
             
             //System.out.append("StreamInBox/postIn:"+postIn));
-
+            if(postIn.isIsPrioritary()) out.println("<div class=\"msj-cont msj-prior\">");
+            
             out.println("<tr id=\"" + postIn.getURI() + "\">");
             printPostIn(request, postIn, paramRequest, response, true);
             out.println("</tr>");
-
+            
+            if(postIn.isIsPrioritary()) out.println("</div>");
         }
 
         out.println("</tbody>");
