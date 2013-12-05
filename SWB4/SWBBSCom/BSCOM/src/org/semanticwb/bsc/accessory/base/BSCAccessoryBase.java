@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.accessory.base;
 
 
-public abstract class BSCAccessoryBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Roleable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.UserGroupable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.model.Undeleteable
+public abstract class BSCAccessoryBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable
 {
     public static final org.semanticwb.platform.SemanticClass bsc_BSCAccessory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#BSCAccessory");
    /**
@@ -168,29 +168,6 @@ public abstract class BSCAccessoryBase extends org.semanticwb.model.SWBClass imp
         public static java.util.Iterator<org.semanticwb.bsc.accessory.BSCAccessory> listBSCAccessoryByRole(org.semanticwb.model.Role value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.BSCAccessory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.accessory.BSCAccessory with a determined RuleRef
-       * @param value RuleRef of the type org.semanticwb.model.RuleRef
-       * @param model Model of the org.semanticwb.bsc.accessory.BSCAccessory
-       * @return Iterator with all the org.semanticwb.bsc.accessory.BSCAccessory
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.accessory.BSCAccessory> listBSCAccessoryByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.BSCAccessory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.accessory.BSCAccessory with a determined RuleRef
-       * @param value RuleRef of the type org.semanticwb.model.RuleRef
-       * @return Iterator with all the org.semanticwb.bsc.accessory.BSCAccessory
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.accessory.BSCAccessory> listBSCAccessoryByRuleRef(org.semanticwb.model.RuleRef value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.BSCAccessory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -551,80 +528,6 @@ public abstract class BSCAccessoryBase extends org.semanticwb.model.SWBClass imp
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(swb_title, title, lang);
-    }
-   /**
-   * Gets all the org.semanticwb.model.RuleRef
-   * @return A GenericIterator with all the org.semanticwb.model.RuleRef
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listRuleRefs()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(getSemanticObject().listObjectProperties(swb_hasRuleRef));
-    }
-
-   /**
-   * Gets true if has a RuleRef
-   * @param value org.semanticwb.model.RuleRef to verify
-   * @return true if the org.semanticwb.model.RuleRef exists, false otherwise
-   */
-    public boolean hasRuleRef(org.semanticwb.model.RuleRef value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swb_hasRuleRef,value.getSemanticObject());
-        }
-        return ret;
-    }
-
-   /**
-   * Gets all the RuleRefs inherits
-   * @return A GenericIterator with all the org.semanticwb.model.RuleRef
-   */
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listInheritRuleRefs()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(getSemanticObject().listInheritProperties(swb_hasRuleRef));
-    }
-   /**
-   * Adds a RuleRef
-   * @param value org.semanticwb.model.RuleRef to add
-   */
-
-    public void addRuleRef(org.semanticwb.model.RuleRef value)
-    {
-        getSemanticObject().addObjectProperty(swb_hasRuleRef, value.getSemanticObject());
-    }
-   /**
-   * Removes all the RuleRef
-   */
-
-    public void removeAllRuleRef()
-    {
-        getSemanticObject().removeProperty(swb_hasRuleRef);
-    }
-   /**
-   * Removes a RuleRef
-   * @param value org.semanticwb.model.RuleRef to remove
-   */
-
-    public void removeRuleRef(org.semanticwb.model.RuleRef value)
-    {
-        getSemanticObject().removeObjectProperty(swb_hasRuleRef,value.getSemanticObject());
-    }
-
-   /**
-   * Gets the RuleRef
-   * @return a org.semanticwb.model.RuleRef
-   */
-    public org.semanticwb.model.RuleRef getRuleRef()
-    {
-         org.semanticwb.model.RuleRef ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRuleRef);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.RuleRef)obj.createGenericInstance();
-         }
-         return ret;
     }
 
 /**
