@@ -748,8 +748,8 @@ public class SocialTopicInBox extends GenericResource {
         while (itposts!=null &&  itposts.hasNext()) {
             PostIn postIn = itposts.next();
                         
-            //System.out.println("postIn en InBox TOPIC:" + PostIn.getPostInbySocialMsgId(wsite, postIn.getSocialNetMsgId()));
-
+            if(postIn.isIsPrioritary()) out.println("<div class=\"msj-cont msj-prior\">");
+            
             out.println("<tr>");
 
             //Show Actions
@@ -934,6 +934,8 @@ public class SocialTopicInBox extends GenericResource {
             out.println("</td>");
 
             out.println("</tr>");
+            
+            if(postIn.isIsPrioritary()) out.println("</div>");
         }
         out.println("</tbody>");
         out.println("</table>");
