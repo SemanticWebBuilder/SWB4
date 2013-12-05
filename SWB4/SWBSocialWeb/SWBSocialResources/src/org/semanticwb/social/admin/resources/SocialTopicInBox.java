@@ -8,11 +8,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -339,6 +341,22 @@ public class SocialTopicInBox extends GenericResource {
         //out.println("</span>");
         
         out.println("</div>");
+        out.println("</fieldset>");
+        
+        int nPage;
+        try {
+            nPage = Integer.parseInt(request.getParameter("page"));
+        } catch (Exception ignored) {
+            nPage = 1;
+        }
+
+        HashMap hmapResult = filtros(swbSocialUser, wsite, searchWord, request, socialTopic, nPage);
+
+        long nRec = ((Long) hmapResult.get("countResult")).longValue();
+        
+        NumberFormat nf2 = NumberFormat.getInstance(Locale.US);
+        out.println("<fieldset>");
+        out.println("<p class=\"totItems\">"+nf2.format(nRec)+"</p>");
         out.println("</fieldset>");
 
         out.println("<fieldset>");
@@ -710,19 +728,6 @@ public class SocialTopicInBox extends GenericResource {
         //setso = filtros(swbSocialUser, wsite, itposts, searchWord, request, setso, socialTopic, paramRequest);
 
 
-        int nPage;
-        try {
-            nPage = Integer.parseInt(request.getParameter("page"));
-        } catch (Exception ignored) {
-            nPage = 1;
-        }
-
-        HashMap hmapResult = filtros(swbSocialUser, wsite, searchWord, request, socialTopic, nPage);
-
-        long nRec = ((Long) hmapResult.get("countResult")).longValue();
-        //Set<PostIn> setso = ((Set) hmapResult.get("itResult"));
-        Iterator<PostIn> itposts = (Iterator)hmapResult.get("itResult"); 
-        
          //Manejo de permisos
         //Manejo de permisos
         User user=paramRequest.getUser();
@@ -739,6 +744,7 @@ public class SocialTopicInBox extends GenericResource {
             userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
         }
 
+        Iterator<PostIn> itposts = (Iterator)hmapResult.get("itResult"); 
         while (itposts!=null &&  itposts.hasNext()) {
             PostIn postIn = itposts.next();
                         
