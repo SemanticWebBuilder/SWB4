@@ -234,7 +234,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                     "Estado",
                     "false"
                 };
-                //headingsArray.add(0, statusHeading);
+                headingsArray.add(0, statusHeading);//Para los filtros
                 headings2Show.put(Integer.parseInt("0"), statusHeading);
             }
             
@@ -258,7 +258,6 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                                            };
                         //headingsArray.add(arrayIndex, heading);
                         headings2Show.put(new Integer(arrayIndex), heading);
-                        System.out.println("Agregando columna: " + arrayIndex);
                         if (filters != null && filters.contains(property.getName())) {
                             showFiltering = true;
                         }
@@ -298,14 +297,12 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             int iCount = 0;
             while (thisHeading != null) {
                 Integer thisKey = (Integer) thisHeading.getKey();
-//            for (int i = 0; i < headingsArray.size(); i++) {
                 
                 if (iCount > 0) {
                     output.append(",\n");
                 } else {
                     output.append("\n");
                 }
-                //String[] heading = headingsArray.get(i);
                 String[] heading = (String[]) thisHeading.getValue();
                 if (heading != null && heading.length > 1) {
                     output.append("        {\n");
