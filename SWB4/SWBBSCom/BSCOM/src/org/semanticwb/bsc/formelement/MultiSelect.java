@@ -6,6 +6,7 @@ import org.semanticwb.bsc.element.Deliverable;
 import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.bsc.element.Objective;
+import org.semanticwb.model.SWBClass;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
@@ -57,6 +58,12 @@ public class MultiSelect extends org.semanticwb.bsc.formelement.base.MultiSelect
                 
                 while (values.hasNext()) {
                     SemanticObject semanticObject = values.next();
+                    if(semanticObject.getSemanticClass().isSWBClass()) {
+                        SWBClass swbclass = (SWBClass)semanticObject.createGenericInstance();
+                        if(!swbclass.isValid()) {
+                            continue;
+                        }
+                    }
                     viewString.append("  <li>");
                     if (showLink) {
                         viewString.append("<a href=\"");
