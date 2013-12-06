@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 import javax.servlet.http.*;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -92,6 +95,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             output.append(paramRequest.getLocaleString("msg_noContentView"));
         } else {
             SummaryView activeView = this.getActiveView();
+            List propsInView = SWBUtils.Collections.copyIterator(activeView.listPropertyListItems());
         
         //Se obtiene el conjunto de instancias correspondientes al valor de workClass, en el sitio, de las que 
         //se tiene captura de datos en el periodo obtenido
@@ -220,8 +224,9 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             }
             
             //Obtiene encabezados de tabla y propiedades para filtros
-            GenericIterator<PropertyListItem> viewPropertiesList = activeView.listPropertyListItems();
+            Iterator<PropertyListItem> viewPropertiesList = propsInView.iterator();//activeView.listPropertyListItems();
             ArrayList<String[]> headingsArray = new ArrayList<String[]>(16);
+            TreeMap headings2Show = new TreeMap();
             
             if (addStatus) {
                 String[] statusHeading = {
@@ -229,7 +234,8 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                     "Estado",
                     "false"
                 };
-                headingsArray.add(0, statusHeading);
+                //headingsArray.add(0, statusHeading);
+                headings2Show.put(Integer.parseInt("0"), statusHeading);
             }
             
             boolean showFiltering = false;
@@ -250,7 +256,9 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                                             (filters != null && filters.contains(property.getName()))
                                             ? "true" : "false"
                                            };
-                        headingsArray.add(arrayIndex, heading);
+                        //headingsArray.add(arrayIndex, heading);
+                        headings2Show.put(new Integer(arrayIndex), heading);
+                        System.out.println("Agregando columna: " + arrayIndex);
                         if (filters != null && filters.contains(property.getName())) {
                             showFiltering = true;
                         }
@@ -286,13 +294,19 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             output.append("      store: myStore,\n");
             output.append("      structure: [\n");
             // Coloca cada columna en la estructura del grid
-            for (int i = 0; i < headingsArray.size(); i++) {
-                if (i > 0) {
+            Entry thisHeading = headings2Show.firstEntry();
+            int iCount = 0;
+            while (thisHeading != null) {
+                Integer thisKey = (Integer) thisHeading.getKey();
+//            for (int i = 0; i < headingsArray.size(); i++) {
+                
+                if (iCount > 0) {
                     output.append(",\n");
                 } else {
                     output.append("\n");
                 }
-                String[] heading = headingsArray.get(i);
+                //String[] heading = headingsArray.get(i);
+                String[] heading = (String[]) thisHeading.getValue();
                 if (heading != null && heading.length > 1) {
                     output.append("        {\n");
                     output.append("          name: \"");
@@ -310,6 +324,8 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                     output.append("          }\n");
                     output.append("        }");
                 }
+                iCount++;
+                thisHeading = headings2Show.higherEntry(thisKey);
             }
             output.append("      ],\n");
             output.append("      rowSelector: '10px', \n");
