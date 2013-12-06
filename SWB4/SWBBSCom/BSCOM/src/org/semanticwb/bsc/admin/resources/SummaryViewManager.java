@@ -33,6 +33,7 @@ import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.bsc.admin.resources.base.SummaryViewManagerBase;
+import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.utils.PropertiesComparator;
 import org.semanticwb.model.FormElement;
@@ -123,18 +124,17 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             if (semWorkClass.equals(Objective.bsc_Objective)) {
                 identifier = paramRequest.getLocaleString("value_ObjectiveId");
                 filters = paramRequest.getLocaleString("value_ObjectiveFilter");
+                addStatus = true;
             } else if (semWorkClass.equals(Indicator.bsc_Indicator)) {
                 identifier = paramRequest.getLocaleString("value_IndicatorId");
                 filters = paramRequest.getLocaleString("value_IndicatorFilter");
+                addStatus = true;
             } else if (semWorkClass.equals(Initiative.bsc_Initiative)) {
                 identifier = paramRequest.getLocaleString("value_InitiativeId");
                 filters = paramRequest.getLocaleString("value_InitiativeFilter");
             } else if (semWorkClass.equals(Deliverable.bsc_Deliverable)) {
                 identifier = paramRequest.getLocaleString("value_DeliverableId");
                 filters = paramRequest.getLocaleString("value_DeliverableFilter");
-            }
-            if (semWorkClass.hasProperty(PeriodStatusAssignable.bsc_hasPeriodStatus.getName())) {
-                addStatus = true;
             }
             //objeto JSON que almacenara la estructura del grid de Dojo
             JSONObject structure = new JSONObject();
@@ -166,6 +166,13 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                     if (generic instanceof Objective) {
                         Objective obj = (Objective) generic;
                         perStat = obj.getPeriodStatus(thisPeriod);
+                    } else if (generic instanceof Indicator) {
+                        Indicator indicator = (Indicator) generic;
+                        Measure measure = indicator != null && indicator.getStar() != null 
+                                          ? indicator.getStar().getMeasure(thisPeriod) : null;
+                        if (measure != null && measure.getEvaluation() != null) {
+                            perStat = measure.getEvaluation();
+                        }
                     }
                     if (perStat != null && perStat.getStatus() != null) {
                         if (perStat.getStatus().getIcon() != null) {
@@ -185,7 +192,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                             status.append("<span class=\"indefinido\">Indefinido</span>");
                     }
                     try {
-                        row.put("Status", status.toString());
+                        row.put("status", status.toString());
                     } catch (JSONException jsone) {
                         SummaryViewManager.log.error("En la creacion de objetos JSON", jsone);
                     }
@@ -230,11 +237,11 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             
             if (addStatus) {
                 String[] statusHeading = {
-                    "Status",
+                    "status",
                     "Estado",
-                    "false"
+                    "true"
                 };
-                headingsArray.add(0, statusHeading);//Para los filtros
+                headingsArray.add(statusHeading);//Para los filtros
                 headings2Show.put(Integer.parseInt("0"), statusHeading);
             }
             
@@ -256,7 +263,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                                             (filters != null && filters.contains(property.getName()))
                                             ? "true" : "false"
                                            };
-                        //headingsArray.add(arrayIndex, heading);
+                        headingsArray.add(heading);
                         headings2Show.put(new Integer(arrayIndex), heading);
                         if (filters != null && filters.contains(property.getName())) {
                             showFiltering = true;
