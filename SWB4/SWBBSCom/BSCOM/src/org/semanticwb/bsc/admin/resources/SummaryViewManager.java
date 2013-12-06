@@ -339,7 +339,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             
             //Se evalua el mostrar la forma para filtrado en grid
             if (filters != null && showFiltering) {
-                output.append("<div>\n");
+                output.append("<div class=\"filter\">\n");
                 output.append("  <form dojoType=\"dijit.form.Form\" name=\"filter\" id=\"filterForm");
                 output.append(this.getId());
                 output.append("\" method=\"post\">\n");
