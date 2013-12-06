@@ -720,7 +720,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 periodStatus = objective.getPeriodStatus(period);
             } else if (generic != null && generic instanceof Indicator) {
                 Indicator indicator = (Indicator) generic;
-                Measure measure = indicator.getStar().getMeasure(period);
+                Measure measure = indicator.getStar() != null ? indicator.getStar().getMeasure(period) : null;
                 if (measure != null && measure.getEvaluation() != null) {
                     periodStatus = measure.getEvaluation();
                 }
