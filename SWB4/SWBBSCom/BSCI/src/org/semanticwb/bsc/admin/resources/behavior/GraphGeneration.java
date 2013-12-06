@@ -80,8 +80,8 @@ public class GraphGeneration extends GenericResource {
                             //Genera la grafica
                             out.println("<div id=\"chart1\" class=\'with-3d-shadow with-transitions\'>");
                             out.println("<h4 align=\"center\">" + grapher.getTitleGraph());
-                            out.println("<svg></svg>");
                             out.println("</h4>");
+                            out.println("<svg></svg>");                      
                             out.println("</div>");
                             out.println("<script type=\"text/javascript\">");
                             out.println("long_short_data = [");
