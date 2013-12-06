@@ -714,13 +714,13 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             Period period = Period.ClassMgr.getPeriod(periodId, paramRequest.getWebPage().getWebSite());
             PeriodStatus periodStatus = null;
             //Si el semObj es hijo de PeriodStatusAssignable se debe:
-            GenericObject generic = semObj.getGenericInstance();
+            GenericObject generic = semObj.createGenericInstance();
             if (generic != null && generic instanceof Objective) {
                 Objective objective = (Objective) generic;
                 periodStatus = objective.getPeriodStatus(period);
             } else if (generic != null && generic instanceof Indicator) {
                 Indicator indicator = (Indicator) generic;
-                Measure measure = indicator.getStar() != null ? indicator.getStar().getMeasure(period) : null;
+                Measure measure = indicator != null && indicator.getStar() != null ? indicator.getStar().getMeasure(period) : null;
                 if (measure != null && measure.getEvaluation() != null) {
                     periodStatus = measure.getEvaluation();
                 }
