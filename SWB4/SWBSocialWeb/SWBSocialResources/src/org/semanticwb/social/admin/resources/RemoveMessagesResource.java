@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,8 +24,14 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.social.Facebook;
 import org.semanticwb.social.PostIn;
+import org.semanticwb.social.SocialNetwork;
+import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Stream;
+import org.semanticwb.social.Twitter;
+import org.semanticwb.social.Youtube;
+import org.semanticwb.social.util.SWBSocialUtil;
 
 /**
  *
@@ -36,6 +43,8 @@ public class RemoveMessagesResource extends GenericResource {
     
     private static String Action_REMOVEWOTOPIC="removewotopic";
     private static String Action_REMOVESINCEDATE="removesinceDate";
+    private static String Action_REMOVESELECTEDTOPICS="removeselectedTopics";
+    private static String Action_REMOVESELECTEDNETWORKS="removeselectedNetworks";
     
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -156,14 +165,75 @@ public class RemoveMessagesResource extends GenericResource {
                 out.println("</form>");
                 out.println("</div>");
 
+                out.println("</div>");
+                
+                
+                
+                out.println("<div class=\"clear\"></div>");
+                
+                
+                ArrayList topics = SWBSocialUtil.sparql.getStreamSocialTopics(stream);
 
+                ArrayList nets = SWBSocialUtil.sparql.getStreamSocialNetworks(stream);
+                
+                out.println("<div  class=\"pub-redes\">");
+                out.println("<form type=\"dijit.form.Form\" id=\"delTopic" + stream.getId() + "\" action=\"" +  paramRequest.getActionUrl().setAction(Action_REMOVESELECTEDTOPICS).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes de los temas seleccionados serán eliminados.')){submitForm('delTopic" + stream.getId() + "'); return false;}else{return false;}\">");
+                out.println("<p>Eliminación personalizada para: <strong>streamPostIn</strong></p>");
+                out.println("<p class=\"titulo\">Temas en el stream:</p>");
+                out.println("   <ul><b>Seleccione los temas para eliminar sus entradas</b></ul>");                
+                out.println("<select style=\"width: 200px\" multiple name=\"topics\" size=\"4\">");
+                for(int i = 0; i < topics.size(); i++){
+                    SocialTopic topic= (SocialTopic)((SemanticObject)topics.get(i)).createGenericInstance();
+                    out.println("  <option value=\"" + topic.getURI() +  "\">" + topic.getDisplayTitle(user.getLanguage()) + "</option>");
+                }
+                out.println("</select>");
+                out.println("<br>");
+                out.println("<input type=\"checkbox\" name=\"topics\" value=\"uri1\">Eliminar temas no seleccionados<br>");                
+                out.println("<button dojoType='dijit.form.Button' type=\"submit\">Eliminar</button>");
+                out.println("</form>");
                 out.println("</div>");
 
+                out.println("<div class=\"pub-redes\">");
+                out.println("</br>");
+                out.println("<form type=\"dijit.form.Form\" id=\"delNetwork" + stream.getId() + "\" action=\"" +  paramRequest.getActionUrl().setAction(Action_REMOVESELECTEDNETWORKS).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes de las redes seleccionadas serán eliminados.')){submitForm('delNetwork" + stream.getId() + "'); return false;}else{return false;}\">");
+                out.println("	<p class=\"titulo\">Redes en el stream:</p>");
+                out.println("	<ul><b>Seleccione las redes sociales para eliminar sus entradas</b></ul>");
+
+                out.println("<select style=\"width: 200px\" size=\"4\" multiple name=\"networks\">");
+                for(int i = 0; i < nets.size(); i++){
+                    SocialNetwork socialNet= (SocialNetwork)((SemanticObject)nets.get(i)).createGenericInstance();
+                    String iconClass ="";
+                    if(socialNet instanceof Twitter){
+                        iconClass = "swbIconTwitter";
+                    }else if (socialNet instanceof Facebook){
+                        iconClass = "swbIconFacebook";
+                    }else if( socialNet instanceof Youtube){
+                        iconClass = "swbIconYouTube";
+                    }
+                    out.println("  <option class=\"" + iconClass + "\" value=\"" + socialNet.getURI() +"\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + socialNet.getDisplayTitle(user.getLanguage()) + "</option>");
+                    //System.out.println("Topic:" + socialNet.getDisplayTitle(user.getLanguage()) + " uri:" + socialNet.getURI());
+                    //System.out.println("net" + nets.get(i));
+                }
+                /*
+                out.println("  <option class=\"swbIconTwitter\" value=\"volvo\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Red 1</option>");
+                out.println("  <option class=\"swbIconFacebook\" value=\"saab\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Red 21</option>");
+                out.println("  <option class=\"swbIconFacebook\" value=\"opel\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;red 22</option>");
+                out.println("  <option value=\"audi\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Redmksjjs 3</option>");
+                * */
+                out.println("</select>");
+                out.println("<br>");
+                out.println("<input type=\"checkbox\" name=\"topics\" value=\"uri1\">Eliminar redes no seleccionados<br>");
+                out.println("<button dojoType='dijit.form.Button' type=\"submit\">Eliminar</button>");
+                out.println("</div>");
+                out.println("</div>");
+  
                 if(request.getParameter("deleted")!= null && request.getParameter("deleted").equals("ok")){
                     out.println("<script type=\"text/javascript\">");
                         out.println("   showStatus('Mensajes eliminados');");            
                     out.println("</script>");
                 }
+                
+                System.out.println("finished" + "</br>");
             }catch(Exception e)
             {
                 System.out.println(e.getMessage()); 
@@ -244,6 +314,50 @@ public class RemoveMessagesResource extends GenericResource {
                                 }
                             }
                         }
+                    }
+                }else if(mode.equals(Action_REMOVESELECTEDTOPICS))   //Elimina mensajes en el stream hacia atras, a partir de una fecha dada 
+                {
+                    String[] selectedTopics = request.getParameterValues("topics");
+                    ArrayList<SocialTopic> topics = new ArrayList<SocialTopic>();
+                    
+                    if(selectedTopics.length != 0){
+                        for(String topic: selectedTopics){
+                            topics.add((SocialTopic)SemanticObject.createSemanticObject(topic).createGenericInstance());
+                        }
+                        
+                        for(SocialTopic sTopic: topics){
+                            ArrayList postIns = SWBSocialUtil.sparql.getPostInbyStreamAndSocialTopic(stream, sTopic);
+                            System.out.println("\n\nVamos a borra los " + postIns.size() + " sdel topic:" + sTopic.getDisplayTitle("es"));
+                            for(int i = 0; i < postIns.size() ; i++){
+                                SemanticObject sobj =(SemanticObject) postIns.get(i);
+                                sobj.remove();
+                            }
+                            System.out.println("Eliminados " + postIns.size() + "!!!");
+                        }
+                        System.out.println("ELIMINANDO SOLO LOS TOPICS SELECCIONADOS");
+                    }
+                }else if(mode.equals(Action_REMOVESELECTEDNETWORKS))   //Elimina los streams de una red
+                {
+                    String[] selectedTopics = request.getParameterValues("networks");
+                    ArrayList<SocialNetwork> networks = new ArrayList<SocialNetwork>();
+                    
+                    if(selectedTopics.length != 0){
+                        for(String net: selectedTopics){
+                            networks.add((SocialNetwork)SemanticObject.createSemanticObject(net).createGenericInstance());
+                        }
+                        
+                        for(SocialNetwork sNetwork: networks){
+                            System.out.println("NET:" +  sNetwork.getTitle());
+                            ArrayList postIns = SWBSocialUtil.sparql.getPostInbyStreamAndSocialNetwork(stream, sNetwork);
+                            System.out.println("\n\nVamos a borra los " + postIns.size() + " de la RED:" + sNetwork.getDisplayTitle("es"));
+                            for(int i = 0; i < postIns.size() ; i++){
+                                SemanticObject sobj =(SemanticObject) postIns.get(i);
+                                sobj.remove();
+                                //System.out.println(postIns.get(i));
+                            }
+                            System.out.println("Eliminados " + postIns.size() + "!!!");                            
+                        }
+                        System.out.println("ELIMINANDO SOLO LOS POSTS DE ESTA RED SELECCIONADOS");
                     }
                 }
             }catch(Exception e)
