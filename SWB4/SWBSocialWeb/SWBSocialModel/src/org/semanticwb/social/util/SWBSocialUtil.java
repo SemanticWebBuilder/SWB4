@@ -2333,6 +2333,46 @@ public class SWBSocialUtil implements SWBAppObject {
                return SWBSocial.executeQueryArraySemObj(query, wsite);
 
         }
+        
+        public static ArrayList getPostInbyStreamAndSocialTopic(Stream stream, org.semanticwb.social.SocialTopic socialTopic)
+        {
+            String query=
+               "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+               "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+               "\n";
+
+               query+="select *" +"\n";
+               query+=
+               "where {\n" +
+               " ?semObj social:postInStream <"+ stream.getURI()+">. \n" + 
+               " ?semObj social:socialTopic <" + socialTopic.getURI() + ">. \n" +
+               "  }\n";
+
+               System.out.println("The query for topics:" + query);
+               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+               return SWBSocial.executeQueryArraySemObj(query, wsite);
+
+        }
+        
+        public static ArrayList getPostInbyStreamAndSocialNetwork(Stream stream, SocialNetwork socialNetwork)
+        {
+            String query=
+               "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+               "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+               "\n";
+
+               query+="select *" +"\n";
+               query+=
+               "where {\n" +
+               " ?semObj social:postInStream <"+ stream.getURI()+">. \n" + 
+               " ?semObj social:postInSocialNetwork <" + socialNetwork.getURI() + ">. \n" +
+               "  }\n";
+
+               System.out.println("The query for networks:" + query);
+               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+               return SWBSocial.executeQueryArraySemObj(query, wsite);
+
+        }
     }
     
 }
