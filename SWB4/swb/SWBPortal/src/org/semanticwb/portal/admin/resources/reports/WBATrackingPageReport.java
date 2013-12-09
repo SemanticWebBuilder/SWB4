@@ -289,16 +289,16 @@ public class WBATrackingPageReport extends GenericResource {
 
                 out.println("  dojo.addOnLoad(function() {");
                 out.println("    layout= [");
-                out.println("      { field:\"rep\", width:\"100px\", name:\"Repositorio\" },");
-                out.println("      { field:\"login\", width:\"100px\", name:\"Nombre de usuario\" },");
-                out.println("      { field:\"ln\", width:\"100px\", name:\"Primer apellido\" },");
-                out.println("      { field:\"sln\", width:\"100px\", name:\"Segundo apellido\" },");
-                out.println("      { field:\"n\", width:\"100px\", name:\"Nombre\" },");
-                out.println("      { field:\"year\", width:\"50px\", name:\"Año\" },");
-                out.println("      { field:\"month\", width:\"50px\", name:\"Mes\" },");
-                out.println("      { field:\"day\", width:\"50px\", name:\"Día\" },");
-                out.println("      { field:\"time\", width:\"50px\", name:\"Hora\" },");
-                out.println("      { field:\"milis\", width:\"100px\", name:\"Duración (ms)\" }");
+                out.println("      { field:\"rep\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblRepository") + "\" },");
+                out.println("      { field:\"login\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblUserName") + "\" },");
+                out.println("      { field:\"ln\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblFirstName") + "\" },");
+                out.println("      { field:\"sln\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblLastName") + "\" },");
+                out.println("      { field:\"n\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblName") + "\" },");
+                out.println("      { field:\"year\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblYear") + "\" },");
+                out.println("      { field:\"month\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblMonth") + "\" },");
+                out.println("      { field:\"day\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblDay") + "\" },");
+                out.println("      { field:\"time\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblHour") + "\" },");
+                out.println("      { field:\"milis\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblDuration") + "\" }");
                 out.println("    ];");
 
                 out.println("   gridMaster = new dojox.grid.DataGrid({");
@@ -366,7 +366,7 @@ public class WBATrackingPageReport extends GenericResource {
                 out.println("<tr><td width=\"183\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"443\"></td></tr>");
                 
                 out.println("<tr>");
-                out.println("<td>Sitio :</td>");
+                out.println("<td>" + paramsRequest.getLocaleString("lblSite") + ":</td>");
                 out.println("<td colspan=\"2\"><select id=\"wb_site\" name=\"wb_site\" onchange=\"getHtml('"+url.setMode(Mode_RENDER_Tree)+"'+'?site='+this.value,'slave');\">");
                 Iterator<WebSite> wsites = SWBContext.listWebSites(false);
                 while(wsites.hasNext()) {
@@ -383,7 +383,7 @@ public class WBATrackingPageReport extends GenericResource {
                 out.println("</tr>");
 
                 out.println("<tr>");
-                out.println("<td>Página :</td>");                
+                out.println("<td>" + paramsRequest.getLocaleString("lblPage") + ":</td>");                
                 out.println("<td colspan=\"3\"><div id=\"slave\"></div></td>");
                 out.println("</tr>");
 
@@ -396,12 +396,12 @@ public class WBATrackingPageReport extends GenericResource {
                     
                 GregorianCalendar now = new GregorianCalendar();
                 out.println("<tr>");
-                out.println("<td>Intervalo de fechas :</td>");
+                out.println("<td>" + paramsRequest.getLocaleString("lblDateRange") + ":</td>");
                 out.println("<td align=\"left\" colspan=\"3\">");
-                out.println("<label for=\"wb_fecha11\">Del:&nbsp;</label>");
+                out.println("<label for=\"wb_fecha11\">" + paramsRequest.getLocaleString("lblFrom") + ":&nbsp;</label>");
                 out.println("<input type=\"text\" name=\"wb_fecha11\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha11\" value=\""+sdf.format(now.getTime())+"\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" hasDownArrow=\"true\" />");
                 out.println("&nbsp;&nbsp;");
-                out.println("<label for=\"wb_t11\">Tiempo:&nbsp;</label>");
+                out.println("<label for=\"wb_t11\">" + paramsRequest.getLocaleString("lblTime") + ":&nbsp;</label>");
                 out.println("<input type=\"text\" name=\"wb_t11\" id=\"wb_t11\" />");
                 out.println("</td>");
                 out.println("</tr>");
@@ -409,10 +409,10 @@ public class WBATrackingPageReport extends GenericResource {
                 out.println("<tr>");
                 out.println("<td>&nbsp;</td>");
                 out.println("<td align=\"left\" colspan=\"3\">");
-                out.println("<label for=\"wb_fecha12\">&nbsp;&nbsp;Al:&nbsp;</label>");
+                out.println("<label for=\"wb_fecha12\">&nbsp;&nbsp;" + paramsRequest.getLocaleString("lblTo") + ":&nbsp;</label>");
                 out.println("<input type=\"text\" name=\"wb_fecha12\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha12\" value=\""+sdf.format(now.getTime())+"\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" hasDownArrow=\"true\" />");
                 out.println("&nbsp;&nbsp;");
-                out.println("<label for=\"wb_t12\">Tiempo:&nbsp;</label>");
+                out.println("<label for=\"wb_t12\">" + paramsRequest.getLocaleString("lblTime") + ":&nbsp;</label>");
                 out.println("<input type=\"text\" name=\"wb_t12\" id=\"wb_t12\" />");
                 out.println("</td>");
                 out.println("</tr>");
@@ -423,9 +423,9 @@ public class WBATrackingPageReport extends GenericResource {
                     out.println("<table border=\"0\" width=\"95%\">");
                     out.println("<tr>");
                     out.println(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">Hoja de cálculo</button>&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">Aplicar</button>");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">" + paramsRequest.getLocaleString("lblXml") + "</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">" + paramsRequest.getLocaleString("lblSpreadsheet") + "</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">" + paramsRequest.getLocaleString("lblApply") + "</button>");
                     out.println(" </td>");
                     out.println("</tr>");
                     out.println("</table>");
