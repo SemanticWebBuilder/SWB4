@@ -4,6 +4,7 @@
     Author     : francisco.jimenez
 --%>
 
+<%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
 <%@page import="org.w3c.dom.Node"%>
 <%@page import="org.w3c.dom.NodeList"%>
 <%@page import="org.xml.sax.InputSource"%>
@@ -500,6 +501,7 @@
 %>
 
 <%
+    String lang = request.getParameter("lang");
     String postUri = request.getParameter("postUri");
     String action = request.getParameter("action");
     System.out.println("Action to be executed: " +  action);
@@ -510,7 +512,8 @@
     
     if(action == null){//Displays user actions available for each social network
         System.out.println("\n\t\tDisplays user actions available for each social network");
-        out.println("<b><font color=\"#CC6600\">Available actions for</font></b></br>");
+        out.println("<b><font color=\"#CC6600\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("availableActions", lang) + "</font></b></br>");
+        
         out.print("<style type=\"text/css\">");
         out.print(" span.inline { display:inline; }");
         out.print("</style>");
@@ -529,16 +532,16 @@
 
                 if(st.isRetweetedByMe()){
                     //System.out.println("Retwited by me!");
-                    out.print("<span class=\"inline\"><a href=\"#\" onclick=\"return false;" +"\">UNDO RT</a></span> ");
+                    out.print("<span class=\"inline\"><a href=\"#\" onclick=\"return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("undoRtPostIn", lang) + "</a></span> ");
                 }else{
                     //System.out.println("NOT Retwited by me!");
-                    out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/RT\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=RT" + "','" + postIn.getURI() +  "/RT'); return false;" +"\">RT</a></span> ");
+                    out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/RT\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=RT&lang=" + lang + "','" + postIn.getURI() +  "/RT'); return false;" +"\">RT</a></span> ");                    
                 }
 
                 if(st.isFavorited()){
-                    out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/FAV\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=UNDOFAV" + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">UNDO FAVORITE</a></span> ");
+                    out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/FAV\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=UNDOFAV&lang=" + lang + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("undoFavPostIn", lang) + "</a></span> ");
                 }else{
-                    out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/FAV\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=FAV" + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">FAVORITE</a></span> ");
+                    out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/FAV\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=FAV&lang=" + lang + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("favPostIn", lang) + "</a></span> ");
                 }
             }catch(Exception e){
                 out.println("This tweet might not exist anymore");
@@ -562,12 +565,12 @@
                     JSONArray likes = likeResp.getJSONArray("data");
 
                     if(likes.length() == 1){//There is one result, I liked this post
-                        out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/LIKE\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=DISLIKE" + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">DISLIKE</a></span> ");
+                        out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/LIKE\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=DISLIKE&lang=" + lang + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("dislikePostIn", lang) + "</a></span> ");
                     }else{
-                        out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/LIKE\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=LIKE" + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">LIKE</a></span> ");
+                        out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/LIKE\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=LIKE&lang=" + lang + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("likePostIn", lang) + "</a></span> ");
                     }
                 }else{
-                    out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/LIKE\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=LIKE" + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">LIKE</a></span> ");
+                    out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/LIKE\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=LIKE&lang=" + lang + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("likePostIn", lang) + "</a></span> ");
                 }
             }catch(Exception e){
                 out.println("This post might not exist anymore");
@@ -575,25 +578,25 @@
             }
         }else if(postInSN instanceof Youtube){//Displays Like, Favorite
             out.println("<b><font color=\"#CC6600\">Youtube</font></b></br>");
-            out.print("<span id=\"" + postIn.getURI() + "/LIKE\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=LIKE" + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">LIKE</a></span> ");
-            out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/FAV\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=FAV" + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">FAVORITE</a></span> ");
+            out.print("<span id=\"" + postIn.getURI() + "/LIKE\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=LIKE&lang=" + lang + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("likePostIn", lang) + "</a></span> ");
+            out.print("<span class=\"inline\" id=\"" + postIn.getURI() + "/FAV\" dojoType=\"dojox.layout.ContentPane\"><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=FAV&lang=" + lang + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("favPostIn", lang) + "</a></span> ");
         }
     }else{//We received an action
         if(action.equalsIgnoreCase("RT")){//Only for Twitter
             String retweetId = doRT(postIn);
             if(retweetId != null){//The retweet was sent correctly
-                out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=UNDORT&retweetId=" + retweetId + "','" + postIn.getURI() +  "/RT'); return false;" +"\">UNDO RT</a> ");
+                out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=UNDORT&retweetId=" + retweetId + "&lang=" + lang + "','" + postIn.getURI() +  "/RT'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("undoRtPostIn", lang) + "</a> ");
             }else{
-                out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=RT" + "','" + postIn.getURI() +  "/RT'); return false;" +"\">RT</a> ");
+                out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=RT&lang=" + lang + "','" + postIn.getURI() +  "/RT'); return false;" +"\">RT</a> ");
             }
             
         }else if(action.equalsIgnoreCase("UNDORT")){//For Twitter and Youtube
             String retweetId = request.getParameter("retweetId");
             try{
                 if(undoRT(postIn, Long.parseLong(retweetId))){
-                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=RT" + "','" + postIn.getURI() +  "/RT'); return false;" +"\">RT</a> ");
+                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=RT&lang=" + lang + "','" + postIn.getURI() +  "/RT'); return false;" +"\">RT</a> ");
                 }else{
-                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=UNDORT&retweetId=" + retweetId + "','" + postIn.getURI() +  "/RT'); return false;" +"\">UNDO RT</a> ");
+                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=UNDORT&retweetId=" + retweetId + "&lang=" + lang + "','" + postIn.getURI() +  "/RT'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("undoRtPostIn", lang) + "</a> ");
                 }
             }catch(NumberFormatException nfe){
                 System.out.println("Error undoing retweet:" + nfe.getMessage());
@@ -601,61 +604,61 @@
         }else if(action.equalsIgnoreCase("FAV")){//For Twitter and Youtube
             if(postInSN instanceof Twitter){
                 if(doFavorite(postIn)){//Action executed correctly
-                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=UNDOFAV" + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">UNDO FAVORITE</a> ");
+                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=UNDOFAV&lang=" + lang + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("undoFavPostIn", lang) + "</a> ");
                 }else{
-                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=FAV" + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">FAVORITE</a> ");
+                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=FAV&lang=" + lang + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("favPostIn", lang) + "</a> ");
                 }
             }else if(postInSN instanceof Youtube){
                 String favoriteId = doYTFavorite(postIn);
                 if(favoriteId != null){//Action executed correctly
-                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=UNDOFAV&favoriteId=" + favoriteId + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">UNDO FAVORITE</a> ");
+                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=UNDOFAV&favoriteId=" + favoriteId + "&lang=" + lang +"','" + postIn.getURI() +  "/FAV'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("undoFavPostIn", lang) + "</a> ");
                 }else{
-                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=FAV" + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">FAVORITE</a> ");
+                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=FAV&lang=" + lang + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("favPostIn", lang) + "</a> ");
                 }
             }
             //out.println("Doing FAV");
         }else if(action.equalsIgnoreCase("UNDOFAV")){//For Twitter and Youtube
             if(postInSN instanceof Twitter){
                 if(undoFavorite(postIn)){//Action executed correctly
-                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=FAV" + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">FAVORITE</a> ");
+                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=FAV&lang=" + lang + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("favPostIn", lang) + "</a> ");
                 }else{
-                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=UNDOFAV" + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">UNDO FAVORITE</a> ");
+                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=UNDOFAV&lang=" + lang + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("favPostIn", lang) + "</a> ");
                 }
             }else if(postInSN instanceof Youtube){
                 String favoriteId = request.getParameter("favoriteId");
                 if(undoYTFavorite(postIn, favoriteId) == null){//Action executed correctly
-                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=FAV" + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">FAVORITE</a> ");                    
+                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=FAV&lang=" + lang + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("favPostIn", lang) + "</a> ");                    
                 }else{
-                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=UNDOFAV&favoriteId=" + favoriteId + "','" + postIn.getURI() +  "/FAV'); return false;" +"\">UNDO FAVORITE</a> ");
+                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=UNDOFAV&favoriteId=" + favoriteId +"&lang=" + lang +  "','" + postIn.getURI() +  "/FAV'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("favPostIn", lang) + "</a> ");
                 }
             }
             //out.println("UNDOING FAV");
         }else if(action.equalsIgnoreCase("LIKE")){//LIKE Only for Youtube and Facebook
             if(postInSN instanceof Facebook){//Do Like and shows 'Dislike'
                 if(doFBLike(postIn)){//Action executed correctly
-                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=DISLIKE" + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">DISLIKE</a> ");
+                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=DISLIKE&lang=" + lang + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("dislikePostIn", lang) + "</a> ");
                 }else{
-                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=LIKE" + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">LIKE</a> ");
+                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=LIKE&lang=" + lang + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("likePostIn", lang) + "</a> ");
                 }
             }else if(postInSN instanceof Youtube){                
                 if(doYTLikeDislike(postIn, "like")){
-                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=DISLIKE" + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">DISLIKE</a> ");
+                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=DISLIKE&lang=" + lang + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("dislikePostIn", lang) + "</a> ");
                 }else{
-                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=LIKE" + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">LIKE</a> ");
+                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=LIKE&lang=" + lang + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("likePostIn", lang) + "</a> ");
                 }
             }            
         }else if(action.equalsIgnoreCase("DISLIKE")){//DISLIKE Only for Youtube and Facebook
             if(postInSN instanceof Facebook){//Do Dislike and shows 'Like'
                 if(doFBDislike(postIn)){//Action executed correctly
-                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=LIKE" + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">LIKE</a> ");
+                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=LIKE&lang=" + lang + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("likePostIn", lang) + "</a> ");
                 }else{
-                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=DISLIKE" + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">DISLIKE</a> ");
+                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=DISLIKE&lang=" + lang + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("dislikePostIn", lang) + "</a> ");
                 }
             }else if(postInSN instanceof Youtube){
                 if(doYTLikeDislike(postIn, "dislike")){
-                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=LIKE" + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">LIKE</a> ");
+                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=LIKE&lang=" + lang + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("likePostIn", lang) + "</a> ");
                 }else{
-                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=DISLIKE" + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">DISLIKE</a> ");
+                    out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=DISLIKE&lang=" + lang + "','" + postIn.getURI() +  "/LIKE'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("dislikePostIn", lang) + "</a> ");
                 }
             }
         }
