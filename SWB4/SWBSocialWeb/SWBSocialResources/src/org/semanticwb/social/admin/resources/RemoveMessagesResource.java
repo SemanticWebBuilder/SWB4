@@ -320,7 +320,7 @@ public class RemoveMessagesResource extends GenericResource {
                     String[] selectedTopics = request.getParameterValues("topics");
                     ArrayList<SocialTopic> topics = new ArrayList<SocialTopic>();
                     
-                    if(selectedTopics.length != 0){
+                    if(selectedTopics != null && selectedTopics.length > 0){
                         for(String topic: selectedTopics){
                             topics.add((SocialTopic)SemanticObject.createSemanticObject(topic).createGenericInstance());
                         }
@@ -338,11 +338,11 @@ public class RemoveMessagesResource extends GenericResource {
                     }
                 }else if(mode.equals(Action_REMOVESELECTEDNETWORKS))   //Elimina los streams de una red
                 {
-                    String[] selectedTopics = request.getParameterValues("networks");
+                    String[] selectedNetworks = request.getParameterValues("networks");
                     ArrayList<SocialNetwork> networks = new ArrayList<SocialNetwork>();
                     
-                    if(selectedTopics.length != 0){
-                        for(String net: selectedTopics){
+                    if(selectedNetworks != null && selectedNetworks.length > 0){
+                        for(String net: selectedNetworks){
                             networks.add((SocialNetwork)SemanticObject.createSemanticObject(net).createGenericInstance());
                         }
                         
