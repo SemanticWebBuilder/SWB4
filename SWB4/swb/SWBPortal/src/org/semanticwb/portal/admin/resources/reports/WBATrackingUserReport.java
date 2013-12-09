@@ -172,6 +172,7 @@ public class WBATrackingUserReport extends GenericResource {
             url.setCallMethod(SWBResourceURL.Call_DIRECT);
 
             out.println("<script type=\"text/javascript\">");
+            out.println("  dojo.require(\"dijit.form.DateTextBox\");");
             out.println("  dojo.require(\"dojox.grid.DataGrid\");");//--
             out.println("  dojo.require(\"dojo.data.ItemFileReadStore\");");//--
             out.println("  dojo.require(\"dijit.form.TimeTextBox\");");
@@ -272,7 +273,7 @@ public class WBATrackingUserReport extends GenericResource {
 
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
-            out.println(paramsRequest.getLocaleString("daily_report"));
+            out.println("Reporte de accesos");
             out.println("</fieldset>");
 
             out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");
