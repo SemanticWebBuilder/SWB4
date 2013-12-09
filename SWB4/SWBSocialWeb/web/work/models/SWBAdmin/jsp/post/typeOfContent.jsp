@@ -289,7 +289,7 @@
                                     starthour = hour + ":" + minutes;
                                 } catch (Exception ignore) {
                                 }
-                            }
+                            }                            
                             //Current date and time for restrictions
                             Date todayDate = new Date();
                             java.util.Calendar cal = java.util.Calendar.getInstance();
@@ -300,8 +300,9 @@
                             int hour = cal.get(java.util.Calendar.HOUR_OF_DAY);
                             int minute = cal.get(java.util.Calendar.MINUTE);
                         %>
-                        <div>Día:<input type="text" name="postOut_inidate" id="<%=objUri%>_postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>" constraints="{min:'<%=year%>-<%=String.format("%02d", month)%>-<%=String.format("%02d", day)%>'}">
-                            Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="<%=objUri%>_postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "")%>" constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm',min:'T<%=String.format("%02d", hour)%>:<%=String.format("%02d", minute)%>:00'} />
+                        <input type="hidden" id="<%=objUri%>_today_hidden" name="today_hidden" value="<%=year+"-" +month+"-"+day%>"/>
+                        <div>Día:<input type="text" name="postOut_inidate" id="<%=objUri%>_postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>" constraints="{min:'<%=year%>-<%=String.format("%02d", month)%>-<%=String.format("%02d", day)%>'}" onchange="removeMin(this, '<%=objUri%>_postOut_starthour', document.getElementById('<%=objUri%>_today_hidden').value, '<%=hour%>', '<%=minute%>');"/>
+                            Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="<%=objUri%>_postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "")%>" constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm',min:'T<%=String.format("%02d", hour)%>:<%=String.format("%02d", minute)%>:00'} disabled="true" />
                         </div>
                     </div>
                     <!--Termina Calendario Rapido-->
@@ -575,9 +576,19 @@
                                     } catch (Exception ignore) {
                                     }
                                 }
+                                //Current date and time for restrictions
+                                Date todayDate = new Date();
+                                java.util.Calendar cal = java.util.Calendar.getInstance();
+                                cal.setTime(todayDate);
+                                int year = cal.get(java.util.Calendar.YEAR);
+                                int month = cal.get(java.util.Calendar.MONTH) + 1;
+                                int day = cal.get(java.util.Calendar.DAY_OF_MONTH);
+                                int hour = cal.get(java.util.Calendar.HOUR_OF_DAY);
+                                int minute = cal.get(java.util.Calendar.MINUTE);
                             %>
-                            <div>Día:<input type="text" name="postOut_inidate" id="<%=objUri%>_postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
-                                Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="<%=objUri%>_postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
+                            <input type="hidden" id="<%=objUri%>_today_hidden" name="today_hidden" value="<%=year+"-" +month+"-"+day%>" />
+                            <div>Día:<input type="text" name="postOut_inidate" id="<%=objUri%>_postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>" constraints="{min:'<%=year%>-<%=String.format("%02d", month)%>-<%=String.format("%02d", day)%>'}" onchange="removeMin(this, '<%=objUri%>_postOut_starthour', document.getElementById('<%=objUri%>_today_hidden').value, '<%=hour%>', '<%=minute%>');"/>
+                                Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="<%=objUri%>_postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm',min:'T<%=String.format("%02d", hour)%>:<%=String.format("%02d", minute)%>:00'} disabled="true" />
                             </div>
                         </div>
                         <!--Termina Calendario Rapido-->
@@ -974,9 +985,19 @@
                                     } catch (Exception ignore) {
                                     }
                                 }
+                                //Current date and time for restrictions
+                                Date todayDate = new Date();
+                                java.util.Calendar cal = java.util.Calendar.getInstance();
+                                cal.setTime(todayDate);
+                                int year = cal.get(java.util.Calendar.YEAR);
+                                int month = cal.get(java.util.Calendar.MONTH) + 1;
+                                int day = cal.get(java.util.Calendar.DAY_OF_MONTH);
+                                int hour = cal.get(java.util.Calendar.HOUR_OF_DAY);
+                                int minute = cal.get(java.util.Calendar.MINUTE);
                             %>
-                            <div>Día:<input type="text" name="postOut_inidate" id="<%=objUri%>_postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>">
-                                Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="<%=objUri%>_postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />
+                            <input type="hidden" id="<%=objUri%>_today_hidden" name="today_hidden" value="<%=year+"-" +month+"-"+day%>" />
+                            <div>Día:<input type="text" name="postOut_inidate" id="<%=objUri%>_postOut_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=date%>" constraints="{min:'<%=year%>-<%=String.format("%02d", month)%>-<%=String.format("%02d", day)%>'}" onchange="removeMin(this, '<%=objUri%>_postOut_starthour', document.getElementById('<%=objUri%>_today_hidden').value, '<%=hour%>', '<%=minute%>');">
+                                Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="<%=objUri%>_postOut_starthour"  value="<%=(starthour != null && starthour.trim().length() > 0 ? "T" + starthour + ":00" : "")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm',min:'T<%=String.format("%02d", hour)%>:<%=String.format("%02d", minute)%>:00'} disabled="true" />
                             </div>
                         </div>
                         <!--Termina Calendario Rapido-->
