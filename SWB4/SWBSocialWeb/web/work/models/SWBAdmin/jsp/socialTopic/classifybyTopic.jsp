@@ -40,8 +40,10 @@
     actionUrl.setParameter("suri",request.getParameter("suri"));
     String responseFromStream = request.getParameter("fromStream");
     String typeOfSubmit="submitForm";
+    String stNoTopic="";//StreamNoTopic
     if(responseFromStream != null && !responseFromStream.trim().isEmpty()){
         typeOfSubmit = "submitFormPostIn";
+        stNoTopic = responseFromStream;
     }
 %>
 
@@ -56,7 +58,7 @@
 
     </p>
     
-    <form id="<%=semObjPost.getSemanticClass().getClassId()%>/classbTopicForm" dojoType="dijit.form.Form" class="swbform" method="post" action="<%=actionUrl%>" method="post" onsubmit="<%=typeOfSubmit%>('<%=semObjPost.getSemanticClass().getClassId()%>/classbTopicForm', '<%=post.getURI()%>');return false;"> 
+    <form id="<%=semObjPost.getSemanticClass().getClassId()%>/classbTopicForm" dojoType="dijit.form.Form" class="swbform" method="post" action="<%=actionUrl%>" method="post" onsubmit="<%=typeOfSubmit%>('<%=semObjPost.getSemanticClass().getClassId()%>/classbTopicForm', '<%=post.getURI()+stNoTopic%>');return false;"> 
         <p>
             <span><%=paramRequest.getLocaleString("chooseTopic")%>:</span>
             <select name="newSocialTopic">
