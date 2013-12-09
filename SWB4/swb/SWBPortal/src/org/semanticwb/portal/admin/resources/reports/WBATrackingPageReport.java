@@ -431,24 +431,11 @@ public class WBATrackingPageReport extends GenericResource {
                     out.println("</table>");
                     out.println("</fieldset>");
                     out.println("</form>");
-
-//                    out.println("<fieldset>");
-//                    out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
-//                    out.println("<tr>");
-//                    out.println("<td colspan=\"4\">");
-//                    out.println("<div id=\"ctnergrid\" style=\"height:400px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
-//                    out.println("  <div id=\"gridMaster\"></div>");
-//                    out.println("</div>");
                     out.println("<div id=\"ctnergrid\" style=\"height:350px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
                     out.println("  <div id=\"gridMaster\" jsid=\"gridMaster\"></div>");
                     out.println("</div>");
-//                    out.println("</td>");
-//                    out.println("</tr>");
-//                    out.println("</table>");
-//                    out.println("</fieldset>");
                     out.println("</div>");
 //                }
-                
                 out.println("</div>");
             }else { // There are not sites and displays a message
                 out.println("<div class=\"swbform\">");
@@ -617,11 +604,27 @@ public class WBATrackingPageReport extends GenericResource {
                 //obj.put("ln", visitor.getLastName());
                 //obj.put("sln", visitor.getSecondLastName());
                 //obj.put("n", visitor.getName());
-                obj.put("year", t[0].substring(0,4));
-                obj.put("month", t[0].substring(5,7));
-                obj.put("day", t[0].substring(8,10));
+                try {
+                    obj.put("year", Integer.parseInt(t[0].substring(0,4)));
+                }catch(NumberFormatException nfe) {
+                    obj.put("year", t[0].substring(0,4));
+                }
+                try {
+                    obj.put("month", Integer.parseInt(t[0].substring(5,7)));
+                }catch(NumberFormatException nfe) {
+                    obj.put("month", t[0].substring(5,7));
+                }
+                try {
+                    obj.put("day", Integer.parseInt(t[0].substring(8,10)));
+                }catch(NumberFormatException nfe) {
+                    obj.put("day", t[0].substring(8,10));
+                }
                 obj.put("time", t[0].substring(11,16));
-                obj.put("milis", t[11]);
+                try {
+                    obj.put("milis", Long.parseLong(t[11]));
+                }catch(NumberFormatException nfe) {
+                    obj.put("milis", t[11]);
+                }                
                 jarr.put(obj);
             }catch (JSONException jsone) {
                 log.error(jsone);
