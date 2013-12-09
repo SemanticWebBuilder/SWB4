@@ -782,7 +782,7 @@
                     <div class="campo"><%=create%><br><input id="<%=id%>_Text" name="<%=id%>_Text" type="text" size="4" class="nobord" readonly value="<%=value.length()%>"><label class="labelInfo"><img class="swbIconTwitter" src="/swbadmin/css/images/trans.png"/> 140  <img class="swbIconFacebook" src="/swbadmin/css/images/trans.png"/> 2000  <img class="swbIconYouTube" src="/swbadmin/css/images/trans.png"/> 5000  </label></div>
                     </p>
                     <p>
-                    <div class="etiqueta"><label for="keywords"><%=Video.swb_Tagable.getDisplayName(lang)%>:</label></div>
+                    <div class="etiqueta"><label for="keywords">Palabras clave:</label></div>
                     <div class="campo"><%=videoMgr.renderElement(request, Video.swb_tags, videoMgr.MODE_CREATE)%></div>
                     </p>
                     <p>
