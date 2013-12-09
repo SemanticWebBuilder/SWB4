@@ -307,27 +307,27 @@ public class WBATrackingUserReport extends GenericResource {
             out.println("</tr>");
 
             GregorianCalendar now = new GregorianCalendar();
-            out.println("<tr>\n");
-            out.println("<td>Intervalo de fechas :</td>\n");
-            out.println("<td align=\"left\" colspan=\"3\">\n");
-            out.println("<label for=\"wb_fecha11\">Del:&nbsp;</label>\n");
-            out.println("<input type=\"text\" name=\"wb_fecha11\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha11\" value=\""+sdf.format(now.getTime())+"\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" hasDownArrow=\"true\" />\n");
+            out.println("<tr>");
+            out.println("<td>Intervalo de fechas :</td>");
+            out.println("<td align=\"left\" colspan=\"3\">");
+            out.println("<label for=\"wb_fecha11\">Del:&nbsp;</label>");
+            out.println("<input type=\"text\" name=\"wb_fecha11\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha11\" value=\""+sdf.format(now.getTime())+"\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" hasDownArrow=\"true\" />");
             out.println("&nbsp;&nbsp;");
-            out.println("<label for=\"wb_t11\">Tiempo:&nbsp;</label>\n");
-            out.println("<input type=\"text\" name=\"wb_t11\" id=\"wb_t11\" size=\"6\" style=\"width:40px;\" />\n");
-            out.println("</td>\n");
-            out.println("</tr>\n");
+            out.println("<label for=\"wb_t11\">Tiempo:&nbsp;</label>");
+            out.println("<input type=\"text\" name=\"wb_t11\" id=\"wb_t11\" size=\"6\" style=\"width:40px;\" />");
+            out.println("</td>");
+            out.println("</tr>");
 
-            out.println("<tr>\n");
-            out.println("<td>&nbsp;</td>\n");
-            out.println("<td align=\"left\" colspan=\"3\">\n");
-            out.println("<label for=\"wb_fecha12\">&nbsp;&nbsp;Al:&nbsp;</label>\n");
-            out.println("<input type=\"text\" name=\"wb_fecha12\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha12\" value=\""+sdf.format(now.getTime())+"\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" hasDownArrow=\"true\" />\n");
+            out.println("<tr>");
+            out.println("<td>&nbsp;</td>");
+            out.println("<td align=\"left\" colspan=\"3\">");
+            out.println("<label for=\"wb_fecha12\">&nbsp;&nbsp;Al:&nbsp;</label>");
+            out.println("<input type=\"text\" name=\"wb_fecha12\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha12\" value=\""+sdf.format(now.getTime())+"\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" hasDownArrow=\"true\" />");
             out.println("&nbsp;&nbsp;");
-            out.println("<label for=\"wb_t12\">Tiempo:&nbsp;</label>\n");
-            out.println("<input name=\"wb_t12\" id=\"wb_t12\" />\n");
-            out.println("</td>\n");
-            out.println("</tr>\n");                                        
+            out.println("<label for=\"wb_t12\">Tiempo:&nbsp;</label>");
+            out.println("<input name=\"wb_t12\" id=\"wb_t12\" />");
+            out.println("</td>");
+            out.println("</tr>");                                        
             out.println("</table></fieldset>");
 
             out.println("<fieldset>");
