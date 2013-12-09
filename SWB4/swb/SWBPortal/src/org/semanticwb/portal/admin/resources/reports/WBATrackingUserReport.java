@@ -492,9 +492,21 @@ public class WBATrackingUserReport extends GenericResource {
                 obj.put("url", fullHostname+wp.getUrl());
                 obj.put("dev",t[9]);
                 obj.put("lang", t[10]);
-                obj.put("year", t[0].substring(0,4));
-                obj.put("month", t[0].substring(5,7));
-                obj.put("day", t[0].substring(8,10));
+                try {
+                    obj.put("year", Integer.parseInt(t[0].substring(0,4)));
+                }catch(NumberFormatException nfe) {
+                    obj.put("year", t[0].substring(0,4));
+                }
+                try {
+                    obj.put("month", Integer.parseInt(t[0].substring(5,7)));
+                }catch(NumberFormatException nfe) {
+                    obj.put("month", t[0].substring(5,7));
+                }
+                try {
+                    obj.put("day", Integer.parseInt(t[0].substring(8,10)));
+                }catch(NumberFormatException nfe) {
+                    obj.put("day", t[0].substring(8,10));
+                }
                 obj.put("time", t[0].substring(11,16));
 
                 jarr.put(obj);
