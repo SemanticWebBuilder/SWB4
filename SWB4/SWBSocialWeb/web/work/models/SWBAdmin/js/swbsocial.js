@@ -663,10 +663,10 @@ function validateVideo(id, formId){
             if(frm.checkYT.checked){//there is only one network
                 //checkRed = true;
                 checkYT = true;
-                if(frm.checkRedes.name.indexOf("#social_Youtube:") != -1){
+                if(frm.checkYT.name.indexOf("#social_Youtube:") != -1){
                     haveYoutube = true;
                 }
-                if(frm.checkRedes.name.indexOf("#social_Facebook:") != -1){
+                if(frm.checkYT.name.indexOf("#social_Facebook:") != -1){
                     haveFacebook = true
                 }
             }
@@ -674,10 +674,10 @@ function validateVideo(id, formId){
             for (i = 0; i < frm.checkYT.length; i++) {
                 if (frm.checkYT[i].checked){//Network is selected
                     checkYT = true;
-                    if(frm.checkRedes[i].name.indexOf("#social_Youtube:") != -1){
+                    if(frm.checkYT[i].name.indexOf("#social_Youtube:") != -1){
                         haveYoutube = true;
                     }
-                    if(frm.checkRedes[i].name.indexOf("#social_Facebook:") != -1){
+                    if(frm.checkYT[i].name.indexOf("#social_Facebook:") != -1){
                         haveFacebook = true
                     }
                 }
@@ -699,10 +699,10 @@ function validateVideo(id, formId){
             for (j = 0; j < frm.checkRedes.length; j++) {
                 if (frm.checkRedes[j].checked){
                     checkRed = true;
-                    if(frm.checkRedes.name.indexOf("#social_Youtube:") != -1){
+                    if(frm.checkRedes[j].name.indexOf("#social_Youtube:") != -1){
                         haveYoutube = true;
                     }
-                    if(frm.checkRedes.name.indexOf("#social_Facebook:") != -1){
+                    if(frm.checkRedes[j].name.indexOf("#social_Facebook:") != -1){
                         haveFacebook = true
                     }
                     break;
@@ -870,3 +870,44 @@ function postSocialPostInHtml(url, tagid)
         handleAs: "text"
     });
 }
+/*
+ *thisVar - the current value of the DateTextBox, the selected day
+ *id - target TimeTextBox to put or remove constraint
+ *today_hidden - the value of the current day (this value is set when the page loads)
+ *
+ *If the selected date(thisVar) is greater than today (today_hidden), then remove the constraint
+ **/
+function removeMin(thisVar, id, today_hidden, hour, minute){
+        var dojoObj = dijit.byId(id);
+        
+        if((thisVar == null) || (thisVar == "") || (thisVar.length == 0)){
+            //console.log('nothing selected!');
+            dojoObj.setAttribute('disabled', true);
+            dojoObj.setAttribute('value', "");
+            return;        
+        }
+        dojoObj.setAttribute('disabled', false);
+        var todayTmp = today_hidden + '';
+        var todayArray = todayTmp.split("-");
+        var todayDate = new Date(todayArray[0], parseInt(todayArray[1])-1, todayArray[2]);
+        //console.log('This is today Date: ' + todayDate);
+
+        var selectedTmp = thisVar  + '';        
+        var selectedArray = selectedTmp.split("-");
+        var selectedDate = new Date(selectedArray[0], parseInt(selectedArray[1])-1, selectedArray[2]);
+        //console.log('This is the selected:' + selectedDate);
+        
+        //Returns a Number: 0 means the dates are equal : dejar o poner la constraint
+        //1 if selectedDate > todayDate : quitar la constraint
+        //and -1 if selectedDate < todayDate : no debe pasar
+        var comparison = dojo.date.compare(selectedDate, todayDate , "date");
+        if(comparison === 0){//Sobreescribir la constraint
+            dijit.byId(id).constraints.min = new Date(1970, 0, 1, hour, minute, 00);
+        }else if (comparison === 1){//Quitar la constraint
+            dijit.byId(id).constraints.min = new Date(1970, 0, 1, 00, 00, 00);
+        }else{//Hay un error
+            return;
+        }
+
+        dojoObj.attr('value', dojoObj.attr('value'));
+    }
