@@ -538,6 +538,7 @@ public class WBATrackingPageReport extends GenericResource {
             jobj.put("label", "sect");
             jobj.put("items", jarr);
         }catch (JSONException jse) {
+            throw new IOException(jse);
         }
         
         Date now = new Date();
