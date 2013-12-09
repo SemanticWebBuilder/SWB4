@@ -6,7 +6,7 @@
 <%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
 <%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
-<%@page contentType="text/html" pageEncoding="ISO-8859-1"%>
+<%@page contentType="text/html" pageEncoding="utf-8"%>
 <%@page import="org.semanticwb.social.*"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="org.semanticwb.SWBUtils"%>
@@ -20,6 +20,7 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
 <%
+    
     org.semanticwb.model.User user = paramRequest.getUser();
     System.out.println("postInJsp:" + request.getAttribute("postIn"));
     if (request.getAttribute("postIn") == null) {
@@ -38,7 +39,7 @@
 
     PostIn postIn = (PostIn) semObj.getGenericInstance();
     //Un mensaje de entrada siempre debe estar atachado a un usuario de la red social de la que proviene, de esta manera, es como desde swbsocial
-    //se respondería a un mensaje
+    //se responderÃ­a a un mensaje
     if (postIn.getPostInSocialNetworkUser() == null) {
         return;
     }
@@ -98,12 +99,20 @@
                 <%
                     if (semObj.getGenericInstance() instanceof MessageIn) {
                         MessageIn message = (MessageIn) semObj.getGenericInstance();
+                        String sMsg="";
+                        if(SWBUtils.TEXT.encode(message.getMsg_Text(), "utf-8")!=null) sMsg=SWBUtils.TEXT.encode(message.getMsg_Text(), "utf-8");
+                        sMsg=sMsg.replaceAll("\n", ""); 
                 %>
-                <td><span><%=SWBUtils.TEXT.encode(message.getMsg_Text() == null ? "" : message.getMsg_Text(), "utf8")%></span>
+                <td>
+                    <span id="msgText"></span>
+                    <script type="text/javascript">returnUrlTextParsed("<%=sMsg%>");</script></span>
                 </td>
                 <%
                 } else if (semObj.getGenericInstance() instanceof PhotoIn) {
                     PhotoIn photo = (PhotoIn) semObj.getGenericInstance();
+                     String sMsg="";
+                     if(SWBUtils.TEXT.encode(photo.getMsg_Text(), "utf-8")!=null) sMsg=SWBUtils.TEXT.encode(photo.getMsg_Text(), "utf-8");
+                     sMsg=sMsg.replaceAll("\n", ""); 
                     //System.out.println("Name:"+Photo.social_Photo.getName()); 
                     //System.out.println("ClassID:"+Photo.social_Photo.getClassId()); 
                     //System.out.println("Canonical:"+Photo.social_Photo.getCanonicalName());
@@ -120,11 +129,16 @@
                     <%
                         }
                     %>     
-                    <br/><%=SWBUtils.TEXT.encode(photo.getMsg_Text() == null ? "" : photo.getMsg_Text(), "utf8")%>
+                    <br/>
+                    <span id="msgText"></span>
+                    <script type="text/javascript">returnUrlTextParsed("<%=sMsg%>");</script></span>
                 </td>
                 <%
                 } else if (semObj.getGenericInstance() instanceof VideoIn) {
                     VideoIn video = (VideoIn) semObj.getGenericInstance();
+                    String sMsg="";
+                    if(SWBUtils.TEXT.encode(video.getMsg_Text(), "utf-8")!=null) sMsg=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf-8");
+                    sMsg=sMsg.replaceAll("\n", ""); 
                     %>
                     <td>
                     <%    
@@ -206,11 +220,39 @@
                     <%
                         }
                     %>    
-                        <br/><br/><%=SWBUtils.TEXT.encode(video.getMsg_Text() == null ? "" : video.getMsg_Text(), "utf8")%>
+                        <br/><br/>
+                        <span id="msgText"></span>
+                        <script type="text/javascript">returnUrlTextParsed("<%=sMsg%>");</script></span>
                     </td>
                     <%
                         }
                     %>
+                    <script type="text/javascript">
+                        function returnUrlTextParsed(text)
+                        {
+                            alert("result/Aver-1:"+text);
+                            var exp = /(\b(((https?|ftp|file|):\/\/)|www[.])[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+                            var temp = text.replace(exp,"<a href=\"$1\" target=\"_blank\">$1</a>");
+                            var result = "";
+                            while (temp.length > 0) {
+                                var pos = temp.indexOf("href=\"");
+                                if (pos == -1) {
+                                    result += temp;
+                                    break;
+                                }
+                                result += temp.substring(0, pos + 6);
+
+                                temp = temp.substring(pos + 6, temp.length);
+                                if ((temp.indexOf("://") > 8) || (temp.indexOf("://") == -1)) {
+                                    result += "http://";
+                                }
+                            }
+                            alert("result/Aver:"+result);
+                            document.getElementById("msgText").innerHTML = result;
+                        }
+                    </script>
+                    
+                    
                     <td>
                     <%
                     if (postIn.getPostSentimentalType() == 0) {
