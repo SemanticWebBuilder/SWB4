@@ -183,72 +183,14 @@ public class WBATrackingPageReport extends GenericResource {
         response.setHeader("Pragma", "no-cache"); 
         PrintWriter out = response.getWriter();
         Resource base = getResourceBase();
-                
-        final int I_ACCESS = 0;
 
-        GregorianCalendar gc_now = new GregorianCalendar();
-//        HashMap hm_sites = new HashMap();
-
-//        String rtype = null;
-
-
-        try{
-//            // Evaluates if there are sites
-//            Iterator<WebSite> webSites = SWBContext.listWebSites();
-//            while(webSites.hasNext()) {
-//                WebSite site = webSites.next();
-//                // Evaluates if TopicMap is not Global
-//                if(!site.getId().equals(SWBContext.getGlobalWebSite().getId())) {
-//                    // Get access level of this user on this topicmap and if level is greater than "0" then user have access
-//                    hm_sites.put(site.getId(), site.getDisplayTitle(paramsRequest.getUser().getLanguage()));
-//                }
-//            }
-            
+        try
+        {    
             // If there are sites continue
             if(SWBContext.listWebSites().hasNext())
             {
                 String address = paramsRequest.getWebPage().getUrl();
                 String websiteId = request.getParameter("wb_site")==null ? SWBContext.listWebSites().next().getId():request.getParameter("wb_site");
-                
-//                int groupDates;
-//                try {
-//                    groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));
-//                }catch(NumberFormatException e) {
-//                    groupDates = 0;
-//                }
-
-//                GregorianCalendar cal = new GregorianCalendar();
-//                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//                String fecha1 = request.getParameter("wb_fecha1")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha1");
-//                try {
-//                    sdf.parse(fecha1);
-//                }catch(ParseException pe){
-//                    fecha1 = sdf.format(cal.getTime());
-//                }
-//                String fecha11 = request.getParameter("wb_fecha11")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha11");
-//                try {
-//                    sdf.parse(fecha11);
-//                }catch(ParseException pe){
-//                    fecha11 = sdf.format(cal.getTime());
-//                }
-//                String fecha12 = request.getParameter("wb_fecha12")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha12");
-//                try {
-//                    sdf.parse(fecha12);
-//                }catch(ParseException pe){
-//                    fecha12 = sdf.format(cal.getTime());
-//                }
-                
-//                String topicId = paramsRequest.getWebPage().getId();
-//                if(topicId.lastIndexOf("Daily") != -1) {
-//                    rtype = "0";
-//                }else if(topicId.lastIndexOf("Monthly") != -1) {
-//                    rtype = "1";
-//                }else {
-//                    rtype = request.getParameter("wb_rtype");
-//                }
-//                if(rtype == null) {
-//                    rtype = "0";
-//                }
                 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 
@@ -388,8 +330,6 @@ public class WBATrackingPageReport extends GenericResource {
                 out.println("<td colspan=\"4\">");
                 out.println("</td>");
                 out.println("</tr>");
-                
-//                if(rtype.equals("0")) { // REPORTE DIARIO
                     
                 GregorianCalendar now = new GregorianCalendar();
                 out.println("<tr>");
@@ -413,26 +353,24 @@ public class WBATrackingPageReport extends GenericResource {
                 out.println("<input type=\"text\" name=\"wb_t12\" id=\"wb_t12\" />");
                 out.println("</td>");
                 out.println("</tr>");
-                    
-                    out.println("</table></fieldset>");
+                out.println("</table></fieldset>");
 
-                    out.println("<fieldset>");
-                    out.println("<table border=\"0\" width=\"95%\">");
-                    out.println("<tr>");
-                    out.println(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">" + paramsRequest.getLocaleString("lblXml") + "</button>&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">" + paramsRequest.getLocaleString("lblSpreadsheet") + "</button>&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">" + paramsRequest.getLocaleString("lblApply") + "</button>");
-                    out.println(" </td>");
-                    out.println("</tr>");
-                    out.println("</table>");
-                    out.println("</fieldset>");
-                    out.println("</form>");
-                    out.println("<div id=\"ctnergrid\" style=\"height:350px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
-                    out.println("  <div id=\"gridMaster\" jsid=\"gridMaster\"></div>");
-                    out.println("</div>");
-                    out.println("</div>");
-//                }
+                out.println("<fieldset>");
+                out.println("<table border=\"0\" width=\"95%\">");
+                out.println("<tr>");
+                out.println(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
+                out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">" + paramsRequest.getLocaleString("lblXml") + "</button>&nbsp;");
+                out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">" + paramsRequest.getLocaleString("lblSpreadsheet") + "</button>&nbsp;");
+                out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">" + paramsRequest.getLocaleString("lblApply") + "</button>");
+                out.println(" </td>");
+                out.println("</tr>");
+                out.println("</table>");
+                out.println("</fieldset>");
+                out.println("</form>");
+                out.println("<div id=\"ctnergrid\" style=\"height:350px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
+                out.println("  <div id=\"gridMaster\" jsid=\"gridMaster\"></div>");
+                out.println("</div>");
+                out.println("</div>");
                 out.println("</div>");
             }else { // There are not sites and displays a message
                 out.println("<div class=\"swbform\">");
