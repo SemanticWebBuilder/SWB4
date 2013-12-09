@@ -158,14 +158,14 @@ public class WBATrackingUserReport extends GenericResource {
         {
             String address = paramsRequest.getWebPage().getUrl();
             String repositoryId = request.getParameter("wb_repository")==null? SWBContext.listUserRepositories().next().getId():request.getParameter("wb_repository");
-            int groupDates;
-            try {
-                groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));
-            }catch(NumberFormatException e) {
-                groupDates = 0;
-            }
+//            int groupDates;
+//            try {
+//                groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));
+//            }catch(NumberFormatException e) {
+//                groupDates = 0;
+//            }
 
-            GregorianCalendar cal = new GregorianCalendar();
+//            GregorianCalendar cal = new GregorianCalendar();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
             SWBResourceURL url=paramsRequest.getRenderUrl();
@@ -566,6 +566,7 @@ public class WBATrackingUserReport extends GenericResource {
                         if(!intime) {
                             continue;
                         }
+                        //6-s_aux receives repository id
                         if(repId!=null && !t[6].equalsIgnoreCase(repId)) {
                             continue;
                         }
