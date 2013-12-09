@@ -65,6 +65,7 @@
     </div>
     <jsp:include page="/work/models/SWBAdmin/jsp/post/postActions.jsp">
         <jsp:param name="postUri" value="<%=postIn.getURI()%>" />
+        <jsp:param name="lang" value="<%=user.getLanguage()%>" />
     </jsp:include>
     <table class="tabla1">
         <thead>
