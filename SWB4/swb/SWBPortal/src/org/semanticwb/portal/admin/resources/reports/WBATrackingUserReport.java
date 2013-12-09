@@ -74,8 +74,8 @@ public class WBATrackingUserReport extends GenericResource {
     /** The str rsc type. */
     private String strRscType;
     
-    private final static String Mode_RENDER_UserList = "rul";
-    private final static String Mode_RENDER_DataTable = "rdt";
+    private static final String Mode_RENDER_UserList = "rul";
+    private static final String Mode_RENDER_DataTable = "rdt";
     private static final String DAILY_LOGGIN = "daily";
     private static final String MONTHLY_LOGGIN = "monthly";
     private static final String YEARLY_LOGGIN = "yearly";
@@ -327,7 +327,7 @@ public class WBATrackingUserReport extends GenericResource {
             out.println("<label for=\"wb_t12\">Tiempo:&nbsp;</label>");
             out.println("<input name=\"wb_t12\" id=\"wb_t12\" />");
             out.println("</td>");
-            out.println("</tr>");                                        
+            out.println("</tr>");
             out.println("</table></fieldset>");
 
             out.println("<fieldset>");
@@ -470,7 +470,7 @@ public class WBATrackingUserReport extends GenericResource {
         final String fullHostname = request.getScheme() + "://" + request.getServerName() + (request.getServerPort() != 80? ":" + request.getServerPort():"");        
         WebSite ws;
         WebPage wp;
-        Iterator<String[]> lines = getReportResults(userId, repId, first, last);
+        Iterator<String[]> lines = getReportResults(repId, userId, first, last);
         while(lines.hasNext()) {
             String[] t = lines.next();
             JSONObject obj = new JSONObject();
@@ -512,7 +512,7 @@ public class WBATrackingUserReport extends GenericResource {
      * @param paramsRequest the params request
      * @return the report results
      */
-    private Iterator<String[]> getReportResults(final String userId, final String repId, final Date s, final Date e) {
+    private Iterator<String[]> getReportResults(final String repId, final String userId, final Date s, final Date e) {
         GregorianCalendar datefile = null;
 
         String line = null;
