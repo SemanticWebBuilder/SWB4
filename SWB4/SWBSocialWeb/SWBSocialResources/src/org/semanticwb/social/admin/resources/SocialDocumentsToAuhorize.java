@@ -50,6 +50,7 @@ import org.semanticwb.social.PostOut;
 import org.semanticwb.social.PostOutNet;
 import org.semanticwb.social.PostOutPrivacyRelation;
 import org.semanticwb.social.SocialNetwork;
+import org.semanticwb.social.SocialSite;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.Youtube;
 import org.semanticwb.social.util.SWBSocialUtil;
@@ -204,12 +205,12 @@ public class SocialDocumentsToAuhorize extends GenericResource {
         out.println("<form type=\"dijit.form.Form\" id=\"frmseecontentsToAuthorize\" name=\"frmseecontentsToAuthorize\" action=\"" + paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT) + "\" method=\"post\">");
         //out.println("<fieldset>");
         out.println("<input type='hidden' name='firstLoad' value='false'></input>");
-        out.println("Selecciona un sitio:");
+        out.println( paramRequest.getLocaleString("selectABrand") + ":");
         out.println("<select name='site' onchange=\"submitForm(\'frmseecontentsToAuthorize\')\">");
         sites = SWBContext.listWebSites();
         while (sites.hasNext()) {
             WebSite site = sites.next();
-            if (!(site.getId().equals(SWBContext.WEBSITE_ADMIN) || site.getId().equals(SWBContext.WEBSITE_GLOBAL) || site.getId().equals(SWBContext.WEBSITE_ONTEDITOR)) && site.isValid()) {
+            if (!(site.getId().equals(SWBContext.WEBSITE_ADMIN) || site.getId().equals(SWBContext.WEBSITE_GLOBAL) || site.getId().equals(SWBContext.WEBSITE_ONTEDITOR)) && site.isValid() && site instanceof SocialSite) {
                 if (sitetoShow.getId().equals(site.getId())) {
                     out.println("<option selected=\"true\" value='" + site.getId() + "'>" + site.getTitle() + "</option>");
                 } else {
