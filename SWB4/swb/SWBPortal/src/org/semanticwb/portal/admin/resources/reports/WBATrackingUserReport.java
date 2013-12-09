@@ -126,11 +126,8 @@ public class WBATrackingUserReport extends GenericResource {
             doRenderUserList(request, response, paramsRequest);
         }else if(Mode_RENDER_DataTable.equalsIgnoreCase(mode)) {
             doFillReport(request,response,paramsRequest);
-        }
-        else if(mode.equalsIgnoreCase("xls")) {
+        }else if(mode.equalsIgnoreCase("xls")) {
 //            doRepExcel(request,response,paramsRequest);
-        }else if(mode.equalsIgnoreCase("xml")) {
-////            doRepXml(request,response,paramsRequest);
         }
         else {
             super.processRequest(request, response, paramsRequest);
@@ -378,6 +375,114 @@ public class WBATrackingUserReport extends GenericResource {
         out.close();
     }
     
+    @Override
+    public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/xml;charset=iso-8859-1");
+        PrintWriter out = response.getWriter();
+        
+        final String repId = request.getParameter("wb_repository");
+        UserRepository ur = SWBContext.getUserRepository(repId);
+        if(ur==null) {
+            log.error("Repositorio de usuarios incorrecto");
+            return;
+        }
+        final String userId = request.getParameter("wb_user");
+        User visitor = ur.getUserByLogin(userId);
+        if(visitor==null) {
+            log.error("Usuario con login "+userId+" no existe en  el repositorio con identificador "+repId);
+            return;
+        }
+        final String lang = visitor.getLanguage();
+
+        JSONObject jobj = new JSONObject();
+        JSONArray jarr = new JSONArray();
+        try {
+            jobj.put("items", jarr);
+        }catch (JSONException jse) {
+            throw new IOException(jse);
+        }
+
+        Date now = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        String date11 = request.getParameter("fecha11")==null ? sdf.format(now):request.getParameter("fecha11")+" "+(request.getParameter("t11")==null ? "00:00":request.getParameter("t11"));
+        Date first;
+        try {
+            first = sdf.parse(date11);
+        }catch(ParseException pe){
+            first = new Date();
+        }
+        
+        String date12 = request.getParameter("fecha12")==null ? sdf.format(now):request.getParameter("fecha12")+" "+(request.getParameter("t12")==null ? "23:59":request.getParameter("t12"));
+        Date last;
+        try {
+            last = sdf.parse(date12);
+        }catch(ParseException pe){
+            last = new Date();
+        }
+        
+        final String fullHostname = request.getScheme() + "://" + request.getServerName() + (request.getServerPort() != 80? ":" + request.getServerPort():"");        
+        WebSite ws;
+        WebPage wp;
+        Iterator<String[]> lines = getReportResults(repId, userId, first, last);
+        while(lines.hasNext()) {
+            String[] t = lines.next();
+            JSONObject obj = new JSONObject();
+            try {
+                ws = SWBContext.getWebSite(t[4]);
+                if(ws==null) {
+                    log.error("Modelo con identificador "+t[4]+" no existe");
+                    continue;
+                }
+                wp = ws.getWebPage(t[5]);
+                if(wp==null) {
+                    log.error("Pagina web con identificador "+t[5]+" no existe");
+                    continue;
+                }
+                //obj.put("uri", webPage.getURI());
+                obj.put("site", ws.getDisplayTitle(lang));
+                obj.put("sect", wp.getDisplayName(lang));
+                obj.put("id", t[5]);
+                obj.put("url", fullHostname+wp.getUrl());
+                obj.put("dev",t[9]);
+                obj.put("lang", t[10]);
+                try {
+                    obj.put("year", Integer.parseInt(t[0].substring(0,4)));
+                }catch(NumberFormatException nfe) {
+                    obj.put("year", t[0].substring(0,4));
+                }
+                try {
+                    obj.put("month", Integer.parseInt(t[0].substring(5,7)));
+                }catch(NumberFormatException nfe) {
+                    obj.put("month", t[0].substring(5,7));
+                }
+                try {
+                    obj.put("day", Integer.parseInt(t[0].substring(8,10)));
+                }catch(NumberFormatException nfe) {
+                    obj.put("day", t[0].substring(8,10));
+                }
+                obj.put("time", t[0].substring(11,16));
+
+                jarr.put(obj);
+            }catch (JSONException jsone) {
+                log.error(jsone);
+            }
+        }
+        
+        
+        StringBuilder xml = new StringBuilder();
+        try {
+            xml.append("<?xml version=\"1.0\"?>");
+            xml.append("<tracking>");
+            xml.append(org.json.XML.toString(jobj));
+            xml.append("</tracking>");
+        }catch(JSONException jse) {
+            xml.append("<?xml version=\"1.0\"?>");
+        }
+        out.print(xml);
+        out.flush();
+        out.close();
+    }
+    
     /**
      * Do render lang.
      * 
@@ -436,9 +541,9 @@ public class WBATrackingUserReport extends GenericResource {
         if(visitor==null) {
             log.error("Usuario con login "+userId+" no existe en  el repositorio con identificador "+repId);
             return;
-        }
+        }        
+        final String lang = visitor.getLanguage();
         
-        String lang = visitor.getLanguage();
         JSONObject jobj = new JSONObject();
         JSONArray jarr = new JSONArray();
         try {
