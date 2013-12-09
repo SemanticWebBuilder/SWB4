@@ -239,10 +239,8 @@ public class WBATrackingUserReport extends GenericResource {
             out.println("  }\n");
 
             out.println("function doXml(accion, size) { ");
-            /*out.println("   if(validate(accion)) {");*/
             out.println("      var params = getParams(accion);");
-            out.println("      window.open(\""+url.setMode("xml")+"\"+params,\"graphWindow\",size);    ");
-            /*out.println("   }");*/
+            out.println("      window.open(\""+url.setMode(SWBResourceURL.Mode_XML)+"\"+params, 'xml', size);    ");
             out.println("}");
 
             out.println("  function doExcel(accion, size) { ");
