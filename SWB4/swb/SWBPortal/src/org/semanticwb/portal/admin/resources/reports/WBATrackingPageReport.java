@@ -201,7 +201,8 @@ public class WBATrackingPageReport extends GenericResource {
             }
             
             // If there are sites continue
-            if(hm_sites.size() > I_ACCESS) {
+            if(SWBContext.listWebSites().hasNext())
+            {
                 String address = paramsRequest.getWebPage().getUrl();
                 String websiteId = request.getParameter("wb_site")==null ? (String)hm_sites.keySet().iterator().next():request.getParameter("wb_site");
                 
@@ -246,7 +247,7 @@ public class WBATrackingPageReport extends GenericResource {
                 }
                 
                 SWBResourceURL url=paramsRequest.getRenderUrl();
-                url.setCallMethod(url.Call_DIRECT);
+                url.setCallMethod(SWBResourceURL.Call_DIRECT);
 
                 out.println("<script type=\"text/javascript\">");                
                 out.println("dojo.require(\"dijit.form.DateTextBox\");");

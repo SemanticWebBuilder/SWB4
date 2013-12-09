@@ -63,7 +63,7 @@ import org.semanticwb.model.WebSite;
 public class WBATrackingUserReport extends GenericResource {
     
     /** The log. */
-    private static Logger log = SWBUtils.getLogger(WBALoginReport.class);
+    private static Logger log = SWBUtils.getLogger(WBATrackingUserReport.class);
 
     /** The Constant S_REPORT_IDAUX. */
     public static final String S_REPORT_IDAUX = "_";
@@ -104,7 +104,7 @@ public class WBATrackingUserReport extends GenericResource {
      */
     @Override
     public void render(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
-        if(!paramsRequest.WinState_MINIMIZED.equals(paramsRequest.getWindowState())) {
+        if(!SWBParamRequest.WinState_MINIMIZED.equals(paramsRequest.getWindowState())) {
             processRequest(request, response, paramsRequest);
         }
     }
@@ -127,21 +127,11 @@ public class WBATrackingUserReport extends GenericResource {
         }else if(Mode_RENDER_DataTable.equalsIgnoreCase(mode)) {
             doFillReport(request,response,paramsRequest);
         }
-//        else if(mode.equalsIgnoreCase("graph")) {
-//            doGraph(request,response,paramsRequest);
-//        }else if(mode.equalsIgnoreCase("histogram")) {
-//            doHistrogram(request,response,paramsRequest);
-//        }
         else if(mode.equalsIgnoreCase("xls")) {
 //            doRepExcel(request,response,paramsRequest);
         }else if(mode.equalsIgnoreCase("xml")) {
 ////            doRepXml(request,response,paramsRequest);
         }
-//        else if(mode.equalsIgnoreCase("pdf")) {
-//            doRepPdf(request,response,paramsRequest);
-//        }else if(mode.equalsIgnoreCase("rtf")) {
-//            doRepRtf(request,response,paramsRequest);
-//        }
         else {
             super.processRequest(request, response, paramsRequest);
         }
@@ -162,424 +152,228 @@ public class WBATrackingUserReport extends GenericResource {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
-        Resource base = getResourceBase();
 
-//        final int I_ACCESS = 0;
-//        HashMap hm_repository = new HashMap();
-//        int i_access = 0;
-//        String rtype;
+        // If there are repositories continue
+        if( SWBContext.listUserRepositories().hasNext() )
+        {
+            String address = paramsRequest.getWebPage().getUrl();
+            String repositoryId = request.getParameter("wb_repository")==null? SWBContext.listUserRepositories().next().getId():request.getParameter("wb_repository");
+            int groupDates;
+            try {
+                groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));
+            }catch(NumberFormatException e) {
+                groupDates = 0;
+            }
 
-//        try{
-//            // Evaluates if there are repositories
-//            Iterator<UserRepository> it_repository = SWBContext.listUserRepositories();
-//            while(it_repository.hasNext()) {
-//                UserRepository ur_repository = it_repository.next();
-//                // Get access level of this user on this topicmap and if level is greater than "0" then user have access
-//                // TODO
-////                i_access = AdmFilterMgr.getInstance().haveAccess2UserRep(paramsRequest.getUser(),ur_repository.getName());
-////                if(I_ACCESS < i_access){
-//                    hm_repository.put(ur_repository.getId(), ur_repository.getSemanticObject().getDisplayName(paramsRequest.getUser().getLanguage()));
-////                }}
-//            }
-            // If there are sites continue
-            if( SWBContext.listUserRepositories().hasNext() )
-            {
-                String address = paramsRequest.getWebPage().getUrl();
-                String repositoryId = request.getParameter("wb_repository")==null? SWBContext.listUserRepositories().next().getId():request.getParameter("wb_repository");
-                int groupDates;
-                try {
-                    groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));
-                }catch(NumberFormatException e) {
-                    groupDates = 0;
-                }
+            GregorianCalendar cal = new GregorianCalendar();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-                GregorianCalendar cal = new GregorianCalendar();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//                String fecha1 = request.getParameter("wb_fecha1")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha1");
-//                try {
-//                    sdf.parse(fecha1);
-//                }catch(ParseException pe){
-//                    fecha1 = sdf.format(cal.getTime());
-//                }
-//                String fecha11 = request.getParameter("wb_fecha11")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha11");
-//                try {
-//                    sdf.parse(fecha11);
-//                }catch(ParseException pe){
-//                    fecha11 = sdf.format(cal.getTime());
-//                }
-//                String fecha12 = request.getParameter("wb_fecha12")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha12");
-//                try {
-//                    sdf.parse(fecha12);
-//                }catch(ParseException pe){
-//                    fecha12 = sdf.format(cal.getTime());
-//                }
+            SWBResourceURL url=paramsRequest.getRenderUrl();
+            url.setCallMethod(SWBResourceURL.Call_DIRECT);
 
-//                String topicId = paramsRequest.getWebPage().getId();
-//                if(topicId.lastIndexOf("Daily") != -1) {
-//                    rtype = "0";
-//                }else if(topicId.lastIndexOf("Monthly") != -1) {
-//                    rtype = "1";
-//                }else {
-//                    rtype = request.getParameter("wb_rtype");
-//                }
-//                if(rtype == null) {
-//                    rtype = "0";
-//                }
+            out.println("<script type=\"text/javascript\">");
+            out.println("  dojo.require(\"dojox.grid.DataGrid\");");//--
+            out.println("  dojo.require(\"dojo.data.ItemFileReadStore\");");//--
+            out.println("  dojo.require(\"dijit.form.TimeTextBox\");");
 
-                SWBResourceURL url=paramsRequest.getRenderUrl();
-                url.setCallMethod(SWBResourceURL.Call_DIRECT);
+            out.println("  dojo.addOnLoad(refresh);");
 
-                // javascript
-                out.println("<script type=\"text/javascript\">");
-                //out.println("dojo.require(\"dijit.form.DateTextBox\");");
+            out.println("  function refresh() {");
+            out.println("    postHtml('"+url.setMode(Mode_RENDER_UserList)+"'+'?wb_repository='+dojo.byId('wb_repository').options[dojo.byId('wb_repository').selectedIndex].value,'slave');");
+            out.println("  }");
 
-                out.println("dojo.require(\"dojox.grid.DataGrid\");");//--
-                out.println("dojo.require(\"dojo.data.ItemFileReadStore\");");//--
-                out.println("dojo.require(\"dijit.form.TimeTextBox\");");
-                
-                out.println("dojo.addOnLoad(refresh);");
+            out.println("  dojo.addOnLoad(function() {");
+            out.println("    var t = new Date();");
+            out.println("    var t1 = new dijit.form.TimeTextBox({name:\"t1\", value:new Date(t.getFullYear(), t.getMonth(), t.getDate(), 0, 0),");
+            out.println("                 constraints:{timePattern:'HH:mm', clickableIncrement:'T00:15:00', visibleIncrement:'T00:15:00', visibleRange:'T02:00:00'}");
+            out.println("    }, \"wb_t11\");");
 
-                out.println("function refresh() {");
-                out.println("    postHtml('"+url.setMode(Mode_RENDER_UserList)+"'+'?wb_repository='+dojo.byId('wb_repository').options[dojo.byId('wb_repository').selectedIndex].value,'slave');");
-                out.println("}");
-                
-                out.println("dojo.addOnLoad(function() {");
-                out.println("   var t = new Date();");
-                out.println("   var t1 = new dijit.form.TimeTextBox({name:\"t1\", value:new Date(t.getFullYear(), t.getMonth(), t.getDate(), 0, 0),");
-                out.println("                constraints:{timePattern:'HH:mm', clickableIncrement:'T00:15:00', visibleIncrement:'T00:15:00', visibleRange:'T02:00:00'}");
-                out.println("   }, \"wb_t11\");");
+            out.println("    var t2 = new dijit.form.TimeTextBox({name:\"t2\", value:new Date(t.getFullYear(), t.getMonth(), t.getDate(), 23, 59),");
+            out.println("                 constraints:{timePattern:'HH:mm', clickableIncrement:'T00:15:00', visibleIncrement:'T00:15:00', visibleRange:'T02:00:00'}");
+            out.println("    }, \"wb_t12\");");
+            out.println("  });");
 
-                out.println("   var t2 = new dijit.form.TimeTextBox({name:\"t2\", value:new Date(t.getFullYear(), t.getMonth(), t.getDate(), 23, 59),");
-                out.println("                constraints:{timePattern:'HH:mm', clickableIncrement:'T00:15:00', visibleIncrement:'T00:15:00', visibleRange:'T02:00:00'}");
-                out.println("   }, \"wb_t12\");");
-                out.println("});");
+            out.println("  function fillGrid(grid, uri) {");
+            out.println("    grid.store = new dojo.data.ItemFileReadStore({url: uri});");
+            out.println("    grid._refresh();");
+            out.println("  }");
 
-                out.println("function fillGrid(grid, uri) {");
-                out.println("   grid.store = new dojo.data.ItemFileReadStore({url: uri});");
-                out.println("   grid._refresh();");
-                out.println("}");
+            out.println("  var layout= null;");
+            out.println("  var jStrMaster = null;");
+            out.println("  var gridMaster = null;");
+            out.println("  var gridResources = null;");
 
-                out.println("var layout= null;");
-                out.println("var jStrMaster = null;");
-                out.println("var gridMaster = null;");
-                out.println("var gridResources = null;");
+            out.println("  dojo.addOnLoad(function() {");
+            out.println("    layout= [");                
+            //out.println("      { field:\"uri\", width:\"100px\", name:\"Uri\" },");
+            out.println("      { field:\"site\", width:\"100px\", name:\"Sitio\" },");
+            out.println("      { field:\"sect\", width:\"100px\", name:\"Página\" },");
+            out.println("      { field:\"id\", width:\"100px\", name:\"Id\" },");
+            out.println("      { field:\"url\", width:\"100px\", name:\"Url\" },");
+            out.println("      { field:\"dev\", width:\"50px\", name:\"Dispositivo\" },");
+            out.println("      { field:\"lang\", width:\"50px\", name:\"Idioma\" },");
+            out.println("      { field:\"year\", width:\"50px\", name:\"Año\" },");
+            out.println("      { field:\"month\", width:\"50px\", name:\"Mes\" },");
+            out.println("      { field:\"day\", width:\"50px\", name:\"Día\" },");
+            out.println("      { field:\"time\", width:\"50px\", name:\"Hora\" }");
+            out.println("    ];");
 
-                out.println("dojo.addOnLoad(function() {");
-                out.println("   layout= [");                
-                //out.println("      { field:\"uri\", width:\"100px\", name:\"Uri\" },");
-                out.println("      { field:\"site\", width:\"100px\", name:\"Sitio\" },");
-                out.println("      { field:\"sect\", width:\"100px\", name:\"Página\" },");
-                out.println("      { field:\"id\", width:\"100px\", name:\"Id\" },");
-                out.println("      { field:\"url\", width:\"100px\", name:\"Url\" },");
-                out.println("      { field:\"dev\", width:\"50px\", name:\"Dispositivo\" },");
-                out.println("      { field:\"lang\", width:\"50px\", name:\"Idioma\" },");
-                out.println("      { field:\"year\", width:\"50px\", name:\"Año\" },");
-                out.println("      { field:\"month\", width:\"50px\", name:\"Mes\" },");
-                out.println("      { field:\"day\", width:\"50px\", name:\"Día\" },");
-                out.println("      { field:\"time\", width:\"50px\", name:\"Hora\" }");
-                out.println("   ];");
+            out.println("    gridMaster = new dojox.grid.DataGrid({");
+            out.println("      id: \"gridMaster\",");
+            out.println("      structure: layout,");
+            out.println("      autoWidth: true,");
+            out.println("      rowSelector: \"10px\",");
+            out.println("      rowsPerPage: \"15\"");
+            out.println("    }, \"gridMaster\");");
+            out.println("    gridMaster.startup();");
+            out.println("  });");
+            //--
 
-                out.println("   gridMaster = new dojox.grid.DataGrid({");
-                out.println("      id: \"gridMaster\",");
-                out.println("      structure: layout,");
-                out.println("      autoWidth: true,");
-                out.println("      rowSelector: \"10px\",");
-                out.println("      rowsPerPage: \"15\"");
-                out.println("   }, \"gridMaster\");");
-                out.println("   gridMaster.startup();");
-                out.println("});");
-                //--
+            out.println("  function getParams() {");
+            out.println("    var params = '?';");
+            out.println("    params += 'wb_repository='+dojo.byId('wb_repository').value;");
+            out.println("    params += '&wb_user='+dojo.byId('wb_user').value;");
+            out.println("    params += '&fecha11='+dojo.byId('wb_fecha11').value;");
+            out.println("    params += '&t11='+dojo.byId('wb_t11').value;");
+            out.println("    params += '&fecha12='+dojo.byId('wb_fecha12').value;");
+            out.println("    params += '&t12='+dojo.byId('wb_t12').value;");
+            out.println("    return params;");
+            out.println("  }\n");
 
-                out.println("function getParams() {");
-                out.println("   var params = '?';");
-                out.println("   params += 'wb_repository='+dojo.byId('wb_repository').value;");
-                out.println("   params += '&wb_user='+dojo.byId('wb_user').value;");
-                out.println("   params += '&fecha11='+dojo.byId('wb_fecha11').value;");
-                out.println("   params += '&t11='+dojo.byId('wb_t11').value;");
-                out.println("   params += '&fecha12='+dojo.byId('wb_fecha12').value;");
-                out.println("   params += '&t12='+dojo.byId('wb_t12').value;");
-                out.println("   return params;");
-                out.println("}\n");
+            out.println("function doXml(accion, size) { ");
+            /*out.println("   if(validate(accion)) {");*/
+            out.println("      var params = getParams(accion);");
+            out.println("      window.open(\""+url.setMode("xml")+"\"+params,\"graphWindow\",size);    ");
+            /*out.println("   }");*/
+            out.println("}");
 
-                /*out.println("function validate(accion) {");
-                out.println("    if(accion=='0') {");
-                out.println("       var fecha1 = new String(dojo.byId('wb_fecha1').value);");
-                out.println("       var fecha2 = new String(dojo.byId('wb_fecha11').value);");
-                out.println("       var fecha3 = new String(dojo.byId('wb_fecha12').value);");
-                out.println("       if( (fecha1.length==0) && (fecha2.length==0 || fecha3.length==0) ) {");
-                out.println("          alert('Especifique la fecha o el rango de fechas que desea consultar');");
-                out.println("          return false;");
-                out.println("       }");
-                out.println("    }");
-                out.println("    return true;");
-                out.println("}");*/
+            out.println("  function doExcel(accion, size) { ");
+            out.println("    var params = getParams(accion);");
+            out.println("    window.open(\""+url.setMode("xls")+"\"+params,\"graphWindow\",size);    ");
+            out.println("  }");
 
-                out.println("function doXml(accion, size) { ");
-                /*out.println("   if(validate(accion)) {");*/
-                out.println("      var params = getParams(accion);");
-                out.println("      window.open(\""+url.setMode("xml")+"\"+params,\"graphWindow\",size);    ");
-                /*out.println("   }");*/
-                out.println("}");
+            out.println("  function getTypeSelected(){");
+            out.println("    var strType = \"0\";");
+            out.println("    for(i=0;i<window.document.frmrep.wb_rep_type.length;i++){");
+            out.println("      if(window.document.frmrep.wb_rep_type[i].checked==true){");
+            out.println("        strType=window.document.frmrep.wb_rep_type[i].value;");
+            out.println("      }");
+            out.println("    }");
+            out.println("    return strType;");
+            out.println("  }");
 
-                out.println("function doExcel(accion, size) { ");
-                /*out.println("   if(validate(accion)) {");*/
-                out.println("      var params = getParams(accion);");
-                out.println("      window.open(\""+url.setMode("xls")+"\"+params,\"graphWindow\",size);    ");
-                /*out.println("   }");*/
-                out.println("}");
+            out.println("  function doApply() {");
+            out.println("    var grid = dijit.byId('gridMaster');");
+            out.println("    var params = getParams();");
+            out.println("    fillGrid(grid, '"+url.setMode(Mode_RENDER_DataTable)+"'+params);");
+            out.println("  }");
 
-                out.println(" function getTypeSelected(){");
-                out.println("     var strType = \"0\";");
-                out.println("     for(i=0;i<window.document.frmrep.wb_rep_type.length;i++){");
-                out.println("       if(window.document.frmrep.wb_rep_type[i].checked==true){");
-                out.println("           strType=window.document.frmrep.wb_rep_type[i].value;");
-                out.println("       }");
-                out.println("     }");
-                out.println("     return strType;");
-                out.println(" }");
-                
-                out.println("function doApply() {");
-                out.println("   var grid = dijit.byId('gridMaster');");
-                out.println("   var params = getParams();");
-                out.println("   fillGrid(grid, '"+url.setMode(Mode_RENDER_DataTable)+"'+params);");
-                out.println("}");
-                
-                out.println("</script>");
+            out.println("</script>");
 
-                out.println("<div class=\"swbform\">");
-                out.println("<fieldset>");
-//                if(rtype.equals("0")) {
-                    out.println(paramsRequest.getLocaleString("daily_report"));
-//                }else {
-//                    out.println(paramsRequest.getLocaleString("monthly_report"));
-//                }
-                out.println("</fieldset>");
+            out.println("<div class=\"swbform\">");
+            out.println("<fieldset>");
+            out.println(paramsRequest.getLocaleString("daily_report"));
+            out.println("</fieldset>");
 
-                out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");
-                out.println("<fieldset>");
-                out.println("<legend>" + paramsRequest.getLocaleString("filter") + "</legend>");
-                out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
-//                if(rtype.equals("0")) {
-                    out.println("<tr><td width=\"183\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"443\"></td></tr>");
-//                }else {
-//                    out.println("<tr><td width=\"100\"></td><td width=\"196\"></td><td width=\"224\"></td><td width=\"364\"></td></tr>");
-//                }
+            out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");
+            out.println("<fieldset>");
+            out.println("<legend>" + paramsRequest.getLocaleString("filter") + "</legend>");
+            out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
+            out.println("<tr><td width=\"183\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"443\"></td></tr>");
 
-                out.println("<tr>");
-                out.println("<td>Repositorio :</td>");
-                out.println("<td colspan=\"2\"><select id=\"wb_repository\" name=\"wb_repository\" onchange=\"getHtml('"+url.setMode(Mode_RENDER_UserList)+"'+'?wb_repository='+this.value,'slave');\">");
-                Iterator<UserRepository> userRepositories = SWBContext.listUserRepositories();
-                while(userRepositories.hasNext()) {
-                    UserRepository ur = userRepositories.next();
-                    out.println("<option value=\""+ ur.getId() + "\"");
-                        if(ur.getId().equalsIgnoreCase(repositoryId)) {
-                            out.println(" selected=\"selected\"");
-                        }
-                    out.println(">" + ur.getSemanticObject().getDisplayName(paramsRequest.getUser().getLanguage()) + "</option>");
-                }
-                out.println("</select>");
-                out.println("</td>");
-                out.println("<td>&nbsp;</td>");
-                out.println("</tr>");
-                
-                out.println("<tr>");
-                out.println("<td>usuario :</td>");
-                out.println("<td colspan=\"2\"><div id=\"slave\"></div>");
-                out.println("</td>");
-                out.println("<td>&nbsp;</td>");
-                out.println("</tr>");
-                
+            out.println("<tr>");
+            out.println("<td>Repositorio :</td>");
+            out.println("<td colspan=\"2\"><select id=\"wb_repository\" name=\"wb_repository\" onchange=\"getHtml('"+url.setMode(Mode_RENDER_UserList)+"'+'?wb_repository='+this.value,'slave');\">");
+            Iterator<UserRepository> userRepositories = SWBContext.listUserRepositories();
+            while(userRepositories.hasNext()) {
+                UserRepository ur = userRepositories.next();
+                out.println("<option value=\""+ ur.getId() + "\"");
+                    if(ur.getId().equalsIgnoreCase(repositoryId)) {
+                        out.println(" selected=\"selected\"");
+                    }
+                out.println(">" + ur.getSemanticObject().getDisplayName(paramsRequest.getUser().getLanguage()) + "</option>");
+            }
+            out.println("</select>");
+            out.println("</td>");
+            out.println("<td>&nbsp;</td>");
+            out.println("</tr>");
 
-//                if(rtype.equals("0"))
-//                { // REPORTE DIARIO
-//                    out.println("<tr>");
-//                    out.println("<td>");
-//                    out.println("<label>");
-//                    out.println("<input type=\"radio\" value=\"0\" name=\"wb_rep_type\" id=\"wb_rep_type_0\" onclick=\"javascript: doBlockade();\"");
-//                    if(groupDates==0) {
-//                        out.println(" checked=\"checked\"");
-//                    }
-//                    out.println(" />");
-//                    out.println("&nbsp;" + paramsRequest.getLocaleString("by_day"));
-//                    out.println("</label></td>");
-//                    out.println("<td colspan=\"2\">");
-//                    out.println("<input type=\"text\" name=\"wb_fecha1\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha1\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha1+"\">");
-//                    out.println("</td>");
-//                    out.println("<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"0\" /></td>");
-//                    out.println("</tr>");
+            out.println("<tr>");
+            out.println("<td>usuario :</td>");
+            out.println("<td colspan=\"2\"><div id=\"slave\"></div>");
+            out.println("</td>");
+            out.println("<td>&nbsp;</td>");
+            out.println("</tr>");
 
-//                    out.println("<tr>");
-//                    out.println("<td>");
-//                    out.println("<label>");
-//                    out.println("<input type=\"radio\" value=\"1\" name=\"wb_rep_type\" id=\"wb_rep_type_1\" onclick=\"javascript: doBlockade();\"");
-//                    if(groupDates!=0) {
-//                        out.println(" checked=\"checked\"");
-//                    }
-//                    out.println(" />");
-//                    out.println("&nbsp;" + paramsRequest.getLocaleString("by_range"));
-//                    out.println("</label></td>");
-//                    out.println("<td>");
-//                    out.println("<input type=\"text\" name=\"wb_fecha11\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha11\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha11+"\">");
-//                    out.println("</td>");
-//                    out.println("<td>");
-//                    out.println("<input type=\"text\" name=\"wb_fecha12\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha12\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha12+"\">");
-//                    out.println("</td>");
-//                    out.println("<td>&nbsp;</td>");
-//                    out.println("</tr>");
-                    
-                
-                    
-                GregorianCalendar now = new GregorianCalendar();
-                out.println("<tr>\n");
-                out.println("<td>Intervalo de fechas :</td>\n");
-                out.println("<td align=\"left\" colspan=\"3\">\n");
-                out.println("<label for=\"wb_fecha11\">Del:&nbsp;</label>\n");
-                out.println("<input type=\"text\" name=\"wb_fecha11\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha11\" value=\""+sdf.format(now.getTime())+"\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" hasDownArrow=\"true\" />\n");
-                /*out.println("</td>\n");
-                out.println("<td>\n");*/
-                out.println("&nbsp;&nbsp;");
-                out.println("<label for=\"wb_t11\">Tiempo:&nbsp;</label>\n");
-                out.println("<input type=\"text\" name=\"wb_t11\" id=\"wb_t11\" size=\"6\" style=\"width:40px;\" />\n");
-                out.println("</td>\n");
-                //out.println("<td></td>\n");
-                out.println("</tr>\n");
+            GregorianCalendar now = new GregorianCalendar();
+            out.println("<tr>\n");
+            out.println("<td>Intervalo de fechas :</td>\n");
+            out.println("<td align=\"left\" colspan=\"3\">\n");
+            out.println("<label for=\"wb_fecha11\">Del:&nbsp;</label>\n");
+            out.println("<input type=\"text\" name=\"wb_fecha11\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha11\" value=\""+sdf.format(now.getTime())+"\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" hasDownArrow=\"true\" />\n");
+            out.println("&nbsp;&nbsp;");
+            out.println("<label for=\"wb_t11\">Tiempo:&nbsp;</label>\n");
+            out.println("<input type=\"text\" name=\"wb_t11\" id=\"wb_t11\" size=\"6\" style=\"width:40px;\" />\n");
+            out.println("</td>\n");
+            out.println("</tr>\n");
 
-                out.println("<tr>\n");
-                out.println("<td>&nbsp;</td>\n");
-                out.println("<td align=\"left\" colspan=\"3\">\n");
-                out.println("<label for=\"wb_fecha12\">&nbsp;&nbsp;Al:&nbsp;</label>\n");
-                out.println("<input type=\"text\" name=\"wb_fecha12\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha12\" value=\""+sdf.format(now.getTime())+"\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" hasDownArrow=\"true\" />\n");
-                /*out.println("</td>\n");
-                out.println("<td>\n");*/
-                out.println("&nbsp;&nbsp;");
-                out.println("<label for=\"wb_t12\">Tiempo:&nbsp;</label>\n");
-                out.println("<input name=\"wb_t12\" id=\"wb_t12\" />\n");
-                out.println("</td>\n");
-                //out.println("<td></td>\n");
-                out.println("</tr>\n");                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    out.println("</table></fieldset>");
+            out.println("<tr>\n");
+            out.println("<td>&nbsp;</td>\n");
+            out.println("<td align=\"left\" colspan=\"3\">\n");
+            out.println("<label for=\"wb_fecha12\">&nbsp;&nbsp;Al:&nbsp;</label>\n");
+            out.println("<input type=\"text\" name=\"wb_fecha12\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha12\" value=\""+sdf.format(now.getTime())+"\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" hasDownArrow=\"true\" />\n");
+            out.println("&nbsp;&nbsp;");
+            out.println("<label for=\"wb_t12\">Tiempo:&nbsp;</label>\n");
+            out.println("<input name=\"wb_t12\" id=\"wb_t12\" />\n");
+            out.println("</td>\n");
+            out.println("</tr>\n");                                        
+            out.println("</table></fieldset>");
 
-                    out.println("<fieldset>");
-                    out.println("<table border=\"0\" width=\"95%\">");
-                    out.println("<tr>");
-                    out.println(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">Hola de cálculo</button>&nbsp;");
+            out.println("<fieldset>");
+            out.println("<table border=\"0\" width=\"95%\">");
+            out.println("<tr>");
+            out.println(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
+            out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;");
+            out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">Hola de cálculo</button>&nbsp;");
 //                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doPdf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">PDF</button>&nbsp;");
 //                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doRtf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">RTF</button>&nbsp;");
 //                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doGraph('"+ rtype +"','width=600, height=550, scrollbars, resizable')\">"+paramsRequest.getLocaleString("graph")+"</button>&nbsp;");
 //                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doHistogram('"+rtype+"', 'width=600, height=600, scrollbars, resizable, alwaysRaised, menubar')\">"+paramsRequest.getLocaleString("histogram")+"</button>&nbsp;");
-                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">Aplicar</button>");
-                    out.println(" </td>");
-                    out.println("</tr>");
-                    out.println("</table>");
-                    out.println("</fieldset>");
-                    out.println("</form>");
-                    
-//                    out.println("<fieldset>");
-//                    out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
-//                    out.println("<tr>");
-//                    out.println("<td colspan=\"4\">");
-//                    out.println("<div id=\"ctnergrid\" style=\"height:400px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
-//                    out.println("  <div id=\"gridMaster\"></div>");
-//                    out.println("</div>");
-                    out.println("<div id=\"ctnergrid\" style=\"height:350px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
-                    out.println("  <div id=\"gridMaster\"></div>");
-                    out.println("</div>");
-//                    out.println("</td>");
-//                    out.println("</tr>");
-//                    out.println("</table>");
-//                    out.println("</fieldset>");
-                    out.println("</div>");
-//                }
-//                else
-//                { // REPORTE MENSUAL
-//                    GregorianCalendar gc_now = new GregorianCalendar();
-//                    int year13 = request.getParameter("wb_year13")==null ? gc_now.get(Calendar.YEAR):Integer.parseInt(request.getParameter("wb_year13"));
-//                    out.println("<tr>");
-//                    out.println("<td>" + paramsRequest.getLocaleString("year") + ":</td>");
-//                    out.println("<td colspan=\"2\"><select id=\"wb_year13\" name=\"wb_year13\">");
-//                    for (int i = 2000; i < 2021; i++) {
-//                        out.println("<option value=\"" + i + "\"");
-//                        if (year13==i) {
-//                            out.println(" selected=\"selected\"");
-//                        }
-//                        out.println(">" + i + "</option>");
-//                    }
-//                    out.println("</select>");
-//                    out.println("</td>");
-//                    out.println("<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"1\" /></td>");
-//                    out.println("</tr>");
-//                    out.println("</table></fieldset>");
-//
-//                    out.println("<fieldset>");
-//                    out.println("<table border=\"0\" width=\"95%\">");
-//                    out.println("<tr>");
-//                    out.println(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
-//                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doXml('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;");
-//                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">"+paramsRequest.getLocaleString("spread_sheet")+"</button>&nbsp;");
-//                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doPdf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">PDF</button>&nbsp;");
-//                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doRtf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">RTF</button>&nbsp;");
-//                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doGraph('"+ rtype +"','width=600, height=550, scrollbars, resizable')\">"+paramsRequest.getLocaleString("graph")+"</button>&nbsp;");
-//                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doHistogram('"+rtype+"', 'width=600, height=600, scrollbars, resizable, alwaysRaised, menubar')\">"+paramsRequest.getLocaleString("histogram")+"</button>&nbsp;");
-//                    out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">"+paramsRequest.getLocaleString("apply")+"</button>");
-//                    out.println(" </td>");
-//                    out.println("</tr>");
-//                    out.println("</table>");
-//                    out.println("</fieldset>");
-//                    out.println("</form>");
-//                    
-////                    out.println("<fieldset>");
-////                    out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
-////                    out.println("<tr>");
-////                    out.println("<td colspan=\"4\">");
-////                    out.println("<div id=\"ctnergrid\" style=\"height:500px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
-////                    out.println("  <div id=\"gridMaster\"></div>");
-////                    out.println("</div>");
-//                    out.println("<div id=\"ctnergrid\" style=\"height:350px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
-//                    out.println("  <div id=\"gridMaster\" jsid=\"gridMaster\"></div>");
-//                    out.println("</div>");
-////                    out.println("</td>");
-////                    out.println("</tr>");
-////                    out.println("</table>");
-////                    out.println("</fieldset>");
-//                    out.println("</div>");
-//                }
-                out.println("</div>");
-            }
-            else
-            {   // There are not sites and displays a message
-                out.println("<div class=\"swbform\">");
-                out.println("<fieldset>");
-                out.println("<legend>" + paramsRequest.getLocaleString("login_report") + "</legend>");
-                out.println("<form method=\"Post\" action=\"" + paramsRequest.getWebPage().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
-                out.println("<table border=0 width=\"100%\">");
-                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                out.println("<tr>");
-                out.println("<td>&nbsp;</td>");
-                out.println("<td colspan=\"2\" align=\"center\">" + paramsRequest.getLocaleString("no_repositories_found") + "</td>");
-                out.println("<td>&nbsp;</td>");
-                out.println("</tr>");
-                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                out.println("</table></form>");
-                out.println("</fieldset></div>");
-            }
-//        }
-//        catch (Exception e){
-//            log.error("Error on method doView() resource " + strRscType +  " with id " + base.getId(), e);
-//        }
+            out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">Aplicar</button>");
+            out.println(" </td>");
+            out.println("</tr>");
+            out.println("</table>");
+            out.println("</fieldset>");
+            out.println("</form>");
+
+            out.println("<div id=\"ctnergrid\" style=\"height:350px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
+            out.println("  <div id=\"gridMaster\"></div>");
+            out.println("</div>");
+            out.println("</div>");
+
+            out.println("</div>");
+        }
+        else
+        {   // There are not sites and displays a message
+            out.println("<div class=\"swbform\">");
+            out.println("<fieldset>");
+            out.println("<legend>" + paramsRequest.getLocaleString("login_report") + "</legend>");
+            out.println("<form method=\"Post\" action=\"" + paramsRequest.getWebPage().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
+            out.println("<table border=0 width=\"100%\">");
+            out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+            out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+            out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+            out.println("<tr>");
+            out.println("<td>&nbsp;</td>");
+            out.println("<td colspan=\"2\" align=\"center\">" + paramsRequest.getLocaleString("no_repositories_found") + "</td>");
+            out.println("<td>&nbsp;</td>");
+            out.println("</tr>");
+            out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+            out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+            out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+            out.println("</table></form>");
+            out.println("</fieldset></div>");
+        }
         out.flush();
         out.close();
     }
@@ -603,7 +397,6 @@ public class WBATrackingUserReport extends GenericResource {
         UserRepository userRepository = SWBContext.getUserRepository(repositoryId);
 
         String userId = request.getParameter("wb_user")==null? "":request.getParameter("wb_user");
-        String lang = paramsRequest.getUser().getLanguage();
 
         out.println("<select id=\"wb_user\" name=\"wb_user\" size=\"8\">");
         Iterator<User> users = userRepository.listUsers();
@@ -655,17 +448,6 @@ public class WBATrackingUserReport extends GenericResource {
         }catch (JSONException jse) {
         }
         
-System.out.println("sitio del repositorio: "+getResourceBase().getWebSite().getUserRepository().getSemanticModel().getModelObject().createGenericInstance());
-
-        
-System.out.println("repId="+repId);
-System.out.println("userId="+userId);
-System.out.println("fecha11="+request.getParameter("fecha11")+":"+request.getParameter("t11"));
-System.out.println("fecha12="+request.getParameter("fecha12")+":"+request.getParameter("t12"));
-
-        
-//        final String hostAndPort = request.getScheme() + "://" + request.getServerName() + (request.getServerPort()!=80 ? ":"+request.getServerPort() : "");
-        
         Date now = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         String date11 = request.getParameter("fecha11")==null ? sdf.format(now):request.getParameter("fecha11")+" "+(request.getParameter("t11")==null ? "00:00":request.getParameter("t11"));
@@ -684,46 +466,40 @@ System.out.println("fecha12="+request.getParameter("fecha12")+":"+request.getPar
             last = new Date();
         }
         
-        
-System.out.println("first="+first);
-System.out.println("last="+last);        
-        
         final String fullHostname = request.getScheme() + "://" + request.getServerName() + (request.getServerPort() != 80? ":" + request.getServerPort():"");        
         WebSite ws;
         WebPage wp;
         Iterator<String[]> lines = getReportResults(userId, repId, first, last);
         while(lines.hasNext()) {
             String[] t = lines.next();
-//            Resource portlet = portlets.next();
-//            if(portlet.getResourceType().getResourceMode()==1) {
-                JSONObject obj = new JSONObject();
-                try {
-                    ws = SWBContext.getWebSite(t[4]);
-                    if(ws==null) {
-                        log.error("Modelo con identificador "+t[4]+" no existe");
-                        continue;
-                    }
-                    wp = ws.getWebPage(t[5]);
-                    if(wp==null) {
-                        log.error("Pagina web con identificador "+t[5]+" no existe");
-                        continue;
-                    }
-                    //obj.put("uri", webPage.getURI());
-                    obj.put("site", ws.getDisplayTitle(lang));
-                    obj.put("sect", wp.getDisplayName(lang));
-                    obj.put("id", t[5]);
-                    obj.put("url", fullHostname+wp.getUrl());
-                    obj.put("dev",t[9]);
-                    obj.put("lang", t[10]);
-                    obj.put("year", t[0].substring(0,4));
-                    obj.put("month", t[0].substring(5,7));
-                    obj.put("day", t[0].substring(8,10));
-                    obj.put("time", t[0].substring(11,16));
-                    
-                    jarr.put(obj);
-                }catch (JSONException jsone) {
+            JSONObject obj = new JSONObject();
+            try {
+                ws = SWBContext.getWebSite(t[4]);
+                if(ws==null) {
+                    log.error("Modelo con identificador "+t[4]+" no existe");
+                    continue;
                 }
-//            }
+                wp = ws.getWebPage(t[5]);
+                if(wp==null) {
+                    log.error("Pagina web con identificador "+t[5]+" no existe");
+                    continue;
+                }
+                //obj.put("uri", webPage.getURI());
+                obj.put("site", ws.getDisplayTitle(lang));
+                obj.put("sect", wp.getDisplayName(lang));
+                obj.put("id", t[5]);
+                obj.put("url", fullHostname+wp.getUrl());
+                obj.put("dev",t[9]);
+                obj.put("lang", t[10]);
+                obj.put("year", t[0].substring(0,4));
+                obj.put("month", t[0].substring(5,7));
+                obj.put("day", t[0].substring(8,10));
+                obj.put("time", t[0].substring(11,16));
+
+                jarr.put(obj);
+            }catch (JSONException jsone) {
+                log.error(jsone);
+            }
         }
         response.getOutputStream().println(jobj.toString());
     }
@@ -736,21 +512,10 @@ System.out.println("last="+last);
      * @return the report results
      */
     private Iterator<String[]> getReportResults(final String userId, final String repId, final Date s, final Date e) {
-        final int I_ZERO = 0;
-        final int I_ONE = 1;
-        final int I_TWENTYFOUR = 24;
-
-        HashMap hm_detail = new HashMap();
-
-//        ArrayList al_pag = new ArrayList();        
-//        String[] arr_data = null;
         GregorianCalendar datefile = null;
-        GregorianCalendar datedisplay = null;
-        GregorianCalendar datedefault = null;        
 
         String line = null;
         String s_aux = null;
-        //String s_resource = null;
         String filename = null;
 
         String yearinfile = null;
@@ -758,34 +523,10 @@ System.out.println("last="+last);
         String dayinfile = null;
         String hourinfile = null;
         String mininfile = null;
-        String dateinfile = null;
-        //String s_auxresourceid = null;
-        String s_datedefault = null;
-        String s_hourfin = null;
-        String s_year = null;
-
-        boolean b_result = true;
-
-        long l_count = 0;
-        /*int i = 0;
-        int col = 0;
-        int i_len = 0;*/
-        int i_new = 0;
-        int i_hourini = 0;
-        int i_hourfin = 0;
-        int i_start = 0;
-
-
-        // Receive parameters
-//        String siteId = request.getParameter("siteid");
-//        WebSite website = SWBContext.getWebSite(siteId);
-//        WebPage sectionParent = null;
-//        WebPage webpage = null;
-
-
-       GregorianCalendar start = new GregorianCalendar();
-       start.setTime(s);
-       GregorianCalendar end = new GregorianCalendar();
+        
+        GregorianCalendar start = new GregorianCalendar();
+        start.setTime(s);
+        GregorianCalendar end = new GregorianCalendar();
         end.setTime(e);
         
         List<String[]> list_rep = new ArrayList<String[]>();
@@ -802,10 +543,7 @@ System.out.println("last="+last);
                         rf_in = new RandomAccessFile(f,"r");
                     }catch(FileNotFoundException fnfe) {
                         continue;
-                    }
-                    datedefault = null;
-                    l_count = 0;
-                    
+                    }                    
                     try {
                     while( (line = rf_in.readLine())!=null ) {
                         String t[]=line.split("\\|");
@@ -818,9 +556,13 @@ System.out.println("last="+last);
                         hourinfile = s_aux.substring(11,13);
                         mininfile = s_aux.substring(14,16);
                         datefile = new GregorianCalendar(Integer.parseInt(yearinfile),Integer.parseInt(monthinfile)-1,Integer.parseInt(dayinfile),Integer.parseInt(hourinfile),Integer.parseInt(mininfile));
-                        if((datefile.after(start) || datefile.equals(start)) && ((datefile.before(end) || datefile.equals(end)))) {
-                            dateinfile = s_aux;
-                        }else {
+//                        if((datefile.after(start) || datefile.equals(start)) && ((datefile.before(end) || datefile.equals(end)))) {
+//                            dateinfile = s_aux;
+//                        }else {
+//                            continue;
+//                        }
+                        boolean intime = (datefile.after(start) || datefile.equals(start)) && ((datefile.before(end) || datefile.equals(end)));
+                        if(!intime) {
                             continue;
                         }
                         if(repId!=null && !t[6].equalsIgnoreCase(repId)) {
@@ -833,7 +575,7 @@ System.out.println("last="+last);
                         list_rep.add(t);
                     }
                     }catch(IOException ioe) {
-System.out.print("error ");
+                        log.error(ioe);
                         continue;
                     }
 //                    while( line != null );
