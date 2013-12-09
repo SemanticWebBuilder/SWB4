@@ -278,7 +278,6 @@ public class WBATrackingUserReport extends GenericResource {
 
             out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");
             out.println("<fieldset>");
-            out.println("<legend>" + paramsRequest.getLocaleString("filter") + "</legend>");
             out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
             out.println("<tr><td width=\"183\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"443\"></td></tr>");
 
