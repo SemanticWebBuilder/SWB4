@@ -188,7 +188,7 @@ public class RemoveMessagesResource extends GenericResource {
                 }
                 out.println("</select>");
                 out.println("<br>");
-                out.println("<input type=\"checkbox\" name=\"topics\" value=\"uri1\">Eliminar temas no seleccionados<br>");                
+                //out.println("<input type=\"checkbox\" name=\"topicsInverse\" value=\"uri1\">Eliminar temas no seleccionados<br>");                
                 out.println("<button dojoType='dijit.form.Button' type=\"submit\">Eliminar</button>");
                 out.println("</form>");
                 out.println("</div>");
@@ -222,7 +222,7 @@ public class RemoveMessagesResource extends GenericResource {
                 * */
                 out.println("</select>");
                 out.println("<br>");
-                out.println("<input type=\"checkbox\" name=\"topics\" value=\"uri1\">Eliminar redes no seleccionados<br>");
+                //out.println("<input type=\"checkbox\" name=\"networksInverse\" value=\"uri1\">Eliminar redes no seleccionados<br>");
                 out.println("<button dojoType='dijit.form.Button' type=\"submit\">Eliminar</button>");
                 out.println("</div>");
                 out.println("</div>");
