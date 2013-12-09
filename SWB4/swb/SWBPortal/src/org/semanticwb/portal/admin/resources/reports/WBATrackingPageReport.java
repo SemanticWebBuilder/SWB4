@@ -125,8 +125,6 @@ public class WBATrackingPageReport extends GenericResource {
             doFillReport(request,response,paramsRequest);
         }else if(paramsRequest.getMode().equalsIgnoreCase("xls")) {
             doRepExcel(request,response,paramsRequest);
-        }else if(paramsRequest.getMode().equalsIgnoreCase("xml")) {
-            doRepXml(request,response,paramsRequest);
         }else{
             super.processRequest(request, response, paramsRequest);
         }
@@ -325,10 +323,10 @@ public class WBATrackingPageReport extends GenericResource {
 
                 out.println("  function doXml(size) { ");
                 out.println("    if(dojo.byId('section')) {");
-                out.println("      var params = getParams(accion);");
-                out.println("      window.open(\"" + url.setMode("xml") + "\"+params,\"graphWindow\",size);");
+                out.println("      var params = getParams();");
+                out.println("      window.open(\"" + url.setMode(SWBResourceURL.Mode_XML) + "\"+params, 'xml', size);");
                 out.println("    }else {");
-                out.println("      alert('Para poder mostrarle el resumen de contenido, primero debe seleccionar una sección');");
+                out.println("      alert('Para mostrar el resumen de contenido, primero debe seleccionar una sección');");
                 out.println("    }");
                 out.println("  }");
 
@@ -463,6 +461,128 @@ public class WBATrackingPageReport extends GenericResource {
         out.close();
     }
     
+    @Override
+    public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/xml;charset=iso-8859-1");
+        PrintWriter out = response.getWriter();
+        final String wsId = request.getParameter("wb_site");
+        WebSite ws = SWBContext.getWebSite(wsId);
+        if(ws==null) {
+            log.error("Repositorio de usuarios incorrecto");
+            return;
+        }
+        final String wpId = request.getParameter("section");
+        WebPage wp = ws.getWebPage(wpId);
+        if(wp==null) {
+            log.error("Usuario con login "+wpId+" no existe en el repositorio con identificador "+wsId);
+            return;
+        }
+
+        JSONObject jobj = new JSONObject();
+        JSONArray jarr = new JSONArray();
+        try {
+            jobj.put("items", jarr);
+        }catch (JSONException jse) {
+            throw new IOException(jse);
+        }
+
+        Date now = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        String date11 = request.getParameter("fecha11")==null ? sdf.format(now):request.getParameter("fecha11")+" "+(request.getParameter("t11")==null ? "00:00":request.getParameter("t11"));
+        Date first;
+        try {
+            first = sdf.parse(date11);
+        }catch(ParseException pe){
+            first = new Date();
+        }
+
+        String date12 = request.getParameter("fecha12")==null ? sdf.format(now):request.getParameter("fecha12")+" "+(request.getParameter("t12")==null ? "23:59":request.getParameter("t12"));
+        Date last;
+        try {
+            last = sdf.parse(date12);
+        }catch(ParseException pe){
+            last = new Date();
+        }
+
+        String urId, login;
+        UserRepository ur;
+        User visitor;
+        Iterator<String[]> lines = getReportResults(wsId, wpId, first, last);
+        while(lines.hasNext()) {
+            String[] t = lines.next();
+            JSONObject obj = new JSONObject();
+            try {
+                ws = SWBContext.getWebSite(t[4]);
+                if(ws==null) {
+                    log.error("Modelo con identificador "+t[4]+" no existe");
+                    continue;
+                }
+                wp = ws.getWebPage(t[5]);
+                if(wp==null) {
+                    log.error("Pagina web con identificador "+t[5]+" no existe");
+                    continue;
+                }
+                urId = t[6];
+                ur = SWBContext.getUserRepository(urId);
+                if(ur==null) {
+                    continue;
+                }
+                obj.put("rep", t[6]);
+                obj.put("login", t[7]);
+                login = t[7];
+                if("_".equals(login)) {
+                    obj.put("ln", "_");
+                    obj.put("sln", "_");
+                    obj.put("n", "_");
+                }else {
+                    visitor = ur.getUserByLogin(login);
+                    if(visitor==null) {
+                        continue;
+                    }
+                    obj.put("ln", visitor.getLastName());
+                    obj.put("sln", visitor.getSecondLastName());
+                    obj.put("n", visitor.getName());
+                }
+                try {
+                    obj.put("year", Integer.parseInt(t[0].substring(0,4)));
+                }catch(NumberFormatException nfe) {
+                    obj.put("year", t[0].substring(0,4));
+                }
+                try {
+                    obj.put("month", Integer.parseInt(t[0].substring(5,7)));
+                }catch(NumberFormatException nfe) {
+                    obj.put("month", t[0].substring(5,7));
+                }
+                try {
+                    obj.put("day", Integer.parseInt(t[0].substring(8,10)));
+                }catch(NumberFormatException nfe) {
+                    obj.put("day", t[0].substring(8,10));
+                }
+                obj.put("time", t[0].substring(11,16));
+                try {
+                    obj.put("milis", Long.parseLong(t[11]));
+                }catch(NumberFormatException nfe) {
+                    obj.put("milis", t[11]);
+                }                
+                jarr.put(obj);
+            }catch (JSONException jsone) {
+                log.error(jsone);
+            }
+        }
+        StringBuilder xml = new StringBuilder();
+        try {
+            xml.append("<?xml version=\"1.0\"?>");
+            xml.append("<tracking>");
+            xml.append(org.json.XML.toString(jobj));
+            xml.append("</tracking>");
+        }catch(JSONException jse) {
+            xml.append("<?xml version=\"1.0\"?>");
+        }
+        out.print(xml);
+        out.flush();
+        out.close();
+    }
+    
     /**
      * Do rep excel.
      * 
@@ -480,27 +600,6 @@ public class WBATrackingPageReport extends GenericResource {
         PrintWriter out = response.getWriter();
         
         //out.print(SWBUtils.XML.domToXml(dom));
-        out.flush();
-        out.close();
-    }
-
-    /**
-     * Do rep xml.
-     * 
-     * @param request the request
-     * @param response the response
-     * @param paramsRequest the params request
-     * @throws SWBResourceException the sWB resource exception
-     * @throws IOException Signals that an I/O exception has occurred.
-     */    
-    public void doRepXml(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
-        response.setContentType("text/xml;charset=iso-8859-1");
-        PrintWriter out = response.getWriter();
-        
-        Resource base = getResourceBase();
-        Document dom = SWBUtils.XML.getNewDocument();
-        
-        out.print(SWBUtils.XML.domToXml(dom));
         out.flush();
         out.close();
     }
