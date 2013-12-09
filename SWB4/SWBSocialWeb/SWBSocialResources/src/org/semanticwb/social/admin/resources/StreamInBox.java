@@ -107,6 +107,8 @@ public class StreamInBox extends GenericResource {
     public static final String Mode_ADVANCE_RECLASSIFYbyTOPIC = "advreclassifyByTopic";
     public static final String Mode_DELETEPOSTIN = "deletePostIn";
     public static final String Mode_UPDATEPOSTIN = "updatePostIn";
+    public static final String Mode_EMPTYRESPONSE = "emptyResponse";
+    public static final String Mode_REDIRECTTOMODE = "redirectToMode";
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -160,7 +162,7 @@ public class StreamInBox extends GenericResource {
             out.println("   var trId=document.getElementById('" + request.getParameter("postUri") + "');");
             out.println("   try{trId.parentNode.removeChild(trId);}catch(noe){alert(noe);}");            
             out.println("</script>");            
-        }else if(mode.equals("redirectToMode")){
+        }else if(mode.equals(Mode_REDIRECTTOMODE)){
             System.out.println("Making the redirect:");
             System.out.println(request.getParameter("statusMsg"));
             System.out.println(request.getParameter("postUri"));
@@ -174,7 +176,13 @@ public class StreamInBox extends GenericResource {
             out.println("   postSocialPostInHtml('" + renderUrl + "', '" + postUri + "');");
             out.println("</script>");
 
-        } else {
+        }else if(mode.equals(Mode_EMPTYRESPONSE)){
+            PrintWriter out = response.getWriter();
+            out.println("<script type=\"javascript\">");
+            out.println("   hideDialog();");
+            out.println("   showStatus('" + request.getParameter("statusMsg") + "');");
+            out.println("</script>");
+        }else {
             super.processRequest(request, response, paramRequest);
         }
     }
@@ -1382,8 +1390,8 @@ public class StreamInBox extends GenericResource {
                             slp.setIntensityType(dpth);
                         }
                     }
-                    response.setMode(SWBActionResponse.Mode_EDIT);
-                    response.setRenderParameter("dialog", "close");
+                    response.setMode(Mode_EMPTYRESPONSE);
+                    //response.setRenderParameter("dialog", "close");
                     response.setRenderParameter("statusMsg", response.getLocaleString("phrasesAdded"));
                     //response.setRenderParameter("reloadTap","1");
                     response.setRenderParameter("suri", stOld.getURI());
@@ -1488,7 +1496,7 @@ public class StreamInBox extends GenericResource {
                 response.setRenderParameter("statusMsg", response.getLocaleString("msgResponseCreated"));
                 response.setRenderParameter("suri", stOld.getURI());
                 response.setRenderParameter("postUri", postIn.getURI());
-                response.setMode("redirectToMode");
+                response.setMode(Mode_REDIRECTTOMODE);
             }
         }else if(action.equals("AdvReClassbyTopic"))
         {
