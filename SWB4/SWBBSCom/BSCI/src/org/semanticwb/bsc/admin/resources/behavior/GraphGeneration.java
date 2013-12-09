@@ -86,7 +86,9 @@ public class GraphGeneration extends GenericResource {
                             out.println("<script type=\"text/javascript\">");
                             out.println("long_short_data = [");
                             out.println("{");
-                            out.println("key: \"" + grapher.getSerieGraph().getTitle() + " en " + formatSerie1.getTitle() + "\" ,");
+                            if(formatSerie1 != null){
+                            out.println("key: \"" + grapher.getSerieGraph().getTitle() + " en " + formatSerie1.getTitle() + "\" ,");}
+                            else{out.println("key: \"" + grapher.getSerieGraph().getTitle() + "\" ,");}
                             out.println("color: '#d62728',");
                             out.println("values: [");
                             //Recorre los periodos y valores de la serie1 para graficarlos
@@ -106,7 +108,9 @@ public class GraphGeneration extends GenericResource {
                                 out.println("},");
                                 //segunda serie a graficar
                                 out.println("{");
-                                out.println("key: \"" + grapher.getSerieGraph2().getTitle() + " en " + formatSerie2.getTitle()+ "\" ,");
+                                if(formatSerie2 != null){
+                                out.println("key: \"" + grapher.getSerieGraph2().getTitle() + " en " + formatSerie2.getTitle()+ "\" ,");}
+                                else{out.println("key: \"" + grapher.getSerieGraph2().getTitle() + "\" ,");}
                                 out.println("color: '#1f77b4',");
                                 out.println("values: [");
                                 //Recorre los periodos y valores de la serie2 para graficarlos
