@@ -159,7 +159,7 @@ public class StreamInBox extends GenericResource {
             PrintWriter out = response.getWriter();
             out.println("<script type=\"javascript\">");            
             out.println("   showStatus('" + request.getParameter("statusMsg") + "');");
-            out.println("   var trId=document.getElementById('" + request.getParameter("postUri") + "');");
+            out.println("   var trId=document.getElementById('" + request.getParameter("postUri") + "/stIn');");
             out.println("   try{trId.parentNode.removeChild(trId);}catch(noe){alert(noe);}");            
             out.println("</script>");            
         }else if(mode.equals(Mode_REDIRECTTOMODE)){
@@ -173,7 +173,7 @@ public class StreamInBox extends GenericResource {
             String suri = request.getParameter("suri");
             SWBResourceURL renderUrl = paramRequest.getRenderUrl().setMode(Mode_UPDATEPOSTIN).setParameter("statusMsg", statusMsg).setParameter("suri", suri).setParameter("postUri", postUri).setCallMethod(SWBResourceURL.Call_DIRECT);
             out.println("<script type=\"javascript\">");
-            out.println("   postSocialPostInHtml('" + renderUrl + "', '" + postUri + "');");
+            out.println("   postSocialPostInHtml('" + renderUrl + "', '" + postUri + "/stIn');");
             out.println("</script>");
 
         }else if(mode.equals(Mode_EMPTYRESPONSE)){
@@ -789,7 +789,7 @@ public class StreamInBox extends GenericResource {
             String sClass="";
             if(postIn.isIsPrioritary()) sClass="class=\"msj-cont msj-prior\"";
             
-            out.println("<tr id=\"" + postIn.getURI() + "\" "+sClass+">");
+            out.println("<tr id=\"" + postIn.getURI() + "/stIn\" "+sClass+">");
             printPostIn(request, postIn, paramRequest, response, true);
             out.println("</tr>");
             
@@ -2640,7 +2640,7 @@ public class StreamInBox extends GenericResource {
         if(userCanRetopicMsg)
         {
             //ReClasifyByTpic
-            SWBResourceURL urlreClasifybyTopic = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI()).setParameter("fromStream", "true");
+            SWBResourceURL urlreClasifybyTopic = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI()).setParameter("fromStream", "/stIn");
             out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reclasifyByTopic") + "\" class=\"retema\" onclick=\"showDialog('" + urlreClasifybyTopic + "','"
                     + paramRequest.getLocaleString("reclasifyByTopic") + "'); return false;\"></a>");
         }
