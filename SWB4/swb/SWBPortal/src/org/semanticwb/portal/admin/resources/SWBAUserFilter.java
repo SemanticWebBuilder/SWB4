@@ -24,6 +24,8 @@ package org.semanticwb.portal.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -44,7 +46,7 @@ import org.semanticwb.portal.api.*;
  * WebBuilder administration resource that allows select the topics to show the
  * selected resource.
  */
-public class SWBAFilterResource extends SWBATree {
+public class SWBAUserFilter extends SWBATree {
 
     /** The log. */
     private Logger log = SWBUtils.getLogger(SWBAFilterResource.class);
@@ -64,6 +66,7 @@ public class SWBAFilterResource extends SWBATree {
      */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        //System.out.println("processRequest:"+paramRequest.getMode());
         if (paramRequest.getMode().equals("gateway")) {
             doGateway(request, response, paramRequest);
         } else {
@@ -98,6 +101,8 @@ public class SWBAFilterResource extends SWBATree {
             response.sendError(404, request.getRequestURI());
             return;
         }
+        //System.out.println("doGateway:"+cmd);
+        
         String ret = "";
         try {
             Document res = null;
@@ -160,84 +165,100 @@ public class SWBAFilterResource extends SWBATree {
         if (src.getElementsByTagName("filter").getLength() > 0) {
             String id = src.getElementsByTagName("id").item(0).getFirstChild().getNodeValue();
             String tm = src.getElementsByTagName("tm").item(0).getFirstChild().getNodeValue();
-            Resource recres = null;
-            WebSite map = SWBContext.getWebSite(tm);
+            SWBModel map = SWBContext.getSWBModel(tm);
             SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-            GenericObject gobj = ont.getGenericObject(id);
-
-            if (gobj instanceof Resource) {
-                recres = (Resource) gobj;
-                map = recres.getWebSite();
-            } else {
-                return null;
+            
+            ArrayList<User> arr=new ArrayList();
+            
+            if(id.startsWith("mv:"))
+            {
+                String id2=id.substring(3);
+                //System.out.println("id2:"+id2);
+                StringTokenizer st=new StringTokenizer(id2,"|");
+                while(st.hasMoreTokens())
+                {
+                    arr.add(User.ClassMgr.getUser(st.nextToken(), SWBContext.getSWBModel(tm)));
+                    //System.out.println("add");
+                }
+            }else
+            {
+                arr.add((User)ont.getGenericObject(id));
             }
+            
+            Iterator<User> it=arr.iterator();
+            while (it.hasNext())
+            {
+                User recres = it.next();
+                map = recres.getUserRepository();                
+                //System.out.println("user:"+recres);
+                
+                log.debug("updateFilter...id:" + id + ", tm:" + tm);
+                String xml = "<resource><filter/></resource>";
+                UserFilter pfil = recres.getUserFilter();
+                if (pfil != null) {
+                    xml = pfil.getXml();
+                }
 
-
-            log.debug("updateFilter...id:" + id + ", tm:" + tm);
-            String xml = "<resource><filter/></resource>";
-            ResourceFilter pfil = recres.getResourceFilter();
-            if (pfil != null) {
-                xml = pfil.getXml();
-            }
-
-            try {
-                Document docxmlConf = null;
-                Element eResource = null;
-                if (xml == null || xml.equals("")) {
-                    docxmlConf = SWBUtils.XML.getNewDocument();
-                    eResource = docxmlConf.createElement("resource");
-                    docxmlConf.appendChild(eResource);
-                } else {
-
-                    //System.out.println("XML antes de actualizar:\n"+xml);
-
-                    if(xml.indexOf("<resource>")==-1)
-                    {
-                        int intIniIdx = xml.indexOf("<filter>");
-                        int intEndIdx = xml.lastIndexOf("</filter>");
-                        if (intIniIdx != -1 && intEndIdx != -1) {
-                            xml = xml.substring(intIniIdx,intEndIdx+9);
-                            xml = "<resource>"+xml+"</resource>";
-                            //System.out.println("XML:"+xml);
-                        }
-                    }
-
-                    docxmlConf = SWBUtils.XML.xmlToDom(xml);
-                    if (docxmlConf.getElementsByTagName("resource").getLength() > 0) {
-                        eResource = (Element) docxmlConf.getElementsByTagName("resource").item(0);
-                    } else {
+                try {
+                    Document docxmlConf = null;
+                    Element eResource = null;
+                    if (xml == null || xml.equals("")) {
+                        docxmlConf = SWBUtils.XML.getNewDocument();
                         eResource = docxmlConf.createElement("resource");
                         docxmlConf.appendChild(eResource);
+                    } else {
+
+                        //System.out.println("XML antes de actualizar:\n"+xml);
+
+                        if(xml.indexOf("<resource>")==-1)
+                        {
+                            int intIniIdx = xml.indexOf("<filter>");
+                            int intEndIdx = xml.lastIndexOf("</filter>");
+                            if (intIniIdx != -1 && intEndIdx != -1) {
+                                xml = xml.substring(intIniIdx,intEndIdx+9);
+                                xml = "<resource>"+xml+"</resource>";
+                                //System.out.println("XML:"+xml);
+                            }
+                        }
+
+                        docxmlConf = SWBUtils.XML.xmlToDom(xml);
+                        if (docxmlConf.getElementsByTagName("resource").getLength() > 0) {
+                            eResource = (Element) docxmlConf.getElementsByTagName("resource").item(0);
+                        } else {
+                            eResource = docxmlConf.createElement("resource");
+                            docxmlConf.appendChild(eResource);
+                        }
                     }
-                }
-                NodeList filters = eResource.getElementsByTagName("filter");
-                for (int i = 0; i < filters.getLength(); i++) {
-                    Element filter = (Element) filters.item(i);
-                    filter.getParentNode().removeChild(filter);
-                }
-                filters = src.getElementsByTagName("filter");
-                for (int i = 0; i < filters.getLength(); i++) {
-                    Element filter = (Element) filters.item(i);
-                    filter = (Element) docxmlConf.importNode(filter, true);
-                    eResource.appendChild(filter);
-                }
+                    NodeList filters = eResource.getElementsByTagName("filter");
+                    for (int i = 0; i < filters.getLength(); i++) {
+                        Element filter = (Element) filters.item(i);
+                        filter.getParentNode().removeChild(filter);
+                    }
+                    filters = src.getElementsByTagName("filter");
+                    for (int i = 0; i < filters.getLength(); i++) {
+                        Element filter = (Element) filters.item(i);
+                        filter = (Element) docxmlConf.importNode(filter, true);
+                        eResource.appendChild(filter);
+                    }
 
-                log.debug(SWBUtils.XML.domToXml(docxmlConf));
+                    log.debug(SWBUtils.XML.domToXml(docxmlConf));
 
-                pfil = recres.getResourceFilter();
-                if (null != recres && null != pfil) {
-                    pfil.setXml(SWBUtils.XML.domToXml(docxmlConf));
-                }
-                Document docresp = SWBUtils.XML.getNewDocument();
-                Element filterresp = docresp.createElement("filter");
-                org.w3c.dom.Text t = docresp.createTextNode(id);
-                filterresp.appendChild(t);
-                docresp.appendChild(filterresp);
-                return docresp;
-            } catch (Exception e) {
-                e.printStackTrace(System.out);
-                log.error(e);
+                    pfil = recres.getUserFilter();
+                    if (null != recres && null != pfil) {
+                        pfil.setXml(SWBUtils.XML.domToXml(docxmlConf));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace(System.out);
+                    log.error(e);
+                }                
             }
+
+            Document docresp = SWBUtils.XML.getNewDocument();
+            Element filterresp = docresp.createElement("filter");
+            org.w3c.dom.Text t = docresp.createTextNode(id);
+            filterresp.appendChild(t);
+            docresp.appendChild(filterresp);
+            return docresp;
         }
         return null;
     }
@@ -342,21 +363,32 @@ public class SWBAFilterResource extends SWBATree {
         String tm = src.getElementsByTagName("tm").item(0).getFirstChild().getNodeValue();
 
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        
+        if(id.startsWith("mv:"))
+        {
+            id=id.substring(3);
+            StringTokenizer st=new StringTokenizer(id,"|");
+            if(st.hasMoreTokens())
+            {
+                id=User.ClassMgr.getUser(st.nextToken(), SWBContext.getSWBModel(tm)).getURI();
+            }
+        }
+        
         GenericObject gobj = ont.getGenericObject(id);
 
-        WebSite map = null;
+        SWBModel map = null;
 
-        Resource recres = null;
+        User recres = null;
 
-        if (gobj instanceof Resource) {
-            recres = (Resource) gobj;
-            map = recres.getWebSite();
+        if (gobj instanceof User) {
+            recres = (User) gobj;
+            map = recres.getUserRepository();
         } else {
             return null;
         }
 
         String xml = null;
-        ResourceFilter pfil = recres.getResourceFilter();
+        UserFilter pfil = recres.getUserFilter();
         if (null != pfil) {
             xml = pfil.getXml();
         }
@@ -428,8 +460,8 @@ public class SWBAFilterResource extends SWBATree {
         if (request.getParameter("id") != null) {
             id = request.getParameter("id");
         }
-        Resource recRes = SWBContext.getWebSite(tm).getResource(id);
-        ResourceFilter pfil = recRes.getResourceFilter();
+        User recRes = SWBContext.getUserRepository(tm).getUser(id);
+        UserFilter pfil = recRes.getUserFilter();
         String strXml = null;
         if (null != pfil) {
             strXml = pfil.getXml();
@@ -481,9 +513,9 @@ public class SWBAFilterResource extends SWBATree {
                         dom = setElement(dom, strTm, strTp, "update");
                     }
                 }
-                pfil = recRes.getWebSite().createResourceFilter();
+                pfil = UserFilter.ClassMgr.createUserFilter(recRes.getUserRepository());
                 pfil.setXml(SWBUtils.XML.domToXml(dom));
-                recRes.setResourceFilter(pfil);
+                recRes.setUserFilter(pfil);
                 response.setRenderParameter("confirm", "added");
             } catch (Exception e) {
                 log.error("Error while updating resource with id:" + id + "- SWBAFilterResource:processAction", e);
@@ -513,14 +545,14 @@ public class SWBAFilterResource extends SWBATree {
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         GenericObject gobj = ont.getGenericObject(id);
 
-        WebSite map = null;
+        SWBModel map = null;
 
 //        if (request.getParameter("suri")!=null && !request.getParameter("suri").equals("id"))
 //            id=request.getParameter("suri");
-        Resource recRes = null;
-        if (gobj instanceof Resource) {
-            recRes = (Resource) gobj;
-            map = recRes.getWebSite();
+        User recRes = null;
+        if (gobj instanceof User) {
+            recRes = (User) gobj;
+            map = recRes.getUserRepository();
             tm = map.getId();
             String strConfirm = request.getParameter("confirm");
             if (strConfirm != null && strConfirm.equals("added")) {
@@ -530,7 +562,7 @@ public class SWBAFilterResource extends SWBATree {
             }
             try {
                 //recRes = map.getResource(id);
-                ResourceFilter pfil = recRes.getResourceFilter();
+                UserFilter pfil = recRes.getUserFilter();
                 String strXml = null;
                 if (null != pfil) {
                     strXml = pfil.getXml();
@@ -538,8 +570,8 @@ public class SWBAFilterResource extends SWBATree {
 
                 if (null == strXml || (strXml != null && strXml.trim().length() == 0)) {
                     if (null == pfil) {
-                        pfil = recRes.getWebSite().createResourceFilter();
-                        recRes.setResourceFilter(pfil);
+                        pfil = UserFilter.ClassMgr.createUserFilter(recRes.getUserRepository());
+                        recRes.setUserFilter(pfil);
                     }
                     pfil.setXml("<resource><filter/></resource>");
                 }
@@ -549,16 +581,31 @@ public class SWBAFilterResource extends SWBATree {
                 url.setMode("gateway");
                 url.setCallMethod(url.Call_DIRECT);
                 out.println("<param name=\"jsess\" value=\"" + request.getSession().getId() + "\">");
-                out.println("<param name =\"idfilter\" value=\"" + id + "\">");
+                //out.println("<param name =\"idfilter\" value=\"" + id + "\">");
                 out.println("<param name =\"cgipath\" value=\"" + url + "\">");
                 out.println("<param name =\"locale\" value=\"" + user.getLanguage() + "\">");
                 out.println("<param name =\"tm\" value=\"" + map.getId() + "\">");
                 out.println("<param name =\"idresource\" value=\"" + id + "\">");
-                boolean global = false;
-                if (map.getId().equalsIgnoreCase(SWBContext.getGlobalWebSite().getId())) {
-                    global = true;
+//                boolean global = false;
+//                if (map.getId().equalsIgnoreCase(SWBContext.getGlobalWebSite().getId())) {
+//                    global = true;
+//                }
+//                out.println("<param name =\"isGlobalTM\" value=\"" + global + "\">");
+                
+                String maps="";
+                Iterator<WebSite> it=SWBContext.listWebSites();
+                while (it.hasNext())
+                {
+                    WebSite webSite = it.next();
+                    if(webSite.getUserRepository().equals(map))
+                    {
+                        maps+="|"+webSite.getId();
+                    }
                 }
-                out.println("<param name =\"isGlobalTM\" value=\"" + global + "\">");
+                
+                out.println("<param name =\"maps\" value=\""+maps+"\">");                
+                out.println("<param name =\"isGlobalTM\" value=\"true\">");                
+                
                 out.println("</applet>");
                 out.println("</div>");
             } catch (Exception e) {
