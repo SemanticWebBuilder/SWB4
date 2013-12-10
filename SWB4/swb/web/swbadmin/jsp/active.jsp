@@ -3,6 +3,13 @@
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 
 <%
+    User user=SWBContext.getAdminUser();
+    if(user==null)
+    {
+        response.sendError(403);
+        return;
+    }    
+    
     String lang="es";
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
@@ -18,13 +25,6 @@
     Error params not found...
     <a href="?suri=<%=uri%>">edit</a>
 <%
-        return;
-    }
-
-    User user=SWBContext.getAdminUser();
-    if(user==null)
-    {
-        response.sendError(403);
         return;
     }
 
