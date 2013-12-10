@@ -3715,8 +3715,6 @@
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="alertSistemStatus">
     <rdfs:label xml:lang="es">Activate Alerts</rdfs:label>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
     <rdfs:label xml:lang="es">Activar Alertas</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_alertSistemStatus">
