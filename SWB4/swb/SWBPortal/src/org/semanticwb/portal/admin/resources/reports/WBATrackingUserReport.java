@@ -127,7 +127,7 @@ public class WBATrackingUserReport extends GenericResource {
         }else if(Mode_RENDER_DataTable.equalsIgnoreCase(mode)) {
             doFillReport(request,response,paramsRequest);
         }else if(mode.equalsIgnoreCase("xls")) {
-//            doRepExcel(request,response,paramsRequest);
+            doRepExcel(request,response,paramsRequest);
         }
         else {
             super.processRequest(request, response, paramsRequest);
@@ -618,6 +618,204 @@ public class WBATrackingUserReport extends GenericResource {
             }
         }
         response.getOutputStream().println(jobj.toString());
+    }
+    
+    /**
+     * Do rep excel.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */    
+    public void doRepExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-Disposition", "inline; filename=\"scr.xls\"");
+        PrintWriter out = response.getWriter();
+
+        final String repId = request.getParameter("wb_repository");
+        UserRepository ur = SWBContext.getUserRepository(repId);
+        if(ur==null) {
+            log.error("Repositorio de usuarios incorrecto");
+            return;
+        }
+        final String userId = request.getParameter("wb_user");
+        User visitor = ur.getUserByLogin(userId);
+        if(visitor==null) {
+            log.error("Usuario con login "+userId+" no existe en  el repositorio con identificador "+repId);
+            return;
+        }        
+        final String lang = visitor.getLanguage();
+        
+//        JSONObject jobj = new JSONObject();
+//        JSONArray jarr = new JSONArray();
+//        try {
+//            //jobj.put("identifier", "uri");
+//            jobj.put("label", "sect");
+//            jobj.put("items", jarr);
+//        }catch (JSONException jse) {
+//            throw new IOException(jse);
+//        }
+        
+        Date now = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        String date11 = request.getParameter("fecha11")==null ? sdf.format(now):request.getParameter("fecha11")+" "+(request.getParameter("t11")==null ? "00:00":request.getParameter("t11"));
+        Date first;
+        try {
+            first = sdf.parse(date11);
+        }catch(ParseException pe){
+            first = new Date();
+        }
+        
+        String date12 = request.getParameter("fecha12")==null ? sdf.format(now):request.getParameter("fecha12")+" "+(request.getParameter("t12")==null ? "23:59":request.getParameter("t12"));
+        Date last;
+        try {
+            last = sdf.parse(date12);
+        }catch(ParseException pe){
+            last = new Date();
+        }
+        
+        final String fullHostname = request.getScheme() + "://" + request.getServerName() + (request.getServerPort() != 80? ":" + request.getServerPort():"");        
+        WebSite ws;
+        WebPage wp;
+        Iterator<String[]> lines = getReportResults(repId, userId, first, last);
+        out.println("<table>");
+        out.println("<tr>");
+        out.println("<th>");
+        out.println(paramsRequest.getLocaleString("lblSite"));
+        out.println("</th>");
+        out.println("<th>");
+        out.println(paramsRequest.getLocaleString("lblPage"));
+        out.println("</th>");
+        out.println("<th>");
+        out.println(paramsRequest.getLocaleString("lblId"));
+        out.println("</th>");
+        out.println("<th>");
+        out.println(paramsRequest.getLocaleString("lblUrl"));
+        out.println("</th>");
+        out.println("<th>");
+        out.println(paramsRequest.getLocaleString("lblDevice"));
+        out.println("</th>");
+        out.println("<th>");
+        out.println(paramsRequest.getLocaleString("lblLanguage"));
+        out.println("</th>");
+        out.println("<th>");
+        out.println(paramsRequest.getLocaleString("lblYear"));
+        out.println("</th>");
+        out.println("<th>");
+        out.println(paramsRequest.getLocaleString("lblMonth"));
+        out.println("</th>");
+        out.println("<th>");
+        out.println(paramsRequest.getLocaleString("lblDay"));
+        out.println("</th>");
+        out.println("<th>");
+        out.println(paramsRequest.getLocaleString("lblHour"));
+        out.println("</th>");
+        out.println("</tr>");
+        
+        while(lines.hasNext()) {
+            String[] t = lines.next();
+//            JSONObject obj = new JSONObject();
+//            try {
+                ws = SWBContext.getWebSite(t[4]);
+                if(ws==null) {
+                    log.error("Modelo con identificador "+t[4]+" no existe");
+                    continue;
+                }
+                wp = ws.getWebPage(t[5]);
+                if(wp==null) {
+                    log.error("Pagina web con identificador "+t[5]+" no existe");
+                    continue;
+                }
+                //obj.put("uri", webPage.getURI());
+                String site = ws.getDisplayTitle(lang);
+                String sect = wp.getDisplayName(lang);
+                String id = t[5];
+                String url = fullHostname+wp.getUrl();
+                String dev = t[9];
+                String langA = t[10];
+                String year = "";
+                String month = "";
+                String day = "";
+                String time = "";
+//                obj.put("site", ws.getDisplayTitle(lang));
+//                obj.put("sect", wp.getDisplayName(lang));
+//                obj.put("id", t[5]);
+//                obj.put("url", fullHostname+wp.getUrl());
+//                obj.put("dev",t[9]);
+//                obj.put("lang", t[10]);
+                int y = 0;
+                int m = 0;
+                int d = 0;
+                try {
+                    y = Integer.parseInt(t[0].substring(0,4));
+                    year = y + "";
+                    //obj.put("year", Integer.parseInt(t[0].substring(0,4)));
+                }catch(NumberFormatException nfe) {
+                    year = t[0].substring(0,4);
+                    //obj.put("year", t[0].substring(0,4));
+                }
+                try {
+                    m = Integer.parseInt(t[0].substring(5,7));
+                    month = m + "";
+//                    obj.put("month", Integer.parseInt(t[0].substring(5,7)));
+                }catch(NumberFormatException nfe) {
+                    month = t[0].substring(5,7);
+                    //obj.put("month", t[0].substring(5,7));
+                }
+                try {
+                    d = Integer.parseInt(t[0].substring(8,10));
+                    day = d + "";
+                    //obj.put("day", Integer.parseInt(t[0].substring(8,10)));
+                }catch(NumberFormatException nfe) {
+                    day = t[0].substring(8,10);
+                    //obj.put("day", t[0].substring(8,10));
+                }
+                time = t[0].substring(11,16);
+                //obj.put("time", t[0].substring(11,16));
+
+//                jarr.put(obj);
+//            }catch (JSONException jsone) {
+//                log.error(jsone);
+//            }
+            out.println("<tr>");
+            out.println("<td>");
+            out.println(site);
+            out.println("</td>");            
+            out.println("<td>");
+            out.println(sect);
+            out.println("</td>");
+            out.println("<td>");
+            out.println(id);
+            out.println("</td>");
+            out.println("<td>");
+            out.println(url);
+            out.println("</td>");
+            out.println("<td>");
+            out.println(dev);
+            out.println("</td>");
+            out.println("<td>");
+            out.println(langA);
+            out.println("</td>");            
+            out.println("<td>");
+            out.println(year);
+            out.println("</td>");  
+            out.println("<td>");
+            out.println(month);
+            out.println("</td>");            
+            out.println("<td>");
+            out.println(day);
+            out.println("</td>");   
+            out.println("<td>");
+            out.println(time);
+            out.println("</td>");              
+            out.println("</tr>");                
+        }
+        //out.print(SWBUtils.XML.domToXml(dom));
+        out.println("</table>");
+        out.flush();
+        out.close();
     }
     
     /**
