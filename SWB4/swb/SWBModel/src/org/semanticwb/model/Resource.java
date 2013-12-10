@@ -50,12 +50,6 @@ public class Resource extends org.semanticwb.model.base.ResourceBase {
     
     /** The randpriority. */
     protected int randpriority;
-//    private Document m_dom=null;
-    /** The m_filter. */
-    private Document m_filter = null;
-    
-    /** The m_filternode. */
-    private NodeList m_filternode = null;
     
     /** The hits. */
     private long hits = 0;
@@ -466,67 +460,20 @@ public class Resource extends org.semanticwb.model.base.ResourceBase {
         setProperty("data/wp/" + page.getWebSiteId() + "/" + page.getId(), data);
     }
 
-    /** Getter for property filterMap.
-     * @return Value of property filterMap.
-     */
-    public org.w3c.dom.NodeList getFilterNode() {
-        ResourceFilter pfilter = getResourceFilter();
-        if (pfilter != null) {
-            Document aux = pfilter.getSemanticObject().getDomProperty(swb_xml);
-            if (aux != m_filter) {
-                m_filter = aux;
-                NodeList nl = aux.getElementsByTagName("topicmap");
-                int n = nl.getLength();
-                if (n > 0) {
-                    m_filternode = nl;
-                } else {
-                    m_filternode = null;
-                }
-            }
-        } else {
-            m_filternode = null;
-        }
-        //System.out.println("getFilterNode:"+getURI()+" "+m_filternode);
-        return m_filternode;
-    }
-
     /**
-     * org.semanticwb.model.Inheritable
+     * Evalua el filtro de secciones
      * 
      * @param topic the topic
      * @return true, if successful
      * @return
      */
-    public boolean evalFilterMap(WebPage topic) {
-        boolean negative=false;
-        boolean ret = false;
-        NodeList fi = getFilterNode();
-        if (fi != null) {
-            for (int x = 0; x < fi.getLength(); x++) {
-                Element el = (Element) fi.item(x);
-                negative=(el.getAttribute("negative")!=null?el.getAttribute("negative").equals("true"):false);
-                //System.out.println("evalFilterMap:"+topic.getWebSiteId()+"="+el.getAttribute("id"));
-                if (topic.getWebSiteId().equals(el.getAttribute("id"))) {
-                    NodeList ti = el.getElementsByTagName("topic");
-                    for (int y = 0; y < ti.getLength(); y++) {
-                        Element eltp = (Element) ti.item(y);
-                        WebPage atopic = topic.getWebSite().getWebPage(eltp.getAttribute("id"));
-                        if (atopic != null) {
-                            if (topic.equals(atopic)) {
-                                ret = true;
-                            } else if (eltp.getAttribute("childs").equals("true") && topic.isChildof(atopic))
-                            {
-                                ret = true;
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            ret = true;
-        }
-        return ret^negative;
-    }
+    public boolean evalFilterMap(WebPage topic) 
+    {
+        //System.out.println("Resource:evalFilterMap:"+this+" "+this.getResourceType()+" "+this.getTitle()+" "+topic);
+        ResourceFilter pfilter = getResourceFilter();
+        if(pfilter==null)return true;
+        else return pfilter.evalFilterMap(topic);
+    }    
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.ResourceBase#getHits()

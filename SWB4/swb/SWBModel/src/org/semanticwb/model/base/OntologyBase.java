@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto que define una Ontologia 
    */
-public abstract class OntologyBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable
+public abstract class OntologyBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass
 {
    /**
    * Interfaz que define propiedades para elementos que dependen de una ontologia
