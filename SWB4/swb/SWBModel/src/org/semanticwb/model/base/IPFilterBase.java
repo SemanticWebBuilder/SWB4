@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Define un Filtros de IPs, para denegar acceso, solo acceso o no contar accesos de las IPs definidas en el filtro. 
    */
-public abstract class IPFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Traceable
+public abstract class IPFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_ipFilterNumber=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#ipFilterNumber");
     public static final org.semanticwb.platform.SemanticProperty swb_ipFilterAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#ipFilterAction");

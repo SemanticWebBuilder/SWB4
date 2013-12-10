@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Referencia a un objeto de tipo Template 
    */
-public abstract class TemplateRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable,org.semanticwb.model.Priorityable,org.semanticwb.model.Inheritable
+public abstract class TemplateRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Priorityable,org.semanticwb.model.Activeable,org.semanticwb.model.Inheritable
 {
    /**
    * Las Plantillas son documentos HTML que sirven de base a SemanticWebBuilder para poder mostrar el "look & feel" del sitio, así como la distribución de todos los elementos en la pagina.

@@ -33,11 +33,15 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBRuntimeException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.base.*;
+import static org.semanticwb.model.base.XMLableBase.swb_xml;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 
 
@@ -590,7 +594,12 @@ public class User extends UserBase implements Principal
     {
         //System.out.println(this+" haveAccess:"+obj);
         boolean ret = true;
-        if (obj instanceof RoleRefable)
+        if (obj instanceof WebPage)
+        {
+            ret = evalFilterMap((WebPage)obj);
+        }
+        
+        if (ret && obj instanceof RoleRefable)
         {
             Boolean temp=null;
             boolean andeval=((RoleRefable)obj).isAndEvalRoleRef();
@@ -934,6 +943,21 @@ public class User extends UserBase implements Principal
         {
             return getSemanticObject().getObjectProperty(prop);
         }
+    }   
+    
+    /**
+     * Evalua el filtro de secciones
+     * 
+     * @param topic the topic
+     * @return true, if successful
+     * @return
+     */
+    public boolean evalFilterMap(WebPage topic) 
+    {
+        //System.out.println("User:evalFilterMap:"+this+" "+topic+" "+getUserFilter());
+        UserFilter pfilter = getUserFilter();
+        if(pfilter==null)return true;
+        else return pfilter.evalFilterMap(topic);
     }    
     
 }
