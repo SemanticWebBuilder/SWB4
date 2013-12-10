@@ -244,8 +244,8 @@ public class WBATrackingUserReport extends GenericResource {
             out.println("}");
 
             out.println("  function doExcel(accion, size) { ");
-            out.println("    var params = getParams(accion);");
-            out.println("    window.open(\""+url.setMode("xls")+"\"+params,\"graphWindow\",size);    ");
+            out.println("    var params = getParams();");
+            out.println("    window.open(\""+url.setMode("xls")+"\"+params,\"trck\",size);    ");
             out.println("  }");
 
             out.println("  function getTypeSelected(){");
@@ -631,7 +631,7 @@ public class WBATrackingUserReport extends GenericResource {
      */    
     public void doRepExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Content-Disposition", "inline; filename=\"scr.xls\"");
+        response.setHeader("Content-Disposition", "inline; filename=\"trck.xls\"");
         PrintWriter out = response.getWriter();
 
         final String repId = request.getParameter("wb_repository");
@@ -647,16 +647,6 @@ public class WBATrackingUserReport extends GenericResource {
             return;
         }        
         final String lang = visitor.getLanguage();
-        
-//        JSONObject jobj = new JSONObject();
-//        JSONArray jarr = new JSONArray();
-//        try {
-//            //jobj.put("identifier", "uri");
-//            jobj.put("label", "sect");
-//            jobj.put("items", jarr);
-//        }catch (JSONException jse) {
-//            throw new IOException(jse);
-//        }
         
         Date now = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -716,69 +706,49 @@ public class WBATrackingUserReport extends GenericResource {
         
         while(lines.hasNext()) {
             String[] t = lines.next();
-//            JSONObject obj = new JSONObject();
-//            try {
-                ws = SWBContext.getWebSite(t[4]);
-                if(ws==null) {
-                    log.error("Modelo con identificador "+t[4]+" no existe");
-                    continue;
-                }
-                wp = ws.getWebPage(t[5]);
-                if(wp==null) {
-                    log.error("Pagina web con identificador "+t[5]+" no existe");
-                    continue;
-                }
-                //obj.put("uri", webPage.getURI());
-                String site = ws.getDisplayTitle(lang);
-                String sect = wp.getDisplayName(lang);
-                String id = t[5];
-                String url = fullHostname+wp.getUrl();
-                String dev = t[9];
-                String langA = t[10];
-                String year = "";
-                String month = "";
-                String day = "";
-                String time = "";
-//                obj.put("site", ws.getDisplayTitle(lang));
-//                obj.put("sect", wp.getDisplayName(lang));
-//                obj.put("id", t[5]);
-//                obj.put("url", fullHostname+wp.getUrl());
-//                obj.put("dev",t[9]);
-//                obj.put("lang", t[10]);
-                int y = 0;
-                int m = 0;
-                int d = 0;
-                try {
-                    y = Integer.parseInt(t[0].substring(0,4));
-                    year = y + "";
-                    //obj.put("year", Integer.parseInt(t[0].substring(0,4)));
-                }catch(NumberFormatException nfe) {
-                    year = t[0].substring(0,4);
-                    //obj.put("year", t[0].substring(0,4));
-                }
-                try {
-                    m = Integer.parseInt(t[0].substring(5,7));
-                    month = m + "";
-//                    obj.put("month", Integer.parseInt(t[0].substring(5,7)));
-                }catch(NumberFormatException nfe) {
-                    month = t[0].substring(5,7);
-                    //obj.put("month", t[0].substring(5,7));
-                }
-                try {
-                    d = Integer.parseInt(t[0].substring(8,10));
-                    day = d + "";
-                    //obj.put("day", Integer.parseInt(t[0].substring(8,10)));
-                }catch(NumberFormatException nfe) {
-                    day = t[0].substring(8,10);
-                    //obj.put("day", t[0].substring(8,10));
-                }
-                time = t[0].substring(11,16);
-                //obj.put("time", t[0].substring(11,16));
+            ws = SWBContext.getWebSite(t[4]);
+            if(ws==null) {
+                log.error("Modelo con identificador "+t[4]+" no existe");
+                continue;
+            }
+            wp = ws.getWebPage(t[5]);
+            if(wp==null) {
+                log.error("Pagina web con identificador "+t[5]+" no existe");
+                continue;
+            }
+            String site = ws.getDisplayTitle(lang);
+            String sect = wp.getDisplayName(lang);
+            String id = t[5];
+            String url = fullHostname+wp.getUrl();
+            String dev = t[9];
+            String langA = t[10];
+            String year;
+            String month;
+            String day;
+            String time;
+            int y;
+            int m;
+            int d;
+            try {
+                y = Integer.parseInt(t[0].substring(0,4));
+                year = y + "";
+            }catch(NumberFormatException nfe) {
+                year = t[0].substring(0,4);
+            }
+            try {
+                m = Integer.parseInt(t[0].substring(5,7));
+                month = m + "";
+            }catch(NumberFormatException nfe) {
+                month = t[0].substring(5,7);
+            }
+            try {
+                d = Integer.parseInt(t[0].substring(8,10));
+                day = d + "";
+            }catch(NumberFormatException nfe) {
+                day = t[0].substring(8,10);
+            }
+            time = t[0].substring(11,16);
 
-//                jarr.put(obj);
-//            }catch (JSONException jsone) {
-//                log.error(jsone);
-//            }
             out.println("<tr>");
             out.println("<td>");
             out.println(site);

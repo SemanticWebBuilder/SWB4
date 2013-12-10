@@ -118,7 +118,7 @@ public class WBATrackingPageReport extends GenericResource {
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         final String mode = paramsRequest.getMode();
-        
+System.out.println("mode="+mode);
         if(Mode_RENDER_Tree.equalsIgnoreCase(mode)) {
             doRenderSectionTree(request,response,paramsRequest);
         }else if(Mode_RENDER_DataTable.equalsIgnoreCase(mode)) {
@@ -274,8 +274,8 @@ public class WBATrackingPageReport extends GenericResource {
 
                 out.println("  function doExcel(size) { ");
                 out.println("    if(dojo.byId('section')) {");
-                out.println("      var params = getParams(accion);");
-                out.println("      window.open(\"" + url.setMode("xls") + "\"+params,\"graphWindow\",size);");
+                out.println("      var params = getParams();");
+                out.println("      window.open(\"" + url.setMode("xls") + "\"+params, 'trck', size);");
                 out.println("    }else {");
                 out.println("      alert('Para poder mostrarle el resumen de contenido, primero debe seleccionar una sección');");
                 out.println("    }");
@@ -532,9 +532,8 @@ public class WBATrackingPageReport extends GenericResource {
      */    
     public void doRepExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Content-Disposition", "inline; filename=\"scr.xls\"");
+        response.setHeader("Content-Disposition", "inline; filename=\"trck.xls\"");
 
-        // Resource base = getResourceBase();
         PrintWriter out = response.getWriter();
 
         final String wsId = request.getParameter("wb_site");
@@ -543,13 +542,14 @@ public class WBATrackingPageReport extends GenericResource {
             log.error("Repositorio de usuarios incorrecto");
             return;
         }
+
         final String wpId = request.getParameter("section");
         WebPage wp = ws.getWebPage(wpId);
         if (wp == null) {
             log.error("Usuario con login " + wpId + " no existe en el repositorio con identificador " + wsId);
             return;
         }
-
+        
         Date now = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         String date11 = request.getParameter("fecha11") == null ? sdf.format(now) : request.getParameter("fecha11") + " " + (request.getParameter("t11") == null ? "00:00" : request.getParameter("t11"));
@@ -608,8 +608,6 @@ public class WBATrackingPageReport extends GenericResource {
 
         while (lines.hasNext()) {
             String[] t = lines.next();
-            //JSONObject obj = new JSONObject();
-//            try {
             ws = SWBContext.getWebSite(t[4]);
             if (ws == null) {
                 log.error("Modelo con identificador " + t[4] + " no existe");
@@ -625,25 +623,20 @@ public class WBATrackingPageReport extends GenericResource {
             if (ur == null) {
                 continue;
             }
-//                obj.put("rep", t[6]);
-//                obj.put("login", t[7]);
             String rep = t[6];
             String ln = "";
             String sln = "";
             String n = "";
-            String year = "";
-            String month = "";
-            String day = "";
-            String times = "";
-            String millis = "";
+            String year;
+            String month;
+            String day;
+            String times;
+            String millis;
             login = t[7];
             if ("_".equals(login)) {
                 ln = "_";
                 sln = "_";
                 n = "_";
-//                    obj.put("ln", "_");
-//                    obj.put("sln", "_");
-//                    obj.put("n", "_");
             } else {
                 visitor = ur.getUserByLogin(login);
                 if (visitor == null) {
@@ -652,61 +645,37 @@ public class WBATrackingPageReport extends GenericResource {
                 ln = visitor.getLastName();
                 sln = visitor.getSecondLastName();
                 n = visitor.getName();
-//                    obj.put("ln", visitor.getLastName());
-//                    obj.put("sln", visitor.getSecondLastName());
-//                    obj.put("n", visitor.getName());
             }
-
-            //obj.put("uri", webPage.getURI());
-            //obj.put("rep", t[6]);
-            //obj.put("login", t[7]);
-            //obj.put("ln", visitor.getLastName());
-            //obj.put("sln", visitor.getSecondLastName());
-            //obj.put("n", visitor.getName());
+            
             int y = 0;
             int m = 0;
             int d = 0;
             try {
                 y = Integer.parseInt(t[0].substring(0, 4));
                 year = y + "";
-                //obj.put("year", Integer.parseInt(t[0].substring(0, 4)));
             } catch (NumberFormatException nfe) {
                 year = t[0].substring(0, 4);
-                //obj.put("year", t[0].substring(0, 4));
             }
             try {
                 m = Integer.parseInt(t[0].substring(5, 7));
                 month = m + "";
-                //obj.put("month", Integer.parseInt(t[0].substring(5, 7)));
             } catch (NumberFormatException nfe) {
                 month = t[0].substring(5, 7);
-                //obj.put("month", t[0].substring(5, 7));
             }
             try {
                 d = Integer.parseInt(t[0].substring(8, 10));
                 day = "" + d;
-                //obj.put("day", Integer.parseInt(t[0].substring(8, 10)));
             } catch (NumberFormatException nfe) {
                 day = t[0].substring(8, 10);
-                //obj.put("day", t[0].substring(8, 10));
             }
             times = t[0].substring(11, 16);
-            //obj.put("time", t[0].substring(11, 16));
             try {
                 long l = Long.parseLong(t[11]);
                 millis = l + "";
-                //obj.put("milis", Long.parseLong(t[11]));
             } catch (NumberFormatException nfe) {
-                //obj.put("milis", t[11]);
                 millis = t[11];
             }
-
-
-
-//                jarr.put(obj);
-//            } catch (JSONException jsone) {
-//                log.error(jsone);
-//            }
+            
             out.println("<tr>");
             out.println("<td>");
             out.println(rep);
@@ -738,8 +707,6 @@ public class WBATrackingPageReport extends GenericResource {
             out.println("</tr>");
         }
         out.println("</table>");
-        //out.print(SWBUtils.XML.domToXml(dom));
-
         out.flush();
         out.close();
     }
