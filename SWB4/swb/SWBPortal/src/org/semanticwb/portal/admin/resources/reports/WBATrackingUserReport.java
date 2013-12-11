@@ -155,14 +155,7 @@ public class WBATrackingUserReport extends GenericResource {
         {
             String address = paramsRequest.getWebPage().getUrl();
             String repositoryId = request.getParameter("wb_repository")==null? SWBContext.listUserRepositories().next().getId():request.getParameter("wb_repository");
-//            int groupDates;
-//            try {
-//                groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));
-//            }catch(NumberFormatException e) {
-//                groupDates = 0;
-//            }
-
-//            GregorianCalendar cal = new GregorianCalendar();
+            
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
             SWBResourceURL url=paramsRequest.getRenderUrl();
@@ -207,13 +200,12 @@ public class WBATrackingUserReport extends GenericResource {
             out.println("      { field:\"site\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblSite") + "\" },");
             out.println("      { field:\"sect\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblPage") + "\" },");
             out.println("      { field:\"id\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblId") + "\" },");
-            out.println("      { field:\"url\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblUrl") + "\" },");
+            out.println("      { field:\"url\", width:\"150px\", name:\"" + paramsRequest.getLocaleString("lblUrl") + "\" },");
             out.println("      { field:\"dev\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblDevice") + "\" },");
             out.println("      { field:\"lang\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblLanguage") + "\" },");
             out.println("      { field:\"year\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblYear") + "\" },");
             out.println("      { field:\"month\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblMonth") + "\" },");
             out.println("      { field:\"day\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblDay") + "\" },");
-            out.println("      { field:\"time\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblHour") + "\" }");
             out.println("    ];");
 
             out.println("    gridMaster = new dojox.grid.DataGrid({");
@@ -458,7 +450,6 @@ public class WBATrackingUserReport extends GenericResource {
                 }catch(NumberFormatException nfe) {
                     obj.put("day", t[0].substring(8,10));
                 }
-                obj.put("time", t[0].substring(11,16));
 
                 jarr.put(obj);
             }catch (JSONException jsone) {
@@ -610,7 +601,6 @@ public class WBATrackingUserReport extends GenericResource {
                 }catch(NumberFormatException nfe) {
                     obj.put("day", t[0].substring(8,10));
                 }
-                obj.put("time", t[0].substring(11,16));
 
                 jarr.put(obj);
             }catch (JSONException jsone) {
