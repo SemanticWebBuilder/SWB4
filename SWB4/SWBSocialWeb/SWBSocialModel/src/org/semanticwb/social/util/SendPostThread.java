@@ -99,6 +99,7 @@ public class SendPostThread extends java.lang.Thread {
                          //Los PostOut que tengan asignado un calendario Avanzado, se les estara actualizando esta fecha, eso esta bien, ya que nos interesaría seguir
                          //monitoreando esas instancias de PostOutNets que se vayan generando de dicho calendario avanzado asignado al PostOut.
                          postOut.setPo_publishDate(Calendar.getInstance().getTime());
+                         postOut.setIsClosedforResponses(false);  //Se crea el triple, esto para revisarlos postOut en la clase MonitorPostOutResponsesMgr
                        }
                        
                      }
