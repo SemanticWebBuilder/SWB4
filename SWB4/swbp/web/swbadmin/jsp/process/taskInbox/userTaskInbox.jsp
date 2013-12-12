@@ -115,7 +115,7 @@ if (!user.isSigned()) {
 } else {
     if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
         %>
-        <a href="<%=createPiUrl%>" class="btn btn-sm btn-success swbp-btn-start" data-toggle="modal" data-target="#modalDialog"><span class="fa fa-play-circle fa-lg fa-fw"></span> <%=paramRequest.getLocaleString("createCase")%></a>
+        <a onclick="showModal('<%=createPiUrl%>', '<%=paramRequest.getLocaleString("createCase")%>', '<%=paramRequest.getLocaleString("msgLoading")%>', '<%=paramRequest.getLocaleString("msgResponseError")%>'); return false;" href="" class="btn btn-sm btn-success swbp-btn-start"><span class="fa fa-play-circle fa-lg fa-fw"></span> <%=paramRequest.getLocaleString("createCase")%></a>
         <div class="swbp-left-menu">
             <ul class="list-unstyled">
                 <li>
@@ -126,8 +126,8 @@ if (!user.isSigned()) {
                 </li>
                 <li>
                     <a href="<%=optsUrl.setParameter("sf", String.valueOf(FlowNodeInstance.STATUS_ABORTED))%>"><%=paramRequest.getLocaleString("abortedTasks")%></a>
-                </li>
-            </ul>
+                </li> 
+           </ul>
         </div>
         <%
     } else {
@@ -247,7 +247,7 @@ if (!user.isSigned()) {
             </select>
             </li>
             <li>
-                <a href="<%=createPiUrl%>" class="btn btn-default hidden-lg" data-toggle="modal" data-target="#modalDialog"><span class="fa fa-play-circle fa-lg fa-fw"></span> <%=paramRequest.getLocaleString("createCase")%></a>
+                <a class="btn btn-default hidden-lg" onclick="showModal('<%=createPiUrl%>', '<%=paramRequest.getLocaleString("createCase")%>', '<%=paramRequest.getLocaleString("msgLoading")%>', '<%=paramRequest.getLocaleString("msgResponseError")%>'); return false;" href=""><span class="fa fa-play-circle fa-lg fa-fw"></span> <%=paramRequest.getLocaleString("createCase")%></a>
             </li>
         </ul>
         <% if (tinstances != null && tinstances.size() > 0) { %>
@@ -367,7 +367,7 @@ if (!user.isSigned()) {
                                                             <a href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>" class="btn btn-default" title="<%=paramRequest.getLocaleString("actTake")%>"><span class="fa fa-external-link-square"></span></a>
                                                             <%if (allowForward && instance.getAssignedto() != null) {
                                                                 SWBResourceURL forward = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(UserTaskInboxResource.MODE_FWD);
-                                                                %><a href="<%=forward.setParameter("suri", instance.getEncodedURI())%>" class="btn btn-default" data-toggle="modal" data-target="#modalDialog" title="<%=paramRequest.getLocaleString("actFwd")%>" ><span class="fa fa-exchange"></span></a><%
+                                                                %><a href="" onclick="showModal('<%=forward.setParameter("suri", instance.getEncodedURI())%>', '<%=paramRequest.getLocaleString("actFwd")%>', '<%=paramRequest.getLocaleString("msgLoading")%>', '<%=paramRequest.getLocaleString("msgResponseError")%>'); return false;" class="btn btn-default" title="<%=paramRequest.getLocaleString("actFwd")%>" ><span class="fa fa-exchange"></span></a><%
                                                             }
                                                         }
                                                         if (statusWp != null) {%>
