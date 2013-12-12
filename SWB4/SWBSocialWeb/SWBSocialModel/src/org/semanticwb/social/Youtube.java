@@ -1254,7 +1254,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
     }
 
     @Override
-    public HashMap monitorPostOutResponses(PostOut postOut) {
+    public HashMap monitorPostOutResponses(PostOut postOut, SocialNetwork socialNetwork) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
