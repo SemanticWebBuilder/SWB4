@@ -1252,4 +1252,10 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         System.out.println("PRIVACY:" + privacy);
         return privacy;
     }
+
+    @Override
+    public int monitorPostOutResponses(PostOut postOut) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
 }

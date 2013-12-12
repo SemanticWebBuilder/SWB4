@@ -4,8 +4,12 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales. Esta clase no se relaciona con una red social (con la clase SocialNetwork) porque un post de salida (desde la herramienta) podría ser enviado a diferentes redes sociales, sin embargo, es el mismo post de salida. Donde esta a que red social se envía esta en las instancias de la clase PostContainer. 
    */
-public abstract class PostOutBase extends org.semanticwb.social.Post implements org.semanticwb.social.PostTextable,org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.social.PostDataable,org.semanticwb.model.Tagable,org.semanticwb.model.Traceable
+public abstract class PostOutBase extends org.semanticwb.social.Post implements org.semanticwb.model.Tagable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.social.PostDataable,org.semanticwb.model.CalendarRefable,org.semanticwb.social.PostTextable
 {
+   /**
+   * Propiedad que indica si el postOut esta cerrado para el monitoreo de respuestas o no lo esta. Podría haber utilizado solo la fecha de creación de decir que los que tengan una fecha de mas de una mes que se crearon, no se monitorean mas, pero esto tendría un performance mas deficiente que al tener esta propiedad (isClosedforResponses), que se coloca en true cuando pasa mas de un mes y despues solo busco sobre esta con un listSubjects, el cual es muy rapido al buscar sobre indices.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_isClosedforResponses=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#isClosedforResponses");
    /**
    * Tipo de PostOut. 1=Message;2=Photo;3:Video. Estan con variables estaticas en la clase SWBSocialUtil.
    */
@@ -34,6 +38,10 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
    * Propiedad que indica si el mensaje de salida (PostOut) se origina de un mensaje que estamos solamente compartiendo de otro mensaje que llego desde PostIn, es decir, desde la red social Twitter, sería como darle a un mensaje de otra persona "retweet" y desde facebook, sería como darle a un mensaje de otra persona "Share".
    */
     public static final org.semanticwb.platform.SemanticProperty social_isMsgShared=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#isMsgShared");
+   /**
+   * Fecha en que se publica el PostOut, o por lo menos intenta publicarse (ya que talvez marque error).
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_po_publishDate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#po_publishDate");
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
    */
@@ -438,6 +446,24 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
     {
         super(base);
     }
+
+/**
+* Gets the IsClosedforResponses property
+* @return boolean with the IsClosedforResponses
+*/
+    public boolean isIsClosedforResponses()
+    {
+        return getSemanticObject().getBooleanProperty(social_isClosedforResponses);
+    }
+
+/**
+* Sets the IsClosedforResponses property
+* @param value long with the IsClosedforResponses
+*/
+    public void setIsClosedforResponses(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(social_isClosedforResponses, value);
+    }
    /**
    * Sets the value for the property ModifiedBy
    * @param value ModifiedBy to set
@@ -680,6 +706,24 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Po_publishDate property
+* @return java.util.Date with the Po_publishDate
+*/
+    public java.util.Date getPo_publishDate()
+    {
+        return getSemanticObject().getDateProperty(social_po_publishDate);
+    }
+
+/**
+* Sets the Po_publishDate property
+* @param value long with the Po_publishDate
+*/
+    public void setPo_publishDate(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(social_po_publishDate, value);
     }
    /**
    * Gets all the org.semanticwb.social.SocialNetwork

@@ -6,6 +6,7 @@ import com.flickr4java.flickr.photos.PhotoList;
 import com.flickr4java.flickr.photos.PhotosInterface;
 import com.flickr4java.flickr.photos.SearchParameters;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
@@ -235,6 +236,11 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
     @Override
     public JSONObject getUserInfobyId(String userId) {
         return null;
+    }
+
+    @Override
+    public int monitorPostOutResponses(PostOut postOut) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
 }

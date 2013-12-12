@@ -12,4 +12,5 @@ public interface Listenerable extends org.semanticwb.social.base.ListenerableBas
      public void stopListen(Stream stream);
      
      public JSONObject getUserInfobyId(String userId);
+   
 }
