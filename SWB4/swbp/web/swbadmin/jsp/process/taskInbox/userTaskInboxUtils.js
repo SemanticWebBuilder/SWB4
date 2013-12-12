@@ -1,16 +1,5 @@
 var color = d3.scale.category10();
 
-function setDialogLoading(show, msg) {
-    if (show) {
-        document.getElementById("dialogLoading").style.display="";
-        document.getElementById("dialogContent").style.display="none";
-        document.getElementById("dialogLoadingTitle").innerHTML=msg;
-    } else {
-        document.getElementById("dialogLoading").style.display="none";
-        document.getElementById("dialogContent").style.display="";
-    }
-}
-
 function loadPageUrl(url, paramName, paramValue) {
     var dest = url;
     if (paramName !== null && paramValue !== null && paramValue !== "") {
@@ -160,4 +149,30 @@ function updateChart(chartContainer, title, data) {
         .text(function(d) {
             return d.data.label;
         });*/
+}
+
+function showWaitDialog(title, loadmsg) {
+    var msg = "Loading, please wait...";
+    if (loadmsg && loadmsg !== "") msg = loadmsg;
+
+    $("#modalDialog").html('<div class="modal-dialog"><div class="modal-content"><div class="modal-header">\n\
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4>' + title
+        + '</h4></div><div class="modal-body"><div id="modal-content" class="text-center"><span class="fa fa-cog fa-lg fa-spin">\n\
+        </span> '+ msg + '</div></div></div></div>');
+
+    $("#modalDialog").modal('show');
+}
+    
+function showModal(url, title, loadmsg, errormsg) {
+    var emsg = "Sorry, there was an error processing the request...";
+    if (errormsg && errormsg !== "") emsg = errormsg;
+
+    showWaitDialog(title, loadmsg);
+
+    var jqxhr = $.get(url, function(data) {
+        $("#modalDialog").html(data);
+    })
+    .fail(function() {
+        $("#modalDialog").find("#modal-content").html(" "+emsg);
+    });
 }
