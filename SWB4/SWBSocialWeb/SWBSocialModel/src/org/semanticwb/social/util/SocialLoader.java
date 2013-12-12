@@ -12,6 +12,7 @@ import org.semanticwb.social.PostMonitor;
 import org.semanticwb.social.SocialFlow.SocialPFlowMgr;
 import org.semanticwb.social.listener.ListenerMgr;
 import org.semanticwb.social.listener.MonitorMgr;
+import org.semanticwb.social.listener.MonitorPostOutResponsesMgr;
 
 /**
  *
@@ -47,6 +48,8 @@ public class SocialLoader implements SWBAppObject {
             new StreamCleanerMsgbyDays(); //Eliminador automatico por número de días de postIns en streams. Se levanta un thread cada 24 hrs.
             
             new SWBSocialUtil().createInstance(); //Sin threads
+            
+            new MonitorPostOutResponsesMgr();
             
              //Charges the unique PostMonitor instance
             if(PostMonitor.ClassMgr.listPostMonitors(SWBContext.getAdminWebSite()).hasNext())
