@@ -1657,7 +1657,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     }
 
     @Override
-    public int monitorPostOutResponses(PostOut postOut) {
+    public HashMap monitorPostOutResponses(PostOut postOut) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
