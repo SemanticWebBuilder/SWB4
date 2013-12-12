@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta. 
    */
-public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable,org.semanticwb.model.Tagable
+public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable
 {
    /**
    * Clase a Cambiar despues por "Relacional".Clase en la cual se almacenan los usuarios que escriben los PostIn que llegan. No se puso como identificador de las instancias de esta clase el id que maneja el usuario en la red social, ya que un identificador de una red social, puede ser el mismo para otra red social, pero obviamnete para otro usuario.Es por ello que se puso como AutoGenID esta clase y por ello se maneja por separado el id de un usuario en una determinada red social, esto en la propiedad snu_id.
@@ -35,7 +35,7 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
    */
     public static final org.semanticwb.platform.SemanticProperty social_postSentimentalEmoticonType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postSentimentalEmoticonType");
    /**
-   * Creación del PostIn. Este campo es un indice para poderlo tomar como ordenamiento via Sparql, por eso no se toma el de Descriptable.
+   * Creación del PostIn. Este campo es un indice para poderlo tomar como ordenamiento via Sparql, por eso no se toma el de Descriptable. Esta propiedad nos indica cuando se creao el PostIn en el sistema, es muy diferente de cuando se creó en la red social, para eso tenemos el campo pi_createdInSocialNet.
    */
     public static final org.semanticwb.platform.SemanticProperty social_pi_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#pi_created");
    /**
@@ -54,6 +54,10 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
    * Dispositivo desde el que se ha enviado el post
    */
     public static final org.semanticwb.platform.SemanticProperty social_postSource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postSource");
+   /**
+   * Fecha de creación del post en la red social.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_pi_createdInSocialNet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#pi_createdInSocialNet");
    /**
    * Tipo de PostIn. 1=Message;2=Photo;3:Video. Estan con variables estaticas en la clase PostIn.
    */
@@ -513,6 +517,24 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
     public void setPostSource(String value)
     {
         getSemanticObject().setProperty(social_postSource, value);
+    }
+
+/**
+* Gets the Pi_createdInSocialNet property
+* @return java.util.Date with the Pi_createdInSocialNet
+*/
+    public java.util.Date getPi_createdInSocialNet()
+    {
+        return getSemanticObject().getDateProperty(social_pi_createdInSocialNet);
+    }
+
+/**
+* Sets the Pi_createdInSocialNet property
+* @param value long with the Pi_createdInSocialNet
+*/
+    public void setPi_createdInSocialNet(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(social_pi_createdInSocialNet, value);
     }
 
 /**

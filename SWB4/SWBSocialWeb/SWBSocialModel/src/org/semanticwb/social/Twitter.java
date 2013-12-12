@@ -801,11 +801,11 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     }
     
     
-    
-    
-    ///////////////////////////
-    
-    
+   @Override
+    public int monitorPostOutResponses(PostOut postOut) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
     
     
 }

@@ -6,6 +6,7 @@
 package org.semanticwb.social.util;
 
 import java.net.SocketException;
+import java.util.Calendar;
 import java.util.LinkedList;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -93,6 +94,11 @@ public class SendPostThread extends java.lang.Thread {
                               videoable.postVideo((Video)postableObj.getPost());
                               //postOut.setPublished(true);
                           }
+                         //Guardamos la fecha de publicación del PostOut. Esto para fines de buscar en el monitoreo de PostOuts (PostOutResClassifierThread)
+                         //solo los postOut que tengan menos de 30 días de haber sido publicados y con ello cerrar el monitoreo de dicho PostOut(isClosedforResponses)
+                         //Los PostOut que tengan asignado un calendario Avanzado, se les estara actualizando esta fecha, eso esta bien, ya que nos interesaría seguir
+                         //monitoreando esas instancias de PostOutNets que se vayan generando de dicho calendario avanzado asignado al PostOut.
+                         postOut.setPo_publishDate(Calendar.getInstance().getTime());
                        }
                        
                      }
