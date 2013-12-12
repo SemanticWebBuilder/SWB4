@@ -76,7 +76,7 @@ SWBResourceURL forward = paramRequest.getActionUrl().setAction(UserTaskInboxReso
             <h4><%=paramRequest.getLocaleString("actFwd")%></h4>
         </div>
         <%if (tPartners != null && tPartners.hasNext()) {%>
-            <form method="post" action="<%=forward%>" onsubmit="setDialogLoading(true, '<%=paramRequest.getLocaleString("msgCreating")%>'); return true;">
+            <form method="post" action="<%=forward%>" onsubmit="showWaitDialog('<%=paramRequest.getLocaleString("actFwd")%>','<%=paramRequest.getLocaleString("msgForwarding")%>'); return true;">
                 <input type="hidden" name="suri" value="<%=suri%>"/>
                 <div class="modal-body">
                     <label for="pid"><%=paramRequest.getLocaleString("promptFwd")%></label>
