@@ -24,6 +24,10 @@ public abstract class PostOutNetBase extends org.semanticwb.model.SWBClass
    */
     public static final org.semanticwb.platform.SemanticProperty social_po_privacy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#po_privacy");
    /**
+   * Número de respuestas con las que cuenta el PostOutNet.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_po_numResponses=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#po_numResponses");
+   /**
    * Estatus del PostOut en una instancia de red social específica. 0=No publicado; 1=Publicado;
    */
     public static final org.semanticwb.platform.SemanticProperty social_status=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#status");
@@ -329,6 +333,24 @@ public abstract class PostOutNetBase extends org.semanticwb.model.SWBClass
              ret=(org.semanticwb.social.PostOutPrivacy)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Po_numResponses property
+* @return int with the Po_numResponses
+*/
+    public int getPo_numResponses()
+    {
+        return getSemanticObject().getIntProperty(social_po_numResponses);
+    }
+
+/**
+* Sets the Po_numResponses property
+* @param value long with the Po_numResponses
+*/
+    public void setPo_numResponses(int value)
+    {
+        getSemanticObject().setIntProperty(social_po_numResponses, value);
     }
 
 /**

@@ -4,6 +4,7 @@
  */
 package org.semanticwb.social.listener;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import org.semanticwb.social.*;
 
@@ -31,8 +32,8 @@ public class PostOutResClassifierThread extends java.lang.Thread {
                 if(socialNet instanceof PostOutMonitorable)
                 {
                     PostOutMonitorable postOutMonitorAble=(PostOutMonitorable) socialNet;
-                    int newResponses=postOutMonitorAble.monitorPostOutResponses(postOut);
-                    if(newResponses>0)  //Enviar email a los que esten en el o los grupos del tema al que pertenece el PostOut
+                    HashMap hMapnewResponses=postOutMonitorAble.monitorPostOutResponses(postOut);
+                    if(!hMapnewResponses.isEmpty())  //Enviar email a los que esten en el o los grupos del tema al que pertenece el PostOut
                     {
                         
                     }

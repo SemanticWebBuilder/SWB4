@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Acción específica mediante la cual se marca un mensaje como prioritario. Esto en la propiedad "IsPrioritary" de un mensaje (Post). 
    */
-public abstract class MarkMsgAsPrioritaryBase extends org.semanticwb.social.Action implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class MarkMsgAsPrioritaryBase extends org.semanticwb.social.Action implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
    /**
    * Acción específica mediante la cual se marca un mensaje como prioritario. Esto en la propiedad "IsPrioritary" de un mensaje (Post).

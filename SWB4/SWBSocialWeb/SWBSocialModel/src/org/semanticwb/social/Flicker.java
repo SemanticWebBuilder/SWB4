@@ -8,6 +8,7 @@ import com.flickr4java.flickr.photos.SearchParameters;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -239,7 +240,7 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
     }
 
     @Override
-    public int monitorPostOutResponses(PostOut postOut) {
+    public HashMap monitorPostOutResponses(PostOut postOut) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
