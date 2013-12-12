@@ -63,7 +63,7 @@ public class PostOutResClassifierThread extends java.lang.Thread {
                             }
                         }
                         //Enviar un email por cuenta de red social
-                            
+                        System.out.println("Se envía email de monitor de respuestas(PostOutResClassifierThread) con la sig info:"+strbd.toString());    
                         //Termina envío de email.
                     }
                 }
