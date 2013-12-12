@@ -720,6 +720,26 @@ public class SWBSocialUtil implements SWBAppObject {
         
         
         
+        public static void sendGenricEmail2UsersInSocialTopic(org.semanticwb.social.SocialTopic socialTopic, String subject, String body)
+        {
+            Iterator<User> itSocialTopicUsers=SWBSocialUtil.SocialTopic.getUsersbySocialTopic(socialTopic).iterator();
+            while(itSocialTopicUsers.hasNext()) 
+            {
+                User user=itSocialTopicUsers.next();
+                if(user.getEmail()!=null && SWBUtils.EMAIL.isValidEmailAddress(user.getEmail()))
+                {
+                    try
+                    {
+                         SWBUtils.EMAIL.sendBGEmail(user.getEmail(), subject, body);
+                    }catch(SocketException so)
+                    {
+                        log.error(so);
+                    }
+                }
+            }
+        }
+        
+        
         /*
          * Functions which returns the value (number of days) set up in numDaysToCheckKlout Admin site property
          */
