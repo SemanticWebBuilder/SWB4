@@ -802,14 +802,14 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     
     
    @Override
-   public HashMap monitorPostOutResponses(PostOut postOut, SocialNetwork socialNetwork) 
+   public HashMap monitorPostOutResponses(PostOut postOut) 
    {
         HashMap hMapPostOutNets=new HashMap();
         Iterator<PostOutNet> itPostOutNets=PostOutNet.ClassMgr.listPostOutNetBySocialPost(postOut);
         while(itPostOutNets.hasNext())
         {
             PostOutNet postOutNet=itPostOutNets.next();
-            if(postOutNet.getStatus()==1 && postOutNet.getSocialNetwork().getURI().equals(socialNetwork.getURI()))
+            if(postOutNet.getStatus()==1 && postOutNet.getSocialNetwork().getURI().equals(this.getURI()))
             {
                 //El número que se agrega es la diferencia entre el número de respuesta encontradas en la red social - el que se encuentra en la propiedad postOutNet.getPo_numResponses()
                 hMapPostOutNets.put(postOutNet.getURI(), 5);    

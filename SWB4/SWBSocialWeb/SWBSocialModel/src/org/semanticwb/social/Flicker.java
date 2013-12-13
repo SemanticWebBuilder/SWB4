@@ -240,7 +240,7 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
     }
 
     @Override
-    public HashMap monitorPostOutResponses(PostOut postOut, SocialNetwork socialNetwork) {
+    public HashMap monitorPostOutResponses(PostOut postOut) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
