@@ -812,7 +812,8 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             if(postOutNet.getStatus()==1 && postOutNet.getSocialNetwork().getURI().equals(this.getURI()))
             {
                 //El número que se agrega es la diferencia entre el número de respuesta encontradas en la red social - el que se encuentra en la propiedad postOutNet.getPo_numResponses()
-                hMapPostOutNets.put(postOutNet.getURI(), 5);    
+                hMapPostOutNets.put(postOutNet.getURI(), 5);
+                postOutNet.setPo_numResponses(5);
             }
         }
         return hMapPostOutNets;

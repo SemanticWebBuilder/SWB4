@@ -69,11 +69,14 @@ public class PostOutResClassifierThread extends java.lang.Thread {
                             }
                         }
                         //Enviar un email por cuenta de red social
-                        try{
-                            System.out.println("Se envía email de monitor de respuestas(PostOutResClassifierThread) con la sig info:\n"+SWBUtils.TEXT.encode(strbd.toString(), "iso8859-1"));    
-                            //sendGenricEmail2UsersInSocialTopic
-                            SWBSocialUtil.Classifier.sendGenricEmail2UsersInSocialTopic(postOut.getSocialTopic(), "Nuevas respuestas en mensajes enviados", strbd.toString());
-                        }catch(Exception e){log.error(e);
+                        System.out.println("postOut.getSocialTopic():"+postOut.getSocialTopic()+", se envian correos:"+postOut.getSocialTopic().isSentEmailInComments());
+                        if(postOut.getSocialTopic().isSentEmailInComments())
+                        {
+                            try{
+                                System.out.println("Se envía email de monitor de respuestas(PostOutResClassifierThread) con la sig info:\n"+SWBUtils.TEXT.encode(strbd.toString(), "iso8859-1"));    
+                                //sendGenricEmail2UsersInSocialTopic
+                                SWBSocialUtil.Classifier.sendGenricEmail2UsersInSocialTopic(postOut.getSocialTopic(), "Nuevas respuestas en mensajes enviados", strbd.toString());
+                            }catch(Exception e){log.error(e);}
                         }
                         //Termina envío de email.
                     }
