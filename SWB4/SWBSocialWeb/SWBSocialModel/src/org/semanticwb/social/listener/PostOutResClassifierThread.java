@@ -30,6 +30,7 @@ public class PostOutResClassifierThread extends java.lang.Thread {
     {
         if(postOut!=null && postOut.getSocialTopic()!=null && !postOut.getSocialTopic().isDeleted() && postOut.getSocialTopic().isActive())
         {
+            int numTotNewResponses=0;
             StringBuilder strbd=new StringBuilder();
             Iterator<SocialNetwork> itSocialNets=postOut.listSocialNetworks();
             while(itSocialNets.hasNext())
@@ -38,7 +39,7 @@ public class PostOutResClassifierThread extends java.lang.Thread {
                 if(socialNet instanceof PostOutMonitorable)
                 {
                     PostOutMonitorable postOutMonitorAble=(PostOutMonitorable) socialNet;
-                    HashMap<String, Integer> hMapnewResponses=postOutMonitorAble.monitorPostOutResponses(postOut, socialNet);  //Me regresa los PostOutNet del PostOut en la socialNetwork enviada
+                    HashMap<String, Integer> hMapnewResponses=postOutMonitorAble.monitorPostOutResponses(postOut);  //Me regresa los PostOutNet del PostOut en la socialNetwork enviada
                     if(!hMapnewResponses.isEmpty())  //Enviar email a los que esten en el o los grupos del tema al que pertenece el PostOut
                     {
                         strbd.append("Le informamos que el mensaje enviado con las siguientes caracteristicas: <br><br><br>");
@@ -63,6 +64,7 @@ public class PostOutResClassifierThread extends java.lang.Thread {
                                     PostOutNet postOutNet=(PostOutNet)semObj.createGenericInstance();
                                     strbd.append("<b>Referencia:</b>"+postOutNet.getPo_socialNetMsgID() + "<br>");
                                     strbd.append("<b>Mensajes Nuevos:</b>"+increaseResponses + "<br>");
+                                    numTotNewResponses+=increaseResponses;
                                 }
                             }
                         }
@@ -77,6 +79,7 @@ public class PostOutResClassifierThread extends java.lang.Thread {
                     }
                 }
             }
+            postOut.setNumTotNewResponses(postOut.getNumTotNewResponses()+numTotNewResponses);
         }
     }
     

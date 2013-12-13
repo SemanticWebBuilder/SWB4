@@ -8,5 +8,5 @@ import java.util.HashMap;
 public interface PostOutMonitorable extends org.semanticwb.social.base.PostOutMonitorableBase
 {
     
-    public HashMap monitorPostOutResponses(PostOut postOut, SocialNetwork socialNetwork);
+    public HashMap monitorPostOutResponses(PostOut postOut);
 }
