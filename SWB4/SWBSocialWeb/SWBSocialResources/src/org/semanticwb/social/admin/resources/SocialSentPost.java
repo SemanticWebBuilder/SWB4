@@ -95,7 +95,7 @@ public class SocialSentPost extends GenericResource {
     String Mode_Action = "paction";
     String Mode_PFlowMsg = "doPflowMsg";
     String Mode_PreView = "preview";
-
+    
     /**
      * Creates a new instance of SWBAWebPageContents.
      */
@@ -115,6 +115,7 @@ public class SocialSentPost extends GenericResource {
     private static final String Mode_ShowUsrHistory = "showUsrHistory";
     private static final String Mode_ShowMoreNets = "showMoreNets";
     private static final String Mode_ShowFastCalendar = "showFastCalendar";
+    public static final String Mode_MsgComments="msgComments";
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -143,9 +144,11 @@ public class SocialSentPost extends GenericResource {
             } catch (Exception e) {
                 System.out.println("Error reprt:" + e);
             }
-        } else if (Mode_ShowPhotos.equals(mode)) {
+        }else if (Mode_ShowPhotos.equals(mode)) {
             doShowPhotos(request, response, paramRequest);
-        }  else {
+        }else if (Mode_MsgComments.equals(mode)) {
+            doShowMsgComments(request, response, paramRequest);
+        }else {
             super.processRequest(request, response, paramRequest);
         }
     }
@@ -357,13 +360,27 @@ public class SocialSentPost extends GenericResource {
             nPage = 1;
         }
 
+        System.out.println("SentPost/socialTopic:"+socialTopic);
+        
         HashMap hmapResult = filtros(swbSocialUser, wsite, searchWord, request, socialTopic, nPage);
+        
+        int numSocialTopicPOComments=0;
+        String snumSocialTopicPOComments=getSumTotPostOutComments(socialTopic);
+        if(snumSocialTopicPOComments!=null && !snumSocialTopicPOComments.isEmpty())
+        {
+            try{
+                numSocialTopicPOComments=Integer.parseInt(snumSocialTopicPOComments);
+            }catch(Exception e)
+            {
+                numSocialTopicPOComments=0;
+            }
+        }            
 
         long nRec = ((Long) hmapResult.get("countResult")).longValue();
         
         NumberFormat nf2 = NumberFormat.getInstance(Locale.US);
         out.println("<fieldset>");
-        out.println("<p class=\"totItems\">"+nf2.format(nRec)+"</p>");
+        out.println("<p class=\"totItems\">"+nf2.format(nRec)+"/"+nf2.format(numSocialTopicPOComments) +"</p>");
         out.println("</fieldset>");
         
         
@@ -876,6 +893,10 @@ public class SocialSentPost extends GenericResource {
                 out.println("<a class=\"swbIconCA\" href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + msgText + "');return false;\" title=\"" + paramRequest.getLocaleString("globalCalendar") + "\"></a>");
             }
 
+            
+            SWBResourceURL postOutCommentsUrl = paramRequest.getRenderUrl().setMode(Mode_MsgComments).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postOut.getURI());
+            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("msgComments") + "\" class=\"msgComments\" onclick=\"showDialog('" + postOutCommentsUrl + "','" + paramRequest.getLocaleString("msgComments")
+                    + "'); return false;\"></a>");
 
             out.println("</td>");
 
@@ -3110,6 +3131,25 @@ public class SocialSentPost extends GenericResource {
         return query;   
     }
    
+   
+   private String getSumTotPostOutComments(SocialTopic socialTopic)
+    {
+        String query=
+           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#> \n";
+           query+="select (SUM(?totMsgs) AS ?c1) \n";
+           query+=
+           "where {\n" +
+           "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
+           "  ?postUi social:numTotNewResponses ?totMsgs." + "\n" + 
+           "  }\n";
+
+           WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+           query=SWBSocial.executeQuery(query, wsite);
+           
+        return query;   
+    }
+   
     
    /*
    private String executeQuery(String query, WebSite wsite)
@@ -3176,8 +3216,6 @@ public class SocialSentPost extends GenericResource {
     */
 
     private void doShowPhotos(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
-
-
         final String myPath = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPhotos.jsp";
 
         RequestDispatcher dis = request.getRequestDispatcher(myPath);
@@ -3192,7 +3230,26 @@ public class SocialSentPost extends GenericResource {
             }
         }
     }
+    
+    /*
+     * Shows the comments of a specific PostOut
+     */
+    private void doShowMsgComments(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
+        final String myPath = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showMsgComments.jsp";
 
+        RequestDispatcher dis = request.getRequestDispatcher(myPath);
+        if (dis != null) {
+            try {                
+                request.setAttribute("postOut", request.getParameter("postOut"));
+                request.setAttribute("paramRequest", paramRequest);
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error(e);
+                e.printStackTrace(System.out);
+            }
+        }
+    }
+    
     private void doDeletePhoto(HttpServletRequest request, SWBActionResponse response) {
         String idPhoto = request.getParameter("idPhoto");
         String po = request.getParameter("postOut");
