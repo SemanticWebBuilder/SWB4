@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Catalogo de temas de un modelo (Marca) 
    */
-public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Tagable,org.semanticwb.model.FilterableClass,org.semanticwb.social.SocialPFlowRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.FilterableNode
+public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Tagable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Traceable,org.semanticwb.social.SocialPFlowRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableClass
 {
    /**
    * Catalogo de temas de un modelo (Marca)
@@ -16,6 +16,10 @@ public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass impl
    * Propiedad que indica si en el Tema también se revisara sentimientos e intensidad en los mensajes de salida.
    */
     public static final org.semanticwb.platform.SemanticProperty social_checkSentPostSentiment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#checkSentPostSentiment");
+   /**
+   * Indica si se desea enviar email a los usuarios de los grupos que tenga asignado el SocialTopic para indicarles que existen comentarios nuevos sobre los mensajes que se postearon desde ese socialTopic.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_sentEmailInComments=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#sentEmailInComments");
    /**
    * Clase a Cambiar despues por "Relacional", esta y todas sus hijas. Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta..
    */
@@ -505,6 +509,24 @@ public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass impl
     public void setActive(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb_active, value);
+    }
+
+/**
+* Gets the SentEmailInComments property
+* @return boolean with the SentEmailInComments
+*/
+    public boolean isSentEmailInComments()
+    {
+        return getSemanticObject().getBooleanProperty(social_sentEmailInComments);
+    }
+
+/**
+* Sets the SentEmailInComments property
+* @param value long with the SentEmailInComments
+*/
+    public void setSentEmailInComments(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(social_sentEmailInComments, value);
     }
    /**
    * Sets the value for the property Creator
