@@ -30,7 +30,7 @@ public class PostOutResClassifierThread extends java.lang.Thread {
     {
         if(postOut!=null && postOut.getSocialTopic()!=null && !postOut.getSocialTopic().isDeleted() && postOut.getSocialTopic().isActive())
         {
-            int numTotNewResponses=0;
+            long numTotNewResponses=0;
             StringBuilder strbd=new StringBuilder();
             Iterator<SocialNetwork> itSocialNets=postOut.listSocialNetworks();
             while(itSocialNets.hasNext())
