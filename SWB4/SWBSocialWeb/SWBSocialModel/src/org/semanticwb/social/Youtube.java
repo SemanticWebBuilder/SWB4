@@ -1255,7 +1255,124 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
 
     @Override
     public HashMap monitorPostOutResponses(PostOut postOut) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //throw new UnsupportedOperationException("Not supported yet.");
+        HashMap hMapPostOutNets = new HashMap();
+        Iterator<PostOutNet> itPostOutNets=PostOutNet.ClassMgr.listPostOutNetBySocialPost(postOut);
+        
+        if(!this.validateToken()){
+            log.error("Unable to update the access token inside post Comment!");
+            return hMapPostOutNets;
+        }
+        
+        while(itPostOutNets.hasNext())
+        {
+            PostOutNet postOutNet=itPostOutNets.next();
+            if(postOutNet.getStatus()==1 && postOutNet.getSocialNetwork().getURI().equals(this.getURI()))
+            {
+                System.out.println("********** Monitoreando RESPUESTAS de " + postOutNet.getPo_socialNetMsgID() + "*************");
+                
+                long totalComments = this.comments(postOutNet.getPo_socialNetMsgID());
+                //El número que se agrega es la diferencia entre el número de respuesta encontradas en la red social - el que se encuentra en la propiedad postOutNet.getPo_numResponses()
+                
+                if(totalComments > 0){
+                    if(postOutNet.getPo_numResponses() > 0){//Si ya había respuestas
+                        if(postOutNet.getPo_numResponses() < totalComments){//Si hay respuestas nuevas
+                            hMapPostOutNets.put(postOutNet.getURI(), totalComments - postOutNet.getPo_numResponses());
+                        }
+                    }else if(postOutNet.getPo_numResponses() == 0){//Si no había respuestas
+                        hMapPostOutNets.put(postOutNet.getURI(), totalComments);
+                    }
+                    postOutNet.setPo_numResponses((int)totalComments);
+                }
+            }
+        }
+        return hMapPostOutNets;
     }
     
+    public long comments(String videoId){
+        long totalComments = 0L;
+        try{
+        String video = getcommentsFromVideoId(videoId, this.getAccessToken());
+        JSONObject videoResp = new JSONObject(video);
+
+        if(!videoResp.isNull("feed")){
+            if(!videoResp.getJSONObject("feed").isNull("openSearch$totalResults")){
+                if(!videoResp.getJSONObject("feed").getJSONObject("openSearch$totalResults").isNull("$t")){
+                    totalComments = videoResp.getJSONObject("feed").getJSONObject("openSearch$totalResults").getLong("$t");
+                }
+            }            
+        }
+        System.out.println("YOUTUBE:" + videoId + " AND THE NUMBER:" + totalComments);
+        }catch(Exception e){
+            log.error("Youtube: Not data found for ->" + videoId );
+        }
+        return totalComments;
+    }
+    
+    public String getcommentsFromVideoId(String id, String accessToken){
+        HashMap<String, String> params = new HashMap<String, String>(3);    
+        params.put("v", "2");
+        params.put("alt","json");//alt
+        params.put("start-index","1");//alt
+        params.put("max-results","1");//alt
+    
+        String response = null;
+        try{
+            //https://gdata.youtube.com/feeds/api/videos/Wwv6iOVFZvw/comments?v=2&alt=json&start-index=1&max-results=1&prettyprint=true
+            response = getRequestVideo(params, "https://gdata.youtube.com/feeds/api/videos/" + id +"/comments",
+                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", accessToken);
+
+        }catch(Exception e){
+            System.out.println("Error getting video information"  + e.getMessage());
+        }
+        return response;
+    }
+    
+    public String getRequestVideo(Map<String, String> params, String url,
+            String userAgent, String accessToken) throws IOException {
+        
+        CharSequence paramString = (null == params) ? "" : delimit(params.entrySet(), "&", "=", true);
+        URL serverUrl = new URL(url + "?" +  paramString);       
+        System.out.println("URL:" +  serverUrl);
+        
+        HttpURLConnection conex = null;
+        InputStream in = null;
+        String response = null;
+       
+        try {
+            conex = (HttpURLConnection) serverUrl.openConnection();
+            if (userAgent != null) {
+                conex.setRequestProperty("user-agent", userAgent);                
+            }
+            ///Validate if i am looking for the default user or another
+            if(accessToken != null){
+                conex.setRequestProperty("Authorization", "Bearer " + accessToken);
+            }
+            ///
+            conex.setConnectTimeout(30000);
+            conex.setReadTimeout(60000);
+            conex.setRequestMethod("GET");
+            conex.setDoOutput(true);
+            conex.connect();
+            in = conex.getInputStream();
+            response = getResponse(in);
+            //System.out.println("RESPONSE:" + response);
+                        
+        } catch (java.io.IOException ioe) {
+            if (conex.getResponseCode() >= 400) {
+                response = getResponse(conex.getErrorStream());
+                System.out.println("\n\n\nERROR:" +   response);
+            }
+            ioe.printStackTrace();
+        } finally {
+            close(in);
+            if (conex != null) {
+                conex.disconnect();
+            }
+        }
+        if (response == null) {
+            response = "";
+        }
+        return response;
+    }
 }

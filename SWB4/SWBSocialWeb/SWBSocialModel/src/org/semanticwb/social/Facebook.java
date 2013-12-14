@@ -1658,8 +1658,56 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
     @Override
     public HashMap monitorPostOutResponses(PostOut postOut) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        HashMap hMapPostOutNets=new HashMap();
+        Iterator<PostOutNet> itPostOutNets=PostOutNet.ClassMgr.listPostOutNetBySocialPost(postOut);
+        while(itPostOutNets.hasNext())
+        {
+            PostOutNet postOutNet=itPostOutNets.next();
+            if(postOutNet.getStatus()==1 && postOutNet.getSocialNetwork().getURI().equals(this.getURI()))
+            {
+                System.out.println("********** Monitoreando RESPUESTAS de " + postOutNet.getPo_socialNetMsgID() + "*************");
+                
+                long totalComments = this.comments(postOutNet.getPo_socialNetMsgID());
+                //El número que se agrega es la diferencia entre el número de respuesta encontradas en la red social - el que se encuentra en la propiedad postOutNet.getPo_numResponses()
+                
+                if(totalComments > 0){
+                    if(postOutNet.getPo_numResponses() > 0){//Si ya había respuestas
+                        if(postOutNet.getPo_numResponses() < totalComments){//Si hay respuestas nuevas
+                            hMapPostOutNets.put(postOutNet.getURI(), totalComments - postOutNet.getPo_numResponses());
+                        }
+                    }else if(postOutNet.getPo_numResponses() == 0){//Si no había respuestas
+                        hMapPostOutNets.put(postOutNet.getURI(), totalComments);
+                    }
+                    postOutNet.setPo_numResponses((int)totalComments);
+                }
+            }
+        }
+        return hMapPostOutNets;
     }
 
-    
+    private long comments(String postID){
+        HashMap<String, String> params = new HashMap<String, String>(2);
+        params.put("access_token", this.getAccessToken());
+        long totalComments  = 0;
+        params.put("fields","comments.summary(true)");
+        try{
+            String fbResponse = getRequest(params, "https://graph.facebook.com/" + postID,
+                            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
+
+            //System.out.println("Facebook response:" + fbResponse);
+            JSONObject response = new JSONObject(fbResponse);
+            if(!response.isNull("comments")){
+                if(!response.getJSONObject("comments").isNull("summary")){
+                    if(!response.getJSONObject("comments").getJSONObject("summary").isNull("total_count")){
+                        //System.out.println(response.getJSONObject("comments").getJSONObject("summary"));
+                        totalComments = response.getJSONObject("comments").getJSONObject("summary").getLong("total_count");
+                    }
+                }
+            }
+            System.out.println("FACEBOOK:" + postID + " AND THE NUMBER:" + totalComments);
+        }catch(Exception e){
+            log.error("Facebook: Not data found for ->" + postID);
+        }
+        return totalComments;      
+    }
 }
