@@ -39,7 +39,7 @@ public class PostOutResClassifierThread extends java.lang.Thread {
                 if(socialNet instanceof PostOutMonitorable)
                 {
                     PostOutMonitorable postOutMonitorAble=(PostOutMonitorable) socialNet;
-                    HashMap<String, Integer> hMapnewResponses=postOutMonitorAble.monitorPostOutResponses(postOut);  //Me regresa los PostOutNet del PostOut en la socialNetwork enviada
+                    HashMap<String, Long> hMapnewResponses=postOutMonitorAble.monitorPostOutResponses(postOut);  //Me regresa los PostOutNet del PostOut en la socialNetwork enviada
                     if(!hMapnewResponses.isEmpty())  //Enviar email a los que esten en el o los grupos del tema al que pertenece el PostOut
                     {
                         strbd.append("Le informamos que el mensaje enviado con las siguientes caracteristicas: <br><br><br>");
@@ -52,9 +52,9 @@ public class PostOutResClassifierThread extends java.lang.Thread {
                         while(itPostOutNets.hasNext())
                         {
                             String spostOutNet=itPostOutNets.next();
-                            int increaseResponses=0;
+                            long increaseResponses=0;
                             try{
-                                increaseResponses=(hMapnewResponses.get(spostOutNet)).intValue();
+                                increaseResponses=hMapnewResponses.get(spostOutNet).longValue();
                             }catch(Exception e){increaseResponses=0;}
                             if(spostOutNet!=null && increaseResponses>0)
                             {
@@ -69,7 +69,6 @@ public class PostOutResClassifierThread extends java.lang.Thread {
                             }
                         }
                         //Enviar un email por cuenta de red social
-                        System.out.println("postOut.getSocialTopic():"+postOut.getSocialTopic()+", se envian correos:"+postOut.getSocialTopic().isSentEmailInComments());
                         if(postOut.getSocialTopic().isSentEmailInComments())
                         {
                             try{

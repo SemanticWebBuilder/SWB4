@@ -802,7 +802,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     
     
    @Override
-   public HashMap monitorPostOutResponses(PostOut postOut) 
+   public HashMap<String, Long> monitorPostOutResponses(PostOut postOut) 
    {
         HashMap hMapPostOutNets=new HashMap();
         Iterator<PostOutNet> itPostOutNets=PostOutNet.ClassMgr.listPostOutNetBySocialPost(postOut);
