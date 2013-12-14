@@ -1657,7 +1657,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     }
 
     @Override
-    public HashMap monitorPostOutResponses(PostOut postOut) {
+    public HashMap<String, Long> monitorPostOutResponses(PostOut postOut) {
         HashMap hMapPostOutNets=new HashMap();
         Iterator<PostOutNet> itPostOutNets=PostOutNet.ClassMgr.listPostOutNetBySocialPost(postOut);
         while(itPostOutNets.hasNext())
@@ -1665,8 +1665,6 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             PostOutNet postOutNet=itPostOutNets.next();
             if(postOutNet.getStatus()==1 && postOutNet.getSocialNetwork().getURI().equals(this.getURI()))
             {
-                System.out.println("********** Monitoreando RESPUESTAS de " + postOutNet.getPo_socialNetMsgID() + "*************");
-                
                 long totalComments = this.comments(postOutNet.getPo_socialNetMsgID());
                 //El número que se agrega es la diferencia entre el número de respuesta encontradas en la red social - el que se encuentra en la propiedad postOutNet.getPo_numResponses()
                 
