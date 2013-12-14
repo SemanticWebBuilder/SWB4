@@ -893,12 +893,12 @@ public class SocialSentPost extends GenericResource {
                 out.println("<a class=\"swbIconCA\" href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + msgText + "');return false;\" title=\"" + paramRequest.getLocaleString("globalCalendar") + "\"></a>");
             }
 
-            
-            if(postOut.getNumTotNewResponses()>0)
+            System.out.println("No ma k marca error...");
+            if(postOut.getNumTotNewResponses()>0L)
             {
                 SWBResourceURL postOutCommentsUrl = paramRequest.getRenderUrl().setMode(Mode_MsgComments).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postOut.getURI());
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("msgComments") + "\" class=\"msgComments\" onclick=\"showDialog('" + postOutCommentsUrl + "','" + paramRequest.getLocaleString("msgComments")
-                        + "'); return false;\">"+postOut.getNumTotNewResponses()+"</a>");
+                        + "'); return false;\">"+Math.round(postOut.getNumTotNewResponses())+"</a>");
             }
 
             out.println("</td>");
