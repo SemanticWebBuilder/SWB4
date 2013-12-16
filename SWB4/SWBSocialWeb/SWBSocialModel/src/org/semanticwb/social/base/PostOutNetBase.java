@@ -24,6 +24,10 @@ public abstract class PostOutNetBase extends org.semanticwb.model.SWBClass
    */
     public static final org.semanticwb.platform.SemanticProperty social_po_privacy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#po_privacy");
    /**
+   * Propiedad que se colocara con valor "true", cuando la red social nos envíe un error que nos indique que ya no debemos mandar solicitar nuevamente el estatus de comentarios de ese PostOutNet a la red social que lo contenga. Esto podría suceder por ejemplo cuando se borró directamente en la red social el mensaje (PostOut) enviado desde SWBSocial, por lo cual la red social enviaría un error 400 que no lo encuentra el id del postOutNet, por lo cual, siempre se estaria enviando este error y no se tendría ningún motivo por el cual seguirlo monitoreando, solo gastaría procesamiento y ancho de banda en la herramienta SWBSocial.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_pon_dontMonitor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#pon_dontMonitor");
+   /**
    * Número de respuestas con las que cuenta el PostOutNet.
    */
     public static final org.semanticwb.platform.SemanticProperty social_po_numResponses=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#po_numResponses");
@@ -333,6 +337,24 @@ public abstract class PostOutNetBase extends org.semanticwb.model.SWBClass
              ret=(org.semanticwb.social.PostOutPrivacy)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Pon_dontMonitor property
+* @return boolean with the Pon_dontMonitor
+*/
+    public boolean isPon_dontMonitor()
+    {
+        return getSemanticObject().getBooleanProperty(social_pon_dontMonitor);
+    }
+
+/**
+* Sets the Pon_dontMonitor property
+* @param value long with the Pon_dontMonitor
+*/
+    public void setPon_dontMonitor(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(social_pon_dontMonitor, value);
     }
 
 /**

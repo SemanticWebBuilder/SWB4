@@ -28,7 +28,7 @@ public class PostOutResClassifierThread extends java.lang.Thread {
     @Override
     public void run()
     {
-        if(postOut!=null && postOut.getSocialTopic()!=null && !postOut.getSocialTopic().isDeleted() && postOut.getSocialTopic().isActive())
+        if(postOut!=null && postOut.getSocialTopic()!=null && !postOut.getSocialTopic().isDeleted() && postOut.getSocialTopic().isActive() && postOut.getSocialTopic().getSt_numDays2ClosePostOuts()>0 && postOut.getSocialTopic().getSt_numDays2ClosePostOuts()<100)
         {
             long numTotNewResponses=0;
             StringBuilder strbd=new StringBuilder();
