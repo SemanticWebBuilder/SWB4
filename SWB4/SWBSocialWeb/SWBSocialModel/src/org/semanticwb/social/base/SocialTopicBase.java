@@ -4,13 +4,17 @@ package org.semanticwb.social.base;
    /**
    * Catalogo de temas de un modelo (Marca) 
    */
-public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Tagable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupRefable,org.semanticwb.social.SocialPFlowRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable
+public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Tagable,org.semanticwb.model.Trashable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.social.SocialPFlowRefable,org.semanticwb.model.FilterableNode
 {
    /**
    * Catalogo de temas de un modelo (Marca)
    */
     public static final org.semanticwb.platform.SemanticClass social_SocialTopic=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialTopic");
     public static final org.semanticwb.platform.SemanticProperty social_hasChildSocialTopicInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasChildSocialTopicInv");
+   /**
+   * Número de días para cerrar el monitoreo de las respuestas de los PostOut del SocialTopic. Maximo 99 días., Si colocan 0, no se monitorearan los PostOut en ese SocialTopic.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_st_numDays2ClosePostOuts=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#st_numDays2ClosePostOuts");
     public static final org.semanticwb.platform.SemanticProperty social_parentSocialTopic=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#parentSocialTopic");
    /**
    * Propiedad que indica si en el Tema también se revisara sentimientos e intensidad en los mensajes de salida.
@@ -348,6 +352,24 @@ public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass impl
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the St_numDays2ClosePostOuts property
+* @return int with the St_numDays2ClosePostOuts
+*/
+    public int getSt_numDays2ClosePostOuts()
+    {
+        return getSemanticObject().getIntProperty(social_st_numDays2ClosePostOuts);
+    }
+
+/**
+* Sets the St_numDays2ClosePostOuts property
+* @param value long with the St_numDays2ClosePostOuts
+*/
+    public void setSt_numDays2ClosePostOuts(int value)
+    {
+        getSemanticObject().setIntProperty(social_st_numDays2ClosePostOuts, value);
     }
    /**
    * Sets the value for the property ParentSocialTopic
