@@ -57,7 +57,7 @@ public class InitiativeManager extends GenericResource {
         
         if (semObj != null)
         {
-            BSC bsc = (BSC)semObj.getModel().getModelObject().createGenericInstance();
+            BSC bsc = (BSC)semObj.getModel().getModelObject().getGenericInstance();
             SWBResourceURL urlAdd;
             Iterator<Initiative> itInit = bsc.listInitiatives();
                 
@@ -162,7 +162,7 @@ public class InitiativeManager extends GenericResource {
             return;
         }
         
-        Objective obj = (Objective) semObj.createGenericInstance();
+        Objective obj = (Objective) semObj.getGenericInstance();
         BSC bsc = obj.getBSC();
 
         if(Action_UPDT_ACTIVE.equalsIgnoreCase(action)) {

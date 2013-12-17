@@ -130,7 +130,7 @@ public class EvaluationRulesManager extends GenericAdmResource {
             out.println("</thead>");
             out.println("<tbody>");
             
-            series = (Series)obj.createGenericInstance();
+            series = (Series)obj.getGenericInstance();
             Indicator indicator = series.getIndicator();
             BSC bsc = series.getIndicator().getObjective().getTheme().getPerspective().getBSC();
 
@@ -353,7 +353,7 @@ public class EvaluationRulesManager extends GenericAdmResource {
         if(Action_UPDT_OPER.equalsIgnoreCase(action))
         {
             SemanticObject objRule = ont.getSemanticObject(request.getParameter("sval"));
-            SWBModel model = (SWBModel)objSeries.getModel().getModelObject().createGenericInstance();
+            SWBModel model = (SWBModel)objSeries.getModel().getModelObject().getGenericInstance();
             Series series = (Series)objSeries.getGenericInstance();
             String operId = request.getParameter("operId");
             EvaluationRule rule;
@@ -381,7 +381,7 @@ public class EvaluationRulesManager extends GenericAdmResource {
         else if(Action_UPDT_SERIES.equalsIgnoreCase(action))
         {
             SemanticObject objRule = ont.getSemanticObject(request.getParameter("sval"));
-            SWBModel model = (SWBModel)objSeries.getModel().getModelObject().createGenericInstance();
+            SWBModel model = (SWBModel)objSeries.getModel().getModelObject().getGenericInstance();
             Series series = (Series)objSeries.getGenericInstance();
             String siblingId = request.getParameter("ssId");
             EvaluationRule rule;
@@ -416,7 +416,7 @@ public class EvaluationRulesManager extends GenericAdmResource {
         else if(Action_UPDT_FACTOR.equalsIgnoreCase(action))
         {
             SemanticObject objRule = ont.getSemanticObject(request.getParameter("sval"));
-            SWBModel model = (SWBModel)objSeries.getModel().getModelObject().createGenericInstance();
+            SWBModel model = (SWBModel)objSeries.getModel().getModelObject().getGenericInstance();
             Series series = (Series)objSeries.getGenericInstance();
             String factor = request.getParameter("fctr")==null?"":request.getParameter("fctr");
             EvaluationRule rule;

@@ -49,7 +49,7 @@ public class MeasuresManager extends GenericAdmResource {
         
         if(semanticObj != null)
         {
-            GenericObject genericObj = semanticObj.createGenericInstance();
+            GenericObject genericObj = semanticObj.getGenericInstance();
             if(genericObj instanceof Series)
             {
                 Series series = (Series)genericObj;
@@ -225,7 +225,7 @@ public class MeasuresManager extends GenericAdmResource {
             return;
         }
         
-        GenericObject genericObj = semanticObj.createGenericInstance();
+        GenericObject genericObj = semanticObj.getGenericInstance();
         if(genericObj instanceof Series)
         {
             Series series = (Series)genericObj;
@@ -263,7 +263,7 @@ public class MeasuresManager extends GenericAdmResource {
                 }
 
                 String pid, val;
-                BSC bsc = (BSC) semanticObj.getModel().getModelObject().createGenericInstance();
+                BSC bsc = (BSC) semanticObj.getModel().getModelObject().getGenericInstance();
                 Enumeration<String> e = request.getParameterNames();
                 while(e.hasMoreElements()) {
                     pid = e.nextElement();
