@@ -817,6 +817,14 @@ public class SentimentalDataClassifier {
                 Listenerable listenerAble = (Listenerable) socialNetwork;
                 JSONObject userData = listenerAble.getUserInfobyId(socialNetUser.getSnu_id());
                 if (userData != null && !userData.toString().equals("{}")) {
+                    
+                    //User Third party id
+                    if (!userData.isNull("third_party_id")) {
+                        String userThird_party_id = userData.getString("third_party_id") != null ? userData.getString("third_party_id") : null;
+                        if (userThird_party_id != null && !userThird_party_id.isEmpty()) {
+                            socialNetUser.setSnu_third_party_id(userData.getString("third_party_id"));
+                        }
+                    }
                     //Followers
                     if (!userData.isNull("followers")) {
                         long followers = userData.getLong("followers") > 0 ? userData.getLong("followers") : 0;

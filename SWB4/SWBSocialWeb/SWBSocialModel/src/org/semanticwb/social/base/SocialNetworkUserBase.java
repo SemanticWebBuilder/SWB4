@@ -30,6 +30,10 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
    * Educación definida del usuario en la red social.    1=HighSchool; 2=College; 3=Graduate; 4=Undefined;
    */
     public static final org.semanticwb.platform.SemanticProperty social_snu_education=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_education");
+   /**
+   * Propiedad en la que se graba un thirdPartyId que tiene una red social para el usuario. Facebook tiene un third party id para c/usuario, ese id es el que utiliza Klout para medir la influencia de ese usuario en esa red social.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_snu_third_party_id=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_third_party_id");
     public static final org.semanticwb.platform.SemanticClass social_LifeStage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#LifeStage");
    /**
    * Etapa de vida del usuario de la red social
@@ -494,6 +498,24 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
     public void setSnu_education(int value)
     {
         getSemanticObject().setIntProperty(social_snu_education, value);
+    }
+
+/**
+* Gets the Snu_third_party_id property
+* @return String with the Snu_third_party_id
+*/
+    public String getSnu_third_party_id()
+    {
+        return getSemanticObject().getProperty(social_snu_third_party_id);
+    }
+
+/**
+* Sets the Snu_third_party_id property
+* @param value long with the Snu_third_party_id
+*/
+    public void setSnu_third_party_id(String value)
+    {
+        getSemanticObject().setProperty(social_snu_third_party_id, value);
     }
    /**
    * Sets the value for the property Snu_LifeStage
