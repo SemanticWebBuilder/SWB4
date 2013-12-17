@@ -19,6 +19,10 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.io.SWBFile;
 import org.semanticwb.io.SWBFileInputStream;
 import org.semanticwb.model.Language;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.SWBModel;
+import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.social.listener.Classifier;
@@ -1708,4 +1712,135 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         }
         return totalComments;      
     }
+
+    @Override
+    public double getUserKlout(String facebookUserID) {
+       String userThird_party_id=null;
+       WebSite wsite=WebSite.ClassMgr.getWebSite(this.getSemanticObject().getModel().getName());
+       SocialNetworkUser socilNetUser=getThird_party_id(facebookUserID, wsite);
+       if(socilNetUser!=null)
+       {
+           if(socilNetUser.getSnu_third_party_id()!=null)
+           {
+               userThird_party_id=socilNetUser.getSnu_third_party_id();
+           }
+       }
+       if(userThird_party_id==null)
+       {
+           //Hacer conexión vía Fq a facebook para obtener Third_party_id del usuario en cuestion.
+           userThird_party_id=getFacebookThird_party_id(facebookUserID);
+       }
+        
+       if(userThird_party_id!=null)
+       {
+            //String url_1="http://api.klout.com/v2/identity.json/tw/"+twitterUserID;
+            String url_1="http://api.klout.com/v2/identity.json/fb/"+userThird_party_id;
+            String kloutJsonResponse_1=getData(url_1);
+            //System.out.println("kloutResult step-1:"+kloutJsonResponse_1);
+
+            //Obtener id de json
+            try
+            {
+                if(kloutJsonResponse_1!=null)
+                {
+                    JSONObject userData = new JSONObject(kloutJsonResponse_1);
+                    String kloutUserId = userData != null && userData.get("id") != null ? (String) userData.get("id") : "";
+                    //System.out.println("kloutId de Resultado en Json:"+kloutUserId);
+
+                    //Segunda llamada a la red social Klout, para obtener Json de Score del usuario (kloutUserId) encontrado
+                    if(kloutUserId!=null)
+                    {
+                        String url_2="http://api.klout.com/v2/user.json/"+kloutUserId+"/score";
+                        String kloutJsonResponse_2=getData(url_2);
+                        //System.out.println("kloutResult step-2-Json:"+kloutJsonResponse_2);
+
+                        if(kloutJsonResponse_2!=null)
+                        {
+                             JSONObject userScoreData = new JSONObject(kloutJsonResponse_2);
+                             Double kloutUserScore = userScoreData != null && userScoreData.get("score") != null ? (Double) userScoreData.get("score") : 0.00;
+                             return Math.rint(kloutUserScore.doubleValue());
+                        }
+                    }
+                }
+            }catch(JSONException je)
+            {
+
+            }
+        }
+        return 0;
+    }
+    
+    private static String getData(String url)
+    {
+        String answer = null;
+        //String key=SWBContext.getAdminWebSite().getProperty("kloutKey");    //TODO:Ver con Jei x que no funciona esto...
+        String key=SWBSocialUtil.Util.getModelPropertyValue(SWBContext.getAdminWebSite(), "kloutKey");
+        //if(key==null) key="8fkzgz7ngf7bth3nk94gnxkd";   //Solo para fines de pruebas, quitar despues y dejar línea anterior.
+        //System.out.println("key para KLOUT--Gg:"+key);
+        if(key!=null)
+        {
+            url=url+"?key="+key;
+            URLConnection conex = null;
+            try {
+                //System.out.println("Url a enviar a Klout:"+url);
+                URL pagina = new URL(url);
+
+                String host = pagina.getHost();
+                //Se realiza la peticion a la página externa
+                conex = pagina.openConnection();
+                /*
+                if (userAgent != null) {
+                    conex.setRequestProperty("user-agent", userAgent);
+                }*/
+                if (host != null) {
+                    conex.setRequestProperty("host", host);
+                }
+                conex.setDoOutput(true);
+
+                conex.setConnectTimeout(20000); //15 segundos maximo, si no contesta la red Klout, cortamos la conexión
+            } catch (Exception nexc) {
+                System.out.println("nexc Error:"+nexc.getMessage());
+                conex = null;
+            }
+            //System.out.println("Twitter Klout/conex:"+conex);
+            //Analizar la respuesta a la peticion y obtener el access token
+            if (conex != null) {
+                try
+                {
+                    //System.out.println("Va a checar esto en Klit:"+conex.getInputStream());
+                    answer = getResponse(conex.getInputStream());
+                }catch(Exception e)
+                {
+                    //log.error(e);
+                }
+                //System.out.println("Twitter Klout/answer-1:"+answer);
+            }
+        }
+        //System.out.println("Twitter Klout/answer-2:"+answer);
+        return answer;
+    }
+    
+    private String getFacebookThird_party_id(String facebookUserId)
+    {
+        return null;
+    }
+    
+    
+    private SocialNetworkUser getThird_party_id(String userId, SWBModel model)
+    {
+        Iterator<SemanticObject> it=model.getSemanticModel().listSubjects(SocialNetworkUser.social_snu_id, userId); //No encuentra
+        while(it.hasNext())
+        {
+            SemanticObject obj=it.next();
+            SocialNetworkUser socialNetUser=(SocialNetworkUser)obj.createGenericInstance();
+            //System.out.println("GEOOOOORGGGEEE:socialNetUser.getSnu_SocialNetwork().getId():"+socialNetUser.getSnu_SocialNetworkObj().getId());
+            //System.out.println("GEOOOOORGGGEEE:socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject().getId():"+socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject().getId());
+            if(socialNetUser.getSnu_SocialNetworkObj()!=null && socialNetUser.getSnu_SocialNetworkObj().getId().equals(this.getSemanticObject().getSemanticClass().getSemanticObject().getId()));
+            {
+                  return socialNetUser;
+            }
+        }
+        return null;
+    }
+    
 }
