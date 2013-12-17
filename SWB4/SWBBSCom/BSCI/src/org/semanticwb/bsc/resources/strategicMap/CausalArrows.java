@@ -44,7 +44,7 @@ public class CausalArrows extends Decorator {
     private double y1 = 0;
     private double y2 = 0;
     private int countForRelation = 1;
-    private int countForPerspective = 1;
+    //private int countForPerspective = 1;
     private BigDecimal divTitl = new BigDecimal(divTitle);
     private BigDecimal divContainerCo = new BigDecimal(divContainerCols);
     private BigDecimal divSizeColum = new BigDecimal(divSizeColumn);
@@ -55,6 +55,12 @@ public class CausalArrows extends Decorator {
     private BigDecimal tam2 = new BigDecimal(2);
     private BigDecimal tam100 = new BigDecimal(100);
     private BigDecimal tam04 = new BigDecimal("0.4");
+    private static final String triangle1 = "#triangle-end1";
+    private static final String triangle2 = "#triangle-end2";
+    private static final String triangle3 = "#triangle-end3";
+    private static final String triangle4 = "#triangle-end4";
+    private static final String triangle5 = "#triangle-end5";
+    private static final String triangle0 = "#triangle-end0";
 
     /**
      * Construye una instancia de tipo {@code CausalArrows}
@@ -80,9 +86,7 @@ public class CausalArrows extends Decorator {
     @Override
     public StringBuilder draw(BSC bsc, Period period, Resource base) {
         StringBuilder sb = new StringBuilder();
-        //sb.append("<div id=\"pruebaContenedorMapa\">");
-        sb.append("\n <div style=\"width:100%;height:100%");/*100%*/
-        //sb.append(heightAll);
+        sb.append("\n <div style=\"width:100%;height:100%");
         sb.append(";float:left;\" id=\"causalMap\" name=\"causalMap\">");
         sb.append(super.draw(bsc, period, base));
         sb.append(paintArrows(getStructureDataArrows(base, bsc, period), base, bsc, period));
@@ -181,7 +185,7 @@ public class CausalArrows extends Decorator {
                 int startThemeIndex = findIndexTheme(startPerspectiveIndex, dataStructure, theme);
                 if (itCausalTheme.hasNext()) {
                     HashMap map = paintThemeTheme(dataStructure, startPerspectiveIndex, startThemeIndex,
-                            base, itCausalTheme, countLinesAttributes, period, "#triangle-end1");
+                            base, itCausalTheme, countLinesAttributes, period);
                     itMap = map.entrySet().iterator();
                     while (itMap.hasNext()) {
                         Entry entry = itMap.next();
@@ -195,7 +199,7 @@ public class CausalArrows extends Decorator {
                 itCausalobjective = BSCUtils.sortObjSortable(itCausalobjective).listIterator();
                 if (itCausalobjective.hasNext()) {
                     HashMap map = paintThemeObjective(dataStructure, startPerspectiveIndex, startThemeIndex,
-                            0, itCausalobjective, base, period, countLinesAttributes, "#triangle-end2");
+                            0, itCausalobjective, base, period, countLinesAttributes);
                     itMap = map.entrySet().iterator();
                     while (itMap.hasNext()) {
                         Entry entry = itMap.next();
@@ -219,7 +223,7 @@ public class CausalArrows extends Decorator {
                                 startThemeIndex, objective);
                         map = paintObjectiveTheme(dataStructure, startPerspectiveIndex, startThemeIndex,
                                 startObjective, itCausalTheme, base, period, countLinesAttributes,
-                                objective.getTheme().getPerspective(), "#triangle-end3");
+                                objective.getTheme().getPerspective());
                         itMap = map.entrySet().iterator();
                         while (itMap.hasNext()) {
                             Entry entry = itMap.next();
@@ -237,7 +241,7 @@ public class CausalArrows extends Decorator {
                                 startThemeIndex, objective);
                         map = paintObjectiveObjective(dataStructure, startPerspectiveIndex,
                                 startThemeIndex, startObjective, base, period, itCausalobjective,
-                                objective, countLinesAttributes, "#triangle-end4");
+                                objective, countLinesAttributes);
                         itMap = map.entrySet().iterator();
                         while (itMap.hasNext()) {
                             Entry entry = itMap.next();
@@ -260,7 +264,7 @@ public class CausalArrows extends Decorator {
                 int startPerspectiveIndex = findIndexPerspective(perspective, dataStructure);
                 int finalPerspectiveIndex = findIndexPerspective(perspeFinal, dataStructure);
                 HashMap map = paintPerspPersp(startPerspectiveIndex, finalPerspectiveIndex, //dataStructure.length(),
-                        countLinesAttributes, classLine, dataStructure, "#triangle-end5");
+                        countLinesAttributes, classLine, dataStructure);
                 itMap = map.entrySet().iterator();
                 while (itMap.hasNext()) {
                     Entry entry = itMap.next();
@@ -340,13 +344,14 @@ public class CausalArrows extends Decorator {
      */
     private HashMap paintThemeTheme(JSONObject jsonArrows, int startPerspectiveIndex,
             int startThemeIndex, Resource base, Iterator itCausalTheme, int countLine,
-            Period period, String triangleEnd) {
+            Period period) {
         HashMap map1 = new HashMap();
         Iterator<Entry> itMap;
         StringBuilder sb = new StringBuilder();
         String classLine = ((base.getData("colorRelTT") == null)
                 || (base.getData("colorRelTT").trim().length() == 0))
                 ? "arrow" : base.getData("colorRelTT");
+        String triangleEnd = (classLine.equals("arrow")) ? triangle0 : triangle4;
         while (itCausalTheme.hasNext()) {
             Theme theme = (Theme) itCausalTheme.next();
             if (isValidTheme(theme, period)) {
@@ -378,7 +383,8 @@ public class CausalArrows extends Decorator {
     }
 
     private HashMap paintPerspPersp(int initPerspective, int finalizePerspective, //int elements,
-            int countLine, String classLine, JSONObject jsonArrows, String triangleEnd) {
+            int countLine, String classLine, JSONObject jsonArrows) {
+        String triangleEnd = (classLine.equals("arrow")) ? triangle0 : triangle5;
         HashMap map = new HashMap();
         StringBuilder sb = new StringBuilder();
         try {
@@ -1260,7 +1266,7 @@ public class CausalArrows extends Decorator {
         sb.append(allLines);
         sb.append("\n         svg.setAttribute(\"width\", \"100%\");");
         sb.append("\n         svg.setAttribute(\"height\", \"100%\");");
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 0; i <= 5; i++) {
             sb.append(getDownArrow(i));
         }
         sb.append(allAttributeLines);
@@ -1421,13 +1427,14 @@ public class CausalArrows extends Decorator {
      */
     private HashMap paintThemeObjective(JSONObject jsonArrows, int startPerspectiveIndex,
             int startThemeIndex, int startObjetiveIndex, Iterator itCausalobjective,
-            Resource base, Period period, int countLine, String triangleEnd) {
+            Resource base, Period period, int countLine) {
         HashMap map1 = new HashMap();
         Iterator<Entry> itMap;
         StringBuilder sb = new StringBuilder();
         String classLine = ((base.getData("colorRelTO") == null)
                 || (base.getData("colorRelTO").trim().length() == 0))
                 ? "arrow" : base.getData("colorRelTO");
+        String triangleEnd = (classLine.equals("arrow")) ? triangle0 : triangle3;
         while (itCausalobjective.hasNext()) {
             Objective objective = (Objective) itCausalobjective.next();
             if (objective.hasPeriod(period)) {
@@ -1520,13 +1527,14 @@ public class CausalArrows extends Decorator {
      */
     private HashMap paintObjectiveTheme(JSONObject jsonArrows, int startPerspectiveIndex,
             int startThemeIndex, int startObjetiveIndex, Iterator itCausalTheme,
-            Resource base, Period period, int countLine, Perspective iniPerspe, String triangleEnd) {
+            Resource base, Period period, int countLine, Perspective iniPerspe) {
         HashMap map1 = new HashMap();
         Iterator<Entry> itMap;
         StringBuilder sb = new StringBuilder();
         String classLine = ((base.getData("colorRelOT") == null)
                 || (base.getData("colorRelOT").trim().length() == 0))
                 ? "arrow" : base.getData("colorRelOT");
+        String triangleEnd = (classLine.equals("arrow")) ? triangle0 : triangle2;
         while (itCausalTheme.hasNext()) {
             Theme theme = (Theme) itCausalTheme.next();
             if (isValidTheme(theme, period)) {
@@ -2473,13 +2481,14 @@ public class CausalArrows extends Decorator {
      */
     private HashMap paintObjectiveObjective(JSONObject jsonArrows, int startPerspectiveIndex,
             int startThemeIndex, int startObjetiveIndex, Resource base, Period period,
-            Iterator itCausalobjective, Objective objStart, int countLine, String triangleEnd) {
+            Iterator itCausalobjective, Objective objStart, int countLine) {
         HashMap map1 = new HashMap();
         StringBuilder sb = new StringBuilder();
         Perspective persStart = objStart.getTheme().getPerspective();
-        String classLine = ((base.getData("colorRelTO") == null)
-                || (base.getData("colorRelTO").trim().length() == 0))
-                ? "arrow" : base.getData("colorRelTO");
+        String classLine = ((base.getData("colorRelOO") == null)
+                || (base.getData("colorRelOO").trim().length() == 0))
+                ? "arrow" : base.getData("colorRelOO");
+        String triangleEnd = (classLine.equals("arrow")) ? triangle0 : triangle1;
         while (itCausalobjective.hasNext()) {
             Objective objective = (Objective) itCausalobjective.next();
             if (objective.hasPeriod(period)) {
