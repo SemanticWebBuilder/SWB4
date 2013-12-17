@@ -939,7 +939,7 @@ public class SentimentalDataClassifier {
                             else if(userGender.equals("female")) socialNetUser.setSnu_gender(SocialNetworkUser.USER_GENDER_FEMALE);
                             else socialNetUser.setSnu_gender(SocialNetworkUser.USER_GENDER_UNDEFINED);
                         }else socialNetUser.setSnu_gender(SocialNetworkUser.USER_GENDER_UNDEFINED);
-                    }
+                    }else socialNetUser.setSnu_gender(SocialNetworkUser.USER_GENDER_UNDEFINED);
                     //RelationShio Status
                     if(!userData.isNull("relationship_status"))
                     {
@@ -953,7 +953,7 @@ public class SentimentalDataClassifier {
                             else if(userRelationShip.equals("Widowed")) socialNetUser.setSnu_relationShipStatus(SocialNetworkUser.USER_RELATION_WIDOWED); 
                             else socialNetUser.setSnu_relationShipStatus(SocialNetworkUser.USER_RELATION_UNDEFINED); //Could be: In a relationship, Engaged, It's complicated, In an open relationship,Separated,  In a civil union, In a domestic partnership, etc
                         }else socialNetUser.setSnu_relationShipStatus(SocialNetworkUser.USER_RELATION_UNDEFINED); //Could be: In a relationship, Engaged, It's complicated, In an open relationship,Separated,  In a civil union, In a domestic partnership, etc
-                    }
+                    }else socialNetUser.setSnu_relationShipStatus(SocialNetworkUser.USER_RELATION_UNDEFINED); //Could be: In a relationship, Engaged, It's complicated, In an open relationship,Separated,  In a civil union, In a domestic partnership, etc
                     //User Education
                     String school="";
                     if(!userData.isNull("education"))
