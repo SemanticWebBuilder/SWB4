@@ -46,6 +46,31 @@
     if (semObj.getGenericInstance() instanceof Descriptiveable) {
         title = ((Descriptiveable) semObj.getGenericInstance()).getDisplayTitle(lang);
     }
+
+
+
+    ArrayList listMeses = new ArrayList();
+    listMeses.add("Enero");
+    listMeses.add("Febrero");
+    listMeses.add("Marzo");
+    listMeses.add("Abril");
+    listMeses.add("Mayo");
+    listMeses.add("Junio");
+    listMeses.add("Julio");
+    listMeses.add("Agosto");
+    listMeses.add("Septiembre");
+    listMeses.add("Octubre");
+    listMeses.add("Noviembre");
+    listMeses.add("Diciembre");
+    Iterator iMeses = listMeses.iterator();
+
+    ArrayList listAnio = new ArrayList();
+    listAnio.add("2013");
+    listAnio.add("2012");
+
+    Iterator iAnio = listAnio.iterator();
+
+
 %>
 <!DOCTYPE html>
 <meta charset="utf-8">
@@ -129,7 +154,7 @@
         top: 100%;
         left: 0;
     }
-    
+
     .units {
         line-height: 1;
         font-weight: bold;
@@ -137,10 +162,11 @@
         background: rgba(0, 0, 0, 0.8);
         color: #fff;
         border-radius: 2px;
-        
+
     }
 
 </style>
+<body onload="lanzar();">
 <head>
     <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" ></script>
     <script type="text/javascript" charset="utf-8" src="/swbadmin/js/swb.js"></script>
@@ -149,6 +175,7 @@
     <script type="text/javascript" >
         function postHtml(url, tagid)
         {
+            
             dojo.xhrPost({
                 url: url,
                 load: function(response)
@@ -182,6 +209,28 @@
             });
         }
             
+        function mostrar(selected){
+           
+            var div  ;
+            if(selected ==  1){
+                div = document.getElementById('divAnual');
+                div.style.display='block';
+                
+                var mensual =  document.getElementById('divAnualMensual');
+                mensual.style.display='none';
+                
+            }else {
+                div = document.getElementById('divAnualMensual');                
+                div.style.display='block';
+                
+                var anual = document.getElementById('divAnual');
+                anual.style.display='none';
+                
+                
+            }
+            
+            
+        }
         function valid(id){
             if(id ==1){    
                 var selectAnio=  document.getElementById("selectAnio").value;
@@ -202,6 +251,20 @@
                 }
             }                   
         }
+        
+ 
+        function lanzar()
+        {
+    
+            var submitBtn = document.getElementById('mostrarGraficaOculto');
+         
+            if(submitBtn){
+               
+                submitBtn.click();
+            }
+
+        }
+
     </script>
 </head>
 <style type="text/css">         
@@ -342,17 +405,93 @@
         <form name="formgraphBar" id="formgraphBar" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data" action="">
             <table>
                 <tr>
-                <select name="select_sh" id="select_sh"  dojoType="dijit.form.Select" onchange="javascript:postHtml('<%=url.setMode("InfographBar")%>?selected='+escape(document.formgraphBar.select_sh[document.formgraphBar.select_sh.selectedIndex].value)+'&suri=<%=URLEncoder.encode(suri)%>', 'selectgraphBar');">
+                <select name="select_sh" id="select_sh"  dojoType="dijit.form.Select" onchange="mostrar(document.formgraphBar.select_sh[document.formgraphBar.select_sh.selectedIndex].value);">
                     <option value="0">--Seleccione--</option>
-                    <option value="1">Anual</option>
+                    <option value="1" selected="">Anual</option>
                     <option value="2">Mensual</option>
                 </select>
                 </tr>
             </table>
         </form>
+
+        <div id="divAnual" class="pub-redes"  style="display:none;">
+            <p class="titulo">Seleccione:</p>      
+            <div id="graphBardivd"  >
+                <form name="formgraphBarAnio" id="formgraphBarAnio" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data" action="">
+                    <table>
+                        <tr>
+                        <select name="selectAnio" id="selectAnio">
+                            <option value=""><---Seleccione el año----></option>
+                            <%
+                                while (iAnio.hasNext()) {
+                                    String anio = (String) iAnio.next();
+                            %>
+                            <option value="<%=anio%>"><%=anio%></option>
+                            <%}%>                            
+                        </select>
+                        </tr>
+                        <tr>
+                        <input id="mostrarGraficaOculto"  type="hidden" value="Mostrar" onclick="postHtml('<%=urlRender.setMode("showGraphBar")%>&selectedAnio='+escape(document.formgraphBarAnio.selectAnio[document.formgraphBarAnio.selectAnio.selectedIndex].value)+'&suri=<%=URLEncoder.encode(suri)%>', 'showgraphBar');">
+                        <input id="mostrarGraficaR"  type="button" value="Mostrar" onclick="javascript:valid('1');postHtml('<%=urlRender.setMode("showGraphBar")%>&selectedAnio='+escape(document.formgraphBarAnio.selectAnio[document.formgraphBarAnio.selectAnio.selectedIndex].value)+'&suri=<%=URLEncoder.encode(suri)%>', 'showgraphBar');">
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+
+
+        <div id="divAnualMensual" style="display:none;">
+            <p class="titulo">Seleccione:</p>      
+            <form type="dijit.form.Form" id="createPost" name="createPost" action="" method="post" >
+                <input type="hidden" id="suri" name="suri" value="<%=URLEncoder.encode(suri)%>" >
+                <table>
+                    <tr>
+                        <td>
+                            <select name="selectAnio2" id="selectAnio2">
+                                <option value=""><---Seleccione el año----></option>
+                                  <option value="2012">2012</option>
+                                  <option value="2013">2013</option>
+                                  <option value="2014">2014</option>
+                                  <option value="2015">2015</option>                                                   
+                            </select>
+                        </td>
+                        <td>
+                            <select name="selectMes" id="selectMes">
+                                <option value=""><---Seleccione el mes----></option>
+                                <%
+                                    int valuemonth = 1;
+                                    while (iMeses.hasNext()) {
+                                        String mes = (String) iMeses.next();
+                                %>
+                                <option value="<%=valuemonth%>"><%=mes%></option>
+                                <%
+                                        valuemonth++;
+                                    }
+                                %>                            
+                            </select>
+                        </td>
+                        <td></td>
+                        <td>
+                            <input   type="button" value="Mostrar" onclick="javascript:valid('2');postHtml('<%=urlRender.setMode("showGraphBar")%>&selectAnio='+escape(document.createPost.selectAnio2[document.createPost.selectAnio2.selectedIndex].value)+'&suri=<%=URLEncoder.encode(suri)%>&selectMes='+escape(document.createPost.selectMes[document.createPost.selectMes.selectedIndex].value) +'', 'showgraphBar');">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
     </div>
-    <div id="selectgraphBar" dojoType="dijit.layout.ContentPane">
-    </div>
+
+
+
+</div>
+<div id="selectgraphBar" dojoType="dijit.layout.ContentPane">
+</div>                   
+
+
+<div id="showgraphBar" dojoType="dijit.layout.ContentPane" title="Preguntas" selected="true">
+
+</div>
 </fieldset>
+
+</body>
 
 
