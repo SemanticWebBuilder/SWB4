@@ -167,59 +167,6 @@
     <script type="text/javascript" charset="utf-8" src="/swbadmin/js/swb_admin.js"></script>
     <script type="text/javascript" charset="utf-8" src="/work/models/SWBAdmin/js/swbsocial.js" ></script>
     <script type="text/javascript" >
-        function postHtml(url, tagid)
-        {
-            dojo.xhrPost({
-                url: url,
-                load: function(response)
-                {
-                    var tag=dojo.byId(tagid);
-                    if(tag){
-                        var pan=dijit.byId(tagid);
-                        if(pan && pan.attr)
-                        {
-                            pan.attr('content',response);
-                        }else
-                        {
-                            tag.innerHTML = response;
-                        }
-                    }else {
-                        alert("No existe ningún elemento con id " + tagid);
-                    }
-                    return response;
-                },
-                error: function(response)
-                {
-                    if(dojo.byId(tagid)) {
-                        dojo.byId(tagid).innerHTML = "<p>Ocurrió un error con respuesta:<br />" + response + "</p>";
-                    }else {
-                        alert("No existe ningún elemento con id " + tagid);
-                    }
-                    return response;
-                },
-                handleAs: "text"
-            });
-        }
-
-
-        function postHtml(url)
-        {
-            dojo.xhrPost({
-                url: url,
-             
-                error: function(response)
-                {
-                    if(dojo.byId(tagid)) {
-                        dojo.byId(tagid).innerHTML = "<p>Ocurrió un error con respuesta:<br />" + response + "</p>";
-                    }else {
-                        alert("No existe ningún elemento con id " + tagid);
-                    }
-                    return response;
-                },
-                handleAs: "text"
-            });
-        }
-        
         function post()
         {
             alert('entro');
