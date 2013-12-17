@@ -31,16 +31,13 @@
     }
     
     String args = "?objUri=" + semObj.getEncodedURI();
+    
     String selectedAnio = request.getParameter("selectedAnio");
-    String selectAnio = request.getParameter("selectAnio");
+    String selectAnio =  request.getParameter("selectAnio");
     String selectMes = request.getParameter("selectMes");
     args += "&selectedAnio=" + selectedAnio;
     args += "&selectAnio=" + selectAnio;
-    args += "&selectMes=" + selectMes;
-
- 
-    SWBResourceURL url = paramRequest.getRenderUrl();
-   
+    args += "&selectMes=" + selectMes;   
 %>
 
 
@@ -50,7 +47,6 @@
         <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
         <script language="javascript" type="text/javascript">
             function resizeIframe() {
-
                 var iframe =  window.parent.document.getElementById('inneriframe');              
                 var container = document.getElementById('chart');     
                 iframe.style.height = container.offsetHeight + 'px';             
@@ -135,7 +131,7 @@
 
         </style>
     </head>
-    <body onload="resizeIframe();">        
+    <body onload="resizeIframe();javascript:valid('1');">        
 
         <div id="chart"></div>
         <script type="text/javascript" >
