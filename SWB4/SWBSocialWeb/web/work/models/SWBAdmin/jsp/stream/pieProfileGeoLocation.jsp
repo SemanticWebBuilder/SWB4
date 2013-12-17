@@ -28,7 +28,6 @@
     JSONArray getObject(SemanticObject semObj, String lang, String idModel, String fi) throws Exception {
 
         String filter = reemplazar(fi);
-        System.out.println("FIlter depsue de reemplazar " + filter);
 
         ArrayList list = new ArrayList();
         list.add("Aguscalientes");
@@ -83,7 +82,6 @@
         HashMap mapCountry = new HashMap();
         while (coun.hasNext()) {
             Country cou = (Country) coun.next();
-            System.out.println("cou.getTitle()" + cou.getTitle());
             mapCountry.put(cou.getTitle(), mapCountry.containsKey(cou.getTitle()) ? (Integer.parseInt(mapCountry.get(cou.getTitle()).toString()) + 1) : 0);
         }
         HashMap map = new HashMap();
@@ -1114,7 +1112,6 @@
 
 
 
-        System.out.println("antes de entrar a comparacion ");
 
 
         if (filter.equals("all")) {
@@ -1155,166 +1152,133 @@
             getJson(node, "No definido", totalnodefined, intPorcentajenodefinido, positivesnoefined, negativesnodefined, neutralsnodefined, totalPost);
 
         } else if (filter.equals("Aguascalientes")) {
-            System.out.println("entro agus");
 
             getJsonPositivesNegativesNeutrals(filter, node, positivesAguascalientes, negativesAguascalientes, neutralsAguascalientes, porcentajePositivesAguascalientes, porcentajeNegativesAguascalientes, porcentajeNeutralsAguascalientes);
 
         } else if (filter.equals("Baja California")) {
-            System.out.println("bj");
 
             getJsonPositivesNegativesNeutrals(filter, node, positivesbCalifornia, negativesbCalifornia, neutralsbCalifornia, porcentajePositivesBajaCalifornia, porcentajeNegativesBajaCalifornia, porcentajeNeutralsBajaCalifornia);
 
         } else if (filter.equals("Baja California Sur")) {
-            System.out.println("bjs");
 
             getJsonPositivesNegativesNeutrals(filter, node, positivesbCaliforniaSI, negativesbCaliforniaSI, neutralsbCaliforniaSI, porcentajePositivesBajaCaliforniaS, porcentajeNegativesBajaCaliforniaS, porcentajeNeutralsBajaCaliforniaS);
 
         } else if (filter.equals("Campeche")) {
-            System.out.println("cam");
 
             getJsonPositivesNegativesNeutrals(filter, node, positivesCampeche, negativesCampeche, neutralsCampeche, porcentajePositivesCampeche, porcentajeNegativesCampeche, porcentajeNeutralsCampeche);
 
         } else if (filter.equals("Coahuila de Zaragoza")) {
-            System.out.println("coah");
 
             getJsonPositivesNegativesNeutrals(filter, node, positivesCoahuia, negativesCoahuila, neutralsCoahuila, porcentajePositivesCoahuila, porcentajeNegativesCohauila, porcentajeNeutralsCoahuila);
 
         } else if (filter.equals("Colima")) {
-            System.out.println("col");
 
             getJsonPositivesNegativesNeutrals(filter, node, positivesColima, negativesColima, neutralsColima, porcentajePositivesColima, porcentajeNegativesColima, porcentajeNeutralsColima);
 
         } else if (filter.equals("Chiapas")) {
-            System.out.println("chiap");
 
             getJsonPositivesNegativesNeutrals(filter, node, positivesChiapas, negativesChiapas, neutralsChiapas, porcentajePositivesChiapas, porcentajeNegativesChiapas, porcentajeNeutralsChiapas);
 
         } else if (filter.equals("Chihuahua")) {
-            System.out.println("chihua");
 
             getJsonPositivesNegativesNeutrals(filter, node, positivesChihuahua, negativesChihuahua, neutralsChihuahua, porcentajePositivesChihuahua, porcentajeNegativesChihuahua, porcentajeNeutralsChihuahua);
 
         } else if (filter.equals("Distrito Federal")) {
-            System.out.println("df");
 
             getJsonPositivesNegativesNeutrals(filter, node, positivesdistritoFederal, negativesdistritoFederal, neutralsdistritoFederal, porcentajePositivesDF, porcentajeNegativesDF, porcentajeNeutralsDF);
 
         } else if (filter.equals("Durango")) {
-            System.out.println("dur");
 
             getJsonPositivesNegativesNeutrals(filter, node, positivesdurango, negativesdurango, neutralsdurango, porcentajePositivesDurango, porcentajeNegativesDurango, porcentajeNeutralsDurango);
 
         } else if (filter.equals("Guanajuato")) {
-            System.out.println("gua");
 
             getJsonPositivesNegativesNeutrals(filter, node, positivesguanajuato, negativesguanajuato, neutralsguanajuato, porcentajePositivesGuanajuato, porcentajeNegativesGuanajuato, porcentajeNeutralsGuanajuato);
 
         } else if (filter.equals("Guerrero")) {
-            System.out.println("guer");
 
             getJsonPositivesNegativesNeutrals(filter, node, positivesguerrero, negativesguerrero, neutralsguerrero, porcentajePositivesGuerrero, porcentajeNegativesGuerrero, porcentajeNeutralsGuerrero);
 
         } else if (filter.equals("Hidalgo")) {
-            System.out.println("hida");
 
             getJsonPositivesNegativesNeutrals(filter, node, positiveshidalgo, negativeshidalgo, neutralshidalgo, porcentajePositiveshidalgo, porcentajeNegativeshidalgo, porcentajeNeutralshidalgo);
 
         } else if (filter.equals("Jalisco")) {
-            System.out.println("jali");
 
             getJsonPositivesNegativesNeutrals(filter, node, positivesjalisco, negativesjalisco, neutralsjalisco, porcentajePositivesjalisco, porcentajeNegativesjalisco, porcentajeNeutralsjalisco);
 
         } else if (filter.equals("Estado de Mexico")) {
-            System.out.println("estad");
             getJsonPositivesNegativesNeutrals(filter, node, positivesestadoMexico, negativesestadoMexico, neutralsestadoMexico, porcentajePositivesestadoMexico, porcentajeNegativesestadoMexico, porcentajeNeutralsestadoMexico);
 
         } else if (filter.equals("Michoacan")) {
-            System.out.println("miho");
 
             getJsonPositivesNegativesNeutrals(filter, node, positivesmichoacan, negativesmichoacan, neutralsmichoacan, porcentajePositivesmichoacan, porcentajeNegativesmichoacan, porcentajeNeutralsmichoacan);
 
         } else if (filter.equals("Morelos")) {
-            System.out.println("more");
 
             getJsonPositivesNegativesNeutrals(filter, node, positivesmorelos, negativesmorelos, neutralsmorelos, porcentajePositivesmorelos, porcentajeNegativesmorelos, porcentajeNeutralsmorelos);
 
         } else if (filter.equals("Nayarit")) {
-            System.out.println("naya");
 
             getJsonPositivesNegativesNeutrals(filter, node, positivesnayarit, negativesnayarit, neutralsnayarit, porcentajePositivesnayarit, porcentajeNegativesnayarit, porcentajeNeutralsnayarit);
 
         } else if (filter.equals("Nuevo Leon")) {
-            System.out.println("nuevo");
 
             getJsonPositivesNegativesNeutrals(filter,  node, positivesnuevoLeon, negativesnuevoLeon, neutralsnuevoLeon, porcentajePositivesnuevoLeon, porcentajeNegativesnuevoLeon, porcentajeNeutralsnuevoLeon);
 
         } else if (filter.equals("Oaxaca")) {
-            System.out.println("oaxa");
 
             getJsonPositivesNegativesNeutrals(filter, node, positivesoaxaca, negativesoaxaca, neutralsoaxaca, porcentajePositivesoaxaca, porcentajeNegativesoaxaca, porcentajeNeutralsoaxaca);
 
         } else if (filter.equals("Puebla")) {
-            System.out.println("pueb");
 
             getJsonPositivesNegativesNeutrals(filter,  node, positivespuebla, negativespuebla, neutralspuebla, porcentajePositivespuebla, porcentajeNegativespuebla, porcentajeNeutralspuebla);
 
         } else if (filter.equals("Queretaro")) {
-            System.out.println("quer");
 
             getJsonPositivesNegativesNeutrals(filter,  node, positivesqueretaro, negativesqueretaro, neutralsqueretaro, porcentajePositivesqueretaro, porcentajeNegativesqueretaro, porcentajeNeutralsqueretaro);
 
         } else if (filter.equals("Quintana Roo")) {
-            System.out.println("quin");
 
             getJsonPositivesNegativesNeutrals(filter, node, positivesquintanaRoo, negativesquintanaRoo, neutralsquintanaRoo, porcentajePositivesquintanaRoo, porcentajeNegativesquintanaRoo, porcentajeNeutralsquintanaRoo);
 
         } else if (filter.equals("San Luis Potosi")) {
-            System.out.println("san lu");
 
             getJsonPositivesNegativesNeutrals(filter, node, positivessanLuis, negativessanLuis, neutralssanLuis, porcentajePositivessanLuis, porcentajeNegativessanLuis, porcentajeNeutralssanLuis);
 
         } else if (filter.equals("Sinaloa")) {
-            System.out.println("sinal");
 
             getJsonPositivesNegativesNeutrals(filter,  node, positivessinaloa, negativessinaloa, neutralssinaloa, porcentajePositivessinaloa, porcentajeNegativessinaloa, porcentajeNeutralssinaloa);
 
         } else if (filter.equals("Sonora")) {
-            System.out.println("sono");
 
             getJsonPositivesNegativesNeutrals(filter,  node, positivessonora, negativessonora, neutralssonora, porcentajePositivessonora, porcentajeNegativessonora, porcentajeNeutralssonora);
 
         } else if (filter.equals("Tabasco")) {
-            System.out.println("taba");
 
             getJsonPositivesNegativesNeutrals(filter,  node, positivestabasco, negativestabasco, neutralstabasco, porcentajePositivestabasco, porcentajeNegativestabasco, porcentajeNeutralstabasco);
 
         } else if (filter.equals("Tamaulipas")) {
-            System.out.println("tama");
 
             getJsonPositivesNegativesNeutrals(filter,  node, positivestamaulipas, negativestamaulipas, neutralstamaulipas, porcentajePositivestamaulipas, porcentajeNegativestamaulipas, porcentajeNeutralstamaulipas);
 
         } else if (filter.equals("Tlaxcala")) {
-            System.out.println("tla");
 
             getJsonPositivesNegativesNeutrals(filter,  node, positivestlaxcala, negativestlaxcala, neutralstlaxcala, porcentajePositivestlaxcala, porcentajeNegativestlaxcala, porcentajeNeutralstlaxcala);
 
         } else if (filter.equals("Veracruz")) {
-            System.out.println("vera");
 
             getJsonPositivesNegativesNeutrals(filter,  node, positivesveracruz, negativesveracruz, neutralsveracruz, porcentajePositivesveracruz, porcentajeNegativesveracruz, porcentajeNeutralsveracruz);
 
         } else if (filter.equals("Yucatan")) {
-            System.out.println("yuca");
 
             getJsonPositivesNegativesNeutrals(filter,  node, positivesyucatan, negativesyucatan, neutralsyucatan, porcentajePositivesyucatan, porcentajeNegativesyucatan, porcentajeNeutralsyucatan);
 
         } else if (filter.equals("Zacatecas")) {
-            System.out.println("zaca");
 
             getJsonPositivesNegativesNeutrals(filter,  node, positiveszacatecas, negativeszacatecas, neutralszacatecas, porcentajePositiveszacatecas, porcentajeNegativeszacatecas, porcentajeNeutralszacatecas);
 
         } else if (filter.equals("No definido")) {
-            System.out.println("nodefinnido");
 
             getJsonPositivesNegativesNeutrals(filter,  node, positivesnoefined, negativesnodefined, neutralsnodefined, porcentajePositivesnodefined, porcentajeNegativesnodefined, porcentajeNeutralsnodefined);
 
