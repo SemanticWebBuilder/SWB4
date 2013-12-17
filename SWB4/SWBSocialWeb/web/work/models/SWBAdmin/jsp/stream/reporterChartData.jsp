@@ -27,7 +27,7 @@
         String scountryState = request.getParameter("scountryState");
         String sinceDate = request.getParameter("sinceDate");
         String toDate = request.getParameter("toDate");
-     
+
         Date dateSince = null;
         Date dateTo = null;
 
@@ -87,7 +87,7 @@
             node1.put("label", "Positivos");
             node1.put("value1", "" + positives);
             node1.put("value2", "" + round(intPorcentajePositive));
-            node1.put("color", "#86c440");
+            node1.put("color", "#008000");
             node1.put("chartclass", "possClass");
             node.put(node1);
         }
@@ -96,7 +96,7 @@
             node2.put("label", "Negativos");
             node2.put("value1", "" + negatives);
             node2.put("value2", "" + round(intPorcentajeNegative));
-            node2.put("color", "#990000");
+            node2.put("color", "#FF0000");
             node2.put("chartclass", "negClass");
             node.put(node2);
         }
@@ -105,7 +105,7 @@
             node3.put("label", "Neutros");
             node3.put("value1", "" + neutrals);
             node3.put("value2", "" + round(intPorcentajeNeutral));
-            node3.put("color", "#eae8e3");
+            node3.put("color", "#FFD700");
             node3.put("chartclass", "neuClass");
             node.put(node3);
         }
@@ -129,7 +129,7 @@
         //System.out.println("GenderPostIn:"+postInUser.getSnu_gender()+",schoolGrade:"+ postInUser.getSnu_education()+",life:"+slifeStage+"Gender:"+gender);
 
         if (dateSince != null && dateTo != null) {
-            
+
             if ((gender.equals("all") || (postInUser.getSnu_gender() > 0 && postInUser.getSnu_gender() == Integer.parseInt(gender)))
                     && (schoolGrade.equals("all") || (postInUser.getSnu_education() > 0 && postInUser.getSnu_education() == Integer.parseInt(schoolGrade)))
                     && (slifeStage.equals("all") || (postInUser.getSnu_LifeStage() != null && postInUser.getSnu_LifeStage().getId().equals(slifeStage)))
@@ -137,14 +137,25 @@
                     && (scountryState.equals("all") || (postInCountryState != null && postInCountryState.getId().equals(scountryState)))
                     && (postIn.getPi_created().compareTo(dateSince) >= 0) && (postIn.getPi_created().compareTo(dateTo) <= 0)) {
                 return true;
+            } else if ((gender.equals("all") || (postInUser.getSnu_gender() > 0 && postInUser.getSnu_gender() == Integer.parseInt(gender)))
+                    && (schoolGrade.equals("all") || (postInUser.getSnu_education() > 0 && postInUser.getSnu_education() == Integer.parseInt(schoolGrade)))
+                    && (slifeStage.equals("all") || (postInUser.getSnu_LifeStage() == null && slifeStage.equals("noDefinido")  ))
+                    && (sentimentalRelationShip.equals("all") || (postInUser.getSnu_relationShipStatus() > 0 && postInUser.getSnu_relationShipStatus() == Integer.parseInt(sentimentalRelationShip)))
+                    && (scountryState.equals("all") || (postInCountryState == null && scountryState.equals("estadonoDefinido")))) {
+                return true;
             }
         } else {
             if ((gender.equals("all") || (postInUser.getSnu_gender() > 0 && postInUser.getSnu_gender() == Integer.parseInt(gender)))
                     && (schoolGrade.equals("all") || (postInUser.getSnu_education() > 0 && postInUser.getSnu_education() == Integer.parseInt(schoolGrade)))
                     && (slifeStage.equals("all") || (postInUser.getSnu_LifeStage() != null && postInUser.getSnu_LifeStage().getId().equals(slifeStage)))
                     && (sentimentalRelationShip.equals("all") || (postInUser.getSnu_relationShipStatus() > 0 && postInUser.getSnu_relationShipStatus() == Integer.parseInt(sentimentalRelationShip)))
-                    && (scountryState.equals("all") || (postInCountryState != null && postInCountryState.getId().equals(scountryState)))
-                    ) {
+                    && (scountryState.equals("all") || (postInCountryState != null && postInCountryState.getId().equals(scountryState)))) {
+                return true;
+            } else if ((gender.equals("all") || (postInUser.getSnu_gender() > 0 && postInUser.getSnu_gender() == Integer.parseInt(gender)))
+                    && (schoolGrade.equals("all") || (postInUser.getSnu_education() > 0 && postInUser.getSnu_education() == Integer.parseInt(schoolGrade)))
+                    && (slifeStage.equals("all") || (postInUser.getSnu_LifeStage() == null && slifeStage.equals("noDefinido")  ))
+                    && (sentimentalRelationShip.equals("all") || (postInUser.getSnu_relationShipStatus() > 0 && postInUser.getSnu_relationShipStatus() == Integer.parseInt(sentimentalRelationShip)))
+                    && (scountryState.equals("all") || (postInCountryState == null && scountryState.equals("estadonoDefinido")))) {
                 return true;
             }
 

@@ -69,16 +69,16 @@
 
 
     <style type="text/css">
-         
+
         @import "/swbadmin/js/dojo/dojo/resources/dojo.css"; 
         @import "/swbadmin/js/dojo/dojo/resources/dnd.css";
         @import "/swbadmin/js/dojo/dijit/themes/soria/soria.css";
         @import "/swbadmin/js/dojo/dojox/layout/resources/ExpandoPane.css";
         @import "/swbadmin/js/dojo/dojox/form/resources/FileInput.css";
         @import "/swbadmin/css/swbsocial.css";          
-            html, body, #main{
-                overflow: auto;
-            }
+        html, body, #main{
+            overflow: auto;
+        }
     </style>
     <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false"></script>
     <script type="text/javascript" charset="utf-8" src="/swbadmin/js/swb.js"></script>
@@ -134,6 +134,7 @@
                     <label for="life">Etapa</label>
                     <select name="lifeStage">
                         <option value="all">Todos</option>
+                       
                         <%
                             Iterator<LifeStage> itLifeStages = SWBComparator.sortByCreated(LifeStage.ClassMgr.listLifeStages(SWBContext.getAdminWebSite()));
                             while (itLifeStages.hasNext()) {
@@ -143,6 +144,7 @@
                         <%
                             }
                         %>
+                         <option value="noDefinido" <%=slifeStage.equals("noDefinido") ? "selected" : ""%>>No definido</option>
                     </select>
                 </div>
                 <div id="statuslove-box">
@@ -174,6 +176,7 @@
                                 }
                             }
                         %>    
+                         <option value="estadonoDefinido" <%=slifeStage.equals("estadonoDefinido") ? "selected" : ""%>>No definido</option>
                     </select>
                 </div>
 
@@ -184,10 +187,10 @@
                     <input type="text" name="toDate" id="toDate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true">
 
                 </div>
-                    <div id="mapa-buscar">
-                <button dojoType="dijit.form.Button" type="submit" onclick="showPie('<%=semObj.getSemanticClass().getClassId()%>/reporterFilter');return false; "><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
-                <button dojoType="dijit.form.Button" type="submit"  onclick="exportExcel('<%=semObj.getSemanticClass().getClassId()%>/reporterFilter');return false;">Exportar Excel </button>
-                    </div>
+                <div id="mapa-buscar">
+                    <button dojoType="dijit.form.Button" type="submit" onclick="showPie('<%=semObj.getSemanticClass().getClassId()%>/reporterFilter');return false; "><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+                    <button dojoType="dijit.form.Button" type="submit"  onclick="exportExcel('<%=semObj.getSemanticClass().getClassId()%>/reporterFilter');return false;">Exportar Excel </button>
+                </div>
             </div>
         </form>
     </div>
@@ -213,12 +216,12 @@
         radius = Math.min(width, height) / 2;
 
         var arc = d3.svg.arc()
-        .outerRadius(radius - 10)
-        .innerRadius(0);
+        .outerRadius(radius - 20)
+        .innerRadius(radius - 100);
         
         var arcOver = d3.svg.arc()
-        .outerRadius(radius - 5)
-        .innerRadius(radius-15);
+        .outerRadius(radius - 10)
+        .innerRadius(0);
         
 
         var pie = d3.layout.pie()
