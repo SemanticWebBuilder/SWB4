@@ -177,8 +177,22 @@ public class PieCharts extends GenericResource {
     private void doGenerateReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws JSONException, IOException, com.hp.hpl.jena.sparql.lib.org.json.JSONException {
         String args = request.getParameter("args");
         String suri = request.getParameter("suri");
+        
+        String title = "";
+        
+        if(SemanticObject.getSemanticObject(suri).getGenericInstance() instanceof  Stream){
+        Stream stream = (Stream)SemanticObject.getSemanticObject(suri).getGenericInstance();
+        title =  stream.getTitle();
+        
+        }else if(SemanticObject.getSemanticObject(suri).getGenericInstance() instanceof  SocialTopic){
+            SocialTopic sTopic = (SocialTopic)SemanticObject.getSemanticObject(suri).getGenericInstance();
+        title =  sTopic.getTitle();
+        }
+        
+        
         String type = request.getParameter("type");
         String filter = request.getParameter("filter");
+        String filterGeneral = request.getParameter("filterGeneral");
         if (filter == null) {
             filter = "";
         }
@@ -186,31 +200,31 @@ public class PieCharts extends GenericResource {
         String lang = paramRequest.getUser().getLanguage();
         Iterator<PostIn> setso = null;
         if (type.equals("gender")) {
-            setso = getListGender(suri, lang, filter);
+            setso = getListGender(suri, lang, filter, filterGeneral);
         } else if (type.equals("education")) {
-            setso = getListEducation(suri, lang, filter);
+            setso = getListEducation(suri, lang, filter, filterGeneral);
         } else if (type.equals("relation")) {
-            setso =  getRelationShip(suri, lang, filter);
+            setso = getRelationShip(suri, lang, filter, filterGeneral);
         } else if (type.equals("lifeStage")) {
-            setso = getLifeStage(suri, lang, filter);
+            setso = getLifeStage(suri, lang, filter, filterGeneral);
         } else if (type.equals("geoLocation")) {
-            setso = getGeoLocation(suri, lang, filter);
+            setso = getGeoLocation(suri, lang, filter, filterGeneral);
         }
 
         try {
 
-            createExcel(setso, paramRequest, response);
+            createExcel(setso, paramRequest, response, title);
 
         } catch (Exception e) {
             log.error(e);
         }
     }
 
-    public void createExcel(Iterator<PostIn> setso, SWBParamRequest paramRequest, HttpServletResponse response) {
+    public void createExcel(Iterator<PostIn> setso, SWBParamRequest paramRequest, HttpServletResponse response, String titleR) {
         try {
             // Defino el Libro de Excel
             // Iterator v = setso.iterator();
-            String title = "hello";
+            String title = titleR;
 
 
             HSSFWorkbook wb = new HSSFWorkbook();
@@ -288,7 +302,8 @@ public class PieCharts extends GenericResource {
                     createCell(cellStyle, wb, troww, 0, CellStyle.ALIGN_LEFT, CellStyle.VERTICAL_CENTER, "---");
 
                 }
-                createCell(cellStyle, wb, troww, 1, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, postIn instanceof MessageIn ? paramRequest.getLocaleString("message") : postIn instanceof PhotoIn ? paramRequest.getLocaleString("photo") : postIn instanceof VideoIn ? paramRequest.getLocaleString("video") : "---");
+               // createCell(cellStyle, wb, troww, 1, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, postIn instanceof MessageIn ? paramRequest.getLocaleString("message") : postIn instanceof PhotoIn ? paramRequest.getLocaleString("photo") : postIn instanceof VideoIn ? paramRequest.getLocaleString("video") : "---");
+                createCell(cellStyle, wb, troww, 1, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, postIn instanceof MessageIn ? "Mensaje" : postIn instanceof PhotoIn ? "Foto": postIn instanceof VideoIn ? "Video" : "---");
                 createCell(cellStyle, wb, troww, 2, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, postIn.getPostInSocialNetwork().getDisplayTitle(lang));
 
 
@@ -512,8 +527,8 @@ public class PieCharts extends GenericResource {
         }
     }
 
-    private Iterator getListGender(String suri, String lang, String filter) {
- 
+    private Iterator getListGender(String suri, String lang, String filter, String filterGeneral) {
+
         SemanticObject semObj = SemanticObject.getSemanticObject(suri);
         ArrayList listTotal = new ArrayList();
         ArrayList listMale = new ArrayList();
@@ -522,12 +537,28 @@ public class PieCharts extends GenericResource {
 
         //String lang = paramRequest.getUser().getLanguage();
 
-        int female = 0, male = 0, other = 0;
+
         int totalPost = 0;
         ArrayList genderMale = new ArrayList();
         ArrayList genderFemale = new ArrayList();
         ArrayList genderother = new ArrayList();
         Iterator<PostIn> itObjPostIns = null;
+        ArrayList all = new ArrayList();
+        ArrayList allMale = new ArrayList();
+        ArrayList allFemale = new ArrayList();
+        ArrayList allNodefine = new ArrayList();
+        ArrayList male = new ArrayList();
+        ArrayList malePositives = new ArrayList();
+        ArrayList maleNegatives = new ArrayList();
+        ArrayList maleNeutrals = new ArrayList();
+        ArrayList female = new ArrayList();
+        ArrayList femalePositives = new ArrayList();
+        ArrayList femaleNegatives = new ArrayList();
+        ArrayList femaleNeutrals = new ArrayList();
+        ArrayList nodefine = new ArrayList();
+        ArrayList nodefinePositives = new ArrayList();
+        ArrayList nodefineNegatives = new ArrayList();
+        ArrayList nodefineNeutrals = new ArrayList();
 
         if (semObj.getGenericInstance() instanceof Stream) {
             Stream stream = (Stream) semObj.getGenericInstance();
@@ -536,51 +567,200 @@ public class PieCharts extends GenericResource {
             SocialTopic socialTopic = (SocialTopic) semObj.getGenericInstance();
             itObjPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
         }
+
+
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
 
-            if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_MALE) {
-                male++;
-                if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("male", lang))) {
-                    listMale.add(postIn);
+            if (filterGeneral.equals("all")) {
+                //System.out.println("entro en filte r general all");
+                if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_MALE || postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_FEMALE || postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_gender() == 0) {
+                    all.add(postIn);
                 }
 
-                listTotal.add(postIn);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_FEMALE) {
-                female++;
-                if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("female", lang))) {
-                    listFemale.add(postIn);
+            }
+
+            if (filterGeneral.equals("male")) {
+                //System.out.println("entro en filter general male");
+                if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_MALE) {
+                    male.add(postIn);
                 }
-                listTotal.add(postIn);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_gender() == 0) {
-                other++;
-                if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("other", lang))) {
-                    listOther.add(postIn);
+
+
+            }
+
+            if (filterGeneral.equals("female")) {
+                //System.out.println("entro en filter general female");
+                if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_FEMALE) {
+                    female.add(postIn);
                 }
-                listTotal.add(postIn);
+            }
+
+            if (filterGeneral.equals("nodefine")) {
+                //System.out.println("entro en no define filter genral");
+                if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_gender() == 0) {
+                    nodefine.add(postIn);
+                }
+            }
+        }
+
+        if (filterGeneral.equals("all")) {
+            Iterator allI = all.iterator();
+
+            while (allI.hasNext()) {
+                PostIn postInAll = (PostIn) allI.next();
+
+                if (filter.equals("Masculino") && postInAll.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_MALE) {
+                   // System.out.println("agrego a all male");
+                    allMale.add(postInAll);
+
+                } else if (filter.equals("Femenino") && postInAll.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_FEMALE) {
+                    //System.out.println("agrego a allfemale");
+                    allFemale.add(postInAll);
+
+                } else if (filter.equals("No definido") && postInAll.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_UNDEFINED || postInAll.getPostInSocialNetworkUser().getSnu_gender() == 0) {
+                   // System.out.println("agregar a all nodefine");
+                    allNodefine.add(postInAll);
+                }
+            }
+        } else if (filterGeneral.equals("male")) {
+
+
+            Iterator maleI = male.iterator();
+
+            while (maleI.hasNext()) {
+                PostIn postInMale = (PostIn) maleI.next();
+
+                if (filter.equals("Positivos") && postInMale.getPostSentimentalType() == 1) {
+                    malePositives.add(postInMale);
+
+                } else if (filter.equals("Negativos") && postInMale.getPostSentimentalType() == 2) {
+                    maleNegatives.add(postInMale);
+
+                } else if (filter.equals("Neutros") && postInMale.getPostSentimentalType() == 0) {
+                    maleNeutrals.add(postInMale);
+                }
+            }
+        } else if (filterGeneral.equals("female")) {
+            Iterator femaleI = female.iterator();
+
+            while (femaleI.hasNext()) {
+                PostIn postInFemale = (PostIn) femaleI.next();
+
+                if (filter.equals("Positivos") && postInFemale.getPostSentimentalType() == 1) {
+                    //System.out.println("entro en positivos femmenino y 1");
+                    femalePositives.add(postInFemale);
+
+                } else if (filter.equals("Negativos") && postInFemale.getPostSentimentalType() == 2) {
+                   // System.out.println("entro en positivos femmenino y 2");
+                    femaleNegatives.add(postInFemale);
+
+                } else if (filter.equals("Neutros") && postInFemale.getPostSentimentalType() == 0) {
+                    //System.out.println("entro en positivos femmenino y 0");
+                    femaleNeutrals.add(postInFemale);
+                }
+            }
+        } else if (filterGeneral.equals("nodefine")) {
+
+
+            Iterator nodefineI = nodefine.iterator();
+
+            while (nodefineI.hasNext()) {
+                PostIn postInnoDefine = (PostIn) nodefineI.next();
+
+                if (filter.equals("Positivos") && postInnoDefine.getPostSentimentalType() == 1) {
+                    nodefinePositives.add(postInnoDefine);
+
+                } else if (filter.equals("Negativos") && postInnoDefine.getPostSentimentalType() == 2) {
+                    nodefineNegatives.add(postInnoDefine);
+
+                } else if (filter.equals("Neutros") && postInnoDefine.getPostSentimentalType() == 0) {
+                    nodefineNeutrals.add(postInnoDefine);
+                }
             }
 
         }
+
+
         Iterator i = null;
-        if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("male", lang))) {
-            i = listMale.iterator();
-        } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("female", lang))) {
-            i = listFemale.iterator();
-        } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("other", lang))) {
-            i = listOther.iterator();
-        } else {
-            i = listTotal.iterator();
+        if (filterGeneral.equals("all")) {
+            i = all.iterator();
+            if (filter.equals("Masculino")) {
+                //System.out.println("entro e i male");
+                i = allMale.iterator();
+            } else if (filter.equals("Femenino")) {
+              //  System.out.println(" entro en i female");
+                i = allFemale.iterator();
+            } else if (filter.equals("No definido")) {
+               // System.out.println("entro en i no define");
+                i = allNodefine.iterator();
+            }
+
+        } else if (filterGeneral.equals("male")) {
+            i = male.iterator();
+            if (filter.equals("Positivos")) {
+               // System.out.println("x");
+                i = malePositives.iterator();
+            } else if (filter.equals("Negativos")) {
+               // System.out.println("y");
+                i = maleNegatives.iterator();
+            } else if (filter.equals("Neutros")) {
+              //  System.out.println("z");
+                i = maleNeutrals.iterator();
+            }
+        } else if (filterGeneral.equals("female")) {
+            i = female.iterator();
+
+            if (filter.equals("Positivos")) {
+               //System.out.println("xf");
+                i = femalePositives.iterator();
+            } else if (filter.equals("Negativos")) {
+                //System.out.println("yf");
+                i = femaleNegatives.iterator();
+            } else if (filter.equals("Neutros")) {
+             //   System.out.println("zf");
+                i = femaleNeutrals.iterator();
+            }
+        } else if (filterGeneral.equals("nodefine")) {
+            i = nodefine.iterator();
+            if (filter.equals("Positivos")) {
+                //System.out.println("xn");
+                i = nodefinePositives.iterator();
+            } else if (filter.equals("Negativos")) {
+               // System.out.println("yn");
+                i = nodefineNegatives.iterator();
+            } else if (filter.equals("Neutros")) {
+                //System.out.println("zn");
+                i = nodefineNeutrals.iterator();
+            }
         }
 
         return i;
     }
 
-    private Iterator getListEducation(String suri, String lang, String filter) {
+    private Iterator getListEducation(String suri, String lang, String filter, String filterGeneral) {
         ArrayList listTotal = new ArrayList();
         SemanticObject semObj = SemanticObject.getSemanticObject(suri);
+      //  System.out.println("entro en get listeducation");
+     //   System.out.println("filter : " + filter);
+     //   System.out.println("filter General : " + filterGeneral);
+
+        ArrayList all = new ArrayList();
+        ArrayList highSchool = new ArrayList();
+        ArrayList college = new ArrayList();
+        ArrayList graduate = new ArrayList();
+        ArrayList undefined = new ArrayList();
+        ArrayList allSecundaria = new ArrayList();
+        ArrayList allMedioSuperior = new ArrayList();
+        ArrayList allGraduado = new ArrayList();
+        ArrayList allUdefined = new ArrayList();
+        ArrayList positives = new ArrayList();
+        ArrayList negatives = new ArrayList();
+        ArrayList neutrals = new ArrayList();
 
 
-        int highSchool = 0, college = 0, graduate = 0, undefined = 0, totalPost = 0;
+
+        // int highSchool = 0, college = 0, graduate = 0, undefined = 0, totalPost = 0;
         Iterator<PostIn> itObjPostIns = null;
         if (semObj.getGenericInstance() instanceof Stream) {
             Stream stream = (Stream) semObj.getGenericInstance();
@@ -590,63 +770,248 @@ public class PieCharts extends GenericResource {
             itObjPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
         }
 
-        ArrayList highSchoolArray = new ArrayList();
-        ArrayList collegeArray = new ArrayList();
-        ArrayList graduateArray = new ArrayList();
-        ArrayList undefinedArray = new ArrayList();
 
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
-            totalPost++;
+            //totalPost++;
 
-            if (postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL) {
-                highSchool++;
-                highSchoolArray.add(postIn);
-                listTotal.add(postIn);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_COLLEGE) {
-                college++;
-                collegeArray.add(postIn);
-                listTotal.add(postIn);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_GRADUATE) {
-                graduate++;
-                graduateArray.add(postIn);
-                listTotal.add(postIn);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_education() == 0) {
-                undefined++;
-                undefinedArray.add(postIn);
-                listTotal.add(postIn);
+            if (filterGeneral.equals("all")) {
+                if (postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL
+                        || postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_COLLEGE
+                        || postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_GRADUATE
+                        || postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_education() == 0) {
+                    all.add(postIn);
+                }
+
+            } else if (filterGeneral.equals("secundaria")) {
+                if (postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL) {
+                    highSchool.add(postIn);
+                }
+
+            } else if (filterGeneral.equals("mediosuperior")) {
+                if (postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_COLLEGE) {
+                    college.add(postIn);
+                }
+            } else if (filterGeneral.equals("graduado")) {
+                if (postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_GRADUATE) {
+                    graduate.add(postIn);
+                }
+            } else if (filterGeneral.equals("undefined")) {
+                if (postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_education() == 0) {
+                    undefined.add(postIn);
+                }
             }
-
         }
 
+        if (filterGeneral.equals("all")) {
+
+
+            Iterator allI = all.iterator();
+
+            while (allI.hasNext()) {
+                PostIn postIn = (PostIn) allI.next();
+
+                if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("highSchool", lang)) && postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL) {
+                  //  System.out.println("agrego a all secundaria");
+                    allSecundaria.add(postIn);
+
+                } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("college", lang)) && postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_COLLEGE) {
+                   // System.out.println("agrego a mediosuperioe");
+                    allMedioSuperior.add(postIn);
+
+                } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("graduate", lang)) && postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_GRADUATE) {
+                  //  System.out.println("agregar a all graduado");
+                    allGraduado.add(postIn);
+                } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("undefinedEducation", lang)) && postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_education() == 0) {
+                 //   System.out.println("agregar a all undefine");
+                    allUdefined.add(postIn);
+                }
+            }
+        } else if (filterGeneral.equals("secundaria")) {
+
+            Iterator allI = highSchool.iterator();
+            while (allI.hasNext()) {
+                PostIn postIn = (PostIn) allI.next();
+
+                if (filter.equals("Positivos") && postIn.getPostSentimentalType() == 1) {
+             //       System.out.println("agrego a high positivos");
+                    positives.add(postIn);
+
+                } else if (filter.equals("Negativos") && postIn.getPostSentimentalType() == 2) {
+               //     System.out.println("agrego a high negativos");
+                    negatives.add(postIn);
+
+                } else if (filter.equals("Neutros") && postIn.getPostSentimentalType() == 0) {
+                    System.out.println("agregar a high neutros");
+                    neutrals.add(postIn);
+                }
+
+            }
+
+
+        } else if (filterGeneral.equals("mediosuperior")) {
+
+
+            Iterator allI = college.iterator();
+
+            while (allI.hasNext()) {
+                PostIn postIn = (PostIn) allI.next();
+
+                if (filter.equals("Positivos") && postIn.getPostSentimentalType() == 1) {
+                //    System.out.println("agrego a mediosuperior positivos");
+                    positives.add(postIn);
+
+                } else if (filter.equals("Negativos") && postIn.getPostSentimentalType() == 2) {
+               //     System.out.println("agrego a mediosuperior negativos");
+                    negatives.add(postIn);
+
+                } else if (filter.equals("Neutros") && postIn.getPostSentimentalType() == 0) {
+                 //   System.out.println("agregar a mediosuperior neutros");
+                    neutrals.add(postIn);
+                }
+
+            }
+
+
+        } else if (filterGeneral.equals("graduado")) {
+
+
+            Iterator allI = college.iterator();
+
+            while (allI.hasNext()) {
+                PostIn postIn = (PostIn) allI.next();
+
+                if (filter.equals("Positivos") && postIn.getPostSentimentalType() == 1) {
+                 //   System.out.println("agrego a mediosuperior positivos");
+                    positives.add(postIn);
+
+                } else if (filter.equals("Negativos") && postIn.getPostSentimentalType() == 2) {
+                   // System.out.println("agrego a mediosuperior negativos");
+                    negatives.add(postIn);
+
+                } else if (filter.equals("Neutros") && postIn.getPostSentimentalType() == 0) {
+                    //System.out.println("agregar a mediosuperior neutros");
+                    neutrals.add(postIn);
+                }
+
+            }
+        } else if (filterGeneral.equals("undefined")) {
+
+
+            Iterator allI = undefined.iterator();
+
+            while (allI.hasNext()) {
+                PostIn postIn = (PostIn) allI.next();
+
+                if (filter.equals("Positivos") && postIn.getPostSentimentalType() == 1) {
+                //    System.out.println("agrego a mediosuperior positivos");
+                    positives.add(postIn);
+
+                } else if (filter.equals("Negativos") && postIn.getPostSentimentalType() == 2) {
+                  //  System.out.println("agrego a mediosuperior negativos");
+                    negatives.add(postIn);
+
+                } else if (filter.equals("Neutros") && postIn.getPostSentimentalType() == 0) {
+                  //  System.out.println("agregar a mediosuperior neutros");
+                    neutrals.add(postIn);
+                }
+
+            }
+        }
+
+
         Iterator i = null;
-        if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("highSchool", lang))) {
-            i = highSchoolArray.iterator();
-        } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("college", lang))) {
-            i = collegeArray.iterator();
-        } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("graduate", lang))) {
-            i = graduateArray.iterator();
-        } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("undefinedEducation", lang))) {
-            i = undefinedArray.iterator();
-        } else {
-            i = listTotal.iterator();
+        if (filterGeneral.equals("all")) {
+            i = all.iterator();
+            if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("highSchool", lang))) {
+              //  System.out.println("entro e i secundaria");
+                i = allSecundaria.iterator();
+            } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("college", lang))) {
+             //   System.out.println(" entro en i mediosuperior");
+                i = allMedioSuperior.iterator();
+            } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("graduate", lang))) {
+             //   System.out.println("entro en i no define");
+                i = allGraduado.iterator();
+            } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("undefinedEducation", lang))) {
+              //  System.out.println("entro en i no define");
+                i = allUdefined.iterator();
+            }
+        } else if (filterGeneral.equals("secundaria")) {
+            i = highSchool.iterator();
+            if (filter.equals("Positivos")) {
+             //   System.out.println("x");
+                i = positives.iterator();
+            } else if (filter.equals("Negativos")) {
+              //  System.out.println("y");
+                i = negatives.iterator();
+            } else if (filter.equals("Neutros")) {
+              //  System.out.println("z");
+                i = neutrals.iterator();
+            }
+        } else if (filterGeneral.equals("mediosuperior")) {
+            i = college.iterator();
+            if (filter.equals("Positivos")) {
+             //   System.out.println("xf");
+                i = positives.iterator();
+            } else if (filter.equals("Negativos")) {
+             //   System.out.println("yf");
+                i = negatives.iterator();
+            } else if (filter.equals("Neutros")) {
+            //    System.out.println("zf");
+                i = neutrals.iterator();
+            }
+        } else if (filterGeneral.equals("graduado")) {
+            i = graduate.iterator();
+            if (filter.equals("Positivos")) {
+              //  System.out.println("xf");
+                i = positives.iterator();
+            } else if (filter.equals("Negativos")) {
+            //    System.out.println("xf");
+                i = negatives.iterator();
+            } else if (filter.equals("Neutros")) {
+             //   System.out.println("xf");
+                i = neutrals.iterator();
+            }
+        } else if (filterGeneral.equals("undefined")) {
+            i = undefined.iterator();
+            if (filter.equals("Positivos")) {
+              //  System.out.println("zf");
+                i = positives.iterator();
+            } else if (filter.equals("Negativos")) {
+              //  System.out.println("zf");
+                i = negatives.iterator();
+            } else if (filter.equals("Neutros")) {
+              //  System.out.println("zf");
+                i = neutrals.iterator();
+            }
         }
 
         return i;
     }
 
-    private Iterator getRelationShip(String suri, String lang, String filter) {
+    private Iterator getRelationShip(String suri, String lang, String filter, String filterGeneral) {
+     //   System.out.println("filter " + filter);
+       // System.out.println("filter genneral " + filterGeneral);
 
         int single = 0, married = 0, divorced = 0, widowed = 0, undefined = 0;
         SemanticObject semObj = SemanticObject.getSemanticObject(suri);
 
-        ArrayList totalPost = new ArrayList();
+        ArrayList all = new ArrayList();
+        ArrayList allSingle = new ArrayList();
+        ArrayList allMarried = new ArrayList();
+        ArrayList allWidowed = new ArrayList();
+        ArrayList allDivorced = new ArrayList();
+        ArrayList allUndefined = new ArrayList();
         ArrayList singleArray = new ArrayList();
         ArrayList marriedArray = new ArrayList();
         ArrayList divorcedArray = new ArrayList();
         ArrayList widowedArray = new ArrayList();
         ArrayList undefinedArray = new ArrayList();
 
+        ArrayList positives = new ArrayList();
+        ArrayList negatives = new ArrayList();
+        ArrayList neutrals = new ArrayList();
+
         Iterator<PostIn> itObjPostIns = null;
         if (semObj.getGenericInstance() instanceof Stream) {
             Stream stream = (Stream) semObj.getGenericInstance();
@@ -659,119 +1024,265 @@ public class PieCharts extends GenericResource {
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
 
-            if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_SINGLE) {
-                single++;
-                singleArray.add(postIn);
-                totalPost.add(postIn);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_MARRIED) {
-                married++;
-                marriedArray.add(postIn);
-                totalPost.add(postIn);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_DIVORCED) {
-                divorced++;
-                divorcedArray.add(postIn);
-                totalPost.add(postIn);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_WIDOWED) {
-                widowed++;
-                widowedArray.add(postIn);
-                totalPost.add(postIn);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == 0) {
-                undefined++;
-                undefinedArray.add(postIn);
-                totalPost.add(postIn);
+            if (filterGeneral.equals("all")) {
+                if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_SINGLE
+                        || postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_MARRIED
+                        || postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_DIVORCED
+                        || postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_WIDOWED
+                        || postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == 0) {
+                  //  System.out.println("agregar todos");
+                    all.add(postIn);
+                }
+            } else if (filterGeneral.equals("single")) {
+                if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_SINGLE) {
+                  //  System.out.println("agregar single");
+                    singleArray.add(postIn);
+                }
+            } else if (filterGeneral.equals("married")) {
+                if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_MARRIED) {
+                 //   System.out.println("agregar a married");
+                    marriedArray.add(postIn);
+                }
+            } else if (filterGeneral.equals("widowed")) {
+                if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_WIDOWED) {
+                   // System.out.println("agregar widowed");
+                    widowedArray.add(postIn);
+                }
+            } else if (filterGeneral.equals("divorced")) {
+                if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_DIVORCED) {
+                  //  System.out.println("agregar divorced");
+                    divorcedArray.add(postIn);
+                }
+            } else if (filterGeneral.equals("undefined")) {
+                if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == 0) {
+                 //   System.out.println("agregar undefined");
+                    undefinedArray.add(postIn);
+                }
             }
+
         }
 
 
 
-        Iterator singleI = singleArray.iterator();
-        int neutralsSingle = 0, positivesSingle = 0, negativesSingle = 0;
-        while (singleI.hasNext()) {
-            PostIn pi = (PostIn) singleI.next();
-            if (pi.getPostSentimentalType() == 0) {
-                neutralsSingle++;
-            } else if (pi.getPostSentimentalType() == 1) {
-                positivesSingle++;
-            } else if (pi.getPostSentimentalType() == 2) {
-                negativesSingle++;
+        if (filterGeneral.equals("all")) {
+            Iterator allI = all.iterator();
+            while (allI.hasNext()) {
+                PostIn postIn = (PostIn) allI.next();
+              //  System.out.println("SWBSocialResUtil.Util.getStringFromGenericLocale(\"undefinedRelation\", lang)" + SWBSocialResUtil.Util.getStringFromGenericLocale("undefinedRelation", lang));
+                if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("single", lang)) && postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_SINGLE) {
+                //    System.out.println("agrego a all single");
+                    allSingle.add(postIn);
+
+                } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("married", lang)) && postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_MARRIED) {
+               //     System.out.println("agrego a married");
+                    allMarried.add(postIn);
+
+                } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("widowed", lang)) && postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_WIDOWED) {
+                //    System.out.println("agregar a all widowed");
+                    allWidowed.add(postIn);
+                } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("divorced", lang)) && postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_DIVORCED) {
+                 //   System.out.println("agregar a all divorced");
+                    allDivorced.add(postIn);
+                } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("undefinedRelation", lang)) && postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == 0) {
+                   // System.out.println("agregar a all undefined");
+                    allUndefined.add(postIn);
+                }
             }
-        }
 
+        } else if (filterGeneral.equals("single")) {
 
-        Iterator marriedI = marriedArray.iterator();
-        int neutralsMarried = 0, positivesMarried = 0, negativesMarried = 0;
-        while (marriedI.hasNext()) {
-            PostIn pi = (PostIn) marriedI.next();
-            if (pi.getPostSentimentalType() == 0) {
-                neutralsMarried++;
-            } else if (pi.getPostSentimentalType() == 1) {
-                positivesMarried++;
-            } else if (pi.getPostSentimentalType() == 2) {
-                negativesMarried++;
+            Iterator i = singleArray.iterator();
+
+            while (i.hasNext()) {
+                PostIn postIn = (PostIn) i.next();
+
+                if (filter.equals("Positivos") && postIn.getPostSentimentalType() == 1) {
+                    positives.add(postIn);
+
+                } else if (filter.equals("Negativos") && postIn.getPostSentimentalType() == 2) {
+                    negatives.add(postIn);
+
+                } else if (filter.equals("Neutros") && postIn.getPostSentimentalType() == 0) {
+                    neutrals.add(postIn);
+                }
             }
-        }
 
-        Iterator divorcedI = divorcedArray.iterator();
-        int neutralsDivorced = 0, positivesDivorced = 0, negativesDivorced = 0;
-        while (divorcedI.hasNext()) {
-            PostIn pi = (PostIn) divorcedI.next();
-            if (pi.getPostSentimentalType() == 0) {
-                neutralsDivorced++;
-            } else if (pi.getPostSentimentalType() == 1) {
-                positivesDivorced++;
-            } else if (pi.getPostSentimentalType() == 2) {
-                negativesDivorced++;
+        } else if (filterGeneral.equals("married")) {
+
+            Iterator i = marriedArray.iterator();
+
+            while (i.hasNext()) {
+                PostIn postIn = (PostIn) i.next();
+
+                if (filter.equals("Positivos") && postIn.getPostSentimentalType() == 1) {
+                    positives.add(postIn);
+
+                } else if (filter.equals("Negativos") && postIn.getPostSentimentalType() == 2) {
+                    negatives.add(postIn);
+
+                } else if (filter.equals("Neutros") && postIn.getPostSentimentalType() == 0) {
+                    neutrals.add(postIn);
+                }
             }
-        }
 
-        Iterator widowedI = widowedArray.iterator();
-        int neutralsWidowed = 0, positivesWidowed = 0, negativesWidowed = 0;
-        while (widowedI.hasNext()) {
-            PostIn pi = (PostIn) widowedI.next();
-            if (pi.getPostSentimentalType() == 0) {
-                neutralsWidowed++;
-            } else if (pi.getPostSentimentalType() == 1) {
-                positivesWidowed++;
-            } else if (pi.getPostSentimentalType() == 2) {
-                negativesWidowed++;
+        } else if (filterGeneral.equals("widowed")) {
+
+            Iterator i = widowedArray.iterator();
+
+            while (i.hasNext()) {
+                PostIn postIn = (PostIn) i.next();
+
+                if (filter.equals("Positivos") && postIn.getPostSentimentalType() == 1) {
+                    positives.add(postIn);
+
+                } else if (filter.equals("Negativos") && postIn.getPostSentimentalType() == 2) {
+                    negatives.add(postIn);
+
+                } else if (filter.equals("Neutros") && postIn.getPostSentimentalType() == 0) {
+                    neutrals.add(postIn);
+                }
             }
-        }
 
+        } else if (filterGeneral.equals("divorced")) {
 
-        Iterator undefinedI = undefinedArray.iterator();
-        int neutralsUndefined = 0, positivesUndefined = 0, negativesUndefined = 0;
-        while (undefinedI.hasNext()) {
-            PostIn pi = (PostIn) undefinedI.next();
-            if (pi.getPostSentimentalType() == 0) {
-                neutralsUndefined++;
-            } else if (pi.getPostSentimentalType() == 1) {
-                positivesUndefined++;
-            } else if (pi.getPostSentimentalType() == 2) {
-                negativesUndefined++;
+            Iterator i = divorcedArray.iterator();
+
+            while (i.hasNext()) {
+                PostIn postIn = (PostIn) i.next();
+
+                if (filter.equals("Positivos") && postIn.getPostSentimentalType() == 1) {
+                    positives.add(postIn);
+
+                } else if (filter.equals("Negativos") && postIn.getPostSentimentalType() == 2) {
+                    negatives.add(postIn);
+
+                } else if (filter.equals("Neutros") && postIn.getPostSentimentalType() == 0) {
+                    neutrals.add(postIn);
+                }
             }
+
+        } else if (filterGeneral.equals("undefined")) {
+
+            Iterator i = undefinedArray.iterator();
+
+            while (i.hasNext()) {
+                PostIn postIn = (PostIn) i.next();
+
+                if (filter.equals("Positivos") && postIn.getPostSentimentalType() == 1) {
+                    positives.add(postIn);
+
+                } else if (filter.equals("Negativos") && postIn.getPostSentimentalType() == 2) {
+                    negatives.add(postIn);
+
+                } else if (filter.equals("Neutros") && postIn.getPostSentimentalType() == 0) {
+                    neutrals.add(postIn);
+                }
+            }
+
         }
-
-
 
         Iterator i = null;
-        if (filter.equals("")) {
-            i = totalPost.iterator();
-        } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("single", lang))) {
+        if (filterGeneral.equals("all")) {
+            i = all.iterator();
+
+            if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("single", lang))) {
+          //      System.out.println(" i single");
+                i = allSingle.iterator();
+
+            } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("married", lang))) {
+           //     System.out.println(" i married");
+                i = allMarried.iterator();
+
+            } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("widowed", lang))) {
+             //   System.out.println("i viudo");
+
+                i = allWidowed.iterator();
+
+            } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("divorced", lang))) {
+           //    System.out.println("i divorced");
+                i = allDivorced.iterator();
+
+            } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("undefinedRelation", lang))) {
+              //  System.out.println(" i undefined");
+                i = allUndefined.iterator();
+
+            }
+
+
+        } else if (filterGeneral.equals("single")) {
             i = singleArray.iterator();
-        } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("married", lang))) {
+
+            if (filter.equals("Positivos")) {
+              //  System.out.println("xd");
+                i = positives.iterator();
+            } else if (filter.equals("Negativos")) {
+              //  System.out.println("yd");
+                i = negatives.iterator();
+            } else if (filter.equals("Neutros")) {
+             //   System.out.println("zd");
+                i = neutrals.iterator();
+            }
+
+        } else if (filterGeneral.equals("married")) {
             i = marriedArray.iterator();
-        } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("divorced", lang))) {
+            if (filter.equals("Positivos")) {
+           //     System.out.println("x");
+                i = positives.iterator();
+            } else if (filter.equals("Negativos")) {
+             //   System.out.println("y");
+                i = negatives.iterator();
+            } else if (filter.equals("Neutros")) {
+             //   System.out.println("z");
+                i = neutrals.iterator();
+            }
+        } else if (filterGeneral.equals("divorced")) {
             i = divorcedArray.iterator();
-        } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("widowed", lang))) {
+            if (filter.equals("Positivos")) {
+              // System.out.println("xd");
+                i = positives.iterator();
+            } else if (filter.equals("Negativos")) {
+              //  System.out.println("yd");
+                i = negatives.iterator();
+            } else if (filter.equals("Neutros")) {
+                //System.out.println("zd");
+                i = neutrals.iterator();
+            }
+
+        } else if (filterGeneral.equals("widowed")) {
             i = widowedArray.iterator();
-        } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("undefinedRelation", lang))) {
+            if (filter.equals("Positivos")) {
+            //    System.out.println("xw");
+                i = positives.iterator();
+            } else if (filter.equals("Negativos")) {
+             //   System.out.println("yw");
+                i = negatives.iterator();
+            } else if (filter.equals("Neutros")) {
+             //   System.out.println("zw");
+                i = neutrals.iterator();
+            }
+            i = widowedArray.iterator();
+
+        } else if (filterGeneral.equals("undefined")) {
             i = undefinedArray.iterator();
+            if (filter.equals("Positivos")) {
+              //  System.out.println("xu");
+                i = positives.iterator();
+            } else if (filter.equals("Negativos")) {
+             //   System.out.println("yu");
+                i = negatives.iterator();
+            } else if (filter.equals("Neutros")) {
+             //   System.out.println("zu");
+                i = neutrals.iterator();
+            }
+
         }
 
         return i;
     }
 
-    private Iterator getLifeStage(String suri, String lang, String filter) {
+    private Iterator getLifeStage(String suri, String lang, String filter, String filterGeneral) {
+      //  System.out.println("filter " + filter);
+       // System.out.println("filter General " + filterGeneral);
         SemanticObject semObj = SemanticObject.getSemanticObject(suri);
 
         int young = 0, child = 0, teenAge = 0, youngAdult = 0, adult = 0, thirdAge = 0, nodefined = 0;
@@ -794,160 +1305,434 @@ public class PieCharts extends GenericResource {
         ArrayList adultArray = new ArrayList();
         ArrayList noDefine = new ArrayList();
 
+        ArrayList all = new ArrayList();
+        ArrayList allchild = new ArrayList();
+        ArrayList allYoung = new ArrayList();
+        ArrayList allTeenAge = new ArrayList();
+        ArrayList allYoungAdult = new ArrayList();
+        ArrayList allAdult = new ArrayList();
+        ArrayList allThirdAge = new ArrayList();
+        ArrayList allnodefine = new ArrayList();
 
+
+        ArrayList positives = new ArrayList();
+        ArrayList negatives = new ArrayList();
+        ArrayList neutrals = new ArrayList();
+
+
+    //    System.out.println("antes del while");
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
-           
-            
-            if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() == null) {
-                nodefined++;
-                totalPost.add(postIn);
-            }
-            if(postIn.getPostInSocialNetworkUser().getSnu_LifeStage() != null){
-            if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Young")) {
-                young++;
-                youngArray.add(postIn);
-                totalPost.add(postIn);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Child")) {
-                child++;
-                childArray.add(postIn);
-                totalPost.add(postIn);
+         //   System.out.println("enel while");
+            if (filterGeneral.equals("all")) {
+                if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() == null
+                        || postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Child")
+                        || postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("TeenAge")
+                        || postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("YoungAdult")
+                        || postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Adult")
+                        || postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("ThirdAge")
+                        || postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Young")) {
 
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("TeenAge")) {
-                teenAge++;
-                teenAgeArray.add(postIn);
-                totalPost.add(postIn);
+                    all.add(postIn);
 
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("YoungAdult")) {
-                youngAdult++;
-                youngAdultArray.add(postIn);
-                totalPost.add(postIn);
+                }
 
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Adult")) {
-                adult++;
-                adultArray.add(postIn);
-                totalPost.add(postIn);
+            } else if (filterGeneral.equals("child")) {
+                if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() != null) {
+                    if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Child")) {
+                        childArray.add(postIn);
+                    }
+                }
 
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("ThirdAge")) {
-                thirdAge++;
-                thirdAgeArray.add(postIn);
-                totalPost.add(postIn);
+            } else if (filterGeneral.equals("young")) {
+          //      System.out.println("entro a youngarray");
+                if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() != null) {
+                    if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Young")) {
+                        youngArray.add(postIn);
+                    }
+                }
 
-            }
-            }
-        }
+            } else if (filterGeneral.equals("teenAge")) {
+                if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() != null) {
+                    if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("TeenAge")) {
+                        teenAgeArray.add(postIn);
+                    }
+                }
 
+            } else if (filterGeneral.equals("youngAdult")) {
+                if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() != null) {
+                    if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("YoungAdult")) {
+                        youngAdultArray.add(postIn);
+                    }
+                }
 
-        Iterator youngI = youngArray.iterator();
-
-        int neutralsYoung = 0, positivesYoung = 0, negativesYoung = 0;
-        while (youngI.hasNext()) {
-            PostIn pi = (PostIn) youngI.next();
-            if (pi.getPostSentimentalType() == 0) {
-                neutralsYoung++;
-            } else if (pi.getPostSentimentalType() == 1) {
-                positivesYoung++;
-            } else if (pi.getPostSentimentalType() == 2) {
-                negativesYoung++;
-            }
-        }
+            } else if (filterGeneral.equals("adult")) {
+                if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() != null) {
+                    if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Adult")) {
+                        adultArray.add(postIn);
+                    }
+                }
 
 
-        Iterator childI = childArray.iterator();
+            } else if (filterGeneral.equals("thirdAge")) {
+                if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() != null) {
+                    if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("ThirdAge")) {
+                        thirdAgeArray.add(postIn);
+                    }
+                }
 
-        int neutralsChild = 0, positivesChild = 0, negativesChild = 0;
-        while (childI.hasNext()) {
-            PostIn pi = (PostIn) childI.next();
-            if (pi.getPostSentimentalType() == 0) {
-                neutralsChild++;
-            } else if (pi.getPostSentimentalType() == 1) {
-                positivesChild++;
-            } else if (pi.getPostSentimentalType() == 2) {
-                negativesChild++;
-            }
-        }
+            } else if (filterGeneral.equals("nodefine")) {
+                if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() == null) {
+                    noDefine.add(postIn);
+                }
 
-        Iterator teenAgeI = teenAgeArray.iterator();
 
-        int neutralsteenAge = 0, positivesteenAge = 0, negativesteenAge = 0;
-        while (teenAgeI.hasNext()) {
-            PostIn pi = (PostIn) teenAgeI.next();
-            if (pi.getPostSentimentalType() == 0) {
-                neutralsteenAge++;
-            } else if (pi.getPostSentimentalType() == 1) {
-                positivesteenAge++;
-            } else if (pi.getPostSentimentalType() == 2) {
-                negativesteenAge++;
             }
         }
 
 
-        Iterator youngAdultI = youngAdultArray.iterator();
 
-        int neutralsyoungAdult = 0, positivesyoungAdult = 0, negativesyoungAdult = 0;
-        while (youngAdultI.hasNext()) {
-            PostIn pi = (PostIn) youngAdultI.next();
-            if (pi.getPostSentimentalType() == 0) {
-                neutralsyoungAdult++;
-            } else if (pi.getPostSentimentalType() == 1) {
-                positivesyoungAdult++;
-            } else if (pi.getPostSentimentalType() == 2) {
-                negativesyoungAdult++;
+        if (filterGeneral.equals("all")) {
+            Iterator allI = all.iterator();
+
+            while (allI.hasNext()) {
+                PostIn postIn = (PostIn) allI.next();
+
+           //     System.out.println("eentro alll");
+                if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() != null) {
+
+                    if (filter.equals("Child") && postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Child")) {
+                  //      System.out.println("agrego a all male");
+                        childArray.add(postIn);
+
+                    } else if (filter.equals("Young") && postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Young")) {
+                //        System.out.println("agrego a allfemale");
+                        youngArray.add(postIn);
+
+                    } else if (filter.equals("TeenAge") && postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("TeenAge")) {
+                    //    System.out.println("agregar a all teenage");
+                        teenAgeArray.add(postIn);
+                    } else if (filter.equals("YoungAdult") && postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("YoungAdult")) {
+                    //    System.out.println("agregar a all youngadult");
+                        youngAdultArray.add(postIn);
+                    } else if (filter.equals("Adult") && postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Adult")) {
+                  //      System.out.println("agregar a all adult");
+                        adultArray.add(postIn);
+                    } else if (filter.equals("ThirdAge") && postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("ThirdAge")) {
+                  //      System.out.println("agregar a all thirdage");
+                        thirdAgeArray.add(postIn);
+                    }
+                } else {
+                    if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("nodefine", lang)) && postIn.getPostInSocialNetworkUser().getSnu_LifeStage() == null) {
+                    //    System.out.println("agregar a all nodefine");
+                        noDefine.add(postIn);
+                    }
+
+                }
             }
+        } else if (filterGeneral.equals("child")) {
+         //   System.out.println("entro child");
+
+            Iterator i = childArray.iterator();
+            while (i.hasNext()) {
+                PostIn postInMale = (PostIn) i.next();
+
+                if (filter.equals("Positivos") && postInMale.getPostSentimentalType() == 1) {
+                    positives.add(postInMale);
+
+                } else if (filter.equals("Negativos") && postInMale.getPostSentimentalType() == 2) {
+                    negatives.add(postInMale);
+
+                } else if (filter.equals("Neutros") && postInMale.getPostSentimentalType() == 0) {
+                    neutrals.add(postInMale);
+                }
+            }
+
+        } else if (filterGeneral.equals("young")) {
+        //    System.out.println("entro young");
+            Iterator i = youngArray.iterator();
+            while (i.hasNext()) {
+                PostIn postInMale = (PostIn) i.next();
+
+                if (filter.equals("Positivos") && postInMale.getPostSentimentalType() == 1) {
+                    positives.add(postInMale);
+
+                } else if (filter.equals("Negativos") && postInMale.getPostSentimentalType() == 2) {
+                    negatives.add(postInMale);
+
+                } else if (filter.equals("Neutros") && postInMale.getPostSentimentalType() == 0) {
+                    neutrals.add(postInMale);
+                }
+            }
+
+        } else if (filterGeneral.equals("teenAge")) {
+         //   System.out.println("entro teenage");
+            Iterator i = teenAgeArray.iterator();
+            while (i.hasNext()) {
+                PostIn postInMale = (PostIn) i.next();
+
+                if (filter.equals("Positivos") && postInMale.getPostSentimentalType() == 1) {
+                    positives.add(postInMale);
+
+                } else if (filter.equals("Negativos") && postInMale.getPostSentimentalType() == 2) {
+                    negatives.add(postInMale);
+
+                } else if (filter.equals("Neutros") && postInMale.getPostSentimentalType() == 0) {
+                    neutrals.add(postInMale);
+                }
+            }
+
+
+        } else if (filterGeneral.equals("youngAdult")) {
+       //     System.out.println("entro youngaadult");
+            Iterator i = youngAdultArray.iterator();
+            while (i.hasNext()) {
+                PostIn postInMale = (PostIn) i.next();
+
+                if (filter.equals("Positivos") && postInMale.getPostSentimentalType() == 1) {
+                    positives.add(postInMale);
+
+                } else if (filter.equals("Negativos") && postInMale.getPostSentimentalType() == 2) {
+                    negatives.add(postInMale);
+
+                } else if (filter.equals("Neutros") && postInMale.getPostSentimentalType() == 0) {
+                    neutrals.add(postInMale);
+                }
+            }
+
+        } else if (filterGeneral.equals("adult")) {
+        //    System.out.println("entro adult");
+            Iterator i = adultArray.iterator();
+            while (i.hasNext()) {
+                PostIn postInMale = (PostIn) i.next();
+
+                if (filter.equals("Positivos") && postInMale.getPostSentimentalType() == 1) {
+                    positives.add(postInMale);
+
+                } else if (filter.equals("Negativos") && postInMale.getPostSentimentalType() == 2) {
+                    negatives.add(postInMale);
+
+                } else if (filter.equals("Neutros") && postInMale.getPostSentimentalType() == 0) {
+                    neutrals.add(postInMale);
+                }
+            }
+
+        } else if (filterGeneral.equals("thirdAge")) {
+        //    System.out.println("entro a thirdage");
+            Iterator i = thirdAgeArray.iterator();
+            while (i.hasNext()) {
+                PostIn postInMale = (PostIn) i.next();
+
+                if (filter.equals("Positivos") && postInMale.getPostSentimentalType() == 1) {
+                    positives.add(postInMale);
+
+                } else if (filter.equals("Negativos") && postInMale.getPostSentimentalType() == 2) {
+                    negatives.add(postInMale);
+
+                } else if (filter.equals("Neutros") && postInMale.getPostSentimentalType() == 0) {
+                    neutrals.add(postInMale);
+                }
+            }
+
+        } else if (filterGeneral.equals("nodefine")) {
+         //   System.out.println("entro no define");
+            Iterator i = noDefine.iterator();
+            while (i.hasNext()) {
+                PostIn postInMale = (PostIn) i.next();
+
+                if (filter.equals("Positivos") && postInMale.getPostSentimentalType() == 1) {
+                    positives.add(postInMale);
+
+                } else if (filter.equals("Negativos") && postInMale.getPostSentimentalType() == 2) {
+                    negatives.add(postInMale);
+
+                } else if (filter.equals("Neutros") && postInMale.getPostSentimentalType() == 0) {
+                    neutrals.add(postInMale);
+                }
+            }
+
         }
 
-        Iterator adultI = adultArray.iterator();
 
-        int neutralsAdult = 0, positivesAdult = 0, negativesAdult = 0;
-        while (adultI.hasNext()) {
-            PostIn pi = (PostIn) adultI.next();
-            if (pi.getPostSentimentalType() == 0) {
-                neutralsAdult++;
-            } else if (pi.getPostSentimentalType() == 1) {
-                positivesAdult++;
-            } else if (pi.getPostSentimentalType() == 2) {
-                negativesAdult++;
-            }
-        }
 
-        Iterator thirdAgeI = thirdAgeArray.iterator();
 
-        int neutralsthirdAge = 0, positivesthirdAge = 0, negativesthirdAge = 0;
-        while (thirdAgeI.hasNext()) {
-            PostIn pi = (PostIn) thirdAgeI.next();
-            if (pi.getPostSentimentalType() == 0) {
-                neutralsthirdAge++;
-            } else if (pi.getPostSentimentalType() == 1) {
-                positivesthirdAge++;
-            } else if (pi.getPostSentimentalType() == 2) {
-                negativesthirdAge++;
-            }
-        }
 
         Iterator ii = null;
 
+        if (filterGeneral.equals("all")) {
 
-        if (filter.equals("Young")) {
-            ii = youngArray.iterator();
-        } else if (filter.equals("Child")) {
-            ii = childArray.iterator();
-        } else if (filter.equals("TeenAge")) {
-            ii = teenAgeArray.iterator();
-        } else if (filter.equals("YoungAdult")) {
-            ii = youngAdultArray.iterator();
-        } else if (filter.equals("ThirdAge")) {
-            ii = thirdAgeArray.iterator();
-        } else if (filter.equals("Adult")) {
-            ii = adultArray.iterator();
-        } else {
-            ii = totalPost.iterator();
+            if (filter.equals("")) {
+                ii = all.iterator();
+            } else if (filter.equals("Young")) {
+           //     System.out.println("all young");
+                ii = youngArray.iterator();
+            } else if (filter.equals("Child")) {
+          //      System.out.println("all child");
+                ii = childArray.iterator();
+            } else if (filter.equals("TeenAge")) {
+          //      System.out.println("all tenage");
+                ii = teenAgeArray.iterator();
+            } else if (filter.equals("YoungAdult")) {
+           //     System.out.println("allyoungadult");
+                ii = youngAdultArray.iterator();
+            } else if (filter.equals("ThirdAge")) {
+          //      System.out.println("all thirdahe");
+                ii = thirdAgeArray.iterator();
+            } else if (filter.equals("Adult")) {
+            //    System.out.println("alladult");
+                ii = adultArray.iterator();
+            } else {
+           //     System.out.println("allnoefine");
+                ii = noDefine.iterator();
+            }
+
+
+        } else if (filterGeneral.equals("child")) {
+            if (filter.equals("")) {
+                ii = childArray.iterator();
+            } else if (filter.equals("Positivos")) {
+            //    System.out.println("x");
+                ii = positives.iterator();
+            } else if (filter.equals("Negativos")) {
+           //     System.out.println("y");
+                ii = negatives.iterator();
+            } else if (filter.equals("Neutros")) {
+             //   System.out.println("z");
+                ii = neutrals.iterator();
+            }
+
+
+
+        } else if (filterGeneral.equals("young")) {
+
+            if (filter.equals("")) {
+                ii = youngArray.iterator();
+            } else if (filter.equals("Positivos")) {
+             //   System.out.println("xy");
+                ii = positives.iterator();
+            } else if (filter.equals("Negativos")) {
+            //    System.out.println("yy");
+                ii = negatives.iterator();
+            } else if (filter.equals("Neutros")) {
+             //   System.out.println("zy");
+                ii = neutrals.iterator();
+            }
+
+        } else if (filterGeneral.equals("teenAge")) {
+            if (filter.equals("")) {
+                ii = teenAgeArray.iterator();
+            } else if (filter.equals("Positivos")) {
+             //   System.out.println("xt");
+                ii = positives.iterator();
+            } else if (filter.equals("Negativos")) {
+            //    System.out.println("yt");
+                ii = negatives.iterator();
+            } else if (filter.equals("Neutros")) {
+            //    System.out.println("zt");
+                ii = neutrals.iterator();
+            }
+        } else if (filterGeneral.equals("youngAdult")) {
+
+            if (filter.equals("")) {
+                ii = youngAdultArray.iterator();
+            } else if (filter.equals("Positivos")) {
+           //     System.out.println("xya");
+                ii = positives.iterator();
+            } else if (filter.equals("Negativos")) {
+              //  System.out.println("yya");
+                ii = negatives.iterator();
+            } else if (filter.equals("Neutros")) {
+             //   System.out.println("za");
+                ii = neutrals.iterator();
+            }
+
+        } else if (filterGeneral.equals("adult")) {
+            if (filter.equals("")) {
+                ii = adultArray.iterator();
+            } else if (filter.equals("Positivos")) {
+               // System.out.println("xa");
+                ii = positives.iterator();
+            } else if (filter.equals("Negativos")) {
+            //    System.out.println("ya");
+                ii = negatives.iterator();
+            } else if (filter.equals("Neutros")) {
+            //    System.out.println("za");
+                ii = neutrals.iterator();
+            }
+
+        } else if (filterGeneral.equals("thirdAge")) {
+            if (filter.equals("")) {
+                ii = thirdAgeArray.iterator();
+            } else if (filter.equals("Positivos")) {
+              //  System.out.println("xt");
+                ii = positives.iterator();
+            } else if (filter.equals("Negativos")) {
+             //   System.out.println("yt");
+                ii = negatives.iterator();
+            } else if (filter.equals("Neutros")) {
+            //    System.out.println("zt");
+                ii = neutrals.iterator();
+            }
+        } else if (filterGeneral.equals("nodefine")) {
+            if (filter.equals("")) {
+                ii = noDefine.iterator();
+            } else if (filter.equals("Positivos")) {
+             //   System.out.println("xn");
+                ii = positives.iterator();
+            } else if (filter.equals("Negativos")) {
+              //  System.out.println("yn");
+                ii = negatives.iterator();
+            } else if (filter.equals("Neutros")) {
+             //   System.out.println("zn");
+                ii = neutrals.iterator();
+            }
         }
-
         return ii;
     }
 
-    private Iterator getGeoLocation(String suri, String lang, String filter) {
+    private Iterator getGeoLocation(String suri, String lang, String filter, String filterGeneral) {
         SemanticObject semObj = SemanticObject.getSemanticObject(suri);
+      //  System.out.println("Filter en clase: " + filter);
+       // System.out.println("FilterGeneral en clase: " + filterGeneral);
+
+        ArrayList all = new ArrayList();
+        ArrayList aguascalientes = new ArrayList();
+        ArrayList bajaCalifornia = new ArrayList();
+        ArrayList bajaCaliforniaSur = new ArrayList();
+        ArrayList campeche = new ArrayList();
+        ArrayList coahuila = new ArrayList();
+        ArrayList colima = new ArrayList();
+        ArrayList chiapas = new ArrayList();
+        ArrayList chihuahua = new ArrayList();
+        ArrayList distritoFederal = new ArrayList();
+        ArrayList durango = new ArrayList();
+        ArrayList guanajuatp = new ArrayList();
+        ArrayList guerrero = new ArrayList();
+        ArrayList hidalgo = new ArrayList();
+        ArrayList jalisco = new ArrayList();
+        ArrayList estadoDeMexico = new ArrayList();
+        ArrayList michoacan = new ArrayList();
+        ArrayList morelos = new ArrayList();
+        ArrayList nayarit = new ArrayList();
+        ArrayList nuevoLeon = new ArrayList();
+        ArrayList oaxaca = new ArrayList();
+        ArrayList puebla = new ArrayList();
+        ArrayList queretaro = new ArrayList();
+        ArrayList quintanaRoo = new ArrayList();
+        ArrayList sanLuis = new ArrayList();
+        ArrayList sinaloa = new ArrayList();
+        ArrayList sonora = new ArrayList();
+        ArrayList tabasco = new ArrayList();
+        ArrayList tamaulipas = new ArrayList();
+        ArrayList tlaxcala = new ArrayList();
+        ArrayList veracruz = new ArrayList();
+        ArrayList yucatan = new ArrayList();
+        ArrayList zacatecas = new ArrayList();
+        ArrayList nodefinido = new ArrayList();
+
+        ArrayList positivos = new ArrayList();
+        ArrayList negativos = new ArrayList();
+        ArrayList neutros = new ArrayList();
 
         int neutrals = 0, positives = 0, negatives = 0;
         Iterator<PostIn> itObjPostIns = null;
@@ -961,55 +1746,586 @@ public class PieCharts extends GenericResource {
             itObjPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
         }
 
-
-
-        HashMap map = new HashMap();
-        int size = 1;
-
-
-
-        JSONArray node = new JSONArray();
-        ArrayList<String> geoLocation = new ArrayList<String>();
-        String cad = "1,0,0,0";
-        ArrayList listEdo = new ArrayList();
-        HashMap mapEdo = new HashMap();
-        ArrayList listPost = new ArrayList();
-        while (itObjPostIns.hasNext()) {
-
-            PostIn postIn = itObjPostIns.next();
-            CountryState key = postIn.getGeoStateMap();
-
-           String title = "";
-            if (key == null) {
-                title = "No definido";
-            } else {
-                title = key.getTitle();
-
-            }
-                map.put(title, map.containsKey(title) ? cad(map.get(title).toString(), postIn) : "1,1,0,0");
-                mapEdo.put(title, mapEdo.containsKey(title) ? addPostIn(postIn, (ArrayList) mapEdo.get(title)) : addPostIn(postIn, (ArrayList) mapEdo.get(title)));
-                totalPost.add(postIn);
-            
-
-            size++;
-        }
-
         Iterator i = null;
 
-        Iterator ii = mapEdo.entrySet().iterator();
-        while (ii.hasNext()) {
-            Map.Entry e = (Map.Entry) ii.next();
-            String key = reemplazar(e.getKey().toString());
-            if (key.equals(filter)) {
-                ArrayList list = (ArrayList) e.getValue();
-                i = list.iterator();
+        //System.out.println("antes de while");
+        while (itObjPostIns.hasNext()) {
+            PostIn postIn = itObjPostIns.next();
+         //   System.out.println("enel while");
+            String geoState = "";
+
+            if (postIn.getGeoStateMap() != null) {
+                geoState = postIn.getGeoStateMap().toString();
             }
-        }
-        if (i == null) {
-            i = totalPost.iterator();
+
+            if (filterGeneral.equals("all")) {
+
+                if (postIn.getGeoStateMap() != null) {
+
+                    if (geoState.contains("Aguascalientes") || geoState.contains("Baja California Sur") || geoState.contains("Coahuila") || geoState.contains("Colima") || geoState.contains("Chiapas")
+                            || geoState.contains("Baja California") || geoState.contains("Campeche")
+                            || geoState.contains("Chihuahua") || geoState.contains("Distrito") || geoState.contains("Durango") || geoState.contains("Guanajuato") || geoState.contains("Tamaulipas")
+                            || geoState.contains("Guerrero") || geoState.contains("Nuevo") || geoState.contains("Oaxaca") || geoState.contains("San Luis") || geoState.contains("Tlaxcala")
+                            || geoState.contains("Hidalgo") || geoState.contains("Nayarit") || geoState.contains("Puebla") || geoState.contains("Sinaloa") || geoState.contains("Veracruz")
+                            || geoState.contains("Jalisco") || geoState.contains("Morelos") || geoState.contains("Queretaro") || geoState.contains("Sonora")
+                            || geoState.contains("Mexico") || geoState.contains("Michoacan") || geoState.contains("Quintana") || geoState.contains("Tabasco") || geoState.contains("Yucatan") || geoState.contains("Zacatecas")) {
+                        all.add(postIn);
+                    }
+
+                }
+                if (postIn.getGeoStateMap() == null) {
+                    all.add(postIn);
+                    nodefinido.add(postIn);
+                }
+
+            } else if (filterGeneral.equals("Aguascalientes") && postIn.getGeoStateMap() != null) {
+                if (geoState.contains("Aguascalientes")) {
+                    aguascalientes.add(postIn);
+                }
+            } else if (filterGeneral.equals("Baja California")) {
+                if (geoState.contains("Baja California")) {
+                    bajaCalifornia.add(postIn);
+                }
+            } else if (filterGeneral.equals("Baja California Sur")) {
+                if (geoState.contains("Baja California Sur")) {
+                    bajaCaliforniaSur.add(postIn);
+                }
+            } else if (filterGeneral.equals("Campeche")) {
+                if (geoState.contains("Campeche")) {
+                    campeche.add(postIn);
+                }
+            } else if (filterGeneral.equals("Colima")) {
+                if (geoState.contains("Colima")) {
+                    colima.add(postIn);
+                }
+            } else if (filterGeneral.equals("Distrito Federal")) {
+                if (geoState.contains("Distrito Federal")) {
+                    distritoFederal.add(postIn);
+                }
+            } else if (filterGeneral.equals("Durango")) {
+                if (geoState.contains("Durango")) {
+                    durango.add(postIn);
+                }
+            } else if (filterGeneral.equals("Guanajuato")) {
+                if (geoState.contains("Guanajuato")) {
+                    guanajuatp.add(postIn);
+                }
+            } else if (filterGeneral.equals("Guerrero")) {
+                if (geoState.contains("Guerrero")) {
+                    guerrero.add(postIn);
+                }
+            } else if (filterGeneral.equals("Hidalgo") && geoState.contains("Hidalgo")) {
+                hidalgo.add(postIn);
+            } else if (filterGeneral.equals("Jalisco") && geoState.contains("Jalisco")) {
+                jalisco.add(postIn);
+            } else if (filterGeneral.equals("Estado de Mexico") && geoState.contains("Estado de Mexico")) {
+                estadoDeMexico.add(postIn);
+            } else if (filterGeneral.equals("Michoacan") && geoState.contains("Michoacan")) {
+                michoacan.add(postIn);
+            } else if (filterGeneral.equals("Morelos") && geoState.contains("Morelos")) {
+                morelos.add(postIn);
+            } else if (filterGeneral.equals("Nayarit") && geoState.contains("Nayarit")) {
+                nayarit.add(postIn);
+            } else if (filterGeneral.equals("Nuevo Leon") && geoState.contains("Nuevo Leon")) {
+                nuevoLeon.add(postIn);
+            } else if (filterGeneral.equals("Oaxaca") && geoState.contains("Oaxaca")) {
+                oaxaca.add(postIn);
+            } else if (filterGeneral.equals("Puebla") && geoState.contains("Puebla")) {
+                puebla.add(postIn);
+            } else if (filterGeneral.equals("Queretaro") && geoState.contains("Queretaro")) {
+                queretaro.add(postIn);
+            } else if (filterGeneral.equals("Quintana Roo") && geoState.contains("Quintana Roo")) {
+                quintanaRoo.add(postIn);
+            } else if (filterGeneral.equals("San Luis Potosi") && geoState.contains("San Luis Potosi")) {
+                sanLuis.add(postIn);
+            } else if (filterGeneral.equals("Sinaloa") && geoState.contains("Sinaloa")) {
+                sinaloa.add(postIn);
+            } else if (filterGeneral.equals("Sonora") && geoState.contains("Sonora")) {
+                sonora.add(postIn);
+            } else if (filterGeneral.equals("Tabasco") && geoState.contains("Tabasco")) {
+                tabasco.add(postIn);
+            } else if (filterGeneral.equals("Tamaulipas") && geoState.contains("Tamaulipas")) {
+                tamaulipas.add(postIn);
+            } else if (filterGeneral.equals("Tlaxcala") && geoState.contains("Tlaxcala")) {
+                tlaxcala.add(postIn);
+            } else if (filterGeneral.equals("Veracruz") && geoState.contains("Veracruz")) {
+                veracruz.add(postIn);
+            } else if (filterGeneral.equals("Yucatan") && geoState.contains("Yucatan")) {
+                yucatan.add(postIn);
+            } else if (filterGeneral.equals("Zacatecas") && geoState.contains("Zacatecas")) {
+                zacatecas.add(postIn);
+            } else if (filterGeneral.equals("No definido") && postIn.getGeoStateMap() == null) {
+                nodefinido.add(postIn);
+            }
+
         }
 
+
+        if (filterGeneral.equals("all")) {
+            i = all.iterator();
+            if (filter.equals("Aguascalientes")) {
+                i = aguascalientes.iterator();
+            } else if (filter.equals("Baja California")) {
+                i =bajaCalifornia.iterator();
+            } else if (filter.equals("Baja California Sur")) {
+                i =bajaCaliforniaSur.iterator();
+            } else if (filter.equals("Campeche")) {
+                i =campeche.iterator();
+            } else if (filter.equals("Coahuila")) {
+                i =coahuila.iterator();
+            } else if (filter.equals("Colima")) {
+                i =colima.iterator();
+            } else if (filter.equals("Chiapas")) {
+                i =chiapas.iterator();
+            } else if (filter.equals("Chihuahua")) {
+                i =chihuahua.iterator();
+            } else if (filter.equals("Distrito Federal")) {
+                i =distritoFederal.iterator();
+            } else if (filter.equals("Durango")) {
+                i =durango.iterator();
+            } else if (filter.equals("Guanajuato")) {
+                i =guanajuatp.iterator();
+            } else if (filter.equals("Guerrero")) {
+                i =guerrero.iterator();
+            } else if (filter.equals("Hidalgo")) {
+                i =hidalgo.iterator();
+            } else if (filter.equals("Jalisco")) {
+                i =jalisco.iterator();
+            } else if (filter.equals("Estado de Mexico")) {
+                i =estadoDeMexico.iterator();
+            } else if (filter.equals("Michoacan")) {
+                i =morelos.iterator();
+            } else if (filter.equals("Morelos")) {
+                i =morelos.iterator();
+            } else if (filter.equals("Nayarit")) {
+                i =nayarit.iterator();
+            } else if (filter.equals("Nuevo Leon")) {
+                i =nuevoLeon.iterator();
+            } else if (filter.equals("Oaxaca")) {
+                i =oaxaca.iterator();
+            } else if (filter.equals("Puebla")) {
+                i =puebla.iterator();
+            } else if (filter.equals("Queretaro")) {
+                i =queretaro.iterator();
+            } else if (filter.equals("Quintana Roo")) {
+                i =quintanaRoo.iterator();
+            } else if (filter.equals("San Luis Potosi")) {
+                i =sanLuis.iterator();
+            } else if (filter.equals("Sinaloa")) {
+                i =sinaloa.iterator();
+            } else if (filter.equals("Sonora")) {
+                i =sonora.iterator();
+            } else if (filter.equals("Tabasco")) {
+                i =tabasco.iterator();
+            } else if (filter.equals("Tamaulipas")) {
+                i =tamaulipas.iterator();
+            } else if (filter.equals("Tlaxcala")) {
+                i =tlaxcala.iterator();
+            } else if (filter.equals("Veracruz")) {
+                i =veracruz.iterator();
+            } else if (filter.equals("Yucatan")) {
+                i =yucatan.iterator();
+            } else if (filter.equals("Zacatecas")) {
+                i =zacatecas.iterator();
+            } else if (filter.equals("No definido")) {
+                i =nodefinido.iterator();
+            }
+
+
+        } else if (filterGeneral.equals("Aguascalientes")) {
+            i = aguascalientes.iterator();
+            getPositivesNegativesNeutros(aguascalientes, positivos, negativos, neutros, filter);
+
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Baja California")) {
+            i = bajaCalifornia.iterator();
+            getPositivesNegativesNeutros(bajaCalifornia, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Baja California Sur")) {
+            i = bajaCaliforniaSur.iterator();
+            getPositivesNegativesNeutros(bajaCaliforniaSur, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Campeche")) {
+            i = campeche.iterator();
+            getPositivesNegativesNeutros(campeche, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Coahuila")) {
+            i = coahuila.iterator();
+            getPositivesNegativesNeutros(coahuila, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Colima")) {
+            i = colima.iterator();
+            getPositivesNegativesNeutros(colima, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Chiapas")) {
+            i = chiapas.iterator();
+            getPositivesNegativesNeutros(chiapas, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Chihuahua")) {
+            i = chihuahua.iterator();
+            getPositivesNegativesNeutros(chihuahua, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Distrito Federal")) {
+            i = distritoFederal.iterator();
+            getPositivesNegativesNeutros(distritoFederal, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Durango")) {
+            i = durango.iterator();
+            getPositivesNegativesNeutros(durango, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Guanajuato")) {
+            i = guanajuatp.iterator();
+            getPositivesNegativesNeutros(guanajuatp, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Guerrero")) {
+            i = guerrero.iterator();
+            getPositivesNegativesNeutros(guerrero, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Hidalgo")) {
+            i = hidalgo.iterator();
+            getPositivesNegativesNeutros(hidalgo, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Jalisco")) {
+            i = jalisco.iterator();
+            getPositivesNegativesNeutros(jalisco, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Estado de Mexico")) {
+            i = estadoDeMexico.iterator();
+            getPositivesNegativesNeutros(estadoDeMexico, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Michoacan")) {
+            i = michoacan.iterator();
+            getPositivesNegativesNeutros(michoacan, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Morelos")) {
+            i = morelos.iterator();
+            getPositivesNegativesNeutros(morelos, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Nayarit")) {
+            i = nayarit.iterator();
+            getPositivesNegativesNeutros(nayarit, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Nuevo Leon")) {
+            i = nuevoLeon.iterator();
+            getPositivesNegativesNeutros(nuevoLeon, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Oaxaca")) {
+            i = oaxaca.iterator();
+            getPositivesNegativesNeutros(oaxaca, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Puebla")) {
+            i = puebla.iterator();
+            getPositivesNegativesNeutros(puebla, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Queretaro")) {
+            i = queretaro.iterator();
+            getPositivesNegativesNeutros(queretaro, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Quintana Roo")) {
+            i = quintanaRoo.iterator();
+            getPositivesNegativesNeutros(quintanaRoo, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("San Luis Potosi")) {
+            i = sanLuis.iterator();
+            getPositivesNegativesNeutros(sanLuis, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Sinaloa")) {
+            i = sinaloa.iterator();
+            getPositivesNegativesNeutros(sinaloa, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Sonora")) {
+            i = sonora.iterator();
+            getPositivesNegativesNeutros(sonora, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Tabasco")) {
+            i = tabasco.iterator();
+            getPositivesNegativesNeutros(tabasco, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Tamaulipas")) {
+            i = tamaulipas.iterator();
+            getPositivesNegativesNeutros(tamaulipas, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Tlaxcala")) {
+            i = tlaxcala.iterator();
+            getPositivesNegativesNeutros(tlaxcala, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Veracruz")) {
+            i = veracruz.iterator();
+            getPositivesNegativesNeutros(veracruz, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Yucatan")) {
+            i = yucatan.iterator();
+            getPositivesNegativesNeutros(yucatan, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("Zacatecas")) {
+            i = zacatecas.iterator();
+            getPositivesNegativesNeutros(zacatecas, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+
+        } else if (filterGeneral.equals("No definido")) {
+            i = nodefinido.iterator();
+            getPositivesNegativesNeutros(nodefinido, positivos, negativos, neutros, filter);
+            if (filter.equals("Positivos")) {
+                i = positivos.iterator();
+            } else if (filter.equals("Negativos")) {
+                i = negativos.iterator();
+            } else if (filter.equals("Neutros")) {
+                i = neutros.iterator();
+            }
+        }
+
+
+
+
+
+
+
+        // System.out.println("Regresa i :"+ i);
+
+
+
         return i;
+    }
+
+    public void getPositivesNegativesNeutros(ArrayList list, ArrayList positives, ArrayList negatives, ArrayList neutrals, String filter) {
+
+        Iterator i = list.iterator();
+        while (i.hasNext()) {
+            PostIn postIn = (PostIn) i.next();
+
+            if (filter.equals("Positivos") && postIn.getPostSentimentalType() == 1) {
+                positives.add(postIn);
+
+            } else if (filter.equals("Negativos") && postIn.getPostSentimentalType() == 2) {
+                negatives.add(postIn);
+
+            } else if (filter.equals("Neutros") && postIn.getPostSentimentalType() == 0) {
+                neutrals.add(postIn);
+            }
+        }
     }
 
     public String reemplazar(String cadena) {
