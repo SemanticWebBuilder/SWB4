@@ -103,7 +103,6 @@
 
         //if (male > 0) {
         if (filter.equals("all")) {
-            System.out.println("entor all");
             float intTotalVotos = male + female + other;
             float intPorcentajeMale = 0;
             float intPorcentajeFemale = 0;
@@ -186,7 +185,6 @@
 
             // }
         } else if (filter.equals("male")) {
-            System.out.println("ENTROOOOOOOOOOOOOOO male");
 
 
             float intPorcentajeNeutralsMale = 0;
@@ -197,9 +195,6 @@
                 intPorcentajePositivesMale = ((float) positivesMale * 100) / (float) totalMale;
                 intPorcentajeNegativesMale = ((float) negativesMale * 100) / (float) totalMale;
             }
-            System.out.println("neutralsMale" + neutralsMale);
-            System.out.println("positivesMale" + positivesMale);
-            System.out.println("negativesMale" + negativesMale);
 
             if (neutralsMale > 0) {
                 JSONObject node4 = new JSONObject();
@@ -241,7 +236,6 @@
 
 
         } else if (filter.equals("female")) {
-            System.out.println("ENTROOOOOOOOOOOOOOO female");
 
             float intPorcentajeNeutralsFemale = 0;
             float intPorcentajePositivesFemale = 0;
@@ -252,9 +246,6 @@
                 intPorcentajeNegativesFemale = ((float) negativesFemale * 100) / (float) totalFemale;
             }
 
-            System.out.println("neutralsFemale" + neutralsFemale);
-            System.out.println("positivesFemale" + positivesFemale);
-            System.out.println("negativesFemale" + negativesFemale);
 
             if (neutralsFemale > 0) {
                 JSONObject node4 = new JSONObject();
@@ -295,7 +286,6 @@
 
 
         } else if (filter.equals("nodefine")) {
-            System.out.println("ENTROOOOOOOOOOOOOOO no define");
 
             float intPorcentajeNeutralsNodefine = 0;
             float intPorcentajePositivesNodefine = 0;
@@ -305,9 +295,7 @@
                 intPorcentajePositivesNodefine = ((float) positivesOther * 100) / (float) totalOther;
                 intPorcentajeNegativesNodefine = ((float) negativesOther * 100) / (float) totalOther;
             }
-            System.out.println("neutralsOther" + neutralsOther);
-            System.out.println("positivesOther" + positivesOther);
-            System.out.println("negativesOther" + negativesOther);
+
 
             if (neutralsOther > 0) {
                 JSONObject node4 = new JSONObject();
@@ -347,7 +335,6 @@
 
 
         } else if (filter.equals("pop")) {
-            System.out.println("entor pop");
 
             if (male == 0 && female == 0 && other == 0) {
                 node.remove(2);
