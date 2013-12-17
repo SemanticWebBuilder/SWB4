@@ -53,7 +53,7 @@
 
                 var iframe =  window.parent.document.getElementById('inneriframe');              
                 var container = document.getElementById('chart');     
-                iframe.style.height = container.offsetHeight + 'px';   
+                iframe.style.height = container.offsetHeight + 'px';             
             }
         </script>
         <meta charset="utf-8">
@@ -93,12 +93,12 @@
             
             
             .bar_positives {
-                fill: orange;
+                fill: #86c440;
             }
 
-            .bar_positives {
-                fill: #04B431 ;
-            }
+            .bar_positives:hover{
+                fill: #86c440 ;
+            }            
             .x.axis path {
                 display: none;
             }
@@ -135,7 +135,7 @@
 
         </style>
     </head>
-    <body onload="resizeIframe();">
+    <body onload="resizeIframe();">        
 
         <div id="chart"></div>
         <script type="text/javascript" >
