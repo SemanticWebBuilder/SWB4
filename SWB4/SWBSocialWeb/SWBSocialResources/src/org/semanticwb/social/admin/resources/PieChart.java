@@ -142,6 +142,17 @@ public class PieChart extends GenericResource {
     private void doGenerateReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws JSONException, IOException, com.hp.hpl.jena.sparql.lib.org.json.JSONException {
         //HashMap hmapResult = filtros(swbSocialUser, webSite, searchWord, request, stream, page);
         String suri = request.getParameter("suri");
+        String title = "";
+        
+        if(SemanticObject.getSemanticObject(suri).getGenericInstance() instanceof  Stream){
+        Stream stream = (Stream)SemanticObject.getSemanticObject(suri).getGenericInstance();
+        title =  stream.getTitle();
+        
+        }else if(SemanticObject.getSemanticObject(suri).getGenericInstance() instanceof  SocialTopic){
+            SocialTopic sTopic = (SocialTopic)SemanticObject.getSemanticObject(suri).getGenericInstance();
+        title =  sTopic.getTitle();
+        }
+        
         String filter = request.getParameter("filter");
         if (filter == null) {
             filter = "";
@@ -152,7 +163,7 @@ public class PieChart extends GenericResource {
 
         try {
 
-            createExcel(setso, paramRequest, response);
+            createExcel(setso, paramRequest, response,title);
 
         } catch (Exception e) {
             log.error(e);
@@ -209,11 +220,11 @@ public class PieChart extends GenericResource {
         return i;
     }
 
-    public void createExcel(Iterator<PostIn> setso, SWBParamRequest paramRequest, HttpServletResponse response) {
+    public void createExcel(Iterator<PostIn> setso, SWBParamRequest paramRequest, HttpServletResponse response, String t) {
         try {
             // Defino el Libro de Excel
             // Iterator v = setso.iterator();
-            String title = "hello";
+            String title = t;;
 
 
             HSSFWorkbook wb = new HSSFWorkbook();
