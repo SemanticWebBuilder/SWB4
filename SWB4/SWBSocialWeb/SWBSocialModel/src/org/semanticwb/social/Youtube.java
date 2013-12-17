@@ -1044,6 +1044,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             JSONObject information = parseUsrInfYoutube.getJSONObject("entry");
             if (information.has("yt$googlePlusUserId") && !information.isNull("yt$googlePlusUserId")) {
                 googlePlusUserId = information.getJSONObject("yt$googlePlusUserId").getString("$t");
+               userInfo.put("third_party_id", information.getJSONObject("yt$googlePlusUserId").getString("$t"));
             }
             if(information.has("yt$statistics") && !information.isNull("yt$statistics")){       
                 userInfo.put("followers", information.getJSONObject("yt$statistics").getString("subscriberCount"));
@@ -1489,7 +1490,30 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
     
     private String getYouTubeThird_party_id(String youtubeUserId)
     {
-        return null;
+        String idPlus = "" ; 
+        HashMap<String, String> params = new HashMap<String, String>(3);
+        params.put("v", "2");
+        params.put("alt", "json");
+
+        String responseIdGoogle = null;
+
+        try {
+            responseIdGoogle = getRequest(params, "https://gdata.youtube.com/feeds/api/users/" + youtubeUserId, "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
+
+            if (responseIdGoogle.equals("")) {
+                return idPlus;
+            }
+            
+            JSONObject parseUsrInfYoutube = new JSONObject(responseIdGoogle);
+            JSONObject information = parseUsrInfYoutube.getJSONObject("entry");
+            if (information.has("yt$googlePlusUserId") && !information.isNull("yt$googlePlusUserId")) {
+                idPlus = information.getJSONObject("yt$googlePlusUserId").getString("$t");            
+            }                  
+            
+        } catch (Exception e) {
+            System.out.println("Error getting user information" + e.getMessage());
+        }        
+        return idPlus;
     }
     
     
