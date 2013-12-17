@@ -37,10 +37,15 @@
 
 
         java.util.Date date = null;
-        Calendar calendario = Calendar.getInstance();
+        Calendar calendario = Calendar.getInstance();        
+        
+        String anio = request.getParameter("selectedAnio");        
+        if(anio.equals("")){        
+        anio = "2013";
+        }
 
-        String selectedAnio = request.getParameter("selectedAnio") == null ? "" : request.getParameter("selectedAnio");
-        String selectAnio = request.getParameter("selectAnio") == null ? "" : request.getParameter("selectAnio");
+        String selectedAnio = anio;
+        String selectAnio = request.getParameter("selectAnio") ; //== "2013" ? "" : request.getParameter("selectAnio");
         String selectMonth = request.getParameter("selectMes") == null ? "" : request.getParameter("selectMes");
 
 
@@ -98,8 +103,8 @@
                 if (meses < 13) {
                     Object elem = months[idx][0];
                     int neutrals_sYear = months[idx][1];
-                    int positives_sYear = months[idx][2];
-                    int negatives_sYear = months[idx][3];
+                    int negatives_sYear = months[idx][2];
+                    int positives_sYear = months[idx][3];
                     JSONObject node1 = new JSONObject();
                     node1.put("day", calendario.get(Calendar.DAY_OF_MONTH));
                     node1.put("month", meses);
@@ -180,8 +185,8 @@
                 if (d <= days) {
                     Object elem = dias[idx][0];
                     int neutrals_s = dias[idx][1];
-                    int positives_s = dias[idx][2];
-                    int negatives_s = dias[idx][3];
+                    int negatives_s = dias[idx][2];
+                    int positives_s = dias[idx][3];
 
                     JSONObject node1 = new JSONObject();
                     node1.put("day", calendario.get(Calendar.MONTH));
