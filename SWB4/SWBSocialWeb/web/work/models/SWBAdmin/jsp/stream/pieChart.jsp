@@ -59,6 +59,87 @@
         stroke: #fff;
     }
 
+    .axis path, .axis line {
+        fill: none;
+        stroke: #FF8000;
+        shape-rendering: crispEdges;
+    }
+    .bar {
+        fill: orange;
+    }
+
+    .bar:hover {
+        fill: orangered ;
+    }
+
+    .bar_neutrals {
+        fill: orange;
+    }
+
+    .bar_neutrals:hover {
+        fill: #D8D8D8 ;
+    }
+
+    .bar_negatives {
+        fill: orange;
+    }
+
+    .bar_negatives:hover {
+        fill: orangered ;
+    }
+
+
+    .bar_positives {
+        fill: #86c440;
+    }
+
+    .bar_positives:hover{
+        fill: #86c440 ;
+    }
+
+    .x.axis path {
+        display: none;
+    }
+
+    .d3-tip {
+        line-height: 1;
+        font-weight: bold;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        border-radius: 2px;
+    }
+
+    /* Creates a small triangle extender for the tooltip 
+    .d3-tip:after {
+        box-sizing: border-box;
+        display: inline;
+        font-size: 10px;
+        width: 100%;
+        line-height: 1;
+        color: rgba(0, 0, 0, 0.8);
+        content: "\25BC";
+        position: absolute;
+        text-align: center;
+    }
+    */
+    /* Style northward tooltips differently */
+    .d3-tip.n:after {
+        margin: -1px 0 0 0;
+        top: 100%;
+        left: 0;
+    }
+    
+    .units {
+        line-height: 1;
+        font-weight: bold;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        border-radius: 2px;
+        
+    }
+
 </style>
 <head>
     <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" ></script>
@@ -143,7 +224,7 @@
 
         var color = d3.scale.category10();
         var width = 760,
-        height = 300,
+        height = 400,
         offset = 20,
         radius = Math.min(width, height) / 2;
 
@@ -154,20 +235,20 @@
     
     
         var arc = d3.svg.arc()
-        .outerRadius(radius - 15)
-        .innerRadius(0);
+        .outerRadius(radius - 20)
+        .innerRadius(radius - 100);
 
         var arcOver = d3.svg.arc()
-        .outerRadius(radius - 10 )
+        .outerRadius(radius - 10)
         .innerRadius(0);
-        
+
 
         var svg = d3.select("#pieChart").append("svg")
         .attr("width", width)
         .attr("height", height)
         .append("g")
-        .attr("transform", "translate(" + width / 2 + "," + (height / 2 + offset)+")");
-
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+        
         d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/ObjsentimentData.jsp<%=args%>", function(error, data) {
 
             var gl = svg.selectAll(".arcOver")
@@ -190,9 +271,10 @@
             .style("z-index", "10");
 
             tooltips.append("p")
-            .append("span")
+            //.append("span")
+            .attr('class', 'd3-tip')  
             .html(function(d) {                
-                return "<strong>"+d.data.label+"</strong><br>"+d.data.value2;
+                return "<strong>"+d.data.label+"</strong><br>"+d.data.value1+"/"+d.data.value2+"%";
             });
         
         
@@ -253,8 +335,8 @@
 
     </script>
 
-
- <h1>Mensajes recibidos de :<%=title%></h1>
+    <br><br>
+    <h1>Mensajes recibidos de :<%=title%></h1>
     <div class="pub-redes">
         <p class="titulo">Tipo de filtro que desea:</p> 
         <form name="formgraphBar" id="formgraphBar" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data" action="">
