@@ -938,7 +938,7 @@ public class SentimentalDataClassifier {
                             if(userGender.equals("male")) socialNetUser.setSnu_gender(SocialNetworkUser.USER_GENDER_MALE);
                             else if(userGender.equals("female")) socialNetUser.setSnu_gender(SocialNetworkUser.USER_GENDER_FEMALE);
                             else socialNetUser.setSnu_gender(SocialNetworkUser.USER_GENDER_UNDEFINED);
-                        }
+                        }else socialNetUser.setSnu_gender(SocialNetworkUser.USER_GENDER_UNDEFINED);
                     }
                     //RelationShio Status
                     if(!userData.isNull("relationship_status"))
@@ -952,7 +952,7 @@ public class SentimentalDataClassifier {
                             else if(userRelationShip.equals("Divorced")) socialNetUser.setSnu_relationShipStatus(SocialNetworkUser.USER_RELATION_DIVORCED);
                             else if(userRelationShip.equals("Widowed")) socialNetUser.setSnu_relationShipStatus(SocialNetworkUser.USER_RELATION_WIDOWED); 
                             else socialNetUser.setSnu_relationShipStatus(SocialNetworkUser.USER_RELATION_UNDEFINED); //Could be: In a relationship, Engaged, It's complicated, In an open relationship,Separated,  In a civil union, In a domestic partnership, etc
-                        }
+                        }else socialNetUser.setSnu_relationShipStatus(SocialNetworkUser.USER_RELATION_UNDEFINED); //Could be: In a relationship, Engaged, It's complicated, In an open relationship,Separated,  In a civil union, In a domestic partnership, etc
                     }
                     //User Education
                     String school="";
@@ -979,15 +979,16 @@ public class SentimentalDataClassifier {
                          else if(school.equals("College")) socialNetUser.setSnu_education(SocialNetworkUser.USER_EDUCATION_COLLEGE);
                          else if(school.equals("Graduate School")) socialNetUser.setSnu_education(SocialNetworkUser.USER_EDUCATION_GRADUATE);
                          else socialNetUser.setSnu_education(SocialNetworkUser.USER_EDUCATION_UNDEFINED);
-                    }
+                    }else socialNetUser.setSnu_education(SocialNetworkUser.USER_EDUCATION_UNDEFINED);
                     System.out.println("User Followers:"+socialNetUser.getFollowers());
                     System.out.println("User Friends:"+socialNetUser.getFriends());
                     System.out.println("User ProfileGeo:"+socialNetUser.getSnu_profileGeoLocation());
                     System.out.println("User Email:"+socialNetUser.getSnu_email());
+                    /*
                     if(socialNetUser.getSnu_LifeStage()!=null)
                     {
                         System.out.println("User LifeStage:"+socialNetUser.getSnu_LifeStage().getId());
-                    }
+                    }*/
                     System.out.println("User Gender:"+socialNetUser.getSnu_gender());
                     System.out.println("User RelationShip:"+socialNetUser.getSnu_relationShipStatus());
                     System.out.println("User Education:"+socialNetUser.getSnu_education());
