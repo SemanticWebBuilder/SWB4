@@ -68,11 +68,11 @@ public class PeriodsManager extends GenericResource {
         out.println("</script>");
 
         if (semObj != null) {
-            BSC bsc = (BSC) semObj.getModel().getModelObject().createGenericInstance();
+            BSC bsc = (BSC) semObj.getModel().getModelObject().getGenericInstance();
             SWBResourceURL urlAdd;
 
-            Iterator<Period> itPeriods = null;
-            GenericObject genericObject = semObj.createGenericInstance();
+            Iterator<Period> itPeriods;
+            GenericObject genericObject = semObj.getGenericInstance();
             
 //                SemanticObject objParent = semObj.getObjectProperty(Indicator.bsc_objectiveInv);
 //                itPeriods = new GenericIterator<Period>(objParent.listObjectProperties(Seasonable.bsc_hasPeriod));            
@@ -107,7 +107,7 @@ public class PeriodsManager extends GenericResource {
             out.println("   </thead>");
             out.println("   <tbody>");
 
-            Seasonable seasonable = (Seasonable) semObj.createGenericInstance();
+            Seasonable seasonable = (Seasonable) semObj.getGenericInstance();
             
             while (itPeriods.hasNext())
             {
@@ -246,7 +246,7 @@ public class PeriodsManager extends GenericResource {
             response.setRenderParameter("statmsg", response.getLocaleString("msgUnauthorizedUser"));
             return;
         }
-        BSC model = (BSC)semObj.getModel().getModelObject().createGenericInstance();
+        BSC model = (BSC)semObj.getModel().getModelObject().getGenericInstance();
         
         if(Action_UPDT_ACTIVE.equalsIgnoreCase(action))
         {
@@ -254,7 +254,7 @@ public class PeriodsManager extends GenericResource {
             if(periodId!=null)
             {
                 if(Period.ClassMgr.hasPeriod(periodId, model)) {
-                    Seasonable seasonable = (Seasonable) semObj.createGenericInstance();                    
+                    Seasonable seasonable = (Seasonable) semObj.getGenericInstance();                    
                     Period period = Period.ClassMgr.getPeriod(periodId, model);
                     if(seasonable.hasPeriod(period)) {
                         seasonable.removePeriod(period);
@@ -275,7 +275,7 @@ public class PeriodsManager extends GenericResource {
         else if(Action_ACTIVE_ALL.equalsIgnoreCase(action))
         {
             Iterator<Period> itPeriods = null;
-            GenericObject genericObject = semObj.createGenericInstance();
+            GenericObject genericObject = semObj.getGenericInstance();
             if (genericObject instanceof Indicator) {
                 Indicator indicator = (Indicator)genericObject;
                 itPeriods = indicator.getObjective().listValidPeriods().iterator();
@@ -283,7 +283,7 @@ public class PeriodsManager extends GenericResource {
                 itPeriods = model.listValidPeriods().iterator();
             }
             if(itPeriods!=null) {
-                Seasonable seasonable = (Seasonable) semObj.createGenericInstance();
+                Seasonable seasonable = (Seasonable) semObj.getGenericInstance();
                 seasonable.removeAllPeriod();
                 while(itPeriods.hasNext()) {
                     seasonable.addPeriod(itPeriods.next());
@@ -292,7 +292,7 @@ public class PeriodsManager extends GenericResource {
         }
         else if(Action_DEACTIVE_ALL.equalsIgnoreCase(action))
         {
-            Seasonable seasonable = (Seasonable) semObj.createGenericInstance();
+            Seasonable seasonable = (Seasonable) semObj.getGenericInstance();
             seasonable.removeAllPeriod();
         }
     }

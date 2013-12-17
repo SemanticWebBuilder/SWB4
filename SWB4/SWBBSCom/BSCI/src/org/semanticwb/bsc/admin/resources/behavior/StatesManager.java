@@ -246,7 +246,7 @@ public class StatesManager extends GenericResource {
                 out.println("</tr>");
                 out.println("</thead>");
                 out.println("<tbody>");
-                Status status = (Status)obj.createGenericInstance();
+                Status status = (Status)obj.getGenericInstance();
 //                if(status.getState()!=null)
 //                {
                     List<State> lstates = null;
@@ -538,7 +538,7 @@ public class StatesManager extends GenericResource {
         }
         else if(Action_DEACTIVE_ALL.equalsIgnoreCase(action))
         {
-            Status status = (Status)semObj.createGenericInstance();
+            Status status = (Status)semObj.getGenericInstance();
             State state = status.getState();
             if(state!=null)
             {
