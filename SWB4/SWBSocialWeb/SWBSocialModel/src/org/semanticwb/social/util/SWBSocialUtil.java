@@ -2368,7 +2368,7 @@ public class SWBSocialUtil implements SWBAppObject {
                " ?semObj social:socialTopic <" + socialTopic.getURI() + ">. \n" +
                "  }\n";
 
-               System.out.println("The query for topics:" + query);
+               //System.out.println("The query for topics:" + query);
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
                return SWBSocial.executeQueryArraySemObj(query, wsite);
 
@@ -2388,10 +2388,87 @@ public class SWBSocialUtil implements SWBAppObject {
                " ?semObj social:postInSocialNetwork <" + socialNetwork.getURI() + ">. \n" +
                "  }\n";
 
-               System.out.println("The query for networks:" + query);
+               //System.out.println("The query for networks:" + query);
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
                return SWBSocial.executeQueryArraySemObj(query, wsite);
 
+        }
+        
+        /**
+         * Gets the social networks where the postOut was sent.
+         * @param postOut
+         * @return 
+         * 
+         */
+        public static ArrayList getPostOutSocialNetwors(PostOut postOut)
+        {
+            String query=
+               "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+               "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+               "\n";
+
+               query+="select DISTINCT ?semObj" +"\n";
+               query+=
+               "where {\n" +
+               " ?postUri social:socialPost <"+ postOut.getURI()+">. \n" + 
+               " ?postUri social:socialNetwork ?semObj. \n" +
+               "  }\n";
+
+               WebSite wsite=WebSite.ClassMgr.getWebSite(postOut.getSemanticObject().getModel().getName());
+               //System.out.println("The query for networks of A POST:" + query);
+               return SWBSocial.executeQueryArraySemObj(query, wsite);
+               /*
+                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+                PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>
+
+                select DISTINCT ?semObj
+                where {
+                 ?postUri social:socialPost <http://www.NewBrandOne.swb#PostOut:199>.
+                 ?postUri social:socialNetwork ?semObj.
+                 ?postUri social:po_created ?postOutCreated.
+                }
+                ORDER BY DESC(?postO
+               */
+        }
+        
+        /**
+         * Get the social postOutNets for a PostOut and a SocialNetwork 
+         * @param postOut
+         * @param socialNetwork
+         * @return 
+         */
+        public static ArrayList getPostOutNetsPostOut(PostOut postOut, SocialNetwork socialNetwork)
+        {
+            String query=
+               "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+               "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+               "\n";
+
+               query+="select ?semObj" +"\n";
+               query+=
+               "where {\n" +
+               " ?semObj social:socialPost <"+ postOut.getURI()+">. \n" + 
+               " ?semObj social:socialNetwork <" + socialNetwork.getURI() + ">. \n" +
+               " ?semObj social:po_created ?postOutCreated." +
+               "  }\n" +
+               " ORDER BY DESC(?postOuCreated)";
+               
+
+               WebSite wsite=WebSite.ClassMgr.getWebSite(postOut.getSemanticObject().getModel().getName());
+               //System.out.println("The query for POSTOUTNET of A POST OUT:" + query);
+               return SWBSocial.executeQueryArraySemObj(query, wsite);
+               /*
+                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+                PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>
+
+                select ?semObj
+                where {
+                 ?semObj social:socialPost <http://www.NewBrandOne.swb#PostOut:198>.
+                 ?semObj social:socialNetwork <http://www.NewBrandOne.swb#social_Facebook:1>.
+                 ?semObj social:po_created ?postOutCreated.
+                }
+                ORDER BY DESC(?postOuCreated) 
+               */
         }
     }
     
