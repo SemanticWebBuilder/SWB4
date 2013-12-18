@@ -1146,7 +1146,7 @@ public class SocialTopicInBox extends GenericResource {
                     response.setMode(SWBActionResponse.Mode_EDIT);
                 } else {
                     response.setRenderParameter("postUri", so.getURI());
-                    //so.remove();
+                    so.remove();
                     response.setRenderParameter("suri", request.getParameter("suri"));
                     response.setRenderParameter("statusMsg", response.getLocaleString("postDeleted"));
                     response.setMode(Mode_DELETEPOSTIN);
@@ -1157,7 +1157,7 @@ public class SocialTopicInBox extends GenericResource {
             String sval = request.getParameter("sval");
             SemanticObject so = SemanticObject.createSemanticObject(sval);
             response.setRenderParameter("postUri", so.getURI());
-            //so.remove();
+            so.remove();
             //response.setMode(SWBActionResponse.Mode_EDIT);
             //response.setRenderParameter("reloadTap", request.getParameter("suri"));
             response.setRenderParameter("suri", request.getParameter("suri"));
