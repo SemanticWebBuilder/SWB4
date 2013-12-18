@@ -43,10 +43,10 @@
     }
     
     System.out.println("--------------------");
-    ArrayList postOutSocialOUTNETS = SWBSocialUtil.sparql.getPostOutNetsPostOut(postOut, (SocialNetwork)SemanticObject.createSemanticObject("http://www.NewBrandOne.swb#social_Facebook:1").createGenericInstance());
+    /*ArrayList postOutSocialOUTNETS = SWBSocialUtil.sparql.getPostOutNetsPostOut(postOut, (SocialNetwork)SemanticObject.createSemanticObject("http://www.NewBrandOne.swb#social_Facebook:1").createGenericInstance());
     for(int i= 0; i < postOutSocialOUTNETS.size(); i++){
         System.out.println("-------->" + postOutSocialOUTNETS.get(i));
-    }
+    }*/
     System.out.println("--------------------");
     System.out.println("POST OUT:" + postOut + "->" + postOut.getMsg_Text() + "</br>");
     //out.println("POST OUT:" + postOut + "->" + postOut.getMsg_Text() + "</br>");    
