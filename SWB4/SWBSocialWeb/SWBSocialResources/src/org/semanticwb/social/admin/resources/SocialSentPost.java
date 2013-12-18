@@ -387,17 +387,22 @@ public class SocialSentPost extends GenericResource {
         
         HashMap hmapResult = filtros(swbSocialUser, wsite, searchWord, request, socialTopic, nPage);
         
-        int numSocialTopicPOComments=0;
+        long numSocialTopicPOComments=0L;
         String snumSocialTopicPOComments=getSumTotPostOutComments(socialTopic);
         if(snumSocialTopicPOComments!=null && !snumSocialTopicPOComments.isEmpty())
         {
             try{
-                numSocialTopicPOComments=Integer.parseInt(snumSocialTopicPOComments);
+                int pos=snumSocialTopicPOComments.indexOf(".");
+                if(pos>-1)
+                {
+                    snumSocialTopicPOComments=snumSocialTopicPOComments.substring(0, pos);
+                }
+                numSocialTopicPOComments=Long.parseLong(snumSocialTopicPOComments);
             }catch(Exception e)
             {
-                numSocialTopicPOComments=0;
+                numSocialTopicPOComments=0L;
             }
-        }            
+        }                 
 
         long nRec = ((Long) hmapResult.get("countResult")).longValue();
         
