@@ -56,7 +56,8 @@
 %>
 
 <!-- this div is only for documentation purpose, in real development environments, just take it out -->
-<div style="height: 300px; width: 500px">
+<!--<div style="height: 300px; width: 500px">-->
+<div class="swbform swbpopup retema-pop" style="height: 300px;">
     <div dojoType="dijit.layout.TabContainer" style="width: 100%;" doLayout="false">
         <%
         for(int i=0; i< postOutSocialNets.size(); i++){
@@ -66,7 +67,8 @@
             ///out.println("-->" + outNet.getURI());
             ///out.println("-->" + outNet.getSocialPost().getSocialTopic());
             ///out.println("-->" + outNet.getSocialNetwork().getURI());
-            //if(outNet.getStatus() == 1){//Fue publicado correctamente
+            //if(outNet.getStatus() == 1){//Fue publicado correctamente            
+            if(!(socialNetwork instanceof Twitter)){
             %>
             <div id="<%=socialNetwork.getURI()%>" dojoType="dijit.layout.ContentPane" href="<%=paramRequest.getRenderUrl().setMode("recoverComments").setParameter("postOutUri", postOut.getURI()).setParameter("postOutNetNetwork", socialNetwork.getURI()) %>" title="<%=socialNetwork.getDisplayTitle("es")%>" _loadingMessage="<%=loading%>">
                 <div class="swbform">
@@ -76,6 +78,7 @@
                 </div>
             </div>
         <%
+            }
             //}
         }
         %>
