@@ -3891,15 +3891,23 @@ public class SocialSentPost extends GenericResource {
             
             for(int i= 0; i<commentsData.length(); i++){
                 JSONObject comment = commentsData.getJSONObject(i);
+                String username = null;
+                if(users.get(comment.getLong("fromid")) != null){
+                    username = users.get(comment.getLong("fromid"));
+                }else if(pages.get(comment.getLong("fromid")) != null){
+                    username = pages.get(comment.getLong("fromid"));
+                }
                 writer.write("<li>");
-                writer.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type","noType").setParameter("id",comment.getLong("fromid")+"") + "','" + "NAME" + "'); return false;\"><img src=\"http://graph.facebook.com/" + comment.getLong("fromid") +"/picture?width=30&height=30\" width=\"30\" height=\"30\"/></a>");
+                writer.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type","noType").setParameter("id",comment.getLong("fromid")+"") + "','" + username + "'); return false;\"><img src=\"http://graph.facebook.com/" + comment.getLong("fromid") +"/picture?width=30&height=30\" width=\"30\" height=\"30\"/></a>");
 
                 writer.write("<p>");
-                writer.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type","noType").setParameter("id", comment.getLong("fromid")+"") + "','" + "NAME" + "'); return false;\">" + "NAME" + "</a>:");
+                writer.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type","noType").setParameter("id", comment.getLong("fromid")+"") + "','" + username + "'); return false;\">" + username + "</a>:");
                 writer.write(       comment.getString("text").replace("\n", "</br>") + "</br>");
                 writer.write("</p>");
 
-                Date commentTime = new Date();//formatter.parse(comment.getString("created_time"));
+                //Long time = comment.getLong("time");
+                Date commentTime = new java.util.Date((long)comment.getLong("time")*1000);
+                //Date commentTime = new Date();//formatter.parse(comment.getString("created_time"));
 
                 writer.write("<p class=\"timelinedate\">");
                 //writer.write("<span id=\"" +facebook.getId() + comments.getJSONObject(k).getString("id") + "_" + postsData.getString("id") + "\" dojoType=\"dojox.layout.ContentPane\">");
