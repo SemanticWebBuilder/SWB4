@@ -1,3 +1,4 @@
+<%@page import="java.util.HashMap"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
 <%
@@ -14,10 +15,38 @@ if (pNum != null && !pNum.trim().equals("")) {
         pageNum = maxPages;
     }
 }
+
+boolean showPageOfPage = request.getParameter("showPageOfPage")!= null ? true : false;
+
+SWBResourceURL nav = paramRequest.getRenderUrl();
+
+//Set mode from parameter
+String navUrlMode = request.getParameter("navUrlMode");
+if (navUrlMode != null && navUrlMode.length() > 0) nav.setMode(navUrlMode);
+
+//Set params from parameter
+String [] navParams = request.getParameterValues("navUrlParams");
+if (navParams != null && navParams.length > 0) {
+    for (int i = 0; i < navParams.length; i++) {
+        String str = navParams[i];
+        if (str != null && str.contains("|")) {
+            String [] strSplit = str.split("\\|");
+            if (strSplit.length == 2) {
+                nav.setParameter(strSplit[0], strSplit[1]);
+            }
+        }
+    }
+}
+
 %>
 <div class="swbp-pagination">
-    <span class="swbp-pagination-info pull-left"><%=paramRequest.getLocaleString("pagPage")%> <%=pageNum%> <%=paramRequest.getLocaleString("pagDelim")%> <%=maxPages%></span>
-    <%if (maxPages > 1) {%>
+    <%
+    if (showPageOfPage) {
+        %>
+        <span class="swbp-pagination-info pull-left"><%=paramRequest.getLocaleString("pagPage")%> <%=pageNum%> <%=paramRequest.getLocaleString("pagDelim")%> <%=maxPages%></span>
+        <%
+    }
+    if (maxPages > 1) {%>
       <div class="swbp-pagination-nav pull-right">
           <ul class="pagination pagination-sm">
             <%
@@ -42,8 +71,6 @@ if (pNum != null && !pNum.trim().equals("")) {
               if (start < 1) {
                   start = 1;
               }
-
-              SWBResourceURL nav = paramRequest.getRenderUrl();
 
               if (sliceIdx != 1) {
                   nav.setParameter("p", String.valueOf(pageNum-1));
