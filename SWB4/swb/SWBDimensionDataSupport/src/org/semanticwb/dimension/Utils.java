@@ -182,7 +182,7 @@ public final class Utils {
                 log.trace("Wake up");
                 salida = getServerStatus();
                 status = isdeployed(salida, serverName);
-                log.trace("status validación: "+serverName +" " + status);
+                log.trace("Server Status: "+serverName +" deployed: " + status);
             } while (status.equals("false") || status.equals("not found"));
             serverStatus = salida;
         }
@@ -196,7 +196,7 @@ public final class Utils {
         list.append(serverName);
         list.append("</name>\n");
         list.append("<description>");
-        list.append("Server deployed by DimensionDAtaImplementation Service");
+        list.append("Server deployed by DimensionDataImplementation Service");
         list.append("</description>\n");
         list.append("<vlanResourcePath>/oec/");
         list.append(orgId);

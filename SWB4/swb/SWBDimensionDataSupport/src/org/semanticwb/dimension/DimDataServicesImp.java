@@ -252,9 +252,7 @@ public final class DimDataServicesImp implements SWBCloud {
             if (checkIfParameterOk("/NetworkName") && checkIfParameterOk("/ImageName")
                     && checkIfParameterOk("/MaxNumberInstances")) {
                 out.print(getFormConfig2(paramRequest, launched));
-            } else {
-                out.println("Los datos no son correctos");
-            }
+            } 
 
             if (checkIfCanLaunch()) {
 //              
@@ -283,14 +281,14 @@ public final class DimDataServicesImp implements SWBCloud {
                     + paramRequest.getRenderUrl().setAction("accUpdate")
                     + "\" onsubmit=\"submitForm('credentialsDD');return false;\" method=\"post\">\n"
                     + "<fieldset>\n"
-                    + "<legend>Datos de Accesso</legend>"
+                    + "<legend>Datos de Acceso</legend>"
                     + "	    <table>\n"
                     + "                <tr><td width=\"200px\" align=\"right\"><label for=\"user\">User &nbsp;</label></td><td><input _id=\"user\" name=\"user\" value=\"" + access + "\" dojoType=\"dijit.form.ValidationTextBox\" required=\"false\" promptMessage=\"Captura el Usuario\" style=\"width:300px;\" /></td></tr>\n"
                     + "                <tr><td width=\"200px\" align=\"right\"><label for=\"password\">Password &nbsp;</label></td><td><input _id=\"password\" name=\"password\" value=\"" + secret + "\" dojoType=\"dijit.form.ValidationTextBox\" type=\"password\" required=\"false\" promptMessage=\"Captura la contrase&#241;a \" style=\"width:300px;\" /></td></tr>\n"
                     + "	    </table>\n"
                     + "	</fieldset>"
                     + "<fieldset><span align=\"center\">\n"
-                    + "    <button dojoType=\"dijit.form.Button\" type=\"submit\">Enviar accesso</button>\n"
+                    + "    <button dojoType=\"dijit.form.Button\" type=\"submit\">Enviar acceso</button>\n"
                     + "</span></fieldset>\n"
                     + "</form>";
         } else {
