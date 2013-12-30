@@ -22,11 +22,9 @@
  */
 package org.semanticwb.dimension;
 
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TimerTask;
@@ -34,13 +32,11 @@ import java.util.logging.Level;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import static org.semanticwb.dimension.SWBDimensionDataUtils.*;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.services.SWBCloud; 
-import sun.security.util.HostnameChecker;
+import org.semanticwb.portal.services.SWBCloud;
 
 /**
  *
@@ -60,8 +56,6 @@ public final class DimDataServicesImp implements SWBCloud {
         Utils.initServices();
     }
 
-
-
     public List<String> getImagesNames() {
         List<String> ret = new ArrayList<String>();
 //        for (String ImageName : Utils.getImagesNames(true)) {
@@ -77,68 +71,60 @@ public final class DimDataServicesImp implements SWBCloud {
 //        }
 //        return ret;
 //    }
-
-
-
-
-    public  List<InstanceData> getRunningInstances() throws IOException {
+    public List<InstanceData> getRunningInstances() throws IOException {
         List<InstanceData> ret = new ArrayList<InstanceData>();
-        String name= null; 
+        String name = null;
         String basename = controlCenter.getBaseName();
-      
-        if(basename != null && !"".equals(basename)){
+
+        if (basename != null && !"".equals(basename)) {
 //          int add = Utils.getRunningInstances().size(); 
 //          int min = 0;   
-        for (InstanceData server : Utils.getRunningInstances()) {
-            name= server.getServerName(); 
+            for (InstanceData server : Utils.getRunningInstances()) {
+                name = server.getServerName();
 //              System.out.println("comparo basename generado: " + basename+Integer.toString(add-min) + "con : " + name );
 //              System.out.println("STRING OBJETO: " + server.toString() + "con nombre: "+ name);
-              if(name.startsWith(basename)){
+                if (name.startsWith(basename)) {
 //                  System.out.println("GUARDO OBJETO: "+ server.toString());
 //                  System.out.println("REAL ID EN GETRUNNING: " + server.getRealId());
-            ret.add(server);
+                    ret.add(server);
 //            controlCenter.addInstanceData(server);
 //            min++;
+                }
+
             }
-         
-       }
         }
         return ret;
     }
 
-
-
-
-
     public void removeInstance(InstanceData inDat) throws IOException {
 //        System.out.println("REMOVE Instance indat" + inDat.getServerName());
 //        System.out.println("TOSTRING OBJETO REMOVE :  " + inDat.toString());
-        String realId = ""; 
-        String info = ""; 
-        if (inDat != null ){
-          
-          info = Utils.getRealInfo(controlCenter.getNetId()); 
-          realId = Utils.getRealId(inDat.getServerName(),info); 
-          inDat.setRealId(realId);         
-        Utils.removeServer(inDat, controlCenter.getFarmId(), controlCenter.getNetId());
-        controlCenter.setCount(0);
+        String realId = "";
+        String info = "";
+        if (inDat != null) {
+
+            info = Utils.getRealInfo(controlCenter.getNetId());
+            realId = Utils.getRealId(inDat.getServerName(), info);
+            inDat.setRealId(realId);
+            Utils.removeServer(inDat, controlCenter.getFarmId(), controlCenter.getNetId());
+            controlCenter.setCount(0);
 //        controlCenter.removeInstanceData(inDat);
         }
 
     }
 
-    private int countRunningClientInstances()  {
+    private int countRunningClientInstances() {
         try {
             int count = 0;
             for (InstanceData id : getRunningInstances()) {
-                if ( "true".equals(id.getStarted())) {
+                if ("true".equals(id.getStarted())) {
                     count++;
                 }
             }
             return count;
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(DimDataServicesImp.class.getName()).log(Level.SEVERE, null, ex);
-            return 0; 
+            return 0;
         }
     }
 
@@ -150,20 +136,20 @@ public final class DimDataServicesImp implements SWBCloud {
             } catch (IOException ex) {
                 java.util.logging.Logger.getLogger(DimDataServicesImp.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             log.debug("Launching Instance " + countRunningClientInstances() + " - " + SWBDimensionDataUtils.getValueOf("/launched"));
             if ("true".equals(SWBDimensionDataUtils.getValueOf("/launched"))
                     && countRunningClientInstances() == 0) {
                 log.debug("Creating...");
-                String id = createInstance(controlCenter.getImageId(), 
-                        controlCenter.getNetId(), controlCenter.getBaseName(), controlCenter.getFarmId());
-                log.event("Created " + id);
-               
+                String name = createInstance(controlCenter.getImageId(),
+                        controlCenter.getNetId(), controlCenter.getFarmId());
+                log.event("Launched... "+name);
+
             }
-            
+
             TimerTask tt = new MonitorCloudTask();
             controlCenter.activateMonitoring(tt);
-            
+
             try {
                 controlCenter.reloadData();
             } catch (IOException ex) {
@@ -180,17 +166,17 @@ public final class DimDataServicesImp implements SWBCloud {
         double load = 0;
         try {
             load = Utils.getCPUAverage(instance, controlCenter.getNetId());
-           
+
         } catch (IOException ex) {
-            System.out.println("Failed at getCPUUSSage" + ex);
+            log.error("Failed at getCPUUSSage: " + ex, ex);
         }
-        return load; 
+        return load;
     }
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest, PrintWriter out) throws SWBResourceException, IOException {
-    
+
         String val = getValueOf("/launched");
         boolean launched = (null != val && "true".equals(val)) ? true : false;
         if ("launch".equals(paramRequest.getAction())) {
@@ -209,7 +195,7 @@ public final class DimDataServicesImp implements SWBCloud {
             launched = false;
             Iterator<InstanceData> lista = getRunningInstances().iterator();
             while (lista.hasNext()) {
-               
+
                 InstanceData inDat = lista.next();
 //                 System.out.println("SERVIDOR A BORRAR: " + inDat.getServerName());
 //                System.out.println("TO STRING SERVIDOR: " + inDat.toString());
@@ -225,7 +211,7 @@ public final class DimDataServicesImp implements SWBCloud {
         }
         if ("confUpdate".equals(paramRequest.getAction())) {
             String error = processConfig(request);
-              
+
             if (null != error) {
                 out.print("<script>alert('" + error + "');</script>");
             }
@@ -238,7 +224,9 @@ public final class DimDataServicesImp implements SWBCloud {
         }
 
 //        getControlCenter().reloadData();
-        if (launched) getRunningInstances();
+        if (launched) {
+            getRunningInstances();
+        }
         Iterator<InstanceData> iid = getControlCenter().listInstanceData();
         if (null != iid && iid.hasNext()) {
             out.print(getFormShutdown(paramRequest));
@@ -246,23 +234,28 @@ public final class DimDataServicesImp implements SWBCloud {
         out.print(getFormCredentials(paramRequest, launched));
         out.print("<br/><br/>");
 //        System.out.println("tome las credenciales");
-       
+
         if (checkIfParameterOk("/user") && checkIfParameterOk("/password")) {
-          try{ if (Utils.url != null && Utils.url != ""){
-                String urlOrg = Utils.getOrgId();
-                if(urlOrg != null && urlOrg != "not found" && urlOrg!= ""){
-                   Utils.urlOrg= Utils.url + urlOrg; 
-                   
-                } }
-          } catch (IOException e ) { System.out.println("Credenciales incorrectas");
+            try {
+                if (Utils.url != null && Utils.url != "") {
+                    String urlOrg = Utils.getOrgId();
+                    if (urlOrg != null && urlOrg != "not found" && urlOrg != "") {
+                        Utils.urlOrg = Utils.url + urlOrg;
+
+                    }
                 }
-           out.print(getFormConfig(paramRequest, launched));
-           
-           if (checkIfParameterOk("/NetworkName") && checkIfParameterOk("/ImageName") 
-                   && checkIfParameterOk("/MaxNumberInstances")){
-           out.print(getFormConfig2(paramRequest, launched));}
-           else {System.out.println("Los datos no son correctos");}
-         
+            } catch (IOException e) {
+                log.error("Credenciales de Dimension Data incorrectas");
+            }
+            out.print(getFormConfig(paramRequest, launched));
+
+            if (checkIfParameterOk("/NetworkName") && checkIfParameterOk("/ImageName")
+                    && checkIfParameterOk("/MaxNumberInstances")) {
+                out.print(getFormConfig2(paramRequest, launched));
+            } else {
+                out.println("Los datos no son correctos");
+            }
+
             if (checkIfCanLaunch()) {
 //              
                 out.print(getFormLaunch(paramRequest, launched));
@@ -285,7 +278,7 @@ public final class DimDataServicesImp implements SWBCloud {
 
         String forma = null;
         if (!launched) {
-           
+
             forma = "<form id=\"credentialsDD\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""
                     + paramRequest.getRenderUrl().setAction("accUpdate")
                     + "\" onsubmit=\"submitForm('credentialsDD');return false;\" method=\"post\">\n"
@@ -323,7 +316,7 @@ public final class DimDataServicesImp implements SWBCloud {
 
     private String processConfig(final HttpServletRequest request) {
         String error = null;
-      
+
         String imageName = request.getParameter("ImageName").trim();
         if (null != imageName && (!"".equals(imageName))) {
             setValueOf("/ImageName", imageName);
@@ -350,7 +343,7 @@ public final class DimDataServicesImp implements SWBCloud {
         String maxNum = getValueOf("/MaxNumberInstances");
         String imageName = getValueOf("/ImageName");
         String netname = getValueOf("/NetworkName");
-        
+
         if (null == maxNum) {
             maxNum = "";
         }
@@ -360,10 +353,10 @@ public final class DimDataServicesImp implements SWBCloud {
         if (null == netname) {
             netname = "";
         }
-      
+
         String forma = null;
         if (!launched) {
-            
+
             forma = "<form id=\"configDD\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""
                     + paramRequest.getRenderUrl().setAction("confUpdate")
                     + "\" onsubmit=\"submitForm('configDD');return false;\" method=\"post\">\n"
@@ -371,10 +364,10 @@ public final class DimDataServicesImp implements SWBCloud {
                     + "<legend>Configuraci&oacute;n</legend>"
                     + "	    <table>\n"
                     + "               <tr><td width=\"200px\" align=\"right\"><label for=\"NetworkName\">Network Name &nbsp;</label></td><td><select name=\"NetworkName\" dojoType=\"dijit.form.ComboBox\" >" + getNetName() + "</td></tr>\n"
-//                    + "<script type=\"dojo/method\" event=\"onChange\" args=\"newValue\">"
-//                    + "alert(\"value changed to \", newValue)"
-//                    +  "<\\script> <\\select>" 
-                    + "                <tr><td width=\"200px\" align=\"right\"><label for=\"ImageName\">Image Name &nbsp;</label></td><td><select name=\"ImageName\" >" + getImageName() + "</td></tr>\n"              
+                    //                    + "<script type=\"dojo/method\" event=\"onChange\" args=\"newValue\">"
+                    //                    + "alert(\"value changed to \", newValue)"
+                    //                    +  "<\\script> <\\select>" 
+                    + "                <tr><td width=\"200px\" align=\"right\"><label for=\"ImageName\">Image Name &nbsp;</label></td><td><select name=\"ImageName\" >" + getImageName() + "</td></tr>\n"
                     + "                <tr><td width=\"200px\" align=\"right\"><label for=\"MaxNumberInstances\">Max Instance to launch &nbsp;</label></td><td><input _id=\"MaxNumberInstances\" name=\"MaxNumberInstances\" "
                     + "value=\"" + maxNum + "\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Set the max number servers to Launch\" invalidMessage=\"Not a number\" style=\"width:40px;\"  "
                     + "</td></tr>\n"
@@ -390,17 +383,13 @@ public final class DimDataServicesImp implements SWBCloud {
                     + "	    <table>\n"
                     + "                <tr><td width=\"200px\" align=\"right\"><label for=\"NetName\">Network Name &nbsp;</label></td><td>" + getValueOf("/NetworkName") + "</td></tr>\n"
                     + "                <tr><td width=\"200px\" align=\"right\"><label for=\"ImageName\">Image Name &nbsp;</label></td><td>" + getValueOf("/ImageName") + "</td></tr>\n"
-                   + "                <tr><td width=\"200px\" align=\"right\"><label for=\"MaxNumberInstances\">Max Instance to launch &nbsp;</label></td><td>" + maxNum + "</td></tr>\n"
+                    + "                <tr><td width=\"200px\" align=\"right\"><label for=\"MaxNumberInstances\">Max Instance to launch &nbsp;</label></td><td>" + maxNum + "</td></tr>\n"
                     + "	    </table>\n"
                     + "	</fieldset>";
         }
 
         return forma;
     }
-
-
-
-
 
     private String getFormLaunch(final SWBParamRequest paramRequest, final boolean launched) {
         String lnch = (launched ? "Detener" : "Lanzar");
@@ -424,9 +413,10 @@ public final class DimDataServicesImp implements SWBCloud {
         while (datos.hasNext()) {
             list += ", " + datos.next().getServerName();
         }
-        if (list!= null && !list.equals("")){
-        list = list.substring(2);}
-        log.trace("DDataServicesImp.getFormShutdown list:"+list);
+        if (!list.equals("")) {
+            list = list.substring(2);
+        }
+        log.trace("DDataServicesImp.getFormShutdown list:" + list);
         String forma = "<form id=\"shutDData\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""
                 + paramRequest.getRenderUrl().setAction("shutdown")
                 + "\" onsubmit=\"submitForm('shutDData');return false;\" method=\"post\">\n"
@@ -443,46 +433,50 @@ public final class DimDataServicesImp implements SWBCloud {
         return forma;
     }
 
-    String createInstance(String imageid, String netId, String serverName, String FarmId) {
-         String ret = null;
-          String info = "";
-          String serverId= ""; 
-          String realServerId = ""; 
-          String doc = ""; 
-          String ip = "";   
-          serverName =controlCenter.getBaseName()+controlCenter.getCount();
-        if (imageid != null && !(imageid.equals("")) && netId!= null && !(netId.equals(""))){
-          info = Utils.setInfo(imageid, netId, serverName); }
-        try {
+    String createInstance(final String imageid, final String netId, final String FarmId) {
+        final String serverName = controlCenter.getBaseName() + controlCenter.getCount();
+        new Thread() {
+            public void run() {
+                try {
+                    String ret;
+                    String serverId;
+                    String realServerId;
+                    String doc;
+                    String ip;
+                    String info = null;
+                    if (imageid != null && !(imageid.equals("")) && netId != null && !(netId.equals(""))) {
+                        info = Utils.setInfo(imageid, netId, serverName);
+                    }
 //            System.out.println("Se creara un servidor con nombre:  "+ serverName);
-            Utils.runInstance(info,serverName);
+                    Utils.runInstance(info, serverName);
 //            System.out.println("cree el servidor");
-            List<InstanceData> run = getRunningInstances();  
-            for (InstanceData instance : run) {
-                ret = instance.getServerName();
+                    List<InstanceData> run = getRunningInstances();
+                    for (InstanceData instance : run) {
+                        ret = instance.getServerName();
 //                System.out.println("comparo instancia: " +ret + "nombre enviado:  " + serverName);
-                if (ret.equals(serverName)){
-                    serverId = instance.getServerId();
-                    Utils.createRealS(serverId,serverName, netId);
-                    doc = Utils.getRealInfo(netId); 
-                    realServerId = Utils.getRealId(serverName, doc); 
-                    instance.setRealId(realServerId);
-                    ip = Utils.getRealIp(doc,serverName); 
-                    instance.setIp(ip);
-                    Utils.addToFarm(netId, FarmId, realServerId);
+                        if (ret.equals(serverName)) {
+                            serverId = instance.getServerId();
+                            Utils.createRealS(serverId, serverName, netId);
+                            doc = Utils.getRealInfo(netId);
+                            realServerId = Utils.getRealId(serverName, doc);
+                            instance.setRealId(realServerId);
+                            ip = Utils.getRealIp(doc, serverName);
+                            instance.setIp(ip);
+                            Utils.addToFarm(netId, FarmId, realServerId);
 //                 System.out.println("OBJETO CREADO: " + instance.toString());
-                }}
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(DimDataServicesImp.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return serverId; 
+                        }
+                    }
+
+                } catch (IOException ex) {
+                    java.util.logging.Logger.getLogger(DimDataServicesImp.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }.start();
+        return serverName;
     }
 
-   
-
     private String getImageName() throws IOException {
-       String value = getValueOf("/ImageName");
+        String value = getValueOf("/ImageName");
         if (null == value) {
             value = "";
         }
@@ -496,19 +490,20 @@ public final class DimDataServicesImp implements SWBCloud {
             }
             ret += "<option" + checked + ">" + name + "</option>";
         }
-        return ret; 
+        return ret;
     }
 
     private String getFarmName() throws IOException {
 //        System.out.println("obtener los Farm");
-        
-       String netName = getValueOf("/NetworkName");
-       String value = getValueOf("/FarmName"); 
-         if (null == value) {
-            value = ""; }
+
+        String netName = getValueOf("/NetworkName");
+        String value = getValueOf("/FarmName");
+        if (null == value) {
+            value = "";
+        }
 //        System.out.println("NetNAme : " + netName);
 //        System.out.println("FarmName(getValueOf) : "+ value);
-         String checked = "";
+        String checked = "";
         String ret = "<option></option>";
         for (String name : Utils.getFarmNames(netName)) {
             if (name.equalsIgnoreCase(value)) {
@@ -518,13 +513,13 @@ public final class DimDataServicesImp implements SWBCloud {
             }
             ret += "<option" + checked + ">" + name + "</option>";
         }
-        return ret; 
-        
+        return ret;
+
     }
 
     private String getNetName() throws IOException {
 //        System.out.println("obtengo netname");
-      String value = getValueOf("/NetworkName");
+        String value = getValueOf("/NetworkName");
         if (null == value) {
             value = "";
         }
@@ -539,12 +534,13 @@ public final class DimDataServicesImp implements SWBCloud {
             ret += "<option" + checked + ">" + name + "</option>";
 //            System.out.println("checked"+checked);  
         }
-        return ret; 
+        return ret;
     }
+
     private String getFarmName(String netname) throws IOException {
 //        System.out.println("Entro farm con string"+ netname);
-        String value = getValueOf("/FarmName"); 
-        
+        String value = getValueOf("/FarmName");
+
         if (null == value) {
             value = "";
         }
@@ -558,15 +554,15 @@ public final class DimDataServicesImp implements SWBCloud {
             }
             ret += "<option" + checked + ">" + name + "</option>";
         }
-        return ret; 
+        return ret;
     }
 
     private String getFormConfig2(SWBParamRequest paramRequest, boolean launched) throws IOException {
-    
+
         String farmName = getValueOf("/FarmName");
         String maxCPU = getValueOf("/MaxCPU");
         String baseName = getValueOf("/BaseName");
-        
+
         if (null == maxCPU) {
             maxCPU = "";
         }
@@ -575,14 +571,14 @@ public final class DimDataServicesImp implements SWBCloud {
         }
         String forma = null;
         if (!launched) {
-            
+
             forma = "<form id=\"configDD2\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""
                     + paramRequest.getRenderUrl().setAction("confUpdate2")
                     + "\" onsubmit=\"submitForm('configDD2');return false;\" method=\"post\">\n"
                     + "<fieldset>\n"
                     + "<legend>Configuraci&oacute;n 2</legend>"
                     + "	    <table>\n"
-                    +"<tr><td width=\"200px\" align=\"right\"><label for=\"FarmName\">Farm Name &nbsp;</label></td><td><select name=\"FarmName\" >" + getFarmName() + "</td></tr>\n" 
+                    + "<tr><td width=\"200px\" align=\"right\"><label for=\"FarmName\">Farm Name &nbsp;</label></td><td><select name=\"FarmName\" >" + getFarmName() + "</td></tr>\n"
                     + "                <tr><td width=\"200px\" align=\"right\"><label for=\"MaxCPU\">CPU Average Level to launch &nbsp;</label></td><td><input _id=\"MaxCPU\" name=\"MaxCPU\" "
                     + "value=\"" + maxCPU + "\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Set the CPU average usage level to Launch other instances\" invalidMessage=\"Not a number\" style=\"width:40px;\"  "
                     + "trim=\"true\"/></td></tr>\n"
@@ -599,8 +595,7 @@ public final class DimDataServicesImp implements SWBCloud {
             forma = "<fieldset class=\"swbform\">\n"
                     + "<legend>Configuraci&oacute;n</legend>"
                     + "	    <table>\n"
-                  
-                    + "                <tr><td width=\"200px\" align=\"right\"><label for=\"FarmName\">Farm Name &nbsp;</label></td><td>" +  getValueOf("/FarmName") + "</td></tr>\n"
+                    + "                <tr><td width=\"200px\" align=\"right\"><label for=\"FarmName\">Farm Name &nbsp;</label></td><td>" + getValueOf("/FarmName") + "</td></tr>\n"
                     + "                <tr><td width=\"200px\" align=\"right\"><label for=\"MaxCPU\">CPU Average Level to launch &nbsp;</label></td><td>" + maxCPU + "</td></tr>\n"
                     + "                <tr><td width=\"200px\" align=\"right\"><label for=\"BaseName\">Servers Base Name &nbsp;</label></td><td>" + baseName + "</td></tr>\n"
                     + "	    </table>\n"
@@ -610,10 +605,8 @@ public final class DimDataServicesImp implements SWBCloud {
         return forma;
     }
 
-     private String processConfig2(final HttpServletRequest request) {
+    private String processConfig2(final HttpServletRequest request) {
         String error = null;
-      
-      
 
         String farmName = request.getParameter("FarmName").trim();
         if (null != farmName && (!"".equals(farmName))) {
@@ -621,8 +614,8 @@ public final class DimDataServicesImp implements SWBCloud {
         } else {
             removeValue("/FarmName");
         }
-        
-       String baseName = request.getParameter("BaseName").trim();
+
+        String baseName = request.getParameter("BaseName").trim();
         if (null != baseName && (!"".equals(baseName))) {
             setValueOf("/BaseName", baseName);
         } else {
@@ -636,6 +629,5 @@ public final class DimDataServicesImp implements SWBCloud {
         }
         return error;
     }
-
 
 }
