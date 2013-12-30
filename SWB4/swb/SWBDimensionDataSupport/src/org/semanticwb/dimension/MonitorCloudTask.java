@@ -29,7 +29,7 @@ import org.semanticwb.SWBUtils;
 
 /**
  *
- *  
+ *
  */
 public final class MonitorCloudTask extends TimerTask {
 
@@ -39,55 +39,54 @@ public final class MonitorCloudTask extends TimerTask {
 
     public MonitorCloudTask() {
         lastLaunchTime = System.currentTimeMillis();
-        System.out.println("lastLaunch" + lastLaunchTime);
+        log.trace("lastLaunch: " + lastLaunchTime);
     }
-
 
     @Override
     public void run() {
         try {
-        log.trace("Monitor  Timer Wake Up...");
-        DimDataServicesImp ddServ = (DimDataServicesImp)SWBPortal.getCloud();
-        SWBCloudControlCenter cc = ddServ.getControlCenter();
-        cc.reloadData();
-        log.trace("found a load of: "+cc.getAverageLoad());
-            System.out.println("found a load of: "+cc.getAverageLoad());
-        if (cc.isLaunched()) {
-            log.trace("System is in Launched state, last launch period: "+(System.currentTimeMillis() - lastLaunchTime + _LAUNCH_PERIOD));
-            System.out.println("comparo: " + cc.getMaxInstances() + "con current instances: " + cc.currentInstances());
-            System.out.println("Average Load:  " +  cc.getAverageLoad()+ "getAvCPU" + cc.getAvgCPU());
-            if ((lastLaunchTime + _LAUNCH_PERIOD) < System.currentTimeMillis()
-                    && cc.getMaxInstances() > cc.currentInstances()
-                    && cc.getAverageLoad() > cc.getAvgCPU()) {
-                log.trace("Time to launch a new instance");
-                launchNew(ddServ, cc);
-                lastLaunchTime = System.currentTimeMillis();
-                log.trace("Instance Launched "+lastLaunchTime);
-            }
-            System.out.println("current instances para borrar : " + cc.currentInstances());
-            System.out.println("average load para borrar : " + cc.getAverageLoad());
-            if ((lastLaunchTime + _LAUNCH_PERIOD) < System.currentTimeMillis()
-                    && 1 < cc.currentInstances()
-                    && cc.getAverageLoad() < 20.0d){
-                log.trace("Time to Terminate an instance");
-                InstanceData id = cc.getFisrtInstance();
-                System.out.println("instance data first: " + id );
-                ddServ.removeInstance(id);
+            log.trace("Monitor  Timer Wake Up...");
+            DimDataServicesImp ddServ = (DimDataServicesImp) SWBPortal.getCloud();
+            SWBCloudControlCenter cc = ddServ.getControlCenter();
+            cc.reloadData();
+            log.trace("found a load of: " + cc.getAverageLoad());
+            if (cc.isLaunched()) {
+                log.trace("System is in Launched state, last launch period: " + (System.currentTimeMillis() - lastLaunchTime + _LAUNCH_PERIOD));
+                //System.out.println("comparo: " + cc.getMaxInstances() + "con current instances: " + cc.currentInstances());
+                log.trace("Average Load: " + cc.getAverageLoad() + " getAvCPU: " + cc.getAvgCPU());
+                if ((lastLaunchTime + _LAUNCH_PERIOD) < System.currentTimeMillis()
+                        && cc.getMaxInstances() > cc.currentInstances()
+                        && cc.getAverageLoad() > cc.getAvgCPU()) {
+                    log.trace("Time to launch a new instance");
+                    launchNew(ddServ, cc);
+                    lastLaunchTime = System.currentTimeMillis();
+                    log.trace("Instance Launched " + lastLaunchTime);
+                }
+                log.trace("current # instances para borrar: " + cc.currentInstances());
+                log.trace("average load para borrar : " + cc.getAverageLoad());
+                if ((lastLaunchTime + _LAUNCH_PERIOD) < System.currentTimeMillis()
+                        && 1 < cc.currentInstances()
+                        && cc.getAverageLoad() < 20.0d) {
+                    log.trace("Time to Terminate an instance");
+                    InstanceData id = cc.getFisrtInstance();
+                    //System.out.println("instance data first: " + id);
+                    ddServ.removeInstance(id);
 //                cc.removeInstanceData(id);
-                log.trace("Instance "+id.getServerId()+" terminated");
+                    log.trace("Instance " + id.getServerId() + " terminated");
+                }
             }
-        }
-        log.trace("Monitor Timer goes to sleep...");
-        } catch (Exception e){
-            log.error("Monitor DimensionData Timer",e);
+            log.trace("Monitor Timer goes to sleep...");
+        } catch (Exception e) {
+            log.error("Monitor DimensionData Timer", e);
         }
     }
-    
-    private String launchNew(final DimDataServicesImp ddServ, final SWBCloudControlCenter controlCenter){
-    
-                ddServ.createInstance(controlCenter.getImageId(),  
-                controlCenter.getNetId(), 
-                controlCenter.getBaseName(),  controlCenter.getFarmId());
-    
-             return "launched";    }
+
+    private String launchNew(final DimDataServicesImp ddServ, final SWBCloudControlCenter controlCenter) {
+
+        ddServ.createInstance(controlCenter.getImageId(),
+                controlCenter.getNetId(),
+                controlCenter.getFarmId());
+
+        return "launched";
+    }
 }

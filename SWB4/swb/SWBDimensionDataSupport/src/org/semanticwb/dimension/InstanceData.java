@@ -24,26 +24,27 @@ package org.semanticwb.dimension;
 
 /**
  * POJO representing an Instance
+ *
  * @author serch
  */
 public final class InstanceData implements Comparable<InstanceData> {
 
-     private String serverId; 
+    private String serverId;
     private String serverName;
-    private String realName; 
-    private String realId; 
-    private String ip; 
-    private long startupTime; 
+    private String realName;
+    private String realId;
+    private String ip;
+    private long startupTime;
     private String deployed;
-    private String started; 
+    private String started;
 
     InstanceData(String name, String id, String deployed, String started) {
-       this.setServerName(name);
-       this.setServerId(id); 
-       this.setStarted(started);
-       this.setDeployed(deployed);
+        this.setServerName(name);
+        this.setServerId(id);
+        this.setStarted(started);
+        this.setDeployed(deployed);
     }
-   // private String deployTime; 
+     // private String deployTime; 
     /**
      * @return the serverId
      */
@@ -113,12 +114,10 @@ public final class InstanceData implements Comparable<InstanceData> {
     public void setIp(String ip) {
         this.ip = ip;
     }
-    
-    
-    
-  
+
     /**
      * get Startup Timestamp
+     *
      * @return startup timestamp
      */
     public long getStartupTime() {
@@ -127,6 +126,7 @@ public final class InstanceData implements Comparable<InstanceData> {
 
     /**
      * Set Startup timestamp
+     *
      * @param startupTime startup timestamp
      */
     public void setStartupTime(long startupTime) {
@@ -137,7 +137,6 @@ public final class InstanceData implements Comparable<InstanceData> {
 //    public int hashCode() {
 //        return id.hashCode();
 //    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
