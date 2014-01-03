@@ -310,9 +310,13 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                 SWBSocialUtil.PostOutUtil.savePostOutNetID(video, this, videoId, null);
             }
         } catch (Exception ex) {
-            log.error("ERROR" + ex.toString());
-            System.out.println("ERROR" + ex.toString());
-            ex.printStackTrace();
+            try{
+            log.error("PROBLEM UPLOADING VIDEO:" + conn.getResponseMessage());
+            System.out.println("THE ERROR" + getResponse(conn.getErrorStream()));
+            }catch(Exception e){
+                System.out.println("INGNORED:" + e.getMessage());
+            }
+            log.error("ERROR-->",ex);
         }
 
         /*   try
@@ -962,7 +966,13 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             get.setHeader("Authorization", "Bearer " + this.getAccessToken());
             HttpResponse res = client.execute(get);
             BufferedReader rd = new BufferedReader(new InputStreamReader(res.getEntity().getContent()));
-            String dcxml = rd.readLine();
+            //String dcxml = rd.readLine();
+            StringBuilder videoInfo = new StringBuilder();
+            String dcxml;
+            while((dcxml = rd.readLine()) != null) {
+               videoInfo.append(dcxml);
+            }
+            dcxml = videoInfo.toString();
             System.out.println("docxml dentro de isPublished:   " + dcxml);
             if (dcxml.contains("Video not found")) {
                 //   postOutNet.setError(dcxml);
@@ -1197,7 +1207,13 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                     writer.flush();
                     writer.close();                        
                     BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    String docxml = readerl.readLine();
+                    //String docxml = readerl.readLine();
+                    StringBuilder videoInfo = new StringBuilder();
+                    String docxml;
+                    while((docxml = readerl.readLine()) != null) {
+                       videoInfo.append(docxml);
+                    }
+                    docxml = videoInfo.toString();
 
                     //SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, String.valueOf(longStat), null);
                     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
