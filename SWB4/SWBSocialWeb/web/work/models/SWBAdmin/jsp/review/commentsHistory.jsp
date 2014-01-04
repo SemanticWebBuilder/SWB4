@@ -30,7 +30,7 @@
     PostOut postOut = (PostOut) sobj.createGenericInstance(); 
     WebSite wsite = WebSite.ClassMgr.getWebSite(postOut.getSemanticObject().getModel().getName());
     
-    if(postOut == null || !postOut.isPublished()){
+    if(postOut == null){//|| !postOut.isPublished()){
         return;
     }
     
@@ -57,7 +57,7 @@
 
 <!-- this div is only for documentation purpose, in real development environments, just take it out -->
 <!--<div style="height: 300px; width: 500px">-->
-<div class="swbform swbpopup retema-pop" style="height: 300px;">
+<div class="swbform swbpopup retema-pop">
     <div dojoType="dijit.layout.TabContainer" style="width: 100%;" doLayout="false">
         <%
         for(int i=0; i< postOutSocialNets.size(); i++){
@@ -68,9 +68,10 @@
             ///out.println("-->" + outNet.getSocialPost().getSocialTopic());
             ///out.println("-->" + outNet.getSocialNetwork().getURI());
             //if(outNet.getStatus() == 1){//Fue publicado correctamente            
+            //if(!(socialNetwork instanceof Twitter) && !(socialNetwork instanceof Facebook)){
             if(!(socialNetwork instanceof Twitter)){
             %>
-            <div id="<%=socialNetwork.getURI()%>" dojoType="dijit.layout.ContentPane" href="<%=paramRequest.getRenderUrl().setMode("recoverComments").setParameter("postOutUri", postOut.getURI()).setParameter("postOutNetNetwork", socialNetwork.getURI()) %>" title="<%=socialNetwork.getDisplayTitle("es")%>" _loadingMessage="<%=loading%>">
+            <div style="height: 300px;" id="<%=socialNetwork.getURI()%>" dojoType="dijit.layout.ContentPane" href="<%=paramRequest.getRenderUrl().setMode("recoverComments").setParameter("postOutUri", postOut.getURI()).setParameter("postOutNetNetwork", socialNetwork.getURI()) %>" title="<%=socialNetwork.getDisplayTitle("es")%>" _loadingMessage="<%=loading%>">
                 <div class="swbform">
                 <%
                     //out.println("&nbsp;&nbsp;&nbsp;&nbsp;POST OUT NET:" + outNet + "->" + outNet.getSocialNetwork().getTitle() + "</br>");
