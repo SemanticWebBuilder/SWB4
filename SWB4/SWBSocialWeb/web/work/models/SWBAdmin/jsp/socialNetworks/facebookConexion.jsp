@@ -48,7 +48,7 @@
         String fbResponse = null;
         try {
             if (more.equals("friends")) {
-                fbResponse = getRequest(params1, "https://graph.facebook.com/me/friends?access_token=" + facebook.getAccessToken() + "&limit=30",
+                fbResponse = getRequest(params1, "https://graph.facebook.com/me/friends?access_token=" + facebook.getAccessToken() + "&limit=20",
                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
             } else {
                 fbResponse = getRequest(params1, "https://graph.facebook.com/me/subscribers?access_token=" + facebook.getAccessToken() + "&limit=30",
