@@ -48,6 +48,9 @@
         
         out.println("<div id=\""+ objUri + VIDEOS_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Videos"+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + VIDEOS_TAB +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
         out.println("</div>");
+        
+        out.println("<div id=\""+ objUri + CONEXION +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Videos"+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + CONEXION +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
+        out.println("</div>");
         /*
         
         
