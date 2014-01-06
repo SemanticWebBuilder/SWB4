@@ -46,6 +46,9 @@
         
         out.println("<div id=\""+ objUri + DIRECT_MESSAGES_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Direct Messages"+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + DIRECT_MESSAGES_TAB +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
         out.println("</div>");
+        
+        out.println("<div id=\""+ objUri + CONNECTIONS_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Connections"+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + CONNECTIONS_TAB +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
+        out.println("</div>");
 
         //out.println("<div id=\""+ objUri + USER_TWEETS_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"My Tweets"+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + USER_TWEETS_TAB +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
         //out.println("</div>");
