@@ -639,8 +639,12 @@ public class SWBPortal
                     site = SWBContext.getWebSite("demo");
                     if (site == null)
                     {
-                        log.event("Creating Demo WebSite...");
-                        UTIL.InstallZip(new File(getWorkPath() + "/sitetemplates/demo.zip"));
+                        File file=new File(getWorkPath() + "/sitetemplates/demo.zip");
+                        if(file.exists())
+                        {
+                            log.event("Creating Demo WebSite...");
+                            UTIL.InstallZip(file);
+                        }
                     }
                 }
                 catch (Exception e)
