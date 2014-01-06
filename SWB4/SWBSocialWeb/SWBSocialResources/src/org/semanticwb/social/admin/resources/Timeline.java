@@ -73,6 +73,7 @@ public class Timeline extends GenericResource{
     public static String DIRECT_MESSAGES_TAB = "/dmsgs";
     public static String USER_TWEETS_TAB = "/userTweets";
     public static String DISCOVER_TAB ="/discover";
+    public static String CONNECTIONS_TAB ="/connectios";
     
     //Variable used to save the users with active session
     private HashMap<String, twitter4j.Twitter> twitterUsers = new HashMap<String,twitter4j.Twitter>();    
@@ -199,6 +200,8 @@ public class Timeline extends GenericResource{
             jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/twitterDiscover.jsp";
         }else if(contentTabId != null && contentTabId.equals(USER_TWEETS_TAB)){
             jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/twitterMyTweets.jsp";
+        }else if(contentTabId != null && contentTabId.equals(CONNECTIONS_TAB)){
+            jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/twitterConnections.jsp";
         }/*else if(contentTabId != null && contentTabId.equals()){
             jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/twitterUserProfile.jsp";
         }else if(contentTabId != null && contentTabId.equals("wordNet")){
@@ -1108,6 +1111,10 @@ public class Timeline extends GenericResource{
             }
         }else if (paramRequest.getMode().equals("post")) {
             doCreatePost(request, response, paramRequest);
+        }else if (paramRequest.getMode().equals("getMoreFriends")) {
+            doGetMoreFriends(request, response, paramRequest);
+        }else if (paramRequest.getMode().equals("getMoreFollowers")) {
+            doGetMoreFollowers(request, response, paramRequest);
         }else{
             super.processRequest(request, response, paramRequest);
         }
@@ -1718,6 +1725,86 @@ public class Timeline extends GenericResource{
             rd.include(request, response);
         } catch (ServletException ex) {
             log.error("Error al enviar los datos a typeOfContent.jsp " + ex.getMessage());
+        }
+    }
+    
+    public void doGetMoreFriends(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        String objUri = request.getParameter("suri");        
+        SWBResourceURL actionURL = paramRequest.getActionUrl();
+        SWBResourceURL renderURL = paramRequest.getRenderUrl();
+        twitter4j.Twitter twitter = twitterUsers.get(objUri);
+        if(objUri!= null){
+            actionURL.setParameter("suri", objUri);
+            renderURL.setParameter("suri", objUri);
+        }
+        
+        Long friendsCursor;
+        try{
+            friendsCursor = Long.parseLong(request.getParameter("friendsCursor"));
+        }catch(NumberFormatException nfe){
+            friendsCursor = -1L;
+        }
+        
+        try {
+            PagableResponseList<User> friends;
+            //do {
+            friends = twitter.getFriendsList(twitter.getId(), friendsCursor);
+            if(friends.size() == 0)return;
+            //out.println("-----" + "/nCursor:" + friends.getNextCursor());
+            for(int i = 0; i < friends.size(); i++){
+                User user = friends.get(i);
+                out.println("THE friend:" + "<img src=\"" + user.getBiggerProfileImageURL() + "\">" + friends.get(i).getScreenName() + "</br>");
+            }
+            friendsCursor = friends.getNextCursor();
+            out.println("<div align=\"center\">");
+            out.println("<label id=\"" + objUri + "/moreFriendsLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreFriends").setParameter("friendsCursor", friendsCursor+"") + "','" + objUri + "/getMoreFriends','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreFriends") + "</a></label>");
+            out.println("</div>");
+        } catch (Exception te) {
+            log.error("Error when getting friends: ", te);
+            out.println("<div align=\"center\">");
+            out.println("<label id=\"" + objUri + "/moreFriendsLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreFriends").setParameter("friendsCursor", friendsCursor+"") + "','" + objUri + "/getMoreFriends','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreFriends") + "</a></label>");
+            out.println("</div>");
+        }
+    }
+    
+    public void doGetMoreFollowers(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        String objUri = request.getParameter("suri");        
+        SWBResourceURL actionURL = paramRequest.getActionUrl();
+        SWBResourceURL renderURL = paramRequest.getRenderUrl();
+        twitter4j.Twitter twitter = twitterUsers.get(objUri);
+        if(objUri!= null){
+            actionURL.setParameter("suri", objUri);
+            renderURL.setParameter("suri", objUri);
+        }
+        
+        Long followersCursor;
+        try{
+            followersCursor = Long.parseLong(request.getParameter("followersCursor"));
+        }catch(NumberFormatException nfe){
+            followersCursor = -1L;
+        }
+        
+        try {
+            PagableResponseList<User> followers;
+            //do {
+            followers = twitter.getFollowersList(twitter.getId(), followersCursor);
+            if(followers.size() == 0)return;
+            //out.println("-----" + "/nCursor:" + friends.getNextCursor());
+            for(int i = 0; i < followers.size(); i++){
+                User user = followers.get(i);
+                out.println("THE follower:" + "<img src=\"" + user.getBiggerProfileImageURL() + "\">" + followers.get(i).getScreenName() + "</br>");
+            }
+            followersCursor = followers.getNextCursor();
+            out.println("<div align=\"center\">");
+            out.println("<label id=\"" + objUri + "/moreFollowersLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreFollowers").setParameter("followersCursor", followersCursor+"") + "','" + objUri + "/getMoreFollowers','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreFollowers") + "</a></label>");
+            out.println("</div>");
+        } catch (Exception te) {
+            log.error("Error when getting followers: ", te);
+            out.println("<div align=\"center\">");
+            out.println("<label id=\"" + objUri + "/moreFollowersLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreFollowers").setParameter("followersCursor", followersCursor+"") + "','" + objUri + "/getMoreFollowers','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreFollowers") + "</a></label>");
+            out.println("</div>");
         }
     }
 }
