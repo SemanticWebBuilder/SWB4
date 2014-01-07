@@ -615,6 +615,9 @@ public class YoutubeWall extends GenericResource{
                     JSONObject usrCommentProfile = null;
                     if(!comment.isNull("author")){
                         if(!comment.getJSONArray("author").getJSONObject(0).isNull("yt$userId")){
+                            if(comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t").equalsIgnoreCase("__NO_YOUTUBE_ACCOUNT__")){
+                                continue;
+                            }
                             String commentProfile = getRequest(paramsUsr, "http://gdata.youtube.com/feeds/api/users/" + comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t"),
                                 "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", null);
                             usrCommentProfile = new JSONObject(commentProfile);
@@ -1153,7 +1156,7 @@ public class YoutubeWall extends GenericResource{
      
      public static void doPrintVideo(HttpServletRequest request, HttpServletResponse response, 
              SWBParamRequest paramRequest, java.io.Writer out, String postURI, SocialUserExtAttributes socialUserExtAttr, JSONObject video) throws SWBResourceException, IOException {
-        //System.out.println("VIDEO:" + video);
+        out.write("VIDEO:" + video);
         HashMap<String, String> paramsComments = new HashMap<String, String>(3);
         paramsComments.put("v", "2");
         paramsComments.put("max-results", "5");
@@ -1238,6 +1241,9 @@ public class YoutubeWall extends GenericResource{
                             JSONObject usrCommentProfile = null;
                             if(!comment.isNull("author")){
                                 if(!comment.getJSONArray("author").getJSONObject(0).isNull("yt$userId")){
+                                    if(comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t").equalsIgnoreCase("__NO_YOUTUBE_ACCOUNT__")){
+                                        continue;
+                                    }
                                     String commentProfile = getRequest(paramsUsr, "http://gdata.youtube.com/feeds/api/users/" + comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t"),
                                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", null);
                                     usrCommentProfile = new JSONObject(commentProfile);
