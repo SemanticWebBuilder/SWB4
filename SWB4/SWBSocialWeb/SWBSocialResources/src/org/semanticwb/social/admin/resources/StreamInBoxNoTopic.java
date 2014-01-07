@@ -35,6 +35,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
+import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
@@ -130,7 +131,25 @@ public class StreamInBoxNoTopic extends GenericResource {
             out.println("</script>");
             SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postUri"));
             PostIn postIn = (PostIn) semObj.createGenericInstance();
-            printPostIn(request, postIn, paramRequest, response);
+            User user=paramRequest.getUser();
+             //Manejo de permisos
+            SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+            boolean userCanRemoveMsg=false;
+            boolean userCanRetopicMsg=false;
+            boolean userCanRevalueMsg=false;
+            if(socialUserExtAttr!=null)
+            {
+                userCanRemoveMsg=socialUserExtAttr.isUserCanRemoveMsg();
+                userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
+                userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
+            }
+            boolean userCandoEveryThing=false;
+            UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
+            UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
+            if(user.hasUserGroup(userAdminGrp) || user.hasUserGroup(userSuperAdminGrp)) userCandoEveryThing=true;
+                    
+            Stream stream = postIn.getPostInStream();
+            printPostIn(postIn, paramRequest, response, stream, userCanRemoveMsg, userCanRetopicMsg, userCanRevalueMsg, userCandoEveryThing);
         }else if(mode.equals(Mode_DELETEPOSTIN)){
             PrintWriter out = response.getWriter();
             out.println("<script type=\"javascript\">");
@@ -198,7 +217,6 @@ public class StreamInBoxNoTopic extends GenericResource {
      */
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String lang = paramRequest.getUser().getLanguage();
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -719,6 +737,7 @@ public class StreamInBoxNoTopic extends GenericResource {
 
 
         //Manejo de permisos
+        
         User user=paramRequest.getUser();
         boolean userCanRemoveMsg=false;
         boolean userCanRetopicMsg=false;
@@ -732,6 +751,12 @@ public class StreamInBoxNoTopic extends GenericResource {
             userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
             //userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
         }
+        boolean userCandoEveryThing=false;
+        UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
+        UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
+        if(user.hasUserGroup(userAdminGrp) || user.hasUserGroup(userSuperAdminGrp)) userCandoEveryThing=true;
+        
+        
         
 
         Iterator<PostIn> itposts = (Iterator)hmapResult.get("itResult"); 
@@ -754,7 +779,7 @@ public class StreamInBoxNoTopic extends GenericResource {
             
             out.println("<tr id=\"" + postIn.getURI() + "/nt\" "+sClass+">"); 
             
-            printPostIn(request, postIn, paramRequest, response);
+            printPostIn(postIn, paramRequest, response, stream, userCanRemoveMsg, userCanRetopicMsg, userCanRevalueMsg, userCandoEveryThing);
             
             out.println("</tr>");
             
@@ -2429,26 +2454,14 @@ public class StreamInBoxNoTopic extends GenericResource {
 
     }
     
-    private void printPostIn(HttpServletRequest request, PostIn postIn, SWBParamRequest paramRequest, HttpServletResponse response) throws SWBResourceException, IOException {
+    private void printPostIn(PostIn postIn, SWBParamRequest paramRequest, HttpServletResponse response, Stream stream, 
+           boolean userCanRemoveMsg, boolean userCanRetopicMsg, boolean userCanRevalueMsg, boolean userCandoEveryThing) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter(); 
-        String objUri = request.getParameter("suri");
         User user = paramRequest.getUser();
         String lang = user.getLanguage();
-        //Manejo de permisos
-        boolean userCanRemoveMsg=false;
-        boolean userCanRetopicMsg=false;
-        boolean userCanRevalueMsg=false;
-
-        SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
-        if(socialUserExtAttr!=null)
-        {
-            userCanRemoveMsg=socialUserExtAttr.isUserCanRemoveMsg();
-            userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
-            userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
-        }
-
-        Stream stream = (Stream) SemanticObject.getSemanticObject(objUri).getGenericInstance();
-        int streamKloutValue=stream.getStream_KloutValue();
+        
+        //Stream stream = (Stream) SemanticObject.getSemanticObject(objUri).getGenericInstance();
+        //int streamKloutValue=stream.getStream_KloutValue();
         /*
         if(postIn.getSocialTopic()!=null) {
         //Tengo el problema con la paginación porque los resto al vuelo, entonces conforme se va acercando a la ultima página es como se hace 
@@ -2463,7 +2476,7 @@ public class StreamInBoxNoTopic extends GenericResource {
 
        //Remove
        SWBResourceURL urlr = paramRequest.getActionUrl();
-       urlr.setParameter("suri", objUri);
+       urlr.setParameter("suri", stream.getURI());
        urlr.setParameter("sval", postIn.getURI());
        //urlr.setParameter("page", "" + nPage);
        urlr.setAction(SWBResourceURL.Action_REMOVE);
@@ -2472,7 +2485,7 @@ public class StreamInBoxNoTopic extends GenericResource {
 
        text = SWBSocialResUtil.Util.replaceSpecialCharacters(text, false);
 
-       if(userCanRemoveMsg)
+       if(userCanRemoveMsg || userCandoEveryThing)
        {
            out.println("<div id=\"inStreamNoTopic" + postIn.getId() + "\">");
            out.println("</div>");
@@ -2489,14 +2502,14 @@ public class StreamInBoxNoTopic extends GenericResource {
 
 
        //ReClasifyByTpic
-       if(userCanRetopicMsg)
+       if(userCanRetopicMsg || userCandoEveryThing)
        {
            SWBResourceURL urlreClasifybyTopic = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI()).setParameter("fromStream", "/nt");
            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reclasifyByTopic") + "\" class=\"retema\"  onclick=\"showDialog('" + urlreClasifybyTopic + "','"
                    + paramRequest.getLocaleString("reclasifyByTopic") + "'); return false;\"></a>");
        }
 
-       if(userCanRevalueMsg)
+       if(userCanRevalueMsg || userCandoEveryThing)
        {
            //ReClasyfyBySentiment & Intensity
            SWBResourceURL urlrev = paramRequest.getRenderUrl().setMode(Mode_REVAL).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
@@ -2601,7 +2614,7 @@ public class StreamInBoxNoTopic extends GenericResource {
 
        //User
        out.println("<td>");
-       SWBResourceURL urlshowUsrHistory = paramRequest.getRenderUrl().setMode(Mode_ShowUsrHistory).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("suri", objUri);
+       SWBResourceURL urlshowUsrHistory = paramRequest.getRenderUrl().setMode(Mode_ShowUsrHistory).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("suri", stream.getURI());
        out.println(postIn.getPostInSocialNetworkUser() != null ? "<a href=\"#\" onclick=\"showDialog('" + urlshowUsrHistory.setParameter("swbSocialUser", postIn.getPostInSocialNetworkUser().getURI()) + "','" + paramRequest.getLocaleString("userHistory") + "'); return false;\">" + postIn.getPostInSocialNetworkUser().getSnu_name() + "</a>" : paramRequest.getLocaleString("withoutUser"));
        out.println("</td>");
 

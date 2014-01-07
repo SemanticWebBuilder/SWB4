@@ -38,6 +38,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
+import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
@@ -58,7 +59,6 @@ import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.SocialUserExtAttributes;
-import org.semanticwb.social.Stream;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.Youtube;
@@ -148,7 +148,25 @@ public class SocialTopicInBox extends GenericResource {
             out.println("</script>");
             SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postUri"));
             PostIn postIn = (PostIn) semObj.createGenericInstance();
-            printPostIn(request, postIn, paramRequest, response);
+            User user=paramRequest.getUser();
+            //Manejo de permisos
+            SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+            boolean userCanRemoveMsg=false;
+            boolean userCanRetopicMsg=false;
+            boolean userCanRespondMsg=false;
+            if(socialUserExtAttr!=null)
+            {
+                userCanRemoveMsg=socialUserExtAttr.isUserCanRemoveMsg();
+                userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
+                userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
+            }
+            boolean userCandoEveryThing=false;
+            UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
+            UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
+            if(user.hasUserGroup(userAdminGrp) || user.hasUserGroup(userSuperAdminGrp)) userCandoEveryThing=true;
+            
+            SocialTopic socialTopic = postIn.getSocialTopic();
+            printPostIn(postIn, paramRequest, response, socialTopic, userCanRemoveMsg, userCanRetopicMsg, userCanRespondMsg, userCandoEveryThing);
         }else if(mode.equals(Mode_DELETEPOSTIN)){
             PrintWriter out = response.getWriter();
             out.println("<script type=\"javascript\">");
@@ -216,7 +234,6 @@ public class SocialTopicInBox extends GenericResource {
      */
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String lang = paramRequest.getUser().getLanguage();
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -774,6 +791,7 @@ public class SocialTopicInBox extends GenericResource {
 
          //Manejo de permisos
         //Manejo de permisos
+        
         User user=paramRequest.getUser();
         boolean userCanRemoveMsg=false;
         boolean userCanRetopicMsg=false;
@@ -787,7 +805,11 @@ public class SocialTopicInBox extends GenericResource {
             //userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
             userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
         }
-
+        boolean userCandoEveryThing=false;
+        UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
+        UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
+        if(user.hasUserGroup(userAdminGrp) || user.hasUserGroup(userSuperAdminGrp)) userCandoEveryThing=true;
+        
         Iterator<PostIn> itposts = (Iterator)hmapResult.get("itResult"); 
         while (itposts!=null &&  itposts.hasNext()) {
             PostIn postIn = itposts.next();
@@ -796,7 +818,7 @@ public class SocialTopicInBox extends GenericResource {
             if(postIn.isIsPrioritary()) sClass="class=\"msj-cont msj-prior\"";
             
             out.println("<tr id=\"" + postIn.getURI() + "/topicIn\" "+sClass+">"); 
-            printPostIn(request, postIn, paramRequest, response);
+            printPostIn(postIn, paramRequest, response, socialTopic, userCanRemoveMsg, userCanRetopicMsg, userCanRespondMsg, userCandoEveryThing);
             out.println("</tr>");
             
         }
@@ -2517,29 +2539,19 @@ public class SocialTopicInBox extends GenericResource {
    }
    * */
    
-   private void printPostIn(HttpServletRequest request, PostIn postIn, SWBParamRequest paramRequest, HttpServletResponse response) throws SWBResourceException, IOException {
+   private void printPostIn(PostIn postIn, SWBParamRequest paramRequest, HttpServletResponse response, SocialTopic socialTopic, 
+           boolean userCanRemoveMsg, boolean userCanRetopicMsg, boolean userCanRespondMsg, boolean userCandoEveryThing) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter(); 
-        String objUri = request.getParameter("suri");
         User user = paramRequest.getUser();
         String lang = user.getLanguage();
-        //Manejo de permisos
-        boolean userCanRemoveMsg=false;
-        boolean userCanRetopicMsg=false;
-        boolean userCanRespondMsg=false;
-        SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
-        if(socialUserExtAttr!=null)
-        {
-            userCanRemoveMsg=socialUserExtAttr.isUserCanRemoveMsg();
-            userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
-            userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
-        }
+        
        
        //Show Actions
         out.println("<td class=\"accion\">");
 
         //Remove
         SWBResourceURL urlr = paramRequest.getActionUrl();
-        urlr.setParameter("suri", objUri);
+        urlr.setParameter("suri", socialTopic.getURI());
         urlr.setParameter("postUri", postIn.getURI());
         //urlr.setParameter("page", "" + nPage);
         urlr.setAction(SWBResourceURL.Action_REMOVE);
@@ -2548,7 +2560,7 @@ public class SocialTopicInBox extends GenericResource {
 
         text = SWBSocialResUtil.Util.replaceSpecialCharacters(text, false);
 
-        if(userCanRemoveMsg)
+        if(userCanRemoveMsg || userCandoEveryThing)
         {
             out.println("<div id=\"inTopic" + postIn.getId() + "\">");
             out.println("</div>");
@@ -2574,7 +2586,7 @@ public class SocialTopicInBox extends GenericResource {
 
 
         //ReClasifyByTpic
-        if(userCanRetopicMsg)
+        if(userCanRetopicMsg || userCandoEveryThing)
         {
             SWBResourceURL urlreClasifybyTopic = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI()).setParameter("fromStream", "/topicIn");
             out.println("<a href=\"#\" class=\"retema\" title=\"" + paramRequest.getLocaleString("reclasifyByTopic") + "\" onclick=\"showDialog('" + urlreClasifybyTopic + "','"
@@ -2582,7 +2594,7 @@ public class SocialTopicInBox extends GenericResource {
         }
 
 
-        if(userCanRespondMsg)
+        if(userCanRespondMsg || userCandoEveryThing)
         {
             //Respond
             SWBResourceURL urlresponse = paramRequest.getRenderUrl().setMode(Mode_RESPONSE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
@@ -2689,7 +2701,7 @@ public class SocialTopicInBox extends GenericResource {
 
         //User
         out.println("<td>");
-        SWBResourceURL urlshowUsrHistory = paramRequest.getRenderUrl().setMode(Mode_ShowUsrHistory).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("suri", objUri);
+        SWBResourceURL urlshowUsrHistory = paramRequest.getRenderUrl().setMode(Mode_ShowUsrHistory).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("suri", socialTopic.getURI());
         out.println(postIn.getPostInSocialNetworkUser() != null ? "<a href=\"#\" onclick=\"showDialog('" + urlshowUsrHistory.setParameter("swbSocialUser", postIn.getPostInSocialNetworkUser().getURI()) + "','" + paramRequest.getLocaleString("userHistory") + "'); return false;\">" + postIn.getPostInSocialNetworkUser().getSnu_name() + "</a>" : paramRequest.getLocaleString("withoutUser"));
         out.println("</td>");
 
