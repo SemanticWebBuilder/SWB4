@@ -80,11 +80,11 @@
             }
             
             .bar_negatives {
-                fill: orange;
+                fill: red;
             }
 
             .bar_negatives:hover {
-                fill: orange;
+                fill: red;
             }
             
             
