@@ -31,7 +31,6 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.file.Files;
 import java.util.LinkedList;
 import javax.net.ssl.HttpsURLConnection;
 import org.semanticwb.SWBUtils;
