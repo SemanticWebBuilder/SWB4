@@ -469,8 +469,15 @@ public class Timeline extends GenericResource{
             //System.out.println("Entra a InBox_processAction-2:"+request.getParameter("objUri"));
             if (request.getParameter("objUri") != null) {
                 //System.out.println("Entra a InBox_processAction-3");
-                PostIn postIn = (PostIn) SemanticObject.getSemanticObject(request.getParameter("objUri")).createGenericInstance();
-                SocialTopic stOld = postIn.getSocialTopic();
+                PostIn postIn = null;
+                SocialTopic socialTopic = null;
+                String suri = request.getParameter("objUri");
+
+                if(SemanticObject.getSemanticObject(suri).createGenericInstance() instanceof PostIn){//When is a response from the timeline
+                    postIn = (PostIn)SemanticObject.createSemanticObject(suri).createGenericInstance();
+                }else if(SemanticObject.getSemanticObject(suri).createGenericInstance() instanceof SocialTopic){//When is a tweet to some user
+                    socialTopic = (SocialTopic)SemanticObject.createSemanticObject(suri).createGenericInstance();
+                }
                 ///
                 WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
                 String socialUri = "";
@@ -514,7 +521,11 @@ public class Timeline extends GenericResource{
                 }
 
                 //System.out.println("Entra a InBox_processAction-4");
-                SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, toPost, request, response);
+                if(postIn != null){//When is a response from the timeline
+                    SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, toPost, request, response);
+                }else if(socialTopic != null){//When is new tweet to some user
+                    SWBSocialUtil.PostOutUtil.sendNewPost(null, socialTopic, socialPFlow, aSocialNets, wsite, toPost, request, response);
+                }
 
                 response.setRenderParameter("repliedTweet", "ok");
                 response.setMode("tweetSent");
@@ -755,7 +766,7 @@ public class Timeline extends GenericResource{
                     log.error(e);
                 }
             }
-        }else if(mode!= null && mode.equals("replyDM")){//Displays dialog to create tweet
+        }else if(mode!= null && (mode.equals("replyDM") || mode.equals("createNewDM"))){//Displays dialog to create tweet
             SWBResourceURL actionURL = paramRequest.getActionUrl();
             actionURL.setParameter("userId", request.getParameter("userId"));
             actionURL.setParameter("suri", request.getParameter("suri"));
@@ -1116,6 +1127,9 @@ public class Timeline extends GenericResource{
         }else if (paramRequest.getMode().equals("getMoreFollowers")) {
             doGetMoreFollowers(request, response, paramRequest);
         }else if (paramRequest.getMode().equals("createTweet")){
+            response.setContentType("text/html; charset=ISO-8859-1");
+            response.setHeader("Cache-Control", "no-cache");
+            response.setHeader("Pragma", "no-cache");
             String jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/createNewPostToUser.jsp";           
             RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
             try {
@@ -1532,7 +1546,7 @@ public class Timeline extends GenericResource{
                 
                 writer.write("<div id=\"" + dm.getId() + "\" dojoType=\"dijit.layout.ContentPane\">");
                 writer.write("<b>" + twitterHumanFriendlyDate(dm.getCreatedAt(), paramRequest) + "</b> ");
-                writer.write("<a href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyDM").setParameter("userId", dm.getSenderId()+"") + "','DM to @" + dm.getSenderScreenName()+ "');return false;\">Reply</a>  ");                
+                writer.write("<a href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyDM").setParameter("userId", dm.getSenderId()+"") + "','DM to @" + dm.getSenderScreenName()+ "');return false;\">Reply</a>  ");
                 writer.write("   </div>");
                 writer.write("   </td>");
                 writer.write("</tr>");          
