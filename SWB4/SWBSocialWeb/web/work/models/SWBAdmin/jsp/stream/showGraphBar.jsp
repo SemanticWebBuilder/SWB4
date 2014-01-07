@@ -68,7 +68,7 @@
             }
 
             .bar:hover {
-                fill: orangered ;
+                fill: orange ;
             }
 
             .bar_neutrals {
@@ -84,7 +84,7 @@
             }
 
             .bar_negatives:hover {
-                fill: orangered ;
+                fill: orange;
             }
             
             
