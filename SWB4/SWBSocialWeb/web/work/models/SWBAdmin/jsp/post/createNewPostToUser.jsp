@@ -18,7 +18,7 @@
 
 <%
     SWBResourceURL url = paramRequest.getRenderUrl();
-    SemanticObject sObjSocialNet=(SemanticObject)SemanticObject.createSemanticObject(request.getParameter("suri"));
+    SemanticObject sObjSocialNet=(SemanticObject)SemanticObject.createSemanticObject(request.getParameter("netSuri"));
     String socialNetUri = sObjSocialNet.getURI();
     SocialNetwork socialNetwork=(SocialNetwork)sObjSocialNet.createGenericInstance();
     
@@ -26,9 +26,13 @@
     
     Map args = new HashMap();
     args.put("wsite", socialNetwork.getSemanticObject().getModel().getName());
-    args.put("objUri", socialNetwork.getURI());
+    args.put("objUri", request.getParameter("suri"));
+    args.put("username", request.getParameter("username"));
+    args.put("netSuri", request.getParameter("netSuri"));
+    
     System.out.println("Username:" + request.getParameter("username"));
-    boolean isMessageAble=false;
+    System.out.println("netSuri" + request.getParameter("netSuri"));
+       boolean isMessageAble=false;
     boolean isPhotoable=false;
     boolean isVideoable=false; 
     if(socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Messageable.social_Messageable))
