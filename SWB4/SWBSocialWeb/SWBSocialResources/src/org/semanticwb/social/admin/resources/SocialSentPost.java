@@ -59,6 +59,7 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.Trashable;
 import org.semanticwb.model.User;
+import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
@@ -384,8 +385,6 @@ public class SocialSentPost extends GenericResource {
         } catch (Exception ignored) {
             nPage = 1;
         }
-
-        System.out.println("SentPost/socialTopic:"+socialTopic);
         
         HashMap hmapResult = filtros(swbSocialUser, wsite, searchWord, request, socialTopic, nPage);
         
@@ -732,6 +731,8 @@ public class SocialSentPost extends GenericResource {
              userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
              * */
         }
+        UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
+        UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
 
         
         //Set<PostOut> setso = ((Set) hmapResult.get("itResult"));
@@ -810,7 +811,7 @@ public class SocialSentPost extends GenericResource {
                 msgText = SWBSocialResUtil.Util.replaceSpecialCharacters(msgText, false);
             }
 
-            if (userCanRemoveMsg) {
+            if (userCanRemoveMsg || user.hasUserGroup(userAdminGrp) || user.hasUserGroup(userSuperAdminGrp)) {
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + msgText + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
             }
 
