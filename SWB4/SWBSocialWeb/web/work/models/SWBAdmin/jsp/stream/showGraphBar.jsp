@@ -72,28 +72,28 @@
             }
 
             .bar_neutrals {
-                fill: orange;
+                fill: #FFD700;
             }
 
             .bar_neutrals:hover {
-                fill: #D8D8D8 ;
+                fill: #FFD700 ;
             }
             
             .bar_negatives {
-                fill: red;
+                fill: #FF0000;
             }
 
             .bar_negatives:hover {
-                fill: red;
+                fill: #FF0000;
             }
             
             
             .bar_positives {
-                fill: #86c440;
+                fill: #008000;
             }
 
             .bar_positives:hover{
-                fill: #86c440 ;
+                fill: #008000 ;
             }            
             .x.axis path {
                 display: none;
