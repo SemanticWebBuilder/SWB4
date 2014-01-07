@@ -2354,6 +2354,26 @@ public class SWBSocialUtil implements SWBAppObject {
 
         }
         
+         public static ArrayList getSocialTopicSocialNetworks(org.semanticwb.social.SocialTopic socialTopic)
+        {
+            String query=
+               "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+               "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+               "\n";
+
+               query+="select DISTINCT ?semObj" +"\n";
+               query+=
+               "where {\n" +
+               " ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
+               " ?postUri social:postInSocialNetwork ?semObj.  \n" +
+               " ?postUri social:pi_created ?postInCreated. \n" +
+               "  }\n";
+
+               WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+               return SWBSocial.executeQueryArraySemObj(query, wsite);
+
+        }
+        
         public static ArrayList getPostInbyStreamAndSocialTopic(Stream stream, org.semanticwb.social.SocialTopic socialTopic)
         {
             String query=
@@ -2393,7 +2413,25 @@ public class SWBSocialUtil implements SWBAppObject {
                return SWBSocial.executeQueryArraySemObj(query, wsite);
 
         }
-        
+       
+         public static ArrayList getPostInbySocialTopicAndSocialNetwork( org.semanticwb.social.SocialTopic socialTopic, SocialNetwork socialNetwork)
+        {
+            String query=
+               "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+               "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+               "\n";
+
+               query+="select *" +"\n";
+               query+=
+               "where {\n" +
+               " ?semObj social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
+               " ?semObj social:postInSocialNetwork <" + socialNetwork.getURI() + ">. \n" +
+               "  }\n";
+
+               WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+               return SWBSocial.executeQueryArraySemObj(query, wsite);
+
+        }
         /**
          * Gets the social networks where the postOut was sent.
          * @param postOut
