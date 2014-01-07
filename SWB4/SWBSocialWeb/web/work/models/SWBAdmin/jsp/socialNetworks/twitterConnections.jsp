@@ -77,7 +77,7 @@
     </p>
     <div class="timelineresume">
         <span class="inline" id="sendTweet/<%=user.getId()%>" dojoType="dojox.layout.ContentPane">
-            <a class="clasifica" href="#" onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("createTweet").setParameter("suri",objUri)%>','Enviar mensaje a @dandanash');return false;">Enviar Mensaje</a>
+            <a class="clasifica" href="#" onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("createTweet").setParameter("suri",defaultSocialTopic.getURI()).setParameter("netSuri",objUri).setParameter("username",user.getScreenName())%>','Enviar mensaje a @<%=user.getScreenName()%>');return false;">Enviar Mensaje</a>
         </span>
         <span class="inline" id="sendDM/<%=user.getId()%>" dojoType="dojox.layout.ContentPane">
             <a class="clasifica" href="#" onclick="">Enviar Mensaje Directo</a>
