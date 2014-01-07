@@ -1115,6 +1115,15 @@ public class Timeline extends GenericResource{
             doGetMoreFriends(request, response, paramRequest);
         }else if (paramRequest.getMode().equals("getMoreFollowers")) {
             doGetMoreFollowers(request, response, paramRequest);
+        }else if (paramRequest.getMode().equals("createTweet")){
+            String jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/createNewPostToUser.jsp";           
+            RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
+            try {
+                request.setAttribute("paramRequest", paramRequest);
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error(e);
+            }            
         }else{
             super.processRequest(request, response, paramRequest);
         }
@@ -1754,7 +1763,17 @@ public class Timeline extends GenericResource{
             //out.println("-----" + "/nCursor:" + friends.getNextCursor());
             for(int i = 0; i < friends.size(); i++){
                 User user = friends.get(i);
-                out.println("THE friend:" + "<img src=\"" + user.getBiggerProfileImageURL() + "\">" + friends.get(i).getScreenName() + "</br>");
+                //out.println("THE friend:" + "<img src=\"" + user.getBiggerProfileImageURL() + "\">" + friends.get(i).getScreenName() + "</br>");
+                out.println("<div class=\"timeline timelinetweeter\">");
+                out.println("	<p class=\"tweeter\">");
+                out.println("	<a onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("suri", objUri).setParameter("targetUser", user.getScreenName()) + "','@" + user.getScreenName() + " - " + user.getName() + "'); return false;\" href=\"#\">@" + user.getScreenName() + "</a>"  + user.getName());
+                out.println("	</p>");
+                out.println("	<p class=\"tweet\">");
+                out.println("		<a onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("suri", objUri).setParameter("targetUser", user.getScreenName()) + "','@" + user.getScreenName() + " - " + user.getName() + "');return false;\" href=\"#\">");
+                out.println("			<img width=\"48\" height=\"48\" src=\"" + user.getBiggerProfileImageURL() + "\"></a>");
+                out.println(            user.getDescription());
+                out.println("	</p>");
+                out.println("</div>");
             }
             friendsCursor = friends.getNextCursor();
             out.println("<div align=\"center\">");
@@ -1794,7 +1813,17 @@ public class Timeline extends GenericResource{
             //out.println("-----" + "/nCursor:" + friends.getNextCursor());
             for(int i = 0; i < followers.size(); i++){
                 User user = followers.get(i);
-                out.println("THE follower:" + "<img src=\"" + user.getBiggerProfileImageURL() + "\">" + followers.get(i).getScreenName() + "</br>");
+                //out.println("THE follower:" + "<img src=\"" + user.getBiggerProfileImageURL() + "\">" + followers.get(i).getScreenName() + "</br>");
+                 out.println("<div class=\"timeline timelinetweeter\">");
+                out.println("	<p class=\"tweeter\">");
+                out.println("	<a onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("suri", objUri).setParameter("targetUser", user.getScreenName()) + "','@" + user.getScreenName() + " - " + user.getName() + "'); return false;\" href=\"#\">@" + user.getScreenName() + "</a> "  + user.getName());
+                out.println("	</p>");
+                out.println("	<p class=\"tweet\">");
+                out.println("		<a onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("suri", objUri).setParameter("targetUser", user.getScreenName()) + "','@" + user.getScreenName() + " - " + user.getName() + "');return false;\" href=\"#\">");
+                out.println("			<img width=\"48\" height=\"48\" src=\"" + user.getBiggerProfileImageURL() + "\"></a>");
+                out.println(            user.getDescription());
+                out.println("	</p>");
+                out.println("</div>");
             }
             followersCursor = followers.getNextCursor();
             out.println("<div align=\"center\">");
