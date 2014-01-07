@@ -4,12 +4,21 @@
  */
 package org.semanticwb.social.admin.resources;
 
+import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.logging.Level;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -83,7 +92,7 @@ public class PieChart extends GenericResource {
             doPreview(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("showGraphBar") || paramRequest.getMode().equals("anioMes")) {
             showGraphBar(request, response, paramRequest);
-        } else if (paramRequest.getMode().equals("exportExcel")) {
+        }  else if (paramRequest.getMode().equals("exportExcel")) {
             try {
                 doGenerateReport(request, response, paramRequest);
             } catch (Exception e) {
@@ -143,27 +152,39 @@ public class PieChart extends GenericResource {
         //HashMap hmapResult = filtros(swbSocialUser, webSite, searchWord, request, stream, page);
         String suri = request.getParameter("suri");
         String title = "";
-        
-        if(SemanticObject.getSemanticObject(suri).getGenericInstance() instanceof  Stream){
-        Stream stream = (Stream)SemanticObject.getSemanticObject(suri).getGenericInstance();
-        title =  stream.getTitle();
-        
-        }else if(SemanticObject.getSemanticObject(suri).getGenericInstance() instanceof  SocialTopic){
-            SocialTopic sTopic = (SocialTopic)SemanticObject.getSemanticObject(suri).getGenericInstance();
-        title =  sTopic.getTitle();
+
+        if (SemanticObject.getSemanticObject(suri).getGenericInstance() instanceof Stream) {
+            Stream stream = (Stream) SemanticObject.getSemanticObject(suri).getGenericInstance();
+            title = stream.getTitle();
+
+        } else if (SemanticObject.getSemanticObject(suri).getGenericInstance() instanceof SocialTopic) {
+            SocialTopic sTopic = (SocialTopic) SemanticObject.getSemanticObject(suri).getGenericInstance();
+            title = sTopic.getTitle();
         }
-        
+
+        String type = request.getParameter("type");
         String filter = request.getParameter("filter");
+        String filterGeneral = request.getParameter("filterGeneral");
         if (filter == null) {
             filter = "";
         }
+        Iterator<PostIn> setso = null;
+
         String lang = paramRequest.getUser().getLanguage();
 
-        Iterator<PostIn> setso = getListSentiment(suri, lang, filter);
+        if (type.equals("socialNetwork")) {
+            setso = getSocialNetwork(suri, lang, filterGeneral, filter);
+        } else {
+            setso = getListSentiment(suri, lang, filter);
+
+        }
+
+
+
 
         try {
 
-            createExcel(setso, paramRequest, response,title);
+            createExcel(setso, paramRequest, response, title);
 
         } catch (Exception e) {
             log.error(e);
@@ -204,6 +225,59 @@ public class PieChart extends GenericResource {
                 negativesArray.add(postIn);
             }
             totalArray.add(postIn);
+        }
+
+
+        if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang))) {
+            i = neutralsArray.iterator();
+        } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang))) {
+            i = positivesArray.iterator();
+        } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang))) {
+            i = negativesArray.iterator();
+        } else {
+            i = totalArray.iterator();
+        }
+
+        return i;
+    }
+
+    private Iterator getSocialNetwork(String suri, String lang, String filterGeneral, String filter) {
+
+        SemanticObject semObj = SemanticObject.getSemanticObject(suri);
+        int neutrals = 0, positives = 0, negatives = 0;
+
+        ArrayList positivesArray = new ArrayList();
+        ArrayList negativesArray = new ArrayList();
+        ArrayList neutralsArray = new ArrayList();
+        ArrayList totalArray = new ArrayList();
+        Iterator i = null;
+
+
+        Iterator<PostIn> itObjPostIns = null;
+        if (semObj.getGenericInstance() instanceof Stream) {
+            Stream stream = (Stream) semObj.getGenericInstance();
+            itObjPostIns = stream.listPostInStreamInvs();
+        } else if (semObj.getGenericInstance() instanceof SocialTopic) {
+            SocialTopic socialTopic = (SocialTopic) semObj.getGenericInstance();
+            itObjPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
+        }
+
+        while (itObjPostIns.hasNext()) {
+            PostIn postIn = itObjPostIns.next();
+            if (filterGeneral.equals("all") || postIn.getPostInSocialNetwork().getTitle().equals(filterGeneral)) {
+                totalArray.add(postIn);
+                if (postIn.getPostSentimentalType() == 0) {
+                    neutrals++;
+                    neutralsArray.add(postIn);
+                } else if (postIn.getPostSentimentalType() == 1) {
+                    positives++;
+                    positivesArray.add(postIn);
+                } else if (postIn.getPostSentimentalType() == 2) {
+                    negatives++;
+                    negativesArray.add(postIn);
+                }
+            }
+
         }
 
 
