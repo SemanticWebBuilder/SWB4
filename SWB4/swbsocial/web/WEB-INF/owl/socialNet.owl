@@ -328,7 +328,6 @@
   </owl:Class>
   <owl:Class rdf:ID="SocialSite">
     <rdfs:label xml:lang="es">Sitio Social</rdfs:label>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Dnss"/>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_SocialSite">
         <swbxf:doDispatcher rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -337,24 +336,24 @@
         >swbIconWebSite</swb:iconClass>
       </swbxf:DisplayObject>
     </swb:displayObject>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Languages"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Roles"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Calendars"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Countries"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Templates"/>
+    <swb:hasHerarquicalNode>
+      <swbxf:HerarquicalNode rdf:ID="hn_SocialNets">
+        <swbxf:heClass rdf:resource="#SocialNetwork"/>
+      </swbxf:HerarquicalNode>
+    </swb:hasHerarquicalNode>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebSite"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTStrategies"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Collections"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_UserGroups"/>
+    <swb:hasClass>
+      <swb:Class rdf:ID="PublishFlow">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </swb:hasClass>
+    <swb:hasClass rdf:resource="#Stream"/>
     <rdfs:label xml:lang="en">Social Site</rdfs:label>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTContents"/>
     <rdfs:comment>Clase que hereda de swb:WebSite. Es un tipo de website Social. De esta manera se puede contar con todos los elementos en el arbol de navegación en la administración, y otros elementos utiles para Social Site.</rdfs:comment>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTSystems"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Model"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PFlows"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Camps"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Rules"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Devices"/>
   </owl:Class>
   <owl:Class rdf:about="#Secreteable">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
@@ -396,14 +395,7 @@
     </owl:inverseOf>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasUser">
-    <rdfs:domain>
-      <swb:Class rdf:ID="PublishFlow">
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:domain>
+    <rdfs:domain rdf:resource="#PublishFlow"/>
     <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
     <rdfs:comment>Un flujo de publicación puede estar asignado a mas de un usuario. Esto es para que los usuarios sigan uno o mas flujos.</rdfs:comment>
     <owl:inverseOf>
