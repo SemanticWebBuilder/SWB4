@@ -4,8 +4,12 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social Facebook. 
    */
-public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Secreteable,org.semanticwb.model.Filterable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.PostOutMonitorable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Kloutable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.social.Messageable,org.semanticwb.model.Trashable,org.semanticwb.social.Photoable,org.semanticwb.social.Oauthable,org.semanticwb.social.Listenerable,org.semanticwb.social.Relationable,org.semanticwb.social.Videoable,org.semanticwb.model.FilterableNode
+public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.PostOutMonitorable,org.semanticwb.social.Photoable,org.semanticwb.model.Filterable,org.semanticwb.social.Oauthable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Messageable,org.semanticwb.model.Trashable,org.semanticwb.social.Listenerable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Relationable,org.semanticwb.social.Videoable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.social.Kloutable,org.semanticwb.social.Secreteable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode
 {
+   /**
+   * Access token de la aplicación. Esta propiedad se utiliza para poder obtener la propiedad Third_party_id de facebook y esta a su vez, para poder obtener el klout de facebook en la red Klout.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_appAccessToken=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#appAccessToken");
    /**
    * Eliminar despues esta propiedad, ver si Jose puede eliminar la propiedad login que se encuentra en la clase padre(SocialNetwork).
    */
@@ -227,6 +231,29 @@ public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork i
             return it;
         }
        /**
+       * Gets all org.semanticwb.social.Facebook with a determined Podur_SocialNetworkInv
+       * @param value Podur_SocialNetworkInv of the type org.semanticwb.social.PostOutDirectUserRelation
+       * @param model Model of the org.semanticwb.social.Facebook
+       * @return Iterator with all the org.semanticwb.social.Facebook
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Facebook> listFacebookByPodur_SocialNetworkInv(org.semanticwb.social.PostOutDirectUserRelation value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Facebook> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_haspodur_SocialNetworkInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Facebook with a determined Podur_SocialNetworkInv
+       * @param value Podur_SocialNetworkInv of the type org.semanticwb.social.PostOutDirectUserRelation
+       * @return Iterator with all the org.semanticwb.social.Facebook
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Facebook> listFacebookByPodur_SocialNetworkInv(org.semanticwb.social.PostOutDirectUserRelation value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Facebook> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_haspodur_SocialNetworkInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.social.Facebook with a determined SocialNetworkPostOutInv
        * @param value SocialNetworkPostOutInv of the type org.semanticwb.social.PostOut
        * @param model Model of the org.semanticwb.social.Facebook
@@ -309,6 +336,24 @@ public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork i
     public FacebookBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the AppAccessToken property
+* @return String with the AppAccessToken
+*/
+    public String getAppAccessToken()
+    {
+        return getSemanticObject().getProperty(social_appAccessToken);
+    }
+
+/**
+* Sets the AppAccessToken property
+* @param value long with the AppAccessToken
+*/
+    public void setAppAccessToken(String value)
+    {
+        getSemanticObject().setProperty(social_appAccessToken, value);
     }
 
 /**

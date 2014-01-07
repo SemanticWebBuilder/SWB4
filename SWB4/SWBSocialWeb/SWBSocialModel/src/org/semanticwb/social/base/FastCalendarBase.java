@@ -7,7 +7,7 @@ package org.semanticwb.social.base;
 public abstract class FastCalendarBase extends org.semanticwb.model.SWBClass 
 {
    /**
-   * Fecha
+   * Date
    */
     public static final org.semanticwb.platform.SemanticProperty social_fc_date=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#fc_date");
    /**
