@@ -94,7 +94,13 @@ public class FilterSection extends javax.swing.JApplet
         this.isGlobal = Boolean.valueOf(this.getParameter("isGlobalTM")).booleanValue();
         try
         {
-            url = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(), getCodeBase().getPort(), cgiPath);
+            if(cgiPath.startsWith("http"))
+            {
+                url = new URL(cgiPath);
+            }else
+            {
+                url = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(), getCodeBase().getPort(), cgiPath);
+            }
         }
         catch (Exception e)
         {
@@ -102,11 +108,12 @@ public class FilterSection extends javax.swing.JApplet
         }
         jTree1.setCellRenderer(new CheckRenderer());
         jTree1.addMouseListener(new CheckListener());
+/*        
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>initTree</cmd></req>";
         String resp = this.getData(xml);
         WBXMLParser parser = new WBXMLParser();
         WBTreeNode nodexml = parser.parse(resp);
-        if (nodexml.getFirstNode() != null)
+        if (nodexml.getNodesSize()>0 && nodexml.getFirstNode() != null)
         {
             WBTreeNode res = nodexml.getFirstNode();
             WBTreeNode config = res.getNodebyName("config");
@@ -144,6 +151,7 @@ public class FilterSection extends javax.swing.JApplet
                 this.jTree1.updateUI();
             }
         }
+*/       
         loadFilter();
     }
 
@@ -374,22 +382,21 @@ public class FilterSection extends javax.swing.JApplet
 
     private void loadFilter()
     {
+        reloads = new HashSet();
         DefaultTreeModel model = (DefaultTreeModel) this.jTree1.getModel();
 
         if (model.getRoot() != null)
         {
-
             Object objroot = model.getRoot();
 
             if (objroot instanceof DefaultMutableTreeNode)
             {
-
                 ((DefaultMutableTreeNode) objroot).removeAllChildren();
                 String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>initTree</cmd></req>";
                 String resp = this.getData(xml);
                 WBXMLParser parser = new WBXMLParser();
                 WBTreeNode nodexml = parser.parse(resp);
-                if (nodexml.getFirstNode() != null)
+                if (nodexml != null && nodexml.getNodesSize() > 0 && nodexml.getFirstNode() != null)
                 {
                     WBTreeNode res = nodexml.getFirstNode();
                     WBTreeNode config = res.getNodebyName("config");
@@ -429,7 +436,6 @@ public class FilterSection extends javax.swing.JApplet
                 }
                 this.jTree1.updateUI();
             }
-
         }
         if (id != null)
         {
@@ -476,7 +482,7 @@ public class FilterSection extends javax.swing.JApplet
 
                                 TopicMap map = (TopicMap) this.jTree1.getModel().getChild(objroot, ichild);
                                 this.jTree1.expandPath(new TreePath(map.getPath()));
-                                if (map.getID().equals(topicmap))
+                                if (map.getID().equals(topicmapid))
                                 {
                                     Iterator ittopics = etopicmap.getNodesbyName("topic");
                                     while (ittopics.hasNext())
@@ -485,7 +491,7 @@ public class FilterSection extends javax.swing.JApplet
                                         String reload = "getTopic." + topicmapid + "." + enode.getAttribute("id");
                                         enode.addAttribute("reload", reload);
                                         if (reload != null && !reload.equals(""))
-                                        {
+                                        {                                            
                                             StringTokenizer st = new StringTokenizer(reload, ".");
                                             if (st.nextToken().equals("getTopic"))
                                             {
@@ -506,15 +512,18 @@ public class FilterSection extends javax.swing.JApplet
                                                     shortcuts = new Root(java.util.ResourceBundle.getBundle("applets/filterSection/FilterSection", locale).getString("sections_permiss"), oicon);
                                                     map.add(shortcuts);
                                                 }
+                                                
                                                 Topic nodetopic = new Topic(enode.getAttribute("icon"), enode.getAttribute("topicmap"), enode.getAttribute("id"), "", enode.getAttribute("reload"), oicon);
                                                 shortcuts.add(nodetopic);
+                                                
                                                 this.reLoadTopic(topicmap, nodetopic);
+                                                
                                                 boolean bchilds = Boolean.valueOf(enode.getAttribute("childs")).booleanValue();
                                                 if (!CheckNode(reload, bchilds))
                                                 {
                                                     reloads.add(enode);
                                                 }
-
+                                                
                                                 this.jTree1.expandPath(new TreePath(shortcuts.getPath()));
                                                 this.jTree1.updateUI();
 
@@ -527,19 +536,10 @@ public class FilterSection extends javax.swing.JApplet
 
 
                     }
-                    /*it=sites.getNodesbyName("node");
-                    while(it.hasNext())
-                    {
-                    WBTreeNode enode=(WBTreeNode)it.next();
-                    String reload=enode.getAttribute("reload");
-                    if(!CheckNode(reload))
-                    {
-                    reloads.add(reload);
-                    }
-                    }*/
 
                 }
             }
+           
         }
     }
 
@@ -758,7 +758,7 @@ public class FilterSection extends javax.swing.JApplet
         StringBuffer ret = new StringBuffer();
         try
         {
-
+            //System.out.println("URL:"+url);
             URLConnection urlconn = url.openConnection();
             urlconn.setUseCaches(false);
             if (jsess != null)
@@ -782,8 +782,13 @@ public class FilterSection extends javax.swing.JApplet
         }
         catch (Exception e)
         {
-            System.out.println("Error to open service..." + e);
+            System.out.println("Error to open service...");
+            e.printStackTrace();
         }
+        
+        //System.out.println("getData:"+xml);
+        //System.out.println("ret:"+ret.toString());
+        
         return ret.toString();
     }
 
@@ -793,7 +798,8 @@ public class FilterSection extends javax.swing.JApplet
      * always regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jPanel1 = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
@@ -810,8 +816,10 @@ public class FilterSection extends javax.swing.JApplet
         jToolBar1.setFloatable(false);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/applets/filterSection/images/save.gif"))); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton1ActionPerformed(evt);
             }
         });
@@ -823,16 +831,22 @@ public class FilterSection extends javax.swing.JApplet
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        jTree1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                jTree1MouseMoved(evt);
+        jTree1.setRowHeight(24);
+        jTree1.addTreeWillExpandListener(new javax.swing.event.TreeWillExpandListener()
+        {
+            public void treeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException
+            {
+                jTree1TreeWillExpand(evt);
+            }
+            public void treeWillCollapse(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException
+            {
             }
         });
-        jTree1.addTreeWillExpandListener(new javax.swing.event.TreeWillExpandListener() {
-            public void treeWillCollapse(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
-            }
-            public void treeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
-                jTree1TreeWillExpand(evt);
+        jTree1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter()
+        {
+            public void mouseMoved(java.awt.event.MouseEvent evt)
+            {
+                jTree1MouseMoved(evt);
             }
         });
         jScrollPane1.setViewportView(jTree1);
