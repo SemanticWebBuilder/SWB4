@@ -29,6 +29,14 @@
     }
 
     String objUri = request.getParameter("objUri");
+    //--
+    String username = "";
+    SocialNetwork socialNetToUser = null;
+    if(request.getParameter("username") != null && request.getParameter("netSuri") != null){
+        username = request.getParameter("username");
+        socialNetToUser = (SocialNetwork)SemanticObject.createSemanticObject(request.getParameter("netSuri")).createGenericInstance();
+    }
+
     String sourceCall = request.getParameter("source");
     if (sourceCall == null) { //When typeOfContent is called from Tema/Responder the param source is not being sent
         sourceCall = "reply";
@@ -109,24 +117,23 @@
     SocialPFlowMgr pfmgr = SocialLoader.getPFlowManager();
 
     //Recovering privacy options
-    ArrayList<String> selectFacebook = new ArrayList<String>();
-    ArrayList<String> selectYoutube = new ArrayList<String>();
+    ArrayList<PostOutPrivacy> selectFacebook = new ArrayList<PostOutPrivacy>();
+    ArrayList<PostOutPrivacy> selectYoutube = new ArrayList<PostOutPrivacy>();
     Iterator<PostOutPrivacy> postOutPs = PostOutPrivacy.ClassMgr.listPostOutPrivacies();
     while (postOutPs.hasNext()) {
         PostOutPrivacy postOutP = postOutPs.next();
-        //SemanticObject sObj =postOutP.getNetworkType();
         Iterator<SemanticObject> nets = postOutP.listNetworkTypes();
         while (nets.hasNext()) {
             SemanticObject semObjNetw = nets.next();
             SemanticClass sClass = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(semObjNetw.getURI());
             if (sClass.equals(Facebook.social_Facebook)) {
-                if (!postOutP.getId().equals("PUBLIC")) {
-                    selectFacebook.add(postOutP.getId());
+                if (!postOutP.getId().equals("PUBLIC")) {//Skip default public value
+                    selectFacebook.add(postOutP);
                 }
             }
             if (sClass.equals(Youtube.social_Youtube)) {
-                if (!postOutP.getId().equals("PUBLIC")) {
-                    selectYoutube.add(postOutP.getId());
+                if (!postOutP.getId().equals("PUBLIC")) {//Skip default public value
+                    selectYoutube.add(postOutP);
                 }
             }
         }
@@ -184,6 +191,11 @@
                     posicion = postOutNNull.indexOf(">");
                     int posicion1 = postOutNNull.indexOf("</textarea>");
                     String value = postOutNNull.substring(posicion + 1, posicion1);
+                    //-- 
+                    //TODO: don't replace username this way
+                    if(!username.isEmpty() && socialNetToUser != null && socialNetToUser instanceof Twitter){//Must have the username to send a message to some user
+                        postOutNull = postOutNull.replace("></textarea>", ">@" + username + "</textarea>");
+                    }
 
                     //System.out.println("imp"+value); 
 %>
@@ -265,10 +277,8 @@
                         }
                     }
 
-                %>
-                <div class="etiqueta"><label>Calendarios de envío: </label></div>
-                <!--Calendario Rapido-->
-                <div id="pub-calendar">
+                %>                
+                <div id="pub-calendar" dojoType="dijit.TitlePane" title="Calendarizar" open="false" duration="150" minSize_="20" splitter_="true" region="bottom">
                     <div class="calendar-fast">
                         <p>Individual</p>
                         <%
@@ -333,13 +343,13 @@
                     </div>
                     <%}%>
                     <!--Terminan Calendarios Avanzados-->
+                </div>
+                    
+                <button class="submit" type="submit" onclick="return checksRedesText('<%=objUri%>','<%=sourceCall%>');"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
 
-                    <button class="submit" type="submit" onclick="return checksRedesText('<%=objUri%>','<%=sourceCall%>');"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
-
-                </div> 
             </div>
                 <%
-                    if (postInSN == null || postIn != null) {
+                    if (postInSN == null || postIn != null || (!username.isEmpty() && socialNetToUser != null)) {
                 %>
                 <div class="pub-redes">
                     <p class="titulo">Redes disponibles</p>
@@ -371,7 +381,13 @@
                                         }
                                     }
                                 }
-
+                                if (socialNetToUser != null){//Write message to some user
+                                    if(socialNetwork.getURI().equals(socialNetToUser.getURI())){
+                                        isSelected = true;
+                                    }else{                                    
+                                        continue;
+                                    }
+                                }
                                 if (socialNetwork instanceof Youtube) {
                                     typeClass = "ico-ytb";
                                 } else if (socialNetwork instanceof Facebook) {
@@ -391,11 +407,11 @@
                             if (socialNetwork instanceof Facebook && postIn == null && postOut == null) {
                         %>
                         <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
-                            <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">PUBLIC</option>
+                            <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">Público</option>
                             <%
                                 for (int i = 0; i < selectFacebook.size(); i++) {
                             %>
-                            <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i)%>"><%=selectFacebook.get(i)%></option>
+                            <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i).getId()%>"><%=selectFacebook.get(i).getDisplayTitle(user.getLanguage())%></option>
                             <%
                                 }
                             %>
@@ -472,6 +488,11 @@
                         position = edit.indexOf(">");
                         int posicion1 = edit.indexOf("</textarea>");
                         String value = edit.substring(position + 1, posicion1);
+                        //-- 
+                        //TODO: don't replace username this way
+                        if(!username.isEmpty() && socialNetToUser != null && socialNetToUser instanceof Twitter){//Must have the username to send a message to some user
+                            create = create.replace("></textarea>", ">@" + username + "</textarea>");
+                        }
                     %>
                    <!-- <div class="campo"><%=postOut == null ? photoMgr.renderElement(request, Photo.social_msg_Text, photoMgr.MODE_CREATE) : photoMgr.renderElement(request, Photo.social_msg_Text, photoMgr.MODE_EDIT)%></div>-->
                     <div class="campo"><%=postOut == null ? create : edit%> <%if (postOut == null) {%><input  id="<%=id%>_Text" name="<%=id%>_Text" type="text" size="4"class="nobord" readonly > <label class="labelInfo"><img class="swbIconTwitter" src="/swbadmin/css/images/trans.png"/> 140  <img class="swbIconFacebook" src="/swbadmin/css/images/trans.png"/> 2000  <img class="swbIconYouTube" src="/swbadmin/css/images/trans.png"/> 5000  </label><%} else {%><br><input id="<%=id%>_Text" name="<%=id%>_Text" type="text" size="4" class="nobord" readonly value="<%=value.length()%>"><label class="labelInfo"><img class="swbIconTwitter" src="/swbadmin/css/images/trans.png"/> 140  <img class="swbIconFacebook" src="/swbadmin/css/images/trans.png"/> 2000  <img class="swbIconYouTube" src="/swbadmin/css/images/trans.png"/> 5000  </label><%}%></div>
@@ -508,7 +529,6 @@
                     %> 
                     <div class="etiqueta"><label for="socialFlow"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("publishFlow", user.getLanguage())%></label></div>
                     <div class="campo">
-
                         </p>
                         <select name="socialFlow" id="flu">
                             <%
@@ -554,7 +574,7 @@
                     <!--Calendario Rapido-->
 
                     <div class="etiqueta"><label>Calendarios de envío: </label></div>
-                    <div id="pub-calendar">
+                    <div id="pub-calendar" dojoType="dijit.TitlePane" title="Calendarizar" open="false" duration="150" minSize_="20" splitter_="true" region="bottom">
                         <div class="calendar-fast">
                             <p>Individual</p>
                             <%
@@ -620,10 +640,9 @@
                         </div>
                         <%}%>
                         <!--Terminan Calendarios Avanzados-->
-
-                        <button class="submit" type="submit" onclick="return validateImages('hasPhoto_new_#swbsocial_<%=objUri + sourceCall%>_dynamic','<%=objUri + sourceCall%>frmUploadPhoto');"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
-                        <!--<button class="submit" type="submit" onclick="return validateTypeFile('hasPhoto_new_dynamic4'); checksRedesPhoto('<%=objUri%>','<%=sourceCall%>',<%=(postInSN == null || postIn != null ? "true" : "false")%>);"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>-->
                     </div>
+                    <button class="submit" type="submit" onclick="return validateImages('hasPhoto_new_#swbsocial_<%=objUri + sourceCall%>_dynamic','<%=objUri + sourceCall%>frmUploadPhoto');"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+                    <!--<button class="submit" type="submit" onclick="return validateTypeFile('hasPhoto_new_dynamic4'); checksRedesPhoto('<%=objUri%>','<%=sourceCall%>',<%=(postInSN == null || postIn != null ? "true" : "false")%>);"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>-->                    
                 </div>
 
                     <%
@@ -656,7 +675,13 @@
                                             }
                                         }
                                     }
-
+                                    if (socialNetToUser != null){//Write message to some user
+                                        if(socialNetwork.getURI().equals(socialNetToUser.getURI())){
+                                            isSelected = true;
+                                        }else{
+                                            continue;
+                                        }
+                                    }
                                     if (socialNetwork instanceof Youtube) {
                                         typeClass = "ico-ytb";
                                     } else if (socialNetwork instanceof Facebook) {
@@ -963,7 +988,7 @@
                     <!--Calendario Rapido-->
                     <div class="etiqueta"><label>Calendarios de envío: </label></div>
 
-                    <div id="pub-calendar">
+                    <div id="pub-calendar" dojoType="dijit.TitlePane" title="Calendarizar" open="false" duration="150" minSize_="20" splitter_="true" region="bottom">
                         <div class="calendar-fast">                            
                             <p>Individual</p>
                             <%
@@ -1027,8 +1052,9 @@
                         </div>
                         <%}%>
                         <!--Terminan Calendarios Avanzados-->
-                        <button class="submit" type="submit" onclick="return validateVideo('<%="video_new_defaultAuto" + objUri + sourceCall%>', '<%=objUri + sourceCall%>frmUploadVideo')"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
                     </div>
+                    
+                    <button class="submit" type="submit" onclick="return validateVideo('<%="video_new_defaultAuto" + objUri + sourceCall%>', '<%=objUri + sourceCall%>frmUploadVideo')"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
                 </div>
 
                     <%
@@ -1167,4 +1193,4 @@
             }
             return nf;
         }
-    %>             
+    %>      
