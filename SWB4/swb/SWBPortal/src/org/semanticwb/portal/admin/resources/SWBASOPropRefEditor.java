@@ -107,9 +107,19 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
         base = getResourceBase();
         PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();
+        
         String id = request.getParameter("suri");
         String idp = request.getParameter("sprop");
         String idpref = request.getParameter("spropref");
+        
+        //Agregado por Jorge (06/Enero/2014), valores por defecto.
+        if(id==null || id.isEmpty())
+        {
+            id=SWBContext.getAdminWebSite().getURI();
+        }
+        if(idp==null || idp.isEmpty()) idp="http://www.semanticwebbuilder.org/swb4/ontology#hasModelProperty";
+        if(idpref==null || idpref.isEmpty()) idpref="http://www.semanticwebbuilder.org/swb4/ontology#hasModelProperty";
+        //Termina Agregado por Jorge (06/Enero/2014)
 
         if(base.getAttribute(USE_ADD)==null&&base.getAttribute(USE_SELECT)==null){
             base.setAttribute(USE_ADD, "0");
@@ -141,7 +151,8 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
         SemanticObject obj = ont.getSemanticObject(id);
         SemanticProperty spro = ont.getSemanticProperty(idp);
         SemanticProperty spref = null;
-
+        
+       
         if(idpref!=null){
             spref=ont.getSemanticProperty(idpref);
         }
@@ -183,7 +194,6 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             //lista de instancias de tipo propiedad existentes para selecionar
             SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idp);
             SemanticClass clsprop = prop.getRangeClass();
-
             //System.out.println(idp+" prop:"+prop+" dom:"+prop.getDomainClass()+" tp:"+prop.isObjectProperty()+" range:"+prop.getRange()+" cls:"+prop.getRangeClass());
 
             SemanticProperty spinHerit = null;
