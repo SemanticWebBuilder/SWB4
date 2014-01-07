@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social YouTube. 
    */
-public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Secreteable,org.semanticwb.model.Filterable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.PostOutMonitorable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.SocialMonitorable,org.semanticwb.social.Kloutable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.social.DeveloperKeyable,org.semanticwb.model.FilterableClass,org.semanticwb.social.Messageable,org.semanticwb.model.Trashable,org.semanticwb.social.Oauthable,org.semanticwb.social.Relationable,org.semanticwb.social.Listenerable,org.semanticwb.social.Videoable,org.semanticwb.model.FilterableNode
+public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.DeveloperKeyable,org.semanticwb.social.PostOutMonitorable,org.semanticwb.model.Filterable,org.semanticwb.social.Oauthable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Messageable,org.semanticwb.model.Trashable,org.semanticwb.social.Listenerable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.SocialMonitorable,org.semanticwb.social.Relationable,org.semanticwb.social.Videoable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.social.Kloutable,org.semanticwb.social.Secreteable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode
 {
    /**
    * Categorias a llenar en una colección.
@@ -228,6 +228,29 @@ public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork im
         public static java.util.Iterator<org.semanticwb.social.Youtube> listYoutubeBySocialPostInv(org.semanticwb.social.PostOutNet value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Youtube> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialPostInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Youtube with a determined Podur_SocialNetworkInv
+       * @param value Podur_SocialNetworkInv of the type org.semanticwb.social.PostOutDirectUserRelation
+       * @param model Model of the org.semanticwb.social.Youtube
+       * @return Iterator with all the org.semanticwb.social.Youtube
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Youtube> listYoutubeByPodur_SocialNetworkInv(org.semanticwb.social.PostOutDirectUserRelation value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Youtube> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_haspodur_SocialNetworkInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Youtube with a determined Podur_SocialNetworkInv
+       * @param value Podur_SocialNetworkInv of the type org.semanticwb.social.PostOutDirectUserRelation
+       * @return Iterator with all the org.semanticwb.social.Youtube
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Youtube> listYoutubeByPodur_SocialNetworkInv(org.semanticwb.social.PostOutDirectUserRelation value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Youtube> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_haspodur_SocialNetworkInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
