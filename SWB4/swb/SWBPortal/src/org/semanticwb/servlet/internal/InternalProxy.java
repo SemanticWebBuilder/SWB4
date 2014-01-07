@@ -123,10 +123,20 @@ public class InternalProxy
         } else if (code.startsWith("2"))
         {
             String contentType = res.getContentType();
+            
             //System.out.println("contentType:"+contentType);
             if(contentType!=null && contentType.indexOf("text")>-1)
             {
-                String txt=SWBUtils.IO.readInputStream(res.getInputStream());
+                String txt=null;
+                int c=contentType.indexOf("charset=");
+                if(c>0)
+                {
+                    txt=SWBUtils.IO.readInputStream(res.getInputStream(),contentType.substring(c+8));
+                }else
+                {
+                    txt=SWBUtils.IO.readInputStream(res.getInputStream());
+                }
+                
                 //System.out.println("text1:"+txt);
                 txt=txt.replace(proxy.getUrl(), "");
                 //System.out.println("text2:"+txt.length());

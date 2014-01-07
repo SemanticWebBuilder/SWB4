@@ -198,6 +198,11 @@ public class SWBAUserFilter extends SWBATree {
                 if (pfil != null) {
                     xml = pfil.getXml();
                 }
+                
+                if (null == pfil) {
+                    pfil = UserFilter.ClassMgr.createUserFilter(recres.getUserRepository());
+                    recres.setUserFilter(pfil);
+                }
 
                 try {
                     Document docxmlConf = null;
