@@ -4,6 +4,7 @@
     Author     : pacone
 --%>
 
+<%@page import="org.semanticwb.model.SWBModel"%>
 <%@page import="org.semanticwb.model.SWBContext"%>
 <%@page import="org.semanticwb.social.SocialUserExtAttributes"%>
 <%@page import="org.semanticwb.social.SocialUserExtAttributes"%>
@@ -51,15 +52,40 @@
 <%
     try {
             out.println("<div class=\"swbform\">");
-            out.println("<div align=\"center\"><h2>" + paramRequest.getLocaleString("showing")  + " @" + twitterBean.getScreenName() + " "  + paramRequest.getLocaleString("mentions") + "</h2><br/></div>");
+            out.println("<div align=\"center\"><h2>" + "@" + twitterBean.getScreenName() + " "  + "</br> Personas que sigo" + "</h2><br/></div>");
             
             PagableResponseList<User> friends;
             //do {
             friends = twitterBean.getFriendsList(twitterBean.getId(), friendsCursor);
             //out.println("-----" + "/nCursor:" + friends.getNextCursor());
+            Twitter twitter = (Twitter)SemanticObject.createSemanticObject(objUri).createGenericInstance();
+            SWBModel model=WebSite.ClassMgr.getWebSite(twitter.getSemanticObject().getModel().getName());
+            SocialTopic defaultSocialTopic = SocialTopic.ClassMgr.getSocialTopic("DefaultTopic", model);
             for(int i = 0; i < friends.size(); i++){
                 User user = friends.get(i);
-                out.println("THE FRIEND:" + "<img src=\"" + user.getBiggerProfileImageURL() + "\">" + friends.get(i).getScreenName() + "</br>");
+                //out.println("THE FRIEND:" + "<img src=\"" + user.getBiggerProfileImageURL() + "\">" + friends.get(i).getScreenName() + "</br>");                
+                
+%>
+<div class="timeline timelinetweeter">
+    <p class="tweeter">
+        <a onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("suri", objUri).setParameter("targetUser", user.getScreenName())%>','<%= "@" + user.getScreenName() + " - " + user.getName()%>'); return false;" href="#"><%= "@" + user.getScreenName()%></a>  <%=user.getName()%>
+    </p>
+    <p class="tweet">
+        <a onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("suri", objUri).setParameter("targetUser", user.getScreenName())%>','<%= "@" + user.getScreenName() + " - " + user.getName()%>');return false;" href="#">
+            <img width="48" height="48" src="<%=user.getBiggerProfileImageURL()%>"/></a>
+        <%=user.getDescription()%>
+    </p>
+    <div class="timelineresume">
+        <span class="inline" id="sendTweet/<%=user.getId()%>" dojoType="dojox.layout.ContentPane">
+            <a class="clasifica" href="#" onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("createTweet").setParameter("suri",objUri)%>','Enviar mensaje a @dandanash');return false;">Enviar Mensaje</a>
+        </span>
+        <span class="inline" id="sendDM/<%=user.getId()%>" dojoType="dojox.layout.ContentPane">
+            <a class="clasifica" href="#" onclick="">Enviar Mensaje Directo</a>
+        </span> 
+
+    </div>
+</div>
+<%
             }
             friendsCursor = friends.getNextCursor();
         }catch (TwitterException te) {
@@ -90,7 +116,7 @@
 <%
     try {
             out.println("<div class=\"swbform\">");
-            out.println("<div align=\"center\"><h2>" + paramRequest.getLocaleString("showing")  + " @" + twitterBean.getScreenName() + " "  + paramRequest.getLocaleString("mentions") + "</h2><br/></div>");
+            out.println("<div align=\"center\"><h2>" + "@" + twitterBean.getScreenName() + " "  + "</br> Personas que me siguen" + "</h2><br/></div>");
             
             PagableResponseList<User> followers;
             //do {
@@ -98,7 +124,20 @@
             //out.println("-----" + "/nCursor:" + friends.getNextCursor());
             for(int i = 0; i < followers.size(); i++){
                 User user = followers.get(i);
-                out.println("THE FOLLOWER:" + "<img src=\"" + user.getBiggerProfileImageURL() + "\">" + followers.get(i).getScreenName() + "</br>");
+                //out.println("THE FOLLOWER:" + "<img src=\"" + user.getBiggerProfileImageURL() + "\">" + followers.get(i).getScreenName() + "</br>");
+%>
+                <div class="timeline timelinetweeter">
+                    <p class="tweeter">
+                        <a onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("suri", objUri).setParameter("targetUser", user.getScreenName())%>','<%= "@" + user.getScreenName() + " - " + user.getName()%>'); return false;" href="#"><%= "@" + user.getScreenName()%></a>  <%=user.getName()%>
+                    </p>
+                    <p class="tweet">
+                        <a onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("suri", objUri).setParameter("targetUser", user.getScreenName())%>','<%= "@" + user.getScreenName() + " - " + user.getName()%>');return false;" href="#">
+                            <img width="48" height="48" src="<%=user.getBiggerProfileImageURL()%>"></a>
+                        <%=user.getDescription()%>
+                    </p>
+                </div>
+
+<%
             }
             followersCursor = followers.getNextCursor();
         }catch (TwitterException te) {
