@@ -166,7 +166,7 @@ public class SocialSentPost extends GenericResource {
             try {
                 doGenerateReport(request, response, paramRequest);
             } catch (Exception e) {
-                System.out.println("Error reprt:" + e);
+                log.error(e);
             }
         }else if (Mode_ShowPhotos.equals(mode)) {
             doShowPhotos(request, response, paramRequest);
@@ -408,8 +408,13 @@ public class SocialSentPost extends GenericResource {
         long nRec = ((Long) hmapResult.get("countResult")).longValue();
         
         NumberFormat nf2 = NumberFormat.getInstance(Locale.US);
+        
+        SWBResourceURL urlRefresh = paramRequest.getRenderUrl();
+        urlRefresh.setParameter("suri", id);
+        
         out.println("<fieldset>");
-        out.println("<p class=\"totItems\">"+nf2.format(nRec)+"/"+nf2.format(numSocialTopicPOComments) +"</p>");
+        out.println("<p class=\"countersBar\">"+nf2.format(nRec)+"/"+nf2.format(numSocialTopicPOComments));
+        out.println("<a href=\"#\" class=\"countersBar\" title=\"Refrescar Tab\" onclick=\"submitUrl('" + urlRefresh.setMode(SWBResourceURL.Action_EDIT) + "',this); return false;\">Refresh</a></p>");
         out.println("</fieldset>");
         
         
@@ -924,7 +929,6 @@ public class SocialSentPost extends GenericResource {
                 out.println("<a class=\"swbIconCA\" href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + msgText + "');return false;\" title=\"" + paramRequest.getLocaleString("globalCalendar") + "\"></a>");
             }
 
-            System.out.println("No ma k marca error...");
             if(postOut.getNumTotNewResponses()>=0L)
             {
                 SWBResourceURL postOutCommentsUrl = paramRequest.getRenderUrl().setMode(Mode_MsgComments).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postOut.getURI());
@@ -3301,8 +3305,8 @@ public class SocialSentPost extends GenericResource {
         SocialNetwork socialNetwork = (SocialNetwork)sNet.createGenericInstance();
         
         //PostOutNet.ClassMgr.lis                
-        System.out.println("--------------------");
-        System.out.println("POST OUT:" + postOut + "->" + postOut.getMsg_Text() + "</br>");
+        //System.out.println("--------------------");
+        //System.out.println("POST OUT:" + postOut + "->" + postOut.getMsg_Text() + "</br>");
         ArrayList postOutSocialNet = SWBSocialUtil.sparql.getPostOutNetsPostOut(postOut, socialNetwork);
         
         SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
@@ -3320,7 +3324,7 @@ public class SocialSentPost extends GenericResource {
             }else if(postOutNet.getSocialNetwork() instanceof Facebook){
                 //out.println("THIS IS A FACEBOOK:" + postOutNet.getPo_socialNetMsgID() +"</br>");
                 
-                System.out.println("OUTNET:" + postOutNet.getPo_socialNetMsgID());
+                //System.out.println("OUTNET:" + postOutNet.getPo_socialNetMsgID());
                 HashMap<String, String> params = new HashMap<String, String>(3);    
                 params.put("q", "{\"comments\": \"SELECT id, text, time, fromid, attachment, can_like, can_remove, likes, user_likes from comment where post_id='" + postOutNet.getPo_socialNetMsgID() +"' ORDER BY time DESC limit 10 offset 0\", \"usernames\": \"SELECT uid, name FROM user WHERE uid IN (SELECT fromid FROM #comments)\", \"pages\":\"SELECT page_id, name FROM page WHERE page_id IN (SELECT fromid FROM #comments)\"}");
                 params.put("access_token", ((Facebook)postOutNet.getSocialNetwork()).getAccessToken());
@@ -3411,7 +3415,7 @@ public class SocialSentPost extends GenericResource {
         try{
             String fbResponse = getRequest(params, "https://graph.facebook.com/" + postID,
                             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
-            System.out.println("THIS IS THE RESPONSE:" + fbResponse);
+            //System.out.println("THIS IS THE RESPONSE:" + fbResponse);
             response = new JSONObject(fbResponse);
             //System.out.println("FACEBOOK:" + postID + " AND THE CONTENT:" + fbResponse);
         }catch(Exception e){
@@ -3921,7 +3925,7 @@ public class SocialSentPost extends GenericResource {
                 }
 
                 if((likes.length() < postLikes) && (iLikedPost == false)){
-                    System.out.println("Look for postLike!!!");
+                    //System.out.println("Look for postLike!!!");
                     HashMap<String, String> params = new HashMap<String, String>(3);    
                     params.put("q", "SELECT post_id FROM like WHERE user_id=me() AND post_id=\"" + postsData.getString("id") + "\"");
                     params.put("access_token", facebook.getAccessToken());
@@ -3930,7 +3934,7 @@ public class SocialSentPost extends GenericResource {
                     try{
                         fbLike = FacebookWall.getRequest(params, "https://graph.facebook.com/fql",
                                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
-                        System.out.println("fbLike:" + fbLike);
+                        //System.out.println("fbLike:" + fbLike);
                         JSONObject likeResp = new JSONObject(fbLike);
                         if(likeResp.has("data")){
                             JSONArray likesArray = likeResp.getJSONArray("data");
@@ -4027,7 +4031,7 @@ public class SocialSentPost extends GenericResource {
                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", accessToken);
 
         }catch(Exception e){
-            System.out.println("Error getting video information"  + e.getMessage());
+            log.error(e);
         }
         return response;
     }
@@ -4044,7 +4048,7 @@ public class SocialSentPost extends GenericResource {
             response = getRequestVideo(params, "https://gdata.youtube.com/feeds/api/videos/" + id +"/comments",
                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", accessToken);
         }catch(Exception e){
-            System.out.println("Error getting video information"  + e.getMessage());
+            log.error(e);
         }
         return response;
     }
@@ -4054,7 +4058,6 @@ public class SocialSentPost extends GenericResource {
         
         CharSequence paramString = (null == params) ? "" : delimit(params.entrySet(), "&", "=", true);
         URL serverUrl = new URL(url + "?" +  paramString);       
-        System.out.println("URL:" +  serverUrl);
         
         HttpURLConnection conex = null;
         InputStream in = null;
@@ -4082,7 +4085,7 @@ public class SocialSentPost extends GenericResource {
         } catch (java.io.IOException ioe) {
             if (conex.getResponseCode() >= 400) {
                 response = getResponse(conex.getErrorStream());
-                System.out.println("\n\n\nERROR:" +   response);
+                log.error(response);
             }
             ioe.printStackTrace();
         } finally {
@@ -4112,8 +4115,8 @@ public class SocialSentPost extends GenericResource {
         paramsUsr.put("alt", "json");
         
         String objUri = youtube.getURI();//request.getParameter("suri");
-        SocialNetwork socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
-        SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
+        //SocialNetwork socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+        //SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
         SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
         Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();
         
@@ -4175,8 +4178,8 @@ public class SocialSentPost extends GenericResource {
                 //Comments,start
                 String ytComments = "";
                 //if(!video.isNull("commentCount") && video.getInt("commentCount")>0 && !isPrivate){
-                    System.out.println("URL for comments:" );
-                    System.out.println("token:" + semanticYoutube.getAccessToken());
+                    //System.out.println("URL for comments:" );
+                    //System.out.println("token:" + semanticYoutube.getAccessToken());
                     ytComments= this.getRequest(paramsComments, "https://gdata.youtube.com/feeds/api/videos/" + videoId + "/comments",
                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", semanticYoutube.getAccessToken());
                     ///out.write("</br></br>comments:" + ytComments);
@@ -4324,7 +4327,7 @@ public class SocialSentPost extends GenericResource {
         
         CharSequence paramString = (null == params) ? "" : delimit(params.entrySet(), "&", "=", true);
         URL serverUrl = new URL(url + "?" +  paramString);       
-        System.out.println("URL:" +  serverUrl);
+        //System.out.println("URL:" +  serverUrl);
         
         HttpURLConnection conex = null;
         InputStream in = null;
@@ -4350,7 +4353,7 @@ public class SocialSentPost extends GenericResource {
         } catch (java.io.IOException ioe) {
             if (conex.getResponseCode() >= 400) {
                 response = getResponse(conex.getErrorStream());
-                System.out.println("\n\n\nERROR:" +   response);
+                log.error(response);
             }
             ioe.printStackTrace();
         } finally {
