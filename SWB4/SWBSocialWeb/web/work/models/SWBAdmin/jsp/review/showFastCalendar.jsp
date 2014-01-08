@@ -19,8 +19,8 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
 
-<ul class="showMoreNets">
 <%
+    System.out.println("mostrando calendario");
     if (request.getAttribute("postOut") == null) {
         return;
     }
@@ -84,6 +84,8 @@
         %>
         <div class="msgFastCalendar">
             <p id="msgTitle">Programar env&iacute;o de mensaje</p>
+            <form id="<%=postOut.getId()%>/removeFastCalendarForm" dojoType="dijit.form.Form" class="swbform" method="post" action="<%=urlAction.setAction("uploadFastCalendar")%>" method="post" onsubmit="submitForm('<%=postOut.getId()%>/removeFastCalendarForm'); return false;"> 
+            </form>
             <form id="<%=postOut.getId()%>/uploadFastCalendarForm" dojoType="dijit.form.Form" class="swbform" method="post" action="<%=urlAction.setAction("uploadFastCalendar")%>" method="post" onsubmit="submitForm('<%=postOut.getId()%>/uploadFastCalendarForm'); return false;"> 
             <%
                 String minutes="00";
@@ -93,10 +95,11 @@
                 String starthour=hour+":"+minutes;
                 //System.out.println("Final starthour:"+starthour);
             %>
-                D&iacute;a:<input type="text" name="postOut_inidate" id="<%=semObj.getId()%>_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=nf%>" constraints="{min:'<%=currentYear%>-<%=String.format("%02d", currentMonth)%>-<%=String.format("%02d", currentDay)%>'}"> 
+                <input type="hidden" id="<%=semObj.getId()%>_today_hidden" name="today_hidden" value="<%=currentYear+"-" +currentMonth+"-"+currentDay%>"/>
+                D&iacute;a:<input type="text" name="postOut_inidate" id="<%=semObj.getId()%>_inidate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=nf%>" constraints="{min:'<%=currentYear%>-<%=String.format("%02d", currentMonth)%>-<%=String.format("%02d", currentDay)%>'}" onchange="removeMin(this, '<%=semObj.getId()%>_postOut_starthour_<%=starthour%>', document.getElementById('<%=semObj.getId()%>_today_hidden').value, '<%=currentHour%>', '<%=currentMin%>');"> 
                 Hora:<input dojoType="dijit.form.TimeTextBox" name="postOut_starthour" id="<%=semObj.getId()%>_postOut_starthour_<%=starthour%>" value="<%=(starthour!=null&&starthour.trim().length() > 0 ? "T"+starthour+":00" : "T00:00:00")%>" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm',min:'T<%=String.format("%02d", currentHour)%>:<%=String.format("%02d", currentMin)%>:00'} />
-                <p><button dojoType="dijit.form.Button" type="submit" ><%=paramRequest.getLocaleString("btnSend")%></button>
-                    <button dojoType="dijit.form.Button" type="submit" onClick="setDefaultValues();"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("removeCal", user.getLanguage())%></button>
+                <p><button dojoType="dijit.form.Button" id="sendButton" type="submit" ><%=paramRequest.getLocaleString("btnSend")%></button>
+                    <button dojoType="dijit.form.Button" type="button" onClick="submitForm('<%=postOut.getId()%>/removeFastCalendarForm'); return false;"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("removeCal", user.getLanguage())%></button>
                 </p>
             </form>
         </div>      
@@ -116,3 +119,23 @@
         <%
     }
 %>
+
+<script>
+    //dojo.addOnLoad(
+        //function(){
+            //var dojoObj = dijit.byId('widget_<%//=semObj.getId()%>_postOut_starthour_<%//=starthour%>');
+            //console.log('widget_<%//=semObj.getId()%>_postOut_starthour_<%//=starthour%>');
+            //var i = 0;                      
+        //}
+    //);
+   
+    /*
+    setTimeout(function(){document.getElementById('sendButton').focus();
+                              //alert('hi');
+                              var dojoObj = dijit.byId('<%//=semObj.getId()%>_inidate');
+                              var tmp = dojoObj.value;                              
+                              dojoObj.attr('value', '');
+                              dojoObj.attr('value', tmp);
+                             }, 500);
+    */    
+</script>
