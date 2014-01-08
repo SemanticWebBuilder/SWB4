@@ -731,7 +731,7 @@ public class SocialSentPost extends GenericResource {
              userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
              * */
         }
-        UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
+        //UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
         UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
 
         
@@ -811,7 +811,7 @@ public class SocialSentPost extends GenericResource {
                 msgText = SWBSocialResUtil.Util.replaceSpecialCharacters(msgText, false);
             }
 
-            if (userCanRemoveMsg || user.hasUserGroup(userAdminGrp) || user.hasUserGroup(userSuperAdminGrp)) {
+            if (userCanRemoveMsg || user.hasUserGroup(userSuperAdminGrp)) {
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + msgText + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"></a>");
             }
 

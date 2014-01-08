@@ -160,13 +160,13 @@ public class SocialTopicInBox extends GenericResource {
                 userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
                 userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
             }
-            boolean userCandoEveryThing=false;
-            UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
+            //boolean userCandoEveryThing=false;
+            //UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
             UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
-            if(user.hasUserGroup(userAdminGrp) || user.hasUserGroup(userSuperAdminGrp)) userCandoEveryThing=true;
+            //if(user.hasUserGroup(userAdminGrp) || user.hasUserGroup(userSuperAdminGrp)) userCandoEveryThing=true;
             
             SocialTopic socialTopic = postIn.getSocialTopic();
-            printPostIn(postIn, paramRequest, response, socialTopic, userCanRemoveMsg, userCanRetopicMsg, userCanRespondMsg, userCandoEveryThing);
+            printPostIn(postIn, paramRequest, response, socialTopic, userCanRemoveMsg, userCanRetopicMsg, userCanRespondMsg, user.hasUserGroup(userSuperAdminGrp));
         }else if(mode.equals(Mode_DELETEPOSTIN)){
             PrintWriter out = response.getWriter();
             out.println("<script type=\"javascript\">");
@@ -805,10 +805,10 @@ public class SocialTopicInBox extends GenericResource {
             //userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
             userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
         }
-        boolean userCandoEveryThing=false;
-        UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
+        //boolean userCandoEveryThing=false;
+        //UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
         UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
-        if(user.hasUserGroup(userAdminGrp) || user.hasUserGroup(userSuperAdminGrp)) userCandoEveryThing=true;
+        //if(user.hasUserGroup(userAdminGrp) || user.hasUserGroup(userSuperAdminGrp)) userCandoEveryThing=true;
         
         Iterator<PostIn> itposts = (Iterator)hmapResult.get("itResult"); 
         while (itposts!=null &&  itposts.hasNext()) {
@@ -818,7 +818,7 @@ public class SocialTopicInBox extends GenericResource {
             if(postIn.isIsPrioritary()) sClass="class=\"msj-cont msj-prior\"";
             
             out.println("<tr id=\"" + postIn.getURI() + "/topicIn\" "+sClass+">"); 
-            printPostIn(postIn, paramRequest, response, socialTopic, userCanRemoveMsg, userCanRetopicMsg, userCanRespondMsg, userCandoEveryThing);
+            printPostIn(postIn, paramRequest, response, socialTopic, userCanRemoveMsg, userCanRetopicMsg, userCanRespondMsg, user.hasUserGroup(userSuperAdminGrp));
             out.println("</tr>");
             
         }
