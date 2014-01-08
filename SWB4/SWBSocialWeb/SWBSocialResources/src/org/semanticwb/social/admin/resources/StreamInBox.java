@@ -181,7 +181,7 @@ public class StreamInBox extends GenericResource {
             out.println("<script type=\"javascript\">");            
             out.println("   showStatus('" + request.getParameter("statusMsg") + "');");
             out.println("   var trId=document.getElementById('" + request.getParameter("postUri") + "/stIn');");
-            out.println("   try{trId.parentNode.removeChild(trId);}catch(noe){alert(noe);}");            
+            out.println("   try{trId.parentNode.removeChild(trId);}catch(noe){}");            
             out.println("</script>");            
         }else if(mode.equals(Mode_REDIRECTTOMODE)){
             System.out.println("Making the redirect:");
