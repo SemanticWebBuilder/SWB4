@@ -54,7 +54,7 @@
         <label for="userCanRemoveMsg"><span>&nbsp;</span>Permiso para Eliminar Mensajes:</label>
         <input type="checkbox" name="userCanRemoveMsg" <%=socialExtAtt.isUserCanRemoveMsg()?"checked":""%>/>
         <br/> 
-        <label for="userCanRespondMsg"><span>&nbsp;</span>Permiso para Responder Mensajes:</label>
+        <label for="userCanRespondMsg"><span>&nbsp;</span>Permiso para Responder/Publicar Mensajes:</label>
         <input type="checkbox" name="userCanRespondMsg" <%=socialExtAtt.isUserCanRespondMsg()?"checked":""%>/> 
         <br/> 
         <label for="userCanReValueMsg"><span>&nbsp;</span>Permiso para Re-Evaluar Mensajes:</label>
