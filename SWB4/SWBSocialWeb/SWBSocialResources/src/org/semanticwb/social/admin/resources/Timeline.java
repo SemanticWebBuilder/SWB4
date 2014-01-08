@@ -285,8 +285,9 @@ public class Timeline extends GenericResource{
                 DirectMessage message = twitter.sendDirectMessage(Long.parseLong(idUser), dmText);
                 response.setRenderParameter("repliedTweet", "ok");
                 response.setMode("tweetSent");                
-            } catch (Exception ex) {
-                log.error("Error when trying to send DM ", ex);
+            } catch (TwitterException ex) {
+                log.error("Error when trying to send DM: "+ ex.getErrorMessage(), ex);
+                response.setMode("showDMError");
             }
         }else if(action.equals("doFavorite")){
             try {
@@ -1037,6 +1038,16 @@ public class Timeline extends GenericResource{
             } catch (TwitterException ex) {
                 log.error("Error when trying to show message of Favorite sent ", ex);
             }
+        }else if(mode!= null && mode.equals("showDMError")){//Displays updated data and shows error            
+            System.out.println("Error processing action!!!");
+            
+            out.println("<span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
+            out.println("<script type=\"dojo/method\">");
+            out.println("   hideDialog();");
+            out.println("   showError('No fue posible procesar la solicitud');");
+            out.println("</script>");
+            out.println("</span>");
+            
         }else if(mode.equals("showUserProfile")){
             RequestDispatcher dis = request.getRequestDispatcher(SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/twitterUserProfile.jsp");
             try {
