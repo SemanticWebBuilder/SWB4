@@ -80,7 +80,7 @@
             <a class="clasifica" href="#" onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("createTweet").setParameter("suri",defaultSocialTopic.getURI()).setParameter("netSuri",objUri).setParameter("username",user.getScreenName())%>','Enviar mensaje a @<%=user.getScreenName()%>');return false;">Enviar Mensaje</a>
         </span>
         <span class="inline" id="sendDM/<%=user.getId()%>" dojoType="dojox.layout.ContentPane">
-            <a class="clasifica" href="#" onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("createNewDM").setParameter("suri",objUri).setParameter("userId", user.getId()+"")%>','DM to @ <%=user.getId()%>');return false;">Enviar Mensaje Directo</a>
+            <a class="clasifica" href="#" onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("createNewDM").setParameter("suri",objUri).setParameter("userId", user.getId()+"")%>','DM to @<%=user.getScreenName()%>');return false;">Enviar Mensaje Directo</a>
         </span> 
              
     </div>
