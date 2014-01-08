@@ -297,6 +297,47 @@ public class SocialSentPost extends GenericResource {
 
 
         out.println("<div class=\"swbform\">");
+        
+        String swbSocialUser = request.getParameter("swbSocialUser");
+
+        int nPage;
+        try {
+            nPage = Integer.parseInt(request.getParameter("page"));
+        } catch (Exception ignored) {
+            nPage = 1;
+        }
+        
+        HashMap hmapResult = filtros(swbSocialUser, wsite, searchWord, request, socialTopic, nPage);
+        
+        long numSocialTopicPOComments=0L;
+        String snumSocialTopicPOComments=getSumTotPostOutComments(socialTopic);
+        if(snumSocialTopicPOComments!=null && !snumSocialTopicPOComments.isEmpty())
+        {
+            try{
+                int pos=snumSocialTopicPOComments.indexOf(".");
+                if(pos>-1)
+                {
+                    snumSocialTopicPOComments=snumSocialTopicPOComments.substring(0, pos);
+                }
+                numSocialTopicPOComments=Long.parseLong(snumSocialTopicPOComments);
+            }catch(Exception e)
+            {
+                numSocialTopicPOComments=0L;
+            }
+        }                 
+
+        long nRec = ((Long) hmapResult.get("countResult")).longValue();
+        
+        NumberFormat nf2 = NumberFormat.getInstance(Locale.US);
+        
+        SWBResourceURL urlRefresh = paramRequest.getRenderUrl();
+        urlRefresh.setParameter("suri", id);
+        
+        out.println("<fieldset class=\"countersBar\">");
+        out.println(nf2.format(nRec)+"/"+nf2.format(numSocialTopicPOComments));
+        out.println("<a href=\"#\" class=\"countersBar\" title=\"Refrescar Tab\" onclick=\"submitUrl('" + urlRefresh.setMode(SWBResourceURL.Action_EDIT) + "',this); return false;\"></a>");
+        out.println("</fieldset>");
+        
 
         out.println("<fieldset class=\"barra\">");
         out.println("<div class=\"barra\">");
@@ -376,47 +417,6 @@ public class SocialSentPost extends GenericResource {
         out.println("</div>");
         out.println("</fieldset>");
        
-        
-        String swbSocialUser = request.getParameter("swbSocialUser");
-
-        int nPage;
-        try {
-            nPage = Integer.parseInt(request.getParameter("page"));
-        } catch (Exception ignored) {
-            nPage = 1;
-        }
-        
-        HashMap hmapResult = filtros(swbSocialUser, wsite, searchWord, request, socialTopic, nPage);
-        
-        long numSocialTopicPOComments=0L;
-        String snumSocialTopicPOComments=getSumTotPostOutComments(socialTopic);
-        if(snumSocialTopicPOComments!=null && !snumSocialTopicPOComments.isEmpty())
-        {
-            try{
-                int pos=snumSocialTopicPOComments.indexOf(".");
-                if(pos>-1)
-                {
-                    snumSocialTopicPOComments=snumSocialTopicPOComments.substring(0, pos);
-                }
-                numSocialTopicPOComments=Long.parseLong(snumSocialTopicPOComments);
-            }catch(Exception e)
-            {
-                numSocialTopicPOComments=0L;
-            }
-        }                 
-
-        long nRec = ((Long) hmapResult.get("countResult")).longValue();
-        
-        NumberFormat nf2 = NumberFormat.getInstance(Locale.US);
-        
-        SWBResourceURL urlRefresh = paramRequest.getRenderUrl();
-        urlRefresh.setParameter("suri", id);
-        
-        out.println("<fieldset>");
-        out.println("<p class=\"countersBar\">"+nf2.format(nRec)+"/"+nf2.format(numSocialTopicPOComments));
-        out.println("<a href=\"#\" class=\"countersBar\" title=\"Refrescar Tab\" onclick=\"submitUrl('" + urlRefresh.setMode(SWBResourceURL.Action_EDIT) + "',this); return false;\">Refresh</a></p>");
-        out.println("</fieldset>");
-        
         
         out.println("<fieldset>");
         
