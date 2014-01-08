@@ -159,10 +159,6 @@ public class StreamInBoxNoTopic extends GenericResource {
             out.println("   try{trId.parentNode.removeChild(trId);}catch(noe){alert(noe);}");            
             out.println("</script>");            
         }else if(mode.equals("redirectToMode")){
-            System.out.println("Making the redirect:");
-            System.out.println(request.getParameter("statusMsg"));
-            System.out.println(request.getParameter("postUri"));
-            System.out.println(request.getParameter("suri"));
             PrintWriter out = response.getWriter();            
             String statusMsg =request.getParameter("statusMsg");
             String postUri = request.getParameter("postUri");
@@ -372,9 +368,14 @@ public class StreamInBoxNoTopic extends GenericResource {
         long nRec=((Long)hmapResult.get("countResult")).longValue();
         
         NumberFormat nf2 = NumberFormat.getInstance(Locale.US);
+        SWBResourceURL urlRefresh = paramRequest.getRenderUrl();
+        urlRefresh.setParameter("suri", id);
+        
         out.println("<fieldset>");
-        out.println("<p class=\"totItems\">"+nf2.format(nRec)+"</p>");
+        out.println("<p class=\"countersBar\">"+nf2.format(nRec));
+        out.println("<a href=\"#\" class=\"countersBar\" title=\"Refrescar Tab\" onclick=\"submitUrl('" + urlRefresh.setMode(SWBResourceURL.Action_EDIT) + "',this); return false;\">Refresh</a></p>");
         out.println("</fieldset>");
+        
 
         out.println("<fieldset>");
         out.println("<table class=\"tabla1\" >");
@@ -870,7 +871,6 @@ public class StreamInBoxNoTopic extends GenericResource {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         final String myPath = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/stream/reValue.jsp";
-        System.out.println("doRevalue/myPath:" + myPath);
         if (request != null && request.getParameter("postUri") != null) {
             RequestDispatcher dis = request.getRequestDispatcher(myPath);
             if (dis != null) {
@@ -1122,7 +1122,7 @@ public class StreamInBoxNoTopic extends GenericResource {
      * Method which controls the filters allowed in this class
      */
     private HashMap filtros(String swbSocialUser, WebSite wsite, String searchWord, HttpServletRequest request, Stream stream, int nPage) {
-        System.out.println("Stream:"+stream.getURI()+",orderByJ:"+request.getParameter("orderBy")+",page:"+nPage);
+        //System.out.println("Stream:"+stream.getURI()+",orderByJ:"+request.getParameter("orderBy")+",page:"+nPage);
         long streamPostIns=0L;
         String sQuery=null;
         ArrayList<PostIn> aListFilter = new ArrayList();
@@ -1146,12 +1146,10 @@ public class StreamInBoxNoTopic extends GenericResource {
                         if(request.getParameter("orderBy").equals("PostTypeUp"))    //Tipo de Mensaje Up
                         {
                             streamPostIns=Integer.parseInt(getPostInType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
-                            System.out.println("HOOOOLAAAASSSSSPostTypeUp-jeje/streamPostIns*******************:"+streamPostIns);
                             sQuery=getPostInType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
                         }else if(request.getParameter("orderBy").equals("PostTypeDown"))    //Tipo de Mensaje Down
                         {
                             streamPostIns=Integer.parseInt(getPostInType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
-                            System.out.println("HOOOOLAAAASSSSSPostTypeDown-jeje/streamPostIns*******************:"+streamPostIns);
                             sQuery=getPostInType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
                         }else if (request.getParameter("orderBy").equals("networkUp")) {
                             streamPostIns=Integer.parseInt(getPostInNet_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
@@ -1190,11 +1188,9 @@ public class StreamInBoxNoTopic extends GenericResource {
                         } else if (request.getParameter("orderBy").equals("followersUp")) {
                             streamPostIns=Integer.parseInt(getAllPostInbyFollowers_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
                             sQuery=getAllPostInbyFollowers_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            System.out.println("NoTopicFollowersUp/streamPostIns:"+streamPostIns+",Query:"+sQuery);
                         } else if (request.getParameter("orderBy").equals("followersDown")) {
                             streamPostIns=Integer.parseInt(getAllPostInbyFollowers_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
                             sQuery=getAllPostInbyFollowers_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            System.out.println("NoTopicFollowersDown/streamPostIns:"+streamPostIns+",Query:"+sQuery);
                         } else if (request.getParameter("orderBy").equals("repliesUp")) {
                             streamPostIns=Integer.parseInt(getAllPostInbyShared_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
                             sQuery=getAllPostInbyShared_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
@@ -1231,7 +1227,7 @@ public class StreamInBoxNoTopic extends GenericResource {
                         {
                             //streamPostIns=Integer.parseInt(getPostInPlace_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
                             aListFilter=SWBSocial.executeQueryArray(sQuery, wsite);
-                            System.out.println("Al ejecutar Query size:"+aListFilter.size());
+                            //System.out.println("Al ejecutar Query size:"+aListFilter.size());
                         }
                     }else{  //No seleccionaron ningún ordenamiento
                         streamPostIns=Integer.parseInt(getPostInWithOutTopic_Query(0, 0, true, stream));
@@ -1247,7 +1243,7 @@ public class StreamInBoxNoTopic extends GenericResource {
                     }
                 }
             
-            System.out.println("streamPostIns FINAL:"+streamPostIns);
+            //System.out.println("streamPostIns FINAL:"+streamPostIns);
             hampResult.put("countResult", Long.valueOf(streamPostIns));
         }
         
@@ -1298,8 +1294,6 @@ public class StreamInBoxNoTopic extends GenericResource {
     
     private String getPostInWithOutTopic_Query(long offset, long limit, boolean isCount, Stream stream)
     {
-        System.out.println("getPostInType_SparqlQuery/offset:"+offset);
-        System.out.println("getPostInType_SparqlQuery/limit:"+limit);
         String query=
            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
            "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
@@ -1332,7 +1326,6 @@ public class StreamInBoxNoTopic extends GenericResource {
            }
            if(isCount)
            {
-               System.out.println("Query Count:"+query);
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
                query=SWBSocial.executeQuery(query, wsite);
            }
@@ -1372,7 +1365,6 @@ public class StreamInBoxNoTopic extends GenericResource {
            }
            if(isCount)
            {
-               System.out.println("Query Count:"+query);
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
                query=SWBSocial.executeQuery(query, wsite);
            }
@@ -1633,10 +1625,6 @@ public class StreamInBoxNoTopic extends GenericResource {
     
     private String getPostInType_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
     {
-        System.out.println("getPostInType_SparqlQuery/orderType:"+orderType);
-        System.out.println("getPostInType_SparqlQuery/offset:"+offset);
-        System.out.println("getPostInType_SparqlQuery/limit:"+limit);
-        System.out.println("getPostInType_SparqlQuery/isCount:"+isCount);
         String query=
            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
            "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
@@ -1672,7 +1660,6 @@ public class StreamInBoxNoTopic extends GenericResource {
                   query+="LIMIT "+limit;   
                 }
            }
-           System.out.println("Query INBOXTopics:"+query);
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
@@ -1684,10 +1671,6 @@ public class StreamInBoxNoTopic extends GenericResource {
     
     private String getPostInNet_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
     {
-        System.out.println("getPostInType_SparqlQuery/orderType:"+orderType);
-        System.out.println("getPostInType_SparqlQuery/offset:"+offset);
-        System.out.println("getPostInType_SparqlQuery/limit:"+limit);
-        System.out.println("getPostInType_SparqlQuery/isCount:"+isCount);
         String query=
            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
            "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
@@ -1783,10 +1766,6 @@ public class StreamInBoxNoTopic extends GenericResource {
     
     private String getPostInCreated_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
     {
-        System.out.println("getPostInType_SparqlQuery/orderType:"+orderType);
-        System.out.println("getPostInType_SparqlQuery/offset:"+offset);
-        System.out.println("getPostInType_SparqlQuery/limit:"+limit);
-        System.out.println("getPostInType_SparqlQuery/isCount:"+isCount);
         String query=
            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
            "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
@@ -1834,10 +1813,6 @@ public class StreamInBoxNoTopic extends GenericResource {
     
     private String getPostInSentimentalType_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
     {
-        System.out.println("getPostInType_SparqlQuery/orderType:"+orderType);
-        System.out.println("getPostInType_SparqlQuery/offset:"+offset);
-        System.out.println("getPostInType_SparqlQuery/limit:"+limit);
-        System.out.println("getPostInType_SparqlQuery/isCount:"+isCount);
         String query=
            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
            "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
@@ -1886,10 +1861,6 @@ public class StreamInBoxNoTopic extends GenericResource {
     
     private String getPostInIntensityType_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
     {
-        System.out.println("getPostInType_SparqlQuery/orderType:"+orderType);
-        System.out.println("getPostInType_SparqlQuery/offset:"+offset);
-        System.out.println("getPostInType_SparqlQuery/limit:"+limit);
-        System.out.println("getPostInType_SparqlQuery/isCount:"+isCount);
         String query=
            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
            "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
@@ -1938,10 +1909,6 @@ public class StreamInBoxNoTopic extends GenericResource {
     
     private String getPostInEmotType_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
     {
-        System.out.println("getPostInType_SparqlQuery/orderType:"+orderType);
-        System.out.println("getPostInType_SparqlQuery/offset:"+offset);
-        System.out.println("getPostInType_SparqlQuery/limit:"+limit);
-        System.out.println("getPostInType_SparqlQuery/isCount:"+isCount);
         String query=
            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
            "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
@@ -1988,10 +1955,6 @@ public class StreamInBoxNoTopic extends GenericResource {
     
     private String getPostInUserName_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
     {
-        System.out.println("getPostInType_SparqlQuery/orderType:"+orderType);
-        System.out.println("getPostInType_SparqlQuery/offset:"+offset);
-        System.out.println("getPostInType_SparqlQuery/limit:"+limit);
-        System.out.println("getPostInType_SparqlQuery/isCount:"+isCount);
         String query=
            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
            "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
@@ -2037,10 +2000,6 @@ public class StreamInBoxNoTopic extends GenericResource {
     
     private String getPostInPlace_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
     {
-        System.out.println("getPostInType_SparqlQuery/orderType:"+orderType);
-        System.out.println("getPostInType_SparqlQuery/offset:"+offset);
-        System.out.println("getPostInType_SparqlQuery/limit:"+limit);
-        System.out.println("getPostInType_SparqlQuery/isCount:"+isCount);
         String query=
            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
            "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
@@ -2088,10 +2047,6 @@ public class StreamInBoxNoTopic extends GenericResource {
     
    private String getPostInPriority_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
     {
-        System.out.println("getPostInType_SparqlQuery/orderType:"+orderType);
-        System.out.println("getPostInType_SparqlQuery/offset:"+offset);
-        System.out.println("getPostInType_SparqlQuery/limit:"+limit);
-        System.out.println("getPostInType_SparqlQuery/isCount:"+isCount);
         String query=
            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
            "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
@@ -2137,78 +2092,6 @@ public class StreamInBoxNoTopic extends GenericResource {
            }
         return query;   
     }
-   
-   /*
-   private String executeQuery(String query, WebSite wsite)
-   {
-        System.out.println("Entra a executeQuery..:"+query);
-        if(query!=null)
-        {
-            QueryExecution qe=new SWBQueryExecution(wsite.getSemanticModel().getRDFModel(), query);
-            ResultSet rs=qe.execSelect();
-            while(rs.hasNext())
-            {
-                QuerySolution qs=rs.next();
-                Iterator<String> it=rs.getResultVars().iterator();
-                while(it.hasNext())
-                {
-                    String name=it.next();
-                    if(name.equalsIgnoreCase("c1"))
-                    {
-                        System.out.println("sQuery a Ejecutar..name:"+name);
-                        RDFNode node=qs.get(name);
-                        String val="";
-                        if(node.isLiteral())val=node.asLiteral().getLexicalForm();
-                        System.out.println("val:"+val);
-                        return val;
-                    }
-                }
-            }
-        }
-        return "0";
-   }
-   
-   
-   private ArrayList executeQueryArray(String query, WebSite wsite)
-   {
-        int cont=0;
-        System.out.println("Va a Ejecutar executeQueryArray:"+query);
-        ArrayList aResult=new ArrayList();
-        QueryExecution qe=new SWBQueryExecution(wsite.getSemanticModel().getRDFModel(), query);
-        ResultSet rs=qe.execSelect();
-        while(rs!=null && rs.hasNext())
-        {
-            QuerySolution qs=rs.next();
-            Iterator<String> it=rs.getResultVars().iterator();
-            while(it.hasNext())
-            {
-                String name=it.next();
-                if(name.equalsIgnoreCase("postUri"))
-                {
-                    System.out.println("sQuery a Ejecutar..name:"+name);
-                    RDFNode node=qs.get(name);
-                    String val="";
-                    if(node.isResource()){
-                        val=node.asResource().getURI();
-                        //System.out.println("ValGeorgeResource:"+val);
-                        SemanticObject semObj=SemanticObject.createSemanticObject(val, wsite.getSemanticModel()); 
-                        //System.out.println("semObj:"+semObj);
-                        PostIn postIn=(PostIn)semObj.createGenericInstance();
-                        //System.out.println("semObj/PostIn:"+postIn);
-                        if(qs.get("POSTINTOPIC")==null)
-                        {
-                            cont++;
-                            System.out.println("cont:"+cont);
-                            aResult.add(postIn);
-                        }else{
-                            System.out.println("NO ES NULO:"+qs.get("POSTINTOPIC"));
-                        }
-                    }
-                }
-            }
-        }
-        return aResult;
-   }*/
    
  public void createExcel(Iterator<PostIn> setso, SWBParamRequest paramRequest, int page, HttpServletResponse response, Stream stream) {
         try {

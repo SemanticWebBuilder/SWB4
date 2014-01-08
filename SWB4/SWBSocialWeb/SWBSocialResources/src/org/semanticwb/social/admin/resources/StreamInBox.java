@@ -184,10 +184,6 @@ public class StreamInBox extends GenericResource {
             out.println("   try{trId.parentNode.removeChild(trId);}catch(noe){}");            
             out.println("</script>");            
         }else if(mode.equals(Mode_REDIRECTTOMODE)){
-            System.out.println("Making the redirect:");
-            System.out.println(request.getParameter("statusMsg"));
-            System.out.println(request.getParameter("postUri"));
-            System.out.println(request.getParameter("suri"));
             PrintWriter out = response.getWriter();            
             String statusMsg =request.getParameter("statusMsg");
             String postUri = request.getParameter("postUri");
@@ -225,7 +221,7 @@ public class StreamInBox extends GenericResource {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         doEdit(request, response, paramRequest);
-            }
+    }
 
     /**
      * User edit view of the resource, this show a list of contents related to a
@@ -430,8 +426,13 @@ public class StreamInBox extends GenericResource {
         long nRec = ((Long) hmapResult.get("countResult")).longValue();
         //Set<PostIn> setso = ((Set) hmapResult.get("itResult"));
         NumberFormat nf2 = NumberFormat.getInstance(Locale.US);
+        
+        SWBResourceURL urlRefresh = paramRequest.getRenderUrl();
+        urlRefresh.setParameter("suri", id);
+        
         out.println("<fieldset>");
-        out.println("<p class=\"totItems\">"+nf2.format(nRec)+"</p>");
+        out.println("<p class=\"countersBar\">"+nf2.format(nRec));
+        out.println("<a href=\"#\" class=\"countersBar\" title=\"Refrescar Tab\" onclick=\"submitUrl('" + urlRefresh.setMode(SWBResourceURL.Action_EDIT) + "',this); return false;\">Refresh</a></p>");
         out.println("</fieldset>");
 
         out.println("<fieldset>");
@@ -1669,7 +1670,7 @@ public class StreamInBox extends GenericResource {
      * Method which controls the filters allowed in this class
      */
     private HashMap filtros(String swbSocialUser, WebSite wsite, String searchWord, HttpServletRequest request, Stream stream, int nPage) {
-        System.out.println("Stream:"+stream.getURI()+",orderByJInBox:"+request.getParameter("orderBy")+",page:"+nPage);
+        //System.out.println("Stream:"+stream.getURI()+",orderByJInBox:"+request.getParameter("orderBy")+",page:"+nPage);
         //System.out.println("stream k Llega a Filtros--George08/11/2013:"+nPage);
         //System.out.println("filtros/searchWord:"+searchWord);
         //Set<PostIn> setso = new TreeSet();
@@ -1742,11 +1743,11 @@ public class StreamInBox extends GenericResource {
                         } else if (request.getParameter("orderBy").equals("repliesUp")) {
                             //streamPostIns=Integer.parseInt(getAllPostInbyShared_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
                             sQuery=getAllPostInbyShared_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            System.out.println("ENTRA A REPLIESUP:"+streamPostIns+"query:"+sQuery);
+                            //System.out.println("ENTRA A REPLIESUP:"+streamPostIns+"query:"+sQuery);
                         } else if (request.getParameter("orderBy").equals("repliesDown")) {
                             //streamPostIns=Integer.parseInt(getAllPostInbyShared_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
                             sQuery=getAllPostInbyShared_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            System.out.println("ENTRA A REPLIESDOWN:"+streamPostIns+"query:"+sQuery);
+                            //System.out.println("ENTRA A REPLIESDOWN:"+streamPostIns+"query:"+sQuery);
                         } else if (request.getParameter("orderBy").equals("friendsUp")) {
                             //streamPostIns=Integer.parseInt(getAllPostInbyFriends_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
                             sQuery=getAllPostInbyFriends_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
@@ -1779,7 +1780,7 @@ public class StreamInBox extends GenericResource {
                         }
                     }else{  //Todos, sin filtros
                         streamPostIns=Integer.parseInt(getAllPostInStream_Query(stream));
-                        System.out.println("ENTRA AQUI--STREAMINBOX...TODOS-1:"+streamPostIns);
+                        //System.out.println("ENTRA AQUI--STREAMINBOX...TODOS-1:"+streamPostIns);
                         sQuery=getAllPostInStream_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream); 
                         aListFilter=SWBSocial.executeQueryArray(sQuery, wsite);
                     }
@@ -1797,7 +1798,7 @@ public class StreamInBox extends GenericResource {
             {
                 streamPostIns=Integer.parseInt(getAllPostInStream_Query(0, 0, true, stream));
             }*/
-            System.out.println("StreamPostIns InBoxJJ:"+streamPostIns);
+            //System.out.println("StreamPostIns InBoxJJ:"+streamPostIns);
             hampResult.put("countResult", Long.valueOf(streamPostIns));
         }
 
@@ -1875,7 +1876,7 @@ public class StreamInBox extends GenericResource {
            }
            if(isCount)
            {
-               System.out.println("Query Count:"+query);
+               //System.out.println("Query Count:"+query);
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
                query=SWBSocial.executeQuery(query, wsite);
            }
@@ -1914,7 +1915,6 @@ public class StreamInBox extends GenericResource {
            }
            if(isCount)
            {
-               System.out.println("Query Count:"+query);
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
                query=SWBSocial.executeQuery(query, wsite);
            }
