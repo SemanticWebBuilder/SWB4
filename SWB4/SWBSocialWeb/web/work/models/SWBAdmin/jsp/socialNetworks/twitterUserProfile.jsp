@@ -4,6 +4,7 @@
     Author     : francisco.jimenez
 --%>
 
+<%@page import="org.semanticwb.model.SWBModel"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="static org.semanticwb.social.admin.resources.Timeline.lookForEntities"%>
 <%@page import="static org.semanticwb.social.admin.resources.Timeline.twitterHumanFriendlyDate"%>
@@ -38,8 +39,12 @@
     boolean isFollowedByMe = relationship.isTargetFollowedBySource();
     String relationshipStatus="";
     SWBResourceURL actionURL = paramRequest.getActionUrl();
-    SWBResourceURL renderURL = paramRequest.getRenderUrl();    
+    SWBResourceURL renderURL = paramRequest.getRenderUrl();
     String suri = request.getParameter("suri");
+    Twitter twitter = (Twitter)SemanticObject.createSemanticObject(suri).createGenericInstance();
+    SWBModel model=WebSite.ClassMgr.getWebSite(twitter.getSemanticObject().getModel().getName());
+    SocialTopic defaultSocialTopic = SocialTopic.ClassMgr.getSocialTopic("DefaultTopic", model);      
+    
     renderURL.setParameter("suri", suri);
     actionURL.setParameter("targetUser", targetUser);
     actionURL.setParameter("suri", suri);
@@ -80,10 +85,18 @@
         
         <tr>
             <td align="center" colspan="4">
-                <div align="center" id="<%=targetUser + "/relStat"%>" dojoType="dijit.layout.ContentPane">
+                <div class="timelineresume">
+                    <span class="inline" id="<%=targetUser + "/relStat"%>" dojoType="dijit.layout.ContentPane">
                     <%if(!targetUser.equals(twitterBean.getScreenName())){//Only if the user is not me%>
-                         <b><a href='#' onclick="try{dojo.byId(this.parentNode.parentNode).innerHTML = '<img src=<%=SWBPlatform.getContextPath()%>/swbadmin/icons/loading.gif>';}catch(noe){} postHtml('<%=actionURL%>','<%=targetUser + "/relStat"%>'); return false;"><%=relationshipStatus%></a></b>
-                    <%}%>
+                         <b><a class="clasifica" href='#' onclick="try{dojo.byId(this.parentNode.parentNode).innerHTML = '<img src=<%=SWBPlatform.getContextPath()%>/swbadmin/icons/loading.gif>';}catch(noe){} postHtml('<%=actionURL%>','<%=targetUser + "/relStat"%>'); return false;"><%=relationshipStatus%></a></b>
+                    <%}%>                    
+                    </span>
+                    <span class="inline">
+                        <a class="clasifica" href="#" onclick="hideDialog(); showDialog('<%=paramRequest.getRenderUrl().setMode("createTweet").setParameter("suri",defaultSocialTopic.getURI()).setParameter("netSuri",suri).setParameter("username",twitterUser.getScreenName())%>','Enviar mensaje a @<%=twitterUser.getScreenName()%>');return false;">Enviar Mensaje</a>
+                    </span>
+                    <span class="inline">
+                        <a class="clasifica" href="#" onclick="hideDialog(); showDialog('<%=paramRequest.getRenderUrl().setMode("createNewDM").setParameter("suri",suri).setParameter("userId", twitterUser.getId()+"")%>','DM to @<%=twitterUser.getScreenName()%>');return false;">Enviar Mensaje Directo</a>
+                    </span> 
                 </div>
             </td>            
         </tr>        
