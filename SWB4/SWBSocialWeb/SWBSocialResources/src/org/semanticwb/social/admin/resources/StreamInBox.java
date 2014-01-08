@@ -169,13 +169,13 @@ public class StreamInBox extends GenericResource {
                 userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
                 userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
             }
-            boolean userCandoEveryThing=false;
-            UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
+            //boolean userCandoEveryThing=false;
+            //UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
             UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
-            if(user.hasUserGroup(userAdminGrp) || user.hasUserGroup(userSuperAdminGrp)) userCandoEveryThing=true;
+            //if(user.hasUserGroup(userAdminGrp) || user.hasUserGroup(userSuperAdminGrp)) userCandoEveryThing=true;
                     
             Stream stream = postIn.getPostInStream();
-            printPostIn(postIn, paramRequest, response, stream, userCanRemoveMsg, userCanRetopicMsg, userCanRevalueMsg, userCanRespondMsg, userCandoEveryThing);
+            printPostIn(postIn, paramRequest, response, stream, userCanRemoveMsg, userCanRetopicMsg, userCanRevalueMsg, userCanRespondMsg, user.hasUserGroup(userSuperAdminGrp));
         }else if(mode.equals(Mode_DELETEPOSTIN)){
             PrintWriter out = response.getWriter();
             out.println("<script type=\"javascript\">");            
@@ -275,11 +275,11 @@ public class StreamInBox extends GenericResource {
             userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
             userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
         }
-        boolean userCandoEveryThing=false;
+        //boolean userCandoEveryThing=false;
         
-        UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
+        //UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
         UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
-        if(user.hasUserGroup(userAdminGrp) || user.hasUserGroup(userSuperAdminGrp)) userCandoEveryThing=true;
+        //if(user.hasUserGroup(userAdminGrp) || user.hasUserGroup(userSuperAdminGrp)) userCandoEveryThing=true;
         
         if (request.getParameter("leyendReconfirm") != null) {
             
@@ -822,7 +822,7 @@ public class StreamInBox extends GenericResource {
             if(postIn.isIsPrioritary()) sClass="class=\"msj-cont msj-prior\"";
             
             out.println("<tr id=\"" + postIn.getURI() + "/stIn\" "+sClass+">");
-            printPostIn(postIn, paramRequest, response, stream, userCanRemoveMsg, userCanRetopicMsg, userCanRevalueMsg, userCanRespondMsg, userCandoEveryThing);
+            printPostIn(postIn, paramRequest, response, stream, userCanRemoveMsg, userCanRetopicMsg, userCanRevalueMsg, userCanRespondMsg, user.hasUserGroup(userSuperAdminGrp));
             out.println("</tr>");
             
         }
