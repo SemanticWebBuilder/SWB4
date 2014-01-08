@@ -230,7 +230,6 @@
                     <script type="text/javascript">
                         function returnUrlTextParsed(text)
                         {
-                            alert("result/Aver-1:"+text);
                             var exp = /(\b(((https?|ftp|file|):\/\/)|www[.])[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
                             var temp = text.replace(exp,"<a href=\"$1\" target=\"_blank\">$1</a>");
                             var result = "";
@@ -247,7 +246,6 @@
                                     result += "http://";
                                 }
                             }
-                            alert("result/Aver:"+result);
                             document.getElementById("msgText").innerHTML = result;
                         }
                     </script>
