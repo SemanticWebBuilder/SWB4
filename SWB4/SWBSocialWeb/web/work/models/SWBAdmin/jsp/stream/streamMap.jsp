@@ -36,7 +36,13 @@
     String positivesMsg=SWBSocialResUtil.Util.getStringFromGenericLocale("positives", user.getLanguage());
     String negativesMsg=SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", user.getLanguage());
     
-    int streamMapView=Integer.parseInt(paramRequest.getResourceBase().getAttribute("streamMapView", "1"));
+    int streamMapView=1;
+    //System.out.println("streamMapView:"+request.getParameter("streamMapView"));
+    if(request.getParameter("streamMapView")!=null && !request.getParameter("streamMapView").isEmpty())
+    {
+            streamMapView=Integer.parseInt(request.getParameter("streamMapView"));
+    }
+    //System.out.println("streamMapView Final:"+streamMapView);
     
     SWBResourceURL urlDetails = paramRequest.getRenderUrl().setMode("showMarkDet");
     urlDetails.setCallMethod(SWBResourceURL.Call_DIRECT);
@@ -54,7 +60,7 @@
     } catch (ParseException ex) {
         ex.printStackTrace();
     }    
-    System.out.println("dateG:"+date.toString());
+    //System.out.println("dateG:"+date.toString());
 %>
 
 
@@ -99,7 +105,7 @@
         Iterator <PostIn> itPostIns=null;  
         if(semObj.getGenericInstance() instanceof Stream) 
         {
-            System.out.println("Map es Stream");
+            //System.out.println("Map es Stream");
             Stream stream=(Stream)semObj.getGenericInstance();
             itPostIns=stream.listPostInStreamInvs();  
         }else if(semObj.getGenericInstance() instanceof SocialTopic) {
@@ -110,15 +116,15 @@
         while(itPostIns.hasNext())
         {
             PostIn postIn=itPostIns.next();
-            System.out.println("postIn Solin:"+postIn);
+            //System.out.println("postIn Solin:"+postIn);
             if(postIn.getPi_created()!=null && postIn.getPi_created().compareTo(date)>=0)
             {
-                System.out.println("postIn Solin-1:"+postIn);
+                //System.out.println("postIn Solin-1:"+postIn);
                 
-                System.out.println("postIn/lat:"+postIn.getLatitude()+",lng:"+postIn.getLongitude());
+                //System.out.println("postIn/lat:"+postIn.getLatitude()+",lng:"+postIn.getLongitude());
                 if(postIn.getGeoStateMap()!=null && (streamMapView==1 || streamMapView==3 || streamMapView==4))
                 {
-                    System.out.println("postIn En estado:"+postIn);
+                    //System.out.println("postIn En estado:"+postIn);
                     if(!hmapPoints.containsKey(postIn.getGeoStateMap().getId())) 
                     {
                         //System.out.println("Entra a hmapPoints-1.1:"+postIn.getMsg_Text()); 
@@ -174,11 +180,11 @@
                     }
                     if(streamMapView==3 || streamMapView==4)
                     {
-                        System.out.println("postIn NO EN estado:"+postIn);
+                        //System.out.println("postIn NO EN estado:"+postIn);
                         aPostInsNotInStates.add(postIn);
                     }
                 }else{
-                    System.out.println("postIn NO EN estado:"+postIn);
+                    //System.out.println("postIn NO EN estado:"+postIn);
                     aPostInsNotInStates.add(postIn);
                 }
             }
@@ -207,6 +213,8 @@
                 }
                 if(positiveNumber>negativeNumber)
                 {
+                    if(streamMapView!=6)
+                    {
                     %>
                     //var tmpIcon = new google.maps.MarkerImage('/images/glad.png');
                     //alert("tmpIcon:"+tmpIcon);
@@ -216,9 +224,12 @@
                         title: '<%=stateMsg%>:<%=countryState.getDisplayTitle(user.getLanguage())%>, <%=positivesMsg%>:'+<%=positiveNumber%>+', <%=negativesMsg%>:<%=negativeNumber%>'
                     })
                     );
-                    <%    
+                    <%
+                    }
                 }else if(negativeNumber>positiveNumber)
                 {
+                    if(streamMapView!=5)
+                    {
                     %>
                     //var tmpIcon = getSentimentIcon("sad");
                     batch.push(new google.maps.Marker({
@@ -227,18 +238,22 @@
                         title: '<%=stateMsg%>:<%=countryState.getDisplayTitle(user.getLanguage())%>, <%=positivesMsg%>:'+<%=positiveNumber%>+', <%=negativesMsg%>:<%=negativeNumber%>'
                     })
                     );
-                    <%  
+                    <%
+                    }                     
                  }else if(positiveNumber==negativeNumber)
                  {
-                    %>
-                    //var tmpIcon = getSentimentIcon("sad");
-                    batch.push(new google.maps.Marker({
-                        position: new google.maps.LatLng(<%=countryState.getCapitalLatitude()%>,<%=countryState.getCapitalLongitude()%>),
-                        icon: new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/yellowPoint.png', new google.maps.Size(15, 15), new google.maps.Point(15,15)),
-                        title: '<%=stateMsg%>:<%=countryState.getDisplayTitle(user.getLanguage())%>, <%=positivesMsg%>:'+<%=positiveNumber%>+', <%=negativesMsg%>:<%=negativeNumber%>'
-                    })
-                    );
-                    <%  
+                    if(streamMapView!=5 && streamMapView!=6)
+                    {
+                        %>
+                        //var tmpIcon = getSentimentIcon("sad");
+                        batch.push(new google.maps.Marker({
+                            position: new google.maps.LatLng(<%=countryState.getCapitalLatitude()%>,<%=countryState.getCapitalLongitude()%>),
+                            icon: new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/yellowPoint.png', new google.maps.Size(15, 15), new google.maps.Point(15,15)),
+                            title: '<%=stateMsg%>:<%=countryState.getDisplayTitle(user.getLanguage())%>, <%=positivesMsg%>:'+<%=positiveNumber%>+', <%=negativesMsg%>:<%=negativeNumber%>'
+                        })
+                        );
+                        <%  
+                    }
                  }
             }
         }
@@ -256,83 +271,109 @@
             {
                 //System.out.println("postIn Msg Todos:"+postIn.getMsg_Text()+":"+postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation());
                  //Para los PostIns que tienen un sentimiento positivo o negativo y ademas tienen latitud y longitud asociada
-                if(postIn.getLatitude()!=0 && postIn.getLongitude()!=0 && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==2 || streamMapView==4))
+                if(postIn.getLatitude()!=0 && postIn.getLongitude()!=0 && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==2 || streamMapView==4 || streamMapView==5 || streamMapView==6))
                 {
                      cont1++;
                      String msg=SWBSocialResUtil.Util.replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false);
-
                     %>
-                           var tmpIcon;
+                           var tmpIcon=null;
                             <%        
                             if(postIn.getPostSentimentalType()==1)
                             {
+                                if(streamMapView!=6)
+                                {
                                 %>
                                    tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/greenGMapMarker.png');
                                 <%
+                                }
                             }else if(postIn.getPostSentimentalType()==2)
                             { 
+                                if(streamMapView!=5)
+                                {
                                 %>
                                     tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/redGMapMarker.png');
                                 <%
+                                }
                             }else if(postIn.getPostSentimentalType()==0)
                             {
+                                if(streamMapView!=5 && streamMapView!=6)
+                                {
                             %>
                                     tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/whiteGMapMarker.png');
                             <%
+                                }
                             } 
                             %>
-                           var marker = new google.maps.Marker({
-                           position: new google.maps.LatLng(<%=postIn.getLatitude()%>,<%=postIn.getLongitude()%>),
-                           icon: tmpIcon, 
-                           title: '<%=msg%>',
-                           map: map
-                           });
-                           associateInfoWindows(marker, '<%=postIn.getEncodedURI()%>', '<%=semObj.getEncodedURI()%>');
-                           batch.push(marker);  
-                    <%         
-                }else if(postIn.getPostInSocialNetworkUser()!=null && postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation()!=null && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==2 || streamMapView==4)){ 
+                                if(tmpIcon!=null)
+                                {
+                                //{ 
+                                    //alert("<%=postIn%>");
+                                    var marker = new google.maps.Marker({
+                                    position: new google.maps.LatLng(<%=postIn.getLatitude()%>,<%=postIn.getLongitude()%>),
+                                    icon: tmpIcon, 
+                                    title: '<%=msg%>',
+                                    map: map
+                                    });
+                                    associateInfoWindows(marker, '<%=postIn.getEncodedURI()%>', '<%=semObj.getEncodedURI()%>');
+                                    batch.push(marker);  
+                                }
+                            <%         
+                }else if(postIn.getPostInSocialNetworkUser()!=null && postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation()!=null && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==2 || streamMapView==4 || streamMapView==5 || streamMapView==6)){ 
                     cont2++; 
                     %>
-                            var tmpIcon;
+                            var tmpIcon=null;
                             <%        
                             if(postIn.getPostSentimentalType()==1)
                             {
+                                if(streamMapView!=6)
+                                {
                                 %>
                                    tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/greenGMapMarker.png');
                                 <%
+                                }
                             }else if(postIn.getPostSentimentalType()==2)
                             {
+                                if(streamMapView!=5)
+                                {
                                 %>
                                     tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/redGMapMarker.png');
                                 <%
+                                }
                             }else if(postIn.getPostSentimentalType()==0)
                             {
+                                if(streamMapView!=5 && streamMapView!=6)
+                                {
                             %>
                                     tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/whiteGMapMarker.png');
                             <%
+                                }
                             } 
                             %>
-                            var postLocation='<%=SWBSocialResUtil.Util.replaceSpecialCharacters(postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation().replaceAll("'", ""), false)%>';
-                            var title='<%=postIn.getMsg_Text()!=null?SWBSocialResUtil.Util.replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false):postIn.getTags()!=null?SWBSocialResUtil.Util.replaceSpecialCharacters(postIn.getTags().replaceAll("'", ""), false):"Sin Mensaje.."%>';
-                             geocoder.geocode( { 'address': postLocation}, function(results, status) { 
-                                if(status==google.maps.GeocoderStatus.OK){
-                                    var marker =new google.maps.Marker({
-                                    map: map,
-                                    position: new google.maps.LatLng(results[0].geometry.location.lat(),results[0].geometry.location.lng()),
-                                    icon: tmpIcon,
-                                    title: 'By GeoUser Profile:'+title
-                                     });
-                                    associateInfoWindows(marker, '<%=postIn.getEncodedURI()%>', '<%=semObj.getEncodedURI()%>');
-                                    batch.push(marker);  
-                                }//else{
-                                   // alert("Esa dirección no existe:"+postLocation);
-                                //}
-                            });
+                            //alert("tmpIcon:"+tmpIcon);         
+                            if(tmpIcon!=null)
+                            {
+                                var postLocation='<%=SWBSocialResUtil.Util.replaceSpecialCharacters(postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation().replaceAll("'", ""), false)%>';
+                                var title='<%=postIn.getMsg_Text()!=null?SWBSocialResUtil.Util.replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false):postIn.getTags()!=null?SWBSocialResUtil.Util.replaceSpecialCharacters(postIn.getTags().replaceAll("'", ""), false):"Sin Mensaje.."%>';
+                                 geocoder.geocode( { 'address': postLocation}, function(results, status) { 
+                                    if(status==google.maps.GeocoderStatus.OK){
+                                        var marker =new google.maps.Marker({
+                                        map: map,
+                                        position: new google.maps.LatLng(results[0].geometry.location.lat(),results[0].geometry.location.lng()),
+                                        icon: tmpIcon,
+                                        title: 'By GeoUser Profile:'+title
+                                         });
+                                        associateInfoWindows(marker, '<%=postIn.getEncodedURI()%>', '<%=semObj.getEncodedURI()%>');
+                                        batch.push(marker);  
+                                    }//else{
+                                       // alert("Esa dirección no existe:"+postLocation);
+                                    //}
+                                });
+                            }
                     <%        
                 }
             }
         }
-        System.out.println("cont1:"+cont1+",cont2:"+cont2);
+        //System.out.println("cont1:"+cont1+",cont2:"+cont2);
       %>          
       //
       
