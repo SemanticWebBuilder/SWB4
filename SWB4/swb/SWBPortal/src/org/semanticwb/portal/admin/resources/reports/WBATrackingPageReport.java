@@ -118,7 +118,7 @@ public class WBATrackingPageReport extends GenericResource {
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         final String mode = paramsRequest.getMode();
-System.out.println("mode="+mode);
+        
         if(Mode_RENDER_Tree.equalsIgnoreCase(mode)) {
             doRenderSectionTree(request,response,paramsRequest);
         }else if(Mode_RENDER_DataTable.equalsIgnoreCase(mode)) {
