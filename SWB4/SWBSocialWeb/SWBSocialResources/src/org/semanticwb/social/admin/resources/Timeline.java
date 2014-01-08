@@ -1063,14 +1063,14 @@ public class Timeline extends GenericResource{
             actionURL.setParameter("targetUser", targetUser);
             actionURL.setParameter("suri", request.getParameter("suri"));
             actionURL.setAction("undoFollow");
-            out.println("<b><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + actionURL + "','" + targetUser + "/relStat'); return false;\">" + paramRequest.getLocaleString("unfollow") + "</a></b>");
+            out.println("<b><a class=\"clasifica\" href=\"#\" onclick=\"try{dojo.byId(this.parentNode.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + actionURL + "','" + targetUser + "/relStat'); return false;\">" + paramRequest.getLocaleString("unfollow") + "</a></b>");
         }else if(mode.equals("undoFollowSent")){
             SWBResourceURL actionURL = paramRequest.getActionUrl();
             String targetUser = request.getParameter("targetUser");
             actionURL.setParameter("targetUser", targetUser);
             actionURL.setParameter("suri", request.getParameter("suri"));
             actionURL.setAction("doFollow");
-            out.println("<b><a href=\"#\" onclick=\"try{dojo.byId(this.parentNode.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + actionURL + "','" + targetUser + "/relStat'); return false;\">" + paramRequest.getLocaleString("follow") + "</a></b>");
+            out.println("<b><a class=\"clasifica\" href=\"#\" onclick=\"try{dojo.byId(this.parentNode.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + actionURL + "','" + targetUser + "/relStat'); return false;\">" + paramRequest.getLocaleString("follow") + "</a></b>");
         }else if(mode.equals("doShowTopic")){
             final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/assignTopic.jsp";
             RequestDispatcher dis = request.getRequestDispatcher(path);
@@ -1788,7 +1788,7 @@ public class Timeline extends GenericResource{
             Twitter twitterSem = (Twitter)SemanticObject.createSemanticObject(objUri).createGenericInstance();
             SWBModel model=WebSite.ClassMgr.getWebSite(twitterSem.getSemanticObject().getModel().getName());
             SocialTopic defaultSocialTopic = SocialTopic.ClassMgr.getSocialTopic("DefaultTopic", model);
-            //out.println("-----" + "/nCursor:" + friends.getNextCursor());
+
             for(int i = 0; i < friends.size(); i++){
                 User user = friends.get(i);
                 //out.println("THE friend:" + "<img src=\"" + user.getBiggerProfileImageURL() + "\">" + friends.get(i).getScreenName() + "</br>");
@@ -1802,10 +1802,10 @@ public class Timeline extends GenericResource{
                 out.println(            user.getDescription());
                 out.println("	</p>");
                 out.println("<div class=\"timelineresume\">");
-                out.println("<span class=\"inline\" id=\"sendTweet/" +user.getId() +"\" dojoType=\"dojox.layout.ContentPane\">");
+                out.println("<span class=\"inline\">");
                 out.println("<a class=\"clasifica\" href=\"#\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("createTweet").setParameter("suri",defaultSocialTopic.getURI()).setParameter("netSuri",objUri).setParameter("username",user.getScreenName()) + "','Enviar mensaje a @" + user.getScreenName() + "');return false;\">Enviar Mensaje</a>");
                 out.println("</span>");
-                out.println("<span class=\"inline\" id=\"sendDM/" + user.getId() + "\" dojoType=\"dojox.layout.ContentPane\">");
+                out.println("<span class=\"inline\">");
                 out.println("<a class=\"clasifica\" href=\"#\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("createNewDM").setParameter("suri",objUri).setParameter("userId", user.getId()+"") + "','DM to @" + user.getScreenName() + "');return false;\">Enviar Mensaje Directo</a>");
                 out.println("</span>");
                 out.println("</div>");
@@ -1863,10 +1863,10 @@ public class Timeline extends GenericResource{
                 out.println(            user.getDescription());
                 out.println("	</p>");
                 out.println("<div class=\"timelineresume\">");
-                out.println("<span class=\"inline\" id=\"sendTweet/" +user.getId() +"\" dojoType=\"dojox.layout.ContentPane\">");
+                out.println("<span class=\"inline\">");
                 out.println("<a class=\"clasifica\" href=\"#\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("createTweet").setParameter("suri",defaultSocialTopic.getURI()).setParameter("netSuri",objUri).setParameter("username",user.getScreenName()) + "','Enviar mensaje a @" + user.getScreenName() + "');return false;\">Enviar Mensaje</a>");
                 out.println("</span>");
-                out.println("<span class=\"inline\" id=\"sendDM/" + user.getId() + "\" dojoType=\"dojox.layout.ContentPane\">");
+                out.println("<span class=\"inline\">");
                 out.println("<a class=\"clasifica\" href=\"#\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("createNewDM").setParameter("suri",objUri).setParameter("userId", user.getId()+"") + "','DM to @" + user.getScreenName() + "');return false;\">Enviar Mensaje Directo</a>");
                 out.println("</span>");
                 out.println("</div>");
