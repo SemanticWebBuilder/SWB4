@@ -27,6 +27,49 @@
     </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
   </owl:Class>
+  <owl:Class rdf:ID="MarkMsgAsPrioritary">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:comment>Acción específica mediante la cual se marca un mensaje como prioritario. Esto en la propiedad "IsPrioritary" de un mensaje (Post).</rdfs:comment>
+    <rdfs:label xml:lang="en">Action of marking a message as prioritary</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableClass"/>
+    <rdfs:label xml:lang="es">Marcar un mensaje como prioritario</rdfs:label>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_markAsPriorityAct">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconActionPrioritary</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdfs:subClassOf>
+      <swb:Class rdf:ID="Action">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdfs:comment>Clase padre de todas las acciones posibles en swbsocial</rdfs:comment>
+        <rdfs:label xml:lang="en">Action</rdfs:label>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:label xml:lang="es">Acción</rdfs:label>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <swb:displayObject>
+          <swbxf:DisplayObject rdf:ID="do_socialAction">
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconRule</swb:iconClass>
+            <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:dragSupport>
+            <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >2</swbxf:dropMatchLevel>
+            <rdfs:label xml:lang="es">Acción</rdfs:label>
+            <rdfs:label xml:lang="en">Action</rdfs:label>
+            <swbxf:doNotInstanceable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:doNotInstanceable>
+          </swbxf:DisplayObject>
+        </swb:displayObject>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+      </swb:Class>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableNode"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
   <owl:Class rdf:ID="TakeOut">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdfs:comment>Clase que englobara elementos a ser quitados en los mensajes de las diferentes redes sociales, de tal manera que se puedan comparar cada uno de las palabras de los mensajes con las palabras de valor sentimental que se tengan almacenadas en la clase SentimentalWords.</rdfs:comment>
@@ -334,6 +377,39 @@
     <rdfs:subClassOf rdf:resource="#GeoCatalog"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
+  <owl:Class rdf:ID="SendEmail">
+    <rdfs:subClassOf>
+      <swb:Class rdf:ID="ActionMsg">
+        <rdfs:subClassOf rdf:resource="#PostTextable"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:comment>Clase que agrupa acciónes que contienen un mesaje a escribir en cada una de las instancias</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="#Action"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:subClassOf>
+    <rdfs:label xml:lang="en">Action of Sending Email</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableNode"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_sendEmailAct">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconActionEmail</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableClass"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:label xml:lang="es">Enviar Email</rdfs:label>
+    <rdfs:comment>Acción específica mediante la cual se envía un correo electrónico</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Emailable">
+        <rdfs:comment>Interface que contiene propiedades que sirven para el envío de emails</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+  </owl:Class>
   <owl:Class rdf:ID="PostMonitor">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -461,49 +537,7 @@
         >swbIconSocialSite</swb:iconClass>
       </swbxf:DisplayObject>
     </swb:displayObject>
-    <swb:hasClass>
-      <swb:Class rdf:ID="MarkMsgAsPrioritary">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:comment>Acción específica mediante la cual se marca un mensaje como prioritario. Esto en la propiedad "IsPrioritary" de un mensaje (Post).</rdfs:comment>
-        <rdfs:label xml:lang="es">Marcar un mensaje como prioritario</rdfs:label>
-        <swb:displayObject>
-          <swbxf:DisplayObject rdf:ID="do_markAsPriorityAct">
-            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbIconActionPrioritary</swb:iconClass>
-          </swbxf:DisplayObject>
-        </swb:displayObject>
-        <rdfs:subClassOf>
-          <swb:Class rdf:ID="Action">
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-            <rdfs:comment>Clase padre de todas las acciones posibles en swbsocial</rdfs:comment>
-            <rdfs:label xml:lang="en">Action</rdfs:label>
-            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swb:autogenId>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-            <rdfs:label xml:lang="es">Acción</rdfs:label>
-            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-            <swb:displayObject>
-              <swbxf:DisplayObject rdf:ID="do_socialAction">
-                <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                >swbIconRule</swb:iconClass>
-                <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-                >true</swbxf:dragSupport>
-                <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-                >2</swbxf:dropMatchLevel>
-                <rdfs:label xml:lang="es">Acción</rdfs:label>
-                <rdfs:label xml:lang="en">Action</rdfs:label>
-                <swbxf:doNotInstanceable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-                >true</swbxf:doNotInstanceable>
-              </swbxf:DisplayObject>
-            </swb:displayObject>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-          </swb:Class>
-        </rdfs:subClassOf>
-        <rdfs:label xml:lang="en">Action of marking a message as prioritary</rdfs:label>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </swb:hasClass>
+    <swb:hasClass rdf:resource="#MarkMsgAsPrioritary"/>
     <swb:hasClass rdf:resource="#Rss"/>
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_SocialNets">
@@ -652,39 +686,7 @@
     <rdfs:label xml:lang="en">Social Site</rdfs:label>
     <rdfs:comment>Clase que hereda de swb:WebSite. Es un tipo de website Social. De esta manera se puede contar con todos los elementos en el arbol de navegación en la administración, y otros elementos utiles para Social Site.</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Model"/>
-    <swb:hasClass>
-      <swb:Class rdf:ID="SendEmail">
-        <rdfs:subClassOf>
-          <swb:Interface rdf:ID="Emailable">
-            <rdfs:comment>Interface que contiene propiedades que sirven para el envío de emails</rdfs:comment>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-          </swb:Interface>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-          <swb:Class rdf:ID="ActionMsg">
-            <rdfs:subClassOf rdf:resource="#PostTextable"/>
-            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swb:autogenId>
-            <rdfs:comment>Clase que agrupa acciónes que contienen un mesaje a escribir en cada una de las instancias</rdfs:comment>
-            <rdfs:subClassOf rdf:resource="#Action"/>
-            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-          </swb:Class>
-        </rdfs:subClassOf>
-        <rdfs:label xml:lang="es">Enviar Email</rdfs:label>
-        <swb:displayObject>
-          <swbxf:DisplayObject rdf:ID="do_sendEmailAct">
-            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbIconActionEmail</swb:iconClass>
-          </swbxf:DisplayObject>
-        </swb:displayObject>
-        <rdfs:comment>Acción específica mediante la cual se envía un correo electrónico</rdfs:comment>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:label xml:lang="en">Action of Sending Email</rdfs:label>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </swb:hasClass>
+    <swb:hasClass rdf:resource="#SendEmail"/>
     <swb:hasClass rdf:resource="#SocialPFlow"/>
   </owl:Class>
   <owl:Class rdf:about="#SocialWebPage">
@@ -704,6 +706,13 @@
     </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
+  <owl:Class rdf:ID="PostOutNet">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:comment>En este objeto se guardara el identificador que es asignado para cada post en cada una de las redes sociales, es decir, si un mismo post se envía hacia mas de una red social, cada una de esas redes sociales daran un identificador unico para ese post en esa red social, este lo tenemos que guardar nosotros en este objeto para fines de monitoreo de estatus del post en esa red social (En Proceso, Revisado, Publicado, etc), como nosotros para un post, independientemente de a cuantas redes sociales se envíe, solo creamos un objeto PostOut (Message, Photo, Video), tuvimos que crear esta clase para guardar el identificador de ese postOut para c/red social.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
   <owl:Class rdf:about="#SendPost">
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
@@ -719,6 +728,7 @@
         >swbIconActionPost</swb:iconClass>
       </swbxf:DisplayObject>
     </swb:displayObject>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableNode"/>
     <rdfs:subClassOf>
       <swb:Interface rdf:ID="SocialNetworkable">
         <rdfs:comment>Interface que define propiedades utiles para que se realice ciertas acciones en ciertas redes sociales.</rdfs:comment>
@@ -727,13 +737,7 @@
       </swb:Interface>
     </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="#ActionMsg"/>
-  </owl:Class>
-  <owl:Class rdf:ID="PostOutNet">
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <rdfs:comment>En este objeto se guardara el identificador que es asignado para cada post en cada una de las redes sociales, es decir, si un mismo post se envía hacia mas de una red social, cada una de esas redes sociales daran un identificador unico para ese post en esa red social, este lo tenemos que guardar nosotros en este objeto para fines de monitoreo de estatus del post en esa red social (En Proceso, Revisado, Publicado, etc), como nosotros para un post, independientemente de a cuantas redes sociales se envíe, solo creamos un objeto PostOut (Message, Photo, Video), tuvimos que crear esta clase para guardar el identificador de ese postOut para c/red social.</rdfs:comment>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableClass"/>
   </owl:Class>
   <owl:Class rdf:ID="SocialRuleRef">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Reference"/>
