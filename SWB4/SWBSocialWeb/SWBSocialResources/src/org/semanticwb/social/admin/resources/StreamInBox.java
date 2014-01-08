@@ -349,6 +349,28 @@ public class StreamInBox extends GenericResource {
         String orderBy = request.getParameter("orderBy");
 
         out.println("<div class=\"swbform\">");
+        
+        int nPage;
+        try {
+            nPage = Integer.parseInt(request.getParameter("page"));
+        } catch (Exception ignored) {
+            nPage = 1;
+        }
+        //System.out.println("nPage a Filtros:"+nPage);
+        
+        HashMap hmapResult = filtros(swbSocialUser, wsite, searchWord, request, stream, nPage);
+
+        long nRec = ((Long) hmapResult.get("countResult")).longValue();
+        //Set<PostIn> setso = ((Set) hmapResult.get("itResult"));
+        NumberFormat nf2 = NumberFormat.getInstance(Locale.US);
+        
+        SWBResourceURL urlRefresh = paramRequest.getRenderUrl();
+        urlRefresh.setParameter("suri", id);
+        
+        out.println("<fieldset class=\"countersBar\">");
+        out.println(nf2.format(nRec));
+        out.println("<a href=\"#\" class=\"countersBar\" title=\"Refrescar Tab\" onclick=\"submitUrl('" + urlRefresh.setMode(SWBResourceURL.Action_EDIT) + "',this); return false;\"></a>");
+        out.println("</fieldset>");
 
         out.println("<fieldset class=\"barra\">");
         out.println("<div class=\"barra\">"); 
@@ -414,27 +436,7 @@ public class StreamInBox extends GenericResource {
         out.println("</div>");
         out.println("</fieldset>");
         
-        int nPage;
-        try {
-            nPage = Integer.parseInt(request.getParameter("page"));
-        } catch (Exception ignored) {
-            nPage = 1;
-        }
-        //System.out.println("nPage a Filtros:"+nPage);
-        HashMap hmapResult = filtros(swbSocialUser, wsite, searchWord, request, stream, nPage);
-
-        long nRec = ((Long) hmapResult.get("countResult")).longValue();
-        //Set<PostIn> setso = ((Set) hmapResult.get("itResult"));
-        NumberFormat nf2 = NumberFormat.getInstance(Locale.US);
         
-        SWBResourceURL urlRefresh = paramRequest.getRenderUrl();
-        urlRefresh.setParameter("suri", id);
-        
-        out.println("<fieldset>");
-        out.println("<p class=\"countersBar\">"+nf2.format(nRec));
-        out.println("<a href=\"#\" class=\"countersBar\" title=\"Refrescar Tab\" onclick=\"submitUrl('" + urlRefresh.setMode(SWBResourceURL.Action_EDIT) + "',this); return false;\">Refresh</a></p>");
-        out.println("</fieldset>");
-
         out.println("<fieldset>");
 
         out.println("<table class=\"tabla1\" >");
