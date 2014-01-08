@@ -76,6 +76,22 @@ public class SocialWebResource extends GenericAdmResource
         if(user.isSigned()){
             if(socialNetwork.isSn_authenticated())
                {
+                   
+                    out.println("<div id=\"configuracion_redes\">");
+                    out.println("<div id=\"autenticacion\">");
+                    out.println("<p>" + paramRequest.getLocaleString("authenticated") + "</p>");
+                    out.println("</div>");
+                    out.println("<div id=\"refrescar_cred\">");                    
+                    out.println("   <form type=\"dijit.form.Form\" id=\"authenticate/" + objUri + "\" action=\"" +  paramRequest.getRenderUrl().setMode(OAUTH_MODE) + "\" method=\"post\" onsubmit=\"submitForm('authenticate/" + objUri +  "'); return false;\">");
+                    out.println("       <input type=\"hidden\"  name=\"suri\" value=\"" + objUri +"\">");
+                    out.println("       <input type=\"hidden\"  name=\"wsid\" value=\"" + socialNetwork.getSemanticObject().getModel().getName()+"\">");
+                    out.println("       <input type=\"hidden\"  name=\"fromDoView\" value=\"true\">");
+                    out.println("       <a href=\"#\" onclick=\"submitForm('authenticate/" + objUri +  "'); return false;\" title=\"" + paramRequest.getLocaleString("refreshCredentials") +"\"><span>" + paramRequest.getLocaleString("refreshCredentials") + "</span></a>");
+                    out.println("   </form>");
+                    out.println("</div>");
+                    out.println("</div>");
+                  
+                /*
                 //System.out.println("Ya esta autenticada, puede refrescar tokens");
                 out.println("<div class=\"swbform\">");
                 out.println("<table width=\"100%\" border=\"0px\">");            
@@ -102,9 +118,26 @@ public class SocialWebResource extends GenericAdmResource
                 out.println("   </tr>");
                 out.println("</table>");
                 out.println("</div>");
+                */
             }else if(!socialNetwork.isSn_authenticated()){
                 //System.out.println("No esta autenticada");
-                out.println("<div class=\"swbform\">");
+                out.println("<div id=\"configuracion_redes\">");
+                out.println("<div id=\"autenticacion\">");
+                out.println("<p>      La cuenta aún no está autenticada</p>");
+                out.println("</div>");
+                out.println("<div id=\"autenticar_cuenta\">");
+                out.println("   <form type=\"dijit.form.Form\" id=\"reauthenticate/" + objUri + "\" action=\"" +  paramRequest.getRenderUrl().setMode(OAUTH_MODE) + "\" method=\"post\" onsubmit=\"submitForm('reauthenticate/" + objUri + "'); return false;\">");
+                out.println("       <input type=\"hidden\"  name=\"suri\" value=\"" + objUri +"\">");
+                out.println("       <input type=\"hidden\"  name=\"wsid\" value=\"" + socialNetwork.getSemanticObject().getModel().getName()+"\">");
+                out.println("       <input type=\"hidden\"  name=\"fromDoView\" value=\"true\">");
+                //out.println("       <button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("lblAuthentic") + "</button>");
+                out.println("   </form>");
+                out.println("<a href=\"#\" onclick=\"submitForm('reauthenticate/" + objUri +  "'); return false;\" title=\"" + paramRequest.getLocaleString("lblAuthentic") +"\"><span>" + paramRequest.getLocaleString("lblAuthentic") + "</span></a>");
+                out.println("</div>");
+                out.println("</div>");
+
+                
+                /*out.println("<div class=\"swbform\">");
                 out.println("<table width=\"100%\" border=\"0px\">");            
                 out.println("   <tr>");
                 out.println("       <td style=\"text-align: center;\"><h3>La cuenta aún no está autenticada!</h3></td>");
@@ -120,7 +153,7 @@ public class SocialWebResource extends GenericAdmResource
                 out.println("       </td>");
                 out.println("   </tr>");
                 out.println("</table>");
-                out.println("</div>");                              
+                out.println("</div>");*/
             }
         }else{
             out.println("<h3>Usuario no autorizado. Consulte a su administrador</h3>");
@@ -187,7 +220,7 @@ System.out.println(" recuperando socialNetwork....");
         SocialNetwork socialNetwork;
         try {
             socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
-System.out.println(" 1.socialNetwork="+socialNetwork.getId());
+            System.out.println(" 1.socialNetwork="+socialNetwork.getId());
             String title = request.getParameter("title");
             String desc = request.getParameter("desc");
             String appId = request.getParameter("appId");
