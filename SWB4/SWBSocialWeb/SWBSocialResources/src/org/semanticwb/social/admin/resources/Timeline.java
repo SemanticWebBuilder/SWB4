@@ -1785,19 +1785,30 @@ public class Timeline extends GenericResource{
             //do {
             friends = twitter.getFriendsList(twitter.getId(), friendsCursor);
             if(friends.size() == 0)return;
+            Twitter twitterSem = (Twitter)SemanticObject.createSemanticObject(objUri).createGenericInstance();
+            SWBModel model=WebSite.ClassMgr.getWebSite(twitterSem.getSemanticObject().getModel().getName());
+            SocialTopic defaultSocialTopic = SocialTopic.ClassMgr.getSocialTopic("DefaultTopic", model);
             //out.println("-----" + "/nCursor:" + friends.getNextCursor());
             for(int i = 0; i < friends.size(); i++){
                 User user = friends.get(i);
                 //out.println("THE friend:" + "<img src=\"" + user.getBiggerProfileImageURL() + "\">" + friends.get(i).getScreenName() + "</br>");
                 out.println("<div class=\"timeline timelinetweeter\">");
                 out.println("	<p class=\"tweeter\">");
-                out.println("	<a onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("suri", objUri).setParameter("targetUser", user.getScreenName()) + "','@" + user.getScreenName() + " - " + user.getName() + "'); return false;\" href=\"#\">@" + user.getScreenName() + "</a>"  + user.getName());
+                out.println("	<a onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("suri", objUri).setParameter("targetUser", user.getScreenName()) + "','@" + user.getScreenName() + " - " + user.getName() + "'); return false;\" href=\"#\">@" + user.getScreenName() + "</a> "  + user.getName());
                 out.println("	</p>");
                 out.println("	<p class=\"tweet\">");
                 out.println("		<a onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("suri", objUri).setParameter("targetUser", user.getScreenName()) + "','@" + user.getScreenName() + " - " + user.getName() + "');return false;\" href=\"#\">");
                 out.println("			<img width=\"48\" height=\"48\" src=\"" + user.getBiggerProfileImageURL() + "\"></a>");
                 out.println(            user.getDescription());
                 out.println("	</p>");
+                out.println("<div class=\"timelineresume\">");
+                out.println("<span class=\"inline\" id=\"sendTweet/" +user.getId() +"\" dojoType=\"dojox.layout.ContentPane\">");
+                out.println("<a class=\"clasifica\" href=\"#\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("createTweet").setParameter("suri",defaultSocialTopic.getURI()).setParameter("netSuri",objUri).setParameter("username",user.getScreenName()) + "','Enviar mensaje a @" + user.getScreenName() + "');return false;\">Enviar Mensaje</a>");
+                out.println("</span>");
+                out.println("<span class=\"inline\" id=\"sendDM/" + user.getId() + "\" dojoType=\"dojox.layout.ContentPane\">");
+                out.println("<a class=\"clasifica\" href=\"#\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("createNewDM").setParameter("suri",objUri).setParameter("userId", user.getId()+"") + "','DM to @" + user.getScreenName() + "');return false;\">Enviar Mensaje Directo</a>");
+                out.println("</span>");
+                out.println("</div>");
                 out.println("</div>");
             }
             friendsCursor = friends.getNextCursor();
@@ -1835,6 +1846,9 @@ public class Timeline extends GenericResource{
             //do {
             followers = twitter.getFollowersList(twitter.getId(), followersCursor);
             if(followers.size() == 0)return;
+            Twitter twitterSem = (Twitter)SemanticObject.createSemanticObject(objUri).createGenericInstance();
+            SWBModel model=WebSite.ClassMgr.getWebSite(twitterSem.getSemanticObject().getModel().getName());
+            SocialTopic defaultSocialTopic = SocialTopic.ClassMgr.getSocialTopic("DefaultTopic", model);
             //out.println("-----" + "/nCursor:" + friends.getNextCursor());
             for(int i = 0; i < followers.size(); i++){
                 User user = followers.get(i);
@@ -1848,6 +1862,15 @@ public class Timeline extends GenericResource{
                 out.println("			<img width=\"48\" height=\"48\" src=\"" + user.getBiggerProfileImageURL() + "\"></a>");
                 out.println(            user.getDescription());
                 out.println("	</p>");
+                out.println("<div class=\"timelineresume\">");
+                out.println("<span class=\"inline\" id=\"sendTweet/" +user.getId() +"\" dojoType=\"dojox.layout.ContentPane\">");
+                out.println("<a class=\"clasifica\" href=\"#\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("createTweet").setParameter("suri",defaultSocialTopic.getURI()).setParameter("netSuri",objUri).setParameter("username",user.getScreenName()) + "','Enviar mensaje a @" + user.getScreenName() + "');return false;\">Enviar Mensaje</a>");
+                out.println("</span>");
+                out.println("<span class=\"inline\" id=\"sendDM/" + user.getId() + "\" dojoType=\"dojox.layout.ContentPane\">");
+                out.println("<a class=\"clasifica\" href=\"#\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("createNewDM").setParameter("suri",objUri).setParameter("userId", user.getId()+"") + "','DM to @" + user.getScreenName() + "');return false;\">Enviar Mensaje Directo</a>");
+                out.println("</span>");
+                out.println("</div>");
+                out.println("</div>");
                 out.println("</div>");
             }
             followersCursor = followers.getNextCursor();
