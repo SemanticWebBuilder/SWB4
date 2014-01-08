@@ -50,6 +50,9 @@
     <div style="width:50%;float:left;display:inline-block;">
 <div class="swbform" id="paco">
 <%
+    Twitter twitter = (Twitter)SemanticObject.createSemanticObject(objUri).createGenericInstance();
+    SWBModel model=WebSite.ClassMgr.getWebSite(twitter.getSemanticObject().getModel().getName());
+    SocialTopic defaultSocialTopic = SocialTopic.ClassMgr.getSocialTopic("DefaultTopic", model);
     try {
             out.println("<div class=\"swbform\">");
             out.println("<div align=\"center\"><h2>" + "@" + twitterBean.getScreenName() + " "  + "</br> Personas que sigo" + "</h2><br/></div>");
@@ -57,10 +60,6 @@
             PagableResponseList<User> friends;
             //do {
             friends = twitterBean.getFriendsList(twitterBean.getId(), friendsCursor);
-            //out.println("-----" + "/nCursor:" + friends.getNextCursor());
-            Twitter twitter = (Twitter)SemanticObject.createSemanticObject(objUri).createGenericInstance();
-            SWBModel model=WebSite.ClassMgr.getWebSite(twitter.getSemanticObject().getModel().getName());
-            SocialTopic defaultSocialTopic = SocialTopic.ClassMgr.getSocialTopic("DefaultTopic", model);
             for(int i = 0; i < friends.size(); i++){
                 User user = friends.get(i);
                 //out.println("THE FRIEND:" + "<img src=\"" + user.getBiggerProfileImageURL() + "\">" + friends.get(i).getScreenName() + "</br>");                
@@ -76,13 +75,12 @@
         <%=user.getDescription()%>
     </p>
     <div class="timelineresume">
-        <span class="inline" id="sendTweet/<%=user.getId()%>" dojoType="dojox.layout.ContentPane">
+        <span class="inline">
             <a class="clasifica" href="#" onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("createTweet").setParameter("suri",defaultSocialTopic.getURI()).setParameter("netSuri",objUri).setParameter("username",user.getScreenName())%>','Enviar mensaje a @<%=user.getScreenName()%>');return false;">Enviar Mensaje</a>
         </span>
-        <span class="inline" id="sendDM/<%=user.getId()%>" dojoType="dojox.layout.ContentPane">
+        <span class="inline">
             <a class="clasifica" href="#" onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("createNewDM").setParameter("suri",objUri).setParameter("userId", user.getId()+"")%>','DM to @<%=user.getScreenName()%>');return false;">Enviar Mensaje Directo</a>
         </span> 
-             
     </div>
 </div>
 <%
@@ -135,6 +133,14 @@
                             <img width="48" height="48" src="<%=user.getBiggerProfileImageURL()%>"></a>
                         <%=user.getDescription()%>
                     </p>
+                    <div class="timelineresume">
+                        <span class="inline">
+                            <a class="clasifica" href="#" onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("createTweet").setParameter("suri",defaultSocialTopic.getURI()).setParameter("netSuri",objUri).setParameter("username",user.getScreenName())%>','Enviar mensaje a @<%=user.getScreenName()%>');return false;">Enviar Mensaje</a>
+                        </span>
+                        <span class="inline">
+                            <a class="clasifica" href="#" onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("createNewDM").setParameter("suri",objUri).setParameter("userId", user.getId()+"")%>','DM to @<%=user.getScreenName()%>');return false;">Enviar Mensaje Directo</a>
+                        </span> 
+                    </div>
                 </div>
 
 <%
