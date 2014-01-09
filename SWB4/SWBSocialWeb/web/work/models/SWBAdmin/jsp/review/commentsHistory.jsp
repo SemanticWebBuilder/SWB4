@@ -82,6 +82,7 @@
             }
             //}
         }
+        postOut.setNumTotNewResponses(0);
         %>
     </div>
 </div>
