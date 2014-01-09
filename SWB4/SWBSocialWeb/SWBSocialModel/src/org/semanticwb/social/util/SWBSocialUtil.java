@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Properties;
 import java.util.StringTokenizer;
 import javaQuery.j2ee.tinyURL;
 import javax.servlet.http.HttpServletRequest;
@@ -78,6 +79,7 @@ public class SWBSocialUtil implements SWBAppObject {
      * utiler&iacute;a de generaci&oacute;n de bit&aacute;coras.</p>
      */
     private static Logger log = SWBUtils.getLogger(SWBSocialUtil.class);
+    private static Properties props = null;
     /**
      * Holds a reference to an object of this class. <p>Mantiene una referencia
      * a un objeto de esta clase.</p>
@@ -160,6 +162,7 @@ public class SWBSocialUtil implements SWBAppObject {
 
     @Override
     public void init() {
+        try{
         //System.out.println("Init de SWBSocialUtil-Jorge");
         //Carga Valores a ArrayList
         aDoubles.add("b");
@@ -221,6 +224,40 @@ public class SWBSocialUtil implements SWBAppObject {
         
         //Carga Palabras sentimentales a memoría
         loadSentimentWords();
+        
+       
+        System.out.println("Va a cargar archivo swbSocial.properties");
+        
+        props = SWBUtils.TEXT.getPropertyFile("/org/semanticwb/social/properties/swbSocial.properties");
+        
+        System.out.println("Cargó archivo swbSocial.properties:"+props);
+            
+      }catch(Exception e){
+          System.out.println("Error:"+e.getMessage());
+          log.error(e);
+      }
+    }
+    
+    /**
+     * Obtiene valor de variable de ambiente declarada en web.xml o web.properties.
+     * 
+     * @param name String nombre de la variable
+     * @param defect String valor por defecto
+     * @return the env
+     * @return
+     */
+    public static String getEnv(String name, String defect)
+    {
+        String obj = null;
+
+        obj=System.getProperty("swb.web."+name);
+        if(obj!=null)return obj;
+        if(props!=null)
+        {
+            obj = props.getProperty(name);
+        }
+        if (obj == null) return defect;
+        return obj;
     }
     
     //Carga las preposiciones que estan en BD a memoria
