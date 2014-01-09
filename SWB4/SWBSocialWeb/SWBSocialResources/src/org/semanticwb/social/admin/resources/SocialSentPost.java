@@ -332,15 +332,11 @@ public class SocialSentPost extends GenericResource {
         
         SWBResourceURL urlRefresh = paramRequest.getRenderUrl();
         urlRefresh.setParameter("suri", id);
-        
-        out.println("<fieldset class=\"countersBar\">");
-        out.println(nf2.format(nRec)+"/"+nf2.format(numSocialTopicPOComments));
-        out.println("<a href=\"#\" class=\"countersBar\" title=\"Refrescar Tab\" onclick=\"submitUrl('" + urlRefresh.setMode(SWBResourceURL.Action_EDIT) + "',this); return false;\"></a>");
-        out.println("</fieldset>");
-        
-
+      
         out.println("<fieldset class=\"barra\">");
         out.println("<div class=\"barra\">");
+        
+        out.println("<a href=\"#\" class=\"countersBar\" title=\"Refrescar Tab\" onclick=\"submitUrl('" + urlRefresh.setMode(SWBResourceURL.Action_EDIT) + "',this); return false;\">"+nf2.format(nRec)+"/"+nf2.format(numSocialTopicPOComments)+" mensajes/respuestas</a>");
 
         /*
          out.println("<span  class=\"spanFormat\">");

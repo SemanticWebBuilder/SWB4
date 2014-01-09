@@ -303,13 +303,10 @@ public class StreamInBoxNoTopic extends GenericResource {
         SWBResourceURL urlRefresh = paramRequest.getRenderUrl();
         urlRefresh.setParameter("suri", id);
         
-        out.println("<fieldset class=\"countersBar\">");
-        out.println(nf2.format(nRec));
-        out.println("<a href=\"#\" class=\"countersBar\" title=\"Refrescar Tab\" onclick=\"submitUrl('" + urlRefresh.setMode(SWBResourceURL.Action_EDIT) + "',this); return false;\"></a>");
-        out.println("</fieldset>");
-
         out.println("<fieldset class=\"barra\">");
         out.println("<div class=\"barra\">"); 
+        
+        out.println("<a href=\"#\" class=\"countersBar\" title=\"Refrescar Tab\" onclick=\"submitUrl('" + urlRefresh.setMode(SWBResourceURL.Action_EDIT) + "',this); return false;\">"+nf2.format(nRec)+" mensajes</a>");
         /*
         out.println("<span  class=\"spanFormat\">");
         out.println("<form id=\"" + id + "/fsearchNoTopic\" name=\"" + id + "/fsearchNoTopic\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearchNoTopic');return false;\">");
