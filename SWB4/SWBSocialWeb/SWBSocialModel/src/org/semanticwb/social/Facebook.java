@@ -657,7 +657,14 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         params.put("access_token", this.getAccessToken());
         params.put("message", message.getMsg_Text());
         params.put("privacy", "{'value':'" + privacyValue(message) + "'}");
-        String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/feed";
+        String url  = "";
+        
+        if(message.getpodur_PostOutInv().getPodur_userIds() .equals("null") ){
+             url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/feed";
+        }else{
+             url =  Facebook.FACEBOOKGRAPH +message.getpodur_PostOutInv().getPodur_userIds()+ "/feed";
+
+        }
         JSONObject jsonResponse = null;
         String facebookResponse = "";
 
@@ -991,10 +998,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
      */
     private String postRequest(Map<String, String> params, String url,
             String userAgent, String method) throws IOException {
-
+        System.out.println("++URL : "+url);
         URL serverUrl = new URL(url);
         CharSequence paramString = (null == params) ? "" : delimit(params.entrySet(), "&", "=", true);
-        //System.out.println("serverUrl: " + serverUrl);
+        System.out.println("serverUrl: " + serverUrl);
         HttpURLConnection conex = null;
         OutputStream out = null;
         InputStream in = null;
@@ -1031,6 +1038,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         if (response == null) {
             response = "";
         }
+        //System.out.println("RESPONSE : "+response);
         return response;
     }
 
