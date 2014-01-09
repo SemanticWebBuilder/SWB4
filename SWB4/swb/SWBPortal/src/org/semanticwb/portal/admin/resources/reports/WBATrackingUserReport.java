@@ -206,6 +206,7 @@ public class WBATrackingUserReport extends GenericResource {
             out.println("      { field:\"year\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblYear") + "\" },");
             out.println("      { field:\"month\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblMonth") + "\" },");
             out.println("      { field:\"day\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblDay") + "\" },");
+            out.println("      { field:\"time\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblHour") + "\" }");
             out.println("    ];");
 
             out.println("    gridMaster = new dojox.grid.DataGrid({");
@@ -450,7 +451,7 @@ public class WBATrackingUserReport extends GenericResource {
                 }catch(NumberFormatException nfe) {
                     obj.put("day", t[0].substring(8,10));
                 }
-
+                obj.put("time", t[0].substring(11,16));
                 jarr.put(obj);
             }catch (JSONException jsone) {
                 log.error(jsone);
@@ -601,7 +602,7 @@ public class WBATrackingUserReport extends GenericResource {
                 }catch(NumberFormatException nfe) {
                     obj.put("day", t[0].substring(8,10));
                 }
-
+                obj.put("time", t[0].substring(11,16));
                 jarr.put(obj);
             }catch (JSONException jsone) {
                 log.error(jsone);
@@ -803,10 +804,20 @@ public class WBATrackingUserReport extends GenericResource {
         GregorianCalendar end = new GregorianCalendar();
         end.setTime(e);
         
+        String wsId = "";
+        UserRepository ur = SWBContext.getUserRepository(repId);
+        Iterator<WebSite> sites = SWBContext.listWebSites(false);
+        while(sites.hasNext()) {
+            WebSite ws = sites.next();
+            if(ws.getUserRepository().equals(ur)) {
+                wsId = ws.getId();
+                break;
+            }
+        }        
+        
         List<String[]> list_rep = new ArrayList<String[]>();
-        Iterator<String> files = getFileNames((GregorianCalendar)start.clone(), (GregorianCalendar)end.clone());
-        if(files.hasNext()) {                
-            String s_key=null;
+        Iterator<String> files = getFileNames(wsId, (GregorianCalendar)start.clone(), (GregorianCalendar)end.clone());
+        if(files.hasNext()) {
             while(files.hasNext()) {
                 filename = files.next();
                 File f = new File(filename);
@@ -879,7 +890,7 @@ public class WBATrackingUserReport extends GenericResource {
      * @param last
      * @return the file names
      */
-    public Iterator<String> getFileNames(GregorianCalendar first, GregorianCalendar last) {
+    public Iterator<String> getFileNames(final String siteId, GregorianCalendar first, GregorianCalendar last) {
         ArrayList files = new ArrayList();
 
         String accessLogPath = SWBPlatform.getEnv("swb/accessLog");
@@ -888,33 +899,30 @@ public class WBATrackingUserReport extends GenericResource {
 
         SimpleDateFormat sdf;
         
-        Iterator<WebSite> sites = SWBContext.listWebSites(false);
-        while(sites.hasNext()) {            
-            final String realpath = path + accessLogPath + "_" + sites.next().getId() + "_acc.";
+        final String realpath = path + accessLogPath + "_" + siteId + "_acc.";
 
-            if(DAILY_LOGGIN.equalsIgnoreCase(period)) {
-                sdf = new SimpleDateFormat("yyyy-MM-dd");
-                while( !first.after(last) ) {
-                    files.add(realpath+sdf.format(first.getTime())+".log");
-                    first.add(Calendar.DATE, 1);
-                }
-            }else if(MONTHLY_LOGGIN.equalsIgnoreCase(period)) {
-                sdf = new SimpleDateFormat("yyyy-MM");
-                int addedDays;
-                while( !first.after(last) ) {
-                    files.add(realpath+sdf.format(first.getTime())+".log");
-                    addedDays = first.getActualMaximum(Calendar.DAY_OF_MONTH)-first.get(Calendar.DAY_OF_MONTH)+1;
-                    first.add(Calendar.DATE, addedDays);
-                }
+        if(DAILY_LOGGIN.equalsIgnoreCase(period)) {
+            sdf = new SimpleDateFormat("yyyy-MM-dd");
+            while( !first.after(last) ) {
+                files.add(realpath+sdf.format(first.getTime())+".log");
+                first.add(Calendar.DATE, 1);
+            }
+        }else if(MONTHLY_LOGGIN.equalsIgnoreCase(period)) {
+            sdf = new SimpleDateFormat("yyyy-MM");
+            int addedDays;
+            while( !first.after(last) ) {
+                files.add(realpath+sdf.format(first.getTime())+".log");
+                addedDays = first.getActualMaximum(Calendar.DAY_OF_MONTH)-first.get(Calendar.DAY_OF_MONTH)+1;
+                first.add(Calendar.DATE, addedDays);
+            }
 
-            }else if(YEARLY_LOGGIN.equalsIgnoreCase(period)) {
-                sdf = new SimpleDateFormat("yyyy");
-                int addedDays;
-                while( !first.after(last) ) {
-                    files.add(realpath+sdf.format(first.getTime())+".log");
-                    addedDays = first.getActualMaximum(Calendar.DAY_OF_YEAR)-first.get(Calendar.DAY_OF_YEAR)+1;
-                    first.add(Calendar.DATE, addedDays);
-                }
+        }else if(YEARLY_LOGGIN.equalsIgnoreCase(period)) {
+            sdf = new SimpleDateFormat("yyyy");
+            int addedDays;
+            while( !first.after(last) ) {
+                files.add(realpath+sdf.format(first.getTime())+".log");
+                addedDays = first.getActualMaximum(Calendar.DAY_OF_YEAR)-first.get(Calendar.DAY_OF_YEAR)+1;
+                first.add(Calendar.DATE, addedDays);
             }
         }
         return files.iterator();
