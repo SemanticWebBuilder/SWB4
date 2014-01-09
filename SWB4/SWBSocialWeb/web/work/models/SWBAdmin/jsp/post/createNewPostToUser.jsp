@@ -19,7 +19,6 @@
 <%
     SWBResourceURL url = paramRequest.getRenderUrl();
     SemanticObject sObjSocialNet=(SemanticObject)SemanticObject.createSemanticObject(request.getParameter("netSuri"));
-    String socialNetUri = sObjSocialNet.getURI();
     SocialNetwork socialNetwork=(SocialNetwork)sObjSocialNet.createGenericInstance();
     
     System.out.println("Entra a PostInResponse..:"+socialNetwork);
@@ -32,7 +31,7 @@
     
     System.out.println("Username:" + request.getParameter("username"));
     System.out.println("netSuri" + request.getParameter("netSuri"));
-       boolean isMessageAble=false;
+    boolean isMessageAble=false;
     boolean isPhotoable=false;
     boolean isVideoable=false; 
     if(socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Messageable.social_Messageable))
