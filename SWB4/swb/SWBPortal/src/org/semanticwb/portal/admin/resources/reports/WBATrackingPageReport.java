@@ -29,7 +29,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -45,18 +44,9 @@ import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.admin.resources.reports.beans.WBAFilterReportBean;
-import org.semanticwb.portal.admin.resources.reports.beans.IncompleteFilterException;
-import org.semanticwb.portal.admin.resources.reports.jrresources.*;
-import org.semanticwb.portal.admin.resources.reports.jrresources.data.JRSectionAccessDataDetail;
-import org.semanticwb.portal.db.SWBRecHit;
-
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.semanticwb.SWBPortal;
 import org.semanticwb.portal.util.SelectTree;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -237,8 +227,8 @@ public class WBATrackingPageReport extends GenericResource {
                 out.println("      { field:\"year\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblYear") + "\" },");
                 out.println("      { field:\"month\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblMonth") + "\" },");
                 out.println("      { field:\"day\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblDay") + "\" },");
-                out.println("      { field:\"time\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblHour") + "\" },");
-                out.println("      { field:\"milis\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblDuration") + "\" }");
+                out.println("      { field:\"time\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblHour") + "\" }");
+                //out.println("      { field:\"milis\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblDuration") + "\" }");
                 out.println("    ];");
 
                 out.println("   gridMaster = new dojox.grid.DataGrid({");
@@ -497,11 +487,11 @@ public class WBATrackingPageReport extends GenericResource {
                     obj.put("day", t[0].substring(8,10));
                 }
                 obj.put("time", t[0].substring(11,16));
-                try {
-                    obj.put("milis", Long.parseLong(t[11]));
-                }catch(NumberFormatException nfe) {
-                    obj.put("milis", t[11]);
-                }                
+//                try {
+//                    obj.put("milis", Long.parseLong(t[11]));
+//                }catch(NumberFormatException nfe) {
+//                    obj.put("milis", t[11]);
+//                }                
                 jarr.put(obj);
             }catch (JSONException jsone) {
                 log.error(jsone);
@@ -826,11 +816,11 @@ public class WBATrackingPageReport extends GenericResource {
                     obj.put("day", t[0].substring(8,10));
                 }
                 obj.put("time", t[0].substring(11,16));
-                try {
-                    obj.put("milis", Long.parseLong(t[11]));
-                }catch(NumberFormatException nfe) {
-                    obj.put("milis", t[11]);
-                }                
+//                try {
+//                    obj.put("milis", Long.parseLong(t[11]));
+//                }catch(NumberFormatException nfe) {
+//                    obj.put("milis", t[11]);
+//                }                
                 jarr.put(obj);
             }catch (JSONException jsone) {
                 log.error(jsone);
@@ -860,7 +850,6 @@ public class WBATrackingPageReport extends GenericResource {
         String mininfile = null;
         
         final WebSite ws = SWBContext.getWebSite(wsId);
-        final WebPage wp = ws.getWebPage(wpId);
         
         GregorianCalendar start = new GregorianCalendar();
         start.setTime(s);
@@ -868,9 +857,8 @@ public class WBATrackingPageReport extends GenericResource {
         end.setTime(e);
         
         List<String[]> list_rep = new ArrayList<String[]>();
-        Iterator<String> files = getFileNames((GregorianCalendar)start.clone(), (GregorianCalendar)end.clone());
-        if(files.hasNext()) {                
-            String s_key=null;
+        Iterator<String> files = getFileNames(wsId, (GregorianCalendar)start.clone(), (GregorianCalendar)end.clone());
+        if(files.hasNext()) {    
             while(files.hasNext()) {
                 filename = files.next();
                 File f = new File(filename);
@@ -929,6 +917,7 @@ public class WBATrackingPageReport extends GenericResource {
                 else
                 {
                     log.error("File " + filename + " not found on method getReportResults() resource " + strRscType + " with id " +  getResourceBase().getId());
+                    System.out.println("...File " + filename + " not found on method getReportResults() resource " + strRscType + " with id " +  getResourceBase().getId());
                 }
             }
         }
@@ -943,42 +932,38 @@ public class WBATrackingPageReport extends GenericResource {
      * @param last
      * @return the file names
      */
-    public Iterator<String> getFileNames(GregorianCalendar first, GregorianCalendar last) {
+    public Iterator<String> getFileNames(final String siteId, GregorianCalendar first, GregorianCalendar last) {
         ArrayList files = new ArrayList();
 
         String accessLogPath = SWBPlatform.getEnv("swb/accessLog");
         String period = SWBPlatform.getEnv("swb/accessLogPeriod");
         String path = SWBPortal.getWorkPath();
-
+        
         SimpleDateFormat sdf;
         
-        Iterator<WebSite> sites = SWBContext.listWebSites(false);
-        while(sites.hasNext()) {            
-            final String realpath = path + accessLogPath + "_" + sites.next().getId() + "_acc.";
+        final String realpath = path + accessLogPath + "_" + siteId + "_acc.";
+        if(DAILY_LOGGIN.equalsIgnoreCase(period)) {
+            sdf = new SimpleDateFormat("yyyy-MM-dd");
+            while( !first.after(last) ) {
+                files.add(realpath+sdf.format(first.getTime())+".log");
+                first.add(Calendar.DATE, 1);
+            }
+        }else if(MONTHLY_LOGGIN.equalsIgnoreCase(period)) {
+            sdf = new SimpleDateFormat("yyyy-MM");
+            int addedDays;
+            while( !first.after(last) ) {
+                files.add(realpath+sdf.format(first.getTime())+".log");
+                addedDays = first.getActualMaximum(Calendar.DAY_OF_MONTH)-first.get(Calendar.DAY_OF_MONTH)+1;
+                first.add(Calendar.DATE, addedDays);
+            }
 
-            if(DAILY_LOGGIN.equalsIgnoreCase(period)) {
-                sdf = new SimpleDateFormat("yyyy-MM-dd");
-                while( !first.after(last) ) {
-                    files.add(realpath+sdf.format(first.getTime())+".log");
-                    first.add(Calendar.DATE, 1);
-                }
-            }else if(MONTHLY_LOGGIN.equalsIgnoreCase(period)) {
-                sdf = new SimpleDateFormat("yyyy-MM");
-                int addedDays;
-                while( !first.after(last) ) {
-                    files.add(realpath+sdf.format(first.getTime())+".log");
-                    addedDays = first.getActualMaximum(Calendar.DAY_OF_MONTH)-first.get(Calendar.DAY_OF_MONTH)+1;
-                    first.add(Calendar.DATE, addedDays);
-                }
-
-            }else if(YEARLY_LOGGIN.equalsIgnoreCase(period)) {
-                sdf = new SimpleDateFormat("yyyy");
-                int addedDays;
-                while( !first.after(last) ) {
-                    files.add(realpath+sdf.format(first.getTime())+".log");
-                    addedDays = first.getActualMaximum(Calendar.DAY_OF_YEAR)-first.get(Calendar.DAY_OF_YEAR)+1;
-                    first.add(Calendar.DATE, addedDays);
-                }
+        }else if(YEARLY_LOGGIN.equalsIgnoreCase(period)) {
+            sdf = new SimpleDateFormat("yyyy");
+            int addedDays;
+            while( !first.after(last) ) {
+                files.add(realpath+sdf.format(first.getTime())+".log");
+                addedDays = first.getActualMaximum(Calendar.DAY_OF_YEAR)-first.get(Calendar.DAY_OF_YEAR)+1;
+                first.add(Calendar.DATE, addedDays);
             }
         }
         return files.iterator();
