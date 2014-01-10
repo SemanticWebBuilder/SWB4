@@ -213,8 +213,6 @@ public class FacebookWall extends GenericResource {
 
         CharSequence paramString = (null == params) ? "" : delimit(params.entrySet(), "&", "=", true);
         URL serverUrl = new URL(url + "?" + paramString);
-        System.out.println("URL:" + serverUrl);
-
         HttpURLConnection conex = null;
         InputStream in = null;
         String response = null;
@@ -720,11 +718,19 @@ public class FacebookWall extends GenericResource {
             }
             response.setMode("reAssignedPost");
         } else if (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo")) {
-            //System.out.println("Entra a InBox_processAction-2:"+request.getParameter("objUri"));
             if (request.getParameter("objUri") != null) {
                 //System.out.println("Entra a InBox_processAction-3");
-                PostIn postIn = (PostIn) SemanticObject.getSemanticObject(request.getParameter("objUri")).createGenericInstance();
-                SocialTopic stOld = postIn.getSocialTopic();
+
+                PostIn postIn = null;
+                SocialTopic socialTopic = null;
+                String suri = request.getParameter("objUri");
+
+                if (SemanticObject.getSemanticObject(suri).createGenericInstance() instanceof PostIn) {//When is a response from the timeline
+                    postIn = (PostIn) SemanticObject.createSemanticObject(suri).createGenericInstance();
+                } else if (SemanticObject.getSemanticObject(suri).createGenericInstance() instanceof SocialTopic) {//When is a tweet to some user
+                    socialTopic = (SocialTopic) SemanticObject.createSemanticObject(suri).createGenericInstance();
+                }
+                //SocialTopic stOld = postIn.getSocialTopic();
                 ///
                 WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
                 String socialUri = "";
@@ -768,7 +774,12 @@ public class FacebookWall extends GenericResource {
                 }
 
                 //System.out.println("Entra a InBox_processAction-4");
-                SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, toPost, request, response);
+                //SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, toPost, request, response);
+                if (postIn != null) {//When is a response from the timeline
+                    SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, toPost, request, response);
+                } else if (socialTopic != null) {//When is new tweet to some user
+                    SWBSocialUtil.PostOutUtil.sendNewPost(null, socialTopic, socialPFlow, aSocialNets, wsite, toPost, request, response);
+                }
 
                 response.setRenderParameter("repliedPost", "ok");
                 response.setMode("postSent");
@@ -785,7 +796,6 @@ public class FacebookWall extends GenericResource {
         String currentTab = request.getParameter("currentTab");
         actionURL.setParameter("suri", request.getParameter("suri"));
         renderURL.setParameter("suri", request.getParameter("suri"));
-        System.out.println("suri:" + request.getParameter("suri"));
         System.out.println("mode:" + mode);
         PrintWriter out = response.getWriter();
         if (mode != null && mode.equals("getMorePosts")) {//Gets older posts
@@ -1240,6 +1250,19 @@ public class FacebookWall extends GenericResource {
             } catch (JSONException ex) {
                 log.error(ex);
             }
+        } else if (mode.equals("createPost")) {
+            response.setContentType("text/html; charset=ISO-8859-1");
+            response.setHeader("Cache-Control", "no-cache");
+            response.setHeader("Pragma", "no-cache");
+            String jspResponse = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/post/createNewPostToUser.jsp";
+            RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
+            try {
+                request.setAttribute("paramRequest", paramRequest);
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error(e);
+            }
+
         } else {//**fin
             super.processRequest(request, response, paramRequest);
         }
@@ -3090,7 +3113,7 @@ public class FacebookWall extends GenericResource {
     }
 
     private void moreView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws IOException, JSONException {
- 
+
         String url = request.getParameter("nextPage");
         SWBResourceURL actionURL = paramRequest.getActionUrl();
         SWBResourceURL renderURL = paramRequest.getRenderUrl();
@@ -3101,8 +3124,8 @@ public class FacebookWall extends GenericResource {
 
         SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
         Facebook facebook = (Facebook) semanticObject.createGenericInstance();
-
         SWBModel model = WebSite.ClassMgr.getWebSite(facebook.getSemanticObject().getModel().getName());
+        SocialTopic defaultSocialTopic = SocialTopic.ClassMgr.getSocialTopic("DefaultTopic", model);
         if (objUri != null) {
             actionURL.setParameter("suri", objUri);
             renderURL.setParameter("suri", objUri);
@@ -3110,7 +3133,7 @@ public class FacebookWall extends GenericResource {
 
         fbResponse = postRequest(url,
                 "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
-        System.out.println(" /n/n/n/n/n EN EL RECURSO : "+fbResponse);
+        System.out.println(" /n/n/n/n/n EN EL RECURSO : " + fbResponse);
         JSONObject phraseResp = new JSONObject(fbResponse);
         int cont = 0;
         JSONArray postsData = phraseResp.getJSONArray("data");
@@ -3121,28 +3144,48 @@ public class FacebookWall extends GenericResource {
         for (int k = 0; k < postsData.length(); k++) {
             cont++;
             object = (JSONObject) postsData.get(k);
-            //System.out.println("\n\nPost de FACEBOOOK*********: " + postsData.getJSONObject(k));
-
-           
             image = object.getString("id");
             name = object.getString("name");
-            out.println("<img src=\"https://graph.facebook.com/" + image + "/picture?width=150&height=150\" width=\"150\" height=\"150\" />");
-            out.println("" + name + "");
-             out.println("<br>");
+            out.println("<div class=\"timeline timelinetweeter\">");
+            out.println(" <p class=\"tweeter\">");
+            out.println(" <a onclick=\"showDialog(' " + paramRequest.getRenderUrl().setMode("fullProfile").setParameter("suri", objUri).setParameter("type", "noType").setParameter("id", image).setParameter("targetUser", name) + " ',' " + name + " '); return false;\" href=\"#\">" + name + "</a>  ");
+            out.println("</p>");
 
+            out.println("<p class=\"tweet\">");
+            out.println("<img src=\"https://graph.facebook.com/" + image + "/picture?width=150&height=150\" width=\"150\" height=\"150\" />");
+            out.println("</p>");
+            out.println("<div class=\"timelineresume\">");
+            out.println(" <span class=\"inline\" id=\"sendTweet/<%=name%>\" dojoType=\"dojox.layout.ContentPane\">");
+            out.println("<a class=\"clasifica\" href=\"#\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("createPost").setParameter("suri", defaultSocialTopic.getURI()).setParameter("netSuri", objUri).setParameter("username", name) + "','Enviar mensaje a " + name + "');return false;\">Enviar Mensaje</a>");
+            out.println("</span>");
+            out.println(" <span class=\"inline\" id=\"sendDM/<%=name%>\" dojoType=\"dojox.layout.ContentPane\">");
+            out.println("  <a class=\"clasifica\" href=\"#\" onclick=\"\">Enviar Mensaje Directo</a>");
+            out.println(" </span> ");
+            out.println(" </div>");
+            out.println("</div>");
 
         }
 
         if (phraseResp.has("paging")) {
-            if(phraseResp.getJSONObject("paging").has("next")){
-            next = phraseResp.getJSONObject("paging").getString("next");
-            }
-            if(request.getParameter("type").equals("friends")){
-            out.println("<a href=\"#\" onclick=\"javascript:postHtml('" + paramRequest.getRenderUrl().setAction("more").setParameter("type", "friends").setParameter("suri", "http://www.Prueba.swb#social_Facebook:1").setParameter("nextPage", next) + " ', 'moreFriends"+facebook+"')\" >Mas amigos");
-            out.println("</a>");
-            }else if(request.getParameter("type").equals("subscriber")) {
-             out.println("<a href=\"#\" onclick=\"javascript:postHtml('" + paramRequest.getRenderUrl().setAction("more").setParameter("type", "subscriber").setParameter("suri", "http://www.Prueba.swb#social_Facebook:1").setParameter("nextPage", next) + " ', 'moreSubscriber"+facebook+"')\" >Mas seguidores");
-            out.println("</a>");
+            if (phraseResp.getJSONObject("paging").has("next")) {
+                next = phraseResp.getJSONObject("paging").getString("next");
+
+                if (request.getParameter("type").equals("friends")) {
+                    out.println("<div align=\"center\">");
+                    out.println("  <label  id=\"" + objUri + "/moreFriendsLabel\" >");
+                    out.println("<a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setAction("more").setParameter("type", "friends").setParameter("suri", "http://www.Prueba.swb#social_Facebook:1").setParameter("nextPage", next) + " ', '" + objUri + "/getMoreFriendsFacebook',  'bottom'); try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\" >Mas amigos");
+                    out.println("</label>");
+                    out.println("</a>");
+                    out.println("</div");
+
+                } else if (request.getParameter("type").equals("subscriber")) {
+                    out.println("<div align=\"center\">");
+                    out.println("<label>");
+                    out.println("<a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setAction("more").setParameter("type", "subscriber").setParameter("suri", "http://www.Prueba.swb#social_Facebook:1").setParameter("nextPage", next) + " ', '" + objUri + "/getMoreSubscribers',  'bottom'); try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\" >Mas seguidores");
+                    out.println("</label>");
+                    out.println("</a>");
+                    out.println("</div");
+                }
             }
         }
 
@@ -3156,7 +3199,7 @@ public class FacebookWall extends GenericResource {
         URL serverUrl = new URL(url);
 
         //URL serverUrl = new URL(url);
-        System.out.println("URL:" + serverUrl);
+        //System.out.println("URL:" + serverUrl);
         //System.out.println("paramString:" + paramString);
 
         HttpURLConnection conex = null;
