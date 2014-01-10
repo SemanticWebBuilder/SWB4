@@ -106,17 +106,19 @@
                     <a onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("fullProfile").setParameter("suri", objUri).setParameter("type", "noType").setParameter("id", image).setParameter("targetUser", name)%>','<%= name + " - " + name%>'); return false;" href="#"><%=name%></a>
                 </p>
                 <p class="tweet">
-                    <img src="https://graph.facebook.com/<%=image%>/picture?width=150&height=150" width="150" height="150"/>                   
+                    <a onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("fullProfile").setParameter("suri", objUri).setParameter("type", "noType").setParameter("id", image).setParameter("targetUser", name)%>','<%= name + " - " + name%>'); return false;" href="#">
+                        <img src="https://graph.facebook.com/<%=image%>/picture?width=150&height=150" width="150" height="150"/>                   
+                    </a>
                 </p>
-                <div class="timelineresume">
-                    <span class="inline" id="sendTweet/<%=name%>" dojoType="dojox.layout.ContentPane">
-                        <a class="clasifica" href="#" onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("createPost").setParameter("suri", defaultSocialTopic.getURI()).setParameter("netSuri", facebook.getURI() ).setParameter("username", name).setParameter("network", "facebook").setParameter("idUser", image) %>','Enviar mensaje a <%=name%>');return false;">Enviar Mensaje</a>
-                    </span>
-                    <span class="inline" id="sendDM/<%=name%>" dojoType="dojox.layout.ContentPane">
-                        <a class="clasifica" href="#" onclick="">Enviar Mensaje Directo</a>
-                    </span> 
-
-                </div>
+                <!-- <div class="timelineresume">
+                     <span class="inline" id="sendTweet/<%=name%>" dojoType="dojox.layout.ContentPane">
+                         <a class="clasifica" href="#" onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("createPost").setParameter("suri", defaultSocialTopic.getURI()).setParameter("netSuri", facebook.getURI()).setParameter("username", name).setParameter("network", "facebook").setParameter("idUser", image)%>','Enviar mensaje a <%=name%>');return false;">Enviar Mensaje</a>
+                     </span>
+                     <span class="inline" id="sendDM/<%=name%>" dojoType="dojox.layout.ContentPane">
+                         <a class="clasifica" href="#" onclick="">Enviar Mensaje Directo</a>
+                     </span> 
+ 
+                 </div>-->
             </div>
             <%
                 }
@@ -132,7 +134,7 @@
             <div id="<%=objUri%>/getMoreFriendsFacebook" dojoType="dojox.layout.ContentPane">
                 <div align="center">
                     <label id="<%=objUri%>/moreFriendsLabel">
-                        <a href="#" onclick="appendHtmlAt('<%=paramRequest.getRenderUrl().setMode("more").setParameter("type", "friends").setParameter("suri" , facebook.getURI()).setParameter("nextPage", nextPage)%>','<%=objUri%>/getMoreFriendsFacebook', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;">Mas amigos</a>
+                        <a href="#" onclick="appendHtmlAt('<%=paramRequest.getRenderUrl().setMode("more").setParameter("type", "friends").setParameter("suri", facebook.getURI()).setParameter("nextPage", nextPage)%>','<%=objUri%>/getMoreFriendsFacebook', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;">Mas amigos</a>
                     </label>
                 </div>
             </div>
@@ -152,10 +154,6 @@
         JSONObject usrFollow = new JSONObject(usrFollower);
         JSONArray usrDataFollow = usrFollow.getJSONArray("data");
 
-        JSONObject objectFollow = new JSONObject();
-        String nextPageFollow = null;
-
-
     %>
     <div style="margin-left:50%;">
         <div class="swbform">
@@ -172,9 +170,14 @@
 
             %>
             <div class="timeline timelinetweeter">
+
                 <p class="tweet">
-                    <img src="https://graph.facebook.com/<%=imageFollow%>/picture?width=150&height=150" width="150" height="150"/>
-                    <%=nameFollow%>
+                    <a onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("fullProfile").setParameter("suri", objUri).setParameter("type", "noType").setParameter("id", imageFollow).setParameter("targetUser", nameFollow)%>','<%= nameFollow + " - " + nameFollow%>'); return false;" href="#"><%=nameFollow%></a>
+                </p>
+                <p class="tweet">
+                    <a onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("fullProfile").setParameter("suri", objUri).setParameter("type", "noType").setParameter("id", imageFollow).setParameter("targetUser", imageFollow)%>','<%= imageFollow + " - " + imageFollow%>'); return false;" href="#">
+                        <img src="https://graph.facebook.com/<%=imageFollow%>/picture?width=150&height=150" width="150" height="150"/>
+                    </a>
                 </p>
             </div>
 
@@ -184,7 +187,6 @@
 
             <%
                 out.println("</div>");
-
                 if (usrFollow.has("paging")) {
                     nextPage = usrFollow.getJSONObject("paging").getString("next");
             %>
@@ -193,7 +195,7 @@
             <div id="<%=objUri%>/getMoreSubscribers" dojoType="dojox.layout.ContentPane">
                 <div align="center">
                     <label>
-                        <a href="#" onclick="appendHtmlAt('<%=paramRequest.getRenderUrl().setMode("more").setParameter("type", "subscriber").setParameter("suri", "http://www.Prueba.swb#social_Facebook:1").setParameter("nextPage", nextPage)%>', '<%=objUri%>/getMoreSubscribers', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;">Mas seguidores</a>
+                        <a href="#" onclick="appendHtmlAt('<%=paramRequest.getRenderUrl().setMode("more").setParameter("type", "subscriber").setParameter("suri", facebook.getURI()).setParameter("nextPage", nextPage)%>', '<%=objUri%>/getMoreSubscribers', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;">Mas seguidores</a>
                     </label>
                     <%   }%>
 
