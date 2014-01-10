@@ -3152,16 +3152,10 @@ public class FacebookWall extends GenericResource {
             out.println("</p>");
 
             out.println("<p class=\"tweet\">");
+            out.println(" <a onclick=\"showDialog(' " + paramRequest.getRenderUrl().setMode("fullProfile").setParameter("suri", objUri).setParameter("type", "noType").setParameter("id", image).setParameter("targetUser", name) + " ',' " + name + " '); return false;\" href=\"#\">" );
             out.println("<img src=\"https://graph.facebook.com/" + image + "/picture?width=150&height=150\" width=\"150\" height=\"150\" />");
+            out.println("</a>");
             out.println("</p>");
-            out.println("<div class=\"timelineresume\">");
-            out.println(" <span class=\"inline\" id=\"sendTweet/<%=name%>\" dojoType=\"dojox.layout.ContentPane\">");
-            out.println("<a class=\"clasifica\" href=\"#\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("createPost").setParameter("suri", defaultSocialTopic.getURI()).setParameter("netSuri", objUri).setParameter("username", name) + "','Enviar mensaje a " + name + "');return false;\">Enviar Mensaje</a>");
-            out.println("</span>");
-            out.println(" <span class=\"inline\" id=\"sendDM/<%=name%>\" dojoType=\"dojox.layout.ContentPane\">");
-            out.println("  <a class=\"clasifica\" href=\"#\" onclick=\"\">Enviar Mensaje Directo</a>");
-            out.println(" </span> ");
-            out.println(" </div>");
             out.println("</div>");
 
         }
@@ -3173,7 +3167,7 @@ public class FacebookWall extends GenericResource {
                 if (request.getParameter("type").equals("friends")) {
                     out.println("<div align=\"center\">");
                     out.println("  <label  id=\"" + objUri + "/moreFriendsLabel\" >");
-                    out.println("<a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setAction("more").setParameter("type", "friends").setParameter("suri", "http://www.Prueba.swb#social_Facebook:1").setParameter("nextPage", next) + " ', '" + objUri + "/getMoreFriendsFacebook',  'bottom'); try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\" >Mas amigos");
+                    out.println("<a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setAction("more").setParameter("type", "friends").setParameter("suri", facebook.getURI()).setParameter("nextPage", next) + " ', '" + objUri + "/getMoreFriendsFacebook',  'bottom'); try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\" >Mas amigos");
                     out.println("</label>");
                     out.println("</a>");
                     out.println("</div");
@@ -3181,7 +3175,7 @@ public class FacebookWall extends GenericResource {
                 } else if (request.getParameter("type").equals("subscriber")) {
                     out.println("<div align=\"center\">");
                     out.println("<label>");
-                    out.println("<a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setAction("more").setParameter("type", "subscriber").setParameter("suri", "http://www.Prueba.swb#social_Facebook:1").setParameter("nextPage", next) + " ', '" + objUri + "/getMoreSubscribers',  'bottom'); try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\" >Mas seguidores");
+                    out.println("<a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setAction("more").setParameter("type", "subscriber").setParameter("suri",facebook.getURI()).setParameter("nextPage", next) + " ', '" + objUri + "/getMoreSubscribers',  'bottom'); try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\" >Mas seguidores");
                     out.println("</label>");
                     out.println("</a>");
                     out.println("</div");
