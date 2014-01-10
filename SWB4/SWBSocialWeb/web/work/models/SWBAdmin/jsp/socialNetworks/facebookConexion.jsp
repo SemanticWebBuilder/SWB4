@@ -1,7 +1,6 @@
 <%-- 
     Document   : facebookNewsFeed
-    Created on : 26/06/2013, 04:34:46 PM
-    Author     : francisco.jimenez
+    Created on : 3/01/2014, 04:34:46 PM
 --%>
 
 <%@page import="org.semanticwb.model.User"%>
@@ -57,7 +56,6 @@
                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
             }
         } catch (Exception e) {
-            System.out.println("Error getting user information" + e.getMessage());
         }
         return fbResponse;
     }
@@ -67,17 +65,14 @@
 <%
 
     String objUri = (String) request.getParameter("suri");
-    System.out.println("objUri" + objUri);
 
     SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
-    System.out.println("semanticObject" + semanticObject);
     Facebook facebook = (Facebook) semanticObject.createGenericInstance();
     SWBModel model = WebSite.ClassMgr.getWebSite(facebook.getSemanticObject().getModel().getName());
     SocialTopic defaultSocialTopic = SocialTopic.ClassMgr.getSocialTopic("DefaultTopic", model);
     String usrProfile = getFullUserProfileFromId("friends", facebook);
 
     JSONObject usrResp = new JSONObject(usrProfile);
-    System.out.println("usrResp" + usrResp);
     JSONArray usrData = usrResp.getJSONArray("data");
 
 
@@ -155,7 +150,6 @@
         String usrFollower = getFullUserProfileFromId("subscriber", facebook);
 
         JSONObject usrFollow = new JSONObject(usrFollower);
-        System.out.println("usrFollow" + usrFollow);
         JSONArray usrDataFollow = usrFollow.getJSONArray("data");
 
         JSONObject objectFollow = new JSONObject();
@@ -167,7 +161,7 @@
         <div class="swbform">
             <%
                 out.println("<div class=\"swbform\">");
-                out.println("<div align=\"center\"><h2>" + "@" + facebook + " " + "</br>Seguidores" + "</h2><br/></div>");
+                out.println("<div align=\"center\"><h2>" + "" + facebook + " " + "</br>Seguidores" + "</h2><br/></div>");
 
                 String imageFollow = "";
                 String nameFollow = "";
