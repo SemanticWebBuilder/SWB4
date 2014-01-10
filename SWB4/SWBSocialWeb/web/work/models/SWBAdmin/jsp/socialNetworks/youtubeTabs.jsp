@@ -44,6 +44,9 @@
         out.println("<div id=\""+ objUri + HOME_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"My videos"+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + HOME_TAB +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
         out.println("</div>");
         
+        out.println("<div id=\""+ objUri + CONEXION +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Connections"+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + CONEXION +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
+        out.println("</div>");
+        
         //out.println("<div id=\""+ objUri + DISCOVER_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Discover"+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + DISCOVER_TAB +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
         //out.println("</div>");       
         out.println("</div><!-- end Bottom TabContainer -->");
