@@ -138,6 +138,7 @@ public class SocialSentPost extends GenericResource {
     private static final String Mode_ShowFastCalendar = "showFastCalendar";
     public static final String Mode_MsgComments="msgComments";
     public static final String Mode_RecoverComments="recoverComments";
+    public static final String Mode_AllComments="allComments";
     public static int DEFAULT_VIDEO_COMMENTS = 5;
 
     public static DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");    
@@ -174,6 +175,8 @@ public class SocialSentPost extends GenericResource {
             doShowMsgComments(request, response, paramRequest);
         }else if(Mode_RecoverComments.equals(mode)){
             doShowRecoveredComments(request, response, paramRequest);
+        }else if(Mode_AllComments.equals(mode)){
+            doGetAllComments(request, response, paramRequest);
         }else {
             super.processRequest(request, response, paramRequest);
         }
@@ -297,7 +300,7 @@ public class SocialSentPost extends GenericResource {
 
 
         out.println("<div class=\"swbform\">");
-        
+
         String swbSocialUser = request.getParameter("swbSocialUser");
 
         int nPage;
@@ -335,7 +338,7 @@ public class SocialSentPost extends GenericResource {
       
         out.println("<fieldset class=\"barra\">");
         out.println("<div class=\"barra\">");
-        
+
         out.println("<a href=\"#\" class=\"countersBar\" title=\"Refrescar Tab\" onclick=\"submitUrl('" + urlRefresh.setMode(SWBResourceURL.Action_EDIT) + "',this); return false;\">"+nf2.format(nRec)+"/"+nf2.format(numSocialTopicPOComments)+" mensajes/respuestas</a>");
 
         /*
@@ -3319,24 +3322,28 @@ public class SocialSentPost extends GenericResource {
             out.println("THIS IS A TWITTER");
             }else if(postOutNet.getSocialNetwork() instanceof Facebook){
                 //out.println("THIS IS A FACEBOOK:" + postOutNet.getPo_socialNetMsgID() +"</br>");
-                
-                //System.out.println("OUTNET:" + postOutNet.getPo_socialNetMsgID());
-                HashMap<String, String> params = new HashMap<String, String>(3);    
-                params.put("q", "{\"comments\": \"SELECT id, text, time, fromid, attachment, can_like, can_remove, likes, user_likes from comment where post_id='" + postOutNet.getPo_socialNetMsgID() +"' ORDER BY time DESC limit 10 offset 0\", \"usernames\": \"SELECT uid, name FROM user WHERE uid IN (SELECT fromid FROM #comments)\", \"pages\":\"SELECT page_id, name FROM page WHERE page_id IN (SELECT fromid FROM #comments)\"}");
-                params.put("access_token", ((Facebook)postOutNet.getSocialNetwork()).getAccessToken());
+                if(postOutNet.getStatus() == 1){
+                    //System.out.println("OUTNET:" + postOutNet.getPo_socialNetMsgID());
+                    HashMap<String, String> params = new HashMap<String, String>(3);    
+                    params.put("q", "{\"comments\": \"SELECT id, text, time, fromid, attachment, can_like, can_remove, likes, user_likes from comment where post_id='" + postOutNet.getPo_socialNetMsgID() +"' ORDER BY time DESC limit 10 offset 0\", \"usernames\": \"SELECT uid, name FROM user WHERE uid IN (SELECT fromid FROM #comments)\", \"pages\":\"SELECT page_id, name FROM page WHERE page_id IN (SELECT fromid FROM #comments)\"}");
+                    params.put("access_token", ((Facebook)postOutNet.getSocialNetwork()).getAccessToken());
 
-                String fbComments = null;
-                try{
-                 fbComments = getRequest(params, "https://graph.facebook.com/fql",
-                            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
-
-                }catch(Exception e){
-                    log.error("Error getting user information" , e);
+                    String fbComments = null;
+                    try{
+                     fbComments = getRequest(params, "https://graph.facebook.com/fql",
+                                "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
+                     System.out.println("all the comments:" + fbComments);
+                    }catch(Exception e){
+                        log.error("Error getting user information" , e);
+                    }
+                    doPrintPost(out, this.comments(postOutNet.getPo_socialNetMsgID(), (Facebook)postOutNet.getSocialNetwork()), request, paramRequest, "", (Facebook)socialNetwork, model, socialUserExtAttr, fbComments);
                 }
-                doPrintPost(out, this.comments(postOutNet.getPo_socialNetMsgID(), (Facebook)postOutNet.getSocialNetwork()), request, paramRequest, "", (Facebook)socialNetwork, model, socialUserExtAttr, fbComments);
             }else if(postOutNet.getSocialNetwork() instanceof Youtube){
-                doPrintVideo(request, response, paramRequest, out, postOutUri, socialUserExtAttr, this.comments(postOutNet.getPo_socialNetMsgID(), (Youtube)postOutNet.getSocialNetwork()), (Youtube)postOutNet.getSocialNetwork());
+                if(postOutNet.getStatus() == 1){
+                    doPrintVideo(request, response, paramRequest, out, postOutUri, socialUserExtAttr, this.comments(postOutNet.getPo_socialNetMsgID(), (Youtube)postOutNet.getSocialNetwork()), (Youtube)postOutNet.getSocialNetwork());
+                }
             }
+            postOutNet.setPo_numResponses(0);
         }        
     }
     //--
@@ -3851,9 +3858,17 @@ public class SocialSentPost extends GenericResource {
             }
             
             if(commentsData.length() > 0){
-                writer.write("<ul>");
+                writer.write("<ul id=\"" + facebook.getId() + postsData.getString("id") + "/comments\">");//writer.write("<ul>");
             }
             
+            if(commentsData.length() >= 10){
+                writer.write("<li class=\"timelinemore\">");
+                SWBResourceURL commentsURL = paramRequest.getRenderUrl().setMode(Mode_AllComments).setParameter("suri", request.getParameter("postOutNetNetwork")).setParameter("postId", postsData.getString("id"));
+                //commentsURL = commentsURL.setParameter("after", pagingComments.getJSONObject("cursors").getString("after")).setParameter("currentTab", currentTab);
+                writer.write("<label><a href=\"#\" onclick=\"postHtml('" + commentsURL
+                    + "','" + facebook.getId() + postsData.getString("id") + "/comments');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\"><span>+</span>" + "Ver todos los comentarios" + "</a></a></label>");
+                writer.write("</li>");
+            }
             for(int i= 0; i<commentsData.length(); i++){
                 JSONObject comment = commentsData.getJSONObject(i);
                 String username = null;
@@ -3921,7 +3936,7 @@ public class SocialSentPost extends GenericResource {
                 }
 
                 if((likes.length() < postLikes) && (iLikedPost == false)){
-                    //System.out.println("Look for postLike!!!");
+                    System.out.println("Look for postLike!!!");
                     HashMap<String, String> params = new HashMap<String, String>(3);    
                     params.put("q", "SELECT post_id FROM like WHERE user_id=me() AND post_id=\"" + postsData.getString("id") + "\"");
                     params.put("access_token", facebook.getAccessToken());
@@ -4081,7 +4096,7 @@ public class SocialSentPost extends GenericResource {
         } catch (java.io.IOException ioe) {
             if (conex.getResponseCode() >= 400) {
                 response = getResponse(conex.getErrorStream());
-                log.error(response);
+                System.out.println("\n\n\nERROR:" +   response);
             }
             ioe.printStackTrace();
         } finally {
@@ -4111,19 +4126,34 @@ public class SocialSentPost extends GenericResource {
         paramsUsr.put("alt", "json");
         
         String objUri = youtube.getURI();//request.getParameter("suri");
-        //SocialNetwork socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
-        //SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
+        SocialNetwork socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+        SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
         SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
-        Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();
+        Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();        
         
         try{
                 String videoId = video.getJSONObject("media$group").getJSONObject("yt$videoid").getString("$t");
-                out.write("<div id=\"" + semanticYoutube.getId() +"/" + videoId + "\" class=\"timeline timelinefacebook\"");
+                JSONObject usrThumbProfile = null;
+                if(!video.getJSONObject("media$group").isNull("yt$uploaderId")){
+                    String commentProfile = getRequest(paramsUsr, "http://gdata.youtube.com/feeds/api/users/" + video.getJSONObject("media$group").getJSONObject("yt$uploaderId").getString("$t"),
+                        "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", null);
+                    usrThumbProfile = new JSONObject(commentProfile);
+                }
+                
+                String username = "";
+                if(!video.isNull("author")){
+                    JSONArray author = video.getJSONArray("author");
+                    if(author.length() == 1){
+                        username = author.getJSONObject(0).getJSONObject("name").getString("$t");
+                    }
+                }
+                out.write("<div id=\"" + semanticYoutube.getId() +"/" + videoId + "\" class=\"timeline timelinefacebook\">");
                 //Username and story
 
-                out.write("<p>");
-                out.write(video.getJSONObject("title").getString("$t"));
-                out.write("</p>");
+                out.write("<div class=\"timelineusr\">");
+                out.write("<a href=\"#\"><img src=\"" + usrThumbProfile.getJSONObject("entry").getJSONObject("media$thumbnail").getString("url") + "\" width=\"50\" height=\"50\"/></a>");
+                out.write("<p>"  + username + "</p>");
+                out.write("</div>");
 
                 out.write("<div class=\"timelineimg\">");
                 out.write(" <span>");
@@ -4237,15 +4267,15 @@ public class SocialSentPost extends GenericResource {
                     }
                 //}
                 //Comments
-                /*
+                
                 out.write("<div class=\"timelineresume\" dojoType=\"dijit.layout.ContentPane\">");//timelineresume
-                out.write("<span id=\"" + semanticYoutube.getId() + video.getString("id") + "INFORMATION" + "\" class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
-                Date date = formatter.parse(video.getString("uploaded"));
+                out.write("<span id=\"" + semanticYoutube.getId() + videoId + "INFORMATION" + "\" class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
+                Date date = formatter.parse(video.getJSONObject("published").getString("$t"));
                 out.write("<em>" + YoutubeWall.humanFriendlyDate(date, paramRequest) + "</em>");
                 
                 
-                if(video.has("viewCount")){
-                    out.write(paramRequest.getLocaleString("views") + ":" + video.getInt("viewCount") + " ");
+                if(!video.isNull("yt$statistics")){
+                    out.write(paramRequest.getLocaleString("views") + ":" + video.getJSONObject("yt$statistics").getInt("viewCount") + " ");
                 }
                 out.write(" <strong><span> " + paramRequest.getLocaleString("likes") + ": </span>");
                 if(video.has("likeCount")){
@@ -4261,31 +4291,31 @@ public class SocialSentPost extends GenericResource {
                     out.write("0 ");
                 }
                 
-                if(video.has("favoriteCount")){
-                    out.write(" " + paramRequest.getLocaleString("favorites") + ": " + video.getInt("favoriteCount"));
+                if(!video.isNull("yt$statistics")){
+                    out.write(" " + paramRequest.getLocaleString("favorites") + ": " + video.getJSONObject("yt$statistics").getInt("favoriteCount"));
                 }
                 
                 out.write("</strong>");
                 out.write("</span>");
                 
                 out.write("   <span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
-                out.write(" <a class=\"clasifica\" href=\"\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("commentVideo").setParameter("suri", objUri).setParameter("videoId", video.getString("id")) + "','Comment to " + video.getString("title") + "');return false;\"><span>Comment</span></a>  ");                    
+                out.write(" <a class=\"clasifica\" href=\"\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("commentVideo").setParameter("suri", objUri).setParameter("videoId", videoId) + "','Comment to " + "MISSING" + "');return false;\"><span>Comment</span></a>  ");                    
                 out.write("   </span>");
 
                 postURI = null;
-                PostIn post = PostIn.getPostInbySocialMsgId(model, video.getString("id"));
+                PostIn post = PostIn.getPostInbySocialMsgId(model, videoId);
                 if(post != null){
                     postURI = post.getURI();
                 }
                 
-                out.write("   <span class=\"inline\" id=\"" + semanticYoutube.getId() + video.getString("id") + "TOPIC"  + "\" dojoType=\"dojox.layout.ContentPane\">");
+                out.write("   <span class=\"inline\" id=\"" + semanticYoutube.getId() + videoId + "TOPIC"  + "\" dojoType=\"dojox.layout.ContentPane\">");
                 if(socialUserExtAttr != null && socialUserExtAttr.isUserCanReTopicMsg()){
                     if(postURI != null){//If post already exists
-                        SWBResourceURL clasifybyTopic = paramRequest.getRenderUrl().setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("videoId", video.getString("id")).setParameter("postUri", postURI).setParameter("suri", objUri);
+                        SWBResourceURL clasifybyTopic = paramRequest.getRenderUrl().setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("videoId", videoId).setParameter("postUri", postURI).setParameter("suri", objUri);
                         out.write("<a href=\"#\" class=\"clasifica\" title=\"" + paramRequest.getLocaleString("reclassify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
                             + paramRequest.getLocaleString("reclassify") + "'); return false;\"><span>" + paramRequest.getLocaleString("reclassify") + "</span></a>");
                     }else{//If posts does not exists 
-                        SWBResourceURL clasifybyTopic = paramRequest.getRenderUrl().setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", video.getString("id")).setParameter("postUri", postURI).setParameter("suri", objUri);
+                        SWBResourceURL clasifybyTopic = paramRequest.getRenderUrl().setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", videoId).setParameter("postUri", postURI).setParameter("suri", objUri);
                         out.write("<a href=\"#\" class=\"clasifica\" class=\"clasifica\" title=\"" + paramRequest.getLocaleString("classify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
                             + paramRequest.getLocaleString("classify") +"'); return false;\"><span>" + paramRequest.getLocaleString("classify") +"</span></a>");
                     }
@@ -4295,22 +4325,22 @@ public class SocialSentPost extends GenericResource {
                 out.write("   </span>");
                 
                 
-                out.write("   <span id=\"" + semanticYoutube.getId() + video.getString("id") +  "LIKE" + "\" class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
-                out.write("<a href=\"#\" class=\"like\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + paramRequest.getActionUrl().setAction("doLike").setParameter("suri", objUri).setParameter("action", "like").setParameter("videoId", video.getString("id")) + "','" + semanticYoutube.getId() +  video.getString("id") + "INFORMATION" + "'); return false;\">" + paramRequest.getLocaleString("like") + "</a>");
+                out.write("   <span id=\"" + semanticYoutube.getId() + videoId +  "LIKE" + "\" class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
+                out.write("<a href=\"#\" class=\"like\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + paramRequest.getActionUrl().setAction("doLike").setParameter("suri", objUri).setParameter("action", "like").setParameter("videoId", videoId) + "','" + semanticYoutube.getId() +  videoId + "INFORMATION" + "'); return false;\">" + paramRequest.getLocaleString("like") + "</a>");
                 out.write("   </span>");
                 
-                out.write("   <span id=\"" + semanticYoutube.getId() + video.getString("id") +  "/edit" + "\" class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
-                SWBResourceURL editVideo = paramRequest.getRenderUrl().setMode("editVideo").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("videoId", video.getString("id")).setParameter("suri", objUri);
+                /*out.write("   <span id=\"" + semanticYoutube.getId() + videoId +  "/edit" + "\" class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
+                SWBResourceURL editVideo = paramRequest.getRenderUrl().setMode("editVideo").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("videoId", videoId).setParameter("suri", objUri);
                 out.write("<a href=\"#\" class=\"editarYoutube\" title=\"" + paramRequest.getLocaleString("edit") + "\" onclick=\"showDialog('" + editVideo + "','"
                     + paramRequest.getLocaleString("edit") +"'); return false;\"><span>" + paramRequest.getLocaleString("edit") +"</span></a>");
                 out.write("   </span>");
                 
-                out.write("   <span id=\"" + semanticYoutube.getId() + video.getString("id") +  "/delete" + "\" class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
-                out.write("<a href=\"#\" class=\"eliminarYoutube\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirmDelete") + "')){ postSocialHtml('" + paramRequest.getActionUrl().setAction("doDeleteVideo").setParameter("suri", objUri).setParameter("videoId", video.getString("id")) + "','" + semanticYoutube.getId() + "/" +  video.getString("id") + "');} return false;\">" + paramRequest.getLocaleString("deleteVideo") + "</a>");
-                out.write("   </span>");
+                out.write("   <span id=\"" + semanticYoutube.getId() + videoId +  "/delete" + "\" class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
+                out.write("<a href=\"#\" class=\"eliminarYoutube\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirmDelete") + "')){ postSocialHtml('" + paramRequest.getActionUrl().setAction("doDeleteVideo").setParameter("suri", objUri).setParameter("videoId", videoId) + "','" + semanticYoutube.getId() + "/" +  videoId + "');} return false;\">" + paramRequest.getLocaleString("deleteVideo") + "</a>");
+                out.write("   </span>");*/
                 
                 out.write("</div>");//timelineresume
-                */
+                
                 out.write("</div>");
         }catch(Exception e){
             log.error("Problema imprimiendo video ", e);
@@ -4362,6 +4392,96 @@ public class SocialSentPost extends GenericResource {
             response = "";
         }
         return response;
+    }
+    /**
+     * Gets all the comments of a post
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws SWBResourceException
+     * @throws IOException 
+     */
+    public void doGetAllComments(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        String suri = request.getParameter("suri");
+        System.out.println("suri:" + request.getParameter("suri"));
+        System.out.println("postId:" + request.getParameter("postId"));
+        SocialNetwork socialNetwork = (SocialNetwork)SemanticObject.createSemanticObject(suri).createGenericInstance();
+        PrintWriter out = response.getWriter();
+        if(socialNetwork instanceof Facebook){
+            Facebook facebook = (Facebook)socialNetwork;
+            String postId = request.getParameter("postId");
+            HashMap<String, String> params = new HashMap<String, String>(3);    
+            params.put("q", "{\"comments\": \"SELECT id, text, time, fromid, attachment, can_like, can_remove, likes, user_likes from comment where post_id='" + postId +"' ORDER BY time DESC\", \"usernames\": \"SELECT uid, name FROM user WHERE uid IN (SELECT fromid FROM #comments)\", \"pages\":\"SELECT page_id, name FROM page WHERE page_id IN (SELECT fromid FROM #comments)\"}");
+            params.put("access_token", facebook.getAccessToken());
+
+            String fbComments = null;
+            try{
+                fbComments = getRequest(params, "https://graph.facebook.com/fql",
+                            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
+
+                SWBResourceURL renderURL = paramRequest.getRenderUrl();
+                JSONObject phraseResp = new JSONObject(fbComments);
+                JSONArray commentsData = null;
+                JSONArray userData = null;
+                JSONArray pageData = null;
+
+                for(int i = 0; i < phraseResp.getJSONArray("data").length(); i++){
+                    if(phraseResp.getJSONArray("data").getJSONObject(i).getString("name").equals("comments")){//All the posts
+                        commentsData = phraseResp.getJSONArray("data").getJSONObject(i).getJSONArray("fql_result_set");
+                    }else if(phraseResp.getJSONArray("data").getJSONObject(i).getString("name").equals("pages")){//All the pages
+                        pageData = phraseResp.getJSONArray("data").getJSONObject(i).getJSONArray("fql_result_set");
+                    }else if(phraseResp.getJSONArray("data").getJSONObject(i).getString("name").equals("usernames")){//All the users
+                        userData = phraseResp.getJSONArray("data").getJSONObject(i).getJSONArray("fql_result_set");
+                    }
+                }
+
+                HashMap<Long, String> users = new HashMap<Long, String>();
+                HashMap<Long, String> pages = new HashMap<Long, String>();            
+                for(int i= 0; i< userData.length(); i++){
+                    users.put(userData.getJSONObject(i).getLong("uid"), userData.getJSONObject(i).getString("name"));
+                }            
+                for(int i= 0; i< pageData.length(); i++){
+                    pages.put(pageData.getJSONObject(i).getLong("page_id"), pageData.getJSONObject(i).getString("name"));
+                }
+
+                for(int i= 0; i<commentsData.length(); i++){
+                    JSONObject comment = commentsData.getJSONObject(i);
+                    String username = null;
+                    if(users.get(comment.getLong("fromid")) != null){
+                        username = users.get(comment.getLong("fromid"));
+                    }else if(pages.get(comment.getLong("fromid")) != null){
+                        username = pages.get(comment.getLong("fromid"));
+                    }
+                    out.write("<li>");
+                    out.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type","noType").setParameter("id",comment.getLong("fromid")+"") + "','" + username + "'); return false;\"><img src=\"http://graph.facebook.com/" + comment.getLong("fromid") +"/picture?width=30&height=30\" width=\"30\" height=\"30\"/></a>");
+
+                    out.write("<p>");
+                    out.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type","noType").setParameter("id", comment.getLong("fromid")+"") + "','" + username + "'); return false;\">" + username + "</a>:");
+                    out.write(       comment.getString("text").replace("\n", "</br>") + "</br>");
+                    out.write("</p>");
+
+                    Date commentTime = new java.util.Date((long)comment.getLong("time")*1000);
+
+                    out.write("<p class=\"timelinedate\">");
+                    out.write("<span dojoType=\"dojox.layout.ContentPane\">");
+
+                    out.write("<em>" + FacebookWall.facebookHumanFriendlyDate(commentTime, paramRequest) + "</em>");
+                    if(comment.has("likes")){
+                        out.write("<strong>");
+                        out.write("<span>Likes:</span> " + comment.getInt("likes") );
+                        out.write("</strong>");
+                    }
+                    out.write("</span>");
+                    out.write("</p>");
+                    out.write("</li>");
+                }
+            }catch(Exception e){
+                log.error("Error getting user information" , e);
+            }
+        }
     }
     //--
 }
