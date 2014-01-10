@@ -84,6 +84,7 @@ public class YoutubeWall extends GenericResource{
     /*Additionally every div has a suffix to identify if the status is inside the tab*/ 
     public static String HOME_TAB = "/myvideos";
     public static String DISCOVER_TAB ="/discover";
+    public static String CONEXION ="/conexion";
     
     public static int DEFAULT_VIDEO_COMMENTS = 5;
     public static String BASE_VIDEO_URL = "http://www.youtube.com/v/";
@@ -112,6 +113,8 @@ public class YoutubeWall extends GenericResource{
             jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/youtubeVideos.jsp";
         }else if(contentTabId != null && contentTabId.equals(DISCOVER_TAB)){
             jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/youtubeDiscover.jsp";
+        }else if(contentTabId != null && contentTabId.equals(CONEXION)){
+            jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/youtubeConexion.jsp";
         }
         
         RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
@@ -1252,7 +1255,6 @@ public class YoutubeWall extends GenericResource{
                             }
                             out.write("<li>");
                             out.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("id", comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t")) + "','" + paramRequest.getLocaleString("viewProfile") + "'); return false;\"><img src=\"" + usrCommentProfile.getJSONObject("entry").getJSONObject("media$thumbnail").getString("url") + "\" width=\"50\" height=\"50\"/></a>");
-
                             out.write("<p>");
                             out.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("id", comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t")) + "','" + paramRequest.getLocaleString("viewProfile") + "'); return false;\">" + comment.getJSONArray("author").getJSONObject(0).getJSONObject("name").getString("$t") + "</a>:");
                             out.write(       comment.getJSONObject("content").getString("$t").replace("\n", "</br>"));
