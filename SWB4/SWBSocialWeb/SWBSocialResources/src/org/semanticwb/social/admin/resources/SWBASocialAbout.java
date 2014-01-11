@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.portal.api.GenericAdmResource;
+import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.social.util.SWBSocialUtil;
@@ -17,7 +17,7 @@ import org.semanticwb.social.util.SWBSocialUtil;
  *
  * @author jorge.jimenez
  */
-public class SWBASocialAbout extends GenericAdmResource{
+public class SWBASocialAbout extends GenericResource{
 
 
     /* (non-Javadoc)
@@ -27,6 +27,7 @@ public class SWBASocialAbout extends GenericAdmResource{
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, java.io.IOException
     {
         PrintWriter out=response.getWriter();
+        /*
         out.println("<BR><BR><BR><BR><center>");
         out.println("<table width=\"500\" height=\"300\" border=\"0\" background=\""+SWBPlatform.getContextPath()+"/swbadmin/images/splash.jpg\" >");
         out.println("  <tr height=\"220\">");
@@ -43,6 +44,15 @@ public class SWBASocialAbout extends GenericAdmResource{
         out.println("    </td>");
         out.println("  </tr>");
         out.println("</table></center>");
+        * */
+        out.println("<div id=\"version\">");
+        out.println("<p class=\"versionmark\">SWB Social</p>");
+        out.println("<p class=\"versionsocial\">Versión "+SWBSocialUtil.getEnv("versionNo", "1.0")+"</p>");
+        out.println("<p class=\"versionmark\">SemanticWebBuilder</p>");
+        out.println("<p class=\"versionswb\">Versión "+SWBPlatform.getVersion()+"/p>");
+        out.println("<p class=\"versioncopy\">SemanticWebBuilder y SWB Social son marcas registradas</p>");
+        out.println("</div>");
+
 
     }
 }
