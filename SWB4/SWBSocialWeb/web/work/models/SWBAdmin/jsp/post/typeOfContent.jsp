@@ -410,8 +410,8 @@
                             <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">Público</option>
                             <%
                                 for (int i = 0; i < selectFacebook.size(); i++) {
-                            %>
-                            <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i).getId()%>"><%=selectFacebook.get(i).getDisplayTitle(user.getLanguage())%></option>
+                            %>                            
+                            <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i).getId()%>"><%=selectFacebook.get(i).getDisplayTitle(user.getLanguage())%></option>                            
                             <%
                                 }
                             %>
@@ -706,7 +706,7 @@
                                 <%
                                     for (int i = 0; i < selectFacebook.size(); i++) {
                                 %>
-                                <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i)%>"><%=selectFacebook.get(i)%></option>
+                                <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i)%>"><%=selectFacebook.get(i).getDisplayTitle(user.getLanguage())%></option>
                                 <%
                                     }
                                 %>
@@ -1113,7 +1113,7 @@
                                 <%
                                     for (int i = 0; i < selectYoutube.size(); i++) {
                                 %>
-                                <option value="<%=socialNetwork.getURI() + "|" + selectYoutube.get(i)%>"><%=selectYoutube.get(i)%></option>
+                                <option value="<%=socialNetwork.getURI() + "|" + selectYoutube.get(i)%>"><%=selectYoutube.get(i).getDisplayTitle(user.getLanguage())%></option>
                                 <%
                                     }
                                 %>
@@ -1136,7 +1136,7 @@
                                 <%
                                     for (int i = 0; i < selectFacebook.size(); i++) {
                                 %>
-                                <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i)%>"><%=selectFacebook.get(i)%></option>
+                                <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i)%>"><%=selectFacebook.get(i).getDisplayTitle(user.getLanguage())%></option>
                                 <%
                                     }
                                 %>
