@@ -2692,6 +2692,14 @@
     <rdfs:subClassOf rdf:resource="#PostIn"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
+  <swbxf:DisplayProperty rdf:ID="dp_latLngRadioMap">
+    <swbxf:propGroup rdf:resource="#grp_Filters"/>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >120</swb:index>
+    <swbxf:formElement>
+      <social:LatLngRadioMap rdf:ID="LatLngRadioMap_1"/>
+    </swbxf:formElement>
+  </swbxf:DisplayProperty>
   <swb:Class rdf:ID="Photo">
     <rdfs:comment xml:lang="es">Clase que sera creada cuando un post sea de tipo Foto (una imagen), como lo es flicker y facebook (cuando se envia una foto a facebook).</rdfs:comment>
     <rdfs:label xml:lang="en">Photo</rdfs:label>
@@ -2798,6 +2806,12 @@
   <swbxf:DisplayProperty rdf:ID="dp_description">
     <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
   </swbxf:DisplayProperty>
+  <swb:FormElement rdf:ID="LatLngRadioMap">
+    <rdfs:label>LatLngRadioMap</rdfs:label>
+    <rdfs:comment>LatLngRadioMap</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBFormElement"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:FormElement>
   <swbxf:DisplayProperty rdf:ID="dp_tree_classUri">
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >5</swb:index>
