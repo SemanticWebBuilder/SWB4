@@ -46,13 +46,17 @@
 <%!
     public static String getFullUserProfileFromId(String more, Facebook facebook) {
         HashMap<String, String> params1 = new HashMap<String, String>(3);
+        params1.put("access_token", facebook.getAccessToken());
+
         String fbResponse = null;
         try {
             if (more.equals("friends")) {
-                fbResponse = getRequest(params1, "https://graph.facebook.com/me/friends?access_token=" + facebook.getAccessToken() + "&limit=20",
+                params1.put("limit", "20");
+                fbResponse = getRequest(params1, "https://graph.facebook.com/me/friends",
                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
             } else {
-                fbResponse = getRequest(params1, "https://graph.facebook.com/me/subscribers?access_token=" + facebook.getAccessToken() + "&limit=30",
+                params1.put("limit", "30");
+                fbResponse = getRequest(params1, "https://graph.facebook.com/me/subscribers",
                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
             }
         } catch (Exception e) {
@@ -129,23 +133,27 @@
 
                 if (usrResp.has("paging")) {
                     nextPage = usrResp.getJSONObject("paging").getString("next");
+
+                    int position = nextPage.indexOf("__after_id");
+                    String nextPageSend = nextPage.substring(position + 11, nextPage.length());
+
+                    position = nextPage.indexOf("offset");
+                    String offsetFriends = nextPage.substring(position + 7, position + 9);
+
             %>
+
+            <br><br>
 
             <div id="<%=objUri%>/getMoreFriendsFacebook" dojoType="dojox.layout.ContentPane">
                 <div align="center">
                     <label id="<%=objUri%>/moreFriendsLabel">
-                        <a href="#" onclick="appendHtmlAt('<%=paramRequest.getRenderUrl().setMode("more").setParameter("type", "friends").setParameter("suri", facebook.getURI()).setParameter("nextPage", nextPage)%>','<%=objUri%>/getMoreFriendsFacebook', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;">Mas amigos</a>
+                        <a href="#" onclick="appendHtmlAt('<%=paramRequest.getRenderUrl().setMode("more").setParameter("type", "friends").setParameter("suri", facebook.getURI()).setParameter("nextPage", nextPageSend).setParameter("offsetFriends", offsetFriends)%>','<%=objUri%>/getMoreFriendsFacebook', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;">Mas amigos</a>
                     </label>
                 </div>
             </div>
             <%   }%>
         </div>
     </div>
-
-
-
-
-
 
     <%
 
@@ -163,6 +171,7 @@
 
                 String imageFollow = "";
                 String nameFollow = "";
+                String nextpageFollow = "";
                 for (int k = 0; k < usrDataFollow.length(); k++) {
                     object = (JSONObject) usrDataFollow.get(k);
                     imageFollow = object.getString("id");
@@ -188,20 +197,26 @@
             <%
                 out.println("</div>");
                 if (usrFollow.has("paging")) {
-                    nextPage = usrFollow.getJSONObject("paging").getString("next");
-            %>
 
+                    nextpageFollow = usrFollow.getJSONObject("paging").getString("next");
+                    int position = nextpageFollow.indexOf("after");
+                    String nextpageFollowSend = nextpageFollow.substring(position + 6, nextpageFollow.length());
+                    //   String afterId = "";
+                    // System.out.println("2nextpage :"+nextpageFollow);
+                    //position = nextpageFollow.indexOf("__after_id");
+                    //afterId = nextpageFollow.substring(position+11, nextpageFollow.length());
+                    position = nextpageFollow.indexOf("limit");
+                    String offset = nextpageFollow.substring(position + 6, position + 8);
+            %>
 
             <div id="<%=objUri%>/getMoreSubscribers" dojoType="dojox.layout.ContentPane">
                 <div align="center">
                     <label>
-                        <a href="#" onclick="appendHtmlAt('<%=paramRequest.getRenderUrl().setMode("more").setParameter("type", "subscriber").setParameter("suri", facebook.getURI()).setParameter("nextPage", nextPage)%>', '<%=objUri%>/getMoreSubscribers', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;">Mas seguidores</a>
+                        <a href="#" onclick="appendHtmlAt('<%=paramRequest.getRenderUrl().setMode("more").setParameter("type", "subscriber").setParameter("suri", facebook.getURI()).setParameter("nextPage", nextpageFollowSend).setParameter("offsetFollow", offset)%>', '<%=objUri%>/getMoreSubscribers', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;">Mas seguidores</a>
                     </label>
                     <%   }%>
-
                 </div>
             </div>
         </div>    
-
     </div>
 </div>
