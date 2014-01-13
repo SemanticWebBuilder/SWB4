@@ -48,6 +48,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
@@ -510,8 +511,50 @@ public class SocialSentPost extends GenericResource {
                 }
             }
             //Post saved
+        }else if (mode.equals("fullProfile")) {//Show user or page profile in dialog
+            response.setContentType("text/html; charset=ISO-8859-1");
+            response.setHeader("Cache-Control", "no-cache");
+            response.setHeader("Pragma", "no-cache");
+            
+            String profileType = request.getParameter("type") == null ? "" : (String) request.getParameter("type");
+            String objUri = (String) request.getParameter("suri");
+            SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
+            Facebook facebook = (Facebook) semanticObject.createGenericInstance();
+            String jspResponse;
+
+            if (profileType.equals("noType")) {
+                try {
+                    JSONObject profile = new JSONObject(FacebookWall.getProfileFromId(request.getParameter("id"), facebook));
+                    profile = profile.getJSONArray("data").getJSONObject(0);
+                    profileType = profile.getString("type");
+                } catch (JSONException jsone) {
+                    log.error("Error getting profile information" + jsone);
+                    return;
+                }
+            }
+            if (profileType.equals("user")) {
+                jspResponse = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialNetworks/facebookUserProfile.jsp";
+            } else if (profileType.equals("page")) {
+                jspResponse = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialNetworks/facebookPageProfile.jsp";
+            } else {
+                return;
+            }
+
+            RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
+            try {
+                request.setAttribute("paramRequest", paramRequest);
+                dis.include(request, response);
+            } catch (Exception e) {
+                System.out.println("Error displaying user profile");
+            }
         }else if (paramRequest.getMode().equals("post")) {
             doCreatePost(request, response, paramRequest);
+        }else if (mode != null && mode.equals("postSent")) {//Hides dialog used to create Post
+            PrintWriter out = response.getWriter();
+            out.println("<script type=\"text/javascript\">");
+            out.println("   hideDialog();");
+            out.println("   showStatus('Post sent');");
+            out.println("</script>");
         }else {
             super.processRequest(request, response, paramRequest);
         }
@@ -2224,9 +2267,10 @@ public class SocialSentPost extends GenericResource {
 
 
                 ///////////////////////////////
-                response.setRenderParameter("statmsg", response.getLocaleString("statmsg1"));
-                response.setMode(response.Mode_EDIT);
-                response.setRenderParameter("act", "");
+                //response.setRenderParameter("statmsg", response.getLocaleString("statmsg1"));
+                //response.setMode(response.Mode_EDIT);
+                //response.setRenderParameter("act", "");
+                response.setMode("postSent");
             } else if ("remove".equals(action)) //suri, prop
             {
                 String sval = request.getParameter("sval");
@@ -4028,7 +4072,7 @@ public class SocialSentPost extends GenericResource {
                         JSONObject toUser = null;
                         if(postsData.has("to")){
                             toUser = postsData.getJSONObject("to").getJSONArray("data").getJSONObject(0);
-                            story = " to " +  "<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", "noType").setParameter("id", toUser.getLong("id")+"") + "','" + toUser.getString("name") + "'); return false;\">" + toUser.getString("name") + "</a>";
+                            story = " to " +  "<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"hideDialog(); showDialog('" + renderURL.setMode("fullProfile").setParameter("type", "noType").setParameter("id", toUser.getLong("id")+"") + "','" + toUser.getString("name") + "'); return false;\">" + toUser.getString("name") + "</a>";
                         }                        
                     }
                 }
@@ -4108,12 +4152,12 @@ public class SocialSentPost extends GenericResource {
             writer.write("<div class=\"timeline timelinefacebook\">");
             //Username and story
             writer.write("<p>");
-            writer.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"showDialog('" +renderURL.setMode("fullProfile").setParameter("type", "noType").setParameter("id", postsData.getJSONObject("from").getLong("id")+"")  + "','" + postsData.getJSONObject("from").getString("name") + "'); return false;\">" + postsData.getJSONObject("from").getString("name") + "</a> " + story);
+            writer.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"hideDialog(); showDialog('" +renderURL.setMode("fullProfile").setParameter("type", "noType").setParameter("id", postsData.getJSONObject("from").getLong("id")+"")  + "','" + postsData.getJSONObject("from").getString("name") + "'); return false;\">" + postsData.getJSONObject("from").getString("name") + "</a> " + story);
             writer.write("</p>");
             
             //User image and message
             writer.write("<div class=\"timelineusr\">");
-            writer.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", "noType").setParameter("id", postsData.getJSONObject("from").getLong("id")+"") + "','" + postsData.getJSONObject("from").getString("name") + "'); return false;\"><img src=\"http://graph.facebook.com/" + postsData.getJSONObject("from").getLong("id") +"/picture\"/></a>");
+            writer.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"hideDialog(); showDialog('" + renderURL.setMode("fullProfile").setParameter("type", "noType").setParameter("id", postsData.getJSONObject("from").getLong("id")+"") + "','" + postsData.getJSONObject("from").getString("name") + "'); return false;\"><img src=\"http://graph.facebook.com/" + postsData.getJSONObject("from").getLong("id") +"/picture\"/></a>");
 
             writer.write("<p>");
             if(message.isEmpty()){
@@ -4140,7 +4184,7 @@ public class SocialSentPost extends GenericResource {
                 writer.write("<div class=\"timelineimg\">");
                 if(postType.equals("video") || postType.equals("swf")){                    
                     writer.write("      <span id=\"vid" + tabSuffix + facebook.getId() + postsData.getString("id") + "\" style=\"width: 250px; height: 250px; border: thick #666666; overflow: hidden; position: relative;\">");
-                    writer.write("      <a href=\"#\" onclick=\"showDialog('"+ renderURL.setMode("displayVideo").setParameter("videoUrl", URLEncoder.encode(postsData.getString("source"), "UTF-8")) +
+                    writer.write("      <a href=\"#\" onclick=\"hideDialog(); showDialog('"+ renderURL.setMode("displayVideo").setParameter("videoUrl", URLEncoder.encode(postsData.getString("source"), "UTF-8")) +
                             "','Video from " + postsData.getJSONObject("from").getString("name") + "'); return false;\"><img src=\"" + picture + "\" style=\"position: relative;\" onerror=\"this.src ='" + picture.replace("_n.", "_s.") + "'\" onload=\"imageLoad(" + "this, 'vid" + tabSuffix + facebook.getId() + postsData.getString("id") + "');\"/></a>");
                     writer.write("      </span>");
                 }else{
@@ -4152,7 +4196,7 @@ public class SocialSentPost extends GenericResource {
                         }
                     }else{
                         writer.write("      <span id=\"img" + tabSuffix + facebook.getId() + postsData.getString("id") + "\" style=\"width: 250px; height: 250px; border: thick #666666; overflow: hidden; position: relative;\">");
-                        writer.write("      <a href=\"#\" onclick=\"showDialog('" + renderURL.setMode("displayPicture").setParameter("pictureUrl", URLEncoder.encode(picture, "UTF-8")) +
+                        writer.write("      <a href=\"#\" onclick=\"hideDialog(); showDialog('" + renderURL.setMode("displayPicture").setParameter("pictureUrl", URLEncoder.encode(picture, "UTF-8")) +
                                 "','Picture from " + postsData.getJSONObject("from").getString("name") + "'); return false;\"><img src=\"" + picture + "\" style=\"position: relative;\" onerror=\"this.src ='" + picture.replace("_n.", "_s.") + "'\" onload=\"imageLoad(" + "this, 'img" + tabSuffix +facebook.getId() + postsData.getString("id") + "');\"/></a>");
                         writer.write("      </span>");
                     }
@@ -4228,10 +4272,10 @@ public class SocialSentPost extends GenericResource {
                     username = pages.get(comment.getLong("fromid"));
                 }
                 writer.write("<li>");
-                writer.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type","noType").setParameter("id",comment.getLong("fromid")+"") + "','" + username + "'); return false;\"><img src=\"http://graph.facebook.com/" + comment.getLong("fromid") +"/picture?width=30&height=30\" width=\"30\" height=\"30\"/></a>");
+                writer.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"hideDialog(); showDialog('" + renderURL.setMode("fullProfile").setParameter("type","noType").setParameter("id",comment.getLong("fromid")+"") + "','" + username + "'); return false;\"><img src=\"http://graph.facebook.com/" + comment.getLong("fromid") +"/picture?width=30&height=30\" width=\"30\" height=\"30\"/></a>");
 
                 writer.write("<p>");
-                writer.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type","noType").setParameter("id", comment.getLong("fromid")+"") + "','" + username + "'); return false;\">" + username + "</a>:");
+                writer.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"hideDialog(); showDialog('" + renderURL.setMode("fullProfile").setParameter("type","noType").setParameter("id", comment.getLong("fromid")+"") + "','" + username + "'); return false;\">" + username + "</a>:");
                 writer.write(       comment.getString("text").replace("\n", "</br>") + "</br>");
                 writer.write("</p>");
 
@@ -4320,7 +4364,7 @@ public class SocialSentPost extends GenericResource {
                 for (int i = 0; i < actions.length(); i++) {
                     if(actions.getJSONObject(i).getString("name").equals("Comment") && socialUserExtAttr.isUserCanRespondMsg()){//I can comment                        
                         writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + FacebookWall.REPLY + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
-                            writer.write(" <a class=\"clasifica\" href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyPost").setParameter("postID", postsData.getString("id")) + "','Reply to " + postsData.getJSONObject("from").getString("name") + "');return false;\"><span>Reply</span></a>  ");
+                            writer.write(" <a class=\"clasifica\" href=\"\" onclick=\"hideDialog(); showDialog('" + renderURL.setMode("replyPost").setParameter("postID", postsData.getString("id")) + "','Reply to " + postsData.getJSONObject("from").getString("name") + "');return false;\"><span>Reply</span></a>  ");
                         writer.write("   </span>");
 
                         ///////////////////////If I can post I can Classify it to answer it later
@@ -4519,7 +4563,7 @@ public class SocialSentPost extends GenericResource {
                 }
 
                 out.write("      <span id=\"img" + semanticYoutube.getId() + videoId + "\" style=\"width: 250px; height: 250px; border: thick #666666; overflow: hidden; position: relative;\">");
-                    out.write("      <a href=\"#\" onclick=\"showDialog('"+ paramRequest.getRenderUrl().setMode("displayVideo").setParameter("videoUrl", URLEncoder.encode("http://www.youtube.com/v/" + videoId, "UTF-8")) +
+                    out.write("      <a href=\"#\" onclick=\"hideDialog(); showDialog('"+ paramRequest.getRenderUrl().setMode("displayVideo").setParameter("videoUrl", URLEncoder.encode("http://www.youtube.com/v/" + videoId, "UTF-8")) +
                             "','" + video.getJSONObject("title").getString("$t") + "'); return false;\"><img src=\"" + imgPath + "\" style=\"position: relative;\" onerror=\"this.src ='" + imgPath + "'\" onload=\"imageLoad(" + "this, 'img" + semanticYoutube.getId() + videoId + "');\"/></a>");
                     out.write("      </span>");
                 out.write(" </span>");
@@ -4596,10 +4640,10 @@ public class SocialSentPost extends GenericResource {
                                 }
                             }
                             out.write("<li>");
-                            out.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("id", comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t")) + "','" + paramRequest.getLocaleString("viewProfile") + "'); return false;\"><img src=\"" + usrCommentProfile.getJSONObject("entry").getJSONObject("media$thumbnail").getString("url") + "\" width=\"50\" height=\"50\"/></a>");
+                            out.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"hideDialog(); showDialog('" + paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("id", comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t")) + "','" + paramRequest.getLocaleString("viewProfile") + "'); return false;\"><img src=\"" + usrCommentProfile.getJSONObject("entry").getJSONObject("media$thumbnail").getString("url") + "\" width=\"50\" height=\"50\"/></a>");
 
                             out.write("<p>");
-                            out.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("id", comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t")) + "','" + paramRequest.getLocaleString("viewProfile") + "'); return false;\">" + comment.getJSONArray("author").getJSONObject(0).getJSONObject("name").getString("$t") + "</a>:");
+                            out.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"hideDialog(); showDialog('" + paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("id", comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t")) + "','" + paramRequest.getLocaleString("viewProfile") + "'); return false;\">" + comment.getJSONArray("author").getJSONObject(0).getJSONObject("name").getString("$t") + "</a>:");
                             out.write(       comment.getJSONObject("content").getString("$t").replace("\n", "</br>"));
                             out.write("</p>");
 
@@ -4612,7 +4656,7 @@ public class SocialSentPost extends GenericResource {
                             out.write("</span>");
                             String comentarioId = comment.getJSONObject("id").getString("$t");
                             out.write("   <span class=\"inline\">");
-                            out.write(" <a href=\"\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("commentComment").setParameter("suri", objUri).setParameter("videoId", videoId).setParameter("commentId", comentarioId.substring(comentarioId.indexOf("comment") + 8)) + "','Comment to " + comment.getJSONObject("content").getString("$t").replace("\n", "</br>") + "');return false;\">Comment</a>");
+                            out.write(" <a href=\"\" onclick=\"hideDialog(); showDialog('" + paramRequest.getRenderUrl().setMode("commentComment").setParameter("suri", objUri).setParameter("videoId", videoId).setParameter("commentId", comentarioId.substring(comentarioId.indexOf("comment") + 8)) + "','Comment to " + comment.getJSONObject("content").getString("$t").replace("\n", "</br>") + "');return false;\">Comment</a>");
                             out.write("   </span>");
                             out.write("</p>");
                             out.write("</li>");
@@ -4660,7 +4704,7 @@ public class SocialSentPost extends GenericResource {
                 out.write("</span>");
                 
                 out.write("   <span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
-                out.write(" <a class=\"clasifica\" href=\"\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("commentVideo").setParameter("suri", objUri).setParameter("videoId", videoId) + "','Comment to " + "MISSING" + "');return false;\"><span>Comment</span></a>  ");                    
+                out.write(" <a class=\"clasifica\" href=\"\" onclick=\"hideDialog(); showDialog('" + paramRequest.getRenderUrl().setMode("commentVideo").setParameter("suri", objUri).setParameter("videoId", videoId) + "','Comment to " + "MISSING" + "');return false;\"><span>Comment</span></a>  ");                    
                 out.write("   </span>");
 
                 postURI = null;
@@ -4817,10 +4861,10 @@ public class SocialSentPost extends GenericResource {
                         username = pages.get(comment.getLong("fromid"));
                     }
                     out.write("<li>");
-                    out.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type","noType").setParameter("id",comment.getLong("fromid")+"") + "','" + username + "'); return false;\"><img src=\"http://graph.facebook.com/" + comment.getLong("fromid") +"/picture?width=30&height=30\" width=\"30\" height=\"30\"/></a>");
+                    out.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"hideDialog(); showDialog('" + renderURL.setMode("fullProfile").setParameter("type","noType").setParameter("id",comment.getLong("fromid")+"") + "','" + username + "'); return false;\"><img src=\"http://graph.facebook.com/" + comment.getLong("fromid") +"/picture?width=30&height=30\" width=\"30\" height=\"30\"/></a>");
 
                     out.write("<p>");
-                    out.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type","noType").setParameter("id", comment.getLong("fromid")+"") + "','" + username + "'); return false;\">" + username + "</a>:");
+                    out.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"hideDialog(); showDialog('" + renderURL.setMode("fullProfile").setParameter("type","noType").setParameter("id", comment.getLong("fromid")+"") + "','" + username + "'); return false;\">" + username + "</a>:");
                     out.write(       comment.getString("text").replace("\n", "</br>") + "</br>");
                     out.write("</p>");
 
@@ -4891,10 +4935,10 @@ public class SocialSentPost extends GenericResource {
                                 }
                             }
                             out.write("<li>");
-                            out.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("id", comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t")) + "','" + paramRequest.getLocaleString("viewProfile") + "'); return false;\"><img src=\"" + usrCommentProfile.getJSONObject("entry").getJSONObject("media$thumbnail").getString("url") + "\" width=\"50\" height=\"50\"/></a>");
+                            out.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"hideDialog(); showDialog('" + paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("id", comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t")) + "','" + paramRequest.getLocaleString("viewProfile") + "'); return false;\"><img src=\"" + usrCommentProfile.getJSONObject("entry").getJSONObject("media$thumbnail").getString("url") + "\" width=\"50\" height=\"50\"/></a>");
 
                             out.write("<p>");
-                            out.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("id", comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t")) + "','" + paramRequest.getLocaleString("viewProfile") + "'); return false;\">" + comment.getJSONArray("author").getJSONObject(0).getJSONObject("name").getString("$t") + "</a>:");
+                            out.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"hideDialog(); showDialog('" + paramRequest.getRenderUrl().setMode("showUserProfile").setParameter("id", comment.getJSONArray("author").getJSONObject(0).getJSONObject("yt$userId").getString("$t")) + "','" + paramRequest.getLocaleString("viewProfile") + "'); return false;\">" + comment.getJSONArray("author").getJSONObject(0).getJSONObject("name").getString("$t") + "</a>:");
                             out.write(       comment.getJSONObject("content").getString("$t").replace("\n", "</br>"));
                             out.write("</p>");
 
@@ -4908,7 +4952,7 @@ public class SocialSentPost extends GenericResource {
                             out.write("</span>");
                             String comentarioId = comment.getJSONObject("id").getString("$t");
                             out.write("   <span class=\"inline\">");
-                            out.write(" <a href=\"\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("commentComment").setParameter("suri", suri).setParameter("videoId",videoId).setParameter("commentId", comentarioId.substring(comentarioId.indexOf("comment") + 8)) + "','Comment to " + comment.getJSONObject("content").getString("$t").replace("\n", "</br>") + "');return false;\">Comment</a>");
+                            out.write(" <a href=\"\" onclick=\"hideDialog(); showDialog('" + paramRequest.getRenderUrl().setMode("commentComment").setParameter("suri", suri).setParameter("videoId",videoId).setParameter("commentId", comentarioId.substring(comentarioId.indexOf("comment") + 8)) + "','Comment to " + comment.getJSONObject("content").getString("$t").replace("\n", "</br>") + "');return false;\">Comment</a>");
                             out.write("   </span>");
                             out.write("</p>");
                             out.write("</li>");
