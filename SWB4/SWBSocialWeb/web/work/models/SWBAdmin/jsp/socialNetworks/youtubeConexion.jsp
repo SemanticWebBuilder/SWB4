@@ -24,9 +24,7 @@ getRequest(paramsVideo, "https://gdata.youtube.com/feeds/api/videos/" + videoId,
 <%@page import="java.util.HashMap"%>
 <%!    
     public static String getFullUserProfileFromId(String more, Youtube youtube, String url) {
-        System.out.println("Youtube: " + youtube);
-        System.out.println("YPUTBE" + youtube.getId());
-        //  System.out.println("++++++++++++"+semanticYoutube.getAccessToken);
+       
         HashMap<String, String> paramsVideo = new HashMap<String, String>(3);
         paramsVideo.put("v", "2");
         paramsVideo.put("alt", "json");//https://gdata.youtube.com/feeds/api/videos/videoid?v=2
@@ -50,18 +48,15 @@ getRequest(paramsVideo, "https://gdata.youtube.com/feeds/api/videos/" + videoId,
     Youtube youtube = (Youtube) semanticObject.createGenericInstance();
     SWBModel model = WebSite.ClassMgr.getWebSite(youtube.getSemanticObject().getModel().getName());
     SocialTopic defaultSocialTopic = SocialTopic.ClassMgr.getSocialTopic("DefaultTopic", model);
-    System.out.println("ID YOUTUBE: "+ youtube);
     String url = "https://gdata.youtube.com/feeds/api/users/default/subscriptions";
     
     String usrProfile = getFullUserProfileFromId("friends", youtube, url);
     JSONObject usrResp = new JSONObject(usrProfile);
-    JSONArray usrData = usrResp.getJSONObject("feed").getJSONArray("entry");
-    
+    JSONArray usrData = usrResp.getJSONObject("feed").getJSONArray("entry");   
     
     
     JSONObject object = new JSONObject();
     JSONObject objectID = new JSONObject();
-    String nextPage = null;
     
 %>
 <%@page contentType="text/html" pageEncoding="x-iso-8859-11"%>
