@@ -1133,7 +1133,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             HttpPost post = new HttpPost("https://www.googleapis.com/oauth2/v2/tokeninfo?access_token=" + this.getAccessToken());
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
             String responseBody = client.execute(post, responseHandler);
-            System.out.println("la respuesta es: " + responseBody);
+            //System.out.println("la respuesta es: " + responseBody);
             refreshedToken = true;//No exception thrown, the token is fine
             //TODO: validate status of the token :)
         } catch (HttpResponseException e) {
@@ -1290,7 +1290,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             PostOutNet postOutNet=itPostOutNets.next();
             if(postOutNet.getStatus()==1 && postOutNet.getSocialNetwork().getURI().equals(this.getURI()))
             {
-                System.out.println("********** Monitoreando RESPUESTAS de " + postOutNet.getPo_socialNetMsgID() + "*************");
+                //System.out.println("********** Monitoreando RESPUESTAS de " + postOutNet.getPo_socialNetMsgID() + "*************");
                 
                 long totalComments = this.comments(postOutNet.getPo_socialNetMsgID());
                 //El número que se agrega es la diferencia entre el número de respuesta encontradas en la red social - el que se encuentra en la propiedad postOutNet.getPo_numResponses()
@@ -1354,7 +1354,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         
         CharSequence paramString = (null == params) ? "" : delimit(params.entrySet(), "&", "=", true);
         URL serverUrl = new URL(url + "?" +  paramString);       
-        System.out.println("URL:" +  serverUrl);
+        //System.out.println("URL:" +  serverUrl);
         
         HttpURLConnection conex = null;
         InputStream in = null;
@@ -1382,9 +1382,8 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         } catch (java.io.IOException ioe) {
             if (conex.getResponseCode() >= 400) {
                 response = getResponse(conex.getErrorStream());
-                System.out.println("\n\n\nERROR:" +   response);
+                //System.out.println("\n\n\nERROR:" +   response);
             }
-            ioe.printStackTrace();
         } finally {
             close(in);
             if (conex != null) {
