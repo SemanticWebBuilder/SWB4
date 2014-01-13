@@ -278,7 +278,7 @@
                     }
 
                 %>                
-                <div id="pub-calendar" dojoType="dijit.TitlePane" title="Calendarizar" open="false" duration="150" minSize_="20" splitter_="true" region="bottom">
+                <div id="<%=objUri%><%=sourceCall%>pub-calendar" dojoType="dijit.TitlePane" title="Calendarizar" open="false" duration="150" minSize_="20" splitter_="true" region="bottom">
                     <div class="calendar-fast">
                         <p>Individual</p>
                         <%
@@ -574,7 +574,7 @@
                     <!--Calendario Rapido-->
 
                     <div class="etiqueta"><label>Calendarios de envío: </label></div>
-                    <div id="pub-calendar" dojoType="dijit.TitlePane" title="Calendarizar" open="false" duration="150" minSize_="20" splitter_="true" region="bottom">
+                    <div id="<%=objUri%><%=sourceCall%>pub-calendar" dojoType="dijit.TitlePane" title="Calendarizar" open="false" duration="150" minSize_="20" splitter_="true" region="bottom">
                         <div class="calendar-fast">
                             <p>Individual</p>
                             <%
@@ -988,7 +988,7 @@
                     <!--Calendario Rapido-->
                     <div class="etiqueta"><label>Calendarios de envío: </label></div>
 
-                    <div id="pub-calendar" dojoType="dijit.TitlePane" title="Calendarizar" open="false" duration="150" minSize_="20" splitter_="true" region="bottom">
+                    <div id="<%=objUri%><%=sourceCall%>pub-calendar" dojoType="dijit.TitlePane" title="Calendarizar" open="false" duration="150" minSize_="20" splitter_="true" region="bottom">
                         <div class="calendar-fast">                            
                             <p>Individual</p>
                             <%
