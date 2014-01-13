@@ -16,11 +16,19 @@ function resetTabTitle (objUri, tabId, title){
 }
       
 function appendHtmlAt(url, tagid, location){
+    alert( 'ENTRO ');
+    alert( 'URL '+url);
+    
+    console.log(url);
+    console.log(tagid);
+    console.log(location);
+    
     dojo.xhrPost({
         url: url,
         load: function(response)
         {
             var tag=dojo.byId(tagid);
+            console.log( 'TAG ENCONTRDAO '+tag);
             if(tag){
                 var pan=dijit.byId(tagid);
                 if(pan && pan.attr)
@@ -741,7 +749,7 @@ function validateVideo(id, formId){
         } 
     }
     
-    if(countFacebook == 0 || countYoutube != 0){
+    if(countFacebook != 0 || countYoutube != 0){
         alert('Extension de archivo no valida');
         return false; 
         
