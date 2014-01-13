@@ -157,11 +157,8 @@ public class FacebookWall extends GenericResource {
             String userAgent, String method) throws IOException {
 
         CharSequence paramString = (null == params) ? "" : delimit(params.entrySet(), "&", "=", true);
+        System.out.println("2URL : " + url + "?" + paramString);
         URL serverUrl = new URL(url + "?" + paramString);
-
-        //URL serverUrl = new URL(url);
-        System.out.println("URL:" + serverUrl);
-        //System.out.println("paramString:" + paramString);
 
         HttpURLConnection conex = null;
         OutputStream out = null;
@@ -1246,7 +1243,7 @@ public class FacebookWall extends GenericResource {
             }
         } else if (mode.equals("more")) {
             try {
-                moreView(request, response, paramRequest);
+                moreContacts(request, response, paramRequest);
             } catch (JSONException ex) {
                 log.error(ex);
             }
@@ -3112,28 +3109,39 @@ public class FacebookWall extends GenericResource {
         }
     }
 
-    private void moreView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws IOException, JSONException {
-
-        String url = request.getParameter("nextPage");
+    private void moreContacts(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws IOException, JSONException {
+        String url = "";
         SWBResourceURL actionURL = paramRequest.getActionUrl();
         SWBResourceURL renderURL = paramRequest.getRenderUrl();
         String objUri = request.getParameter("suri");
         String fbResponse = "";
         renderURL.setParameter("suri", objUri);
         PrintWriter out = response.getWriter();
-
         SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
         Facebook facebook = (Facebook) semanticObject.createGenericInstance();
-        SWBModel model = WebSite.ClassMgr.getWebSite(facebook.getSemanticObject().getModel().getName());
-        SocialTopic defaultSocialTopic = SocialTopic.ClassMgr.getSocialTopic("DefaultTopic", model);
+        //SWBModel model = WebSite.ClassMgr.getWebSite(facebook.getSemanticObject().getModel().getName());
+        //SocialTopic defaultSocialTopic = SocialTopic.ClassMgr.getSocialTopic("DefaultTopic", model);
         if (objUri != null) {
             actionURL.setParameter("suri", objUri);
             renderURL.setParameter("suri", objUri);
         }
 
-        fbResponse = postRequest(url,
-                "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
-        System.out.println(" /n/n/n/n/n EN EL RECURSO : " + fbResponse);
+        HashMap<String, String> params1 = new HashMap<String, String>(3);
+        params1.put("access_token", facebook.getAccessToken());
+
+        if (request.getParameter("type").equals("friends")) {
+            url = "https://graph.facebook.com/me/friends";
+            params1.put("offset", "" + request.getParameter("offsetFriends") + "");
+            params1.put("__after_id", "" + request.getParameter("nextPage") + "");
+            params1.put("limit", "20");
+        } else if (request.getParameter("type").equals("subscriber")) {
+            url = "https://graph.facebook.com/me/subscribers";
+            params1.put("limit", "" + request.getParameter("offsetFollow") + "");
+            params1.put("after", "" + request.getParameter("nextPage") + "");
+            params1.put("limit", "30");
+        }
+
+        fbResponse = postRequest(params1, url, "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
         JSONObject phraseResp = new JSONObject(fbResponse);
         int cont = 0;
         JSONArray postsData = phraseResp.getJSONArray("data");
@@ -3150,9 +3158,8 @@ public class FacebookWall extends GenericResource {
             out.println(" <p class=\"tweeter\">");
             out.println(" <a onclick=\"showDialog(' " + paramRequest.getRenderUrl().setMode("fullProfile").setParameter("suri", objUri).setParameter("type", "noType").setParameter("id", image).setParameter("targetUser", name) + " ',' " + name + " '); return false;\" href=\"#\">" + name + "</a>  ");
             out.println("</p>");
-
             out.println("<p class=\"tweet\">");
-            out.println(" <a onclick=\"showDialog(' " + paramRequest.getRenderUrl().setMode("fullProfile").setParameter("suri", objUri).setParameter("type", "noType").setParameter("id", image).setParameter("targetUser", name) + " ',' " + name + " '); return false;\" href=\"#\">" );
+            out.println(" <a onclick=\"showDialog(' " + paramRequest.getRenderUrl().setMode("fullProfile").setParameter("suri", objUri).setParameter("type", "noType").setParameter("id", image).setParameter("targetUser", name) + " ',' " + name + " '); return false;\" href=\"#\">");
             out.println("<img src=\"https://graph.facebook.com/" + image + "/picture?width=150&height=150\" width=\"150\" height=\"150\" />");
             out.println("</a>");
             out.println("</p>");
@@ -3162,82 +3169,39 @@ public class FacebookWall extends GenericResource {
 
         if (phraseResp.has("paging")) {
             if (phraseResp.getJSONObject("paging").has("next")) {
+
                 next = phraseResp.getJSONObject("paging").getString("next");
+                int position = 0;
+
 
                 if (request.getParameter("type").equals("friends")) {
+                    position = next.indexOf("__after_id");
+                    String nextSend = next.substring(position + 11, next.length());
+                    position = next.indexOf("offset");
+                    String offsetFriends = next.substring(position + 7, position + 9);
                     out.println("<div align=\"center\">");
                     out.println("  <label  id=\"" + objUri + "/moreFriendsLabel\" >");
-                    out.println("<a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setAction("more").setParameter("type", "friends").setParameter("suri", facebook.getURI()).setParameter("nextPage", next) + " ', '" + objUri + "/getMoreFriendsFacebook',  'bottom'); try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\" >Mas amigos");
+                    out.println("<a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setAction("more").setParameter("type", "friends").setParameter("suri", facebook.getURI()).setParameter("nextPage", nextSend).setParameter("offsetFriends", offsetFriends) + " ', '" + objUri + "/getMoreFriendsFacebook',  'bottom'); try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\" >Mas amigos");
                     out.println("</label>");
                     out.println("</a>");
                     out.println("</div");
 
                 } else if (request.getParameter("type").equals("subscriber")) {
+                    String afterId = "";
+                    position = next.indexOf("__after_id");
+                    afterId = next.substring(position + 11, next.length());
+                    position = next.indexOf("after");
+                    String nextSend = next.substring(position + 11, next.length());
+                    position = next.indexOf("limit");
+                    String offsetFollow = next.substring(position + 7, position + 9);
                     out.println("<div align=\"center\">");
                     out.println("<label>");
-                    out.println("<a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setAction("more").setParameter("type", "subscriber").setParameter("suri",facebook.getURI()).setParameter("nextPage", next) + " ', '" + objUri + "/getMoreSubscribers',  'bottom'); try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\" >Mas seguidores");
+                    out.println("<a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setAction("more").setParameter("type", "subscriber").setParameter("suri", facebook.getURI()).setParameter("nextPage", nextSend).setParameter("offsetFollow", offsetFollow).setParameter("afterId", afterId) + " ', '" + objUri + "/getMoreSubscribers',  'bottom'); try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\" >Mas seguidores");
                     out.println("</label>");
                     out.println("</a>");
                     out.println("</div");
                 }
             }
         }
-
-
-    }
-
-    public static String postRequest(String url,
-            String userAgent, String method) throws IOException {
-
-        // CharSequence paramString = (null == params) ? "" : delimit(params.entrySet(), "&", "=", true);
-        URL serverUrl = new URL(url);
-
-        //URL serverUrl = new URL(url);
-        //System.out.println("URL:" + serverUrl);
-        //System.out.println("paramString:" + paramString);
-
-        HttpURLConnection conex = null;
-        OutputStream out = null;
-        InputStream in = null;
-        String response = null;
-
-        if (method == null) {
-            method = "POST";
-        }
-        try {
-            conex = (HttpURLConnection) serverUrl.openConnection();
-            if (userAgent != null) {
-                conex.setRequestProperty("user-agent", userAgent);
-            }
-            conex.setConnectTimeout(30000);
-            conex.setReadTimeout(60000);
-            conex.setRequestMethod(method);
-            conex.setDoOutput(true);
-            conex.connect();
-
-            //System.out.println("CONNECT:" + conex);
-            //   out = conex.getOutputStream();
-            //   out.write(paramString.toString().getBytes("UTF-8"));
-            in = conex.getInputStream();
-            response = getResponse(in);
-
-        } catch (java.io.IOException ioe) {
-            if (conex.getResponseCode() >= 400) {
-                //System.out.println("ERROR:" +   getResponse(conex.getErrorStream()));
-                response = getResponse(conex.getErrorStream());
-                log.error("\n\nERROR:" + response);
-            }
-            //ioe.printStackTrace();
-        } finally {
-            close(in);
-            //close(out);
-            if (conex != null) {
-                conex.disconnect();
-            }
-        }
-        if (response == null) {
-            response = "";
-        }
-        return response;
     }
 }
