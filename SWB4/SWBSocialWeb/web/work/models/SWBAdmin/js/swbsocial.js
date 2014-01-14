@@ -16,19 +16,12 @@ function resetTabTitle (objUri, tabId, title){
 }
       
 function appendHtmlAt(url, tagid, location){
-    alert( 'ENTRO ');
-    alert( 'URL '+url);
     
-    console.log(url);
-    console.log(tagid);
-    console.log(location);
-    
-    dojo.xhrPost({
+        dojo.xhrPost({
         url: url,
         load: function(response)
         {
             var tag=dojo.byId(tagid);
-            console.log( 'TAG ENCONTRDAO '+tag);
             if(tag){
                 var pan=dijit.byId(tagid);
                 if(pan && pan.attr)
