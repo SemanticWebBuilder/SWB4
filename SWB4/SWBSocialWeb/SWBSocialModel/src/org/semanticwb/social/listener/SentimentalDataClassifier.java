@@ -875,7 +875,7 @@ public class SentimentalDataClassifier {
                         }
                     }
                     //Gender
-                    System.out.println("userData.getString(\"gender\")" + userData.getString("gender"));
+                    //System.out.println("userData.getString(\"gender\")" + userData.getString("gender"));
                     if (!userData.isNull("gender")) {
                         String userGender = userData.getString("gender") != null ? userData.getString("gender") : null;
                         if (userGender != null && userGender.trim().length() > 0) {
