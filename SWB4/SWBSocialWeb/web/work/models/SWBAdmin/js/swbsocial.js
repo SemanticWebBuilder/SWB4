@@ -635,7 +635,7 @@ function lookForInputs(children, images){
 function validateVideo(id, formId){
     var nameFile = document.getElementById(id).value;
     var arrFacebook = [".3g2", ".3gp", ".3gpp" , ".asf", ".avi", ".dat", ".divx", ".dv", ".asf", ".f4v", ".flv", ".m2ts", ".m4v", ".mkv", ".mod", ".mov", ".mp4", ".mpe", ".mpeg", ".mpeg4", ".mpg", ".mts", ".nsv", ".ogm", ".nsv", ".ogv", ".qt", ".tod", ".ts", ".vob", ".wmv"];                           
-    var arrYoutube = ['mp3','.jpg','.jpeg','.gif','.png','.bmp','.wav','.aac','.mswmm','.wlmp'];
+    var arrYoutube = ['.mp3','.jpg','.jpeg','.gif','.png','.bmp','.wav','.aac','.mswmm','.wlmp'];
     var j =0 ;
     
     if(nameFile == ""){        
@@ -724,13 +724,14 @@ function validateVideo(id, formId){
 
   
     if(haveFacebook){        
-        for(i = 0; i < arrFacebook.length; i++){
-            
+        for(i = 0; i < arrFacebook.length; i++){            
             if(nameFile.toLowerCase().indexOf(arrFacebook[i]) != -1){ //la extension si es valida    
                 countFacebook++;
                 break;
             }            
         } 
+    }else {
+        countFacebook++;
     }
     
     if(haveYoutube){        
@@ -742,7 +743,7 @@ function validateVideo(id, formId){
         } 
     }
     
-    if(countFacebook != 0 || countYoutube != 0){
+    if(countFacebook == 0 || countYoutube != 0){
         alert('Extension de archivo no valida');
         return false; 
         
