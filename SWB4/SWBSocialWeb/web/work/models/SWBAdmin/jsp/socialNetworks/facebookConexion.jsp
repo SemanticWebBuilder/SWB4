@@ -94,7 +94,7 @@
             <%
 
                 out.println("<div class=\"swbform\">");
-                out.println("<div align=\"center\"><h2>" + "@" + facebook + " " + "</br> Amigos" + "</h2><br/></div>");
+                out.println("<div align=\"center\"><h2></br> Amigos" + "</h2><br/></div>");
 
                 String image = "";
                 String name = "";
@@ -167,7 +167,7 @@
         <div class="swbform">
             <%
                 out.println("<div class=\"swbform\">");
-                out.println("<div align=\"center\"><h2>" + "" + facebook + " " + "</br>Seguidores" + "</h2><br/></div>");
+                out.println("<div align=\"center\"><h2></br>Seguidores" + "</h2><br/></div>");
 
                 String imageFollow = "";
                 String nameFollow = "";
