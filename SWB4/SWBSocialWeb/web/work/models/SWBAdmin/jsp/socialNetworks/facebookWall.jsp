@@ -66,7 +66,7 @@
         }
     %>         
 <div class="swbform">
-<div align="center"><h2><%=username%> Wall.</h2><br/></div>
+<div align="center"><h2><%=username%> - <%=paramRequest.getLocaleString("myWall")%></h2><br/></div>
 <div class="bar" id="<%=objUri%>newPostsWallAvailable" dojoType="dojox.layout.ContentPane"></div>
 <div id="<%=objUri%>facebookWallStream" dojoType="dojox.layout.ContentPane"></div>
 <%
@@ -87,7 +87,7 @@
 
 <div id="<%=objUri%>getMorePostsWall" dojoType="dijit.layout.ContentPane">
     <div align="center">
-        <label id="<%=objUri%>morePostsWallLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMorePosts").setParameter("until", untilPost).setParameter("scope", "wall")%>','<%=objUri%>getMorePostsWall', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;">More posts</a></label>
+        <label id="<%=objUri%>morePostsWallLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMorePosts").setParameter("until", untilPost).setParameter("scope", "wall")%>','<%=objUri%>getMorePostsWall', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;"><%=paramRequest.getLocaleString("getMorePosts")%></a></label>
     </div>
 </div>
 </div>

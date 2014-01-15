@@ -49,7 +49,7 @@
     }
 %>
 <div class="swbform">
-<div align="center"><h2><%=username%> Videos.</h2><br/></div>
+<div align="center"><h2><%=username%> - <%=paramRequest.getLocaleString("myVideos")%></h2><br/></div>
 <%
     //TODO: it seems than 'likes' is deprecated and it must be replaced with like_info
     params.put("q", "{\"videos\": \"SELECT actor_id, created_time, like_info, post_id, attachment, message, description, description_tags, type, comment_info FROM stream WHERE filter_key IN " + 
@@ -64,7 +64,7 @@
 %>
 <div id="<%=objUri%>getMoreVideos" dojoType="dijit.layout.ContentPane">
     <div align="center">
-        <label id="<%=objUri%>moreVideosLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMoreVideos").setParameter("createdTime", createdTime).setParameter("currentTab", VIDEOS_TAB)%>','<%=objUri%>getMoreVideos', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;">More videos</a></label>
+        <label id="<%=objUri%>moreVideosLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMoreVideos").setParameter("createdTime", createdTime).setParameter("currentTab", VIDEOS_TAB)%>','<%=objUri%>getMoreVideos', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;"><%=paramRequest.getLocaleString("getMoreVideos")%></a></label>
     </div>
 </div>
 </div>
