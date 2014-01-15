@@ -99,7 +99,7 @@ public class FacebookWall extends GenericResource {
         String contentTabId = request.getParameter("contentTabId");
 
         if (contentTabId == null) {
-            String jspResponse = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialNetworks/facebookTabs.jsp";
+            String jspResponse = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialNetworks/facebookTabs1.jsp";
             RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
             try {
                 request.setAttribute("paramRequest", paramRequest);
@@ -1307,10 +1307,10 @@ public class FacebookWall extends GenericResource {
         //CAMBIAR EL ID DEL DIV dependiendo de donde sea llamado
         out.println("<div align=\"center\">");
         if (scope.equals("newsFeed")) {
-            out.println("<label id=\"" + objUri + "morePostsLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMorePosts").setParameter("until", untilPost).setParameter("scope", scope).setParameter("currentTab", currentTab) + "','" + objUri + "getMorePosts','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">More posts</a></label>");
+            out.println("<label id=\"" + objUri + "morePostsLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMorePosts").setParameter("until", untilPost).setParameter("scope", scope).setParameter("currentTab", currentTab) + "','" + objUri + "getMorePosts','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("getMorePosts") + "</a></label>");
 
         } else if (scope.equals("wall")) {
-            out.println("<label id=\"" + objUri + "morePostsWallLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMorePosts").setParameter("until", untilPost).setParameter("scope", scope).setParameter("currentTab", currentTab) + "','" + objUri + "getMorePostsWall','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">More posts</a></label>");
+            out.println("<label id=\"" + objUri + "morePostsWallLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMorePosts").setParameter("until", untilPost).setParameter("scope", scope).setParameter("currentTab", currentTab) + "','" + objUri + "getMorePostsWall','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("getMorePosts") + "</a></label>");
         }
         out.println("</div>");
     }
@@ -1346,7 +1346,7 @@ public class FacebookWall extends GenericResource {
             createdTime = createdTimeParam;
         }
         out.println("<div align=\"center\">");
-        out.println("<label id=\"" + objUri + "morePicturesLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMorePictures").setParameter("createdTime", createdTime) + "','" + objUri + "getMorePictures','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">More Pictures</a></label>");
+        out.println("<label id=\"" + objUri + "morePicturesLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMorePictures").setParameter("createdTime", createdTime) + "','" + objUri + "getMorePictures','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("getMoreImages") + "</a></label>");
         out.println("</div>");
     }
 
@@ -1379,7 +1379,7 @@ public class FacebookWall extends GenericResource {
             createdTime = createdTimeParam;
         }
         out.println("<div align=\"center\">");
-        out.println("<label id=\"" + objUri + "moreVideosLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreVideos").setParameter("createdTime", createdTime) + "','" + objUri + "getMoreVideos','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">More Videos</a></label>");
+        out.println("<label id=\"" + objUri + "moreVideosLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreVideos").setParameter("createdTime", createdTime) + "','" + objUri + "getMoreVideos','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("getMoreVideos") + "</a></label>");
         out.println("</div>");
     }
 
@@ -2817,7 +2817,11 @@ public class FacebookWall extends GenericResource {
                 System.out.println("ARREGLO DE DATOS NEWSFEED:" + postsData.length());
                 //if(postsData.length()>0){
                 if ((postsData.length() - postsToRemove) > 0) {
-                    out.println("<a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("doGetStreamUser").setParameter("currentTab", currentTab) + "','" + objUri + "facebookStream','top'); try{dojo.byId(this.parentNode.id).innerHTML = '';}catch(noe){}; return false;\">You have <b>" + (postsData.length() - postsToRemove) + "</b> new post" + ((postsData.length() - postsToRemove) > 1 ? "s" : "") + "</a>");
+                    if((postsData.length() - postsToRemove) == 1){
+                        out.println("<a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("doGetStreamUser").setParameter("currentTab", currentTab) + "','" + objUri + "facebookStream','top'); try{dojo.byId(this.parentNode.id).innerHTML = '';}catch(noe){}; return false;\">" + paramRequest.getLocaleString("youHave") + " <b>1</b> " + paramRequest.getLocaleString("newPostLabel") + "</a>");
+                    }else{
+                        out.println("<a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("doGetStreamUser").setParameter("currentTab", currentTab) + "','" + objUri + "facebookStream','top'); try{dojo.byId(this.parentNode.id).innerHTML = '';}catch(noe){}; return false;\">" + paramRequest.getLocaleString("youHave") + " <b>" + (postsData.length() - postsToRemove) + "</b> " + paramRequest.getLocaleString("newPostsLabel") + "</a>");
+                    }
                 }
             }
         } catch (JSONException jsone) {
@@ -2874,7 +2878,7 @@ public class FacebookWall extends GenericResource {
                         out.println("   var tabId = '" + objUri + WALL_TAB + "';");
                         out.println("   var pane = dijit.byId(tabId);");
                         out.println("   try{");
-                        out.println("       var aux='New posts (" + (postsData.length() - postsToRemove) + ")';");
+                        out.println("       var aux='" + paramRequest.getLocaleString("newPosts") + " (" + (postsData.length() - postsToRemove) + ")';");
                         out.println("       pane.title = aux;");
                         out.println("       pane.controlButton.containerNode.innerHTML = aux;");
                         out.println("   }catch(noe){");
@@ -2882,9 +2886,14 @@ public class FacebookWall extends GenericResource {
                         out.println("   }");
 
                         out.println("   var wall = '" + objUri + "newPostsWallAvailable';");
+                        String textLabel="";
+                        if((postsData.length() - postsToRemove) == 1){
+                            textLabel = paramRequest.getLocaleString("youHave") + " <b>1</b> " + paramRequest.getLocaleString("newPostLabel");
+                        }else{
+                            textLabel = paramRequest.getLocaleString("youHave") + " <b>" + (postsData.length() - postsToRemove) + "</b> " + paramRequest.getLocaleString("newPostsLabel");
+                        }
                         out.println("   var hrefVal='<a href=\"#\" onclick=\"appendHtmlAt(\\'" + renderURL.setMode("doGetStreamUser").setParameter("suri", objUri).setParameter("currentTab", WALL_TAB)
-                                + "\\',\\'" + objUri + "facebookWallStream\\',\\'top\\'); try{dojo.byId(this.parentNode.id).innerHTML = \\'\\';}catch(noe){}; resetTabTitle(\\'" + objUri + "\\', \\'" + WALL_TAB + "\\', \\'Wall\\'); return false;\">You have <b>"
-                                + (postsData.length() - postsToRemove) + "</b> new post" + ((postsData.length() - postsToRemove) > 1 ? "s" : "") + "</a>';");
+                                + "\\',\\'" + objUri + "facebookWallStream\\',\\'top\\'); try{dojo.byId(this.parentNode.id).innerHTML = \\'\\';}catch(noe){}; resetTabTitle(\\'" + objUri + "\\', \\'" + WALL_TAB + "\\', \\'" + paramRequest.getLocaleLogString("myWall") + "\\'); return false;\">" + textLabel + "</a>';");
                         out.println("   try{");
                         out.println("      document.getElementById(wall).innerHTML = hrefVal;");
                         out.println("   }catch(noe){}");
@@ -2921,7 +2930,7 @@ public class FacebookWall extends GenericResource {
                     out.println("   var tabId = '" + objUri + PICTURES_TAB + "';");
                     out.println("   var pane = dijit.byId(tabId);");
                     out.println("   try{");
-                    out.println("       var aux='New pictures (" + postsData.length() + ")';");
+                    out.println("       var aux='" + paramRequest.getLocaleString("newImages") + " (" + postsData.length() + ")';");
                     out.println("       pane.title = aux;");
                     out.println("       pane.controlButton.containerNode.innerHTML = aux;");
                     out.println("   }catch(noe){");
@@ -2929,9 +2938,14 @@ public class FacebookWall extends GenericResource {
                     out.println("   }");
 
                     out.println("   var wall = '" + objUri + "newPicturesAvailable';");
+                    String textLabel = "";
+                    if(postsData.length() == 1){
+                        textLabel = paramRequest.getLocaleString("youHave") + " <b>1</b> " + paramRequest.getLocaleString("newImageLabel");
+                    }else{
+                        textLabel = paramRequest.getLocaleString("youHave") + " <b>" + postsData.length() + "</b> " + paramRequest.getLocaleString("newImagesLabel");
+                    }
                     out.println("   var hrefVal='<a href=\"#\" onclick=\"appendHtmlAt(\\'" + renderURL.setMode("doGetStreamPictures").setParameter("suri", objUri).setParameter("currentTab", PICTURES_TAB)
-                            + "\\',\\'" + objUri + "picturesStream\\',\\'top\\'); try{dojo.byId(this.parentNode.id).innerHTML = \\'\\';}catch(noe){}; resetTabTitle(\\'" + objUri + "\\', \\'" + PICTURES_TAB + "\\', \\'Media\\'); return false;\">You have <b>"
-                            + postsData.length() + "</b> new picture" + (postsData.length() > 1 ? "s" : "") + "</a>';");
+                            + "\\',\\'" + objUri + "picturesStream\\',\\'top\\'); try{dojo.byId(this.parentNode.id).innerHTML = \\'\\';}catch(noe){}; resetTabTitle(\\'" + objUri + "\\', \\'" + PICTURES_TAB + "\\', \\'" + paramRequest.getLocaleString("myImages") +"\\'); return false;\">" + textLabel + "</a>';");
                     out.println("   try{");
                     out.println("      document.getElementById(wall).innerHTML = hrefVal;");
                     out.println("   }catch(noe){}");
