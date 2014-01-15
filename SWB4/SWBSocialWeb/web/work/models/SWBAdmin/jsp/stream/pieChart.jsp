@@ -245,18 +245,18 @@
             if(id ==1){    
                 var selectAnio=  document.getElementById("selectAnio").value;
                 if(selectAnio== ""){
-                    alert('Seleccione el año')
+                    alert('Seleccione el año');
                     return;
                 }
             }else{                  
                 var selectAnio2=  document.getElementById("selectAnio2").value;
                 var selectMes = document.getElementById("selectMes").value;
                 if(selectAnio2== ""){
-                    alert('Seleccione el año')
+                    alert('Seleccione el año');
                     return;
                 }
                 if(selectMes== ""){
-                    alert('Seleccione el mes')
+                    alert('Seleccione el mes');
                     return;
                 }
             }                   
@@ -288,7 +288,7 @@
 <div >
     <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("sentimentProm", lang)%>: <%=title%></h1>
     <div class="barra">
-        <a href="<%=urlRender.setMode("exportExcel").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+        <a href="<%=urlRender.setMode("exportExcel").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("type", "").setParameter("lang", lang)%>" class="excel">Exportar excel</a>
     </div>
     <div id="pieChart">
     </div>
@@ -529,7 +529,6 @@
             .on("change", change);
       
             function change() {
-                console.log('entro a change');
                 pieNetworkSocial(this.value, cont);
                 var value = this.value;
                 //clearTimeout(timeout);
@@ -578,7 +577,7 @@
             .attr("class", "arc")
             .on("click", function(d) {
                 var filter = d.data.label; 
-                alert('filter'+filter);
+                //alert('filter'+filter);
                 var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "socialNetwork").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
                 document.location.href = url;
             })
