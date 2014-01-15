@@ -648,7 +648,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         return isThereMoreMsgs;
     }
 
-    public void postMsg(Message message) {
+      public void postMsg(Message message) {
         if (message.getMsg_Text() == null) {
             log.error("Not message found, nothing to post");
             return;
@@ -657,14 +657,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         params.put("access_token", this.getAccessToken());
         params.put("message", message.getMsg_Text());
         params.put("privacy", "{'value':'" + privacyValue(message) + "'}");
-        String url  = "";
-        
-        if(message.getpodur_PostOutInv().getPodur_userIds() .equals("null") ){
-             url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/feed";
-        }else{
-             url =  Facebook.FACEBOOKGRAPH +message.getpodur_PostOutInv().getPodur_userIds()+ "/feed";
-
-        }
+        String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/feed";
         JSONObject jsonResponse = null;
         String facebookResponse = "";
 
