@@ -4016,34 +4016,12 @@ public class SocialSentPost extends GenericResource {
             JSONArray actions = postsData.has("actions") ? postsData.getJSONArray("actions") : null;
             if(actions != null && actions.length() > 0){//Available actions for the post
                 for (int i = 0; i < actions.length(); i++) {
-                    if(actions.getJSONObject(i).getString("name").equals("Comment") && socialUserExtAttr.isUserCanRespondMsg()){//I can comment                        
+                    if((actions.getJSONObject(i).getString("name").equals("Comment") || postType.equals("photo") || postType.equals("video")) && socialUserExtAttr.isUserCanRespondMsg()){//I can comment
                         writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + FacebookWall.REPLY + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
                             writer.write(" <a class=\"clasifica\" href=\"\" onclick=\"hideDialog(); showDialog('" + renderURL.setMode(Mode_ReplyPost).setParameter("postID", postsData.getString("id")) + "','Reply to " + postsData.getJSONObject("from").getString("name") + "');return false;\"><span>Reply</span></a>  ");
                         writer.write("   </span>");
 
-                        ///////////////////////If I can post I can Classify it to answer it later
-                        /*PostIn post = PostIn.getPostInbySocialMsgId(model, postsData.getString("id"));
-                        writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + FacebookWall.TOPIC + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
-                        if(socialUserExtAttr.isUserCanReTopicMsg()){
-                            if(post != null){
-                                String socialT = "";
-                                if(post.getSocialTopic() != null){
-                                    socialT = post.getSocialTopic().getTitle();
-                                }
-                                SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("id")).setParameter("postUri", post.getURI()).setParameter("currentTab", tabSuffix);
-                                    writer.write("<a href=\"#\" class=\"clasifica\" title=\"" + "Tema actual: " +  socialT + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
-                                    + paramRequest.getLocaleString("reclassify") + " post'); return false;\"><span>" + paramRequest.getLocaleString("reclassify") + "</span></a>");
-                            }else{
-                                SWBResourceURL clasifybyTopic = renderURL.setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("id")).setParameter("currentTab", tabSuffix);
-                                writer.write("<a href=\"#\" class=\"clasifica\" title=\"" + paramRequest.getLocaleString("classify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
-                                + paramRequest.getLocaleString("classify") + " Post'); return false;\"><span>" + paramRequest.getLocaleString("classify") + "</span></a>");
-                            }
-                        }else{
-                            writer.write("&nbsp;");
-                        }*/
-                        writer.write("   </span>");
-
-                    }else if(actions.getJSONObject(i).getString("name").equals("Like")){//I can like
+                    }else if(actions.getJSONObject(i).getString("name").equals("Like") || postType.equals("photo") || postType.equals("video")){//I can like
                         writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + FacebookWall.LIKE + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");                        
                         if(iLikedPost){
                             writer.write(" <a href=\"#\" class=\"nolike\" onclick=\"postSocialHtml('" + actionURL.setAction("doUnlike").setParameter("postID", postsData.getString("id")).setParameter("currentTab", tabSuffix) + "','" + facebook.getId() +  postsData.getString("id") + FacebookWall.INFORMATION + tabSuffix + "');return false;" +"\"><span>" + paramRequest.getLocaleString("undoLike") +"</span></a>");
@@ -4054,6 +4032,22 @@ public class SocialSentPost extends GenericResource {
                     }else{//Other unknown action
                         //writer.write("other:" + actions.getJSONObject(i).getString("name"));
                     }
+                }
+            }else{
+                if((postType.equals("photo") || postType.equals("video")) && socialUserExtAttr.isUserCanRespondMsg()){//I can comment
+                    writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + FacebookWall.REPLY + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
+                        writer.write(" <a class=\"clasifica\" href=\"\" onclick=\"hideDialog(); showDialog('" + renderURL.setMode(Mode_ReplyPost).setParameter("postID", postsData.getString("id")) + "','Reply to " + postsData.getJSONObject("from").getString("name") + "');return false;\"><span>Reply</span></a>  ");
+                    writer.write("   </span>");
+
+                }
+                if(postType.equals("photo") || postType.equals("video")){//I can like
+                    writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + FacebookWall.LIKE + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");                        
+                    if(iLikedPost){
+                        writer.write(" <a href=\"#\" class=\"nolike\" onclick=\"postSocialHtml('" + actionURL.setAction("doUnlike").setParameter("postID", postsData.getString("id")).setParameter("currentTab", tabSuffix) + "','" + facebook.getId() +  postsData.getString("id") + FacebookWall.INFORMATION + tabSuffix + "');return false;" +"\"><span>" + paramRequest.getLocaleString("undoLike") +"</span></a>");
+                    }else{
+                        writer.write(" <a href=\"#\" class=\"like\" onclick=\"postSocialHtml('" + actionURL.setAction("doLike").setParameter("postID", postsData.getString("id")).setParameter("currentTab", tabSuffix) + "','" + facebook.getId() + postsData.getString("id") + FacebookWall.INFORMATION + tabSuffix + "');return false;" +"\"><span>" + paramRequest.getLocaleString("like") +"</span></a>");
+                    }
+                    writer.write("   </span>");
                 }
             }
 
@@ -4802,7 +4796,11 @@ public class SocialSentPost extends GenericResource {
                 String postType = "";
                 if (postData.has("type")) {
                     postType = postData.getString("type");
-                } else if (postData.has("picture") && postData.has("name") && postData.has("link") && postData.has("description")) {
+                }else if(!postData.isNull("picture") && !postData.isNull("source")){
+                    postType = "video";
+                }else if(!postData.isNull("picture")){
+                    postType = "photo";
+                }else if (postData.has("picture") && postData.has("name") && postData.has("link") && postData.has("description")) {
                     postType = "link";
                 }
                 String message = "";
@@ -4846,6 +4844,7 @@ public class SocialSentPost extends GenericResource {
                         System.out.println("********************LINK guardado OK");
                     }
                 } else if (postType.equals("video") || postType.equals("swf")) {
+                    System.out.println("ES UN VIDEO\n\n\n****");
                     postIn = VideoIn.ClassMgr.createVideoIn(model);
                     postIn.setPi_type(SWBSocialUtil.POST_TYPE_VIDEO);
                     //Get message and/or story
@@ -4904,6 +4903,7 @@ public class SocialSentPost extends GenericResource {
                     System.out.println("********************STATUS guardado OK");
                 }
 
+                System.out.println("POSTDATA:" + postData.getString("id"));
                 //Information of post IN
                 postIn.setSocialNetMsgId(postData.getString("id"));
                 postIn.setPostInSocialNetwork(socialNetwork);
