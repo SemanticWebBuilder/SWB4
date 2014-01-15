@@ -1,6 +1,8 @@
 package org.semanticwb.social;
 
+import java.util.Enumeration;
 import javax.servlet.http.HttpServletRequest;
+import org.semanticwb.model.FormElementURL;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -35,140 +37,176 @@ public class LatLngRadioMap extends org.semanticwb.social.base.LatLngRadioMapBas
                                 String mode, String lang) 
     {
         StringBuilder         ret      = new StringBuilder();
+        
+        if(request.getParameter("doView")==null)
+        {
+            FormElementURL formElementUrl=getRenderURL(obj, prop, type, mode, lang);
+            
+            ret.append("<input type=\"hidden\" id=\"geoCenterLatitude\" name=\"geoCenterLatitude\" value=\"\"/>");
+            ret.append("<input type=\"hidden\" id=\"geoCenterLongitude\" name=\"geoCenterLongitude\" />");
+            ret.append("<input type=\"hidden\" id=\"geoRadio\" name=\"geoRadio\" />");
+            
+            ret.append("<iframe width=\"700\" height=\"440\" src=\"" + formElementUrl.setParameter("doView", "1").setParameter("suri", obj.getURI()) + "\"></iframe> ");
+            return ret.toString();
+        }
+        
         try
         {
-            System.out.println("Entra a LatLngRadioMap/renderElement");
-
             if (obj == null) {
                 obj = new SemanticObject();
             }        
 
-
-            String         name     = propName;
-
-            System.out.println("obj:"+obj);
-            System.out.println("name:"+name);
-
-            String value = request.getParameter(propName);
-
-            System.out.println("value-1:"+value);
-
-            if (value == null) {
-                value = obj.getProperty(prop);
-            }
-            if (value == null) {
-                value = "";
-            }
-
-            System.out.println("value-2:"+value);
-
-            //ret.append("<script type=\"text/javascript\" src=\'http://maps.google.com/maps/api/js?sensor=false\'></script> \n");
+            Stream stream=(Stream)obj.createGenericInstance();
+            //System.out.println("LatitudeInicial:"+stream.getGeoCenterLatitude());
+            //System.out.println("LongitudInicial:"+stream.getGeoCenterLongitude());
+            //System.out.println("RadioInicial:"+stream.getGeoRadio());
             
-            ret.append("<script type=\"text/javascript\" src=\"http://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyA_8bWaWXaKlJV2XgZt-RYwRAsp6S0J7iw\"></script>");
-            ret.append("<script type=\"text/javascript\" src=\"/swbadmin/js/jquery/jquery-1.4.4.min.js\"></script> \n");
+            
+            String latitude="0";
+            String longitude="0";
+            String radio="0";
+            if(stream.getGeoCenterLatitude()!=0)latitude=""+stream.getGeoCenterLatitude();
+            if(stream.getGeoCenterLongitude()!=0)longitude=""+stream.getGeoCenterLongitude();
+            if(stream.getGeoRadio()>0)radio=""+stream.getGeoRadio();
+            
 
-            ret.append("<script type=\"text/javascript\" language=\"javascript\"> \n");
-
-            ret.append("$(document).ready(function(){ \n");
-
-                ret.append("var Circle = null; \n");
-                ret.append("var Radius = $(\"#radius\").val(); \n");
-
-                ret.append("var StartPosition = new google.maps.LatLng(54.19335, -3.92695); \n");
-
-                ret.append("function DrawCircle(Map, Center, Radius) { \n");
-
-                    ret.append("if (Circle != null) { \n");
-                        ret.append("Circle.setMap(null); \n");
-                    ret.append("} \n");
-
-                    ret.append("if(Radius > 0) { \n");
-                        ret.append("Radius *= 1609.344; \n");
-                        ret.append("Circle = new google.maps.Circle({ \n");
-                            ret.append("center: Center, \n");
-                            ret.append("radius: Radius, \n");
-                            ret.append("strokeColor: \"#0000FF\", \n");
-                            ret.append("strokeOpacity: 0.35, \n");
-                            ret.append("strokeWeight: 2, \n");
-                            ret.append("fillColor: \"#0000FF\", \n");
-                            ret.append("fillOpacity: 0.20, \n");
-                            ret.append("map: Map \n");
-                        ret.append("}); \n");
-                    ret.append("} \n");
-                ret.append("} \n");
-
-                ret.append("function SetPosition(Location, Viewport) { \n");
-                    ret.append("Marker.setPosition(Location); \n");
-                    ret.append("if(Viewport){ \n");
-                        ret.append("Map.fitBounds(Viewport); \n");
-                        ret.append("Map.setZoom(map.getZoom() + 2); \n");
-                    ret.append("} \n");
-                    ret.append("else { \n");
-                        ret.append("Map.panTo(Location); \n");
-                    ret.append("} \n");
-                    ret.append("Radius = $(\"#radius\").val(); \n");
-                    ret.append("DrawCircle(Map, Location, Radius); \n");
-                    ret.append("$(\"#latitude\").val(Location.lat().toFixed(5)); \n");
-                    ret.append("$(\"#longitude\").val(Location.lng().toFixed(5)); \n");
-              ret.append("} \n");
-
-                ret.append("var MapOptions = { \n");
-                    ret.append("zoom: 5, \n");
-                    ret.append("center: StartPosition, \n");
-                    ret.append("mapTypeId: google.maps.MapTypeId.ROADMAP, \n");
-                    ret.append("mapTypeControl: false, \n");
-                    ret.append("disableDoubleClickZoom: true, \n");
-                    ret.append("streetViewControl: false \n");
-                ret.append("}; \n");
-
-                ret.append("var MapView = $(\"#map\"); \n");
-                ret.append("var Map = new google.maps.Map(MapView.get(0), MapOptions); \n");
-
-                ret.append("var Marker = new google.maps.Marker({ \n");
-                    ret.append("position: StartPosition, \n");
-                    ret.append("map: Map, \n");
-                    ret.append("title: \"Drag Me\", \n");
-                    ret.append("draggable: true \n");
-                ret.append("}); \n");
-
-                ret.append("google.maps.event.addListener(Marker, \"dragend\", function(event) { \n");
-                    ret.append("SetPosition(Marker.position); \n");
-                ret.append("}); \n");
-
-                ret.append("$(\"#radius\").keyup(function(){ \n");
-                    ret.append("google.maps.event.trigger(Marker, \"dragend\"); \n");
-                ret.append("}); \n");
-
-                ret.append("DrawCircle(Map, StartPosition, Radius); \n");
-                ret.append("SetPosition(Marker.position); \n");
-
-            ret.append("}); \n");
-
-            ret.append("</script> \n");
-
-            if (mode.equals("edit") || mode.equals("create")) {
-                ret.append("Radio<input type=\"text\" id=\"radius\" value=\"320\" /> \n");
-            }else if (mode.equals("view")) {
-                ret.append("<span _id=\"radius\" name=\"radius\">" + value + "</span> \n");
-            }
-
-            ret.append("HolasssLat<input type=\"text\" id=\"latitude\" /> \n");
-            ret.append("<input type=\"text\" id=\"longitude\" /> \n");
-
-            ret.append("<div id=\"map\"> \n");
-            ret.append("</div> \n");
+            ret.append("<script type=\"text/javascript\" src=\"http://maps.googleapis.com/maps/api/js?sensor=false\"></script>");
+            ret.append("<script type=\"text/javascript\" src=\"/swbadmin/js/jquery/jquery-1.4.4.min.js\"></script>");
+            ret.append("<script type=\"text/javascript\" language=\"javascript\">");
+            
+            ret.append("function setParentValue(elementname, value2set) {");
+            //ret.append("alert('Hola');");
+            //ret.append("alert('elementName2Change:'+elementname);");
+            //ret.append("alert('valuetoset:'+value2set);");
+            ret.append("parent.document.getElementById(''+elementname+'').value=''+value2set+'';");
+            //ret.append("var geoLati=parent.document.getElementById('geoCenterLatitude').value;");
+            //ret.append("alert('geoLati:'+geoLati);");
+            //ret.append("alert('Valor Puesto:'+parent.document.getElementById('geoCenterLatitude'));");
+            ret.append("return false;");
+            ret.append("}");
+            
+            ret.append("$(document).ready(function(){");
+            ret.append("var Circle = null;");
+            ret.append("var Radius = $(\"#geoRadio\").val();");
+            ret.append("var StartPosition = new google.maps.LatLng("+latitude+", "+longitude+");");
+            ret.append("function DrawCircle(Map, Center, Radius) {");
+            ret.append("if (Circle != null) {");
+            ret.append("Circle.setMap(null);");
+            ret.append("}");
+            ret.append("if(Radius > 0) {");
+            ret.append("Radius *= 1609.344;");
+            ret.append("Circle = new google.maps.Circle({");
+            ret.append("center: Center,");
+            ret.append("radius: Radius,");
+            ret.append("strokeColor: \"#0000FF\",");
+            ret.append("strokeOpacity: 0.35,");
+            ret.append("strokeWeight: 2,");
+            ret.append("fillColor: \"#0000FF\",");
+            ret.append("fillOpacity: 0.20,");
+            ret.append("map: Map");
+            ret.append("});");
+            ret.append("}");
+            ret.append("}");
+            ret.append("function SetPosition(Location, Viewport) {");
+            ret.append("Marker.setPosition(Location);");
+            ret.append("if(Viewport){");
+            ret.append("Map.fitBounds(Viewport);");
+            ret.append("Map.setZoom(map.getZoom() + 2);");
+            ret.append("}");
+            ret.append("else {");
+            ret.append("Map.panTo(Location);");
+            ret.append("}");
+            ret.append("Radius = $(\"#geoRadio\").val();");
+            ret.append("DrawCircle(Map, Location, Radius);");
+            ret.append("$(\"#geoCenterLatitude\").val(Location.lat().toFixed(5));");
+            ret.append("$(\"#geoCenterLongitude\").val(Location.lng().toFixed(5));");
+            ret.append("setParentValue('geoCenterLatitude', Location.lat().toFixed(5));");
+            ret.append("setParentValue('geoCenterLongitude', Location.lng().toFixed(5));");
+            ret.append("}");
+            ret.append("var MapOptions = {");
+            ret.append("zoom: 2,");
+            ret.append("center: StartPosition,");
+            ret.append("mapTypeId: google.maps.MapTypeId.ROADMAP,");
+            ret.append("mapTypeControl: false,");
+            ret.append("disableDoubleClickZoom: true,");
+            ret.append("streetViewControl: false");
+            ret.append("};");
+            ret.append("var MapView = $(\"#map\");");
+            ret.append("var Map = new google.maps.Map(MapView.get(0), MapOptions);");
+            ret.append("var Marker = new google.maps.Marker({");
+            ret.append("position: StartPosition,");
+            ret.append("map: Map,");
+            ret.append("title: \"Drag Me\",");
+            ret.append("draggable: true");
+            ret.append("});");
+            ret.append("google.maps.event.addListener(Marker, \"dragend\", function(event) {");
+            ret.append("SetPosition(Marker.position);");
+            ret.append("});");
+            ret.append("$(\"#geoRadio\").keyup(function(){");
+            ret.append("google.maps.event.trigger(Marker, \"dragend\");");
+            ret.append("});");
+            ret.append("DrawCircle(Map, StartPosition, Radius);");
+            ret.append("SetPosition(Marker.position);");
+            ret.append("});");
+            ret.append("</script>");
+            ret.append("Lat<input type=\"text\" id=\"geoCenterLatitude\" name=\"geoCenterLatitude\" value=\""+latitude+"\" onchange=\"setParentValue('geoCenterLatitude', this.value);\"/>");
+            ret.append("Lng<input type=\"text\" id=\"geoCenterLongitude\" name=\"geoCenterLongitude\" value=\""+longitude+"\" onchange=\"setParentValue('geoCenterLongitude', this.value);\"/>");
+            ret.append("Radio<input type=\"text\" id=\"geoRadio\" value=\""+radio+"\" name=\"geoRadio\" onchange=\"setParentValue('geoRadio', this.value);\"/>");
+            ret.append("<div id=\"map\" style=\"width:600px; height:400px; background-color:#000000;\">");
+            ret.append("</div>");
         
         }catch(Exception e)
         {
-            System.out.println("ErrorJ:"+e.getMessage());
             e.printStackTrace();
         }
-        
-        System.out.println("HTML:"+ret.toString());
         
         return ret.toString();
     
     }
     
+    
+     /**
+     * Process.
+     * 
+     * @param request the request
+     * @param obj the obj
+     * @param prop the prop
+     */
+    @Override
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) {
+
+        Stream stream=(Stream)obj.createGenericInstance();
+        /*
+        Enumeration<String> enParams=request.getParameterNames();
+        while(enParams.hasMoreElements())
+        {
+            String sParam=enParams.nextElement();
+            System.out.println("ParametroJJ:"+request.getParameter(sParam));
+        }*/
+        
+        stream.setGeoCenterLatitude(0);
+        if(request.getParameter("geoCenterLatitude")!=null)
+        {
+            try{                
+                stream.setGeoCenterLatitude(Float.parseFloat(request.getParameter("geoCenterLatitude")));
+            }catch(Exception e){stream.setGeoCenterLatitude(0);}
+        }
+        stream.setGeoCenterLongitude(0);
+        if(request.getParameter("geoCenterLongitude")!=null)
+        {
+            try{                
+                stream.setGeoCenterLongitude(Float.parseFloat(request.getParameter("geoCenterLongitude")));
+            }catch(Exception e){stream.setGeoCenterLongitude(0);}
+        }
+        stream.setGeoRadio(0);
+        if(request.getParameter("geoRadio")!=null)
+        {
+            try{                
+                stream.setGeoRadio(Float.parseFloat(request.getParameter("geoRadio")));
+            }catch(Exception e){stream.setGeoRadio(0);}
+        }
+        
+    }
+
     
 }
