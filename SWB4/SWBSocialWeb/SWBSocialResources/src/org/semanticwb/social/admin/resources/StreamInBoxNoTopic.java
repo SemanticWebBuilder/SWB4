@@ -1231,10 +1231,10 @@ public class StreamInBoxNoTopic extends GenericResource {
                         aListFilter=SWBSocial.executeQueryArray(sQuery, wsite);                        
                     }
                 } else { //Traer todo, NPage==0, en teoría jamas entraría a esta opción.
-                    streamPostIns=Integer.parseInt(getPostInWithOutTopic_Query(0, 0, true, stream));
+                    streamPostIns=Integer.parseInt(getPostInWithOutTopic_Query(0L, 0, true, stream));
                     if(streamPostIns>0)
                     {
-                        sQuery=getPostInWithOutTopic_Query(0L, Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        sQuery=getPostInWithOutTopic_Query(0L, streamPostIns, false, stream);
                         aListFilter=SWBSocial.executeQueryArray(sQuery, wsite);   
                     }
                 }
