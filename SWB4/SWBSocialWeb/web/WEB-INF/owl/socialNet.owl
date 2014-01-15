@@ -1638,17 +1638,6 @@
     <rdfs:comment>Relación sentimental del usuario en la red social. 1=Soltero; 2=Unión Libre; 3=Casado; 4=Divordiado; 5=Viudo;</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="geoCenterLatitude">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_geoCenterLatitude">
-        <swbxf:propPromptMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Capture una latitude para entrada de mensajes en el Stream.</swbxf:propPromptMessage>
-        <rdfs:label xml:lang="en">Latitude</rdfs:label>
-        <swbxf:propGroup rdf:resource="#grp_Filters"/>
-        <rdfs:label xml:lang="es">Latitud</rdfs:label>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >80</swb:index>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
     <rdfs:comment>Latitud del punto central a buscar mensajes</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
     <rdfs:domain rdf:resource="#Geolocable"/>
@@ -1756,6 +1745,9 @@
   <owl:DatatypeProperty rdf:ID="geoRadio">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_geoRadio">
+        <swbxf:formElement>
+          <social:LatLngRadioMap rdf:ID="LatLngRadioMap_1"/>
+        </swbxf:formElement>
         <swbxf:propPromptMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Capture un radio en conjunto con latitude y longitude para entrada de mensajes en el Stream.</swbxf:propPromptMessage>
         <swbxf:propGroup rdf:resource="#grp_Filters"/>
@@ -1814,20 +1806,11 @@
     <rdfs:domain rdf:resource="#SocialPFlowInstance"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="geoCenterLongitude">
-    <rdfs:label xml:lang="en">Longitude</rdfs:label>
     <rdfs:comment>Longitud del punto central a buscar mensajes</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
     <rdfs:domain rdf:resource="#Geolocable"/>
     <rdfs:label xml:lang="es">Longitud</rdfs:label>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_geoCenterLongitude">
-        <swbxf:propPromptMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Capture una longitude para entrada de mensajes en el Stream.</swbxf:propPromptMessage>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >90</swb:index>
-        <swbxf:propGroup rdf:resource="#grp_Filters"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Longitude</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="postSentimentalType">
     <rdfs:domain rdf:resource="#Post"/>
@@ -2696,9 +2679,7 @@
     <swbxf:propGroup rdf:resource="#grp_Filters"/>
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >120</swb:index>
-    <swbxf:formElement>
-      <social:LatLngRadioMap rdf:ID="LatLngRadioMap_1"/>
-    </swbxf:formElement>
+    <swbxf:formElement rdf:resource="#LatLngRadioMap_1"/>
   </swbxf:DisplayProperty>
   <swb:Class rdf:ID="Photo">
     <rdfs:comment xml:lang="es">Clase que sera creada cuando un post sea de tipo Foto (una imagen), como lo es flicker y facebook (cuando se envia una foto a facebook).</rdfs:comment>
@@ -2761,6 +2742,15 @@
     <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     > jpg file:*.jpg|jpeg file:*.jpeg|png file:*.png</swbxf:fileFilter>
   </swb:DojoImageUpload>
+  <swbxf:DisplayProperty rdf:ID="dp_geoCenterLatitude">
+    <swbxf:propPromptMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Capture una latitude para entrada de mensajes en el Stream.</swbxf:propPromptMessage>
+    <rdfs:label xml:lang="en">Latitude</rdfs:label>
+    <swbxf:propGroup rdf:resource="#grp_Filters"/>
+    <rdfs:label xml:lang="es">Latitud</rdfs:label>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >80</swb:index>
+  </swbxf:DisplayProperty>
   <swb:Class rdf:ID="Flicker">
     <rdfs:subClassOf rdf:resource="#PostOutMonitorable"/>
     <rdfs:subClassOf rdf:resource="#Oauthable"/>
@@ -2772,6 +2762,13 @@
     <rdfs:label>Flicker</rdfs:label>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
+  <swbxf:DisplayProperty rdf:ID="dp_geoCenterLongitude">
+    <swbxf:propPromptMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Capture una longitude para entrada de mensajes en el Stream.</swbxf:propPromptMessage>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >90</swb:index>
+    <swbxf:propGroup rdf:resource="#grp_Filters"/>
+  </swbxf:DisplayProperty>
   <swbxf:DisplayProperty rdf:ID="dp_userFavorite">
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >200</swb:index>
