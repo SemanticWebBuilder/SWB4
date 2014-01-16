@@ -103,7 +103,7 @@ public class Timeline extends GenericResource{
         System.out.println("suriReceived in Timeline:" + objUri);
         twitter4j.Twitter twitter = null;
         if(contentTabId == null){//The resource is loaded for the first time and it needs to display the tabs
-            String jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/twitterTabs.jsp";
+            String jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/twitterTabs1.jsp";
             RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
             try {
                 request.setAttribute("paramRequest", paramRequest);
@@ -909,7 +909,7 @@ public class Timeline extends GenericResource{
                     out.println("   var tabId = '" + objUri + FAVORITES_TAB + "';");
                     out.println("   var pane = dijit.byId(tabId);");                   
                     out.println("   try{");
-                    out.println("       var aux='Favorites (" + tweetsListener.getFavoritesSize() + ")';");
+                    out.println("       var aux='" + paramRequest.getLocaleString("favoritesLabel") + " (" + tweetsListener.getFavoritesSize() + ")';");
                     out.println("       pane.title = aux;");
                     out.println("       pane.controlButton.containerNode.innerHTML = aux;");
                     out.println("   }catch(noe){");
@@ -918,7 +918,7 @@ public class Timeline extends GenericResource{
                    
                     out.println("   var favs = '" + objUri + "/newFavoritesAvailable';");
                     out.println("   var hrefVal='<a href=\"#\" onclick=\"appendHtmlAt(\\'" + renderURL.setMode("doGetFavoritesStream").setParameter("suri", objUri)
-                            + "\\',\\'" + objUri +"/favoritesStream\\',\\'top\\'); try{dojo.byId(this.parentNode.id).innerHTML = \\'\\';}catch(noe){}; resetTabTitle(\\'" + objUri + "\\', \\'" + FAVORITES_TAB +  "\\', \\'Favorites\\'); return false;\">" + paramRequest.getLocaleString("youHave") + " <b>"
+                            + "\\',\\'" + objUri +"/favoritesStream\\',\\'top\\'); try{dojo.byId(this.parentNode.id).innerHTML = \\'\\';}catch(noe){}; resetTabTitle(\\'" + objUri + "\\', \\'" + FAVORITES_TAB +  "\\', \\'" + paramRequest.getLocaleString("favoritesLabel") + "\\'); return false;\">" + paramRequest.getLocaleString("youHave") + " <b>"
                             + tweetsListener.getFavoritesSize() +  "</b> " + (tweetsListener.getFavoritesSize() > 1 ? paramRequest.getLocaleString("newFavorites") : paramRequest.getLocaleString("newFavorite")) +  "</a>';");
                     out.println("   try{");
                     out.println("      document.getElementById(favs).innerHTML = hrefVal;");
@@ -932,7 +932,7 @@ public class Timeline extends GenericResource{
                     out.println("   var tabId = '" +objUri + MENTIONS_TAB + "';");
                     out.println("   var pane = dijit.byId(tabId);");                   
                     out.println("   try{");
-                    out.println("       var aux='Mentions (" + tweetsListener.getMentionsSize() + ")';");
+                    out.println("       var aux='" + paramRequest.getLocaleString("mentionsLabel") + " (" + tweetsListener.getMentionsSize() + ")';");
                     out.println("       pane.title = aux;");
                     out.println("       pane.controlButton.containerNode.innerHTML = aux;");
                     out.println("   }catch(noe){");
@@ -940,7 +940,7 @@ public class Timeline extends GenericResource{
                     out.println("   }");
                    
                     out.println("   var favs = '" + objUri + "/newMentionsAvailable';");
-                    out.println("   var hrefVal='<a href=\"#\" onclick=\"appendHtmlAt(\\'" + renderURL.setMode("doGetMentionsStream").setParameter("suri", objUri) + "\\',\\'" + objUri +"/mentionsStream\\',\\'top\\'); try{dojo.byId(this.parentNode.id).innerHTML = \\'\\';}catch(noe){}; resetTabTitle(\\'" + objUri + "\\', \\'" + MENTIONS_TAB +"\\', \\'Mentions\\'); return false;\">" + paramRequest.getLocaleString("youHave") + " <b>" + tweetsListener.getMentionsSize() +  "</b> " + (tweetsListener.getMentionsSize() > 1 ? paramRequest.getLocaleString("newMentions") : paramRequest.getLocaleString("newMention")) +  "</a>';");
+                    out.println("   var hrefVal='<a href=\"#\" onclick=\"appendHtmlAt(\\'" + renderURL.setMode("doGetMentionsStream").setParameter("suri", objUri) + "\\',\\'" + objUri +"/mentionsStream\\',\\'top\\'); try{dojo.byId(this.parentNode.id).innerHTML = \\'\\';}catch(noe){}; resetTabTitle(\\'" + objUri + "\\', \\'" + MENTIONS_TAB +"\\', \\'" + paramRequest.getLocaleString("mentionsLabel") + "\\'); return false;\">" + paramRequest.getLocaleString("youHave") + " <b>" + tweetsListener.getMentionsSize() +  "</b> " + (tweetsListener.getMentionsSize() > 1 ? paramRequest.getLocaleString("newMentions") : paramRequest.getLocaleString("newMention")) +  "</a>';");
                     out.println("   try{");
                     out.println("      document.getElementById(favs).innerHTML = hrefVal;");
                     out.println("   }catch(noe){}");
@@ -953,7 +953,7 @@ public class Timeline extends GenericResource{
                     out.println("   var tabId = '" +objUri + DIRECT_MESSAGES_TAB +"';");
                     out.println("   var pane = dijit.byId(tabId);");                   
                     out.println("   try{");
-                    out.println("       var aux='Direct Messages (" + tweetsListener.getDirectMSize() + ")';");
+                    out.println("       var aux='" + paramRequest.getLocaleString("directMLabel") + " (" + tweetsListener.getDirectMSize() + ")';");
                     out.println("       pane.title = aux;");
                     out.println("       pane.controlButton.containerNode.innerHTML = aux;");
                     out.println("   }catch(noe){");
@@ -961,7 +961,7 @@ public class Timeline extends GenericResource{
                     out.println("   }");
                    
                     out.println("   var favs = '" + objUri + "/newDirectMessagesAvailable';");
-                    out.println("   var hrefVal='<a href=\"#\" onclick=\"appendHtmlAt(\\'" + renderURL.setMode("doGetDMsStream").setParameter("suri", objUri) + "\\',\\'" + objUri +"/directMessagesStream\\',\\'top\\'); try{dojo.byId(this.parentNode.id).innerHTML = \\'\\';}catch(noe){}; resetTabTitle(\\'" + objUri + "\\', \\'" + DIRECT_MESSAGES_TAB + "\\', \\'Direct Messages\\'); return false;\">" + paramRequest.getLocaleString("youHave") + " <b>" + tweetsListener.getDirectMSize() +  "</b> " + (tweetsListener.getDirectMSize() > 1 ? paramRequest.getLocaleString("newDMs") : paramRequest.getLocaleString("newDM")) +  "</a>';");
+                    out.println("   var hrefVal='<a href=\"#\" onclick=\"appendHtmlAt(\\'" + renderURL.setMode("doGetDMsStream").setParameter("suri", objUri) + "\\',\\'" + objUri +"/directMessagesStream\\',\\'top\\'); try{dojo.byId(this.parentNode.id).innerHTML = \\'\\';}catch(noe){}; resetTabTitle(\\'" + objUri + "\\', \\'" + DIRECT_MESSAGES_TAB + "\\', \\'" + paramRequest.getLocaleString("directMLabel") + "\\'); return false;\">" + paramRequest.getLocaleString("youHave") + " <b>" + tweetsListener.getDirectMSize() +  "</b> " + (tweetsListener.getDirectMSize() > 1 ? paramRequest.getLocaleString("newDMs") : paramRequest.getLocaleString("newDM")) +  "</a>';");
                     out.println("   try{");
                     out.println("      document.getElementById(favs).innerHTML = hrefVal;");
                     out.println("   }catch(noe){}");
@@ -1617,7 +1617,7 @@ public class Timeline extends GenericResource{
     
     public static List<Status> recoverConversations(long tweetID, twitter4j.Twitter twitter){
         List<Status> conversations=null;
-        try {
+        /*try {
             //Show conversation information if exists
             RelatedResults results = twitter.getRelatedResults(tweetID);
             conversations = results.getTweetsWithConversation();
@@ -1641,7 +1641,7 @@ public class Timeline extends GenericResource{
             System.out.println("message" + ex.getMessage());
             ex.printStackTrace();
             java.util.logging.Logger.getLogger(Timeline.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
         return conversations;
     }
     
