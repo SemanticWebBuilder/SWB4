@@ -38,15 +38,17 @@ public class LatLngRadioMap extends org.semanticwb.social.base.LatLngRadioMapBas
     {
         StringBuilder         ret      = new StringBuilder();
         
+        Stream stream=(Stream)obj.createGenericInstance();
+        
         if(request.getParameter("doView")==null)
         {
             FormElementURL formElementUrl=getRenderURL(obj, prop, type, mode, lang);
             
-            ret.append("<input type=\"hidden\" id=\"geoCenterLatitude\" name=\"geoCenterLatitude\" value=\"\"/>");
-            ret.append("<input type=\"hidden\" id=\"geoCenterLongitude\" name=\"geoCenterLongitude\" />");
-            ret.append("<input type=\"hidden\" id=\"geoRadio\" name=\"geoRadio\" />");
+            ret.append("<input type=\"hidden\" id=\"geoCenterLatitude_"+stream.getId()+"\" name=\"geoCenterLatitude\" value=\"\"/>");
+            ret.append("<input type=\"hidden\" id=\"geoCenterLongitude_"+stream.getId()+"\" name=\"geoCenterLongitude\" />");
+            ret.append("<input type=\"hidden\" id=\"geoRadio_"+stream.getId()+"\" name=\"geoRadio\" />");
             
-            ret.append("<iframe width=\"700\" height=\"440\" src=\"" + formElementUrl.setParameter("doView", "1").setParameter("suri", obj.getURI()) + "\"></iframe> ");
+            ret.append("<iframe id=\"radio_stream_"+stream.getId()+"\" name=\"radio_stream_"+stream.getId()+"\" width=\"700\" height=\"440\" src=\"" + formElementUrl.setParameter("doView", "1").setParameter("suri", obj.getURI()) + "\"></iframe> ");
             return ret.toString();
         }
         
@@ -56,7 +58,7 @@ public class LatLngRadioMap extends org.semanticwb.social.base.LatLngRadioMapBas
                 obj = new SemanticObject();
             }        
 
-            Stream stream=(Stream)obj.createGenericInstance();
+            
             //System.out.println("LatitudeInicial:"+stream.getGeoCenterLatitude());
             //System.out.println("LongitudInicial:"+stream.getGeoCenterLongitude());
             //System.out.println("RadioInicial:"+stream.getGeoRadio());
@@ -131,7 +133,7 @@ public class LatLngRadioMap extends org.semanticwb.social.base.LatLngRadioMapBas
             ret.append("disableDoubleClickZoom: true,");
             ret.append("streetViewControl: false");
             ret.append("};");
-            ret.append("var MapView = $(\"#map\");");
+            ret.append("var MapView = $(\"#map_"+stream.getId()+"\");");
             ret.append("var Map = new google.maps.Map(MapView.get(0), MapOptions);");
             ret.append("var Marker = new google.maps.Marker({");
             ret.append("position: StartPosition,");
@@ -149,10 +151,10 @@ public class LatLngRadioMap extends org.semanticwb.social.base.LatLngRadioMapBas
             ret.append("SetPosition(Marker.position);");
             ret.append("});");
             ret.append("</script>");
-            ret.append("Lat<input type=\"text\" id=\"geoCenterLatitude\" name=\"geoCenterLatitude\" value=\""+latitude+"\" onchange=\"setParentValue('geoCenterLatitude', this.value);\"/>");
-            ret.append("Lng<input type=\"text\" id=\"geoCenterLongitude\" name=\"geoCenterLongitude\" value=\""+longitude+"\" onchange=\"setParentValue('geoCenterLongitude', this.value);\"/>");
-            ret.append("Radio<input type=\"text\" id=\"geoRadio\" value=\""+radio+"\" name=\"geoRadio\" onchange=\"setParentValue('geoRadio', this.value);\"/>");
-            ret.append("<div id=\"map\" style=\"width:600px; height:400px; background-color:#000000;\">");
+            ret.append("Lat<input type=\"text\" id=\"geoCenterLatitude\" name=\"geoCenterLatitude\" value=\""+latitude+"\" onchange=\"setParentValue('geoCenterLatitude_"+stream.getId()+"', this.value);\"/>");
+            ret.append("Lng<input type=\"text\" id=\"geoCenterLongitude\" name=\"geoCenterLongitude\" value=\""+longitude+"\" onchange=\"setParentValue('geoCenterLongitude_"+stream.getId()+"', this.value);\"/>");
+            ret.append("Radio<input type=\"text\" id=\"geoRadio\" value=\""+radio+"\" name=\"geoRadio\" onchange=\"setParentValue('geoRadio_"+stream.getId()+"', this.value);\"/>");
+            ret.append("<div id=\"map_"+stream.getId()+"\" style=\"width:600px; height:400px; background-color:#000000;\">");
             ret.append("</div>");
         
         }catch(Exception e)
