@@ -49,7 +49,7 @@
             //gets Twitter4j instance with account credentials
             out.println("<div class=\"swbform\">");
             System.out.println(paramRequest.getLocaleString("showing") + " @" + twitterBean.getScreenName() +  "'s Mentions.");
-            out.println("<div align=\"center\"><h2>" + paramRequest.getLocaleString("showing")  + " @" + twitterBean.getScreenName() + " "  + paramRequest.getLocaleString("mentions") + "</h2><br/></div>");
+            out.println("<div align=\"center\"><h2>" + "@" + twitterBean.getScreenName() + " - " + paramRequest.getLocaleString("mentionsLabel") + "</h2><br/></div>");
             out.println("<div class=\"bar\" id=\"" + objUri + "/newMentionsAvailable\" dojoType=\"dojox.layout.ContentPane\"></div>");
             out.println("<div id=\"" + objUri + "/mentionsStream\" dojoType=\"dojox.layout.ContentPane\"></div>");
 

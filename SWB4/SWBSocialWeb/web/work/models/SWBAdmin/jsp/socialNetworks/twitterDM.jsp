@@ -46,7 +46,7 @@
             //gets Twitter4j instance with account credentials
             out.println("<div class=\"swbform\">");
             System.out.println( paramRequest.getLocaleString("showing") + " @" + twitterBean.getScreenName() +  "'s Direct Messages.");
-            out.println("<div align=\"center\"><h2>" + paramRequest.getLocaleString("showing") + " @" + twitterBean.getScreenName() + " " + paramRequest.getLocaleString("directMessages") + "</h2><br/></div>");
+            out.println("<div align=\"center\"><h2>" + "@" + twitterBean.getScreenName() + " - " + paramRequest.getLocaleString("directMLabel") + "</h2><br/></div>");
             out.println("<div class=\"bar\" id=\"" + objUri + "/newDirectMessagesAvailable\" dojoType=\"dojox.layout.ContentPane\"></div>");
             out.println("<div id=\"" + objUri + "/directMessagesStream\" dojoType=\"dojox.layout.ContentPane\"></div>");
             Paging paging = new Paging(); //used to set maxId and count
