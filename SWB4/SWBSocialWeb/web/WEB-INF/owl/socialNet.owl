@@ -1743,6 +1743,8 @@
     <rdfs:domain rdf:resource="#Post"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="geoRadio">
+    <rdfs:label xml:lang="en">Place</rdfs:label>
+    <rdfs:label xml:lang="es">Ubicación</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_geoRadio">
         <swbxf:formElement>
@@ -1755,7 +1757,6 @@
         >100</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="es">Radio</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
     <rdfs:domain rdf:resource="#Geolocable"/>
     <rdfs:comment>Distancia del centro (punto de latitud y longitud) a buscar mensajes</rdfs:comment>
