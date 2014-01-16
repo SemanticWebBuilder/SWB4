@@ -1,7 +1,10 @@
+  4.5.2.1
+    - Se agregó al captcha para formas automáticas la posibilidad de usar audio (serch)
   4.5.2.0
     - Se actualizó la funcionalidad del SemanticElement FileUpload con la nueva versión de DOJO (serch)
     - Se agregó Plug-in para CloudComputing en la plataforma DimensionData (yutzin)
     - Se agregó Filtrado de secciones por usuario (jei)
+    - Se agregó reporte de seguimiento por secciones y usuarios (carlos)
   4.5.1.0
     - Se agrego acciones de seguridad, evaluacion de reglas and/or y heredar o no elementos (Jei) 
   4.5.0.0
