@@ -2765,6 +2765,12 @@ public class FacebookWall extends GenericResource {
         //SI ESTÁ HACIENDO ALGO EL "doGetStreamUser" no debe mostrar el mensaje hasta que termine
 
         HttpSession session = request.getSession(true);
+        if(session == null){
+            return;
+        }
+        if(session.getAttribute(objUri + currentTab + "since") == null){
+            return;
+        }
         HashMap<String, String> params = new HashMap<String, String>(2);
         params.put("access_token", facebook.getAccessToken());
         System.out.println("CURRENTTAB:" + currentTab);
