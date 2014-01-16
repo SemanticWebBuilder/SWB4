@@ -770,9 +770,12 @@ public class SWBFormMgr implements SWBForms
     {
         if (useCaptcha)
         {
-            if (!((String) request.getSession(true).getAttribute("captchaCad")).equalsIgnoreCase(request.getParameter("frmCaptchaValue"))){
+            if ((null!=request.getSession(true).getAttribute("captchaCad") && !((String) request.getSession(true).getAttribute("captchaCad")).equalsIgnoreCase(request.getParameter("frmCaptchaValue"))) ||
+                    (null!=request.getSession(true).getAttribute("captchaNum") && !((String) request.getSession(true).getAttribute("captchaNum")).equalsIgnoreCase(request.getParameter("frmCaptchaValue")))){
                 throw new FormValidateException("Invalid human submitted form validation");
             }
+            request.getSession(true).removeAttribute("captchaCad");
+            request.getSession(true).removeAttribute("captchaNum");
         }
         SemanticObject ret=m_obj;
         String smode=request.getParameter(PRM_MODE);
@@ -1295,9 +1298,10 @@ public class SWBFormMgr implements SWBForms
     private String getCaptchaField(boolean isdojo){
         StringBuilder ret = new StringBuilder();
         ret.append("<tr><td align=\"right\"><label for=\"frmCaptchaValue\">Verificaci&oacute;n <em>*</em></label></td><td>\n");
-                ret.append("<img src=\""+SWBPlatform.getContextPath()+"/frmprocess/requestCaptcha\" style=\"float:left;margin-left: 5px;margin-right: 30px;\" id=\"captchaimg\" />");
+                ret.append("<div id=\"captchaSnd\"></div><img src=\""+SWBPlatform.getContextPath()+"/frmprocess/requestCaptcha\" style=\"float:left;margin-left: 5px;margin-right: 30px;\" id=\"captchaimg\" />");
                 ret.append("<a onclick=\"document.getElementById('captchaimg').src='"+SWBPlatform.getContextPath()+
-                        "/frmprocess/requestCaptcha?'+ Math.random(); document.getElementById('frmCaptchaValue').value=''; return false;\">"+getLocaleString("captchachgImg",m_lang)+"</a><br/>");
+                        "/frmprocess/requestCaptcha?'+ Math.random(); document.getElementById('frmCaptchaValue').value=''; return false;\">"+getLocaleString("captchachgImg",m_lang)+"</a> ");
+                ret.append("<a onclick=\"jBeep('"+SWBPlatform.getContextPath()+"/frmprocess/requestSoundCaptcha?'+ Math.random())\">"+getLocaleString("scaptchasol",m_lang)+"</a><br/>");
                 ret.append("<input name=\"frmCaptchaValue\" id=\"frmCaptchaValue\"  ");
 
                 if (isdojo) {
