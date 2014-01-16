@@ -361,6 +361,8 @@
                             if (socialNetwork instanceof Messageable && socialNetwork.isActive() && socialNetwork.isValid()) {
                                 if (socialNetwork instanceof Youtube && postIn == null && postOut == null) {//Only show youtube networks if is a response
                                     continue;
+                                }else if(socialNetwork instanceof Youtube && postOut != null){
+                                continue;
                                 }
                                 boolean isSelected = false;
                                 //System.out.println("Las Redes:" + socialNetwork);
@@ -437,8 +439,8 @@
         </form> 
  
     <%} else if (contentType.equals("uploadPhoto")) {       ///////////////////////////////POSTEO DE FOTOS/////////////////////////////
-        System.out.println("Entro A uploadPhoto");
-        urlAction.setParameter("toPost", "photo");
+ 
+         urlAction.setParameter("toPost", "photo");
         SWBFormMgr photoMgr = null;
         if (postOut == null) //Creation
         {
@@ -532,7 +534,6 @@
                         </p>
                         <select name="socialFlow" id="flu">
                             <%
-                                System.out.println("select");
                                 boolean noFlows = true;
                                 while (itSocialPFlowRefs.hasNext()) {
                                     SocialPFlowRef socialFlowRef = itSocialPFlowRefs.next();
@@ -652,7 +653,6 @@
                         <p class="titulo">Redes disponibles</p>
                         <ul><b><%=SWBSocialResUtil.Util.getStringFromGenericLocale("chooseSocialNets", user.getLanguage())%></b></ul>
                         <%
-                            System.out.println("redes disponibles");
                             Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
                             while (it.hasNext()) {
                                 SocialNetwork socialNetwork = (SocialNetwork) it.next();
@@ -660,7 +660,6 @@
                                     String typeClass = "";
                                     boolean isSelected = false;
                                     if (apostOutNets.contains(socialNetwork.getURI())) {
-                                        System.out.println("Net found--:" + socialNetwork);
                                         isSelected = true;
                                     }
                                     if (postIn != null) {//If it is a response to some post, show only the nets of the post Type
@@ -735,7 +734,7 @@
 
 
     <%} else if (contentType.equals("uploadVideo")) {       ///////////////////////////////POSTEO DE VIDEOS/////////////////////////////
-        System.out.println("Entra a TypeOfContent..2");
+
         urlAction.setParameter("toPost", "video");
 
         SWBFormMgr videoMgr = null;
@@ -746,7 +745,6 @@
         {
             videoMgr = new SWBFormMgr(postOut.getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
         }
-        System.out.println("Entra a TypeOfContent..3:" + videoMgr);
 
         videoMgr.setType(SWBFormMgr.TYPE_DOJO);
         videoMgr.setFilterRequired(false);
@@ -831,7 +829,6 @@
                     <%
                         if (postOut != null) {
                             Video video = (Video) postOut;
-                            System.out.println("Entra a TypeOfContent..4:" + video);
                             String videoFormat = "";
                             String videoUrl = video.getVideo();
                             String fileext = null;
@@ -1071,7 +1068,6 @@
                                     String typeClass = "";
                                     boolean isSelected = false;
                                     if (apostOutNets.contains(socialNetwork.getURI())) {
-                                        System.out.println("Net found--:" + socialNetwork);
                                         isSelected = true;
                                     }
 
