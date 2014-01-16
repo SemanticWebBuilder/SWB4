@@ -21,16 +21,12 @@
     SemanticObject sObjSocialNet=(SemanticObject)SemanticObject.createSemanticObject(request.getParameter("netSuri"));
     SocialNetwork socialNetwork=(SocialNetwork)sObjSocialNet.createGenericInstance();
     
-    System.out.println("Entra a PostInResponse..:"+socialNetwork);
-    
-    Map args = new HashMap();
+     Map args = new HashMap();
     args.put("wsite", socialNetwork.getSemanticObject().getModel().getName());
     args.put("objUri", request.getParameter("suri"));
     args.put("username", request.getParameter("username"));
     args.put("netSuri", request.getParameter("netSuri"));
-    
-    System.out.println("Username:" + request.getParameter("username"));
-    System.out.println("netSuri" + request.getParameter("netSuri"));
+
     boolean isMessageAble=false;
     boolean isPhotoable=false;
     boolean isVideoable=false; 
