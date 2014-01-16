@@ -116,9 +116,18 @@ public class FrmProcess implements InternalServlet
         {
             SWBPortal.UTIL.sendValidateImage(request, response, "captchaCad", 6, null);
         } 
+        else if (request.getRequestURI().endsWith("requestSoundCaptcha"))
+        {
+            SWBPortal.UTIL.sendValidateSound(request, response, "captchaNum");
+        }
         else if (request.getRequestURI().endsWith("validCaptcha"))
         {
-            if (null!=request.getSession(true).getAttribute("captchaCad") && ((String) request.getSession(true).getAttribute("captchaCad")).equalsIgnoreCase(request.getParameter("frmCaptchaValue")))
+            if ((null!=request.getSession(true).getAttribute("captchaCad") && 
+                    ((String) request.getSession(true).getAttribute("captchaCad")).
+                            equalsIgnoreCase(request.getParameter("frmCaptchaValue")))
+                    || (null!=request.getSession(true).getAttribute("captchaNum") && 
+                    ((String) request.getSession(true).getAttribute("captchaNum")).
+                            equalsIgnoreCase(request.getParameter("frmCaptchaValue"))))
             {
                 response.getWriter().println("true");
             } 
@@ -126,7 +135,7 @@ public class FrmProcess implements InternalServlet
             {
                 response.getWriter().println("false");
             }
-        } 
+        }
         else if (request.getRequestURI().endsWith("canCreate"))
         {
             PrintWriter out = response.getWriter();
