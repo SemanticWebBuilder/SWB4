@@ -1,4 +1,4 @@
-dojo.require("dojox.form.FileInputAuto");
+dojo.require("dojox.form.Uploader");
 dojo.require("dijit.form.CheckBox");
 dojo.require("dijit.form.MultiSelect");
 
@@ -34,5 +34,14 @@ function fileUpload_addNewUpload(pname,filters,url)
     dojo.byId(pname+'_dynamic').appendChild(node);
 }
 
-
+var fileUpload_Callback2 = function(data,ioArgs,widgetRef,eleName){
+    if(data && data.status && data.status == "success")
+    {
+        var ele=document.getElementById(eleName);
+        var form = dijit.byId(ele.form.id);
+        form.extValid=true;
+        form.onValidStateChange(form.isValid()&&form.extValid);
+    }
+    fileUpload_Callback(data,ioArgs,widgetRef);
+}
 
