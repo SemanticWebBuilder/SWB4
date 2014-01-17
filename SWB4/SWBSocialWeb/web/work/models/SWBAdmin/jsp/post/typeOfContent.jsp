@@ -219,8 +219,10 @@
                     <%
                         SemanticObject obj2 = new SemanticObject(paramRequest.getWebPage().getWebSite().getSemanticModel(), Message.sclass);
                         String formElementStr = messageFormMgr.getFormElement(FileAble.social_hasFile).renderElement(request, obj2, FileAble.social_hasFile, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang);
+                        /*
                         formElementStr = formElementStr.replaceFirst("hasFile_new", "hasFile_new_#swbsocial_" + objUri + sourceCall);
                         formElementStr = formElementStr.replaceFirst("hasFile_new_dynamic", "hasFile_new_#swbsocial_" + objUri + sourceCall + "_dynamic");
+                        * */
                     %>       
                     <%=formElementStr%>
                 </p>
@@ -815,11 +817,13 @@
                         String fileUpload = videoMgr.getFormElement(Video.social_video).renderElement(request, videoSemObj, Video.social_video, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang).replaceAll("video_new_defaultAuto", "video_new_defaultAuto" + objUri + sourceCall);
 
                         // Removemos la propiedad startup
+                        /*
                         int nuevo = fileUpload.indexOf("startup");
                         int posicion = fileUpload.indexOf("fileMask");
                         String new1 = fileUpload.substring(0, nuevo);
                         String new2 = fileUpload.substring(posicion, fileUpload.length());
                         fileUpload = new1 + new2;
+                        *  */
 
                     %>
                     <div class="campo"><%=fileUpload%></div>       
