@@ -80,13 +80,13 @@
             overflow: auto;
         }
     </style>
-    <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false"></script>
+    <!--<script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false"></script>
     <script type="text/javascript" charset="utf-8" src="/swbadmin/js/swb.js"></script>
     <script type="text/javascript" charset="utf-8" src="/swbadmin/js/swb_admin.js"></script>
     <script type="text/javascript" charset="utf-8" src="/swbadmin/js/schedule.js"></script>
     <script type="text/javascript" charset="utf-8" src="/swbadmin/js/fileUpload.js" ></script>
     <script type="text/javascript" charset="utf-8" src="/work/models/SWBAdmin/jsp/reports/tagcanvas.js" ></script>
-    <script type="text/javascript" charset="utf-8" src="/work/models/SWBAdmin/js/swbsocial.js" ></script>
+    <script type="text/javascript" charset="utf-8" src="/work/models/SWBAdmin/js/swbsocial.js" ></script>-->
     <script type="text/javascript">
         dojo.require("dijit.form.DateTextBox");
     </script>
