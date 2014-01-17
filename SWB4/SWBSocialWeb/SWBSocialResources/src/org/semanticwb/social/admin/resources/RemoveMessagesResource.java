@@ -83,22 +83,34 @@ public class RemoveMessagesResource extends GenericResource {
                 out.println("</form>");
                 out.println("</div>");
                 * */
-                out.println("<div id=\"strm-eliminar\">");
+                out.println("<div id=\"msj-eliminar\">");
                 out.println("<p>Mensajes del stream: <strong>"+stream.getDisplayTitle(user.getLanguage()) +"</strong></p>");
 
 
                 if(StreamPostIns >0L){
-                    out.println("<div class=\"eliminar-boton streamtot-on\">");
+                    out.println("<div class=\"bloque bloque1\">");
+                    out.println("<p class=\"bloqtit\">Todos</p>");
+                    out.println("<p class=\"bloqnum\">" + StreamPostIns +"</p>");
+                    out.println("<a onclick=\"if(confirm('Desea eliminar todos los mensajes?'))" + "{ submitUrl('" + paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "',this); } else { return false;}\" title=\"Eliminar "+ StreamPostIns +" mensajes de entrada\">Eliminar</a>");
+                    out.println("</div>");
+                    
+                    /*out.println("<div class=\"eliminar-boton streamtot-on\">");
                         out.println("<a onclick=\"if(confirm('Desea eliminar todos los mensajes?'))" + "{ submitUrl('" + paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "',this); } else { return false;}\" title=\"Eliminar "+ StreamPostIns +" mensajes de entrada\">");
                         out.println("<strong>"+StreamPostIns+"</strong> <em>Mensajes de entrada</em>");
                     out.println("</a>");
-                    out.println("</div>");
+                    out.println("</div>");*/
                 }else{
-                    out.println("<div class=\"eliminar-boton streamtot-off\">");
+                    out.println("<div class=\"bloque bloque1\">");
+                    out.println("<p class=\"bloqtit\">Todos</p>");
+                    out.println("<p class=\"bloqnum\">" + "0" +"</p>");
+                    out.println("<a onclick=\"return false;\" title=\"Eliminar "+ StreamPostIns +" mensajes de entrada\">Eliminar</a>");
+                    out.println("</div>");
+                    
+                    /*out.println("<div class=\"eliminar-boton streamtot-off\">");
                     out.println("<span>");
                     out.println("<strong>0</strong> <em>Mensajes de entrada</em>");
                     out.println("</span>");
-                    out.println("</div>");
+                    out.println("</div>");*/
                 }
 
                 //Solo mensajes sin Tema
@@ -117,44 +129,41 @@ public class RemoveMessagesResource extends GenericResource {
                     PostIn postIn=itPostInWOTopic.next();
                     if(postIn.getSocialTopic()==null) aList.add(postIn.getURI());
                 }
-                /*
-                out.println("<div class=\"swbform\">");
-                //out.println("<form type=\"dijit.form.Form\" id=\"del\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"submitForm('del'); return false;\">");            
-                out.println("<form type=\"dijit.form.Form\" id=\"delwotopic" + stream.getId() + "\" action=\"" +  paramRequest.getActionUrl().setAction(Action_REMOVEWOTOPIC).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes serán eliminados.')){submitForm('delwotopic" + stream.getId() + "'); return false;}else{return false;}\">");            
-                out.println("<table width=\"100%\" border=\"0px\">");            
-                out.println("   <tr>");
-                out.println("       <td style=\"text-align: center;\">El Stream <b>" + stream.getDisplayTitle(paramRequest.getUser().getLanguage())  + "</b> actualmente contiene <b>" + aList.size() +  "</b> mensajes sin Tema</td>");        
-                out.println("   </tr>");
-                if(StreamPostIns >0L){
-                    out.println("   <tr>");
-                    out.println("       <td style=\"text-align: center;\">¿Eliminar todos los mensajes sin tema?</td>");
-                    out.println("   </tr>");
-                    out.println("   <tr>");
-                    out.println("       <td style=\"text-align: center;\"><button dojoType=\"dijit.form.Button\" type=\"submit\">Eliminar</button></td>");
-                    //out.println("       <td style=\"text-align: center;\"><button onclick=\"delete()\">Eliminar</button></td>");
-                    //out.println("<button name=\"Delete\" value=\"Delete\" onClick=\"if(confirm('Deseas eliminar los mensajes?')){alert('Enviando'); document.getElementById('del').submit();}else{alert('NO enviando'); return false;}\">Eliminar</button>");
-                    out.println("   </tr>");
-                }
-                out.println("</table>");
-                out.println("</form>");
-                out.println("</div>");
-                **/
 
                 if(aList.size() >0L){
-                    out.println("<div class=\"eliminar-boton streamsin-on\">");
+                    out.println("<div class=\"bloque bloque1\">");
+                    out.println("<p class=\"bloqtit\">Sin clasificar</p>");
+                    out.println("<p class=\"bloqnum\">" + aList.size() +"</p>");
+                    out.println("<a onclick=\"if(confirm('Desea eliminar todos los mensajes sin tema?'))" + "{ submitUrl('" + paramRequest.getActionUrl().setAction(Action_REMOVEWOTOPIC).setParameter("suri", objUri) + "',this); } else { return false;}\" title=\"Eliminar "+ StreamPostIns +" mensajes de entrada\">Eliminar</a>");
+                    out.println("</div>");
+                    /*out.println("<div class=\"eliminar-boton streamsin-on\">");
                         out.println("<a onclick=\"if(confirm('Desea eliminar todos los mensajes sin tema?'))" + "{ submitUrl('" + paramRequest.getActionUrl().setAction(Action_REMOVEWOTOPIC).setParameter("suri", objUri) + "',this); } else { return false;}\" title=\"Eliminar "+ StreamPostIns +" mensajes de entrada\">");
                         out.println("<strong>"+aList.size()+"</strong> <em>Mensajes de entrada</em>");
                     out.println("</a>");
-                    out.println("</div>");
+                    out.println("</div>");*/
                 }else{
-                    out.println("<div class=\"eliminar-boton streamsin-off\">");
+                    out.println("<div class=\"bloque bloque1\">");
+                    out.println("<p class=\"bloqtit\">Sin clasificar</p>");
+                    out.println("<p class=\"bloqnum\">" + "0" +"</p>");
+                    out.println("<a onclick=\"return false;\" title=\"Eliminar "+ StreamPostIns +" mensajes de entrada\">Eliminar</a>");
+                    out.println("</div>");
+                    /*out.println("<div class=\"eliminar-boton streamsin-off\">");
                     out.println("<span>");
                     out.println("<strong>0</strong> <em>Mensajes sin tema/em>");
                     out.println("</span>");
-                    out.println("</div>");
-                }
+                    out.println("</div>");*/
+                }                
 
-
+                out.println("<form type=\"dijit.form.Form\" id=\"delDate" + stream.getId() + "\" action=\"" +  paramRequest.getActionUrl().setAction(Action_REMOVESINCEDATE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes a partir de la facha seleccionada hacia atras serán eliminados.')){submitForm('delDate" + stream.getId() + "'); return false;}else{return false;}\">");
+                out.println("<div class=\"bloque bloque1\">");                
+                out.println("<p class=\"bloqtit\">Periodo</p>");
+                out.println("<p class=\"bloqdat\">Eliminar todos hasta:</p>");
+                //out.println("<input name=\"\" type=\"text\" class=\"bloqdat\"/>");
+                out.println("<input type=\"text\" name=\"remSinceDate"+stream.getId()+"\" id=\"remSinceDate"+stream.getId()+"\" dojoType=\"dijit.form.DateTextBox\"  size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\">");
+                out.println("<a href=\"#\" onclick=\"if(confirm('Los mensajes a partir de la fecha seleccionada hacia atras serán eliminados.')){submitForm('delDate" + stream.getId() + "'); return false;}else{return false;}\">Eliminar</a>");
+                out.println("</div>");
+                out.println("</form>");
+                /*
                 out.println("<div class=\"swbform\">");
                 out.println("<form type=\"dijit.form.Form\" id=\"delDate" + stream.getId() + "\" action=\"" +  paramRequest.getActionUrl().setAction(Action_REMOVESINCEDATE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes a partir de la facha seleccionada hacia atras serán eliminados.')){submitForm('delDate" + stream.getId() + "'); return false;}else{return false;}\">");            
                 out.println("<div class=\"eliminar-date\">");
@@ -163,20 +172,35 @@ public class RemoveMessagesResource extends GenericResource {
                 out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">Eliminar</button>");
                 out.println("</div>");
                 out.println("</form>");
-                out.println("</div>");
+                out.println("</div>");*/
 
-                out.println("</div>");
-                
-                
-                
+                //out.println("</div>");
                 out.println("<div class=\"clear\"></div>");
+                
+                
+                
+                
+                
                 
                 
                 ArrayList topics = SWBSocialUtil.sparql.getStreamSocialTopics(stream);
 
                 ArrayList nets = SWBSocialUtil.sparql.getStreamSocialNetworks(stream);
                 
-                out.println("<div  class=\"pub-redes\">");
+                out.println("<form type=\"dijit.form.Form\" id=\"delTopic" + stream.getId() + "\" action=\"" +  paramRequest.getActionUrl().setAction(Action_REMOVESELECTEDTOPICS).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes de los temas seleccionados serán eliminados.')){submitForm('delTopic" + stream.getId() + "'); return false;}else{return false;}\">");
+                out.println("<div class=\"bloque bloque2\">");
+                out.println("<p class=\"bloqtit\">Temas</p>");
+                out.println("<select name=\"topics\" multiple size=\"5\" class=\"bloqsel\">");
+                for(int i = 0; i < topics.size(); i++){
+                    SocialTopic topic= (SocialTopic)((SemanticObject)topics.get(i)).createGenericInstance();
+                    out.println("  <option class=\"swbIconSocialTopic\" value=\"" + topic.getURI() +  "\">" + topic.getDisplayTitle(user.getLanguage()) + "</option>");
+                }
+                out.println("</select>");
+                out.println("<a href=\"#\" onclick=\"if(confirm('Los mensajes de los temas seleccionados serán eliminados.')){submitForm('delTopic" + stream.getId() + "'); return false;}else{return false;}\">Eliminar</a>");
+                out.println("</form>");
+                out.println("</div>");
+                
+                /*out.println("<div  class=\"pub-redes\">");
                 out.println("<form type=\"dijit.form.Form\" id=\"delTopic" + stream.getId() + "\" action=\"" +  paramRequest.getActionUrl().setAction(Action_REMOVESELECTEDTOPICS).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes de los temas seleccionados serán eliminados.')){submitForm('delTopic" + stream.getId() + "'); return false;}else{return false;}\">");
                 out.println("<p>Eliminación personalizada para: <strong>streamPostIn</strong></p>");
                 out.println("<p class=\"titulo\">Temas en el stream:</p>");
@@ -191,9 +215,30 @@ public class RemoveMessagesResource extends GenericResource {
                 //out.println("<input type=\"checkbox\" name=\"topicsInverse\" value=\"uri1\">Eliminar temas no seleccionados<br>");                
                 out.println("<button dojoType='dijit.form.Button' type=\"submit\">Eliminar</button>");
                 out.println("</form>");
+                out.println("</div>");*/
+                
+                out.println("<form type=\"dijit.form.Form\" id=\"delNetwork" + stream.getId() + "\" action=\"" +  paramRequest.getActionUrl().setAction(Action_REMOVESELECTEDNETWORKS).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes de las redes seleccionadas serán eliminados.')){submitForm('delNetwork" + stream.getId() + "'); return false;}else{return false;}\">");
+                out.println("<div class=\"bloque bloque2\">");
+                out.println("    <p class=\"bloqtit\">Redes Sociales</p>");
+                out.println("    <select name=\"networks\" multiple size=\"5\" class=\"bloqsel\">");
+                for(int i = 0; i < nets.size(); i++){
+                    SocialNetwork socialNet= (SocialNetwork)((SemanticObject)nets.get(i)).createGenericInstance();
+                    String iconClass ="";
+                    if(socialNet instanceof Twitter){
+                        iconClass = "swbIconTwitter";
+                    }else if (socialNet instanceof Facebook){
+                        iconClass = "swbIconFacebook";
+                    }else if( socialNet instanceof Youtube){
+                        iconClass = "swbIconYouTube";
+                    }
+                    out.println("  <option class=\"" + iconClass + "\" value=\"" + socialNet.getURI() +"\">"+ socialNet.getDisplayTitle(user.getLanguage()) + "</option>");
+                }
+                out.println("    </select>");
+                out.println("    <a href=\"#\" onclick=\"if(confirm('Los mensajes de las redes seleccionadas serán eliminados.')){submitForm('delNetwork" + stream.getId() + "'); return false;}else{return false;}\">Eliminar</a>");
                 out.println("</div>");
+                out.println("</form>");
 
-                out.println("<div class=\"pub-redes\">");
+                /*out.println("<div class=\"pub-redes\">");
                 out.println("</br>");
                 out.println("<form type=\"dijit.form.Form\" id=\"delNetwork" + stream.getId() + "\" action=\"" +  paramRequest.getActionUrl().setAction(Action_REMOVESELECTEDNETWORKS).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes de las redes seleccionadas serán eliminados.')){submitForm('delNetwork" + stream.getId() + "'); return false;}else{return false;}\">");
                 out.println("	<p class=\"titulo\">Redes en el stream:</p>");
@@ -211,20 +256,13 @@ public class RemoveMessagesResource extends GenericResource {
                         iconClass = "swbIconYouTube";
                     }
                     out.println("  <option class=\"" + iconClass + "\" value=\"" + socialNet.getURI() +"\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + socialNet.getDisplayTitle(user.getLanguage()) + "</option>");
-                    //System.out.println("Topic:" + socialNet.getDisplayTitle(user.getLanguage()) + " uri:" + socialNet.getURI());
-                    //System.out.println("net" + nets.get(i));
                 }
-                /*
-                out.println("  <option class=\"swbIconTwitter\" value=\"volvo\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Red 1</option>");
-                out.println("  <option class=\"swbIconFacebook\" value=\"saab\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Red 21</option>");
-                out.println("  <option class=\"swbIconFacebook\" value=\"opel\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;red 22</option>");
-                out.println("  <option value=\"audi\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Redmksjjs 3</option>");
-                * */
                 out.println("</select>");
                 out.println("<br>");
                 //out.println("<input type=\"checkbox\" name=\"networksInverse\" value=\"uri1\">Eliminar redes no seleccionados<br>");
                 out.println("<button dojoType='dijit.form.Button' type=\"submit\">Eliminar</button>");
-                out.println("</div>");
+                out.println("</div>");*/
+                
                 out.println("</div>");
   
                 if(request.getParameter("deleted")!= null && request.getParameter("deleted").equals("ok")){
