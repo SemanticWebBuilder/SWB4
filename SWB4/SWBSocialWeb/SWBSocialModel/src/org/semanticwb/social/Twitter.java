@@ -335,6 +335,9 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             }
             
             twitter4j.Query query = new Query(searchPhrases);
+            if(stream.getGeoCenterLatitude() != 0 && stream.getGeoCenterLongitude() != 0 && stream.getGeoRadio() != 0){
+                query.setGeoCode(new GeoLocation(stream.getGeoCenterLatitude(), stream.getGeoCenterLongitude()), stream.getGeoRadio(), "km");//(latitude, longitude), radius, units of distance
+            }
             query.setCount(100); //max tweets by request
             
             boolean canGetMoreTweets = true;
