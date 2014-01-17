@@ -80,11 +80,11 @@ public class LatLngRadioMap extends org.semanticwb.social.base.LatLngRadioMapBas
             //ret.append("alert('Hola');");
             //ret.append("alert('elementName2Change:'+elementname);");
             //ret.append("alert('valuetoset:'+value2set);");
-            ret.append("parent.document.getElementById(''+elementname+'').value=''+value2set+'';");
+            ret.append("parent.document.getElementById(''+elementname+'').value=''+value2set+'';");   
             //ret.append("var geoLati=parent.document.getElementById('geoCenterLatitude').value;");
             //ret.append("alert('geoLati:'+geoLati);");
             //ret.append("alert('Valor Puesto:'+parent.document.getElementById('geoCenterLatitude'));");
-            ret.append("return false;");
+            ret.append("return true;");
             ret.append("}");
             
             ret.append("$(document).ready(function(){");
@@ -122,8 +122,9 @@ public class LatLngRadioMap extends org.semanticwb.social.base.LatLngRadioMapBas
             ret.append("DrawCircle(Map, Location, Radius);");
             ret.append("$(\"#geoCenterLatitude\").val(Location.lat().toFixed(5));");
             ret.append("$(\"#geoCenterLongitude\").val(Location.lng().toFixed(5));");
-            ret.append("setParentValue('geoCenterLatitude', Location.lat().toFixed(5));");
-            ret.append("setParentValue('geoCenterLongitude', Location.lng().toFixed(5));");
+            ret.append("setParentValue('geoCenterLatitude_"+stream.getId()+"', Location.lat().toFixed(5));");
+            ret.append("setParentValue('geoCenterLongitude_"+stream.getId()+"', Location.lng().toFixed(5));");
+            ret.append("setParentValue('geoRadio_"+stream.getId()+"', Radius);");
             ret.append("}");
             ret.append("var MapOptions = {");
             ret.append("zoom: 2,");
@@ -178,12 +179,13 @@ public class LatLngRadioMap extends org.semanticwb.social.base.LatLngRadioMapBas
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) {
 
         Stream stream=(Stream)obj.createGenericInstance();
+        
         /*
         Enumeration<String> enParams=request.getParameterNames();
         while(enParams.hasMoreElements())
         {
             String sParam=enParams.nextElement();
-            System.out.println("ParametroJJ:"+request.getParameter(sParam));
+            System.out.println("ParametroJJ:"+sParam+",value:"+request.getParameter(sParam));
         }*/
         
         stream.setGeoCenterLatitude(0);

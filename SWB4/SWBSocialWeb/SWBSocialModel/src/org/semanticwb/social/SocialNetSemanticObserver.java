@@ -20,13 +20,13 @@ public class SocialNetSemanticObserver implements SemanticObserver {
         if (action != null) {
             SocialNetwork socialNetwork = (SocialNetwork) obj.createGenericInstance();
             WebSite wsite = WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
-
+            
             System.out.println("*********************Twitter/Observer/action:" + action + ", Twitter-Aberr:" + socialNetwork);
 
             //TODO:Probar este código.
-            if (action.equals("REMOVE")) //Si la acción es eliminar el SocialTopic
+            if (action.equals("REMOVE")) //Si la acción es eliminar el SocialNetwork
             {
-                Iterator<PostOut> itPostOuts = PostOut.ClassMgr.listPostOutBySocialNetwork(socialNetwork, wsite);
+                Iterator<PostOut> itPostOuts = PostOut.ClassMgr.listPostOutBySocialNetwork(socialNetwork, wsite);   //Lista todos los PostOut de la red social a eliminar
                 while (itPostOuts.hasNext()) {
                     PostOut postOut = itPostOuts.next();
                     boolean isAlone = true;

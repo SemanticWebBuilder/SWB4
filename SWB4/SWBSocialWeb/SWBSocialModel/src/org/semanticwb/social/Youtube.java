@@ -82,7 +82,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
 
     public Youtube(org.semanticwb.platform.SemanticObject base) {
         super(base);
-    }
+    }  
     static {
         Youtube.social_Youtube.registerObserver(new SocialNetSemanticObserver());
     }
