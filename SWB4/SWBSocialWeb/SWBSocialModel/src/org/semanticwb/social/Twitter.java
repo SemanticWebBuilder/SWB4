@@ -404,7 +404,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                                     }
                                     
                                     external.setSocialNetwork(this);
-                                    external.setPostShared((int)status.getRetweetCount());
+                                    external.setPostShared((int)status.getRetweetCount());   
                                     external.setCreatorPhotoUrl(status.getUser().getBiggerProfileImageURL());
                                     aListExternalPost.add(external);
 
