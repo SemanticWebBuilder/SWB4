@@ -63,15 +63,15 @@
 
 
     }
-      String action = paramRequest.getAction();
-      //System.out.println("action:::::"+action);
+    String action = paramRequest.getAction();
+    //System.out.println("action:::::"+action);
 
     String title = "";
     if (semObj.getGenericInstance() instanceof Descriptiveable) {
         title = ((Descriptiveable) semObj.getGenericInstance()).getDisplayTitle(lang);
     }
 
-       ArrayList listMeses = new ArrayList();
+    ArrayList listMeses = new ArrayList();
     listMeses.add("Enero");
     listMeses.add("Febrero");
     listMeses.add("Marzo");
@@ -178,91 +178,8 @@
 </style>
 <body onload="lanzar();">
 <head>
-    <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" ></script>
-    <script type="text/javascript" charset="utf-8" src="/swbadmin/js/swb.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/swbadmin/js/swb_admin.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/work/models/SWBAdmin/js/swbsocial.js" ></script>
-    <script type="text/javascript" >
-        function postHtml(url, tagid)
-        {
-            
-            dojo.xhrPost({
-                url: url,
-                load: function(response)
-                {
-                    var tag=dojo.byId(tagid);
-                    if(tag){
-                        var pan=dijit.byId(tagid);
-                        //alert("-"+tagid+"-"+tag+"-"+pan+"-");
-                        if(pan && pan.attr)
-                        {
-                            pan.attr('content',response);
-                        }else
-                        {
-                            tag.innerHTML = response;
-                        }
-                    }else {
-                        alert("No existe ningún elemento con id " + tagid);
-                    }
-                    return response;
-                },
-                error: function(response)
-                {
-                    if(dojo.byId(tagid)) {
-                        dojo.byId(tagid).innerHTML = "<p>Ocurrió un error con respuesta:<br />" + response + "</p>";
-                    }else {
-                        alert("No existe ningún elemento con id " + tagid);
-                    }
-                    return response;
-                },
-                handleAs: "text"
-            });
-        }
-            
-        function mostrar(selected){
-           
-            var div  ;
-            if(selected ==  1){
-                div = document.getElementById('divAnual');
-                div.style.display='block';
-                
-                var mensual =  document.getElementById('divAnualMensual');
-                mensual.style.display='none';
-                
-            }else {
-                div = document.getElementById('divAnualMensual');                
-                div.style.display='block';
-                
-                var anual = document.getElementById('divAnual');
-                anual.style.display='none';
-                
-                
-            }
-            
-            
-        }
-        function valid(id){
-            if(id ==1){    
-                var selectAnio=  document.getElementById("selectAnio").value;
-                if(selectAnio== ""){
-                    alert('Seleccione el año');
-                    return;
-                }
-            }else{                  
-                var selectAnio2=  document.getElementById("selectAnio2").value;
-                var selectMes = document.getElementById("selectMes").value;
-                if(selectAnio2== ""){
-                    alert('Seleccione el año');
-                    return;
-                }
-                if(selectMes== ""){
-                    alert('Seleccione el mes');
-                    return;
-                }
-            }                   
-        }
-        
- 
+
+    <script>
         function lanzar()
         {
     
@@ -371,7 +288,7 @@
             .enter().append("g")
             .attr("class", "arc")
             .on("click", function(d) {
-                    var filter =d.data.label; 
+                var filter =d.data.label; 
                 var url = "<%=urlRender.setMode("exportExcel").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter;
                 document.location.href = url;
             })
@@ -444,7 +361,7 @@
             while (i.hasNext()) {
                 SemanticObject sO = (SemanticObject) i.next();
                 SocialNetwork sN = (SocialNetwork) sO.getGenericInstance();
-                System.out.println("SOCIAL"+sN.getURI());
+                System.out.println("SOCIAL" + sN.getURI());
         %>         
         <input type="radio" name="socialNetwork" id="socialNetwork" value="<%=sN.getTitle()%>" /> <%=sN.getTitle()%><br>
         <%
@@ -659,6 +576,87 @@
     
     pieNetworkSocial('all', '2');
     
+</script>
+<script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" ></script>
+<script type="text/javascript" >
+    function postHtml(url, tagid)
+    {
+            
+        dojo.xhrPost({
+            url: url,
+            load: function(response)
+            {
+                var tag=dojo.byId(tagid);
+                if(tag){
+                    var pan=dojo.byId(tagid);
+                    //alert("-"+tagid+"-"+tag+"-"+pan+"-");
+                    if(pan && pan.attr)
+                    {
+                        pan.attr('content',response);
+                    }else
+                    {
+                        tag.innerHTML = response;
+                    }
+                }else {
+                    alert("No existe ningún elemento con id " + tagid);
+                }
+                return response;
+            },
+            error: function(response)
+            {
+                if(dojo.byId(tagid)) {
+                    dojo.byId(tagid).innerHTML = "<p>Ocurrió un error con respuesta:<br />" + response + "</p>";
+                }else {
+                    alert("No existe ningún elemento con id " + tagid);
+                }
+                return response;
+            },
+            handleAs: "text"
+        });
+    }
+            
+    function mostrar(selected){
+           
+        var div  ;
+        if(selected ==  1){
+            div = document.getElementById('divAnual');
+            div.style.display='block';
+                
+            var mensual =  document.getElementById('divAnualMensual');
+            mensual.style.display='none';
+                
+        }else {
+            div = document.getElementById('divAnualMensual');                
+            div.style.display='block';
+                
+            var anual = document.getElementById('divAnual');
+            anual.style.display='none';
+                
+                
+        }
+            
+            
+    }
+    function valid(id){
+        if(id ==1){    
+            var selectAnio=  document.getElementById("selectAnio").value;
+            if(selectAnio== ""){
+                alert('Seleccione el año');
+                return;
+            }
+        }else{                  
+            var selectAnio2=  document.getElementById("selectAnio2").value;
+            var selectMes = document.getElementById("selectMes").value;
+            if(selectAnio2== ""){
+                alert('Seleccione el año');
+                return;
+            }
+            if(selectMes== ""){
+                alert('Seleccione el mes');
+                return;
+            }
+        }                   
+    }
 </script>
 
 <h1>Mensajes recibidos de :<%=title%></h1>
