@@ -55,6 +55,7 @@ public class StreamMap extends GenericResource{
         out.println("<div class=\"divMap\">");
         out.println("<div class=\"swbform\">");
         out.println("<form type=\"dijit.form.Form\" id=\"showMap_"+semObj.getId()+"\" action=\"" +  paramRequest.getRenderUrl().setParameter("suri", suri) + "\" method=\"post\" onsubmit=\"submitForm('showMap_" + semObj.getId() + "'); return false;\">");            
+        /*
         out.println("<table width=\"100%\" border=\"0px\">");            
         out.println("   <tr>");
         out.println("       <td style=\"text-align: center;\">Mostrar mapa con datos desde:</td>");        
@@ -112,6 +113,33 @@ public class StreamMap extends GenericResource{
         out.println("    </td>");
         out.println("   </tr>");
         out.println("</table>");
+        * */
+        
+       String sCheck=""; 
+       out.println("<label>Mostrar ");
+       out.println("<select name=\"streamMapView\"> ");
+       sCheck="";
+       if(streamMapView.equals("4")) sCheck="selected";
+       out.println("<option value=\"4\" " +sCheck+">Todo</option>");
+       if(streamMapView.equals("1")) sCheck="selected";
+       out.println("<option value=\"1\" " +sCheck+">Contadores</option>");
+       sCheck="";
+       if(streamMapView.equals("2")) sCheck="selected";
+       out.println("<option value=\"2\"  " +sCheck+">Mensajes</option>");
+       sCheck="";
+       if(streamMapView.equals("3")) sCheck="selected";
+       out.println("<option value=\"3\"  " +sCheck+">Mensajes y contadores</option>");
+       sCheck="";
+       if(streamMapView.equals("5")) sCheck="selected";
+       out.println("<option value=\"5\"  " +sCheck+">Positivos</option>");
+       sCheck="";
+       if(streamMapView.equals("6")) sCheck="selected";
+       out.println("<option value=\"6\"  " +sCheck+">Negativos</option>");
+       out.println("</select>");
+       out.println("</label>");
+       out.println("<label>Desde el día<input type=\"text\" name=\"mapSinceDate\" id=\"mapSinceDate"+semObj.getId()+"\"  dojoType=\"dijit.form.DateTextBox\" hasDownArrow=\"true\" value=\""+date+"\" class=\"txtfld-calendar\"/></label>");
+       out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">Mostrar</button>");
+
         out.println("</form>");
         out.println("</div>");
         out.println("</div>");
