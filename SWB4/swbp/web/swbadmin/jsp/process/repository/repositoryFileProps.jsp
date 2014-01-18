@@ -103,7 +103,7 @@ if (!user.isSigned()) {
                             <label class="col-lg-5 control-label"><%=re instanceof RepositoryFile?paramRequest.getLocaleString("msgFile"):paramRequest.getLocaleString("lblLink")%></label>
                             <div class="col-lg-7">
                             <%
-                            String val = "--";
+                            String val = "";
                             if (ver != null) {
                                 val = ver.getVersionFile();
                             } else if (vi != null) {
@@ -117,7 +117,7 @@ if (!user.isSigned()) {
                     <div class="form-group">
                       <label class="col-lg-5 control-label"><%=paramRequest.getLocaleString("msgDescription")%></label>
                       <div class="col-lg-7">
-                          <textarea class="form-control" disabled><%=((Descriptiveable)re).getDisplayDescription(lang)!= null?((Descriptiveable)re).getDisplayDescription(lang):"--"%></textarea>
+                          <textarea class="form-control" disabled><%=((Descriptiveable)re).getDisplayDescription(lang)!= null?((Descriptiveable)re).getDisplayDescription(lang):""%></textarea>
                       </div>
                     </div>
                     <%if (re instanceof RepositoryElement) {
