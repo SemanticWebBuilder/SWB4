@@ -1,5 +1,7 @@
   4.5.2.1
     - Se agregó al captcha para formas automáticas la posibilidad de usar audio (serch)
+        al actualizar es necesario agregar los jars: cmu_time_awb.jar, cmu_us_kal.jar, 
+        cmudict04.jar, cmulex.jar, cmutimelex.jar, en_us.jar, freetts.jar
   4.5.2.0
     - Se actualizó la funcionalidad del SemanticElement FileUpload con la nueva versión de DOJO (serch)
     - Se agregó Plug-in para CloudComputing en la plataforma DimensionData (yutzin)
