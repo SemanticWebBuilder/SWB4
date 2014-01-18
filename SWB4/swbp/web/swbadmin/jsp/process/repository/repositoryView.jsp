@@ -254,6 +254,18 @@ if (!user.isSigned()) {
                 </table>
             </div>
             <%
+            String sort = request.getParameter("sort");
+            if (sort != null && sort.length() > 0) {
+                sort = "sort|"+sort;
+            } else {
+                sort = "";
+            }
+            %>
+            <jsp:include page="/swbadmin/jsp/process/commons/pagination.jsp" flush="true">
+                <jsp:param name="navUrlParams" value="<%=sort%>"/>
+                <jsp:param name="showPageOfPage" value="true"/>
+            </jsp:include>
+            <%
         }
     } else {
     %>
