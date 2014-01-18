@@ -41,12 +41,10 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Descriptiveable;
-import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.Role;
-import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.Traceable;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
@@ -65,7 +63,6 @@ import org.semanticwb.process.model.RepositoryDirectory;
 import org.semanticwb.process.model.RepositoryElement;
 import org.semanticwb.process.model.RepositoryFile;
 import org.semanticwb.process.model.RepositoryURL;
-import org.semanticwb.process.model.UserTask;
 
 /**
  *
@@ -263,7 +260,7 @@ public class ProcessFileRepository extends GenericResource {
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             String validFiles = getResourceBase().getAttribute(VALID_FILES, "");
-
+            String ipp = getResourceBase().getAttribute("itemsPerPage", "");
 
             out.println("<tr><td colspan=\"2\"><B>" + paramRequest.getLocaleString("msgRolesDefinitionLevel") + "</B></td></tr>");
             out.println("<tr><td align=\"right\" width=150>" + paramRequest.getLocaleString("msgView") + ":</td>");
@@ -275,6 +272,8 @@ public class ProcessFileRepository extends GenericResource {
 
             out.println("<tr><td align=\"right\"  width=150>" + paramRequest.getLocaleString("msgValidFiles") + ":</td>");
             out.println("<td><input type=\"text\" name=\"validfiles\"  value=\"" + validFiles + "\"></td></tr>");
+            out.println("<tr><td align=\"right\"  width=150>" + paramRequest.getLocaleString("itemsPerPage") + ":</td>");
+            out.println("<td><input type=\"text\" name=\"itemsPerPage\"  value=\"" + ipp + "\"></td></tr>");
 
 
             out.println("</table>");
@@ -533,12 +532,14 @@ public class ProcessFileRepository extends GenericResource {
             String modifyrole = request.getParameter("modificar");
             String adminrole = request.getParameter("administrar");
             String validfiles = request.getParameter("validfiles");
+            String ipp = request.getParameter("itemsPerPage");
 
             try {
                 getResourceBase().setAttribute(LVL_VIEW, viewrole);
                 getResourceBase().setAttribute(LVL_MODIFY, modifyrole);
                 getResourceBase().setAttribute(LVL_ADMIN, adminrole);
                 getResourceBase().setAttribute(VALID_FILES, validfiles);
+                getResourceBase().setAttribute("itemsPerPage", ipp);
                 getResourceBase().updateAttributesToDB();
 
             } catch (Exception e) {
@@ -565,6 +566,7 @@ public class ProcessFileRepository extends GenericResource {
                     res.setResourceType(rType);
                     res.setTitle("REP_"+dirTitle);
                     res.setActive(Boolean.TRUE);
+                    res.setAttribute("itemsPerPage", "10");
                     
                     newRepoDir.addResource(res);
                     newRepoDir.setActive(Boolean.TRUE);
@@ -704,6 +706,18 @@ public class ProcessFileRepository extends GenericResource {
         HashMap<String, GenericObject> hmNodes = new HashMap<String, GenericObject>();
         User user = paramRequest.getUser();
         String lang = "es";
+        String _itemsPerPage = getResourceBase().getAttribute("itemsPerPage");
+        int itemsPerPage = 10;
+        
+        if (_itemsPerPage != null) {
+            try {
+                itemsPerPage = Integer.parseInt(_itemsPerPage);
+            } catch (NumberFormatException ex) {
+                itemsPerPage = 10;
+            }
+        }
+        
+        int page = 1;
         
         RepositoryDirectory repoDir = null;
         if (paramRequest.getWebPage() instanceof RepositoryDirectory) {
@@ -813,13 +827,35 @@ public class ProcessFileRepository extends GenericResource {
 
             ArrayList<String> list = new ArrayList<String>(hmNodes.keySet());
             Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
-            Iterator<String> keys = list.iterator();
             
+            //Realizar paginado de elementos
+            int maxPages = 1;
+            if (request.getParameter("p") != null && !request.getParameter("p").trim().equals("")) {
+                page = Integer.valueOf(request.getParameter("p"));
+                if (page < 0) page = 1;
+            }
+
+            if (itemsPerPage < 5) itemsPerPage = 5;
+        
+            if (hmNodes.size() >= itemsPerPage) {
+                maxPages = (int)Math.ceil((double)hmNodes.size() / itemsPerPage);
+            }
+            if (page > maxPages) page = maxPages;
+
+            int sIndex = (page - 1) * itemsPerPage;
+            if (hmNodes.size() > itemsPerPage && sIndex > hmNodes.size() - 1) {
+                sIndex = hmNodes.size() - itemsPerPage;
+            }
+
+            int eIndex = sIndex + itemsPerPage;
+            if (eIndex >= hmNodes.size()) eIndex = hmNodes.size();
+
+            request.setAttribute("maxPages", maxPages);
             ret = new ArrayList<GenericObject>();
             
-            while (keys.hasNext()) {
-                String key = keys.next();
-                ret.add(hmNodes.get(key));                
+            for (int i = sIndex; i < eIndex; i++) {
+                String key = list.get(i);
+                ret.add(hmNodes.get(key));
             }
         }
         return ret;
