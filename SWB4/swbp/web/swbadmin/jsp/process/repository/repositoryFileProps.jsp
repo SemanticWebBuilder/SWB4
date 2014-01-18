@@ -120,24 +120,29 @@ if (!user.isSigned()) {
                           <textarea class="form-control" disabled><%=((Descriptiveable)re).getDisplayDescription(lang)!= null?((Descriptiveable)re).getDisplayDescription(lang):"--"%></textarea>
                       </div>
                     </div>
-                    <%if (re instanceof RepositoryElement) {%>
+                    <%if (re instanceof RepositoryElement) {
+                        String comment = (vi != null ? vi.getVersionComment() : "");
+                        if (comment == null) {
+                            comment = "";
+                        }
+                        %>
                         <div class="form-group">
                           <label class="col-lg-5 control-label"><%=paramRequest.getLocaleString("msgComments")%></label>
                           <div class="col-lg-7">
-                            <textarea class="form-control" disabled><%=vi!=null?vi.getVersionComment():"--"%></textarea>
+                            <textarea class="form-control" disabled><%=comment%></textarea>
                           </div>
                         </div>
                     <%}%>
                     <div class="form-group">
                       <label class="col-lg-5 control-label"><%=paramRequest.getLocaleString("msgVersionUser")%></label>
                       <div class="col-lg-7">
-                          <input class="form-control" type="text" disabled value="<%=((Traceable)re).getCreator()==null?"--":((Traceable)re).getCreator().getFullName()%>"/>
+                          <input class="form-control" type="text" disabled value="<%=((Traceable)re).getCreator()==null?"":((Traceable)re).getCreator().getFullName()%>"/>
                       </div>
                     </div>
                     <div class="form-group">
                       <label class="col-lg-5 control-label"><%=paramRequest.getLocaleString("msgLastDateModification")%></label>
                       <div class="col-lg-7">
-                        <input class="form-control" type="text" disabled value="<%=((Traceable)re).getCreated()==null?"--":format.format(((Traceable)re).getCreated())%>"/>
+                        <input class="form-control" type="text" disabled value="<%=((Traceable)re).getCreated()==null?"":format.format(((Traceable)re).getCreated())%>"/>
                       </div>
                     </div>
                 </form>
