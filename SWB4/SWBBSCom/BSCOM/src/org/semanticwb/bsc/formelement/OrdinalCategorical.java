@@ -6,6 +6,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.bsc.accessory.StateGroup;
 import org.semanticwb.bsc.element.Indicator;
+import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.bsc.element.Perspective;
 import org.semanticwb.bsc.element.Theme;
 import org.semanticwb.bsc.tracing.Series;
@@ -96,6 +97,22 @@ public class OrdinalCategorical extends org.semanticwb.bsc.formelement.base.Ordi
                     continue;
                 }
                 if(ordinal == t.getIndex())
+                {
+                    throw new FormValidateException("El valor debe ser numérico y no puede repetirse");
+                }
+            }
+        }
+        else if(genObj instanceof Objective)
+        {
+            Objective objective = (Objective)genObj;
+            Theme parent = objective.getTheme();
+            GenericIterator<Objective> it = parent.listObjectives();
+            while(it.hasNext()) {
+                Objective o = it.next();
+                if( objective.equals(o) ) {
+                    continue;
+                }
+                if(ordinal == o.getIndex())
                 {
                     throw new FormValidateException("El valor debe ser numérico y no puede repetirse");
                 }
