@@ -648,14 +648,26 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         return isThereMoreMsgs;
     }
 
-      public void postMsg(Message message) {
+      public void postMsg(Message message) {          
         if (message.getMsg_Text() == null) {
             log.error("Not message found, nothing to post");
             return;
         }
+        
+        String urlLocalPost = "";
+        Iterator<String> files = message.listFiles();
+        if(files.hasNext()){//If at least one file found
+            String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
+            urlLocalPost = absolutePath + "/swbadmin/jsp/social/postViewFiles.jsp?uri=" + message.getEncodedURI();
+        }
+        
         Map<String, String> params = new HashMap<String, String>(2);
         params.put("access_token", this.getAccessToken());
-        params.put("message", message.getMsg_Text());
+        if(urlLocalPost.isEmpty()){
+            params.put("message", message.getMsg_Text());
+        }else{
+            params.put("message", SWBSocialUtil.Util.shortUrl(message.getMsg_Text() + " " + urlLocalPost));
+        }
         params.put("privacy", "{'value':'" + privacyValue(message) + "'}");
         String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/feed";
         JSONObject jsonResponse = null;
