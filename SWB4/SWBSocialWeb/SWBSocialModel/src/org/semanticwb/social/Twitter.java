@@ -83,15 +83,28 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 //StatusUpdate sup = new StatusUpdate(new String(message.getMsg_Text().getBytes(), "utf-8"));
                 //StatusUpdate sup = new StatusUpdate(new String(shortUrl(message.getMsg_Text()).getBytes(), "ISO-8859-1"));
                 Status sup = null;
+                String urlLocalPost = "";
+                Iterator<String> files = message.listFiles();
+                if(files.hasNext()){//If at least one file found
+                    String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
+                    urlLocalPost = absolutePath + "/swbadmin/jsp/social/postViewFiles.jsp?uri=" + message.getEncodedURI();
+                }
                 if(message.getPostInSource()!=null && message.getPostInSource().getSocialNetMsgId()!=null)
                 {
                     System.out.println("Twitter Msg PRIMERA OPCION...:"+message.getPostInSource().getPostInSocialNetworkUser().getSnu_name());
-                    sup = twitter.updateStatus(new StatusUpdate(new String(shortUrl(message.getPostInSource().getPostInSocialNetworkUser().getSnu_name()+" " +message.getMsg_Text()).getBytes(), "ISO-8859-1")).inReplyToStatusId(Long.parseLong(message.getPostInSource().getSocialNetMsgId())));
+                    if(!urlLocalPost.isEmpty()){
+                        sup = twitter.updateStatus(new StatusUpdate(new String(shortUrl(message.getPostInSource().getPostInSocialNetworkUser().getSnu_name()+" " +message.getMsg_Text() + " " + urlLocalPost).getBytes(), "ISO-8859-1")).inReplyToStatusId(Long.parseLong(message.getPostInSource().getSocialNetMsgId())));
+                    }else{
+                        sup = twitter.updateStatus(new StatusUpdate(new String(shortUrl(message.getPostInSource().getPostInSocialNetworkUser().getSnu_name()+" " +message.getMsg_Text()).getBytes(), "ISO-8859-1")).inReplyToStatusId(Long.parseLong(message.getPostInSource().getSocialNetMsgId())));
+                    }
                 }else{
                     System.out.println("Twitter Msg SEGUNDA OPCION...");
-                    sup = twitter.updateStatus(new StatusUpdate(new String(shortUrl(message.getMsg_Text()).getBytes(), "ISO-8859-1")));
+                    if(!urlLocalPost.isEmpty()){
+                        sup = twitter.updateStatus(new StatusUpdate(new String(shortUrl(message.getMsg_Text() + " " + urlLocalPost).getBytes(), "ISO-8859-1")));
+                    }else{
+                        sup = twitter.updateStatus(new StatusUpdate(new String(shortUrl(message.getMsg_Text()).getBytes(), "ISO-8859-1")));
+                    }
                 }
-                
                 //Status stat = twitter.updateStatus(sup);
                 long longStat = sup.getId();
                 
