@@ -121,14 +121,17 @@ public class StreamMap extends GenericResource{
        sCheck="";
        if(streamMapView.equals("4")) sCheck="selected";
        out.println("<option value=\"4\" " +sCheck+">Todo</option>");
+       sCheck="";
        if(streamMapView.equals("1")) sCheck="selected";
        out.println("<option value=\"1\" " +sCheck+">Contadores</option>");
        sCheck="";
        if(streamMapView.equals("2")) sCheck="selected";
        out.println("<option value=\"2\"  " +sCheck+">Mensajes</option>");
        sCheck="";
+       /*
        if(streamMapView.equals("3")) sCheck="selected";
        out.println("<option value=\"3\"  " +sCheck+">Mensajes y contadores</option>");
+       * */
        sCheck="";
        if(streamMapView.equals("5")) sCheck="selected";
        out.println("<option value=\"5\"  " +sCheck+">Positivos</option>");
