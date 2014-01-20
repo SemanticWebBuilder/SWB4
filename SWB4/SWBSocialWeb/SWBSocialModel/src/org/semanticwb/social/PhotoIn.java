@@ -21,9 +21,10 @@ public class PhotoIn extends org.semanticwb.social.base.PhotoInBase
             public void notify(SemanticObject obj, Object prop, String lang, String action) {
                 if(action!=null && obj.instanceOf(PhotoIn.social_PhotoIn))
                 {
+                    System.out.println("PhotoIn--Observer:"+obj+",prop:"+prop+",action:"+action);
                     //Cada que un PostIn se elimine, se ejecutara este código, revisa si el usuario(SocialNetworkUser) asociado al PostIn,
                     //tiene mas PostIn asociados, de no ser así, elimina dicho usuario (SocialNetworkUser).
-                    if(action.equals("REMOVE")) //Si la acción es eliminar el PhotoIn
+                    if(action.equals("REMOVE") && prop==null) //Si la acción es eliminar el PhotoIn
                     {
                         PostIn postIn = (PostIn) obj.createGenericInstance();
                         System.out.println("PhotoIn/Observer/action:"+action+", postIn:"+postIn);
