@@ -35,6 +35,7 @@
     String stateMsg=SWBSocialResUtil.Util.getStringFromGenericLocale("state", user.getLanguage());
     String positivesMsg=SWBSocialResUtil.Util.getStringFromGenericLocale("positives", user.getLanguage());
     String negativesMsg=SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", user.getLanguage());
+    String neutralMsg=SWBSocialResUtil.Util.getStringFromGenericLocale("neutrals", user.getLanguage());
     
     int streamMapView=1;
     //System.out.println("streamMapView:"+request.getParameter("streamMapView"));
@@ -136,6 +137,9 @@
                         else if(postIn.getPostSentimentalType()==2) {
                             sentimentHash.put("N", new Integer(1)); 
                         } //Con sentimiento Negativo
+                        else if(postIn.getPostSentimentalType()==0) {
+                            sentimentHash.put("Ne", new Integer(1)); 
+                        }
                         if(!sentimentHash.isEmpty())
                         {
                             //System.out.println("sentimentHash PRIMERO:"+sentimentHash);
@@ -176,6 +180,19 @@
                                 hmapPoints.remove(postIn.getGeoStateMap().getId());
                                 hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
                             }
+                        }else if(postIn.getPostSentimentalType()==0) {
+                            if(sentimentHash.containsKey("Ne"))
+                            {
+                                int neutralSentimentNumber=((Integer)sentimentHash.get("Ne")).intValue()+1;
+                                sentimentHash.remove("Ne");
+                                sentimentHash.put("Ne", new Integer(neutralSentimentNumber));
+                                hmapPoints.remove(postIn.getGeoStateMap().getId());
+                                hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
+                            }else{
+                                sentimentHash.put("Ne", new Integer(1)); 
+                                hmapPoints.remove(postIn.getGeoStateMap().getId());
+                                hmapPoints.put(postIn.getGeoStateMap().getId(), sentimentHash);
+                            }
                         }
                     }
                     if(streamMapView==3 || streamMapView==4)
@@ -203,6 +220,7 @@
                 
                 int positiveNumber=0;
                 int negativeNumber=0;
+                int neutralNumber=0;
                 if(sentimentHash.containsKey("P"))
                 {
                     positiveNumber=((Integer)sentimentHash.get("P")).intValue(); 
@@ -210,6 +228,10 @@
                 if(sentimentHash.containsKey("N"))
                 {
                     negativeNumber=((Integer)sentimentHash.get("N")).intValue();
+                }
+                if(sentimentHash.containsKey("Ne"))
+                {
+                    neutralNumber=((Integer)sentimentHash.get("Ne")).intValue();
                 }
                 if(positiveNumber>negativeNumber)
                 {
@@ -221,7 +243,7 @@
                     batch.push(new google.maps.Marker({
                         position: new google.maps.LatLng(<%=countryState.getCapitalLatitude()%>,<%=countryState.getCapitalLongitude()%>),
                         icon: new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/greenPoint.png', new google.maps.Size(15, 15), new google.maps.Point(15,15)),
-                        title: '<%=stateMsg%>:<%=countryState.getDisplayTitle(user.getLanguage())%>, <%=positivesMsg%>:'+<%=positiveNumber%>+', <%=negativesMsg%>:<%=negativeNumber%>'
+                        title: '<%=stateMsg%>:<%=countryState.getDisplayTitle(user.getLanguage())%>, <%=positivesMsg%>:'+<%=positiveNumber%>+', <%=negativesMsg%>:<%=negativeNumber%>'+', <%=neutralMsg%>:<%=neutralNumber%>'
                     })
                     );
                     <%
@@ -235,12 +257,12 @@
                     batch.push(new google.maps.Marker({
                         position: new google.maps.LatLng(<%=countryState.getCapitalLatitude()%>,<%=countryState.getCapitalLongitude()%>),
                         icon: new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/redPoint.png', new google.maps.Size(15, 15), new google.maps.Point(15,15)),
-                        title: '<%=stateMsg%>:<%=countryState.getDisplayTitle(user.getLanguage())%>, <%=positivesMsg%>:'+<%=positiveNumber%>+', <%=negativesMsg%>:<%=negativeNumber%>'
+                        title: '<%=stateMsg%>:<%=countryState.getDisplayTitle(user.getLanguage())%>, <%=positivesMsg%>:'+<%=positiveNumber%>+', <%=negativesMsg%>:<%=negativeNumber%>'+', <%=neutralMsg%>:<%=neutralNumber%>'
                     })
                     );
                     <%
                     }                     
-                 }else if(positiveNumber==negativeNumber)
+                 }else if((neutralNumber>positiveNumber && neutralNumber>negativeNumber) || (positiveNumber==negativeNumber))
                  {
                     if(streamMapView!=5 && streamMapView!=6)
                     {
@@ -249,7 +271,7 @@
                         batch.push(new google.maps.Marker({
                             position: new google.maps.LatLng(<%=countryState.getCapitalLatitude()%>,<%=countryState.getCapitalLongitude()%>),
                             icon: new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/yellowPoint.png', new google.maps.Size(15, 15), new google.maps.Point(15,15)),
-                            title: '<%=stateMsg%>:<%=countryState.getDisplayTitle(user.getLanguage())%>, <%=positivesMsg%>:'+<%=positiveNumber%>+', <%=negativesMsg%>:<%=negativeNumber%>'
+                            title: '<%=stateMsg%>:<%=countryState.getDisplayTitle(user.getLanguage())%>, <%=positivesMsg%>:'+<%=positiveNumber%>+', <%=negativesMsg%>:<%=negativeNumber%>'+', <%=neutralMsg%>:<%=neutralNumber%>'
                         })
                         );
                         <%  
@@ -354,6 +376,7 @@
                             {
                                 var postLocation='<%=SWBSocialResUtil.Util.replaceSpecialCharacters(postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation().replaceAll("'", ""), false)%>';
                                 var title='<%=postIn.getMsg_Text()!=null?SWBSocialResUtil.Util.replaceSpecialCharacters(postIn.getMsg_Text().replaceAll("'", ""), false):postIn.getTags()!=null?SWBSocialResUtil.Util.replaceSpecialCharacters(postIn.getTags().replaceAll("'", ""), false):"Sin Mensaje.."%>';
+                                //alert("title:"+title);
                                  geocoder.geocode( { 'address': postLocation}, function(results, status) { 
                                     if(status==google.maps.GeocoderStatus.OK){
                                         var marker =new google.maps.Marker({
