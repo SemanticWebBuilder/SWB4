@@ -96,7 +96,7 @@ public class YoutubeWall extends GenericResource{
         String contentTabId = (String) request.getParameter("contentTabId");
         //System.out.println("suriReceived in YoutubeWall:" + objUri);
         if(contentTabId == null){//The resource is loaded for the first time and it needs to display the tabs
-            String jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/youtubeTabs.jsp";
+            String jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/youtubeTabs1.jsp";
             RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
             try {
                 request.setAttribute("paramRequest", paramRequest);
