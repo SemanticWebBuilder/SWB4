@@ -53,7 +53,7 @@ public class PostIn extends org.semanticwb.social.base.PostInBase
                     System.out.println("*********************postIn/Observer/action:"+action+", postIn:"+postIn);
                     
                     //TODO:Probar este código.
-                    if(action.equals("REMOVE")) //Si la acción es eliminar el SocialTopic
+                    if(action.equals("REMOVE") && prop==null) //Si la acción es eliminar el SocialTopic
                     {
                         SocialNetworkUser socialNetworkUser=postIn.getPostInSocialNetworkUser();
                         if(socialNetworkUser!=null)

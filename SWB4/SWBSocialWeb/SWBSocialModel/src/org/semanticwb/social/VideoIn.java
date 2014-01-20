@@ -23,7 +23,7 @@ public class VideoIn extends org.semanticwb.social.base.VideoInBase
                 {
                     //Cada que un PostIn se elimine, se ejecutara este código, revisa si el usuario(SocialNetworkUser) asociado al PostIn,
                     //tiene mas PostIn asociados, de no ser así, elimina dicho usuario (SocialNetworkUser).
-                    if(action.equals("REMOVE")) //Si la acción es eliminar el SocialTopic
+                    if(action.equals("REMOVE") && prop==null) //Si la acción es eliminar el SocialTopic
                     {
                         PostIn postIn = (PostIn) obj.createGenericInstance();
                         System.out.println("VideoIn/Observer/action:"+action+", postIn:"+postIn);

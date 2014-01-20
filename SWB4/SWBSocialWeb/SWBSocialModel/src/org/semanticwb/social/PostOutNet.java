@@ -28,9 +28,8 @@ public class PostOutNet extends org.semanticwb.social.base.PostOutNetBase
                     System.out.println("Entra a Observer de PostOutNet");
                     //Cada que un PostOut se elimine, se ejecutara este código, revisa si el PostOut tiene PostOutNets asociados
                     //de ser así elimina cada uno de ellos.
-                    if(action.equals("REMOVE")) //Si la acción es eliminar el PostOut
+                    if(action.equals("REMOVE") && prop==null) //Si la acción es eliminar el PostOut
                     {
-                        
                         PostOutNet postOutNet = (PostOutNet) obj.createGenericInstance();
                         if(PostMonitor.ClassMgr.listPostMonitors(SWBContext.getAdminWebSite()).hasNext())
                         {
