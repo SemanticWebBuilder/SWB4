@@ -36,7 +36,7 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
      */
     @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) {
-        System.out.println("Entra a SelectMultipleActives/process-1");
+        //System.out.println("Entra a SelectMultipleActives/process-1");
         // super.process(request, obj, prop);
         // System.out.println("Process...");
         // System.out.println("Prop:"+prop);
@@ -79,7 +79,7 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                 String mode, String lang) {
-        System.out.println("Entra a SelectMultipleActives/renderElement-1");
+        //System.out.println("Entra a SelectMultipleActives/renderElement-1");
         if (obj == null) {
             obj = new SemanticObject();
         }
