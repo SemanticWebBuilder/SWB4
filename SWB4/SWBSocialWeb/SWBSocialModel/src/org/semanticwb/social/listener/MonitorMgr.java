@@ -19,6 +19,7 @@ import org.semanticwb.social.util.SWBSocialUtil;
 /**
  *
  * @author jorge.jimenez
+ * Clase que monitorea redes sociales de tipo MonitorAble (Youtube), que se pueden tardar tiempo para publicar un mensaje.
  */
 public class MonitorMgr {
     
