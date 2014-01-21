@@ -1607,11 +1607,11 @@
     >10000</swb:defaultValue>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_stream_maxMsg">
-        <swbxf:propPromptMessage>Maximo número de mensajes en el Stream antes de ser eliminados. Proporcione un número entre 0 y 99999.</swbxf:propPromptMessage>
-        <swbxf:propInvalidMessage xml:lang="en">This field accept only numbers  between 0 and 99999</swbxf:propInvalidMessage>
+        <swbxf:propInvalidMessage xml:lang="en">This field accept only numbers  between 1000 and 99999</swbxf:propInvalidMessage>
+        <swbxf:propInvalidMessage>Este campo solo acepta números entre 1000 y 99999</swbxf:propInvalidMessage>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >300</swb:index>
-        <swbxf:propInvalidMessage>Este campo solo acepta números entre 0 y 99999</swbxf:propInvalidMessage>
+        <swbxf:propPromptMessage>Maximo número de mensajes en el Stream antes de ser eliminados. Proporcione un número entre 0 y 99999.</swbxf:propPromptMessage>
         <swbxf:formElement>
           <swbxf:Text rdf:ID="streamMaxNumMsg">
             <swbxf:textRegExp rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -2033,7 +2033,8 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_stream_PoolTime">
-        <swbxf:propInvalidMessage>Valor debe ser mayor o igual a 10</swbxf:propInvalidMessage>
+        <swbxf:propPromptMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Lapso de tiempo en minutos para busqueda de información en las redes sociales. El número proporcionado no debe ser menor de 10.</swbxf:propPromptMessage>
         <swbxf:propInvalidMessage xml:lang="en">Value must be greather or equal than 10</swbxf:propInvalidMessage>
         <swbxf:formElement>
           <swbxf:Text rdf:ID="Text_PoolTime">
@@ -2046,8 +2047,7 @@
         <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >60</swb:index>
-        <swbxf:propPromptMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Lapso de tiempo en segundos para busqueda de información en las redes sociales. El número proporcionado no debe ser menor de 10.</swbxf:propPromptMessage>
+        <swbxf:propInvalidMessage>Valor debe ser mayor o igual a 10</swbxf:propInvalidMessage>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:label xml:lang="es">Tiempo para Busqueda de Información</rdfs:label>
