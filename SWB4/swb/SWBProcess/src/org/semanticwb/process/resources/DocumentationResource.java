@@ -125,13 +125,12 @@ public class DocumentationResource extends GenericAdmResource {
             }
         } catch (Exception ex) {
             log.error("Error on processRequest: , " + ex.getMessage());
-            ex.printStackTrace();
         }
     }
 
     public void doViewModel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=UTF-8");
-        String path = SWBPlatform.getContextPath() + "/swbadmin/jsp/process/documentation/DocumentationModel.jsp";
+        String path = SWBPlatform.getContextPath() + "/swbadmin/jsp/process/documentation/documentationModel.jsp";
         request.setAttribute("paramRequest", paramRequest);
         request.setAttribute("suri", request.getParameter("suri"));
         RequestDispatcher rd = request.getRequestDispatcher(path);
@@ -143,9 +142,10 @@ public class DocumentationResource extends GenericAdmResource {
     }
 
     public void doProcessDocumentation(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String path = "/swbadmin/jsp/process/documentation/DocumentationResource.jsp";
+        String path = "/swbadmin/jsp/process/documentation/documentationResource.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(path);
         String suri = request.getParameter("suri");
+        System.out.println("suri: " + suri);
         response.setContentType("text/html; charset=UTF-8");
         try {
             request.setAttribute("paramRequest", paramRequest);
@@ -340,7 +340,7 @@ public class DocumentationResource extends GenericAdmResource {
                         if (!bootstrap.exists()) {
                             bootstrap.mkdirs();
                         }
-                        SWBUtils.IO.copyStructure(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/utils/bootstrap/", basePath + "/bootstrap/");
+                        SWBUtils.IO.copyStructure(SWBUtils.getApplicationPath() + "/swbadmin/css/bootstrap/", basePath + "/bootstrap/");
                         //Add directory documentation
                         File documentation = new File(basePath + "documentation/");
                         if (!documentation.exists()) {
@@ -352,7 +352,7 @@ public class DocumentationResource extends GenericAdmResource {
                         if (!jquery.exists()) {
                             jquery.mkdirs();
                         }
-                        SWBUtils.IO.copyStructure(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/utils/jquery/", basePath + "/jquery/");
+                        SWBUtils.IO.copyStructure(SWBUtils.getApplicationPath() + "/swbadmin/js/jquery/", basePath + "/jquery/");
                         //Add modeler
 //                        File modeler = new File(basePath + "modeler/");
 //                        if (!modeler.exists()) {
@@ -383,14 +383,14 @@ public class DocumentationResource extends GenericAdmResource {
                         if (!fontawesome.exists()) {
                             fontawesome.mkdirs();
                         }
-                        SWBUtils.IO.copyStructure(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/utils/fontawesome/", basePath + "/fontawesome/");
+                        SWBUtils.IO.copyStructure(SWBUtils.getApplicationPath() + "/swbadmin/css/fontawesome/", basePath + "/fontawesome/");
                         String html = "";
                         //Index
-                        html += "<script type=\"text/javascript\" src=\"bootstrap/bootstrap.min.js\"></script>\n"//Begin imports
-                                + "<link href=\"bootstrap/bootstrap.min.css\" rel=\"stylesheet\">\n"
-                                + "<link href=\"fontawesome/css/font-awesome.min.css\" rel=\"stylesheet\">\n"
+                        html += "<script type=\"text/javascript\" src=\"bootstrap/bootstrap.js\"></script>\n"//Begin imports
+                                + "<link href=\"bootstrap/bootstrap.css\" rel=\"stylesheet\">\n"
+                                + "<link href=\"fontawesome/css/font-awesome.css\" rel=\"stylesheet\">\n"
                                 + "<link href=\"taskInbox/css/swbp.css\" rel=\"stylesheet\">\n"
-                                + "<script type=\"text/javascript\" src=\"jquery/jquery.min.js\"></script>\n"
+                                + "<script type=\"text/javascript\" src=\"jquery/jquery.js\"></script>\n"
                                 + "<script type=\"text/javascript\" src=\"modeler/toolkit.js\"></script>\n"
                                 + "<script type=\"text/javascript\" src=\"modeler/modeler.js\"></script>\n"
                                 + "<link href=\"documentation/style.css\" rel=\"stylesheet\">\n"
@@ -760,7 +760,7 @@ public class DocumentationResource extends GenericAdmResource {
             log.error("Error to copy file " + sourceFile + ", " + e.getMessage());
         }
     }
-    public static final String FILE_SEPARATOR = System.getProperty("file.separator");
+//    public static final String FILE_SEPARATOR = System.getProperty("file.separator");
 
     public static void createHtmlSubProcess(org.semanticwb.process.model.Process process, SubProcess subProcess, SWBParamRequest paramRequest, String basePath, String suri) throws FileNotFoundException, IOException, SWBResourceException {
         ArrayList activity = new ArrayList();
@@ -803,11 +803,11 @@ public class DocumentationResource extends GenericAdmResource {
 
 
         String html = "";
-        html += "<script type=\"text/javascript\" src=\"bootstrap/bootstrap.min.js\"></script>\n"//Begin imports
-                + "<link href=\"bootstrap/bootstrap.min.css\" rel=\"stylesheet\">\n"
-                + "<link href=\"fontawesome/css/font-awesome.min.css\" rel=\"stylesheet\">\n"
+        html += "<script type=\"text/javascript\" src=\"bootstrap/bootstrap.js\"></script>\n"//Begin imports
+                + "<link href=\"bootstrap/bootstrap.css\" rel=\"stylesheet\">\n"
+                + "<link href=\"fontawesome/css/font-awesome.css\" rel=\"stylesheet\">\n"
                 + "<link href=\"taskInbox/css/swbp.css\" rel=\"stylesheet\">\n"
-                + "<script type=\"text/javascript\" src=\"jquery/jquery.min.js\"></script>\n"
+                + "<script type=\"text/javascript\" src=\"jquery/jquery.js\"></script>\n"
                 + "<script type=\"text/javascript\" src=\"modeler/toolkit.js\"></script>\n"
                 + "<script type=\"text/javascript\" src=\"modeler/modeler.js\"></script>\n"
                 + "<link href=\"documentation/style.css\" rel=\"stylesheet\">\n"
@@ -1036,7 +1036,7 @@ public class DocumentationResource extends GenericAdmResource {
     }
 
     void doViewDocumentation(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, ServletException {
-        String path = "/swbadmin/jsp/process/documentation/ViewDocumentation.jsp";
+        String path = "/swbadmin/jsp/process/documentation/viewDocumentation.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(path);
         request.setAttribute("paramRequest", paramRequest);
         request.setAttribute("suri", request.getParameter("suri"));
@@ -1049,11 +1049,11 @@ public class DocumentationResource extends GenericAdmResource {
 //        System.out.println("entre createModel: " + suri);
         ProcessElement pe = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
         String html = "";
-        html += "<script type=\"text/javascript\" src=\"bootstrap/bootstrap.min.js\"></script>\n"//Begin imports
-                + "<link href=\"bootstrap/bootstrap.min.css\" rel=\"stylesheet\">\n"
+        html += "<script type=\"text/javascript\" src=\"bootstrap/bootstrap.js\"></script>\n"//Begin imports
+                + "<link href=\"bootstrap/bootstrap.css\" rel=\"stylesheet\">\n"
                 + "<link href=\"fontawesome/css/font-awesome.min.css\" rel=\"stylesheet\">\n"
                 + "<link href=\"taskInbox/css/swbp.css\" rel=\"stylesheet\">\n"
-                + "<script type=\"text/javascript\" src=\"jquery/jquery.min.js\"></script>\n"
+                + "<script type=\"text/javascript\" src=\"jquery/jquery.js\"></script>\n"
                 + "<script type=\"text/javascript\" src=\"modeler/toolkit.js\"></script>\n"
                 + "<script type=\"text/javascript\" src=\"modeler/modeler.js\"></script>\n"
                 + "<link href=\"documentation/style.css\" rel=\"stylesheet\">\n"
