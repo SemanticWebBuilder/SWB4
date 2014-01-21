@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta. 
    */
-public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.model.Tagable,org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable
+public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable
 {
    /**
    * Clase a Cambiar despues por "Relacional".Clase en la cual se almacenan los usuarios que escriben los PostIn que llegan. No se puso como identificador de las instancias de esta clase el id que maneja el usuario en la red social, ya que un identificador de una red social, puede ser el mismo para otra red social, pero obviamnete para otro usuario.Es por ello que se puso como AutoGenID esta clase y por ello se maneja por separado el id de un usuario en una determinada red social, esto en la propiedad snu_id.
