@@ -18,7 +18,7 @@
 
 
 <%
-    User user = (User)request.getAttribute("user");  
+    User user = (User) request.getAttribute("user");
     UserFavorite fav = user.getUserFavorite();
     HashMap sSite = new HashMap();
     ArrayList streamArray = new ArrayList();
@@ -31,15 +31,16 @@
 <ul>
     <%
         Iterator<SemanticObject> ite = SWBComparator.sortSermanticObjects(fav.listObjects());
-       
+
         while (ite.hasNext()) {
             SemanticObject objw = ite.next();
 
             String favorites = "";
             if (objw.createGenericInstance() instanceof SocialSite) {
-                SocialSite socialSite = (SocialSite) objw.createGenericInstance();               
-                //System.out.println("\n\n\n\n\n<--------SOCIAL SITE" + socialSite);
+                SocialSite socialSite = (SocialSite) objw.createGenericInstance();
                 sSite.put(socialSite.getURI(), cad(socialSite.getURI(), fav));
+            } else {
+                sSocialSite(sSite, objw);
             }
 
         }
@@ -95,19 +96,19 @@
     </li>
     <%
     } else if (obj.getGenericInstance() instanceof SocialNetwork) {
-       // System.out.println("es una red social");
+        // System.out.println("es una red social");
         SocialNetwork socialNet = (SocialNetwork) obj.createGenericInstance();
     %>
     <li>
         <a href="javascript:parent.addNewTab('<%=socialNet.getURI()%>','<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/objectTab.jsp','<%=SWBUtils.TEXT.scape4Script(socialNet.getDisplayTitle(user.getLanguage()))%>');">
             <%if (socialNet instanceof Facebook) {
-                   // System.out.println("es facebook");%>
+                    // System.out.println("es facebook");%>
             <img class="swbIconFacebook" src="/swbadmin/css/images/trans.png"/>
             <%} else if (socialNet instanceof Twitter) {
-               // System.out.println("es twitter");%>
+                // System.out.println("es twitter");%>
             <img class="swbIconTwitter" src="/swbadmin/css/images/trans.png"/>
             <%} else if (socialNet instanceof Youtube) {
-               // System.out.println("es youtube");%>
+                // System.out.println("es youtube");%>
             <img class="swbIconYouTube" src="/swbadmin/css/images/trans.png"/>
             <%}%>                       
             <%=socialNet.getTitle()%>
@@ -128,16 +129,16 @@
 
 <%!
     public ArrayList cad(String cadena, UserFavorite fav) {
-      //System.out.println("cadena a comparar " + cadena);
+        //System.out.println("cadena a comparar " + cadena);
 
         ArrayList list = new ArrayList();
         Iterator<SemanticObject> ite = SWBComparator.sortSermanticObjects(fav.listObjects());
-        
+
         //System.out.println("\n\n\n\nentra al metodo cad");
         while (ite.hasNext()) {
-           SemanticObject obj = ite.next();
-          // System.out.println("-----"+obj);
-            
+            SemanticObject obj = ite.next();
+            // System.out.println("-----"+obj);
+
             if (obj.getGenericInstance() instanceof Stream) {
                 Stream streamA = (Stream) obj.createGenericInstance();
                 SocialSite social = streamA.getSocialSite();
@@ -163,9 +164,9 @@
                 Rss rssA = (Rss) obj.createGenericInstance();
                 SocialSite social = rssA.getSocialSite();
                 String uri = social.getURI();
-               // System.out.println("\nURI RSS" + uri);
+                // System.out.println("\nURI RSS" + uri);
                 if (uri.equals(cadena)) {
-                   // System.out.println("agrega un rss");
+                    // System.out.println("agrega un rss");
                     list.add(rssA.getURI());
                 }
 
@@ -183,21 +184,52 @@
             }
         }
 
-        /*
-        Iterator i = list.iterator();
-        while (i.hasNext()) {
-            System.out.println("++++++" + i.next());
-        }*/
-
-        //System.out.println("-------------->cade" + list);
         return list;
     }
-    
-    
-    public HashMap favoritesSocialSite(HashMap hm, SemanticObject sobj){
-        
-        HashMap map = new HashMap();       
-        
-        return map;
+
+    public HashMap sSocialSite(HashMap hm, SemanticObject sobj) {
+        ArrayList list = new ArrayList();
+        if (sobj.getGenericInstance() instanceof Stream) {
+            Stream streamA = (Stream) sobj.createGenericInstance();
+            SocialSite social = streamA.getSocialSite();
+            String uri = social.getURI();
+            if (hm.containsKey(social.getURI()) ) {
+               list = (ArrayList)hm.get(social.getURI());               
+               }
+            list.add(streamA);
+            hm.put(social.getURI(), list );
+        }
+        if (sobj.getGenericInstance() instanceof SocialNetwork) {
+            SocialNetwork socialNetA = (SocialNetwork) sobj.createGenericInstance();
+            String social = socialNetA.getSemanticObject().getModel().getModelObject().getURI();
+            if (hm.containsKey(social)) {
+               list = (ArrayList)hm.get(social);               
+               }
+            list.add(socialNetA);
+            hm.put(social, list);
+
+        }
+        if (sobj.getGenericInstance() instanceof Rss) {
+            Rss rssA = (Rss) sobj.createGenericInstance();
+            SocialSite social = rssA.getSocialSite();
+            String uri = social.getURI();
+                if (hm.containsKey(social.getURI())) {
+               list = (ArrayList)hm.get(social.getURI());               
+               }
+            list.add(rssA);
+            hm.put(social.getURI(), list);
+
+        }
+        if (sobj.getGenericInstance() instanceof SocialTopic) {
+            SocialTopic social = (SocialTopic) sobj.createGenericInstance();
+            SocialSite socialS = social.getSocialSite();
+            String uri = socialS.getURI();
+               if (hm.containsKey(socialS.getURI())) {
+               list = (ArrayList)hm.get(socialS.getURI());               
+               }
+            list.add(social);
+            hm.put(socialS.getURI(), list);
+        }
+        return hm;
     }
 %>
