@@ -1167,7 +1167,7 @@ public class SocialSentPost extends GenericResource {
                                 out.println("<span class=\"status5\" title=\"Cumplir Calendario\"><strong>Cumplir Calendario</strong></span>");
                             }else{
                                 //System.out.println("ENTRA SENTPOST-STATUS-7");
-                                out.println("<a class=\"status6\" href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" /><strong>" + paramRequest.getLocaleString("publish") + "</strong></a>");
+                                out.println("<a class=\"status6\" title=\""+paramRequest.getLocaleString("publish")+"\" href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" /><strong>" + paramRequest.getLocaleString("publish") + "</strong></a>");
                             }
                         }
                     } else {    //El PostOut ya se envío
