@@ -62,6 +62,17 @@
         ex.printStackTrace();
     }    
     //System.out.println("dateG:"+date.toString());
+    
+    String[] selectedNetworks = request.getParameterValues("networks");
+    ArrayList<String> networks = new ArrayList<String>();
+
+    if(selectedNetworks != null && selectedNetworks.length > 0){
+        for(String net: selectedNetworks){
+            try{
+                networks.add(net);
+            }catch(Exception e){}
+        }
+    }
 %>
 
 
@@ -117,8 +128,9 @@
         while(itPostIns.hasNext())
         {
             PostIn postIn=itPostIns.next();
+            SocialNetwork postInSocialNet=postIn.getPostInSocialNetwork();
             //System.out.println("postIn Solin:"+postIn);
-            if(postIn.getPi_created()!=null && postIn.getPi_created().compareTo(date)>=0)
+            if(postIn.getPi_created()!=null && postIn.getPi_created().compareTo(date)>=0 && (networks.isEmpty() || networks.contains(postInSocialNet.getURI())))
             {
                 //System.out.println("postIn Solin-1:"+postIn);
                 
@@ -206,6 +218,7 @@
                 }
             }
         }
+        //Barre los postIns dentro de los estados
         Iterator<String> itMapStates=hmapPoints.keySet().iterator();
         while(itMapStates.hasNext())
         {
