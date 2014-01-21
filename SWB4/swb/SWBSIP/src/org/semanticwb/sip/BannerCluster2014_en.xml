@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAddNew" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
+    <admdbconnmgr defconn="true"/>
+    <fieldset legend="Strategy Setting">
+        <input type="text" id="cluster" name="cluster" label="Subtype of Banner:" size="50" required="true" promptMessage="Banners Subtype name included in the carousel" />
+    </fieldset>
+
+    <fieldset legend="Look and Feel">
+        <input type="text" id="width"  name="width" label="Width of images:" maxlength="9" regExp="\d{1,9}(|px)" invalidMessage="Invalid width" promptMessage="Image width. Examples: 350px, 854" />
+        <input type="text" id="height" name="height" label="Height of images:" maxlength="9" regExp="\d{1,9}(|px)" invalidMessage="Invalid height" promptMessage="Image height. Examples: 350px, 854" />
+
+        <input type="text" id="theight" name="theight" label="Height of title:" maxlength="9" regExp="\d{1,5}" invalidMessage="Altura inválida" promptMessage="Height of title. Considered in pixels" />
+    </fieldset>
+    
+    <fieldset>
+        <input type="submit" name="btnSave" id="btnSave" value="Save" onclick="return jsValida(this.form)" />
+        <input type="reset"  name="btnReset" id="btnReset" value="Reset" />
+    </fieldset>
+    </form>
+
+    <script type="text/javascript">
+        <![CDATA[
+        dojo.require("dijit.form.ValidationTextBox");
+
+        function jsValida(frm) {
+            var cluster = dojo.byId('cluster').value;
+            if( !cluster ) {
+                alert('Enter the Banner Subtype');
+                dojo.byId('cluster').focus();
+                return false;
+            }
+            return true;
+        }
+        ]]>
+    </script>
+</admresource>
