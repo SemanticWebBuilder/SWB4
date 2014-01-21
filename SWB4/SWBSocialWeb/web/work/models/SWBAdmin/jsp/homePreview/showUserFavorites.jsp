@@ -64,9 +64,7 @@
         Iterator i = list.iterator();
         while (i.hasNext()) {
             String uri = i.next().toString();
-            //System.out.println("uri"+uri);
             SemanticObject obj = SemanticObject.createSemanticObject(uri);
-            //System.out.println("obj"+obj);
             if (obj.getGenericInstance() instanceof Stream) {
                 Stream stream = (Stream) obj.createGenericInstance();
     %>
@@ -102,13 +100,13 @@
     <li>
         <a href="javascript:parent.addNewTab('<%=socialNet.getURI()%>','<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/objectTab.jsp','<%=SWBUtils.TEXT.scape4Script(socialNet.getDisplayTitle(user.getLanguage()))%>');">
             <%if (socialNet instanceof Facebook) {
-                    // System.out.println("es facebook");%>
+               %>
             <img class="swbIconFacebook" src="/swbadmin/css/images/trans.png"/>
             <%} else if (socialNet instanceof Twitter) {
-                // System.out.println("es twitter");%>
+              %>
             <img class="swbIconTwitter" src="/swbadmin/css/images/trans.png"/>
             <%} else if (socialNet instanceof Youtube) {
-                // System.out.println("es youtube");%>
+                %>
             <img class="swbIconYouTube" src="/swbadmin/css/images/trans.png"/>
             <%}%>                       
             <%=socialNet.getTitle()%>
@@ -129,33 +127,25 @@
 
 <%!
     public ArrayList cad(String cadena, UserFavorite fav) {
-        //System.out.println("cadena a comparar " + cadena);
 
         ArrayList list = new ArrayList();
         Iterator<SemanticObject> ite = SWBComparator.sortSermanticObjects(fav.listObjects());
 
-        //System.out.println("\n\n\n\nentra al metodo cad");
         while (ite.hasNext()) {
             SemanticObject obj = ite.next();
-            // System.out.println("-----"+obj);
 
             if (obj.getGenericInstance() instanceof Stream) {
                 Stream streamA = (Stream) obj.createGenericInstance();
                 SocialSite social = streamA.getSocialSite();
                 String uri = social.getURI();
-                //System.out.println("\nURI STREAM" + uri);
                 if (uri.equals(cadena)) {
-                    //System.out.println("agrega un stream");
                     list.add(streamA.getURI());
                 }
             }
             if (obj.getGenericInstance() instanceof SocialNetwork) {
                 SocialNetwork socialNetA = (SocialNetwork) obj.createGenericInstance();
                 String social = socialNetA.getSemanticObject().getModel().getModelObject().getURI();
-                //SemanticObject
-                //System.out.println("\nURI SOCIALNETWORK" + social);
                 if (cadena.equals(social)) {
-                    //System.out.println("agrega un socialnetwork");
                     list.add(socialNetA.getURI());
                 }
 
@@ -164,9 +154,7 @@
                 Rss rssA = (Rss) obj.createGenericInstance();
                 SocialSite social = rssA.getSocialSite();
                 String uri = social.getURI();
-                // System.out.println("\nURI RSS" + uri);
                 if (uri.equals(cadena)) {
-                    // System.out.println("agrega un rss");
                     list.add(rssA.getURI());
                 }
 
@@ -175,9 +163,7 @@
                 SocialTopic social = (SocialTopic) obj.createGenericInstance();
                 SocialSite socialS = social.getSocialSite();
                 String uri = socialS.getURI();
-                //System.out.println("\nURI SOCIALTOPIC" + uri);
                 if (uri.equals(cadena)) {
-                    //.out.println("agrega un social topic");
                     list.add(social.getURI());
                 }
 
