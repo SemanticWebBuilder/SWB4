@@ -360,7 +360,9 @@ public class RemoveMessagesResource extends GenericResource {
                     
                     if(selectedTopics != null && selectedTopics.length > 0){
                         for(String topic: selectedTopics){
-                            topics.add((SocialTopic)SemanticObject.createSemanticObject(topic).createGenericInstance());
+                            try{
+                                topics.add((SocialTopic)SemanticObject.createSemanticObject(topic).createGenericInstance());
+                            }catch(Exception e){}
                         }
                         
                         for(SocialTopic sTopic: topics){
@@ -381,7 +383,9 @@ public class RemoveMessagesResource extends GenericResource {
                     
                     if(selectedNetworks != null && selectedNetworks.length > 0){
                         for(String net: selectedNetworks){
-                            networks.add((SocialNetwork)SemanticObject.createSemanticObject(net).createGenericInstance());
+                            try{
+                                networks.add((SocialNetwork)SemanticObject.createSemanticObject(net).createGenericInstance());
+                            }catch(Exception e){}
                         }
                         
                         for(SocialNetwork sNetwork: networks){
