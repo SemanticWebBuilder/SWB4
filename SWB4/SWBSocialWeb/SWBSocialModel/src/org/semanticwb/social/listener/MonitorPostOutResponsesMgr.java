@@ -33,7 +33,7 @@ public class MonitorPostOutResponsesMgr {
     public MonitorPostOutResponsesMgr() {
         try {
             System.out.println("Entra a MonitorPostOutResponsesMgr..-1");
-            int periodTime = (60*MILISEG_IN_SEGUNDO)*1; //10 minutos
+            int periodTime = (60*MILISEG_IN_SEGUNDO)*10; //10 minutos
             Timer timer = new Timer();
             timer.schedule(new MonitorPostOutResponsesMgr.MonitorTask(), 0,periodTime);
             System.out.println("Entra a MonitorPostOutResponsesMgr..-2");
