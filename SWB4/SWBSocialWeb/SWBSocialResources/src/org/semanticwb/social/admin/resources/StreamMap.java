@@ -6,18 +6,26 @@ package org.semanticwb.social.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.social.Facebook;
 import org.semanticwb.social.PostIn;
+import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
+import org.semanticwb.social.Twitter;
+import org.semanticwb.social.Youtube;
+import org.semanticwb.social.util.SWBSocialUtil;
+import org.semanticwb.social.Stream;
 
 /**
  *
@@ -46,8 +54,10 @@ public class StreamMap extends GenericResource{
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
         PrintWriter out = response.getWriter();
+        User user=paramRequest.getUser();
         String suri=request.getParameter("suri");
         SemanticObject semObj=SemanticObject.getSemanticObject(suri);
+        
         String streamMapView="";
         if(request.getParameter("streamMapView")!=null) streamMapView=request.getParameter("streamMapView");
         String date=request.getParameter("mapSinceDate");
@@ -114,6 +124,40 @@ public class StreamMap extends GenericResource{
         out.println("   </tr>");
         out.println("</table>");
         * */
+        ArrayList aNetsSelected=new ArrayList();
+        String[] paramNet=request.getParameterValues("networks");
+        if(paramNet!=null)
+        {
+            for(String net: paramNet){
+                try{
+                    aNetsSelected.add(net);
+                }catch(Exception e){}
+            }
+        }
+        
+        
+        Stream stream=(Stream)semObj.createGenericInstance();
+        ArrayList nets = SWBSocialUtil.sparql.getStreamSocialNetworks(stream);
+        out.println("<div class=\"bloqSocialNetDiv\">");
+        out.println("    <p class=\"bloqSocialNet\">Redes Sociales</p>");
+        out.println("    <select name=\"networks\" multiple size=\"5\">");
+        for(int i = 0; i < nets.size(); i++){
+            SocialNetwork socialNet= (SocialNetwork)((SemanticObject)nets.get(i)).createGenericInstance();
+            String iconClass ="";
+            if(socialNet instanceof Twitter){
+                iconClass = "swbIconTwitter";
+            }else if (socialNet instanceof Facebook){
+                iconClass = "swbIconFacebook";
+            }else if( socialNet instanceof Youtube){
+                iconClass = "swbIconYouTube";
+            }
+            String sSelected="";
+            if(aNetsSelected.contains(socialNet.getURI())) sSelected="selected";
+            out.println("  <option class=\"" + iconClass + "\" value=\"" + socialNet.getURI() +"\" "+sSelected+">"+ socialNet.getDisplayTitle(user.getLanguage()) + "</option>");
+        }
+        out.println("    </select>");
+        out.println("    </div>");
+        
         
        String sCheck=""; 
        out.println("<label>Mostrar ");
@@ -149,7 +193,7 @@ public class StreamMap extends GenericResource{
         if(request.getParameter("mapSinceDate")!=null)
         {
             out.println("<div class=\"swbSocialMapIframe\">");
-            out.println("   <iframe width=\"100%\" height=\"100%\" src=\""+paramRequest.getRenderUrl().setMode(Mode_showMap).setParameter("suri", request.getParameter("suri")).setParameter("mapSinceDate"+semObj.getId(), request.getParameter("mapSinceDate")).setParameter("streamMapView", request.getParameter("streamMapView")) +"\"></iframe> ");
+            out.println("   <iframe width=\"100%\" height=\"100%\" src=\""+paramRequest.getRenderUrl().setMode(Mode_showMap).setParameter("suri", request.getParameter("suri")).setParameter("mapSinceDate"+semObj.getId(), request.getParameter("mapSinceDate")).setParameter("streamMapView", request.getParameter("streamMapView")).setParameter("networks", request.getParameterValues("networks")) +"\"></iframe> ");
             out.println("</div>");
         }
     }

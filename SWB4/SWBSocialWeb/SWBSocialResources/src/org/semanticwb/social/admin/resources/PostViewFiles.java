@@ -37,6 +37,7 @@ public class PostViewFiles extends GenericResource{
         try {
             String jspResponse=null;
             if(request.getParameter("uri") != null) {
+                /*
                 SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("uri"));
                 System.out.println("Entra a PostViewFiles/doView-2:"+semObj);
                 if(semObj!=null)
@@ -63,20 +64,17 @@ public class PostViewFiles extends GenericResource{
                                 }
                             }
                         }
-                        
-                        jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/postViewFiles.jsp";
+                        */
+                        jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/review/postViewFiles.jsp";
                         RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
                         try {
-                            request.setAttribute("imageList", aPostImages.iterator());
-                            request.setAttribute("videoList", aPostVideos.iterator());
                             request.setAttribute("paramRequest", paramRequest);
-                            request.setAttribute("semObj", semObj);
                             dis.include(request, response);
                         } catch (Exception e) {
                             log.error(e);
                         }
-                    }
-                }
+                   // }
+               // }
             }
         }catch(Exception e)
         {
