@@ -323,10 +323,10 @@ public class DataBuilder {
         String prefix = (objective.getPrefix() == null) ? "" : objective.getPrefix();
         WebSite ws = base.getWebSite();
         WebPage wp = ws.getWebPage(Objective.class.getSimpleName());
-        String url = "#";
-        if(wp != null) {
-            url = wp.getUrl() + "?suri=" + objective.getEncodedURI();
-        }
+        //String url = "#";
+        //if(wp != null) {
+        String url = wp.getUrl() + "?suri=" + objective.getEncodedURI();
+        //}
         try {
             dataObjective.put("title", title);
             dataObjective.put("sponsor", BSCUtils.getSponsor(objective.getSponsor()));
