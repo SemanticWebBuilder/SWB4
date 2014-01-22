@@ -1,309 +1,334 @@
 <?xml version="1.0"?>
 <rdf:RDF
-    xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+    xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:frm="http://www.semanticwb.org/SWBForum#"
-    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
   xml:base="http://www.semanticwb.org/SWBForum">
   <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
-    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
   </owl:Ontology>
-  <owl:Class rdf:ID="SWBForum">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
-  </owl:Class>
-  <owl:Class rdf:ID="UserFavThread">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Attachment">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Post">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Thread">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:ObjectProperty rdf:ID="ftUser">
-    <rdfs:domain rdf:resource="#UserFavThread"/>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >user</swb:propertyCodeName>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="atThread">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >thread</swb:propertyCodeName>
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="hasThAttachments"/>
-    </owl:inverseOf>
-    <rdfs:range rdf:resource="#Thread"/>
-    <rdfs:domain rdf:resource="#Attachment"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasAttachments">
+  <owl:ObjectProperty rdf:ID="hasThAttachments">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_FileUpload">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUploadHTML"/>
-        <rdfs:label xml:lang="en">Upload file</rdfs:label>
-        <rdfs:label xml:lang="es">Subir Archivo</rdfs:label>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >30</swb:index>
+        <rdfs:label xml:lang="es">Subir Archivo</rdfs:label>
+        <rdfs:label xml:lang="en">Upload file</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUploadHTML"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="pstThread">
-    <rdfs:domain rdf:resource="#Post"/>
-    <rdfs:range rdf:resource="#Thread"/>
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="hasPost"/>
-    </owl:inverseOf>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >thread</swb:propertyCodeName>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="thForum">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >forum</swb:propertyCodeName>
-    <rdfs:range rdf:resource="#SWBForum"/>
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="hasThreads"/>
-    </owl:inverseOf>
-    <rdfs:domain rdf:resource="#Thread"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="thLastPostMember">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >lastPostMember</swb:propertyCodeName>
-    <rdfs:domain rdf:resource="#Thread"/>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasthAttachments">
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
-    <rdfs:range rdf:resource="#Attachment"/>
-    <rdfs:label>hasAttachment</rdfs:label>
-    <swb:displayProperty rdf:resource="#dp_FileUpload"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasAttachment</swb:propertyCodeName>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="pstParentPost">
-    <rdfs:domain rdf:resource="#Post"/>
-    <rdfs:range rdf:resource="#Post"/>
+  <owl:ObjectProperty rdf:ID="atPost">
     <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="haschildPost"/>
+      <owl:ObjectProperty rdf:ID="hasAttachments"/>
     </owl:inverseOf>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >parentPost</swb:propertyCodeName>
+    >post</swb:propertyCodeName>
+    <rdfs:domain>
+      <swb:Class rdf:ID="Attachment">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+    <rdfs:range>
+      <swb:Class rdf:ID="Post">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#hasPost">
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#hasThreads">
+  <owl:ObjectProperty rdf:ID="hasthAttachments">
+    <swb:displayProperty rdf:resource="#dp_FileUpload"/>
+    <rdfs:label>hasAttachment</rdfs:label>
+    <rdfs:range rdf:resource="#Attachment"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="adminRole">
+    <rdfs:domain>
+      <swb:SemanticResource rdf:ID="SWBForum">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:SemanticResource>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Role"/>
+    <rdfs:label xml:lang="es">Rol de Administración</rdfs:label>
+    <rdfs:label xml:lang="en">Administration Role</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_adminRole">
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneUserRepWithBlank"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="en">Administration Role</rdfs:label>
-    <rdfs:label xml:lang="es">Rol de Administración</rdfs:label>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Role"/>
-    <rdfs:domain rdf:resource="#SWBForum"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="thLastPostMember">
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <rdfs:domain>
+      <swb:Class rdf:ID="Thread">
+        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >lastPostMember</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="ftUser">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >user</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <rdfs:domain>
+      <swb:Class rdf:ID="UserFavThread">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="ftThread">
-    <rdfs:range rdf:resource="#Thread"/>
-    <rdfs:domain rdf:resource="#UserFavThread"/>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >thread</swb:propertyCodeName>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:removeDependency>
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="hasUserFavThread"/>
     </owl:inverseOf>
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >false</swb:removeDependency>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >thread</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="#UserFavThread"/>
+    <rdfs:range rdf:resource="#Thread"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#haschildPost">
+  <owl:ObjectProperty rdf:ID="haschildPost">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="atPost">
-    <rdfs:range rdf:resource="#Post"/>
-    <rdfs:domain rdf:resource="#Attachment"/>
+  <owl:ObjectProperty rdf:ID="thForum">
+    <rdfs:domain rdf:resource="#Thread"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasThreads"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="#SWBForum"/>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >post</swb:propertyCodeName>
-    <owl:inverseOf rdf:resource="#hasAttachments"/>
+    >forum</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasAttachments">
+    <swb:displayProperty rdf:resource="#dp_FileUpload"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasUserFavThread">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#hasThAttachments">
+  <owl:ObjectProperty rdf:ID="atThread">
+    <rdfs:domain rdf:resource="#Attachment"/>
+    <rdfs:range rdf:resource="#Thread"/>
+    <owl:inverseOf rdf:resource="#hasThAttachments"/>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >hasAttachment</swb:propertyCodeName>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <swb:displayProperty rdf:resource="#dp_FileUpload"/>
+    >thread</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasThreads">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
   </owl:ObjectProperty>
-  <owl:DatatypeProperty rdf:ID="pstBody">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  <owl:ObjectProperty rdf:ID="pstParentPost">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >parentPost</swb:propertyCodeName>
+    <owl:inverseOf rdf:resource="#haschildPost"/>
+    <rdfs:range rdf:resource="#Post"/>
     <rdfs:domain rdf:resource="#Post"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_pstBody">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >20</swb:index>
-        <rdfs:label xml:lang="en">Body</rdfs:label>
-        <rdfs:label xml:lang="es">Mensaje</rdfs:label>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasPost">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="pstThread">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >body</swb:propertyCodeName>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="showThreadBody">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_showThreadBody">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >95</swb:index>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:label xml:lang="en">Show thread body in index</rdfs:label>
-    <rdfs:label xml:lang="es">Mostrar contenido del tema en el índice</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#SWBForum"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="acceptGuessUsers">
-    <rdfs:domain rdf:resource="#SWBForum"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_acceptGuestUsers">
-        <rdfs:label xml:lang="en">Accept anonymouse users</rdfs:label>
-        <rdfs:label xml:lang="es">Aceptar usuarios anónimos</rdfs:label>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="atFileSize">
-    <rdfs:domain rdf:resource="#Attachment"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >fileSize</swb:propertyCodeName>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="thViewCount">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:domain rdf:resource="#Thread"/>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >viewCount</swb:propertyCodeName>
-  </owl:DatatypeProperty>
+    >thread</swb:propertyCodeName>
+    <owl:inverseOf rdf:resource="#hasPost"/>
+    <rdfs:range rdf:resource="#Thread"/>
+    <rdfs:domain rdf:resource="#Post"/>
+  </owl:ObjectProperty>
   <owl:DatatypeProperty rdf:ID="jspView">
-    <rdfs:label xml:lang="en">JSP for View</rdfs:label>
-    <rdfs:label xml:lang="es">JSP para la vista</rdfs:label>
+    <rdfs:domain rdf:resource="#SWBForum"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_jspView">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >100</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#SWBForum"/>
+    <rdfs:label xml:lang="es">JSP para la vista</rdfs:label>
+    <rdfs:label xml:lang="en">JSP for View</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="atMimeType">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Attachment"/>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >mimeType</swb:propertyCodeName>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="thReplyCount">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >replyCount</swb:propertyCodeName>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:domain rdf:resource="#Thread"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="atFileName">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Attachment"/>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >fileName</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="notifyThreadCreation">
-    <rdfs:domain rdf:resource="#SWBForum"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  <owl:DatatypeProperty rdf:ID="thViewCount">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >viewCount</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="#Thread"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="pagination">
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_notifyThreadCreation">
-        <rdfs:label xml:lang="es">Notificar Creación de Temas</rdfs:label>
-        <rdfs:label xml:lang="en">Notify Thread Creation</rdfs:label>
+      <swbxf:DisplayProperty rdf:ID="cp_pagination">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >25</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="es">Notificar Creación de Temas</rdfs:label>
-    <rdfs:label xml:lang="en">Notify Thread Creation</rdfs:label>
+    <rdfs:label xml:lang="en">Pagination</rdfs:label>
+    <rdfs:label xml:lang="es">Paginación</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#SWBForum"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="onlyAdminCreateThreads">
-    <rdfs:label xml:lang="en">Threads creation only for Admin</rdfs:label>
-    <rdfs:label xml:lang="es">Crear temas solo por Administrador</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#SWBForum"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_onlyAdminCreateThreads">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >90</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:domain rdf:resource="#SWBForum"/>
+    <rdfs:label xml:lang="es">Crear temas solo por Administrador</rdfs:label>
+    <rdfs:label xml:lang="en">Threads creation only for Admin</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="captcha">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_captcha">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Show captcha</rdfs:label>
+    <rdfs:label xml:lang="es">Mostrar captcha</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#SWBForum"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="testFile">
-    <swb:displayProperty rdf:resource="#dp_FileUpload"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >false</swb:required>
+  <owl:DatatypeProperty rdf:ID="notifyThreadCreation">
+    <rdfs:label xml:lang="en">Notify Thread Creation</rdfs:label>
+    <rdfs:label xml:lang="es">Notificar Creación de Temas</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_notifyThreadCreation">
+        <rdfs:label xml:lang="en">Notify Thread Creation</rdfs:label>
+        <rdfs:label xml:lang="es">Notificar Creación de Temas</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#SWBForum"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="thBody">
+  <owl:DatatypeProperty rdf:ID="atFileName">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >body</swb:propertyCodeName>
-    <rdfs:domain rdf:resource="#Thread"/>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <swb:displayProperty rdf:resource="#dp_pstBody"/>
+    >fileName</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="#Attachment"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="thLastPostDate">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <rdfs:domain rdf:resource="#Thread"/>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >lastPostDate</swb:propertyCodeName>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="showThreadBody">
+    <rdfs:domain rdf:resource="#SWBForum"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:label xml:lang="es">Mostrar contenido del tema en el índice</rdfs:label>
+    <rdfs:label xml:lang="en">Show thread body in index</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_showThreadBody">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >95</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="pstBody">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >body</swb:propertyCodeName>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_pstBody">
+        <rdfs:label xml:lang="es">Mensaje</rdfs:label>
+        <rdfs:label xml:lang="en">Body</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Post"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="atFileSize">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >fileSize</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#Attachment"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="testFile">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:required>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty rdf:resource="#dp_FileUpload"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="thBody">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty rdf:resource="#dp_pstBody"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
     <rdfs:domain rdf:resource="#Thread"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >body</swb:propertyCodeName>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="thReplyCount">
+    <rdfs:domain rdf:resource="#Thread"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >replyCount</swb:propertyCodeName>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="acceptGuessUsers">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_acceptGuestUsers">
+        <rdfs:label xml:lang="es">Aceptar usuarios anónimos</rdfs:label>
+        <rdfs:label xml:lang="en">Accept anonymouse users</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#SWBForum"/>
   </owl:DatatypeProperty>
   <swb:CodePackage rdf:ID="pkg">
-    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >frm</swb:prefix>
     <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.portal.resources.sem.forum</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >frm</swb:prefix>
   </swb:CodePackage>
 </rdf:RDF>
 
-<!-- Created with TopBraid Composer -->
+<!-- Created with TopBraid -->
