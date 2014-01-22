@@ -314,6 +314,7 @@
         selector: "div.editable",
         inline: true,
         language: '<%=paramRequest.getUser().getLanguage()%>',
+        theme_advanced_toolbar_location : "bottom",
         theme: "modern",
         force_br_newlines: false,
         force_p_newlines: false,
