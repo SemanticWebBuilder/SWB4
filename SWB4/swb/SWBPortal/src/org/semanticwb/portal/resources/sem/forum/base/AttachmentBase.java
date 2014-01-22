@@ -1,37 +1,15 @@
-/*
- * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
- * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
- * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
- * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
- * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
- * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
- *
- * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
- * del SemanticWebBuilder 4.0.
- *
- * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
- *  http://www.semanticwebbuilder.org
- */
 package org.semanticwb.portal.resources.sem.forum.base;
 
 
 public abstract class AttachmentBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty frm_atMimeType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#atMimeType");
-    public static final org.semanticwb.platform.SemanticProperty frm_atFileSize=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#atFileSize");
+    public static final org.semanticwb.platform.SemanticClass frm_Post=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Post");
+    public static final org.semanticwb.platform.SemanticProperty frm_atPost=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#atPost");
     public static final org.semanticwb.platform.SemanticClass frm_Thread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Thread");
     public static final org.semanticwb.platform.SemanticProperty frm_atThread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#atThread");
     public static final org.semanticwb.platform.SemanticProperty frm_atFileName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#atFileName");
-    public static final org.semanticwb.platform.SemanticClass frm_Post=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Post");
-    public static final org.semanticwb.platform.SemanticProperty frm_atPost=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#atPost");
+    public static final org.semanticwb.platform.SemanticProperty frm_atFileSize=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#atFileSize");
     public static final org.semanticwb.platform.SemanticClass frm_Attachment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Attachment");
    /**
    * The semantic class that represents the currentObject
@@ -131,26 +109,26 @@ public abstract class AttachmentBase extends org.semanticwb.model.SWBClass imple
             return it;
         }
        /**
-       * Gets all org.semanticwb.portal.resources.sem.forum.Attachment with a determined Thread
-       * @param value Thread of the type org.semanticwb.portal.resources.sem.forum.Thread
+       * Gets all org.semanticwb.portal.resources.sem.forum.Attachment with a determined Post
+       * @param value Post of the type org.semanticwb.portal.resources.sem.forum.Post
        * @param model Model of the org.semanticwb.portal.resources.sem.forum.Attachment
        * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Attachment
        */
 
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Attachment> listAttachmentByThread(org.semanticwb.portal.resources.sem.forum.Thread value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Attachment> listAttachmentByPost(org.semanticwb.portal.resources.sem.forum.Post value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(frm_atThread, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(frm_atPost, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.portal.resources.sem.forum.Attachment with a determined Thread
-       * @param value Thread of the type org.semanticwb.portal.resources.sem.forum.Thread
+       * Gets all org.semanticwb.portal.resources.sem.forum.Attachment with a determined Post
+       * @param value Post of the type org.semanticwb.portal.resources.sem.forum.Post
        * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Attachment
        */
 
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Attachment> listAttachmentByThread(org.semanticwb.portal.resources.sem.forum.Thread value)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Attachment> listAttachmentByPost(org.semanticwb.portal.resources.sem.forum.Post value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(frm_atThread,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(frm_atPost,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -177,28 +155,33 @@ public abstract class AttachmentBase extends org.semanticwb.model.SWBClass imple
             return it;
         }
        /**
-       * Gets all org.semanticwb.portal.resources.sem.forum.Attachment with a determined Post
-       * @param value Post of the type org.semanticwb.portal.resources.sem.forum.Post
+       * Gets all org.semanticwb.portal.resources.sem.forum.Attachment with a determined Thread
+       * @param value Thread of the type org.semanticwb.portal.resources.sem.forum.Thread
        * @param model Model of the org.semanticwb.portal.resources.sem.forum.Attachment
        * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Attachment
        */
 
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Attachment> listAttachmentByPost(org.semanticwb.portal.resources.sem.forum.Post value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Attachment> listAttachmentByThread(org.semanticwb.portal.resources.sem.forum.Thread value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(frm_atPost, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(frm_atThread, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.portal.resources.sem.forum.Attachment with a determined Post
-       * @param value Post of the type org.semanticwb.portal.resources.sem.forum.Post
+       * Gets all org.semanticwb.portal.resources.sem.forum.Attachment with a determined Thread
+       * @param value Thread of the type org.semanticwb.portal.resources.sem.forum.Thread
        * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Attachment
        */
 
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Attachment> listAttachmentByPost(org.semanticwb.portal.resources.sem.forum.Post value)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Attachment> listAttachmentByThread(org.semanticwb.portal.resources.sem.forum.Thread value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(frm_atPost,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(frm_atThread,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static AttachmentBase.ClassMgr getAttachmentClassMgr()
+    {
+        return new AttachmentBase.ClassMgr();
     }
 
    /**
@@ -226,42 +209,6 @@ public abstract class AttachmentBase extends org.semanticwb.model.SWBClass imple
     public void setMimeType(String value)
     {
         getSemanticObject().setProperty(frm_atMimeType, value);
-    }
-
-/**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
-    }
-
-/**
-* Gets the FileSize property
-* @return int with the FileSize
-*/
-    public int getFileSize()
-    {
-        return getSemanticObject().getIntProperty(frm_atFileSize);
-    }
-
-/**
-* Sets the FileSize property
-* @param value long with the FileSize
-*/
-    public void setFileSize(int value)
-    {
-        getSemanticObject().setIntProperty(frm_atFileSize, value);
     }
    /**
    * Sets the value for the property ModifiedBy
@@ -301,6 +248,62 @@ public abstract class AttachmentBase extends org.semanticwb.model.SWBClass imple
          }
          return ret;
     }
+   /**
+   * Sets the value for the property Post
+   * @param value Post to set
+   */
+
+    public void setPost(org.semanticwb.portal.resources.sem.forum.Post value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(frm_atPost, value.getSemanticObject());
+        }else
+        {
+            removePost();
+        }
+    }
+   /**
+   * Remove the value for Post property
+   */
+
+    public void removePost()
+    {
+        getSemanticObject().removeProperty(frm_atPost);
+    }
+
+   /**
+   * Gets the Post
+   * @return a org.semanticwb.portal.resources.sem.forum.Post
+   */
+    public org.semanticwb.portal.resources.sem.forum.Post getPost()
+    {
+         org.semanticwb.portal.resources.sem.forum.Post ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_atPost);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.portal.resources.sem.forum.Post)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
+    }
 
 /**
 * Gets the Updated property
@@ -318,6 +321,44 @@ public abstract class AttachmentBase extends org.semanticwb.model.SWBClass imple
     public void setUpdated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_updated, value);
+    }
+   /**
+   * Sets the value for the property Creator
+   * @param value Creator to set
+   */
+
+    public void setCreator(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
+    }
+   /**
+   * Remove the value for Creator property
+   */
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(swb_creator);
+    }
+
+   /**
+   * Gets the Creator
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getCreator()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Sets the value for the property Thread
@@ -375,80 +416,22 @@ public abstract class AttachmentBase extends org.semanticwb.model.SWBClass imple
     {
         getSemanticObject().setProperty(frm_atFileName, value);
     }
-   /**
-   * Sets the value for the property Creator
-   * @param value Creator to set
-   */
 
-    public void setCreator(org.semanticwb.model.User value)
+/**
+* Gets the FileSize property
+* @return int with the FileSize
+*/
+    public int getFileSize()
     {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
-        }else
-        {
-            removeCreator();
-        }
-    }
-   /**
-   * Remove the value for Creator property
-   */
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(swb_creator);
+        return getSemanticObject().getIntProperty(frm_atFileSize);
     }
 
-   /**
-   * Gets the Creator
-   * @return a org.semanticwb.model.User
-   */
-    public org.semanticwb.model.User getCreator()
+/**
+* Sets the FileSize property
+* @param value long with the FileSize
+*/
+    public void setFileSize(int value)
     {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
-    }
-   /**
-   * Sets the value for the property Post
-   * @param value Post to set
-   */
-
-    public void setPost(org.semanticwb.portal.resources.sem.forum.Post value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(frm_atPost, value.getSemanticObject());
-        }else
-        {
-            removePost();
-        }
-    }
-   /**
-   * Remove the value for Post property
-   */
-
-    public void removePost()
-    {
-        getSemanticObject().removeProperty(frm_atPost);
-    }
-
-   /**
-   * Gets the Post
-   * @return a org.semanticwb.portal.resources.sem.forum.Post
-   */
-    public org.semanticwb.portal.resources.sem.forum.Post getPost()
-    {
-         org.semanticwb.portal.resources.sem.forum.Post ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_atPost);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.portal.resources.sem.forum.Post)obj.createGenericInstance();
-         }
-         return ret;
+        getSemanticObject().setIntProperty(frm_atFileSize, value);
     }
 }
