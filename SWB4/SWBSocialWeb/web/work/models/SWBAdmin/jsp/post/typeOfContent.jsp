@@ -4,6 +4,7 @@
     Author     : Jorge.Jimenez
     Modified by: Francisco.Jimenez
 --%>
+<%@page import="org.semanticwb.util.UploadFileRequest"%>
 <%@page import="org.semanticwb.social.util.SocialLoader"%>
 <%@page import="org.semanticwb.social.util.SWBSocialUtil"%>
 <%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
@@ -517,10 +518,10 @@
                     <div class="etiqueta"><label for="photo"><%=photoMgr.renderLabel(request, PostImageable.social_hasPhoto, photoMgr.MODE_CREATE)%>: </label></div>
                     <%
                         String formElementStr = photoMgr.getFormElement(PostImageable.social_hasPhoto).renderElement(request, obj2, PostImageable.social_hasPhoto, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang);
-                        formElementStr = formElementStr.replaceFirst("hasPhoto_new", "hasPhoto_new_#swbsocial_" + objUri + sourceCall);
-                        formElementStr = formElementStr.replaceFirst("hasPhoto_new_dynamic", "hasPhoto_new_#swbsocial_" + objUri + sourceCall + "_dynamic");
+                      //  formElementStr = formElementStr.replaceFirst("hasPhoto_new", "hasPhoto_new_#swbsocial_" + objUri + sourceCall);
+                       //formElementStr = formElementStr.replaceFirst("hasPhoto_new_dynamic", "hasPhoto_new_#swbsocial_" + objUri + sourceCall + "_dynamic");
                     %>       
-                    <%=formElementStr%>
+                    <%=formElementStr%>                   
 
                     <%
                         if (postIn != null) {
@@ -644,8 +645,8 @@
                         <%}%>
                         <!--Terminan Calendarios Avanzados-->
                     </div>
-                    <button class="submit" type="submit" onclick="return validateImages('hasPhoto_new_#swbsocial_<%=objUri + sourceCall%>_dynamic','<%=objUri + sourceCall%>frmUploadPhoto');"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
-                    <!--<button class="submit" type="submit" onclick="return validateTypeFile('hasPhoto_new_dynamic4'); checksRedesPhoto('<%=objUri%>','<%=sourceCall%>',<%=(postInSN == null || postIn != null ? "true" : "false")%>);"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>-->                    
+                    <button class="submit" type="submit" onclick="return  validateNetwork('<%=objUri + sourceCall%>frmUploadPhoto','<%=objUri + sourceCall%>_defaultAuto')"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+                    <!--<button class="submit" type="submit" onclick="return validateTypeFile('hasPhoto_new_dynamic4'); checksRedesPhoto('<%//=objUri%>','<%=sourceCall%>',<%=(postInSN == null || postIn != null ? "true" : "false")%>);"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>-->                    
                 </div>
 
                     <%
