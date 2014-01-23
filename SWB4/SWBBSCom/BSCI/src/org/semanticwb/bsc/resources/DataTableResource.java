@@ -14,6 +14,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.accessory.Period;
@@ -301,10 +302,10 @@ public class DataTableResource extends GenericResource {
             
             try {
                 base.updateAttributesToDB();
-            }catch(Exception e) {
+            }catch(SWBException e) {
                 log.error("Error al guardar Role/UserGroup para acceso al InlineEdit.",e);
             }finally {
-                response.setAction(response.Action_ADD);
+                response.setAction(SWBActionResponse.Action_ADD);
             }
         }
         else
