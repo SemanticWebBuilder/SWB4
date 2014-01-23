@@ -50,11 +50,11 @@
                     <file>${file.reference.informix.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.mysql-connector-java-5.0.3-bin.jar}</file>
+                    <file>${file.reference.iri-0.8.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.iri-0.8.jar}</file>
+                    <file>${file.reference.mysql-connector-java-5.1.28-bin.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
