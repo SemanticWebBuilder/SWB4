@@ -2876,7 +2876,7 @@ public class SWBPortal {
                                         SWBResource res = ((SWBResource) SWBPortal.getResourceMgr().convertOldWBResource(cls.newInstance()));
                                         if (res != null) {
                                             res.install(resourceType);
-                                        }
+                                        } 
                                     }
                                 } catch (Exception e) {
                                     log.error("" + resourceType, e);
