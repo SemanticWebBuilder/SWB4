@@ -22,6 +22,18 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
 {
     static
     {
+//        bsc_hasState.registerObserver(new SemanticObserver() {
+//            @Override
+//            public void notify(SemanticObject obj, Object prop, String lang, String action)
+//            {
+//System.out.println("\nObjective hasState notify....");
+//System.out.println("obj="+obj);
+//System.out.println("prop="+prop);
+//System.out.println("action="+action);
+//            }
+//        });
+        
+        
         bsc_hasIndicator.registerObserver(new SemanticObserver() {
             @Override
             public void notify(SemanticObject obj, Object prop, String lang, String action)
@@ -44,6 +56,7 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
                             series.setDescription("Serie "+names[i]);
                             series.setDescription("Serie "+names[i], lang);
                             series.setIndex(i);
+                            series.setActive(true);
                             indicator.addSeries(series);
                         }
                     }
@@ -116,16 +129,15 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     public boolean updateAppraisal(Period period) {
         boolean res = Boolean.FALSE;
         State status = null;
-        
         PeriodStatus appraisal = getPeriodStatus(period);
         if(appraisal==null) {
             appraisal = PeriodStatus.ClassMgr.createPeriodStatus(getBSC());
             appraisal.setPeriod(period);
             addPeriodStatus(appraisal);
+            status = getMaximumState();
         }else {
             status = appraisal.getStatus();
         }
-        status = getMaximumState();
         
         Iterator<Indicator> indicators = listValidIndicators().iterator();
         while(indicators.hasNext()) {
@@ -135,7 +147,8 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
                 continue;
             }
             //if( star.getMeasure(period).getEvaluation().getStatus().compareTo(status)<0 ) {
-            if( status.compareTo(star.getMeasure(period).getEvaluation().getStatus())>0 ) {
+            //if( status.compareTo(star.getMeasure(period).getEvaluation().getStatus())>0 ) {
+            if( star.getMeasure(period).getEvaluation().getStatus().compareTo(status)<0 ) {
                 status = star.getMeasure(period).getEvaluation().getStatus();
                 res = Boolean.TRUE;
             }
