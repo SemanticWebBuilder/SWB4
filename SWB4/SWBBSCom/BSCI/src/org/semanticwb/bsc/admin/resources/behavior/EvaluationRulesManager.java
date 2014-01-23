@@ -2,6 +2,7 @@ package org.semanticwb.bsc.admin.resources.behavior;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -131,7 +132,7 @@ public class EvaluationRulesManager extends GenericAdmResource {
             out.println("<tbody>");
             
             series = (Series)obj.getGenericInstance();
-            Indicator indicator = series.getIndicator();
+            final Indicator indicator = series.getIndicator();
             BSC bsc = series.getIndicator().getObjective().getTheme().getPerspective().getBSC();
 
             // Obtener la lista de operaciones válidas
@@ -144,14 +145,19 @@ public class EvaluationRulesManager extends GenericAdmResource {
                                         } 
                                     });
 
-            // Otener la lista de series para contraparte
+            // Obtener la lista de series para contraparte
             List<Series> siblingSerieses = indicator.listValidSerieses();
+            // Eliminamos de la lista la serie actual
             siblingSerieses.remove(series);
 
             // Crear el conjunto de reglas, recordemos que si 
             // una regla ya está en el conjunto no se agrega de nuevo 
             HashSet<State> configuredStates = new HashSet<State>();            
             Iterator<EvaluationRule> rules = series.listEvaluationRules();
+            List lrules = SWBUtils.Collections.copyIterator(rules);
+            Collections.sort(lrules);
+            Collections.reverse(lrules);
+            rules = lrules.iterator();
             hasRules = rules.hasNext();
             while(rules.hasNext()) {
                 EvaluationRule rule = rules.next();
@@ -174,7 +180,7 @@ public class EvaluationRulesManager extends GenericAdmResource {
                 urlchoose.setParameter("sval", rule.getURI());
                 out.println("   <td>");
                 if(rule.getAppraisal()==null) {
-                    out.println("--");
+                    out.println("Not set");
                 }else {
                     out.println("<a href=\"#\" onclick=\"addNewTab('" + rule.getAppraisal().getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + (rule.getAppraisal().getTitle(lang)==null?(rule.getAppraisal().getTitle()==null?"Sin título":rule.getAppraisal().getTitle().replaceAll("'","")):rule.getAppraisal().getTitle(lang).replaceAll("'","")) + "');return false;\" >" + (rule.getAppraisal().getTitle(lang)==null?(rule.getAppraisal().getTitle()==null?"Sin título":rule.getAppraisal().getTitle().replaceAll("'","")):rule.getAppraisal().getTitle(lang).replaceAll("'","")) + "</a>");
                 }
@@ -237,12 +243,16 @@ public class EvaluationRulesManager extends GenericAdmResource {
                 
                 out.println("  </tr>");
                 configuredStates.add(rule.getAppraisal());
-            }
+            } //while
             
-            List<State> validSates = indicator.listValidStates();
-            if(!validSates.isEmpty())
+            
+            //List<State> validSates = indicator.listValidStates();
+            List<State> validStates = indicator.getObjective().listValidStates();
+            Collections.sort(validStates);
+            Collections.reverse(validStates);
+            if(!validStates.isEmpty())
             {
-                for(State state:validSates)
+                for(State state:validStates)
                 {
                     if( configuredStates.add(state) ) {
                         out.println("  <tr>");
@@ -296,11 +306,10 @@ public class EvaluationRulesManager extends GenericAdmResource {
                         
                         // Columna vacía
                         out.println("   <td>&nbsp;</td>");
-
                         out.println("  </tr>");
                     }
-                }
-            }
+                } //for
+            } //if
             else
             {
                 out.println("no hay estados asignados al indicador");
@@ -371,7 +380,7 @@ public class EvaluationRulesManager extends GenericAdmResource {
                 }else {
                     rule = (EvaluationRule)objRule.getGenericInstance();
                 }
-                Operation oper = Operation.ClassMgr.getOperation(operId, model);
+//                Operation oper = Operation.ClassMgr.getOperation(operId, model);
                 rule.setOperationId(operId);
                 response.setRenderParameter("statmsg", response.getLocaleString("msgUpdtOperatorOk"));
             }else {
@@ -443,7 +452,7 @@ public class EvaluationRulesManager extends GenericAdmResource {
         else if(Action_UPDT_ACTIVE.equalsIgnoreCase(action))
         {
             SemanticObject objRule = ont.getSemanticObject(request.getParameter("sval"));
-            if(objSeries!=null && objRule!=null) {
+//            if(objSeries!=null && objRule!=null) {
                 EvaluationRule rule = (EvaluationRule)objRule.getGenericInstance();
                 Series series = (Series)objSeries.getGenericInstance();
                 if(series.hasEvaluationRule(rule)) {
@@ -452,34 +461,36 @@ public class EvaluationRulesManager extends GenericAdmResource {
                 }else {
                     response.setRenderParameter("statmsg", response.getLocaleString("msgRemoveError"));
                 }
-            }else {
-                response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchSemanticElement"));
-            }
+//            }else {
+//                response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchSemanticElement"));
+//            }
         }
         else if(Action_ACTIVE_ALL.equalsIgnoreCase(action))
         {
-            if(objSeries!=null) {
+//            if(objSeries!=null) {
                 Series series = (Series)objSeries.getGenericInstance();                
                 Iterator<EvaluationRule> rules = series.listEvaluationRules();
                 while(rules.hasNext()) {
                     rules.next().setActive(Boolean.TRUE);
                 }
-            }
+                response.setRenderParameter("statmsg", response.getLocaleString("msgUpdtAllActiveOk"));
+//            }
         }
         else if(Action_DEACTIVE_ALL.equalsIgnoreCase(action))
         {
-            if(objSeries!=null) {
+//            if(objSeries!=null) {
                 Series series = (Series)objSeries.getGenericInstance();                
                 Iterator<EvaluationRule> rules = series.listEvaluationRules();
                 while(rules.hasNext()) {
                     rules.next().setActive(Boolean.FALSE);
                 }
-            }
+                response.setRenderParameter("statmsg", response.getLocaleString("msgUpdtAllDeactiveOk"));
+//            }
         }
         else if(SWBResourceURL.Action_REMOVE.equalsIgnoreCase(action))
         {
             SemanticObject objRule = ont.getSemanticObject(request.getParameter("sval"));
-            if(objSeries!=null && objRule!=null) {
+//            if(objSeries!=null && objRule!=null) {
                 EvaluationRule rule = (EvaluationRule)objRule.getGenericInstance();
                 Series series = (Series)objSeries.getGenericInstance();
                 if(series.hasEvaluationRule(rule)) {
@@ -488,16 +499,16 @@ public class EvaluationRulesManager extends GenericAdmResource {
                 }else {
                     response.setRenderParameter("statmsg", response.getLocaleString("msgRemoveError"));
                 }
-            }else {
-                response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchSemanticElement"));
-            }
+//            }else {
+//                response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchSemanticElement"));
+//            }
         }
         else if(Action_DELETE_ALL.equalsIgnoreCase(action))
         {
-            if(objSeries!=null) {
+//            if(objSeries!=null) {
                 Series series = (Series)objSeries.getGenericInstance();                
                 series.removeAllEvaluationRule();
-            }
+//            }
         }
     }
 }
