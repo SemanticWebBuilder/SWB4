@@ -14,12 +14,14 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.catalogs.Format;
+import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.bsc.utils.InappropriateFrequencyException;
 import org.semanticwb.bsc.utils.UndefinedFrequencyException;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
@@ -49,11 +51,23 @@ public class MeasuresManager extends GenericAdmResource {
         
         if(semanticObj != null)
         {
+            out.println("<script type=\"text/javascript\">");
+            if (request.getParameter("statmsg") != null && !request.getParameter("statmsg").isEmpty()) {
+                out.println("   showStatus('" + request.getParameter("statmsg") + "');");
+                //out.println("updateTreeNodeByURI('" + obj.getURI() + "');");
+                //String icon = SWBContext.UTILS.getIconClass(obj);
+                //out.println("setTabTitle('" + obj.getURI() + "','" + obj.getDisplayName(user.getLanguage()) + "','" + icon + "');");
+            }
+            //if (request.getParameter("closetab") != null && request.getParameter("closetab").trim().length() > 0) {
+            //    out.println("   closeTab('" + request.getParameter("closetab") + "');");
+            //}
+            out.println("</script>");
+            
             GenericObject genericObj = semanticObj.getGenericInstance();
             if(genericObj instanceof Series)
             {
                 Series series = (Series)genericObj;
-                
+                final Objective objective = series.getIndicator().getObjective();
                 Iterator<Period> measurablesPeriods = null;
                 try
                 {
@@ -127,12 +141,13 @@ public class MeasuresManager extends GenericAdmResource {
                             series.addMeasure(measure);
                             PeriodStatus ps = PeriodStatus.ClassMgr.createPeriodStatus(period.getBSC());
                             ps.setPeriod(period);
-                            //ps.setStatus(series.getIndicator().getMinimumState());
+                            ps.setStatus(objective.getMinimumState());
                             measure.setEvaluation(ps);
                             measure.setValue(0);
                         }else {
-                            // Valida que el estado asignado a la medición aún este asignado al indicador. Sino lo elimina de la medición.
-                            if(!series.getIndicator().hasState(measure.getEvaluation().getStatus())) {
+                            // Valida que el estado asignado a la medición aún este asignado al indicador. Sino, lo elimina de la medición.
+                            //if(!series.getIndicator().hasState(measure.getEvaluation().getStatus())) {
+                            if(!objective.hasState(measure.getEvaluation().getStatus())) {
                                 measure.getEvaluation().removeStatus();
                             }
                         }
@@ -148,12 +163,12 @@ public class MeasuresManager extends GenericAdmResource {
                                 iconClass = "noStatus";
                             }
                         }catch(Exception e) {
-                            statusTitle = "-";
+                            statusTitle = "Not set";
                             iconClass = "noStatus";
                         }
                         
                         String title = period.getTitle(user.getLanguage()) == null ? period.getTitle() : period.getTitle(user.getLanguage());
-                        title.replaceAll("'", "");
+                        title = title.replaceAll("'", "");
                         out.println("<tr>");
 
                         // Acción
@@ -178,7 +193,7 @@ public class MeasuresManager extends GenericAdmResource {
                         out.println("</td>");
 
                         // Estatus
-                        out.println("<td><span class=\""+iconClass+"\">"+statusTitle+"</span></td>");
+                        out.println("<td><span class=\""+iconClass+"\">&nbsp;</span><span>"+statusTitle+"</span></td>");
                         out.println("</tr>");
                     }
                     out.println(" </tbody>");
@@ -265,43 +280,47 @@ public class MeasuresManager extends GenericAdmResource {
                 String pid, val;
                 BSC bsc = (BSC) semanticObj.getModel().getModelObject().getGenericInstance();
                 Enumeration<String> e = request.getParameterNames();
-                while(e.hasMoreElements()) {
-                    pid = e.nextElement();
-                    val = request.getParameter(pid)==null?"":request.getParameter(pid);
-                    if(Period.ClassMgr.hasPeriod(pid, bsc))
-                    {
-                        Period period = Period.ClassMgr.getPeriod(pid, bsc);
-                        Measure measure = series.getMeasure(period);
-                        PeriodStatus ps;
-                        if(measure == null) {
-                            measure = Measure.ClassMgr.createMeasure(bsc);
-                            series.addMeasure(measure);
-                            ps = PeriodStatus.ClassMgr.createPeriodStatus(bsc);
-                            ps.setPeriod(period);
-                            measure.setEvaluation(ps);
-                        }
-                        if(val.isEmpty()) {
-                            measure.setValue(0);
-                            measure.getEvaluation().setStatus(null);
-                            continue;
-                        }
-                        try {
-                            float value = Float.parseFloat(val);
-                            measure.setValue(value);
-                        }catch(NumberFormatException nfe) {
-                            try {
-                                Number value = formatter.parse(val);
-                                measure.setValue(value.floatValue());
-                            }catch(ParseException pe) {
-                                measure.setValue(0);
+                if(e.hasMoreElements())
+                {
+                    while(e.hasMoreElements()) {
+                        pid = e.nextElement();
+                        val = request.getParameter(pid)==null?"":request.getParameter(pid);
+                        if(Period.ClassMgr.hasPeriod(pid, bsc))
+                        {
+                            Period period = Period.ClassMgr.getPeriod(pid, bsc);
+                            Measure measure = series.getMeasure(period);
+                            PeriodStatus ps;
+                            if(measure == null) {
+                                measure = Measure.ClassMgr.createMeasure(bsc);
+                                series.addMeasure(measure);
+                                ps = PeriodStatus.ClassMgr.createPeriodStatus(bsc);
+                                ps.setPeriod(period);
+                                measure.setEvaluation(ps);
                             }
-                        }finally {
-                            measure.evaluate();
-                            series.getIndicator().getObjective().updateAppraisal(period);
+                            if(val.isEmpty()) {
+                                measure.setValue(0);
+                                measure.getEvaluation().setStatus(null);
+                                continue;
+                            }
+                            try {
+                                float value = Float.parseFloat(val);
+                                measure.setValue(value);
+                            }catch(NumberFormatException nfe) {
+                                try {
+                                    Number value = formatter.parse(val);
+                                    measure.setValue(value.floatValue());
+                                }catch(ParseException pe) {
+                                    measure.setValue(0);
+                                }
+                            }finally {
+                                measure.evaluate();
+                                series.getIndicator().getObjective().updateAppraisal(period);
+                            }
                         }
-                    }
-                }
-            }
+                    } //while
+                    response.setRenderParameter("statmsg", response.getLocaleString("msgUpdtOk"));
+                } //if
+            } //else
         }
     }
 }
