@@ -38,7 +38,7 @@ public class Measure extends org.semanticwb.bsc.tracing.base.MeasureBase
     }
     
     public void evaluate() {
-        getEvaluation().setStatus(getSeries().getIndicator().getMinimumState());
+        getEvaluation().setStatus(getSeries().getIndicator().getObjective().getMinimumState());
         Iterator<EvaluationRule> rules = getSeries().listValidEvaluationRules(false).iterator();
 	while(rules.hasNext())
 	{
