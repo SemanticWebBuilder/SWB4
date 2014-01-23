@@ -17,7 +17,7 @@ function resetTabTitle (objUri, tabId, title){
       
 function appendHtmlAt(url, tagid, location){
     
-        dojo.xhrPost({
+    dojo.xhrPost({
         url: url,
         load: function(response)
         {
@@ -502,43 +502,87 @@ function reloadSocialTab(uri){
     }
 }
 
-function validateImages(uri, formId, modified, numPhotos){
 
-    var obj = document.getElementById(uri);
+function validateImages(uri){    
+    console.log("RECIBIDO:"+uri);
+    var obj = dijit.byId(uri);   
+    
+    //Obtenemos los archivos seleccionados del FileUpload
+    var fileArray = [];
+    fileArray  =obj.inputNode.files;
+
+    //El fileUpload debe contener archivos
+    if(fileArray.length == 0){
+        alert("Debes adjuntar al menos una imagen ");
+        return false;       
+    } 
+    
+    // Se almacenan los archivos seleccionados  nombre , tama?o del archivo
     var images = new Array();
-    var children = obj.childNodes;
-    var haveFacebook = false;
-    var haveTwitter = false;
-    var typeFile = ['.jpg','.jpeg','.gif','.png']; 
-    var checkYT = false;
-    var checkRed = false;
     
-    if(children != null && children.length > 0){
-        lookForInputs(children, images);
-    }
+    for (var i = 0; i < fileArray.length; i++) {                
+        console.log(fileArray[i].name);
+        images.push(fileArray[i].name+","+fileArray[i].size);             
+    }   
+    
+    //Obtenemos las extensiones y tama?o  valido desde el formElement
+    var typeFileValid = [];
+    var validos = obj.get('fileMask');
 
-    if(modified == 1){
-        if(numPhotos == 0){            
-            alert("Debes adjuntar al menos una imagen modified");
-            return false;
+    var position = validos.toString().indexOf(",");   
+    var sizeValid = validos.toString().substring(s0 , position+1);
+
+    var res = validos.toString().substring(position+1 ,obj.get('fileMask').toString().length);
+    while( res.indexOf("*") > -1)
+    {
+        res = res.replace("*", "");
+    }   
+    typeFileValid =  res.split(";");    
+    
+    var count = 0;
+    var countSize = 0;
+    for(i = 0; i < typeFileValid.length; i++){
+        for(j=0; j < images.length ; j++ ){
+            var image = images[j]; //.toLowerCase();
+            var position =  image .toString().indexOf(",");   
+            var ima =  image.toString().substring(0 ,position);
+            var size = image.toString().substring(position+1, image.toString().length);
+            var imgExt = ima.substring(ima.lastIndexOf(".") + 1);            
+            if(typeFileValid[i].indexOf(imgExt)!= -1 ){//si valido           
+                count++;               
+                break;
+            }                            
+            if(size > sizeValid ){
+                countSize++;   
+                break;
+            }
         }
-    
-    }else if(images.length === 0){
-        alert("Debes adjuntar al menos una imagen");
-        return false;
+    }    
+    if(count != images.length  ){
+        alert('Extension de archivo no valida');
+        return false;         
     }
+    if(countSize > 0){
+        alert('El tama?o del archivo excede lo permitido');
+        return false;         
+    }
+    return true;        
+}
+
+function validateNetwork( formId, id){        
+    console.log("entr");
+    var haveFacebook = false;
+    var haveTwitter = false;   
     
+    var checkYT = false;
+    var checkRed = false;      
     
-    var frm = document.getElementById(formId);
-    
+    var frm = document.getElementById(formId);    
     if(frm.checkRedes == null){//No networks
         alert("Debes crear primero una red en donde publicar");
         return false;
     }
-
-
     if(frm.checkYT != null){
-
         if(frm.checkRedes.length == null){
             if(frm.checkRedes.checked){//there is only one network
                 //checkRed = true;
@@ -581,37 +625,12 @@ function validateImages(uri, formId, modified, numPhotos){
                 }
             }
         }
-    }
-    
+    }    
     if(checkYT == false && checkRed == false){
         alert("Debes seleccionar al menos una red");
         return false;
-    }
-    
-    //console.log("haveFacebook:" + haveFacebook);
-    //console.log("haveTwitter:" + haveTwitter);
-    var count = 0;
-    //if(haveTwitter){
-    for(i = 0; i < typeFile.length; i++){
-        console.log("typeFile"+typeFile[i]);
-        
-        for(j=0; j < images.length ; j++ ){
-            var image = images[j].toLowerCase();
-            var imgExt = image.substring(image.lastIndexOf(".") + 1);
-            
-            if(typeFile[i].indexOf(imgExt)!= -1 ){//si valido           
-                count++;               
-            }            
-                
-        }
-    //}
-    }
-    
-    if(count != images.length  ){
-        alert('Extension de archivo no valida');
-        return false;         
-    }
-    return true;
+    }    
+    return  validateImages(id);     
 }
 
 function lookForInputs(children, images){
@@ -619,10 +638,12 @@ function lookForInputs(children, images){
         return;
     }else{
         for(var i = 0; i < children.length; i++){
-            //console.log(children[i]);
+            console.log("CHILDREN:"+children[i].nodeName);
             if(children[i].nodeName === "INPUT"){
+                console.log("1");
                 if(children[i].value != null && children[i].value != "")
                 {
+                    console.log("2***"+children[i].value);
                     images.push(children[i].value);
                 }
             }
@@ -632,8 +653,8 @@ function lookForInputs(children, images){
     }
 }
 
-function validateVideo(id, formId){
-    var nameFile = document.getElementById(id).value;
+function validateVideo(id){
+        var nameFile = document.getElementById(id).value;
     var arrFacebook = [".3g2", ".3gp", ".3gpp" , ".asf", ".avi", ".dat", ".divx", ".dv", ".asf", ".f4v", ".flv", ".m2ts", ".m4v", ".mkv", ".mod", ".mov", ".mp4", ".mpe", ".mpeg", ".mpeg4", ".mpg", ".mts", ".nsv", ".ogm", ".nsv", ".ogv", ".qt", ".tod", ".ts", ".vob", ".wmv"];                           
     var arrYoutube = ['.mp3','.jpg','.jpeg','.gif','.png','.bmp','.wav','.aac','.mswmm','.wlmp'];
     var j =0 ;
@@ -774,7 +795,10 @@ function submitFormPostIn(formid, postUri)
         try
         {
             //dojo.fadeOut({node: formid, duration: 1000}).play();
-            dojo.fx.wipeOut({node: formid, duration: 500}).play();
+            dojo.fx.wipeOut({
+                node: formid, 
+                duration: 500
+            }).play();
         } catch (noe) {
         }
 
@@ -810,12 +834,12 @@ function submitFormPostIn(formid, postUri)
                 try{
                     var tag=document.getElementById(postUri);
                     if(tag){                
-                            tag.innerHTML = data;
-                            var arrScript = tag.getElementsByTagName('script')
-                            for (var n = 0; n < arrScript.length; n++){
-                                eval(arrScript[n].innerHTML)//run script inside div
-                            }
-                            //console.log("RECEIVED:" + data);
+                        tag.innerHTML = data;
+                        var arrScript = tag.getElementsByTagName('script')
+                        for (var n = 0; n < arrScript.length; n++){
+                            eval(arrScript[n].innerHTML)//run script inside div
+                        }
+                    //console.log("RECEIVED:" + data);
                     }else {
                         console.log('Tag not found: ' + postUri);
                     }
@@ -829,7 +853,7 @@ function submitFormPostIn(formid, postUri)
             }
         });
     } else
-    {
+{
         alert("Datos Inv?lidos...");
     }
 }
@@ -880,36 +904,36 @@ function postSocialPostInHtml(url, tagid)
  *If the selected date(thisVar) is greater than today (today_hidden), then remove the constraint
  **/
 function removeMin(thisVar, id, today_hidden, hour, minute){
-        var dojoObj = dijit.byId(id);
+    var dojoObj = dijit.byId(id);
         
-        if((thisVar == null) || (thisVar == "") || (thisVar.length == 0)){
-            //console.log('nothing selected!');
-            dojoObj.setAttribute('disabled', true);
-            dojoObj.setAttribute('value', "");
-            return;        
-        }
-        dojoObj.setAttribute('disabled', false);
-        var todayTmp = today_hidden + '';
-        var todayArray = todayTmp.split("-");
-        var todayDate = new Date(todayArray[0], parseInt(todayArray[1])-1, todayArray[2]);
-        //console.log('This is today Date: ' + todayDate);
-
-        var selectedTmp = thisVar  + '';        
-        var selectedArray = selectedTmp.split("-");
-        var selectedDate = new Date(selectedArray[0], parseInt(selectedArray[1])-1, selectedArray[2]);
-        //console.log('This is the selected:' + selectedDate);
-        
-        //Returns a Number: 0 means the dates are equal : dejar o poner la constraint
-        //1 if selectedDate > todayDate : quitar la constraint
-        //and -1 if selectedDate < todayDate : no debe pasar
-        var comparison = dojo.date.compare(selectedDate, todayDate , "date");
-        if(comparison === 0){//Sobreescribir la constraint
-            dijit.byId(id).constraints.min = new Date(1970, 0, 1, hour, minute, 00);
-        }else if (comparison === 1){//Quitar la constraint
-            dijit.byId(id).constraints.min = new Date(1970, 0, 1, 00, 00, 00);
-        }else{//Hay un error
-            return;
-        }
-
-        dojoObj.attr('value', dojoObj.attr('value'));
+    if((thisVar == null) || (thisVar == "") || (thisVar.length == 0)){
+        //console.log('nothing selected!');
+        dojoObj.setAttribute('disabled', true);
+        dojoObj.setAttribute('value', "");
+        return;        
     }
+    dojoObj.setAttribute('disabled', false);
+    var todayTmp = today_hidden + '';
+    var todayArray = todayTmp.split("-");
+    var todayDate = new Date(todayArray[0], parseInt(todayArray[1])-1, todayArray[2]);
+    //console.log('This is today Date: ' + todayDate);
+
+    var selectedTmp = thisVar  + '';        
+    var selectedArray = selectedTmp.split("-");
+    var selectedDate = new Date(selectedArray[0], parseInt(selectedArray[1])-1, selectedArray[2]);
+    //console.log('This is the selected:' + selectedDate);
+        
+    //Returns a Number: 0 means the dates are equal : dejar o poner la constraint
+    //1 if selectedDate > todayDate : quitar la constraint
+    //and -1 if selectedDate < todayDate : no debe pasar
+    var comparison = dojo.date.compare(selectedDate, todayDate , "date");
+    if(comparison === 0){//Sobreescribir la constraint
+        dijit.byId(id).constraints.min = new Date(1970, 0, 1, hour, minute, 00);
+    }else if (comparison === 1){//Quitar la constraint
+        dijit.byId(id).constraints.min = new Date(1970, 0, 1, 00, 00, 00);
+    }else{//Hay un error
+        return;
+    }
+
+    dojoObj.attr('value', dojoObj.attr('value'));
+}
