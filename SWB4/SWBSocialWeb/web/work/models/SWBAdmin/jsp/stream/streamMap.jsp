@@ -19,6 +19,7 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
 <%
+    //Este Jsp ya no se esta utilizando, tenía bajo performance, barría todos los registros para hacer algo. En su lugar se utiliza: streamMapQuery.jsp
     String apiKey=SWBSocialUtil.Util.getModelPropertyValue(SWBContext.getAdminWebSite(), "GoogleMapsApiKey");
     if(apiKey==null){
         out.println("Error:No se puede mostrar el mapa debido a que la llave de Google Maps no esta configurada(GoogleMapsApiKey), contactese con su administrador");
