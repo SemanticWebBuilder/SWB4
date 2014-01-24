@@ -26,6 +26,7 @@ import org.semanticwb.social.Twitter;
 import org.semanticwb.social.Youtube;
 import org.semanticwb.social.util.SWBSocialUtil;
 import org.semanticwb.social.Stream;
+import org.semanticwb.social.SocialTopic;
 
 /**
  *
@@ -135,9 +136,15 @@ public class StreamMap extends GenericResource{
             }
         }
         
-        
-        Stream stream=(Stream)semObj.createGenericInstance();
-        ArrayList nets = SWBSocialUtil.sparql.getStreamSocialNetworks(stream);
+        ArrayList nets=new ArrayList();
+        if(semObj.createGenericInstance() instanceof Stream)
+        {
+            Stream stream=(Stream)semObj.createGenericInstance();
+            nets = SWBSocialUtil.sparql.getStreamSocialNetworks(stream);
+        }else if(semObj.createGenericInstance() instanceof SocialTopic){
+            SocialTopic socialTopic=(SocialTopic)semObj.createGenericInstance();
+            nets = SWBSocialUtil.sparql.getSocialTopicSocialNetworks(socialTopic);
+        }
         out.println("<div class=\"bloqSocialNetDiv\">");
         out.println("    <p class=\"bloqSocialNet\">Redes Sociales</p>");
         out.println("    <select name=\"networks\" multiple size=\"5\">");
@@ -185,6 +192,8 @@ public class StreamMap extends GenericResource{
        out.println("</select>");
        out.println("</label>");
        out.println("<label>Desde el día<input type=\"text\" name=\"mapSinceDate\" id=\"mapSinceDate"+semObj.getId()+"\"  dojoType=\"dijit.form.DateTextBox\" hasDownArrow=\"true\" value=\""+date+"\" class=\"txtfld-calendar\"/></label>");
+       
+       out.println("Mostrar también por ubicación de perfil de usuarios:<input type=\"checkbox\" name=\"showGeoProfile\"/>");
        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">Mostrar</button>");
 
         out.println("</form>");
@@ -192,15 +201,16 @@ public class StreamMap extends GenericResource{
         out.println("</div>");
         if(request.getParameter("mapSinceDate")!=null)
         {
+            System.out.println("mapSinceDate k LLega a Clase:"+request.getParameter("mapSinceDate"));
             out.println("<div class=\"swbSocialMapIframe\">");
-            out.println("   <iframe width=\"100%\" height=\"100%\" src=\""+paramRequest.getRenderUrl().setMode(Mode_showMap).setParameter("suri", request.getParameter("suri")).setParameter("mapSinceDate"+semObj.getId(), request.getParameter("mapSinceDate")).setParameter("streamMapView", request.getParameter("streamMapView")).setParameter("networks", request.getParameterValues("networks")) +"\"></iframe> ");
+            out.println("   <iframe width=\"100%\" height=\"100%\" src=\""+paramRequest.getRenderUrl().setMode(Mode_showMap).setParameter("suri", request.getParameter("suri")).setParameter("mapSinceDate"+semObj.getId(), request.getParameter("mapSinceDate")).setParameter("streamMapView", request.getParameter("streamMapView")).setParameter("networks", request.getParameterValues("networks")).setParameter("showGeoProfile", request.getParameter("showGeoProfile")) +"\"></iframe> ");
             out.println("</div>");
         }
     }
      
      public void doShowMap(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
      {
-        final String myPath = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/stream/streamMap.jsp";
+        final String myPath = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/stream/streamMapQuery.jsp";
          RequestDispatcher dis = request.getRequestDispatcher(myPath);
          if (dis != null) {
              try {

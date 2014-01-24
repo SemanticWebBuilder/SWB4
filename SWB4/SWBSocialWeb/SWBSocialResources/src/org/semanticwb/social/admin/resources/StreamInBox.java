@@ -254,7 +254,7 @@ public class StreamInBox extends GenericResource {
         Stream stream = (Stream) SemanticObject.getSemanticObject(id).getGenericInstance();
         WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
         
-        //System.out.println("stream:"+stream.getURI());
+        System.out.println("stream:"+stream.getURI());
 
         PrintWriter out = response.getWriter();
         
