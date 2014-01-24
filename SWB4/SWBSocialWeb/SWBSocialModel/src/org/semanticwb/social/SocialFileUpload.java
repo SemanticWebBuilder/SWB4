@@ -1,5 +1,6 @@
 package org.semanticwb.social;
 
+import com.google.gdata.data.extensions.Image;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,12 +23,11 @@ import org.semanticwb.util.UploaderFileCacheUtils;
 /**
  * Cargador de Archivos con Dojo
  */
-public class SocialFileUpload extends org.semanticwb.social.base.SocialFileUploadBase 
-{
+public class SocialFileUpload extends org.semanticwb.social.base.SocialFileUploadBase {
+
     private static Logger log = SWBUtils.getLogger(SocialFileUpload.class);
 
-    public SocialFileUpload(org.semanticwb.platform.SemanticObject base)
-    {
+    public SocialFileUpload(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
 
@@ -36,13 +36,13 @@ public class SocialFileUpload extends org.semanticwb.social.base.SocialFileUploa
      */
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj,
-         SemanticProperty prop, String propName, String type, String mode, String lang) {
+            SemanticProperty prop, String propName, String type, String mode, String lang) {
 
         String objUri = request.getParameter("objUri");
         String sourceCall = request.getParameter("source");
         if (sourceCall == null) { //When typeOfContent is called from Tema/Responder the param source is not being sent
-        sourceCall = "reply";
-    }
+            sourceCall = "reply";
+        }
 //        System.out.println("objuri: "+obj.getURI());
 //        System.out.println("prop: "+prop);
 //        System.out.println("type: "+type);
@@ -81,14 +81,14 @@ public class SocialFileUpload extends org.semanticwb.social.base.SocialFileUploa
 //        String enviar = lang.equals("en") ? "You have to send the selected files first" : "Debe enviar primero los archivos seleccionados";
         String eliminar = lang.equals("en") ? "Chose the files to delete" : "Selecione el(los) archivo(s) a eliminar";
 //        String agregar = lang.equals("en") ? "Add new file upload" : "Agrega un nuevo archivo a cargar";
-        String filtros ="";
+        String filtros = "";
         StringBuilder filts = new StringBuilder();
         Set<String> keys = ufq.getFiltros().keySet();
         for (String key : keys) {
-            String value = ufq.getFiltros().get(key);        
-            filtros  = value;
+            String value = ufq.getFiltros().get(key);
+            filtros = value;
         }
-        
+
 
         String multiple = "false;";
         if (!"view".equals(mode)) {
@@ -99,9 +99,13 @@ public class SocialFileUpload extends org.semanticwb.social.base.SocialFileUploa
                     //+ "force:'iframe', \n" 
                     + "uploadOnSelect:'true', \n"
                     + "url:'" + url + "', \n"
-                    + "submit: function(form) {}, \n"
-                    + "onComplete: function (result) {   validateImages('" +objUri+sourceCall+ "_defaultAuto'); }, \n"
-                    + "onCancel: function() {console.log('cancelled');}, \n"
+                    + "submit: function(form) {}, \n");
+                    if (obj.getSemanticClass().getName().equals("Message") || obj.getSemanticClass().getName().equals("Photo")) {
+           buffer.append("onComplete: function (result) {   validateExtension('" + objUri + sourceCall + "_defaultAuto'); }, \n");
+                    } else if (obj.getSemanticClass().getName().equals("Video")) {
+           buffer.append("onComplete: function (result) {   validateVideo('" + objUri + sourceCall + "_defaultAuto', '" + objUri + sourceCall + "frmUploadVideo'); }, \n"); //validateVideo('<%=objUri + sourceCall%>_defaultAuto', '<%=objUri + sourceCall%>frmUploadVideo')
+                    }
+           buffer.append("onCancel: function() {console.log('cancelled');}, \n"
                     + "onAbort: function() {console.log('aborted');}, \n"
                     + "onError: function (evt) {console.log(evt);}, \n"
                      + "fileMask: ['"+ getFileMaxSize()+" ', ' "+ filtros+"  ']\" "
