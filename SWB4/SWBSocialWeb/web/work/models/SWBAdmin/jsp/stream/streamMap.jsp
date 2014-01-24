@@ -69,6 +69,7 @@
     if(selectedNetworks != null && selectedNetworks.length > 0){
         for(String net: selectedNetworks){
             try{
+                System.out.println("net:"+net);
                 networks.add(net);
             }catch(Exception e){}
         }
@@ -353,7 +354,8 @@
                                     batch.push(marker);  
                                 }
                             <%         
-                }else if(postIn.getPostInSocialNetworkUser()!=null && postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation()!=null && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==2 || streamMapView==4 || streamMapView==5 || streamMapView==6)){ 
+                }else if(postIn.getPostInSocialNetworkUser()!=null && postIn.getPostInSocialNetworkUser().getSnu_profileGeoLocation()!=null && ((streamMapView==3 && postIn.getPostSentimentalType()>0) || streamMapView==2 || streamMapView==4 || streamMapView==5 || streamMapView==6))
+                { 
                     cont2++; 
                     %>
                             var tmpIcon=null;
