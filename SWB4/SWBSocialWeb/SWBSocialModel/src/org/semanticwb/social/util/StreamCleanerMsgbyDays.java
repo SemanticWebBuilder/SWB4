@@ -44,10 +44,10 @@ public class StreamCleanerMsgbyDays {
 
             Timer timer = new Timer();
             
-            //timer.schedule(new CheckStreamsMsgbyDays(), 0, 60 * 1000); //Cada minuto
+            timer.schedule(new CheckStreamsMsgbyDays(), 0, 60 * 1000); //Cada minuto
             
             //Que empiece hoy a las 11:59 pm y vuelve a iterar un dia despues y así se siga
-            timer.schedule(new CheckStreamsMsgbyDays(), time2Start, oneDay);
+            //timer.schedule(new CheckStreamsMsgbyDays(), time2Start, oneDay);
         } catch (Exception e) {
             log.error(e);
         }
@@ -79,9 +79,9 @@ public class StreamCleanerMsgbyDays {
                         Date d = Calendar.getInstance().getTime();//intialize your date to any date 
                         Date dateBefore = new Date(d.getTime() - postInDays2Stay * 24 * 3600 * 1000 ); //Subtract n days  
                        
-                        String date2Compare=dateBefore.getYear()+1900+"-"+(dateBefore.getMonth()+1)+"-"+dateBefore.getDate()+"T00:00:00Z";
+                        String date2Compare=dateBefore.getYear()+1900+"-"+(dateBefore.getMonth()+01)+"-"+dateBefore.getDate()+"T00:00:00Z";
                         
-                        //System.out.println("date2Compare:"+date2Compare);
+                        System.out.println("date2Compare:"+date2Compare);
                         
                         String query=getAllPostIn2Remove(stream, date2Compare);
                         //System.out.println("query pa eliminarJJ:"+query);
