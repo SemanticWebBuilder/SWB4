@@ -64,4 +64,17 @@ public class Period extends PeriodBase implements Comparable<Period>
         compare = d1.getTime() > d2.getTime() ? 1 : -1;
         return compare;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(super.toString());
+        sb.append("\n");
+        sb.append("Start:");
+        sb.append(getStart());
+        sb.append("\nEnd:");
+        sb.append(getEnd());        
+        //return sb.toString();
+        return super.toString();
+    }
 }
