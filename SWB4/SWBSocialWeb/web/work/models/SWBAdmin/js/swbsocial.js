@@ -392,7 +392,7 @@ function checksRedesPhoto(objUri, sourceCall, selectNetwork){
         return true;
     }
 }
-function checksRedesText(objUri, sourceCall){
+function checksRedesText(objUri, sourceCall,id){
     var frm = document.getElementById(objUri+sourceCall+'frmUploadText');
     var checkRed = false;
           
@@ -417,7 +417,7 @@ function checksRedesText(objUri, sourceCall){
         alert("Debes seleccionar al menos una red.");
         return false;
     }else{
-        return true;
+        return  validateExtension(id);    
     }
 }
 function validateChecks(objUri, sourceCall, selectNetwork){
@@ -503,7 +503,7 @@ function reloadSocialTab(uri){
 }
 
 
-function validateImages(uri){    
+function validateExtension(uri){    
     console.log("RECIBIDO:"+uri);
     var obj = dijit.byId(uri);   
     
@@ -528,9 +528,9 @@ function validateImages(uri){
     //Obtenemos las extensiones y tama?o  valido desde el formElement
     var typeFileValid = [];
     var validos = obj.get('fileMask');
-
+    //console.log("VALIDOS:"+validos);
     var position = validos.toString().indexOf(",");   
-    var sizeValid = validos.toString().substring(s0 , position+1);
+    var sizeValid = validos.toString().substring(0 , position);
 
     var res = validos.toString().substring(position+1 ,obj.get('fileMask').toString().length);
     while( res.indexOf("*") > -1)
@@ -547,11 +547,15 @@ function validateImages(uri){
             var position =  image .toString().indexOf(",");   
             var ima =  image.toString().substring(0 ,position);
             var size = image.toString().substring(position+1, image.toString().length);
-            var imgExt = ima.substring(ima.lastIndexOf(".") + 1);            
+            var imgExt = ima.substring(ima.lastIndexOf(".") + 1);      
+            console.log("este"+imgExt);
+            console.log("con este"+typeFileValid[i]);
             if(typeFileValid[i].indexOf(imgExt)!= -1 ){//si valido           
                 count++;               
                 break;
-            }                            
+            }                        
+            console.log("Tamano de la imagen:"+size);
+            console.log("Tamano valido:"+sizeValid);
             if(size > sizeValid ){
                 countSize++;   
                 break;
@@ -630,7 +634,7 @@ function validateNetwork( formId, id){
         alert("Debes seleccionar al menos una red");
         return false;
     }    
-    return  validateImages(id);     
+    return  validateExtension(id);     
 }
 
 function lookForInputs(children, images){
@@ -653,17 +657,54 @@ function lookForInputs(children, images){
     }
 }
 
-function validateVideo(id){
-        var nameFile = document.getElementById(id).value;
+function validateVideo(id, formId){
+    console.log("RECIBIDO:"+id);
+    var obj = dijit.byId(id);   
+    var original = "[  'Facebook:', [23,34] ;  'Youtube:', [45,56]  ]"
+    var string = " 23,34 ; 45 ,56 ";
+    var arrayFacebook = [];
+    var arrayYoutube = [];
+
+    var position ;
+
+    position =  string.indexOf(";");
+
+    arrayFacebook = JSON.parse("[" +string.substring(0, position) + "]");
+    arrayYoutube =JSON.parse("[" +string.substring(position+1, string.length) + "]");
+
+    console.log("arrayFacebook"+arrayFacebook);
+    console.log("arrayYoutube"+arrayYoutube);
+    console.log("arrayYoutube[0]"+arrayYoutube[0]);
+    console.log("arrayYoutube[1]"+arrayYoutube[1]);
+    console.log("arrayFacebook[0]"+arrayFacebook[0]);
+    console.log("arrayFacebook[1]"+arrayFacebook[1]);
+
+
+    //Obtenemos los archivos seleccionados del FileUpload
+    var fileArray = [];
+    fileArray  =obj.inputNode.files;
+
+    //El fileUpload debe contener archivos
+    if(fileArray.length == 0){
+        alert("Debe adjuntar un video");
+        return false;       
+    } 
+    
+    
+    var validos = obj.get('fileMask');
+    // Se almacenan los archivos seleccionados  nombre , tama?o del archivo
+    var file;
+    
+    for (var i = 0; i < fileArray.length; i++) {                
+        console.log(fileArray[i].name);
+        file= fileArray[i].name+","+fileArray[i].size;             
+    }   
+    
+    console.log("VALORES A COMPARAR"+file);
     var arrFacebook = [".3g2", ".3gp", ".3gpp" , ".asf", ".avi", ".dat", ".divx", ".dv", ".asf", ".f4v", ".flv", ".m2ts", ".m4v", ".mkv", ".mod", ".mov", ".mp4", ".mpe", ".mpeg", ".mpeg4", ".mpg", ".mts", ".nsv", ".ogm", ".nsv", ".ogv", ".qt", ".tod", ".ts", ".vob", ".wmv"];                           
-    var arrYoutube = ['.mp3','.jpg','.jpeg','.gif','.png','.bmp','.wav','.aac','.mswmm','.wlmp'];
+    var arrYoutube =[".3g2", ".3gp", ".3gpp" , ".asf", ".avi", ".dat", ".divx", ".dv", ".asf", ".f4v", ".flv", ".m2ts", ".m4v", ".mkv", ".mod", ".mov", ".mp4", ".mpe", ".mpeg", ".mpeg4", ".mpg", ".mts", ".nsv", ".ogm", ".nsv", ".ogv", ".qt", ".tod", ".ts", ".vob", ".wmv"];                           
+    var sizeFile = 500000;
     var j =0 ;
-    
-    if(nameFile == ""){        
-        alert('Debes adjuntar un video');
-        return false;        
-    }
-    
     
     var haveFacebook = false;
     var haveYoutube = false;
@@ -736,35 +777,53 @@ function validateVideo(id){
     if(checkYT == false && checkRed == false){
         alert("Debes seleccionar al menos una red");
         return false;
-    }
-    
+    }    
     
     var countFacebook = 0;
-    var countYoutube =0
+    var countYoutube =0;
 
-
+    var name ="";
+    var size ="";
+    var position ;
+    position =  file.indexOf(",");
+    name = file.substring(0, position);
+    size = file.substring(position+1, file.length);            
+            
+    console.log("NAME: "+name);
+    console.log("SIZE: "+size );
   
     if(haveFacebook){        
         for(i = 0; i < arrFacebook.length; i++){            
-            if(nameFile.toLowerCase().indexOf(arrFacebook[i]) != -1){ //la extension si es valida    
+            console.log("COMPARA CON:"+arrFacebook[i]);
+            if(name.toLowerCase().indexOf(arrFacebook[i]) != -1  ){ //la extension si es valida 
+                console.log("laextension es valida");
                 countFacebook++;
                 break;
-            }            
+            }                        
+            if( size > sizeFile){                
+                countFacebook= 0;
+            }
         } 
-    }else {
+    }else{        
         countFacebook++;
     }
     
     if(haveYoutube){        
         for(i = 0; i < arrYoutube.length; i++){
-            if(nameFile.toLowerCase().indexOf(arrYoutube[i]) != -1){ //la extension si es valida    
+            if(name.toLowerCase().indexOf(arrYoutube[i]) != -1 ){ //la extension si es valida    
                 countYoutube++;
                 break;
-            }            
+            }                             
+            if( size > sizeFile){                
+                countFacebook= 0;
+            }
         } 
+    }else{
+        countYoutube++;        
     }
+    console.log("countFacebook"+countFacebook);
     
-    if(countFacebook == 0 || countYoutube != 0){
+    if(countFacebook == 0 || countYoutube == 0){
         alert('Extension de archivo no valida');
         return false; 
         
