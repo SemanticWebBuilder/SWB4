@@ -125,14 +125,14 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                                 external.setCountryCode(status.getPlace().getCountryCode().toUpperCase());
                             }
                         }
-                    }else if(status.getUser().getLocation()!=null){
+                    }else if(status.getUser().getLocation()!=null && !status.getUser().getLocation().isEmpty()){
                         //System.out.println("Pone en External UserGeo:"+status.getUser().getLocation());
                         external.setUserGeoLocation(status.getUser().getLocation());
                     }
                     
                     
                     external.setSocialNetwork(socialNetwork);
-                    external.setPostShared((int)status.getRetweetCount());
+                    external.setPostShared((int)status.getRetweetCount());    
                     external.setCreatorPhotoUrl(status.getUser().getBiggerProfileImageURL());
                     aListExternalPost.add(external);
 
