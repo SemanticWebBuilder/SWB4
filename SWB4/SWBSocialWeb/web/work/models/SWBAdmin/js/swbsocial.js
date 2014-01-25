@@ -40,16 +40,16 @@ function appendHtmlAt(url, tagid, location){
                     }
                 }
             }else {
-            //alert("No existe ningun elemento con id " + tagid);
+                //alert("No existe ningun elemento con id " + tagid);
             }
             return response;
         },
         error: function(response)
         {
             if(dojo.byId(tagid)) {
-            //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
+                //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
             }else {
-            //alert("No existe ningun elemento con id " + tagid);
+                //alert("No existe ningun elemento con id " + tagid);
             }
             return response;
         },
@@ -82,7 +82,7 @@ function postSocialHtml(url, tagid)
         {
             alert(response.status);
             if(dojo.byId(tagid)) {
-            //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
+                //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
             }else {
                 console.log('Tag not found: ' + tagid);
             }
@@ -124,7 +124,7 @@ function postSocialHtmlListeners(url, tagid)
             }
                   
             if(dojo.byId(tagid)) {
-            //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
+                //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
             }else {
                 console.log('Tag not found: ' + tagid);
             }
@@ -297,7 +297,7 @@ function saveInterval(url){
         url: url,
         load: function(response, ioArgs)
         {
-        //console.log('Saving interval:' + response)
+            //console.log('Saving interval:' + response)
         },
         error: function(response, ioArgs){
             console.log("Error saving interval!");
@@ -392,7 +392,7 @@ function checksRedesPhoto(objUri, sourceCall, selectNetwork){
         return true;
     }
 }
-function checksRedesText(objUri, sourceCall,id){
+function checksRedesText(objUri, sourceCall,id, required){
     var frm = document.getElementById(objUri+sourceCall+'frmUploadText');
     var checkRed = false;
           
@@ -417,7 +417,7 @@ function checksRedesText(objUri, sourceCall,id){
         alert("Debes seleccionar al menos una red.");
         return false;
     }else{
-        return  validateExtension(id);    
+        return  validateExtention(id, required);    
     }
 }
 function validateChecks(objUri, sourceCall, selectNetwork){
@@ -503,34 +503,34 @@ function reloadSocialTab(uri){
 }
 
 
-function validateExtension(uri){    
-    console.log("RECIBIDO:"+uri);
+function validateExtention(uri,required){    
     var obj = dijit.byId(uri);   
     
     //Obtenemos los archivos seleccionados del FileUpload
-    var fileArray = [];
-    fileArray  =obj.inputNode.files;
+    var inputfileArray = [];
+    inputfileArray  =obj.inputNode.files;
 
     //El fileUpload debe contener archivos
-    if(fileArray.length == 0){
-        alert("Debes adjuntar al menos una imagen ");
-        return false;       
-    } 
+    if(required){
+        if(inputfileArray.length == 0){
+            alert("Debes adjuntar al menos una imagen ");
+            return false;       
+        } 
+    }
     
     // Se almacenan los archivos seleccionados  nombre , tama?o del archivo
-    var images = new Array();
+    var inputImages = new Array();
     
-    for (var i = 0; i < fileArray.length; i++) {                
-        console.log(fileArray[i].name);
-        images.push(fileArray[i].name+","+fileArray[i].size);             
+    for (var i = 0; i < inputfileArray.length; i++) {                
+        inputImages.push(inputfileArray[i].name+","+inputfileArray[i].size);             
     }   
     
-    //Obtenemos las extensiones y tama?o  valido desde el formElement
+    //Obtenemos las extensiones y tama?o  validos desde el formElement
     var typeFileValid = [];
     var validos = obj.get('fileMask');
     //console.log("VALIDOS:"+validos);
     var position = validos.toString().indexOf(",");   
-    var sizeValid = validos.toString().substring(0 , position);
+    var sizeValid =parseInt( validos.toString().substring(0 , position));
 
     var res = validos.toString().substring(position+1 ,obj.get('fileMask').toString().length);
     while( res.indexOf("*") > -1)
@@ -540,41 +540,42 @@ function validateExtension(uri){
     typeFileValid =  res.split(";");    
     
     var count = 0;
-    var countSize = 0;
-    for(i = 0; i < typeFileValid.length; i++){
-        for(j=0; j < images.length ; j++ ){
-            var image = images[j]; //.toLowerCase();
-            var position =  image .toString().indexOf(",");   
-            var ima =  image.toString().substring(0 ,position);
-            var size = image.toString().substring(position+1, image.toString().length);
-            var imgExt = ima.substring(ima.lastIndexOf(".") + 1);      
-            console.log("este"+imgExt);
-            console.log("con este"+typeFileValid[i]);
-            if(typeFileValid[i].indexOf(imgExt)!= -1 ){//si valido           
-                count++;               
-                break;
-            }                        
-            console.log("Tamano de la imagen:"+size);
-            console.log("Tamano valido:"+sizeValid);
-            if(size > sizeValid ){
-                countSize++;   
-                break;
-            }
+    var countSize = 0;    
+    var nValidExtention ="";
+    var nValidSize ="";
+
+    
+    for(j=0; j < inputImages.length ; j++ ){
+        var image = inputImages[j]; //.toLowerCase();
+        var position =  image.toString().indexOf(",");   
+        var ima =  image.toString().substring(0 ,position);
+        var size =parseInt(image.toString().substring(position+1, image.toString().length));
+        var imgExt = ima.substring(ima.lastIndexOf("."));  //     var imgExt = ima.substring(ima.lastIndexOf(".") + 1);
+        if(typeFileValid.indexOf(imgExt) >= 0){   //si lo contiene
+            count++;   
+        }else{             
+            nValidExtention += "\n"+ ima;
         }
-    }    
-    if(count != images.length  ){
-        alert('Extension de archivo no valida');
+        
+        if(size > sizeValid){
+            countSize++;  
+            size= size/1024;
+            nValidSize += "\n"+ ima + " - "+ Math.ceil(size) + "KB";
+        }
+    }
+
+    if(count != inputImages.length  ){
+        alert('Archivo con extensiones no validas: '+nValidExtention);
         return false;         
     }
     if(countSize > 0){
-        alert('El tama?o del archivo excede lo permitido');
+        alert('Tama\xf1o de archivo no permitido ' +nValidSize);
         return false;         
     }
     return true;        
 }
 
 function validateNetwork( formId, id){        
-    console.log("entr");
     var haveFacebook = false;
     var haveTwitter = false;   
     
@@ -593,11 +594,11 @@ function validateNetwork( formId, id){
                 checkYT = true;
                 if(frm.checkRedes.name.indexOf("#social_Twitter:") != -1){
                     haveTwitter = true;
-                //console.log('twitterFOUND');
+                    //console.log('twitterFOUND');
                 }
                 if(frm.checkRedes.name.indexOf("#social_Facebook:") != -1){
                     haveFacebook = true
-                //console.log('FacebookFOUND');
+                    //console.log('FacebookFOUND');
                 }
             }
         }else{
@@ -606,11 +607,11 @@ function validateNetwork( formId, id){
                     checkYT = true;
                     if(frm.checkRedes[i].name.indexOf("#social_Twitter:") != -1){
                         haveTwitter = true;
-                    //console.log('twitterFOUND');
+                        //console.log('twitterFOUND');
                     }
                     if(frm.checkRedes[i].name.indexOf("#social_Facebook:") != -1){
                         haveFacebook = true
-                    //console.log('FacebookFOUND');
+                        //console.log('FacebookFOUND');
                     }
                 }
             }
@@ -634,7 +635,7 @@ function validateNetwork( formId, id){
         alert("Debes seleccionar al menos una red");
         return false;
     }    
-    return  validateExtension(id);     
+    return  validateExtention(id, true);     
 }
 
 function lookForInputs(children, images){
@@ -642,12 +643,9 @@ function lookForInputs(children, images){
         return;
     }else{
         for(var i = 0; i < children.length; i++){
-            console.log("CHILDREN:"+children[i].nodeName);
             if(children[i].nodeName === "INPUT"){
-                console.log("1");
                 if(children[i].value != null && children[i].value != "")
                 {
-                    console.log("2***"+children[i].value);
                     images.push(children[i].value);
                 }
             }
@@ -658,7 +656,6 @@ function lookForInputs(children, images){
 }
 
 function validateVideo(id, formId){
-    console.log("RECIBIDO:"+id);
     var obj = dijit.byId(id);   
     var original = "[  'Facebook:', [23,34] ;  'Youtube:', [45,56]  ]"
     var string = " 23,34 ; 45 ,56 ";
@@ -898,7 +895,7 @@ function submitFormPostIn(formid, postUri)
                         for (var n = 0; n < arrScript.length; n++){
                             eval(arrScript[n].innerHTML)//run script inside div
                         }
-                    //console.log("RECEIVED:" + data);
+                        //console.log("RECEIVED:" + data);
                     }else {
                         console.log('Tag not found: ' + postUri);
                     }
@@ -912,7 +909,7 @@ function submitFormPostIn(formid, postUri)
             }
         });
     } else
-{
+    {
         alert("Datos Inv?lidos...");
     }
 }
@@ -946,7 +943,7 @@ function postSocialPostInHtml(url, tagid)
         {
             alert(response.status);
             if(dojo.byId(tagid)) {
-            //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
+                //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
             }else {
                 console.log('Tag not found: ' + tagid);
             }
