@@ -348,7 +348,7 @@
                     <!--Terminan Calendarios Avanzados-->
                 </div>
                     
-                <button class="submit" type="submit" onclick="return checksRedesText('<%=objUri%>','<%=sourceCall%>');"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+                <button class="submit" type="submit" onclick="return checksRedesText('<%=objUri%>','<%=sourceCall%>','<%=objUri + sourceCall%>_defaultAuto', false);"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
 
             </div>
                 <%
@@ -815,7 +815,8 @@
                     <div class="etiqueta"><label for="title"><%=videoMgr.renderLabel(request, Video.social_video, videoMgr.MODE_CREATE)%>: </label></div>
 
                     <%
-                        String fileUpload = videoMgr.getFormElement(Video.social_video).renderElement(request, videoSemObj, Video.social_video, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang).replaceAll("video_new_defaultAuto", "video_new_defaultAuto" + objUri + sourceCall);
+                        //String fileUpload = videoMgr.getFormElement(Video.social_video).renderElement(request, videoSemObj, Video.social_video, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang).replaceAll("video_new_defaultAuto", "video_new_defaultAuto" + objUri + sourceCall);
+                        String fileUpload = videoMgr.getFormElement(Video.social_video).renderElement(request, videoSemObj, Video.social_video, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang);
 
                         // Removemos la propiedad startup
                         /*
@@ -1056,7 +1057,7 @@
                         <!--Terminan Calendarios Avanzados-->
                     </div>
                     
-                    <button class="submit" type="submit" onclick="return validateVideo('<%="video_new_defaultAuto" + objUri + sourceCall%>', '<%=objUri + sourceCall%>frmUploadVideo')"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+                    <button class="submit" type="submit" onclick="return validateVideo('<%=objUri+sourceCall%>_defaultAuto', '<%=objUri + sourceCall%>frmUploadVideo')"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
                 </div>
 
                     <%
