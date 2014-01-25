@@ -35,7 +35,7 @@ public class SocialFileUpload extends org.semanticwb.social.base.SocialFileUploa
      * @see org.semanticwb.model.FileUpload#renderElement(HttpServletRequest, SemanticObject, SemanticProperty, String, String, String)
      */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj,
+public String renderElement(HttpServletRequest request, SemanticObject obj,
             SemanticProperty prop, String propName, String type, String mode, String lang) {
 
         String objUri = request.getParameter("objUri");
@@ -97,18 +97,21 @@ public class SocialFileUpload extends org.semanticwb.social.base.SocialFileUploa
                     + "data-dojo-props=\" \n"
                     + "multiple:'" + (prop.getCardinality() != 1 ? "true" : "false") + "', \n"
                     //+ "force:'iframe', \n" 
-                    + "uploadOnSelect:'true', \n"
+                    + "uploadOnSelect:false, \n"
                     + "url:'" + url + "', \n"
                     + "submit: function(form) {}, \n");
-                    if (obj.getSemanticClass().getName().equals("Message") || obj.getSemanticClass().getName().equals("Photo")) {
-           buffer.append("onComplete: function (result) {   validateExtension('" + objUri + sourceCall + "_defaultAuto'); }, \n");
-                    } else if (obj.getSemanticClass().getName().equals("Video")) {
-           buffer.append("onComplete: function (result) {   validateVideo('" + objUri + sourceCall + "_defaultAuto', '" + objUri + sourceCall + "frmUploadVideo'); }, \n"); //validateVideo('<%=objUri + sourceCall%>_defaultAuto', '<%=objUri + sourceCall%>frmUploadVideo')
+                    if (obj.getSemanticClass().getName().equals("Message") ) {
+                        buffer.append("onChange: function (result) {   validateExtention('" + objUri + sourceCall + "_defaultAuto',false); }, \n");
+                    } else if(obj.getSemanticClass().getName().equals("Photo")){
+                        buffer.append("onChange: function (result) {   validateExtention('" + objUri + sourceCall + "_defaultAuto', true); }, \n");
+                    }else if (obj.getSemanticClass().getName().equals("Video")) {
+                        buffer.append("onChange: function (result) {   validateVideo('" + objUri + sourceCall + "_defaultAuto', '" + objUri + sourceCall + "frmUploadVideo'); }, \n"); //validateVideo('<%=objUri + sourceCall%>_defaultAuto', '<%=objUri + sourceCall%>frmUploadVideo')
                     }
-           buffer.append("onCancel: function() {console.log('cancelled');}, \n"
+                    buffer.append("onCancel: function() {console.log('cancelled');}, \n"
                     + "onAbort: function() {console.log('aborted');}, \n"
+                    + "onComplete: function(result) {console.log('result:' + result);}, \n"
                     + "onError: function (evt) {console.log(evt);}, \n"
-                     + "fileMask: ['"+ getFileMaxSize()+" ', ' "+ filtros+"  ']\" "
+                     + "fileMask: ['"+ getFileMaxSize()+"', '"+ filtros+"']\" "
                     + "\" "
                     + "type=\"file\" "
                     + "data-dojo-type=\"dojox.form.Uploader\" "
@@ -135,11 +138,11 @@ public class SocialFileUpload extends org.semanticwb.social.base.SocialFileUploa
                 if (name.startsWith(pname)) {
                     name = name.substring(pname.length() + 1);
                 }
-                if (prop.getCardinality() == 1) {
+               if (prop.getCardinality() == 1) {
                     if ("edit".equals(mode)) {
                         buffer.append("Eliminar: <input dojoType=\"dijit.form.CheckBox\" id=\""
                                 + pname + "_delFile\" name=\""
-                                + pname + "_delFile\" value=\"" + name + "\" /><a href=\"" + SWBPlatform.getContextPath() + "/work" + obj.getWorkPath() + "/" + obj.getProperty(prop) + "\">" + name + "</a>\n");
+                               + pname + "_delFile\" value=\"" + name + "\" /><a href=\"" + SWBPlatform.getContextPath() + "/work" + obj.getWorkPath() + "/" + obj.getProperty(prop) + "\">" + name + "</a>\n");
                     } else {
                         buffer.append("&nbsp;<a href=\"" + SWBPlatform.getContextPath() + "/work" + obj.getWorkPath() + "/" + obj.getProperty(prop) + "\">" + name + "</a>");
                     }
@@ -218,6 +221,7 @@ public class SocialFileUpload extends org.semanticwb.social.base.SocialFileUploa
         System.out.println("Entra a SocialFileUpload/renderElement-1:" + buffer.toString());
         return buffer.toString();
     }
+
 
     /**
      * Process.
