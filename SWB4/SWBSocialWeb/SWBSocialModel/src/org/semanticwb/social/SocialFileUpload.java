@@ -101,16 +101,24 @@ public String renderElement(HttpServletRequest request, SemanticObject obj,
                     + "url:'" + url + "', \n"
                     + "submit: function(form) {}, \n");
                     if (obj.getSemanticClass().getName().equals("Message") ) {
-                        buffer.append("onChange: function (result) {   validateExtention('" + objUri + sourceCall + "_defaultAuto',false); }, \n");
+                        buffer.append("onChange: function (result) {   validateExtention('" + objUri + sourceCall + "_defaultAuto', false); }, \n");
                     } else if(obj.getSemanticClass().getName().equals("Photo")){
                         buffer.append("onChange: function (result) {   validateExtention('" + objUri + sourceCall + "_defaultAuto', true); }, \n");
                     }else if (obj.getSemanticClass().getName().equals("Video")) {
                         buffer.append("onChange: function (result) {   validateVideo('" + objUri + sourceCall + "_defaultAuto', '" + objUri + sourceCall + "frmUploadVideo'); }, \n"); //validateVideo('<%=objUri + sourceCall%>_defaultAuto', '<%=objUri + sourceCall%>frmUploadVideo')
                     }
                     buffer.append("onCancel: function() {console.log('cancelled');}, \n"
-                    + "onAbort: function() {console.log('aborted');}, \n"
-                    + "onComplete: function(result) {console.log('result:' + result);}, \n"
-                    + "onError: function (evt) {console.log(evt);}, \n"
+                    + "onAbort: function() {console.log('aborted');}, \n");
+                    
+                    //buffer.append("onComplete: function(result) {console.log('result:' + result);}, \n"
+                    if (obj.getSemanticClass().getName().equals("Message") ) {
+                        buffer.append("onComplete: function (result) { console.log('upload TEXT form');  submitForm('" + objUri + sourceCall + "frmUploadText');}, \n");
+                    } else if(obj.getSemanticClass().getName().equals("Photo")){
+                        buffer.append("onComplete: function (result) { console.log('upload PHOTO form'); submitForm('" + objUri + sourceCall + "frmUploadPhoto');}, \n");
+                    }else if (obj.getSemanticClass().getName().equals("Video")) {
+                        buffer.append("onComplete: function (result) { console.log('upload VIDEO form'); submitForm('" + objUri + sourceCall + "frmUploadVideo');}, \n"); //validateVideo('<%=objUri + sourceCall%>_defaultAuto', '<%=objUri + sourceCall%>frmUploadVideo')
+                    }        
+                    buffer.append("onError: function (evt) {console.log(evt);}, \n"
                      + "fileMask: ['"+ getFileMaxSize()+"', '"+ filtros+"']\" "
                     + "\" "
                     + "type=\"file\" "
@@ -131,7 +139,8 @@ public String renderElement(HttpServletRequest request, SemanticObject obj,
 //                    + "/>\n");
             //buffer.append("        <button onclick=\"return false;\">Enviar</button>\n");
             buffer.append("<br/>\n");
-
+            
+            buffer.append("<div data-dojo-type=\"dojox.form.uploader.FileList\" uploaderId=\"" + objUri + sourceCall+ "_defaultAuto\"></div>");
 
             if (!"create".equals(mode) && obj.getProperty(prop) != null) {
                 String name = obj.getProperty(prop);
