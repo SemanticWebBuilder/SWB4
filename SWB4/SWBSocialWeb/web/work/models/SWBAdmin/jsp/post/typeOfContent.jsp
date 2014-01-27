@@ -166,8 +166,7 @@
 <div id="pub-detalle">
     <span class="sel-txtdiv"></span>
     <div class="swbform">
-          <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadText" action="<%=urlAction.setAction("postMessage")%>" onsubmit="submitForm('<%=objUri%><%=sourceCall%>frmUploadText');
-              return false;" method="post">
+          <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadText" action="<%=urlAction.setAction("postMessage")%>" onsubmit="dijit.byId('<%=objUri + sourceCall%>_defaultAuto').upload(); return false;" method="post">
 
             <div class="pub-redes">
                 <%= messageFormMgr.getFormHiddens()%>
@@ -347,8 +346,9 @@
                     <%}%>
                     <!--Terminan Calendarios Avanzados-->
                 </div>
-                    
+                
                 <button class="submit" type="submit" onclick="return checksRedesText('<%=objUri%>','<%=sourceCall%>','<%=objUri + sourceCall%>_defaultAuto', false);"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+                <!--<button class="submit" type="button" onclick="return checksRedesText('<%//=objUri%>','<%//=sourceCall%>','<%//=objUri + sourceCall%>_defaultAuto', false);"><%//=SWBSocialResUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>-->
 
             </div>
                 <%
@@ -470,8 +470,7 @@
     <div id="pub-detalle">
         <span class="sel-imgdiv"></span>
         <div class="swbform">
-            <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadPhoto" action="<%=urlAction.setAction("uploadPhoto")%>" method="post" onsubmit="submitForm('<%=objUri%><%=sourceCall%>frmUploadPhoto');
-                return false;">
+            <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadPhoto" action="<%=urlAction.setAction("uploadPhoto")%>" method="post" onsubmit="dijit.byId('<%=objUri + sourceCall%>_defaultAuto').upload(); return false;">
                 <%= photoMgr.getFormHiddens()%>
                 <div class="pub-redes">
                     <p class="titulo">Detalles de la publicaci&oacute;n</p>
@@ -763,8 +762,7 @@
     <div id="pub-detalle">
         <span class="sel-viddiv"></span>
         <div class="swbform">
-              <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadVideo" action="<%=urlAction.setAction("uploadVideo")%>" method="post" onsubmit="submitForm('<%=objUri%><%=sourceCall%>frmUploadVideo');
-                return false;">
+              <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadVideo" action="<%=urlAction.setAction("uploadVideo")%>" method="post" onsubmit="dijit.byId('<%=objUri + sourceCall%>_defaultAuto').upload(); return false;">
                 <%= videoMgr.getFormHiddens()%>
 
                 <div class="pub-redes">
