@@ -61,6 +61,7 @@
     {
         showSinceDate=request.getParameter("mapSinceDate"+semObj.getId())+"T00:00:00Z";
     }
+    //System.out.println("showSinceDate:"+showSinceDate);
     String showGeoProfile="off";
     if(request.getParameter("showGeoProfile")!=null) showGeoProfile=request.getParameter("showGeoProfile"); 
     /*
@@ -137,7 +138,7 @@
                 //GeoUser Location
                 if(showGeoProfile.equals("on")) queryGeoProfile=getStreamPIGeoProfile(stream, showSinceDate, -1);
             }else if(streamMapView==4){  //Todo
-                query=getStreamPI(stream, showSinceDate, true, true, -1);
+                query=getStreamPI(stream, showSinceDate, false, true, -1);
                 //GeoUser Location
                 if(showGeoProfile.equals("on")) queryGeoProfile=getStreamPIGeoProfile(stream, showSinceDate, -1);
             }else if(streamMapView==5){  //Positivos
@@ -148,15 +149,40 @@
                 query=getStreamPI(stream, showSinceDate, false, true, 2);
                 //GeoUser Location
                 if(showGeoProfile.equals("on")) queryGeoProfile=getStreamPIGeoProfile(stream, showSinceDate, 2);
-            }      
+            }else if(streamMapView==7) { //Neutros 
+                query=getStreamPI(stream, showSinceDate, false, true, 0);
+                //GeoUser Location
+                if(showGeoProfile.equals("on")) queryGeoProfile=getStreamPIGeoProfile(stream, showSinceDate, 0);
+            }       
         }else if(semObj.getGenericInstance() instanceof SocialTopic) {
             SocialTopic socialTopic=(SocialTopic) semObj.getGenericInstance();
             wsite=socialTopic.getSocialSite();
             if(streamMapView==1)query=getTopicPI(socialTopic, showSinceDate, true, false, -1);    //Contadores
-            else if(streamMapView==2)query=getTopicPI(socialTopic, showSinceDate, false, true, -1);    //Mensajes
-            else if(streamMapView==4)query=getTopicPI(socialTopic, showSinceDate, true, true, -1);     //Todo
-            else if(streamMapView==5)query=getTopicPI(socialTopic, showSinceDate, false, true, 1);      //Positivos
-            else if(streamMapView==6)query=getTopicPI(socialTopic, showSinceDate, false, true, 2);      //Negativos 
+            else if(streamMapView==2){ //Mensajes
+                query=getTopicPI(socialTopic, showSinceDate, false, true, -1);
+                //GeoUser Location
+                if(showGeoProfile.equals("on")) queryGeoProfile=getTopicPIGeoProfile(socialTopic, showSinceDate, -1);
+            }
+            else if(streamMapView==4){  //Todo
+                query=getTopicPI(socialTopic, showSinceDate, false, true, -1);
+                //GeoUser Location
+                if(showGeoProfile.equals("on")) queryGeoProfile=getTopicPIGeoProfile(socialTopic, showSinceDate, -1);
+            }     
+            else if(streamMapView==5){  //Positivos
+                query=getTopicPI(socialTopic, showSinceDate, false, true, 1);
+                //GeoUser Location
+                if(showGeoProfile.equals("on")) queryGeoProfile=getTopicPIGeoProfile(socialTopic, showSinceDate, 1);
+            }      
+            else if(streamMapView==6){  //Negativos 
+                query=getTopicPI(socialTopic, showSinceDate, false, true, 2);
+                //GeoUser Location
+                if(showGeoProfile.equals("on")) queryGeoProfile=getTopicPIGeoProfile(socialTopic, showSinceDate, 2);
+            }      
+            else if(streamMapView==7){   //Negativos 
+                query=getTopicPI(socialTopic, showSinceDate, false, true, 0);
+                //GeoUser Location
+                if(showGeoProfile.equals("on")) queryGeoProfile=getTopicPIGeoProfile(socialTopic, showSinceDate, 0);
+            }     
         }
         //System.out.println("Aqui 1:"+query);
         HashMap postInsResult=new HashMap();
@@ -165,6 +191,7 @@
         if(queryGeoProfile!=null) aPostInsGeoProfile=SWBSocial.executeQueryArray(queryGeoProfile, wsite);
         //System.out.println("aPostInsGeoProfile Tamano:"+aPostInsGeoProfile.size());
         for (PostIn x : aPostInsGeoProfile){
+            System.out.println("X..Geo:"+x.getMsg_Text());
             if (!aPostIns.contains(x)){
                aPostIns.add(x);
             }
@@ -427,6 +454,8 @@
            query+=" ?postUri social:pi_created ?postInCreated. \n";
            if(!date.equals(DEFECT_DATE)) query+= "  FILTER(xsd:dateTime(?postInCreated) >= xsd:dateTime(\""+date+"\")) \n";
            query+="  }\n";
+           
+           System.out.println("Query:"+query);
         return query;
     }
     
@@ -469,6 +498,31 @@
            query+=
            "where { \n" +
            " ?postUri social:postInStream <"+ stream.getURI()+">. \n" +
+           " ?postUri social:postInSocialNetworkUser ?socialNetUser. \n" +
+           " ?socialNetUser social:snu_profileGeoLocation ?usrGeoLoc. \n";
+           if(sentiment2Check>-1){
+               query+=" ?postUri social:postSentimentalType ?sentType. \n" +
+               " FILTER (?sentType="+sentiment2Check+"). \n"; 
+           }
+           
+           query+=" ?postUri social:pi_created ?postInCreated. \n";
+           if(!date.equals(DEFECT_DATE)) query+= "  FILTER(xsd:dateTime(?postInCreated) >= xsd:dateTime(\""+date+"\")) \n";
+           query+="  }\n";
+        return query;
+    }
+    
+    
+    private String getTopicPIGeoProfile(SocialTopic socialTopic, String date, int sentiment2Check) 
+    {
+        String query=
+           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#> \n" +
+           "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> \n" +
+           "\n";
+           query+="select * \n";    //Para Gena
+           query+=
+           "where { \n" +
+           " ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" +
            " ?postUri social:postInSocialNetworkUser ?socialNetUser. \n" +
            " ?socialNetUser social:snu_profileGeoLocation ?usrGeoLoc. \n";
            if(sentiment2Check>-1){
