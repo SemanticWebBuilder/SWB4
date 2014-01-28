@@ -40,16 +40,16 @@ function appendHtmlAt(url, tagid, location){
                     }
                 }
             }else {
-                //alert("No existe ningun elemento con id " + tagid);
+            //alert("No existe ningun elemento con id " + tagid);
             }
             return response;
         },
         error: function(response)
         {
             if(dojo.byId(tagid)) {
-                //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
+            //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
             }else {
-                //alert("No existe ningun elemento con id " + tagid);
+            //alert("No existe ningun elemento con id " + tagid);
             }
             return response;
         },
@@ -82,7 +82,7 @@ function postSocialHtml(url, tagid)
         {
             alert(response.status);
             if(dojo.byId(tagid)) {
-                //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
+            //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
             }else {
                 console.log('Tag not found: ' + tagid);
             }
@@ -124,7 +124,7 @@ function postSocialHtmlListeners(url, tagid)
             }
                   
             if(dojo.byId(tagid)) {
-                //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
+            //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
             }else {
                 console.log('Tag not found: ' + tagid);
             }
@@ -297,7 +297,7 @@ function saveInterval(url){
         url: url,
         load: function(response, ioArgs)
         {
-            //console.log('Saving interval:' + response)
+        //console.log('Saving interval:' + response)
         },
         error: function(response, ioArgs){
             console.log("Error saving interval!");
@@ -594,11 +594,11 @@ function validateNetwork( formId, id){
                 checkYT = true;
                 if(frm.checkRedes.name.indexOf("#social_Twitter:") != -1){
                     haveTwitter = true;
-                    //console.log('twitterFOUND');
+                //console.log('twitterFOUND');
                 }
                 if(frm.checkRedes.name.indexOf("#social_Facebook:") != -1){
                     haveFacebook = true
-                    //console.log('FacebookFOUND');
+                //console.log('FacebookFOUND');
                 }
             }
         }else{
@@ -607,11 +607,11 @@ function validateNetwork( formId, id){
                     checkYT = true;
                     if(frm.checkRedes[i].name.indexOf("#social_Twitter:") != -1){
                         haveTwitter = true;
-                        //console.log('twitterFOUND');
+                    //console.log('twitterFOUND');
                     }
                     if(frm.checkRedes[i].name.indexOf("#social_Facebook:") != -1){
                         haveFacebook = true
-                        //console.log('FacebookFOUND');
+                    //console.log('FacebookFOUND');
                     }
                 }
             }
@@ -656,52 +656,6 @@ function lookForInputs(children, images){
 }
 
 function validateVideo(id, formId){
-    var obj = dijit.byId(id);   
-    var original = "[  'Facebook:', [23,34] ;  'Youtube:', [45,56]  ]"
-    var string = " 23,34 ; 45 ,56 ";
-    var arrayFacebook = [];
-    var arrayYoutube = [];
-
-    var position ;
-
-    position =  string.indexOf(";");
-
-    arrayFacebook = JSON.parse("[" +string.substring(0, position) + "]");
-    arrayYoutube =JSON.parse("[" +string.substring(position+1, string.length) + "]");
-
-    console.log("arrayFacebook"+arrayFacebook);
-    console.log("arrayYoutube"+arrayYoutube);
-    console.log("arrayYoutube[0]"+arrayYoutube[0]);
-    console.log("arrayYoutube[1]"+arrayYoutube[1]);
-    console.log("arrayFacebook[0]"+arrayFacebook[0]);
-    console.log("arrayFacebook[1]"+arrayFacebook[1]);
-
-
-    //Obtenemos los archivos seleccionados del FileUpload
-    var fileArray = [];
-    fileArray  =obj.inputNode.files;
-
-    //El fileUpload debe contener archivos
-    if(fileArray.length == 0){
-        alert("Debe adjuntar un video");
-        return false;       
-    } 
-    
-    
-    var validos = obj.get('fileMask');
-    // Se almacenan los archivos seleccionados  nombre , tama?o del archivo
-    var file;
-    
-    for (var i = 0; i < fileArray.length; i++) {                
-        console.log(fileArray[i].name);
-        file= fileArray[i].name+","+fileArray[i].size;             
-    }   
-    
-    console.log("VALORES A COMPARAR"+file);
-    var arrFacebook = [".3g2", ".3gp", ".3gpp" , ".asf", ".avi", ".dat", ".divx", ".dv", ".asf", ".f4v", ".flv", ".m2ts", ".m4v", ".mkv", ".mod", ".mov", ".mp4", ".mpe", ".mpeg", ".mpeg4", ".mpg", ".mts", ".nsv", ".ogm", ".nsv", ".ogv", ".qt", ".tod", ".ts", ".vob", ".wmv"];                           
-    var arrYoutube =[".3g2", ".3gp", ".3gpp" , ".asf", ".avi", ".dat", ".divx", ".dv", ".asf", ".f4v", ".flv", ".m2ts", ".m4v", ".mkv", ".mod", ".mov", ".mp4", ".mpe", ".mpeg", ".mpeg4", ".mpg", ".mts", ".nsv", ".ogm", ".nsv", ".ogv", ".qt", ".tod", ".ts", ".vob", ".wmv"];                           
-    var sizeFile = 500000;
-    var j =0 ;
     
     var haveFacebook = false;
     var haveYoutube = false;
@@ -718,7 +672,6 @@ function validateVideo(id, formId){
 
 
     if(frm.checkYT != null){
-
         if(frm.checkYT.length == null){
             if(frm.checkYT.checked){//there is only one network
                 //checkRed = true;
@@ -776,54 +729,117 @@ function validateVideo(id, formId){
         return false;
     }    
     
-    var countFacebook = 0;
-    var countYoutube =0;
+    //Obtenemos el componente FileUpload
+    var obj = dijit.byId(id);   
 
+    //Obtenemos los archivos seleccionados del FileUpload
+    var fileArray = [];
+    fileArray  =obj.inputNode.files;
+
+    //El fileUpload debe contener archivos
+    if(fileArray.length == 0){
+        alert("Debes adjuntar un video");
+        return false;       
+    } 
+    
+    //Obtenemos el fileMask del FileUpload 
+    var validos = obj.get('fileMask');
+    
+    //Obtenemos el tama?o del archivo valido
+    var position = validos.toString().indexOf(",");   
+    var sizeValid = Number(""+validos.toString().substring(0 , position).toString()+"");
+
+    //Obtenemos las extensiones validas
+    var res = validos.toString().substring(position+1 ,obj.get('fileMask').toString().length);
+    
+    //Quitamos caracteres que no utilizamos; tales como * y ,
+    var caracteres = ["*",";"];
+    i=0;
+    while (i<caracteres.length) {
+        res = res.split(caracteres[i]).join("");
+        i++
+    }
+
+    //Separamos los archivos validos para Facebook y para Youtube
+    position  = res.toString().indexOf(",");
+    var validFacebook =  res.substring(0, position);
+    var validYoutube =  res.substring(position+1, res.toString().length);
+    
+
+    //Convertimos en arreglo el string 
+    var arrFacebook = validFacebook.split(".");
+    var arrYoutube = validYoutube.split(".");
+
+
+    var countFacebook = 0;
+    var countYoutube =0;    
+    var countSizeFacebook = 0;
+    var countSizeYoutube = 0;
+    var nValidSizeFacebook ="";
+    var nValidSizeYoutube ="";
     var name ="";
-    var size ="";
-    var position ;
+    var nValidExtentionFacebook ="";
+    var nValidExtentionYoutube ="";
+    var nameFile ="";
+
+    var file;    
+    for (var i = 0; i < fileArray.length; i++) {                
+        file= fileArray[i].name+","+fileArray[i].size;             
+    }   
+        
+
     position =  file.indexOf(",");
     name = file.substring(0, position);
-    size = file.substring(position+1, file.length);            
-            
-    console.log("NAME: "+name);
-    console.log("SIZE: "+size );
-  
+    var size = Number(""+file.substring(position+1, file.length).toString()+"");     
+    position =  name.lastIndexOf(".");
+    nameFile =  name.substring(position+1, name.length);
+
     if(haveFacebook){        
-        for(i = 0; i < arrFacebook.length; i++){            
-            console.log("COMPARA CON:"+arrFacebook[i]);
-            if(name.toLowerCase().indexOf(arrFacebook[i]) != -1  ){ //la extension si es valida 
-                console.log("laextension es valida");
-                countFacebook++;
-                break;
-            }                        
-            if( size > sizeFile){                
-                countFacebook= 0;
-            }
-        } 
+        if(arrFacebook.indexOf(nameFile) >= 0){   //si lo contiene
+            countFacebook++;   
+        }else{             
+            nValidExtentionFacebook += "\n"+ name;
+        }
+                              
+        if( size > sizeValid){                
+            countSizeFacebook++;
+            size= size/1024;
+            nValidSizeFacebook += "\n"+ name+ " - "+ Math.ceil(size) + "KB";
+        }
+        
     }else{        
         countFacebook++;
     }
     
     if(haveYoutube){        
-        for(i = 0; i < arrYoutube.length; i++){
-            if(name.toLowerCase().indexOf(arrYoutube[i]) != -1 ){ //la extension si es valida    
-                countYoutube++;
-                break;
-            }                             
-            if( size > sizeFile){                
-                countFacebook= 0;
-            }
-        } 
+        if( arrYoutube.indexOf(nameFile)>0){ //la extension si es valida    
+            countYoutube++;           
+        } else{             
+            nValidExtentionYoutube += "\n"+ name;
+        }                            
+        if( size > sizeValid){        
+            countSizeYoutube ++;
+            size= size/1024;
+            nValidSizeYoutube += "\n"+ name+ " - "+ Math.ceil(size) + "KB";
+        }        
     }else{
         countYoutube++;        
     }
-    console.log("countFacebook"+countFacebook);
     
-    if(countFacebook == 0 || countYoutube == 0){
-        alert('Extension de archivo no valida');
-        return false; 
+    if(countFacebook == 0 ){
+        alert('Archivo con extensi\xf3n no valida: '+nValidExtentionFacebook);
+        return false;         
+    }else if( countYoutube == 0){        
+        alert('Archivo con extensi\xf3n no valida: '+nValidExtentionYoutube);
+        return false;        
         
+    }
+    if(countSizeFacebook>0){        
+        alert('Tama\xf1o de archivo no permitido ' +nValidSizeFacebook);
+        return false;      
+    }else if(countSizeYoutube){
+        alert('Tama\xf1o de archivo no permitido ' +nValidSizeYoutube);
+        return false;         
     }
     
     return true;
@@ -895,7 +911,7 @@ function submitFormPostIn(formid, postUri)
                         for (var n = 0; n < arrScript.length; n++){
                             eval(arrScript[n].innerHTML)//run script inside div
                         }
-                        //console.log("RECEIVED:" + data);
+                    //console.log("RECEIVED:" + data);
                     }else {
                         console.log('Tag not found: ' + postUri);
                     }
@@ -909,7 +925,7 @@ function submitFormPostIn(formid, postUri)
             }
         });
     } else
-    {
+{
         alert("Datos Inv?lidos...");
     }
 }
@@ -943,7 +959,7 @@ function postSocialPostInHtml(url, tagid)
         {
             alert(response.status);
             if(dojo.byId(tagid)) {
-                //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
+            //dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
             }else {
                 console.log('Tag not found: ' + tagid);
             }
