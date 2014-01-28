@@ -192,6 +192,9 @@ public class StreamMap extends GenericResource{
        sCheck="";
        if(streamMapView.equals("6")) sCheck="selected";
        out.println("<option value=\"6\"  " +sCheck+">Negativos</option>");
+       sCheck="";
+       if(streamMapView.equals("7")) sCheck="selected";
+       out.println("<option value=\"7\"  " +sCheck+">Neutros</option>");
        out.println("</select>");
        out.println("</label>");
        out.println("<label>Desde el día<input type=\"text\" name=\"mapSinceDate\" id=\"mapSinceDate"+semObj.getId()+"\"  dojoType=\"dijit.form.DateTextBox\" hasDownArrow=\"true\" value=\""+date+"\" class=\"txtfld-calendar\"/></label>");
