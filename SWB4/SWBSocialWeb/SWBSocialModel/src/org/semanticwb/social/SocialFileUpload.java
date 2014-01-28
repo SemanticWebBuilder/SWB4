@@ -89,13 +89,14 @@ public String renderElement(HttpServletRequest request, SemanticObject obj,
             filtros = value;
         }
 
+        System.out.println("EN EL RECURSO: "+filtros);
 
         String multiple = "false;";
         if (!"view".equals(mode)) {
             buffer.append("<input "
                     + "name=\"uploadedfile\" "
                     + "data-dojo-props=\" \n"
-                    + "multiple:'" + (prop.getCardinality() != 1 ? "true" : "false") + "', \n"
+                    + "multiple:" + (prop.getCardinality() != 1 ? "true" : "false") + " , \n"
                     //+ "force:'iframe', \n" 
                     + "uploadOnSelect:false, \n"
                     + "url:'" + url + "', \n"
@@ -140,7 +141,7 @@ public String renderElement(HttpServletRequest request, SemanticObject obj,
             //buffer.append("        <button onclick=\"return false;\">Enviar</button>\n");
             buffer.append("<br/>\n");
             
-            buffer.append("<div data-dojo-type=\"dojox.form.uploader.FileList\" uploaderId=\"" + objUri + sourceCall+ "_defaultAuto\"></div>");
+            buffer.append("<div data-dojo-type=\"dojox.form.uploader.FileList\" uploaderId=\""+objUri+sourceCall+ "_defaultAuto\"></div>");
 
             if (!"create".equals(mode) && obj.getProperty(prop) != null) {
                 String name = obj.getProperty(prop);
@@ -315,8 +316,10 @@ public String renderElement(HttpServletRequest request, SemanticObject obj,
         } else {
             String[] cads = getFileFilter().split("\\|");
             for (String line : cads) {
-//                System.out.println("cadena:"+line);
+              System.out.println("cadena:"+line);
                 String[] parts = line.split(":");
+                System.out.println("parts[0]"+parts[0]);
+                System.out.println("parts[1]"+parts[1]);
                 filtros.put(parts[0], parts[1]);
             }
         }
