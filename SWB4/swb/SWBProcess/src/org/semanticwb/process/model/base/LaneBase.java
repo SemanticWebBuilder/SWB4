@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class LaneBase extends org.semanticwb.process.model.GraphicalElement implements org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Sortable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RuleRefable,org.semanticwb.process.model.ResourceAssignmentable
+public abstract class LaneBase extends org.semanticwb.process.model.GraphicalElement implements org.semanticwb.model.Traceable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Sortable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swp_Lane=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Lane");
    /**
@@ -381,24 +381,6 @@ public abstract class LaneBase extends org.semanticwb.process.model.GraphicalEle
     public void setNotInheritUserGroupRef(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb_notInheritUserGroupRef, value);
-    }
-
-/**
-* Gets the Index property
-* @return int with the Index
-*/
-    public int getIndex()
-    {
-        return getSemanticObject().getIntProperty(swb_index);
-    }
-
-/**
-* Sets the Index property
-* @param value long with the Index
-*/
-    public void setIndex(int value)
-    {
-        getSemanticObject().setIntProperty(swb_index, value);
     }
 
 /**

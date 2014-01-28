@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class RepositoryElementBase extends org.semanticwb.process.model.BaseElement implements org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.Expirable,org.semanticwb.model.RoleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Searchable,org.semanticwb.model.Versionable,org.semanticwb.model.Hitable
+public abstract class RepositoryElementBase extends org.semanticwb.process.model.BaseElement implements org.semanticwb.model.Traceable,org.semanticwb.model.Versionable,org.semanticwb.model.Hitable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Searchable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Expirable
 {
     public static final org.semanticwb.platform.SemanticClass swp_RepositoryDirectory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#RepositoryDirectory");
     public static final org.semanticwb.platform.SemanticProperty swp_repositoryDirectory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#repositoryDirectory");
@@ -422,24 +422,6 @@ public abstract class RepositoryElementBase extends org.semanticwb.process.model
     }
 
 /**
-* Gets the Updated property
-* @return java.util.Date with the Updated
-*/
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-/**
-* Sets the Updated property
-* @param value long with the Updated
-*/
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-/**
 * Gets the Created property
 * @return java.util.Date with the Created
 */
@@ -455,6 +437,24 @@ public abstract class RepositoryElementBase extends org.semanticwb.process.model
     public void setCreated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
    /**
    * Sets the value for the property ActualVersion

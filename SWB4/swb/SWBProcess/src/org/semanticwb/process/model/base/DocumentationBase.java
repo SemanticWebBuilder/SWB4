@@ -2,20 +2,20 @@ package org.semanticwb.process.model.base;
 
 
    /**
-   * Stores a textual description of a process element 
+   * Objeto que almacena una descripción textual de un elemento de procesos 
    */
 public abstract class DocumentationBase extends org.semanticwb.process.model.BaseElement 
 {
    /**
-   * Mime-type del texto de la documentación
+   * Mime-type for the text documentation
    */
     public static final org.semanticwb.platform.SemanticProperty swp_textFormat=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#textFormat");
    /**
-   * Stores documentation text
+   * Almacena el texto de la documentación
    */
     public static final org.semanticwb.platform.SemanticProperty swp_text=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#text");
    /**
-   * Stores a textual description of a process element
+   * Objeto que almacena una descripción textual de un elemento de procesos
    */
     public static final org.semanticwb.platform.SemanticClass swp_Documentation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Documentation");
    /**

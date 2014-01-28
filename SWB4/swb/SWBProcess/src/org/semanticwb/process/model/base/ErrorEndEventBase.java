@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ErrorEndEventBase extends org.semanticwb.process.model.EndEventNode implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ActionCodeable
+public abstract class ErrorEndEventBase extends org.semanticwb.process.model.EndEventNode implements org.semanticwb.model.Traceable,org.semanticwb.model.Sortable,org.semanticwb.process.model.ActionCodeable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swp_ErrorEndEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ErrorEndEvent");
    /**
