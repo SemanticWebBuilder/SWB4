@@ -1,10 +1,10 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessElementBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class ProcessElementBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
    /**
-   * Stores a textual description of a process element
+   * Objeto que almacena una descripción textual de un elemento de procesos
    */
     public static final org.semanticwb.platform.SemanticClass swp_Documentation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Documentation");
     public static final org.semanticwb.platform.SemanticProperty swp_hasDocumentation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasDocumentation");

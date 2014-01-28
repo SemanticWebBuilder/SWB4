@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class TaskActionBase extends org.semanticwb.process.model.BaseElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class TaskActionBase extends org.semanticwb.process.model.BaseElement implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swp_taskActionCode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#taskActionCode");
     public static final org.semanticwb.platform.SemanticProperty swp_taskActionType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#taskActionType");

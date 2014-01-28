@@ -4,7 +4,7 @@ package org.semanticwb.process.model.base;
    /**
    * Nodo raiz de Eventos Iniciales 
    */
-public abstract class StartEventNodeBase extends org.semanticwb.process.model.CatchEvent implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class StartEventNodeBase extends org.semanticwb.process.model.CatchEvent implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Sortable
 {
     public static final org.semanticwb.platform.SemanticClass swp_FlowNode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#FlowNode");
     public static final org.semanticwb.platform.SemanticProperty swp_ie_next=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#ie_next");

@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class DirectionalAssociationBase extends org.semanticwb.process.model.AssociationFlow implements org.semanticwb.process.model.ConnectionObjectEditable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class DirectionalAssociationBase extends org.semanticwb.process.model.AssociationFlow implements org.semanticwb.process.model.ConnectionObjectEditable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swp_associationScriptCode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#associationScriptCode");
     public static final org.semanticwb.platform.SemanticClass swp_DirectionalAssociation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#DirectionalAssociation");
