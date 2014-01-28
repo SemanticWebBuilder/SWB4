@@ -54,6 +54,7 @@ public class StreamMap extends GenericResource{
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
+        System.out.println("EWntra a StremMap-0");
         PrintWriter out = response.getWriter();
         User user=paramRequest.getUser();
         String suri=request.getParameter("suri");
@@ -135,15 +136,17 @@ public class StreamMap extends GenericResource{
                 }catch(Exception e){}
             }
         }
-        
+        System.out.println("EWntra a StremMap-1");
         ArrayList nets=new ArrayList();
         if(semObj.createGenericInstance() instanceof Stream)
         {
             Stream stream=(Stream)semObj.createGenericInstance();
             nets = SWBSocialUtil.sparql.getStreamSocialNetworks(stream);
+            System.out.println("EWntra a StremMap-2:"+stream);
         }else if(semObj.createGenericInstance() instanceof SocialTopic){
             SocialTopic socialTopic=(SocialTopic)semObj.createGenericInstance();
             nets = SWBSocialUtil.sparql.getSocialTopicSocialNetworks(socialTopic);
+            System.out.println("EWntra a StremMap-3:"+socialTopic);
         }
         out.println("<div class=\"bloqSocialNetDiv\">");
         out.println("    <p class=\"bloqSocialNet\">Redes Sociales</p>");
