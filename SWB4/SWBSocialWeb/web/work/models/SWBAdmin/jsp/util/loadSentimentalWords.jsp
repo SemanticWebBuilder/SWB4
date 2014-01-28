@@ -9,7 +9,7 @@
 <%@page import="org.apache.lucene.analysis.Analyzer,org.apache.lucene.analysis.TokenStream,org.apache.lucene.analysis.tokenattributes.CharTermAttribute,org.apache.lucene.analysis.tokenattributes.OffsetAttribute,org.semanticwb.social.util.lucene.SpanishAnalizer"%>
 
 
-<p>Inicia...</p>
+<p class="vocabularyWords"><b>INICIA CARGA DE VOCABULARIO CON SENTIMIENTOS...</b></p>
 <%!
     static ArrayList<String> aDoubles=new ArrayList();
     static HashMap<String, String> hmapChanges=new HashMap();
@@ -36,7 +36,7 @@
     BufferedReader bf = null;
     try {
         //ARCHIVO QUE CONTIENE LAS PALABRAS CON SENTIMIENTO ACTUALIZADAS ES UN ARCHIVO .CSV--------SIN ACENTROS--------
-        bf = new BufferedReader(new FileReader(SWBPortal.getWorkPath()+"/../swbadmin/jsp/util/social/sentimentalWords.csv"));
+        bf = new BufferedReader(new FileReader(SWBPortal.getWorkPath()+"/models/"+wsite.getId()+"/config/sentimentalWords2Process_SinAcentos.csv"));
     } catch (FileNotFoundException e) {
     e.printStackTrace();
     }
@@ -46,26 +46,27 @@
         while ((line = bf.readLine())!=null) {
             if(isFirstLine){isFirstLine=false; continue;}
             int colum=0;
-            SentimentWords sentimentWord=null;
             StringTokenizer tokens = new StringTokenizer(line, ";");
             while(tokens.hasMoreTokens()){
                 colum++;
+                SentimentWords sentimentWord=null;
                 String tokenValue=tokens.nextToken();
                 //if((colum==1 && tokenValue==null) || colum>3) break;
                 if(tokenValue==null) continue;
                 if(colum==1) {
-                    System.out.println("tokenValue-1:"+tokenValue);
+                    //System.out.println("tokenValue-1:"+tokenValue);
                     String tmpToken=getRootWord(tokenValue);
                     if(tmpToken!=null) tokenValue=tmpToken;
-                    System.out.println("tokenValue-1.1:"+tokenValue);
+                    //System.out.println("tokenValue-1.1:"+tokenValue);
                     tokenValue=phonematize(tokenValue);
-                    System.out.println("tokenValue-2:"+tokenValue);
+                    //System.out.println("tokenValue-2:"+tokenValue);
                     sentimentWord=SentimentWords.ClassMgr.getSentimentWords(tokenValue,wsite);
                     if(sentimentWord==null)
                     {
                         sentimentWord=SentimentWords.ClassMgr.createSentimentWords(tokenValue,wsite);
+                        out.println("SE CREó nueva palabra:"+sentimentWord.getId()+"<br>"); 
                     }else{
-                        out.println("YA SE ENCUENTRA/NO SE CREO:"+tokenValue+"<br>");
+                        out.println("YA SE ENCUENTRA/NO SE CREó:"+tokenValue+"<br>");
                     }
                     //sentimentWord.setSentimentalWord(tokenValue);
                 }
@@ -83,9 +84,9 @@
         e.printStackTrace();
     }
     %>
-    <p>FINALIZO LA CARGA DE PALABRAS CON SENTIMIENTO....</p>
+    <p class="vocabularyWords"><b>FINALIZO LA CARGA DE PALABRAS CON SENTIMIENTO....</b></p>
         
-    <p>EL LISTADO COMPLETO DE PALABRAS CON SENTIMIENTO SON:</p>
+    <p class="vocabularyWords"><b>EL LISTADO COMPLETO DE PALABRAS CON SENTIMIENTO AHORA ES:</b></p>
     <%
     int cont=0;
     //Lee todos los valores de la clase sentimentWord
@@ -95,11 +96,11 @@
     {
         cont++;
         SentimentWords sentimentWord=itSentimentWords.next();
-        out.println("sentimentWord:"+sentimentWord.getId()+", sentimentValue:"+sentimentWord.getSentimentalValue()+", IntensityValue:"+sentimentWord.getIntensityValue()+"<br/>");
+        out.println("Palabra:"+sentimentWord.getId()+", Valor Sentimental:"+sentimentWord.getSentimentalValue()+", Valor de Intensidad:"+sentimentWord.getIntensityValue()+"<br/>");
         //if(cont==10) break;
     }
     %>
-    <p>cont:<%=cont%></p>
+    <p>Total de Palabras en el vocabulario:<%=cont%></p>
     
 <%!
 private static String getRootWord(String word)
@@ -107,7 +108,7 @@ private static String getRootWord(String word)
     try
     {
         TokenStream tokenStream = new SpanishAnalizer().tokenStream("contents", new StringReader(word));
-        OffsetAttribute offsetAttribute = tokenStream.addAttribute(OffsetAttribute.class);
+        //OffsetAttribute offsetAttribute = tokenStream.addAttribute(OffsetAttribute.class);
         CharTermAttribute charTermAttribute = tokenStream.addAttribute(CharTermAttribute.class);
 
         while (tokenStream.incrementToken()) {
