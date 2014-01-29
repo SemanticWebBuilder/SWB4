@@ -1176,6 +1176,14 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                 String videoId = message.getPostInSource().getSocialNetMsgId();
                 String comment = message.getMsg_Text();
                 
+                String urlLocalPost = "";
+                Iterator<String> files = message.listFiles();
+                if(files.hasNext()){//If at least one file found
+                    String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
+                    urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + message.getEncodedURI();
+                    comment += " " + urlLocalPost;
+                }
+                
                 if(!this.validateToken()){
                     log.error("Unable to update the access token inside post Comment!");
                     return;
@@ -1201,7 +1209,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                     String xml = "<?xml version=\"1.0\"?>"
                         + "<entry xmlns=\"http://www.w3.org/2005/Atom\""
                         + " xmlns:yt=\"http://gdata.youtube.com/schemas/2007\">"
-                        + "<content>" + comment + "</content>"
+                        + "<content>" + SWBSocialUtil.Util.shortUrl(comment) + "</content>"
                         + "</entry>";
                     writer.write(xml.getBytes("UTF-8"));
                     writer.flush();

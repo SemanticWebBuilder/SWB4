@@ -658,7 +658,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         Iterator<String> files = message.listFiles();
         if(files.hasNext()){//If at least one file found
             String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
-            urlLocalPost = absolutePath + "/swbadmin/jsp/social/postViewFiles.jsp?uri=" + message.getEncodedURI();
+            urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + message.getEncodedURI();
         }
         
         Map<String, String> params = new HashMap<String, String>(2);
@@ -666,7 +666,9 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         if(urlLocalPost.isEmpty()){
             params.put("message", message.getMsg_Text());
         }else{
-            params.put("message", SWBSocialUtil.Util.shortUrl(message.getMsg_Text() + " " + urlLocalPost));
+            String messageWithLink = SWBSocialUtil.Util.shortUrl(message.getMsg_Text() + " " + urlLocalPost);
+            params.put("message", messageWithLink);
+            message.setMsg_Text(messageWithLink);//Save the message with link
         }
         params.put("privacy", "{'value':'" + privacyValue(message) + "'}");
         String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/feed";
@@ -750,7 +752,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         //String urlLocalPost = "http://localhost:8080/swbadmin/jsp/social/postViewFiles.jsp?uri=" + photo.getEncodedURI();
         //String uriTemp = "http://" + request.getServerName() + ":" + request.getServerPort() + SWBPortal.getWebWorkPath() + "/models/SWBAdmin/jsp/oauth/callback.jsp";
         String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
-        String urlLocalPost = absolutePath + "/swbadmin/jsp/social/postViewFiles.jsp?uri=" + photo.getEncodedURI();
+        String urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles.jsp?uri=" + photo.getEncodedURI();
         try {
             String photoToPublish = "";
             String additionalPhotos = "";
