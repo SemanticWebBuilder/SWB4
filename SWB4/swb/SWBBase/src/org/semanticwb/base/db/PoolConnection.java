@@ -186,12 +186,17 @@ public class PoolConnection implements java.sql.Connection {
     {
         if(description==null || description.length()==0)
         {
-            String ret=threadName;
+            StringBuilder ret=new StringBuilder();
+            ret.append(threadName);
             for(int x=0;x<stack.length;x++)
             {
-                if(x>=0)ret+=stack[x].toString()+"\n";
+                if(x>=0)
+                {
+                    ret.append(stack[x].toString());
+                    ret.append("\n");
+                }
             }
-            return ret;
+            return ret.toString();
         }
         return description;
     }
