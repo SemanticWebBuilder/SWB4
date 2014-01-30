@@ -36,21 +36,20 @@ public class LatLngRadioMap extends org.semanticwb.social.base.LatLngRadioMapBas
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                 String mode, String lang) 
     {
-        StringBuilder         ret      = new StringBuilder();
+        StringBuilder ret = new StringBuilder();
         
         Stream stream=(Stream)obj.createGenericInstance();
         
-        if(request.getParameter("doView")==null)
-        {
-            FormElementURL formElementUrl=getRenderURL(obj, prop, type, mode, lang);
-            
-            ret.append("<input type=\"hidden\" id=\"geoCenterLatitude_"+stream.getId()+"\" name=\"geoCenterLatitude\" value=\"\"/>");
+        /*if(request.getParameter("doView")==null)
+        {*/
+            //FormElementURL formElementUrl=getRenderURL(obj, prop, type, mode, lang);            
+            /*ret.append("<input type=\"hidden\" id=\"geoCenterLatitude_"+stream.getId()+"\" name=\"geoCenterLatitude\" value=\"\"/>");
             ret.append("<input type=\"hidden\" id=\"geoCenterLongitude_"+stream.getId()+"\" name=\"geoCenterLongitude\" />");
-            ret.append("<input type=\"hidden\" id=\"geoRadio_"+stream.getId()+"\" name=\"geoRadio\" />");
+            ret.append("<input type=\"hidden\" id=\"geoRadio_"+stream.getId()+"\" name=\"geoRadio\" />");*/
             
-            ret.append("<iframe id=\"radio_stream_"+stream.getId()+"\" name=\"radio_stream_"+stream.getId()+"\" width=\"700\" height=\"440\" src=\"" + formElementUrl.setParameter("doView", "1").setParameter("suri", obj.getURI()) + "\"></iframe> ");
-            return ret.toString();
-        }
+            //ret.append("<iframe id=\"radio_stream_"+stream.getId()+"\" name=\"radio_stream_"+stream.getId()+"\" width=\"700\" height=\"440\" src=\"" + formElementUrl.setParameter("doView", "1").setParameter("suri", obj.getURI()) + "\"></iframe> ");
+            //return ret.toString();
+        //}
         
         try
         {
@@ -71,12 +70,15 @@ public class LatLngRadioMap extends org.semanticwb.social.base.LatLngRadioMapBas
             if(stream.getGeoCenterLongitude()!=0)longitude=""+stream.getGeoCenterLongitude();
             if(stream.getGeoRadio()>0)radio=""+stream.getGeoRadio();
             
-
-            ret.append("<script type=\"text/javascript\" src=\"http://maps.googleapis.com/maps/api/js?sensor=false\"></script>");
-            ret.append("<script type=\"text/javascript\" src=\"/swbadmin/js/jquery/jquery-1.4.4.min.js\"></script>");
-            ret.append("<script type=\"text/javascript\" language=\"javascript\">");
+            ret.append("<div dojoType=\"dojox.layout.ContentPane\">");
+            ret.append("	<script type=\"dojo/method\">");
             
-            ret.append("function setParentValue(elementname, value2set) {");
+            
+            //ret.append("<script type=\"text/javascript\" src=\"http://maps.googleapis.com/maps/api/js?sensor=false\"></script>");
+            //ret.append("<script type=\"text/javascript\" src=\"/swbadmin/js/jquery/jquery-1.4.4.min.js\"></script>");
+            //ret.append("<script type=\"text/javascript\" language=\"javascript\">");
+            
+            /*ret.append("function setParentValue(elementname, value2set) {");
             //ret.append("alert('Hola');");
             //ret.append("alert('elementName2Change:'+elementname);");
             //ret.append("alert('valuetoset:'+value2set);");
@@ -85,11 +87,11 @@ public class LatLngRadioMap extends org.semanticwb.social.base.LatLngRadioMapBas
             //ret.append("alert('geoLati:'+geoLati);");
             //ret.append("alert('Valor Puesto:'+parent.document.getElementById('geoCenterLatitude'));");
             ret.append("return true;");
-            ret.append("}");
+            ret.append("}");*/
             
             ret.append("$(document).ready(function(){");
             ret.append("var Circle = null;");
-            ret.append("var Radius = $(\"#geoRadio\").val();");
+            ret.append("var Radius = $(\"#geoRadio_" + stream.getId() + "\").val();");
             ret.append("var StartPosition = new google.maps.LatLng("+latitude+", "+longitude+");");
             ret.append("function DrawCircle(Map, Center, Radius) {");
             ret.append("if (Circle != null) {");
@@ -118,13 +120,13 @@ public class LatLngRadioMap extends org.semanticwb.social.base.LatLngRadioMapBas
             ret.append("else {");
             ret.append("Map.panTo(Location);");
             ret.append("}");
-            ret.append("Radius = $(\"#geoRadio\").val();");
+            ret.append("Radius = $(\"#geoRadio_" + stream.getId() +"\").val();");
             ret.append("DrawCircle(Map, Location, Radius);");
-            ret.append("$(\"#geoCenterLatitude\").val(Location.lat().toFixed(5));");
-            ret.append("$(\"#geoCenterLongitude\").val(Location.lng().toFixed(5));");
-            ret.append("setParentValue('geoCenterLatitude_"+stream.getId()+"', Location.lat().toFixed(5));");
+            ret.append("$(\"#geoCenterLatitude_" + stream.getId() + "\").val(Location.lat().toFixed(5));");
+            ret.append("$(\"#geoCenterLongitude_" + stream.getId() + "\").val(Location.lng().toFixed(5));");
+            /*ret.append("setParentValue('geoCenterLatitude_"+stream.getId()+"', Location.lat().toFixed(5));");
             ret.append("setParentValue('geoCenterLongitude_"+stream.getId()+"', Location.lng().toFixed(5));");
-            ret.append("setParentValue('geoRadio_"+stream.getId()+"', Radius);");
+            ret.append("setParentValue('geoRadio_"+stream.getId()+"', Radius);");*/
             ret.append("}");
             ret.append("var MapOptions = {");
             ret.append("zoom: 2,");
@@ -145,19 +147,24 @@ public class LatLngRadioMap extends org.semanticwb.social.base.LatLngRadioMapBas
             ret.append("google.maps.event.addListener(Marker, \"dragend\", function(event) {");
             ret.append("SetPosition(Marker.position);");
             ret.append("});");
-            ret.append("$(\"#geoRadio\").keyup(function(){");
+            ret.append("$(\"#geoRadio_" + stream.getId() +"\").keyup(function(){");
             ret.append("google.maps.event.trigger(Marker, \"dragend\");");
             ret.append("});");
             ret.append("DrawCircle(Map, StartPosition, Radius);");
             ret.append("SetPosition(Marker.position);");
             ret.append("});");
-            ret.append("</script>");
-            ret.append("Lat<input type=\"text\" id=\"geoCenterLatitude\" name=\"geoCenterLatitude\" value=\""+latitude+"\" onchange=\"setParentValue('geoCenterLatitude_"+stream.getId()+"', this.value);\"/>");
+            ret.append("	</script>");
+            ret.append("</div>");
+            //ret.append("</script>");
+            /*ret.append("Lat<input type=\"text\" id=\"geoCenterLatitude\" name=\"geoCenterLatitude\" value=\""+latitude+"\" onchange=\"setParentValue('geoCenterLatitude_"+stream.getId()+"', this.value);\"/>");
             ret.append("Lng<input type=\"text\" id=\"geoCenterLongitude\" name=\"geoCenterLongitude\" value=\""+longitude+"\" onchange=\"setParentValue('geoCenterLongitude_"+stream.getId()+"', this.value);\"/>");
-            ret.append("Radio<input type=\"text\" id=\"geoRadio\" value=\""+radio+"\" name=\"geoRadio\" onchange=\"setParentValue('geoRadio_"+stream.getId()+"', this.value);\"/>");
+            ret.append("Radio<input type=\"text\" id=\"geoRadio\" value=\""+radio+"\" name=\"geoRadio\" onchange=\"setParentValue('geoRadio_"+stream.getId()+"', this.value);\"/>");*/
+            ret.append("Lat<input type=\"text\" id=\"geoCenterLatitude_" + stream.getId() + "\" name=\"geoCenterLatitude\" value=\""+latitude+"\" />");
+            ret.append("Lng<input type=\"text\" id=\"geoCenterLongitude_" + stream.getId() + "\" name=\"geoCenterLongitude\" value=\""+longitude+"\" />");
+            ret.append("Radio<input type=\"text\" id=\"geoRadio_" + stream.getId() +"\" value=\""+radio+"\" name=\"geoRadio\" />");
             ret.append("<div id=\"map_"+stream.getId()+"\" style=\"width:600px; height:400px; background-color:#000000;\">");
             ret.append("</div>");
-        
+                    
         }catch(Exception e)
         {
             e.printStackTrace();
