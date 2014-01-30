@@ -44,10 +44,10 @@ public class StreamCleanerMsgbyDays {
 
             Timer timer = new Timer();
             
-            timer.schedule(new CheckStreamsMsgbyDays(), 0, 60 * 1000); //Cada minuto
+            //timer.schedule(new CheckStreamsMsgbyDays(), 0, 60 * 1000); //Cada minuto
             
             //Que empiece hoy a las 11:59 pm y vuelve a iterar un dia despues y así se siga
-            //timer.schedule(new CheckStreamsMsgbyDays(), time2Start, oneDay);
+            timer.schedule(new CheckStreamsMsgbyDays(), time2Start, oneDay);
         } catch (Exception e) {
             log.error(e);
         }
