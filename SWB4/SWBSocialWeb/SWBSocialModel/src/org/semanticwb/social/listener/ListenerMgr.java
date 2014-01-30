@@ -74,7 +74,7 @@ public class ListenerMgr implements SWBAppObject {
                             //Este número es por defecto, ya que si el stream maneja solo una red tipo listenAlive, es posible que no le hayan puesto un 
                             //valor a stream.getPoolTime(), por lo cual, en la línea de abajo que crea el timer marcaría un error (Non-positive period).
                             if(time<1) time=10; 
-                            int periodTime = (time*60)*MILISEG_IN_SEGUNDO;
+                            int periodTime = (time*MILISEG_IN_SEGUNDO)*60;
                             Timer timer = new Timer();
                             timer.schedule(new ListenerTask(stream), 0,periodTime);
                             htTimers.put(stream.getURI(), timer);
