@@ -10,7 +10,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -223,6 +222,7 @@ public class RemoveMessagesResource extends GenericResource {
                 out.println("    <select name=\"networks\" multiple size=\"5\" class=\"bloqsel\">");
                 for(int i = 0; i < nets.size(); i++){
                     SocialNetwork socialNet= (SocialNetwork)((SemanticObject)nets.get(i)).createGenericInstance();
+                    /*
                     String iconClass ="";
                     if(socialNet instanceof Twitter){
                         iconClass = "swbIconTwitter";
@@ -230,8 +230,8 @@ public class RemoveMessagesResource extends GenericResource {
                         iconClass = "swbIconFacebook";
                     }else if( socialNet instanceof Youtube){
                         iconClass = "swbIconYouTube";
-                    }
-                    out.println("  <option class=\"" + iconClass + "\" value=\"" + socialNet.getURI() +"\">"+ socialNet.getDisplayTitle(user.getLanguage()) + "</option>");
+                    }*/
+                    out.println("  <option value=\"" + socialNet.getURI() +"\">"+ socialNet.getDisplayTitle(user.getLanguage()) + "</option>");
                 }
                 out.println("    </select>");
                 out.println("    <a href=\"#\" onclick=\"if(confirm('Los mensajes de las redes seleccionadas serán eliminados.')){submitForm('delNetwork" + stream.getId() + "'); return false;}else{return false;}\">Eliminar</a>");
