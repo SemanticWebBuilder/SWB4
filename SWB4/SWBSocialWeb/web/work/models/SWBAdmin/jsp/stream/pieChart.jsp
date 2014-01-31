@@ -195,185 +195,178 @@
     </script>
 </head>
 <style type="text/css">         
-    @import "/swbadmin/css/swbsocial.css";          
+    @import  "/swbadmin/css/swbsocial.css";          
     html, body, #main{
         overflow: auto;
     }
 </style>
 
-
-<div >
-    <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("sentimentProm", lang)%>: <%=title%></h1>
-    <div class="barra">
-        <a href="<%=urlRender.setMode("exportExcel").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("type", "").setParameter("lang", lang)%>" class="excel">Exportar excel</a>
-    </div>
-    <div id="pieChart">
-    </div>
-</div>
-
 <script src="http://d3js.org/d3.v3.min.js"></script>    
-<script>
-    function pieChart(){  
-        var color = d3.scale.category10();
-        var width = 760,
-        height = 400,
-        offset = 20,
-        radius = Math.min(width, height) / 2;
+
+<div id="graficador">
+    <div id="pieGenderParent">
+        <div class="grafTit">
+            <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("sentimentProm", lang)%>: <%=title%></h1>
+            <a href="<%=urlRender.setMode("exportExcel").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("type", "").setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+        </div>    
+        <div id="pieChart">
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <script>
+        function pieChart(){  
+            var color = d3.scale.category10();
+            var width = 760,
+            height = 400,
+            offset = 20,
+            radius = Math.min(width, height) / 2;
 
 
-        var pie = d3.layout.pie()
-        .sort(null)
-        .value(function(d) { return d.value2; });    
+            var pie = d3.layout.pie()
+            .sort(null)
+            .value(function(d) { return d.value2; });    
     
     
-        var arc = d3.svg.arc()
-        .outerRadius(radius - 20)
-        .innerRadius(radius - 100);
+            var arc = d3.svg.arc()
+            .outerRadius(radius - 20)
+            .innerRadius(radius - 100);
 
-        var arcOver = d3.svg.arc()
-        .outerRadius(radius - 10)
-        .innerRadius(0);
+            var arcOver = d3.svg.arc()
+            .outerRadius(radius - 10)
+            .innerRadius(0);
 
 
     
     
-        d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/ObjsentimentData.jsp<%=args%>", function(error, data) {
+            d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/ObjsentimentData.jsp<%=args%>", function(error, data) {
 
 
-            var svgSen = d3.select("#pieChart").append("svg")
-            .attr("width", width)
-            .attr("height", height)
-            .append("g")
-            // .attr("transform", "translate(" + width / 2 + "," + (height / 2 + offset)+")");
-            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+                var svgSen = d3.select("#pieChart").append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .append("g")
+                // .attr("transform", "translate(" + width / 2 + "," + (height / 2 + offset)+")");
+                .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
         
-            var path = svgSen.datum(data).selectAll("path")
-            .data(pie)
-            .enter().append("path")
-            .attr("fill", function(d, i) { return d.data.color; })
-            .attr("d", arc)
-            .each(function(d) { this._current = d; }); // store the initial angles
+                var path = svgSen.datum(data).selectAll("path")
+                .data(pie)
+                .enter().append("path")
+                .attr("fill", function(d, i) { return d.data.color; })
+                .attr("d", arc)
+                .each(function(d) { this._current = d; }); // store the initial angles
             
             
-            var gl= svgSen.selectAll(".arcOver")
-            .data(pie(data))
-            .enter().append("g")
-            .attr("class", "arcOver")
-            .style("visibility","hidden");
+                var gl= svgSen.selectAll(".arcOver")
+                .data(pie(data))
+                .enter().append("g")
+                .attr("class", "arcOver")
+                .style("visibility","hidden");
             
-            gl.append("path")
-            .attr("d", arcOver)
-            .style("fill-opacity", "0.6")
-            .style("fill", function(d) { return d.data.color; });
+                gl.append("path")
+                .attr("d", arcOver)
+                .style("fill-opacity", "0.6")
+                .style("fill", function(d) { return d.data.color; });
 
-            var tooltips = svgSen.select("#pieChart")
-            .data(pie(data))
-            .enter().append("div")
-            .attr("class","chartToolTip")
-            .style("display", "none")
-            .style("position", "absolute")
-            .style("z-index", "10");
+                var tooltips = svgSen.select("#pieChart")
+                .data(pie(data))
+                .enter().append("div")
+                .attr("class","chartToolTip")
+                .style("display", "none")
+                .style("position", "absolute")
+                .style("z-index", "10");
 
-            tooltips.append("p")
-            //.append("span")
-            .attr('class', 'd3-tip')  
-            .html(function(d) {                
-                return "<strong>"+d.data.label+"</strong><br>"+d.data.value1+"/"+d.data.value2+"%";
-            });
-        
-        
-        
-            var g = svgSen.selectAll(".arc")
-            .data(pie(data))
-            .enter().append("g")
-            .attr("class", "arc")
-            .on("click", function(d) {
-                var filter =d.data.label; 
-                var url = "<%=urlRender.setMode("exportExcel").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter;
-                document.location.href = url;
-            })
-            .on("mouseover", function(d, i) {
-                d3.select(gl[0][i]).style("visibility","visible"); 
-                d3.select(tooltips[0][i])
-                .style("display","block");
-            })
-            .on("mouseout", function(d, i) {
-                d3.select(gl[0][i]).style("visibility","hidden"); 
-                d3.select(tooltips[0][i])
-                .style("display","none");
-                d3.select(gl[0][i]).style("fill",function(d) {
-                    return d.data.color;
+                tooltips.append("p")
+                //.append("span")
+                .attr('class', 'd3-tip')  
+                .html(function(d) {                
+                    return "<strong>"+d.data.label+"</strong><br>"+d.data.value1+"/"+d.data.value2+"%";
                 });
-            })
-          
-            .on("mousemove", function(d, i) {
-                d3.select(tooltips[0][i])
-                .style("top", d3.event.pageY-10+"px")
-                .style("left", d3.event.pageX+10+"px")
-            });
-
-            //Create slices
-            g.append("path")
-            .attr("d", arc)
-            .style("stroke", "white")
-            .style("stroke-width", "2")
-            .style("fill", function(d, i) {
-                return  d.data.color;
-            });
-
-            svgSen
-            .append("text")
-            .text("title")
-            .style("text-anchor","middle")
-            .style("fill","black")
-            .style("font-size","10pt")
-            .style("font-weight","bold")
-            .attr("x","0")
-            .attr("y",function(d) {
-                return - width/2;
-            });
         
-        });
-    }
-    pieChart();
+        
+        
+                var g = svgSen.selectAll(".arc")
+                .data(pie(data))
+                .enter().append("g")
+                .attr("class", "arc")
+                .on("click", function(d) {
+                    var filter =d.data.label; 
+                    var url = "<%=urlRender.setMode("exportExcel").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter;
+                    document.location.href = url;
+                })
+                .on("mouseover", function(d, i) {
+                    d3.select(gl[0][i]).style("visibility","visible"); 
+                    d3.select(tooltips[0][i])
+                    .style("display","block");
+                })
+                .on("mouseout", function(d, i) {
+                    d3.select(gl[0][i]).style("visibility","hidden"); 
+                    d3.select(tooltips[0][i])
+                    .style("display","none");
+                    d3.select(gl[0][i]).style("fill",function(d) {
+                        return d.data.color;
+                    });
+                })
+          
+                .on("mousemove", function(d, i) {
+                    d3.select(tooltips[0][i])
+                    .style("top", d3.event.pageY-10+"px")
+                    .style("left", d3.event.pageX+10+"px")
+                });
+
+                //Create slices
+                g.append("path")
+                .attr("d", arc)
+                .style("stroke", "white")
+                .style("stroke-width", "2")
+                .style("fill", function(d, i) {
+                    return  d.data.color;
+                });
+
+                svgSen
+                .append("text")
+                .text("title")
+                .style("text-anchor","middle")
+                .style("fill","black")
+                .style("font-size","10pt")
+                .style("font-weight","bold")
+                .attr("x","0")
+                .attr("y",function(d) {
+                    return - width/2;
+                });
+        
+            });
+        }
+        pieChart();
+    </script>
 
 
-</script>
-
-<br><br><br><br>
-<div id="pieSocialNetwork">
-    <h1>Redes Sociales</h1>
-    <div class="barra">
-        <a id="hrefGender" href="<%=urlRender.setMode("exportExcel").setParameter("type", "socialNetwork").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+    <div id="pieSocialNetwork">
+        <div class="grafTit">
+            <h1>Redes Sociales</h1>
+            <a id="hrefGender" href="<%=urlRender.setMode("exportExcel").setParameter("type", "socialNetwork").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+        </div>
+        <div id="pieNetworkSocial">
+        </div>    
+        <div>
+            <%
+                Iterator i = socialNetworks.iterator();
+            %>
+            <input  type="radio" name="socialNetwork" id="socialNetwork" value="all" checked />  Todos<br>
+            <%
+                while (i.hasNext()) {
+                    SemanticObject sO = (SemanticObject) i.next();
+                    SocialNetwork sN = (SocialNetwork) sO.getGenericInstance();
+                    System.out.println("SOCIAL" + sN.getURI());
+            %>         
+            <input type="radio" name="socialNetwork" id="socialNetwork" value="<%=sN.getTitle()%>" /> <%=sN.getTitle()%><br>
+            <%
+                }
+            %>
+        </div>
+        <div class="clear"></div>
     </div>
-    <div id="pieNetworkSocial">
-
-    </div>
-    <div class="clear"></div>
-    <div>
-        <%
-            Iterator i = socialNetworks.iterator();
-        %>
-
-        <input  type="radio" name="socialNetwork" id="socialNetwork" value="all" checked />  Todos<br>
-
-        <%
-            while (i.hasNext()) {
-                SemanticObject sO = (SemanticObject) i.next();
-                SocialNetwork sN = (SocialNetwork) sO.getGenericInstance();
-                System.out.println("SOCIAL" + sN.getURI());
-        %>         
-        <input type="radio" name="socialNetwork" id="socialNetwork" value="<%=sN.getTitle()%>" /> <%=sN.getTitle()%><br>
-        <%
-            }
-        %>
-    </div>
-    <!--<div id="pieGenderInfo">          
-    </div>-->
 </div>
-
-<script src="http://d3js.org/d3.v3.min.js"></script>   
-
 <script>    
     function pieNetworkSocial(parametro, cont){   
         document.getElementById('pieNetworkSocial').innerHTML="";
@@ -381,7 +374,10 @@
         //alert('val'+val);
 
         document.getElementById("hrefGender").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "socialNetwork").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>&filterGeneral="+val ;
-     
+        var opciones =  document.getElementsByName("socialNetwork");
+        for(var i=0; i<opciones.length; i++) {        
+            opciones[i].disabled = true;
+        }
 
         console.log('THE PARAM:' + parametro);        
         var xArray = new Array();
@@ -410,16 +406,19 @@
 
         d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieSocialNetwork.jsp<%=args%>&filter="+parametro, function(error, data) {
             
-            d3.select("#amazingViz").remove();
+            var opciones =  document.getElementsByName("socialNetwork");//.disabled=false;
+            for(var i=0; i<opciones.length; i++) {        
+                opciones[i].disabled = true;
+            }
             if(data==""){
                 var para = document.createElement("p");                                  
                 var node = document.createTextNode( "Sin datos para procesar" );
                 para.appendChild(node);                   
-               // para.style="letter-spacing: 5px;"
+                // para.style="letter-spacing: 5px;"
                 //  para.style="text-shadow: grey 5px -5px 2px; ;letter-spacing: 5px;"                   
                 var element=document.getElementById("pieNetworkSocial");
                 element.appendChild(para);           
-               // element. style="font-family:verdana; text-align: center; font-size: 20pt; color: orange;vertical-align: middle;padding-bottom: 115px; padding-top:115px;"
+                // element. style="font-family:verdana; text-align: center; font-size: 20pt; color: orange;vertical-align: middle;padding-bottom: 115px; padding-top:115px;"
                 //  element.style="opacity:0.3;position:center;left:50;width:50;height:200px;background-color:#8AC007"             
                 return;
     
@@ -646,6 +645,7 @@
             
             
     }
+    
     function valid(id){
         if(id ==1){    
             var selectAnio=  document.getElementById("selectAnio").value;
