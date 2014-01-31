@@ -142,14 +142,22 @@
 
 
         float intTotalVotos = undefined + single + married + divorced + widowed;
+                float intPorcentajeSingle = 0;
+        float intPorcentajeMarried = 0;
+        float intPorcentajeDivorced = 0;
+        float intPorcentajeWidowed =0;
+        float intPorcentajeundefined =0;
+        if (totalPost != 0) {
+         intPorcentajeSingle = ((float) single * 100) / (float) totalPost;
+         intPorcentajeMarried = ((float) married * 100) / (float) totalPost;
+         intPorcentajeDivorced = ((float) divorced * 100) / (float) totalPost;
+         intPorcentajeWidowed = ((float) widowed * 100) / (float) totalPost;
+         intPorcentajeundefined = ((float) undefined * 100) / (float) totalPost;
+               }
 
-        float intPorcentajeSingle = ((float) single * 100) / (float) totalPost;
-        float intPorcentajeMarried = ((float) married * 100) / (float) totalPost;
-        float intPorcentajeDivorced = ((float) divorced * 100) / (float) totalPost;
-        float intPorcentajeWidowed = ((float) widowed * 100) / (float) totalPost;
-        float intPorcentajeundefined = ((float) undefined * 100) / (float) totalPost;
-
-
+int totalPositives =  positivesDivorced+positivesMarried+positivesSingle+positivesUndefined+positivesWidowed;
+int totalNegatives = negativesDivorced+negativesMarried+negativesSingle+negativesUndefined+negativesWidowed;
+int totalNeutrals = neutralsDivorced+neutralsMarried+neutralsSingle+neutralsUndefined+neutralsWidowed;
 
 
         JSONArray node = new JSONArray();
@@ -160,6 +168,11 @@
             node1.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("single", lang));
             node1.put("value1", "" + single);
             node1.put("value2", "" + round(intPorcentajeSingle));
+            JSONObject joUndefine = new JSONObject();
+            joUndefine.put("positivos", "" + positivesSingle);
+            joUndefine.put("negativos", "" + negativesSingle);
+            joUndefine.put("neutros", "" + neutralsSingle);
+            node1.put("valor", joUndefine);
             if (positivesSingle > negativesSingle && positivesSingle > neutralsSingle) {
                 node1.put("color", "#008000");
             } else if (negativesSingle > neutralsSingle) {
@@ -169,7 +182,11 @@
             }
             node1.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("single", lang) + ": " + single + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesSingle + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesSingle + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsSingle);
             node1.put("chartclass", "possClass");
-            node1.put("label3", "Total de Post: " + totalPost);
+            JSONObject joTotal = new JSONObject();
+            joTotal.put("positivos", "" + totalPositives);
+            joTotal.put("negativos", "" + totalNegatives);
+            joTotal.put("neutros", "" + totalNeutrals);
+            node1.put("label3", joTotal);           
 
             node.put(node1);
             //}
@@ -179,6 +196,11 @@
             node2.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("married", lang));
             node2.put("value1", "" + married);
             node2.put("value2", "" + round(intPorcentajeMarried));
+            JSONObject joMArried = new JSONObject();
+            joMArried.put("positivos", "" + positivesMarried);
+            joMArried.put("negativos", "" + negativesMarried);
+            joMArried.put("neutros", "" + neutralsMarried);
+            node2.put("valor", joMArried);
             if (positivesMarried > negativesMarried && positivesMarried > neutralsMarried) {
                 node2.put("color", "#008000");
             } else if (negativesMarried > neutralsMarried) {
@@ -192,12 +214,41 @@
 
             node.put(node2);
             // }
+            
+            
+             // if (widowed > 0) {
+            JSONObject node4 = new JSONObject();
+            node4.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("widowed", lang));
+            node4.put("value1", "" + widowed);
+            node4.put("value2", "" + round(intPorcentajeWidowed));
+            JSONObject joWidowed = new JSONObject();
+            joWidowed.put("positivos", "" + positivesWidowed);
+            joWidowed.put("negativos", "" + negativesWidowed);
+            joWidowed.put("neutros", "" + neutralsWidowed);
+            node4.put("valor", joWidowed);
+            if (positivesWidowed > negativesWidowed && positivesWidowed > neutralsWidowed) {
+                node4.put("color", "#008000");
+            } else if (negativesWidowed > neutralsWidowed) {
+                node4.put("color", "#FF0000");
+            } else {
+                node4.put("color", "#FFD700");
+            }
+            node4.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("widowed", lang) + ": " + widowed + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesWidowed + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesWidowed + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsWidowed);
+            node4.put("chartclass", "possClass");
+            node4.put("label3", "Total de Post: " + totalPost);
+            node.put(node4);
+            //}
 
             //if (divorced > 0) {
             JSONObject node3 = new JSONObject();
             node3.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("divorced", lang));
             node3.put("value1", "" + divorced);
             node3.put("value2", "" + round(intPorcentajeDivorced));
+            JSONObject joDivorced = new JSONObject();
+            joDivorced.put("positivos", "" + positivesDivorced);
+            joDivorced.put("negativos", "" + negativesDivorced);
+            joDivorced.put("neutros", "" + neutralsDivorced);
+            node3.put("valor", joDivorced);
             if (positivesDivorced > negativesDivorced && positivesDivorced > neutralsDivorced) {
                 node3.put("color", "#008000");
             } else if (negativesDivorced > neutralsDivorced) {
@@ -212,29 +263,18 @@
             node.put(node3);
             // }
 
-            // if (widowed > 0) {
-            JSONObject node4 = new JSONObject();
-            node4.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("widowed", lang));
-            node4.put("value1", "" + widowed);
-            node4.put("value2", "" + round(intPorcentajeWidowed));
-            if (positivesWidowed > negativesWidowed && positivesWidowed > neutralsWidowed) {
-                node4.put("color", "#008000");
-            } else if (negativesWidowed > neutralsWidowed) {
-                node4.put("color", "#FF0000");
-            } else {
-                node4.put("color", "#FFD700");
-            }
-            node4.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("widowed", lang) + ": " + widowed + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesWidowed + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesWidowed + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsWidowed);
-            node4.put("chartclass", "possClass");
-            node4.put("label3", "Total de Post: " + totalPost);
-            node.put(node4);
-            //}
+           
 
             // if (undefined > 0) {
             JSONObject node5 = new JSONObject();
             node5.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("undefinedRelation", lang));
             node5.put("value1", "" + undefined);
             node5.put("value2", "" + round(intPorcentajeundefined));
+                JSONObject joUndefined = new JSONObject();
+            joUndefined.put("positivos", "" + positivesUndefined);
+            joUndefined.put("negativos", "" + negativesUndefined);
+            joUndefined.put("neutros", "" + neutralsUndefined);
+            node5.put("valor", joUndefined);
             if (positivesUndefined > negativesUndefined && positivesUndefined > neutralsUndefined) {
                 node5.put("color", "#008000");
             } else if (negativesUndefined > neutralsUndefined) {
