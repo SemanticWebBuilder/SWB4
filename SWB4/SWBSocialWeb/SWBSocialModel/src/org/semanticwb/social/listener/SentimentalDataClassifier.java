@@ -92,7 +92,7 @@ public class SentimentalDataClassifier {
         this.socialNetwork = socialNetwork;
         this.classifyGeoLocation = classifyGeoLocation;
         this.wsite = org.semanticwb.social.SocialSite.ClassMgr.getSocialSite(stream.getSocialSite().getId());
-        System.out.println("wsite en SentimentalDataClassifier:" + wsite);
+        //System.out.println("wsite en SentimentalDataClassifier:" + wsite);
         //this.checkKlout=checkKlout;
 
 
@@ -110,7 +110,7 @@ public class SentimentalDataClassifier {
     private void getExternalPostData() {
         externalString2Clasify = externalPost.getMessage();
 
-        System.out.println("SentimentalDataClassifier/getExternalPostData:" + externalString2Clasify);
+        //System.out.println("SentimentalDataClassifier/getExternalPostData:" + externalString2Clasify);
         //Si la descripción es diferente que nula, se agrega al texto a ser clasificado
         /*
          if(externalPost.getDescription()!=null)
@@ -319,10 +319,10 @@ public class SentimentalDataClassifier {
         }
         //long tfinTMP2=System.currentTimeMillis() - tini;
         //System.out.println("\n<!--Total Time to Classify--TMP2: " + tfinTMP2 + "ms - SWBSocial--> ");
-        System.out.println("CLASIFICADOR-STEP-1");
+        //System.out.println("CLASIFICADOR-STEP-1");
         if (createPostInbySentiment && createPostInbyIntensity) //Si pasa los filtros, entonces se crea el mensaje, de lo contrario el mensaje de la red social nunca se persiste.
         {
-            System.out.println("PASA FILTRO DE SENTIMIENTOS E INTENSIDAD");
+            //System.out.println("PASA FILTRO DE SENTIMIENTOS E INTENSIDAD");
             //Si pasó filtro por sentimiento e intensidad, entonces revisa filtro por klout
             SocialNetworkUser socialNetUser = null;
             String creatorId = externalPost.getCreatorId();
@@ -341,10 +341,10 @@ public class SentimentalDataClassifier {
                 }
             }
 
-            System.out.println("checkKlout en Clasificador..:" + stream.getStream_KloutValue());
+            //System.out.println("checkKlout en Clasificador..:" + stream.getStream_KloutValue());
             int userKloutScore = 0;
             if (stream.getStream_KloutValue() > 0 && socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable)) {
-                System.out.println("creatorId en Sentimental:" + creatorId);
+                //System.out.println("creatorId en Sentimental:" + creatorId);
                 HashMap userKloutDat = SWBSocialUtil.Classifier.classifybyKlout(socialNetwork, stream, socialNetUser, creatorId, upDateSocialUserNetworkData);
                 createPostbyKlout = ((Boolean) userKloutDat.get("createPostbyKlout")).booleanValue();
                 userKloutScore = ((Integer) userKloutDat.get("userKloutScore")).intValue();
@@ -422,10 +422,10 @@ public class SentimentalDataClassifier {
 
             //long tfinTMP3=System.currentTimeMillis() - tini;
             //System.out.println("\n<!--Total Time to Classify--TMP3: " + tfinTMP3 + "ms - SWBSocial--> ");
-            System.out.println("Klout de usuario del mensaje, lo crea o no??:" + createPostbyKlout);
+            //System.out.println("Klout de usuario del mensaje, lo crea o no??:" + createPostbyKlout);
             if (createPostbyKlout) //Si pasa el filtro de Klout del usuario, entonces ya persite el mensaje en BD
             {
-                System.out.println("Paso filtro de sentimientos, intensidad y klout---vamos a persistir el msg...");
+                //System.out.println("Paso filtro de sentimientos, intensidad y klout---vamos a persistir el msg...");
                 PostIn post = createPostInObj(socialNetUser, userKloutScore, upDateSocialUserNetworkData, days);
 
                 //Guarda valores sentimentales en el PostIn (mensaje de entrada)
@@ -454,15 +454,15 @@ public class SentimentalDataClassifier {
                 ArrayList<SocialRule> streamRules = new ArrayList();
                 //Momento de revisar las reglas del stream
                 Iterator<SocialRuleRef> itsocialRuleRefs = stream.listSocialRuleRefs();
-                System.out.println("itsocialRuleRefs jorge:" + itsocialRuleRefs.hasNext());
+                //System.out.println("itsocialRuleRefs jorge:" + itsocialRuleRefs.hasNext());
                 while (itsocialRuleRefs.hasNext()) {
                     SocialRuleRef socialRuleRef = itsocialRuleRefs.next();
                     if (socialRuleRef.isActive() && socialRuleRef.getSocialRule() != null) {
-                        System.out.println("ReglaRef k:" + socialRuleRef);
+                        //System.out.println("ReglaRef k:" + socialRuleRef);
                         SWBSocialRuleMgr socialRuleMgr = new SWBSocialRuleMgr();
                         SocialRule socialRule = socialRuleRef.getSocialRule();
                         rulesClassifierValueTmp = socialRuleMgr.eval(post, socialRule);
-                        System.out.println("rulesClassifierValueTmp-1:" + rulesClassifierValue);
+                        //System.out.println("rulesClassifierValueTmp-1:" + rulesClassifierValue);
                         if (firstTime) {
                             rulesClassifierValue = rulesClassifierValueTmp;
                             firstTime = false;
@@ -479,13 +479,13 @@ public class SentimentalDataClassifier {
                     Iterator<SocialRule> itRules = streamRules.iterator();
                     while (itRules.hasNext()) {
                         SocialRule socialRule = itRules.next();
-                        System.out.println("Entra CR/J1");
+                        //System.out.println("Entra CR/J1");
                         Iterator<Action> itActions = socialRule.listActions();
                         while (itActions.hasNext()) {
                             Action action = itActions.next();
-                            System.out.println("Entra CR/J2:" + action);
+                            //System.out.println("Entra CR/J2:" + action);
                             if (action instanceof SendEmail) {
-                                System.out.println("Entra CR/J3:" + action);
+                                //System.out.println("Entra CR/J3:" + action);
                                 SendEmail.sendEmail(action, post, stream, socialNetwork);
                             } else if (action instanceof SendPost) {
                                 if (post.getSocialTopic() != null) {
@@ -634,6 +634,7 @@ public class SentimentalDataClassifier {
                     }
                 }
             } else if (externalPost.getPostType().equals(SWBSocialUtil.VIDEO) && externalPost.getVideo() != null) {
+                System.out.println("model en Sentimental/VideoIn:"+model);
                 postIn = VideoIn.ClassMgr.createVideoIn(model);
                 VideoIn videoIn = (VideoIn) postIn;
                 videoIn.setVideo(externalPost.getVideo());
@@ -660,7 +661,7 @@ public class SentimentalDataClassifier {
             postIn.setSocialNetMsgId(externalPost.getPostId());
 
             Calendar calendario = Calendar.getInstance();
-            System.out.println("FECHA AL POSTIN:" + calendario.getTime());
+            //System.out.println("FECHA AL POSTIN:" + calendario.getTime());
             postIn.setPi_created(calendario.getTime());   //Para fines de indexado para ordenamientos con Sparql
 
             /*
@@ -853,14 +854,14 @@ public class SentimentalDataClassifier {
                     if (!userData.isNull("birthday")) {
                         String userBirthDay = userData.getString("birthday") != null ? userData.getString("birthday") : null;
                         if (userBirthDay != null && userBirthDay.trim().length() > 0) {
-                            System.out.println("userBirthDay:" + userBirthDay);
+                            //System.out.println("userBirthDay:" + userBirthDay);
                             //Date date=new SimpleDateFormat("MM/dd/yyyy").parse(userBirthDay);
                             final DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
                             final Calendar c = Calendar.getInstance();
                             c.setTime(date.parse(userBirthDay));
                             if (c.get(Calendar.YEAR) > 1900) {
                                 int userYears = SWBSocialUtil.Util.calculateAge(c.getTime());
-                                System.out.println("userYears:" + userYears);
+                                //System.out.println("userYears:" + userYears);
                                 if (userYears > 0) {
                                     Iterator<LifeStage> itLifeStage = LifeStage.ClassMgr.listLifeStages(SWBContext.getAdminWebSite());
                                     while (itLifeStage.hasNext()) {
@@ -879,7 +880,7 @@ public class SentimentalDataClassifier {
                     if (!userData.isNull("gender")) {
                         String userGender = userData.getString("gender") != null ? userData.getString("gender") : null;
                         if (userGender != null && userGender.trim().length() > 0) {
-                            System.out.println("userGender George:" + userGender);
+                            //System.out.println("userGender George:" + userGender);
                             if (userGender.equals("male")) {
                                 socialNetUser.setSnu_gender(SocialNetworkUser.USER_GENDER_MALE);
                             } else if (userGender.equals("female")) {
@@ -897,7 +898,7 @@ public class SentimentalDataClassifier {
                     if (!userData.isNull("relationship_status")) {
                         String userRelationShip = userData.getString("relationship_status") != null ? userData.getString("relationship_status") : null;
                         if (userRelationShip != null && userRelationShip.trim().length() > 0) {
-                            System.out.println("relationship_status George:" + userRelationShip);
+                            //System.out.println("relationship_status George:" + userRelationShip);
                             if (userRelationShip.equals("Single")) {
                                 socialNetUser.setSnu_relationShipStatus(SocialNetworkUser.USER_RELATION_SINGLE);
                             } else if (userRelationShip.equals("Married")) {
@@ -944,10 +945,12 @@ public class SentimentalDataClassifier {
                     } else {
                         socialNetUser.setSnu_education(SocialNetworkUser.USER_EDUCATION_UNDEFINED);
                     }
+                    /*
                     System.out.println("User Followers:" + socialNetUser.getFollowers());
                     System.out.println("User Friends:" + socialNetUser.getFriends());
                     System.out.println("User ProfileGeo:" + socialNetUser.getSnu_profileGeoLocation());
                     System.out.println("User Email:" + socialNetUser.getSnu_email());
+                    * */
                     /*
                      if(socialNetUser.getSnu_LifeStage()!=null)
                      {
