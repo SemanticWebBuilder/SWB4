@@ -154,7 +154,7 @@
                 </div>
             </div>          
         </div>
-          <div class="clear"></div>   
+        <div class="clear"></div>   
     </div>
     <script>    
         function pieGender(parametro, cont){   
@@ -189,7 +189,7 @@
                     para.appendChild(node);                   
                     var element=document.getElementById("pieGender");
                     element.appendChild(node);   
-                   // element.style="line-height: 250px; font-family:verdana; text-align: center; font-size: 10pt; color: orange;vertical-align: middle;"//padding-bottom: 115px; padding-top:115px"
+                    // element.style="line-height: 250px; font-family:verdana; text-align: center; font-size: 10pt; color: orange;vertical-align: middle;"//padding-bottom: 115px; padding-top:115px"
                     return;    
                 }
                 
@@ -212,6 +212,11 @@
       
                 function change() {
                     console.log('entro a change');
+                     
+                    var opciones =  document.getElementsByName("gender");//.disabled=false;
+                    for(var i=0; i<opciones.length; i++) {        
+                        opciones[i].disabled = true;
+                    }
                     pieGender(this.value, cont);
                     var value = this.value;
                     pie.value(function(d) { return d[value]; }); // change the value function
@@ -372,7 +377,12 @@
                         
                     }            
                     cont++;
+             
                 }       
+                       var opciones =  document.getElementsByName("gender");//.disabled=false;
+                    for(var i=0; i<opciones.length; i++) {        
+                        opciones[i].disabled = false;
+                    }
          
             });
                 
@@ -458,7 +468,7 @@
                     para.appendChild(node);                   
                     var element=document.getElementById("pieEducation");
                     element.appendChild(para);           
-                   // element.style="line-height: 250px; font-family:verdana; text-align: center; font-size: 10pt; color: orange;vertical-align: middle;"//padding-bottom: 115px; padding-top:115px"
+                    // element.style="line-height: 250px; font-family:verdana; text-align: center; font-size: 10pt; color: orange;vertical-align: middle;"//padding-bottom: 115px; padding-top:115px"
                     return;
     
                 }
@@ -480,8 +490,12 @@
                 d3.selectAll("input[name=education]")
                 .on("change", change);
             
-               function change() {
+                function change() {
                     console.log('entro a change');
+                    var opciones =  document.getElementsByName("education");//.disabled=false;
+                    for(var i=0; i<opciones.length; i++) {        
+                        opciones[i].disabled = true;
+                    }
                     pieEducation(this.value, cont);
                     var value = this.value;
                     pie.value(function(d) { return d[value]; }); // change the value function
@@ -646,7 +660,12 @@
                        
                     }      
                     cont++;
+       
                 }
+                             var opciones =  document.getElementsByName("education");//.disabled=false;
+                    for(var i=0; i<opciones.length; i++) {        
+                        opciones[i].disabled = false;
+                    }
                                   
             });       
         }
@@ -755,6 +774,10 @@
       
                 function change() {
                     console.log('entro a change');
+                    var opciones =  document.getElementsByName("relation");//.disabled=false;
+                    for(var i=0; i<opciones.length; i++) {        
+                        opciones[i].disabled = true;
+                    }
                     pieRelation(this.value, cont);
                     var value = this.value;
                     pie.value(function(d) { return d[value]; }); // change the value function
@@ -922,8 +945,12 @@
                         
                     } 
                     cont++;
+
                 }
-        
+                            var opciones =  document.getElementsByName("relation");//.disabled=false;
+                    for(var i=0; i<opciones.length; i++) {        
+                        opciones[i].disabled = false;
+                    }
             });
     
         }
@@ -986,7 +1013,7 @@
         </div>
         <div class="clear"></div>
     </div>
-        
+
     <script>
     
         function pieLifeStage(parametro, cont){   
@@ -1051,6 +1078,10 @@
       
                 function change() {
                     console.log('entro a change');
+                    var opciones =  document.getElementsByName("life");//.disabled=false;
+                    for(var i=0; i<opciones.length; i++) {        
+                        opciones[i].disabled = true;
+                    }
                     pieLifeStage(this.value, cont);
                     var value = this.value;
                     //clearTimeout(timeout);
@@ -1229,8 +1260,12 @@
                         }
                         cont++;
                     }
-                 
+
                 }
+                    var opciones =  document.getElementsByName("life");//.disabled=false;
+                    for(var i=0; i<opciones.length; i++) {        
+                        opciones[i].disabled = false;
+                    }
             });
     
         }
@@ -1344,7 +1379,7 @@
                     para.appendChild(node);                   
                     var element=document.getElementById("profileGeoLocation");
                     element.appendChild(node);           
-                   // element.style="line-height: 250px; font-family:verdana; text-align: center; font-size: 10pt; color: orange;vertical-align: middle;"//padding-bottom: 115px; padding-top:115px"
+                    // element.style="line-height: 250px; font-family:verdana; text-align: center; font-size: 10pt; color: orange;vertical-align: middle;"//padding-bottom: 115px; padding-top:115px"
                     return;
     
                 }
@@ -1370,6 +1405,10 @@
       
                 function change() {
                     console.log('entro a change');
+                    var opciones =  document.getElementsByName("geo");//.disabled=false;
+                    for(var i=0; i<opciones.length; i++) {        
+                        opciones[i].disabled = true;
+                    }
                     pieGeo(this.value, cont);
                     var value = this.value;
                     pie.value(function(d) { return d[value]; }); // change the value function
@@ -1517,7 +1556,10 @@
                     }  
                     cont++;
                 }
-        
+           var opciones =  document.getElementsByName("geo");//.disabled=false;
+            for(var i=0; i<opciones.length; i++) {        
+                opciones[i].disabled = false;
+            }
             });
     
         }  
