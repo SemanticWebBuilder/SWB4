@@ -184,17 +184,27 @@
             d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieGender.jsp<%=args%>&filter="+parametro, function(error, data) {
                         
                 if(data==""){
-                    var para = document.createElement("p");                                  
-                    var node = document.createTextNode( "Sin datos para procesar" );
-                    para.appendChild(node);                   
-                    var element=document.getElementById("pieGender");
-                    element.appendChild(node);   
+                    //d3.select("#pieGender").append("<img href='http://jenkov.com/images/layout/top-bar-logo.png' />")
+                    var svg = d3.selectAll("#pieGender").append("svg")
+                    //.attr("xlink:href", "http://www.e-pint.com/epint.jpg")
+                    //.attr("width", 150)
+                    //.attr("height", 200);
+                    //.attr('x',-9)
+                    //.attr('y',-12)
+                    //.attr('width', 20)
+                    //.attr('height', 24)
+                    //.attr("xlink:href","http://jenkov.com/images/layout/top-bar-logo.png")
+                    // var para = document.createElement("p");                                  
+                    //var node = document.createTextNode( "Sin datos para procesar" );
+                    //para.appendChild(node);                   
+                    //var element=document.getElementById("pieGender");
+                    //element.appendChild(node);   
                     var opciones =  document.getElementsByName("gender");//.disabled=false;
                     for(var i=0; i<opciones.length; i++) {        
                         opciones[i].disabled = false;
                     }
                     // element.style="line-height: 250px; font-family:verdana; text-align: center; font-size: 10pt; color: orange;vertical-align: middle;"//padding-bottom: 115px; padding-top:115px"
-                    return;    
+                    return svg;    
                 }
                 
                 var svg = d3.select("#pieGender").append("svg")
@@ -466,12 +476,11 @@
                     
             d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieEducation.jsp<%=args%>&filter="+parametro, function(error, data) {
             
-                if(data==""){
-                    var para = document.createElement("p");                                  
-                    var node = document.createTextNode( "Sin datos para procesar" );
-                    para.appendChild(node);                   
-                    var element=document.getElementById("pieEducation");
-                    element.appendChild(para);   
+                if(data==""){                 
+                    var svg = d3.selectAll("#pieEducation").append("svg")                
+                   // .attr("xlink:href", "http://www.e-pint.com/epint.jpg")
+                    //.attr("width", 150)
+                    //.attr("height", 200);
                     var opciones =  document.getElementsByName("education");//.disabled=false;
                     for(var i=0; i<opciones.length; i++) {        
                         opciones[i].disabled = false;
@@ -751,11 +760,8 @@
             d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieRelationShipStatus.jsp<%=args%>&filter="+parametro, function(error, data) {
             
                 if(data==""){
-                    var para = document.createElement("p");                                  
-                    var node = document.createTextNode( "Sin datos para procesar" );
-                    para.appendChild(node);                   
-                    var element=document.getElementById("pieRelationShipStatus");
-                    element.appendChild(para);     
+                   var svg = d3.selectAll("#pieRelationShipStatus").append("svg")                
+                   
                     var opciones =  document.getElementsByName("relation");//.disabled=false;
                     for(var i=0; i<opciones.length; i++) {        
                         opciones[i].disabled = false;
@@ -1059,12 +1065,9 @@
             d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieLifeStage.jsp<%=args%>&filter="+parametro, function(error, data) {
             
                 if(data==""){
-                    var para = document.createElement("p");                                  
-                    var node = document.createTextNode( "Sin datos para procesar" );
-                    para.appendChild(node);                          
-                    var element=document.getElementById("profileLifeStage");
-                    element.appendChild(para);         
-                var opciones =  document.getElementsByName("life");//.disabled=false;
+                     var svg = d3.selectAll("#profileLifeStage").append("svg")              
+                
+                    var opciones =  document.getElementsByName("life");//.disabled=false;
                     for(var i=0; i<opciones.length; i++) {        
                         opciones[i].disabled = false;
                     }
@@ -1390,11 +1393,7 @@
 
             d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieProfileGeoLocation.jsp<%=args%>&filter="+parametro, function(error, data) {
                 if(data==""){
-                    var para = document.createElement("p");                                  
-                    var node = document.createTextNode( "Sin datos para procesar" );
-                    para.appendChild(node);                   
-                    var element=document.getElementById("profileGeoLocation");
-                    element.appendChild(node);       
+                    var svg = d3.selectAll("#profileGeoLocation").append("svg")              
                     var opciones =  document.getElementsByName("geo");//.disabled=false;
                     for(var i=0; i<opciones.length; i++) {        
                         opciones[i].disabled = false;
