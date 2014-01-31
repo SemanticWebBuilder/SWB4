@@ -1345,8 +1345,8 @@
                     while (i.hasNext()) {
                         String value = i.next().toString();
                 %>
-                <input id="bcn" type="radio" name="geo" value="<%=value%>">
-                <label for="bcn"><%=value%></label>
+                <input id="bcn<%=value%>" type="radio" name="geo" value="<%=value%>">
+                <label for="bcn<%=value%>"><%=value%></label>
                 <%
                     }
                 %>
