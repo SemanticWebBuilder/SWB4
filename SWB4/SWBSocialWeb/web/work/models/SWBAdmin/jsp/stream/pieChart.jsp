@@ -240,14 +240,14 @@
         d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/ObjsentimentData.jsp<%=args%>", function(error, data) {
 
 
-            var svg = d3.select("#pieChart").append("svg")
+            var svgSen = d3.select("#pieChart").append("svg")
             .attr("width", width)
             .attr("height", height)
             .append("g")
             // .attr("transform", "translate(" + width / 2 + "," + (height / 2 + offset)+")");
             .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
         
-            var path = svg.datum(data).selectAll("path")
+            var path = svgSen.datum(data).selectAll("path")
             .data(pie)
             .enter().append("path")
             .attr("fill", function(d, i) { return d.data.color; })
@@ -255,7 +255,7 @@
             .each(function(d) { this._current = d; }); // store the initial angles
             
             
-            var gl= svg.selectAll(".arcOver")
+            var gl= svgSen.selectAll(".arcOver")
             .data(pie(data))
             .enter().append("g")
             .attr("class", "arcOver")
@@ -266,7 +266,7 @@
             .style("fill-opacity", "0.6")
             .style("fill", function(d) { return d.data.color; });
 
-            var tooltips = svg.select("#pieChart")
+            var tooltips = svgSen.select("#pieChart")
             .data(pie(data))
             .enter().append("div")
             .attr("class","chartToolTip")
@@ -283,7 +283,7 @@
         
         
         
-            var g = svg.selectAll(".arc")
+            var g = svgSen.selectAll(".arc")
             .data(pie(data))
             .enter().append("g")
             .attr("class", "arc")
@@ -321,7 +321,7 @@
                 return  d.data.color;
             });
 
-            svg
+            svgSen
             .append("text")
             .text("title")
             .style("text-anchor","middle")
@@ -355,7 +355,7 @@
             Iterator i = socialNetworks.iterator();
         %>
 
-        <input type="radio" name="socialNetwork" id="socialNetwork" value="all" checked />  Todos<br>
+        <input  type="radio" name="socialNetwork" id="socialNetwork" value="all" checked />  Todos<br>
 
         <%
             while (i.hasNext()) {
@@ -390,11 +390,11 @@
         height = 400,
         offset = 20,
         radius = Math.min(width, height) / 2;
-
+     
 
         var pie = d3.layout.pie()
         //.sort(null)
-        .value(function(d) { console.log('gender value'+d.value2); return d.value2; });    
+        .value(function(d) { console.log('PieChartgender value'+d.value2); return d.value2; });    
     
     
         var arc = d3.svg.arc()
@@ -409,9 +409,8 @@
 
 
         d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieSocialNetwork.jsp<%=args%>&filter="+parametro, function(error, data) {
-            //d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieGender.jsp<%=args%>&filter="+parametro, function(error, data) {
             
-            
+            d3.select("#amazingViz").remove();
             if(data==""){
                 var para = document.createElement("p");                                  
                 var node = document.createTextNode( "Sin datos para procesar" );
@@ -427,7 +426,11 @@
             }
 
             document.getElementById("pieNetworkSocial").removeAttribute("style");
+            //d3.select("svg") .remove();
+            //d3.select("#pieNetworkSocial").remove();
+            
             var svg = d3.select("#pieNetworkSocial").append("svg")
+            .attr("id", "amazingViz")
             .attr("width", width)
             .attr("height", height)
             .append("g")
@@ -446,9 +449,12 @@
             .on("change", change);
       
             function change() {
+                var opciones =  document.getElementsByName("socialNetwork");//.disabled=false;
+                for(var i=0; i<opciones.length; i++) {        
+                    opciones[i].disabled = true;
+                }
                 pieNetworkSocial(this.value, cont);
                 var value = this.value;
-                //clearTimeout(timeout);
                 pie.value(function(d) { return d[value]; }); // change the value function
                 path = path.data(pie); // compute the new angles
                 path.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
@@ -569,7 +575,10 @@
                 cont ++;
             }
         
-         
+            var opciones =  document.getElementsByName("socialNetwork");//.disabled=false;
+            for(var i=0; i<opciones.length; i++) {        
+                opciones[i].disabled = false;
+            }
         });
                 
     }
@@ -739,7 +748,6 @@
         </form>
     </div>
 </div>
-
 
 
 </div>
