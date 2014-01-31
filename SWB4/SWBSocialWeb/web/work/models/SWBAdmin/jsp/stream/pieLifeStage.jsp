@@ -189,14 +189,26 @@
 
 
         float intTotalVotos = young + child + teenAge + youngAdult + adult + thirdAge + nodefined;
-        float intPorcentajenodefined = ((float) nodefined * 100) / (float) totalPost;
-        float intPorcentajeYoung = ((float) young * 100) / (float) totalPost;
-        float intPorcentajeChild = ((float) child * 100) / (float) totalPost;
-        float intPorcentajeTeenAge = ((float) teenAge * 100) / (float) totalPost;
-        float intPorcentajeYoungAdult = ((float) youngAdult * 100) / (float) totalPost;
-        float intPorcentajeAdult = ((float) adult * 100) / (float) totalPost;
-        float intPorcentajeThirdAge = ((float) thirdAge * 100) / (float) totalPost;
+        float intPorcentajenodefined = 0;
+        float intPorcentajeYoung = 0;
+        float intPorcentajeChild = 0;
+        float intPorcentajeTeenAge = 0;
+        float intPorcentajeYoungAdult = 0;
+        float intPorcentajeAdult = 0;
+        float intPorcentajeThirdAge =0;
+        if (totalPost != 0) {
+         intPorcentajenodefined = ((float) nodefined * 100) / (float) totalPost;
+         intPorcentajeYoung = ((float) young * 100) / (float) totalPost;
+         intPorcentajeChild = ((float) child * 100) / (float) totalPost;
+         intPorcentajeTeenAge = ((float) teenAge * 100) / (float) totalPost;
+         intPorcentajeYoungAdult = ((float) youngAdult * 100) / (float) totalPost;
+         intPorcentajeAdult = ((float) adult * 100) / (float) totalPost;
+         intPorcentajeThirdAge = ((float) thirdAge * 100) / (float) totalPost;
+               }
 
+        int totalPositives = positivesAdult+positivesChild+positivesYoung+positivesnoDefine+positivesteenAge+positivesthirdAge+positivesyoungAdult;
+        int totalNegatives = negativesAdult+negativesChild+negativesYoung+negativesnoDefine+negativesteenAge+negativesthirdAge+negativesyoungAdult;
+        int totalNeutrals =  neutralsAdult+neutralsChild+neutralsYoung+neutralsnoDefine+neutralsteenAge+neutralsthirdAge+neutralsyoungAdult;
 
         JSONArray node = new JSONArray();
 
@@ -206,6 +218,11 @@
             node1.put("label", childTitle);
             node1.put("value1", "" + child);
             node1.put("value2", "" + round(intPorcentajeChild));
+            JSONObject joChild= new JSONObject();
+            joChild.put("positivos", "" + positivesChild);
+            joChild.put("negativos", "" + negativesChild);
+            joChild.put("neutros", "" + neutralsChild);
+            node1.put("valor", joChild);
             if (positivesChild > negativesChild && positivesChild > neutralsChild) {
                 node1.put("color", "#008000");
             } else if (negativesChild > neutralsChild) {
@@ -215,35 +232,25 @@
             }
             node1.put("label2", childTitle + " " + child + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesChild + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesChild + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsChild);
             node1.put("chartclass", "possClass");
-            node1.put("label3", "Total de Post: " + totalPost);
+             JSONObject joTotal = new JSONObject();
+            joTotal.put("positivos", "" + totalPositives);
+            joTotal.put("negativos", "" + totalNegatives);
+            joTotal.put("neutros", "" + totalNeutrals);
+            node1.put("label3", joTotal);        
             node.put(node1);
             //}
 
-            // if (young > 0) {
-            JSONObject node2 = new JSONObject();
-            node2.put("label", youngTitle);
-            node2.put("value1", "" + young);
-            node2.put("value2", "" + round(intPorcentajeYoung));
-            if (positivesYoung > negativesYoung && positivesYoung > neutralsYoung) {
-                node2.put("color", "#008000");
-            } else if (negativesYoung > neutralsYoung) {
-                node2.put("color", "#FF0000");
-            } else {
-                node2.put("color", "#FFD700");
-            }
-            node2.put("label2", youngTitle + " " + young + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesYoung + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesYoung + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsYoung);
-            node2.put("chartclass", "possClass");
-            node2.put("label3", "Total de Post: " + totalPost);
-
-            node.put(node2);
-            //}
-
-
-            //if (teenAge > 0) {
+            
+                       //if (teenAge > 0) {
             JSONObject node3 = new JSONObject();
             node3.put("label", teenTitle);
             node3.put("value1", "" + teenAge);
             node3.put("value2", "" + round(intPorcentajeTeenAge));
+            JSONObject joUndefine = new JSONObject();
+            joUndefine.put("positivos", "" + positivesteenAge);
+            joUndefine.put("negativos", "" + negativesteenAge);
+            joUndefine.put("neutros", "" + neutralsteenAge);
+            node3.put("valor", joUndefine);
             if (positivesteenAge > negativesteenAge && positivesteenAge > neutralsteenAge) {
                 node3.put("color", "#008000");
             } else if (negativesteenAge > neutralsteenAge) {
@@ -257,12 +264,43 @@
 
             node.put(node3);
             //}
+            
+            
+            // if (young > 0) {
+            JSONObject node2 = new JSONObject();
+            node2.put("label", youngTitle);
+            node2.put("value1", "" + young);
+            node2.put("value2", "" + round(intPorcentajeYoung));
+               JSONObject joYoung= new JSONObject();
+            joYoung.put("positivos", "" + positivesYoung);
+            joYoung.put("negativos", "" + negativesYoung);
+            joYoung.put("neutros", "" + neutralsYoung);
+            node2.put("valor", joYoung);
+            if (positivesYoung > negativesYoung && positivesYoung > neutralsYoung) {
+                node2.put("color", "#008000");
+            } else if (negativesYoung > neutralsYoung) {
+                node2.put("color", "#FF0000");
+            } else {
+                node2.put("color", "#FFD700");
+            }
+            node2.put("label2", youngTitle + " " + young + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesYoung + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesYoung + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsYoung);
+            node2.put("chartclass", "possClass");
+            node2.put("label3", "Total de Post: " + totalPost);
+
+            node.put(node2);
+            //}
+ 
 
             //   if (youngAdult > 0) {
             JSONObject node4 = new JSONObject();
             node4.put("label", youngAdultTitle);
             node4.put("value1", "" + youngAdult);
             node4.put("value2", "" + round(intPorcentajeYoungAdult));
+               JSONObject joYoungAdult= new JSONObject();
+            joYoungAdult.put("positivos", "" + positivesyoungAdult);
+            joYoungAdult.put("negativos", "" + negativesyoungAdult);
+            joYoungAdult.put("neutros", "" + neutralsyoungAdult);
+            node4.put("valor", joYoungAdult);
             if (positivesyoungAdult > negativesyoungAdult && positivesyoungAdult > neutralsyoungAdult) {
                 node4.put("color", "#008000");
             } else if (negativesyoungAdult > neutralsyoungAdult) {
@@ -283,6 +321,11 @@
             node5.put("label", adultTitle);
             node5.put("value1", "" + adult);
             node5.put("value2", "" + round(intPorcentajeAdult));
+            JSONObject joAdult= new JSONObject();
+            joAdult.put("positivos", "" + positivesAdult);
+            joAdult.put("negativos", "" + negativesAdult);
+            joAdult.put("neutros", "" + neutralsAdult);
+            node5.put("valor", joAdult);
             if (positivesAdult > negativesAdult && positivesAdult > neutralsAdult) {
                 node5.put("color", "#008000");
             } else if (negativesAdult > neutralsAdult) {
@@ -303,6 +346,11 @@
             node6.put("label", thirdTitle);
             node6.put("value1", "" + thirdAge);
             node6.put("value2", "" + round(intPorcentajeThirdAge));
+                JSONObject joThird= new JSONObject();
+            joThird.put("positivos", "" + positivesthirdAge);
+            joThird.put("negativos", "" + negativesthirdAge);
+            joThird.put("neutros", "" + neutralsthirdAge);
+            node6.put("valor", joThird);
             if (positivesthirdAge > negativesthirdAge && positivesthirdAge > neutralsthirdAge) {
                 node6.put("color", "#008000");
             } else if (negativesthirdAge > neutralsthirdAge) {
@@ -322,6 +370,11 @@
             node7.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("nodefine", lang));
             node7.put("value1", "" + nodefined);
             node7.put("value2", "" + round(intPorcentajenodefined));
+            JSONObject joNodefine= new JSONObject();
+            joNodefine.put("positivos", "" + positivesnoDefine);
+            joNodefine.put("negativos", "" + negativesnoDefine);
+            joNodefine.put("neutros", "" + neutralsnoDefine);
+            node7.put("valor", joNodefine);
             if (positivesnoDefine > negativesnoDefine && positivesnoDefine > neutralsnoDefine) {
                 node7.put("color", "#008000");
             } else if (negativesnoDefine > neutralsnoDefine) {
