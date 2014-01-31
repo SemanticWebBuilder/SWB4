@@ -189,6 +189,10 @@
                     para.appendChild(node);                   
                     var element=document.getElementById("pieGender");
                     element.appendChild(node);   
+                    var opciones =  document.getElementsByName("gender");//.disabled=false;
+                    for(var i=0; i<opciones.length; i++) {        
+                        opciones[i].disabled = false;
+                    }
                     // element.style="line-height: 250px; font-family:verdana; text-align: center; font-size: 10pt; color: orange;vertical-align: middle;"//padding-bottom: 115px; padding-top:115px"
                     return;    
                 }
@@ -379,10 +383,10 @@
                     cont++;
              
                 }       
-                       var opciones =  document.getElementsByName("gender");//.disabled=false;
-                    for(var i=0; i<opciones.length; i++) {        
-                        opciones[i].disabled = false;
-                    }
+                var opciones =  document.getElementsByName("gender");//.disabled=false;
+                for(var i=0; i<opciones.length; i++) {        
+                    opciones[i].disabled = false;
+                }
          
             });
                 
@@ -467,7 +471,11 @@
                     var node = document.createTextNode( "Sin datos para procesar" );
                     para.appendChild(node);                   
                     var element=document.getElementById("pieEducation");
-                    element.appendChild(para);           
+                    element.appendChild(para);   
+                    var opciones =  document.getElementsByName("education");//.disabled=false;
+                    for(var i=0; i<opciones.length; i++) {        
+                        opciones[i].disabled = false;
+                    }
                     // element.style="line-height: 250px; font-family:verdana; text-align: center; font-size: 10pt; color: orange;vertical-align: middle;"//padding-bottom: 115px; padding-top:115px"
                     return;
     
@@ -662,10 +670,10 @@
                     cont++;
        
                 }
-                             var opciones =  document.getElementsByName("education");//.disabled=false;
-                    for(var i=0; i<opciones.length; i++) {        
-                        opciones[i].disabled = false;
-                    }
+                var opciones =  document.getElementsByName("education");//.disabled=false;
+                for(var i=0; i<opciones.length; i++) {        
+                    opciones[i].disabled = false;
+                }
                                   
             });       
         }
@@ -747,7 +755,11 @@
                     var node = document.createTextNode( "Sin datos para procesar" );
                     para.appendChild(node);                   
                     var element=document.getElementById("pieRelationShipStatus");
-                    element.appendChild(para);           
+                    element.appendChild(para);     
+                    var opciones =  document.getElementsByName("relation");//.disabled=false;
+                    for(var i=0; i<opciones.length; i++) {        
+                        opciones[i].disabled = false;
+                    }
                     //element.style="line-height: 250px; font-family:verdana; text-align: center; font-size: 10pt; color: orange;vertical-align: middle;"//padding-bottom: 115px; padding-top:115px"
                     return;
     
@@ -947,10 +959,10 @@
                     cont++;
 
                 }
-                            var opciones =  document.getElementsByName("relation");//.disabled=false;
-                    for(var i=0; i<opciones.length; i++) {        
-                        opciones[i].disabled = false;
-                    }
+                var opciones =  document.getElementsByName("relation");//.disabled=false;
+                for(var i=0; i<opciones.length; i++) {        
+                    opciones[i].disabled = false;
+                }
             });
     
         }
@@ -1051,7 +1063,11 @@
                     var node = document.createTextNode( "Sin datos para procesar" );
                     para.appendChild(node);                          
                     var element=document.getElementById("profileLifeStage");
-                    element.appendChild(para);           
+                    element.appendChild(para);         
+                var opciones =  document.getElementsByName("life");//.disabled=false;
+                    for(var i=0; i<opciones.length; i++) {        
+                        opciones[i].disabled = false;
+                    }
                     //element.style="line-height: 250px; font-family:verdana; text-align: center; font-size: 10pt; color: orange;vertical-align: middle;"//padding-bottom: 115px; padding-top:115px"
                     return;
     
@@ -1262,10 +1278,10 @@
                     }
 
                 }
-                    var opciones =  document.getElementsByName("life");//.disabled=false;
-                    for(var i=0; i<opciones.length; i++) {        
-                        opciones[i].disabled = false;
-                    }
+                var opciones =  document.getElementsByName("life");//.disabled=false;
+                for(var i=0; i<opciones.length; i++) {        
+                    opciones[i].disabled = false;
+                }
             });
     
         }
@@ -1378,7 +1394,11 @@
                     var node = document.createTextNode( "Sin datos para procesar" );
                     para.appendChild(node);                   
                     var element=document.getElementById("profileGeoLocation");
-                    element.appendChild(node);           
+                    element.appendChild(node);       
+                    var opciones =  document.getElementsByName("geo");//.disabled=false;
+                    for(var i=0; i<opciones.length; i++) {        
+                        opciones[i].disabled = false;
+                    }
                     // element.style="line-height: 250px; font-family:verdana; text-align: center; font-size: 10pt; color: orange;vertical-align: middle;"//padding-bottom: 115px; padding-top:115px"
                     return;
     
@@ -1556,10 +1576,10 @@
                     }  
                     cont++;
                 }
-           var opciones =  document.getElementsByName("geo");//.disabled=false;
-            for(var i=0; i<opciones.length; i++) {        
-                opciones[i].disabled = false;
-            }
+                var opciones =  document.getElementsByName("geo");//.disabled=false;
+                for(var i=0; i<opciones.length; i++) {        
+                    opciones[i].disabled = false;
+                }
             });
     
         }  
