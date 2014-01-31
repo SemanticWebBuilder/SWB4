@@ -99,9 +99,13 @@
             }
         }
 
+        int totalPositives =  positivesMale+positivesFemale+positivesOther;
+        int totalNegatives =  negativesMale+negativesFemale+negativesOther;
+        int totalNeutrals =  neutralsMale+neutralsFemale+neutralsOther;
         JSONArray node = new JSONArray();
 
         //if (male > 0) {
+        System.out.println("FILTRO:"+filter);
         if (filter.equals("all")) {
             float intTotalVotos = male + female + other;
             float intPorcentajeMale = 0;
@@ -118,9 +122,9 @@
             node1.put("value1", "" + male);
             node1.put("value2", "" + round(intPorcentajeMale));
             JSONObject jor = new JSONObject();
-            jor.put("positivos", "" + round(positivesMale));
-            jor.put("negativos", "" + round(negativesMale));
-            jor.put("neutros", "" + round(neutralsMale));
+            jor.put("positivos", "" + positivesMale);
+            jor.put("negativos", "" + negativesMale);
+            jor.put("neutros", "" + neutralsMale);
             node1.put("valor", jor);
             if (positivesMale > negativesMale && positivesMale > neutralsMale) {
                 node1.put("color", "#008000");
@@ -131,7 +135,11 @@
             }
             node1.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("male", lang) + ": " + male + "     -     " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesMale + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " :" + negativesMale + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsMale);
             node1.put("chartclass", "possClass");
-            node1.put("label3", "Total de Post:" + totalPost);
+            JSONObject joTotal = new JSONObject();
+            joTotal.put("positivos", "" + totalPositives);
+            joTotal.put("negativos", "" + totalNegatives);
+            joTotal.put("neutros", "" + totalNeutrals);
+            node1.put("label3", joTotal);
             node.put(node1);
             //}
 
@@ -141,9 +149,9 @@
             node2.put("value1", "" + female);
             node2.put("value2", "" + round(intPorcentajeFemale));
             JSONObject joc = new JSONObject();
-            joc.put("positivos", "" + round(positivesFemale));
-            joc.put("negativos", "" + round(negativesFemale));
-            joc.put("neutros", "" + round(neutralsFemale));
+            joc.put("positivos", "" + positivesFemale);
+            joc.put("negativos", "" + negativesFemale);
+            joc.put("neutros", "" + neutralsFemale);
             node2.put("valor", joc);
             if (positivesFemale > negativesFemale && positivesFemale > neutralsFemale) {
                 node2.put("color", "#008000");
@@ -166,9 +174,9 @@
             node3.put("value1", "" + other);
             node3.put("value2", "" + round(intPorcentajeOther));
             JSONObject jo = new JSONObject();
-            jo.put("positivos", "" + round(positivesOther));
-            jo.put("negativos", "" + round(negativesOther));
-            jo.put("neutros", "" + round(neutralsOther));
+            jo.put("positivos", "" + positivesOther);
+            jo.put("negativos", "" + negativesOther);
+            jo.put("neutros", "" + neutralsOther);
             node3.put("valor", jo);
             if (positivesOther > negativesOther && positivesOther > neutralsOther) {
                 node3.put("color", "#008000");
