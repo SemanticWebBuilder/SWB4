@@ -415,11 +415,11 @@
                 var para = document.createElement("p");                                  
                 var node = document.createTextNode( "Sin datos para procesar" );
                 para.appendChild(node);                   
-                para.style="letter-spacing: 5px;"
+               // para.style="letter-spacing: 5px;"
                 //  para.style="text-shadow: grey 5px -5px 2px; ;letter-spacing: 5px;"                   
                 var element=document.getElementById("pieNetworkSocial");
                 element.appendChild(para);           
-                element. style="font-family:verdana; text-align: center; font-size: 20pt; color: orange;vertical-align: middle;padding-bottom: 115px; padding-top:115px;"
+               // element. style="font-family:verdana; text-align: center; font-size: 20pt; color: orange;vertical-align: middle;padding-bottom: 115px; padding-top:115px;"
                 //  element.style="opacity:0.3;position:center;left:50;width:50;height:200px;background-color:#8AC007"             
                 return;
     
