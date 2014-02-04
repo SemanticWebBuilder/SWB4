@@ -137,10 +137,10 @@
                 title = key.getTitle();
 
             }
+            title = title.toLowerCase();
             //System.out.println("title " + title);
             //map.put(title, map.containsKey(title) ? cad(map.get(title).toString(), postIn) : "1,1,0,0");
-
-            if (title.contains("No definido")) {
+            if (title.contains("no definido")) {
                 nodefinido.add(postIn);
             } else if (title.contains("aguascalientes")) {
                 aguascalientes.add(postIn);
@@ -353,12 +353,13 @@
                 negativesCoahuila++;
             }
         }
-        float intPorcentajeCohauila = ((float) totalCoahuila * 100) / (float) totalPost;
+        float intPorcentajeCohauila = 0;
         float porcentajeNeutralsCoahuila = 0;
         float porcentajePositivesCoahuila = 0;
         float porcentajeNegativesCohauila = 0;
 
         if (totalCoahuila != 0) {
+            intPorcentajeCohauila = ((float) totalCoahuila * 100) / (float) totalPost;
             porcentajeNeutralsCoahuila = ((float) neutralsCoahuila * 100) / (float) totalCoahuila;
             porcentajePositivesCoahuila = ((float) positivesCoahuia * 100) / (float) totalCoahuila;
             porcentajeNegativesCohauila = ((float) negativesCoahuila * 100) / (float) totalCoahuila;
@@ -1130,22 +1131,6 @@
                     + neutralsnayarit + neutralsnodefined + neutralsnuevoLeon + neutralsoaxaca + neutralspuebla + neutralsqueretaro + neutralsquintanaRoo + neutralssanLuis + neutralssinaloa + neutralssonora
                     + neutralstabasco + neutralstamaulipas + neutralstlaxcala + neutralsveracruz + neutralsyucatan + neutralszacatecas;
 
-            if(totalPositives==0&&totalNegatives==0&&totalNeutrals==0){
-                 JSONObject node4 = new JSONObject();
-                node4.put("label", "Sin Datos");
-                node4.put("value1", "0");
-                node4.put("value2", "100");
-                node4.put("color", "#E6E6E6");
-                node4.put("chartclass", "neuClass");
-                JSONObject jor = new JSONObject();
-                jor.put("positivos", "" + totalPositives);
-                jor.put("negativos", "" + totalNegatives);
-                jor.put("neutros", "" + totalNeutrals);
-                node4.put("valor", jor);
-                node.put(node4);
-                return node;
-            
-            }
 
             getJson(node, "Aguascalientes", totalAguascalientes, intPorcentajeAguascalientes, positivesAguascalientes, negativesAguascalientes, neutralsAguascalientes, totalPost, true, totalPositives, totalNegatives, totalNeutrals);
             getJson(node, "Baja California", totalbCalifornia, intPorcentajeBajaCalifornia, positivesbCalifornia, negativesbCalifornia, neutralsbCalifornia, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
@@ -1167,7 +1152,7 @@
             getJson(node, "Nayarit", totalnayarit, intPorcentajenayarit, positivesnayarit, negativesnayarit, neutralsnayarit, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
             getJson(node, "Nuevo Leon", totalnuevoLeon, intPorcentajenuevoLeon, positivesnuevoLeon, negativesnuevoLeon, neutralsnuevoLeon, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
             getJson(node, "Oaxaca", totaloaxaca, intPorcentajeoaxaca, positivesoaxaca, negativesoaxaca, neutralsoaxaca, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
-            getJson(node, "Puebla", totaloaxaca, intPorcentajepuebla, positivespuebla, negativespuebla, neutralspuebla, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Puebla", totalpuebla, intPorcentajepuebla, positivespuebla, negativespuebla, neutralspuebla, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
             getJson(node, "Querétaro", totalqueretaro, intPorcentajequeretaro, positivesqueretaro, negativesqueretaro, neutralsqueretaro, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
             getJson(node, "Quintana Roo", totalquintanaRoo, intPorcentajequintanaRoo, positivesquintanaRoo, negativesquintanaRoo, neutralsquintanaRoo, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
             getJson(node, "San Luis Potosi", totalsanLuis, intPorcentajesanLuis, positivessanLuis, negativessanLuis, neutralssanLuis, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
