@@ -163,6 +163,10 @@
 
             document.getElementById("hrefGender").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "gender").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>&filterGeneral="+val ;
      
+            var opciones =  document.getElementsByName("gender");//.disabled=false;
+            for(var i=0; i<opciones.length; i++) {        
+                opciones[i].disabled = true;
+            }
             var xArray = new Array();
             var color = d3.scale.category10();
             var width = 760,
@@ -184,16 +188,7 @@
             
             d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieGender.jsp<%=args%>&filter="+parametro, function(error, data) {
                     
-                if(data==""){
-                            
-                    var opciones =  document.getElementsByName("gender");//.disabled=false;
-                    for(var i=0; i<opciones.length; i++) {        
-                        opciones[i].disabled = false;
-                    }
-                    // element.style="line-height: 250px; font-family:verdana; text-align: center; font-size: 10pt; color: orange;vertical-align: middle;"//padding-bottom: 115px; padding-top:115px"
-                 
-                }
-                
+               
                 var svg = d3.select("#pieGender").append("svg")
                 .attr("width", width)
                 .attr("height", height)
@@ -212,7 +207,7 @@
                 .on("change", change);
       
                 function change() {
-                   // console.log('entro a change');
+                    // console.log('entro a change');
                      
                     var opciones =  document.getElementsByName("gender");//.disabled=false;
                     for(var i=0; i<opciones.length; i++) {        
@@ -440,6 +435,11 @@
             var val = document.querySelector('input[name="education"]:checked').value;
             document.getElementById("hrefEducation").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "education").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>&filterGeneral="+val ;
      
+            var opciones =  document.getElementsByName("education");//.disabled=false;
+            for(var i=0; i<opciones.length; i++) {        
+                opciones[i].disabled = true;
+            }
+                    
             var educationArray = new Array();
             var color = d3.scale.category10();
             var width = 760,
@@ -466,19 +466,6 @@
                     
             d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieEducation.jsp<%=args%>&filter="+parametro, function(error, data) {
             
-                if(data==""){                 
-                    var svg = d3.selectAll("#pieEducation").append("svg")                
-                    // .attr("xlink:href", "http://www.e-pint.com/epint.jpg")
-                    //.attr("width", 150)
-                    //.attr("height", 200);
-                    var opciones =  document.getElementsByName("education");//.disabled=false;
-                    for(var i=0; i<opciones.length; i++) {        
-                        opciones[i].disabled = false;
-                    }
-                    // element.style="line-height: 250px; font-family:verdana; text-align: center; font-size: 10pt; color: orange;vertical-align: middle;"//padding-bottom: 115px; padding-top:115px"
-                    return;
-    
-                }
 
                 document.getElementById("pieEducation").removeAttribute("style");
                 var svg = d3.select("#pieEducation").append("svg")
@@ -733,7 +720,11 @@
             document.getElementById('pieRelationShipStatus').innerHTML="";
             var val = document.querySelector('input[name="relation"]:checked').value;
             document.getElementById("hrefRelation").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "relation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>&filterGeneral="+val ;
-
+            var opciones =  document.getElementsByName("relation");//.disabled=false;
+            for(var i=0; i<opciones.length; i++) {        
+                opciones[i].disabled = true;
+            }
+                    
             var relationArray = new Array();
             var width = 760,
             height = 300,
@@ -753,18 +744,6 @@
 
             d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieRelationShipStatus.jsp<%=args%>&filter="+parametro, function(error, data) {
             
-                if(data==""){
-                    var svg = d3.selectAll("#pieRelationShipStatus").append("svg")                
-                   
-                    var opciones =  document.getElementsByName("relation");//.disabled=false;
-                    for(var i=0; i<opciones.length; i++) {        
-                        opciones[i].disabled = false;
-                    }
-                    //element.style="line-height: 250px; font-family:verdana; text-align: center; font-size: 10pt; color: orange;vertical-align: middle;"//padding-bottom: 115px; padding-top:115px"
-                    return;
-    
-                }
-
                 document.getElementById("pieRelationShipStatus").removeAttribute("style");
             
                 var svg = d3.select("#pieRelationShipStatus").append("svg")
@@ -1037,7 +1016,10 @@
 
             var val = document.querySelector('input[name="life"]:checked').value;
             document.getElementById("hrefLife").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "lifeStage").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>&filterGeneral="+val ;
-     
+            var opciones =  document.getElementsByName("life");//.disabled=false;
+            for(var i=0; i<opciones.length; i++) {        
+                opciones[i].disabled = true;
+            }
 
             var width = 760,
             height = 300,
@@ -1062,18 +1044,6 @@
 
             d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieLifeStage.jsp<%=args%>&filter="+parametro, function(error, data) {
             
-                if(data==""){
-                    var svg = d3.selectAll("#profileLifeStage").append("svg")              
-                
-                    var opciones =  document.getElementsByName("life");//.disabled=false;
-                    for(var i=0; i<opciones.length; i++) {        
-                        opciones[i].disabled = false;
-                    }
-                    //element.style="line-height: 250px; font-family:verdana; text-align: center; font-size: 10pt; color: orange;vertical-align: middle;"//padding-bottom: 115px; padding-top:115px"
-                    return;
-    
-                }
-
                 document.getElementById("profileLifeStage").removeAttribute("style");
             
                 var svg = d3.select("#profileLifeStage").append("svg")
@@ -1094,7 +1064,7 @@
                 .on("change", change);
       
                 function change() {
-                   // console.log('entro a change');
+                    // console.log('entro a change');
                     var opciones =  document.getElementsByName("life");//.disabled=false;
                     for(var i=0; i<opciones.length; i++) {        
                         opciones[i].disabled = true;
@@ -1196,92 +1166,92 @@
                     lifeStageArray.push(data[i].valor);                                            
                 }  
             
-            if(lifeStageArray.length!=1){
+                if(lifeStageArray.length!=1){
                 
         
-                if(cont == 0){
-                    for (var x = 0; x < data.length; x++) {  
-                        total = data[x].label3;
-                        //console.log("total"+total);
-                        var paraPositives= document.createElement("p");   
-                        var paraNegatives= document.createElement("p");   
-                        var paraNeutrals= document.createElement("p");   
+                    if(cont == 0){
+                        for (var x = 0; x < data.length; x++) {  
+                            total = data[x].label3;
+                            //console.log("total"+total);
+                            var paraPositives= document.createElement("p");   
+                            var paraNegatives= document.createElement("p");   
+                            var paraNeutrals= document.createElement("p");   
                             
-                        var nodePositives = document.createTextNode( total.positivos );
-                        var nodeNegatives= document.createTextNode( total.negativos );
-                        var nodeNeutrals = document.createTextNode( total.neutros );
+                            var nodePositives = document.createTextNode( total.positivos );
+                            var nodeNegatives= document.createTextNode( total.negativos );
+                            var nodeNeutrals = document.createTextNode( total.neutros );
 
                             
-                        paraPositives.appendChild(nodePositives);
-                        paraNegatives.appendChild(nodeNegatives);
-                        paraNeutrals.appendChild(nodeNeutrals);
-                        var element =   document.getElementById("lAll");                            
-                        element.appendChild(paraPositives);
-                        element.appendChild(paraNegatives);
-                        element.appendChild(paraNeutrals);
-                        break;
-                        cont++;
-                    } 
+                            paraPositives.appendChild(nodePositives);
+                            paraNegatives.appendChild(nodeNegatives);
+                            paraNeutrals.appendChild(nodeNeutrals);
+                            var element =   document.getElementById("lAll");                            
+                            element.appendChild(paraPositives);
+                            element.appendChild(paraNegatives);
+                            element.appendChild(paraNeutrals);
+                            break;
+                            cont++;
+                        } 
            
                         
 
                                           
-                    for (var j = 0; j <lifeStageArray.length ; j++) {   
-                        var paraPositive = document.createElement("p");                                  
-                        var paraNegative = document.createElement("p");                                  
-                        var paraNeutrals = document.createElement("p");                                  
+                        for (var j = 0; j <lifeStageArray.length ; j++) {   
+                            var paraPositive = document.createElement("p");                                  
+                            var paraNegative = document.createElement("p");                                  
+                            var paraNeutrals = document.createElement("p");                                  
                        
                         
-                        var myJSONObject = lifeStageArray[j];
+                            var myJSONObject = lifeStageArray[j];
                         
-                        var nodePositives = document.createTextNode(myJSONObject.positivos);
-                        var nodeNegatives = document.createTextNode(myJSONObject.negativos);
-                        var nodeNeutros = document.createTextNode(myJSONObject.neutros );             
+                            var nodePositives = document.createTextNode(myJSONObject.positivos);
+                            var nodeNegatives = document.createTextNode(myJSONObject.negativos);
+                            var nodeNeutros = document.createTextNode(myJSONObject.neutros );             
                         
-                        paraPositive.appendChild(nodePositives);
-                        paraNegative.appendChild(nodeNegatives);
-                        paraNeutrals.appendChild(nodeNeutros);
-                        var element; 
+                            paraPositive.appendChild(nodePositives);
+                            paraNegative.appendChild(nodeNegatives);
+                            paraNeutrals.appendChild(nodeNeutros);
+                            var element; 
                             
-                        if(j==0){
-                            element =   document.getElementById("lChild");                            
-                            element.appendChild(paraPositive);
-                            element.appendChild(paraNegative);
-                            element.appendChild(paraNeutrals);
-                        }else if(j==1){
-                            element =   document.getElementById("lTeenAge");                            
-                            element.appendChild(paraPositive);
-                            element.appendChild(paraNegative);
-                            element.appendChild(paraNeutrals);
-                        }else if(j==2){
-                            element =   document.getElementById("lYoung");                            
-                            element.appendChild(paraPositive);
-                            element.appendChild(paraNegative);
-                            element.appendChild(paraNeutrals);
-                        }else if(j==3){
-                            element =   document.getElementById("lYoungAdult");                            
-                            element.appendChild(paraPositive);
-                            element.appendChild(paraNegative);
-                            element.appendChild(paraNeutrals);
-                        }else if(j==4){
-                            element =   document.getElementById("lAdul");                            
-                            element.appendChild(paraPositive);
-                            element.appendChild(paraNegative);
-                            element.appendChild(paraNeutrals);
-                        }else if(j==5){
-                            element =   document.getElementById("lThirdAge");                            
-                            element.appendChild(paraPositive);
-                            element.appendChild(paraNegative);
-                            element.appendChild(paraNeutrals);
-                        }else if(j==6){
-                            element =   document.getElementById("lNodefine");                            
-                            element.appendChild(paraPositive);
-                            element.appendChild(paraNegative);
-                            element.appendChild(paraNeutrals);
+                            if(j==0){
+                                element =   document.getElementById("lChild");                            
+                                element.appendChild(paraPositive);
+                                element.appendChild(paraNegative);
+                                element.appendChild(paraNeutrals);
+                            }else if(j==1){
+                                element =   document.getElementById("lTeenAge");                            
+                                element.appendChild(paraPositive);
+                                element.appendChild(paraNegative);
+                                element.appendChild(paraNeutrals);
+                            }else if(j==2){
+                                element =   document.getElementById("lYoung");                            
+                                element.appendChild(paraPositive);
+                                element.appendChild(paraNegative);
+                                element.appendChild(paraNeutrals);
+                            }else if(j==3){
+                                element =   document.getElementById("lYoungAdult");                            
+                                element.appendChild(paraPositive);
+                                element.appendChild(paraNegative);
+                                element.appendChild(paraNeutrals);
+                            }else if(j==4){
+                                element =   document.getElementById("lAdul");                            
+                                element.appendChild(paraPositive);
+                                element.appendChild(paraNegative);
+                                element.appendChild(paraNeutrals);
+                            }else if(j==5){
+                                element =   document.getElementById("lThirdAge");                            
+                                element.appendChild(paraPositive);
+                                element.appendChild(paraNegative);
+                                element.appendChild(paraNeutrals);
+                            }else if(j==6){
+                                element =   document.getElementById("lNodefine");                            
+                                element.appendChild(paraPositive);
+                                element.appendChild(paraNegative);
+                                element.appendChild(paraNeutrals);
+                            }
+                            cont++;
                         }
-                        cont++;
                     }
-                }
 
                 }
                 var opciones =  document.getElementsByName("life");//.disabled=false;
@@ -1375,6 +1345,11 @@
             var val = document.querySelector('input[name="geo"]:checked').value;
             document.getElementById("hrefGeo").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>&filterGeneral="+val ;
      
+            var opciones =  document.getElementsByName("geo");//.disabled=false;
+            for(var i=0; i<opciones.length; i++) {        
+                opciones[i].disabled = true;
+            }
+                    
             var width = 760,
             height = 300,
             radius = Math.min(width, height) / 2;
@@ -1395,16 +1370,6 @@
    
 
             d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieProfileGeoLocation.jsp<%=args%>&filter="+parametro, function(error, data) {
-                if(data==""){
-                    var svg = d3.selectAll("#profileGeoLocation").append("svg")              
-                    var opciones =  document.getElementsByName("geo");//.disabled=false;
-                    for(var i=0; i<opciones.length; i++) {        
-                        opciones[i].disabled = false;
-                    }
-                    // element.style="line-height: 250px; font-family:verdana; text-align: center; font-size: 10pt; color: orange;vertical-align: middle;"//padding-bottom: 115px; padding-top:115px"
-                    return;
-    
-                }
 
                 document.getElementById("profileGeoLocation").removeAttribute("style");
             
@@ -1426,7 +1391,7 @@
                 .on("change", change);
       
                 function change() {
-                  //  console.log('entro a change');
+                    //  console.log('entro a change');
                     var opciones =  document.getElementsByName("geo");//.disabled=false;
                     for(var i=0; i<opciones.length; i++) {        
                         opciones[i].disabled = true;
@@ -1532,52 +1497,52 @@
                 if(cont  == 0){
                     
                     if(data.length!=1){
-                    for (var x = 0; x < data.length; x++) {  
-                        var to;
-                        to = data[x].label3;
-                        var paraPositives= document.createElement("p");   
-                        var paraNegatives= document.createElement("p");   
-                        var paraNeutrals= document.createElement("p");   
+                        for (var x = 0; x < data.length; x++) {  
+                            var to;
+                            to = data[x].label3;
+                            var paraPositives= document.createElement("p");   
+                            var paraNegatives= document.createElement("p");   
+                            var paraNeutrals= document.createElement("p");   
                             
 
-                        var nodPositives = document.createTextNode(to.positivos);
-                        var nodNegatives= document.createTextNode(to.negativos);
-                        var nodNeutrals = document.createTextNode(to.neutros);
+                            var nodPositives = document.createTextNode(to.positivos);
+                            var nodNegatives= document.createTextNode(to.negativos);
+                            var nodNeutrals = document.createTextNode(to.neutros);
                             
-                        paraPositives.appendChild(nodPositives);
-                        paraNegatives.appendChild(nodNegatives);
-                        paraNeutrals.appendChild(nodNeutrals);
+                            paraPositives.appendChild(nodPositives);
+                            paraNegatives.appendChild(nodNegatives);
+                            paraNeutrals.appendChild(nodNeutrals);
                         
-                        var element = document.getElementById("todogeoDiv");                            
-                        element.appendChild(paraPositives);
-                        element.appendChild(paraNegatives);
-                        element.appendChild(paraNeutrals);
-                        break;
-                        cont++;
-                    }       
+                            var element = document.getElementById("todogeoDiv");                            
+                            element.appendChild(paraPositives);
+                            element.appendChild(paraNegatives);
+                            element.appendChild(paraNeutrals);
+                            break;
+                            cont++;
+                        }       
                         
-                    for (var i = 0; i < data.length; i++) {        
-                        if(data[i].label==="No definido"){
+                        for (var i = 0; i < data.length; i++) {        
+                            if(data[i].label==="No definido"){
                            
-                            var pPositives= document.createElement("p");   
-                            var pNegatives= document.createElement("p");   
-                            var pNeutrals= document.createElement("p");   
-                            var myJSONObject = data[i].valor; 
+                                var pPositives= document.createElement("p");   
+                                var pNegatives= document.createElement("p");   
+                                var pNeutrals= document.createElement("p");   
+                                var myJSONObject = data[i].valor; 
                         
-                            var nodePositives = document.createTextNode(myJSONObject.positivos);
-                            var nodeNegatives = document.createTextNode(myJSONObject.negativos);
-                            var nodeNeutros = document.createTextNode(myJSONObject.neutros );             
+                                var nodePositives = document.createTextNode(myJSONObject.positivos);
+                                var nodeNegatives = document.createTextNode(myJSONObject.negativos);
+                                var nodeNeutros = document.createTextNode(myJSONObject.neutros );             
                         
-                            pPositives.appendChild(nodePositives);
-                            pNegatives.appendChild(nodeNegatives);
-                            pNeutrals.appendChild(nodeNeutros);
+                                pPositives.appendChild(nodePositives);
+                                pNegatives.appendChild(nodeNegatives);
+                                pNeutrals.appendChild(nodeNeutros);
                         
-                            var element=document.getElementById("indegeoDiv");
-                            element.appendChild(pPositives);
-                            element.appendChild(pNegatives);
-                            element.appendChild(pNeutrals);
-                        }                       
-                    }  
+                                var element=document.getElementById("indegeoDiv");
+                                element.appendChild(pPositives);
+                                element.appendChild(pNegatives);
+                                element.appendChild(pNeutrals);
+                            }                       
+                        }  
                     }
                     cont++;
                 }
