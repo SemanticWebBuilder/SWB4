@@ -115,6 +115,17 @@
             float intPorcentajePositives = 0;
             float intPorcentajeNegatives = 0;
 
+            if(positives==0 && negatives==0 && neutrals ==0){
+                JSONObject node3 = new JSONObject();
+                node3.put("label", "Sin Datos");
+                node3.put("value1", "0");
+                node3.put("value2", "100");
+                node3.put("color", "#E6E6E6");
+                node3.put("chartclass", "neuClass");
+                node.put(node3);
+                return node;
+            }
+            
             if (total != 0) {
                 intPorcentajeNeutrals = ((float) neutrals * 100) / (float) total;
                 intPorcentajePositives = ((float) positives * 100) / (float) total;
@@ -158,10 +169,7 @@
             }
 
         }
-
-
-
-
+        
         return node;
     }
 
