@@ -195,30 +195,44 @@
         float intPorcentajeTeenAge = 0;
         float intPorcentajeYoungAdult = 0;
         float intPorcentajeAdult = 0;
-        float intPorcentajeThirdAge =0;
+        float intPorcentajeThirdAge = 0;
         if (totalPost != 0) {
-         intPorcentajenodefined = ((float) nodefined * 100) / (float) totalPost;
-         intPorcentajeYoung = ((float) young * 100) / (float) totalPost;
-         intPorcentajeChild = ((float) child * 100) / (float) totalPost;
-         intPorcentajeTeenAge = ((float) teenAge * 100) / (float) totalPost;
-         intPorcentajeYoungAdult = ((float) youngAdult * 100) / (float) totalPost;
-         intPorcentajeAdult = ((float) adult * 100) / (float) totalPost;
-         intPorcentajeThirdAge = ((float) thirdAge * 100) / (float) totalPost;
-               }
+            intPorcentajenodefined = ((float) nodefined * 100) / (float) totalPost;
+            intPorcentajeYoung = ((float) young * 100) / (float) totalPost;
+            intPorcentajeChild = ((float) child * 100) / (float) totalPost;
+            intPorcentajeTeenAge = ((float) teenAge * 100) / (float) totalPost;
+            intPorcentajeYoungAdult = ((float) youngAdult * 100) / (float) totalPost;
+            intPorcentajeAdult = ((float) adult * 100) / (float) totalPost;
+            intPorcentajeThirdAge = ((float) thirdAge * 100) / (float) totalPost;
+        }
 
-        int totalPositives = positivesAdult+positivesChild+positivesYoung+positivesnoDefine+positivesteenAge+positivesthirdAge+positivesyoungAdult;
-        int totalNegatives = negativesAdult+negativesChild+negativesYoung+negativesnoDefine+negativesteenAge+negativesthirdAge+negativesyoungAdult;
-        int totalNeutrals =  neutralsAdult+neutralsChild+neutralsYoung+neutralsnoDefine+neutralsteenAge+neutralsthirdAge+neutralsyoungAdult;
+        int totalPositives = positivesAdult + positivesChild + positivesYoung + positivesnoDefine + positivesteenAge + positivesthirdAge + positivesyoungAdult;
+        int totalNegatives = negativesAdult + negativesChild + negativesYoung + negativesnoDefine + negativesteenAge + negativesthirdAge + negativesyoungAdult;
+        int totalNeutrals = neutralsAdult + neutralsChild + neutralsYoung + neutralsnoDefine + neutralsteenAge + neutralsthirdAge + neutralsyoungAdult;
 
         JSONArray node = new JSONArray();
 
         if (filter.equals("all")) {
+
+             if (child == 0 && young == 0 && teenAge == 0 && youngAdult == 0 && adult == 0 && thirdAge == 0 && nodefined == 0) {
+
+                JSONObject node4 = new JSONObject();
+                node4.put("label", "Sin Datos");
+                node4.put("value1", "0");
+                node4.put("value2", "100");
+                node4.put("color", "#E6E6E6");
+                node4.put("chartclass", "neuClass");
+                node.put(node4);
+                return node;
+
+            }
+
             //if (child > 0) {
             JSONObject node1 = new JSONObject();
             node1.put("label", childTitle);
             node1.put("value1", "" + child);
             node1.put("value2", "" + round(intPorcentajeChild));
-            JSONObject joChild= new JSONObject();
+            JSONObject joChild = new JSONObject();
             joChild.put("positivos", "" + positivesChild);
             joChild.put("negativos", "" + negativesChild);
             joChild.put("neutros", "" + neutralsChild);
@@ -232,16 +246,16 @@
             }
             node1.put("label2", childTitle + " " + child + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesChild + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesChild + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsChild);
             node1.put("chartclass", "possClass");
-             JSONObject joTotal = new JSONObject();
+            JSONObject joTotal = new JSONObject();
             joTotal.put("positivos", "" + totalPositives);
             joTotal.put("negativos", "" + totalNegatives);
             joTotal.put("neutros", "" + totalNeutrals);
-            node1.put("label3", joTotal);        
+            node1.put("label3", joTotal);
             node.put(node1);
             //}
 
-            
-                       //if (teenAge > 0) {
+
+            //if (teenAge > 0) {
             JSONObject node3 = new JSONObject();
             node3.put("label", teenTitle);
             node3.put("value1", "" + teenAge);
@@ -264,14 +278,14 @@
 
             node.put(node3);
             //}
-            
-            
+
+
             // if (young > 0) {
             JSONObject node2 = new JSONObject();
             node2.put("label", youngTitle);
             node2.put("value1", "" + young);
             node2.put("value2", "" + round(intPorcentajeYoung));
-               JSONObject joYoung= new JSONObject();
+            JSONObject joYoung = new JSONObject();
             joYoung.put("positivos", "" + positivesYoung);
             joYoung.put("negativos", "" + negativesYoung);
             joYoung.put("neutros", "" + neutralsYoung);
@@ -289,14 +303,14 @@
 
             node.put(node2);
             //}
- 
+
 
             //   if (youngAdult > 0) {
             JSONObject node4 = new JSONObject();
             node4.put("label", youngAdultTitle);
             node4.put("value1", "" + youngAdult);
             node4.put("value2", "" + round(intPorcentajeYoungAdult));
-               JSONObject joYoungAdult= new JSONObject();
+            JSONObject joYoungAdult = new JSONObject();
             joYoungAdult.put("positivos", "" + positivesyoungAdult);
             joYoungAdult.put("negativos", "" + negativesyoungAdult);
             joYoungAdult.put("neutros", "" + neutralsyoungAdult);
@@ -321,7 +335,7 @@
             node5.put("label", adultTitle);
             node5.put("value1", "" + adult);
             node5.put("value2", "" + round(intPorcentajeAdult));
-            JSONObject joAdult= new JSONObject();
+            JSONObject joAdult = new JSONObject();
             joAdult.put("positivos", "" + positivesAdult);
             joAdult.put("negativos", "" + negativesAdult);
             joAdult.put("neutros", "" + neutralsAdult);
@@ -346,7 +360,7 @@
             node6.put("label", thirdTitle);
             node6.put("value1", "" + thirdAge);
             node6.put("value2", "" + round(intPorcentajeThirdAge));
-                JSONObject joThird= new JSONObject();
+            JSONObject joThird = new JSONObject();
             joThird.put("positivos", "" + positivesthirdAge);
             joThird.put("negativos", "" + negativesthirdAge);
             joThird.put("neutros", "" + neutralsthirdAge);
@@ -370,7 +384,7 @@
             node7.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("nodefine", lang));
             node7.put("value1", "" + nodefined);
             node7.put("value2", "" + round(intPorcentajenodefined));
-            JSONObject joNodefine= new JSONObject();
+            JSONObject joNodefine = new JSONObject();
             joNodefine.put("positivos", "" + positivesnoDefine);
             joNodefine.put("negativos", "" + negativesnoDefine);
             joNodefine.put("neutros", "" + neutralsnoDefine);
@@ -393,6 +407,17 @@
 
             // }
         } else if (filter.equals("child")) {
+
+            if (positivesChild == 0 && negativesChild == 0 && neutralsChild == 0) {
+                JSONObject node3 = new JSONObject();
+                node3.put("label", "Sin Datos");
+                node3.put("value1", "0");
+                node3.put("value2", "100");
+                node3.put("color", "#E6E6E6");
+                node3.put("chartclass", "neuClass");
+                node.put(node3);
+                return node;
+            }
 
             float intPorcentajeChildNeutrals = 0;
             float intPorcentajeChildPositives = 0;
@@ -441,6 +466,17 @@
             }
 
         } else if (filter.equals("young")) {
+
+            if (positivesYoung == 0 && negativesYoung == 0 && neutralsYoung == 0) {
+                JSONObject node3 = new JSONObject();
+                node3.put("label", "Sin Datos");
+                node3.put("value1", "0");
+                node3.put("value2", "100");
+                node3.put("color", "#E6E6E6");
+                node3.put("chartclass", "neuClass");
+                node.put(node3);
+                return node;
+            }
 
             float intPorcentajeYoungNeutrals = 0;
             float intPorcentajeYoungPositives = 0;
@@ -491,6 +527,17 @@
 
         } else if (filter.equals("teenAge")) {
 
+            if (positivesteenAge == 0 && negativesteenAge == 0 && neutralsteenAge == 0) {
+                JSONObject node3 = new JSONObject();
+                node3.put("label", "Sin Datos");
+                node3.put("value1", "0");
+                node3.put("value2", "100");
+                node3.put("color", "#E6E6E6");
+                node3.put("chartclass", "neuClass");
+                node.put(node3);
+                return node;
+            }
+
             float intPorcentajeTeenAgeNeutrals = 0;
             float intPorcentajeTeenAgePositives = 0;
             float intPorcentajeTeenAgeNegatives = 0;
@@ -539,6 +586,17 @@
             }
 
         } else if (filter.equals("youngAdult")) {
+
+            if (positivesyoungAdult == 0 && negativesyoungAdult == 0 && neutralsyoungAdult == 0) {
+                JSONObject node3 = new JSONObject();
+                node3.put("label", "Sin Datos");
+                node3.put("value1", "0");
+                node3.put("value2", "100");
+                node3.put("color", "#E6E6E6");
+                node3.put("chartclass", "neuClass");
+                node.put(node3);
+                return node;
+            }
 
             float intPorcentajeYoungAdultNeutrals = 0;
             float intPorcentajeYoungAdultPositives = 0;
@@ -589,6 +647,17 @@
 
         } else if (filter.equals("adult")) {
 
+            if (positivesAdult == 0 && negativesAdult == 0 && neutralsAdult == 0) {
+                JSONObject node3 = new JSONObject();
+                node3.put("label", "Sin Datos");
+                node3.put("value1", "0");
+                node3.put("value2", "100");
+                node3.put("color", "#E6E6E6");
+                node3.put("chartclass", "neuClass");
+                node.put(node3);
+                return node;
+            }
+
             float intPorcentajeAdultNeutrals = 0;
             float intPorcentajeAdultPositives = 0;
             float intPorcentajeAdultNegatives = 0;
@@ -636,6 +705,17 @@
             }
 
         } else if (filter.equals("thirdAge")) {
+            
+              if (positivesthirdAge == 0 && negativesthirdAge == 0 && neutralsthirdAge == 0) {
+                JSONObject node3 = new JSONObject();
+                node3.put("label", "Sin Datos");
+                node3.put("value1", "0");
+                node3.put("value2", "100");
+                node3.put("color", "#E6E6E6");
+                node3.put("chartclass", "neuClass");
+                node.put(node3);
+                return node;
+            }
 
             float intPorcentajeThirdNeutrals = 0;
             float intPorcentajeThirdPositives = 0;
@@ -684,6 +764,17 @@
             }
 
         } else if (filter.equals("nodefine")) {
+            
+              if (positivesnoDefine == 0 && negativesnoDefine == 0 && neutralsnoDefine == 0) {
+                JSONObject node3 = new JSONObject();
+                node3.put("label", "Sin Datos");
+                node3.put("value1", "0");
+                node3.put("value2", "100");
+                node3.put("color", "#E6E6E6");
+                node3.put("chartclass", "neuClass");
+                node.put(node3);
+                return node;
+            }
 
             float intPorcentajenoDefineNeutrals = 0;
             float intPorcentajenoDefinePositives = 0;
@@ -732,41 +823,7 @@
                 node.put(node6);
             }
 
-        } else if (filter.equals("x")) {
-
-            if (child == 0 && young == 0 && teenAge == 0 && youngAdult == 0 && adult == 0 && thirdAge == 0 && nodefined == 0) {
-                //System.out.println("ENTROOOOOOOOOOOOOOOLIFE");
-                node.remove(6);
-                node.remove(5);
-                node.remove(4);
-                node.remove(3);
-                node.remove(2);
-                node.remove(1);
-                node.remove(0);
-
-                JSONObject node8 = new JSONObject();
-                node8.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("nodefined", lang));
-                node8.put("value1", "0");
-                node8.put("value2", "100");
-                if (positivesnoDefine > negativesnoDefine && positivesnoDefine > neutralsnoDefine) {
-                    node8.put("color", "#86c440");
-                } else if (negativesnoDefine > neutralsnoDefine) {
-                    node8.put("color", "#990000");
-                } else {
-                    node8.put("color", "#eae8e3");
-                }
-                node8.put("chartclass", "neuClass");
-                node8.put("label2", "Sin datos para procesar");
-                node8.put("label3", "Total de Post: " + totalPost);
-
-                node.put(node8);
-
-            }
-
-        }
-
-
-
+        } 
         return node;
     }
 
