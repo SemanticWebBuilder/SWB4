@@ -164,25 +164,7 @@
 
         if (filter.equals("all")) {
 
-            if (single == 0 && married == 0 && divorced == 0 && widowed == 0 && undefined == 0) {
-
-                JSONObject node4 = new JSONObject();
-                node4.put("label", "Sin Datos");
-                node4.put("value1", "0");
-                node4.put("value2", "100");
-                node4.put("color", "#E6E6E6");
-                node4.put("chartclass", "neuClass");
-                JSONObject jor = new JSONObject();
-                jor.put("positivos", "" + totalPositives);
-                jor.put("negativos", "" + totalNegatives);
-                jor.put("neutros", "" + totalNeutrals);
-                node4.put("valor", jor);
-                node.put(node4);
-                return node;
-
-            }
-
-            //  if (single > 0) {
+             //  if (single > 0) {
             JSONObject node1 = new JSONObject();
             node1.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("single", lang));
             node1.put("value1", "" + single);
