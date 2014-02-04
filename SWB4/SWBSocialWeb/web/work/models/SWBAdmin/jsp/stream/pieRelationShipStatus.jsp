@@ -172,6 +172,11 @@
                 node4.put("value2", "100");
                 node4.put("color", "#E6E6E6");
                 node4.put("chartclass", "neuClass");
+                JSONObject jor = new JSONObject();
+                jor.put("positivos", "" + totalPositives);
+                jor.put("negativos", "" + totalNegatives);
+                jor.put("neutros", "" + totalNeutrals);
+                node4.put("valor", jor);
                 node.put(node4);
                 return node;
 
