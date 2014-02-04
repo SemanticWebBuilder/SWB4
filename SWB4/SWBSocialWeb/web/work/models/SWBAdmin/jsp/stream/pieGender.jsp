@@ -105,7 +105,7 @@
         JSONArray node = new JSONArray();
 
         //if (male > 0) {
-        System.out.println("FILTRO:" + filter);
+        //System.out.println("FILTRO:" + filter);
         if (filter.equals("all")) {
             float intTotalVotos = male + female + other;
             float intPorcentajeMale = 0;
@@ -115,22 +115,6 @@
                 intPorcentajeMale = ((float) male * 100) / (float) totalPost;
                 intPorcentajeFemale = ((float) female * 100) / (float) totalPost;
                 intPorcentajeOther = ((float) other * 100) / (float) totalPost;
-            }
-
-            if (male == 0 && female == 0 && other == 0) {
-                JSONObject node4 = new JSONObject();
-                node4.put("label", "Sin Datos");
-                node4.put("value1", "0");
-                node4.put("value2", "100");
-                node4.put("color", "#E6E6E6");
-                node4.put("chartclass", "neuClass");
-                JSONObject jor = new JSONObject();
-                jor.put("positivos", "" + totalPositives);
-                jor.put("negativos", "" + totalNegatives);
-                jor.put("neutros", "" + totalNeutrals);
-                node4.put("label3", jor);
-                node.put(node4);
-                return node;
             }
 
 
