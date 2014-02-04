@@ -550,9 +550,9 @@
         float porcentajeNegativesGuerrero = 0;
 
         if (totalguerrero != 0) {
-            porcentajeNeutralsGuerrero = ((float) neutralsguerrero * 100) / (float) totalguanajuato;
-            porcentajePositivesGuerrero = ((float) positivesguerrero * 100) / (float) totalguanajuato;
-            porcentajeNegativesGuerrero = ((float) negativesguerrero * 100) / (float) totalguanajuato;
+            porcentajeNeutralsGuerrero = ((float) neutralsguerrero * 100) / (float) totalguerrero;
+            porcentajePositivesGuerrero = ((float) positivesguerrero * 100) / (float) totalguerrero;
+            porcentajeNegativesGuerrero = ((float) negativesguerrero * 100) / (float) totalguerrero;
         }
 
 
@@ -1130,40 +1130,56 @@
                     + neutralsnayarit + neutralsnodefined + neutralsnuevoLeon + neutralsoaxaca + neutralspuebla + neutralsqueretaro + neutralsquintanaRoo + neutralssanLuis + neutralssinaloa + neutralssonora
                     + neutralstabasco + neutralstamaulipas + neutralstlaxcala + neutralsveracruz + neutralsyucatan + neutralszacatecas;
 
+            if(totalPositives==0&&totalNegatives==0&&totalNeutrals==0){
+                 JSONObject node4 = new JSONObject();
+                node4.put("label", "Sin Datos");
+                node4.put("value1", "0");
+                node4.put("value2", "100");
+                node4.put("color", "#E6E6E6");
+                node4.put("chartclass", "neuClass");
+                JSONObject jor = new JSONObject();
+                jor.put("positivos", "" + totalPositives);
+                jor.put("negativos", "" + totalNegatives);
+                jor.put("neutros", "" + totalNeutrals);
+                node4.put("valor", jor);
+                node.put(node4);
+                return node;
+            
+            }
 
             getJson(node, "Aguascalientes", totalAguascalientes, intPorcentajeAguascalientes, positivesAguascalientes, negativesAguascalientes, neutralsAguascalientes, totalPost, true, totalPositives, totalNegatives, totalNeutrals);
-            getJson(node, "Baja California", totalbCalifornia, intPorcentajeBajaCalifornia, positivesbCalifornia, negativesbCalifornia, neutralsbCalifornia, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Baja California Sur", totalbCaliforniaSI, intPorcentajeBajaCaliforniaS, positivesbCaliforniaSI, negativesbCaliforniaSI, neutralsbCaliforniaSI, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Campeche", totalCampeche, intPorcentajeCampeche, positivesCampeche, negativesCampeche, neutralsCampeche, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Coahuila de Zaragoza", totalCoahuila, intPorcentajeCohauila, positivesCoahuia, negativesCoahuila, neutralsCoahuila, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Colima", totalColima, intPorcentajeCohauila, positivesCoahuia, negativesCoahuila, neutralsCoahuila, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Chiapas", totalChiapas, intPorcentajeChiapas, positivesChiapas, negativesChiapas, neutralsChiapas, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Chihuahua", totalChihuahua, intPorcentajeChihuahua, positivesChihuahua, negativesChihuahua, neutralsChihuahua, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Distrito Federal", totaldistritoFederal, intPorcentajeDF, positivesdistritoFederal, negativesdistritoFederal, neutralsdistritoFederal, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Durango", totaldurango, intPorcentajeDurango, positivesdurango, negativesdurango, neutralsdurango, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Guanajuato", totalguanajuato, intPorcentajeGuanajuato, positivesguanajuato, negativesguanajuato, neutralsguanajuato, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Guerrero", totalguerrero, intPorcentajeGuerrero, positivesguerrero, negativesguerrero, neutralsguerrero, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Hidalgo", totalhidalgo, intPorcentajehidalgo, positiveshidalgo, negativeshidalgo, neutralshidalgo, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Jalisco", totaljalisco, intPorcentajejalisco, positivesjalisco, negativesjalisco, neutralsjalisco, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Estado de México", totalestadoMexico, intPorcentajeestadoMexico, positivesestadoMexico, negativesestadoMexico, neutralsestadoMexico, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Michoacán", totalmichoacan, intPorcentajemichoacan, positivesmichoacan, negativesmichoacan, neutralsmichoacan, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Morelos", totalmorelos, intPorcentajemorelos, positivesmorelos, negativesmorelos, neutralsmorelos, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Nayarit", totalnayarit, intPorcentajenayarit, positivesnayarit, negativesnayarit, neutralsnayarit, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Nuevo Leon", totalnuevoLeon, intPorcentajenuevoLeon, positivesnuevoLeon, negativesnuevoLeon, neutralsnuevoLeon, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Oaxaca", totaloaxaca, intPorcentajeoaxaca, positivesoaxaca, negativesoaxaca, neutralsoaxaca, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Puebla", totaloaxaca, intPorcentajepuebla, positivespuebla, negativespuebla, neutralspuebla, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Querétaro", totalqueretaro, intPorcentajequeretaro, positivesqueretaro, negativesqueretaro, neutralsqueretaro, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Quintana Roo", totalquintanaRoo, intPorcentajequintanaRoo, positivesquintanaRoo, negativesquintanaRoo, neutralsquintanaRoo, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "San Luis Potosi", totalsanLuis, intPorcentajesanLuis, positivessanLuis, negativessanLuis, neutralssanLuis, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Sinaloa", totalsinaloa, intPorcentajesanLuis, positivessanLuis, negativessanLuis, neutralssanLuis, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Sonora", totalsonora, intPorcentajesonora, positivessonora, negativessonora, neutralssonora, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Tabasco", totaltabasco, intPorcentajetabasco, positivestabasco, negativestabasco, neutralstabasco, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Tamaulipas", totaltamaulipas, intPorcentajetamaulipas, positivestamaulipas, negativestamaulipas, neutralstamaulipas, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "tlaxcala", totaltlaxcala, intPorcentajetlaxcala, positivestlaxcala, negativestlaxcala, neutralstlaxcala, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Veracruz de Ignacio de la Llave", totalveracruz, intPorcentajeveracruz, positivesveracruz, negativesveracruz, neutralsveracruz, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Yucatán", totalyucatan, intPorcentajeyucatan, positivesyucatan, negativesyucatan, neutralsyucatan, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "Zacatecas", totalzacatecas, intPorcentajezacatecas, positiveszacatecas, negativeszacatecas, neutralszacatecas, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
-            getJson(node, "No definido", totalnodefined, intPorcentajenodefinido, positivesnoefined, negativesnodefined, neutralsnodefined, totalPost, false, totalPositives, totalNegatives, totalNeutrals );
+            getJson(node, "Baja California", totalbCalifornia, intPorcentajeBajaCalifornia, positivesbCalifornia, negativesbCalifornia, neutralsbCalifornia, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Baja California Sur", totalbCaliforniaSI, intPorcentajeBajaCaliforniaS, positivesbCaliforniaSI, negativesbCaliforniaSI, neutralsbCaliforniaSI, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Campeche", totalCampeche, intPorcentajeCampeche, positivesCampeche, negativesCampeche, neutralsCampeche, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Coahuila de Zaragoza", totalCoahuila, intPorcentajeCohauila, positivesCoahuia, negativesCoahuila, neutralsCoahuila, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Colima", totalColima, intPorcentajeCohauila, positivesCoahuia, negativesCoahuila, neutralsCoahuila, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Chiapas", totalChiapas, intPorcentajeChiapas, positivesChiapas, negativesChiapas, neutralsChiapas, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Chihuahua", totalChihuahua, intPorcentajeChihuahua, positivesChihuahua, negativesChihuahua, neutralsChihuahua, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Distrito Federal", totaldistritoFederal, intPorcentajeDF, positivesdistritoFederal, negativesdistritoFederal, neutralsdistritoFederal, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Durango", totaldurango, intPorcentajeDurango, positivesdurango, negativesdurango, neutralsdurango, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Guanajuato", totalguanajuato, intPorcentajeGuanajuato, positivesguanajuato, negativesguanajuato, neutralsguanajuato, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Guerrero", totalguerrero, intPorcentajeGuerrero, positivesguerrero, negativesguerrero, neutralsguerrero, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Hidalgo", totalhidalgo, intPorcentajehidalgo, positiveshidalgo, negativeshidalgo, neutralshidalgo, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Jalisco", totaljalisco, intPorcentajejalisco, positivesjalisco, negativesjalisco, neutralsjalisco, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Estado de México", totalestadoMexico, intPorcentajeestadoMexico, positivesestadoMexico, negativesestadoMexico, neutralsestadoMexico, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Michoacán", totalmichoacan, intPorcentajemichoacan, positivesmichoacan, negativesmichoacan, neutralsmichoacan, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Morelos", totalmorelos, intPorcentajemorelos, positivesmorelos, negativesmorelos, neutralsmorelos, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Nayarit", totalnayarit, intPorcentajenayarit, positivesnayarit, negativesnayarit, neutralsnayarit, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Nuevo Leon", totalnuevoLeon, intPorcentajenuevoLeon, positivesnuevoLeon, negativesnuevoLeon, neutralsnuevoLeon, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Oaxaca", totaloaxaca, intPorcentajeoaxaca, positivesoaxaca, negativesoaxaca, neutralsoaxaca, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Puebla", totaloaxaca, intPorcentajepuebla, positivespuebla, negativespuebla, neutralspuebla, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Querétaro", totalqueretaro, intPorcentajequeretaro, positivesqueretaro, negativesqueretaro, neutralsqueretaro, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Quintana Roo", totalquintanaRoo, intPorcentajequintanaRoo, positivesquintanaRoo, negativesquintanaRoo, neutralsquintanaRoo, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "San Luis Potosi", totalsanLuis, intPorcentajesanLuis, positivessanLuis, negativessanLuis, neutralssanLuis, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Sinaloa", totalsinaloa, intPorcentajesanLuis, positivessanLuis, negativessanLuis, neutralssanLuis, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Sonora", totalsonora, intPorcentajesonora, positivessonora, negativessonora, neutralssonora, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Tabasco", totaltabasco, intPorcentajetabasco, positivestabasco, negativestabasco, neutralstabasco, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Tamaulipas", totaltamaulipas, intPorcentajetamaulipas, positivestamaulipas, negativestamaulipas, neutralstamaulipas, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "tlaxcala", totaltlaxcala, intPorcentajetlaxcala, positivestlaxcala, negativestlaxcala, neutralstlaxcala, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Veracruz de Ignacio de la Llave", totalveracruz, intPorcentajeveracruz, positivesveracruz, negativesveracruz, neutralsveracruz, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Yucatán", totalyucatan, intPorcentajeyucatan, positivesyucatan, negativesyucatan, neutralsyucatan, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "Zacatecas", totalzacatecas, intPorcentajezacatecas, positiveszacatecas, negativeszacatecas, neutralszacatecas, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
+            getJson(node, "No definido", totalnodefined, intPorcentajenodefinido, positivesnoefined, negativesnodefined, neutralsnodefined, totalPost, false, totalPositives, totalNegatives, totalNeutrals);
 
         } else if (filter.equals("Aguascalientes")) {
 
@@ -1354,6 +1370,23 @@
 
     public JSONArray getJsonPositivesNegativesNeutrals(String filter, JSONArray node, int positives, int negatives, int neutrals, float intPorcentajePositives, float intPorcentajeNegatives, float intPorcentajeNeutrals) throws Exception {
 
+        if (neutrals == 0 && positives == 0 && negatives == 0) {
+
+            JSONObject node4 = new JSONObject();
+            node4.put("label", "Sin Datos");
+            node4.put("value1", "0");
+            node4.put("value2", "100");
+            node4.put("color", "#E6E6E6");
+            node4.put("chartclass", "neuClass");
+             JSONObject jor = new JSONObject();
+                jor.put("positivos", "" + positives);
+                jor.put("negativos", "" + negatives);
+                jor.put("neutros", "" + neutrals);
+                node4.put("valor", jor);
+            node.put(node4);
+            return node;
+
+        }
         if (neutrals > 0) {
             JSONObject node4 = new JSONObject();
             node4.put("label", "Neutros");
