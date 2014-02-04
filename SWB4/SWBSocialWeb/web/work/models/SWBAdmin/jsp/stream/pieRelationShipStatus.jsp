@@ -142,27 +142,41 @@
 
 
         float intTotalVotos = undefined + single + married + divorced + widowed;
-                float intPorcentajeSingle = 0;
+        float intPorcentajeSingle = 0;
         float intPorcentajeMarried = 0;
         float intPorcentajeDivorced = 0;
-        float intPorcentajeWidowed =0;
-        float intPorcentajeundefined =0;
+        float intPorcentajeWidowed = 0;
+        float intPorcentajeundefined = 0;
         if (totalPost != 0) {
-         intPorcentajeSingle = ((float) single * 100) / (float) totalPost;
-         intPorcentajeMarried = ((float) married * 100) / (float) totalPost;
-         intPorcentajeDivorced = ((float) divorced * 100) / (float) totalPost;
-         intPorcentajeWidowed = ((float) widowed * 100) / (float) totalPost;
-         intPorcentajeundefined = ((float) undefined * 100) / (float) totalPost;
-               }
+            intPorcentajeSingle = ((float) single * 100) / (float) totalPost;
+            intPorcentajeMarried = ((float) married * 100) / (float) totalPost;
+            intPorcentajeDivorced = ((float) divorced * 100) / (float) totalPost;
+            intPorcentajeWidowed = ((float) widowed * 100) / (float) totalPost;
+            intPorcentajeundefined = ((float) undefined * 100) / (float) totalPost;
+        }
 
-int totalPositives =  positivesDivorced+positivesMarried+positivesSingle+positivesUndefined+positivesWidowed;
-int totalNegatives = negativesDivorced+negativesMarried+negativesSingle+negativesUndefined+negativesWidowed;
-int totalNeutrals = neutralsDivorced+neutralsMarried+neutralsSingle+neutralsUndefined+neutralsWidowed;
+        int totalPositives = positivesDivorced + positivesMarried + positivesSingle + positivesUndefined + positivesWidowed;
+        int totalNegatives = negativesDivorced + negativesMarried + negativesSingle + negativesUndefined + negativesWidowed;
+        int totalNeutrals = neutralsDivorced + neutralsMarried + neutralsSingle + neutralsUndefined + neutralsWidowed;
 
 
         JSONArray node = new JSONArray();
 
         if (filter.equals("all")) {
+
+            if (single == 0 && married == 0 && divorced == 0 && widowed == 0 && undefined == 0) {
+
+                JSONObject node4 = new JSONObject();
+                node4.put("label", "Sin Datos");
+                node4.put("value1", "0");
+                node4.put("value2", "100");
+                node4.put("color", "#E6E6E6");
+                node4.put("chartclass", "neuClass");
+                node.put(node4);
+                return node;
+
+            }
+
             //  if (single > 0) {
             JSONObject node1 = new JSONObject();
             node1.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("single", lang));
@@ -186,7 +200,7 @@ int totalNeutrals = neutralsDivorced+neutralsMarried+neutralsSingle+neutralsUnde
             joTotal.put("positivos", "" + totalPositives);
             joTotal.put("negativos", "" + totalNegatives);
             joTotal.put("neutros", "" + totalNeutrals);
-            node1.put("label3", joTotal);           
+            node1.put("label3", joTotal);
 
             node.put(node1);
             //}
@@ -214,9 +228,9 @@ int totalNeutrals = neutralsDivorced+neutralsMarried+neutralsSingle+neutralsUnde
 
             node.put(node2);
             // }
-            
-            
-             // if (widowed > 0) {
+
+
+            // if (widowed > 0) {
             JSONObject node4 = new JSONObject();
             node4.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("widowed", lang));
             node4.put("value1", "" + widowed);
@@ -263,14 +277,14 @@ int totalNeutrals = neutralsDivorced+neutralsMarried+neutralsSingle+neutralsUnde
             node.put(node3);
             // }
 
-           
+
 
             // if (undefined > 0) {
             JSONObject node5 = new JSONObject();
             node5.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("undefinedRelation", lang));
             node5.put("value1", "" + undefined);
             node5.put("value2", "" + round(intPorcentajeundefined));
-                JSONObject joUndefined = new JSONObject();
+            JSONObject joUndefined = new JSONObject();
             joUndefined.put("positivos", "" + positivesUndefined);
             joUndefined.put("negativos", "" + negativesUndefined);
             joUndefined.put("neutros", "" + neutralsUndefined);
@@ -293,6 +307,18 @@ int totalNeutrals = neutralsDivorced+neutralsMarried+neutralsSingle+neutralsUnde
             float intPorcentajeSingleNeutrals = 0;
             float intPorcentajeSinglePositives = 0;
             float intPorcentajeSingleNegatives = 0;
+
+            if (positivesSingle == 0 && negativesSingle == 0 && neutralsSingle == 0) {
+                JSONObject node3 = new JSONObject();
+                node3.put("label", "Sin Datos");
+                node3.put("value1", "0");
+                node3.put("value2", "100");
+                node3.put("color", "#E6E6E6");
+                node3.put("chartclass", "neuClass");
+                node.put(node3);
+                return node;
+            }
+
 
             if (totalPostSingle != 0) {
                 intPorcentajeSingleNeutrals = ((float) neutralsSingle * 100) / (float) totalPostSingle;
@@ -339,6 +365,16 @@ int totalNeutrals = neutralsDivorced+neutralsMarried+neutralsSingle+neutralsUnde
 
         } else if (filter.equals("married")) {
 
+            if (positivesMarried == 0 && negativesMarried == 0 && neutralsMarried == 0) {
+                JSONObject node3 = new JSONObject();
+                node3.put("label", "Sin Datos");
+                node3.put("value1", "0");
+                node3.put("value2", "100");
+                node3.put("color", "#E6E6E6");
+                node3.put("chartclass", "neuClass");
+                node.put(node3);
+                return node;
+            }
 
             float intPorcentajeMarriedNeutrals = 0;
             float intPorcentajeMarriedPositives = 0;
@@ -387,6 +423,17 @@ int totalNeutrals = neutralsDivorced+neutralsMarried+neutralsSingle+neutralsUnde
             }
 
         } else if (filter.equals("divorced")) {
+
+            if (positivesDivorced == 0 && negativesDivorced == 0 && neutralsDivorced == 0) {
+                JSONObject node3 = new JSONObject();
+                node3.put("label", "Sin Datos");
+                node3.put("value1", "0");
+                node3.put("value2", "100");
+                node3.put("color", "#E6E6E6");
+                node3.put("chartclass", "neuClass");
+                node.put(node3);
+                return node;
+            }
 
             float intPorcentajeDivorcedNeutrals = 0;
             float intPorcentajeDivorcedPositives = 0;
@@ -438,6 +485,17 @@ int totalNeutrals = neutralsDivorced+neutralsMarried+neutralsSingle+neutralsUnde
 
         } else if (filter.equals("widowed")) {
 
+            if (positivesWidowed == 0 && negativesWidowed == 0 && neutralsWidowed == 0) {
+                JSONObject node3 = new JSONObject();
+                node3.put("label", "Sin Datos");
+                node3.put("value1", "0");
+                node3.put("value2", "100");
+                node3.put("color", "#E6E6E6");
+                node3.put("chartclass", "neuClass");
+                node.put(node3);
+                return node;
+            }
+
             float intPorcentajeWidowedNeutrals = 0;
             float intPorcentajeWidowedPositives = 0;
             float intPorcentajeWidowedNegatives = 0;
@@ -487,11 +545,22 @@ int totalNeutrals = neutralsDivorced+neutralsMarried+neutralsSingle+neutralsUnde
 
         } else if (filter.equals("undefined")) {
 
+            if (positivesUndefined == 0 && negativesUndefined == 0 && neutralsUndefined == 0) {
+                JSONObject node3 = new JSONObject();
+                node3.put("label", "Sin Datos");
+                node3.put("value1", "0");
+                node3.put("value2", "100");
+                node3.put("color", "#E6E6E6");
+                node3.put("chartclass", "neuClass");
+                node.put(node3);
+                return node;
+            }
+
             //System.out.println("entro en undefined relation");
             float intPorcentajeUndefinedNeutrals = 0;
             float intPorcentajeUndefinedPositives = 0;
             float intPorcentajeUndefinedNegatives = 0;
-//System.out.println("totalPostUndefined"+totalPostUndefined);
+            //System.out.println("totalPostUndefined"+totalPostUndefined);
             if (totalPostUndefined != 0) {
                 intPorcentajeUndefinedNeutrals = ((float) neutralsUndefined * 100) / (float) totalPostUndefined;
                 intPorcentajeUndefinedPositives = ((float) positivesUndefined * 100) / (float) totalPostUndefined;
@@ -511,7 +580,7 @@ int totalNeutrals = neutralsDivorced+neutralsMarried+neutralsSingle+neutralsUnde
                 node1.put("label3", "Total de Post: " + totalPost);
                 node.put(node1);
             }
-//System.out.println("intPorcentajeUndefinedNegatives"+intPorcentajeUndefinedNegatives);
+            //System.out.println("intPorcentajeUndefinedNegatives"+intPorcentajeUndefinedNegatives);
             if (negativesUndefined > 0) {
                 JSONObject node2 = new JSONObject();
                 node2.put("label", "Negativos");
@@ -537,29 +606,9 @@ int totalNeutrals = neutralsDivorced+neutralsMarried+neutralsSingle+neutralsUnde
             }
 
 
-            } else if (filter.equals("x")) {
-            if (single == 0 && married == 0 && divorced == 0 && widowed == 0 && undefined == 0) {
+        } 
 
-                node.remove(4);
-                node.remove(3);
-                node.remove(2);
-                node.remove(1);
-                node.remove(0);
-                JSONObject node6 = new JSONObject();
-                node6.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang));
-                node6.put("value1", "0");
-                node6.put("value2", "100");
-                node6.put("color", "#eae8e3");
-                node6.put("chartclass", "neuClass");
-                node6.put("label2", "Sin datos para procesar");
-                node6.put("label3", "Total de Post: " + totalPost);
-
-                node.put(node6);
-
-            }
-        }
-
-//System.out.println("node: "+node);
+        //System.out.println("node: "+node);
 
         return node;
     }
