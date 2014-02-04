@@ -117,7 +117,16 @@
                 intPorcentajeOther = ((float) other * 100) / (float) totalPost;
             }
 
-
+             if (male == 0 && female == 0 && other == 0) {
+                JSONObject node4 = new JSONObject();
+                node4.put("label", "Sin Datos");
+                node4.put("value1", "0");
+                node4.put("value2", "100");
+                node4.put("color", "#E6E6E6");
+                node4.put("chartclass", "neuClass");
+                node.put(node4);
+                return node;
+              }
 
 
             JSONObject node1 = new JSONObject();
@@ -191,17 +200,8 @@
             node3.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("nodefine", lang) + ": " + other + "     -     " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + "  : " + positivesOther + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + "  :" + negativesOther + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsOther);
             node3.put("chartclass", "possClass");
             node3.put("label3", "Total de Post: " + totalPost);
-            node.put(node3);
-            
-             if (male == 0 && female == 0 && other == 0) {
-                JSONObject node4 = new JSONObject();
-                node4.put("label", "Sin Datos");
-                node4.put("value1", "0");
-                node4.put("value2", "100");
-                node4.put("color", "#E6E6E6");
-                node4.put("chartclass", "neuClass");
-                node.put(node4);
-              }
+            node.put(node3);            
+
 
             // }
         } else if (filter.equals("male")) {
