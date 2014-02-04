@@ -117,22 +117,22 @@
         }
 
         float intTotalVotos = undefined + highSchool + college + graduate;
-          float intPorcentajehighSchool = 0;
-                  float intPorcentajecollege = ((float) college * 100) / (float) totalPost;
-                  float intPorcentajegraduate =0;
+        float intPorcentajehighSchool = 0;
+        float intPorcentajecollege = ((float) college * 100) / (float) totalPost;
+        float intPorcentajegraduate = 0;
         float intPorcentajeundefined = 0;
         if (totalPost != 0) {
-       intPorcentajehighSchool = ((float) highSchool * 100) / (float) totalPost;
-         intPorcentajecollege = ((float) college * 100) / (float) totalPost;
-         intPorcentajegraduate = ((float) graduate * 100) / (float) totalPost;
-         intPorcentajeundefined = ((float) undefined * 100) / (float) totalPost;
-               }
+            intPorcentajehighSchool = ((float) highSchool * 100) / (float) totalPost;
+            intPorcentajecollege = ((float) college * 100) / (float) totalPost;
+            intPorcentajegraduate = ((float) graduate * 100) / (float) totalPost;
+            intPorcentajeundefined = ((float) undefined * 100) / (float) totalPost;
+        }
 
         //System.out.println("neutralshighSchool" + neutralshighSchool);
         //System.out.println("totalPosthighSchool" + totalPosthighSchool);
-       int totalPositives =  positivescollege+positivesgraduate+positiveshighSchool+positivesundefined;
-        int totalNegatives =  negativescollege+negativesgraduate+negativeshighSchool+negativesundefined;
-        int totalNeutrals =  negativescollege+neutralsgraduate+neutralshighSchool+neutralsundefined;
+        int totalPositives = positivescollege + positivesgraduate + positiveshighSchool + positivesundefined;
+        int totalNegatives = negativescollege + negativesgraduate + negativeshighSchool + negativesundefined;
+        int totalNeutrals = negativescollege + neutralsgraduate + neutralshighSchool + neutralsundefined;
 
 
 
@@ -140,13 +140,27 @@
 
 
         if (filter.equals("all")) {
+            
+            
+              if (highSchool == 0 && college == 0 && graduate == 0 && undefined == 0) {
+
+                JSONObject node4 = new JSONObject();
+                node4.put("label", "Sin Datos");
+                node4.put("value1", "0");
+                node4.put("value2", "100");
+                node4.put("color", "#E6E6E6");
+                node4.put("chartclass", "neuClass");
+                node.put(node4);
+                return node;
+
+            }
 
             // if (highSchool > 0) {
             JSONObject node1 = new JSONObject();
             node1.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("highSchool", lang));
             node1.put("value1", "" + highSchool);
             node1.put("value2", "" + round(intPorcentajehighSchool));
-             JSONObject jor = new JSONObject();
+            JSONObject jor = new JSONObject();
             jor.put("positivos", "" + positiveshighSchool);
             jor.put("negativos", "" + negativeshighSchool);
             jor.put("neutros", "" + neutralshighSchool);
@@ -173,7 +187,7 @@
             node2.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("college", lang));
             node2.put("value1", "" + college);
             node2.put("value2", "" + round(intPorcentajecollege));
-                   JSONObject joCollege = new JSONObject();
+            JSONObject joCollege = new JSONObject();
             joCollege.put("positivos", "" + positivescollege);
             joCollege.put("negativos", "" + negativescollege);
             joCollege.put("neutros", "" + neutralscollege);
@@ -196,13 +210,13 @@
             JSONObject node3 = new JSONObject();
             node3.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("graduate", lang));
             node3.put("value1", "" + graduate);
-            node3.put("value2", "" + round(intPorcentajegraduate));            
+            node3.put("value2", "" + round(intPorcentajegraduate));
             JSONObject joGraduate = new JSONObject();
             joGraduate.put("positivos", "" + positivesgraduate);
             joGraduate.put("negativos", "" + negativesgraduate);
             joGraduate.put("neutros", "" + neutralsgraduate);
             node3.put("valor", joGraduate);
-            
+
             if (positivesgraduate > negativesgraduate && positivesgraduate > neutralsgraduate) {
                 node3.put("color", "#008000");
             } else if (negativesgraduate > neutralsgraduate) {
@@ -211,7 +225,7 @@
                 node3.put("color", "#FFD700");
             }
             node3.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("graduate", lang) + " :" + graduate + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " :" + positivesgraduate + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesgraduate + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + "  :" + neutralsgraduate);
-            node3.put("chartclass", "possClass");            
+            node3.put("chartclass", "possClass");
             node3.put("label3", "Total de Post: " + totalPost);
 
             node.put(node3);
@@ -222,7 +236,7 @@
             node4.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("undefinedEducation", lang));
             node4.put("value1", "" + undefined);
             node4.put("value2", "" + round(intPorcentajeundefined));
-                JSONObject joUndefine = new JSONObject();
+            JSONObject joUndefine = new JSONObject();
             joUndefine.put("positivos", "" + positivesundefined);
             joUndefine.put("negativos", "" + negativesundefined);
             joUndefine.put("neutros", "" + neutralsundefined);
@@ -257,7 +271,16 @@
             //System.out.println("Entro en  secundaria");
             //System.out.println("-->" + intPorcentajehighSchoolNeutrals);
             //System.out.println("-->" + round(intPorcentajehighSchoolNeutrals));
-
+            if (negativeshighSchool == 0 && positiveshighSchool == 0 && neutralshighSchool == 0) {
+                JSONObject node3 = new JSONObject();
+                node3.put("label", "Sin Datos");
+                node3.put("value1", "0");
+                node3.put("value2", "100");
+                node3.put("color", "#E6E6E6");
+                node3.put("chartclass", "neuClass");
+                node.put(node3);
+                return node;
+            }
 
 
             if (neutralshighSchool > 0) {
@@ -299,7 +322,7 @@
 
         } else if (filter.equals("mediosuperior")) {
 
-           //System.out.println("Entro en  mediosuperior");
+            //System.out.println("Entro en  mediosuperior");
             float intPorcentajecollegeNeutrals = 0;
             float intPorcentajecollegePositives = 0;
             float intPorcentajecollegeNegatives = 0;
@@ -309,6 +332,16 @@
                 intPorcentajecollegePositives = ((float) positivescollege * 100) / (float) totalPostcollege;
                 intPorcentajecollegeNegatives = ((float) negativescollege * 100) / (float) totalPostcollege;
 
+            }
+
+            if (neutralscollege == 0 && positivescollege == 0 && negativescollege == 0) {
+                JSONObject node4 = new JSONObject();
+                node4.put("label", "Sin Datos");
+                node4.put("value1", "0");
+                node4.put("value2", "100");
+                node4.put("color", "#E6E6E6");
+                node4.put("chartclass", "neuClass");
+                node.put(node4);
             }
 
             if (neutralscollege > 0) {
@@ -352,7 +385,7 @@
         } else if (filter.equals("graduado")) {
 
 
-          //  System.out.println("Entro en  graduado");
+            //  System.out.println("Entro en  graduado");
 
 
             float intPorcentajegraduateNeutrals = 0;
@@ -363,6 +396,16 @@
                 intPorcentajegraduateNeutrals = ((float) neutralsgraduate * 100) / (float) totalPostgraduate;
                 intPorcentajegraduatePositives = ((float) positivesgraduate * 100) / (float) totalPostgraduate;
                 intPorcentajegraduateNegatives = ((float) negativesgraduate * 100) / (float) totalPostgraduate;
+            }
+
+            if (neutralsgraduate == 0 && positivesgraduate == 0 && negativesgraduate == 0) {
+                JSONObject node4 = new JSONObject();
+                node4.put("label", "Sin Datos");
+                node4.put("value1", "0");
+                node4.put("value2", "100");
+                node4.put("color", "#E6E6E6");
+                node4.put("chartclass", "neuClass");
+                node.put(node4);
             }
 
             if (neutralsgraduate > 0) {
@@ -406,7 +449,7 @@
         } else if (filter.equals("undefined")) {
 
 
-           // System.out.println("Entro en  undefine");
+            // System.out.println("Entro en  undefine");
             float intPorcentajeundefineNeutrals = 0;
             float intPorcentajeundefinePositives = 0;
             float intPorcentajeundefineNegatives = 0;
@@ -417,68 +460,55 @@
                 intPorcentajeundefineNegatives = ((float) negativesundefined * 100) / (float) totalPostundefine;
             }
 
-            if(neutralsundefined>0){
-            JSONObject node4 = new JSONObject();
-            node4.put("label", "Neutros");
-            node4.put("value1", "" + neutralsundefined);
-            node4.put("value2", "" + round(intPorcentajeundefineNeutrals));
-            node4.put("color", "#FFD700");
-            node4.put("label2", "");
-            node4.put("chartclass", "possClass");
-            node4.put("label3", "Total de Post: " + totalPost);
-            node.put(node4);
+            if (neutralsundefined == 0 && positivesundefined == 0 && negativesundefined == 0) {
+                JSONObject node4 = new JSONObject();
+                node4.put("label", "Sin Datos");
+                node4.put("value1", "0");
+                node4.put("value2", "100");
+                node4.put("color", "#E6E6E6");
+                node4.put("chartclass", "neuClass");
+                node.put(node4);
             }
 
-            if(positivesundefined>0){
-            JSONObject node5 = new JSONObject();
-            node5.put("label", "Positivos");
-            node5.put("value1", "" + positivesundefined);
-            node5.put("value2", "" + round(intPorcentajeundefinePositives));
-            node5.put("color", "#008000");
-            node5.put("label2", "");
-            node5.put("chartclass", "possClass");
-            node5.put("label3", "Total de Post: " + totalPost);
-            node.put(node5);
-                       }
+            if (neutralsundefined > 0) {
+                JSONObject node4 = new JSONObject();
+                node4.put("label", "Neutros");
+                node4.put("value1", "" + neutralsundefined);
+                node4.put("value2", "" + round(intPorcentajeundefineNeutrals));
+                node4.put("color", "#FFD700");
+                node4.put("label2", "");
+                node4.put("chartclass", "possClass");
+                node4.put("label3", "Total de Post: " + totalPost);
+                node.put(node4);
+            }
 
-            if(negativesundefined>0){
-            JSONObject node6 = new JSONObject();
-            node6.put("label", "Negativos");
-            node6.put("value1", "" + negativesundefined);
-            node6.put("value2", "" + round(intPorcentajeundefineNegatives));
-            node6.put("color", "#FF0000");
-            node6.put("label2", "");
-            node6.put("chartclass", "possClass");
-            node6.put("label3", "Total de Post: " + totalPost);
-            node.put(node6);
-                       }
-
-
-
-        } else if (filter.equals("pop")) {
-
-           // System.out.println("Entro en  pop");
-
-
-            if (highSchool == 0 && college == 0 && graduate == 0 && undefined == 0) {
-
-                node.remove(3);
-                node.remove(2);
-                node.remove(1);
-                node.remove(0);
-
+            if (positivesundefined > 0) {
                 JSONObject node5 = new JSONObject();
-                node5.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang));
-                node5.put("value1", "0");
-                node5.put("value2", "100");
-                node5.put("color", "#eae8e3");
-                node5.put("chartclass", "neuClass");
-                node5.put("label2", "Sin datos para procesar");
+                node5.put("label", "Positivos");
+                node5.put("value1", "" + positivesundefined);
+                node5.put("value2", "" + round(intPorcentajeundefinePositives));
+                node5.put("color", "#008000");
+                node5.put("label2", "");
+                node5.put("chartclass", "possClass");
                 node5.put("label3", "Total de Post: " + totalPost);
                 node.put(node5);
-
             }
-        }
+
+            if (negativesundefined > 0) {
+                JSONObject node6 = new JSONObject();
+                node6.put("label", "Negativos");
+                node6.put("value1", "" + negativesundefined);
+                node6.put("value2", "" + round(intPorcentajeundefineNegatives));
+                node6.put("color", "#FF0000");
+                node6.put("label2", "");
+                node6.put("chartclass", "possClass");
+                node6.put("label3", "Total de Post: " + totalPost);
+                node.put(node6);
+            }
+
+
+
+        } 
         //System.out.println("node en education \n" + node + "\n");
         return node;
     }
