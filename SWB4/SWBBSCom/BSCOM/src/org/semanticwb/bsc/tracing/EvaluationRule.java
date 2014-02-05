@@ -38,6 +38,12 @@ public class EvaluationRule extends org.semanticwb.bsc.tracing.base.EvaluationRu
      * @return Si el factor cumple con el formato entonces cierto, de lo contrario falso.
      */
     public boolean validateFactor(String factor) {
+        if(factor==null) {
+            return false;
+        }
+        if(factor.isEmpty()) {
+            return true;
+        }
         Pattern pattern;
         try{
             pattern = Pattern.compile(Default_FORMAT_PATTERN);
