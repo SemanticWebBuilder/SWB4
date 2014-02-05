@@ -4,7 +4,7 @@ package org.semanticwb.bsc.accessory.base;
    /**
    * Período de medición. 
    */
-public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Blockable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Machinable,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable
+public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Undeleteable,org.semanticwb.model.Roleable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Machinable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable
 {
    /**
    * Indica la fecha incial del periodo representado
@@ -423,24 +423,6 @@ public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccesso
              ret=(org.semanticwb.bsc.Seasonable)obj.createGenericInstance();
          }
          return ret;
-    }
-
-/**
-* Gets the Blocked property
-* @return boolean with the Blocked
-*/
-    public boolean isBlocked()
-    {
-        return getSemanticObject().getBooleanProperty(bsc_blocked);
-    }
-
-/**
-* Sets the Blocked property
-* @param value long with the Blocked
-*/
-    public void setBlocked(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(bsc_blocked, value);
     }
 
 /**
