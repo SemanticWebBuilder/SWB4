@@ -247,7 +247,7 @@ public class DBConnectionManager {
                                 buf.append("\n");
                             }
                             description=buf.toString();
-                        }catch(Exception noe){}
+                        }catch(Throwable noe){}
                     }
                     con.setDescription(description);
                 }
