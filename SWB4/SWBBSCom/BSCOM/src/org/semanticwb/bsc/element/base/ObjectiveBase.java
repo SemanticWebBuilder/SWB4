@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Recognizable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Referensable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Causal,org.semanticwb.bsc.Updateable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Sortable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.Preference,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Status,org.semanticwb.bsc.Seasonable,org.semanticwb.bsc.Serializable,org.semanticwb.model.Activeable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.bsc.PeriodStatusAssignable,org.semanticwb.model.RuleRefable
+public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.FilterableClass,org.semanticwb.model.UserGroupable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Updateable,org.semanticwb.model.Roleable,org.semanticwb.bsc.PeriodStatusAssignable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.bsc.Seasonable,org.semanticwb.bsc.Sortable,org.semanticwb.bsc.Causal,org.semanticwb.model.RuleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.bsc.Status,org.semanticwb.bsc.Serializable,org.semanticwb.bsc.Preference,org.semanticwb.model.Activeable
 {
    /**
    * Persiste los atributos de un indicador
