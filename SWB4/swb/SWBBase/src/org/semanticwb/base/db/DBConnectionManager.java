@@ -237,14 +237,17 @@ public class DBConnectionManager {
                     {                        
                         description = "NoDesc";
                         
-                        StringBuffer buf=new StringBuffer();
-                        StackTraceElement eles[]=Thread.currentThread().getStackTrace();
-                        for(int i=0;i<eles.length;i++)
+                        try
                         {
-                            buf.append(eles[i].toString());
-                            buf.append("\n");
-                        }
-                        description=buf.toString();
+                            StringBuffer buf=new StringBuffer();
+                            StackTraceElement eles[]=Thread.currentThread().getStackTrace();
+                            for(int i=0;i<eles.length;i++)
+                            {
+                                buf.append(eles[i].toString());
+                                buf.append("\n");
+                            }
+                            description=buf.toString();
+                        }catch(Exception noe){}
                     }
                     con.setDescription(description);
                 }
