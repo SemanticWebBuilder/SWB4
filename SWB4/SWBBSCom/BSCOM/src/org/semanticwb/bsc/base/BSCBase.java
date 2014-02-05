@@ -4,7 +4,7 @@ package org.semanticwb.bsc.base;
    /**
    * Modelo que define un Scorecard de la metodologia BalancedScorecard de Norton y Kaplan 
    */
-public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Trashable,org.semanticwb.bsc.Help,org.semanticwb.model.Localeable,org.semanticwb.model.Indexable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Countryable
+public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Countryable,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.OntologyDepable,org.semanticwb.bsc.Help,org.semanticwb.model.Localeable,org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_values=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#values");
    /**
@@ -19,32 +19,60 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
    * Define una Collección de objetos de una clase especificada con la propiedad "collectionClass"
    */
     public static final org.semanticwb.platform.SemanticClass swb_Collection=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Collection");
+   /**
+   * Referencia a un objeto de tipo Rule
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_RuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RuleRef");
     public static final org.semanticwb.platform.SemanticClass bsc_Operation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Operation");
     public static final org.semanticwb.platform.SemanticClass bsc_Objective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Objective");
    /**
-   * Persiste los atributos de un indicador
+   * Objeto por medio del cual se define un tipo de componente o recurso
    */
-    public static final org.semanticwb.platform.SemanticClass bsc_Indicator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Indicator");
-    public static final org.semanticwb.platform.SemanticClass bsc_Risk=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Risk");
+    public static final org.semanticwb.platform.SemanticClass swb_ResourceType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceType");
+   /**
+   * Período de medición.
+   */
+    public static final org.semanticwb.platform.SemanticClass bsc_Period=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Period");
    /**
    * Clase que define el valor de un estado en un periodo. Ejemplo: Para el periodo "Enero 2013" - Estado "En Riesgo"
    */
     public static final org.semanticwb.platform.SemanticClass bsc_PeriodStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#PeriodStatus");
-    public static final org.semanticwb.platform.SemanticClass bsc_Action=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Action");
+    public static final org.semanticwb.platform.SemanticClass bsc_Perspective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Perspective");
+   /**
+   * Objeto que define una agripacion de componentes o recursos de un mismo tipo
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_ResourceSubType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceSubType");
+   /**
+   * Referencia a un objeto de tipo Role
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_RoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RoleRef");
    /**
    * Catalogo de paises
    */
     public static final org.semanticwb.platform.SemanticClass swb_Country=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Country");
-    public static final org.semanticwb.platform.SemanticClass bsc_Perspective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Perspective");
-    public static final org.semanticwb.platform.SemanticClass bsc_Initiative=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Initiative");
+    public static final org.semanticwb.platform.SemanticClass bsc_Action=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Action");
+   /**
+   * Persiste los atributos de un indicador
+   */
+    public static final org.semanticwb.platform.SemanticClass bsc_Indicator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Indicator");
    /**
    * Las frecuencias de medición, definen bloques de períodos para determinar cuándo se requiere la captura de información. Frecuencia de medición.
    */
     public static final org.semanticwb.platform.SemanticClass bsc_MeasurementFrequency=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#MeasurementFrequency");
    /**
-   * Período de medición.
+   * Un recurso es un componente en una Página Web con el cual el usuario tiene interacción
    */
-    public static final org.semanticwb.platform.SemanticClass bsc_Period=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Period");
+    public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
+    public static final org.semanticwb.platform.SemanticClass bsc_Risk=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Risk");
+    public static final org.semanticwb.platform.SemanticClass bsc_Initiative=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Initiative");
+   /**
+   * Objeto que define una regla de negocio, utilizando los atributos del usuario para filtrar componente, seccion, plantillas, etc.
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_Rule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Rule");
+   /**
+   * Referencia a un objeto de tipo Resource
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_ResourceRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceRef");
    /**
    * The semantic class that represents the currentObject
    */
@@ -625,6 +653,36 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
         return org.semanticwb.model.Collection.ClassMgr.hasCollection(id, this);
     }
 
+    public org.semanticwb.model.RuleRef getRuleRef(String id)
+    {
+        return org.semanticwb.model.RuleRef.ClassMgr.getRuleRef(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.RuleRef> listRuleRefs()
+    {
+        return org.semanticwb.model.RuleRef.ClassMgr.listRuleRefs(this);
+    }
+
+    public org.semanticwb.model.RuleRef createRuleRef(String id)
+    {
+        return org.semanticwb.model.RuleRef.ClassMgr.createRuleRef(id,this);
+    }
+
+    public org.semanticwb.model.RuleRef createRuleRef()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_RuleRef);
+        return org.semanticwb.model.RuleRef.ClassMgr.createRuleRef(String.valueOf(id),this);
+    } 
+
+    public void removeRuleRef(String id)
+    {
+        org.semanticwb.model.RuleRef.ClassMgr.removeRuleRef(id, this);
+    }
+    public boolean hasRuleRef(String id)
+    {
+        return org.semanticwb.model.RuleRef.ClassMgr.hasRuleRef(id, this);
+    }
+
     public org.semanticwb.bsc.catalogs.Operation getOperation(String id)
     {
         return org.semanticwb.bsc.catalogs.Operation.ClassMgr.getOperation(id, this);
@@ -685,64 +743,58 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
         return org.semanticwb.bsc.element.Objective.ClassMgr.hasObjective(id, this);
     }
 
-    public org.semanticwb.bsc.element.Indicator getIndicator(String id)
+    public org.semanticwb.model.ResourceType getResourceType(String id)
     {
-        return org.semanticwb.bsc.element.Indicator.ClassMgr.getIndicator(id, this);
+        return org.semanticwb.model.ResourceType.ClassMgr.getResourceType(id, this);
     }
 
-    public java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicators()
+    public java.util.Iterator<org.semanticwb.model.ResourceType> listResourceTypes()
     {
-        return org.semanticwb.bsc.element.Indicator.ClassMgr.listIndicators(this);
+        return org.semanticwb.model.ResourceType.ClassMgr.listResourceTypes(this);
     }
 
-    public org.semanticwb.bsc.element.Indicator createIndicator(String id)
+    public org.semanticwb.model.ResourceType createResourceType(String id)
     {
-        return org.semanticwb.bsc.element.Indicator.ClassMgr.createIndicator(id,this);
+        return org.semanticwb.model.ResourceType.ClassMgr.createResourceType(id,this);
     }
 
-    public org.semanticwb.bsc.element.Indicator createIndicator()
+    public void removeResourceType(String id)
     {
-        long id=getSemanticObject().getModel().getCounter(bsc_Indicator);
-        return org.semanticwb.bsc.element.Indicator.ClassMgr.createIndicator(String.valueOf(id),this);
+        org.semanticwb.model.ResourceType.ClassMgr.removeResourceType(id, this);
+    }
+    public boolean hasResourceType(String id)
+    {
+        return org.semanticwb.model.ResourceType.ClassMgr.hasResourceType(id, this);
+    }
+
+    public org.semanticwb.bsc.accessory.Period getPeriod(String id)
+    {
+        return org.semanticwb.bsc.accessory.Period.ClassMgr.getPeriod(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.bsc.accessory.Period> listPeriods()
+    {
+        return org.semanticwb.bsc.accessory.Period.ClassMgr.listPeriods(this);
+    }
+
+    public org.semanticwb.bsc.accessory.Period createPeriod(String id)
+    {
+        return org.semanticwb.bsc.accessory.Period.ClassMgr.createPeriod(id,this);
+    }
+
+    public org.semanticwb.bsc.accessory.Period createPeriod()
+    {
+        long id=getSemanticObject().getModel().getCounter(bsc_Period);
+        return org.semanticwb.bsc.accessory.Period.ClassMgr.createPeriod(String.valueOf(id),this);
     } 
 
-    public void removeIndicator(String id)
+    public void removePeriod(String id)
     {
-        org.semanticwb.bsc.element.Indicator.ClassMgr.removeIndicator(id, this);
+        org.semanticwb.bsc.accessory.Period.ClassMgr.removePeriod(id, this);
     }
-    public boolean hasIndicator(String id)
+    public boolean hasPeriod(String id)
     {
-        return org.semanticwb.bsc.element.Indicator.ClassMgr.hasIndicator(id, this);
-    }
-
-    public org.semanticwb.bsc.tracing.Risk getRisk(String id)
-    {
-        return org.semanticwb.bsc.tracing.Risk.ClassMgr.getRisk(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRisks()
-    {
-        return org.semanticwb.bsc.tracing.Risk.ClassMgr.listRisks(this);
-    }
-
-    public org.semanticwb.bsc.tracing.Risk createRisk(String id)
-    {
-        return org.semanticwb.bsc.tracing.Risk.ClassMgr.createRisk(id,this);
-    }
-
-    public org.semanticwb.bsc.tracing.Risk createRisk()
-    {
-        long id=getSemanticObject().getModel().getCounter(bsc_Risk);
-        return org.semanticwb.bsc.tracing.Risk.ClassMgr.createRisk(String.valueOf(id),this);
-    } 
-
-    public void removeRisk(String id)
-    {
-        org.semanticwb.bsc.tracing.Risk.ClassMgr.removeRisk(id, this);
-    }
-    public boolean hasRisk(String id)
-    {
-        return org.semanticwb.bsc.tracing.Risk.ClassMgr.hasRisk(id, this);
+        return org.semanticwb.bsc.accessory.Period.ClassMgr.hasPeriod(id, this);
     }
 
     public org.semanticwb.bsc.tracing.PeriodStatus getPeriodStatus(String id)
@@ -775,60 +827,6 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
         return org.semanticwb.bsc.tracing.PeriodStatus.ClassMgr.hasPeriodStatus(id, this);
     }
 
-    public org.semanticwb.bsc.tracing.Action getAction(String id)
-    {
-        return org.semanticwb.bsc.tracing.Action.ClassMgr.getAction(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.bsc.tracing.Action> listActions()
-    {
-        return org.semanticwb.bsc.tracing.Action.ClassMgr.listActions(this);
-    }
-
-    public org.semanticwb.bsc.tracing.Action createAction(String id)
-    {
-        return org.semanticwb.bsc.tracing.Action.ClassMgr.createAction(id,this);
-    }
-
-    public org.semanticwb.bsc.tracing.Action createAction()
-    {
-        long id=getSemanticObject().getModel().getCounter(bsc_Action);
-        return org.semanticwb.bsc.tracing.Action.ClassMgr.createAction(String.valueOf(id),this);
-    } 
-
-    public void removeAction(String id)
-    {
-        org.semanticwb.bsc.tracing.Action.ClassMgr.removeAction(id, this);
-    }
-    public boolean hasAction(String id)
-    {
-        return org.semanticwb.bsc.tracing.Action.ClassMgr.hasAction(id, this);
-    }
-
-    public org.semanticwb.model.Country getCountry(String id)
-    {
-        return org.semanticwb.model.Country.ClassMgr.getCountry(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.model.Country> listCountries()
-    {
-        return org.semanticwb.model.Country.ClassMgr.listCountries(this);
-    }
-
-    public org.semanticwb.model.Country createCountry(String id)
-    {
-        return org.semanticwb.model.Country.ClassMgr.createCountry(id,this);
-    }
-
-    public void removeCountry(String id)
-    {
-        org.semanticwb.model.Country.ClassMgr.removeCountry(id, this);
-    }
-    public boolean hasCountry(String id)
-    {
-        return org.semanticwb.model.Country.ClassMgr.hasCountry(id, this);
-    }
-
     public org.semanticwb.bsc.element.Perspective getPerspective(String id)
     {
         return org.semanticwb.bsc.element.Perspective.ClassMgr.getPerspective(id, this);
@@ -859,34 +857,142 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
         return org.semanticwb.bsc.element.Perspective.ClassMgr.hasPerspective(id, this);
     }
 
-    public org.semanticwb.bsc.element.Initiative getInitiative(String id)
+    public org.semanticwb.model.ResourceSubType getResourceSubType(String id)
     {
-        return org.semanticwb.bsc.element.Initiative.ClassMgr.getInitiative(id, this);
+        return org.semanticwb.model.ResourceSubType.ClassMgr.getResourceSubType(id, this);
     }
 
-    public java.util.Iterator<org.semanticwb.bsc.element.Initiative> listInitiatives()
+    public java.util.Iterator<org.semanticwb.model.ResourceSubType> listResourceSubTypes()
     {
-        return org.semanticwb.bsc.element.Initiative.ClassMgr.listInitiatives(this);
+        return org.semanticwb.model.ResourceSubType.ClassMgr.listResourceSubTypes(this);
     }
 
-    public org.semanticwb.bsc.element.Initiative createInitiative(String id)
+    public org.semanticwb.model.ResourceSubType createResourceSubType(String id)
     {
-        return org.semanticwb.bsc.element.Initiative.ClassMgr.createInitiative(id,this);
+        return org.semanticwb.model.ResourceSubType.ClassMgr.createResourceSubType(id,this);
     }
 
-    public org.semanticwb.bsc.element.Initiative createInitiative()
+    public void removeResourceSubType(String id)
     {
-        long id=getSemanticObject().getModel().getCounter(bsc_Initiative);
-        return org.semanticwb.bsc.element.Initiative.ClassMgr.createInitiative(String.valueOf(id),this);
+        org.semanticwb.model.ResourceSubType.ClassMgr.removeResourceSubType(id, this);
+    }
+    public boolean hasResourceSubType(String id)
+    {
+        return org.semanticwb.model.ResourceSubType.ClassMgr.hasResourceSubType(id, this);
+    }
+
+    public org.semanticwb.model.RoleRef getRoleRef(String id)
+    {
+        return org.semanticwb.model.RoleRef.ClassMgr.getRoleRef(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.RoleRef> listRoleRefs()
+    {
+        return org.semanticwb.model.RoleRef.ClassMgr.listRoleRefs(this);
+    }
+
+    public org.semanticwb.model.RoleRef createRoleRef(String id)
+    {
+        return org.semanticwb.model.RoleRef.ClassMgr.createRoleRef(id,this);
+    }
+
+    public org.semanticwb.model.RoleRef createRoleRef()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_RoleRef);
+        return org.semanticwb.model.RoleRef.ClassMgr.createRoleRef(String.valueOf(id),this);
     } 
 
-    public void removeInitiative(String id)
+    public void removeRoleRef(String id)
     {
-        org.semanticwb.bsc.element.Initiative.ClassMgr.removeInitiative(id, this);
+        org.semanticwb.model.RoleRef.ClassMgr.removeRoleRef(id, this);
     }
-    public boolean hasInitiative(String id)
+    public boolean hasRoleRef(String id)
     {
-        return org.semanticwb.bsc.element.Initiative.ClassMgr.hasInitiative(id, this);
+        return org.semanticwb.model.RoleRef.ClassMgr.hasRoleRef(id, this);
+    }
+
+    public org.semanticwb.model.Country getCountry(String id)
+    {
+        return org.semanticwb.model.Country.ClassMgr.getCountry(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.Country> listCountries()
+    {
+        return org.semanticwb.model.Country.ClassMgr.listCountries(this);
+    }
+
+    public org.semanticwb.model.Country createCountry(String id)
+    {
+        return org.semanticwb.model.Country.ClassMgr.createCountry(id,this);
+    }
+
+    public void removeCountry(String id)
+    {
+        org.semanticwb.model.Country.ClassMgr.removeCountry(id, this);
+    }
+    public boolean hasCountry(String id)
+    {
+        return org.semanticwb.model.Country.ClassMgr.hasCountry(id, this);
+    }
+
+    public org.semanticwb.bsc.tracing.Action getAction(String id)
+    {
+        return org.semanticwb.bsc.tracing.Action.ClassMgr.getAction(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.bsc.tracing.Action> listActions()
+    {
+        return org.semanticwb.bsc.tracing.Action.ClassMgr.listActions(this);
+    }
+
+    public org.semanticwb.bsc.tracing.Action createAction(String id)
+    {
+        return org.semanticwb.bsc.tracing.Action.ClassMgr.createAction(id,this);
+    }
+
+    public org.semanticwb.bsc.tracing.Action createAction()
+    {
+        long id=getSemanticObject().getModel().getCounter(bsc_Action);
+        return org.semanticwb.bsc.tracing.Action.ClassMgr.createAction(String.valueOf(id),this);
+    } 
+
+    public void removeAction(String id)
+    {
+        org.semanticwb.bsc.tracing.Action.ClassMgr.removeAction(id, this);
+    }
+    public boolean hasAction(String id)
+    {
+        return org.semanticwb.bsc.tracing.Action.ClassMgr.hasAction(id, this);
+    }
+
+    public org.semanticwb.bsc.element.Indicator getIndicator(String id)
+    {
+        return org.semanticwb.bsc.element.Indicator.ClassMgr.getIndicator(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicators()
+    {
+        return org.semanticwb.bsc.element.Indicator.ClassMgr.listIndicators(this);
+    }
+
+    public org.semanticwb.bsc.element.Indicator createIndicator(String id)
+    {
+        return org.semanticwb.bsc.element.Indicator.ClassMgr.createIndicator(id,this);
+    }
+
+    public org.semanticwb.bsc.element.Indicator createIndicator()
+    {
+        long id=getSemanticObject().getModel().getCounter(bsc_Indicator);
+        return org.semanticwb.bsc.element.Indicator.ClassMgr.createIndicator(String.valueOf(id),this);
+    } 
+
+    public void removeIndicator(String id)
+    {
+        org.semanticwb.bsc.element.Indicator.ClassMgr.removeIndicator(id, this);
+    }
+    public boolean hasIndicator(String id)
+    {
+        return org.semanticwb.bsc.element.Indicator.ClassMgr.hasIndicator(id, this);
     }
 
     public org.semanticwb.bsc.tracing.MeasurementFrequency getMeasurementFrequency(String id)
@@ -919,33 +1025,153 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
         return org.semanticwb.bsc.tracing.MeasurementFrequency.ClassMgr.hasMeasurementFrequency(id, this);
     }
 
-    public org.semanticwb.bsc.accessory.Period getPeriod(String id)
+    public org.semanticwb.model.Resource getResource(String id)
     {
-        return org.semanticwb.bsc.accessory.Period.ClassMgr.getPeriod(id, this);
+        return org.semanticwb.model.Resource.ClassMgr.getResource(id, this);
     }
 
-    public java.util.Iterator<org.semanticwb.bsc.accessory.Period> listPeriods()
+    public java.util.Iterator<org.semanticwb.model.Resource> listResources()
     {
-        return org.semanticwb.bsc.accessory.Period.ClassMgr.listPeriods(this);
+        return org.semanticwb.model.Resource.ClassMgr.listResources(this);
     }
 
-    public org.semanticwb.bsc.accessory.Period createPeriod(String id)
+    public org.semanticwb.model.Resource createResource(String id)
     {
-        return org.semanticwb.bsc.accessory.Period.ClassMgr.createPeriod(id,this);
+        return org.semanticwb.model.Resource.ClassMgr.createResource(id,this);
     }
 
-    public org.semanticwb.bsc.accessory.Period createPeriod()
+    public org.semanticwb.model.Resource createResource()
     {
-        long id=getSemanticObject().getModel().getCounter(bsc_Period);
-        return org.semanticwb.bsc.accessory.Period.ClassMgr.createPeriod(String.valueOf(id),this);
+        long id=getSemanticObject().getModel().getCounter(swb_Resource);
+        return org.semanticwb.model.Resource.ClassMgr.createResource(String.valueOf(id),this);
     } 
 
-    public void removePeriod(String id)
+    public void removeResource(String id)
     {
-        org.semanticwb.bsc.accessory.Period.ClassMgr.removePeriod(id, this);
+        org.semanticwb.model.Resource.ClassMgr.removeResource(id, this);
     }
-    public boolean hasPeriod(String id)
+    public boolean hasResource(String id)
     {
-        return org.semanticwb.bsc.accessory.Period.ClassMgr.hasPeriod(id, this);
+        return org.semanticwb.model.Resource.ClassMgr.hasResource(id, this);
+    }
+
+    public org.semanticwb.bsc.tracing.Risk getRisk(String id)
+    {
+        return org.semanticwb.bsc.tracing.Risk.ClassMgr.getRisk(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRisks()
+    {
+        return org.semanticwb.bsc.tracing.Risk.ClassMgr.listRisks(this);
+    }
+
+    public org.semanticwb.bsc.tracing.Risk createRisk(String id)
+    {
+        return org.semanticwb.bsc.tracing.Risk.ClassMgr.createRisk(id,this);
+    }
+
+    public org.semanticwb.bsc.tracing.Risk createRisk()
+    {
+        long id=getSemanticObject().getModel().getCounter(bsc_Risk);
+        return org.semanticwb.bsc.tracing.Risk.ClassMgr.createRisk(String.valueOf(id),this);
+    } 
+
+    public void removeRisk(String id)
+    {
+        org.semanticwb.bsc.tracing.Risk.ClassMgr.removeRisk(id, this);
+    }
+    public boolean hasRisk(String id)
+    {
+        return org.semanticwb.bsc.tracing.Risk.ClassMgr.hasRisk(id, this);
+    }
+
+    public org.semanticwb.bsc.element.Initiative getInitiative(String id)
+    {
+        return org.semanticwb.bsc.element.Initiative.ClassMgr.getInitiative(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.bsc.element.Initiative> listInitiatives()
+    {
+        return org.semanticwb.bsc.element.Initiative.ClassMgr.listInitiatives(this);
+    }
+
+    public org.semanticwb.bsc.element.Initiative createInitiative(String id)
+    {
+        return org.semanticwb.bsc.element.Initiative.ClassMgr.createInitiative(id,this);
+    }
+
+    public org.semanticwb.bsc.element.Initiative createInitiative()
+    {
+        long id=getSemanticObject().getModel().getCounter(bsc_Initiative);
+        return org.semanticwb.bsc.element.Initiative.ClassMgr.createInitiative(String.valueOf(id),this);
+    } 
+
+    public void removeInitiative(String id)
+    {
+        org.semanticwb.bsc.element.Initiative.ClassMgr.removeInitiative(id, this);
+    }
+    public boolean hasInitiative(String id)
+    {
+        return org.semanticwb.bsc.element.Initiative.ClassMgr.hasInitiative(id, this);
+    }
+
+    public org.semanticwb.model.Rule getRule(String id)
+    {
+        return org.semanticwb.model.Rule.ClassMgr.getRule(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.Rule> listRules()
+    {
+        return org.semanticwb.model.Rule.ClassMgr.listRules(this);
+    }
+
+    public org.semanticwb.model.Rule createRule(String id)
+    {
+        return org.semanticwb.model.Rule.ClassMgr.createRule(id,this);
+    }
+
+    public org.semanticwb.model.Rule createRule()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_Rule);
+        return org.semanticwb.model.Rule.ClassMgr.createRule(String.valueOf(id),this);
+    } 
+
+    public void removeRule(String id)
+    {
+        org.semanticwb.model.Rule.ClassMgr.removeRule(id, this);
+    }
+    public boolean hasRule(String id)
+    {
+        return org.semanticwb.model.Rule.ClassMgr.hasRule(id, this);
+    }
+
+    public org.semanticwb.model.ResourceRef getResourceRef(String id)
+    {
+        return org.semanticwb.model.ResourceRef.ClassMgr.getResourceRef(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.ResourceRef> listResourceRefs()
+    {
+        return org.semanticwb.model.ResourceRef.ClassMgr.listResourceRefs(this);
+    }
+
+    public org.semanticwb.model.ResourceRef createResourceRef(String id)
+    {
+        return org.semanticwb.model.ResourceRef.ClassMgr.createResourceRef(id,this);
+    }
+
+    public org.semanticwb.model.ResourceRef createResourceRef()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_ResourceRef);
+        return org.semanticwb.model.ResourceRef.ClassMgr.createResourceRef(String.valueOf(id),this);
+    } 
+
+    public void removeResourceRef(String id)
+    {
+        org.semanticwb.model.ResourceRef.ClassMgr.removeResourceRef(id, this);
+    }
+    public boolean hasResourceRef(String id)
+    {
+        return org.semanticwb.model.ResourceRef.ClassMgr.hasResourceRef(id, this);
     }
 }

@@ -5,7 +5,13 @@ package org.semanticwb.bsc.base;
    */
 public interface UpdateableBase extends org.semanticwb.model.GenericObject
 {
+   /**
+   * Indicación de las recomendaciones para el elemento correspondiente 
+   */
     public static final org.semanticwb.platform.SemanticProperty bsc_recommendations=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#recommendations");
+   /**
+   * Anotaciones del análisis realizado al estado del elemento correspondiente 
+   */
     public static final org.semanticwb.platform.SemanticProperty bsc_analysis=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#analysis");
    /**
    * Cualquier elemento BSC que se pueda actualizar periodicamente 
