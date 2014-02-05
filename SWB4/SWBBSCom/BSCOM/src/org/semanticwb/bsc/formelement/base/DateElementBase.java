@@ -74,6 +74,11 @@ public abstract class DateElementBase extends org.semanticwb.model.DateElement
         }
     }
 
+//    public static DateElementBase.ClassMgr getDateElementClassMgr()
+//    {
+//        return new DateElementBase.ClassMgr();
+//    }
+
    /**
    * Constructs a DateElementBase with a SemanticObject
    * @param base The SemanticObject with the properties for the DateElement

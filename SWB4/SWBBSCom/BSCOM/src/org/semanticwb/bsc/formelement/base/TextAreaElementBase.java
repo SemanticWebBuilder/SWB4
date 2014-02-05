@@ -6,6 +6,7 @@ package org.semanticwb.bsc.formelement.base;
    */
 public abstract class TextAreaElementBase extends org.semanticwb.model.TextArea 
 {
+    public static final org.semanticwb.platform.SemanticProperty bsc_editable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#editable");
    /**
    * Utilizado en la generación de vistas resumen y detalle
    */
@@ -92,5 +93,23 @@ public abstract class TextAreaElementBase extends org.semanticwb.model.TextArea
     public TextAreaElementBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the Editable property
+* @return boolean with the Editable
+*/
+    public boolean isEditable()
+    {
+        return getSemanticObject().getBooleanProperty(bsc_editable);
+    }
+
+/**
+* Sets the Editable property
+* @param value long with the Editable
+*/
+    public void setEditable(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(bsc_editable, value);
     }
 }
