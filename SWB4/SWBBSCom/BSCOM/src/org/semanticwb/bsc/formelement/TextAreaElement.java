@@ -48,7 +48,7 @@ public class TextAreaElement extends org.semanticwb.bsc.formelement.base.TextAre
     public String renderElement(HttpServletRequest request, SemanticObject obj,
             SemanticProperty prop, String propName, String type, String mode,
             String lang) {
-        
+System.out.println("TextAreaElement.renderElement... mode="+mode);
         String toReturn = null;
         
         if (mode == null) {
