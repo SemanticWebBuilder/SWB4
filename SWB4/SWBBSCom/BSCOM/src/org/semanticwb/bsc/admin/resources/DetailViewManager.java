@@ -29,6 +29,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.*;
+import org.semanticwb.bsc.formelement.TextAreaElement;
 import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.utils.DetailView;
@@ -713,17 +714,22 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             }
             Period period = Period.ClassMgr.getPeriod(periodId, paramRequest.getWebPage().getWebSite());
             PeriodStatus periodStatus = null;
+            
+            UserGroup collaboration = null;
+            
             //Si el semObj es hijo de PeriodStatusAssignable se debe:
             GenericObject generic = semObj.createGenericInstance();
             if (generic != null && generic instanceof Objective) {
                 Objective objective = (Objective) generic;
                 periodStatus = objective.getPeriodStatus(period);
+                collaboration = objective.getSponsor().getUserRepository().getUserGroup("Sponsors");
             } else if (generic != null && generic instanceof Indicator) {
                 Indicator indicator = (Indicator) generic;
                 Measure measure = indicator != null && indicator.getStar() != null ? indicator.getStar().getMeasure(period) : null;
                 if (measure != null && measure.getEvaluation() != null) {
                     periodStatus = measure.getEvaluation();
                 }
+                collaboration = indicator.getChampion().getUserRepository().getUserGroup("Champions");
             }
             
             //-Agrega encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
@@ -747,7 +753,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             output.append("</h2>\n");
 
             if (reader != null) {
-                output.append(generateDisplay(request, paramRequest, reader, semObj));
+                output.append(generateDisplay(request, paramRequest, reader, semObj, collaboration));
             } else {
                 output.append(paramRequest.getLocaleString("fileNotRead"));
             }
@@ -1126,7 +1132,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * @throws IOException en caso de que se presente alg&uacute;n problema en el parseo del contenido de la plantilla
      */
     private String generateDisplay(HttpServletRequest request, SWBParamRequest paramRequest,
-            FileReader template, SemanticObject elementBSC) throws IOException {
+            FileReader template, SemanticObject elementBSC, final UserGroup collaboration) throws IOException {
         
         StringBuilder view = new StringBuilder(256);
         HtmlStreamTokenizer tok = new HtmlStreamTokenizer(template);
@@ -1167,7 +1173,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                  */
                     String propUri = tag.getParam("tagProp");
                     if (propUri != null) {
-                        view.append(renderPropertyValue(request, elementBSC, propUri, lang, period));
+                        view.append(renderPropertyValue(request, elementBSC, propUri, lang, period, collaboration));
                     }
                 }
             } else if (ttype == HtmlStreamTokenizer.TT_TEXT) {
@@ -1190,7 +1196,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * @return el despliegue del valor almacenado para la propiedad indicada
      */
     private String renderPropertyValue(HttpServletRequest request, SemanticObject elementBSC,
-            String propUri, String lang, Period period) {
+            String propUri, String lang, Period period, final UserGroup collaboration) {
         
         String ret = null;
         SWBFormMgr formMgr = new SWBFormMgr(elementBSC, null, SWBFormMgr.MODE_VIEW);
@@ -1209,16 +1215,11 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                         "http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement"));
                 if (formElement != null) {
                     FormElement fe = (FormElement) formElement.createGenericInstance();
-                    //Revisar tipo de FormElement para saber si aplicar el InLineEdit
-                    GenericObject generic = formElement.createGenericInstance();
                     boolean applyInlineEdit = false;
-                    
-                    if (generic instanceof Text || generic instanceof TextArea) {
+                    if( (userCanEdit()&&isInMeasurementTime(period)&&isEditable(formElement)) || (userCanCollaborate(collaboration)&&isEditable(formElement)) ) {
                         applyInlineEdit = true;
                     }
-                    if (!userCanEdit() || !isInMeasurementTime(period)) {
-                        applyInlineEdit = false;
-                    }
+                    
                     if (fe != null) {
                         if (formMgr.getSemanticObject() != null) {
                             fe.setModel(formMgr.getSemanticObject().getModel());
@@ -1271,33 +1272,37 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         String str_role = getResourceBase().getAttribute("editRole", null);
         final User user = SWBContext.getSessionUser();
         
-        if (user != null && str_role != null) {
-            SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-            GenericObject gobj = null;
-            try {
-                gobj = ont.getGenericObject(str_role);
-            } catch (Exception e) {
-                DetailViewManager.log.error("Error InlineEdit.userCanEdit()", e);
-                return Boolean.FALSE;
-            }
-
-            UserGroup ugrp = null;
-            Role urole = null;
-
-            if (gobj != null) {
-                if (gobj instanceof UserGroup) {
-                    ugrp = (UserGroup) gobj;
-                    if (user.hasUserGroup(ugrp)) {
-                        access = true;
-                    }
-                } else if (gobj instanceof Role) {
-                    urole = (Role) gobj;
-                    if (user.hasRole(urole)) {
-                        access = true;
-                    }
+        if(user != null)
+        {
+            if(str_role != null)
+            {
+                SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+                GenericObject gobj = null;
+                try {
+                    gobj = ont.getGenericObject(str_role);
+                } catch (Exception e) {
+                    DetailViewManager.log.error("Error InlineEdit.userCanEdit()", e);
+                    return Boolean.FALSE;
                 }
-            } else {
-                access = false;
+
+                UserGroup ugrp = null;
+                Role urole = null;
+
+                if (gobj != null) {
+                    if (gobj instanceof UserGroup) {
+                        ugrp = (UserGroup) gobj;
+                        if (user.hasUserGroup(ugrp)) {
+                            access = true;
+                        }
+                    } else if (gobj instanceof Role) {
+                        urole = (Role) gobj;
+                        if (user.hasRole(urole)) {
+                            access = true;
+                        }
+                    }
+                } else {
+                    access = false;
+                }
             }
         }
         return access;
@@ -1311,7 +1316,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      *          de captura para el periodo indicado {@code true}, o {@code false} de lo contrario.
      */
     private boolean isInMeasurementTime(final Period period) {
-        
         Resource base = getResourceBase();
         int timeBefore = 0;
         int timeAfter = 0;
@@ -1346,5 +1350,14 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         endDate.setTime(end);
         endDate.add(timeUnit, timeAfter);
         return current.compareTo(startDate) >= 0 && current.compareTo(endDate) <= 0;
+    }
+    
+    private boolean isEditable(SemanticObject formElement) {        
+        return formElement.getProperty(TextAreaElement.bsc_editable)==null?false:formElement.getBooleanProperty(TextAreaElement.bsc_editable);
+    }
+    
+    private boolean userCanCollaborate(final UserGroup collaboration) {
+        final User user = SWBContext.getSessionUser();
+        return collaboration.hasUser(user);
     }
 }
