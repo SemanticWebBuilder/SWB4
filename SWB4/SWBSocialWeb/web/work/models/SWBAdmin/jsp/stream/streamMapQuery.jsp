@@ -23,6 +23,7 @@
 
 
 <%
+try{
     String apiKey=SWBSocialUtil.Util.getModelPropertyValue(SWBContext.getAdminWebSite(), "GoogleMapsApiKey");
     if(apiKey==null){
         out.println("Error:No se puede mostrar el mapa debido a que la llave de Google Maps no esta configurada(GoogleMapsApiKey), contactese con su administrador");
@@ -427,6 +428,10 @@
     </div>
   </body>
 </html>
+            
+<%
+}catch(Exception e){System.out.println("Error:"+e.getMessage());e.printStackTrace();}
+%>
             
             
 <%!
