@@ -175,7 +175,7 @@ public class WBATrackingPageReport extends GenericResource {
         Resource base = getResourceBase();
 
         try
-        {    
+        {
             // If there are sites continue
             if(SWBContext.listWebSites().hasNext())
             {
@@ -227,8 +227,8 @@ public class WBATrackingPageReport extends GenericResource {
                 out.println("      { field:\"year\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblYear") + "\" },");
                 out.println("      { field:\"month\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblMonth") + "\" },");
                 out.println("      { field:\"day\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblDay") + "\" },");
-                out.println("      { field:\"time\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblHour") + "\" }");
-                //out.println("      { field:\"milis\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblDuration") + "\" }");
+                out.println("      { field:\"time\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblHour") + "\" },");
+                out.println("      { field:\"secc\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblSection") + "\" }");
                 out.println("    ];");
 
                 out.println("   gridMaster = new dojox.grid.DataGrid({");
@@ -250,6 +250,7 @@ public class WBATrackingPageReport extends GenericResource {
                 out.println("    params += '&t11='+dojo.byId('wb_t11').value;");
                 out.println("    params += '&fecha12='+dojo.byId('wb_fecha12').value;");
                 out.println("    params += '&t12='+dojo.byId('wb_t12').value;");
+                out.println("    params += '&wb_show_chld=' + dojo.byId('wb_show_chld').checked;");
                 out.println("    return params;");
                 out.println("  } ");
 
@@ -315,6 +316,12 @@ public class WBATrackingPageReport extends GenericResource {
                 out.println("<td>" + paramsRequest.getLocaleString("lblPage") + ":</td>");                
                 out.println("<td colspan=\"3\"><div id=\"slave\"></div></td>");
                 out.println("</tr>");
+                
+out.println("<tr>");
+out.println("<td colspan=\"4\"><input type=\"checkbox\" id=\"wb_show_chld\" name=\"wb_show_chld\" value=\"1\" />");
+out.println("<label for=\"wb_show_chld\">"+paramsRequest.getLocaleString("lblDescendant")+"</label>");
+out.println("</td>");
+out.println("</tr>");
 
                 out.println("<tr>");
                 out.println("<td colspan=\"4\">");
@@ -435,7 +442,7 @@ public class WBATrackingPageReport extends GenericResource {
         String urId, login;
         UserRepository ur;
         User visitor;
-        Iterator<String[]> lines = getReportResults(wsId, wpId, first, last);
+        Iterator<String[]> lines = getReportResults(wsId, wp, true, first, last);
         while(lines.hasNext()) {
             String[] t = lines.next();
             JSONObject obj = new JSONObject();
@@ -488,7 +495,7 @@ public class WBATrackingPageReport extends GenericResource {
                 }
                 obj.put("time", t[0].substring(11,16));
 //                try {
-//                    obj.put("milis", Long.parseLong(t[11]));
+                obj.put("secc", t[5]);
 //                }catch(NumberFormatException nfe) {
 //                    obj.put("milis", t[11]);
 //                }                
@@ -561,7 +568,7 @@ public class WBATrackingPageReport extends GenericResource {
         String urId, login;
         UserRepository ur;
         User visitor;
-        Iterator<String[]> lines = getReportResults(wsId, wpId, first, last);
+        Iterator<String[]> lines = getReportResults(wsId, wp, true, first, last);
         out.println("<table>");
         out.println("<tr>");
         out.println("<th>");
@@ -571,11 +578,11 @@ public class WBATrackingPageReport extends GenericResource {
         out.println(paramsRequest.getLocaleString("lblUserName"));
         out.println("</th>");
         out.println("<th>");
-        out.println(paramsRequest.getLocaleString("lblFirstName"));
-        out.println("</th>");
-        out.println("<th>");
         out.println(paramsRequest.getLocaleString("lblLastName"));
         out.println("</th>");
+        out.println("<th>");
+        out.println(paramsRequest.getLocaleString("lblSecondLastName"));
+        out.println("</th>");        
         out.println("<th>");
         out.println(paramsRequest.getLocaleString("lblName"));
         out.println("</th>");
@@ -592,7 +599,7 @@ public class WBATrackingPageReport extends GenericResource {
         out.println(paramsRequest.getLocaleString("lblHour"));
         out.println("</th>");
         out.println("<th>");
-        out.println(paramsRequest.getLocaleString("lblDuration"));
+        out.println(paramsRequest.getLocaleString("lblSection"));
         out.println("</th>");
         out.println("</tr>");
 
@@ -621,7 +628,7 @@ public class WBATrackingPageReport extends GenericResource {
             String month;
             String day;
             String times;
-            String millis;
+//            String millis;
             login = t[7];
             if ("_".equals(login)) {
                 ln = "_";
@@ -659,25 +666,28 @@ public class WBATrackingPageReport extends GenericResource {
                 day = t[0].substring(8, 10);
             }
             times = t[0].substring(11, 16);
-            try {
-                long l = Long.parseLong(t[11]);
-                millis = l + "";
-            } catch (NumberFormatException nfe) {
-                millis = t[11];
-            }
+//            try {
+//                long l = Long.parseLong(t[11]);
+//                millis = l + "";
+//            } catch (NumberFormatException nfe) {
+//                millis = t[11];
+//            }
             
             out.println("<tr>");
             out.println("<td>");
             out.println(rep);
-            out.println("</td>");            
+            out.println("</td>");
             out.println("<td>");
-            out.println(n);
+            out.println(login);
             out.println("</td>");
             out.println("<td>");
             out.println(ln);
             out.println("</td>");
             out.println("<td>");
             out.println(sln);
+            out.println("</td>");
+            out.println("<td>");
+            out.println(n);
             out.println("</td>");
             out.println("<td>");
             out.println(year);
@@ -692,7 +702,7 @@ public class WBATrackingPageReport extends GenericResource {
             out.println(times);
             out.println("</td>");   
             out.println("<td>");
-            out.println(millis);
+            out.println(t[5]);
             out.println("</td>");   
             out.println("</tr>");
         }
@@ -754,10 +764,12 @@ public class WBATrackingPageReport extends GenericResource {
             last = new Date();
         }
         
+        boolean includeDescendant = Boolean.parseBoolean(request.getParameter("wb_show_chld"));
+        
         String urId, login;
         UserRepository ur;
         User visitor;
-        Iterator<String[]> lines = getReportResults(wsId, wpId, first, last);
+        Iterator<String[]> lines = getReportResults(wsId, wp, includeDescendant, first, last);
         while(lines.hasNext()) {
             String[] t = lines.next();
             JSONObject obj = new JSONObject();
@@ -816,6 +828,7 @@ public class WBATrackingPageReport extends GenericResource {
                     obj.put("day", t[0].substring(8,10));
                 }
                 obj.put("time", t[0].substring(11,16));
+                obj.put("secc", t[5]);
 //                try {
 //                    obj.put("milis", Long.parseLong(t[11]));
 //                }catch(NumberFormatException nfe) {
@@ -836,9 +849,8 @@ public class WBATrackingPageReport extends GenericResource {
      * @param paramsRequest the params request
      * @return the report results
      */
-    private Iterator<String[]> getReportResults(final String wsId, final String wpId, final Date s, final Date e) {
+    private Iterator<String[]> getReportResults(final String wsId, final WebPage webPage, boolean includeChild,final Date s, final Date e) {
         GregorianCalendar datefile = null;
-
         String line = null;
         String s_aux = null;
         String filename = null;
@@ -849,7 +861,10 @@ public class WBATrackingPageReport extends GenericResource {
         String hourinfile = null;
         String mininfile = null;
         
-        final WebSite ws = SWBContext.getWebSite(wsId);
+        WebPage wp;
+        
+        //final WebSite ws = SWBContext.getWebSite(wsId);
+        final WebSite ws = webPage.getWebSite();
         
         GregorianCalendar start = new GregorianCalendar();
         start.setTime(s);
@@ -857,7 +872,7 @@ public class WBATrackingPageReport extends GenericResource {
         end.setTime(e);
         
         List<String[]> list_rep = new ArrayList<String[]>();
-        Iterator<String> files = getFileNames(wsId, (GregorianCalendar)start.clone(), (GregorianCalendar)end.clone());
+        Iterator<String> files = getFileNames(ws.getId(), (GregorianCalendar)start.clone(), (GregorianCalendar)end.clone());
         if(files.hasNext()) {    
             while(files.hasNext()) {
                 filename = files.next();
@@ -892,13 +907,27 @@ public class WBATrackingPageReport extends GenericResource {
                             continue;
                         }
                         //4-s_aux receives website id, this value no matter
-                        if( wsId!=null && !wsId.equalsIgnoreCase(t[4]) ) {
+                        if( !ws.getId().equalsIgnoreCase(t[4]) ) {
                             continue;
                         }
+                        
+                        //Obtener la pagina actual del log
+                        wp = ws.getWebPage(t[5]);
+                        if(wp==null) {
+                            continue;
+                        }
+                        
                         //5-s_aux receives section id
-                        if( wpId!=null && !wpId.equalsIgnoreCase(t[5]) ) {
-                            continue;
+                        if(includeChild) {
+                            if( !webPage.getId().equalsIgnoreCase(t[5]) && !wp.isChildof(webPage) ) {
+                                continue;
+                            }
+                        }else {
+                            if( !webPage.getId().equalsIgnoreCase(t[5]) ) {
+                                continue;
+                            }
                         }
+                        
                         list_rep.add(t);
                     }
                     }catch(IOException ioe) {
@@ -906,18 +935,18 @@ public class WBATrackingPageReport extends GenericResource {
                         continue;
                     }
 //                    while( line != null );
-                    if(rf_in != null ) {
+//                    if(rf_in != null ) {
                         try {
                             rf_in.close();
                         }catch(IOException ioe) {
                             rf_in = null;
                         }
-                    }
+//                    }
                 } // f.exists()
                 else
                 {
                     log.error("File " + filename + " not found on method getReportResults() resource " + strRscType + " with id " +  getResourceBase().getId());
-                    System.out.println("...File " + filename + " not found on method getReportResults() resource " + strRscType + " with id " +  getResourceBase().getId());
+                    //System.out.println("...File " + filename + " not found on method getReportResults() resource " + strRscType + " with id " +  getResourceBase().getId());
                 }
             }
         }
