@@ -25,7 +25,9 @@ public class SWBSocial {
         if(query!=null)
         {
             //QueryExecution qe=new SWBQueryExecution(wsite.getSemanticModel().getRDFModel(), query);
+            System.out.println("SWBSocial/executeQuery:"+query);
             QueryExecution qe=wsite.getSemanticModel().sparQLQuery(query);
+            //System.out.println("SWBSocial-1/executeQuery:"+qe);
             ResultSet rs=qe.execSelect();
             while(rs.hasNext())
             {

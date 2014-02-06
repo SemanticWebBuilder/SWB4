@@ -87,6 +87,7 @@ public class StreamCleanerMsgbyNumber {
                 + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
                 + "  }\n";
         WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+        //System.out.println("query:"+query+",wsite:"+wsite);
         query = SWBSocial.executeQuery(query, wsite);
         return query;
     }
