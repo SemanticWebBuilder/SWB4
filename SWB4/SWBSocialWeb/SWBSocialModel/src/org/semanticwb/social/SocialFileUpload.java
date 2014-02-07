@@ -97,7 +97,7 @@ public String renderElement(HttpServletRequest request, SemanticObject obj,
         if (!"view".equals(mode)) {
             buffer.append("<input "
                     + "name=\"uploadedfile\" "
-                    + "data-dojo-props=\" \n"
+                    + "data-dojo-props=\"label:'Adjuntar',\n"
                     + "multiple:'" + (prop.getCardinality() != 1 ? "true" : "false") + "', \n"
                     //+ "force:'iframe', \n" 
                     + "uploadOnSelect:false, \n"
