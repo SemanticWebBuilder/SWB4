@@ -177,7 +177,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 log.error("Al integrar consulta batch con siguiente consulta", jsone);
             }
         }
-
+        //--System.out.println("RELATIVE URL:" + batch.toString());
         return batch.toString();
     }
 
@@ -402,10 +402,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     }
                     //Para la primera ejecucion de este proceso se crean las url de las consultas publicas
                     publicQuery = "search?q=" + phrase[i] + "&type=post&limit="
-                            + Facebook.QUERYLIMIT + (untilPublic != null ? "&since=" + untilPublic : "");
+                            + Facebook.QUERYLIMIT + (untilPublic != null ? "&since=" + untilPublic : "") + "&fields=id,from,to,message,story,picture,caption,link,object_id,application,source,name,description,properties,type,status_type,created_time,updated_time,likes.summary(true),place,icon";
                     // Y las url de las consultas privadas
                     wallQuery = "me/feed?q=" + phrase[i] + "&type=post&limit="
-                            + Facebook.QUERYLIMIT + (untilPrivate != null ? "&since=" + untilPrivate : "");
+                            + Facebook.QUERYLIMIT + (untilPrivate != null ? "&since=" + untilPrivate : "") + "&fields=id,from,to,message,story,picture,caption,link,object_id,application,source,name,description,properties,type,status_type,created_time,updated_time,likes.summary(true),place,icon";
 
                     queryPublic.put("method", "GET");
                     queryPublic.put("relative_url", publicQuery);
@@ -523,8 +523,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                 }
 
                                 if (postsData.getJSONObject(k).has("likes")) {
-                                    if (postsData.getJSONObject(k).getJSONObject("likes").has("count")) {
-                                        external.setPostShared(postsData.getJSONObject(k).getJSONObject("likes").getInt("count"));
+                                    if (postsData.getJSONObject(k).getJSONObject("likes").has("summary")) {
+                                        if (postsData.getJSONObject(k).getJSONObject("likes").getJSONObject("summary").has("total_count")) {
+                                            external.setPostShared(postsData.getJSONObject(k).getJSONObject("likes").getJSONObject("summary").getInt("total_count"));
+                                        }
                                     }
                                 }
 
