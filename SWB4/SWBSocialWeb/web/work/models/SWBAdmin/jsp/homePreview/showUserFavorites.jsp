@@ -70,7 +70,7 @@
     %>
     <li>
         <a href="javascript:parent.addNewTab('<%=stream.getURI()%>','<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/objectTab.jsp','<%=SWBUtils.TEXT.scape4Script(stream.getDisplayTitle(user.getLanguage()))%>');">
-            <img class="swbIconStream" src="/swbadmin/css/images/trans.png"/><%=stream.getTitle()%>
+            <img class="swbIconStream" src="/swbadmin/css/images/trans.png"/><%=stream.getDisplayTitle(user.getLanguage())%> 
         </a>
     </li>
     <%
@@ -80,7 +80,7 @@
     %>
     <li>
         <a href="javascript:parent.addNewTab('<%=socialTopic.getURI()%>','<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/objectTab.jsp','<%=SWBUtils.TEXT.scape4Script(socialTopic.getDisplayTitle(user.getLanguage()))%>');">
-            <img class="swbIconSocialTopic" src="/swbadmin/css/images/trans.png"/>  <%=socialTopic.getTitle()%>
+            <img class="swbIconSocialTopic" src="/swbadmin/css/images/trans.png"/>  <%=socialTopic.getDisplayTitle(user.getLanguage())%>
         </a>
     </li>
     <%
