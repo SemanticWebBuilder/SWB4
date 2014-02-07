@@ -326,7 +326,7 @@ public class SocialSentPostBySocialNet extends GenericResource{
         out.println("<fieldset class=\"barra\">");
         out.println("<div class=\"barra\">");
 
-        out.println("<a href=\"#\" class=\"countersBar\" title=\"Refrescar Tab\" onclick=\"submitUrl('" + urlRefresh.setMode(SWBResourceURL.Action_EDIT) + "',this); return false;\">"+nf2.format(nRec)+"/"+nf2.format(numSocialTopicPOComments)+" mensajes/respuestas</a>");
+        out.println("<a href=\"#\" class=\"countersBar\" title=\"Refrescar Tab\" onclick=\"submitUrl('" + urlRefresh.setMode(SWBResourceURL.Action_EDIT) + "',this); return false;\">"+nf2.format(numSocialTopicPOComments)+" mensajes enviados</a>");
 
         String page = request.getParameter("page");
         if (page == null) {
@@ -334,7 +334,7 @@ public class SocialSentPostBySocialNet extends GenericResource{
         }
         String orderBy = request.getParameter("orderBy");
         
-        out.println("<a href=\"" + urls.setMode("exportExcel").setParameter("pages", page).setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("orderBy", orderBy) + "\" class=\"excel\">" + paramRequest.getLocaleString("importCurrentPage") + "</a>");
+        //out.println("<a href=\"" + urls.setMode("exportExcel").setParameter("pages", page).setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("orderBy", orderBy) + "\" class=\"excel\">" + paramRequest.getLocaleString("importCurrentPage") + "</a>");
 
         
         out.println("<a href=\"" + urls.setMode("exportExcel").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("pages", "0").setParameter("orderBy", orderBy) + "\" class=\"excelall\">" + paramRequest.getLocaleString("importAll") + "</a>");
@@ -344,23 +344,23 @@ public class SocialSentPostBySocialNet extends GenericResource{
         urls.setParameter("act", "");
         urls.setParameter("suri", id);
         
-        out.println("<form id=\"" + id + "/fviewScheduledPost\" name=\"" + id + "/fviewScheduledPost\" method=\"post\" action=\"" + urlScheduledPost.setMode(SWBResourceURL.Mode_EDIT).setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", id) + "\" onsubmit=\"submitForm('" + id + "/fviewScheduledPost');return false;\">");
+        /*out.println("<form id=\"" + id + "/fviewScheduledPost\" name=\"" + id + "/fviewScheduledPost\" method=\"post\" action=\"" + urlScheduledPost.setMode(SWBResourceURL.Mode_EDIT).setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", id) + "\" onsubmit=\"submitForm('" + id + "/fviewScheduledPost');return false;\">");
         out.println(paramRequest.getLocaleString("showComboFilters")+":<select name=\"orderBy\">");
         out.println("<option value=\"\">"+paramRequest.getLocaleString("all")+"</option>");
         out.println("<option value=\"viewFCPost\">"+paramRequest.getLocaleString("indivCal")+"</option>");
         out.println("<option value=\"viewACPost\">"+paramRequest.getLocaleString("globalCal")+"</option>");
         out.println("</select>");
         out.println("<input type=\"submit\" name\"fviewScheduledPost_Go\" value=\""+paramRequest.getLocaleString("btnGo") + "\"/>"); //
-        out.println("</form>");
+        out.println("</form>");*/
 
         //out.println("<span  class=\"spanFormat\">");
-        out.println("<form id=\"" + id + "/fsearchwp\" name=\"" + id + "/fsearchwp\" method=\"post\" action=\"" + urls.setMode(SWBResourceURL.Mode_EDIT) + "\" onsubmit=\"submitForm('" + id + "/fsearchwp');return false;\">");
+        /*//-out.println("<form id=\"" + id + "/fsearchwp\" name=\"" + id + "/fsearchwp\" method=\"post\" action=\"" + urls.setMode(SWBResourceURL.Mode_EDIT) + "\" onsubmit=\"submitForm('" + id + "/fsearchwp');return false;\">");
         out.println("<div align=\"right\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
         out.println("<input type=\"text\" name=\"search\" id=\"" + id + "_searchwp\" value=\"" + searchWord + "\" placeholder=\"" + paramRequest.getLocaleString("searchPost") + "\">");
         out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("btnSearch") + "</button>"); //
         out.println("</div>");
-        out.println("</form>");
+        out.println("</form>");*/
         //out.println("</span>");
 
         out.println("</div>");
@@ -374,13 +374,13 @@ public class SocialSentPostBySocialNet extends GenericResource{
         out.println("<tr>");
 
 
-        out.println("<th class=\"accion\">");
-        out.println("<span>" + paramRequest.getLocaleString("action") + "</span>");
+        out.println("<th class=\"mensaje\">");
+        out.println(paramRequest.getLocaleString("action"));
         out.println("</th>");
 
 
         out.println("<th class=\"mensaje\">");
-        out.println("<span>" + paramRequest.getLocaleString("post") + "</span>");
+        out.println(paramRequest.getLocaleString("post"));
         out.println("</th>");
 
         SWBResourceURL urlOderby = paramRequest.getRenderUrl();
@@ -404,14 +404,15 @@ public class SocialSentPostBySocialNet extends GenericResource{
                 }
             }
         }
-        out.println("<th>");
+        out.println("<th class=\"mensaje\">");
         urlOderby.setParameter("nameClass", nameClass);
-        out.println("<a href=\"#\" class=\"" + nameClass + "\" title=\"" + typeOrder + "\">");
-        out.println("<span>" + paramRequest.getLocaleString("postType") + "</span>");
-        out.println("</a>");
+        out.println(paramRequest.getLocaleString("postType"));
         out.println("</th>");
 
-
+        out.println("<th class=\"mensaje\">");
+        out.println(paramRequest.getLocaleString("postTopic"));
+        out.println("</th>");
+        
         out.println("<th class=\"mensaje\">");
         out.println(paramRequest.getLocaleString("networks"));
         out.println("</th>");
@@ -434,11 +435,9 @@ public class SocialSentPostBySocialNet extends GenericResource{
                 }
             }
         }
-        out.println("<th>");
-        urlOderby.setParameter("nameClassOrigen", nameClassOrigen);
-        out.println("<a href=\"#\" class=\"" + nameClassOrigen + "\" title=\"" + typeOrderOrigen + "\" onclick=\"submitUrl('" + urlOderby + "',this); return false;\">");
-        out.println("<span>" + paramRequest.getLocaleString("source") + "</span>");
-        out.println("</a>");
+        out.println("<th class=\"mensaje\">");
+        urlOderby.setParameter("nameClassOrigen", nameClassOrigen);        
+        out.println(paramRequest.getLocaleString("source"));
         out.println("</th>");
 
 
@@ -459,11 +458,9 @@ public class SocialSentPostBySocialNet extends GenericResource{
                 }
             }
         }
-        out.println("<th>");
+        out.println("<th class=\"mensaje\">");
         urlOderby.setParameter("nameClassUser", nameClassUser);
-        out.println("<a href=\"#\" class=\"" + nameClassUser + "\" title=\"" + typeOrderUser + "\">");
-        out.println("<span>" + paramRequest.getLocaleString("user") + "</span>");
-        out.println("</a>");
+        out.println(paramRequest.getLocaleString("user"));
         out.println("</th>");
         //Ends User
 
@@ -485,11 +482,9 @@ public class SocialSentPostBySocialNet extends GenericResource{
                 }
             }
         }
-        out.println("<th>");
+        out.println("<th class=\"mensaje\">");
         urlOderby.setParameter("nameClassCreted", nameClassCreted);
-        out.println("<a href=\"#\" class=\"" + nameClassCreted + "\" title=\"" + typeOrderCreted + "\">");
-        out.println("<span>" + paramRequest.getLocaleString("created") + "</span>");
-        out.println("</a>");
+        out.println(paramRequest.getLocaleString("created"));
         out.println("</th>");
 
 
@@ -510,11 +505,9 @@ public class SocialSentPostBySocialNet extends GenericResource{
             }
         }
 
-        out.println("<th>");
+        out.println("<th class=\"mensaje\">");
         urlOderby.setParameter("nameClassUpdate", nameClassUpdate);
-        out.println("<a  href=\"#\" class=\"" + nameClassUpdate + "\" title=\"" + typeOrderUpdate + "\">");
-        out.println("<span>" + paramRequest.getLocaleString("updated") + "</span>");
-        out.println("</a>");
+        out.println(paramRequest.getLocaleString("updated"));
         out.println("</th>");
 
         String nameClassStatus = "ascen";
@@ -533,11 +526,9 @@ public class SocialSentPostBySocialNet extends GenericResource{
                 }
             }
         }
-        out.println("<th>");
+        out.println("<th class=\"mensaje\">");
         urlOderby.setParameter("nameClassStatus", nameClassStatus);
-        out.println("<a href=\"#\" class=\"" + nameClassStatus + "\" title=\"" + typeOrderSentiment + "\">");
-        out.println("<span>" + paramRequest.getLocaleString("status") + "</span>");
-        out.println("</a>");
+        out.println(paramRequest.getLocaleString("status"));
         out.println("</th>");
 
 
@@ -556,7 +547,7 @@ public class SocialSentPostBySocialNet extends GenericResource{
 
         //Set<PostOut> setso = ((Set) hmapResult.get("itResult"));
         Iterator<PostOut> itposts = socialNetwork.listSocialNetworkPostOutInvs();//(Iterator)hmapResult.get("itResult"); 
-
+        
         //Iterator<PostOut> itposts = setso.iterator();
         while (itposts!=null && itposts.hasNext()) {
             PostOut postOut = (PostOut) itposts.next();
@@ -675,6 +666,12 @@ public class SocialSentPostBySocialNet extends GenericResource{
             out.println(postOut instanceof Message ? "<img title=\"Texto\" src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-txt.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("message") + "  \">" : postOut instanceof Photo ? "<img title=\"Imagen\" src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-img.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("photo") + "  \">" : postOut instanceof Video ? "<img title=\"Video\" src=\" " + SWBPlatform.getContextPath() + " /swbadmin/css/images/tipo-vid.jpg\" border=\"0\" alt=\"  " + paramRequest.getLocaleString("video") + "  \">" : "---");
             out.println("</td>");
 
+            //Show Topic
+            out.println("<td>");
+            out.println(postOut.getSocialTopic().getDisplayTitle(paramRequest.getUser().getLanguage()));
+            out.println("</td>");
+            
+            
             //Show Networks
             out.println("<td>");
             String nets = "---";
@@ -1793,10 +1790,11 @@ public class SocialSentPostBySocialNet extends GenericResource{
         SocialNetwork socialNetwork = (SocialNetwork) SemanticObject.createSemanticObject(id).getGenericInstance();
         WebSite webSite = WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
 
-        HashMap hmapResult = filtros(swbSocialUser, webSite, searchWord, request, socialNetwork, page);
+        //HashMap hmapResult = filtros(swbSocialUser, webSite, searchWord, request, socialNetwork, page);
 
         //long nRec = ((Long) hmapResult.get("countResult")).longValue();
-        Iterator<PostOut> setso = ((Iterator) hmapResult.get("itResult"));
+        //Iterator<PostOut> setso = ((Iterator) hmapResult.get("itResult"));
+        Iterator<PostOut> setso = socialNetwork.listSocialNetworkPostOutInvs();
 
 
         String classifyBySentiment = SWBSocialUtil.Util.getModelPropertyValue(webSite, SWBSocialUtil.CLASSIFYSENTMGS_PROPNAME);
@@ -1838,17 +1836,18 @@ public class SocialSentPostBySocialNet extends GenericResource{
             // Creo las celdas de mi fila, se puede poner un diseño a la celda
             createHead(wb, row, 0, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Post");
             createHead(wb, row, 1, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Tipo");
-            createHead(wb, row, 2, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Redes");
-            createHead(wb, row, 3, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Origen");
-            createHead(wb, row, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Creación");
-            createHead(wb, row, 5, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Última actualización");
+            createHead(wb, row, 2, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Tema");
+            createHead(wb, row, 3, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Redes");
+            createHead(wb, row, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Origen");
+            createHead(wb, row, 5, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Creación");
+            createHead(wb, row, 6, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Última actualización");
             if (classifyBySentiment != null && classifyBySentiment.equalsIgnoreCase("true")) {
-                createHead(wb, row, 6, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Sentimiento");
-                createHead(wb, row, 7, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Intensidad");
-                createHead(wb, row, 8, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Estatus");
+                createHead(wb, row, 7, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Sentimiento");
+                createHead(wb, row, 8, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Intensidad");
+                createHead(wb, row, 9, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Estatus");
             } else {
 
-                createHead(wb, row, 6, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Estatus");
+                createHead(wb, row, 7, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Estatus");
             }
 
 
@@ -1877,6 +1876,8 @@ public class SocialSentPostBySocialNet extends GenericResource{
 
                 }
                 createCell(cellStyle, wb, troww, 1, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, postIn instanceof Message ? paramRequest.getLocaleString("message") : postIn instanceof Photo ? paramRequest.getLocaleString("photo") : postIn instanceof Video ? paramRequest.getLocaleString("video") : "---");
+                
+                createCell(cellStyle, wb, troww, 2, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, postIn.getSocialTopic().getDisplayTitle(paramRequest.getUser().getLanguage()));
 
                 String nets = "---";
                 boolean firstTime = true;
@@ -1897,44 +1898,44 @@ public class SocialSentPostBySocialNet extends GenericResource{
                     }
                 }
 
-                createCell(cellStyle, wb, troww, 2, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, nets);
+                createCell(cellStyle, wb, troww, 3, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, nets);
 
                 if (postIn.getPostInSource() != null) {
-                    createCell(cellStyle, wb, troww, 3, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Origen(Image)");
+                    createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Origen(Image)");
 
                 } else {
-                    createCell(cellStyle, wb, troww, 3, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "----");
+                    createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "----");
                 }
 
 
-                createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getCreated(), lang));
+                createCell(cellStyle, wb, troww, 5, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getCreated(), lang));
 
-                createCell(cellStyle, wb, troww, 5, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getUpdated(), lang));
+                createCell(cellStyle, wb, troww, 6, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getUpdated(), lang));
 
 
                 if (classifyBySentiment != null && classifyBySentiment.equalsIgnoreCase("true")) {
                     //Sentiment
 
                     if (postIn.getPostSentimentalType() == 0) {
-                        createCell(cellStyle, wb, troww, 6, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "----");
+                        createCell(cellStyle, wb, troww, 7, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "----");
                     } else if (postIn.getPostSentimentalType() == 1) {
-                        createCell(cellStyle, wb, troww, 6, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Positivo");
+                        createCell(cellStyle, wb, troww, 7, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Positivo");
                     } else if (postIn.getPostSentimentalType() == 2) {
-                        createCell(cellStyle, wb, troww, 6, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Negativo");
+                        createCell(cellStyle, wb, troww, 7, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "Negativo");
                     }
 
 
 
                     if (postIn.getPostIntesityType() == 1) {
-                        createCell(cellStyle, wb, troww, 7, CellStyle.ALIGN_CENTER,
+                        createCell(cellStyle, wb, troww, 8, CellStyle.ALIGN_CENTER,
                                 CellStyle.VERTICAL_CENTER, "Medium");
 
                     } else if (postIn.getPostIntesityType() == 2) {
-                        createCell(cellStyle, wb, troww, 7, CellStyle.ALIGN_CENTER,
+                        createCell(cellStyle, wb, troww, 8, CellStyle.ALIGN_CENTER,
                                 CellStyle.VERTICAL_CENTER, "High");
                     } else if (postIn.getPostIntesityType() == 0) {
 
-                        createCell(cellStyle, wb, troww, 7, CellStyle.ALIGN_CENTER,
+                        createCell(cellStyle, wb, troww, 8, CellStyle.ALIGN_CENTER,
                                 CellStyle.VERTICAL_CENTER, "---");
                     }
 
@@ -1953,17 +1954,17 @@ public class SocialSentPostBySocialNet extends GenericResource{
                         }
                         if (!isInFlow && postOutwithPostOutNets && !someOneIsNotPublished) //Se supone que por lo menos, hay publicado un PostOutNet del Post                         
                         {
-                            createCell(cellStyle, wb, troww, 8, CellStyle.ALIGN_CENTER,
+                            createCell(cellStyle, wb, troww, 9, CellStyle.ALIGN_CENTER,
                                     CellStyle.VERTICAL_CENTER, "Publicado");
                         } else {
                             if (!needAuthorization) {
 
 
                                 if (someOneIsNotPublished) {
-                                    createCell(cellStyle, wb, troww, 8, CellStyle.ALIGN_CENTER,
+                                    createCell(cellStyle, wb, troww, 9, CellStyle.ALIGN_CENTER,
                                             CellStyle.VERTICAL_CENTER, "A revisar");
                                 } else {
-                                    createCell(cellStyle, wb, troww, 8, CellStyle.ALIGN_CENTER,
+                                    createCell(cellStyle, wb, troww, 9, CellStyle.ALIGN_CENTER,
                                             CellStyle.VERTICAL_CENTER, "Publicar");
                                 }
                             } else {    //El PostOut ya se envío
@@ -1972,17 +1973,17 @@ public class SocialSentPostBySocialNet extends GenericResource{
                                     if (postIn.getPflowInstance() != null && postIn.getPflowInstance().getPflow() != null) {
                                         sFlowRejected = postIn.getPflowInstance().getPflow().getDisplayTitle(lang);
                                     }
-                                    createCell(cellStyle, wb, troww, 8, CellStyle.ALIGN_CENTER,
+                                    createCell(cellStyle, wb, troww, 9, CellStyle.ALIGN_CENTER,
                                             CellStyle.VERTICAL_CENTER, "Rechazado");
                                 } else if (isInFlow && needAuthorization && !isAuthorized) {
-                                    createCell(cellStyle, wb, troww, 8, CellStyle.ALIGN_CENTER,
+                                    createCell(cellStyle, wb, troww, 9, CellStyle.ALIGN_CENTER,
                                             CellStyle.VERTICAL_CENTER, "En flujo");
                                 }
                             }
                         }
                     } else {
                         //System.out.println("ESE POST ESTA PUBLICADO..");
-                        createCell(cellStyle, wb, troww, 8, CellStyle.ALIGN_CENTER,
+                        createCell(cellStyle, wb, troww, 9, CellStyle.ALIGN_CENTER,
                                 CellStyle.VERTICAL_CENTER, "Publicado");
                     }
                 } else {
@@ -2003,17 +2004,17 @@ public class SocialSentPostBySocialNet extends GenericResource{
                         }
                         if (!isInFlow && postOutwithPostOutNets && !someOneIsNotPublished) //Se supone que por lo menos, hay publicado un PostOutNet del Post                         
                         {
-                            createCell(cellStyle, wb, troww, 6, CellStyle.ALIGN_CENTER,
+                            createCell(cellStyle, wb, troww, 7, CellStyle.ALIGN_CENTER,
                                     CellStyle.VERTICAL_CENTER, "Publicado");
                         } else {
                             if (!needAuthorization) {
 
 
                                 if (someOneIsNotPublished) {
-                                    createCell(cellStyle, wb, troww, 6, CellStyle.ALIGN_CENTER,
+                                    createCell(cellStyle, wb, troww, 7, CellStyle.ALIGN_CENTER,
                                             CellStyle.VERTICAL_CENTER, "A revisar");
                                 } else {
-                                    createCell(cellStyle, wb, troww, 6, CellStyle.ALIGN_CENTER,
+                                    createCell(cellStyle, wb, troww, 7, CellStyle.ALIGN_CENTER,
                                             CellStyle.VERTICAL_CENTER, "Publicar");
                                 }
                             } else {    //El PostOut ya se envío
@@ -2022,17 +2023,17 @@ public class SocialSentPostBySocialNet extends GenericResource{
                                     if (postIn.getPflowInstance() != null && postIn.getPflowInstance().getPflow() != null) {
                                         sFlowRejected = postIn.getPflowInstance().getPflow().getDisplayTitle(lang);
                                     }
-                                    createCell(cellStyle, wb, troww, 6, CellStyle.ALIGN_CENTER,
+                                    createCell(cellStyle, wb, troww, 7, CellStyle.ALIGN_CENTER,
                                             CellStyle.VERTICAL_CENTER, "Rechazado");
                                 } else if (isInFlow && needAuthorization && !isAuthorized) {
-                                    createCell(cellStyle, wb, troww, 6, CellStyle.ALIGN_CENTER,
+                                    createCell(cellStyle, wb, troww, 7, CellStyle.ALIGN_CENTER,
                                             CellStyle.VERTICAL_CENTER, "En flujo");
                                 }
                             }
                         }
                     } else {
                         //System.out.println("ESE POST ESTA PUBLICADO..");
-                        createCell(cellStyle, wb, troww, 6, CellStyle.ALIGN_CENTER,
+                        createCell(cellStyle, wb, troww, 7, CellStyle.ALIGN_CENTER,
                                 CellStyle.VERTICAL_CENTER, "Publicado");
                     }
 
@@ -2868,7 +2869,7 @@ public class SocialSentPostBySocialNet extends GenericResource{
    
    private String getSumTotPostOutComments(SocialNetwork socialNetwork)
     {
-        String query=
+        /*String query=
            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
            "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#> \n";
            query+="select (SUM(DISTINCT ?totMsgs) AS ?c1) \n";
@@ -2879,9 +2880,10 @@ public class SocialSentPostBySocialNet extends GenericResource{
            "  }\n";
 
            WebSite wsite=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
-           query=SWBSocial.executeQuery(query, wsite);
-           
-        return query;   
+           query=SWBSocial.executeQuery(query, wsite);*/
+        
+           long size = SWBUtils.Collections.sizeOf(socialNetwork.listSocialNetworkPostOutInvs());           
+           return String.valueOf(size);
     }
    
     
