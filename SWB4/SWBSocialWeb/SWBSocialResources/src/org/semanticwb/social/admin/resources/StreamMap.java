@@ -65,7 +65,7 @@ public class StreamMap extends GenericResource{
         String date=request.getParameter("mapSinceDate");
         
         out.println("<div class=\"divMap\">");
-        out.println("<div class=\"swbform\">");
+        //out.println("<div class=\"swbform\">");
         out.println("<form type=\"dijit.form.Form\" id=\"showMap_"+semObj.getId()+"\" action=\"" +  paramRequest.getRenderUrl().setParameter("suri", suri) + "\" method=\"post\" onsubmit=\"submitForm('showMap_" + semObj.getId() + "'); return false;\">");            
         /*
         out.println("<table width=\"100%\" border=\"0px\">");            
@@ -126,58 +126,16 @@ public class StreamMap extends GenericResource{
         out.println("   </tr>");
         out.println("</table>");
         * */
-        ArrayList aNetsSelected=new ArrayList();
-        String[] paramNet=request.getParameterValues("networks");
-        if(paramNet!=null)
-        {
-            for(String net: paramNet){
-                try{
-                    aNetsSelected.add(net);
-                }catch(Exception e){}
-            }
-        }
-        System.out.println("EWntra a StremMap-1");
-        ArrayList nets=new ArrayList();
-        if(semObj.createGenericInstance() instanceof Stream)
-        {
-            Stream stream=(Stream)semObj.createGenericInstance();
-            nets = SWBSocialUtil.sparql.getStreamSocialNetworks(stream);
-            System.out.println("EWntra a StremMap-2:"+stream);
-        }else if(semObj.createGenericInstance() instanceof SocialTopic){
-            SocialTopic socialTopic=(SocialTopic)semObj.createGenericInstance();
-            nets = SWBSocialUtil.sparql.getSocialTopicSocialNetworks(socialTopic);
-            System.out.println("EWntra a StremMap-3:"+socialTopic);
-        }
-        out.println("<div class=\"bloqSocialNetDiv\">");
-        out.println("    <p class=\"bloqSocialNet\">Redes Sociales</p>");
-        out.println("    <select name=\"networks\" multiple size=\"5\">");
-        for(int i = 0; i < nets.size(); i++){
-            SocialNetwork socialNet= (SocialNetwork)((SemanticObject)nets.get(i)).createGenericInstance();
-            String iconClass ="";
-            if(socialNet instanceof Twitter){
-                iconClass = "swbIconTwitter";
-            }else if (socialNet instanceof Facebook){
-                iconClass = "swbIconFacebook";
-            }else if( socialNet instanceof Youtube){
-                iconClass = "swbIconYouTube";
-            }
-            String sSelected="";
-            if(aNetsSelected.contains(socialNet.getURI())) sSelected="selected";
-            out.println("  <option class=\"" + iconClass + "\" value=\"" + socialNet.getURI() +"\" "+sSelected+">"+ socialNet.getDisplayTitle(user.getLanguage()) + "</option>");
-        }
-        out.println("    </select>");
-        out.println("    </div>");
-        
         
        String sCheck=""; 
-       out.println("<label>Mostrar ");
+       out.println("<label><div>Sentimientos:</div> ");
        out.println("<select name=\"streamMapView\"> ");
        sCheck="";
        if(streamMapView.equals("4")) sCheck="selected";
        out.println("<option value=\"4\" " +sCheck+">Todo</option>");
        sCheck="";
        if(streamMapView.equals("1")) sCheck="selected";
-       out.println("<option value=\"1\" " +sCheck+">Contadores</option>");
+       out.println("<option value=\"1\" " +sCheck+">Por estado</option>");
        sCheck="";
        if(streamMapView.equals("2")) sCheck="selected";
        out.println("<option value=\"2\"  " +sCheck+">Mensajes</option>");
@@ -197,13 +155,60 @@ public class StreamMap extends GenericResource{
        out.println("<option value=\"7\"  " +sCheck+">Neutros</option>");
        out.println("</select>");
        out.println("</label>");
-       out.println("<label>Desde el día<input type=\"text\" name=\"mapSinceDate\" id=\"mapSinceDate"+semObj.getId()+"\"  dojoType=\"dijit.form.DateTextBox\" hasDownArrow=\"true\" value=\""+date+"\" class=\"txtfld-calendar\"/></label>");
+        
+       out.println("<label><div>Desde el día:</div><input type=\"text\" name=\"mapSinceDate\" id=\"mapSinceDate"+semObj.getId()+"\"  dojoType=\"dijit.form.DateTextBox\" hasDownArrow=\"true\" value=\""+date+"\" class=\"txtfld-calendar\"/></label>");
+        
+        ArrayList aNetsSelected=new ArrayList();
+        String[] paramNet=request.getParameterValues("networks");
+        if(paramNet!=null)
+        {
+            for(String net: paramNet){
+                try{
+                    aNetsSelected.add(net);
+                }catch(Exception e){}
+            }
+        }
+        ArrayList nets=new ArrayList();
+        if(semObj.createGenericInstance() instanceof Stream)
+        {
+            Stream stream=(Stream)semObj.createGenericInstance();
+            nets = SWBSocialUtil.sparql.getStreamSocialNetworks(stream);
+        }else if(semObj.createGenericInstance() instanceof SocialTopic){
+            SocialTopic socialTopic=(SocialTopic)semObj.createGenericInstance();
+            nets = SWBSocialUtil.sparql.getSocialTopicSocialNetworks(socialTopic);
+        }
        
-       out.println("Mostrar también por ubicación de perfil de usuarios:<input type=\"checkbox\" name=\"showGeoProfile\"/>");
-       out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">Mostrar</button>");
+        out.println("<div class=\"divMapRed\">");
+        out.println("<label><div>Redes sociales:</div>");
+        out.println("    <select name=\"networks\" multiple size=\"5\">");
+        for(int i = 0; i < nets.size(); i++){
+            SocialNetwork socialNet= (SocialNetwork)((SemanticObject)nets.get(i)).createGenericInstance();
+            String iconClass ="";
+            if(socialNet instanceof Twitter){
+                iconClass = "swbIconTwitter";
+            }else if (socialNet instanceof Facebook){
+                iconClass = "swbIconFacebook";
+            }else if( socialNet instanceof Youtube){
+                iconClass = "swbIconYouTube";
+            }
+            String sSelected="";
+            if(aNetsSelected.contains(socialNet.getURI())) sSelected="selected";
+            out.println("  <option class=\"" + iconClass + "\" value=\"" + socialNet.getURI() +"\" "+sSelected+">"+ socialNet.getDisplayTitle(user.getLanguage()) + "</option>");
+        }
+        out.println("    </select>");
+        out.println("</label>");
+        out.println("    </div>");
+        
+       
+       out.println("<div class=\"divMapUbica\">");
+       out.println("<input type=\"checkbox\" name=\"showGeoProfile\" id=\"divMapUbica\"/>");
+       out.println("<label for=\"divMapUbica\" title=\"Muestra la ubicación registrada en el perfil de usuario\">Utilizar ubicación de perfil de usuario</label>");
+       out.println("</div>");
+       
+       out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">Mostrar mapa</button>");
 
         out.println("</form>");
-        out.println("</div>");
+        //out.println("</div>");
         out.println("</div>");
         if(request.getParameter("mapSinceDate")!=null)
         {
