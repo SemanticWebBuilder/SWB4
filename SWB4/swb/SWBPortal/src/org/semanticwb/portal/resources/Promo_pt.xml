@@ -4,7 +4,7 @@
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
     <admdbconnmgr defconn="true"/>
     <fieldset legend="Definição da estratégia">
-        <input type="text" name="title" label="Título" maxlength="50" promptMessage="Título" />
+        <input type="text" name="title" label="Título" promptMessage="Título" />
         <input type="text" name="subtitle" label="Subtítulo" maxlength="50" promptMessage="Subtítulo" />
         <input type="file" name="imgfile" label="Imagem (gif, jpg, jpeg, png)" showfile="true" filetype="jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Remover imagem" size="40"/>
         <input type="text" name="caption" label="Pie de foto" maxlength="50" promptMessage="Pie de foto" />
