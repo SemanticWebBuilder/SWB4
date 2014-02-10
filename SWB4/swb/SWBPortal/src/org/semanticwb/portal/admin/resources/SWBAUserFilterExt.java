@@ -62,20 +62,40 @@ public class SWBAUserFilterExt extends SWBAUserFilter
         String contx = SWBPortal.getContextPath();
         String userRep = user.getUserRepository().getId(); //request.getParameter("userRep");
         String users[] = request.getParameterValues("users");
+        String search = request.getParameter("s");
+        
+        if(search!=null)
+        {
+            if (userRep != null)
+            {
+                search=search.toLowerCase();
+                Iterator<User> it2 = UserRepository.ClassMgr.getUserRepository(userRep).listUsers();
+                while (it2.hasNext())
+                {
+                    User ur = it2.next();
+                    String txt=ur.getLogin()+" ("+ur.getFullName()+")";
+                    if(search.length()==0 || txt.toLowerCase().indexOf(search)>-1)
+                    {
+                        out.println("<option value=\""+ur.getId()+"\">"+txt+"</option>");
+                    }
+                }
+            }
+            return;
+        }        
 
         if (users == null)
         {
 
             out.println("<style type=\"text/css\">\n"
-                    + "    #select, #select2 {\n"
+                    + "    #uf_select, #uf_select2 {\n"
                     + "        width:255px;\n"
                     + "        height:300px;\n"
                     + "        overflow:auto;\n"
                     + "    }\n"
-                    + "    div#sel1, div#sel2 {\n"
+                    + "    div#uf_sel1, div#uf_sel2 {\n"
                     + "        float: left;\n"
                     + "    }\n"
-                    + "    div#leftRightButtons {\n"
+                    + "    div#uf_leftRightButtons {\n"
                     + "        float: left;\n"
                     + "        padding: 10em 0.5em 0 0.5em;\n"
                     + "    }\n"
@@ -85,65 +105,43 @@ public class SWBAUserFilterExt extends SWBAUserFilter
                     + "        return false;\" method=\"post\">\n"
                     + "    <fieldset>\n"
                     + "        <table>\n"
-//                    + "            <tr>\n"
-//                    + "                <td width=\"200px\" align=\"right\"><label for=\"userRep\">Repositorio de Usuarios:</label></td>\n"
-//                    + "                <td>\n"
-//                    + "                    <select name=\"userRep\" dojoType=\"dijit.form.FilteringSelect\" onchange=\"userFilter.submit()\" autoComplete=\"true\" invalidMessage=\"Dato invalido.\" value=\"" + userRep + "\" >\n"
-//                    + "");
-//            Iterator<UserRepository> it = SWBContext.listUserRepositories();
-//            while (it.hasNext())
-//            {
-//                UserRepository ur = it.next();
-//                String selected = "";
-//                if (ur.getId().equals(userRep))
-//                {
-//                    selected = "selected=\"selected\"";
-//                }
-//
-//                out.println("<option value=\"" + ur.getId() + "\" " + selected + ">" + ur.getDisplayTitle(lang) + "</option>");
-//            }
-//            out.println("                    </select>\n"
-//                    + "                </td>\n"
-//                    + "            </tr>\n"
+                    + "            <tr>\n"
+                    + "                <td width=\"200px\" align=\"right\"><label for=\"uf_search\">Buscador de Usuarios:</label></td>\n"
+                    + "                <td>\n"
+                    + "                    <input id=\"uf_search\" type=\"text\" dojoType=\"dijit.form.TextBox\"> &nbsp; \n"
+                    + "                    <button onclick=\"\n" 
+                    + "                            var s=document.getElementById('uf_search').value;\n"
+                    + "                            var rep='"+userRep+"';\n"
+                    + "                            var cont=getSyncHtml('" + paramRequest.getRenderUrl() + "?userRep='+rep+'&s='+s);\n"
+                    + "                            var sel = document.getElementById('uf_select');\n"
+                    + "                            sel.innerHTML =cont;\n"
+                    + "                            return false;\n"
+                    + "                            \" title=\"Buscar Usuarios\">Buscar</button>\n"
+                    + "                </td>\n"
+                    + "            </tr>"
                     + "            <tr>\n"
                     + "                <td width=\"200px\" align=\"right\">\n"
                     + "                    <label>Usuarios:</label>\n"
                     + "                </td>                \n"
                     + "                <td> \n"
                     + "                    <div>\n"
-                    + "                        <div id=\"sel1\" role=\"presentation\">\n"
+                    + "                        <div id=\"uf_sel1\" role=\"presentation\">\n"
                     + "                            <label for=\"allusers\">Lista de Usuarios:</label><br>\n"
-                    + "                            <select multiple=\"true\" dojoType=\"dijit.form.MultiSelect\" id=\"select\">\n"
+                    + "                            <select multiple=\"true\" dojoType=\"dijit.form.MultiSelect\" id=\"uf_select\">\n"
                     + "");
-            if (userRep != null)
-            {
-                Iterator<User> it2 = UserRepository.ClassMgr.getUserRepository(userRep).listUsers();
-                while (it2.hasNext())
-                {
-                    User ur = it2.next();
-                    String selected = "";
-                    if (ur.getId().equals(userRep))
-                    {
-                        selected = "selected=\"selected\"";
-                    }
-
-                    out.println("<option value=\"" + ur.getId() + "\" " + selected + ">"+ur.getId()+" ("+ ur.getFullName() + ")</option>");
-                }
-            }
-
             out.println("                            </select>\n"
                     + "                        </div>\n"
-                    + "                        <div id=\"leftRightButtons\" role=\"presentation\">\n"
+                    + "                        <div id=\"uf_leftRightButtons\" role=\"presentation\">\n"
                     + "                            <span>\n"
-                    + "                                <button class=\"switch\" id=\"left\" onclick=\"dijit.byId('select').addSelected(dijit.byId('select2'));\n"
+                    + "                                <button class=\"switch\" onclick=\"dijit.byId('uf_select').addSelected(dijit.byId('uf_select2'));\n"
                     + "        return false;\" title=\"Move Items to First list\">&lt;</button>\n"
-                    + "                                <button class=\"switch\" id=\"right\" onclick=\"dijit.byId('select2').addSelected(dijit.byId('select'));\n"
+                    + "                                <button class=\"switch\" onclick=\"dijit.byId('uf_select2').addSelected(dijit.byId('uf_select'));\n"
                     + "        return false;\" title=\"Move Items to Second list\">&gt;</button>\n"
                     + "                            </span>\n"
                     + "                        </div>\n"
-                    + "                        <div id=\"sel2\" role=\"presentation\">\n"
+                    + "                        <div id=\"uf_sel2\" role=\"presentation\">\n"
                     + "                            <label for=\"users\">Usuarios seleccionados:</label><br>\n"
-                    + "                            <select multiple=\"true\" name=\"users\" dojoType=\"dijit.form.MultiSelect\" id=\"select2\">\n"
+                    + "                            <select multiple=\"true\" name=\"users\" dojoType=\"dijit.form.MultiSelect\" id=\"uf_select2\">\n"
                     + "                            </select>\n"
                     + "                        </div>\n"
                     + "                    </div>\n"
@@ -153,9 +151,7 @@ public class SWBAUserFilterExt extends SWBAUserFilter
                     + "    </fieldset>\n"
                     + "    <fieldset>\n"
                     + "        <span align=\"center\">\n"
-                    + "            <button dojoType=\"dijit.form.Button\" name=\"save\" type=\"submit\" value=\"save\">Guardar</button>\n"
-                    + "            <button dojoType=\"dijit.form.Button\" name=\"delete\" type=\"submit\" value=\"delete\" onclick=\"if (!confirm('¿Eliminar el elemento?'))\n"
-                    + "            return false;\">Eliminar</button>\n"
+                    + "            <button dojoType=\"dijit.form.Button\" name=\"save\" type=\"submit\" value=\"save\">Editar Filtro</button>\n"
                     + "        </span>\n"
                     + "    </fieldset>\n"
                     + "</form>\n"
@@ -175,9 +171,26 @@ public class SWBAUserFilterExt extends SWBAUserFilter
             String id = SWBUtils.TEXT.join("|", users);
             //System.out.println("id:"+id);
 
+            UserRepository rep=UserRepository.ClassMgr.getUserRepository(userRep);
+
+            out.println("<form id=\"userFilter/form\" dojoType=\"dijit.form.Form\" action=\"" + paramRequest.getRenderUrl() + "\" class=\"swbform\">");
+            out.println("<fieldset>");
+            out.println("<legend>Usuarios seleccionados</legend>");
+            out.println("<ul>");
+            for(int x=0;x<users.length;x++)
+            {
+                User usr=rep.getUser(users[x]);
+                out.println(usr.getLogin()+" ("+usr.getFullName()+")");
+                if(x+1<users.length)out.println(", ");
+            }
+            out.println("</ul>");
+            out.println("</fieldset>");
+            out.println("<fieldset>");
+            out.println("<legend>Filtro a aplicar</legend>");
+            
 
             out.println("<div class=\"applet\">\n"
-                    + "    <applet id=\"editfilter\" name=\"editfilter\" code=\"applets.filterSection.FilterSection.class\" codebase=\"/\" archive=\"swbadmin/lib/SWBAplFilterSection.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"500\">\n"
+                    + "    <applet name=\"editfilter\" code=\"applets.filterSection.FilterSection.class\" codebase=\"/\" archive=\"swbadmin/lib/SWBAplFilterSection.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"500\">\n"
                     + "        <param name=\"jsess\" value=\""+request.getSession().getId()+"\">\n"
                     + "        <param name=\"cgipath\" value=\""+paramRequest.getRenderUrl().setCallMethod(3).setMode("gateway")+"\">\n"
                     + "        <param name=\"locale\" value=\""+lang+"\">\n"
@@ -187,6 +200,17 @@ public class SWBAUserFilterExt extends SWBAUserFilter
                     + "        <param name=\"isGlobalTM\" value=\"true\">\n"
                     + "    </applet>\n"
                     + "</div>");
+            
+            out.println("</fieldset>");
+
+            out.println("<fieldset>");
+            out.println("    <span>");
+            out.println("        <button dojoType=\"dijit.form.Button\" name=\"back\" type=\"submit\" value=\"back\">Regresar</button>");
+            out.println("    </span>");
+            out.println("</fieldset>");   
+
+            out.println("</form>");            
+            
         }
 
 
