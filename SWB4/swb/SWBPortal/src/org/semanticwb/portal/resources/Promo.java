@@ -1103,11 +1103,11 @@ public class Promo extends GenericResource {
         htm.append("    <ul class=\"swbform-ul\">\n");
         htm.append("        <li class=\"swbform-li\">\n");
         htm.append("          <label for=\"title\" class=\"swbform-label\">Título</label>\n");
-        htm.append("          <input type=\"text\" id=\"title\" name=\"title\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("title","")+"\" maxlength =\"50\"/>\n");
+        htm.append("          <input type=\"text\" id=\"title\" name=\"title\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("title","")+"\" />\n");
         htm.append("        </li>\n");
         htm.append("        <li class=\"swbform-li\">\n");
         htm.append("          <label for=\"subtitle\" class=\"swbform-label\">Subtítulo</label>\n");
-        htm.append("          <input type=\"text\" id=\"subtitle\" name=\"subtitle\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("subtitle","")+"\" maxlength=\"60\"/>\n");
+        htm.append("          <input type=\"text\" id=\"subtitle\" name=\"subtitle\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("subtitle","")+"\" />\n");
         htm.append("        </li>\n");
         htm.append("        <li class=\"swbform-li\">\n");
         htm.append("          <label for=\"text\" class=\"swbform-label\">* Texto</label>\n");
