@@ -140,6 +140,7 @@ public class SWBVirtTransactionHandler extends TransactionHandlerBase
 
     public Connection getConnection()
     {
+        //System.out.print("getConnection");
         Long id=Thread.currentThread().getId();
         Connection con=null;
         SWBTransaction tran=conmap.get(id);
@@ -148,10 +149,13 @@ public class SWBVirtTransactionHandler extends TransactionHandlerBase
         {
             con=SWBUtils.DB.getDefaultConnection();
             //System.out.println("trans2.getConnection():"+id+" "+con);
+            //System.out.print(" new:"+id);
         }else
         {
             con=tran.getConnection();
+            //System.out.print(" existing:"+id);
         }
+        //System.out.println(" "+con);
         return con;
     }
     
