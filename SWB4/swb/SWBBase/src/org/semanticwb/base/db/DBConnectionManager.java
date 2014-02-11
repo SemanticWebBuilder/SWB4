@@ -231,26 +231,29 @@ public class DBConnectionManager {
             if (pool != null)
             {
                 PoolConnection con = (PoolConnection) pool.getConnection();
-                if (con != null)
-                {
-                    if (description == null)
-                    {                        
-                        description = "NoDesc";
-                        
-                        try
-                        {
-                            StringBuffer buf=new StringBuffer();
-                            StackTraceElement eles[]=Thread.currentThread().getStackTrace();
-                            for(int i=0;i<eles.length;i++)
-                            {
-                                buf.append(eles[i].toString());
-                                buf.append("\n");
-                            }
-                            description=buf.toString();
-                        }catch(Throwable noe){}
-                    }
-                    con.setDescription(description);
-                }
+//                if (con != null)
+//                {
+//                    if (description == null)
+//                    {                        
+//                        description = "NoDesc";                        
+//                        try
+//                        {
+//                            StringBuffer buf=new StringBuffer();
+//                            buf.append("Trace detail:\n");
+//                            //System.out.print(" getConnection 1");
+//                            StackTraceElement eles[]=Thread.currentThread().getStackTrace();
+//                            //System.out.print(" 2");
+//                            for(int i=0;i<eles.length;i++)
+//                            {
+//                                buf.append(eles[i].toString());
+//                                buf.append("\n");
+//                            }
+//                            description=buf.toString();
+//                        }catch(Throwable noe){}
+//                        //System.out.println(" 3");
+//                    }
+//                    con.setDescription(description);
+//                }
                 //System.out.println("getConnection("+con.getId()+","+name+","+description+")");
                 ret = con;
             }

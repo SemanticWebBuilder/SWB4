@@ -72,7 +72,7 @@ public class PoolConnection implements java.sql.Connection {
     private boolean destroy = false;
     
     /** The isdestroyed. */
-    private boolean isdestroyed = false;
+    private volatile boolean isdestroyed = false;
     
     /** The stack. */
     private StackTraceElement stack[] = null;
@@ -121,7 +121,6 @@ public class PoolConnection implements java.sql.Connection {
     public long getId()
     {
         return id;
-
     }
 
     /** Setter for property id.
@@ -534,10 +533,10 @@ public class PoolConnection implements java.sql.Connection {
             {
                 //System.out.println("******************close****************");
                 //printTrackTrace(System.out);
-                con.close();
+                if(!con.isClosed())con.close();
             } catch (Exception e)
             {
-                log.error("Connection " + description + " finalize:" + e);
+                log.error("Connection " + description + " finalize",e);                
             }
             if(pool!=null)log.debug("destroyConnection:(" + getId() + "," + pool.getName() + "):" + pool.checkedOut);
         }
