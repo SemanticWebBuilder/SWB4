@@ -34,11 +34,13 @@ public class SWBVirtResSetIter extends NiceIterator<Triple>
 
     public SWBVirtResSetIter()
     {
+        //System.out.println("SWBVirtResSetIter()");
         this.v_finished = true;
     }
 
     public SWBVirtResSetIter(SWBVirtGraph paramVirtGraph, ResultSet paramResultSet, Statement statement, TripleMatch paramTripleMatch)
     {
+        //System.out.println("SWBVirtResSetIter4("+paramTripleMatch+")");
         this.v_resultSet = paramResultSet;
         this.v_in = paramTripleMatch;
         this.v_graph = paramVirtGraph;
@@ -47,6 +49,7 @@ public class SWBVirtResSetIter extends NiceIterator<Triple>
 
     public void reset(ResultSet paramResultSet, PreparedStatement paramPreparedStatement)
     {
+        //System.out.println("SWBVirtResSetIter3()");
         this.v_resultSet = paramResultSet;
         this.v_finished = false;
         this.v_prefetched = false;
@@ -110,6 +113,7 @@ public class SWBVirtResSetIter extends NiceIterator<Triple>
             }
         } catch (Exception localException)
         {
+            System.out.println("moveForward error:"+this.v_graph+" "+this.v_in);
             throw new JenaException(localException);
         }
     }
@@ -117,6 +121,7 @@ public class SWBVirtResSetIter extends NiceIterator<Triple>
     protected void extractRow()
             throws Exception
     {
+        //System.out.print("extractRow:"+this.v_in);
         Node localNode1;
         if (this.v_in.getMatchSubject() != null)
         {
@@ -137,10 +142,11 @@ public class SWBVirtResSetIter extends NiceIterator<Triple>
         if (this.v_in.getMatchObject() != null)
         {
             localNode3 = this.v_in.getMatchObject();
-        } else
+        } else   
         {
             localNode3 = SWBVirtGraph.Object2Node(this.v_resultSet.getObject("o"));
         }
+        //System.out.println(" :"+localNode1+" "+localNode2+" "+localNode3);
         this.v_row = new Triple(localNode1, localNode2, localNode3);
     }
 

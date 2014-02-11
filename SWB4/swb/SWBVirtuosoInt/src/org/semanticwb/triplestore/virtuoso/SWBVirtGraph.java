@@ -214,19 +214,21 @@ public class SWBVirtGraph extends GraphBase implements GraphExt
 
     private static String escapeString(String s)
     {
-        StringBuffer buf = new StringBuffer(s.length());
-        int i = 0;
-        char ch;
-        while (i < s.length())
-        {
-            ch = s.charAt(i++);
-            if (ch == '\'')
-            {
-                buf.append('\\');
-            }
-            buf.append(ch);
-        }
-        return buf.toString();
+        return encodeText(s, true);
+//        
+//        StringBuffer buf = new StringBuffer(s.length());
+//        int i = 0;
+//        char ch;
+//        while (i < s.length())
+//        {
+//            ch = s.charAt(i++);
+//            if (ch == '\'')
+//            {
+//                buf.append('\\');
+//            }
+//            buf.append(ch);
+//        }
+//        return buf.toString();
     }
 
     protected java.sql.Statement createStatement(Connection connection) throws java.sql.SQLException
@@ -344,7 +346,7 @@ public class SWBVirtGraph extends GraphBase implements GraphExt
             if (llang != null && llang.length() > 0)
             {
                 ps.setInt(col, 5);
-                ps.setString(col + 1, n.getLiteralValue().toString());
+                ps.setString(col + 1, encodeText(n.getLiteralValue().toString()));
                 ps.setString(col + 2, n.getLiteralLanguage());
             } else if (ltype != null && ltype.length() > 0)
             {
@@ -354,13 +356,13 @@ public class SWBVirtGraph extends GraphBase implements GraphExt
             } else
             {
                 ps.setInt(col, 3);
-                ps.setString(col + 1, n.getLiteralValue().toString());
+                ps.setString(col + 1, encodeText(n.getLiteralValue().toString()));
                 ps.setNull(col + 2, java.sql.Types.VARCHAR);
             }
         } else
         {
             ps.setInt(col, 3);
-            ps.setString(col + 1, n.toString());
+            ps.setString(col + 1, encodeText(n.toString()));
             ps.setNull(col + 2, java.sql.Types.VARCHAR);
         }
     }
@@ -854,11 +856,13 @@ public class SWBVirtGraph extends GraphBase implements GraphExt
 
     public static Node Object2Node(Object o)
     {
+        //System.out.print("Object2Node:"+o);
         if (o == null)
         {
             return null;
         }
 
+        //System.out.println(" "+o.getClass());        
         if (o instanceof ExtendedString)
         {
             ExtendedString vs = (ExtendedString) o;
@@ -879,7 +883,7 @@ public class SWBVirtGraph extends GraphBase implements GraphExt
 
             } else
             {
-                return Node.createLiteral(vs.toString());
+                return Node.createLiteral(decodeText(vs.toString()));
             }
 
         } else if (o instanceof RdfBox)
@@ -893,7 +897,8 @@ public class SWBVirtGraph extends GraphBase implements GraphExt
             {
                 dt = TypeMapper.getInstance().getSafeTypeByName(rb_type);
             }
-            return Node.createLiteral(rb.toString(), rb.getLang(), dt);
+            //System.out.println("-->"+rb.toString()+" "+rb.getLang()+" "+dt);
+            return Node.createLiteral(decodeText(rb.toString()), rb.getLang(), dt);
 
         } else if (o instanceof java.lang.Integer)
         {
@@ -960,9 +965,8 @@ public class SWBVirtGraph extends GraphBase implements GraphExt
             return Node.createLiteral(o.toString(), null, dt);
 
         } else
-        {
-
-            return Node.createLiteral(o.toString());
+        {            
+            return Node.createLiteral(decodeText(o.toString()));
         }
     }
 
@@ -1209,4 +1213,71 @@ public class SWBVirtGraph extends GraphBase implements GraphExt
             throw new JenaException(e);
         }
     }
+    
+    
+    //Methods to codify the DB
+    private static String encodeText(String str)
+    {
+        return encodeText(str,false);
+    }    
+    
+    //Methods to codify the DB
+    private static String encodeText(String str, boolean escapeStr)
+    {
+        if(str==null)return "";
+        StringBuffer ret = new StringBuffer();
+        for (int x = 0; x < str.length(); x++)
+        {
+            char ch = str.charAt(x);
+            if (escapeStr && ch == '\'')
+            {
+                ret.append('\\');
+                ret.append(ch);
+            }else if (ch == '&')
+            {
+                ret.append("&#38;");
+            }else if (ch > 126 || ch < 32)
+            {
+                ret.append("&#" + (int) ch + ";");
+            } else
+            {
+                ret.append(ch);
+            }
+        }
+        return ret.toString();
+    }
+
+    private static String decodeText(String str)
+    {
+        if(str==null)return "";
+        StringBuffer ret = new StringBuffer();
+        int l = str.length();
+        for (int x = 0; x < l; x++)
+        {
+            char ch = str.charAt(x);
+            boolean addch = false;
+            if (ch == '&' && (x + 1) < l && str.charAt(x + 1) == '#')
+            {
+                int i = str.indexOf(";", x);
+                if (i > x)
+                {
+                    try
+                    {
+                        int v = Integer.parseInt(str.substring(x + 2, i));
+                        ret.append((char) v);
+                        x = i;
+                        addch = true;
+                    } catch (NumberFormatException e)
+                    { //Si no se puede parsear no se agrega
+                    }
+                }
+            }
+            if (!addch)
+            {
+                ret.append(ch);
+            }
+        }
+        return ret.toString();
+    }    
+    
 }
