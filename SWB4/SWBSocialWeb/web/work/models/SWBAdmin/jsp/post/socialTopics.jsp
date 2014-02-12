@@ -19,23 +19,6 @@
         SWBResourceURL url = paramRequest.getRenderUrl();   
 %>
 
-<style>
-    .campo {
-        border: 0px;
-        float: left;
-        margin: 4px;
-        padding: 0px;
-        width: 300px;
-    }
-    .etiqueta {
-        border: 0px;
-        float: left;
-        margin: 4px;
-        padding: 0px;
-        width: 300px;
-        text-align: left;
-    }
-</style>
 
 <div class="swbform">
     <div id="pub-detalle">
