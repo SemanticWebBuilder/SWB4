@@ -1232,7 +1232,7 @@ public class SVGModeler extends GenericAdmResource {
                     if (!item.isFormField()) {//Es un archivo
                         if (item.getName().endsWith(".swp")) { //Es un archivo swp
                             InputStream stream = item.openStream();
-                            java.util.Scanner scanner = new Scanner(stream).useDelimiter("\\A");
+                            java.util.Scanner scanner = new Scanner(stream, "UTF-8").useDelimiter("\\A");
                             if (scanner.hasNext()) {
                                 data = scanner.next();
                             }
