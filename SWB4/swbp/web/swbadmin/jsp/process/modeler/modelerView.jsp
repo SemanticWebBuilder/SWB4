@@ -918,7 +918,7 @@ if (!isViewMode) {
         </defs>
     </svg>
 </div>
-<form id="svgform" accept-charset="utf-8"method="post" action="<%=exportUrl%>">
+<form id="svgform" accept-charset="utf-8" method="post" action="<%=exportUrl%>">
     <input type="hidden" id="output_format" name="output_format" value="">
     <input type="hidden" name="suri" value="<%=suri%>">
     <input type="hidden" id="data" name="data" value="">
@@ -1049,7 +1049,7 @@ if (!isViewMode) {
                 var svg = document.getElementsByTagName("svg")[0];
                 // Extract the data as SVG text string
                 var svg_xml = (new XMLSerializer).serializeToString(svg);
-                form['data'].value = svg_xml ;
+                form['data'].value = svg_xml;
             } else if (output_format === "swp") {
                 form['data'].value = JSON.stringify(Modeler.getProcessJSON());
             }
