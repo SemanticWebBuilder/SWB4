@@ -2257,6 +2257,7 @@
                 Modeler.selectedPath.select(false);
                 Modeler.selectedPath = null;
             }
+            if (!Modeler.creationDropObject) Modeler.creationDropObject = null;
             
             if(Modeler.creationId!==null)
             {
@@ -2264,22 +2265,20 @@
                 if(obj.move) //es un FlowNode
                 {
                     if (obj.canAddToDiagram()) {
-                        if (Modeler.creationDropObject === null && Modeler.creationId === "Lane") { //Lane sobre nada
-                            obj.remove();
+                        if (Modeler.creationId === "Lane") {
+                            if (Modeler.creationDropObject === null) {
+                                obj.remove();//Lane sobre nada
+                            } else if (Modeler.creationDropObject.elementType === "Pool") {
+                                Modeler.creationDropObject.addLane(obj);
+                            }
                         } else {
-                            if (Modeler.creationId === "Lane" && Modeler.creationDropObject !== null && Modeler.creationDropObject.elementType === "Pool") {
-                                 Modeler.creationDropObject.addLane(obj);
-                            } else {
-                                obj.move(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
-                                obj.snap2Grid();
-                            }
-                            if (obj.typeOf("GraphicalElement")) {
-                                Modeler.fadeInObject(obj);
-                            }
-                            obj.layer = ToolKit.layer;
+                            obj.move(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
+                            obj.snap2Grid();
                         }
-                    }  else {
-                        obj.remove();
+                        if (obj.typeOf("GraphicalElement")) {
+                            Modeler.fadeInObject(obj);
+                        }
+                        obj.layer = ToolKit.layer;
                     }
                 }else   //Es un ConnectionObject
                 {
@@ -2347,7 +2346,11 @@
             if (Modeler.mode === "view") return false;
             if(Modeler.creationId!==null)
             {
-                Modeler.creationDropObject=obj;
+                if (obj.elementType !== "Lane") {
+                    Modeler.creationDropObject=obj;
+                } else {
+                    Modeler.creationDropObject=null;
+                }
                 return false;
             }
             
