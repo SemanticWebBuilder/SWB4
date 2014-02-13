@@ -3082,7 +3082,9 @@
             if (obj.typeOf("ConnectionObject")) { 
                 ret.start=obj.fromObject.id;
                 ret.end = obj.toObject.id;
-                ret.connectionPoints = "0,0|0,0";//TODO: Agregar método para obtener puntos intermedios
+                if (obj.connectionPoints && obj.connectionPoints !== undefined) {
+                    ret.connectionPoints = obj.connectionPoints;
+                }
             }
             return ret;
         },
@@ -3216,7 +3218,11 @@
                     var tmp = connObjects[i];
                     var obj = Modeler.mapObject(tmp.class);
                     obj.setURI(tmp.uri);
-
+                    
+                    if (tmp.connectionPoints && tmp.connectionPoints !== undefined) {
+                        obj.connectionPoints = tmp.connectionPoints;
+                    }
+                    
                     var start = Modeler.getGraphElementByURI(null, tmp.start);
                     var end = Modeler.getGraphElementByURI(null, tmp.end);
 
