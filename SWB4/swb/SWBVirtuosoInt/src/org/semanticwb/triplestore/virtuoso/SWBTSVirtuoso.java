@@ -75,6 +75,19 @@ public class SWBTSVirtuoso implements AbstractStore
     public Iterator<String> listModelNames()
     {
         models=new ArrayList();   
+        SWBVirtDataSource ds=new SWBVirtDataSource();
+        Iterator<String> it=ds.listNames();
+        while (it.hasNext())
+        {
+            String str = it.next();
+            if(str.startsWith("swb_"))
+            {
+                models.add(str.substring(4));
+                System.out.println("name swb:"+str.substring(4));
+            }
+        }     
+        
+/*        
         SWBVirtGraph set = new SWBVirtGraph (null);
         Query sparql = QueryFactory.create("SELECT DISTINCT ?g\n" +
             "WHERE {\n" +
@@ -89,11 +102,14 @@ public class SWBTSVirtuoso implements AbstractStore
         while (results.hasNext()) {
             QuerySolution result = results.nextSolution();
             RDFNode graph = result.get("g");
+            System.out.println("name:"+graph.toString());
             if(graph.toString().startsWith("swb_"))
             {
                 models.add(graph.toString().substring(4));
+                System.out.println("name swb:"+graph.toString().substring(4));
             }
         }        
+*/ 
         return models.iterator();
     }
     

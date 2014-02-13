@@ -185,25 +185,26 @@ public class SWBVirtDataSource extends SWBVirtGraph implements DataSource {
     @Override
     public boolean containsNamedModel(String name) 
     {
-      String query = "select count(*) from (sparql select * where { graph `iri(??)` { ?s ?p ?o }})f";
-      ResultSet rs = null;
-      int ret = 0;
+        System.out.println("containsNamedModel:"+name);
+        String query = "select count(*) from (sparql select * where { graph `iri(??)` { ?s ?p ?o }})f";
+        ResultSet rs = null;
+        int ret = 0;
 
-      checkOpen();
-      try {
-          Connection con=m_transactionHandler.getConnection();
-        java.sql.PreparedStatement ps = prepareStatement(con,query);
-        ps.setString(1, name);
-        rs = ps.executeQuery();
-        if (rs.next())
-          ret = rs.getInt(1);
-        rs.close();
-        ps.close();
-        con.close();
-      } catch (Exception e) {
-        throw new JenaException(e);
-      }
-      return (ret!=0);
+        checkOpen();
+        try {
+            Connection con=m_transactionHandler.getConnection();
+          java.sql.PreparedStatement ps = prepareStatement(con,query);
+          ps.setString(1, name);
+          rs = ps.executeQuery();
+          if (rs.next())
+            ret = rs.getInt(1);
+          rs.close();
+          ps.close();
+          con.close();
+        } catch (Exception e) {
+          throw new JenaException(e);
+        }
+        return (ret!=0);
     }
 
 
@@ -222,7 +223,11 @@ public class SWBVirtDataSource extends SWBVirtGraph implements DataSource {
         java.sql.Statement stmt = createStatement(con);
         rs = stmt.executeQuery(exec_text);
         while(rs.next())
-          names.add(rs.getString(1));
+        {
+            String name=rs.getString(1);
+            names.add(name);
+            System.out.println("listNames:"+name);
+        }
         rs.close();
         stmt.close();
         con.close();
