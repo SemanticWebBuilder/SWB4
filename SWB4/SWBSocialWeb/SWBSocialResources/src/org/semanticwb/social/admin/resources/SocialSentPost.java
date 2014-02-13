@@ -2519,8 +2519,11 @@ public class SocialSentPost extends GenericResource {
         if (swbSocialUser != null) {
             User user = User.ClassMgr.getUser(swbSocialUser, SWBContext.getAdminWebSite());
             socialTopicPostOut=Integer.parseInt(getAllPostOutbyAdminUser_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic, user));
-            sQuery=getAllPostOutbyAdminUser_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic, user);
-            aListFilter=SWBSocial.executeQueryArrayPostOuts(sQuery, wsite);  
+            if(socialTopicPostOut>0)
+            {
+                sQuery=getAllPostOutbyAdminUser_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic, user);
+                aListFilter=SWBSocial.executeQueryArrayPostOuts(sQuery, wsite);  
+            }
             hampResult.put("countResult", Long.valueOf(socialTopicPostOut));
         } else {
                 if (nPage != 0) 
@@ -2530,60 +2533,82 @@ public class SocialSentPost extends GenericResource {
                         if(request.getParameter("orderBy").equals("viewFCPost"))
                         {   //Si se selecciono que mostrara solo los que estan con FastCalendars
                             socialTopicPostOut=Integer.parseInt(getAllPostOutFC_Query(0, 0, true, socialTopic));
-                            sQuery=getAllPostOutFC_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic); 
-                            aListFilter=SWBSocial.executeQueryArrayPostOuts(sQuery, wsite);
+                            if(socialTopicPostOut>0)
+                            {
+                                sQuery=getAllPostOutFC_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic); 
+                                aListFilter=SWBSocial.executeQueryArrayPostOuts(sQuery, wsite);
+                            }
                         }else if(request.getParameter("orderBy").equals("viewACPost"))
                         {   //Si se selecciono que mostrara solo los que estan con Advance Calendars
                             socialTopicPostOut=Integer.parseInt(getAllPostOutAC_Query(0, 0, true, socialTopic));
-                            sQuery=getAllPostOutAC_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic); 
-                            aListFilter=SWBSocial.executeQueryArrayPostOuts(sQuery, wsite);
+                            if(socialTopicPostOut>0)
+                            {
+                                sQuery=getAllPostOutAC_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic); 
+                                aListFilter=SWBSocial.executeQueryArrayPostOuts(sQuery, wsite);
+                            }
                         }
                     }else if (searchWord != null && searchWord.trim().length()>0) {
                         socialTopicPostOut=Integer.parseInt(getPostOutTopicbyWord_Query(0, 0, true, socialTopic, searchWord.trim()));
-                        sQuery=getPostOutTopicbyWord_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic, searchWord.trim()); 
-                        aListFilter=SWBSocial.executeQueryArray(sQuery, wsite); 
+                        if(socialTopicPostOut>0)
+                        {
+                            sQuery=getPostOutTopicbyWord_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic, searchWord.trim()); 
+                            aListFilter=SWBSocial.executeQueryArray(sQuery, wsite); 
+                        }else{  //Buscar sobre los nombres de los usuarios
+                            System.out.println("Entra a buscar pir user en SentPostJ");
+                            socialTopicPostOut=Integer.parseInt(getPostInStreambyUser_Query(0, 0, true, socialTopic, searchWord.trim()));
+                            System.out.println("Entra a buscar pir user en SentPostJ:"+socialTopicPostOut);
+                            if(socialTopicPostOut>0)
+                            {
+                                sQuery=getPostInStreambyUser_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic, searchWord.trim()); 
+                                System.out.println("Entra a buscar pir user en SentPostJ/sQuery:"+sQuery);
+                                aListFilter=SWBSocial.executeQueryArray(sQuery, wsite); 
+                            }
+                        }
                     }else if(request.getParameter("orderBy")!=null && !request.getParameter("orderBy").isEmpty())
                     {
                         socialTopicPostOut=Integer.parseInt(getAllPostOutSocialTopic_Query(socialTopic));
-                        if(request.getParameter("orderBy").equals("PostTypeUp"))    //Tipo de Mensaje Up
+                        if(socialTopicPostOut>0)
                         {
-                            sQuery=getPostOutType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
-                        }else if(request.getParameter("orderBy").equals("PostTypeDown"))    //Tipo de Mensaje Down
-                        {
-                            sQuery=getPostOutType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
-                        } else if (request.getParameter("orderBy").equals("origenUp")) {
-                            //socialTopicPostOut=Integer.parseInt(getPostOutSource_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
-                            sQuery=getPostOutSource_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
-                        } else if (request.getParameter("orderBy").equals("origenDown")) {
-                            //socialTopicPostOut=Integer.parseInt(getPostOutSource_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
-                            sQuery=getPostOutSource_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
-                        } else if (request.getParameter("orderBy").equals("cretedUp")) {
-                            sQuery=getPostOutCreated_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
-                        } else if (request.getParameter("orderBy").equals("cretedDown")) {
-                            sQuery=getPostOutCreated_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
-                        } else if (request.getParameter("orderBy").equals("sentimentUp")) {
-                            sQuery=getPostOutSentimentalType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
-                        } else if (request.getParameter("orderBy").equals("sentimentDown")) {
-                            sQuery=getPostOutSentimentalType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
-                        } else if (request.getParameter("orderBy").equals("intensityUp")) {
-                            sQuery=getPostOutIntensityType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
-                        } else if (request.getParameter("orderBy").equals("intensityDown")) {
-                            sQuery=getPostOutIntensityType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
-                        } else if (request.getParameter("orderBy").equals("updatedUp")) {
-                            //socialTopicPostOut=Integer.parseInt(getPostOutUpdated_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
-                            sQuery=getPostOutUpdated_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
-                        } else if (request.getParameter("orderBy").equals("updatedDown")) {
-                            //socialTopicPostOut=Integer.parseInt(getPostOutUpdated_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
-                            sQuery=getPostOutUpdated_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
-                        } else if (request.getParameter("orderBy").equals("userUp")) {
-                            sQuery=getPostOutUserName_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
-                        } else if (request.getParameter("orderBy").equals("userDown")) {
-                            sQuery=getPostOutUserName_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
-                        } else if (request.getParameter("orderBy").equals("statusUp")) {
-                            sQuery=getPostOutStatus_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
-                        } else if (request.getParameter("orderBy").equals("statusDown")) {
-                            sQuery=getPostOutStatus_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
-                        } 
+                            if(request.getParameter("orderBy").equals("PostTypeUp"))    //Tipo de Mensaje Up
+                            {
+                                sQuery=getPostOutType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
+                            }else if(request.getParameter("orderBy").equals("PostTypeDown"))    //Tipo de Mensaje Down
+                            {
+                                sQuery=getPostOutType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
+                            } else if (request.getParameter("orderBy").equals("origenUp")) {
+                                //socialTopicPostOut=Integer.parseInt(getPostOutSource_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
+                                sQuery=getPostOutSource_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
+                            } else if (request.getParameter("orderBy").equals("origenDown")) {
+                                //socialTopicPostOut=Integer.parseInt(getPostOutSource_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
+                                sQuery=getPostOutSource_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
+                            } else if (request.getParameter("orderBy").equals("cretedUp")) {
+                                sQuery=getPostOutCreated_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
+                            } else if (request.getParameter("orderBy").equals("cretedDown")) {
+                                sQuery=getPostOutCreated_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
+                            } else if (request.getParameter("orderBy").equals("sentimentUp")) {
+                                sQuery=getPostOutSentimentalType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
+                            } else if (request.getParameter("orderBy").equals("sentimentDown")) {
+                                sQuery=getPostOutSentimentalType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
+                            } else if (request.getParameter("orderBy").equals("intensityUp")) {
+                                sQuery=getPostOutIntensityType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
+                            } else if (request.getParameter("orderBy").equals("intensityDown")) {
+                                sQuery=getPostOutIntensityType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
+                            } else if (request.getParameter("orderBy").equals("updatedUp")) {
+                                //socialTopicPostOut=Integer.parseInt(getPostOutUpdated_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
+                                sQuery=getPostOutUpdated_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
+                            } else if (request.getParameter("orderBy").equals("updatedDown")) {
+                                //socialTopicPostOut=Integer.parseInt(getPostOutUpdated_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, socialTopic));
+                                sQuery=getPostOutUpdated_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
+                            } else if (request.getParameter("orderBy").equals("userUp")) {
+                                sQuery=getPostOutUserName_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
+                            } else if (request.getParameter("orderBy").equals("userDown")) {
+                                sQuery=getPostOutUserName_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
+                            } else if (request.getParameter("orderBy").equals("statusUp")) {
+                                sQuery=getPostOutStatus_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
+                            } else if (request.getParameter("orderBy").equals("statusDown")) {
+                                sQuery=getPostOutStatus_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic);
+                            } 
+                        }
                         //Termina Armado de Query
                         if(sQuery!=null)
                         {
@@ -2595,8 +2620,11 @@ public class SocialSentPost extends GenericResource {
                             setso = SWBSocialComparator.sortByPostOutCreatedSet(itposts, false); 
                             itposts = setso.iterator();*/
                             socialTopicPostOut=Integer.parseInt(getAllPostOutSocialTopic_Query(0, 0, true, socialTopic));
-                            sQuery=getAllPostOutSocialTopic_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic); 
-                            aListFilter=SWBSocial.executeQueryArrayPostOuts(sQuery, wsite);
+                            if(socialTopicPostOut>0)
+                            {
+                                sQuery=getAllPostOutSocialTopic_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, socialTopic); 
+                                aListFilter=SWBSocial.executeQueryArrayPostOuts(sQuery, wsite);
+                            }
                         }
                     } else { //Traer todo, NPage==0, en teoría jamas entraría a esta opción.
                         socialTopicPostOut=Integer.parseInt(getAllPostOutSocialTopic_Query(0, 0, true, socialTopic));
@@ -2735,6 +2763,50 @@ public class SocialSentPost extends GenericResource {
            }
         return query;
     }
+    
+    
+    private String getPostInStreambyUser_Query(long offset, long limit, boolean isCount, SocialTopic socialTopic, String word)
+    {
+        String query=
+           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
+           "PREFIX swb: <http://www.semanticwebbuilder.org/swb4/ontology#>" +    
+           "\n";
+           if(isCount)
+           {
+               //query+="select count(*)\n";    
+               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+           }else query+="select *\n";
+           
+           query+=
+           "where {\n" +
+           "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
+            " ?postUri swb:creator ?postOutCreator. \n" +      
+           "  ?postOutCreator swb:usrFirstName ?userName. \n" + 
+           "  FILTER regex(?userName, \""+word+"\", \"i\"). \n" + 
+           "  ?postUri social:pout_created ?postOutCreated. \n" +
+           "  }\n";
+
+           if(!isCount)
+           {
+                query+="ORDER BY desc(?postOutCreated) \n";
+
+                query+="OFFSET "+offset +"\n";
+                if(limit>0)
+                {
+                  query+="LIMIT "+limit;   
+                }
+           }
+           System.out.println("getPostInStreambyUser_Query:"+query);
+           if(isCount)
+           {
+               WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+               query=SWBSocial.executeQuery(query, wsite);
+           }
+        return query;
+    }
+    
+    
     
     /*
      * gets all PostIn by specific SocialNetUser
