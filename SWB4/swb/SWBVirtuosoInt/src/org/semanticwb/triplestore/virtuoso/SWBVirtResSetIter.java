@@ -113,7 +113,7 @@ public class SWBVirtResSetIter extends NiceIterator<Triple>
             }
         } catch (Exception localException)
         {
-            System.out.println("moveForward error:"+this.v_graph+" "+this.v_in);
+            //System.out.println("moveForward error:"+this.v_graph+" "+this.v_in);
             throw new JenaException(localException);
         }
     }

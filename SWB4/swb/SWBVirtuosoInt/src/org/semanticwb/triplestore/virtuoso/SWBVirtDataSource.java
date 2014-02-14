@@ -185,7 +185,7 @@ public class SWBVirtDataSource extends SWBVirtGraph implements DataSource {
     @Override
     public boolean containsNamedModel(String name) 
     {
-        System.out.println("containsNamedModel:"+name);
+        //System.out.println("containsNamedModel:"+name);
         String query = "select count(*) from (sparql select * where { graph `iri(??)` { ?s ?p ?o }})f";
         ResultSet rs = null;
         int ret = 0;
@@ -226,7 +226,7 @@ public class SWBVirtDataSource extends SWBVirtGraph implements DataSource {
         {
             String name=rs.getString(1);
             names.add(name);
-            System.out.println("listNames:"+name);
+            //System.out.println("listNames:"+name);
         }
         rs.close();
         stmt.close();
