@@ -40,7 +40,7 @@ public class StreamCleanerMsgbyDays {
 
             int oneDay = 60 * MILISEG_IN_SEGUNDO * 60 * 24;
             
-            System.out.println("StreamCleanerMsgbyDays/time2Start Para empezar por primera vez:"+time2Start);
+            //System.out.println("StreamCleanerMsgbyDays/time2Start Para empezar por primera vez:"+time2Start);
 
             Timer timer = new Timer();
             
@@ -72,7 +72,7 @@ public class StreamCleanerMsgbyDays {
             while (itStreams.hasNext()) {
                 Stream stream = itStreams.next();
                 if (stream.getSocialSite().isValid() && stream.isValid()) {
-                    System.out.println("Entra a CheckStreamsMsgbyDays...EJECUTAR/STREAM:"+stream+",MaxDays:"+stream.getStream_maxDays());
+                    //System.out.println("Entra a CheckStreamsMsgbyDays...EJECUTAR/STREAM:"+stream+",MaxDays:"+stream.getStream_maxDays());
                     int postInDays2Stay=stream.getStream_maxDays();
                     if(postInDays2Stay>0)
                     {
@@ -81,7 +81,7 @@ public class StreamCleanerMsgbyDays {
                        
                         String date2Compare=dateBefore.getYear()+1900+"-"+(dateBefore.getMonth()+01)+"-"+dateBefore.getDate()+"T00:00:00Z";
                         
-                        System.out.println("date2Compare:"+date2Compare);
+                        //System.out.println("date2Compare:"+date2Compare);
                         
                         String query=getAllPostIn2Remove(stream, date2Compare);
                         //System.out.println("query pa eliminarJJ:"+query);

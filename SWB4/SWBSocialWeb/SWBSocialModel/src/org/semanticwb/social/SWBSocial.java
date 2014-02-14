@@ -25,7 +25,7 @@ public class SWBSocial {
         if(query!=null)
         {
             //QueryExecution qe=new SWBQueryExecution(wsite.getSemanticModel().getRDFModel(), query);
-            System.out.println("SWBSocial/executeQuery:"+query);
+            //System.out.println("SWBSocial/executeQuery:"+query);
             QueryExecution qe=wsite.getSemanticModel().sparQLQuery(query);
             //System.out.println("SWBSocial-1/executeQuery:"+qe);
             ResultSet rs=qe.execSelect();
@@ -43,7 +43,10 @@ public class SWBSocial {
                         //System.out.println("node en executeQuery:"+node);
                         //System.out.println("node en executeQuery-1:"+node.asLiteral());
                         String val="";
-                        if(node.isLiteral())val=node.asLiteral().getLexicalForm();
+                        //System.out.println("node:"+node);
+                        try{
+                            if(node.isLiteral())val=node.asLiteral().getLexicalForm();
+                        }catch(Exception e){val="0";}
                         //System.out.println("val en executeQuery:"+val);
                         return val;
                     }
