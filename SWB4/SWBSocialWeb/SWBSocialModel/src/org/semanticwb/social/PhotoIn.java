@@ -21,18 +21,18 @@ public class PhotoIn extends org.semanticwb.social.base.PhotoInBase
             public void notify(SemanticObject obj, Object prop, String lang, String action) {
                 if(action!=null && obj.instanceOf(PhotoIn.social_PhotoIn))
                 {
-                    System.out.println("PhotoIn--Observer:"+obj+",prop:"+prop+",action:"+action);
+                    //System.out.println("PhotoIn--Observer:"+obj+",prop:"+prop+",action:"+action);
                     //Cada que un PostIn se elimine, se ejecutara este código, revisa si el usuario(SocialNetworkUser) asociado al PostIn,
                     //tiene mas PostIn asociados, de no ser así, elimina dicho usuario (SocialNetworkUser).
                     if(action.equals("REMOVE") && prop==null) //Si la acción es eliminar el PhotoIn
                     {
                         PostIn postIn = (PostIn) obj.createGenericInstance();
-                        System.out.println("PhotoIn/Observer/action:"+action+", postIn:"+postIn);
-                        System.out.println("PhotoIn Observador-1");
+                        //System.out.println("PhotoIn/Observer/action:"+action+", postIn:"+postIn);
+                        //System.out.println("PhotoIn Observador-1");
                         SocialNetworkUser socialNetworkUser=postIn.getPostInSocialNetworkUser();
                         if(socialNetworkUser!=null)
                         {
-                            System.out.println("PhotoIn Observador-2:"+socialNetworkUser+", trae:"+PostIn.ClassMgr.listPostInByPostInSocialNetworkUser(socialNetworkUser).hasNext());
+                            //System.out.println("PhotoIn Observador-2:"+socialNetworkUser+", trae:"+PostIn.ClassMgr.listPostInByPostInSocialNetworkUser(socialNetworkUser).hasNext());
                             
                             //Si dicho usuario no tiene mas PostIns, entonces que lo elimine de la clase SocialNetworkUser
                             //De lo contrarío se quedaría ahi como basura, pudiendo crecer demaciado la info en esa Clase.
@@ -77,7 +77,7 @@ public class PhotoIn extends org.semanticwb.social.base.PhotoInBase
                                 while(itSocialNetStreamSearch.hasNext())
                                 {
                                     SocialNetStreamSearch socialNetStreamSearch=itSocialNetStreamSearch.next();
-                                    System.out.println("Remueve en Stream:"+socialNetStreamSearch);
+                                    //System.out.println("Remueve en Stream:"+socialNetStreamSearch);
                                     socialNetStreamSearch.remove();
                                 }
                             }

@@ -1,7 +1,6 @@
 package org.semanticwb.social;
 
 import java.util.Iterator;
-import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
 
@@ -11,6 +10,7 @@ import org.semanticwb.platform.SemanticObserver;
    */
 public class MessageIn extends org.semanticwb.social.base.MessageInBase 
 {
+    
     public MessageIn(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
@@ -27,12 +27,12 @@ public class MessageIn extends org.semanticwb.social.base.MessageInBase
                     if(action.equals("REMOVE") && prop==null) //Si la acción es eliminar el SocialTopic
                     {
                         PostIn postIn = (PostIn) obj.createGenericInstance();
-                        System.out.println("MessageIn/Observer/action:"+action+", postIn:"+postIn);
-                        System.out.println("MessageIn Observador-1");
+                        //System.out.println("MessageIn/Observer/action:"+action+", postIn:"+postIn);
+                        //System.out.println("MessageIn Observador-1");
                         SocialNetworkUser socialNetworkUser=postIn.getPostInSocialNetworkUser();
                         if(socialNetworkUser!=null)
                         {
-                            System.out.println("MessageIn Observador-2:"+socialNetworkUser+", trae:"+PostIn.ClassMgr.listPostInByPostInSocialNetworkUser(socialNetworkUser).hasNext());
+                            //System.out.println("MessageIn Observador-2:"+socialNetworkUser+", trae:"+PostIn.ClassMgr.listPostInByPostInSocialNetworkUser(socialNetworkUser).hasNext());
                             
                             //Si dicho usuario no tiene mas PostIns, entonces que lo elimine de la clase SocialNetworkUser
                             //De lo contrarío se quedaría ahi como basura, pudiendo crecer demaciado la info en esa Clase.

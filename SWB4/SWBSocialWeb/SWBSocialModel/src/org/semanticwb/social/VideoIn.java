@@ -26,12 +26,12 @@ public class VideoIn extends org.semanticwb.social.base.VideoInBase
                     if(action.equals("REMOVE") && prop==null) //Si la acción es eliminar el SocialTopic
                     {
                         PostIn postIn = (PostIn) obj.createGenericInstance();
-                        System.out.println("VideoIn/Observer/action:"+action+", postIn:"+postIn);
-                        System.out.println("VideoIn Observador-1");
+                        //System.out.println("VideoIn/Observer/action:"+action+", postIn:"+postIn);
+                        //System.out.println("VideoIn Observador-1");
                         SocialNetworkUser socialNetworkUser=postIn.getPostInSocialNetworkUser();
                         if(socialNetworkUser!=null)
                         {
-                            System.out.println("VideoIn Observador-2:"+socialNetworkUser+", trae:"+PostIn.ClassMgr.listPostInByPostInSocialNetworkUser(socialNetworkUser).hasNext());
+                            //System.out.println("VideoIn Observador-2:"+socialNetworkUser+", trae:"+PostIn.ClassMgr.listPostInByPostInSocialNetworkUser(socialNetworkUser).hasNext());
                             
                             //Si dicho usuario no tiene mas PostIns, entonces que lo elimine de la clase SocialNetworkUser
                             //De lo contrarío se quedaría ahi como basura, pudiendo crecer demaciado la info en esa Clase.

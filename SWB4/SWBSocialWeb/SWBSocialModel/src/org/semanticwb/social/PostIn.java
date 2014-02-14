@@ -17,17 +17,17 @@ public class PostIn extends org.semanticwb.social.base.PostInBase
     
     public static PostIn getPostInbySocialMsgId(SWBModel model, String socialMsgId)
     {
-        System.out.println("PostIn/getPostInbySocialMsgId-LLega:"+socialMsgId);
+        //System.out.println("PostIn/getPostInbySocialMsgId-LLega:"+socialMsgId);
         Iterator<SemanticObject> it=model.getSemanticModel().listSubjects(PostIn.social_socialNetMsgId, socialMsgId);
         while(it.hasNext())
         {
             SemanticObject obj=it.next();
-            System.out.println("objJorge:"+obj);
-            System.out.println("objJorge GenInst:"+obj.getGenericInstance());
+            //System.out.println("objJorge:"+obj);
+            //System.out.println("objJorge GenInst:"+obj.getGenericInstance());
             if(obj.createGenericInstance() instanceof PostIn)
             {
                 PostIn postIn=(PostIn)obj.createGenericInstance();
-                System.out.println("postInGeoge:"+postIn.getSocialNetMsgId());
+                //System.out.println("postInGeoge:"+postIn.getSocialNetMsgId());
                 //return (PostIn)obj.createGenericInstance();
                 return postIn;
             }
@@ -50,7 +50,7 @@ public class PostIn extends org.semanticwb.social.base.PostInBase
                     //Cada que un PostIn se elimine, se ejecutara este código, revisa si el usuario(SocialNetworkUser) asociado al PostIn,
                     //tiene mas PostIn asociados, de no ser así, elimina dicho usuario (SocialNetworkUser).
                     
-                    System.out.println("*********************postIn/Observer/action:"+action+", postIn:"+postIn);
+                    //System.out.println("*********************postIn/Observer/action:"+action+", postIn:"+postIn);
                     
                     //TODO:Probar este código.
                     if(action.equals("REMOVE") && prop==null) //Si la acción es eliminar el SocialTopic
@@ -63,23 +63,23 @@ public class PostIn extends org.semanticwb.social.base.PostInBase
                             while(itPostInUserNumber.hasNext())
                             {
                                 i++;
-                                System.out.println("IJ1:"+i);
+                                //System.out.println("IJ1:"+i);
                                 if(i>1) 
                                 {
-                                    System.out.println("IJ2:"+i);
+                                    //System.out.println("IJ2:"+i);
                                     break;
                                 }
-                                System.out.println("IJ3:"+i);
+                                //System.out.println("IJ3:"+i);
                                 itPostInUserNumber.next();
                             }
                            
-                            System.out.println("I:"+i);
+                            //System.out.println("I:"+i);
                             
                             if(i<=1)
                             {
-                                System.out.println("MessageIn Observador-J3:"+socialNetworkUser+", FUE ELIMINADO...");
+                                //System.out.println("MessageIn Observador-J3:"+socialNetworkUser+", FUE ELIMINADO...");
                                 socialNetworkUser.remove();
-                                System.out.println("MessageIn Observador-J3.1:"+socialNetworkUser+", FUE ELIMINADO...");
+                                System.out.println("PostIn Observador-J3.1:"+socialNetworkUser+", FUE ELIMINADO...");
                             }else{
                                 System.out.println("Por PostIn, no encontro ni maiz k");
                             }
