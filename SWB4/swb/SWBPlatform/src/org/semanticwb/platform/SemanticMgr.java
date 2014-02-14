@@ -690,10 +690,9 @@ public class SemanticMgr implements SWBInstanceObject
             }
             model = omodel;
         } else if (name.equals(SWBAdmin)) {
-            NsIterator it = model.listNameSpaces();
-            if (!it.hasNext() || !it.hasNext()) { // verifica que no exista mas de un namespace
+            List ns=SWBUtils.Collections.copyIterator(model.listNameSpaces());
+            if (ns.size()<=1) { // verifica que no exista mas de un namespace
                 log.info("Importing SWBAdmin...");
-                it.close();
                 try {
                     FileInputStream in = new FileInputStream(SWBUtils.getApplicationPath() + SWBPlatform.createInstance().getAdminFile());
                     if (model.supportsTransactions()) {
