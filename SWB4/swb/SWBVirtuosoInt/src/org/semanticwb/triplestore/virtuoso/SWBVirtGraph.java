@@ -632,7 +632,7 @@ public class SWBVirtGraph extends GraphBase implements GraphExt
 //--java5 or newer    @SuppressWarnings("unchecked")
     void add(Iterator<Triple> it, List<Triple> list)
     {
-        System.out.println("add:"+list.size());
+        System.out.println("add g it");
         try
         {
             Connection con=m_transactionHandler.getConnection();
@@ -642,6 +642,7 @@ public class SWBVirtGraph extends GraphBase implements GraphExt
             while (it.hasNext())
             {
                 Triple t = (Triple) it.next();
+                System.out.println("triple:"+t);
 
                 if (list != null)
                 {
