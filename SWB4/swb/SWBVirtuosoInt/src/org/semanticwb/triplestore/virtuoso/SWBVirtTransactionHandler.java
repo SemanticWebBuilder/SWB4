@@ -56,7 +56,7 @@ public class SWBVirtTransactionHandler extends TransactionHandlerBase
 //            throw new JenaException(e);
 //        }
 //        return false;
-        return false;
+        return true;
     }
 
     @Override

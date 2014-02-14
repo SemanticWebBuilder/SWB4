@@ -83,7 +83,7 @@ public class SWBTSVirtuoso implements AbstractStore
             if(str.startsWith("swb_"))
             {
                 models.add(str.substring(4));
-                System.out.println("name swb:"+str.substring(4));
+                //System.out.println("name swb:"+str.substring(4));
             }
         }     
         

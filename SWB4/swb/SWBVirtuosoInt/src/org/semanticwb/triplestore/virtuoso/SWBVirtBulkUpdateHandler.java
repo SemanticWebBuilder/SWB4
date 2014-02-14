@@ -27,7 +27,7 @@ public class SWBVirtBulkUpdateHandler extends SimpleBulkUpdateHandler
 
 //--java5 or newer    @Override
     public void add( Triple [] triples ) { 
-        System.out.println("add triples:"+triples.length);
+        //System.out.println("add triples:"+triples.length);
         addIterator(Arrays.asList(triples).iterator(), false);
         manager.notifyAddArray( graph, triples );
     }
@@ -41,7 +41,7 @@ public class SWBVirtBulkUpdateHandler extends SimpleBulkUpdateHandler
 
 //--java5 or newer    @Override
     public void addIterator(Iterator<Triple> it, boolean notify) {
-        System.out.println("add iterator");
+        //System.out.println("add iterator");
 	SWBVirtGraph _graph=(SWBVirtGraph)this.graph;
 	List list = notify ? new ArrayList() : null;
 
