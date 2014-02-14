@@ -53,7 +53,7 @@ public class StreamCleanerMsgbyNumber {
             while (itStreams.hasNext()) {
                 Stream stream = itStreams.next();
                 if (stream.getSocialSite().isValid() && stream.isValid()) {
-                    System.out.println("Entra a StreamCleanerMsgbyNumber...EJECUTAR/STREAM:"+stream);
+                    //System.out.println("Entra a StreamCleanerMsgbyNumber...EJECUTAR/STREAM:"+stream);
                     int postInNumAccepted=stream.getStream_maxMsg();
                     //1000 es el menor número aceptado en un stream, 99999 es el mayor número aceptado
                     //El número de mensajes en el stream no debe ser mayor que el que acepta el stream (entre 1000 y 99999)
@@ -87,7 +87,6 @@ public class StreamCleanerMsgbyNumber {
                 + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
                 + "  }\n";
         WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-        //System.out.println("query:"+query+",wsite:"+wsite);
         query = SWBSocial.executeQuery(query, wsite);
         return query;
     }
