@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.catalogs.base;
 
 
-public abstract class PriorityBase extends org.semanticwb.bsc.catalogs.Catalog implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
+public abstract class PriorityBase extends org.semanticwb.bsc.catalogs.Catalog implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticClass bsc_Priority=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Priority");
    /**
