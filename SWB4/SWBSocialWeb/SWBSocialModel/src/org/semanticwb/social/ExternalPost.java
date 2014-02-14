@@ -82,12 +82,12 @@ public class ExternalPost {
     /**
      * The time the post was initially published
      */
-    private String creationTime;
+    private Date creationTime;
     
     /**
      * The time of the last comment or update to this post
      */
-    private String updateTime;
+    private Date updateTime;
     
     /**
      * Creator's friends number
@@ -357,28 +357,28 @@ public class ExternalPost {
     /**
      * @return the creationTime
      */
-    public String getCreationTime() {
+    public Date getCreationTime() {
         return creationTime;
     }
 
     /**
      * @param creationTime the creationTime to set
      */
-    public void setCreationTime(String creationTime) {
+    public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
     }
 
     /**
      * @return the updateTime
      */
-    public String getUpdateTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
 
     /**
      * @param updateTime the updateTime to set
      */
-    public void setUpdateTime(String updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 
