@@ -31,11 +31,7 @@ import com.hp.hpl.jena.graph.TransactionHandler;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.graph.TripleMatch;
 import com.hp.hpl.jena.graph.impl.GraphBase;
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryFactory;
-import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.AnonId;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.impl.ModelCom;
 import com.hp.hpl.jena.shared.AddDeniedException;
 import com.hp.hpl.jena.shared.DeleteDeniedException;
@@ -54,8 +50,6 @@ import java.util.List;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.triplestore.ext.GraphExt;
-import virtuoso.jena.driver.VirtuosoQueryExecution;
-import virtuoso.jena.driver.VirtuosoQueryExecutionFactory;
 import virtuoso.sql.ExtendedString;
 import virtuoso.sql.RdfBox;
 
@@ -373,6 +367,7 @@ public class SWBVirtGraph extends GraphBase implements GraphExt
         if(m_transactionHandler.batchAddTransaction(t))return;
         java.sql.PreparedStatement ps;
 
+        System.out.println("performAdd:"+t);
         try
         {
             Connection con=m_transactionHandler.getConnection();
@@ -637,6 +632,7 @@ public class SWBVirtGraph extends GraphBase implements GraphExt
 //--java5 or newer    @SuppressWarnings("unchecked")
     void add(Iterator<Triple> it, List<Triple> list)
     {
+        System.out.println("add:"+list.size());
         try
         {
             Connection con=m_transactionHandler.getConnection();
