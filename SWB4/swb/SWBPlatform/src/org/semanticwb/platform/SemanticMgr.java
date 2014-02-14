@@ -690,6 +690,16 @@ public class SemanticMgr implements SWBInstanceObject
             }
             model = omodel;
         } else if (name.equals(SWBAdmin)) {
+            
+            System.out.println(model.size());
+            NsIterator it2=model.listNameSpaces();
+            while (it2.hasNext())
+            {
+                String string = it2.next();
+                System.out.println(string);
+            }
+            
+            
             NsIterator it = model.listNameSpaces();
             if (!it.hasNext()) {
                 log.info("Importing SWBAdmin...");
