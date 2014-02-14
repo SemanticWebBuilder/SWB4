@@ -800,6 +800,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         ArrayList<ExternalPost> aListExternalPost = new ArrayList();
         String searchPhrases = getPhrases(stream.getPhrase());
         String category = "";
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
         
         if(searchPhrases == null || searchPhrases.isEmpty()){
             return;
@@ -851,7 +852,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                     JSONArray items = data.getJSONArray("items");
                     count = items.length();
 
-                    DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+                    //DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
                     //formatter.setTimeZone(TimeZone.getTimeZone("GMT-6"));
                     //Date currentVideoID = new Date(0L);
 
@@ -882,8 +883,8 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                             external.setPostId(idItem);
                             external.setCreatorId(uploader);
                             external.setCreatorName(uploader);
-                            external.setCreationTime(uploadedStr);
-                            external.setUpdateTime(updatedItem);
+                            external.setCreationTime(formatter.parse(uploadedStr));
+                            //external.setUpdateTime(updatedItem);
                             external.setMessage(description);
                             external.setCategory(categoryItem);
                             external.setSocialNetwork(this);
@@ -1074,7 +1075,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             String youtubeResponse = getRequest(null, "https://www.googleapis.com/plus/v1/people/" + googlePlusUserId + "?key=AIzaSyBEbVYqvZudUYdt-UeHkgRl-rkvNHCw4Z8", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
             JSONObject parseUsrInf = null;
             parseUsrInf = new JSONObject(youtubeResponse);
-
+            System.out.println(parseUsrInf);
             if (parseUsrInf.has("gender") && !parseUsrInf.isNull("gender")) {
                 userInfo.put("gender", parseUsrInf.getString("gender"));
             } else {

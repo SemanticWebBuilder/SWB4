@@ -91,14 +91,14 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 }
                 if(message.getPostInSource()!=null && message.getPostInSource().getSocialNetMsgId()!=null)
                 {
-                    System.out.println("Twitter Msg PRIMERA OPCION...:"+message.getPostInSource().getPostInSocialNetworkUser().getSnu_name());
+                    //System.out.println("Twitter Msg PRIMERA OPCION...:"+message.getPostInSource().getPostInSocialNetworkUser().getSnu_name());
                     if(!urlLocalPost.isEmpty()){
                         sup = twitter.updateStatus(new StatusUpdate(new String(SWBSocialUtil.Util.shortUrl(message.getPostInSource().getPostInSocialNetworkUser().getSnu_name()+" " +message.getMsg_Text() + " " + urlLocalPost).getBytes(), "ISO-8859-1")).inReplyToStatusId(Long.parseLong(message.getPostInSource().getSocialNetMsgId())));
                     }else{
                         sup = twitter.updateStatus(new StatusUpdate(new String(SWBSocialUtil.Util.shortUrl(message.getPostInSource().getPostInSocialNetworkUser().getSnu_name()+" " +message.getMsg_Text()).getBytes(), "ISO-8859-1")).inReplyToStatusId(Long.parseLong(message.getPostInSource().getSocialNetMsgId())));
                     }
                 }else{
-                    System.out.println("Twitter Msg SEGUNDA OPCION...");
+                    //System.out.println("Twitter Msg SEGUNDA OPCION...");
                     if(!urlLocalPost.isEmpty()){
                         sup = twitter.updateStatus(new StatusUpdate(new String(SWBSocialUtil.Util.shortUrl(message.getMsg_Text() + " " + urlLocalPost).getBytes(), "ISO-8859-1")));
                     }else{
@@ -128,7 +128,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     }
 
     public void postPhoto(Photo photo) {        
-        System.out.println("Inside post photo TWITTER");
+        //System.out.println("Inside post photo TWITTER");
         if (photo != null) {
             String photoToPublish="";
             String additionalPhotos="";
@@ -145,12 +145,12 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             }
             if(photoNumber == 0){
                 log.error("No photo(s) found!");
-                System.out.println("No Photos FOUND");
+                //System.out.println("No Photos FOUND");
                 return;
             }else if (photoNumber > 1){
                 String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
                 additionalPhotos = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + photo.getEncodedURI();
-                System.out.println("Path form multiple photos:" + additionalPhotos);
+                //System.out.println("Path form multiple photos:" + additionalPhotos);
             }
             
             //System.out.println("The photo to be published TWITTER:" + photoToPublish);            
@@ -166,7 +166,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 Status stat = null;
                 if(photo.getPostInSource()!=null && photo.getPostInSource().getSocialNetMsgId()!=null)
                 {
-                    System.out.println("Twitter Photo PRIMERA OPCION...:"+photo.getPostInSource().getPostInSocialNetworkUser().getSnu_name());
+                    //System.out.println("Twitter Photo PRIMERA OPCION...:"+photo.getPostInSource().getPostInSocialNetworkUser().getSnu_name());
                     //sup = new StatusUpdate(new String(shortUrl(photo.getPostInSource().getPostInSocialNetworkUser().getSnu_name() + " " +description).getBytes(), "ISO-8859-1"));
                     description = description + (additionalPhotos.trim().length() > 0 ? " " + additionalPhotos : "" ); //
                     sup = new StatusUpdate(new String(SWBSocialUtil.Util.shortUrl(photo.getPostInSource().getPostInSocialNetworkUser().getSnu_name() + " " + description ).getBytes(), "ISO-8859-1"));
@@ -174,7 +174,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                     sup.setMedia(new File(photoToPublish));
                     stat = twitter.updateStatus(sup.inReplyToStatusId(Long.parseLong(photo.getPostInSource().getSocialNetMsgId())));
                 }else{
-                    System.out.println("Twitter Photo SEGUNDA OPCION...");
+                    //System.out.println("Twitter Photo SEGUNDA OPCION...");
                     description = description + (additionalPhotos.trim().length() > 0 ? " " + additionalPhotos : "" ); //
                     sup = new StatusUpdate(new String(SWBSocialUtil.Util.shortUrl(description).getBytes(), "ISO-8859-1"));
                     //sup.setMedia(new File(photoSend));
@@ -236,23 +236,23 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
      */
     private long getLastTweetID(Stream stream){
         SocialNetStreamSearch socialStreamSerch=SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
-        System.out.println("----------GET LAST TWEET ID");
+        /*System.out.println("----------GET LAST TWEET ID");
         System.out.println("----------Net:" +  this.getTitle() + " Stream:" + stream.getTitle());
         System.out.println("----------SocialStreamSerch:\n\t" + socialStreamSerch );
         if(socialStreamSerch != null){
             System.out.println("Stream:\n\t" + socialStreamSerch.getStream() );
             System.out.println("Next Date:\n\t" + socialStreamSerch.getNextDatetoSearch() );
-        }
+        }*/
         long lastTweetID = 0L;
         if(socialStreamSerch!=null && socialStreamSerch.getNextDatetoSearch()!= null){
             try{
-                System.out.println("RECOVERING NEXTDATETOSEARCH: " + socialStreamSerch.getNextDatetoSearch());
+                //System.out.println("RECOVERING NEXTDATETOSEARCH: " + socialStreamSerch.getNextDatetoSearch());
                 lastTweetID = Long.parseLong(socialStreamSerch.getNextDatetoSearch());
                 
             }catch(NumberFormatException nfe){
                 lastTweetID = 0L;
                 log.error("----------Error in getLastTweetID():",  nfe);
-                System.out.println("----------Invalid value found in NextDatetoSearch(). Set to 0");
+                //System.out.println("----------Invalid value found in NextDatetoSearch(). Set to 0");
             }
         }else{
             lastTweetID=0L;
@@ -270,11 +270,11 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             if(socialStreamSerch!=null && socialStreamSerch.getNextDatetoSearch()!=null) storedValue = Long.parseLong(socialStreamSerch.getNextDatetoSearch());
             
             if(tweetID > storedValue){ //Only stores tweetID if it's greater than the current stored value
-                System.out.println("----------EL VALOR ALMACENADO ES:" +  tweetID.toString());
+                //System.out.println("----------EL VALOR ALMACENADO ES:" +  tweetID.toString());
                 socialStreamSerch.setNextDatetoSearch(String.valueOf(tweetID));
                 //System.out.println("SET VALUE:" + socialStreamSerch.getNextDatetoSearch());
             }else{
-                System.out.println("NO ESTÁ GUARDANDO NADA PORQUE EL VALOR ALMACENADO YA ES IGUAL O MAYOR AL ACTUAL");
+                //System.out.println("NO ESTÁ GUARDANDO NADA PORQUE EL VALOR ALMACENADO YA ES IGUAL O MAYOR AL ACTUAL");
                 log.error("Do not save the Tweet ID because stored value is equal or greater than the received");
             }
         }catch(NumberFormatException nfe){
@@ -311,7 +311,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
     @Override
     public void listen(Stream stream) {
-        System.out.println("Entra a Twitter/Listen");
+        //System.out.println("Entra a Twitter/Listen");
         //WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
         //System.out.println("Red SocialID:"+this.getId()+", Red Title:"+this.getTitle()+", sitio:"+wsite.getId());
         //System.out.println("Creador:" + this.getCreator());
@@ -322,7 +322,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         if(stream.getBlockofMsgToClassify() > 0){
             blockOfTweets = stream.getBlockofMsgToClassify();
         }
-        System.out.println("Message Block Twitter:" + blockOfTweets);
+        //System.out.println("Message Block Twitter:" + blockOfTweets);
         
         try{            
             long lastTweetID = getLastTweetID(stream); //gets the value stored in NextDatetoSearch
@@ -372,7 +372,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                                     external.setPostId(String.valueOf(status.getId())); 
                                     external.setCreatorId(String.valueOf(status.getUser().getId()));
                                     external.setCreatorName("@"+status.getUser().getScreenName());
-                                    external.setCreationTime(""+status.getCreatedAt());
+                                    external.setCreationTime(status.getCreatedAt());
                                     external.setDevice(status.getSource());
                                     if (status.getText()!=null) {
                                        external.setMessage(status.getText());
@@ -416,7 +416,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                                     tweetsReceived++;
                                     
                                     if((blockOfTweets > 0) && (aListExternalPost.size() >= blockOfTweets)){//Classify the block of tweets
-                                        System.out.println("CLASSIFYING:" + aListExternalPost.size());
+                                        //System.out.println("CLASSIFYING:" + aListExternalPost.size());
                                         new Classifier((ArrayList <ExternalPost>)aListExternalPost.clone(), stream, this, false);
                                         aListExternalPost.clear();
                                     }
@@ -506,7 +506,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     
     public void listenAlive(Stream stream) {
         try {
-            System.out.println("Entra a Twitter listenAlive-1:"+stream.getURI()+"|"+this.getURI());
+            //System.out.println("Entra a Twitter listenAlive-1:"+stream.getURI()+"|"+this.getURI());
             if(ListenAlives.containsKey(stream.getURI()+"|"+this.getURI())) {
                 stopListenAlive(stream);
             }
@@ -533,7 +533,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             
             TwitterStream twitterStream = new TwitterStreamFactory(configureOAuth().build()).getInstance();
             
-            System.out.println(twitterStream);
+            //System.out.println(twitterStream);
             
             twitterStream.addListener(listener);
 
@@ -545,7 +545,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             
             //System.out.println("Entra a Twitter listenAlive-4-JorgeJJ:"+stream.getURI()+"|"+this.getURI());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
             log.error(e);
         }
     }
