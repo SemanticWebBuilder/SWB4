@@ -76,7 +76,12 @@ public class ClassifierThread extends java.lang.Thread {
             while(itExternalThreads.hasNext())
             {
                 ExternalPost externalPost=itExternalThreads.next();
-                new SentimentalDataClassifier(externalPost, stream, socialNetwork, classifyGeoLocation);
+                if(socialNetwork!=null && stream!=null && externalPost.getCreatorId()!=null && externalPost.getPostId()!=null && externalPost.getSocialNetwork()!=null)
+                {
+                    new SentimentalDataClassifier(externalPost, stream, socialNetwork, classifyGeoLocation);
+                }else{
+                    System.out.println("NO MANCHESSSS/socialNetwork:"+socialNetwork+",NET2:"+externalPost.getSocialNetwork());
+                }
             }
           }
            /*

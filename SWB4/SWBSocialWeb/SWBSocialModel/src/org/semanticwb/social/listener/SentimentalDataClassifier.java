@@ -124,6 +124,10 @@ public class SentimentalDataClassifier {
      * así como la intensidad, eso en este momento, talvez se requiera realizar mas clasificaciones posteriormente.
      */
     private void initAnalysis() {
+        if(externalPost.getCreatorId()==null || externalPost.getCreatorId().isEmpty()) {
+            System.out.println("VIENE NULO UN EXTERNAL POST");
+            return;
+        }
         long tini = System.currentTimeMillis();
         //Normalizo
         String externalString2Clasify_TMP = externalString2Clasify;
@@ -428,79 +432,87 @@ public class SentimentalDataClassifier {
                 //System.out.println("Paso filtro de sentimientos, intensidad y klout---vamos a persistir el msg...");
                 PostIn post = createPostInObj(socialNetUser, userKloutScore, upDateSocialUserNetworkData, days);
 
-                //Guarda valores sentimentales en el PostIn (mensaje de entrada)
-                post.setPostSentimentalValue(promSentimentalValue);
-                post.setPostSentimentalType(sentimentalTweetValueType);
+                if(post!=null)
+                {
+                    //Guarda valores sentimentales en el PostIn (mensaje de entrada)
+                    post.setPostSentimentalValue(promSentimentalValue);
+                    post.setPostSentimentalType(sentimentalTweetValueType);
 
-                //Guarda valores sentimentales en el PostIn (mensaje de entrada)
-                post.setPostIntensityValue(promIntensityValue);
-                post.setPostIntesityType(intensityTweetValueType);
+                    //Guarda valores sentimentales en el PostIn (mensaje de entrada)
+                    post.setPostIntensityValue(promIntensityValue);
+                    post.setPostIntesityType(intensityTweetValueType);
 
-                //System.out.println("Valor sentimental puesto al final:"+post.getPostSentimentalValue());
-                //System.out.println("Valor de intensidad puesto al final:"+post.getPostIntensityValue());
+                    //System.out.println("Valor sentimental puesto al final:"+post.getPostSentimentalValue());
+                    //System.out.println("Valor de intensidad puesto al final:"+post.getPostIntensityValue());
 
-                //Revisa si encuentra emoticones en el mensaje
-                //System.out.println("SentimentalData..text/externalString2Clasify:"+externalString2Clasify);
-                findEmoticones(post, externalString2Clasify_TMP);
-                //MessageIn messageIn=(MessageIn)post;
-                //System.out.println("messageIn final:"+messageIn.getMsg_Text());
+                    //Revisa si encuentra emoticones en el mensaje
+                    //System.out.println("SentimentalData..text/externalString2Clasify:"+externalString2Clasify);
+                    findEmoticones(post, externalString2Clasify_TMP);
+                    //MessageIn messageIn=(MessageIn)post;
+                    //System.out.println("messageIn final:"+messageIn.getMsg_Text());
 
-                //Clasificación por palabras relacionadas a un tema
-                SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(post, externalString2Clasify_TMP, true);
+                    //Clasificación por palabras relacionadas a un tema
+                    SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(post, externalString2Clasify_TMP, true);
 
-                boolean firstTime = true;
-                boolean rulesClassifierValue = false;
-                boolean rulesClassifierValueTmp = false;
-                ArrayList<SocialRule> streamRules = new ArrayList();
-                //Momento de revisar las reglas del stream
-                Iterator<SocialRuleRef> itsocialRuleRefs = stream.listSocialRuleRefs();
-                //System.out.println("itsocialRuleRefs jorge:" + itsocialRuleRefs.hasNext());
-                while (itsocialRuleRefs.hasNext()) {
-                    SocialRuleRef socialRuleRef = itsocialRuleRefs.next();
-                    if (socialRuleRef.isActive() && socialRuleRef.getSocialRule() != null) {
-                        //System.out.println("ReglaRef k:" + socialRuleRef);
-                        SWBSocialRuleMgr socialRuleMgr = new SWBSocialRuleMgr();
-                        SocialRule socialRule = socialRuleRef.getSocialRule();
-                        rulesClassifierValueTmp = socialRuleMgr.eval(post, socialRule);
-                        //System.out.println("rulesClassifierValueTmp-1:" + rulesClassifierValue);
-                        if (firstTime) {
-                            rulesClassifierValue = rulesClassifierValueTmp;
-                            firstTime = false;
-                        } else {
-                            rulesClassifierValue = rulesClassifierValue && rulesClassifierValueTmp;
-                            //System.out.println("rulesClassifierValue-2:"+rulesClassifierValue);
+                    boolean firstTime = true;
+                    boolean rulesClassifierValue = false;
+                    boolean rulesClassifierValueTmp = false;
+                    ArrayList<SocialRule> streamRules = new ArrayList();
+                    //Momento de revisar las reglas del stream
+                    Iterator<SocialRuleRef> itsocialRuleRefs = stream.listSocialRuleRefs();
+                    //System.out.println("itsocialRuleRefs jorge:" + itsocialRuleRefs.hasNext());
+                    while (itsocialRuleRefs.hasNext()) {
+                        SocialRuleRef socialRuleRef = itsocialRuleRefs.next();
+                        if (socialRuleRef.isActive() && socialRuleRef.getSocialRule() != null) {
+                            //System.out.println("ReglaRef k:" + socialRuleRef);
+                            SWBSocialRuleMgr socialRuleMgr = new SWBSocialRuleMgr();
+                            SocialRule socialRule = socialRuleRef.getSocialRule();
+                            rulesClassifierValueTmp = socialRuleMgr.eval(post, socialRule);
+                            //System.out.println("rulesClassifierValueTmp-1:" + rulesClassifierValue);
+                            if (firstTime) {
+                                rulesClassifierValue = rulesClassifierValueTmp;
+                                firstTime = false;
+                            } else {
+                                rulesClassifierValue = rulesClassifierValue && rulesClassifierValueTmp;
+                                //System.out.println("rulesClassifierValue-2:"+rulesClassifierValue);
+                            }
+                            streamRules.add(socialRule);
                         }
-                        streamRules.add(socialRule);
                     }
-                }
-                //System.out.println("rulesClassifierValue-Final:"+rulesClassifierValue);
-                //Si el mensaje cumple con las reglas que tiene el stream por el cual provinó, entonces se ejecutan las acciones asignadas a dichas reglas.
-                if (rulesClassifierValue) {
-                    Iterator<SocialRule> itRules = streamRules.iterator();
-                    while (itRules.hasNext()) {
-                        SocialRule socialRule = itRules.next();
-                        //System.out.println("Entra CR/J1");
-                        Iterator<Action> itActions = socialRule.listActions();
-                        while (itActions.hasNext()) {
-                            Action action = itActions.next();
-                            //System.out.println("Entra CR/J2:" + action);
-                            if (action instanceof SendEmail) {
-                                //System.out.println("Entra CR/J3:" + action);
-                                SendEmail.sendEmail(action, post, stream, socialNetwork);
-                            } else if (action instanceof SendPost) {
-                                if (post.getSocialTopic() != null) {
-                                    SendPost.sendPost(action, post);
+                    //System.out.println("rulesClassifierValue-Final:"+rulesClassifierValue);
+                    //Si el mensaje cumple con las reglas que tiene el stream por el cual provinó, entonces se ejecutan las acciones asignadas a dichas reglas.
+                    if (rulesClassifierValue) {
+                        Iterator<SocialRule> itRules = streamRules.iterator();
+                        while (itRules.hasNext()) {
+                            SocialRule socialRule = itRules.next();
+                            //System.out.println("Entra CR/J1");
+                            Iterator<Action> itActions = socialRule.listActions();
+                            while (itActions.hasNext()) {
+                                Action action = itActions.next();
+                                //System.out.println("Entra CR/J2:" + action);
+                                if (action instanceof SendEmail) {
+                                    //System.out.println("Entra CR/J3:" + action);
+                                    SendEmail.sendEmail(action, post, stream, socialNetwork);
+                                } else if (action instanceof SendPost) {
+                                    if (post.getSocialTopic() != null) {
+                                        SendPost.sendPost(action, post);
+                                    }
+                                } else if (action instanceof MarkMsgAsPrioritary) {
+                                    MarkMsgAsPrioritary.markMsgAsPrioritary(action, post);
                                 }
-                            } else if (action instanceof MarkMsgAsPrioritary) {
-                                MarkMsgAsPrioritary.markMsgAsPrioritary(action, post);
                             }
                         }
+                    }
+                    if(post.getPostInSocialNetworkUser()==null)
+                    {
+                        System.out.println("VA A ELIMINAR POSTIN...NO USER:"+post);
+                        post.remove();
                     }
                 }
             }
         }
         long tfin = System.currentTimeMillis() - tini;
-        System.out.println("\n<!--Total Time to Classify: " + tfin + "ms - SWBSocial--> ");
+        //System.out.println("\n<!--Total Time to Classify: " + tfin + "ms - SWBSocial--> ");
     }
 
     /*
@@ -618,163 +630,188 @@ public class SentimentalDataClassifier {
     private PostIn createPostInObj(SocialNetworkUser socialNetUser, int userKloutScore, boolean upDateSocialUserNetworkData, int days) {
         PostIn postIn = null;
         try {
-            //Persistencia del mensaje
-            //System.out.println("externalPost.getPostType():"+externalPost.getPostType());
-            if (externalPost.getPostType().equals(SWBSocialUtil.MESSAGE)) {
-                postIn = MessageIn.ClassMgr.createMessageIn(model);
-                postIn.setPi_type(SWBSocialUtil.POST_TYPE_MESSAGE);   //Para fines de indexado para ordenamientos con Sparql
-            } else if (externalPost.getPostType().equals(SWBSocialUtil.PHOTO) && externalPost.lisPictures().hasNext()) {
-                postIn = PhotoIn.ClassMgr.createPhotoIn(model);
-                PhotoIn photoIn = (PhotoIn) postIn;
-                photoIn.setPi_type(SWBSocialUtil.POST_TYPE_PHOTO);    //Para fines de indexado para ordenamientos con Sparql
-                if (externalPost.lisPictures().hasNext()) {
-                    String sphoto = (String) externalPost.lisPictures().next();
-                    if (sphoto != null && sphoto.trim().length() > 0) {
-                        photoIn.addPhoto(sphoto);
-                    }
-                }
-            } else if (externalPost.getPostType().equals(SWBSocialUtil.VIDEO) && externalPost.getVideo() != null) {
-                System.out.println("model en Sentimental/VideoIn:"+model);
-                postIn = VideoIn.ClassMgr.createVideoIn(model);
-                VideoIn videoIn = (VideoIn) postIn;
-                videoIn.setVideo(externalPost.getVideo());
-                videoIn.setPi_type(SWBSocialUtil.POST_TYPE_VIDEO);    //Para fines de indexado para ordenamientos con Sparql
-                if (externalPost.getCategory() != null) {
-                    //Para categorias de youtube, si despues se manejan mas categorias para otras redes sociales de video, sería un bloque similar al siguiente
-                    //Si despues se manejan mas categorias en otras redes sociales que no sean de tipo Video, tendría que quitar la propiedad category que se encuentra
-                    //en este momento en la interfaz PostVideoable y ponerselas a las de mas redes sociales, talvez a la clase SocialNetwork directamenre
-                    if (externalPost.getSocialNetwork() instanceof Youtube) {
-                        YouTubeCategory youTubeCate = YouTubeCategory.ClassMgr.getYouTubeCategory(externalPost.getCategory(), SWBContext.getAdminWebSite());
-                        //System.out.println("youTubeCate-1:"+youTubeCate);
-                        if (youTubeCate != null) {
-                            //System.out.println("youTubeCate-2:"+youTubeCate);
-                            videoIn.setCategory(youTubeCate.getURI());
-                        }
-                    }
-                }
-            }
-
-            if (externalPost.getMessage() != null) {
-                //System.out.println("postIn fACE:"+postIn+", externalPost:"+externalPost);
-                postIn.setMsg_Text(externalPost.getMessage());
-            }
-            postIn.setSocialNetMsgId(externalPost.getPostId());
-
-            Calendar calendario = Calendar.getInstance();
-            //System.out.println("FECHA AL POSTIN:" + calendario.getTime());
-            postIn.setPi_created(calendario.getTime());   //Para fines de indexado para ordenamientos con Sparql
-
-            /*
-             if(externalPost.getDescription()!=null)
-             {
-             postIn.setDescription(externalPost.getDescription());
-             }*/
-            //System.out.println("CREÓ EL MENSAJE CON TEXTO:"+postIn.getMsg_Text());
-            postIn.setPostInSocialNetwork(socialNetwork);
-            postIn.setPostInStream(stream);
-
-            //System.out.println("Ya en Msg ReTweets:"+message.getPostRetweets());
-            if (externalPost.getDevice() != null) //Dispositivo utilizado
+            if (externalPost.getCreatorId() != null && externalPost.getPostId()!=null) 
             {
-                String source = null;
-                int pos = externalPost.getDevice().indexOf(">");
-                if (pos > -1) {
-                    int pos1 = externalPost.getDevice().indexOf("<", pos);
-                    if (pos1 > -1) {
-                        source = externalPost.getDevice().substring(pos + 1, pos1);
+                //Persistencia del mensaje
+                //System.out.println("externalPost.getPostType():"+externalPost.getPostType());
+                if (externalPost.getPostType().equals(SWBSocialUtil.MESSAGE)) {
+                    postIn = MessageIn.ClassMgr.createMessageIn(model);
+                    postIn.setPi_type(SWBSocialUtil.POST_TYPE_MESSAGE);   //Para fines de indexado para ordenamientos con Sparql
+                } else if (externalPost.getPostType().equals(SWBSocialUtil.PHOTO) && externalPost.lisPictures().hasNext()) {
+                    postIn = PhotoIn.ClassMgr.createPhotoIn(model);
+                    PhotoIn photoIn = (PhotoIn) postIn;
+                    photoIn.setPi_type(SWBSocialUtil.POST_TYPE_PHOTO);    //Para fines de indexado para ordenamientos con Sparql
+                    if (externalPost.lisPictures().hasNext()) {
+                        String sphoto = (String) externalPost.lisPictures().next();
+                        if (sphoto != null && sphoto.trim().length() > 0) {
+                            photoIn.addPhoto(sphoto);
+                        }
                     }
-                } else {
-                    source = externalPost.getDevice();
-                }
-                postIn.setPostSource(source);
-            }
-            //System.out.println("Ya en Msg source:"+source);
-
-            if (externalPost.getCreatorId() != null) {
-                if (externalPost.getPlace() != null) {
-                    postIn.setPostPlace(externalPost.getPlace());
-                }/*else if(externalPost.getLocation()!=null)
-                 {
-                 postIn.setPostPlace(externalPost.getLocation());
-                 }*/
-
-                //Sets the latitude, longitud and possibly the state the message is comming from
-                //System.out.println("Checa latitude y longitud del mensaje recibido-Latitude:"+externalPost.getLatitude()+",longitude:"+externalPost.getLongitude());
-                if (externalPost.getLatitude() != 0 && externalPost.getLongitude() != 0) {
-                    postIn.setLatitude(Float.parseFloat("" + externalPost.getLatitude()));
-                    postIn.setLongitude(Float.parseFloat("" + externalPost.getLongitude()));
-
-                    //The next code calculates if latitude and longitud belongs to a country and next to state
-                    Country country = null;
-                    if (externalPost.getCountryCode() != null) {
-                        country = Country.ClassMgr.getCountry(externalPost.getCountryCode().toUpperCase(), SWBContext.getAdminWebSite());
-                    } else {
-                        country = SWBSocialUtil.Util.getMessageMapCountry(postIn.getLatitude(), postIn.getLongitude());
-                    }
-                    //System.out.println("country en el que encuentra el mensaje:"+country);
-                    if (country != null) {
-                        //Busca en que estado del país encontrado se encuentra el mensaje.
-                        CountryState countryState = SWBSocialUtil.Util.getMessageMapState(country, postIn.getLatitude(), postIn.getLongitude());
-                        //System.out.println("estado en el que encuentra el mensaje:"+countryState);
-                        if (countryState != null) {
-                            postIn.setGeoStateMap(countryState);
+                } else if (externalPost.getPostType().equals(SWBSocialUtil.VIDEO) && externalPost.getVideo() != null) {
+                    //System.out.println("model en Sentimental/VideoIn:"+model);
+                    postIn = VideoIn.ClassMgr.createVideoIn(model);
+                    VideoIn videoIn = (VideoIn) postIn;
+                    videoIn.setVideo(externalPost.getVideo());
+                    videoIn.setPi_type(SWBSocialUtil.POST_TYPE_VIDEO);    //Para fines de indexado para ordenamientos con Sparql
+                    if (externalPost.getCategory() != null) {
+                        //Para categorias de youtube, si despues se manejan mas categorias para otras redes sociales de video, sería un bloque similar al siguiente
+                        //Si despues se manejan mas categorias en otras redes sociales que no sean de tipo Video, tendría que quitar la propiedad category que se encuentra
+                        //en este momento en la interfaz PostVideoable y ponerselas a las de mas redes sociales, talvez a la clase SocialNetwork directamenre
+                        if (externalPost.getSocialNetwork() instanceof Youtube) {
+                            YouTubeCategory youTubeCate = YouTubeCategory.ClassMgr.getYouTubeCategory(externalPost.getCategory(), SWBContext.getAdminWebSite());
+                            //System.out.println("youTubeCate-1:"+youTubeCate);
+                            if (youTubeCate != null) {
+                                //System.out.println("youTubeCate-2:"+youTubeCate);
+                                videoIn.setCategory(youTubeCate.getURI());
+                            }
                         }
                     }
                 }
 
-                if (externalPost.getPostShared() > 0) {
-                    postIn.setPostShared(externalPost.getPostShared());
+                if (externalPost.getMessage() != null) {
+                    //System.out.println("postIn fACE:"+postIn+", externalPost:"+externalPost);
+                    postIn.setMsg_Text(externalPost.getMessage());
                 }
+                postIn.setSocialNetMsgId(externalPost.getPostId());
 
+                Calendar calendario = Calendar.getInstance();
+                //System.out.println("FECHA AL POSTIN:" + calendario.getTime());
+                postIn.setPi_created(calendario.getTime());   //Para fines de indexado para ordenamientos con Sparql
+                
+                //System.out.println("PostNet Creation Time:"+externalPost.getCreationTime());
+                
+                //postIn.setPi_createdInSocialNet(null);
 
-                if (socialNetUser == null) //Si el usuario no existe en la red social, Twitter, Faebook, etc, entonces crealo
+                /*
+                 if(externalPost.getDescription()!=null)
+                 {
+                 postIn.setDescription(externalPost.getDescription());
+                 }*/
+                //System.out.println("CREÓ EL MENSAJE CON TEXTO:"+postIn.getMsg_Text());
+                postIn.setPostInSocialNetwork(socialNetwork);
+                postIn.setPostInStream(stream);
+
+                //System.out.println("Ya en Msg ReTweets:"+message.getPostRetweets());
+                if (externalPost.getDevice() != null) //Dispositivo utilizado
                 {
-                    //Si no existe el id del usuario para esa red social, lo crea.
-
-                    socialNetUser = SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);
-                    socialNetUser.setSnu_id(externalPost.getCreatorId());
-                    socialNetUser.setSnu_name(externalPost.getCreatorName());
-                    if (externalPost.getCreatorPhotoUrl() != null) {
-                        socialNetUser.setSnu_photoUrl(externalPost.getCreatorPhotoUrl());
-                    }
-                    socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject());
-                    socialNetUser.setCreated(externalPost.getUsercreation());
-                    socialNetUser.setSnu_klout(userKloutScore);
-
-                    if (externalPost.getFollowers() > 0 && externalPost.getFriendsNumber() > 0) {
-                        //System.out.println("SocialNet em Sentimental JAJS-1:"+socialNetwork);
-                        socialNetUser.setFollowers(externalPost.getFollowers());
-                        socialNetUser.setFriends(externalPost.getFriendsNumber());
+                    String source = null;
+                    int pos = externalPost.getDevice().indexOf(">");
+                    if (pos > -1) {
+                        int pos1 = externalPost.getDevice().indexOf("<", pos);
+                        if (pos1 > -1) {
+                            source = externalPost.getDevice().substring(pos + 1, pos1);
+                        }
                     } else {
-                        getUserData(socialNetUser, days, true);
+                        source = externalPost.getDevice();
                     }
-                } else if (upDateSocialUserNetworkData) {
-                    socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject());
-                    socialNetUser.setSnu_klout(userKloutScore);
-                    if (externalPost.getCreatorPhotoUrl() != null) {
-                        socialNetUser.setSnu_photoUrl(externalPost.getCreatorPhotoUrl());
-                    }
-
-                    if (externalPost.getFollowers() > 0 && externalPost.getFriendsNumber() > 0) {
-                        //System.out.println("SocialNet em Sentimental JAJS-1:"+socialNetwork);
-                        socialNetUser.setFollowers(externalPost.getFollowers());
-                        socialNetUser.setFriends(externalPost.getFriendsNumber());
-                    } else {
-                        getUserData(socialNetUser, days, false);
-                    }
-
-                    socialNetUser.setUpdated(new Date());
+                    postIn.setPostSource(source);
                 }
+                //System.out.println("Ya en Msg source:"+source);
 
-                //System.out.println("Poner en UserGe-0");
-                if (socialNetUser != null) {
-                    postIn.setPostInSocialNetworkUser(socialNetUser);
-                    //System.out.println("Poner en UserGe-1");
-                    if (externalPost.getUserGeoLocation() != null) {
-                        //System.out.println("Poner en UserGeo:"+externalPost.getUserGeoLocation());
-                        socialNetUser.setSnu_profileGeoLocation(externalPost.getUserGeoLocation());
+
+                    if (externalPost.getPlace() != null) {
+                        postIn.setPostPlace(externalPost.getPlace());
+                    }/*else if(externalPost.getLocation()!=null)
+                     {
+                     postIn.setPostPlace(externalPost.getLocation());
+                     }*/
+
+                    //Sets the latitude, longitud and possibly the state the message is comming from
+                    //System.out.println("Checa latitude y longitud del mensaje recibido-Latitude:"+externalPost.getLatitude()+",longitude:"+externalPost.getLongitude());
+                    if (externalPost.getLatitude() != 0 && externalPost.getLongitude() != 0) {
+                        postIn.setLatitude(Float.parseFloat("" + externalPost.getLatitude()));
+                        postIn.setLongitude(Float.parseFloat("" + externalPost.getLongitude()));
+
+                        //The next code calculates if latitude and longitud belongs to a country and next to state
+                        Country country = null;
+                        if (externalPost.getCountryCode() != null) {
+                            country = Country.ClassMgr.getCountry(externalPost.getCountryCode().toUpperCase(), SWBContext.getAdminWebSite());
+                        } else {
+                            country = SWBSocialUtil.Util.getMessageMapCountry(postIn.getLatitude(), postIn.getLongitude());
+                        }
+                        //System.out.println("country en el que encuentra el mensaje:"+country);
+                        if (country != null) {
+                            //Busca en que estado del país encontrado se encuentra el mensaje.
+                            CountryState countryState = SWBSocialUtil.Util.getMessageMapState(country, postIn.getLatitude(), postIn.getLongitude());
+                            //System.out.println("estado en el que encuentra el mensaje:"+countryState);
+                            if (countryState != null) {
+                                postIn.setGeoStateMap(countryState);
+                            }
+                        }
                     }
-                }
+
+                    if (externalPost.getPostShared() > 0) {
+                        postIn.setPostShared(externalPost.getPostShared());
+                    }
+
+                    //System.out.println("socialNetUser-1:"+socialNetUser);
+
+                    if (socialNetUser == null) //Si el usuario no existe en la red social, Twitter, Faebook, etc, entonces crealo
+                    {
+                        //Si no existe el id del usuario para esa red social, lo crea.
+
+                        socialNetUser = SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);
+                        socialNetUser.setSnu_id(externalPost.getCreatorId());
+                        if(externalPost.getCreatorName()!=null)
+                        {
+                            socialNetUser.setSnu_name(externalPost.getCreatorName());
+                        }
+                        if (externalPost.getCreatorPhotoUrl() != null) {
+                            socialNetUser.setSnu_photoUrl(externalPost.getCreatorPhotoUrl());
+                        }
+                        socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject());
+                        if(externalPost.getUsercreation()!=null)
+                        {
+                            socialNetUser.setCreated(externalPost.getUsercreation());
+                        }
+                        if(userKloutScore>0)
+                        {
+                            socialNetUser.setSnu_klout(userKloutScore);
+                        }
+
+                        if (externalPost.getFollowers() > 0 && externalPost.getFriendsNumber() > 0) {
+                            //System.out.println("SocialNet em Sentimental JAJS-1:"+socialNetwork);
+                            socialNetUser.setFollowers(externalPost.getFollowers());
+                            socialNetUser.setFriends(externalPost.getFriendsNumber());
+                        } else {
+                            getUserData(socialNetUser, days, true);
+                        }
+                        //System.out.println("socialNetUser-2:"+socialNetUser);
+                    } else if (upDateSocialUserNetworkData) {
+                        //System.out.println("socialNetUser-3:"+socialNetUser);
+                        socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject());
+                        if(userKloutScore>0)
+                        {
+                            socialNetUser.setSnu_klout(userKloutScore);
+                        }
+                        if (externalPost.getCreatorPhotoUrl() != null) {
+                            socialNetUser.setSnu_photoUrl(externalPost.getCreatorPhotoUrl());
+                        }
+
+                        if (externalPost.getFollowers() > 0 && externalPost.getFriendsNumber() > 0) {
+                            //System.out.println("SocialNet em Sentimental JAJS-1:"+socialNetwork);
+                            socialNetUser.setFollowers(externalPost.getFollowers());
+                            socialNetUser.setFriends(externalPost.getFriendsNumber());
+                        } else {
+                            getUserData(socialNetUser, days, false);
+                        }
+
+                        socialNetUser.setUpdated(new Date());
+                    }
+
+                    //System.out.println("Poner en UserGe-0");
+                    if (socialNetUser != null) {
+                        postIn.setPostInSocialNetworkUser(socialNetUser);
+                        //System.out.println("Poner en UserGe-1");
+                        if (externalPost.getUserGeoLocation() != null) {
+                            //System.out.println("Poner en UserGeo:"+externalPost.getUserGeoLocation());
+                            socialNetUser.setSnu_profileGeoLocation(externalPost.getUserGeoLocation());
+                        }
+                    }else{
+                        System.out.println("VA A ELIMINAR POSTIN-USER NULO:"+postIn);
+                        postIn.remove();
+                    }
+
             }
 
             /*Código test para barrer las instamcias de la clase SocialNetworkUser
