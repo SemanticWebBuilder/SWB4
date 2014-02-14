@@ -4,7 +4,7 @@ package org.semanticwb.bsc.base;
    /**
    * Modelo que define un Scorecard de la metodologia BalancedScorecard de Norton y Kaplan 
    */
-public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Countryable,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.OntologyDepable,org.semanticwb.bsc.Help,org.semanticwb.model.Localeable,org.semanticwb.model.Activeable
+public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable,org.semanticwb.model.Trashable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Help,org.semanticwb.model.FilterableNode,org.semanticwb.model.Indexable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Activeable,org.semanticwb.model.Countryable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_values=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#values");
    /**
@@ -50,11 +50,18 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
    * Catalogo de paises
    */
     public static final org.semanticwb.platform.SemanticClass swb_Country=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Country");
-    public static final org.semanticwb.platform.SemanticClass bsc_Action=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Action");
+   /**
+   * Clase que define un factor de riesgo.
+   */
+    public static final org.semanticwb.platform.SemanticClass bsc_Factor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Factor");
    /**
    * Persiste los atributos de un indicador
    */
     public static final org.semanticwb.platform.SemanticClass bsc_Indicator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Indicator");
+   /**
+   * Gestiona la información de un control en un Riesgo.
+   */
+    public static final org.semanticwb.platform.SemanticClass bsc_Control=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Control");
    /**
    * Las frecuencias de medición, definen bloques de períodos para determinar cuándo se requiere la captura de información. Frecuencia de medición.
    */
@@ -63,8 +70,19 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
    * Un recurso es un componente en una Página Web con el cual el usuario tiene interacción
    */
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
+   /**
+   * Define un riesgo que puede presentarse mediante un elemento del BSC: Objetivo, Entregable, Iniciativa o Indicador. Un riesgo tambien puede presentarse independientemente.
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_Risk=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Risk");
+   /**
+   * Persiste la información de una Sesión. Existen  dos tipos de sesiones: RAE y NOA
+   */
+    public static final org.semanticwb.platform.SemanticClass bsc_Meeting=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Meeting");
     public static final org.semanticwb.platform.SemanticClass bsc_Initiative=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Initiative");
+   /**
+   * Define las características de un Acuerdo.
+   */
+    public static final org.semanticwb.platform.SemanticClass bsc_Agreement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Agreement");
    /**
    * Objeto que define una regla de negocio, utilizando los atributos del usuario para filtrar componente, seccion, plantillas, etc.
    */
@@ -935,34 +953,34 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
         return org.semanticwb.model.Country.ClassMgr.hasCountry(id, this);
     }
 
-    public org.semanticwb.bsc.tracing.Action getAction(String id)
+    public org.semanticwb.bsc.tracing.Factor getFactor(String id)
     {
-        return org.semanticwb.bsc.tracing.Action.ClassMgr.getAction(id, this);
+        return org.semanticwb.bsc.tracing.Factor.ClassMgr.getFactor(id, this);
     }
 
-    public java.util.Iterator<org.semanticwb.bsc.tracing.Action> listActions()
+    public java.util.Iterator<org.semanticwb.bsc.tracing.Factor> listFactors()
     {
-        return org.semanticwb.bsc.tracing.Action.ClassMgr.listActions(this);
+        return org.semanticwb.bsc.tracing.Factor.ClassMgr.listFactors(this);
     }
 
-    public org.semanticwb.bsc.tracing.Action createAction(String id)
+    public org.semanticwb.bsc.tracing.Factor createFactor(String id)
     {
-        return org.semanticwb.bsc.tracing.Action.ClassMgr.createAction(id,this);
+        return org.semanticwb.bsc.tracing.Factor.ClassMgr.createFactor(id,this);
     }
 
-    public org.semanticwb.bsc.tracing.Action createAction()
+    public org.semanticwb.bsc.tracing.Factor createFactor()
     {
-        long id=getSemanticObject().getModel().getCounter(bsc_Action);
-        return org.semanticwb.bsc.tracing.Action.ClassMgr.createAction(String.valueOf(id),this);
+        long id=getSemanticObject().getModel().getCounter(bsc_Factor);
+        return org.semanticwb.bsc.tracing.Factor.ClassMgr.createFactor(String.valueOf(id),this);
     } 
 
-    public void removeAction(String id)
+    public void removeFactor(String id)
     {
-        org.semanticwb.bsc.tracing.Action.ClassMgr.removeAction(id, this);
+        org.semanticwb.bsc.tracing.Factor.ClassMgr.removeFactor(id, this);
     }
-    public boolean hasAction(String id)
+    public boolean hasFactor(String id)
     {
-        return org.semanticwb.bsc.tracing.Action.ClassMgr.hasAction(id, this);
+        return org.semanticwb.bsc.tracing.Factor.ClassMgr.hasFactor(id, this);
     }
 
     public org.semanticwb.bsc.element.Indicator getIndicator(String id)
@@ -993,6 +1011,36 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
     public boolean hasIndicator(String id)
     {
         return org.semanticwb.bsc.element.Indicator.ClassMgr.hasIndicator(id, this);
+    }
+
+    public org.semanticwb.bsc.tracing.Control getControl(String id)
+    {
+        return org.semanticwb.bsc.tracing.Control.ClassMgr.getControl(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.bsc.tracing.Control> listControls()
+    {
+        return org.semanticwb.bsc.tracing.Control.ClassMgr.listControls(this);
+    }
+
+    public org.semanticwb.bsc.tracing.Control createControl(String id)
+    {
+        return org.semanticwb.bsc.tracing.Control.ClassMgr.createControl(id,this);
+    }
+
+    public org.semanticwb.bsc.tracing.Control createControl()
+    {
+        long id=getSemanticObject().getModel().getCounter(bsc_Control);
+        return org.semanticwb.bsc.tracing.Control.ClassMgr.createControl(String.valueOf(id),this);
+    } 
+
+    public void removeControl(String id)
+    {
+        org.semanticwb.bsc.tracing.Control.ClassMgr.removeControl(id, this);
+    }
+    public boolean hasControl(String id)
+    {
+        return org.semanticwb.bsc.tracing.Control.ClassMgr.hasControl(id, this);
     }
 
     public org.semanticwb.bsc.tracing.MeasurementFrequency getMeasurementFrequency(String id)
@@ -1085,6 +1133,36 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
         return org.semanticwb.bsc.tracing.Risk.ClassMgr.hasRisk(id, this);
     }
 
+    public org.semanticwb.bsc.tracing.Meeting getMeeting(String id)
+    {
+        return org.semanticwb.bsc.tracing.Meeting.ClassMgr.getMeeting(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.bsc.tracing.Meeting> listMeetings()
+    {
+        return org.semanticwb.bsc.tracing.Meeting.ClassMgr.listMeetings(this);
+    }
+
+    public org.semanticwb.bsc.tracing.Meeting createMeeting(String id)
+    {
+        return org.semanticwb.bsc.tracing.Meeting.ClassMgr.createMeeting(id,this);
+    }
+
+    public org.semanticwb.bsc.tracing.Meeting createMeeting()
+    {
+        long id=getSemanticObject().getModel().getCounter(bsc_Meeting);
+        return org.semanticwb.bsc.tracing.Meeting.ClassMgr.createMeeting(String.valueOf(id),this);
+    } 
+
+    public void removeMeeting(String id)
+    {
+        org.semanticwb.bsc.tracing.Meeting.ClassMgr.removeMeeting(id, this);
+    }
+    public boolean hasMeeting(String id)
+    {
+        return org.semanticwb.bsc.tracing.Meeting.ClassMgr.hasMeeting(id, this);
+    }
+
     public org.semanticwb.bsc.element.Initiative getInitiative(String id)
     {
         return org.semanticwb.bsc.element.Initiative.ClassMgr.getInitiative(id, this);
@@ -1113,6 +1191,36 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
     public boolean hasInitiative(String id)
     {
         return org.semanticwb.bsc.element.Initiative.ClassMgr.hasInitiative(id, this);
+    }
+
+    public org.semanticwb.bsc.tracing.Agreement getAgreement(String id)
+    {
+        return org.semanticwb.bsc.tracing.Agreement.ClassMgr.getAgreement(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.bsc.tracing.Agreement> listAgreements()
+    {
+        return org.semanticwb.bsc.tracing.Agreement.ClassMgr.listAgreements(this);
+    }
+
+    public org.semanticwb.bsc.tracing.Agreement createAgreement(String id)
+    {
+        return org.semanticwb.bsc.tracing.Agreement.ClassMgr.createAgreement(id,this);
+    }
+
+    public org.semanticwb.bsc.tracing.Agreement createAgreement()
+    {
+        long id=getSemanticObject().getModel().getCounter(bsc_Agreement);
+        return org.semanticwb.bsc.tracing.Agreement.ClassMgr.createAgreement(String.valueOf(id),this);
+    } 
+
+    public void removeAgreement(String id)
+    {
+        org.semanticwb.bsc.tracing.Agreement.ClassMgr.removeAgreement(id, this);
+    }
+    public boolean hasAgreement(String id)
+    {
+        return org.semanticwb.bsc.tracing.Agreement.ClassMgr.hasAgreement(id, this);
     }
 
     public org.semanticwb.model.Rule getRule(String id)

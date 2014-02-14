@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class BSCElementBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Roleable,org.semanticwb.model.Referensable,org.semanticwb.model.Filterable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Help,org.semanticwb.model.UserGroupable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable
+public abstract class BSCElementBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Roleable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help
 {
     public static final org.semanticwb.platform.SemanticClass bsc_BSCElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#BSCElement");
    /**
@@ -333,6 +333,24 @@ public abstract class BSCElementBase extends org.semanticwb.model.SWBClass imple
     {
         getSemanticObject().setProperty(swb_description, description, lang);
     }
+
+/**
+* Gets the NotInheritRuleRef property
+* @return boolean with the NotInheritRuleRef
+*/
+    public boolean isNotInheritRuleRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_notInheritRuleRef);
+    }
+
+/**
+* Sets the NotInheritRuleRef property
+* @param value long with the NotInheritRuleRef
+*/
+    public void setNotInheritRuleRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_notInheritRuleRef, value);
+    }
    /**
    * Gets all the org.semanticwb.model.UserGroup
    * @return A GenericIterator with all the org.semanticwb.model.UserGroup
@@ -625,5 +643,23 @@ public abstract class BSCElementBase extends org.semanticwb.model.SWBClass imple
              ret=(org.semanticwb.model.RuleRef)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the AndEvalRuleRef property
+* @return boolean with the AndEvalRuleRef
+*/
+    public boolean isAndEvalRuleRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_andEvalRuleRef);
+    }
+
+/**
+* Sets the AndEvalRuleRef property
+* @param value long with the AndEvalRuleRef
+*/
+    public void setAndEvalRuleRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_andEvalRuleRef, value);
     }
 }

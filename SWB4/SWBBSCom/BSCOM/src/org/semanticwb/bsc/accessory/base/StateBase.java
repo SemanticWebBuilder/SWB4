@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.accessory.base;
 
 
-public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Undeleteable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Machinable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Iconable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Roleable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help,org.semanticwb.model.Activeable
+public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.bsc.Machinable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Help,org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Iconable,org.semanticwb.model.Roleable,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticClass bsc_StateGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#StateGroup");
     public static final org.semanticwb.platform.SemanticProperty bsc_stateGroupInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#stateGroupInv");
