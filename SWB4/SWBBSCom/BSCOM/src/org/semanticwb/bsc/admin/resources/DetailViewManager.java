@@ -212,10 +212,14 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             listCode.append("       </select>\n");
             listCode.append("     </li>\n");
             listCode.append("   <li class=\"swbform-li\">");
-            listCode.append("       <label for=\"before\" class=\"swbform-label\">");
+            listCode.append("       <label for=\"before");
+            listCode.append(this.getId());
+            listCode.append("\" class=\"swbform-label\">");
             listCode.append(paramRequest.getLocaleString("lbl_timeBefore"));
             listCode.append("</label>");
-            listCode.append("       <input type=\"text\" name=\"before\" id=\"before\" maxlength=\"2\" value=\"");
+            listCode.append("       <input type=\"text\" name=\"before\" id=\"before");
+            listCode.append(this.getId());
+            listCode.append("\" maxlength=\"2\" value=\"");
             listCode.append(base.getAttribute("before", "7"));
             listCode.append("\" regExp=\"\\d{1,2}\" dojoType=\"dijit.form.ValidationTextBox\" invalidMessage=\"");
             listCode.append(paramRequest.getLocaleString("err_incorrectAmount"));
@@ -224,10 +228,14 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             listCode.append("\" />");
             listCode.append("     </li>");
             listCode.append("   <li class=\"swbform-li\">");
-            listCode.append("       <label for=\"after\" class=\"swbform-label\">");
+            listCode.append("       <label for=\"after");
+            listCode.append(this.getId());
+            listCode.append("\" class=\"swbform-label\">");
             listCode.append(paramRequest.getLocaleString("lbl_timeAfter"));
             listCode.append("</label>");
-            listCode.append("       <input type=\"text\" name=\"after\" id=\"after\" maxlength=\"2\" value=\"");
+            listCode.append("       <input type=\"text\" name=\"after\" id=\"after");
+            listCode.append(this.getId());
+            listCode.append("\" maxlength=\"2\" value=\"");
             listCode.append(base.getAttribute("after", "7"));
             listCode.append("\" regExp=\"\\d{1,2}\" dojoType=\"dijit.form.ValidationTextBox\" invalidMessage=\"");
             listCode.append(paramRequest.getLocaleString("err_incorrectAmount"));
@@ -236,10 +244,14 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             listCode.append("\" />");
             listCode.append("     </li>");
             listCode.append("   <li class=\"swbform-li\">");
-            listCode.append("       <label for=\"timeUnit\" class=\"swbform-label\">");
+            listCode.append("       <label for=\"timeUnit");
+            listCode.append(this.getId());
+            listCode.append("\" class=\"swbform-label\">");
             listCode.append(paramRequest.getLocaleString("lbl_unitOfTime"));
             listCode.append("</label>");
-            listCode.append("       <select id=\"timeUnit\" name=\"timeUnit\" dojoType=\"dijit.form.FilteringSelect\">");
+            listCode.append("       <select id=\"timeUnit");
+            listCode.append(this.getId());
+            listCode.append("\" name=\"timeUnit\" dojoType=\"dijit.form.FilteringSelect\">");
             listCode.append("         <option");
             listCode.append(base.getAttribute("unitTime", Integer.toString(Calendar.DATE)).equals(Integer.toString(Calendar.DATE)) ? " selected=\"selected\"" : "");
             listCode.append(" value=\"");
@@ -725,7 +737,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 collaboration = objective.getSponsor().getUserRepository().getUserGroup("Sponsors");
             } else if (generic != null && generic instanceof Indicator) {
                 Indicator indicator = (Indicator) generic;
-                Measure measure = indicator != null && indicator.getStar() != null ? indicator.getStar().getMeasure(period) : null;
+                Measure measure = indicator != null && indicator.getStar() != null 
+                        ? indicator.getStar().getMeasure(period) : null;
                 if (measure != null && measure.getEvaluation() != null) {
                     periodStatus = measure.getEvaluation();
                 }
@@ -1216,7 +1229,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 if (formElement != null) {
                     FormElement fe = (FormElement) formElement.createGenericInstance();
                     boolean applyInlineEdit = false;
-                    if( (userCanEdit()&&isInMeasurementTime(period)&&isEditable(formElement)) || (userCanCollaborate(collaboration)&&isEditable(formElement)) ) {
+                    if ((userCanEdit() && isInMeasurementTime(period) && isEditable(formElement)) ||
+                            (userCanCollaborate(collaboration) && isEditable(formElement))) {
                         applyInlineEdit = true;
                     }
                     
@@ -1310,7 +1324,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     
     /**
      * Determina si la fecha actual pertenece al periodo de captura permitido para 
-     * el periodo indicado como argumento
+     * el periodo indicado como argumento, de acuerdo a la configuraci&oacute;n hecha
+     * en la instancia del recurso.
      * @param period periodo a evaluar contra la fecha actual
      * @return un boleano que representa la validez de la fecha actual contra el periodo
      *          de captura para el periodo indicado {@code true}, o {@code false} de lo contrario.
@@ -1352,12 +1367,26 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         return current.compareTo(startDate) >= 0 && current.compareTo(endDate) <= 0;
     }
     
+    /**
+     * Eval&uacute;a si el {@code formElement} indicado es susceptible de edici&oacute;n
+     * a fin de presentar la interface de edici&oacue;n en l&iacute;nea.
+     * @param formElement el objeto de forma a presentar en la interface
+     * @return {@literal true} si el {@code formElement} puede presentar interface de edici&oacute;n, 
+     *      {@literal false} de lo contrario
+     */
     private boolean isEditable(SemanticObject formElement) {        
-        return formElement.getProperty(TextAreaElement.bsc_editable)==null?false:formElement.getBooleanProperty(TextAreaElement.bsc_editable);
+        return formElement.getProperty(TextAreaElement.bsc_editable) == null
+                ? true : formElement.getBooleanProperty(TextAreaElement.bsc_editable);
     }
     
+    /**
+     * Revisa si el usuario en sesi&oacute;n pertenece al grupo de usuarios recibido, 
+     * devolviendo el resultado de esa revisi&oacute;n
+     * @param collaboration un grupo de usuarios, al que se desea saber si pertenece el usuario en sesi&oacute;n
+     * @return {@literal true} si el usuario en sesi&oacutee;n pertenece al grupo indicado, {@literal false} de lo contrario
+     */
     private boolean userCanCollaborate(final UserGroup collaboration) {
         final User user = SWBContext.getSessionUser();
-        return collaboration.hasUser(user);
+        return (collaboration != null && user != null) ? collaboration.hasUser(user) : false;
     }
 }

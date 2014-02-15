@@ -151,7 +151,11 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                 boolean isActive = semObj.getBooleanProperty(org.semanticwb.model.Activeable.swb_active, true);
                 boolean hasPeriod = true;
                 if (thisPeriod != null) {
-                    hasPeriod = semObj.hasObjectProperty(Seasonable.bsc_hasPeriod, thisPeriod.getSemanticObject());
+                    if (semObj.instanceOf(Seasonable.bsc_Seasonable)) {
+                        hasPeriod = semObj.hasObjectProperty(Seasonable.bsc_hasPeriod, thisPeriod.getSemanticObject());
+                    } else {//Para iniciativas y entregables:
+                        hasPeriod = true;
+                    }
                 }
                 if (!user.haveAccess(generic) || !isActive || !hasPeriod) {
                     continue;

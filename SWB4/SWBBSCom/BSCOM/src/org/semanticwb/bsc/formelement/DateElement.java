@@ -120,6 +120,76 @@ public class DateElement extends org.semanticwb.bsc.formelement.base.DateElement
             ret.append("/>");
         } else if (mode.equals("view")) {
             ret.append("<span name=\"" + name + "\">" + value + "</span>");
+        } else if (mode.equals("inlineEdit")) {
+            /*Al utilizar este modo, se debe incluir en el HTML las instrucciones 
+             * dojo.require del InlineEditBox y dijit.form.DateTextBox, al menos*/
+            StringBuilder viewString = new StringBuilder(128);
+            String objectId = getDateId() + obj.getId();
+            String url = (String) request.getAttribute("urlRequest");
+            
+            viewString.append("<script type=\"text/javascript\">\n");
+            viewString.append("  <!--\n");
+            viewString.append("    var iledit_");
+            viewString.append(objectId);
+            viewString.append(";\n");
+            
+            
+            viewString.append("    dojo.addOnLoad( function() {\n");
+            /*viewString.append("require(\"dojo/ready\", function(ready){");
+            viewString.append("ready(function(){");*/
+            viewString.append("      iledit_");
+            viewString.append(objectId);
+            viewString.append(" = new dijit.InlineEditBox({\n");
+            viewString.append("        id: \"");
+            viewString.append(objectId);
+            viewString.append("\",\n");
+            viewString.append("        autoSave: false,\n");
+            viewString.append("        editor: \"dijit.form.DateTextBox\",\n");
+            viewString.append("        editorParams: {required:true, width: '70px', constraints: {");
+            if (getDateOnChange() != null) {
+                StringBuilder constraints = new StringBuilder(64);
+                String attributeValue = getDateOnChange();
+                String searchFor = null;
+                if (attributeValue.indexOf(".max") != -1) {
+                    constraints.append("min:\"");
+                    searchFor = "max";
+                } else if (attributeValue.indexOf(".min") != -1) {
+                    constraints.append("max:\"");
+                    searchFor = "min";
+                }
+                attributeValue = (attributeValue.indexOf("{replaceId}") != -1 
+                                ? attributeValue.replace("{replaceId}", obj.getId())
+                                : attributeValue);
+                constraints.append(attributeValue.substring(0, attributeValue.indexOf("constraints.")));
+                constraints.append("value");
+                viewString.append(constraints.toString());
+                viewString.append("\"");
+            }
+            viewString.append("}},\n");
+            //viewString.append("        width: '90px',\n");
+            viewString.append("        onChange: function(value) {\n");
+            viewString.append("          getSyncHtml('");
+            viewString.append(url);
+            viewString.append("&propUri=");
+            viewString.append(prop.getEncodedURI());
+            viewString.append("&value='+value);\n");
+            viewString.append("        }\n");
+            viewString.append("      }, 'eb_");
+            viewString.append(objectId);
+            viewString.append("');\n");
+            viewString.append("      iledit_");
+            viewString.append(objectId);
+            viewString.append(".startup();\n");
+            viewString.append("    });\n");
+            //viewString.append("});\n");
+            viewString.append("-->\n");
+            viewString.append("</script>\n");
+            viewString.append("<span id=\"eb_");
+            viewString.append(objectId);
+            viewString.append("\" class=\"swb-ile\">");
+            viewString.append(value);
+            viewString.append("</span>");
+            ret.append(viewString.toString());
         }
 
         return ret.toString();
