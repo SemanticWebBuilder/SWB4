@@ -51,7 +51,6 @@ import org.semanticwb.social.Prepositions;
 import org.semanticwb.social.PunctuationSign;
 import org.semanticwb.social.SentimentWords;
 import org.semanticwb.social.SentimentalLearningPhrase;
-import org.semanticwb.social.SocialAdmin;
 import org.semanticwb.social.SocialMonitorable;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
@@ -108,7 +107,7 @@ public class SWBSocialUtil implements SWBAppObject {
     public static final int POST_TYPE_MESSAGE=1;
     public static final int POST_TYPE_PHOTO=2;
     public static final int POST_TYPE_VIDEO=3;
-    
+    private static WebSite CONFIG_WEBSITE=null;
     
     
     //private static Properties prop = new Properties();
@@ -231,12 +230,23 @@ public class SWBSocialUtil implements SWBAppObject {
         props = SWBUtils.TEXT.getPropertyFile("/org/semanticwb/social/properties/swbSocial.properties");
         
         System.out.println("Cargó archivo swbSocial.properties:"+props);
+        
+        
+        CONFIG_WEBSITE=SWBContext.getGlobalWebSite(); 
+        
             
       }catch(Exception e){
           System.out.println("Error:"+e.getMessage());
           log.error(e);
       }
     }
+    
+    
+    public static WebSite getConfigWebSite()
+    {
+        return CONFIG_WEBSITE;
+    }
+    
     
     /**
      * Obtiene valor de variable de ambiente declarada en web.xml o web.properties.
@@ -263,7 +273,7 @@ public class SWBSocialUtil implements SWBAppObject {
     //Carga las preposiciones que estan en BD a memoria
     public static void loadPrepositions()
     {
-        Iterator<Prepositions> itPreps=Prepositions.ClassMgr.listPrepositionses(SWBContext.getAdminWebSite());
+        Iterator<Prepositions> itPreps=Prepositions.ClassMgr.listPrepositionses(SWBSocialUtil.getConfigWebSite());
         while(itPreps.hasNext())
         {
             Prepositions prep=itPreps.next();
@@ -274,7 +284,7 @@ public class SWBSocialUtil implements SWBAppObject {
     //Carga las palabras sentimentales a memoría
     public static void loadSentimentWords()
     {
-        Iterator<SentimentWords> itSentWords=SentimentWords.ClassMgr.listSentimentWordses(SWBContext.getAdminWebSite());
+        Iterator<SentimentWords> itSentWords=SentimentWords.ClassMgr.listSentimentWordses(SWBSocialUtil.getConfigWebSite());
         while(itSentWords.hasNext())
         {
             SentimentWords sentWord=itSentWords.next();
@@ -645,9 +655,7 @@ public class SWBSocialUtil implements SWBAppObject {
              //Elimino Caracteres especiales (acentuados)
             String externalMsgTMP=SWBSocialUtil.Strings.replaceSpecialCharacters(text);
 
-            SocialAdmin socialAdminSite=(SocialAdmin)SWBContext.getAdminWebSite();
-
-            externalMsgTMP=SWBSocialUtil.Strings.removePuntualSigns(externalMsgTMP, socialAdminSite);
+            externalMsgTMP=SWBSocialUtil.Strings.removePuntualSigns(externalMsgTMP, SWBSocialUtil.getConfigWebSite());
 
             ArrayList<String> amsgWords=new ArrayList();
             String[] msgWords=externalMsgTMP.split(" ");
@@ -683,7 +691,7 @@ public class SWBSocialUtil implements SWBAppObject {
                             //Elimino Caracteres especiales (acentuados)
                             tag=SWBSocialUtil.Strings.replaceSpecialCharacters(tag);
 
-                            tag=SWBSocialUtil.Strings.removePuntualSigns(tag, socialAdminSite);
+                            tag=SWBSocialUtil.Strings.removePuntualSigns(tag, SWBSocialUtil.getConfigWebSite());
 
                             //System.out.println("Tag2_Final:"+tag);
                             //
@@ -889,9 +897,7 @@ public class SWBSocialUtil implements SWBAppObject {
             //Elimino Caracteres especiales (acentuados)
             text=SWBSocialUtil.Strings.replaceSpecialCharacters(text);
 
-            SocialAdmin socialAdminSite=(SocialAdmin)SWBContext.getAdminWebSite();
-
-            text=SWBSocialUtil.Strings.removePuntualSigns(text, socialAdminSite);
+            text=SWBSocialUtil.Strings.removePuntualSigns(text, SWBSocialUtil.getConfigWebSite());
 
             //System.out.println("ANALISIS-5:sentimentalTweetValue:"+externalString2Clasify);
 
@@ -921,7 +927,7 @@ public class SWBSocialUtil implements SWBAppObject {
                 //SentimentWords sentimentalWordObj=SentimentWords.ClassMgr.getSentimentWords(word2Find, socialAdminSite);
                 if(aSentimentWords.contains(word2Find)) //La palabra en cuestion ha sido encontrada en la BD
                 {
-                    SentimentWords sentimentalWordObj=SentimentWords.ClassMgr.getSentimentWords(word2Find, socialAdminSite);
+                    SentimentWords sentimentalWordObj=SentimentWords.ClassMgr.getSentimentWords(word2Find, SWBSocialUtil.getConfigWebSite());
                     //System.out.println("Palabra Encontrada:"+word2Find);
                     wordsCont++;
                     IntensiveTweetValue+=sentimentalWordObj.getIntensityValue();
@@ -1008,7 +1014,7 @@ public class SWBSocialUtil implements SWBAppObject {
            int positiveintensityveResult=0;
            int negativeintensityveResult=0;
            //HashMap sntPhrasesMap=new HashMap();
-           Iterator<SentimentalLearningPhrase> itSntPhases=SentimentalLearningPhrase.ClassMgr.listSentimentalLearningPhrases(SWBContext.getAdminWebSite());
+           Iterator<SentimentalLearningPhrase> itSntPhases=SentimentalLearningPhrase.ClassMgr.listSentimentalLearningPhrases(SWBSocialUtil.getConfigWebSite());
            while(itSntPhases.hasNext())
            {
                SentimentalLearningPhrase sntLPhrase=itSntPhases.next();
@@ -1702,7 +1708,7 @@ public class SWBSocialUtil implements SWBAppObject {
                                     if(socialNet!=null && privacy!=null)
                                     {
                                         SemanticObject semObjSocialNet=SemanticObject.createSemanticObject(socialNet);
-                                        PostOutPrivacy postOutPrivacy=PostOutPrivacy.ClassMgr.getPostOutPrivacy(privacy, SWBContext.getAdminWebSite());
+                                        PostOutPrivacy postOutPrivacy=PostOutPrivacy.ClassMgr.getPostOutPrivacy(privacy, SWBSocialUtil.getConfigWebSite());
                                         if(semObjSocialNet!=null && postOutPrivacy!=null && semObjSocialNet.createGenericInstance() instanceof SocialNetwork)
                                         {
                                             PostOutPrivacyRelation postOutPrivacyRel=PostOutPrivacyRelation.ClassMgr.createPostOutPrivacyRelation(wsite);
@@ -2189,7 +2195,7 @@ public class SWBSocialUtil implements SWBAppObject {
         {
             if(latitude!=0 && longitude!=0)
             {
-                Iterator <Country> itCountries=Country.ClassMgr.listCountries(SWBContext.getAdminWebSite());
+                Iterator <Country> itCountries=Country.ClassMgr.listCountries(SWBSocialUtil.getConfigWebSite());
                 while(itCountries.hasNext())
                 {
                     Country country=itCountries.next();
