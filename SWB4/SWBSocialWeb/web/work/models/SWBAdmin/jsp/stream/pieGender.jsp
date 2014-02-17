@@ -40,19 +40,21 @@
 
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
-            totalPost++;
-            //System.out.println("postIn.getPostInSocialNetworkUser().getSnu_gender()"+postIn.getPostInSocialNetworkUser().getSnu_gender());
-            if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_MALE) {
-                male++;
-                genderMale.add(postIn);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_FEMALE) {
-                female++;
-                genderFemale.add(postIn);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_gender() == 0) {
-                other++;
-                genderother.add(postIn);
+            if(postIn.getPostInSocialNetworkUser()!=null)
+            {
+                totalPost++;
+                //System.out.println("postIn.getPostInSocialNetworkUser().getSnu_gender()"+postIn.getPostInSocialNetworkUser().getSnu_gender());
+                if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_MALE) {
+                    male++;
+                    genderMale.add(postIn);
+                } else if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_FEMALE) {
+                    female++;
+                    genderFemale.add(postIn);
+                } else if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_gender() == 0) {
+                    other++;
+                    genderother.add(postIn);
+                }
             }
-
         }
 
         Iterator gMale = genderMale.iterator();

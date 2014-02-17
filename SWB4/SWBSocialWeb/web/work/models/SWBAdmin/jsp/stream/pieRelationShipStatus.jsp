@@ -40,23 +40,25 @@
 
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
-            totalPost++;
-
-            if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_SINGLE) {
-                single++;
-                singleArray.add(postIn);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_MARRIED) {
-                married++;
-                marriedArray.add(postIn);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_DIVORCED) {
-                divorced++;
-                divorcedArray.add(postIn);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_WIDOWED) {
-                widowed++;
-                widowedArray.add(postIn);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == 0) {
-                undefined++;
-                undefinedArray.add(postIn);
+            if(postIn.getPostInSocialNetworkUser()!=null)
+            {
+                totalPost++;
+                if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_SINGLE) {
+                    single++;
+                    singleArray.add(postIn);
+                } else if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_MARRIED) {
+                    married++;
+                    marriedArray.add(postIn);
+                } else if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_DIVORCED) {
+                    divorced++;
+                    divorcedArray.add(postIn);
+                } else if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_WIDOWED) {
+                    widowed++;
+                    widowedArray.add(postIn);
+                } else if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == 0) {
+                    undefined++;
+                    undefinedArray.add(postIn);
+                }
             }
         }
 
