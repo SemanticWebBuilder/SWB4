@@ -18,7 +18,9 @@
 <%
     //WebSite wsite=paramRequest.getWebPage().getWebSite();
     
-    WebSite wsite=SWBContext.getWebSite("SocialConfigData"); 
+    WebSite wsite=SWBContext.getGlobalWebSite(); //Sitio en el que se cargan las palabras sentimentales
+    
+    WebSite admWsite=SWBContext.getAdminWebSite(); //Sitio en el que se encuentra el archivo a cargar de palabras sentimentales
     
     System.out.println("wsite:"+wsite);
 
@@ -38,7 +40,7 @@
     BufferedReader bf = null;
     try {
         //ARCHIVO QUE CONTIENE LAS PALABRAS CON SENTIMIENTO ACTUALIZADAS ES UN ARCHIVO .CSV--------SIN ACENTROS--------
-        bf = new BufferedReader(new FileReader(SWBPortal.getWorkPath()+"/models/"+wsite.getId()+"/config/sentimentalWords2Process_SinAcentos.csv"));
+        bf = new BufferedReader(new FileReader(SWBPortal.getWorkPath()+"/models/"+admWsite.getId()+"/config/sentimentalWords2Process_SinAcentos.csv"));
     } catch (FileNotFoundException e) {
     e.printStackTrace();
     }
