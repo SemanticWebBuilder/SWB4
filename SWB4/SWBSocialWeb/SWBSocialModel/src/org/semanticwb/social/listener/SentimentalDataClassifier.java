@@ -17,7 +17,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.social.Action;
@@ -658,7 +657,7 @@ public class SentimentalDataClassifier {
                         //Si despues se manejan mas categorias en otras redes sociales que no sean de tipo Video, tendría que quitar la propiedad category que se encuentra
                         //en este momento en la interfaz PostVideoable y ponerselas a las de mas redes sociales, talvez a la clase SocialNetwork directamenre
                         if (externalPost.getSocialNetwork() instanceof Youtube) {
-                            YouTubeCategory youTubeCate = YouTubeCategory.ClassMgr.getYouTubeCategory(externalPost.getCategory(), SWBContext.getAdminWebSite());
+                            YouTubeCategory youTubeCate = YouTubeCategory.ClassMgr.getYouTubeCategory(externalPost.getCategory(), SWBSocialUtil.getConfigWebSite());
                             //System.out.println("youTubeCate-1:"+youTubeCate);
                             if (youTubeCate != null) {
                                 //System.out.println("youTubeCate-2:"+youTubeCate);
@@ -725,7 +724,7 @@ public class SentimentalDataClassifier {
                         //The next code calculates if latitude and longitud belongs to a country and next to state
                         Country country = null;
                         if (externalPost.getCountryCode() != null) {
-                            country = Country.ClassMgr.getCountry(externalPost.getCountryCode().toUpperCase(), SWBContext.getAdminWebSite());
+                            country = Country.ClassMgr.getCountry(externalPost.getCountryCode().toUpperCase(), SWBSocialUtil.getConfigWebSite());
                         } else {
                             country = SWBSocialUtil.Util.getMessageMapCountry(postIn.getLatitude(), postIn.getLongitude());
                         }
@@ -900,7 +899,7 @@ public class SentimentalDataClassifier {
                                 int userYears = SWBSocialUtil.Util.calculateAge(c.getTime());
                                 //System.out.println("userYears:" + userYears);
                                 if (userYears > 0) {
-                                    Iterator<LifeStage> itLifeStage = LifeStage.ClassMgr.listLifeStages(SWBContext.getAdminWebSite());
+                                    Iterator<LifeStage> itLifeStage = LifeStage.ClassMgr.listLifeStages(SWBSocialUtil.getConfigWebSite());
                                     while (itLifeStage.hasNext()) {
                                         LifeStage lifeStage = itLifeStage.next();
                                         if (userYears >= lifeStage.getLs_minAge() && userYears <= lifeStage.getLs_maxAge()) {
