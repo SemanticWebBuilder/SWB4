@@ -2380,7 +2380,7 @@ public class StreamInBox extends GenericResource {
            query+=
            "where {\n" +
            "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:pi_created ?postInCreated." + "\n" + 
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n" + 
            "  }\n";
 
            if(!isCount)
@@ -2805,9 +2805,9 @@ public class StreamInBox extends GenericResource {
         //Show Creation Time
         out.println("<td>");
         //System.out.println("FechaTimeAgo:"+postIn.getPi_created());
-        if(postIn.getPi_created()!=null)
+        if(postIn.getPi_createdInSocialNet()!=null)
         {
-            out.println(SWBUtils.TEXT.getTimeAgo(postIn.getPi_created(), lang));
+            out.println(SWBUtils.TEXT.getTimeAgo(postIn.getPi_createdInSocialNet(), lang));
         }else{
             out.println(SWBUtils.TEXT.getTimeAgo(new Date(), lang));
         }
