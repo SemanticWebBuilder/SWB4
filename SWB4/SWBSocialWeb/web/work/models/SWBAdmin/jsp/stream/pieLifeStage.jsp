@@ -50,36 +50,38 @@
 
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
-            totalPost++;
-            if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() == null) {
-                nodefined++;
-                noDefine.add(postIn);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Young")) {
-                young++;
-                youngArray.add(postIn);
-                //youngTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Child")) {
-                child++;
-                childArray.add(postIn);
-                //childTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("TeenAge")) {
-                teenAge++;
-                teenAgeArray.add(postIn);
-                //teenTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("YoungAdult")) {
-                youngAdult++;
-                youngAdultArray.add(postIn);
-                //youngAdultTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Adult")) {
-                adult++;
-                adultArray.add(postIn);
-                //adultTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
-            } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("ThirdAge")) {
-                thirdAge++;
-                thirdAgeArray.add(postIn);
-                //thirdTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
+            if(postIn.getPostInSocialNetworkUser()!=null)
+            {
+                totalPost++;
+                if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() == null) {
+                    nodefined++;
+                    noDefine.add(postIn);
+                } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Young")) {
+                    young++;
+                    youngArray.add(postIn);
+                    //youngTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
+                } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Child")) {
+                    child++;
+                    childArray.add(postIn);
+                    //childTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
+                } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("TeenAge")) {
+                    teenAge++;
+                    teenAgeArray.add(postIn);
+                    //teenTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
+                } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("YoungAdult")) {
+                    youngAdult++;
+                    youngAdultArray.add(postIn);
+                    //youngAdultTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
+                } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Adult")) {
+                    adult++;
+                    adultArray.add(postIn);
+                    //adultTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
+                } else if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("ThirdAge")) {
+                    thirdAge++;
+                    thirdAgeArray.add(postIn);
+                    //thirdTitle = postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getTitle(lang);
+                }
             }
-
         }
 
 

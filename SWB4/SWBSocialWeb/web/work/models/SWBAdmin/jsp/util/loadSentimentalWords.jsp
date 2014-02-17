@@ -18,7 +18,9 @@
 <%
     //WebSite wsite=paramRequest.getWebPage().getWebSite();
     
-    WebSite wsite=SWBContext.getAdminWebSite();
+    WebSite wsite=SWBContext.getWebSite("SocialConfigData"); 
+    
+    System.out.println("wsite:"+wsite);
 
     initialize();
 
