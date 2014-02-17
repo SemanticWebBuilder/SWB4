@@ -1466,7 +1466,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
     {
         String answer = null;
         //String key=SWBContext.getAdminWebSite().getProperty("kloutKey");    //TODO:Ver con Jei x que no funciona esto...
-        String key=SWBSocialUtil.Util.getModelPropertyValue(SWBContext.getAdminWebSite(), "kloutKey");
+        String key=SWBSocialUtil.Util.getModelPropertyValue(SWBSocialUtil.getConfigWebSite(), "kloutKey");
         //if(key==null) key="8fkzgz7ngf7bth3nk94gnxkd";   //Solo para fines de pruebas, quitar despues y dejar línea anterior.
         //System.out.println("key para KLOUT--Gg:"+key);
         if(key!=null)
