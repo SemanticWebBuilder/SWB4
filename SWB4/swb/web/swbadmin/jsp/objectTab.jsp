@@ -51,9 +51,16 @@
     //TODO:Modificar este codigo para recarga de clases, posible cambio por onLoad
     out.println("    <script type=\"dojo/connect\">");
     out.println("       this.watch(\"selectedChildWidget\", function(name, oval, nval){");
-    out.println("           onClickTab(nval);");
+%>
+    require(["dijit/registry",  "dojo/on", "dojo/ready", "dojo/domReady!"], function (registry, on, ready) {               
+        on(nval.controlButton, "DblClick", function (event) {
+            nval.refresh();
+        });           
+    });
+<%                
+    //out.println("           onClickTab(nval);");
     out.println("       });    ");
-    out.println("    </script>");    
+    out.println("    </script>");
     
     Iterator<ObjectBehavior> obit=SWBComparator.sortSermanticObjects(ObjectBehavior.ClassMgr.listObjectBehaviors(adm));
     //Iterator<ObjectBehavior> obit=SWBComparator.sortSermanticObjects(new GenericIterator(ObjectBehavior.swbxf_ObjectBehavior, obj.getModel().listInstancesOfClass(ObjectBehavior.swbxf_ObjectBehavior)));
