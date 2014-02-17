@@ -1,4 +1,5 @@
 <%@page contentType="text/html"%><%@page pageEncoding="UTF-8"%><%@page import="org.semanticwb.*,org.semanticwb.model.*,org.semanticwb.platform.*,org.semanticwb.portal.*,java.util.*,org.semanticwb.base.util.*,com.hp.hpl.jena.ontology.*,com.hp.hpl.jena.rdf.model.*"%>
+<jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%
     response.setHeader("Cache-Control", "no-cache");
     response.setHeader("Pragma", "no-cache");
@@ -13,34 +14,56 @@
     String contx = SWBPortal.getContextPath();
     String userRep = request.getParameter("userRep");
     String users[] = request.getParameterValues("users");
+    String search = request.getParameter("s");
+    
+    String path=paramRequest.getRenderUrl().setCallMethod(3).toString();
+    
+    if(search!=null)
+    {
+        if (userRep != null)
+        {
+            search=search.toLowerCase();
+            Iterator<User> it2 = UserRepository.ClassMgr.getUserRepository(userRep).listUsers();
+            while (it2.hasNext())
+            {
+                User ur = it2.next();
+                String txt=ur.getLogin()+" ("+ur.getFullName()+")";
+                if(search.length()==0 || txt.toLowerCase().indexOf(search)>-1)
+                {
+                    out.println("<option value=\""+ur.getId()+"\">"+txt+"</option>");
+                }
+            }
+        }
+        return;
+    }
 
     if (users == null)
     {
 %>
 
 <style type="text/css">
-    #select, #select2 {
+    #uf_select, #uf_select2 {
         width:255px;
         height:300px;
         overflow:auto;
     }
-    div#sel1, div#sel2 {
+    div#uf_sel1, div#uf_sel2 {
         float: left;
     }
-    div#leftRightButtons {
+    div#uf_leftRightButtons {
         float: left;
         padding: 10em 0.5em 0 0.5em;
     }
 </style>
 
-<form id="userFilter/form" dojoType="dijit.form.Form" class="swbform" action="<%=contx%>/swbadmin/jsp/userFilter.jsp"  onsubmit="submitForm('userFilter/form');
+<form id="userFilter/form" dojoType="dijit.form.Form" class="swbform" action="<%=path%>"  onsubmit="submitForm('userFilter/form');
         return false;" method="post">
     <fieldset>
         <table>
             <tr>
                 <td width="200px" align="right"><label for="userRep">Repositorio de Usuarios:</label></td>
                 <td>
-                    <select name="userRep" dojoType="dijit.form.FilteringSelect" onchange="submitForm('userFilter/form')" autoComplete="true" invalidMessage="Dato invalido." value="<%=userRep%>" >
+                    <select id="uf_userRep" name="userRep" dojoType="dijit.form.FilteringSelect" onchange_="submitForm('userFilter/form')" autoComplete="true" invalidMessage="Dato invalido." value="<%=userRep%>" >
                         <%
                             Iterator<UserRepository> it = SWBContext.listUserRepositories();
                             while (it.hasNext())
@@ -60,45 +83,39 @@
                 </td>
             </tr>
             <tr>
+                <td width="200px" align="right"><label for="userRep">Buscador de Usuarios:</label></td>
+                <td>
+                    <input id="uf_search" type="text" dojoType="dijit.form.TextBox"> &nbsp; 
+                    <button onclick="
+                            var s=document.getElementById('uf_search').value;
+                            var rep=dijit.byId('uf_userRep').value;                            
+                            var cont=getSyncHtml('<%=path%>?userRep='+rep+'&s='+s);
+                            var sel = document.getElementById('uf_select');
+                            sel.innerHTML =cont;
+                            return false;
+                            " title="Buscar Usuarios">Buscar</button>
+                </td>
+            </tr>            
+            <tr>
                 <td width="200px" align="right">
                     <label>Usuarios:</label>
                 </td>                
                 <td> 
                     <div>
-                        <div id="sel1" role="presentation">
+                        <div id="uf_sel1" role="presentation">
                             <label for="allusers">Lista de Usuarios:</label><br>
-                            <select multiple="true" dojoType="dijit.form.MultiSelect" id="select">
-                                <%
-                                    if (userRep != null)
-                                    {
-                                        Iterator<User> it2 = UserRepository.ClassMgr.getUserRepository(userRep).listUsers();
-                                        while (it2.hasNext())
-                                        {
-                                            User ur = it2.next();
-                                            String selected = "";
-                                            if (ur.getId().equals(userRep))
-                                            {
-                                                selected = "selected=\"selected\"";
-                                            }
-                                %>
-                                <option value="<%=ur.getId()%>" <%=selected%>><%=ur.getFullName()%></option>
-                                <%
-                                        }
-                                    }
-                                %>                                           
+                            <select multiple="true" dojoType="dijit.form.MultiSelect" id="uf_select">                                
                             </select>
                         </div>
-                        <div id="leftRightButtons" role="presentation">
+                        <div id="uf_leftRightButtons" role="presentation">
                             <span>
-                                <button class="switch" id="left" onclick="dijit.byId('select').addSelected(dijit.byId('select2'));
-        return false;" title="Move Items to First list">&lt;</button>
-                                <button class="switch" id="right" onclick="dijit.byId('select2').addSelected(dijit.byId('select'));
-        return false;" title="Move Items to Second list">&gt;</button>
+                                <button class="switch"  onclick="console.log(dijit.byId('uf_select'));dijit.byId('uf_select').addSelected(dijit.byId('uf_select2'));return false;" title="Move Items to First list">&lt;</button>
+                                <button class="switch"  onclick="dijit.byId('uf_select2').addSelected(dijit.byId('uf_select'));return false;" title="Move Items to Second list">&gt;</button>
                             </span>
                         </div>
-                        <div id="sel2" role="presentation">
+                        <div id="uf_sel2" role="presentation">
                             <label for="users">Usuarios seleccionados:</label><br>
-                            <select multiple="true" name="users" dojoType="dijit.form.MultiSelect" id="select2">
+                            <select multiple="true" name="users" dojoType="dijit.form.MultiSelect" id="uf_select2">
                             </select>
                         </div>
                     </div>
@@ -108,9 +125,7 @@
     </fieldset>
     <fieldset>
         <span align="center">
-            <button dojoType="dijit.form.Button" name="save" type="submit" value="save">Guardar</button>
-            <button dojoType="dijit.form.Button" name="delete" type="submit" value="delete" onclick="if (!confirm('¿Eliminar el elemento?'))
-            return false;">Eliminar</button>
+            <button dojoType="dijit.form.Button" name="save" type="submit" value="save">Editar Filtro</button>
         </span>
     </fieldset>
 </form>
@@ -129,6 +144,24 @@
         }
         String id=SWBUtils.TEXT.join("|", users);
         //System.out.println("id:"+id);
+
+        UserRepository rep=UserRepository.ClassMgr.getUserRepository(userRep);
+        
+        out.println("<form id=\"userFilter/form\" dojoType=\"dijit.form.Form\" action=\""+contx+"/swbadmin/jsp/userFilter.jsp\" class=\"swbform\" onsubmit=\"submitForm('userFilter/form');return false;\">");
+        out.println("<fieldset>");
+        out.println("<legend>Usuarios seleccionados</legend>");
+        out.println("<ul>");
+        for(int x=0;x<users.length;x++)
+        {
+            User usr=rep.getUser(users[x]);
+            out.println(usr.getLogin()+" ("+usr.getFullName()+")");
+            if(x+1<users.length)out.println(", ");
+        }
+        out.println("</ul>");
+        out.println("</fieldset>");
+        out.println("<fieldset>");
+        out.println("<legend>Filtro a aplicar</legend>");
+        
 %>
 <div class="applet">
     <applet id="editfilter" name="editfilter" code="applets.filterSection.FilterSection.class" codebase="/" archive="swbadmin/lib/SWBAplFilterSection.jar, swbadmin/lib/SWBAplCommons.jar" width="100%" height="500">
@@ -142,5 +175,14 @@
     </applet>
 </div>
 <%
+        out.println("</fieldset>");
+        
+        out.println("<fieldset>");
+        out.println("    <span>");
+        out.println("        <button dojoType=\"dijit.form.Button\" name=\"back\" type=\"submit\" value=\"back\">Regresar</button>");
+        out.println("    </span>");
+        out.println("</fieldset>");   
+        
+        out.println("</form>");
     }
 %>
