@@ -15,7 +15,8 @@ html, body, #main {
     font: 10pt Arial,Myriad,Tahoma,Verdana,sans-serif;
 }
 
-.soria .dijitTreeIcon {
+.soria .dijitTreeIcon 
+{
     width:20px;
     height: 18px;
 }

@@ -1,5 +1,8 @@
       // scan page for widgets and instantiate them
 
+      dojo.require("dojo.on");
+      dojo.require("dijit.registry");
+
       dojo.require("dojo.parser");
       // dnd:
       
