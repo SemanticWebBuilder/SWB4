@@ -162,7 +162,8 @@ public class SWBSocialUtil implements SWBAppObject {
     @Override
     public void init() {
         try{
-        CONFIG_WEBSITE=SWBContext.getGlobalWebSite();   
+        //CONFIG_WEBSITE=SWBContext.getGlobalWebSite();   
+        CONFIG_WEBSITE=SWBContext.getAdminWebSite();   
         
         System.out.println("Se carga Sitio Global:"+CONFIG_WEBSITE);
             
