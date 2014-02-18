@@ -95,7 +95,7 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                     external.setPostId(String.valueOf(status.getId())); 
                     external.setCreatorId(String.valueOf(status.getUser().getId()));
                     external.setCreatorName("@"+status.getUser().getScreenName());
-                    external.setCreationTime(""+status.getCreatedAt());
+                    external.setCreationTime(status.getCreatedAt());
                     external.setDevice(status.getSource());
                     if (status.getText()!=null) {
                        external.setMessage(status.getText());
