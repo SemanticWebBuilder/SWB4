@@ -577,7 +577,7 @@ public class DistributorParams
                 if(!site.equals(SWBContext.getAdminWebSite())
                    && !site.equals(SWBContext.getGlobalWebSite()))
                 {
-                    if(site.isValid() && site.getHomePage().isValid())
+                    if(site.isValid() && site.getHomePage()!=null && site.getHomePage().isValid())
                     {
                         wp=site.getHomePage();
                         break;
