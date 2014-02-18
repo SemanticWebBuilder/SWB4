@@ -436,6 +436,8 @@ public class SentimentalDataClassifier {
                     //Guarda valores sentimentales en el PostIn (mensaje de entrada)
                     post.setPostIntensityValue(promIntensityValue);
                     post.setPostIntesityType(intensityTweetValueType);
+                    
+                    post.setIsPrioritary(false);   //Por defecto, si cumple con alguna regla se podría cambiar a valor 1.
 
                     //System.out.println("Valor sentimental puesto al final:"+post.getPostSentimentalValue());
                     //System.out.println("Valor de intensidad puesto al final:"+post.getPostIntensityValue());
@@ -500,7 +502,7 @@ public class SentimentalDataClassifier {
                     }
                     if(post.getPostInSocialNetworkUser()==null)
                     {
-                        System.out.println("VA A ELIMINAR POSTIN...SIN USER:"+post);
+                        //Se elimina nuevo postIn, ya que por alguna razón no se le asoció un SocialNetworkUser
                         post.remove();
                     }
                 }
@@ -675,7 +677,12 @@ public class SentimentalDataClassifier {
                 
                 //System.out.println("PostNet Creation Time:"+externalPost.getCreationTime());
                 
-                //postIn.setPi_createdInSocialNet(null);
+                if(externalPost.getCreationTime()!=null)
+                {
+                    postIn.setPi_createdInSocialNet(externalPost.getCreationTime());
+                }else {
+                    postIn.setPi_createdInSocialNet(postIn.getPi_created());
+                }
 
                 /*
                  if(externalPost.getDescription()!=null)
@@ -759,6 +766,7 @@ public class SentimentalDataClassifier {
                         {
                             socialNetUser.setCreated(externalPost.getUsercreation());
                         }
+                        socialNetUser.setSnu_klout(0);  //Valor por defecto, sirve para que si el usuario no cumple con Klout, sirva de cualquier foma el ordenamiento
                         if(userKloutScore>0)
                         {
                             socialNetUser.setSnu_klout(userKloutScore);
@@ -775,6 +783,7 @@ public class SentimentalDataClassifier {
                     } else if (upDateSocialUserNetworkData) {
                         //System.out.println("socialNetUser-3:"+socialNetUser);
                         socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject());
+                        socialNetUser.setSnu_klout(0);  //Valor por defecto, sirve para que si el usuario no cumple con Klout, sirva de cualquier foma el ordenamiento
                         if(userKloutScore>0)
                         {
                             socialNetUser.setSnu_klout(userKloutScore);
@@ -803,7 +812,7 @@ public class SentimentalDataClassifier {
                             socialNetUser.setSnu_profileGeoLocation(externalPost.getUserGeoLocation());
                         }
                     }else{
-                        System.out.println("VA A ELIMINAR POSTIN-USER NULO:"+postIn);
+                        //System.out.println("VA A ELIMINAR POSTIN-USER NULO:"+postIn);
                         postIn.remove();
                     }
 
