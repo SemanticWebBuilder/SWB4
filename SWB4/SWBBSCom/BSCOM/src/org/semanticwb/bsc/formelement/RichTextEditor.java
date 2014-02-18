@@ -88,7 +88,7 @@ public class RichTextEditor extends org.semanticwb.bsc.formelement.base.RichText
             viewString.append("        renderAsHtml: true,\n");
             viewString.append("        editorParams: {width: '80%', height: '80px', trim:true,");
             //El plugin dojox.editor.plugins.PasteFromWord es para dojo 1.5+
-            viewString.append("required:true, extraPlugins:['dijit._editor.plugins.AlwaysShowToolbar', 'foreColor', 'hiliteColor', 'PasteFromWord']},\n");
+            viewString.append("required:true, extraPlugins:['dijit._editor.plugins.AlwaysShowToolbar', 'foreColor', 'hiliteColor']},\n"); //, Revisar funcionamiento: 'PasteFromWord'
             viewString.append("        width: '80%',\n");
             viewString.append("        onChange: function(value) {\n");
             viewString.append("          getSyncHtml('");
