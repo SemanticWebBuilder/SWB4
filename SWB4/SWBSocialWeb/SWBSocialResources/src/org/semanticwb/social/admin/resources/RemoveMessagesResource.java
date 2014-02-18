@@ -23,13 +23,10 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.social.Facebook;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Stream;
-import org.semanticwb.social.Twitter;
-import org.semanticwb.social.Youtube;
 import org.semanticwb.social.util.SWBSocialUtil;
 
 /**
@@ -177,11 +174,6 @@ public class RemoveMessagesResource extends GenericResource {
                 out.println("<div class=\"clear\"></div>");
                 
                 
-                
-                
-                
-                
-                
                 ArrayList topics = SWBSocialUtil.sparql.getStreamSocialTopics(stream);
 
                 ArrayList nets = SWBSocialUtil.sparql.getStreamSocialNetworks(stream);
@@ -270,8 +262,6 @@ public class RemoveMessagesResource extends GenericResource {
                         out.println("   showStatus('Mensajes eliminados');");            
                     out.println("</script>");
                 }
-                
-                System.out.println("finished" + "</br>");
             }catch(Exception e)
             {
                 System.out.println(e.getMessage()); 
@@ -367,14 +357,14 @@ public class RemoveMessagesResource extends GenericResource {
                         
                         for(SocialTopic sTopic: topics){
                             ArrayList postIns = SWBSocialUtil.sparql.getPostInbyStreamAndSocialTopic(stream, sTopic);
-                            System.out.println("\n\nVamos a borra los " + postIns.size() + " sdel topic:" + sTopic.getDisplayTitle("es"));
+                            //System.out.println("\n\nVamos a borra los " + postIns.size() + " sdel topic:" + sTopic.getDisplayTitle("es"));
                             for(int i = 0; i < postIns.size() ; i++){
                                 SemanticObject sobj =(SemanticObject) postIns.get(i);
                                 sobj.remove();
                             }
-                            System.out.println("Eliminados " + postIns.size() + "!!!");
+                            //System.out.println("Eliminados " + postIns.size() + "!!!");
                         }
-                        System.out.println("ELIMINANDO SOLO LOS TOPICS SELECCIONADOS");
+                        //System.out.println("ELIMINANDO SOLO LOS TOPICS SELECCIONADOS");
                     }
                 }else if(mode.equals(Action_REMOVESELECTEDNETWORKS))   //Elimina los streams de una red
                 {
@@ -389,17 +379,17 @@ public class RemoveMessagesResource extends GenericResource {
                         }
                         
                         for(SocialNetwork sNetwork: networks){
-                            System.out.println("NET:" +  sNetwork.getTitle());
+                            //System.out.println("NET:" +  sNetwork.getTitle());
                             ArrayList postIns = SWBSocialUtil.sparql.getPostInbyStreamAndSocialNetwork(stream, sNetwork);
-                            System.out.println("\n\nVamos a borra los " + postIns.size() + " de la RED:" + sNetwork.getDisplayTitle("es"));
+                            //System.out.println("\n\nVamos a borra los " + postIns.size() + " de la RED:" + sNetwork.getDisplayTitle("es"));
                             for(int i = 0; i < postIns.size() ; i++){
                                 SemanticObject sobj =(SemanticObject) postIns.get(i);
                                 sobj.remove();
                                 //System.out.println(postIns.get(i));
                             }
-                            System.out.println("Eliminados " + postIns.size() + "!!!");                            
+                            //System.out.println("Eliminados " + postIns.size() + "!!!");                            
                         }
-                        System.out.println("ELIMINANDO SOLO LOS POSTS DE ESTA RED SELECCIONADOS");
+                        //System.out.println("ELIMINANDO SOLO LOS POSTS DE ESTA RED SELECCIONADOS");
                     }
                 }
             }catch(Exception e)
