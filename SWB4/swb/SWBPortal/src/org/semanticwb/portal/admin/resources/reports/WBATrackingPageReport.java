@@ -69,7 +69,7 @@ import org.semanticwb.model.WebPage;
 public class WBATrackingPageReport extends GenericResource {
     
     /** The log. */
-    private static Logger log = SWBUtils.getLogger(WBASectionReport.class);
+    private static final Logger log = SWBUtils.getLogger(WBATrackingPageReport.class);
 
     /** The Constant I_REPORT_TYPE. */
     public static final int I_REPORT_TYPE = 3;
@@ -92,7 +92,7 @@ public class WBATrackingPageReport extends GenericResource {
         try {
             strRscType = base.getResourceType().getResourceClassName();
         }catch (Exception e) {
-            strRscType = "WBASectionReport";
+            strRscType = "WBATrackingPageReport";
         }
     }
 
@@ -221,8 +221,8 @@ public class WBATrackingPageReport extends GenericResource {
                 out.println("    layout= [");
                 out.println("      { field:\"rep\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblRepository") + "\" },");
                 out.println("      { field:\"login\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblUserName") + "\" },");
-                out.println("      { field:\"ln\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblFirstName") + "\" },");
-                out.println("      { field:\"sln\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblLastName") + "\" },");
+                out.println("      { field:\"ln\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblLastName") + "\" },");
+                out.println("      { field:\"sln\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblSecondLastName") + "\" },");
                 out.println("      { field:\"n\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblName") + "\" },");
                 out.println("      { field:\"year\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblYear") + "\" },");
                 out.println("      { field:\"month\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblMonth") + "\" },");
@@ -570,6 +570,7 @@ out.println("</tr>");
         User visitor;
         Iterator<String[]> lines = getReportResults(wsId, wp, true, first, last);
         out.println("<table>");
+        out.println("<thead>");
         out.println("<tr>");
         out.println("<th>");
         out.println(paramsRequest.getLocaleString("lblRepository"));
@@ -602,110 +603,107 @@ out.println("</tr>");
         out.println(paramsRequest.getLocaleString("lblSection"));
         out.println("</th>");
         out.println("</tr>");
-
-        while (lines.hasNext()) {
-            String[] t = lines.next();
-            ws = SWBContext.getWebSite(t[4]);
-            if (ws == null) {
-                log.error("Modelo con identificador " + t[4] + " no existe");
-                continue;
-            }
-            wp = ws.getWebPage(t[5]);
-            if (wp == null) {
-                log.error("Pagina web con identificador " + t[5] + " no existe");
-                continue;
-            }
-            urId = t[6];
-            ur = SWBContext.getUserRepository(urId);
-            if (ur == null) {
-                continue;
-            }
-            String rep = t[6];
-            String ln = "";
-            String sln = "";
-            String n = "";
-            String year;
-            String month;
-            String day;
-            String times;
-//            String millis;
-            login = t[7];
-            if ("_".equals(login)) {
-                ln = "_";
-                sln = "_";
-                n = "_";
-            } else {
-                visitor = ur.getUserByLogin(login);
-                if (visitor == null) {
+        out.println("</thead>");
+        
+        if(lines.hasNext()) {
+            out.println("<tbody>");
+            while (lines.hasNext()) {
+                String[] t = lines.next();
+                ws = SWBContext.getWebSite(t[4]);
+                if (ws == null) {
+                    log.error("Modelo con identificador " + t[4] + " no existe");
                     continue;
                 }
-                ln = visitor.getLastName();
-                sln = visitor.getSecondLastName();
-                n = visitor.getName();
+                wp = ws.getWebPage(t[5]);
+                if (wp == null) {
+                    log.error("Pagina web con identificador " + t[5] + " no existe");
+                    continue;
+                }
+                urId = t[6];
+                ur = SWBContext.getUserRepository(urId);
+                if (ur == null) {
+                    continue;
+                }
+                String rep = t[6];
+                String ln = "";
+                String sln = "";
+                String n = "";
+                String year;
+                String month;
+                String day;
+                String times;
+
+                login = t[7];
+                if ("_".equals(login)) {
+                    ln = "_";
+                    sln = "_";
+                    n = "_";
+                } else {
+                    visitor = ur.getUserByLogin(login);
+                    if (visitor == null) {
+                        continue;
+                    }
+                    ln = visitor.getLastName();
+                    sln = visitor.getSecondLastName();
+                    n = visitor.getName();
+                }
+
+                int y,m,d;
+                try {
+                    y = Integer.parseInt(t[0].substring(0, 4));
+                    year = y + "";
+                } catch (NumberFormatException nfe) {
+                    year = t[0].substring(0, 4);
+                }
+                try {
+                    m = Integer.parseInt(t[0].substring(5, 7));
+                    month = m + "";
+                } catch (NumberFormatException nfe) {
+                    month = t[0].substring(5, 7);
+                }
+                try {
+                    d = Integer.parseInt(t[0].substring(8, 10));
+                    day = "" + d;
+                } catch (NumberFormatException nfe) {
+                    day = t[0].substring(8, 10);
+                }
+                times = t[0].substring(11, 16);            
+                out.println("<tr>");
+                out.println("<td>");
+                out.println(rep);
+                out.println("</td>");
+                out.println("<td>");
+                out.println(login);
+                out.println("</td>");
+                out.println("<td>");
+                out.println(ln);
+                out.println("</td>");
+                out.println("<td>");
+                out.println(sln);
+                out.println("</td>");
+                out.println("<td>");
+                out.println(n);
+                out.println("</td>");
+                out.println("<td>");
+                out.println(year);
+                out.println("</td>");
+                out.println("<td>");
+                out.println(month);
+                out.println("</td>");            
+                out.println("<td>");
+                out.println(day);
+                out.println("</td>");   
+                out.println("<td>");
+                out.println(times);
+                out.println("</td>");   
+                out.println("<td>");
+                out.println(t[5]);
+                out.println("</td>");   
+                out.println("</tr>");
             }
-            
-            int y = 0;
-            int m = 0;
-            int d = 0;
-            try {
-                y = Integer.parseInt(t[0].substring(0, 4));
-                year = y + "";
-            } catch (NumberFormatException nfe) {
-                year = t[0].substring(0, 4);
-            }
-            try {
-                m = Integer.parseInt(t[0].substring(5, 7));
-                month = m + "";
-            } catch (NumberFormatException nfe) {
-                month = t[0].substring(5, 7);
-            }
-            try {
-                d = Integer.parseInt(t[0].substring(8, 10));
-                day = "" + d;
-            } catch (NumberFormatException nfe) {
-                day = t[0].substring(8, 10);
-            }
-            times = t[0].substring(11, 16);
-//            try {
-//                long l = Long.parseLong(t[11]);
-//                millis = l + "";
-//            } catch (NumberFormatException nfe) {
-//                millis = t[11];
-//            }
-            
-            out.println("<tr>");
-            out.println("<td>");
-            out.println(rep);
-            out.println("</td>");
-            out.println("<td>");
-            out.println(login);
-            out.println("</td>");
-            out.println("<td>");
-            out.println(ln);
-            out.println("</td>");
-            out.println("<td>");
-            out.println(sln);
-            out.println("</td>");
-            out.println("<td>");
-            out.println(n);
-            out.println("</td>");
-            out.println("<td>");
-            out.println(year);
-            out.println("</td>");
-            out.println("<td>");
-            out.println(month);
-            out.println("</td>");            
-            out.println("<td>");
-            out.println(day);
-            out.println("</td>");   
-            out.println("<td>");
-            out.println(times);
-            out.println("</td>");   
-            out.println("<td>");
-            out.println(t[5]);
-            out.println("</td>");   
-            out.println("</tr>");
+            out.println("</tbody>");
         }
+        
         out.println("</table>");
         out.flush();
         out.close();
@@ -897,11 +895,7 @@ out.println("</tr>");
                         hourinfile = s_aux.substring(11,13);
                         mininfile = s_aux.substring(14,16);
                         datefile = new GregorianCalendar(Integer.parseInt(yearinfile),Integer.parseInt(monthinfile)-1,Integer.parseInt(dayinfile),Integer.parseInt(hourinfile),Integer.parseInt(mininfile));
-//                        if((datefile.after(start) || datefile.equals(start)) && ((datefile.before(end) || datefile.equals(end)))) {
-//                            dateinfile = s_aux;
-//                        }else {
-//                            continue;
-//                        }
+                        
                         boolean intime = (datefile.after(start) || datefile.equals(start)) && ((datefile.before(end) || datefile.equals(end)));
                         if(!intime) {
                             continue;
@@ -934,14 +928,11 @@ out.println("</tr>");
                         log.error(ioe);
                         continue;
                     }
-//                    while( line != null );
-//                    if(rf_in != null ) {
-                        try {
-                            rf_in.close();
-                        }catch(IOException ioe) {
-                            rf_in = null;
-                        }
-//                    }
+                    try {
+                        rf_in.close();
+                    }catch(IOException ioe) {
+                        rf_in = null;
+                    }
                 } // f.exists()
                 else
                 {

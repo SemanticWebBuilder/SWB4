@@ -63,7 +63,7 @@ import org.semanticwb.model.WebSite;
 public class WBATrackingUserReport extends GenericResource {
     
     /** The log. */
-    private static Logger log = SWBUtils.getLogger(WBATrackingUserReport.class);
+    private static final Logger log = SWBUtils.getLogger(WBATrackingUserReport.class);
 
     /** The Constant S_REPORT_IDAUX. */
     public static final String S_REPORT_IDAUX = "_";
@@ -89,7 +89,7 @@ public class WBATrackingUserReport extends GenericResource {
         try {
             strRscType = base.getResourceType().getResourceClassName();
         }catch (Exception e) {
-            strRscType = "WBALoginReport";
+            strRscType = "WBATrackingUserReport";
         }
     }
 
@@ -662,6 +662,7 @@ public class WBATrackingUserReport extends GenericResource {
         WebPage wp;
         Iterator<String[]> lines = getReportResults(repId, userId, first, last);
         out.println("<table>");
+        out.println("<thead>");
         out.println("<tr>");
         out.println("<th>");
         out.println(paramsRequest.getLocaleString("lblSite"));
@@ -694,86 +695,91 @@ public class WBATrackingUserReport extends GenericResource {
         out.println(paramsRequest.getLocaleString("lblHour"));
         out.println("</th>");
         out.println("</tr>");
+        out.println("</thead>");
         
-        while(lines.hasNext()) {
-            String[] t = lines.next();
-            ws = SWBContext.getWebSite(t[4]);
-            if(ws==null) {
-                log.error("Modelo con identificador "+t[4]+" no existe");
-                continue;
-            }
-            wp = ws.getWebPage(t[5]);
-            if(wp==null) {
-                log.error("Pagina web con identificador "+t[5]+" no existe");
-                continue;
-            }
-            String site = ws.getDisplayTitle(lang);
-            String sect = wp.getDisplayName(lang);
-            String id = t[5];
-            String url = fullHostname+wp.getUrl();
-            String dev = t[9];
-            String langA = t[10];
-            String year;
-            String month;
-            String day;
-            String time;
-            int y;
-            int m;
-            int d;
-            try {
-                y = Integer.parseInt(t[0].substring(0,4));
-                year = y + "";
-            }catch(NumberFormatException nfe) {
-                year = t[0].substring(0,4);
-            }
-            try {
-                m = Integer.parseInt(t[0].substring(5,7));
-                month = m + "";
-            }catch(NumberFormatException nfe) {
-                month = t[0].substring(5,7);
-            }
-            try {
-                d = Integer.parseInt(t[0].substring(8,10));
-                day = d + "";
-            }catch(NumberFormatException nfe) {
-                day = t[0].substring(8,10);
-            }
-            time = t[0].substring(11,16);
+        if(lines.hasNext()) {
+            out.println("<tbody>");
+            while(lines.hasNext()) {
+                String[] t = lines.next();
+                ws = SWBContext.getWebSite(t[4]);
+                if(ws==null) {
+                    log.error("Modelo con identificador "+t[4]+" no existe");
+                    continue;
+                }
+                wp = ws.getWebPage(t[5]);
+                if(wp==null) {
+                    log.error("Pagina web con identificador "+t[5]+" no existe");
+                    continue;
+                }
+                String site = ws.getDisplayTitle(lang);
+                String sect = wp.getDisplayName(lang);
+                String id = t[5];
+                String url = fullHostname+wp.getUrl();
+                String dev = t[9];
+                String langA = t[10];
+                String year;
+                String month;
+                String day;
+                String time;
+                int y;
+                int m;
+                int d;
+                try {
+                    y = Integer.parseInt(t[0].substring(0,4));
+                    year = y + "";
+                }catch(NumberFormatException nfe) {
+                    year = t[0].substring(0,4);
+                }
+                try {
+                    m = Integer.parseInt(t[0].substring(5,7));
+                    month = m + "";
+                }catch(NumberFormatException nfe) {
+                    month = t[0].substring(5,7);
+                }
+                try {
+                    d = Integer.parseInt(t[0].substring(8,10));
+                    day = d + "";
+                }catch(NumberFormatException nfe) {
+                    day = t[0].substring(8,10);
+                }
+                time = t[0].substring(11,16);
 
-            out.println("<tr>");
-            out.println("<td>");
-            out.println(site);
-            out.println("</td>");            
-            out.println("<td>");
-            out.println(sect);
-            out.println("</td>");
-            out.println("<td>");
-            out.println(id);
-            out.println("</td>");
-            out.println("<td>");
-            out.println(url);
-            out.println("</td>");
-            out.println("<td>");
-            out.println(dev);
-            out.println("</td>");
-            out.println("<td>");
-            out.println(langA);
-            out.println("</td>");            
-            out.println("<td>");
-            out.println(year);
-            out.println("</td>");  
-            out.println("<td>");
-            out.println(month);
-            out.println("</td>");            
-            out.println("<td>");
-            out.println(day);
-            out.println("</td>");   
-            out.println("<td>");
-            out.println(time);
-            out.println("</td>");              
-            out.println("</tr>");                
+                out.println("<tr>");
+                out.println("<td>");
+                out.println(site);
+                out.println("</td>");            
+                out.println("<td>");
+                out.println(sect);
+                out.println("</td>");
+                out.println("<td>");
+                out.println(id);
+                out.println("</td>");
+                out.println("<td>");
+                out.println(url);
+                out.println("</td>");
+                out.println("<td>");
+                out.println(dev);
+                out.println("</td>");
+                out.println("<td>");
+                out.println(langA);
+                out.println("</td>");            
+                out.println("<td>");
+                out.println(year);
+                out.println("</td>");  
+                out.println("<td>");
+                out.println(month);
+                out.println("</td>");            
+                out.println("<td>");
+                out.println(day);
+                out.println("</td>");   
+                out.println("<td>");
+                out.println(time);
+                out.println("</td>");              
+                out.println("</tr>");                
+            }
+            out.println("</tbody>");
         }
-        //out.print(SWBUtils.XML.domToXml(dom));
+        
         out.println("</table>");
         out.flush();
         out.close();
