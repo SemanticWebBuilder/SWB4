@@ -22,18 +22,18 @@
     
     WebSite admWsite=SWBContext.getAdminWebSite(); //Sitio en el que se encuentra el archivo a cargar de palabras sentimentales
     
-    System.out.println("wsite:"+wsite);
+    //System.out.println("wsite:"+wsite);
 
     initialize();
 
     //Elimina todos los objetos(instancias) de la clase SentimentWords
     /*
-    Iterator <SentimentWords> itSentimentWords=SentimentWords.ClassMgr.listSentimentWordses(wsite);
-    while(itSentimentWords.hasNext())
+    Iterator <SentimentWords> itSentimentWords2Remove=SentimentWords.ClassMgr.listSentimentWordses(wsite);
+    while(itSentimentWords2Remove.hasNext())
     {
-        SentimentWords sentimentWord=itSentimentWords.next();
-        out.println("sentimentWord:"+sentimentWord);
-        //sentimentWord.remove();
+        SentimentWords sentimentWord=itSentimentWords2Remove.next();
+        out.println("sentimentWord Eliminado:"+sentimentWord);
+        sentimentWord.remove();
     }*/
 
     //Inserta detos en la clase SentimentWords
@@ -50,11 +50,12 @@
         while ((line = bf.readLine())!=null) {
             if(isFirstLine){isFirstLine=false; continue;}
             int colum=0;
+            SentimentWords sentimentWord=null;
             StringTokenizer tokens = new StringTokenizer(line, ";");
             while(tokens.hasMoreTokens()){
                 colum++;
-                SentimentWords sentimentWord=null;
                 String tokenValue=tokens.nextToken();
+                //System.out.println("TOKEN:"+tokenValue);
                 //if((colum==1 && tokenValue==null) || colum>3) break;
                 if(tokenValue==null) continue;
                 if(colum==1) {
@@ -65,6 +66,7 @@
                     tokenValue=phonematize(tokenValue);
                     //System.out.println("tokenValue-2:"+tokenValue);
                     sentimentWord=SentimentWords.ClassMgr.getSentimentWords(tokenValue,wsite);
+                    //System.out.println("sentimentWord Buscado:"+sentimentWord);
                     if(sentimentWord==null)
                     {
                         sentimentWord=SentimentWords.ClassMgr.createSentimentWords(tokenValue,wsite);
@@ -73,14 +75,13 @@
                         out.println("YA SE ENCUENTRA/NO SE CREó:"+tokenValue+"<br>");
                     }
                     //sentimentWord.setSentimentalWord(tokenValue);
-                }
-                else if(colum==2 && sentimentWord!=null) {
-                    //System.out.println("tokenValue:"+tokenValue);
+                }else if(colum==2 && sentimentWord!=null) {
+                    //System.out.println("Colum2:"+tokenValue);
                     sentimentWord.setSentimentalValue(Float.parseFloat(tokenValue));
-                }
-                else if(colum==3 && sentimentWord!=null) {
-                    //System.out.println("tokenValue:"+tokenValue);
+                }else if(colum==3 && sentimentWord!=null) {
+                    //System.out.println("Colum3:"+tokenValue);
                     sentimentWord.setIntensityValue(Float.parseFloat(tokenValue));
+                    sentimentWord=null;
                 }
             }
         }
@@ -95,7 +96,7 @@
     int cont=0;
     //Lee todos los valores de la clase sentimentWord
     //Iterator <SentimentWords> itSentimentWords=SentimentWords.ClassMgr.listSentimentWordses(wsite);
-    Iterator <SentimentWords> itSentimentWords=SentimentWords.ClassMgr.listSentimentWordses(wsite);
+    Iterator <SentimentWords> itSentimentWords=SentimentWords.ClassMgr.listSentimentWordses(wsite); 
     while(itSentimentWords.hasNext())
     {
         cont++;
@@ -119,7 +120,7 @@ private static String getRootWord(String word)
             //int startOffset = offsetAttribute.startOffset();
             //int endOffset = offsetAttribute.endOffset();
             String term = charTermAttribute.toString();
-            System.out.println("term Jorge:"+term);
+            //System.out.println("term Jorge:"+term);
             return term;
         }
     }catch(Exception e){ e.printStackTrace();}
