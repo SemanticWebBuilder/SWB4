@@ -162,6 +162,10 @@ public class SWBSocialUtil implements SWBAppObject {
     @Override
     public void init() {
         try{
+        CONFIG_WEBSITE=SWBContext.getGlobalWebSite();   
+        
+        System.out.println("Se carga Sitio Global:"+CONFIG_WEBSITE);
+            
         //System.out.println("Init de SWBSocialUtil-Jorge");
         //Carga Valores a ArrayList
         aDoubles.add("b");
@@ -232,9 +236,6 @@ public class SWBSocialUtil implements SWBAppObject {
         System.out.println("Cargó archivo swbSocial.properties:"+props);
         
         
-        CONFIG_WEBSITE=SWBContext.getGlobalWebSite(); 
-        
-            
       }catch(Exception e){
           System.out.println("Error:"+e.getMessage());
           log.error(e);
@@ -284,10 +285,12 @@ public class SWBSocialUtil implements SWBAppObject {
     //Carga las palabras sentimentales a memoría
     public static void loadSentimentWords()
     {
+        System.out.println("Entra a loadSentimentWords-1");
         Iterator<SentimentWords> itSentWords=SentimentWords.ClassMgr.listSentimentWordses(SWBSocialUtil.getConfigWebSite());
         while(itSentWords.hasNext())
         {
             SentimentWords sentWord=itSentWords.next();
+            System.out.println("Entra a loadSentimentWords-2:"+sentWord);
             aSentimentWords.add(sentWord.getId());
         }
     }
@@ -926,7 +929,7 @@ public class SWBSocialUtil implements SWBAppObject {
                 //System.out.println("word Fonematizada:"+word2Find);
                 //SentimentWords sentimentalWordObj=SentimentWords.ClassMgr.getSentimentWords(word2Find, socialAdminSite);
                 if(aSentimentWords.contains(word2Find)) //La palabra en cuestion ha sido encontrada en la BD
-                {
+                {   
                     SentimentWords sentimentalWordObj=SentimentWords.ClassMgr.getSentimentWords(word2Find, SWBSocialUtil.getConfigWebSite());
                     //System.out.println("Palabra Encontrada:"+word2Find);
                     wordsCont++;

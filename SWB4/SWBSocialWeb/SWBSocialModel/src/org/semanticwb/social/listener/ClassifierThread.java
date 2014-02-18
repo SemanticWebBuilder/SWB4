@@ -9,11 +9,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.WebSite;
 import org.semanticwb.social.ExternalPost;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.Stream;
-import org.semanticwb.social.util.SWBSocialUtil;
 import org.semanticwb.social.util.SendPostThread;
 
 /**
@@ -79,8 +77,6 @@ public class ClassifierThread extends java.lang.Thread {
                 if(socialNetwork!=null && stream!=null && externalPost.getCreatorId()!=null && externalPost.getPostId()!=null && externalPost.getSocialNetwork()!=null)
                 {
                     new SentimentalDataClassifier(externalPost, stream, socialNetwork, classifyGeoLocation);
-                }else{
-                    System.out.println("NO MANCHESSSS/socialNetwork:"+socialNetwork+",NET2:"+externalPost.getSocialNetwork());
                 }
             }
           }

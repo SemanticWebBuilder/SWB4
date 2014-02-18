@@ -123,10 +123,6 @@ public class SentimentalDataClassifier {
      * así como la intensidad, eso en este momento, talvez se requiera realizar mas clasificaciones posteriormente.
      */
     private void initAnalysis() {
-        if(externalPost.getCreatorId()==null || externalPost.getCreatorId().isEmpty()) {
-            System.out.println("VIENE NULO UN EXTERNAL POST");
-            return;
-        }
         long tini = System.currentTimeMillis();
         //Normalizo
         String externalString2Clasify_TMP = externalString2Clasify;
@@ -267,7 +263,7 @@ public class SentimentalDataClassifier {
          System.out.println("SentimentalData../sentimentalTweetValueType:"+sentimentalTweetValueType);
          System.out.println("SentimentalData../promIntensityValue:"+promIntensityValue);
          System.out.println("SentimentalData../intensityTweetValueType:"+intensityTweetValueType);
-         */
+        */
 
         //////////////////////////////////ESTO (PARA ABAJO) SI FUNCIONA BIEN ------10 - Julio - 2013//////////////////////////////////
         boolean filterPositives = stream.isFilterSentimentalPositive();
@@ -504,14 +500,14 @@ public class SentimentalDataClassifier {
                     }
                     if(post.getPostInSocialNetworkUser()==null)
                     {
-                        System.out.println("VA A ELIMINAR POSTIN...NO USER:"+post);
+                        System.out.println("VA A ELIMINAR POSTIN...SIN USER:"+post);
                         post.remove();
                     }
                 }
             }
         }
         long tfin = System.currentTimeMillis() - tini;
-        //System.out.println("\n<!--Total Time to Classify: " + tfin + "ms - SWBSocial--> ");
+        System.out.println("\n<!--Total Time to Classify: " + tfin + "ms - SWBSocial--> ");
     }
 
     /*
