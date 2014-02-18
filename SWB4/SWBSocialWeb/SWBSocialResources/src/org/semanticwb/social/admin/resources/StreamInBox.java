@@ -1188,7 +1188,7 @@ public class StreamInBox extends GenericResource {
                 } else {
                     createCell(cellStyle, wb, troww, 3, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "---" );
                 }
-                createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getPi_created(), lang) );
+                createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getPi_createdInSocialNet(), lang) );
 
                 String path = "";
 
@@ -1879,7 +1879,7 @@ public class StreamInBox extends GenericResource {
            query+=
            "where {\n" +
            "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "  }\n";
 
            if(!isCount)
@@ -1917,7 +1917,7 @@ public class StreamInBox extends GenericResource {
            "where {\n" +
            "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
            "  ?postUri social:msg_Text ?msgText. \n" +       
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "  FILTER regex(?msgText, \""+word+"\", \"i\"). " + 
            "  }\n";
 
@@ -1958,7 +1958,7 @@ public class StreamInBox extends GenericResource {
            "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n" +      
            "  ?postInSocialNetUsr social:snu_name ?userName. \n" + 
            "  FILTER regex(?userName, \""+word+"\", \"i\"). \n" + 
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "  }\n";
 
            if(!isCount)
@@ -1998,7 +1998,7 @@ public class StreamInBox extends GenericResource {
            query+=
            "where {\n" +
            "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:pi_created ?postInCreated." + "\n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n" +
            "   OPTIONAL { " + "\n" +
            "        ?postUri social:postShared ?postShared. " + "\n" +
            "   } "  + "\n" +
@@ -2050,7 +2050,7 @@ public class StreamInBox extends GenericResource {
            "where {\n" +
            "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
            "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n" + 
-           "  ?postUri social:pi_created ?postInCreated." + "\n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n" +
            "   OPTIONAL { " + "\n" +
            "        ?postInSocialNetUsr social:followers ?userFollowers. " + "\n" +
            "   } "  + "\n" +
@@ -2102,7 +2102,7 @@ public class StreamInBox extends GenericResource {
            "where {\n" +
            "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
            "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n" + 
-           "  ?postUri social:pi_created ?postInCreated." + "\n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n" +
            "   OPTIONAL { " + "\n" +
            "        ?postInSocialNetUsr social:friends ?userFriends. " + "\n" +
            "   } "  + "\n" +
@@ -2154,7 +2154,7 @@ public class StreamInBox extends GenericResource {
            "where {\n" +
            "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
            "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n" + 
-           "  ?postUri social:pi_created ?postInCreated." + "\n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n" +
            "   OPTIONAL { " + "\n" +
            "        ?postInSocialNetUsr social:snu_klout ?userKlout. " + "\n" +
            "   } "  + "\n" +
@@ -2207,7 +2207,7 @@ public class StreamInBox extends GenericResource {
            "where {\n" +
            "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
            "  ?postUri social:postInSocialNetworkUser <"+socialNetUser.getURI()+">." +"\n" +
-           "  ?postUri social:pi_created ?postInCreated." + "\n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n" +
            "  }\n";
 
            if(!isCount)
@@ -2245,7 +2245,7 @@ public class StreamInBox extends GenericResource {
            "where {\n" +
            "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
            "  ?postUri social:pi_type ?postInType. \n" +
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "  }\n";
 
            if(!isCount)
@@ -2290,7 +2290,7 @@ public class StreamInBox extends GenericResource {
            "where {\n" +
            "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
            "  ?postUri social:postInSocialNetwork ?postInSocialNet. \n" +
-           "  ?postUri social:pi_created ?postInCreated. \n" +        
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +        
            "  }\n";
 
            if(!isCount)
@@ -2333,7 +2333,7 @@ public class StreamInBox extends GenericResource {
            query+=
            "where {\n" +
            "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "OPTIONAL { \n" +
                 "?postUri social:socialTopic ?socialTopic." + "\n" + 
            "         }" +
@@ -2398,6 +2398,7 @@ public class StreamInBox extends GenericResource {
                   query+="LIMIT "+limit;   
                 }
            }
+           System.out.println("En getPostInCreated_Query:"+query);
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
@@ -2423,7 +2424,7 @@ public class StreamInBox extends GenericResource {
            "where {\n" +
            "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
            "  ?postUri social:postSentimentalType ?postSentimentalType." + "\n" + 
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "  }\n";
 
            if(!isCount)
@@ -2467,7 +2468,7 @@ public class StreamInBox extends GenericResource {
            "where {\n" +
            "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
            "  ?postUri social:postIntesityType ?postIntensityType." + "\n" + 
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "  }\n";
 
            if(!isCount)
@@ -2510,7 +2511,7 @@ public class StreamInBox extends GenericResource {
            query+=
            "where {\n" +
            "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "  OPTIONAL { \n" +
            "  ?postUri social:postSentimentalEmoticonType ?feelingEmot." + "\n" + 
            "     }" +
@@ -2558,7 +2559,7 @@ public class StreamInBox extends GenericResource {
            "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
            "  ?postUri social:postInSocialNetworkUser ?postInuserNetwork." + "\n" + 
            "  ?postInuserNetwork social:snu_name ?userName." + "\n" + 
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "  }\n";
 
            if(!isCount)
@@ -2601,7 +2602,7 @@ public class StreamInBox extends GenericResource {
            query+=
            "where {\n" +
            "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "  OPTIONAL { \n" +
            "  ?postUri social:postPlace ?postInPlace." + "\n" + 
            "     }" +
@@ -2649,7 +2650,7 @@ public class StreamInBox extends GenericResource {
            "where {\n" +
            "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
            "  ?postUri social:isPrioritary ?isPriority." + "\n" + 
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "  }\n";
 
            if(!isCount)
@@ -2669,6 +2670,7 @@ public class StreamInBox extends GenericResource {
               query+="LIMIT "+limit;   
             }
            }
+           System.out.println("getPostInPriority_Query/query:"+query);
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
