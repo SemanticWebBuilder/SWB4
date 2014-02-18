@@ -1339,6 +1339,17 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     out.println("<script type=\"text/javascript\">");
                     out.println("  window.close();");
                     out.println("</script>");
+                    
+                    String app_token_url = "https://graph.facebook.com/oauth/access_token?" + "client_id=" + getAppKey() + "&client_secret=" + getSecretKey() + "&grant_type=client_credentials";
+                    String appToken = Facebook.graphRequest(app_token_url, request.getHeader("user-agent"));
+                    System.out.println("APPTOKEN:" + appToken);
+                    if(appToken != null){
+                        if(appToken.startsWith("access_token")){
+                            appToken = appToken.substring(appToken.indexOf("=")+1);
+                            System.out.println("THA APP TOKEN-->" + appToken);
+                            setAppAccessToken(appToken);
+                        }
+                    }
                 } catch (JSONException e) {
                     log.error(e);
                     request.setAttribute("msg", "hubo problemas. contacta a tu administrador para revisar el visor de errores");
@@ -1844,8 +1855,21 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     }
     
     private String getFacebookThird_party_id(String facebookUserId)
-    {
-        return null;
+    {        
+        String thirdPID = null;
+        String thirdpid_url = "https://graph.facebook.com/" + facebookUserId + "?fields=third_party_id&access_token=" + getAppAccessToken();
+        try{            
+            String thirdPartyID = Facebook.graphRequest(thirdpid_url, null);
+            if(thirdPartyID != null){
+                JSONObject response = new JSONObject(thirdPartyID);
+                if(!response.isNull("third_party_id")){
+                    thirdPID = response.getString("third_party_id");
+                }                
+            }
+        }catch(Exception e){
+            log.error("Problem getting Third Party ID for :" + thirdpid_url);
+        }
+        return thirdPID;
     }
     
     
