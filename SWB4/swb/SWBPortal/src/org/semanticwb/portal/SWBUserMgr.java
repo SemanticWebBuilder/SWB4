@@ -224,6 +224,9 @@ public class SWBUserMgr
             {
                 sub.getPrincipals().add(ret);
             }catch(Exception e){log.error(e);}
+            
+            if(language==null)language="es"; //si todo fallo usamos español por efecto
+            
             ret.setLanguage(language); 
             //validar dispositivo
             Device dev=getDevice(request, site);
