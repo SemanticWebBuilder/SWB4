@@ -94,6 +94,15 @@ public class YoutubeWall extends GenericResource{
         PrintWriter out = response.getWriter();
         String objUri = (String) request.getParameter("suri");
         String contentTabId = (String) request.getParameter("contentTabId");
+        Youtube youtube = (Youtube) SemanticObject.createSemanticObject(objUri).createGenericInstance();
+        if(!youtube.isSn_authenticated() || youtube.getAccessToken() == null){
+            out.println("<div id=\"configuracion_redes\">");
+            out.println("<div id=\"autenticacion\">");
+            out.println("<p>      La cuenta no ha sido autenticada correctamente</p>");
+            out.println("</div>");
+            out.println("</div>");
+            return;
+        }
         //System.out.println("suriReceived in YoutubeWall:" + objUri);
         if(contentTabId == null){//The resource is loaded for the first time and it needs to display the tabs
             String jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/youtubeTabs1.jsp";

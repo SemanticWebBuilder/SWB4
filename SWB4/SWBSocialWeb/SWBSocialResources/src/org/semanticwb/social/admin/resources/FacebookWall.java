@@ -97,7 +97,16 @@ public class FacebookWall extends GenericResource {
         SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
         Facebook facebookBean = (Facebook) semanticObject.createGenericInstance();
         String contentTabId = request.getParameter("contentTabId");
-
+        PrintWriter out = response.getWriter();
+        
+        if(!facebookBean.isSn_authenticated() || facebookBean.getAccessToken() == null){
+            out.println("<div id=\"configuracion_redes\">");
+            out.println("<div id=\"autenticacion\">");
+            out.println("<p>      La cuenta no ha sido autenticada correctamente</p>");
+            out.println("</div>");
+            out.println("</div>");
+            return;
+        }
         if (contentTabId == null) {
             String jspResponse = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialNetworks/facebookTabs1.jsp";
             RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
