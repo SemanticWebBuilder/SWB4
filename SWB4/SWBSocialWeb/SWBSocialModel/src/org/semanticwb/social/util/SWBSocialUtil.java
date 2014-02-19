@@ -230,12 +230,9 @@ public class SWBSocialUtil implements SWBAppObject {
         loadSentimentWords();
         
        
-        System.out.println("Va a cargar archivo swbSocial.properties");
-        
         props = SWBUtils.TEXT.getPropertyFile("/org/semanticwb/social/properties/swbSocial.properties");
         
         System.out.println("Cargó archivo swbSocial.properties:"+props);
-        
         
       }catch(Exception e){
           System.out.println("Error:"+e.getMessage());
@@ -286,12 +283,11 @@ public class SWBSocialUtil implements SWBAppObject {
     //Carga las palabras sentimentales a memoría
     public static void loadSentimentWords()
     {
-        System.out.println("Entra a loadSentimentWords-1");
         Iterator<SentimentWords> itSentWords=SentimentWords.ClassMgr.listSentimentWordses(SWBSocialUtil.getConfigWebSite());
         while(itSentWords.hasNext())
         {
             SentimentWords sentWord=itSentWords.next();
-            System.out.println("Entra a loadSentimentWords-2:"+sentWord);
+            //System.out.println("Entra a loadSentimentWords-2:"+sentWord);
             aSentimentWords.add(sentWord.getId());
         }
     }
