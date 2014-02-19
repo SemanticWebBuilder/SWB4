@@ -958,6 +958,6 @@ public class User extends UserBase implements Principal
         UserFilter pfilter = getUserFilter();
         if(pfilter==null)return true;
         else return pfilter.evalFilterMap(topic);
-    }    
+    }     
     
 }
