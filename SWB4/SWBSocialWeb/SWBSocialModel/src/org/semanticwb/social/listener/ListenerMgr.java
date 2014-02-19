@@ -218,17 +218,29 @@ public class ListenerMgr implements SWBAppObject {
                         {
                             System.out.println("Ejecuta Red Social/ListenAlive:"+socialNet.getId());
                             KeepAliveListenerable listenAliveableNet=(KeepAliveListenerable)socialNet;
-                            listenAliveableNet.listenAlive(stream);
+                            try{
+                                listenAliveableNet.listenAlive(stream);
+                            }catch(Exception e){
+                                log.error(e);
+                            }
                         }else   //De lo contrario, si se envía a que escuche
                         {
                             System.out.println("Ejecuta Red Social/Listen:"+socialNet.getId());
-                            socialNet.listen(stream);
+                            try{
+                                socialNet.listen(stream);
+                            }catch(Exception e){
+                                log.error(e);
+                            }
                             isThereNoListenAliveNets=true;
                         }
                     }else   //De lo contrario, si se envía a que escuche
                     {
                         System.out.println("Ejecuta Red Social/Listen:"+socialNet.getId());
-                        socialNet.listen(stream);
+                        try{
+                            socialNet.listen(stream);
+                        }catch(Exception e){
+                            log.error(e);
+                        }
                         isThereNoListenAliveNets=true;
                     }
                 }
