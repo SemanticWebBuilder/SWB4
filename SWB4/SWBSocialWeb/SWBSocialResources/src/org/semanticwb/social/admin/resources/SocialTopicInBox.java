@@ -1320,7 +1320,7 @@ public class SocialTopicInBox extends GenericResource {
                     } else {
                         createCell(cellStyle,wb, troww, 3, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "---");
                     }
-                    createCell(cellStyle,wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getPi_created()==null?new Date():postIn.getPi_created(), lang));
+                    createCell(cellStyle,wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getPi_createdInSocialNet()==null?new Date():postIn.getPi_createdInSocialNet(), lang));
 
                     if (postIn.getPostSentimentalType() == 0) {
                         createCell(cellStyle,wb, troww, 5, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "----");
@@ -1655,7 +1655,7 @@ public class SocialTopicInBox extends GenericResource {
            query+=
            "where {\n" +
            "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "  }\n";
             WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
             query=SWBSocial.executeQuery(query, wsite);
@@ -1680,7 +1680,7 @@ public class SocialTopicInBox extends GenericResource {
            query+=
            "where {\n" +
            "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "  }\n";
 
            if(!isCount)
@@ -1718,7 +1718,7 @@ public class SocialTopicInBox extends GenericResource {
            "where {\n" +
            "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
            "  ?postUri social:msg_Text ?msgText. \n" +       
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "  FILTER regex(?msgText, \""+word+"\", \"i\"). " + 
            "  }\n";
 
@@ -1759,7 +1759,7 @@ public class SocialTopicInBox extends GenericResource {
            "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n" +      
            "  ?postInSocialNetUsr social:snu_name ?userName. \n" + 
            "  FILTER regex(?userName, \""+word+"\", \"i\"). \n" + 
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "  }\n";
 
            if(!isCount)
@@ -1800,7 +1800,7 @@ public class SocialTopicInBox extends GenericResource {
            "where {\n" +
            "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
            "  ?postUri social:postInSocialNetworkUser <"+socialNetUser.getURI()+">." +"\n" +
-           "  ?postUri social:pi_created ?postInCreated." + "\n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n" +
            "  }\n";
 
            if(!isCount)
@@ -1840,7 +1840,7 @@ public class SocialTopicInBox extends GenericResource {
            query+=
            "where {\n" +
            "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
-           "  ?postUri social:pi_created ?postInCreated." + "\n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n" +
            "   OPTIONAL { " + "\n" +
            "        ?postUri social:postShared ?postShared. " + "\n" +
            "   } "  + "\n" +
@@ -1892,7 +1892,7 @@ public class SocialTopicInBox extends GenericResource {
            "where {\n" +
            "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
            "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n" + 
-           "  ?postUri social:pi_created ?postInCreated." + "\n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n" +
            "   OPTIONAL { " + "\n" +
            "        ?postInSocialNetUsr social:followers ?userFollowers. " + "\n" +
            "   } "  + "\n" +
@@ -1944,7 +1944,7 @@ public class SocialTopicInBox extends GenericResource {
            "where {\n" +
            "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
            "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n" + 
-           "  ?postUri social:pi_created ?postInCreated." + "\n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n" +
            "   OPTIONAL { " + "\n" +
            "        ?postInSocialNetUsr social:friends ?userFriends. " + "\n" +
            "   } "  + "\n" +
@@ -1996,7 +1996,7 @@ public class SocialTopicInBox extends GenericResource {
            "where {\n" +
            "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
            "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n" + 
-           "  ?postUri social:pi_created ?postInCreated." + "\n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n" +
            "   OPTIONAL { " + "\n" +
            "        ?postInSocialNetUsr social:snu_klout ?userKlout. " + "\n" +
            "   } "  + "\n" +
@@ -2046,7 +2046,7 @@ public class SocialTopicInBox extends GenericResource {
            "where {\n" +
            "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
            "  ?postUri social:pi_type ?postInType. \n" +
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "  }\n";
 
            if(!isCount)
@@ -2091,7 +2091,7 @@ public class SocialTopicInBox extends GenericResource {
            "where {\n" +
            "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
            "  ?postUri social:postInSocialNetwork ?postInSocialNet. \n" +
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "  }\n";
 
            if(!isCount)
@@ -2135,7 +2135,7 @@ public class SocialTopicInBox extends GenericResource {
            query+=
            "where {\n" +
            "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "  OPTIONAL { \n" +
            "  ?postUri social:postInStream ?piStream. \n" +
            "         }" +                           
@@ -2182,7 +2182,7 @@ public class SocialTopicInBox extends GenericResource {
            query+=
            "where {\n" +
            "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
-           "  ?postUri social:pi_created ?postInCreated." + "\n" + 
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n" + 
            "  }\n";
 
            if(!isCount)
@@ -2225,7 +2225,7 @@ public class SocialTopicInBox extends GenericResource {
            "where {\n" +
            "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
            "  ?postUri social:postSentimentalType ?postSentimentalType." + "\n" + 
-           "  ?postUri social:pi_created ?postInCreated." + "\n" + 
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n" + 
            "  }\n";
 
            if(!isCount)
@@ -2269,7 +2269,7 @@ public class SocialTopicInBox extends GenericResource {
            "where {\n" +
            "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
            "  ?postUri social:postIntesityType ?postIntensityType." + "\n" + 
-           "  ?postUri social:pi_created ?postInCreated." + "\n" + 
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n" + 
            "  }\n";
 
            if(!isCount)
@@ -2312,7 +2312,7 @@ public class SocialTopicInBox extends GenericResource {
            query+=
            "where {\n" +
            "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "  OPTIONAL { \n" +
            "  ?postUri social:postSentimentalEmoticonType ?feelingEmot." + "\n" + 
            "         }" + 
@@ -2360,7 +2360,7 @@ public class SocialTopicInBox extends GenericResource {
            "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
            "  ?postUri social:postInSocialNetworkUser ?postInuserNetwork." + "\n" + 
            "  ?postInuserNetwork social:snu_name ?userName." + "\n" + 
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "  }\n";
 
            if(!isCount)
@@ -2403,7 +2403,7 @@ public class SocialTopicInBox extends GenericResource {
            query+=
            "where {\n" +
            "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "  OPTIONAL { \n" +
            "  ?postUri social:postPlace ?postInPlace." + "\n" + 
            "         }" +         
@@ -2451,7 +2451,7 @@ public class SocialTopicInBox extends GenericResource {
            "where {\n" +
            "  ?postUri social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
            "  ?postUri social:isPrioritary ?isPriority." + "\n" + 
-           "  ?postUri social:pi_created ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
            "  }\n";
 
            if(!isCount)
@@ -2602,7 +2602,7 @@ public class SocialTopicInBox extends GenericResource {
 
         //created
         out.println("<td>");
-        out.println(SWBUtils.TEXT.getTimeAgo(postIn.getPi_created()==null?new Date():postIn.getPi_created(), lang)); 
+        out.println(SWBUtils.TEXT.getTimeAgo(postIn.getPi_createdInSocialNet()==null?new Date():postIn.getPi_createdInSocialNet(), lang)); 
         out.println("</td>");
 
         //Sentiment
