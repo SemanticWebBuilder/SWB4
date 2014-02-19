@@ -45,6 +45,7 @@ public class CodeGeneratorProcess
         SWBPlatform.createInstance();
         //SWBPlatform.getSemanticMgr().initializeDB();
         SWBPlatform.getSemanticMgr().addBaseOntology(base+"/../../../web/WEB-INF/owl/swb.owl");
+        System.out.println(base+"/../../../web/WEB-INF/owl/swb.owl");
         SWBPlatform.getSemanticMgr().addBaseOntology(base+"/../../../../swbp/WEB-INF/owl/ext/swp.owl");
         SWBPlatform.getSemanticMgr().loadBaseVocabulary();
         //SWBPlatform.getSemanticMgr().loadDBModels();
