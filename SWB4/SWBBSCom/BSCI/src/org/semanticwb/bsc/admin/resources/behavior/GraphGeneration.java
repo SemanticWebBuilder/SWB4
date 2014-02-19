@@ -6,10 +6,11 @@ package org.semanticwb.bsc.admin.resources.behavior;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.bsc.accessory.Grapher;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.catalogs.Format;
 import org.semanticwb.bsc.element.Indicator;
@@ -25,131 +26,148 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
 /**
- *
+ * Genera el c&oacute;digo HTML para presentar una gr&aacute;fica con los datos 
+ * de las series activas del indicador cuyo uri se recibe.
  * @author ana.garcias
  */
 public class GraphGeneration extends GenericResource {
 
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        //super.doView(request, response, paramsRequest); //To change body of generated methods, choose Tools | Templates.
+    public void doView(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+        
         PrintWriter out = response.getWriter();
         String suri = request.getParameter("suri");
         SemanticObject semanticObj = SemanticObject.createSemanticObject(suri);
+        //Colores a utilizar para cada serie
+        String[] colors = {"#009900", "#0066CC", "#9933FF", "#CC0033", "#FF6633",
+                           "#FFFF00", "#33FF66", "#6666FF", "#00CCFF", "#990000",
+                           "#CC33FF", "#FF99FF", "#996666", "#0000FF", "#6600FF",
+                           "#CCCC66", "#ff0000", "#1F77B4", "#50EE45", "#FF6525"};
+        StringBuilder output = new StringBuilder(512);
 
         if (semanticObj != null) {
             GenericObject genericObj = semanticObj.createGenericInstance();
             if (genericObj instanceof Indicator) {
-                //Recuperar los datos del graficador
-                Iterator<Grapher> itGraph = new GenericIterator<Grapher>(
-                        semanticObj.listObjectProperties(Indicator.bsc_hasGrapher));
-                //Valida que tenga gurdados datos de configuracion de grafica
-                if (itGraph.hasNext()) {
-                    Grapher grapher = itGraph.next();
-                    Series serieGraph = grapher.getSerieGraph();
-                    Series serieGraph2 = grapher.getSerieGraph2();
-                    //Valida que la serie guardada este activa
-                    if (serieGraph.isActive() && serieGraph.isValid() && serieGraph2.isActive() && serieGraph2.isValid()) {
-                        Iterator<Period> measurablesPeriods1 = null;
-                        Iterator<Period> measurablesPeriods2 = null;
-                        try {
-                            measurablesPeriods1 = serieGraph.getIndicator().listMeasurablesPeriods();
-                            measurablesPeriods2 = serieGraph2.getIndicator().listMeasurablesPeriods();
-                        } catch (UndefinedFrequencyException ex) {
-                            out.println("<div class=\"swbform\">");
-                            out.println("<fieldset>");
-                            out.println("</fieldset>");
-                            out.println("<p>" + paramsRequest.getLocaleString("msgUndefinedFrequencyException") + "</p>");
-                            out.println("</div>");
-                            out.flush();
-                            out.close();
-                        } catch (InappropriateFrequencyException ex) {
-                            out.println("<div class=\"swbform\">");
-                            out.println("<fieldset>");
-                            out.println("</fieldset>");
-                            out.println("<p>" + paramsRequest.getLocaleString("msgInappropriateFrequencyException") + "</p>");
-                            out.println("</div>");
-                            out.flush();
-                            out.close();
+                Indicator indicator = (Indicator) genericObj;
+                Iterator<Period> measurablePeriods = null;
+                GenericIterator<Series> seriesIt = indicator.listSerieses();
+                List<Period> periodsList = new java.util.ArrayList<Period>();
+                StringBuilder usedColors = new StringBuilder(32);
+                
+                try {
+                    measurablePeriods = indicator.listMeasurablesPeriods();
+                    if (measurablePeriods == null || !measurablePeriods.hasNext()) {
+                        List<Period> lperiods = indicator.listValidPeriods();
+                        Collections.sort(lperiods);
+                        measurablePeriods = lperiods.iterator();
+                    }
+                    if (measurablePeriods != null) {
+                        while (measurablePeriods.hasNext()) {
+                            periodsList.add(measurablePeriods.next());
                         }
-                        Period period, period2;
-                        Format formatSerie1 = serieGraph.getFormat();
-                        Format formatSerie2 = serieGraph2.getFormat();
-                        //Valida que la serie1 y la serie2 contengan periodos asignados
-                        if (measurablesPeriods1.hasNext() && measurablesPeriods2.hasNext()) {
-                            //Genera la grafica
-                            out.println("<div id=\"chart1\" class=\'with-3d-shadow with-transitions\'>");
-                            out.println("<h4 align=\"center\">" + grapher.getTitleGraph());
-                            out.println("</h4>");
-                            out.println("<svg></svg>");                      
-                            out.println("</div>");
-                            out.println("<script type=\"text/javascript\">");
-                            out.println("long_short_data = [");
-                            out.println("{");
-                            if(formatSerie1 != null){
-                            out.println("key: \"" + grapher.getSerieGraph().getTitle() + " en " + formatSerie1.getTitle() + "\" ,");}
-                            else{out.println("key: \"" + grapher.getSerieGraph().getTitle() + "\" ,");}
-                            out.println("color: '#d62728',");
-                            out.println("values: [");
-                            //Recorre los periodos y valores de la serie1 para graficarlos
-                            while (measurablesPeriods1.hasNext()) {
-                                period = measurablesPeriods1.next();
-                                Measure measure = serieGraph.getMeasure(period);
-                                out.println("{");
-                                out.println("\"label\" : \"" + period.getTitle() + "\" ,");
-                                try {
-                                    out.println("\"value\" : " + measure.getValue() + "");
-                                } catch (Exception e) {
-                                    out.println("\"value\" : 0.0 ");
+                    }
+                } catch (UndefinedFrequencyException ex) {
+                    out.println("<div class=\"swbform\"><fieldset></fieldset><p>");
+                    out.println(paramsRequest.getLocaleString("msgUndefinedFrequencyException"));
+                    out.println("</p></div>");
+                    out.flush();
+                    out.close();
+                } catch (InappropriateFrequencyException ex) {
+                    out.println("<div class=\"swbform\"><fieldset></fieldset><p>");
+                    out.println(paramsRequest.getLocaleString("msgInappropriateFrequencyException"));
+                    out.println("</p></div>");
+                    out.flush();
+                    out.close();
+                }
+                //Codigo HTML para generar la grafica
+                output.append("<div id=\"graphContainer\">\n");
+                output.append("   <div id=\"chart1\" class=\'with-3d-shadow with-transitions\'>\n");
+                output.append("       <h4 align=\"center\">");
+                output.append(indicator.getTitle());
+                output.append("       </h4>\n");
+                output.append("       <div>\n");
+                output.append("         <input type=\"radio\" name=\"graphType\" id=\"hGraph\" value=\"1\" onclick=\"javascript:showGraph(this);\" checked=\"checked\"><label for=\"hGraph\">Horizontal</label>\n");
+                output.append("         <input type=\"radio\" name=\"graphType\" id=\"vGraph\" value=\"2\" onclick=\"javascript:showGraph(this);\"><label for=\"vGraph\">Vertical</label>\n");
+                output.append("       </div>\n");
+                output.append("       <svg></svg>\n");                      
+                output.append("   </div>\n");
+                output.append("<script type=\"text/javascript\">\n");
+                output.append("long_short_data = [\n");
+                short seriesCount = 0;
+                //Se recorren todas las series asociadas al indicador
+                while (seriesIt != null && seriesIt.hasNext()) {
+                    Series graphSeries = seriesIt.next();
+                    //Valida que la serie este activa
+                    if (graphSeries.isActive() && graphSeries.isValid()) {
+                        Format seriesFormat = graphSeries.getFormat();
+                        //Valida que la serie contenga periodos asignados
+                        if (periodsList.size() > 0) {
+                            if (seriesCount > 0) {
+                                output.append(",\n");  //separador de series
+                            }
+                            output.append("{");
+                            //Se coloca el identificador de cada seria
+                            if (seriesFormat != null) {
+                                output.append("  key: \"");
+                                output.append(graphSeries.getTitle());
+                                output.append(" en ");
+                                output.append(seriesFormat.getTitle());
+                                output.append("\" ,\n");
+                            } else {
+                                output.append("  key: \"");
+                                output.append(graphSeries.getTitle());
+                                output.append("\" ,\n");
+                            }
+                            /*Lo mantengo por si al final la seleccion aleatoria de colores se decide eliminar
+                            short colorIndex = 0;
+                            if (seriesCount < colors.length) {
+                                colorIndex = seriesCount;
+                            } else {
+                                colorIndex = (short) (seriesCount % colors.length);
+                            }*/
+                            //Se selecciona el color de la serie de manera aleatoria
+                            short colorIndex = (short) (Math.random() * colors.length);
+                            boolean colorAssigned = false;
+                            while (!colorAssigned) {
+                                if (usedColors.indexOf(colorIndex + ",") == -1) {
+                                    usedColors.append(colorIndex);
+                                    usedColors.append(",");
+                                    colorAssigned = true;
+                                } else {
+                                    colorIndex = (short) (Math.random() * colors.length);
                                 }
-                                out.println("},");
-                                }
-                                out.println(" ]");
-                                out.println("},");
-                                //segunda serie a graficar
-                                out.println("{");
-                                if(formatSerie2 != null){
-                                out.println("key: \"" + grapher.getSerieGraph2().getTitle() + " en " + formatSerie2.getTitle()+ "\" ,");}
-                                else{out.println("key: \"" + grapher.getSerieGraph2().getTitle() + "\" ,");}
-                                out.println("color: '#1f77b4',");
-                                out.println("values: [");
-                                //Recorre los periodos y valores de la serie2 para graficarlos
-                                while (measurablesPeriods2.hasNext()) {
-                                period2 = measurablesPeriods2.next();
-                                Measure measure2 = serieGraph2.getMeasure(period2);
-                                out.println("{");
-                                out.println("\"label\" : \"" + period2.getTitle() + "\" ,");
-                                try {
-                                    out.println("\"value\" : " + measure2.getValue() + "");
-                                } catch (Exception e) {
-                                    out.println("\"value\" : 0.0 ");
-                                }
-                                out.println("},");
-                                }
-                                
-                                out.println("]");
-                                out.println(" }");
-                                out.println("];");
-                                out.println("var chart;");
-                                out.println("nv.addGraph(function() {");
-                                out.println("chart = nv.models.multiBarHorizontalChart()");
-                                out.println(".x(function(d) { return d.label })");
-                                out.println(".y(function(d) { return d.value })");
-                                out.println(".margin({top: 30, right: 20, bottom: 50, left: 175})");
-                                out.println(".transitionDuration(250)");
-                                out.println(".showControls(false);");
-                                out.println("chart.yAxis");
-                                out.println(".tickFormat(d3.format(',.2f'));");
-                                out.println("d3.select('#chart1 svg')");
-                                out.println(".datum(long_short_data)");
-                                out.println(".call(chart);");
-                                out.println("nv.utils.windowResize(chart.update);");
-                                out.println("return chart;");
-                                out.println("});");
-                                out.println("</script>");
+                            }
                             
-
-                        } else {
+                            //Se coloca el color a utilizar para la serie
+                            output.append("  color: '");
+                            output.append(colors[colorIndex]);
+                            output.append("',\n");
+                            output.append("  values: [\n");
+                            
+                            int periodsCount = 0;
+                            //Recorre los periodos y valores de la serie para graficarlos
+                            for (Period period : periodsList) {
+                                Measure measure = graphSeries.getMeasure(period);
+                                if (periodsCount > 0) {
+                                    output.append(",\n");
+                                }
+                                output.append("    {");
+                                output.append("      \"label\" : \"");
+                                output.append(period.getTitle());
+                                output.append("\", ");
+                                try {
+                                    output.append("\"value\" : ");
+                                    output.append(measure.getValue());
+                                } catch (Exception e) {
+                                    output.append("\"value\" : 0.0 ");
+                                }
+                                output.append("    }");
+                                periodsCount++;
+                            }
+                            output.append("  ]");
+                            output.append("}");
+                        } else {//En caso de que no haya periodos
                             out.println("<div class=\"swbform\">");
                             out.println("<fieldset>");
                             out.println("</fieldset>");
@@ -158,28 +176,69 @@ public class GraphGeneration extends GenericResource {
                             out.flush();
                             out.close();
                         }
-                    } else {
-                        out.println("<div class=\"swbform\">");
-                        out.println("<fieldset>");
-                        out.println("</fieldset>");
-                        out.println("<p>" + paramsRequest.getLocaleString("msgNotSerieAct") + "</p>");
-                        out.println("</div>");
-                        out.flush();
-                        out.close();
+                        seriesCount++;
                     }
-                } else {
+                }
+                //En caso de que no haya series activas para el indicador
+                if (seriesCount == 0) {
                     out.println("<div class=\"swbform\">");
                     out.println("<fieldset>");
                     out.println("</fieldset>");
-                    out.println("<p>" + paramsRequest.getLocaleString("msgNotConfiguration") + "</p>");
+                    out.println("<p>" + paramsRequest.getLocaleString("msgNotSerieAct") + "</p>");
                     out.println("</div>");
                     out.flush();
                     out.close();
                 }
-
+                
+                //Se termina de armar el Javascript para la presentacion de la grafica
+                output.append("];\n");
+                output.append("var chart;\n");
+                output.append("var chart2;\n");
+                output.append("nv.addGraph(function() {\n");
+                output.append("  chart = nv.models.multiBarHorizontalChart()\n");
+                output.append("      .x(function(d) { return d.label })\n");
+                output.append("      .y(function(d) { return d.value })\n");
+                output.append("    .margin({top: 30, right: 20, bottom: 30, left: 125})\n");
+                output.append("    .transitionDuration(250)\n");
+                output.append("    .showControls(true);\n");
+                output.append("  chart.yAxis\n");
+                output.append("    .tickFormat(d3.format(',.2f'));\n");
+                output.append("  d3.select('#chart1 svg')\n");
+                output.append("    .datum(long_short_data)\n");
+                output.append("    .call(chart);\n");
+                output.append("  nv.utils.windowResize(chart.update);\n");
+                output.append("  return chart;\n");
+                output.append("});\n");
+                output.append("nv.addGraph(function() {\n");
+                output.append("  chart2 = nv.models.multiBarChart()\n");
+                output.append("      .x(function(d) { return d.label })\n");
+                output.append("      .y(function(d) { return d.value })\n");
+                output.append("      .transitionDuration(350)\n");
+                output.append("      .reduceXTicks(false)\n");   /*If 'false', every single x-axis tick label will be rendered.*/
+                output.append("      .rotateLabels(90)\n");      /*Angle to rotate x-axis labels.*/
+                output.append("      .showControls(true)\n");   /*Allow user to switch between 'Grouped' and 'Stacked' mode.*/
+                output.append("      .groupSpacing(0.1);\n");    /*Distance between each group of bars.*/
+                output.append("  chart2.yAxis\n");
+                output.append("      .tickFormat(d3.format(',.2f'));\n");
+                output.append("  return chart2;\n");
+                output.append("});\n");
+                output.append("  function showGraph(radioBtn) {\n");
+                output.append("    if (radioBtn.value == 1 && radioBtn.checked) {\n");
+                output.append("      d3.select('#chart1 svg g').remove();\n");
+                output.append("      d3.select('#chart1 svg')\n");
+                output.append("        .datum(long_short_data)\n");
+                output.append("        .call(chart);\n");
+                output.append("    } else if (radioBtn.value == 2 && radioBtn.checked) {\n");
+                output.append("      d3.select('#chart1 svg g').remove();\n");
+                output.append("      d3.select('#chart1 svg')\n");
+                output.append("        .datum(long_short_data)\n");
+                output.append("        .call(chart2);\n");
+                output.append("    }\n");
+                output.append("  }\n");
+                output.append("  </script>\n");
+                output.append("</div>\n");
+                out.println(output.toString());
             }
-
         }
-
     }
 }
