@@ -731,11 +731,11 @@ public class SentimentalDataClassifier {
                         } else {
                             country = SWBSocialUtil.Util.getMessageMapCountry(postIn.getLatitude(), postIn.getLongitude());
                         }
-                        //System.out.println("country en el que encuentra el mensaje:"+country);
+                        System.out.println("country en el que encuentra el mensaje:"+country);
                         if (country != null) {
                             //Busca en que estado del país encontrado se encuentra el mensaje.
                             CountryState countryState = SWBSocialUtil.Util.getMessageMapState(country, postIn.getLatitude(), postIn.getLongitude());
-                            //System.out.println("estado en el que encuentra el mensaje:"+countryState);
+                            System.out.println("estado en el que encuentra el mensaje:"+countryState+",Lat:"+postIn.getLatitude()+",lng:"+postIn.getLongitude());
                             if (countryState != null) {
                                 postIn.setGeoStateMap(countryState);
                             }
