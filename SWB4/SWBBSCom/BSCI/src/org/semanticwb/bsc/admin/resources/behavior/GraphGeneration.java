@@ -214,8 +214,9 @@ public class GraphGeneration extends GenericResource {
                 output.append("      .x(function(d) { return d.label })\n");
                 output.append("      .y(function(d) { return d.value })\n");
                 output.append("      .transitionDuration(350)\n");
-                output.append("      .reduceXTicks(false)\n");   /*If 'false', every single x-axis tick label will be rendered.*/
-                output.append("      .rotateLabels(90)\n");      /*Angle to rotate x-axis labels.*/
+                output.append("      .reduceXTicks(true)\n");   /*If 'false', every single x-axis tick label will be rendered.*/
+                //output.append("      .rotateLabels(90)\n");      /*Angle to rotate x-axis labels.*/
+                output.append("      .staggerLabels(true)\n");     /*Intercala etiquetas en el eje 1 arriba, 1 abajo.*/
                 output.append("      .showControls(true)\n");   /*Allow user to switch between 'Grouped' and 'Stacked' mode.*/
                 output.append("      .groupSpacing(0.1);\n");    /*Distance between each group of bars.*/
                 output.append("  chart2.yAxis\n");
