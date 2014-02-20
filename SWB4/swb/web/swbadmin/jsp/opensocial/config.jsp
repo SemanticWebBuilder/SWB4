@@ -392,7 +392,6 @@ Lenguaje:
 <br>
 
 <script type="text/javascript">
-    <!--
     function closeWindow()
     {
         this.location='<%=add%>';
@@ -450,6 +449,4 @@ Lenguaje:
            return c_numero;
        }
     }
-
-    -->
 </script>
