@@ -23,6 +23,7 @@
 package org.semanticwb.portal.indexer.parser;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Searchable;
@@ -76,8 +77,11 @@ public class WebPageParser extends GenericParser {
      * {@link Searchable}.
      */
     @Override
-    public String getIndexLastUpdated(Searchable gen) {
-        return ((WebPage)gen).getUpdated().toString();
+    public String getIndexLastUpdated(Searchable gen) 
+    {
+        Date date=((WebPage)gen).getUpdated();
+        if(date!=null) return date.toString();
+        else return "";
     }
 
     //************ Métodos que no afectan la información del índice ************
