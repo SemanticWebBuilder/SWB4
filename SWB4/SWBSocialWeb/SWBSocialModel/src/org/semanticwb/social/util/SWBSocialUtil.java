@@ -2228,9 +2228,16 @@ public class SWBSocialUtil implements SWBAppObject {
                 {
                     CountryState countryState=itCountryStates.next();
                     //Si se cumple el siguiente if, el mensaje proviene del estado en cuestio.
+                    System.out.println("latitude:"+latitude);
+                    System.out.println("longitude:"+longitude);
+                    System.out.println("countryState.getNorth():"+countryState.getNorth());
+                    System.out.println("countryState.getSouth():"+countryState.getSouth());
+                    System.out.println("countryState.getEast():"+countryState.getEast());
+                    System.out.println("countryState.getWest():"+countryState.getWest());
                     if(countryState.getNorth()>=latitude && countryState.getSouth()<=latitude && 
                             countryState.getEast()>=longitude && countryState.getWest()<=longitude)
                     {
+                        System.out.println("REGRESA:"+countryState);
                         return countryState;
                     }
                 }
