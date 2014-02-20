@@ -35,7 +35,7 @@
     String objUri = (String) request.getParameter("suri");
     SWBResourceURL renderURL = paramRequest.getRenderUrl().setParameter("suri", objUri);
     long maxTweetID = 0L;
-    //'resetTabTitle' resets the Tab title to the specified value
+    boolean gotError = false;//'resetTabTitle' resets the Tab title to the specified value
 %>
 
 <div dojoType="dojox.layout.ContentPane">
@@ -44,7 +44,7 @@
    </script>
 </div>
 
-<div class="swbform">
+<div class="swbform" style="padding:10px 5px 10px 5px; overflow-y: scroll; height: 400px;">
 <%
     try {
             //gets Twitter4j instance with account credentials
@@ -72,15 +72,24 @@
             if(te.getErrorCode() == 88){
                 out.println("<div align=\"center\"><h2>YOU HAVE REACHED YOUR RATE LIMIT FOR THIS RESOURCE</h2><br/></div>");
             }else{
-                out.println("<div align=\"center\"><h2>" + te.getErrorMessage() + "</h2><br/></div>");
+                String message = te.getErrorMessage();
+                if(message == null){
+                    message = "Network problem?";
+                }
+                out.println("<div align=\"center\"><h2>" + message + "</h2><br/></div>");
             }
             System.out.println("Error displaying mentions:" + te.getErrorMessage());
             te.printStackTrace();
+            gotError = true;
         }catch(Exception e){
             System.out.println("Error displaying mentions" + e.getMessage());
             e.printStackTrace();
+            gotError = true;
         }
             out.println("</div>");
+        if(gotError){
+            out.println("</div>");
+        }else{
 %>
 <div id="<%=objUri%>/getMoreFavorites" dojoType="dojox.layout.ContentPane">
     <div align="center">
@@ -88,3 +97,6 @@
     </div>
 </div>
 </div>
+<%
+   }
+%>

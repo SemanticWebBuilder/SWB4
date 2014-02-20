@@ -56,9 +56,10 @@
     String objUri = (String) request.getParameter("suri");
     SWBResourceURL renderURL = paramRequest.getRenderUrl().setParameter("suri", objUri);
     long maxTweetID = 0L;
+    boolean gotError = false;
 %>
 
-<div class="swbform">
+<div class="swbform" style="padding:10px 5px 10px 5px; overflow-y: scroll; height: 400px;">
 <%
     try {
             //gets Twitter4j instance with account credentials
@@ -77,7 +78,7 @@
             SocialNetwork socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
             SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
 
-            out.println("<div dojoType=\"dojox.layout.ContentPane\">");
+            out.println("<div dojoType=\"dojox.layout.ContentPane\">");//style=\"background-color: #909090;\"
             String postURI = null;
             org.semanticwb.model.User user = paramRequest.getUser();
             SocialUserExtAttributes socialUserExtAttr = null;
@@ -111,11 +112,16 @@
             }
             System.out.println("Error displaying timeline:" + te.getErrorMessage());
             te.printStackTrace();
+            gotError = true;
         }catch(Exception e){
             System.out.println("Error displaying timeline" + e.getMessage());
             e.printStackTrace();
+            gotError = true;
         }
         out.println("</div>");
+        if(gotError){
+            out.println("</div>");
+        }else{
 %>    
 <div id="<%=objUri%>/getMoreTweets" dojoType="dojox.layout.ContentPane">
     <div align="center">
@@ -152,7 +158,8 @@
         var cPane = dijit.byId(tabId);        
         cPane.attr('onClose', function callStopListener(){ clearInterval(interval); stopListener('<%=renderURL.setMode("stopListener")%>'); return true;});
    </script>
+</div>   
 </div>
-   
-</div>
-
+<%
+        }
+%>
