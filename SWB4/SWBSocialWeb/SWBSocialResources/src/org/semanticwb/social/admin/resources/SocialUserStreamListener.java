@@ -48,12 +48,12 @@ public class SocialUserStreamListener implements UserStreamListener {
     @Override
     public void onStatus(Status status) {
         //status.
-        System.out.println("\t\tEl mensaje es RT:" + status.isRetweet());
-        System.out.println("\t\tEl id del mensaje es: " + status.getId());
-        System.out.println("\t\tEl mensaje es MI RT:" + status.isRetweetedByMe());
+        //System.out.println("\t\tEl mensaje es RT:" + status.isRetweet());
+        //System.out.println("\t\tEl id del mensaje es: " + status.getId());
+        //System.out.println("\t\tEl mensaje es MI RT:" + status.isRetweetedByMe());
         
         if(isAMention(status)){// Is the current user mentioned in a Tweet
-            System.out.println("\n\n++++++++++++++\nTenemos una nueva mention: " + status.getText());
+            //System.out.println("\n\n++++++++++++++\nTenemos una nueva mention: " + status.getText());
             this.mentionsStatus.add(status);
         }
         
@@ -61,7 +61,7 @@ public class SocialUserStreamListener implements UserStreamListener {
         if(currentUser != status.getUser().getId() || (!status.isRetweet() && status.getUser().getId() == currentUser) ){
             this.homeStatus.add(status);
             this.totalRunningTime = System.currentTimeMillis() - this.startTime;
-            System.out.println("difference: " + this.totalRunningTime);
+            //System.out.println("difference: " + this.totalRunningTime);
             if (this.totalRunningTime > 60000*30){//Has been alive for 15 min since last interaction
                System.out.println("15 minutes of inactivity. Time to stop the thread!");
                this.twitterStream.cleanUp();
@@ -238,11 +238,11 @@ public class SocialUserStreamListener implements UserStreamListener {
     }
     
     public void clearHomeStatus(){
-        System.out.println("Cleaning Home statuses");
+        /*System.out.println("Cleaning Home statuses");
         System.out.println("favs: " + getFavoritesSize());
         System.out.println("ment: " + getMentionsSize());
         System.out.println("dmsgs: " + getDirectMSize());
-        System.out.println("home: " +  getHomeStatusSize());
+        System.out.println("home: " +  getHomeStatusSize());*/
         this.homeStatus.clear();
     }
     public void clearFavoritesStatus(){
