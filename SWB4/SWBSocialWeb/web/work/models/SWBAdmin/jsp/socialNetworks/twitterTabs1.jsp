@@ -45,8 +45,8 @@
     //Div dummy para detectar evento de carga y modificar titulo
     out.println("<div dojoType=\"dijit.layout.ContentPane\"/>");
 
-    out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" id=\""+replaceId(objUri)+"_tabs_twitter\">");
-
+    //out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" id=\""+replaceId(objUri)+"_tabs_twitter\">");
+    out.println("<div class=\"swbform\" style=\" width : 2400px; overflow-y: hidden; height:500px;\">");
     //TODO:Modificar este codigo para recarga de clases, posible cambio por onLoad
     out.println("    <script type=\"dojo/connect\">");
     out.println("       this.watch(\"selectedChildWidget\", function(name, oval, nval){");
@@ -55,19 +55,22 @@
     out.println("    </script>");    
     
    
-    out.println("<div id=\""+ objUri + HOME_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+paramRequest.getLocaleString("timelineLabel")+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + HOME_TAB +"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
+    out.println("<div class=\"pub-redes\" style=\"width: 400px; height:500px;\" id=\""+ objUri + HOME_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+paramRequest.getLocaleString("timelineLabel")+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + HOME_TAB +"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
     out.println("</div>");
 
-    out.println("<div id=\""+ objUri + MENTIONS_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+paramRequest.getLocaleString("mentionsLabel")+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + MENTIONS_TAB +"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
+    out.println("<div class=\"pub-redes\" style=\"width: 400px; height:500px;\" id=\""+ objUri + MENTIONS_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+paramRequest.getLocaleString("mentionsLabel")+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + MENTIONS_TAB +"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
     out.println("</div>");
     
-    out.println("<div id=\""+ objUri + FAVORITES_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+paramRequest.getLocaleString("favoritesLabel")+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + FAVORITES_TAB +"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
+    out.println("<div class=\"pub-redes\" style=\"width: 400px; height:500px;\" id=\""+ objUri + FAVORITES_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+paramRequest.getLocaleString("favoritesLabel")+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + FAVORITES_TAB +"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
     out.println("</div>");
     
-    out.println("<div id=\""+ objUri + DIRECT_MESSAGES_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+paramRequest.getLocaleString("directMLabel")+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + DIRECT_MESSAGES_TAB +"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
+    out.println("<div class=\"pub-redes\" style=\"width: 400px; height:500px;\" id=\""+ objUri + DIRECT_MESSAGES_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+paramRequest.getLocaleString("directMLabel")+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + DIRECT_MESSAGES_TAB +"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
     out.println("</div>");
     
-    out.println("<div id=\""+ objUri + CONNECTIONS_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+paramRequest.getLocaleString("connectionsLabel")+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + CONNECTIONS_TAB +"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
+    out.println("<div class=\"pub-redes\" style=\"width: 400px; height:500px;\" id=\""+ objUri + FRIENDS_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+paramRequest.getLocaleString("connectionsLabel")+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + FRIENDS_TAB +"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
+    out.println("</div>");
+    
+    out.println("<div class=\"pub-redes\" style=\"width: 400px; height:500px;\" id=\""+ objUri + FOLLOWERS_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+paramRequest.getLocaleString("connectionsLabel")+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + FOLLOWERS_TAB +"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
     out.println("</div>");
 
 
