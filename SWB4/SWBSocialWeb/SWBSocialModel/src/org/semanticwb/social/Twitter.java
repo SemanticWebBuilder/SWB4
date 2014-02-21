@@ -74,6 +74,11 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
     @Override
     public void postMsg(Message message) {
+        if(!isSn_authenticated() || getAccessToken() == null ){
+            log.error("Not authenticated network: " + getTitle() + ". Unable to post Message");
+            return;
+        }
+        
         if (message != null && message.getMsg_Text() != null && message.getMsg_Text().trim().length() > 1) {
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
             try {
@@ -127,7 +132,11 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         }
     }
 
-    public void postPhoto(Photo photo) {        
+    public void postPhoto(Photo photo) {
+        if(!isSn_authenticated() || getAccessToken() == null ){
+            log.error("Not authenticated network: " + getTitle() + ". Unable to post Photo");
+            return;
+        }
         //System.out.println("Inside post photo TWITTER");
         if (photo != null) {
             String photoToPublish="";
@@ -311,6 +320,11 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
     @Override
     public void listen(Stream stream) {
+        if(!isSn_authenticated() || getAccessToken() == null ){
+            log.error("Not authenticated network: " + getTitle() + "!!!");
+            return;
+        }
+
         //System.out.println("Entra a Twitter/Listen");
         //WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
         //System.out.println("Red SocialID:"+this.getId()+", Red Title:"+this.getTitle()+", sitio:"+wsite.getId());
@@ -688,7 +702,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     {
         String answer = null;
         //String key=SWBContext.getAdminWebSite().getProperty("kloutKey");    //TODO:Ver con Jei x que no funciona esto...
-        String key=SWBSocialUtil.Util.getModelPropertyValue(SWBSocialUtil.getConfigWebSite(), "kloutKey");
+        String key="";//SWBSocialUtil.Util.getModelPropertyValue(SWBSocialUtil.getConfigWebSite(), "kloutKey");
         //if(key==null) key="8fkzgz7ngf7bth3nk94gnxkd";   //Solo para fines de pruebas, quitar despues y dejar línea anterior.
         //System.out.println("key para KLOUT--Gg:"+key);
         if(key!=null)
