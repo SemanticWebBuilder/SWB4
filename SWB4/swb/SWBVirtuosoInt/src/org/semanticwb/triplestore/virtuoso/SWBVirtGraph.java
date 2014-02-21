@@ -382,6 +382,7 @@ public class SWBVirtGraph extends GraphBase implements GraphExt
             con.close();
         } catch (Exception e)
         {
+            e.printStackTrace();
             throw new AddDeniedException(e.toString());
         }
     }
