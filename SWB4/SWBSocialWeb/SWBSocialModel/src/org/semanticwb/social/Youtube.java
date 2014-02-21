@@ -206,7 +206,10 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
      }*/
     @Override
     public void postVideo(Video video) {
-
+        if(!isSn_authenticated() || getAccessToken() == null ){
+            log.error("Not authenticated network: " + getTitle() + ". Unable to post Video");
+            return;
+        }
         System.out.println("Entra al metodo postVideo de YouTube....");
         if (video.getVideo() == null || video.getTitle() == null) {//Required fields
             return;
@@ -789,6 +792,10 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
      }*/
     @Override
     public void listen(Stream stream) {
+        if(!isSn_authenticated() || getAccessToken() == null ){
+            log.error("Not authenticated network: " + getTitle() + "!!!");
+            return;
+        }
         //Busca en las categorias: Comedy, Film, Music, People
         //Las palabras "america+pumas"
         //https://gdata.youtube.com/feeds/api/videos?v=2&category=Comedy%7CFilm%7CMusic%7CPeople&max-results=50&alt=jsonc&q=%22america+pumas%22&orderby=published&start-index=1
@@ -1170,6 +1177,10 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
 
     @Override
     public void postMsg(Message message) {
+        if(!isSn_authenticated() || getAccessToken() == null ){
+            log.error("Not authenticated network: " + getTitle() + ". Unable to post Comment");
+            return;
+        }
         System.out.println("Posting comment to a video");
         if (message != null && message.getMsg_Text() != null && message.getMsg_Text().trim().length() > 1) {
             if(message.getPostInSource()!=null && message.getPostInSource().getSocialNetMsgId()!=null){
