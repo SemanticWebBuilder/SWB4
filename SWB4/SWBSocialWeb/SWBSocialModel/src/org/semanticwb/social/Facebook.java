@@ -103,7 +103,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
      */
     @Override
     public void listen(Stream stream) {
-
+        if(!isSn_authenticated() || getAccessToken() == null ){
+            log.error("Not authenticated network: " + getTitle() + "!!!");
+            return;
+        }
         System.out.println("Listening from FACEBOOK");
         HashMap<String, String> params = new HashMap<String, String>(2);
         params.put("access_token", this.getAccessToken());
@@ -656,7 +659,12 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         return isThereMoreMsgs;
     }
 
-      public void postMsg(Message message) {          
+      public void postMsg(Message message) {  
+        if(!isSn_authenticated() || getAccessToken() == null ){
+            log.error("Not authenticated network: " + getTitle() + ". Unable to post Message");
+            return;
+        }
+
         if (message.getMsg_Text() == null) {
             log.error("Not message found, nothing to post");
             return;
@@ -744,6 +752,11 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     }
 
     public void postPhoto(Photo photo) {
+        if(!isSn_authenticated() || getAccessToken() == null ){
+            log.error("Not authenticated network: " + getTitle() + ". Unable to post Photo");
+            return;
+        }
+        
         if (photo.listPhotos().hasNext() == false) {
             log.error("Not photos found, nothing to post");
             return;
@@ -865,6 +878,11 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     }
 
     public void postVideo(Video video) {
+        if(!isSn_authenticated() || getAccessToken() == null ){
+            log.error("Not authenticated network: " + getTitle() + ". Unable to post Video");
+            return;
+        }
+        
         if (video.getVideo() == null) {
             log.error("Not video found, nothing to post.");
             return;
