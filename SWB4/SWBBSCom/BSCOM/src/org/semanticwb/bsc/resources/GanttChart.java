@@ -7,6 +7,7 @@ package org.semanticwb.bsc.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
@@ -46,6 +47,7 @@ public class GanttChart extends GenericResource {
         StringBuilder output = new StringBuilder(512);
         JSONArray ganttData = new JSONArray();
         int deliverableCount = 0;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy,MM,dd");
 
         if (semanticObj != null) {
             GenericObject genericObj = semanticObj.createGenericInstance();
@@ -65,21 +67,21 @@ public class GanttChart extends GenericResource {
                             JSONObject planned = new JSONObject();
                             planned.put("name", "Planeado");
                             if (deli.getPlannedStart() != null) {
-                                planned.put("start", "new Date()");
+                                planned.put("start", "new Date(" + format.format(deli.getPlannedStart()) + ")");
                             }
                             if (deli.getPlannedEnd() != null) {
-                                planned.put("end", "new Date()");
+                                planned.put("end", "new Date(" + format.format(deli.getPlannedEnd()) + ")");
                             }
                             planned.put("color", "\"#BDB4F6\"");
                             series.put(planned);
                             JSONObject actual = new JSONObject();
                             if (deli.getActualStart() != null) {
                                 actual.put("name", "Real");
-                                actual.put("start", "new Date()");
+                                actual.put("start", "new Date(" + format.format(deli.getActualStart()) + ")");
                                 if (deli.getActualEnd() != null) {
-                                    actual.put("end", "new Date()"); //con actualEnd
+                                    actual.put("end", "new Date(" + format.format(deli.getActualEnd()) + ")"); //con actualEnd
                                 } else {
-                                    actual.put("end", "new Date()"); //con actualStart
+                                    actual.put("end", "new Date(" + format.format(deli.getActualStart()) + ")"); //con actualStart
                                 }
                                 //En base al status asignar color
                                 actual.put("color", "\"#70DB70\"");
