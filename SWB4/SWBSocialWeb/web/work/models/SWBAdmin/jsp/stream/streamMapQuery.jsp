@@ -45,7 +45,7 @@ try{
     
     
     int streamMapView=1;
-    //System.out.println("streamMapView:"+request.getParameter("streamMapView"));
+    System.out.println("streamMapView:"+request.getParameter("streamMapView"));
     if(request.getParameter("streamMapView")!=null && !request.getParameter("streamMapView").isEmpty())
     {
             streamMapView=Integer.parseInt(request.getParameter("streamMapView"));
@@ -65,6 +65,10 @@ try{
     //System.out.println("showSinceDate:"+showSinceDate);
     String showGeoProfile="off";
     if(request.getParameter("showGeoProfile")!=null) showGeoProfile=request.getParameter("showGeoProfile"); 
+    System.out.println("showGeoProfile:"+showGeoProfile);
+    
+    //System.out.println("streamMapView K llega:"+streamMapView);
+    //System.out.println("showGeoProfile K llega:"+showGeoProfile);
     /*
     SimpleDateFormat formatoDelTexto=null;
     try {
@@ -140,6 +144,7 @@ try{
                 if(showGeoProfile.equals("on")) queryGeoProfile=getStreamPIGeoProfile(stream, showSinceDate, -1);
             }else if(streamMapView==4){  //Todo
                 query=getStreamPI(stream, showSinceDate, false, true, -1);
+                //System.out.println("Fue 4, query:"+query+",showGeoProfile:"+showGeoProfile);
                 //GeoUser Location
                 if(showGeoProfile.equals("on")) queryGeoProfile=getStreamPIGeoProfile(stream, showSinceDate, -1);
             }else if(streamMapView==5){  //Positivos
@@ -192,7 +197,7 @@ try{
         if(queryGeoProfile!=null) aPostInsGeoProfile=SWBSocial.executeQueryArray(queryGeoProfile, wsite);
         //System.out.println("aPostInsGeoProfile Tamano:"+aPostInsGeoProfile.size());
         for (PostIn x : aPostInsGeoProfile){
-            System.out.println("X..Geo:"+x.getMsg_Text());
+            //System.out.println("X..Geo:"+x.getMsg_Text());
             if (!aPostIns.contains(x)){
                aPostIns.add(x);
             }
@@ -207,7 +212,9 @@ try{
             {
                 if(streamMapView==1 || streamMapView==4)
                 {
+                    System.out.println("postIn a agregar a estados:"+postIn+",mSG:"+postIn.getMsg_Text()+"State:"+postIn.getGeoStateMap()); 
                     hmapPoints=getStateCounters(postIn, hmapPoints);
+                    //System.out.println("hmapPoints:"+hmapPoints.size());
                 }
                 if(streamMapView==2 || streamMapView>=4)
                 {
@@ -314,8 +321,7 @@ try{
             while(itMapStates.hasNext())
             {
                 String state=itMapStates.next();
-                CountryState countryState=CountryState.ClassMgr.getCountryState(state, SWBContext.getAdminWebSite());
-                //System.out.println("countryState J-4:"+countryState.getId());
+                CountryState countryState=CountryState.ClassMgr.getCountryState(state, SWBSocialUtil.getConfigWebSite()); 
                 if(countryState!=null)
                 {
                     HashMap<String, Integer> sentimentHash=hmapPoints.get(state); 
@@ -460,7 +466,7 @@ try{
            if(!date.equals(DEFECT_DATE)) query+= "  FILTER(xsd:dateTime(?postInCreated) >= xsd:dateTime(\""+date+"\")) \n";
            query+="  }\n";
            
-           System.out.println("Query:"+query);
+           //System.out.println("Query:"+query);
         return query;
     }
     
@@ -548,6 +554,7 @@ try{
         {
             if(!hmapPoints.containsKey(postIn.getGeoStateMap().getId())) 
             {
+                //System.out.println("No en Hash:"+postIn+",GeoState:"+postIn.getGeoStateMap());  
                 HashMap<String, Integer> sentimentHash=new HashMap();
                 //System.out.println("Entra a hmapPoints-1.2:"+postIn.getPostSentimentalType());
                 if(postIn.getPostSentimentalType()==1) {
@@ -566,6 +573,7 @@ try{
                     //System.out.println("Entra a hmapPoints-2:"+hmapPoints);
                 }
             }else{  //Si ya contiene el estado en el HashMap
+                //System.out.println("SI en Hash:"+postIn+",GeoState:"+postIn.getGeoStateMap());  
                 HashMap sentimentHash=hmapPoints.get(postIn.getGeoStateMap().getId());
                 if(postIn.getPostSentimentalType()==1)
                 {
