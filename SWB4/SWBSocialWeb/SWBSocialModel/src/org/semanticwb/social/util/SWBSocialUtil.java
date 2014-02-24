@@ -71,7 +71,7 @@ import org.semanticwb.social.SWBSocial;
 /*
  * Clase de tipo utilerías 
  */
-public class SWBSocialUtil implements SWBAppObject {
+public class SWBSocialUtil {
 
     /**
      * Holds a reference to a log utility. <p>Mantiene una referencia a la
@@ -116,8 +116,6 @@ public class SWBSocialUtil implements SWBAppObject {
      * Creates a new object of this class.
      */
     public SWBSocialUtil() {
-        System.out.println("Entra a SWBSocialUtil/createInstance-Jorge");
-        init();
     }
 
    /**
@@ -132,6 +130,8 @@ public class SWBSocialUtil implements SWBAppObject {
         {
             //System.out.println("Entra a SWBSocialUtil/createInstance-Jorge-1");
             SWBSocialUtil.instance = new SWBSocialUtil();
+            log.event("Initializing SWBSocialUtil");
+            init();
         }
         //System.out.println("Entra a SWBSocialUtil/createInstance-Jorge-2");
         return SWBSocialUtil.instance;
@@ -148,7 +148,7 @@ public class SWBSocialUtil implements SWBAppObject {
     public HashMap getChangesMap() {
         return hmapChanges;
     }
-
+/*
     @Override
     public void destroy() {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -160,12 +160,13 @@ public class SWBSocialUtil implements SWBAppObject {
     }
 
     @Override
-    public void init() {
+    * */
+    public static void init() {
+        //System.out.println("Entra s SWBSocialUtil/init..");
         try{
-        //CONFIG_WEBSITE=SWBContext.getGlobalWebSite();   
-        CONFIG_WEBSITE=SWBContext.getAdminWebSite();   
+        CONFIG_WEBSITE=SWBContext.getGlobalWebSite();   
+        //CONFIG_WEBSITE=SWBContext.getAdminWebSite();   
         
-        System.out.println("Se carga Sitio Global:"+CONFIG_WEBSITE);
             
         //System.out.println("Init de SWBSocialUtil-Jorge");
         //Carga Valores a ArrayList
@@ -232,10 +233,7 @@ public class SWBSocialUtil implements SWBAppObject {
        
         props = SWBUtils.TEXT.getPropertyFile("/org/semanticwb/social/properties/swbSocial.properties");
         
-        System.out.println("Cargó archivo swbSocial.properties:"+props);
-        
       }catch(Exception e){
-          System.out.println("Error:"+e.getMessage());
           log.error(e);
       }
     }
@@ -1466,11 +1464,11 @@ public class SWBSocialUtil implements SWBAppObject {
                     postOutInitHour="00:00";
                 }
 
-                System.out.println("manageFastCalendar2PostOut/wsite:"+wsite);
+                //System.out.println("manageFastCalendar2PostOut/wsite:"+wsite);
 
                 FastCalendar newFastCalendarInstance=FastCalendar.ClassMgr.createFastCalendar(wsite);
                 
-                System.out.println("manageFastCalendar2PostOut/wsite/newFastCalendarInstance:"+newFastCalendarInstance);
+                //System.out.println("manageFastCalendar2PostOut/wsite/newFastCalendarInstance:"+newFastCalendarInstance);
                 
                 Date date2SendPostOut=new Date(postOutInitDate);
 
@@ -1560,7 +1558,7 @@ public class SWBSocialUtil implements SWBAppObject {
                     //Convierto a un post de salida para poderle agregar cada red social a la que se envía dicho post
                     PostOut postOut = (PostOut) post;
                     
-                    System.out.println("Entra a editPostOut..."+postout);
+                    //System.out.println("Entra a editPostOut..."+postout);
                     
                     //Comienza manejo de FastCalendar
                     manageFastCalendar2PostOut(request, postOut);
@@ -1815,7 +1813,7 @@ public class SWBSocialUtil implements SWBAppObject {
             {
                 if (postOut instanceof Message && socialNet instanceof Messageable) 
                 {
-                    System.out.println("MENSAJE!!");
+                    //System.out.println("MENSAJE!!");
                     //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
                     Messageable messageable = (Messageable) socialNet;
                     //messageable.postMsg((Message) post, request, response);
@@ -1824,7 +1822,7 @@ public class SWBSocialUtil implements SWBAppObject {
                     sendPostThread.addPostAble(postableObj);
                     sendPostThread.start();
                 } else if (postOut instanceof Photo && socialNet instanceof Photoable) {
-                    System.out.println("PHOTO!!");
+                    //System.out.println("PHOTO!!");
                     //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
                     Photoable photoable = (Photoable) socialNet;
                     //photoable.postPhoto((Photo) post, request, response);
@@ -1833,7 +1831,7 @@ public class SWBSocialUtil implements SWBAppObject {
                     sendPostThread.addPostAble(postableObj);
                     sendPostThread.start();
                 } else if (postOut instanceof Video && socialNet instanceof Videoable) {
-                    System.out.println("VIDEO!!");
+                    //System.out.println("VIDEO!!");
                     //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
                     Videoable videoable = (Videoable) socialNet;
                     //videoable.postVideo((Video) post, request, response);
@@ -2228,16 +2226,18 @@ public class SWBSocialUtil implements SWBAppObject {
                 {
                     CountryState countryState=itCountryStates.next();
                     //Si se cumple el siguiente if, el mensaje proviene del estado en cuestio.
+                    /*
                     System.out.println("latitude:"+latitude);
                     System.out.println("longitude:"+longitude);
                     System.out.println("countryState.getNorth():"+countryState.getNorth());
                     System.out.println("countryState.getSouth():"+countryState.getSouth());
                     System.out.println("countryState.getEast():"+countryState.getEast());
                     System.out.println("countryState.getWest():"+countryState.getWest());
+                    * */
                     if(countryState.getNorth()>=latitude && countryState.getSouth()<=latitude && 
                             countryState.getEast()>=longitude && countryState.getWest()<=longitude)
                     {
-                        System.out.println("REGRESA:"+countryState);
+                        //System.out.println("REGRESA:"+countryState);
                         return countryState;
                     }
                 }

@@ -36,7 +36,6 @@ public class SocialLoader implements SWBAppObject {
      */
     public SocialLoader() {
         try {
-            System.out.println("Entra a Cargar:SocialLoader");
             pflowMgr = new SocialPFlowMgr();    //Sin threads
             pflowMgr.init(); //Sin threads
             new SWBSocialCalendarMgr(); //Se dispara un solo thread c/minuto + los threads que se disparen en c/red social en ese minuto (si aplicara)

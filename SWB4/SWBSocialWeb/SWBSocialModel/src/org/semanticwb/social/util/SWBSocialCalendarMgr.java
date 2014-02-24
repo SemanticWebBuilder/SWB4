@@ -38,10 +38,11 @@ public class SWBSocialCalendarMgr {
 
     public SWBSocialCalendarMgr() {
         try {
-            System.out.println("Entra a SWBSocialCalendarMgr...");
             int periodTime = 60 * MILISEG_IN_SEGUNDO; //Un minuto
+            int initTime=180*MILISEG_IN_SEGUNDO;
             Timer timer = new Timer();
-            timer.schedule(new SWBSocialCalendarMgr.CallCalendarTask(), 0, periodTime);
+            log.event("Initializing SWBSocialCalendarMgr, starts in:"+initTime+"ms,periodicity:"+periodTime+"ms");
+            timer.schedule(new SWBSocialCalendarMgr.CallCalendarTask(), initTime, periodTime);
         } catch (Exception e) {
             log.error(e);
         }
@@ -65,7 +66,7 @@ public class SWBSocialCalendarMgr {
          * que como lo hago en este momento, pudiera utilizar Calendar directamente.
          */
         public void run() {
-            System.out.println("Revisar todos los calendarios de todas las marcas");
+            //System.out.println("Revisar todos los calendarios de todas las marcas");
             SocialPFlowMgr pfmgr = SocialLoader.getPFlowManager();
             Iterator<SocialCalendar> itSCalendars = SocialCalendar.ClassMgr.listSocialCalendars();
             while (itSCalendars.hasNext()) {

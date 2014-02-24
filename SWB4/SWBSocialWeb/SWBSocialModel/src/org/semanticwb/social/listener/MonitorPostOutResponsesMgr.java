@@ -32,11 +32,11 @@ public class MonitorPostOutResponsesMgr {
      */
     public MonitorPostOutResponsesMgr() {
         try {
-            System.out.println("Entra a MonitorPostOutResponsesMgr..-1");
+            //System.out.println("Entra a MonitorPostOutResponsesMgr..-1");
             int periodTime = (60*MILISEG_IN_SEGUNDO)*10; //10 minutos
             Timer timer = new Timer();
             timer.schedule(new MonitorPostOutResponsesMgr.MonitorTask(), 0,periodTime);
-            System.out.println("Entra a MonitorPostOutResponsesMgr..-2");
+            //System.out.println("Entra a MonitorPostOutResponsesMgr..-2");
         } catch (Exception e) {
             log.error(e);
         }
@@ -53,7 +53,7 @@ public class MonitorPostOutResponsesMgr {
         }
 
         public void run() {
-             System.out.println("Entra a MonitorPostOutResponsesMgr/Run-1");
+             //System.out.println("Entra a MonitorPostOutResponsesMgr/Run-1");
              Iterator<WebSite> itWebSites = SWBContext.listWebSites(false);
              while (itWebSites.hasNext()) {
                 WebSite wsite = itWebSites.next();
@@ -71,7 +71,7 @@ public class MonitorPostOutResponsesMgr {
                                 int days=SWBSocialUtil.Util.Datediff(postOut.getPo_publishDate(), Calendar.getInstance().getTime());
                                 //Solo si son menos de 30 días (configurar despues) se monitorearan respuestas del PostOut, si ya pasaron se cierra 
                                 //para no volver a ser monitoreado (postOut.setIsClosedforResponses(true))
-                                System.out.println("Entra a MonitorPostOutResponsesMgr/Run-4:"+days);
+                                //System.out.println("Entra a MonitorPostOutResponsesMgr/Run-4:"+days);
                                 if(days<=postOut.getSocialTopic().getSt_numDays2ClosePostOuts())
                                 {
                                     try{
@@ -81,7 +81,7 @@ public class MonitorPostOutResponsesMgr {
                                         log.error(e);
                                     }
                                 }else { 
-                                    System.out.println("Entra a MonitorPostOutResponsesMgr/Run-5/Elimina PostOut del monitoreo por el tiempo:"+postOut.getURI());
+                                    //System.out.println("Entra a MonitorPostOutResponsesMgr/Run-5/Elimina PostOut del monitoreo por el tiempo:"+postOut.getURI());
                                     //Si ya pasaron mas de 30 días..., se cierra el PostOut, para que a la proxima no se tome en cuenta, 
                                     //no nos interesan los comentarios mayores a 30 días, ver si se hace como parametro configurable.
                                     postOut.setIsClosedforResponses(true);

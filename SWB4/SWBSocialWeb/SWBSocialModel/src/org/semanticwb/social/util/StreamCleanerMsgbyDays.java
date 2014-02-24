@@ -7,7 +7,6 @@ package org.semanticwb.social.util;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.semanticwb.Logger;
@@ -47,6 +46,7 @@ public class StreamCleanerMsgbyDays {
             //timer.schedule(new CheckStreamsMsgbyDays(), 0, 60 * 1000); //Cada minuto
             
             //Que empiece hoy a las 11:59 pm y vuelve a iterar un dia despues y así se siga
+            log.event("Initializing StreamCleanerMsgbyDays, starts in:"+time2Start+"ms, periodicity:"+oneDay+",ms");
             timer.schedule(new CheckStreamsMsgbyDays(), time2Start, oneDay);
         } catch (Exception e) {
             log.error(e);
@@ -67,7 +67,6 @@ public class StreamCleanerMsgbyDays {
          * Metodo que revisa todos los streams activos en todas las marcas a
          */
         public void run() {
-            System.out.println("Entra a CheckStreamsMsgbyDays...EJECUTAR....");
             Iterator<Stream> itStreams = Stream.ClassMgr.listStreams();
             while (itStreams.hasNext()) {
                 Stream stream = itStreams.next();
