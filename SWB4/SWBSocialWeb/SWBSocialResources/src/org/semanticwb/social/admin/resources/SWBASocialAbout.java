@@ -49,7 +49,7 @@ public class SWBASocialAbout extends GenericResource{
         out.println("<p class=\"versionmark\">SWB Social</p>");
         out.println("<p class=\"versionsocial\">Versión "+SWBSocialUtil.getEnv("versionNo", "1.0")+"</p>");
         out.println("<p class=\"versionmark\">SemanticWebBuilder</p>");
-        out.println("<p class=\"versionswb\">Versión "+SWBPlatform.getVersion()+"/p>");
+        out.println("<p class=\"versionswb\">Versión "+SWBPlatform.getVersion()+"</p>");
         out.println("<p class=\"versioncopy\">SemanticWebBuilder y SWB Social son marcas registradas</p>");
         out.println("</div>");
 
