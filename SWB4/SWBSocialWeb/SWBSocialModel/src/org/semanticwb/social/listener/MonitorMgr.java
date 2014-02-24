@@ -33,11 +33,11 @@ public class MonitorMgr {
      */
     public MonitorMgr() {
         try {
-            System.out.println("Entra a MonitorMgr..-1");
             int periodTime = (60*MILISEG_IN_SEGUNDO)*3; //3 minutos
             Timer timer = new Timer();
-            timer.schedule(new MonitorTask(), 0,periodTime);
-            System.out.println("Entra a MonitorMgr..-2");
+            int initTime=180*MILISEG_IN_SEGUNDO;
+            log.event("Initializing MonitorMgr, starts starts in:"+initTime+"ms,periodicity:"+periodTime+"ms");
+            timer.schedule(new MonitorTask(), initTime,periodTime);
         } catch (Exception e) {
             log.error(e);
         }
@@ -54,7 +54,7 @@ public class MonitorMgr {
         }
 
         public void run() {
-             System.out.println("Entra a MonitorMgr/Run-1");
+            //System.out.println("Entra a MonitorMgr/Run-1");
             if(PostMonitor.ClassMgr.listPostMonitors(SWBContext.getAdminWebSite()).hasNext())
             {
                 PostMonitor postMonitor=PostMonitor.ClassMgr.listPostMonitors(SWBContext.getAdminWebSite()).next();

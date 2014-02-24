@@ -27,8 +27,10 @@ public class StreamCleanerMsgbyNumber {
         try {
             //System.out.println("Entra a StreamCleanerMsgbyNumber...");
             int periodTime = 60 * MILISEG_IN_SEGUNDO; //Un minuto
+            int initTime=180*MILISEG_IN_SEGUNDO;
             Timer timer = new Timer();
-            timer.schedule(new StreamCleanerMsgbyNumber.CheckStreamsMsgbyNumber(), 0, periodTime);
+            log.event("Initializing StreamCleanerMsgbyNumber, starts in:"+initTime+"ms, periodicity:"+periodTime+"ms");
+            timer.schedule(new StreamCleanerMsgbyNumber.CheckStreamsMsgbyNumber(), initTime, periodTime);
         } catch (Exception e) {
             log.error(e);
         }
@@ -48,7 +50,6 @@ public class StreamCleanerMsgbyNumber {
          * Metodo que revisa todos los streams activos en todas las marcas a
          */
         public void run() {
-            System.out.println("Entra a StreamCleanerMsgbyNumber...EJECUTAR....");
             Iterator<Stream> itStreams = Stream.ClassMgr.listStreams();
             while (itStreams.hasNext()) {
                 Stream stream = itStreams.next();

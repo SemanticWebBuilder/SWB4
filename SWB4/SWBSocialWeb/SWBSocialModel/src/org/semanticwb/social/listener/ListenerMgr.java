@@ -71,12 +71,14 @@ public class ListenerMgr implements SWBAppObject {
                         if (createTimer(stream))
                         {
                             int time=stream.getPoolTime();
+                            int initTime=180*MILIGSEG_IN_SEG;   //3 minutos
                             //Este número es por defecto, ya que si el stream maneja solo una red tipo listenAlive, es posible que no le hayan puesto un 
                             //valor a stream.getPoolTime(), por lo cual, en la línea de abajo que crea el timer marcaría un error (Non-positive period).
                             if(time<1) time=15; //15 milisegundos por defecto
                             int periodTime = (time*MILIGSEG_IN_SEG)*60;    //El tiempo por 1000 para que sea en segundos y por 60 para que sea en minutos
                             Timer timer = new Timer();
-                            timer.schedule(new ListenerTask(stream), 180*MILIGSEG_IN_SEG,periodTime);   //Dentro de 180 Segundos(3 min) inicias(Damos tiempo para que arranque el appserver completamente) y lo ejecutas cada sucesivamente cada que se cumpla periodTime
+                            log.event("Initializing ListenerMgr, starts in:"+initTime+"ms, periodicity:"+periodTime+"ms"+",Stream:"+stream);
+                            timer.schedule(new ListenerTask(stream), initTime,periodTime);   //Dentro de 180 Segundos(3 min) inicias(Damos tiempo para que arranque el appserver completamente) y lo ejecutas cada sucesivamente cada que se cumpla periodTime
                             htTimers.put(stream.getURI(), timer);
                         }
                     }
