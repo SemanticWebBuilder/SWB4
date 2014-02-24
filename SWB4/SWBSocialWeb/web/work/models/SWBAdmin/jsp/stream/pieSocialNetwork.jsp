@@ -21,6 +21,7 @@
 
 <%!
     JSONArray getObject(SemanticObject semObj, String lang, String filter) throws Exception {
+        System.out.println("entro a piesocialnetwork");
         int positives = 0, negatives = 0, neutrals = 0, total = 0;
         int totalPost = 0;
         Iterator<PostIn> itObjPostIns = null;
@@ -49,21 +50,40 @@
         Iterator i = socialNetworks.iterator();
         ArrayList<PostIn> postInSocialNetwork = new ArrayList<PostIn>();
         //Iterar las redes sociales que tienen postin
+        int cont = 0;
         while (i.hasNext()) {
+            cont++;
             SemanticObject sO = (SemanticObject) i.next();
             SocialNetwork s = (SocialNetwork) sO.getGenericInstance();
+            System.out.println("RED SOCIAL: " + s.getTitle());
             //obtenemos los post que estan en un  stream y una red en especifico
             if (semObj.getGenericInstance() instanceof Stream) {
+
                 postInSocialNetwork = SWBSocialUtil.sparql.getPostInbyStreamAndSocialNetwork(stream, s);
+
             } else if (semObj.getGenericInstance() instanceof SocialTopic) {
+
                 postInSocialNetwork = SWBSocialUtil.sparql.getPostInbySocialTopicAndSocialNetwork(socialTopic, s);
+
             }
 
 
             Iterator ii = postInSocialNetwork.iterator();
             //obtenemos los json del array
+
             getJsonArray(node, ii, s.getTitle(), totalPost, filter, positives, negatives, neutrals, total);
 
+
+        }
+        if (cont == 0) {
+            JSONObject node3 = new JSONObject();
+            node3.put("label", "Sin Datos");
+            node3.put("value1", "0");
+            node3.put("value2", "100");
+            node3.put("color", "#E6E6E6");
+            node3.put("chartclass", "neuClass");
+            node.put(node3);
+            //return node;
         }
 
         return node;
@@ -75,8 +95,12 @@
 
     public JSONArray getJsonArray(JSONArray node, Iterator i, String title, int totalPost, String filter, int positives, int negatives, int neutrals, int total) throws Exception {
 
+        System.out.println("entro en getJson array");
 
         float intPorcentaje = 0F;
+        int positivesF = 0;
+        int negativesF = 0;
+        int neutralsF = 0;
         while (i.hasNext()) {
 
             SemanticObject so = (SemanticObject) i.next();
@@ -84,16 +108,17 @@
             if (filter.equals("all") || filter.equals(pi.getPostInSocialNetwork().getTitle())) {
                 total++;
                 if (pi.getPostSentimentalType() == 0) {
-                    neutrals++;
+                    neutralsF++;
                 } else if (pi.getPostSentimentalType() == 1) {
-                    positives++;
+                    positivesF++;
                 } else if (pi.getPostSentimentalType() == 2) {
-                    negatives++;
+                    negativesF++;
                 }
             }
         }
 
         if (filter.equals("all")) {
+            System.out.println("mostarrar todos");
             intPorcentaje = ((float) total * 100) / (float) totalPost;
             JSONObject node1 = new JSONObject();
             node1.put("label", "" + title);
@@ -111,31 +136,32 @@
             node1.put("label3", "Total de Post: ");
             node.put(node1);
         } else {
+            System.out.println("tiene un filtro");
             float intPorcentajeNeutrals = 0;
             float intPorcentajePositives = 0;
             float intPorcentajeNegatives = 0;
 
-            if(positives==0 && negatives==0 && neutrals ==0){
-                JSONObject node3 = new JSONObject();
-                node3.put("label", "Sin Datos");
-                node3.put("value1", "0");
-                node3.put("value2", "100");
-                node3.put("color", "#E6E6E6");
-                node3.put("chartclass", "neuClass");
-                node.put(node3);
-                return node;
-            }
-            
+            /*  if(positivesF==0 && negativesF==0 && neutralsF ==0){
+             JSONObject node3 = new JSONObject();
+             node3.put("label", "Sin Datos");
+             node3.put("value1", "0");
+             node3.put("value2", "100");
+             node3.put("color", "#E6E6E6");
+             node3.put("chartclass", "neuClass");
+             node.put(node3);
+             return node;
+             }*/
+
             if (total != 0) {
-                intPorcentajeNeutrals = ((float) neutrals * 100) / (float) total;
-                intPorcentajePositives = ((float) positives * 100) / (float) total;
-                intPorcentajeNegatives = ((float) negatives * 100) / (float) total;
+                intPorcentajeNeutrals = ((float) neutralsF * 100) / (float) total;
+                intPorcentajePositives = ((float) positivesF * 100) / (float) total;
+                intPorcentajeNegatives = ((float) negativesF * 100) / (float) total;
             }
 
-            if (positives > 0) {
+            if (positivesF > 0) {
                 JSONObject node1 = new JSONObject();
                 node1.put("label", "Positivos");
-                node1.put("value1", "" + positives);
+                node1.put("value1", "" + positivesF);
                 node1.put("value2", "" + round(intPorcentajePositives));
                 node1.put("color", "#008000");
                 node1.put("label2", "");
@@ -144,10 +170,10 @@
                 node.put(node1);
             }
 
-            if (negatives > 0) {
+            if (negativesF > 0) {
                 JSONObject node2 = new JSONObject();
                 node2.put("label", "Negativos");
-                node2.put("value1", "" + negatives);
+                node2.put("value1", "" + negativesF);
                 node2.put("value2", "" + round(intPorcentajeNegatives));
                 node2.put("color", "#FF0000");
                 node2.put("label2", "");
@@ -156,10 +182,10 @@
                 node.put(node2);
             }
 
-            if (neutrals > 0) {
+            if (neutralsF > 0) {
                 JSONObject node3 = new JSONObject();
                 node3.put("label", "Neutros");
-                node3.put("value1", "" + neutrals);
+                node3.put("value1", "" + neutralsF);
                 node3.put("value2", "" + round(intPorcentajeNeutrals));
                 node3.put("color", "#FFD700");
                 node3.put("label2", "");
@@ -169,7 +195,7 @@
             }
 
         }
-        
+
         return node;
     }
 
