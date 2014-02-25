@@ -198,7 +198,7 @@ if (!user.isSigned()) {
                             <td><%=ownerGroup%></td>
                             <td><%=status%></td>
                             <td class="swbp-actions">
-                                <a href="<%=propsUrl%>" title="<%=paramRequest.getLocaleString("msgInfo")%>" class="btn btn-default" data-toggle="modal" data-target="#modalDialog"><span class="fa fa-exclamation-circle"></span></a>
+                                <a href="<%=propsUrl%>" title="<%=paramRequest.getLocaleString("msgInfo")%>" class="btn btn-default" data-toggle="modal" data-target="#modalDialog"><span class="fa fa-info-circle"></span></a>
                                 <%if (luser == 3 || (((Traceable)go).getCreator() != null && ((Traceable)go).getCreator().equals(user) && luser > 1)) {
                                     boolean canDelete = true;
                                     if (go instanceof RepositoryDirectory) {
