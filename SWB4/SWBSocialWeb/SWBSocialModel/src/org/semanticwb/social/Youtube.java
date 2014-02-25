@@ -391,10 +391,11 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             response = getResponse(in);
 
         } catch (java.io.IOException ioe) {
-            if (conex.getResponseCode() >= 400) {
-                //System.out.println("ERROR:" + getResponse(conex.getErrorStream()));                
-            }
-            ioe.printStackTrace();
+            /*if (conex.getResponseCode() >= 400) {
+                System.out.println("ERROR:" + getResponse(conex.getErrorStream()));                
+            }*/
+            log.error("ERROR in getRequest:" + getResponse(conex.getErrorStream()), ioe);
+            //ioe.printStackTrace();
         } finally {
             close(in);
             if (conex != null) {
@@ -795,6 +796,12 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         if(!isSn_authenticated() || getAccessToken() == null ){
             log.error("Not authenticated network: " + getTitle() + "!!!");
             return;
+        }
+        
+        //Valida que este activo el token, de lo contrario lo refresca
+        if(!this.validateToken()){
+            log.error("Unable to update the access token inside listen Youtube!");
+            this.validateToken();
         }
         //Busca en las categorias: Comedy, Film, Music, People
         //Las palabras "america+pumas"
