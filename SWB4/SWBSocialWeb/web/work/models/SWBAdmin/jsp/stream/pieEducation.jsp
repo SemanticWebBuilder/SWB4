@@ -22,8 +22,6 @@
 <%!
     JSONArray getObject(SemanticObject semObj, String lang, String filter) throws Exception {
         
-        System.out.println("Entra 1");
-        
         int highSchool = 0, college = 0, graduate = 0, undefined = 0, totalPost = 0;
         Iterator<PostIn> itObjPostIns = null;
         if (semObj.getGenericInstance() instanceof Stream) {
@@ -33,7 +31,6 @@
             SocialTopic socialTopic = (SocialTopic) semObj.getGenericInstance();
             itObjPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
         }
-        System.out.println("Entra 2");
         ArrayList highSchoolArray = new ArrayList();
         ArrayList collegeArray = new ArrayList();
         ArrayList graduateArray = new ArrayList();
@@ -61,8 +58,6 @@
                 }
             }
         }
-        System.out.println("Entra 4");
-
         Iterator ihighSchool = highSchoolArray.iterator();
         int neutralshighSchool = 0, positiveshighSchool = 0, negativeshighSchool = 0, totalPosthighSchool = 0;
         while (ihighSchool.hasNext()) {
@@ -76,7 +71,7 @@
                 negativeshighSchool++;
             }
         }
-        System.out.println("Entra 5");
+        
         Iterator icollegeArray = collegeArray.iterator();
         int neutralscollege = 0, positivescollege = 0, negativescollege = 0, totalPostcollege = 0;
         while (icollegeArray.hasNext()) {
@@ -90,7 +85,7 @@
                 negativescollege++;
             }
         }
-        System.out.println("Entra 6");
+        
         Iterator igraduateArray = graduateArray.iterator();
         int neutralsgraduate = 0, positivesgraduate = 0, negativesgraduate = 0, totalPostgraduate = 0;
         while (igraduateArray.hasNext()) {
@@ -104,7 +99,7 @@
                 negativesgraduate++;
             }
         }
-        System.out.println("Entra 7");
+        
         Iterator iundefinedArray = undefinedArray.iterator();
         int neutralsundefined = 0, positivesundefined = 0, negativesundefined = 0, totalPostundefine = 0;
         while (iundefinedArray.hasNext()) {
@@ -143,7 +138,6 @@
 
 
         if (filter.equals("all")) {            
-            System.out.println("Entra 10");
                          // if (highSchool > 0) {
             JSONObject node1 = new JSONObject();
             node1.put("label", SWBSocialResUtil.Util.getStringFromGenericLocale("highSchool", lang));
