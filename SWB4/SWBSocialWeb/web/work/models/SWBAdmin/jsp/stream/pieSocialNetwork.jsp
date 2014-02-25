@@ -124,9 +124,9 @@
             node1.put("label", "" + title);
             node1.put("value1", "" + total);
             node1.put("value2", "" + round(intPorcentaje));
-            if (positives > negatives && positives > neutrals) {
+            if (positivesF > negativesF && positivesF > neutralsF) {
                 node1.put("color", "#008000");
-            } else if (negatives > neutrals) {
+            } else if (negativesF > neutralsF) {
                 node1.put("color", "#FF0000");
             } else {
                 node1.put("color", "#FFD700");
