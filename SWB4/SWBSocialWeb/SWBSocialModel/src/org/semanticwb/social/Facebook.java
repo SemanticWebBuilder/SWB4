@@ -540,27 +540,39 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
                                 if (postsData.getJSONObject(k).has("place")) {
                                     if (!postsData.getJSONObject(k).isNull("place")) {
+                                        if(!postsData.getJSONObject(k).getJSONObject("place").isNull("name")){
+                                            external.setPlace(postsData.getJSONObject(k).getJSONObject("place").getString("name"));
+                                        }
                                         if (postsData.getJSONObject(k).getJSONObject("place").has("location")) {
                                             if (!postsData.getJSONObject(k).getJSONObject("place").isNull("location")) {
-                                                String country = "";
+                                                boolean validLocation = true;
+                                                try {
+                                                    new JSONObject(postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location"));
+                                                } catch(JSONException ex) { 
+                                                    validLocation = false;
+                                                }
+                                                if(validLocation){
+                                                    System.out.println("THE LOCATION:" + postsData.getJSONObject(k).getJSONObject("place"));
+                                                    String country = "";
 
-                                                external.setLatitude(postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").getDouble("latitude"));
-                                                external.setLongitude(postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").getDouble("longitude"));
+                                                    external.setLatitude(postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").getDouble("latitude"));
+                                                    external.setLongitude(postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").getDouble("longitude"));
 
-                                                if (postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").has("country")) {//TODO: ver si en twitter es solo un codigo de 2 letras
-                                                    if (!postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").isNull("country")) {
-                                                        country = postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").getString("country");
+                                                    if (postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").has("country")) {//TODO: ver si en twitter es solo un codigo de 2 letras
+                                                        if (!postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").isNull("country")) {
+                                                            country = postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").getString("country");
 
-                                                        if (country.equals("Mexico")) {
-                                                            country = "MX";
+                                                            if (country.equals("Mexico")) {
+                                                                country = "MX";
+                                                            }
+                                                            if (country.equals("United States")) {
+                                                                country = "US";
+                                                            }
+
+                                                            external.setCountryCode(country);
                                                         }
-                                                        if (country.equals("United States")) {
-                                                            country = "US";
-                                                        }
-
-                                                        external.setCountryCode(country);
+                                                        //external.setPlace(country);
                                                     }
-                                                    external.setPlace(country);
                                                 }
                                             }
                                         }
