@@ -76,6 +76,7 @@ public class WBATrackingUserReport extends GenericResource {
     
     private static final String Mode_RENDER_UserList = "rul";
     private static final String Mode_RENDER_DataTable = "rdt";
+    private static final String Mode_SEARCH_USERS_List = "sul";
     private static final String DAILY_LOGGIN = "daily";
     private static final String MONTHLY_LOGGIN = "monthly";
     private static final String YEARLY_LOGGIN = "yearly";
@@ -126,10 +127,11 @@ public class WBATrackingUserReport extends GenericResource {
             doRenderUserList(request, response, paramsRequest);
         }else if(Mode_RENDER_DataTable.equalsIgnoreCase(mode)) {
             doFillReport(request,response,paramsRequest);
+        }else if(Mode_SEARCH_USERS_List.equalsIgnoreCase(mode)) {
+            doSearchUsers(request, response, paramsRequest);
         }else if(mode.equalsIgnoreCase("xls")) {
             doRepExcel(request,response,paramsRequest);
-        }
-        else {
+        }else {
             super.processRequest(request, response, paramsRequest);
         }
     }
@@ -162,15 +164,17 @@ public class WBATrackingUserReport extends GenericResource {
             url.setCallMethod(SWBResourceURL.Call_DIRECT);
 
             out.println("<script type=\"text/javascript\">");
-            out.println("  dojo.require(\"dijit.form.DateTextBox\");");
-            out.println("  dojo.require(\"dojox.grid.DataGrid\");");//--
             out.println("  dojo.require(\"dojo.data.ItemFileReadStore\");");//--
+            out.println("  dojo.require(\"dijit.form.DateTextBox\");");
             out.println("  dojo.require(\"dijit.form.TimeTextBox\");");
+            out.println("  dojo.require(\"dijit.form.FilteringSelect\");");
+            out.println("  dojo.require(\"dojox.grid.DataGrid\");");//--
 
             out.println("  dojo.addOnLoad(refresh);");
 
             out.println("  function refresh() {");
-            out.println("    postHtml('"+url.setMode(Mode_RENDER_UserList)+"'+'?wb_repository='+dojo.byId('wb_repository').options[dojo.byId('wb_repository').selectedIndex].value,'slave');");
+            //out.println("    postHtml('"+url.setMode(Mode_RENDER_UserList)+"'+'?wb_repository='+dijit.byId('wb_repository').options[dijit.byId('wb_repository').selectedIndex].value,'slave');");
+            out.println("    postHtml('"+url.setMode(Mode_RENDER_UserList)+"'+'?wb_repository='+dijit.byId('wb_repository').value,'slave');");
             out.println("  }");
 
             out.println("  dojo.addOnLoad(function() {");
@@ -222,7 +226,8 @@ public class WBATrackingUserReport extends GenericResource {
 
             out.println("  function getParams() {");
             out.println("    var params = '?';");
-            out.println("    params += 'wb_repository='+dojo.byId('wb_repository').value;");
+            //out.println("    params += 'wb_repository='+dojo.byId('wb_repository').value;");
+            out.println("    params += 'wb_repository='+dijit.byId('wb_repository').value;");
             out.println("    params += '&wb_user='+dojo.byId('wb_user').value;");
             out.println("    params += '&fecha11='+dojo.byId('wb_fecha11').value;");
             out.println("    params += '&t11='+dojo.byId('wb_t11').value;");
@@ -231,12 +236,12 @@ public class WBATrackingUserReport extends GenericResource {
             out.println("    return params;");
             out.println("  }\n");
 
-            out.println("function doXml(accion, size) { ");
-            out.println("      var params = getParams(accion);");
+            out.println("function doXml(size) { ");
+            out.println("      var params = getParams();");
             out.println("      window.open(\""+url.setMode(SWBResourceURL.Mode_XML)+"\"+params, 'xml', size);    ");
             out.println("}");
 
-            out.println("  function doExcel(accion, size) { ");
+            out.println("  function doExcel(size) { ");
             out.println("    var params = getParams();");
             out.println("    window.open(\""+url.setMode("xls")+"\"+params,\"trck\",size);    ");
             out.println("  }");
@@ -271,7 +276,7 @@ public class WBATrackingUserReport extends GenericResource {
 
             out.println("<tr>");
             out.println("<td>" + paramsRequest.getLocaleString("lblRepository") + ":</td>");
-            out.println("<td colspan=\"2\"><select id=\"wb_repository\" name=\"wb_repository\" onchange=\"getHtml('"+url.setMode(Mode_RENDER_UserList)+"'+'?wb_repository='+this.value,'slave');\">");
+            out.println("<td colspan=\"2\"><select dojoType=\"dijit.form.FilteringSelect\" id=\"wb_repository\" name=\"wb_repository\" onchange=\"getHtml('"+url.setMode(Mode_RENDER_UserList)+"'+'?wb_repository='+this.value,'slave');\" autoComplete=\"true\" >");
             Iterator<UserRepository> userRepositories = SWBContext.listUserRepositories();
             while(userRepositories.hasNext()) {
                 UserRepository ur = userRepositories.next();
@@ -285,6 +290,24 @@ public class WBATrackingUserReport extends GenericResource {
             out.println("</td>");
             out.println("<td>&nbsp;</td>");
             out.println("</tr>");
+            
+            
+            
+out.println("<tr>");
+out.println(" <td class=\"labels\"><label for=\"wb_srch_usr\">"+paramsRequest.getLocaleString("lblSerchByUser")+":</label></td>");
+out.println(" <td colspan=\"2\">");
+out.println("  <input id=\"wb_srch_usr\" type=\"text\" dojoType=\"dijit.form.TextBox\" /> &nbsp;");
+out.print("  <button dojoType=\"dijit.form.Button\" onclick=\"");
+out.print("                                                    var s=document.getElementById('wb_srch_usr').value;");
+out.print("                                                    var rep=dijit.byId('wb_repository').value;");
+out.print("                                                    var cont=getSyncHtml('"+url.setMode(Mode_SEARCH_USERS_List)+"?wb_repository='+rep+'&s='+s);");
+out.print("                                                    var sel = document.getElementById('slave');");
+out.print("                                                    sel.innerHTML =cont;");
+out.println("                                                    return false;\" title=\"Buscar Usuarios\">Buscar</button>");
+out.println("</td>");
+out.println("</tr>");
+
+
 
             out.println("<tr>");
             out.println("<td>" + paramsRequest.getLocaleString("lblUser") + ":</td>");
@@ -482,7 +505,8 @@ public class WBATrackingUserReport extends GenericResource {
      * @throws SWBResourceException the sWB resource exception
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    public void doRenderUserList(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+    public void doRenderUserList(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
+    {
         response.setContentType("text/html;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -502,6 +526,38 @@ public class WBATrackingUserReport extends GenericResource {
                 out.print(" selected=\"selected\" ");
             }
             out.print(">"+user.getFullName()+" - "+user.getLogin()+"</option>");
+        }
+        out.println("</select>");
+        out.flush();
+        out.close();
+    }
+    
+    public void doSearchUsers(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
+    {
+        response.setContentType("text/html;charset=iso-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        PrintWriter out = response.getWriter();
+        
+        String search = request.getParameter("s");
+        String repositoryId = request.getParameter("wb_repository");
+        UserRepository userRepository = SWBContext.getUserRepository(repositoryId);
+        
+        //out.println("<select id=\"wb_user\" name=\"wb_user\" size=\"8\">");
+        out.println("<select id=\"wb_user\" name=\"wb_user\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" size=\"8\" invalidMessage=\"Dato invalido.\" >");
+        if(search!=null && userRepository!=null)
+        {
+            search = search.toLowerCase();
+            Iterator<User> it2 = userRepository.listUsers();
+            while (it2.hasNext())
+            {
+                User user = it2.next();
+                String txt = user.getFullName()+" - "+user.getLogin();
+                if(search.length()==0 || txt.toLowerCase().indexOf(search)>-1)
+                {
+                    out.println("<option value=\""+user.getLogin()+"\">"+txt+"</option>");
+                }
+            }
         }
         out.println("</select>");
         out.flush();
