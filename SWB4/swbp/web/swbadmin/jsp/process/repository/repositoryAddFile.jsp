@@ -65,6 +65,14 @@ if (!user.isSigned()) {
 } else {
     SWBResourceURL viewURL = paramRequest.getRenderUrl().setMode(SWBParamRequest.Mode_VIEW);
     SWBResourceURL createURL = paramRequest.getActionUrl().setAction(ProcessFileRepository.ACT_NEWFILE);
+    
+    String comments = "";
+    String description = "";
+    if (re != null && vi.getVersionComment() != null) {
+        comments = vi.getVersionComment();
+    }
+    
+    if (re != null && re.getDisplayDescription(lang) != null) description = re.getDisplayDescription(lang);
     %>
     <script src="<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/repository/fileRepositoryUtils.js" charset="utf-8"></script>
     <div class="col-lg-offset-3 col-lg-6">
@@ -86,13 +94,13 @@ if (!user.isSigned()) {
                 <div class="form-group">
                     <label for="" class="col-lg-4 control-label"><%=paramRequest.getLocaleString("msgDescription")%> *</label>
                     <div class="col-lg-6">
-                        <textarea name="fdescription" id="fdescription" class="form-control"><%=(re != null)?re.getDisplayDescription(lang):""%></textarea>
+                        <textarea name="fdescription" id="fdescription" class="form-control"><%=description%></textarea>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="" class="col-lg-4 control-label"><%=paramRequest.getLocaleString("msgComments")%></label>
                     <div class="col-lg-6">
-                        <textarea name="fcomment" id="fcomment" class="form-control"><%=(re != null)?vi.getVersionComment():""%></textarea>
+                        <textarea name="fcomment" id="fcomment" class="form-control"><%=comments%></textarea>
                     </div>
                 </div>
                 <%if (re == null) {%>
