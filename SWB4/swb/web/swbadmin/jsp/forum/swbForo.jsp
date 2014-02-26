@@ -83,48 +83,36 @@ a:hover {text-decoration: underline;}
 <!-- Begin view Post -->
 <div class="row">
     <div class="col-lg-6 col-lg-offset-3">
-        <div class="row text-right">
-            <ul class="list-unstyled list-inline ">
-                <li>
-                    <a href="<%=webpage.getParent().getUrl(lang)%>" class="btn btn-default swbp-btn-action" title="Herramientas de colaboración">
-                        <span class="fa fa-reply fa-fw"></span> Herramientas de colaboración</a>
-                </li>
-                <li>
-                    <%if (!oforum.isOnlyAdminCreateThreads() || isforumAdmin) {%>
-                    <%if (user != null && user.isRegistered()) {%><a class="btn btn-default swbp-btn-action" style="color: #fff;" href="<%=urlthread%>">
-                        <span class="fa fa-plus"></span>
-                        <%=paramRequest.getLocaleString("publicThread")%></a><%} else {%><%=paramRequest.getLocaleString("signintopost")%><%}%>
-                        <%}%>
-                </li>
-            </ul>
-        </div>
         <div class="panel panel-default swbp-panel">
             <div class="panel-heading swbp-panel-title">
                 <div class="panel-title">
-                    <%
-
-                    %>
                     <h1 class="panel-title"><span class="fa fa-comments"></span> <%=paramRequest.getLocaleString("lblComments")%>
-
                         <div class="pull-right">
-                            <%if (isTheAuthor || isforumAdmin) {
-                                    urlthread.setMode("editThread");%>
-                            <a class="btn btn-success" href="<%=urlthread.setParameter("threadUri", thread.getURI())%>">
-                                <span class="fa fa-pencil"></span>
-                                <%=paramRequest.getLocaleString("edit")%></a>
-                                <%}
-                                    if (isTheAuthor || isforumAdmin) {
-                                        url.setAction("removePost");
-                                        url.setParameter("isthread", "1");%> 
-                                <%
-                                    actionURL.setAction("removeThread");
-                                    actionURL.setParameter("forumUri", request.getParameter("forumUri"));
+                            <%
+                            if (isTheAuthor || isforumAdmin) {
+                                urlthread.setMode("editThread");
                                 %>
-                            <a class="btn btn-success" onclick="if (!confirm('<%=paramRequest.getLocaleString("remove")%> <%=thread.getTitle()%>?'))
+                                    <a class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Editar tema" href="<%=urlthread.setParameter("threadUri", thread.getURI())%>">
+                                    <span class="fa fa-pencil"></span>
+                                    </a>
+                                <%
+                            }
+                            if (isTheAuthor || isforumAdmin) {
+                                url.setAction("removePost");
+                                url.setParameter("isthread", "1");
+                                actionURL.setAction("removeThread");
+                                actionURL.setParameter("forumUri", request.getParameter("forumUri"));
+                                %>
+                                    <a class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Eliminar tema" onclick="if (!confirm('<%=paramRequest.getLocaleString("remove")%> <%=thread.getTitle()%>?'))
                                         return false;" href="<%=actionURL.setParameter("threadUri", thread.getURI())%>">
                                 <span class="fa fa-trash-o"></span>
-                                <%=paramRequest.getLocaleString("remove")%></a>
-                                <%}%>
+                                </a>
+                                <%
+                            }
+                            %>
+                            <a href="<%=paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW)%>" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Volver a lista de temas">
+                                <span class="fa fa-reply"></span>
+                            </a>
                         </div>
                     </h1>
                 </div>
@@ -201,7 +189,7 @@ a:hover {text-decoration: underline;}
                         <%}%>
 
                         <div class="panel-footer text-right">
-                            <a class="btn btn-default" style="color: #fff;" href="<%=paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW)%>">
+                            <a class="btn btn-default" href="<%=paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW)%>">
                                 <span class="fa fa-mail-reply"></span>
                                 <%=paramRequest.getLocaleString("cancel")%></a>
                             <button id="saveForm" class="btn btn-success" type="submit">
@@ -447,26 +435,25 @@ a:hover {text-decoration: underline;}
 %>
 <div class="row">
     <div class="col-lg-10 col-lg-offset-1">
-
-        <div class="row text-right">
-            <ul class="list-unstyled list-inline ">
-                <li>
-                    <a href="<%=webpage.getParent().getUrl(lang)%>" class="btn btn-default swbp-btn-action" title="Herramientas de colaboración">
-                        <span class="fa fa-reply fa-fw"></span> Herramientas de colaboración</a>
-                </li>
-                <li>
-                    <%if (!oforum.isOnlyAdminCreateThreads() || isforumAdmin) {%>
-                    <%if (user != null && user.isRegistered()) {%><a class="btn btn-default swbp-btn-action" style="color: #fff;" href="<%=url%>">
-                        <span class="fa fa-plus"></span>
-                        <%=paramRequest.getLocaleString("publicThread")%></a><%} else {%><%=paramRequest.getLocaleString("signintopost")%><%}%>
-                        <%}%>
-                </li>
-            </ul>
-        </div>
         <div class="panel panel-default swbp-panel">
             <div class="panel-heading swbp-panel-title">
                 <div class="panel-title">
-                    <h1 class="panel-title"><span class="fa fa-bullhorn"></span> Foro</h1>
+                    <h1 class="panel-title"><span class="fa fa-bullhorn"></span> Foro
+                        <div class="pull-right">
+                            <%
+                            if (!oforum.isOnlyAdminCreateThreads() || isforumAdmin) {
+                                if (user != null && user.isRegistered()) {
+                                    %>
+                                    <a class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Agregar tema" href="<%=url%>"><span class="fa fa-plus"></span></a>
+                                    <%
+                                }
+                            }
+                            %>
+                            <a href="<%=webpage.getParent().getUrl(lang)%>" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Herramientas de colaboración">
+                                <span class="fa fa-reply"></span>
+                            </a>
+                        </div>
+                    </h1>
                 </div>
             </div>
             <div class="panel-body">
