@@ -197,9 +197,13 @@ public class StreamMap extends GenericResource{
         out.println("</label>");
         out.println("    </div>");
         
-       
+       String showGeoProfile="";  
+       if(request.getParameter("showGeoProfile")!=null && request.getParameter("showGeoProfile").equals("on"))
+       {
+           showGeoProfile="checked";
+       }
        out.println("<div class=\"divMapUbica\">");
-       out.println("<input type=\"checkbox\" name=\"showGeoProfile\" id=\"divMapUbica\"/>");
+       out.println("<input type=\"checkbox\" name=\"showGeoProfile\" id=\"divMapUbica\" "+ showGeoProfile+" />");
        out.println("<label for=\"divMapUbica\" title=\"Muestra la ubicación registrada en el perfil de usuario\">Utilizar ubicación de perfil de usuario</label>");
        out.println("</div>");
        
