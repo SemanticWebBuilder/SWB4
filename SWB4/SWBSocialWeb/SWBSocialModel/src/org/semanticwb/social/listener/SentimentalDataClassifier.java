@@ -125,7 +125,10 @@ public class SentimentalDataClassifier {
     private void initAnalysis() {
         long tini = System.currentTimeMillis();
         //Normalizo
-        String externalString2Clasify_TMP = externalString2Clasify;
+        if (externalString2Clasify == null) {
+            return;
+        }
+        
         /*
          externalString2Clasify=SWBSocialUtil.Classifier.normalizer(externalString2Clasify).getNormalizedPhrase();
         
@@ -217,14 +220,13 @@ public class SentimentalDataClassifier {
         //System.out.println("externalString2Clasify:"+externalString2Clasify);
 
 
-        if (externalString2Clasify == null) {
-            return;
-        }
-
         //Para el caso de Streaming Api que no se le puede enviar un bounding box, ni una latitud, longitud y radio para que solo me traiga tweets de una región
+        System.out.println("Geo-1---Lat:"+stream.getGeoCenterLatitude()+"/long:"+stream.getGeoCenterLongitude()+",classifyGeoLocation:"+classifyGeoLocation);
+        System.out.println("Geo-2--Lat:"+externalPost.getLatitude()+",Long:"+externalPost.getLongitude());
         if (stream.getGeoCenterLatitude() != 0 && stream.getGeoCenterLongitude() != 0 && classifyGeoLocation) {
-            //System.out.println("Geo-1");
+            System.out.println("Geo-1---Lat:"+stream.getGeoCenterLatitude()+"/long:"+stream.getGeoCenterLongitude());
             if (externalPost.getLatitude() != 0 && externalPost.getLongitude() != 0) {
+                System.out.println("Geo-2--Lat:"+externalPost.getLatitude()+",Long:"+externalPost.getLongitude());
                 double eart_Radio = SWBSocialUtil.EART_RADIUS_KM; //Por defecto se mide en Kilometros
                 if (stream.getGeoDistanceUnit().equals("MI")) {
                     eart_Radio = SWBSocialUtil.EART_RADIUS_MI;
@@ -239,16 +241,20 @@ public class SentimentalDataClassifier {
                 if (!SWBSocialUtil.Util.isPointInsideCoodinates(externalPost.getLatitude(), externalPost.getLongitude(), boundingCoordinates)) {
                     //System.out.println("Geo-3");
                     externalPost = null;  //Destruyo el objeto ExternalPost, para que no consuma memoria.
+                    System.out.println("Geo-3");
                     return; //Regresa sin hacer nada.
                 }
             } else {  //Si en el stream se indica que es mandatorio que se tomen los tweets de una cierta región y el tweet que llega no tiene localización (latitud y longitud) pues No se hace nada con ese externalPost;
-                //System.out.println("Geo-4");
+                System.out.println("Geo-4");
                 externalPost = null;  //Destruyo el objeto ExternalPost, para que no consuma memoria.
+                //System.out.println("Geo-4");
                 return; //Regresa sin hacer nada.
             }
         }
         //Pasó filtrado por región.
         //System.out.println("Geo-Fin");
+        
+        String externalString2Clasify_TMP = externalString2Clasify;
 
         HashMap hmapValues = SWBSocialUtil.Classifier.classifyText(externalString2Clasify);
         float promSentimentalValue = ((Float) hmapValues.get("promSentimentalValue")).floatValue();
@@ -258,12 +264,12 @@ public class SentimentalDataClassifier {
 
         //long tfinTMP1=System.currentTimeMillis() - tini;
         //System.out.println("\n<!--Total Time to Classify--TMP1: " + tfinTMP1 + "ms - SWBSocial--> ");
-        /*
+  /*      
          System.out.println("SentimentalData../promSentimentalValue:"+promSentimentalValue);
          System.out.println("SentimentalData../sentimentalTweetValueType:"+sentimentalTweetValueType);
          System.out.println("SentimentalData../promIntensityValue:"+promIntensityValue);
          System.out.println("SentimentalData../intensityTweetValueType:"+intensityTweetValueType);
-        */
+    */    
 
         //////////////////////////////////ESTO (PARA ABAJO) SI FUNCIONA BIEN ------10 - Julio - 2013//////////////////////////////////
         boolean filterPositives = stream.isFilterSentimentalPositive();
