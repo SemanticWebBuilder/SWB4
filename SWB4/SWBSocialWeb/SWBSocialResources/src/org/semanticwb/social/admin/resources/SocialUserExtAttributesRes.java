@@ -90,12 +90,13 @@ public class SocialUserExtAttributesRes extends GenericResource{
                 System.out.println("user.getId():"+user.getId()+",socialextatt-2:"+socialextatt);
             }
             
+            /*
             Enumeration enParams=request.getParameterNames();
             while(enParams.hasMoreElements())
             {
                 String paramName=(String)enParams.nextElement();
                 System.out.println("param:"+paramName+",value:"+request.getParameter(paramName));
-            }
+            }*/
 
             if (request.getParameter(SocialUserExtAttributes.social_userCanRemoveMsg.getName()) != null) {
                 System.out.println(SocialUserExtAttributes.social_userCanRemoveMsg.getName()+"---True");
@@ -103,7 +104,7 @@ public class SocialUserExtAttributesRes extends GenericResource{
             }else{
                 System.out.println(SocialUserExtAttributes.social_userCanRemoveMsg.getName()+"---False");
                 socialextatt.setUserCanRemoveMsg(false);
-                socialextatt.removeProperty(SocialUserExtAttributes.social_userCanRemoveMsg.getName());
+               // socialextatt.removeProperty(SocialUserExtAttributes.social_userCanRemoveMsg.getName());
             }
 
             if (request.getParameter(SocialUserExtAttributes.social_userCanRespondMsg.getName()) != null) {
@@ -112,7 +113,7 @@ public class SocialUserExtAttributesRes extends GenericResource{
             }else{
                 System.out.println(SocialUserExtAttributes.social_userCanRespondMsg.getName()+"---False");
                 socialextatt.setUserCanRespondMsg(false);
-                socialextatt.removeProperty(SocialUserExtAttributes.social_userCanRespondMsg.getName());
+                //socialextatt.removeProperty(SocialUserExtAttributes.social_userCanRespondMsg.getName());
             }
 
             if (request.getParameter(SocialUserExtAttributes.social_userCanReValueMsg.getName()) != null) {
@@ -121,7 +122,7 @@ public class SocialUserExtAttributesRes extends GenericResource{
             }else{
                 System.out.println(SocialUserExtAttributes.social_userCanReValueMsg.getName()+"---False");
                 socialextatt.setUserCanReValueMsg(false);
-                socialextatt.removeProperty(SocialUserExtAttributes.social_userCanReValueMsg.getName());
+                //socialextatt.removeProperty(SocialUserExtAttributes.social_userCanReValueMsg.getName());
             }
 
             if (request.getParameter(SocialUserExtAttributes.social_userCanReTopicMsg.getName()) != null) {
@@ -130,7 +131,7 @@ public class SocialUserExtAttributesRes extends GenericResource{
             }else{
                 System.out.println(SocialUserExtAttributes.social_userCanReTopicMsg.getName()+"---False");
                 socialextatt.setUserCanReTopicMsg(false);
-                socialextatt.removeProperty(SocialUserExtAttributes.social_userCanReTopicMsg.getName());
+                //socialextatt.removeProperty(SocialUserExtAttributes.social_userCanReTopicMsg.getName());
             }
         }
     }
