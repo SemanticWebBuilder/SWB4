@@ -84,39 +84,53 @@ public class SocialUserExtAttributesRes extends GenericResource{
             User user=(User)semObj.getGenericInstance();
 
             SocialUserExtAttributes socialextatt = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), wsite);
+            System.out.println("user.getId():"+user.getId()+",socialextatt-1:"+socialextatt);
             if (socialextatt == null) {
                 socialextatt = SocialUserExtAttributes.ClassMgr.createSocialUserExtAttributes(user.getId(), wsite);
+                System.out.println("user.getId():"+user.getId()+",socialextatt-2:"+socialextatt);
             }
-            /*
+            
             Enumeration enParams=request.getParameterNames();
             while(enParams.hasMoreElements())
             {
                 String paramName=(String)enParams.nextElement();
                 System.out.println("param:"+paramName+",value:"+request.getParameter(paramName));
-            }*/
+            }
 
             if (request.getParameter(SocialUserExtAttributes.social_userCanRemoveMsg.getName()) != null) {
+                System.out.println(SocialUserExtAttributes.social_userCanRemoveMsg.getName()+"---True");
                 socialextatt.setUserCanRemoveMsg(true);
             }else{
+                System.out.println(SocialUserExtAttributes.social_userCanRemoveMsg.getName()+"---False");
                 socialextatt.setUserCanRemoveMsg(false);
+                socialextatt.removeProperty(SocialUserExtAttributes.social_userCanRemoveMsg.getName());
             }
 
             if (request.getParameter(SocialUserExtAttributes.social_userCanRespondMsg.getName()) != null) {
+                System.out.println(SocialUserExtAttributes.social_userCanRespondMsg.getName()+"---True");
                 socialextatt.setUserCanRespondMsg(true);
             }else{
+                System.out.println(SocialUserExtAttributes.social_userCanRespondMsg.getName()+"---False");
                 socialextatt.setUserCanRespondMsg(false);
+                socialextatt.removeProperty(SocialUserExtAttributes.social_userCanRespondMsg.getName());
             }
 
             if (request.getParameter(SocialUserExtAttributes.social_userCanReValueMsg.getName()) != null) {
+                System.out.println(SocialUserExtAttributes.social_userCanReValueMsg.getName()+"---True");
                 socialextatt.setUserCanReValueMsg(true);
             }else{
+                System.out.println(SocialUserExtAttributes.social_userCanReValueMsg.getName()+"---False");
                 socialextatt.setUserCanReValueMsg(false);
+                socialextatt.removeProperty(SocialUserExtAttributes.social_userCanReValueMsg.getName());
             }
 
             if (request.getParameter(SocialUserExtAttributes.social_userCanReTopicMsg.getName()) != null) {
+                System.out.println(SocialUserExtAttributes.social_userCanReTopicMsg.getName()+"---True");
                 socialextatt.setUserCanReTopicMsg(true);
             }else{
+                System.out.println(SocialUserExtAttributes.social_userCanReTopicMsg.getName()+"---False");
                 socialextatt.setUserCanReTopicMsg(false);
+                socialextatt.removeProperty(SocialUserExtAttributes.social_userCanReTopicMsg.getName());
             }
         }
     }
