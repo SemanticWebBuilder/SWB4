@@ -189,9 +189,6 @@ a:hover {text-decoration: underline;}
                         <%}%>
 
                         <div class="panel-footer text-right">
-                            <a class="btn btn-default" href="<%=paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW)%>">
-                                <span class="fa fa-mail-reply"></span>
-                                <%=paramRequest.getLocaleString("cancel")%></a>
                             <button id="saveForm" class="btn btn-success" type="submit">
                                 <span class="fa fa-save"></span>
                                 <%=paramRequest.getLocaleString("send")%></button>
