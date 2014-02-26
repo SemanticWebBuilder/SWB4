@@ -26,7 +26,7 @@ import org.semanticwb.social.util.SendPostThread;
 public class ClassifierThread extends java.lang.Thread {
 
     /** The log. */
-    private static Logger log = SWBUtils.getLogger(SendPostThread.class);
+    private static Logger log = SWBUtils.getLogger(ClassifierThread.class);
     /** The emails. */
     //PostIn post = null;
     ArrayList <ExternalPost> aListExternalPost=null;

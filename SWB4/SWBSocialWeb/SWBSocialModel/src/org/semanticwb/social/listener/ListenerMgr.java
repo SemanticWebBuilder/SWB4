@@ -229,7 +229,9 @@ public class ListenerMgr implements SWBAppObject {
                         {
                             System.out.println("Ejecuta Red Social/Listen:"+socialNet.getId());
                             try{
-                                socialNet.listen(stream);
+                                //socialNet.listen(stream);
+                                 ListenerClassifierThread lisClassThread=new ListenerClassifierThread(socialNet, stream);
+                                 lisClassThread.start();
                             }catch(Exception e){
                                 log.error(e);
                             }
@@ -239,7 +241,9 @@ public class ListenerMgr implements SWBAppObject {
                     {
                         System.out.println("Ejecuta Red Social/Listen:"+socialNet.getId());
                         try{
-                            socialNet.listen(stream);
+                            //socialNet.listen(stream);
+                            ListenerClassifierThread lisClassThread=new ListenerClassifierThread(socialNet, stream);
+                            lisClassThread.start();
                         }catch(Exception e){
                             log.error(e);
                         }
