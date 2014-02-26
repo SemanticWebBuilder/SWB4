@@ -19,6 +19,7 @@
     org.semanticwb.portal.resources.sem.forum.Thread thread = (org.semanticwb.portal.resources.sem.forum.Thread) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(threadUri);
     WebSite model = paramRequest.getWebPage().getWebSite();
     SWBResourceURL urlAction = paramRequest.getActionUrl().setAction("addThread");
+    SWBResourceURL backUrl = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW);
     SWBFormMgr forMgr = new SWBFormMgr(org.semanticwb.portal.resources.sem.forum.Thread.frm_Thread, model.getSemanticObject(), SWBFormMgr.MODE_CREATE);
     String iconClass = "fa fa-plus";
     Boolean isCaptcha = request.getAttribute("isCaptcha") != null ? Boolean.parseBoolean(request.getAttribute("isCaptcha").toString()) : false;
@@ -32,6 +33,8 @@
         urlAction.setAction("editThread");
         urlAction.setParameter("threadUri", thread.getURI());
         lblAction = paramRequest.getLocaleString("edit") + " " + paramRequest.getLocaleString("thread");
+        backUrl.setAction("viewPost");
+        backUrl.setParameter("threadUri", threadUri);
     }
     String flag = request.getParameter("flag") != null ? request.getParameter("flag").toString() : "";
 %>
@@ -89,7 +92,7 @@
                     <%}%>
                 </div>
                 <div class="panel-footer text-right">
-                    <a class="btn btn-default" style="color: #fff;" href="<%=paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW).setAction("viewPost").setParameter("threadUri", threadUri)%>"> 
+                    <a class="btn btn-default" href="<%=backUrl%>"> 
                         <span class="fa fa-mail-reply"></span>
                         <%=paramRequest.getLocaleString("cancel")%></a>
                     <button type="submit" class="btn btn-success" id="btnSaveThread">
