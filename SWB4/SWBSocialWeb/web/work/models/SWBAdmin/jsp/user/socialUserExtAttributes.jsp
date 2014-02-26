@@ -29,9 +29,9 @@
 <%
     String userAttrStr=paramRequest.getLocaleString("userAttr");
     if(request.getParameter("suri")==null) return; 
-    SemanticObject sObj=SemanticObject.getSemanticObject(request.getParameter("suri"));
+    SemanticObject sObj=SemanticObject.createSemanticObject(request.getParameter("suri")); 
     if(sObj==null) return;
-    User user=(User)sObj.getGenericInstance();   
+    User user=(User)sObj.createGenericInstance();    
     //Tomando en cuenta que los usuarios siempre seran del sitio de Admin..., es decir, que ningún socialSite tendra usuarios
     WebSite wsite=SWBContext.getAdminWebSite();
     SocialUserExtAttributes socialExtAtt = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), wsite);
