@@ -145,11 +145,16 @@ if (!user.isSigned()) {
             request.getSession(true).removeAttribute("msg");
         }
         %>
+        <div class="row">
+            <div class=" pull-right">
         <ul class="list-unstyled list-inline">
             <li>
+                <a class="btn btn-default" data-tooltip="tooltip" data-pacement="bottom" title="<%=paramRequest.getLocaleString("createCase")%>" onclick="showModal('<%=createPiUrl%>', '<%=paramRequest.getLocaleString("createCase")%>', '<%=paramRequest.getLocaleString("msgLoading")%>', '<%=paramRequest.getLocaleString("msgResponseError")%>'); return false;" href=""><span class="fa fa-play-circle fa-lg"></span></a>
+            </li>
+            <li>
                 <div class="dropdown">
-                    <a class="btn btn-default" data-toggle="dropdown">
-                        <span class="fa fa-sort-amount-asc"></span> <%=paramRequest.getLocaleString("sortLabel")%> <span class="caret"></span>
+                    <a class="btn btn-default" data-toggle="dropdown" data-tooltip="tooltip" data-placement="bottom" title=" <%=paramRequest.getLocaleString("sortLabel")%> ">
+                        <span class="fa fa-sort-amount-asc"></span><span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li class="dropdown-header" role="menuitem"><%=paramRequest.getLocaleString("sortDate")%></li>
@@ -179,8 +184,8 @@ if (!user.isSigned()) {
             </li>
             <li>
                 <div class="dropdown">
-                    <a class="btn btn-default" data-toggle="dropdown">
-                        <span class="fa fa-filter"></span> <%=paramRequest.getLocaleString("filteringLabel")%> <span class="caret"></span>
+                    <a class="btn btn-default" data-toggle="dropdown" data-tooltip="tooltip" data-placement="bottom" title="<%=paramRequest.getLocaleString("filteringLabel")%>">
+                        <span class="fa fa-filter"></span><span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li class="dropdown-header" role="menuitem"><%=paramRequest.getLocaleString("sortStatus")%></li>
@@ -246,10 +251,9 @@ if (!user.isSigned()) {
                 %>
             </select>
             </li>
-            <li>
-                <a class="btn btn-default hidden-lg" onclick="showModal('<%=createPiUrl%>', '<%=paramRequest.getLocaleString("createCase")%>', '<%=paramRequest.getLocaleString("msgLoading")%>', '<%=paramRequest.getLocaleString("msgResponseError")%>'); return false;" href=""><span class="fa fa-play-circle fa-lg fa-fw"></span> <%=paramRequest.getLocaleString("createCase")%></a>
-            </li>
         </ul>
+            </div>
+        </div>
         <% if (tinstances != null && tinstances.size() > 0) { %>
             <div class="table-responsive">
                 <table class="table table-hover swbp-table">
