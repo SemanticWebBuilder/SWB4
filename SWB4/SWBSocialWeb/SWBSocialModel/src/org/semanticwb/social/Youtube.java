@@ -31,6 +31,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -361,6 +362,9 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         URL serverUrl = null;
         if (params != null) {
             serverUrl = new URL(url + "?" + paramString);
+            if(url.equals("https://gdata.youtube.com/feeds/api/videos")){
+            System.out.println("LA URL DE BUSQUEDA:" + serverUrl);
+            }
         } else {
             serverUrl = new URL(url);
         }
@@ -501,7 +505,8 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             in = conex.getInputStream();
             response = getResponse(in);
         } catch (java.io.IOException ioe) {
-            ioe.printStackTrace();
+            //ioe.printStackTrace();
+            log.error("ERROR in postRequest:" + getResponse(conex.getErrorStream()), ioe);
         } finally {
             close(in);
             close(out);
@@ -815,7 +820,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         String searchPhrases = getPhrases(stream.getPhrase());
         String category = "";
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-        
+        DecimalFormat df = new DecimalFormat("#.00");
         if(searchPhrases == null || searchPhrases.isEmpty()){
             return;
         }
@@ -853,8 +858,25 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             params.put("max-results", String.valueOf(maxResults));
             params.put("alt", "jsonc");
             params.put("orderby", "published");
+            //params.put("location","lat,long!");
+            //params.put("location-radius","100km");
             if (!category.isEmpty()) {
                 params.put("category", category);
+            }
+            if(stream.getGeoCenterLatitude() != 0 && stream.getGeoCenterLongitude() != 0 && stream.getGeoRadio() > 0){
+                if(stream.getGeoRadio() < 50){//Default value
+                    params.put("location",stream.getGeoCenterLatitude() +"," + stream.getGeoCenterLongitude() +"!");
+                    params.put("location-radius","50km");
+                    //query.setGeoCode(new GeoLocation(stream.getGeoCenterLatitude(), stream.getGeoCenterLongitude()), 50, "km");//(latitude, longitude), radius, units of distance
+                }if(stream.getGeoRadio() > 1000){//Max value
+                    params.put("location",stream.getGeoCenterLatitude() +"," + stream.getGeoCenterLongitude() +"!");
+                    params.put("location-radius","1000km");
+                    //query.setGeoCode(new GeoLocation(stream.getGeoCenterLatitude(), stream.getGeoCenterLongitude()), 50, "km");//(latitude, longitude), radius, units of distance
+                }else{
+                    params.put("location",stream.getGeoCenterLatitude() +"," + stream.getGeoCenterLongitude() +"!");
+                    params.put("location-radius",stream.getGeoRadio() + "km");
+                    //query.setGeoCode(new GeoLocation(stream.getGeoCenterLatitude(), stream.getGeoCenterLongitude()), stream.getGeoRadio(), "km");//(latitude, longitude), radius, units of distance
+                }
             }
 
             try {
@@ -870,7 +892,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                     //formatter.setTimeZone(TimeZone.getTimeZone("GMT-6"));
                     //Date currentVideoID = new Date(0L);
 
-                    //System.out.println("Antes de entrar al for");
+                    System.out.println("\n\n*******Antes de entrar al for:" + count);
                     for (int i = 0; i < count; i++) {
                         ExternalPost external = new ExternalPost();
                         JSONObject id = items.getJSONObject(i);
@@ -887,6 +909,16 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                             description = title + " / " + description;
                         }
                         String categoryItem = id.getString("category");
+                        Double latitude = null;
+                        Double longitude = null;
+                        
+                        if(!id.isNull("geoCoordinates")){
+                            if(!id.getJSONObject("geoCoordinates").isNull("latitude") &&
+                            !id.getJSONObject("geoCoordinates").isNull("longitude")){
+                                latitude = id.getJSONObject("geoCoordinates").getDouble("latitude");
+                                longitude = id.getJSONObject("geoCoordinates").getDouble("longitude");
+                            }
+                        }
 
                         Date uploaded = formatter.parse(id.getString("uploaded"));
                         if (uploaded.before(lastVideoID) || uploaded.equals(lastVideoID)) {
@@ -905,6 +937,11 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                             external.setVideo(BASE_VIDEO_URL + idItem);
                             external.setPostType(SWBSocialUtil.VIDEO);
                             aListExternalPost.add(external);
+                            if(latitude != null && longitude != null){
+                                external.setLatitude(latitude);
+                                external.setLongitude(longitude);
+                                external.setPlace("(" +df.format(latitude) + "," + df.format(longitude) + ")");
+                            }
                             //currentVideoID = uploaded;
                         }
 
@@ -919,7 +956,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                     
                     if((blockOfVideos > 0) && (aListExternalPost.size() >= blockOfVideos)){//Classify the block of videos
                         System.out.println("CLASSIFYING:" + aListExternalPost.size());
-                        new Classifier((ArrayList <ExternalPost>)aListExternalPost.clone(), stream, this, false);
+                        new Classifier((ArrayList <ExternalPost>)aListExternalPost.clone(), stream, this, true);
                         aListExternalPost.clear();
                     }
                     if(!stream.isActive()){//If the stream has been disabled stop listening
@@ -943,7 +980,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         System.out.println("Total Videos in Array: " + aListExternalPost.size());
 
         if (aListExternalPost.size() > 0) {
-            new Classifier(aListExternalPost, stream, this, false);
+            new Classifier(aListExternalPost, stream, this, true);
         }
         System.out.println("Total Videos: " + totalResources);
     }
@@ -1088,8 +1125,12 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         try {
             String youtubeResponse = getRequest(null, "https://www.googleapis.com/plus/v1/people/" + googlePlusUserId + "?key=AIzaSyBEbVYqvZudUYdt-UeHkgRl-rkvNHCw4Z8", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
             JSONObject parseUsrInf = null;
-            parseUsrInf = new JSONObject(youtubeResponse);
-            System.out.println(parseUsrInf);
+            try{
+                parseUsrInf = new JSONObject(youtubeResponse);
+            }catch(JSONException jse){
+                parseUsrInf = new JSONObject();
+            }
+            //System.out.println(parseUsrInf);
             if (parseUsrInf.has("gender") && !parseUsrInf.isNull("gender")) {
                 userInfo.put("gender", parseUsrInf.getString("gender"));
             } else {
