@@ -202,80 +202,87 @@ a:hover {text-decoration: underline;}
             <%
                     out.print(SWBForum.getScriptValidator("saveForm", "formSavePost"));
                 }
-            %>
-            <br/>
-            <ul class="list-group">
-                <%
-                    boolean cambiaColor = true;
-                    Iterator<Post> itPost = SWBComparator.sortByCreated(thread.listPosts(), false);
-                    if (itPost.hasNext()) {
-                %>
-                <li class="list-group-item active"><span class="fa fa-comment fa-fw"></span><strong> <%=paramRequest.getLocaleString("responses")%></strong></li>
+                boolean cambiaColor = true;
+                Iterator<Post> itPost = SWBComparator.sortByCreated(thread.listPosts(), false);
+                if (itPost.hasNext()) {
+                    %>
+                    <ul class="list-group">
+                        <li class="list-group-item active"><span class="fa fa-comment fa-fw"></span><strong> <%=paramRequest.getLocaleString("responses")%></strong></li>
                         <%
+                        while (itPost.hasNext()) {
+                            Post post = itPost.next();
+                            url.setParameter("postUri", post.getURI());
+                            urlRemovePost.setParameter("postUri", post.getURI());
+                            User userPost = null;
+                            String postCreator = "Anonimo";
+                            String postCreated = "";
+                            isTheAuthor = false;
+                            if (post.getCreator() != null) {
+                                userPost = post.getCreator();
+                                postCreator = post.getCreator().getFullName();
+                                if (post.getCreator().getPhoto() != null) {
+                                    photo = SWBPortal.getWebWorkPath() + post.getCreator().getPhoto();
+                                }
+                                if (post.getCreator().getURI().equals(user.getURI())) {
+                                    isTheAuthor = true;
+                                }
                             }
-                            while (itPost.hasNext()) {
-                                Post post = itPost.next();
-                                url.setParameter("postUri", post.getURI());
-                                urlRemovePost.setParameter("postUri", post.getURI());
-                                User userPost = null;
-                                String postCreator = "Anonimo";
-                                String postCreated = "";
-                                isTheAuthor = false;
-                                if (post.getCreator() != null) {
-                                    userPost = post.getCreator();
-                                    postCreator = post.getCreator().getFullName();
-                                    if (post.getCreator().getPhoto() != null) {
-                                        photo = SWBPortal.getWebWorkPath() + post.getCreator().getPhoto();
-                                    }
-                                    if (post.getCreator().getURI().equals(user.getURI())) {
-                                        isTheAuthor = true;
-                                    }
-                                }
-                                String rowClass = "pluginRow2";
-                                if (!cambiaColor) {
-                                    rowClass = "pluginRow1";
-                                }
-                                cambiaColor = !(cambiaColor);
-                        %>
-                <li class="list-group-item swbp-foro-respuestas">
-                    <div class="img_ReplyForo">
-                        <span class="fa fa-user fa-5x"></span>
-                    </div>
-                    <p class="tituloNoticia"><%=postCreator%></p>
-                    <p><%=post.getBody()%></p>
-                    <p><%=SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage())%></p>
-                    <%
-                        urlRemovePost.setAction("removePost");
-                        urlthread.setMode("replyPost");
-                        urlthread.setParameter("postUri", post.getURI());%>
-                    <p class="pull-right"> 
-                        <%if ((user != null && user.isRegistered()) || acceptguesscomments) {%>
-                        <a class="btn btn-default" href="<%=urlthread%>">
-                            <span class="fa fa-comment"></span>
-                            <%=paramRequest.getLocaleString("comment")%></a>
-                            <%}%>
-                            <%if (isTheAuthor || isforumAdmin) {
-                                    urlthread.setMode("editPost");%>
-                        <a class="btn btn-default" href="<%=urlthread%>">
-                            <span class="fa fa-pencil"></span>
-                            <%=paramRequest.getLocaleString("edit")%></a>
-                            <%if (isTheAuthor || isforumAdmin) {
-                                    url.setAction("removePost");%><%}%>
-                            <%
-                                actionURL.setAction("removePost");
-                                actionURL.setParameter("threadUri", thread.getURI());
+                            String rowClass = "pluginRow2";
+                            if (!cambiaColor) {
+                                rowClass = "pluginRow1";
+                            }
+                            cambiaColor = !(cambiaColor);
                             %>
-                        <a class="btn btn-default" onclick="if (!confirm('<%=paramRequest.getLocaleString("remove")%> <%=post.getBody()%>?'))
-                                        return false;" href="<%=actionURL.setParameter("postUri", post.getURI())%>">
-                            <span class="fa fa-trash-o"></span>
-                            <%=paramRequest.getLocaleString("remove")%></a>
-                    </p><%}%>
-                </li>
+                            <li class="list-group-item swbp-foro-respuestas">
+                                <div class="img_ReplyForo"><span class="fa fa-user fa-5x"></span></div>
+                                <p class="tituloNoticia"><%=postCreator%></p>
+                                <p><%=post.getBody()%></p>
+                                <p><%=SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage())%></p>
+                                <%
+                                urlRemovePost.setAction("removePost");
+                                urlthread.setMode("replyPost");
+                                urlthread.setParameter("postUri", post.getURI());
+                                %>
+                                <p class="pull-right"> 
+                                <%
+                                    if ((user != null && user.isRegistered()) || acceptguesscomments) {
+                                        %>
+                                        <a class="btn btn-default" href="<%=urlthread%>">
+                                            <span class="fa fa-comment"></span>
+                                        <%=paramRequest.getLocaleString("comment")%></a>
+                                    <%
+                                    }
+                                    if (isTheAuthor || isforumAdmin) {
+                                        urlthread.setMode("editPost");
+                                        %>
+                                        <a class="btn btn-default" href="<%=urlthread%>">
+                                            <span class="fa fa-pencil"></span>
+                                            <%=paramRequest.getLocaleString("edit")%>
+                                        </a>
+                                        <%
+                                        if (isTheAuthor || isforumAdmin) {
+                                            url.setAction("removePost");
+                                        }
+                                        actionURL.setAction("removePost");
+                                        actionURL.setParameter("threadUri", thread.getURI());
+                                        %>
+                                        <a class="btn btn-default" onclick="if (!confirm('<%=paramRequest.getLocaleString("remove")%> <%=post.getBody()%>?'))
+                                            return false;" href="<%=actionURL.setParameter("postUri", post.getURI())%>">
+                                            <span class="fa fa-trash-o"></span>
+                                            <%=paramRequest.getLocaleString("remove")%>
+                                        </a>
+                                </p>
+                                <%
+                                }
+                                %>
+                            </li>
+                        <%
+                        }
+                        %>
+                    </ul>
                 <%
-                    }
+                }
                 %>
-            </ul>
-
         </div>
     </div>
 </div>
