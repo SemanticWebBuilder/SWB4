@@ -621,7 +621,6 @@
                 <rdfs:subClassOf rdf:resource="#Photoable"/>
                 <rdfs:subClassOf rdf:resource="#PostOutMonitorable"/>
                 <rdfs:subClassOf rdf:resource="#Oauthable"/>
-                <rdfs:subClassOf rdf:resource="#Kloutable"/>
                 <rdfs:subClassOf rdf:resource="#SocialNetwork"/>
                 <rdf:type rdf:resource="#NetworkType"/>
                 <rdfs:label xml:lang="en">Facebook Account</rdfs:label>
@@ -852,14 +851,14 @@
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasStream_socialNetwork">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
+    >false</swb:required>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >hasSocialNetwork</swb:propertyCodeName>
     <rdfs:label xml:lang="es">Redes Sociales</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_hasStream_socialNetwork">
         <swbxf:propPromptMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Seleccione una o mas redes sociales que se monitorearan en este Stream.</swbxf:propPromptMessage>
+        >Seleccione una o mas redes sociales que se monitorearan en este Stream. (Información Necesaria).</swbxf:propPromptMessage>
         <swbxf:propInvalidMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Debe seleccionar una o mas redes sociales que se monitorearan en este Stream.</swbxf:propInvalidMessage>
         <swbxf:propGroup>
@@ -2228,14 +2227,14 @@
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="stream_phrase">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
+    >false</swb:required>
     <rdfs:comment>Frase a monitorear en un determinado stream, cada stream tiene sus propias frasea a monitorear.</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Stream"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_stream_phase">
         <swbxf:propPromptMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Proporcione la o las frases a monitorear separadas por coma.</swbxf:propPromptMessage>
+        >Proporcione la o las frases a monitorear separadas por coma. (Información necesaria).</swbxf:propPromptMessage>
         <swbxf:propInvalidMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Este campo debe ser llenado con la(s) frase a monitorear en las redes sociales.</swbxf:propInvalidMessage>
         <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
@@ -2425,11 +2424,11 @@
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="rss_URL">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
+    >false</swb:required>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_rss_URL">
         <swbxf:propPromptMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Capture la URL del RSS a monitorear.</swbxf:propPromptMessage>
+        >Capture la URL del RSS a monitorear (Información Necesaria)</swbxf:propPromptMessage>
         <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >10</swb:index>
