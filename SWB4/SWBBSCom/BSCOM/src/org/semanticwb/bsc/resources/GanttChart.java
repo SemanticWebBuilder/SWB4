@@ -8,12 +8,11 @@ package org.semanticwb.bsc.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.element.Deliverable;
 import org.semanticwb.bsc.element.Initiative;
@@ -21,7 +20,6 @@ import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
-import org.semanticwb.portal.api.GenericSemResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
@@ -35,7 +33,7 @@ public class GanttChart extends GenericResource {
 
     
     /** Realiza operaciones en la bitacora de eventos. */
-    private static Logger log = SWBUtils.getLogger(GanttChart.class);
+    private static final Logger log = SWBUtils.getLogger(GanttChart.class);
     
     
     @Override
@@ -45,94 +43,108 @@ public class GanttChart extends GenericResource {
         String suri = request.getParameter("suri");
         SemanticObject semanticObj = SemanticObject.createSemanticObject(suri);
         StringBuilder output = new StringBuilder(512);
-        JSONArray ganttData = new JSONArray();
-        int deliverableCount = 0;
+        StringBuilder dataOut = new StringBuilder(512);
         SimpleDateFormat format = new SimpleDateFormat("yyyy,MM,dd");
 
         if (semanticObj != null) {
             GenericObject genericObj = semanticObj.createGenericInstance();
             if (genericObj instanceof Initiative) {
                 Initiative initiative = (Initiative) genericObj;
+                Date today = new Date();
+                int countDeliverable = 0;
                 
                 GenericIterator<Deliverable> iterator = initiative.listDeliverables();
+                dataOut.append("[");
                 while (iterator != null && iterator.hasNext()) {
-                    deliverableCount++;
                     Deliverable deli = iterator.next();
                     if (deli.isActive()) {
+                        boolean anotherDeliverable = false;
                         try {
-                            JSONObject element = new JSONObject();
-                            element.append("id", Integer.valueOf(deliverableCount));
-                            element.append("name", deli.getTitle());
-                            JSONArray series = new JSONArray();
-                            JSONObject planned = new JSONObject();
-                            planned.put("name", "Planeado");
-                            if (deli.getPlannedStart() != null) {
-                                planned.put("start", "new Date(" + format.format(deli.getPlannedStart()) + ")");
-                            }
-                            if (deli.getPlannedEnd() != null) {
-                                planned.put("end", "new Date(" + format.format(deli.getPlannedEnd()) + ")");
-                            }
-                            planned.put("color", "\"#BDB4F6\"");
-                            series.put(planned);
-                            JSONObject actual = new JSONObject();
-                            if (deli.getActualStart() != null) {
-                                actual.put("name", "Real");
-                                actual.put("start", "new Date(" + format.format(deli.getActualStart()) + ")");
-                                if (deli.getActualEnd() != null) {
-                                    actual.put("end", "new Date(" + format.format(deli.getActualEnd()) + ")"); //con actualEnd
-                                } else {
-                                    actual.put("end", "new Date(" + format.format(deli.getActualStart()) + ")"); //con actualStart
+                            if (deli.getPlannedStart() != null && deli.getPlannedEnd() != null) {
+                                if (countDeliverable > 0) {
+                                    dataOut.append(",\n");
                                 }
-                                //En base al status asignar color
-                                actual.put("color", "\"#70DB70\"");
-                                series.put(actual);
+                                dataOut.append("{");
+//                                JSONObject planned = new JSONObject();
+                                dataOut.append("  taskName : \"");
+                                dataOut.append(deli.getTitle());
+                                dataOut.append(" - Planeado\",\n");
+                                dataOut.append("  startDate : new Date(" );
+                                dataOut.append(format.format(deli.getPlannedStart()));
+                                dataOut.append("),\n");
+                                dataOut.append("  endDate : new Date(");
+                                dataOut.append(format.format(deli.getPlannedEnd()));
+                                dataOut.append("),\n");
+                                dataOut.append("  status : \"#33B5E5\"");
+                                dataOut.append("}");
+                                countDeliverable++;
+                                anotherDeliverable = true;
                             }
-                            element.put("series", series);
-                            ganttData.put(element);
-                        } catch (JSONException jsone) {
-                            GanttChart.log.error("Al generar estructura de datos", jsone);
+                            if (deli.getActualStart() != null) {
+                                if (anotherDeliverable) {
+                                    dataOut.append(",\n");
+                                }
+                                dataOut.append("{");
+                                dataOut.append("  taskName : \"");
+                                dataOut.append(deli.getTitle());
+                                dataOut.append(" - Real\",\n");
+                                dataOut.append("  startDate : new Date(" );
+                                dataOut.append(format.format(deli.getActualStart()));
+                                dataOut.append("),\n");
+                                dataOut.append("  endDate : new Date(");
+                                if (deli.getActualEnd() != null) {
+                                    dataOut.append(format.format(deli.getActualEnd()));
+                                } else {
+                                    dataOut.append(format.format(today));
+                                }
+                                dataOut.append("),\n");
+                                dataOut.append("  status : ");
+                                //En base al status asignar color
+                                if (deli.getAutoStatus() != null) {
+                                    dataOut.append(deli.getAutoStatus().getIconClass());
+                                } else {
+                                    dataOut.append("\"#CCCCCC\"");
+                                }
+                                dataOut.append("}\n");
+                            }
+                        } catch (Exception e) {
+                            GanttChart.log.error("Al generar estructura de datos", e);
                         }
                     }
                 }
+                dataOut.append("]");
                 
-                /*
-                 * Incluir los siguientes en el código de la pagina
-	<link rel="stylesheet" type="text/css" href="../lib/jquery-ui-1.8.4.css" />
-	<link rel="stylesheet" type="text/css" href="reset.css" />
-	<link rel="stylesheet" type="text/css" href="../jquery.ganttView.css" />
-        * 
-        * 
-	<script type="text/javascript" src="../lib/jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../lib/date.js"></script>
-	<script type="text/javascript" src="../lib/jquery-ui-1.8.4.js"></script>
-	<script type="text/javascript" src="../jquery.ganttView.js"></script>
-                 */
                 output.append("");
-                output.append("<div id=\"ganttChart\"></div>\n");
-                output.append("<br/><br/>\n");
-                output.append("<div id=\"eventMessage\"></div>\n");
+                output.append("<div id=\"ganttChart\">\n");
+                output.append("  <script type=\"text/javascript\" src=\"");
+                output.append(SWBPlatform.getContextPath());
+                output.append("/swbadmin/js/gantt-chart-d3.js\"></script>\n");
+                output.append("</div>\n");
                 output.append("  <script type=\"text/javascript\">\n");
-                output.append("    var ganttData = ");
-                try {
-                    output.append(ganttData.toString(2));
-                } catch(JSONException jsone) {
-                    GanttChart.log.error("Al presentar estructura de datos", jsone);
-                    output.append("null");
-                }
+                output.append("    var tasks = ");
+                output.append(dataOut.toString());
                 output.append(";\n");
-                output.append("    $(function () {\n");
-                output.append("      $(\"#ganttChart\").ganttView({ \n");
-                output.append("         data: ganttData,\n");
-                output.append("         slideWidth: 800,\n");
-                output.append("         lang: 'es',\n");
-                output.append("         behavior: {\n");
-                output.append("             clickable: false,\n");
-                output.append("             draggable: false,\n");
-                output.append("             resizable: false\n");
-                output.append("         }\n");
-                output.append("     });\n");
-                output.append("   });\n");
-                output.append(" </script>\n");
+                output.append("  var taskNames = new Array();\n");
+                output.append("  for (i = 0; i < tasks.length; i++) {\n");
+                output.append("    if (taskNames.indexOf(tasks[i].taskName) == -1) {\n");
+                output.append("      taskNames.push(tasks[i].taskName);\n");
+                output.append("    }\n");
+                output.append("  }\n");
+                output.append("  tasks.sort(function(a, b) {\n");
+                output.append("    return a.endDate - b.endDate;\n");
+                output.append("  });\n");
+                output.append("  var maxDate = tasks[tasks.length - 1].endDate;\n");
+                output.append("  tasks.sort(function(a, b) {\n");
+                output.append("    return a.startDate - b.startDate;\n");
+                output.append("  });\n");
+                output.append("  var minDate = tasks[0].startDate;\n");
+                output.append("  var format = \"%d/%m/%Y\";\n");
+                output.append("  \n");
+                output.append("  var gantt = d3.gantt().taskTypes(taskNames).tickFormat(format).timeDomainMode(\"fit\");\n");
+                output.append("  gantt(tasks);\n");
+                output.append("  \n");
+                output.append("  \n");
+                output.append("  </script>\n");
                 output.append("");
             }
         }
