@@ -7,7 +7,6 @@ package org.semanticwb.bsc.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,14 +36,14 @@ public class GanttChart extends GenericResource {
     
     
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doView(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         
         PrintWriter out = response.getWriter();
         String suri = request.getParameter("suri");
         SemanticObject semanticObj = SemanticObject.createSemanticObject(suri);
         StringBuilder output = new StringBuilder(512);
         StringBuilder dataOut = new StringBuilder(512);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy,MM,dd");
 
         if (semanticObj != null) {
             GenericObject genericObj = semanticObj.createGenericInstance();
@@ -55,6 +54,48 @@ public class GanttChart extends GenericResource {
                 
                 GenericIterator<Deliverable> iterator = initiative.listDeliverables();
                 dataOut.append("[");
+                if (initiative.getPlannedStart() != null && initiative.getPlannedEnd() != null) {
+                    dataOut.append("{");
+                    dataOut.append("  taskName : \"");
+                    dataOut.append(initiative.getTitle());
+                    dataOut.append(paramRequest.getLocaleString("lbl_planned"));
+                    dataOut.append("\",\n");
+                    dataOut.append("  startDate : new Date(" );
+                    dataOut.append(initiative.getPlannedStart().getTime());
+                    dataOut.append("),\n");
+                    dataOut.append("  endDate : new Date(");
+                    dataOut.append(initiative.getPlannedEnd().getTime());
+                    dataOut.append("),\n");
+                    dataOut.append("  status : \"#33B5E5\"");
+                    dataOut.append("},\n");
+                    if (initiative.getActualStart() != null) {
+                        dataOut.append("{");
+                        dataOut.append("  taskName : \"");
+                        dataOut.append(initiative.getTitle());
+                        dataOut.append(paramRequest.getLocaleString("lbl_actual"));
+                        dataOut.append("\",\n");
+                        dataOut.append("  startDate : new Date(" );
+                        dataOut.append(initiative.getActualStart().getTime());
+                        dataOut.append("),\n");
+                        dataOut.append("  endDate : new Date(");
+                        if (initiative.getActualEnd() != null) {
+                            dataOut.append(initiative.getActualEnd().getTime());
+                        } else {
+                            dataOut.append(today.getTime());
+                        }
+                        dataOut.append("),\n");
+                        dataOut.append("  status : ");
+                        //En base al status asignar color
+                        if (initiative.getState() != null) {
+                            dataOut.append("\"");
+                            dataOut.append(initiative.getState().getColorHex());
+                            dataOut.append("\"");
+                        } else {
+                            dataOut.append("\"#CCCCCC\"");
+                        }
+                        dataOut.append("},\n");
+                    }
+                }
                 while (iterator != null && iterator.hasNext()) {
                     Deliverable deli = iterator.next();
                     if (deli.isActive()) {
@@ -65,15 +106,15 @@ public class GanttChart extends GenericResource {
                                     dataOut.append(",\n");
                                 }
                                 dataOut.append("{");
-//                                JSONObject planned = new JSONObject();
                                 dataOut.append("  taskName : \"");
                                 dataOut.append(deli.getTitle());
-                                dataOut.append(" - Planeado\",\n");
+                                dataOut.append(paramRequest.getLocaleString("lbl_planned"));
+                                dataOut.append("\",\n");
                                 dataOut.append("  startDate : new Date(" );
-                                dataOut.append(format.format(deli.getPlannedStart()));
+                                dataOut.append(deli.getPlannedStart().getTime());
                                 dataOut.append("),\n");
                                 dataOut.append("  endDate : new Date(");
-                                dataOut.append(format.format(deli.getPlannedEnd()));
+                                dataOut.append(deli.getPlannedEnd().getTime());
                                 dataOut.append("),\n");
                                 dataOut.append("  status : \"#33B5E5\"");
                                 dataOut.append("}");
@@ -87,27 +128,30 @@ public class GanttChart extends GenericResource {
                                 dataOut.append("{");
                                 dataOut.append("  taskName : \"");
                                 dataOut.append(deli.getTitle());
-                                dataOut.append(" - Real\",\n");
+                                dataOut.append(paramRequest.getLocaleString("lbl_actual"));
+                                dataOut.append("\",\n");
                                 dataOut.append("  startDate : new Date(" );
-                                dataOut.append(format.format(deli.getActualStart()));
+                                dataOut.append(deli.getActualStart().getTime());
                                 dataOut.append("),\n");
                                 dataOut.append("  endDate : new Date(");
                                 if (deli.getActualEnd() != null) {
-                                    dataOut.append(format.format(deli.getActualEnd()));
+                                    dataOut.append(deli.getActualEnd().getTime());
                                 } else {
-                                    dataOut.append(format.format(today));
+                                    dataOut.append(today.getTime());
                                 }
                                 dataOut.append("),\n");
                                 dataOut.append("  status : ");
                                 //En base al status asignar color
                                 if (deli.getAutoStatus() != null) {
-                                    dataOut.append(deli.getAutoStatus().getIconClass());
+                                    dataOut.append(deli.getAutoStatus().getColorHex());
                                 } else {
+                                    dataOut.append("\"");
                                     dataOut.append("\"#CCCCCC\"");
+                                    dataOut.append("\"");
                                 }
                                 dataOut.append("}\n");
                             }
-                        } catch (Exception e) {
+                        } catch (SWBResourceException e) {
                             GanttChart.log.error("Al generar estructura de datos", e);
                         }
                     }
