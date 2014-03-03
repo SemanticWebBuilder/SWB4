@@ -153,16 +153,18 @@ public class GraphGeneration extends GenericResource {
                                     output.append(",\n");
                                 }
                                 output.append("    {");
-                                output.append("      \"label\" : \"");
+                                output.append(" \"label\" : \"");
                                 output.append(period.getTitle());
                                 output.append("\", ");
                                 try {
-                                    output.append("\"value\" : ");
-                                    output.append(measure.getValue());
+                                    if (measure.getValue() != 0) {
+                                        output.append("\"value\" : ");
+                                        output.append(measure.getValue());
+                                    }
                                 } catch (Exception e) {
                                     output.append("\"value\" : 0.0 ");
                                 }
-                                output.append("    }");
+                                output.append(" }");
                                 periodsCount++;
                             }
                             output.append("  ]");
