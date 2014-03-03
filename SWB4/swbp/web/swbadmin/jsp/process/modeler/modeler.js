@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /***************************Elementos genéricos**************************/
     var _GraphicalElement = function(obj) {
         var _this = obj;
@@ -1824,38 +1823,6 @@
         
         _this.setElementType("Lane");
         
-        _this.setText = function(text) {
-            fSetText(text,0,0,_this.getHeight(),1);
-            fUpdateText = _this.text.update;
-            
-            _this.text.ondblclick = function(evt) {
-                var txt = prompt("Titulo:",_this.text.value);                  
-                if(txt && txt!==null)
-                {
-                    _this.text.value=txt;
-                    _this.text.update();
-                    _this.updateHeaderLine();
-                }
-            };
-            
-            _this.text.update = function() {
-                if (fUpdateText !== null) {
-                    _this.text.textW = _this.getHeight();
-                    fUpdateText();
-                    //console.log("width: "+_this.text.getBoundingClientRect().width+", height: "+_this.text.getBoundingClientRect().height);
-                    //console.log("cwidth: "+_this.text.getBBox().width+", cheight: "+_this.text.getBBox().height);
-                    var x = (_this.getX() - _this.getWidth()/2) + _this.text.getBoundingClientRect().width/2;
-                    var y = _this.getY();
-                    if (_this.text.childElementCount === 1) {
-                        x += 5;
-                    }
-                    _this.text.setAttributeNS(null, "x", x);
-                    _this.text.setAttributeNS(null, "y", y);
-                    _this.text.setAttributeNS(null, "transform", "rotate(-90 "+x+","+y+")");
-                }
-            };
-        };
-        
         _this.setIndex = function(idx) {
             _this.index = idx;
         };
@@ -2188,6 +2155,9 @@
                 {
                     if (_this.selected[0].elementType==="Pool" && _this.selected[0].hasLanes()) {
                         var obj=_this.selected[0];
+                        for (var i = 0; i < obj.lanes.length; i++) {
+                            _this.createResizeBox(obj.lanes[i],0,1,"s-resize");
+                        }
                         _this.createResizeBox(obj,-1,0,"w-resize");
                         _this.createResizeBox(obj,1,0,"e-resize");
                     } else if (_this.selected[0].elementType==="Lane") {
@@ -2233,7 +2203,125 @@
                 } , false);
             }
             
-            if (callbackHandler && callbackHandler != null) {
+            //Sobreescritura de mousemove en SVG padre para manejar redimensionamiento de Lanes
+            ToolKit.svg.onmousemove=function(evt)
+            {
+                var _this = ToolKit;
+                var resizeObj = _this.svg.resizeObject || null;
+                if(_this.onmousemove(evt)===false)return;
+                _this.svg.mouseX=_this.getEventX(evt);
+                _this.svg.mouseY=_this.getEventY(evt);
+
+                if(resizeObj!==null)
+                {
+                    if (resizeObj.parent.elementType==="Lane") {
+                        var w = resizeObj.parent.getWidth();
+                        y=_this.getEventY(evt)-_this.svg.dragOffsetY;
+                        ty=y-resizeObj.parent.getY();
+                        h=Math.abs(resizeObj.startH+ty*resizeObj.iy); 
+                        if((resizeObj.parent.getY()-h/2)<0)h=resizeObj.parent.getY()*2;
+                        resizeObj.parent.resize(w,h);
+                       
+                        resizeObj.parent.parent.updateLanes();
+                        _this.updateResizeBox();
+                    } else {
+                        x=_this.getEventX(evt)-_this.svg.dragOffsetX;
+                        y=_this.getEventY(evt)-_this.svg.dragOffsetY;
+                        tx=x-resizeObj.parent.getX();
+                        ty=y-resizeObj.parent.getY();
+                        w=Math.abs(resizeObj.startW+tx*2*resizeObj.ix);
+                        h=Math.abs(resizeObj.startH+ty*2*resizeObj.iy); 
+                        if((resizeObj.parent.getX()-w/2)<0)w=resizeObj.parent.getX()*2;
+                        if((resizeObj.parent.getY()-h/2)<0)h=resizeObj.parent.getY()*2;
+                        resizeObj.parent.resize(w,h);
+                        _this.updateResizeBox();
+                    }
+
+                }else if(_this.svg.dragObject!==null)  //dragObjects
+                {
+                    _this.selected.unselect=false; //si hace drag no deselecciona
+                    x=_this.getEventX(evt)-_this.svg.dragOffsetX;
+                    y=_this.getEventY(evt)-_this.svg.dragOffsetY;
+
+//                    if(_this.snap2Grid)
+//                    {
+//                        x=Math.round(x/_this.snap2GridSize)*_this.snap2GridSize;
+//                        y=Math.round(y/_this.snap2GridSize)*_this.snap2GridSize;
+//                    }
+
+                    if(_this.cmdkey===true) //Drag one
+                    {
+                        _this.svg.dragObject.move(x,y);
+                        _this.updateResizeBox();
+                    }else //drag selecteds
+                    {
+                        tx=x-_this.svg.dragObject.getX();
+                        ty=y-_this.svg.dragObject.getY();
+
+                        for (var i = _this.selected.length; i--;) 
+                        {                                
+                            _this.selected[i].traslate(tx, ty);
+                        }
+                        _this.updateResizeBox();
+                    }
+                }else if(_this.selectBox!==null) //SelectBox
+                {
+                    var w=_this.getEventX(evt)-_this.svg.dragOffsetX;
+                    var h=_this.getEventY(evt)-_this.svg.dragOffsetY;
+                    var x=_this.svg.dragOffsetX;
+                    var y=_this.svg.dragOffsetY;
+
+                    if(w<0)
+                    {
+                        x=_this.svg.dragOffsetX+w;
+                        w=-w;                                    
+                    }
+                    if(h<0)
+                    {
+                        y=_this.svg.dragOffsetY+h;
+                        h=-h;                                        
+                    }
+
+                    _this.selectBox.setAttributeNS(null,"x",x);
+                    _this.selectBox.setAttributeNS(null,"width",w);
+                    _this.selectBox.setAttributeNS(null,"y",y);
+                    _this.selectBox.setAttributeNS(null,"height",h);
+                    //_this.svg.appendChild(_this.selectBox);
+
+                    var nodes=_this.svg.childNodes;
+                    for(i=0;i<nodes.length;i++)
+                    {
+                        var obj=nodes.item(i);
+                        if(obj.contents && obj.canSelect===true && !obj.hidden)    //Es un objeto grafico
+                        {
+                            var ox=obj.getX();
+                            var oy=obj.getY();
+                            var bb = _this.selectBox.getBBox();
+                            if ((ox-obj.getWidth()/2 > bb.x && ox+obj.getWidth()/2 < (bb.x+bb.width)) && (oy-obj.getHeight()/2 > bb.y && oy+obj.getHeight()/2 < bb.y+bb.height))
+                            //if(ox>=x && ox<=x+w && oy>=y && oy<=y+h)
+                            {
+                                if(obj.selected!==true)
+                                {                                                
+                                    _this.selectObj(obj);
+                                }
+                            }else
+                            {
+                                if(!_this.cmdkey)
+                                {
+                                    if(obj.selected===true)
+                                    {
+                                        _this.unSelectObj(obj);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                _this.loaded = true;
+
+            };
+            
+            if (callbackHandler && callbackHandler !== null) {
                 callbackHandler();
             }
         },
@@ -2270,6 +2358,7 @@
                                 obj.remove();//Lane sobre nada
                             } else if (Modeler.creationDropObject.elementType === "Pool") {
                                 Modeler.creationDropObject.addLane(obj);
+                                ToolKit.unSelectAll();
                             }
                         } else {
                             obj.move(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
@@ -2311,16 +2400,18 @@
                 if(Modeler.dragConnection.toObject!==null)
                 {
                     Modeler.dragConnection.toObject=null;
-                    ToolKit.unSelectAll();
+                    _this.unSelectAll();
                 }
-                Modeler.dragConnection.setEndPoint(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
+                Modeler.dragConnection.setEndPoint(_this.getEventX(evt), _this.getEventY(evt));
                 return false;
             }
             return true;
-        },  
+        },
                 
         onmouseup:function(evt)
         {
+            var _this = ToolKit;
+            var resizeObj = _this.svg.resizeObject || null;
             if (Modeler.mode === "view") return false;
             if(Modeler.dragConnection && Modeler.dragConnection!==null)
             {
@@ -2337,7 +2428,17 @@
                 }
                 Modeler.dragConnection=null;
             }
-            //ToolKit.hideToolTip();
+            
+            if (resizeObj !== null && resizeObj.parent.elementType==="Lane") {
+                var oldH = ty;
+                y=_this.getEventY(evt)-_this.svg.dragOffsetY;
+                ty=y-resizeObj.parent.getY();
+                h=Math.abs(resizeObj.startH+ty*resizeObj.iy);
+                if((resizeObj.parent.getY()-h/2)<0)h=resizeObj.parent.getY()*2;
+                
+                resizeObj.parent.parent.resize(resizeObj.parent.parent.getWidth(), resizeObj.parent.parent.getHeight() + oldH);
+                _this.updateResizeBox();
+            }
             return true;
         },                  
                 
@@ -2633,6 +2734,40 @@
             obj.mousedown = function(evt) {
                 return false;
             };
+            
+            var fUpdateText = null;
+            var fSetText = obj.setText;
+            obj.setText = function(text) {
+                fSetText(text,0,0,obj.getHeight(),1);
+                fUpdateText = obj.text.update;
+
+                obj.text.ondblclick = function(evt) {
+                    var txt = prompt("Titulo:",obj.text.value);                  
+                    if(txt && txt!==null)
+                    {
+                        obj.text.value=txt;
+                        obj.text.update();
+                        obj.updateHeaderLine();
+                    }
+                };
+
+                obj.text.update = function() {
+                    if (fUpdateText !== null) {
+                        obj.text.textW = obj.getHeight();
+                        fUpdateText();
+                        //console.log("width: "+_this.text.getBoundingClientRect().width+", height: "+_this.text.getBoundingClientRect().height);
+                        //console.log("cwidth: "+_this.text.getBBox().width+", cheight: "+_this.text.getBBox().height);
+                        var x = (obj.getX() - obj.getWidth()/2) + obj.text.getBoundingClientRect().width/2;
+                        var y = obj.getY();
+                        if (obj.text.childElementCount === 1) {
+                            x += 5;
+                        }
+                        obj.text.setAttributeNS(null, "x", x);
+                        obj.text.setAttributeNS(null, "y", y);
+                        obj.text.setAttributeNS(null, "transform", "rotate(-90 "+x+","+y+")");
+                    }
+                };
+            };
             return obj;
         },
         
@@ -2696,7 +2831,7 @@
                 if (obj.nextSibling) {
                     ToolKit.svg.insertBefore(obj.headerLine, obj.nextSibling);
                 }
-            }
+            };
             
             obj.hasLanes = function() {
                 return (obj.lanes && obj.lanes !== null && obj.lanes.length > 0);
