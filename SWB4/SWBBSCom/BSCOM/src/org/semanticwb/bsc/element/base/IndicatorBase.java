@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Persiste los atributos de un indicador 
    */
-public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Updateable,org.semanticwb.model.Traceable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Seasonable,org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Serializable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Status,org.semanticwb.bsc.Committable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass
+public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Referensable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Updateable,org.semanticwb.bsc.Seasonable,org.semanticwb.bsc.Serializable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Status,org.semanticwb.bsc.Attachmentable,org.semanticwb.model.Filterable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Committable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable
 {
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
@@ -235,6 +235,29 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
         public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByUserGroup(org.semanticwb.model.UserGroup value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroup,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Indicator with a determined Attachments
+       * @param value Attachments of the type org.semanticwb.bsc.catalogs.Attachment
+       * @param model Model of the org.semanticwb.bsc.element.Indicator
+       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByAttachments(org.semanticwb.bsc.catalogs.Attachment value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasAttachments, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Indicator with a determined Attachments
+       * @param value Attachments of the type org.semanticwb.bsc.catalogs.Attachment
+       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByAttachments(org.semanticwb.bsc.catalogs.Attachment value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasAttachments,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -641,6 +664,71 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
     {
         //Override this method in Indicator object
         getSemanticObject().setProperty(bsc_prefix, value,false);
+    }
+   /**
+   * Gets all the org.semanticwb.bsc.catalogs.Attachment
+   * @return A GenericIterator with all the org.semanticwb.bsc.catalogs.Attachment
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.catalogs.Attachment> listAttachmentses()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.catalogs.Attachment>(getSemanticObject().listObjectProperties(bsc_hasAttachments));
+    }
+
+   /**
+   * Gets true if has a Attachments
+   * @param value org.semanticwb.bsc.catalogs.Attachment to verify
+   * @return true if the org.semanticwb.bsc.catalogs.Attachment exists, false otherwise
+   */
+    public boolean hasAttachments(org.semanticwb.bsc.catalogs.Attachment value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(bsc_hasAttachments,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a Attachments
+   * @param value org.semanticwb.bsc.catalogs.Attachment to add
+   */
+
+    public void addAttachments(org.semanticwb.bsc.catalogs.Attachment value)
+    {
+        getSemanticObject().addObjectProperty(bsc_hasAttachments, value.getSemanticObject());
+    }
+   /**
+   * Removes all the Attachments
+   */
+
+    public void removeAllAttachments()
+    {
+        getSemanticObject().removeProperty(bsc_hasAttachments);
+    }
+   /**
+   * Removes a Attachments
+   * @param value org.semanticwb.bsc.catalogs.Attachment to remove
+   */
+
+    public void removeAttachments(org.semanticwb.bsc.catalogs.Attachment value)
+    {
+        getSemanticObject().removeObjectProperty(bsc_hasAttachments,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the Attachments
+   * @return a org.semanticwb.bsc.catalogs.Attachment
+   */
+    public org.semanticwb.bsc.catalogs.Attachment getAttachments()
+    {
+         org.semanticwb.bsc.catalogs.Attachment ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasAttachments);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.catalogs.Attachment)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**
