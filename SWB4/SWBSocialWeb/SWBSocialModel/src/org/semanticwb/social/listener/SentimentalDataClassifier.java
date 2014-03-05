@@ -221,12 +221,12 @@ public class SentimentalDataClassifier {
 
 
         //Para el caso de Streaming Api que no se le puede enviar un bounding box, ni una latitud, longitud y radio para que solo me traiga tweets de una región
-        System.out.println("Geo-1---Lat:"+stream.getGeoCenterLatitude()+"/long:"+stream.getGeoCenterLongitude()+",classifyGeoLocation:"+classifyGeoLocation);
-        System.out.println("Geo-2--Lat:"+externalPost.getLatitude()+",Long:"+externalPost.getLongitude());
+        //System.out.println("Geo-1---Lat:"+stream.getGeoCenterLatitude()+"/long:"+stream.getGeoCenterLongitude()+",classifyGeoLocation:"+classifyGeoLocation);
+        //System.out.println("Geo-2--Lat:"+externalPost.getLatitude()+",Long:"+externalPost.getLongitude());
         if (stream.getGeoCenterLatitude() != 0 && stream.getGeoCenterLongitude() != 0 && classifyGeoLocation) {
-            System.out.println("Geo-1---Lat:"+stream.getGeoCenterLatitude()+"/long:"+stream.getGeoCenterLongitude());
+            //System.out.println("Geo-1---Lat:"+stream.getGeoCenterLatitude()+"/long:"+stream.getGeoCenterLongitude());
             if (externalPost.getLatitude() != 0 && externalPost.getLongitude() != 0) {
-                System.out.println("Geo-2--Lat:"+externalPost.getLatitude()+",Long:"+externalPost.getLongitude());
+                //System.out.println("Geo-2--Lat:"+externalPost.getLatitude()+",Long:"+externalPost.getLongitude());
                 double eart_Radio = SWBSocialUtil.EART_RADIUS_KM; //Por defecto se mide en Kilometros
                 if (stream.getGeoDistanceUnit().equals("MI")) {
                     eart_Radio = SWBSocialUtil.EART_RADIUS_MI;
@@ -241,11 +241,11 @@ public class SentimentalDataClassifier {
                 if (!SWBSocialUtil.Util.isPointInsideCoodinates(externalPost.getLatitude(), externalPost.getLongitude(), boundingCoordinates)) {
                     //System.out.println("Geo-3");
                     externalPost = null;  //Destruyo el objeto ExternalPost, para que no consuma memoria.
-                    System.out.println("Geo-3");
+                    //System.out.println("Geo-3");
                     return; //Regresa sin hacer nada.
                 }
             } else {  //Si en el stream se indica que es mandatorio que se tomen los tweets de una cierta región y el tweet que llega no tiene localización (latitud y longitud) pues No se hace nada con ese externalPost;
-                System.out.println("Geo-4");
+                //System.out.println("Geo-4");
                 externalPost = null;  //Destruyo el objeto ExternalPost, para que no consuma memoria.
                 //System.out.println("Geo-4");
                 return; //Regresa sin hacer nada.
@@ -347,9 +347,10 @@ public class SentimentalDataClassifier {
             }
 
             //System.out.println("checkKlout en Clasificador..:" + stream.getStream_KloutValue());
+            //System.out.println("CLASIFICAR POR KLOUT-apoco");
             int userKloutScore = 0;
             if (stream.getStream_KloutValue() > 0 && socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable)) {
-                //System.out.println("creatorId en Sentimental:" + creatorId);
+                //System.out.println("CLASIFICAR POR KLOUT:"+stream.getStream_KloutValue());
                 HashMap userKloutDat = SWBSocialUtil.Classifier.classifybyKlout(socialNetwork, stream, socialNetUser, creatorId, upDateSocialUserNetworkData);
                 createPostbyKlout = ((Boolean) userKloutDat.get("createPostbyKlout")).booleanValue();
                 userKloutScore = ((Integer) userKloutDat.get("userKloutScore")).intValue();
@@ -670,7 +671,6 @@ public class SentimentalDataClassifier {
                         }
                     }
                 }
-
                 if (externalPost.getMessage() != null) {
                     //System.out.println("postIn fACE:"+postIn+", externalPost:"+externalPost);
                     postIn.setMsg_Text(externalPost.getMessage());
@@ -737,11 +737,11 @@ public class SentimentalDataClassifier {
                         } else {
                             country = SWBSocialUtil.Util.getMessageMapCountry(postIn.getLatitude(), postIn.getLongitude());
                         }
-                        System.out.println("country en el que encuentra el mensaje:"+country);
+                        //System.out.println("country en el que encuentra el mensaje:"+country);
                         if (country != null) {
                             //Busca en que estado del país encontrado se encuentra el mensaje.
                             CountryState countryState = SWBSocialUtil.Util.getMessageMapState(country, postIn.getLatitude(), postIn.getLongitude());
-                            System.out.println("estado en el que encuentra el mensaje:"+countryState+",Lat:"+postIn.getLatitude()+",lng:"+postIn.getLongitude());
+                            //System.out.println("estado en el que encuentra el mensaje:"+countryState+",Lat:"+postIn.getLatitude()+",lng:"+postIn.getLongitude());
                             if (countryState != null) {
                                 postIn.setGeoStateMap(countryState);
                             }
@@ -757,7 +757,6 @@ public class SentimentalDataClassifier {
                     if (socialNetUser == null) //Si el usuario no existe en la red social, Twitter, Faebook, etc, entonces crealo
                     {
                         //Si no existe el id del usuario para esa red social, lo crea.
-
                         socialNetUser = SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);
                         socialNetUser.setSnu_id(externalPost.getCreatorId());
                         if(externalPost.getCreatorName()!=null)
@@ -777,7 +776,6 @@ public class SentimentalDataClassifier {
                         {
                             socialNetUser.setSnu_klout(userKloutScore);
                         }
-
                         if (externalPost.getFollowers() > 0 && externalPost.getFriendsNumber() > 0) {
                             //System.out.println("SocialNet em Sentimental JAJS-1:"+socialNetwork);
                             socialNetUser.setFollowers(externalPost.getFollowers());
@@ -808,7 +806,6 @@ public class SentimentalDataClassifier {
 
                         socialNetUser.setUpdated(new Date());
                     }
-
                     //System.out.println("Poner en UserGe-0");
                     if (socialNetUser != null) {
                         postIn.setPostInSocialNetworkUser(socialNetUser);
@@ -821,7 +818,7 @@ public class SentimentalDataClassifier {
                         //System.out.println("VA A ELIMINAR POSTIN-USER NULO:"+postIn);
                         postIn.remove();
                     }
-
+                    //System.out.println("createPostInObj/socialNetUser-1:"+socialNetUser.getSnu_klout());
             }
 
             /*Código test para barrer las instamcias de la clase SocialNetworkUser
@@ -1003,10 +1000,11 @@ public class SentimentalDataClassifier {
                      {
                      System.out.println("User LifeStage:"+socialNetUser.getSnu_LifeStage().getId());
                      }*/
+                    /*
                     System.out.println("User Gender:" + socialNetUser.getSnu_gender());
                     System.out.println("User RelationShip:" + socialNetUser.getSnu_relationShipStatus());
                     System.out.println("User Education:" + socialNetUser.getSnu_education());
-
+                    * */
                 } else {
                     socialNetUser.setSnu_gender(SocialNetworkUser.USER_GENDER_UNDEFINED);
                     socialNetUser.setSnu_relationShipStatus(SocialNetworkUser.USER_RELATION_UNDEFINED); //Could be: In a relationship, Engaged, It's complicated, In an open relationship,Separated,  In a civil union, In a domestic partnership, etc
