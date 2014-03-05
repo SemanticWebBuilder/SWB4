@@ -9,7 +9,6 @@ import com.cybozu.labs.langdetect.DetectorFactory;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.StringReader;
 import java.net.SocketException;
 import java.text.DateFormat;
@@ -111,6 +110,7 @@ public class SWBSocialUtil {
     static private ArrayList<String> aPrepositions=new ArrayList();
     static private ArrayList<String> aSentimentWords=new ArrayList();
     static private HashMap<String, Double> englishDictionary;
+    static private ArrayList aENGLISH_STOP_WORDS=new ArrayList();
     //static private int NUMDAYS2REFRESH_USERDATA=5;
     
     public static final int POST_TYPE_MESSAGE=1;
@@ -118,8 +118,7 @@ public class SWBSocialUtil {
     public static final int POST_TYPE_VIDEO=3;
     private static WebSite CONFIG_WEBSITE=null;
     
-    private static HashMap<Integer, CountryState> mxStates =  new HashMap<Integer,CountryState>();
-    private static ArrayList<double[][]> mxPolygons = new ArrayList<double[][]>();
+    
     //private static Properties prop = new Properties();
 
     /**
@@ -234,7 +233,7 @@ public class SWBSocialUtil {
         }
         */
         
-        File profileDir=new File(SWBPortal.getWorkPath()+"/models/"+SWBContext.getAdminWebSite().getId()+"/profiles/"); 
+        File profileDir=new File(SWBPortal.getWorkPath()+"/models/"+SWBContext.getAdminWebSite().getId()+"/config/profiles/"); 
         if(profileDir.exists() && profileDir.isDirectory())
         {
             DetectorFactory.loadProfile(profileDir);
@@ -247,7 +246,6 @@ public class SWBSocialUtil {
         //Carga Palabras sentimentales memoría
         loadSentimentWords();
         
-        loadGeoStatesPolygons();
         
         props = SWBUtils.TEXT.getPropertyFile("/org/semanticwb/social/properties/swbSocial.properties");
         
@@ -255,55 +253,6 @@ public class SWBSocialUtil {
           log.error(e);
       }
     }
-    
-    private static void loadGeoStatesPolygons()
-    {
-
-        BufferedReader br = null;
-        
-        Country country = Country.ClassMgr.getCountry("MX", SWBSocialUtil.getConfigWebSite());
-        long startTime = System.currentTimeMillis();
-
-        /*LECTURA DE DATOS*/
-        try{
-            String pathToPolygons = SWBPortal.getWorkPath()+"/models/"+SWBContext.getAdminWebSite().getId()+"/config/PolygonsByCountry/MX/";
-            //States for Mexico
-            Iterator<CountryState> itCountryStates=country.listStatesInvs();
-            int countryId = 0;
-            int totalLines = 0;
-            while(itCountryStates.hasNext())
-            {
-                CountryState countryState = itCountryStates.next();
-                mxStates.put(countryId, countryState);
-                countryId ++;
-                String filename = pathToPolygons + "MX_"+ countryState.getId() + ".txt";
-                br = new BufferedReader(new FileReader(filename));
-                String line = br.readLine();
-                String dataFile[] = line.split(",");
-
-                double[][] state = new double[Integer.parseInt(dataFile[0])][2];//n rows,2
-                int lineCounter = 0;
-                while ((line = br.readLine()) != null)
-                {
-                    String [] latlong = line.split(",");
-                    state[lineCounter][0] = Double.parseDouble(latlong[0]);
-                    state[lineCounter][1] = Double.parseDouble(latlong[1]);
-                    lineCounter++;
-                }
-                mxPolygons.add(state);
-                //System.out.println("THE COUNTRY STATE:" + countryState.getTitle() + " - " + countryState.getId() + "- points:" + lineCounter);
-                totalLines+= lineCounter;
-                br.close();//Close current file
-            }
-            //System.out.println("TOTAL points:" + totalLines);
-            long endTime = System.currentTimeMillis();
-            //System.out.println("Reading Files took" + (endTime - startTime) + " milliseconds");
-        }catch(IOException ioe){
-            log.error("Problem loading states polygons:", ioe);
-        }
-        /*LECTURA DE DATOS*/        
-    }
-    
     
     
     public static WebSite getConfigWebSite()
@@ -365,7 +314,7 @@ public class SWBSocialUtil {
         
         //english languaje -->Reference Link:http://sentiwordnet.isti.cnr.it/
         {
-            String pathToSWN = SWBPortal.getWorkPath()+"/models/"+SWBContext.getAdminWebSite().getId()+"/sentimentaldictionaries/SentiWordNet20130122.txt";
+            String pathToSWN = SWBPortal.getWorkPath()+"/models/"+SWBContext.getAdminWebSite().getId()+"/config/sentimentaldictionaries/en/SentiWordNet20130122.txt";
            
             //System.out.println("Entra a Cargar dictionario en Ingles");
             englishDictionary = new HashMap<String, Double>();
@@ -435,6 +384,26 @@ public class SWBSocialUtil {
                 }
             }catch(Exception e){e.printStackTrace();}        
             //System.out.println("TERMINA de Cargar dictionario en Ingles");
+            
+            //LOAD ENGLISH STOP WORDS
+            String pathToEnglishStopWords = SWBPortal.getWorkPath()+"/models/"+SWBContext.getAdminWebSite().getId()+"/config/sentimentaldictionaries/en/englishStopWords.txt";
+            try{
+                BufferedReader stopwBR =  new BufferedReader(new FileReader(pathToEnglishStopWords));
+                int lineNumber = 0;
+                String line = "";           
+                while((line = stopwBR.readLine()) != null)
+                {
+                    if(line!=null && !line.isEmpty())
+                    {
+                        lineNumber++;
+                        aENGLISH_STOP_WORDS.add(line);
+                    }
+                }
+                System.out.println("aENGLISH_STOP_WORDS:"+aENGLISH_STOP_WORDS.size());
+            }catch(Exception e)
+            {
+                log.error(e);
+            }
         }
         
     }
@@ -787,6 +756,14 @@ public class SWBSocialUtil {
      * Metodo que normaliza una palabra, esto de acuerdo a definición realizada internamente en el área
      */
     public static class Classifier {
+        
+        /*
+         * Gets English Stop Words
+         */
+        public static ArrayList getEnglishStopWords()
+        {
+            return aENGLISH_STOP_WORDS;
+        }
         
         /*
          * Method that classifies a PostIn by Topic
@@ -1155,11 +1132,14 @@ public class SWBSocialUtil {
                 System.out.println("Va a Clasificar mensaje para Lenguage INGLES");
                 String[] words = text.split("\\s+"); 
                 double totalScore = 0, averageScore;
-                for(String word : words) {
-                    word = word.replaceAll("([^a-zA-Z\\s])", "");
-                    if (extract(word) == null)
-                        continue;
-                    totalScore += extract(word);
+                for(String word : words) {                    
+                    if(!aENGLISH_STOP_WORDS.contains(word))
+                    {
+                        word = word.replaceAll("([^a-zA-Z\\s])", "");
+                        //if (extract(word) == null)
+                        //    continue;
+                        totalScore += extract(word);
+                    }
                 }
                 averageScore = totalScore;
 
@@ -1169,20 +1149,20 @@ public class SWBSocialUtil {
                     //return "Strong positive";
                     sentimentalTweetValueType=1;
                     IntensiveTweetValue=2;
-                }else if(averageScore > 0.25 && averageScore<0.5){
-                    //return  "weak_positive";
-                    sentimentalTweetValueType=1;
-                    IntensiveTweetValue=1;
                 }else if(averageScore>=0.5){
                     //return  "positive";
                     sentimentalTweetValueType=1;
                     IntensiveTweetValue=1;
-                }else if(averageScore < 0 && averageScore>=-0.25){
-                    //return "weak_negative";
-                    sentimentalTweetValueType=2;
-                    IntensiveTweetValue=1;
+                }else if(averageScore > 0.25 && averageScore<0.5){
+                    //return  "weak_positive";
+                    sentimentalTweetValueType=1;
+                    IntensiveTweetValue=0;
                 }else if(averageScore < -0.25 && averageScore>=-0.5){
                     //return "negative";
+                    sentimentalTweetValueType=2;
+                    IntensiveTweetValue=0;
+                }else if(averageScore < -0.5 && averageScore>-0.75){
+                    //return "weak_negative";
                     sentimentalTweetValueType=2;
                     IntensiveTweetValue=1;
                 }else if(averageScore<=-0.75){
@@ -2354,41 +2334,8 @@ public class SWBSocialUtil {
     
     
     public static class Util{
-        public static boolean pnpoly(double[][] vert, double testx, double testy)  
-        {  
-            int i, j = 0;
-            int nvert = vert.length;
-            boolean c = false;
-            for (i = 0, j = nvert - 1; i < nvert; j = i++) {
-                if (((vert[i][1] > testy) != (vert[j][1] > testy))
-                        && (testx < (vert[j][0] - vert[i][0]) * (testy - vert[i][1]) / (vert[j][1] - vert[i][1]) + vert[i][0])) {
-                    c = !c;
-                }
-            }
-            return c; 
-        }
         
-       public static CountryState getCountryState(Country country, double lat, double lng)
-       {
-           /*System.out.println("ENTERING COUNTRY STATE");
-           Iterator<CountryState> itCountryStates=country.listStatesInvs();
-           while(itCountryStates.hasNext())
-           {
-               CountryState countryState=itCountryStates.next();
-               System.out.println("THE COUNTRY STATE:" + countryState.getTitle() + " - " + countryState.getId());
-           }*/
-           //long startTime = System.currentTimeMillis();
-           
-           for(int i = 0; i < mxPolygons.size(); i++){
-                if(pnpoly(mxPolygons.get(i), lat, lng)){
-                    //System.out.println("El post: " +lat+","+lng+" esta en:" + mxStates.get(i).getTitle());
-                    //long endTime = System.currentTimeMillis();
-                    //System.out.println("Lookin for state " + (endTime - startTime) + " milliseconds");
-                    return mxStates.get(i);
-                }
-           }
-           return null;   
-       }
+        
         
        public static String changeFormat(String fecha, int formato)
        {
