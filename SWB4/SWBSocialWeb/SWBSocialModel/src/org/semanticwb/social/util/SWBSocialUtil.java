@@ -6,7 +6,9 @@ package org.semanticwb.social.util;
 
 import com.cybozu.labs.langdetect.Detector;
 import com.cybozu.labs.langdetect.DetectorFactory;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.StringReader;
 import java.net.SocketException;
 import java.text.DateFormat;
@@ -17,7 +19,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.Vector;
 import javaQuery.j2ee.tinyURL;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.lucene.analysis.TokenStream;
@@ -105,6 +109,7 @@ public class SWBSocialUtil {
     static public double EART_RADIUS_MI = 3958.762079; //Millas
     static private ArrayList<String> aPrepositions=new ArrayList();
     static private ArrayList<String> aSentimentWords=new ArrayList();
+    static private HashMap<String, Double> englishDictionary;
     //static private int NUMDAYS2REFRESH_USERDATA=5;
     
     public static final int POST_TYPE_MESSAGE=1;
@@ -237,10 +242,10 @@ public class SWBSocialUtil {
         //Carga preposiciones a memoría
         loadPrepositions();
         
-        //Carga Palabras sentimentales a memoría
+        //Carga Palabras sentimentales memoría
         loadSentimentWords();
         
-       
+        
         props = SWBUtils.TEXT.getPropertyFile("/org/semanticwb/social/properties/swbSocial.properties");
         
       }catch(Exception e){
@@ -280,24 +285,106 @@ public class SWBSocialUtil {
     //Carga las preposiciones que estan en BD a memoria
     public static void loadPrepositions()
     {
+        //Lenguaje Español
         Iterator<Prepositions> itPreps=Prepositions.ClassMgr.listPrepositionses(SWBSocialUtil.getConfigWebSite());
         while(itPreps.hasNext())
         {
             Prepositions prep=itPreps.next();
             aPrepositions.add(prep.getId());
         }
+        //Lenguaje Ingles
+        
+        
     }
     
     //Carga las palabras sentimentales a memoría
     public static void loadSentimentWords()
     {
-        Iterator<SentimentWords> itSentWords=SentimentWords.ClassMgr.listSentimentWordses(SWBSocialUtil.getConfigWebSite());
-        while(itSentWords.hasNext())
+        //spanish language
         {
-            SentimentWords sentWord=itSentWords.next();
-            //System.out.println("Entra a loadSentimentWords-2:"+sentWord);
-            aSentimentWords.add(sentWord.getId());
+            Iterator<SentimentWords> itSentWords=SentimentWords.ClassMgr.listSentimentWordses(SWBSocialUtil.getConfigWebSite());
+            while(itSentWords.hasNext())
+            {
+                SentimentWords sentWord=itSentWords.next();
+                //System.out.println("Entra a loadSentimentWords-2:"+sentWord);
+                aSentimentWords.add(sentWord.getId());
+            }
         }
+        
+        //english languaje -->Reference Link:http://sentiwordnet.isti.cnr.it/
+        {
+            String pathToSWN = SWBPortal.getWorkPath()+"/models/"+SWBContext.getAdminWebSite().getId()+"/sentimentaldictionaries/SentiWordNet20130122.txt";
+           
+            //System.out.println("Entra a Cargar dictionario en Ingles");
+            englishDictionary = new HashMap<String, Double>();
+            HashMap<String, Vector<Double>> _temp = new HashMap<String, Vector<Double>>();
+            try{
+                BufferedReader csv =  new BufferedReader(new FileReader(pathToSWN));
+                int lineNumber = 0;
+                String line = "";           
+                while((line = csv.readLine()) != null)
+                {
+                    lineNumber++;
+                    if (!line.trim().startsWith("#")) 
+                    {
+                        String[] data = line.split("\t");
+                        /*
+                        for(int i=0;i<data.length;i++)
+                        {
+                            System.out.println("data["+i+"]:"+data[i]);
+                        }*/
+                        // Is it a valid line? Otherwise, through exception.
+                        if (data.length != 6) {
+                            throw new IllegalArgumentException(
+                                    "Incorrect tabulation format in file, line: "
+                                    + lineNumber);
+                        }
+                        
+                        Double score = Double.parseDouble(data[2])-Double.parseDouble(data[3]);
+                        String[] words = data[4].split(" ");
+                        for(String w:words)
+                        {
+                            String[] w_n = w.split("#");
+                            w_n[0] += "#"+data[0];
+                            int index = Integer.parseInt(w_n[1])-1;
+                            if(_temp.containsKey(w_n[0]))
+                            {
+                                Vector<Double> v = _temp.get(w_n[0]);
+                                if(index>v.size())
+                                    for(int i = v.size();i<index; i++)
+                                        v.add(0.0);
+                                v.add(index, score);
+                                _temp.put(w_n[0], v);
+                            }
+                            else
+                            {
+                                Vector<Double> v = new Vector<Double>();
+                                for(int i = 0;i<index; i++)
+                                    v.add(0.0);
+                                v.add(index, score);
+                                _temp.put(w_n[0], v);
+                            }
+                        }
+                    }
+                }
+                Set<String> temp = _temp.keySet();
+                for (Iterator<String> iterator = temp.iterator(); iterator.hasNext();) {
+                    String word = (String) iterator.next();
+                    Vector<Double> v = _temp.get(word);
+                    double score = 0.0;
+                    double sum = 0.0;
+                    for(int i = 0; i < v.size(); i++)
+                        score += ((double)1/(double)(i+1))*v.get(i);
+                    for(int i = 1; i<=v.size(); i++)
+                        sum += (double)1/(double)i;
+                    score /= sum;
+
+                    englishDictionary.put(word, Double.valueOf(score));
+                }
+            }catch(Exception e){e.printStackTrace();}        
+            //System.out.println("TERMINA de Cargar dictionario en Ingles");
+        }
+        
     }
     
     
@@ -665,6 +752,7 @@ public class SWBSocialUtil {
 
             externalMsgTMP=SWBSocialUtil.Strings.removePuntualSigns(externalMsgTMP, SWBSocialUtil.getConfigWebSite());
 
+            /*
             ArrayList<String> amsgWords=new ArrayList();
             String[] msgWords=externalMsgTMP.split(" ");
             for(int i=0;i<msgWords.length;i++)
@@ -672,9 +760,10 @@ public class SWBSocialUtil {
                 String msgWord=msgWords[i];
                 if(msgWord!=null && msgWord.length()>0)
                 {
+                    System.out.println("msgWord PUESTO:"+msgWord.toLowerCase());
                     amsgWords.add(msgWord.toLowerCase());
                 }
-            }
+            }**/
             
             //System.out.println("Asocialcion de socialTopic-23");
 
@@ -701,13 +790,13 @@ public class SWBSocialUtil {
 
                             tag=SWBSocialUtil.Strings.removePuntualSigns(tag, SWBSocialUtil.getConfigWebSite());
 
-                            //System.out.println("Tag2_Final:"+tag);
+                            //System.out.println("Tag2_Final:"+tag.toLowerCase());
                             //
                             //Si una de las palabras clave de un tema esta en el mensaje de entrada, entonces se agrega al postIn ese tema 
                             //y ya no se continua iterando en los temas
-                            if(amsgWords.contains(tag.toLowerCase()))
+                            if(externalMsgTMP.toLowerCase().indexOf(tag.toLowerCase())>-1)  //No tendría que hacerlo sobre las palabras, sino sobre todo el texto del mensaje, ya que puedo tener frases de mas de 1 palabra en las palabras clave del tema.
                             {
-                               //System.out.println("tag SI esta contenido en las palabras:"+tag);
+                                //System.out.println("tag SI esta contenido en las palabras:"+tag);
                                //Hice que un msg de entrada solo se pudiera asignar a un tema debido a que si fuera a mas, entonces sería revisado el mismo msg por 
                                //varios usuarios en varios flujos, es mejor que se vaya solo a un flujo, asignando bien las palabras clave a cada tema (que no se repitan) 
                                // y si se clasificó a un tema que no debia de ser (por no colocar correctamente las palabras clave), las personas en un flujo podrían
@@ -893,7 +982,8 @@ public class SWBSocialUtil {
             int intensityTweetValueType=0;    //Por defecto sería un tweet con intensidad baja.
             float promIntensityValue=0;     
            if(lang.equals("es"))
-           {     
+           {    
+               System.out.println("Va a Clasificar mensaje para Lenguage ESPAÑOL");
                 int wordsCont=0;
                 //Normalizo
                 //System.out.println("ANALISIS-0:"+externalString2Clasify);
@@ -957,7 +1047,7 @@ public class SWBSocialUtil {
                     if(aSentimentWords.contains(word2Find)) //La palabra en cuestion ha sido encontrada en la BD
                     {   
                         SentimentWords sentimentalWordObj=SentimentWords.ClassMgr.getSentimentWords(word2Find, SWBSocialUtil.getConfigWebSite());
-                        System.out.println("Palabra Encontrada:"+word2Find);
+                        //System.out.println("Palabra Encontrada:"+word2Find);
                         wordsCont++;
                         IntensiveTweetValue+=sentimentalWordObj.getIntensityValue();
                         //Veo si la palabra cuenta con mas de dos caracteres(Normalmente el inicial de la palabra y talvez otro que
@@ -1008,7 +1098,50 @@ public class SWBSocialUtil {
                         intensityTweetValueType=1;
                     }
                 }
+            }else if(lang.equals("en"))
+            {
+                System.out.println("Va a Clasificar mensaje para Lenguage INGLES");
+                String[] words = text.split("\\s+"); 
+                double totalScore = 0, averageScore;
+                for(String word : words) {
+                    word = word.replaceAll("([^a-zA-Z\\s])", "");
+                    if (extract(word) == null)
+                        continue;
+                    totalScore += extract(word);
+                }
+                averageScore = totalScore;
+
+                System.out.println("averageScore:"+averageScore);
+
+                if(averageScore>=0.75){
+                    //return "Strong positive";
+                    sentimentalTweetValueType=1;
+                    IntensiveTweetValue=2;
+                }else if(averageScore > 0.25 && averageScore<0.5){
+                    //return  "weak_positive";
+                    sentimentalTweetValueType=1;
+                    IntensiveTweetValue=1;
+                }else if(averageScore>=0.5){
+                    //return  "positive";
+                    sentimentalTweetValueType=1;
+                    IntensiveTweetValue=1;
+                }else if(averageScore < 0 && averageScore>=-0.25){
+                    //return "weak_negative";
+                    sentimentalTweetValueType=2;
+                    IntensiveTweetValue=1;
+                }else if(averageScore < -0.25 && averageScore>=-0.5){
+                    //return "negative";
+                    sentimentalTweetValueType=2;
+                    IntensiveTweetValue=1;
+                }else if(averageScore<=-0.75){
+                    //return "strong_negative";
+                    sentimentalTweetValueType=2;
+                    IntensiveTweetValue=2;
+                }
+                //return "neutral";
+                promSentimentalValue=Float.parseFloat(Double.toString(averageScore));
             }
+           
             HashMap hmapValuesReturn=new HashMap();
             hmapValuesReturn.put("promSentimentalValue", promSentimentalValue);
             hmapValuesReturn.put("sentimentalTweetValueType", sentimentalTweetValueType);
@@ -1016,6 +1149,20 @@ public class SWBSocialUtil {
             hmapValuesReturn.put("intensityTweetValueType", intensityTweetValueType);
             return hmapValuesReturn;
             
+        }
+        
+        private static Double extract(String word)
+        {
+            Double total = new Double(0);
+            if(englishDictionary.get(word+"#n") != null)
+                 total = englishDictionary.get(word+"#n").doubleValue() + total;
+            if(englishDictionary.get(word+"#a") != null)
+                total = englishDictionary.get(word+"#a").doubleValue() + total;
+            if(englishDictionary.get(word+"#r") != null)
+                total = englishDictionary.get(word+"#r").doubleValue() + total;
+            if(englishDictionary.get(word+"#v") != null)
+                total = englishDictionary.get(word+"#v").doubleValue() + total;
+            return total;
         }
         
         /*
