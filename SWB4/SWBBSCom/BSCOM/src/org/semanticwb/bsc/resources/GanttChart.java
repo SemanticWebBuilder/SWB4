@@ -145,9 +145,7 @@ public class GanttChart extends GenericResource {
                                 if (deli.getAutoStatus() != null) {
                                     dataOut.append(deli.getAutoStatus().getColorHex());
                                 } else {
-                                    dataOut.append("\"");
                                     dataOut.append("\"#CCCCCC\"");
-                                    dataOut.append("\"");
                                 }
                                 dataOut.append("}\n");
                             }
