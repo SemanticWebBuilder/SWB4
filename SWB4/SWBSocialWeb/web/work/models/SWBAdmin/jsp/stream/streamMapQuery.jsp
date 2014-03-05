@@ -45,7 +45,7 @@ try{
     
     
     int streamMapView=1;
-    System.out.println("streamMapView:"+request.getParameter("streamMapView"));
+    //System.out.println("streamMapView:"+request.getParameter("streamMapView"));
     if(request.getParameter("streamMapView")!=null && !request.getParameter("streamMapView").isEmpty())
     {
             streamMapView=Integer.parseInt(request.getParameter("streamMapView"));
@@ -212,7 +212,7 @@ try{
             {
                 if(streamMapView==1 || streamMapView==4)
                 {
-                    System.out.println("postIn a agregar a estados:"+postIn+",mSG:"+postIn.getMsg_Text()+"State:"+postIn.getGeoStateMap()); 
+                    //System.out.println("postIn a agregar a estados:"+postIn+",mSG:"+postIn.getMsg_Text()+"State:"+postIn.getGeoStateMap()); 
                     hmapPoints=getStateCounters(postIn, hmapPoints);
                     //System.out.println("hmapPoints:"+hmapPoints.size());
                 }
