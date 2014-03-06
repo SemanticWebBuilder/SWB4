@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -29,6 +30,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.*;
+import org.semanticwb.bsc.formelement.DateElement;
 import org.semanticwb.bsc.formelement.TextAreaElement;
 import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.PeriodStatus;
@@ -40,8 +42,6 @@ import org.semanticwb.model.Resource;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.Text;
-import org.semanticwb.model.TextArea;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
 import org.semanticwb.platform.SemanticClass;
@@ -734,7 +734,9 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             if (generic != null && generic instanceof Objective) {
                 Objective objective = (Objective) generic;
                 periodStatus = objective.getPeriodStatus(period);
-                collaboration = objective.getSponsor().getUserRepository().getUserGroup("Sponsors");
+                if (objective.getSponsor() != null) {
+                    collaboration = objective.getSponsor().getUserRepository().getUserGroup("Sponsors");
+                }
             } else if (generic != null && generic instanceof Indicator) {
                 Indicator indicator = (Indicator) generic;
                 Measure measure = indicator != null && indicator.getStar() != null 
@@ -742,7 +744,9 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 if (measure != null && measure.getEvaluation() != null) {
                     periodStatus = measure.getEvaluation();
                 }
-                collaboration = indicator.getChampion().getUserRepository().getUserGroup("Champions");
+                if (indicator.getChampion() != null) {
+                    collaboration = indicator.getChampion().getUserRepository().getUserGroup("Champions");
+                }
             }
             
             //-Agrega encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
@@ -1014,8 +1018,19 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                     ).getVocabulary().getSemanticProperty(propUri);
             
             if (semanticObject != null && propUri != null && propValue != null) {
-                String value = SWBUtils.XML.replaceXMLTags(propValue);
-                semanticObject.setProperty(semProp, value);
+                String value = propValue;
+                if (semProp.isDate()) {
+                    try {
+                        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                        semanticObject.setDateProperty(semProp, format.parse(value));
+                    } catch (Exception e) {
+                        log.error(e);
+                    }
+                    
+                } else if (semProp.isString()) {
+                    value = SWBUtils.XML.replaceXMLTags(propValue);
+                    semanticObject.setProperty(semProp, value);
+                }
             }
         } else {
             super.processAction(request, response);
@@ -1147,7 +1162,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     private String generateDisplay(HttpServletRequest request, SWBParamRequest paramRequest,
             FileReader template, SemanticObject elementBSC, final UserGroup collaboration) throws IOException {
         
-        StringBuilder view = new StringBuilder(256);
+        StringBuilder view = new StringBuilder(512);
+        StringBuilder javascript = new StringBuilder(256);
         HtmlStreamTokenizer tok = new HtmlStreamTokenizer(template);
         HtmlTag tag = new HtmlTag();
         String lang = paramRequest.getUser().getLanguage();
@@ -1161,6 +1177,13 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                             ? (String) request.getSession().getAttribute(modelName)
                             : null;
         Period period = Period.ClassMgr.getPeriod(periodId, paramRequest.getWebPage().getWebSite());
+        boolean showDateVariables = false;
+        GenericObject generic = elementBSC.createGenericInstance();
+        
+        if (generic instanceof Initiative || generic instanceof Deliverable) {
+            showDateVariables = true;
+            javascript.append("<script type=\"text/javascript\">\n");
+        }
         
         while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
             int ttype = tok.getTokenType();
@@ -1180,24 +1203,32 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 } else if (tag.getTagString().toLowerCase().equals("img") && !tag.hasParam("tagProp")) {
                     view.append(tag.toString());
                 }  else if (tag.getTagString().toLowerCase().equals("img") && tag.hasParam("tagProp")) {
-                /*
-                 Si es un tag de imagen y tiene el atributo tagProp
-                 obtener el valor del atributo tagProp que contiene el uri de la propiedad
-                 */
+                    /*
+                     Si es un tag de imagen y tiene el atributo tagProp
+                     obtener el valor del atributo tagProp que contiene el uri de la propiedad
+                     */
                     String propUri = tag.getParam("tagProp");
                     if (propUri != null) {
                         view.append(renderPropertyValue(request, elementBSC, propUri, lang, period, collaboration));
+                        if (showDateVariables) {
+                            javascript.append(getDateValue(elementBSC, propUri));
+                        }
                     }
                 }
             } else if (ttype == HtmlStreamTokenizer.TT_TEXT) {
                 view.append(tok.getStringValue());
             } else if (ttype == HtmlStreamTokenizer.TT_COMMENT) {
-                view.append("<!--" + tok.getStringValue() + "-->");
+                view.append("<!--");
+                view.append(tok.getStringValue());
+                view.append("-->");
             }
             view.append("\n");
         }
+        if (showDateVariables) {
+            javascript.append("</script>\n");
+        }
 
-        return view.toString();
+        return (javascript.toString() + view.toString());
     }
     
     /**
@@ -1388,5 +1419,55 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     private boolean userCanCollaborate(final UserGroup collaboration) {
         final User user = SWBContext.getSessionUser();
         return (collaboration != null && user != null) ? collaboration.hasUser(user) : false;
+    }
+    
+    /**
+     * Obtiene el valor de las propiedades tipo fecha en la declaraci&oacute;n de una variable de javascript.
+     * En caso de que la propiedad indicada no sea de tipo fecha, devuelve una cadena vac&iacute;a.
+     * @param elementBSC objeto de tipo BSCElement del cual se obtiene la propiedad
+     * @param propUri propiedad de la que se intenta obtener el valor, si es de tipo fecha
+     * @return un {@literal String} que representa la declaración de una variable en javascript 
+     *          con el valor de la propiedad indicada si &eacute;sta es de tipo fecha, de lo contrario, se devuelve
+     *          una cadena vac&iacute;a
+     */
+    private String getDateValue(SemanticObject elementBSC, String propUri) {
+        
+        StringBuilder toReturn = new StringBuilder(128);
+        SemanticProperty semProp = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propUri);
+        
+        if (semProp.isDate() || semProp.isDateTime()) {
+            Date dateValue = elementBSC.getDateProperty(semProp);
+            if (dateValue == null) {
+                dateValue = new Date();
+            }
+            
+            //Codigo para obtener el displayElement
+            Statement st = semProp.getRDFProperty().getProperty(
+                    SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(
+                    "http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
+            if (st != null) {
+                //Se obtiene: SemanticProperty: displayElement de la propiedad en cuestion (prop)
+                SemanticObject soDisplayElement = SemanticObject.createSemanticObject(st.getResource());
+                if (soDisplayElement != null) {
+                    SemanticObject formElement = soDisplayElement.getObjectProperty(
+                            org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(
+                            "http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement"));
+                    if (formElement != null) {
+                        FormElement fe = (FormElement) formElement.createGenericInstance();
+                        //Solo se consideran los form elements de tipo bsc.formelement.DateElement
+                        if (fe instanceof DateElement && ((DateElement) fe).getDateId() != null) {
+                            toReturn.append("    var date_");
+                            toReturn.append(((DateElement) fe).getDateId());
+                            toReturn.append(elementBSC.getId());
+                            toReturn.append(" = new Date(");
+                            toReturn.append(dateValue.getTime());
+                            toReturn.append(");\n");
+                        }
+                    }
+                }
+            }
+        }
+        
+        return toReturn.toString();
     }
 }

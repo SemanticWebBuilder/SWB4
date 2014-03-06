@@ -31,6 +31,7 @@ public class DateElement extends org.semanticwb.bsc.formelement.base.DateElement
         String pmsg = null;
         String imsg = null;
         boolean disabled = false;
+        Date dt = null;
 
         if (sobj != null) {
             DisplayProperty dobj = new DisplayProperty(sobj);
@@ -67,10 +68,10 @@ public class DateElement extends org.semanticwb.bsc.formelement.base.DateElement
 
         String ext = disabled?" disabled=\"disabled\"":"";
         
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         String value = request.getParameter(propName);
         if (value == null) {
-            Date dt = obj.getDateProperty(prop);
+            dt = obj.getDateProperty(prop);
             if (dt != null) {
                 value = format.format(dt);
             }
@@ -127,16 +128,37 @@ public class DateElement extends org.semanticwb.bsc.formelement.base.DateElement
             String objectId = getDateId() + obj.getId();
             String url = (String) request.getAttribute("urlRequest");
             
+            String significantOther = null;
+            String attributeValue = null;
+            boolean handleMaximum = false;
+            
+            //se obtiene identificador del otro control con el que se complementa el periodo en significantOther
+            if (getDateOnChange() != null) {
+                String delimiter = "byId('";
+                attributeValue = getDateOnChange();
+                if (attributeValue.indexOf("constraints.max") != -1) {
+                    handleMaximum = true;
+                }
+                if (attributeValue.indexOf(delimiter) != -1) {
+                    attributeValue = attributeValue.substring(attributeValue.indexOf(delimiter) + delimiter.length());
+                }
+                if (attributeValue.indexOf("').constraints.") != -1) {
+                    significantOther = attributeValue.substring(0, attributeValue.indexOf("').constraints."));
+                } else {
+                    significantOther = attributeValue;
+                }
+                significantOther = (significantOther.indexOf("{replaceId}") != -1 
+                            ? significantOther.replace("{replaceId}", obj.getId())
+                            : significantOther);
+            }
+            
             viewString.append("<script type=\"text/javascript\">\n");
             viewString.append("  <!--\n");
             viewString.append("    var iledit_");
             viewString.append(objectId);
             viewString.append(";\n");
             
-            
             viewString.append("    dojo.addOnLoad( function() {\n");
-            /*viewString.append("require(\"dojo/ready\", function(ready){");
-            viewString.append("ready(function(){");*/
             viewString.append("      iledit_");
             viewString.append(objectId);
             viewString.append(" = new dijit.InlineEditBox({\n");
@@ -145,34 +167,40 @@ public class DateElement extends org.semanticwb.bsc.formelement.base.DateElement
             viewString.append("\",\n");
             viewString.append("        autoSave: false,\n");
             viewString.append("        editor: \"dijit.form.DateTextBox\",\n");
-            viewString.append("        editorParams: {required:true, width: '70px', constraints: {");
-            if (getDateOnChange() != null) {
-                StringBuilder constraints = new StringBuilder(64);
-                String attributeValue = getDateOnChange();
-                String searchFor = null;
-                if (attributeValue.indexOf(".max") != -1) {
-                    constraints.append("min:\"");
-                    searchFor = "max";
-                } else if (attributeValue.indexOf(".min") != -1) {
-                    constraints.append("max:\"");
-                    searchFor = "min";
-                }
-                attributeValue = (attributeValue.indexOf("{replaceId}") != -1 
-                                ? attributeValue.replace("{replaceId}", obj.getId())
-                                : attributeValue);
-                constraints.append(attributeValue.substring(0, attributeValue.indexOf("constraints.")));
-                constraints.append("value");
-                viewString.append(constraints.toString());
-                viewString.append("\"");
-            }
+            viewString.append("        editorParams: {required: true, width: '70px', value: new Date(");
+            viewString.append(dt != null ? ("" + dt.getTime()) : "");
+            viewString.append("), constraints: { ");
+            viewString.append(!handleMaximum ? "max" : "min");
+            viewString.append(": date_");
+            viewString.append(significantOther);
             viewString.append("}},\n");
-            //viewString.append("        width: '90px',\n");
             viewString.append("        onChange: function(value) {\n");
             viewString.append("          getSyncHtml('");
             viewString.append(url);
             viewString.append("&propUri=");
             viewString.append(prop.getEncodedURI());
             viewString.append("&value='+value);\n");
+            viewString.append("          if (dijit.byId('");
+            viewString.append(significantOther);
+            viewString.append("') && dijit.byId('");
+            viewString.append(significantOther);
+            viewString.append("').wrapperWidget && dijit.byId('");
+            viewString.append(significantOther);
+            viewString.append("').wrapperWidget.editWidget) {\n");
+            viewString.append("            dijit.byId('");
+            viewString.append(significantOther);
+            viewString.append("').wrapperWidget.editWidget.constraints.");
+            viewString.append(handleMaximum ? "max" : "min");
+            viewString.append(" = this.wrapperWidget.editWidget.value;\n");
+            viewString.append("          } else {\n");
+            viewString.append("              dijit.byId('");
+            viewString.append(significantOther);
+            viewString.append("').editorParams.constraints.");
+            viewString.append(handleMaximum ? "max" : "min");
+            viewString.append(" = this.wrapperWidget.editWidget.value;\n");
+            viewString.append("          }\n");
+/*            viewString.append("");
+            viewString.append("");*/
             viewString.append("        }\n");
             viewString.append("      }, 'eb_");
             viewString.append(objectId);
@@ -181,7 +209,6 @@ public class DateElement extends org.semanticwb.bsc.formelement.base.DateElement
             viewString.append(objectId);
             viewString.append(".startup();\n");
             viewString.append("    });\n");
-            //viewString.append("});\n");
             viewString.append("-->\n");
             viewString.append("</script>\n");
             viewString.append("<span id=\"eb_");
@@ -194,4 +221,5 @@ public class DateElement extends org.semanticwb.bsc.formelement.base.DateElement
 
         return ret.toString();
     }
+    
 }
