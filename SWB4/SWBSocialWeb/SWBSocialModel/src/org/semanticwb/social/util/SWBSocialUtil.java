@@ -316,7 +316,6 @@ public class SWBSocialUtil {
         {
             String pathToSWN = SWBPortal.getWorkPath()+"/models/"+SWBContext.getAdminWebSite().getId()+"/config/sentimentaldictionaries/en/SentiWordNet20130122.txt";
            
-            //System.out.println("Entra a Cargar dictionario en Ingles");
             englishDictionary = new HashMap<String, Double>();
             HashMap<String, Vector<Double>> _temp = new HashMap<String, Vector<Double>>();
             try{
@@ -387,6 +386,7 @@ public class SWBSocialUtil {
             
             //LOAD ENGLISH STOP WORDS
             String pathToEnglishStopWords = SWBPortal.getWorkPath()+"/models/"+SWBContext.getAdminWebSite().getId()+"/config/sentimentaldictionaries/en/englishStopWords.txt";
+            //System.out.println("Entra a Cargar stopwords Ingles:"+pathToEnglishStopWords);
             try{
                 BufferedReader stopwBR =  new BufferedReader(new FileReader(pathToEnglishStopWords));
                 int lineNumber = 0;
@@ -399,7 +399,7 @@ public class SWBSocialUtil {
                         aENGLISH_STOP_WORDS.add(line);
                     }
                 }
-                System.out.println("aENGLISH_STOP_WORDS:"+aENGLISH_STOP_WORDS.size());
+                //System.out.println("aENGLISH_STOP_WORDS:"+aENGLISH_STOP_WORDS.size());
             }catch(Exception e)
             {
                 log.error(e);
