@@ -39,13 +39,15 @@
     boolean gotError = false;
 %>
 
-<div class="swbform" style="padding:10px 5px 10px 5px; overflow-y: scroll; height: 400px;">
+<div class="timelineTab" style="padding:10px 5px 10px 5px; overflow-y: scroll; height: 400px;">
 <%
     Twitter twitter = (Twitter)SemanticObject.createSemanticObject(objUri).createGenericInstance();
     SWBModel model=WebSite.ClassMgr.getWebSite(twitter.getSemanticObject().getModel().getName());
     SocialTopic defaultSocialTopic = SocialTopic.ClassMgr.getSocialTopic("DefaultTopic", model);
     try {
-            out.println("<div align=\"center\"><h2>" + "@" + twitterBean.getScreenName() + " "  + "</br> Personas que sigo" + "</h2><br/></div>");
+	    out.println("<div class=\"timelineTab-title\"><p><strong>" + " Personas que sigo" + "</strong> @" + twitterBean.getScreenName() + "</p></div>");
+
+            //out.println("<div align=\"center\"><h2>" + "@" + twitterBean.getScreenName() + " "  + "</br> Personas que sigo" + "</h2><br/></div>");
             
             PagableResponseList<User> friends;
             //do {

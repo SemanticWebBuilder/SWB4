@@ -46,7 +46,7 @@
     out.println("<div dojoType=\"dijit.layout.ContentPane\"/>");
 
     //out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" id=\""+replaceId(objUri)+"_tabs_twitter\">");
-    out.println("<div class=\"swbform\" style=\" width : 2400px; overflow-y: hidden; height:500px;\">");
+    out.println("<div class=\"swbform timelineCont\" style=\" width : 2400px; overflow-y: hidden; height:500px;\">");
     //TODO:Modificar este codigo para recarga de clases, posible cambio por onLoad
     out.println("    <script type=\"dojo/connect\">");
     out.println("       this.watch(\"selectedChildWidget\", function(name, oval, nval){");
