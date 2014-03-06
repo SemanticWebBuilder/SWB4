@@ -768,7 +768,7 @@ public class NewBrand extends GenericResource {
                     out.println("<script type=\"text/javascript\">");
                     out.println("hideDialog();");
                     out.println("addItemByURI(mtreeStore, null, '" + site.getURI() + "');");
-                    out.println("showStatus('Sitio Creado');");
+                    out.println("showStatus('Marca Creada');");
                     out.println("</script>");
 
                     site.commit();
