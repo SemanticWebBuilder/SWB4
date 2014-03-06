@@ -59,12 +59,13 @@
     boolean gotError = false;
 %>
 
-<div class="swbform" style="padding:10px 5px 10px 5px; overflow-y: scroll; height: 400px;">
+<div class="timelineTab" style="padding:10px 5px 10px 5px; overflow-y: scroll; height: 400px;">
 <%
     try {
             //gets Twitter4j instance with account credentials
             System.out.println( paramRequest.getLocaleString("showing") + " @" + twitterBean.getScreenName() + " " +  paramRequest.getLocaleString("timeline"));
-            out.println("<div align=\"center\"><h2>" + "@" + twitterBean.getScreenName() +  " - " + paramRequest.getLocaleString("timelineLabel") + "</h2><br/></div>");
+            out.println("<div class=\"timelineTab-title\"><p><strong>" + paramRequest.getLocaleString("timelineLabel") + "</strong> @" + twitterBean.getScreenName() + "</p></div>");
+	    //out.println("<div align=\"center\"><h2>" + "@" + twitterBean.getScreenName() +  " - " + paramRequest.getLocaleString("timelineLabel") + "</h2><br/></div>");
             out.println("<div class=\"bar\" id=\"" + objUri + "/newTweetsAvailable\" dojoType=\"dojox.layout.ContentPane\"></div>");
             out.println("<div id=\"" + objUri + "/stream\" dojoType=\"dojox.layout.ContentPane\"></div>");           
             
