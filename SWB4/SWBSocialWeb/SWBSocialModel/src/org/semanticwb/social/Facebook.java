@@ -785,7 +785,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         //String urlLocalPost = "http://localhost:8080/swbadmin/jsp/social/postViewFiles.jsp?uri=" + photo.getEncodedURI();
         //String uriTemp = "http://" + request.getServerName() + ":" + request.getServerPort() + SWBPortal.getWebWorkPath() + "/models/SWBAdmin/jsp/oauth/callback.jsp";
         String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
-        String urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles.jsp?uri=" + photo.getEncodedURI();
+        String urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + photo.getEncodedURI();
         try {
             String photoToPublish = "";
             String additionalPhotos = "";
@@ -916,7 +916,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         JSONObject jsonResponse = null;
         //String urlLocalPost = "http://localhost:8080/swbadmin/jsp/social/postViewFiles.jsp?uri=" + video.getEncodedURI();
         String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
-        String urlLocalPost = absolutePath + "/swbadmin/jsp/social/postViewFiles.jsp?uri=" + video.getEncodedURI();
+        String urlLocalPost = absolutePath + "/swbadmin/jsp/social/ViewPostFiles?uri=" + video.getEncodedURI();
 
         try {
             String videoPath = SWBPortal.getWorkPath() + video.getWorkPath() + "/" + video.getVideo();
@@ -1531,10 +1531,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     public JSONObject getUserInfobyId(String userId) {
         HashMap<String, String> params = new HashMap<String, String>(2);
         //params.put("q", "SELECT friend_count, subscriber_count, current_location, sex, relationship_status, birthday_date, email, education, work  FROM user WHERE uid = " + userId);
-        params.put("q", "{\"usuario\": \"SELECT friend_count FROM user WHERE uid = " + userId + "\", \"pagina\": \"SELECT fan_count  FROM page WHERE page_id = " + userId + "\"}");
+        params.put("q", "{\"usuario\": \"SELECT friend_count, subscriber_count, current_location, sex, relationship_status, birthday_date, email, education FROM user WHERE uid = " + userId + "\", \"pagina\": \"SELECT fan_count  FROM page WHERE page_id = " + userId + "\"}");
         params.put("access_token", this.getAccessToken());
 
-        JSONObject userInfo = new JSONObject();
+        JSONObject userInfo = new JSONObject();        
         try {
             String fbResponse = getRequest(params, "https://graph.facebook.com/fql",
                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
