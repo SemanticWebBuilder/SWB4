@@ -427,62 +427,28 @@ if (!user.isSigned()) {
                     </tbody>
                 </table>
             </div>
-            <div class="swbp-pagination">
-                <span class="swbp-pagination-info pull-left"><%=paramRequest.getLocaleString("pagPage")%> <%=pageNum%> <%=paramRequest.getLocaleString("pagDelim")%> <%=maxPages%></span>
-                <%if (maxPages > 1) {%>
-                  <div class="swbp-pagination-nav pull-right">
-                      <ul class="pagination pagination-sm">
-                        <%
-                          int pagSlice = 5;
-                          int sliceIdx = 1;
-                          int start = 1;
-                          int end = pagSlice * sliceIdx;
+            <%
+            String sort = sortType;
+            String filter = sFilter;
+            if (sort != null && sort.length() > 0) {
+                sort = "sort|"+sort;
+            } else {
+                sort = "";
+            }
 
-                          if (pageNum > end) {
-                              do {
-                                  sliceIdx++;
-                                  end = pagSlice * sliceIdx;
-                              } while(pageNum > end);
-                          }
-                          end = pagSlice * sliceIdx;
-
-                          if (end > maxPages) {
-                              end = maxPages;
-                          }
-
-                          start = (end-pagSlice)+1;
-                          if (start < 1) {
-                              start = 1;
-                          }
-
-                          SWBResourceURL nav = paramRequest.getRenderUrl();
-                          nav.setParameter("sf", sFilter);
-                          nav.setParameter("sort", sortType);
-                          
-                          if (applyFilter) {
-                              nav.setParameter("pf", pFilter);
-                          }
-
-                          if (sliceIdx != 1) {
-                              nav.setParameter("p", String.valueOf(pageNum-1));
-                              %><li><a href="<%=nav%>">&laquo;</a></li><%
-                          }
-
-                          for(int k = start; k <= end; k++) {
-                              nav.setParameter("p", String.valueOf(k));
-                              %>
-                              <li <%=(k==pageNum?"class=\"active\"":"")%>><a href="<%=nav%>"><%=k%></a></li>
-                              <%
-                          }
-
-                          if (end < maxPages) {
-                              nav.setParameter("p", String.valueOf(pageNum+1));
-                              %><li><a href="<%=nav%>">&raquo;</a></li><%
-                          }
-                      }%>
-                    </ul>
-                </div>
-            </div>
+            if (filter != null && filter.length() > 0) {
+                filter = "filter|"+filter;
+            } else {
+                filter = "";
+            }
+            %>
+            <!--sort:<%=sort%>-->
+            <!--filter:<%=filter%>-->
+            <jsp:include page="/swbadmin/jsp/process/commons/pagination.jsp" flush="true">
+                <jsp:param name="navUrlParams" value="<%=sort%>"/>
+                <jsp:param name="navUrlParams" value="<%=filter%>"/>
+                <jsp:param name="showPageOfPage" value="true"/>
+            </jsp:include>
         <%
         } else {
             %>
