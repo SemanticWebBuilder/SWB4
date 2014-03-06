@@ -31,6 +31,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.CalendarRef;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.Language;
 import org.semanticwb.model.ModelProperty;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
@@ -110,7 +111,7 @@ public class SWBSocialUtil {
     static private ArrayList<String> aPrepositions=new ArrayList();
     static private ArrayList<String> aSentimentWords=new ArrayList();
     static private HashMap<String, Double> englishDictionary;
-    static private ArrayList aENGLISH_STOP_WORDS=new ArrayList();
+    static private ArrayList<String> aENGLISH_STOP_WORDS=new ArrayList();
     //static private int NUMDAYS2REFRESH_USERDATA=5;
     
     public static final int POST_TYPE_MESSAGE=1;
@@ -237,6 +238,28 @@ public class SWBSocialUtil {
         if(profileDir.exists() && profileDir.isDirectory())
         {
             DetectorFactory.loadProfile(profileDir);
+            /*
+             *
+            DETECTOR = DetectorFactory.create();
+            HashMap priorMap = new HashMap();
+            Iterator<Language> languages=Language.ClassMgr.listLanguages(CONFIG_WEBSITE);
+            while(languages.hasNext())
+            {
+                Language language=languages.next();
+                //Spanish or English more priority than the others, doing this, the library could take Spanish and english to compare the text first than with the other languages
+                if(language.getId().equals("es") || language.getId().equals("en"))
+                {
+                    priorMap.put(language.getId(), new Double(0.1));   
+                }else if(language.getId().equals("zh")) //There are two Chinese language, and are more than 2 letters.
+                {
+                    priorMap.put("zh-cn", new Double(0.5));    
+                    priorMap.put("zh-tw", new Double(0.5));    
+                }else{
+                    priorMap.put(language.getId(), new Double(0.5));    
+                }
+            }
+            DETECTOR.setPriorMap(priorMap);
+            * */
         }
         log.event("Initializing Language Detector...");
         
@@ -287,7 +310,7 @@ public class SWBSocialUtil {
     public static void loadPrepositions()
     {
         //Lenguaje Español
-        Iterator<Prepositions> itPreps=Prepositions.ClassMgr.listPrepositionses(SWBSocialUtil.getConfigWebSite());
+        Iterator<Prepositions> itPreps=Prepositions.ClassMgr.listPrepositionses(CONFIG_WEBSITE);
         while(itPreps.hasNext())
         {
             Prepositions prep=itPreps.next();
@@ -303,7 +326,7 @@ public class SWBSocialUtil {
     {
         //spanish language
         {
-            Iterator<SentimentWords> itSentWords=SentimentWords.ClassMgr.listSentimentWordses(SWBSocialUtil.getConfigWebSite());
+            Iterator<SentimentWords> itSentWords=SentimentWords.ClassMgr.listSentimentWordses(CONFIG_WEBSITE);
             while(itSentWords.hasNext())
             {
                 SentimentWords sentWord=itSentWords.next();
@@ -760,9 +783,11 @@ public class SWBSocialUtil {
         /*
          * Gets English Stop Words
          */
-        public static ArrayList getEnglishStopWords()
+        public static String[] getEnglishStopWords()
         {
-            return aENGLISH_STOP_WORDS;
+            String[] stockArr = new String[aENGLISH_STOP_WORDS.size()];
+            stockArr = aENGLISH_STOP_WORDS.toArray(stockArr);
+            return stockArr;
         }
         
         /*
@@ -779,7 +804,7 @@ public class SWBSocialUtil {
              //Elimino Caracteres especiales (acentuados)
             String externalMsgTMP=SWBSocialUtil.Strings.replaceSpecialCharacters(text);
 
-            externalMsgTMP=SWBSocialUtil.Strings.removePuntualSigns(externalMsgTMP, SWBSocialUtil.getConfigWebSite());
+            externalMsgTMP=SWBSocialUtil.Strings.removePuntualSigns(externalMsgTMP, CONFIG_WEBSITE);
 
             /*
             ArrayList<String> amsgWords=new ArrayList();
@@ -817,7 +842,7 @@ public class SWBSocialUtil {
                             //Elimino Caracteres especiales (acentuados)
                             tag=SWBSocialUtil.Strings.replaceSpecialCharacters(tag);
 
-                            tag=SWBSocialUtil.Strings.removePuntualSigns(tag, SWBSocialUtil.getConfigWebSite());
+                            tag=SWBSocialUtil.Strings.removePuntualSigns(tag, CONFIG_WEBSITE);
 
                             //System.out.println("Tag2_Final:"+tag.toLowerCase());
                             //
@@ -990,18 +1015,7 @@ public class SWBSocialUtil {
         
         public static HashMap classifyText(String text)
         {
-            String lang="";
-            try
-            {
-                Detector detector = DetectorFactory.create();
-                String textTmp=text;
-                if(textTmp.length()>50) textTmp=textTmp.substring(0, 50);                
-                detector.append(textTmp);
-                lang=detector.detect();
-            }catch(Exception e)
-            {
-                //log.error(e);
-            }
+            String lang=SWBSocialUtil.Util.getStringLanguage(text);
             //System.out.println("LENGUAJE DETECTADO:"+lang);
             
             float sentimentalTweetValue;
@@ -1010,8 +1024,8 @@ public class SWBSocialUtil {
             int sentimentalTweetValueType=0;    //Por defecto sería neutro
             int intensityTweetValueType=0;    //Por defecto sería un tweet con intensidad baja.
             float promIntensityValue=0;     
-           if(lang.equals("es"))
-           {    
+            if(lang!=null && lang.equals("es"))
+            {    
                System.out.println("Va a Clasificar mensaje para Lenguage ESPAÑOL");
                 int wordsCont=0;
                 //Normalizo
@@ -1044,7 +1058,7 @@ public class SWBSocialUtil {
                 //Elimino Caracteres especiales (acentuados)
                 text=SWBSocialUtil.Strings.replaceSpecialCharacters(text);
 
-                text=SWBSocialUtil.Strings.removePuntualSigns(text, SWBSocialUtil.getConfigWebSite());
+                text=SWBSocialUtil.Strings.removePuntualSigns(text, CONFIG_WEBSITE);
 
 
                 //System.out.println("ANALISIS-5:sentimentalTweetValue:"+externalString2Clasify);
@@ -1075,7 +1089,7 @@ public class SWBSocialUtil {
                     //SentimentWords sentimentalWordObj=SentimentWords.ClassMgr.getSentimentWords(word2Find, socialAdminSite);
                     if(aSentimentWords.contains(word2Find)) //La palabra en cuestion ha sido encontrada en la BD
                     {   
-                        SentimentWords sentimentalWordObj=SentimentWords.ClassMgr.getSentimentWords(word2Find, SWBSocialUtil.getConfigWebSite());
+                        SentimentWords sentimentalWordObj=SentimentWords.ClassMgr.getSentimentWords(word2Find, CONFIG_WEBSITE);
                         //System.out.println("Palabra Encontrada:"+word2Find);
                         wordsCont++;
                         IntensiveTweetValue+=sentimentalWordObj.getIntensityValue();
@@ -1127,7 +1141,7 @@ public class SWBSocialUtil {
                         intensityTweetValueType=1;
                     }
                 }
-            }else if(lang.equals("en"))
+            }else if(lang!=null && lang.equals("en"))
             {
                 System.out.println("Va a Clasificar mensaje para Lenguage INGLES");
                 String[] words = text.split("\\s+"); 
@@ -1179,6 +1193,7 @@ public class SWBSocialUtil {
             hmapValuesReturn.put("sentimentalTweetValueType", sentimentalTweetValueType);
             hmapValuesReturn.put("promIntensityValue", promIntensityValue);
             hmapValuesReturn.put("intensityTweetValueType", intensityTweetValueType);
+            hmapValuesReturn.put("msg_lang", lang);
             return hmapValuesReturn;
             
         }
@@ -1216,7 +1231,7 @@ public class SWBSocialUtil {
            int positiveintensityveResult=0;
            int negativeintensityveResult=0;
            //HashMap sntPhrasesMap=new HashMap();
-           Iterator<SentimentalLearningPhrase> itSntPhases=SentimentalLearningPhrase.ClassMgr.listSentimentalLearningPhrases(SWBSocialUtil.getConfigWebSite());
+           Iterator<SentimentalLearningPhrase> itSntPhases=SentimentalLearningPhrase.ClassMgr.listSentimentalLearningPhrases(CONFIG_WEBSITE);
            while(itSntPhases.hasNext())
            {
                SentimentalLearningPhrase sntLPhrase=itSntPhases.next();
@@ -1910,7 +1925,7 @@ public class SWBSocialUtil {
                                     if(socialNet!=null && privacy!=null)
                                     {
                                         SemanticObject semObjSocialNet=SemanticObject.createSemanticObject(socialNet);
-                                        PostOutPrivacy postOutPrivacy=PostOutPrivacy.ClassMgr.getPostOutPrivacy(privacy, SWBSocialUtil.getConfigWebSite());
+                                        PostOutPrivacy postOutPrivacy=PostOutPrivacy.ClassMgr.getPostOutPrivacy(privacy, CONFIG_WEBSITE);
                                         if(semObjSocialNet!=null && postOutPrivacy!=null && semObjSocialNet.createGenericInstance() instanceof SocialNetwork)
                                         {
                                             PostOutPrivacyRelation postOutPrivacyRel=PostOutPrivacyRelation.ClassMgr.createPostOutPrivacyRelation(wsite);
@@ -1951,12 +1966,20 @@ public class SWBSocialUtil {
                             int sentimentalTweetValueType=((Integer)hmapValues.get("sentimentalTweetValueType")).intValue();
                             float promIntensityValue=((Float)hmapValues.get("promIntensityValue")).floatValue();
                             int intensityTweetValueType=((Integer)hmapValues.get("intensityTweetValueType")).intValue();
+                            String lang=(String)hmapValues.get("msg_lang");
 
                             //System.out.println("SentimentalData../promSentimentalValue:"+promSentimentalValue);
                             //System.out.println("SentimentalData../sentimentalTweetValueType:"+sentimentalTweetValueType);
                             //System.out.println("SentimentalData../promIntensityValue:"+promIntensityValue);
                             //System.out.println("SentimentalData../intensityTweetValueType:"+intensityTweetValueType);
                             
+                            //Save language used to send the message (PostOut)
+                            Language language=Language.ClassMgr.getLanguage(lang, CONFIG_WEBSITE);
+                            if(language!=null)
+                            {
+                                postOut.setMsg_lang(language);
+                            }
+                                                        
                             //Guarda valores sentimentales en el PostOut (mensaje de Salida)
                             postOut.setPostSentimentalValue(promSentimentalValue);
                             postOut.setPostSentimentalType(sentimentalTweetValueType);
@@ -2336,6 +2359,21 @@ public class SWBSocialUtil {
     public static class Util{
         
         
+       public static String getStringLanguage(String text)
+       {
+           String lang=null;
+            try
+            {
+                if(text.length()>50) text=text.substring(0, 50);   
+                Detector detector=DetectorFactory.create();
+                detector.append(text);
+                lang=detector.detect();
+            }catch(Exception e)
+            {
+                log.error(e);
+            }
+            return lang;
+       }
         
        public static String changeFormat(String fecha, int formato)
        {
@@ -2397,7 +2435,7 @@ public class SWBSocialUtil {
         {
             if(latitude!=0 && longitude!=0)
             {
-                Iterator <Country> itCountries=Country.ClassMgr.listCountries(SWBSocialUtil.getConfigWebSite());
+                Iterator <Country> itCountries=Country.ClassMgr.listCountries(CONFIG_WEBSITE);
                 while(itCountries.hasNext())
                 {
                     Country country=itCountries.next();

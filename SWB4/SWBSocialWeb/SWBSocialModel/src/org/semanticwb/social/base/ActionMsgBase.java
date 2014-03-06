@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que agrupa acciónes que contienen un mesaje a escribir en cada una de las instancias 
    */
-public abstract class ActionMsgBase extends org.semanticwb.social.Action implements org.semanticwb.social.PostDataable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.PostTextable,org.semanticwb.model.Traceable
+public abstract class ActionMsgBase extends org.semanticwb.social.Action implements org.semanticwb.model.Traceable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Clase que agrupa acciónes que contienen un mesaje a escribir en cada una de las instancias
@@ -153,6 +153,29 @@ public abstract class ActionMsgBase extends org.semanticwb.social.Action impleme
             org.semanticwb.model.GenericIterator<org.semanticwb.social.ActionMsg> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.social.ActionMsg with a determined Msg_lang
+       * @param value Msg_lang of the type org.semanticwb.model.Language
+       * @param model Model of the org.semanticwb.social.ActionMsg
+       * @return Iterator with all the org.semanticwb.social.ActionMsg
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.ActionMsg> listActionMsgByMsg_lang(org.semanticwb.model.Language value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.ActionMsg> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_msg_lang, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.ActionMsg with a determined Msg_lang
+       * @param value Msg_lang of the type org.semanticwb.model.Language
+       * @return Iterator with all the org.semanticwb.social.ActionMsg
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.ActionMsg> listActionMsgByMsg_lang(org.semanticwb.model.Language value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.ActionMsg> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_msg_lang,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
     public static ActionMsgBase.ClassMgr getActionMsgClassMgr()
@@ -167,6 +190,44 @@ public abstract class ActionMsgBase extends org.semanticwb.social.Action impleme
     public ActionMsgBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+   /**
+   * Sets the value for the property Msg_lang
+   * @param value Msg_lang to set
+   */
+
+    public void setMsg_lang(org.semanticwb.model.Language value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(social_msg_lang, value.getSemanticObject());
+        }else
+        {
+            removeMsg_lang();
+        }
+    }
+   /**
+   * Remove the value for Msg_lang property
+   */
+
+    public void removeMsg_lang()
+    {
+        getSemanticObject().removeProperty(social_msg_lang);
+    }
+
+   /**
+   * Gets the Msg_lang
+   * @return a org.semanticwb.model.Language
+   */
+    public org.semanticwb.model.Language getMsg_lang()
+    {
+         org.semanticwb.model.Language ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_msg_lang);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Language)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**

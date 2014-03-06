@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase en donde se almacenan todos los post de tipo Video y que entran por el Listener 
    */
-public abstract class VideoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable,org.semanticwb.social.PostVideoable
+public abstract class VideoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostVideoable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable
 {
    /**
    * Clase en donde se almacenan todos los post de tipo Video y que entran por el Listener
@@ -151,6 +151,29 @@ public abstract class VideoInBase extends org.semanticwb.social.PostIn implement
         public static java.util.Iterator<org.semanticwb.social.VideoIn> listVideoInByGeoStateMap(org.semanticwb.social.CountryState value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.VideoIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_geoStateMap,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.VideoIn with a determined Msg_lang
+       * @param value Msg_lang of the type org.semanticwb.model.Language
+       * @param model Model of the org.semanticwb.social.VideoIn
+       * @return Iterator with all the org.semanticwb.social.VideoIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.VideoIn> listVideoInByMsg_lang(org.semanticwb.model.Language value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.VideoIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_msg_lang, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.VideoIn with a determined Msg_lang
+       * @param value Msg_lang of the type org.semanticwb.model.Language
+       * @return Iterator with all the org.semanticwb.social.VideoIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.VideoIn> listVideoInByMsg_lang(org.semanticwb.model.Language value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.VideoIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_msg_lang,value.getSemanticObject(),sclass));
             return it;
         }
        /**

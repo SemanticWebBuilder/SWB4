@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase a Cambiar despues por "Relacional", esta y todas sus hijas. Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta.. 
    */
-public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable
+public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable
 {
    /**
    * Propiedad con valor entero que representa el tipo de Sentimientos que expresa el Post, estos se estan definiendo de esta manera: 0) Neutro 1) Positivo 2)Negativo, estos valores pueden ser mas y permanecer en un objeto tipo colección en lo futuro.
@@ -143,6 +143,29 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
         public static java.util.Iterator<org.semanticwb.social.Post> listPostByGeoStateMap(org.semanticwb.social.CountryState value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Post> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_geoStateMap,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Post with a determined Msg_lang
+       * @param value Msg_lang of the type org.semanticwb.model.Language
+       * @param model Model of the org.semanticwb.social.Post
+       * @return Iterator with all the org.semanticwb.social.Post
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Post> listPostByMsg_lang(org.semanticwb.model.Language value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Post> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_msg_lang, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Post with a determined Msg_lang
+       * @param value Msg_lang of the type org.semanticwb.model.Language
+       * @return Iterator with all the org.semanticwb.social.Post
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Post> listPostByMsg_lang(org.semanticwb.model.Language value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Post> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_msg_lang,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -328,6 +351,44 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
     public void setIsPrioritary(boolean value)
     {
         getSemanticObject().setBooleanProperty(social_isPrioritary, value);
+    }
+   /**
+   * Sets the value for the property Msg_lang
+   * @param value Msg_lang to set
+   */
+
+    public void setMsg_lang(org.semanticwb.model.Language value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(social_msg_lang, value.getSemanticObject());
+        }else
+        {
+            removeMsg_lang();
+        }
+    }
+   /**
+   * Remove the value for Msg_lang property
+   */
+
+    public void removeMsg_lang()
+    {
+        getSemanticObject().removeProperty(social_msg_lang);
+    }
+
+   /**
+   * Gets the Msg_lang
+   * @return a org.semanticwb.model.Language
+   */
+    public org.semanticwb.model.Language getMsg_lang()
+    {
+         org.semanticwb.model.Language ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_msg_lang);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Language)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**

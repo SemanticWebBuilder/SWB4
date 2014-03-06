@@ -17,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Language;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.social.Action;
@@ -261,6 +262,7 @@ public class SentimentalDataClassifier {
         int sentimentalTweetValueType = ((Integer) hmapValues.get("sentimentalTweetValueType")).intValue();
         float promIntensityValue = ((Float) hmapValues.get("promIntensityValue")).floatValue();
         int intensityTweetValueType = ((Integer) hmapValues.get("intensityTweetValueType")).intValue();
+        String lang=(String)hmapValues.get("msg_lang");
 
         //long tfinTMP1=System.currentTimeMillis() - tini;
         //System.out.println("\n<!--Total Time to Classify--TMP1: " + tfinTMP1 + "ms - SWBSocial--> ");
@@ -436,6 +438,15 @@ public class SentimentalDataClassifier {
 
                 if(post!=null)
                 {
+                    if(lang!=null)
+                    {
+                        Language language=Language.ClassMgr.getLanguage(lang, SWBSocialUtil.getConfigWebSite());
+                        if(language!=null)
+                        {
+                            post.setMsg_lang(language);
+                        }
+                    }
+                    System.out.println("Lang Puesto:"+post.getMsg_lang());    
                     //Guarda valores sentimentales en el PostIn (mensaje de entrada)
                     post.setPostSentimentalValue(promSentimentalValue);
                     post.setPostSentimentalType(sentimentalTweetValueType);
@@ -733,12 +744,14 @@ public class SentimentalDataClassifier {
                         //The next code calculates if latitude and longitud belongs to a country and next to state
                         Country country = null;
                         if (externalPost.getCountryCode() != null) {
+                            postIn.setGeoCountry(externalPost.getCountryCode());  //Sets the countryCode that comes in the message
                             country = Country.ClassMgr.getCountry(externalPost.getCountryCode().toUpperCase(), SWBSocialUtil.getConfigWebSite());
                         } else {
                             country = SWBSocialUtil.Util.getMessageMapCountry(postIn.getLatitude(), postIn.getLongitude());
                         }
                         //System.out.println("country en el que encuentra el mensaje:"+country);
                         if (country != null) {
+                            postIn.setGeoCountry(country.getId());  //if a country instance is get it, set it to the PostIn.
                             //Busca en que estado del país encontrado se encuentra el mensaje.
                             CountryState countryState = SWBSocialUtil.Util.getMessageMapState(country, postIn.getLatitude(), postIn.getLongitude());
                             //System.out.println("estado en el que encuentra el mensaje:"+countryState+",Lat:"+postIn.getLatitude()+",lng:"+postIn.getLongitude());
@@ -746,6 +759,7 @@ public class SentimentalDataClassifier {
                                 postIn.setGeoStateMap(countryState);
                             }
                         }
+                        System.out.println("country Code Puesto:"+postIn.getGeoCountry());
                     }
 
                     if (externalPost.getPostShared() > 0) {
