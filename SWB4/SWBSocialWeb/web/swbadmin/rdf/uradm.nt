@@ -1,0 +1,123 @@
+<http://www.semanticwb.org/uradm#uradm> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticwebbuilder.org/swb4/ontology#UserRepository> .
+<http://www.semanticwb.org/uradm#uradm> <http://www.semanticwebbuilder.org/swb4/ontology#title> "Admin User Repository" .
+<http://www.semanticwb.org/uradm#uradm> <http://www.semanticwebbuilder.org/swb4/ontology#description> "Admin User Repository" .
+<http://www.semanticwb.org/uradm#uradm> <http://www.semanticwebbuilder.org/swb4/ontology#userRepAuthMethod> "FORM" .
+<http://www.semanticwb.org/uradm#uradm> <http://www.semanticwebbuilder.org/swb4/ontology#userRepLoginContext> "swb4TripleStoreModule" .
+<http://www.semanticwb.org/uradm#uradm> <http://www.semanticwebbuilder.org/swb4/ontology#userRepCallBackHandlerClassName> "org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp" .
+<http://www.semanticwb.org/uradm#uradm> <http://www.semanticwebbuilder.org/swb4/ontology#undeleteable> "1"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://www.semanticwb.org/uradm#swb_User:3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticwebbuilder.org/swb4/ontology#User> .
+<http://www.semanticwb.org/uradm#swb_User:3> <http://www.semanticwebbuilder.org/swb4/ontology#usrLogin> "jajs" .
+<http://www.semanticwb.org/uradm#swb_User:3> <http://www.semanticwebbuilder.org/swb4/ontology#usrPassword> "{SHA-512}D3KpIQc6VWBgZN2vOeaRRL74+OvHIB6o5xBd2i7nujetcXwvJ/Gcw+mH787y+JTv3zUKTaLo2z1f9D7tIA+MlA==" .
+<http://www.semanticwb.org/uradm#swb_User:3> <http://www.semanticwebbuilder.org/swb4/ontology#usrPasswordChanged> "2014-02-21T13:38:34.528" .
+<http://www.semanticwb.org/uradm#swb_User:3> <http://www.semanticwebbuilder.org/swb4/ontology#usrEmail> "jajs@hotmail.com" .
+<http://www.semanticwb.org/uradm#swb_User:3> <http://www.semanticwebbuilder.org/swb4/ontology#usrFirstName> "jajs" .
+<http://www.semanticwb.org/uradm#swb_User:3> <http://www.semanticwebbuilder.org/swb4/ontology#usrLanguage> "es" .
+<http://www.semanticwb.org/uradm#swb_User:3> <http://www.semanticwebbuilder.org/swb4/ontology#created> "2014-02-21T13:38:34.492" .
+<http://www.semanticwb.org/uradm#swb_User:3> <http://www.semanticwebbuilder.org/swb4/ontology#updated> "2014-02-21T14:12:14.501" .
+<http://www.semanticwb.org/uradm#swb_User:3> <http://www.semanticwebbuilder.org/swb4/ontology#active> "1"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://www.semanticwb.org/uradm#swb_User:3> <http://www.semanticwebbuilder.org/swb4/ontology#creator> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_User:3> <http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_User:3> <http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroup> <http://www.semanticwb.org/uradm#swb_UserGroup:admin> .
+<http://www.semanticwb.org/uradm#swb_User:3> <http://www.semanticwebbuilder.org/swb4/ontology#usrLastName> "jajs" .
+<http://www.semanticwb.org/uradm#swb_User:3> <http://www.semanticwebbuilder.org/swb4/ontology#usrLastLogin> "2014-02-21T13:39:02.111" .
+<http://www.semanticwb.org/uradm#swb_User:3> <http://www.semanticwebbuilder.org/swb4/ontology#hasAdminFilter> <http://www.semanticwb.org/uradm#swb_AdminFilter:6> .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:5> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticwebbuilder.org/swb4/ontology#AdminFilter> .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:5> <http://www.semanticwebbuilder.org/swb4/ontology#title> "Temas" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:5> <http://www.semanticwebbuilder.org/swb4/ontology#description> "Filtro con permisos limitados a los temas.\n\nNo puede crear, editar, eliminar." .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:5> <http://www.semanticwebbuilder.org/swb4/ontology#created> "2014-02-21T14:09:35.647" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:5> <http://www.semanticwebbuilder.org/swb4/ontology#updated> "2014-02-21T14:13:42.467" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:5> <http://www.semanticwebbuilder.org/swb4/ontology#creator> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:5> <http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:5> <http://www.semanticwebbuilder.org/swb4/ontology#xml> "<?xml version=\"1.0\" encoding=\"UTF-8\"?><filter id=\"5\" topicmap=\"uradm\"><elements><node id=\"bh_Information\" path=\"ObjectBehavior|bh_Information\" reload=\"getTopic.SWBAdmin.bh_Information\" topicmap=\"SWBAdmin\"/><node id=\"bh_Log\" path=\"ObjectBehavior|bh_Log\" reload=\"getTopic.SWBAdmin.bh_Log\" topicmap=\"SWBAdmin\"/><node id=\"bh_socialTopicMsgs\" path=\"ObjectBehavior|SWBSocial|SocialTopics|bh_socialTopicMsgs\" reload=\"getTopic.SWBAdmin.bh_socialTopicMsgs\" topicmap=\"SWBAdmin\"/><node id=\"bh_socialTopicMsgsOut\" path=\"ObjectBehavior|SWBSocial|SocialTopics|bh_socialTopicMsgsOut\" reload=\"getTopic.SWBAdmin.bh_socialTopicMsgsOut\" topicmap=\"SWBAdmin\"/><node id=\"bh_socialTopicPublish\" path=\"ObjectBehavior|SWBSocial|SocialTopics|bh_socialTopicPublish\" reload=\"getTopic.SWBAdmin.bh_socialTopicPublish\" topicmap=\"SWBAdmin\"/><node id=\"bh_socialTopicMap\" path=\"ObjectBehavior|SWBSocial|SocialTopics|bh_socialTopicMap\" reload=\"getTopic.SWBAdmin.bh_socialTopicMap\" topicmap=\"SWBAdmin\"/><node id=\"bh_socialTopicAnalysis\" path=\"ObjectBehavior|SWBSocial|SocialTopics|bh_socialTopicAnalysis\" reload=\"getTopic.SWBAdmin.bh_socialTopicAnalysis\" topicmap=\"SWBAdmin\"/><node id=\"bh_SocialTopicCharts\" path=\"ObjectBehavior|SWBSocial|SocialTopics|bh_SocialTopicCharts\" reload=\"getTopic.SWBAdmin.bh_SocialTopicCharts\" topicmap=\"SWBAdmin\"/><node id=\"bh_SocialTopicReporter\" path=\"ObjectBehavior|SWBSocial|SocialTopics|bh_SocialTopicReporter\" reload=\"getTopic.SWBAdmin.bh_SocialTopicReporter\" topicmap=\"SWBAdmin\"/></elements><dirs/><menus/><sites><node id=\"server\" path=\"server\" reload=\"getServer\" topicmap=\"server\"/></sites></filter>" .
+<http://www.semanticwb.org/uradm#> <http://www.swb.org/#prefix> "uradm" .
+<http://www.semanticwb.org/uradm#swb_User:1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticwebbuilder.org/swb4/ontology#User> .
+<http://www.semanticwb.org/uradm#swb_User:1> <http://www.semanticwebbuilder.org/swb4/ontology#usrLogin> "admin" .
+<http://www.semanticwb.org/uradm#swb_User:1> <http://www.semanticwebbuilder.org/swb4/ontology#usrPassword> "{SHA-512}g3RtVbFTq4NluG0BdfwgZE+cViGeq4lzjP5JGupPtWfrth/akY1H5dURuNYdTP9xoA/N2d9C7JQ50y+yqRWLIg==" .
+<http://www.semanticwb.org/uradm#swb_User:1> <http://www.semanticwebbuilder.org/swb4/ontology#usrPasswordChanged> "2014-02-17T20:40:37.386" .
+<http://www.semanticwb.org/uradm#swb_User:1> <http://www.semanticwebbuilder.org/swb4/ontology#usrEmail> "admin@semanticwb.org" .
+<http://www.semanticwb.org/uradm#swb_User:1> <http://www.semanticwebbuilder.org/swb4/ontology#usrFirstName> "Admin" .
+<http://www.semanticwb.org/uradm#swb_User:1> <http://www.semanticwebbuilder.org/swb4/ontology#usrLanguage> "es" .
+<http://www.semanticwb.org/uradm#swb_User:1> <http://www.semanticwebbuilder.org/swb4/ontology#created> "2014-02-17T20:40:37.389" .
+<http://www.semanticwb.org/uradm#swb_User:1> <http://www.semanticwebbuilder.org/swb4/ontology#updated> "2014-02-21T10:56:34.271" .
+<http://www.semanticwb.org/uradm#swb_User:1> <http://www.semanticwebbuilder.org/swb4/ontology#active> "1"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://www.semanticwb.org/uradm#swb_User:1> <http://www.semanticwebbuilder.org/swb4/ontology#creator> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_User:1> <http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_User:1> <http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroup> <http://www.semanticwb.org/uradm#swb_UserGroup:admin> .
+<http://www.semanticwb.org/uradm#swb_User:1> <http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroup> <http://www.semanticwb.org/uradm#swb_UserGroup:su> .
+<http://www.semanticwb.org/uradm#swb_User:1> <http://www.semanticwebbuilder.org/swb4/ontology#usrLastLogin> "2014-02-21T13:36:20.732" .
+<http://www.semanticwb.org/uradm#swb_UserGroup:admin> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticwebbuilder.org/swb4/ontology#UserGroup> .
+<http://www.semanticwb.org/uradm#swb_UserGroup:admin> <http://www.semanticwebbuilder.org/swb4/ontology#title> "Administrator"@en .
+<http://www.semanticwb.org/uradm#swb_UserGroup:admin> <http://www.semanticwebbuilder.org/swb4/ontology#title> "Administrador"@es .
+<http://www.semanticwb.org/uradm#swb_UserGroup:admin> <http://www.semanticwebbuilder.org/swb4/ontology#undeleteable> "1"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://www.semanticwb.org/uradm#swb_UserGroup:admin> <http://www.semanticwebbuilder.org/swb4/ontology#created> "2014-02-17T20:40:37.400" .
+<http://www.semanticwb.org/uradm#swb_UserGroup:admin> <http://www.semanticwebbuilder.org/swb4/ontology#updated> "2014-02-17T20:40:37.400" .
+<http://www.semanticwb.org/uradm#swb_UserGroup:admin> <http://www.semanticwebbuilder.org/swb4/ontology#creator> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_UserGroup:admin> <http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_UserGroup:su> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticwebbuilder.org/swb4/ontology#UserGroup> .
+<http://www.semanticwb.org/uradm#swb_UserGroup:su> <http://www.semanticwebbuilder.org/swb4/ontology#title> "Super User"@en .
+<http://www.semanticwb.org/uradm#swb_UserGroup:su> <http://www.semanticwebbuilder.org/swb4/ontology#title> "Super Usuario"@es .
+<http://www.semanticwb.org/uradm#swb_UserGroup:su> <http://www.semanticwebbuilder.org/swb4/ontology#undeleteable> "1"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://www.semanticwb.org/uradm#swb_UserGroup:su> <http://www.semanticwebbuilder.org/swb4/ontology#created> "2014-02-17T20:40:37.409" .
+<http://www.semanticwb.org/uradm#swb_UserGroup:su> <http://www.semanticwebbuilder.org/swb4/ontology#updated> "2014-02-17T20:40:37.410" .
+<http://www.semanticwb.org/uradm#swb_UserGroup:su> <http://www.semanticwebbuilder.org/swb4/ontology#creator> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_UserGroup:su> <http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_UserGroup:su> <http://www.semanticwebbuilder.org/swb4/ontology#usrgrpParent> <http://www.semanticwb.org/uradm#swb_UserGroup:admin> .
+<http://www.semanticwb.org/uradm#counter:swb_User> <http://www.semanticwb.org/uradm#counter> "3"^^<http://www.w3.org/2001/XMLSchema#long> .
+<http://www.semanticwb.org/uradm#swb_User:2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticwebbuilder.org/swb4/ontology#User> .
+<http://www.semanticwb.org/uradm#swb_User:2> <http://www.semanticwebbuilder.org/swb4/ontology#usrLogin> "Test" .
+<http://www.semanticwb.org/uradm#swb_User:2> <http://www.semanticwebbuilder.org/swb4/ontology#usrPassword> "{SHA-512}xu6eM89cZxWh0Uj9c/cxiIS0Gty5FgIeK8DoAKXF3Zf1FCF49q6IyP3Zjhr7DOTI0sVLXzezC32hmXuzOwuKMQ==" .
+<http://www.semanticwb.org/uradm#swb_User:2> <http://www.semanticwebbuilder.org/swb4/ontology#usrPasswordChanged> "2014-02-18T11:09:25.921" .
+<http://www.semanticwb.org/uradm#swb_User:2> <http://www.semanticwebbuilder.org/swb4/ontology#usrEmail> "test@test.com" .
+<http://www.semanticwb.org/uradm#swb_User:2> <http://www.semanticwebbuilder.org/swb4/ontology#usrFirstName> "Test" .
+<http://www.semanticwb.org/uradm#swb_User:2> <http://www.semanticwebbuilder.org/swb4/ontology#usrLanguage> "es" .
+<http://www.semanticwb.org/uradm#swb_User:2> <http://www.semanticwebbuilder.org/swb4/ontology#created> "2014-02-18T11:09:25.916" .
+<http://www.semanticwb.org/uradm#swb_User:2> <http://www.semanticwebbuilder.org/swb4/ontology#updated> "2014-02-21T13:38:10.522" .
+<http://www.semanticwb.org/uradm#swb_User:2> <http://www.semanticwebbuilder.org/swb4/ontology#active> "1"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://www.semanticwb.org/uradm#swb_User:2> <http://www.semanticwebbuilder.org/swb4/ontology#creator> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_User:2> <http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_User:2> <http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroup> <http://www.semanticwb.org/uradm#swb_UserGroup:admin> .
+<http://www.semanticwb.org/uradm#swb_User:2> <http://www.semanticwebbuilder.org/swb4/ontology#usrLastName> "Test" .
+<http://www.semanticwb.org/uradm#swb_User:2> <http://www.semanticwebbuilder.org/swb4/ontology#usrSecondLastName> "Test" .
+<http://www.semanticwb.org/uradm#swb_User:2> <http://www.semanticwebbuilder.org/swb4/ontology#usrLastLogin> "2014-02-21T13:37:53.650" .
+<http://www.semanticwb.org/uradm#swb_User:2> <http://www.semanticwebbuilder.org/swb4/ontology#hasAdminFilter> <http://www.semanticwb.org/uradm#swb_AdminFilter:1> .
+<http://www.semanticwb.org/uradm#counter:swb_AdminFilter> <http://www.semanticwb.org/uradm#counter> "6"^^<http://www.w3.org/2001/XMLSchema#long> .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticwebbuilder.org/swb4/ontology#AdminFilter> .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:1> <http://www.semanticwebbuilder.org/swb4/ontology#title> "TimeLines" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:1> <http://www.semanticwebbuilder.org/swb4/ontology#description> "TimeLines" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:1> <http://www.semanticwebbuilder.org/swb4/ontology#created> "2014-02-18T19:13:24.746" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:1> <http://www.semanticwebbuilder.org/swb4/ontology#updated> "2014-02-21T13:46:58.973" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:1> <http://www.semanticwebbuilder.org/swb4/ontology#creator> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:1> <http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:1> <http://www.semanticwebbuilder.org/swb4/ontology#xml> "<?xml version=\"1.0\" encoding=\"UTF-8\"?><filter id=\"1\" topicmap=\"uradm\"><elements><node id=\"bh_Information\" path=\"ObjectBehavior|bh_Information\" reload=\"getTopic.SWBAdmin.bh_Information\" topicmap=\"SWBAdmin\"/><node id=\"bh_Log\" path=\"ObjectBehavior|bh_Log\" reload=\"getTopic.SWBAdmin.bh_Log\" topicmap=\"SWBAdmin\"/><node id=\"Timeline\" path=\"ObjectBehavior|SWBSocial|SocialNetworks|Timeline\" reload=\"getTopic.SWBAdmin.Timeline\" topicmap=\"SWBAdmin\"/><node id=\"Youtube_Wall\" path=\"ObjectBehavior|SWBSocial|SocialNetworks|Youtube_Wall\" reload=\"getTopic.SWBAdmin.Youtube_Wall\" topicmap=\"SWBAdmin\"/><node id=\"FacebookWall\" path=\"ObjectBehavior|SWBSocial|SocialNetworks|FacebookWall\" reload=\"getTopic.SWBAdmin.FacebookWall\" topicmap=\"SWBAdmin\"/></elements><dirs/><menus/><sites><node id=\"server\" path=\"server\" reload=\"getServer\" topicmap=\"server\"/></sites></filter>" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticwebbuilder.org/swb4/ontology#AdminFilter> .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:2> <http://www.semanticwebbuilder.org/swb4/ontology#title> "TimeLines Total" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:2> <http://www.semanticwebbuilder.org/swb4/ontology#description> "Filtro con control total de TimeLines" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:2> <http://www.semanticwebbuilder.org/swb4/ontology#created> "2014-02-21T13:47:27.472" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:2> <http://www.semanticwebbuilder.org/swb4/ontology#updated> "2014-02-21T13:56:00.520" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:2> <http://www.semanticwebbuilder.org/swb4/ontology#creator> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:2> <http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:2> <http://www.semanticwebbuilder.org/swb4/ontology#xml> "<?xml version=\"1.0\" encoding=\"UTF-8\"?><filter id=\"2\" topicmap=\"uradm\"><elements><node id=\"bh_Information\" path=\"ObjectBehavior|bh_Information\" reload=\"getTopic.SWBAdmin.bh_Information\" topicmap=\"SWBAdmin\"/><node id=\"bh_Log\" path=\"ObjectBehavior|bh_Log\" reload=\"getTopic.SWBAdmin.bh_Log\" topicmap=\"SWBAdmin\"/><node id=\"SocialNetworks\" path=\"ObjectBehavior|SWBSocial|SocialNetworks\" reload=\"getTopic.SWBAdmin.SocialNetworks\" topicmap=\"SWBAdmin\"/></elements><dirs/><menus><node id=\"social:SocialNetwork\" path=\"WBAd_Menus|WBAd_mnu_PopUp|social:SocialNetwork\" reload=\"getTopic.SC|social:SocialNetwork\" topicmap=\"SWBAdmin\"/></menus><sites><node id=\"server\" path=\"server\" reload=\"getServer\" topicmap=\"server\"/></sites></filter>" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticwebbuilder.org/swb4/ontology#AdminFilter> .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:3> <http://www.semanticwebbuilder.org/swb4/ontology#title> "Streams" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:3> <http://www.semanticwebbuilder.org/swb4/ontology#description> "Filtro con permisos limitados a los Streams.\n\nNo puede crear, editar, eliminar." .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:3> <http://www.semanticwebbuilder.org/swb4/ontology#created> "2014-02-21T13:59:32.924" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:3> <http://www.semanticwebbuilder.org/swb4/ontology#updated> "2014-02-21T14:14:05.871" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:3> <http://www.semanticwebbuilder.org/swb4/ontology#creator> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:3> <http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:3> <http://www.semanticwebbuilder.org/swb4/ontology#xml> "<?xml version=\"1.0\" encoding=\"UTF-8\"?><filter id=\"3\" topicmap=\"uradm\"><elements><node id=\"bh_Information\" path=\"ObjectBehavior|bh_Information\" reload=\"getTopic.SWBAdmin.bh_Information\" topicmap=\"SWBAdmin\"/><node id=\"bh_Log\" path=\"ObjectBehavior|bh_Log\" reload=\"getTopic.SWBAdmin.bh_Log\" topicmap=\"SWBAdmin\"/><node id=\"bh_streamInBox\" path=\"ObjectBehavior|SWBSocial|Streams|bh_streamInBox\" reload=\"getTopic.SWBAdmin.bh_streamInBox\" topicmap=\"SWBAdmin\"/><node id=\"bh_StreamInBoxNoTopic\" path=\"ObjectBehavior|SWBSocial|Streams|bh_StreamInBoxNoTopic\" reload=\"getTopic.SWBAdmin.bh_StreamInBoxNoTopic\" topicmap=\"SWBAdmin\"/><node id=\"bh_streamMap\" path=\"ObjectBehavior|SWBSocial|Streams|bh_streamMap\" reload=\"getTopic.SWBAdmin.bh_streamMap\" topicmap=\"SWBAdmin\"/><node id=\"bh_streamAnalysis\" path=\"ObjectBehavior|SWBSocial|Streams|bh_streamAnalysis\" reload=\"getTopic.SWBAdmin.bh_streamAnalysis\" topicmap=\"SWBAdmin\"/><node id=\"Graficas\" path=\"ObjectBehavior|SWBSocial|Streams|Graficas\" reload=\"getTopic.SWBAdmin.Graficas\" topicmap=\"SWBAdmin\"/><node id=\"bh_StreamReporter\" path=\"ObjectBehavior|SWBSocial|Streams|bh_StreamReporter\" reload=\"getTopic.SWBAdmin.bh_StreamReporter\" topicmap=\"SWBAdmin\"/></elements><dirs/><menus/><sites><node id=\"server\" path=\"server\" reload=\"getServer\" topicmap=\"server\"/></sites></filter>" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticwebbuilder.org/swb4/ontology#AdminFilter> .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:6> <http://www.semanticwebbuilder.org/swb4/ontology#title> "Temas Total" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:6> <http://www.semanticwebbuilder.org/swb4/ontology#description> "Filtro con control total a los temas" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:6> <http://www.semanticwebbuilder.org/swb4/ontology#created> "2014-02-21T14:11:16.996" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:6> <http://www.semanticwebbuilder.org/swb4/ontology#updated> "2014-02-21T14:11:59.165" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:6> <http://www.semanticwebbuilder.org/swb4/ontology#creator> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:6> <http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:6> <http://www.semanticwebbuilder.org/swb4/ontology#xml> "<?xml version=\"1.0\" encoding=\"UTF-8\"?><filter id=\"6\" topicmap=\"uradm\"><elements><node id=\"bh_Information\" path=\"ObjectBehavior|bh_Information\" reload=\"getTopic.SWBAdmin.bh_Information\" topicmap=\"SWBAdmin\"/><node id=\"bh_Log\" path=\"ObjectBehavior|bh_Log\" reload=\"getTopic.SWBAdmin.bh_Log\" topicmap=\"SWBAdmin\"/><node id=\"SocialTopics\" path=\"ObjectBehavior|SWBSocial|SocialTopics\" reload=\"getTopic.SWBAdmin.SocialTopics\" topicmap=\"SWBAdmin\"/></elements><dirs/><menus><node id=\"social:SocialTopic\" path=\"WBAd_Menus|WBAd_mnu_PopUp|social:SocialTopic\" reload=\"getTopic.SC|social:SocialTopic\" topicmap=\"SWBAdmin\"/></menus><sites><node id=\"server\" path=\"server\" reload=\"getServer\" topicmap=\"server\"/></sites></filter>" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticwebbuilder.org/swb4/ontology#AdminFilter> .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:4> <http://www.semanticwebbuilder.org/swb4/ontology#title> "Streams Total" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:4> <http://www.semanticwebbuilder.org/swb4/ontology#description> "Filtro con control total a los Streams." .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:4> <http://www.semanticwebbuilder.org/swb4/ontology#created> "2014-02-21T14:07:02.328" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:4> <http://www.semanticwebbuilder.org/swb4/ontology#updated> "2014-02-21T14:14:41.200" .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:4> <http://www.semanticwebbuilder.org/swb4/ontology#creator> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:4> <http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy> <http://www.semanticwb.org/uradm#swb_User:1> .
+<http://www.semanticwb.org/uradm#swb_AdminFilter:4> <http://www.semanticwebbuilder.org/swb4/ontology#xml> "<?xml version=\"1.0\" encoding=\"UTF-8\"?><filter id=\"4\" topicmap=\"uradm\"><elements><node id=\"bh_Information\" path=\"ObjectBehavior|bh_Information\" reload=\"getTopic.SWBAdmin.bh_Information\" topicmap=\"SWBAdmin\"/><node id=\"bh_Log\" path=\"ObjectBehavior|bh_Log\" reload=\"getTopic.SWBAdmin.bh_Log\" topicmap=\"SWBAdmin\"/><node id=\"Streams\" path=\"ObjectBehavior|SWBSocial|Streams\" reload=\"getTopic.SWBAdmin.Streams\" topicmap=\"SWBAdmin\"/></elements><dirs/><menus><node id=\"social:Stream\" path=\"WBAd_Menus|WBAd_mnu_PopUp|social:Stream\" reload=\"getTopic.SC|social:Stream\" topicmap=\"SWBAdmin\"/></menus><sites><node id=\"server\" path=\"server\" reload=\"getServer\" topicmap=\"server\"/></sites></filter>" .
