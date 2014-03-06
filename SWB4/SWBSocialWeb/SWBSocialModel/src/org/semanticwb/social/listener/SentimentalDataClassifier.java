@@ -760,7 +760,7 @@ public class SentimentalDataClassifier {
                                 postIn.setGeoStateMap(countryState);
                             }
                         }
-                        System.out.println("country Code Puesto:"+postIn.getGeoCountry());
+                        //System.out.println("country Code Puesto:"+postIn.getGeoCountry());
                     }
 
                     if (externalPost.getPostShared() > 0) {
