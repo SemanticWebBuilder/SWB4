@@ -255,34 +255,40 @@
             }
         }
         
-        if(postIn.getMsg_Text()!=null){//If post has message
+        if(postIn.getMsg_Text()!=null)
+        {//If post has message
             String msg=postIn.getMsg_Text().toLowerCase();
-            //TODO:ver si mejor desde que se clasifica el mensaje, se guarda en alguna nueva propiedad
-            //el mensaje normalizado, replaceSpecialCharacters y removePuntualSigns.
-            //msg=SWBSocialUtil.Classifier.normalizer(msg).getNormalizedPhrase();
-            msg = SWBSocialUtil.Strings.removePrepositions(msg); 
+            String lang=SWBSocialUtil.Util.getStringLanguage(msg);
+            if(lang==null) lang.equals("es");
+            if(lang.equals("es"))
+            {
+                msg = SWBSocialUtil.Strings.removePrepositions(msg); 
+            }   
             msg = Jsoup.clean(msg, Whitelist.simpleText());
             msg = SWBSocialResUtil.Util.replaceSpecialCharactersAndHtmlCodes(msg, false);
             msg = SWBSocialUtil.Strings.removePuntualSigns(msg, socialAdminSite);
-            
+
             String[] mgsWords=msg.split("\\s+");  //Dividir valores
             for(int i=0;i<mgsWords.length;i++)
             {
-               String word=mgsWords[i];
-               if(!Arrays.asList(SWBSocialUtil.Classifier.getSpanishStopWords()).contains(word))
-               {
-                    if(!isInteger(word))
-                    {
-                        Integer frequency = cloudTags.get(word);
-                        if(frequency == null){//New word
-                            cloudTags.put(word, 1);
-                        }else if(frequency > 0){//Repeated word
-                            cloudTags.put(word, ++frequency);
-                        }
+                String word=mgsWords[i];
+                boolean isStopWord=true;
+                if(lang.equals("es") && !Arrays.asList(SWBSocialUtil.Classifier.getSpanishStopWords()).contains(word)){
+                    isStopWord=false;
+                }else if(lang.equals("en") && !Arrays.asList(SWBSocialUtil.Classifier.getEnglishStopWords()).contains(word)){
+                    isStopWord=false;
+                }
+                if(!isStopWord && !isInteger(word))
+                {
+                    Integer frequency = cloudTags.get(word);
+                    if(frequency == null){//New word
+                        cloudTags.put(word, 1);
+                    }else if(frequency > 0){//Repeated word
+                        cloudTags.put(word, ++frequency);
                     }
-               }
-            }
-        }
+                }
+              }
+       }
     }
     
     //System.out.println("POSTS READ:"+ posts);
