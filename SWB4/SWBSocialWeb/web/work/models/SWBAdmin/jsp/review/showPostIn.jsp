@@ -97,15 +97,16 @@
             <tr>
 
                 <%
-                    if (semObj.getGenericInstance() instanceof MessageIn) {
+                    if (postIn instanceof MessageIn) {
                         MessageIn message = (MessageIn) semObj.getGenericInstance();
-                        String sMsg="";
-                        if(SWBUtils.TEXT.encode(message.getMsg_Text(), "utf-8")!=null) sMsg=SWBUtils.TEXT.encode(message.getMsg_Text(), "utf-8");
+                        String sMsg=message.getMsg_Text();
+                        String textUtf8=SWBUtils.TEXT.encode(message.getMsg_Text(), "utf-8");
+                        if(textUtf8!=null && !textUtf8.isEmpty()) sMsg=textUtf8;
                         sMsg=sMsg.replaceAll("\n", ""); 
                 %>
                 <td>
                     <span id="msgText"></span>
-                    <script type="text/javascript">returnUrlTextParsed("<%=sMsg%>");</script></span>
+                    <%=sMsg%>
                 </td>
                 <%
                 } else if (semObj.getGenericInstance() instanceof PhotoIn) {
@@ -131,13 +132,14 @@
                     %>     
                     <br/>
                     <span id="msgText"></span>
-                    <script type="text/javascript">returnUrlTextParsed("<%=sMsg%>");</script></span>
+                    <%=sMsg%>
                 </td>
                 <%
                 } else if (semObj.getGenericInstance() instanceof VideoIn) {
                     VideoIn video = (VideoIn) semObj.getGenericInstance();
-                    String sMsg="";
-                    if(SWBUtils.TEXT.encode(video.getMsg_Text(), "utf-8")!=null) sMsg=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf-8");
+                    String sMsg=video.getMsg_Text();
+                    String textUtf8=SWBUtils.TEXT.encode(video.getMsg_Text(), "utf-8"); 
+                    if(textUtf8!=null && !textUtf8.isEmpty()) sMsg=textUtf8;
                     sMsg=sMsg.replaceAll("\n", ""); 
                     %>
                     <td>
@@ -222,7 +224,7 @@
                     %>    
                         <br/><br/>
                         <span id="msgText"></span>
-                        <script type="text/javascript">returnUrlTextParsed("<%=sMsg%>");</script></span>
+                        <%=sMsg%>
                     </td>
                     <%
                         }
