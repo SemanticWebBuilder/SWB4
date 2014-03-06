@@ -1,0 +1,99 @@
+<template method="setHeaders" Content-Type="text/html; charset=UTF-8" charset="UTF-8" Cache-Control="no-cache" Pragma="no-cache"  response="{response}" />
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{user@getLanguage}" lang="{user@getLanguage}">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>SWB Social : WorkAdmin</title>
+
+<!-->
+ <style type="text/css">
+            @import "<webpath/>/swbadmin/js/dojo/dojo/resources/dojo.css";
+            /*@import "<webpath/>/swbadmin/js/dojo/dojo/resources/dnd.css";*/
+            @import "<webpath/>/swbadmin/js/dojo/dijit/themes/soria/soria.css";
+            @import "<webpath/>/swbadmin/js/dojo/dojox/layout/resources/ExpandoPane.css";
+            @import "<webpath/>/swbadmin/js/dojo/dojox/form/resources/FileInput.css";
+            @import "<webpath/>/swbadmin/css/swb.css";
+            @import "<webpath/>/swbadmin/css/swbsocial.css";
+
+            /* pre-loader specific stuff to prevent unsightly flash of unstyled content */
+  
+        </style>
+
+        <script type="text/javascript" src="{webpath}/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false, locale: '{user@getLanguage}'"></script>
+        <script type="text/javascript" charset="utf-8" src="{webpath}/swbadmin/js/swb.js"></script>
+        <script type="text/javascript" charset="utf-8" src="{webpath}/swbadmin/js/swb_admin.js"></script>
+        <script type="text/javascript" charset="utf-8" src="{webpath}/swbadmin/js/schedule.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/work/models/SWBAdmin/jsp/reports/tagcanvas.js" ></script>
+        <script type="text/javascript" charset="utf-8" src="{webpath}/swbadmin/js/fileUpload.js" ></script>
+        <script type="text/javascript" charset="utf-8" src="/work/models/SWBAdmin/js/swbsocial.js" ></script>
+
+
+        <script type="text/javascript">
+            context="<webpath/>";
+            word_separator='_';
+            dojo.addOnLoad
+            (
+                function()
+                {
+                    //alert("OnLoad");
+                    var start = new Date().getTime();
+                    //dojo.parser.parse(dojo.byId('main'));
+                    console.info("Total parse time: " + (new Date().getTime() - start) + "ms");
+
+                    //dojo.byId('loaderInner').innerHTML += " done.";
+                    setTimeout(function hideLoader()
+                    {
+                        var loader = dojo.byId('loader');
+                        dojo.fadeOut({ node: loader, duration:500,
+                            onEnd: function(){
+                                loader.style.display = "none";
+                            }
+                        }).play();
+                    }, 0);
+                }
+            );
+        </script>
+        <script type="text/javascript">
+	 dojo.require("dojox.layout.ExpandoPane");
+        </script>
+<!-->
+<link href="/swbadmin/css/swbsocial.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="{webpath}/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false, locale: '{user@getLanguage}'"></script>
+<script type="text/javascript" charset="utf-8" src="{webpath}/swbadmin/js/swb.js"></script>
+<!--script type="text/javascript" charset="utf-8" src="{webpath}/swbadmin/js/swb_admin.js"></script-->
+</head>
+<body id="vistaPrevia">
+<div id="gral">
+   <h1><span>SWB Social</span></h1>
+
+<div id="VistaCont">
+
+    <div id="name">
+        <USER method="getFullName"/>
+    </div>
+
+    <div id="favs">
+        <div id="userFavorites">
+        <h2>Favoritos</h2>
+           <include src="/work/models/SWBAdmin/jsp/homePreview/showUserFavorites.jsp"/>       
+        </div>
+    </div>
+
+    <div id="movs">
+        <h2>Mensajes</h2>
+        <div id="movs-cont">
+          <RESOURCE TYPE="UserMsgBoard"/>
+        </div>
+    </div>
+
+   
+
+    <div class="clear"></div>
+
+</div><!-- VistaCont -->
+
+
+</div>
+</body>
+</html>

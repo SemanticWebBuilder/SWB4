@@ -1,0 +1,1536 @@
+/* 
+    Document   : swbsocial
+    Created on : 19/03/2013, 17:55:58 PM
+    Author     : Jorge Jim?nez
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+html, body, #main {
+    width: 100%;
+    height: 100%;
+    /*overflow: hidden;*/
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+    font: 10pt Arial,Myriad,Tahoma,Verdana,sans-serif;
+}
+
+.rounded {
+behavior: url(border-radius.htc); border-radius: 2px; /*IE */
+border-radius:2px; /*opera y CSS3*/ 
+-moz-border-radius:2px; /*FireFox*/
+-webkit-border-radius:2px; /*Safari Chrome*/
+-khtml-border-radius:2px; /* Linux browers */
+}
+
+.soria .dijitTreeIcon {
+    width:20px;
+    height: 18px;
+}
+
+.swbLogo {
+    width: 252px;
+    height: 26px;
+    padding: 0px 0px 0px 0px;
+    margin: expression('0px 0px -7px 0px'); /*IE*/
+}
+
+/*  20x18 */
+
+.swbIconMnuView,
+.swbIconMnuReload,
+.swbIconMnuDelete,
+.swbIconMnuAdd,
+.swbIconMnuActive,
+.swbIconMnuEdit,
+.swbIconSystem,
+.swbIconStrategy,
+.swbIconContent,
+.swbIconResources,
+.swbIconResourceType,
+.swbIconResource,
+.swbIconResourceU,
+.swbIconResourceE,
+.swbIconResourceW,
+.swbIconResourceF,
+.swbIconResourceSubType,
+.swbIconTemplateGroup,
+.swbIconTemplates,
+.swbIconTemplate,
+.swbIconTemplateU,
+.swbIconTemplateE,
+.swbIconTemplateW,
+.swbIconTemplateF,
+.swbIconWebSites,
+.swbIconWebSite,
+.swbIconWebSiteU,
+.swbIconUserRespositorys,
+.swbIconUserRepository,
+.swbIconHomePage,
+.swbIconHomePageU,
+.swbIconWebPage,
+.swbIconWebPageU,
+.swbIconWebPageE,
+.swbIconWebPageW,
+.swbIconWebPageF,
+.swbIconWebPageV,
+.swbIconCamps,
+.swbIconCamp,
+.swbIconCampU,
+.swbIconPFlows,
+.swbIconPFlow,
+.swbIconPFlowU,
+.swbIconLanguages,
+.swbIconLanguage,
+.swbIconCountrys,
+.swbIconCountry,
+.swbIconDevices,
+.swbIconDevice,
+.swbIconRules,
+.swbIconRule,
+.swbIconRuleU,
+.swbIconRoles,
+.swbIconRole,
+.swbIconRoleU,
+.swbIconDnss,
+.swbIconDns,
+.swbIconUser,
+.swbIconUserU,
+.swbIconUserGroups,
+.swbIconUserGroup,
+.swbIconObjectBehaviors,
+.swbIconObjectBehavior,
+.swbIconObjectBehaviorU,
+.swbIconWorkspace,
+.swbIconWorkspaceU,
+.swbIconMenuItems,
+.swbIconMenuItem,
+.swbIconMenuItemU,
+.swbIconReload,
+.swbIconTrash,
+.swbIconAdd,
+.swbIconEdit,
+.swbIconDelete,
+.swbIconCalendars,
+.swbIconCalendar,
+.swbIconCalendarU,
+
+.swbIconOntology,
+.swbIconOntologyU,
+.swbIconClass,
+.swbIconProperty,
+
+.swbIconProcess,
+.swbIconProcesses,
+.swbIconProcessU,
+.swbIconProcessW,
+.swbIconProcessF,
+.swbIconSubProcess,
+.swbIconSubProcessU,
+.swbIconSubProcessW,
+.swbIconSubProcessF,
+.swbIconAdhocSubProcess,
+.swbIconAdhocSubProcessU,
+.swbIconAdhocSubProcessW,
+.swbIconAdhocSubProcessF,
+.swbIconEventSubProcess,
+.swbIconEventSubProcessU,
+.swbIconEventSubProcessW,
+.swbIconEventSubProcessF,
+.swbIconTransactionSubProcess,
+.swbIconTransactionSubProcessU,
+.swbIconTransactionSubProcessW,
+.swbIconTransactionSubProcessF,
+.swbIconTask,
+.swbIconTaskU,
+.swbIconTaskW,
+.swbIconTaskF,
+.swbIconUserTask,
+.swbIconUserTaskU,
+.swbIconUserTaskW,
+.swbIconUserTaskF,
+.swbIconServiceTask,
+.swbIconServiceTaskU,
+.swbIconServiceTaskW,
+.swbIconServiceTaskF,
+.swbIconScriptTask,
+.swbIconScriptTaskU,
+.swbIconScriptTaskW,
+.swbIconScriptTaskF,
+.swbIconBusinessRuleTask,
+.swbIconBusinessRuleTaskU,
+.swbIconBusinessRuleTaskW,
+.swbIconBusinessRuleTaskF,
+.swbIconManualTask,
+.swbIconManualTaskU,
+.swbIconManualTaskW,
+.swbIconManualTaskF,
+.swbIconSendTask,
+.swbIconSendTaskU,
+.swbIconSendTaskW,
+.swbIconSendTaskF,
+.swbIconReceiveTask,
+.swbIconReceiveTaskU,
+.swbIconReceiveTaskW,
+.swbIconReceiveTaskF,
+.swbIconCallTask,
+.swbIconCallTaskU,
+.swbIconCallTaskW,
+.swbIconCallTaskF,
+.swbIconCallManualTask,
+.swbIconCallManualTaskU,
+.swbIconCallManualTaskW,
+.swbIconCallManualTaskF,
+.swbIconCallBusinessRuleTask,
+.swbIconCallBusinessRuleTaskU,
+.swbIconCallBusinessRuleTaskW,
+.swbIconCallBusinessRuleTaskF,
+.swbIconCallScriptTask,
+.swbIconCallScriptTaskU,
+.swbIconCallScriptTaskW,
+.swbIconCallScriptTaskF,
+.swbIconCallUserTask,
+.swbIconCallUserTaskU,
+.swbIconCallUserTaskW,
+.swbIconCallUserTaskF,
+.swbIconCallProcess,
+.swbIconCallProcessU,
+.swbIconCallProcessW,
+.swbIconCallProcessF,
+.swbIconStartEvent,
+.swbIconStartEventU,
+.swbIconStartEventW,
+.swbIconStartEventF,
+.swbIconMessageStartEvent,
+.swbIconTimerStartEvent,
+.swbIconRuleStartEvent,
+.swbIconSignalStartEvent,
+.swbIconMultipleStartEvent,
+.swbIconParallelStartEvent,
+.swbIconScalationStartEvent,
+.swbIconErrorStartEvent,
+.swbIconCompensationStartEvent,
+.swbIconMessageIntermediateCatchEvent,
+.swbIconMessageIntermediateThrowEvent,
+.swbIconTimerIntermediateCatchEvent,
+.swbIconErrorIntermediateCatchEvent,
+.swbIconCancelationIntermediateCatchEvent,
+.swbIconCompensationIntermediateCatchEvent,
+.swbIconCompensationIntermediateThrowEvent,
+.swbIconRuleIntermediateCatchEvent,
+.swbIconLinkIntermediateCatchEvent,
+.swbIconLinkIntermediateThrowEvent,
+.swbIconSignalIntermediateCatchEvent,
+.swbIconSignalIntermediateThrowEvent,
+.swbIconMultipleIntermediateCatchEvent,
+.swbIconMultipleIntermediateThrowEvent,
+.swbIconScalationIntermediateCatchEvent,
+.swbIconScalationIntermediateThrowEvent,
+.swbIconParallelIntermediateCatchEvent,
+.swbIconEndEvent,
+.swbIconMessageEndEvent,
+.swbIconErrorEndEvent,
+.swbIconCancelationEndEvent,
+.swbIconCompensationEndEvent,
+.swbIconSignalEndEvent,
+.swbIconTerminationEndEvent,
+.swbIconMultipleEndEvent,
+.swbIconScalationEndEvent,
+.swbIconParallelGateway,
+.swbIconComplexGateway,
+.swbIconExclusiveIntermediateEventGateway,
+.swbIconExclusiveStartEventGateway,
+.swbIconParallelStartEventGateway,
+.swbIconInclusiveGateway,
+.swbIconExclusiveGateway,
+.swbIconSequenceFlow,
+.swbIconConditionalFlow,
+.swbIconDefaultFlow,
+.swbIconMessageFlow,
+.swbIconAssociationFlow,
+.swbIconDirectionalAssociation,
+.swbIconAnnotationArtifact,
+.swbIconGroupArtifact,
+.swbIconDataObject,
+.swbIconDataInput,
+.swbIconDataOutput,
+.swbIconDataStore,
+.swbIconPool,
+.swbIconLane,
+.swbIconLaneU,
+.swbIconLaneW,
+.swbIconLaneF,
+.swbIconArtifact {
+    background-repeat: no-repeat;
+    width:20px;
+    height: 18px;
+    text-align: center;
+    padding-right:0px;
+    background-image: url('../icons/icons20x18.png'); background-position: -620px -200px;
+}
+
+.swbIconSystem      { background-position: -200px -0px; }
+.swbIconStrategy    { background-position: -240px -0px; }
+.swbIconContent     { background-position: -260px -0px; }
+.swbIconResources   { background-position: -340px -0px; }
+.swbIconResource    { background-position: -340px -18px; }
+.swbIconResourceU   { background-position: -340px -36px; }
+.swbIconResourceF   { background-position: -120px -72px; }
+.swbIconResourceW   { background-position: -140px -72px; }
+.swbIconResourceE   { background-position: -160px -72px; }
+.swbIconResourceType { background-position: -340px -0px; }
+.swbIconTemplates   { background-position: -140px -0px; }
+.swbIconTemplate    { background-position: -140px -18px; }
+.swbIconTemplateU   { background-position: -140px -36px; }
+.swbIconTemplateF   { background-position: -180px -72px; }
+.swbIconTemplateW   { background-position: -200px -72px; }
+.swbIconTemplateE   { background-position: -220px -72px; }
+.swbIconWebSites    { background-position: -280px -0px; }
+.swbIconWebSite     { background-position: -280px -18px; }
+.swbIconWebSiteU    { background-position: -280px -36px; }
+.swbIconHomePage    { background-position: -400px -18px; }
+.swbIconHomePageU   { background-position: -400px -36px; }
+.swbIconWebPage     { background-position: -420px -18px; }
+.swbIconWebPageU    { background-position: -420px -36px; }
+.swbIconWebPageF    { background-position: -0px -72px; }
+.swbIconWebPageW    { background-position: -20px -72px; }
+.swbIconWebPageE    { background-position: -40px -72px; }
+.swbIconWebPageV    { background-position: -140px -199px; }
+.swbIconDnss        { background-position: -80px -0px; }
+.swbIconDns         { background-position: -80px -18px; }
+.swbIconLanguages   { background-position: -20px -0px; }
+.swbIconLanguage    { background-position: -20px -18px; }
+.swbIconCountrys    { background-position: -440px -0px; }
+.swbIconCountry     { background-position: -440px -18px; }
+.swbIconRoles       { background-position: -40px -0px; }
+.swbIconRole        { background-position: -40px -18px; }
+.swbIconUser        { background-position: -0px -18px; }
+.swbIconUserU       { background-position: -0px -36px; }
+.swbIconUserGroups  { background-position: -320px -0px; }
+.swbIconUserGroup   { background-position: -320px -18px; }
+.swbIconWorkspace   { background-position: -360px -18px; }
+.swbIconUserRepository   { background-position: -0px -0px; }
+.swbIconCamps       { background-position: -160px -0px; }
+.swbIconCamp        { background-position: -160px -18px; }
+.swbIconCampU       { background-position: -160px -36px; }
+.swbIconRules       { background-position: -60px -0px; }
+.swbIconRule        { background-position: -260px -18px; }
+.swbIconRuleU       { background-position: -260px -36px; }
+.swbIconDevices     { background-position: -100px -0px; }
+.swbIconDevice      { background-position: -100px -18px; }
+.swbIconPFlows      { background-position: -120px -0px; }
+.swbIconPFlow       { background-position: -120px -18px; }
+.swbIconPFlowU      { background-position: -120px -36px; }
+.swbIconTrash       { background-position: -440px -200px; }
+.swbIconReload      { background-position: -520px -200px; }
+.swbIconDelete      { background-position: -103px -200px; }
+.swbIconAdd         { background-position: -242px -200px; }
+.swbIconEdit        { background-position: -3px -145px; }
+.swbIconCalendars   { background-position: -220px -0px; }
+.swbIconCalendar    { background-position: -220px -18px; }
+.swbIconCalendarU   { background-position: -220px -36px; }
+
+.swbIconOntology    { background-position: -380px -18px; }
+.swbIconOntologyU   { background-position: -380px -36px; }
+.swbIconClass       { background-position: -60px -90px; }
+.swbIconProperty    { background-position: -240px -90px; }
+
+.swbIconProcess     { background-position: -460px -18px; }
+.swbIconProcessU    { background-position: -460px -36px; }
+.swbIconProcessW    { background-position: -459px -56px; }
+.swbIconProcessF    { background-position: -459px -56px; }
+.swbIconProcesses   { background-position: -460px -0px; }
+.swbIconSubProcess   { background-position: -0px -377px; }
+.swbIconSubProcessU   { background-position: -0px -377px; }
+.swbIconSubProcessW   { background-position: -0px -377px; }
+.swbIconSubProcessF   { background-position: -0px -377px; }
+.swbIconAdhocSubProcess   { background-position: -180px -377px; }
+.swbIconAdhocSubProcessY   { background-position: -180px -377px; }
+.swbIconAdhocSubProcessW   { background-position: -180px -377px; }
+.swbIconAdhocSubProcessF   { background-position: -180px -377px; }
+.swbIconEventSubProcess   { background-position: -40px -377px; }
+.swbIconEventSubProcessU   { background-position: -40px -377px; }
+.swbIconEventSubProcessW   { background-position: -40px -377px; }
+.swbIconEventSubProcessF   { background-position: -40px -377px; }
+.swbIconTransactionSubProcess   { background-position: -60px -377px; }
+.swbIconTransactionSubProcessU   { background-position: -60px -377px; }
+.swbIconTransactionSubProcessW   { background-position: -60px -377px; }
+.swbIconTransactionSubProcessF   { background-position: -60px -377px; }
+.swbIconTask   { background-position: -0px -305px; }
+.swbIconTaskU   { background-position: -0px -305px; }
+.swbIconTaskW   { background-position: -0px -305px; }
+.swbIconTaskF   { background-position: -0px -305px; }
+.swbIconUserTask   { background-position: -40px -305px; }
+.swbIconUserTaskU   { background-position: -40px -305px; }
+.swbIconUserTaskW   { background-position: -40px -305px; }
+.swbIconUserTaskF   { background-position: -40px -305px; }
+.swbIconServiceTask   { background-position: -120px -305px; }
+.swbIconServiceTaskU   { background-position: -120px -305px; }
+.swbIconServiceTaskW   { background-position: -120px -305px; }
+.swbIconServiceTaskF   { background-position: -120px -305px; }
+.swbIconScriptTask   { background-position: -80px -305px; }
+.swbIconScriptTaskU   { background-position: -80px -305px; }
+.swbIconScriptTaskW   { background-position: -80px -305px; }
+.swbIconScriptTaskF   { background-position: -80px -305px; }
+.swbIconBusinessRuleTask   { background-position: -240px -305px; }
+.swbIconBusinessRuleTaskU   { background-position: -240px -305px; }
+.swbIconBusinessRuleTaskW   { background-position: -240px -305px; }
+.swbIconBusinessRuleTaskF   { background-position: -240px -305px; }
+.swbIconManualTask   { background-position: -160px -305px; }
+.swbIconManualTaskU   { background-position: -160px -305px; }
+.swbIconManualTaskW   { background-position: -160px -305px; }
+.swbIconManualTaskF   { background-position: -160px -305px; }
+.swbIconSendTask   { background-position: -200px -305px; }
+.swbIconSendTaskU   { background-position: -200px -305px; }
+.swbIconSendTaskW   { background-position: -200px -305px; }
+.swbIconSendTaskF   { background-position: -200px -305px; }
+.swbIconReceiveTask   { background-position: -220px -305px; }
+.swbIconReceiveTaskU   { background-position: -220px -305px; }
+.swbIconReceiveTaskW   { background-position: -220px -305px; }
+.swbIconReceiveTaskF   { background-position: -220px -305px; }
+.swbIconCallTask   { background-position: -20px -305px; }
+.swbIconCallTaskU   { background-position: -20px -305px; }
+.swbIconCallTaskW   { background-position: -20px -305px; }
+.swbIconCallTaskF   { background-position: -20px -305px; }
+.swbIconCallManualTask   { background-position: -180px -305px; }
+.swbIconCallManualTaskU   { background-position: -180px -305px; }
+.swbIconCallManualTaskW   { background-position: -180px -305px; }
+.swbIconCallManualTaskF   { background-position: -180px -305px; }
+.swbIconCallBusinessRuleTask   { background-position: -260px -305px; }
+.swbIconCallBusinessRuleTaskU   { background-position: -260px -305px; }
+.swbIconCallBusinessRuleTaskW   { background-position: -260px -305px; }
+.swbIconCallBusinessRuleTaskF   { background-position: -260px -305px; }
+.swbIconCallScriptTask   { background-position: -100px -305px; }
+.swbIconCallScriptTaskU   { background-position: -100px -305px; }
+.swbIconCallScriptTaskW   { background-position: -100px -305px; }
+.swbIconCallScriptTaskF   { background-position: -100px -305px; }
+.swbIconCallUserTask   { background-position: -60px -305px; }
+.swbIconCallUserTaskU   { background-position: -60px -305px; }
+.swbIconCallUserTaskW   { background-position: -60px -305px; }
+.swbIconCallUserTaskF   { background-position: -60px -305px; }
+.swbIconCallProcess   { background-position: -240px -377px; }
+.swbIconCallProcessU   { background-position: -240px -377px; }
+.swbIconCallProcessW   { background-position: -240px -377px; }
+.swbIconCallProcessF   { background-position: -240px -377px; }
+.swbIconInclusiveGateway   { background-position: -400px -145px; }
+.swbIconParallelGateway    { background-position: -420px -145px; }
+.swbIconStartEvent   { background-position: -0px -234px; }
+.swbIconStartEventU   { background-position: -0px -234px; }
+.swbIconStartEventW   { background-position: -0px -234px; }
+.swbIconStartEventF   { background-position: -0px -234px; }
+.swbIconMessageStartEvent   { background-position: -20px -234px; }
+.swbIconTimerStartEvent   { background-position: -40px -234px; }
+.swbIconRuleStartEvent   { background-position: -60px -234px; }
+.swbIconSignalStartEvent   { background-position: -80px -234px; }
+.swbIconMultipleStartEvent   { background-position: -100px -234px; }
+.swbIconParallelStartEvent   { background-position: -120px -234px; }
+.swbIconScalationStartEvent   { background-position: -140px -234px; }
+.swbIconErrorStartEvent   { background-position: -160px -234px; }
+.swbIconCompensationStartEvent   { background-position: -180px -234px; }
+.swbIconMessageIntermediateCatchEvent { background-position: -20px -252px; }
+.swbIconMessageIntermediateThrowEvent { background-position: -40px -252px; }
+.swbIconTimerIntermediateCatchEvent { background-position: -60px -252px; }
+.swbIconErrorIntermediateCatchEvent { background-position: -80px -252px; }
+.swbIconCancelationIntermediateCatchEvent { background-position: -100px -252px; }
+.swbIconCompensationIntermediateCatchEvent { background-position: -120px -252px; }
+.swbIconCompensationIntermediateThrowEvent { background-position: -140px -252px; }
+.swbIconRuleIntermediateCatchEvent { background-position: -160px -252px; }
+.swbIconLinkIntermediateCatchEvent { background-position: -180px -252px; }
+.swbIconLinkIntermediateThrowEvent { background-position: -200px -252px; }
+.swbIconSignalIntermediateCatchEvent { background-position: -220px -252px; }
+.swbIconSignalIntermediateThrowEvent { background-position: -240px -252px; }
+.swbIconMultipleIntermediateCatchEvent { background-position: -260px -252px; }
+.swbIconMultipleIntermediateThrowEvent { background-position: -280px -252px; }
+.swbIconScalationIntermediateCatchEvent { background-position: -300px -252px; }
+.swbIconScalationIntermediateThrowEvent { background-position: -320px -252px; }
+.swbIconParallelIntermediateCatchEvent { background-position: -340px -252px; }
+.swbIconEndEvent   { background-position: -0px -270px; }
+.swbIconMessageEndEvent   { background-position: -20px -270px; }
+.swbIconErrorEndEvent   { background-position: -40px -270px; }
+.swbIconCancelationEndEvent   { background-position: -60px -270px; }
+.swbIconCompensationEndEvent   { background-position: -80px -270px; }
+.swbIconSignalEndEvent   { background-position: -100px -270px; }
+.swbIconTerminationEndEvent   { background-position: -120px -270px; }
+.swbIconMultipleEndEvent   { background-position: -140px -270px; }
+.swbIconScalationEndEvent   { background-position: -160px -270px; }
+.swbIconExclusiveGateway { background-position: -20px -288px; }
+.swbIconInclusiveGateway { background-position: -80px -288px; }
+.swbIconExclusiveIntermediateEventGateway { background-position: -60px -288px; }
+.swbIconExclusiveStartEventGateway { background-position: -40px -288px; }
+.swbIconComplexGateway { background-position: -100px -288px; }
+.swbIconParallelGateway { background-position: -120px -288px; }
+.swbIconParallelStartEventGateway { background-position: -140px -288px; }
+.swbIconSequenceFlow { background-position: -0px -324px; }
+.swbIconConditionalFlow { background-position: -20px -324px; }
+.swbIconDefaultFlow { background-position: -60px -324px; }
+.swbIconMessageFlow { background-position: -80px -324px; }
+.swbIconAssociationFlow { background-position: -160px -341px; }
+.swbIconDirectionalAssociation { background-position: -140px -341px; }
+.swbIconAnnotationArtifact   { background-position: -120px -342px; }
+.swbIconGroupArtifact   { background-position: -100px -342px; }
+.swbIconDataObject { background-position: -0px -342px; }
+.swbIconDataInput { background-position: -40px -342px; }
+.swbIconDataOutput { background-position: -60px -342px; }
+.swbIconDataStore { background-position: -80px -342px; }
+.swbIconPool   { background-position: -0px -360px; }
+.swbIconLane   { background-position: -20px -360px; }
+.swbIconLaneU   { background-position: -20px -360px; }
+.swbIconLaneW   { background-position: -20px -360px; }
+.swbIconLaneF   { background-position: -20px -360px; }
+
+
+.admViewProperties table{ padding:0px; margin:-10px; width:100%; }
+.admViewProperties div div div{ padding:0px; margin:0px; width:100%; }
+
+caption {
+	background:#fafafa url(../js/dojo/dijit/themes/soria/images/titleBar.png) repeat-x top left;
+	border-top: 1px solid #b9bbdd;
+	padding: 5px 5px 6px 8px;
+    font-weight: bold;
+}
+
+th {
+	background-color: #4f8ce5; 
+	color: #666; 
+	font-weight: bold;
+	margin:0;
+	padding:1px 5px;
+	background-image:url('../js/dojo/dijit/themes/soria/images/titleBar.png');
+	background-position:0px -1px; 
+}
+
+.swbform legend {
+    padding: 0 2px;
+    font-weight: bold;
+    padding-left: 0;
+}
+
+.swbform fieldset ol{
+    margin: 0;
+    padding: 0;
+}
+	
+.swbform fieldset fieldset {
+    border: none;
+    padding: 0px 25px 0px 0px;
+    background: none;
+}
+	
+/*.swbform fieldset fieldset legend {
+    width: 25%;
+    text-align: right;
+	font-weight: normal;
+}*/
+	
+/*.swbform fieldset fieldset label {
+	display: block;
+	width: auto;
+    margin-left: 26%;
+    text-align: left;
+    padding: 0px;
+	}*/
+
+/*.swbform fieldset span label {
+    width: auto;
+    padding: 0px 10px 0px 0px;  
+	_display: block;            
+    _margin-left: 25.5%;        
+    _text-align: left;         
+	}*/
+
+.swbform em {
+    font-weight: bold;
+    font-style: normal;
+    color: #f00;
+}
+
+.swbform {
+	/*_width: 100%;*/
+    font-size: 1.1em;
+    color: #333;
+    font: normal 100% "Lucida Grande", Helvetica, Verdana, Arial;
+    background: url(../images/swbform-fieldset.png) left bottom repeat-x;
+}
+
+.swbform legend,
+.swbform label { color: #333; }
+
+.swbform fieldset {
+    /*_width: 400px;*/
+    padding: 5px;
+    border-top: 1px solid #a0a0ff;
+    border-left: 1px solid #a0a0ff;
+    border-bottom: 1px solid #a0a0ff;
+    border-right: 1px solid #a0a0ff;
+	/*_background: url(../images/swbform-fieldset.png) left bottom repeat-x;
+    _background: url('../js/dojo/dijit/themes/soria/images/titleBar.png') left bottom repeat-x;*/
+}
+
+.swbform-label {
+    width: 250px;
+    display: inline-block;
+    text-align:right;
+    padding-right: 10px;
+}
+.swbform-ul { list-style-type:none;}
+.swbform-li { padding-bottom:3px;}
+
+#swblogout {
+    padding:5px;
+    position:absolute;
+    right:0px;
+    z-index:auto;
+	color:#505b5f !important;
+	font-size:12px;
+}
+#swblogout a { color:#b6c0c9; text-decoration:none; margin:0px 10px;}
+
+.applet{
+    visibility:visible;
+    z-index:10000
+}
+
+.dijitContentPaneLoading {
+	_background:url(../js/dojo/dijit/themes/tundra/images/loading.gif) no-repeat left center;
+    background:url(../icons/loading.gif) no-repeat left center;
+	padding-left:25px;
+}
+
+.dijitContentPaneError {
+	background:url(../js/dojo/dijit/themes/tundra/images/warning.png) no-repeat left center;
+	padding-left:25px;
+}
+
+.dijitTreeExpandoLoading {
+	background-image: url(../js/dojo/dijit/themes/tundra/images/treeExpand_loading.gif);
+}
+
+.swbError {
+	color: #FF5050;
+	text-decoration: none;
+	font-family: Verdana;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+/************* Version 3 ****************/
+
+.selected {
+	color: #114982;
+	text-decoration: none;
+	font-family: Verdana;
+	font-size: 11px;
+}
+.titulo {
+	color: #428AD4;
+	text-decoration: none;
+	font-family: Verdana;
+	font-size: 14px;
+	font-weight: bold;
+}
+.status {
+	color: #666666;
+	text-decoration: none;
+	font-family: Verdana;
+	font-size: 11px;
+}
+.datos {
+	color: #333333;
+	text-decoration: none;
+        text-align: right;
+	font-family: Verdana;
+	font-size: 12px;
+}
+.valores {
+	color: #000000;
+	text-decoration: none;
+	font-family: Verdana;
+	font-size: 12px;
+}
+.enfasis {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: xx-small;
+    font-weight: 100;
+}
+.requerido {
+    color: red;
+}
+.indice {
+	color: #428AD4;
+	text-decoration: none;
+	font-family: Verdana;
+	font-size: 11px;
+}
+
+/*------------------- select tree  ----*/
+div.sitesectiontree a.treeres:link {
+	text-decoration:none;
+	font-weight: normal;
+	cursor: pointer;	
+}
+div.sitesectiontree a.treeres:visited {
+	text-decoration:none;
+	font-weight: normal;
+	cursor: pointer;	
+}
+div.sitesectiontree a.treeres:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+div.sitesectiontree span {
+	cursor: pointer;
+}
+
+div.sitesectiontree ul.treeres {
+	list-style-type: none;
+	padding-left: 10px;
+	padding-right:1px;
+	margin-left:10px;
+	margin-right:10px;
+	margin-bottom:5px;
+	margin-top:2px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+/*------------------- select tree  ----*/
+
+#swbPreviewTab { margin:0 !important; padding:0 !important;}
+
+
+/*ANTI SORIA*/
+.swbLogo {background: url(images/swb-social.png) no-repeat !important; height:41px !important; padding:0; width:189px !important; margin:0px 60px 0px 10px !important}
+.soria .dijitToolbar { background:url(images/bg-cabecera.png) #505b5f !important; height:50px !important;}
+#mainSplit { top:50px !important;}
+
+.soria .dijitComboBox .dijitArrowButton .dijitArrowButtonInner { background-position:left -8px !important;}
+.soria .dijitSplitContainer-child, .soria .dijitBorderContainer-child { border-color:#ffb13d !important; border-top:none !important; border-left:none !important; border-bottom:none !important;}
+.soria .dijitSplitterV .dijitSplitterThumb { background:url(images/splitContainerSizerV-thumb.png) no-repeat !important;}
+
+.soria .dijitTitlePane .dijitClosed .dijitArrowNode,
+.soria .dijitTitlePane .dijitOpen .dijitArrowNode,
+.soria .dijitAccordionTitle-selected .dijitAccordionArrow { float:right;}
+.soria .dijitToolbar .dijitButtonNode button { font-size:0.9em; color:#a9b2bb; padding-top:0px; height:45px;}
+.soria .dijitToolbar .dijitButtonNode button:hover { color:#ff6600; background:none;}
+.soria .dijitToolbar .dijitArrowButtonInner       {background: url(images/spriteArrows.png) no-repeat 0px 0px !important; position:relative; top:15px;}
+.soria .dijitToolbar .dijitArrowButtonInner:hover {background: url(images/spriteArrows.png) no-repeat 0px -10px !important; position:relative; top:15px;}
+.soria .dijitToolbar .dijitButtonText { position:relative; top:15px;}
+
+.soria .dojoxGridCell { font-size:12px; color:#666;}
+
+#mnu_File			     { background:url(images/iconToolBar.png) no-repeat -750px 7px;}
+#Publish         	     { background:url(images/iconToolBar.png) no-repeat   16px 7px;}
+#authorize 	     	     { background:url(images/iconToolBar.png) no-repeat  -90px 7px;}
+#analysis   	 	     { background:url(images/iconToolBar.png) no-repeat -200px 7px;}
+#WBAd_mnui_Tools 	     { background:url(images/iconToolBar.png) no-repeat -300px 7px;}
+#Configurar		 	     { background:url(images/iconToolBar.png) no-repeat -412px 7px;}
+#WBAd_mnui_Users         { background:url(images/iconToolBar.png) no-repeat -530px 7px;}
+#WBAd_mnui_Help   	     { background:url(images/iconToolBar.png) no-repeat -641px 7px;}
+#SWBSocialMenuItem	     { background:url(images/iconToolBar.png) no-repeat -860px 7px;}
+#mnu_File:hover		     { background:url(images/iconToolBar.png) no-repeat -750px -53px;}
+#Publish:hover           { background:url(images/iconToolBar.png) no-repeat   16px -53px;}
+#authorize:hover 	     { background:url(images/iconToolBar.png) no-repeat  -90px -53px;}
+#analysis:hover  	     { background:url(images/iconToolBar.png) no-repeat -200px -53px;}
+#WBAd_mnui_Tools:hover   { background:url(images/iconToolBar.png) no-repeat -300px -53px;}
+#Configurar:hover	     { background:url(images/iconToolBar.png) no-repeat -412px -53px;}
+#WBAd_mnui_Users:hover   { background:url(images/iconToolBar.png) no-repeat -530px -53px;}
+#WBAd_mnui_Help:hover    { background:url(images/iconToolBar.png) no-repeat -641px -53px;}
+#SWBSocialMenuItem:hover { background:url(images/iconToolBar.png) no-repeat -860px -53px;}
+#Publish, #authorize, #analysis, #WBAd_mnui_Tools, #Configurar, #WBAd_mnui_Users, #WBAd_mnui_Help { margin:0px 10px;}
+
+
+.soria .dijitToolbar .dijitButtonCheckedHover,
+.soria .dijitToolbar .dijitToggleButtonCheckedHover { 
+background-color:#9abbea;	border:1px solid #316ac5; padding:0px; 
+}
+
+.soria .dijitToolbar .dijitButton,
+.soria .dijitToolbar .dijitButtonHover,
+.soria .dijitToolbar .dijitToggleButton,
+.soria .dijitToolbar .dijitToggleButtonHover,
+.soria .dijitToolbar .dijitDropDownButton,
+.soria .dijitToolbar .dijitDropDownButtonHover,
+.soria .dijitToolbar .dijitComboButton .dijitButtonContents,
+.soria .dijitToolbar .dijitComboButtonHover .dijitButtonContents,
+.soria .dijitToolbar .dijitComboButton .dijitDownArrowButton,
+.soria .dijitToolbar .dijitComboButtonDownArrowHover .dijitDownArrowButton {
+background:none !important; border:none !important; padding:0 !important;}
+
+/*PLECAS COLUMNA IZQUIERDA*/
+.soria .dijitAccordionTitle          { background:url(images/titleBar.png) repeat-x left top #FAFAFA !important; color:#685521 !important; }
+.soria .dijitAccordionTitle-selected { background:url(images/accordionItemActive.png) repeat-x left top #FAFAFA !important; color:#5F4324 !important; } 
+.soria .dijitTreeNodeSelected .dijitTreeLabel { background:none;} /*Seleccionado*/
+.soria .dijitAccordionContainer-dijitContentPane { background-color:#EAEAEA; padding:0px !important; width:100% !important;} /*FONDO donde viene el árbol*/
+.soria .dijitTreeIsRoot { background: url(images/bg-dijitTreeIsRoot.gif) !important; margin-bottom:1px;} /*MARCA*/
+.soria .dijitTreeLabel { font-weight:bold !important;}
+.soria .dijitAccordionArrow { float:right;}
+
+.soria .dijitTreeRow { /*color:#505b5f*/}
+
+.soria .dijitTreeExpandoClosed { /* float:right; */ background:url(images/spriteTree.png) !important; cursor:pointer;}
+.soria .dijitTreeExpandoOpened { /* float:right; */ background:url(images/spriteTree.png) -18px 0px !important; cursor:pointer;}
+
+.dijitTreeIsRoot .dijitTreeContainer { background:#f2f3f4;}
+.soria .dijitTreeContent { color:#505B5F !important;}
+
+/*TABLAS*/
+.dijitContentPane fieldset table	{ border-collapse:collapse;}
+.dijitContentPane fieldset table th { background:#ffc46a !important; background-image:none !important; color:#C60; border:1px #FFF solid;}
+.dijitContentPane fieldset table td { }
+.soria .dojoxGridHeader .dojoxGridCell { background:#FFC46A; color:#503307 !important; font-size:12px; font-weight: normal;}
+
+/*.soria .dijitMenuItemSelected {	background-color:#f9f3d9 !important; color:#6B3A08 !important} FONDO SUBMENU ITEM */
+.soria .dijitMenuBar          { border:1px solid #444d51 !important; margin:0px; padding:0px; background-color:#f9f3d9 }
+.soria .dijitMenuItemSelected {	background-color:#ee9818 !important; color:#FFF !important} /*FONDO SUBMENU ITEM */
+.soria .dijitMenuTable	      { position:relative; top:4px !important;}
+
+/*-----------------*/
+.soria .dijitTabInnerDiv {
+	padding:0px 3px 0px 0px;
+	margin: 0 0 0 4px;
+	background: url(images/tabContainerSprite.gif) no-repeat;
+	background-position: right -400px;
+}
+.soria .dijitTab {
+	line-height:normal;
+	margin:0 2px 0 0;	
+	padding:0px;
+	background: url(images/tabContainerSprite.gif) no-repeat 0 -300px;
+	color: #BC8534;
+	border-bottom: 1px #ffc56e solid;
+}
+.soria .dijitTabHover {
+	color:#6b3a08 !important;
+}
+.soria .dijitTabInnerDiv .dijitTabContent {
+	padding:5px 3px 4px 4px;
+	background: url(images/tabContainerSprite.gif) repeat-x 0 -350px;
+	position: relative;
+}
+.soria .dijitTabHover {
+	color: #243C5F;
+	background: url(images/tabContainerSprite.gif) no-repeat 0px -150px;
+}
+.soria .dijitTabHover .dijitTabInnerDiv {
+	background: url(images/tabContainerSprite.gif) no-repeat right -250px;
+}
+.soria .dijitTabHover .dijitTabInnerDiv .dijitTabContent {
+	background: url(images/tabContainerSprite.gif) repeat-x 0 -200px;
+}
+.soria .dijitTabChecked,
+.soria .dijitTabCloseButtonChecked
+{
+	
+	background: url(images/tabContainerSprite.gif) no-repeat 0px -0px;
+}
+.soria .dijitTabChecked .dijitTabInnerDiv {
+	background: url(images/tabContainerSprite.gif) no-repeat right -100px;
+}
+.soria .dijitTabChecked .dijitTabInnerDiv .dijitTabContent {
+	background: url(images/tabContainerSprite.gif) repeat-x 0 -50px;
+	color: #6b3a08 !important;
+}
+.soria .dijitTabContainerTabListNested {
+	background: #F0F4FC;
+	background: #D9E9F9;
+	border: none;
+}
+.soria .dijitTabContainerTop-tabs {
+	margin-bottom: -1px;
+	border-color: #FFC56E !important;
+	padding-left: 3px;
+	background: url(images/bg-dijitTabContainerTop-tabs.png) repeat-x;
+}
+.soria .dijitTabContainerTop-container {
+	border-top: none;
+}
+.soria .dijitTabContainerTop-tabs .dijitTabChecked {
+	border-bottom-color: #FFA51E;
+}
+.soria .dijitTabContainerTopStrip {
+	border: 1px solid #B1BADF;
+	padding-top: 2px;
+	padding-left: 3px;
+}
+.soria .dijitTabContainerTopStrip {
+	background: #F0F4FC;
+}
+.soria .dijitTabContainerBottom-tabs {
+	margin-top: -1px;
+	border-color: #ccc;
+	padding-left: 3px;
+}
+.soria .dijitTabContainerBottom-container {
+	border-bottom: none;
+}
+.soria .dijitTabContainerBottom-tabs .dijitTab {
+	border-bottom: none;
+	border-top: 1px solid #B1BADF;
+	background: url(images/tabBottomEnabledSpriteLR.gif) no-repeat bottom left;
+}
+.soria .dijitTabContainerBottom-tabs .dijitTabChecked {
+	border-top-color:#94b4e6;
+}
+.soria .dijitTabContainerBottom-tabs .dijitTabInnerDiv .dijitTabContent {
+	padding-top: 4px;
+	padding-bottom: 5px;
+	background: url(images/tabBottomEnabledC.gif) repeat-x bottom left;
+}
+.soria .dijitTabContainerBottom-tabs .dijitTabInnerDiv {
+	background: url(images/tabBottomEnabledSpriteLR.gif) no-repeat bottom right;
+}
+.soria .dijitTabContainerBottom-tabs .dijitTabHover {
+	color: #243C5F;
+	background: url(images/tabBottomHoverSpriteLR.gif) no-repeat bottom left;
+}
+.soria .dijitTabContainerBottom-tabs .dijitTabHover .dijitTabInnerDiv {
+	background: url(images/tabBottomHoverSpriteLR.gif) no-repeat bottom right;
+}
+.soria .dijitTabContainerBottom-tabs .dijitTabHover .dijitTabInnerDiv .dijitTabContent {
+	background: url(images/tabBottomHoverC.gif) repeat-x bottom left;
+}
+.soria .dijitTabContainerBottom-tabs .dijitTabChecked,
+.soria .dijitTabContainerBottom-tabs .dijitTabCloseButtonChecked {
+	background: url(images/tabBottomActiveSpriteLR.gif) no-repeat bottom left;
+}
+.soria .dijitTabContainerBottom-tabs .dijitTabChecked .dijitTabInnerDiv {
+	background: url(images/tabBottomActiveSpriteLR.gif) no-repeat bottom right;
+}
+.soria .dijitTabContainerBottom-tabs .dijitTabChecked .dijitTabInnerDiv .dijitTabContent {
+	background: url(images/tabBottomActiveC.gif) repeat-x bottom left;
+}
+.soria .dijitTabContainerBottomStrip {
+	padding-bottom: 2px;
+	padding-left: 3px;	
+	border: 1px solid #B1BADF;
+}
+.soria .dijitTabContainerBottomStrip {
+	background: #F0F4FC;
+}
+.soria .dijitTabContainerBottom-spacer,
+.soria .dijitTabContainerTop-spacer {
+	height: 2px;
+	border: 1px solid #8ba0bd;
+	background: #94b4e6;
+}
+.soria .dijitTabContainerRight-tabs {
+	margin-left: -1px;
+	border-color: #ccc;
+	padding-top: 3px;
+}
+.soria .dijitTabContainerRight-container {
+	border-right: none;
+}
+.soria .dijitTabContainerRight-tabs .dijitTab {
+	border-bottom: none;
+	border-left: 1px solid #B1BADF;
+	border-bottom: 1px solid #B1BADF !important;
+}
+.dj_ie .soria .dijitTabContainerRight-tabs .dijitTabInnerDiv {
+	border-bottom: solid #fff 1px;
+}
+.soria .dijitTabContainerRight-tabs .dijitTabChecked {
+	border-left-color: #94b4e6;
+}
+.soria .dijitTabContainerRight-tabs .dijitTabChecked {
+	background: url(images/tabRightChecked.gif) no-repeat left top !important;
+}
+.dj_ie .soria .dijitTabContainerRight-tabs .dijitTabChecked .dijitTabInnerDiv,
+.dj_ie .soria .dijitTabContainerRight-tabs .dijitTabCheckedHover .dijitTabInnerDiv {
+	border-bottom: solid #efefef 1px;
+}
+.soria .dijitTabContainerRight-tabs .dijitTab {
+	background: url(images/tabContainerSprite.gif) no-repeat left -350px;
+}
+.soria .dijitTabContainerRight-tabs .dijitTabHover .dijitTab {
+	background: url(images/tabContainerSprite.gif) no-repeat left -200px;
+}
+.soria .dijitTabContainerRightStrip {
+	padding-right: 2px;
+	padding-top: 3px;	
+	border: 1px solid #B1BADF;
+}
+.soria .dijitTabContainerRightStrip {
+	background: #F0F4FC;
+}
+.soria .dijitTabContainerLeft-tabs {
+	margin-right: -1px;
+	border-color: #ccc;
+	padding-top: 3px;
+}
+.soria .dijitTabContainerLeft-container {
+	border-left: none;
+}
+.soria .dijitTabContainerLeft-tabs .dijitTab {
+	border-right: 1px solid #B1BADF;
+	border-bottom: 1px solid #B1BADF;
+}
+.soria .dijitTabContainerLeft-tabs .dijitTabChecked {
+	border-right: 1px solid #94b4e6;}
+.soria .dijitTabContainerLeft-tabs .dijitTabInnerDiv {
+	background: url(images/tabContainerSprite.gif) no-repeat right -350px;}
+.soria .dijitTabContainerLeft-tabs .dijitTabHover .dijitTabInnerDiv {
+	background: url(images/tabContainerSprite.gif) no-repeat right -200px;}
+	
+.soria .dijitTabContainerBottom-spacer, .soria .dijitTabContainerTop-spacer {
+border: 1px solid #A96603 !important;
+background: #FFA51E !important;}
+
+.soria .dijitSplitterV, .soria .dijitGutterV { background:url(images/bg-dijitTabContainerTop-tabs.png) repeat-x #EAEAEA !important;}
+.soria .dijitBorderContainer-dijitTabContainerTop, .soria .dijitBorderContainer-dijitTabContainerBottom, .soria .dijitBorderContainer-dijitTabContainerLeft, .soria .dijitBorderContainer-dijitTabContainerRight { background:#EAEAEA;} 
+
+.swbform fieldset { border-color:#CCC; margin:6px 0px;}
+.swbform { background:none;}
+.swbform a { color:#F60;}
+.soria .dijitTextBox, .soria .dijitComboBox, .soria .dijitSpinner, .soria .dijitInlineEditor input, .soria .dijitTextArea { border-color:#B7B7B7;}
+
+.soria .dijitButtonNode {
+	background: url(images/buttonEnabled.png) repeat-x left top #BCD5F0; border-color:#FFAF37 #FFAF37 #F19101;
+}
+.soria .dijitButtonHover .dijitButtonNode, .soria .dijitButtonNodeHover, .soria .dijitToggleButtonHover .dijitButtonNode, .soria .dijitDropDownButtonHover .dijitButtonNode, .soria .dijitComboButtonHover .dijitButtonContents, .soria .dijitComboButtonDownArrowHover .dijitDownArrowButton, .soria .dijitComboBoxHover .dijitDownArrowButton, .soria .dijitSpinnerUpArrowHover .dijitUpArrowButton, .soria .dijitSpinnerDownArrowHover .dijitDownArrowButton {
+	background: url(images/buttonHover.png) repeat-x scroll left top #ACC5E2;
+	color:#87490A ;
+}
+
+.soria .dijitToolbar .dijitButtonHover .dijitButtonNode, 
+.soria .dijitToolbar .dijitButtonNodeHover, 
+.soria .dijitToolbar .dijitToggleButtonHover .dijitButtonNode, 
+.soria .dijitToolbar .dijitDropDownButtonHover .dijitButtonNode, 
+.soria .dijitToolbar .dijitComboButtonHover .dijitButtonContents, 
+.soria .dijitToolbar .dijitComboButtonDownArrowHover .dijitDownArrowButton, 
+.soria .dijitToolbar .dijitComboBoxHover .dijitDownArrowButton, .soria .dijitSpinnerUpArrowHover .dijitUpArrowButton, 
+.soria .dijitToolbar .dijitSpinnerDownArrowHover .dijitDownArrowButton { background:none; color:#87490A ;}
+
+.soria .dijitTabContainerTop-container { border-color:#ffb13D !important;}
+
+/*POP UP */
+.soria .dijitDialog 		{ border:solid 1px #6B3A08; top:105px !important;}
+.soria .dijitDialogTitleBar { background:url(images/titleBar.png) repeat-x}
+.soria .dijitDialog .dijitDialogTitle { color:#6B3A08;}
+.dijitDialogUnderlay { background:#000;}
+.dijitDialogUnderlayWrapper { top:0 !important;} /*Pop up transparente*/
+
+/*NUEVOS ICONOS*/
+.swbIconRssGrp,
+.swbIconRss,
+.swbIconSocialCalendarGrp,
+.swbIconSocialCalendarU,
+.swbIconSocialCalendar,
+.swbIconSocialAdminSite,
+.swbIconSocialAdminSiteU,
+.swbIconSocialSite,
+.swbIconSocialSiteU,
+.swbIconWebSite,
+.swbIconWebSiteU,
+.swbIconSocialNetGrp,
+.swbIconFacebookGrp,
+.swbIconFacebook,
+.swbIconFacebookU,
+.swbIconTwitterGrp,
+.swbIconTwitter,
+.swbIconTwitterU,
+.swbIconYoutubeGrp,
+.swbIconYouTube,
+.swbIconYouTubeU,
+.swbIconStreamGrp,
+.swbIconStream,
+.swbIconStreamU,
+.swbIconSocialTopicGrp,
+.swbIconSocialTopic,
+.swbIconSocialTopicU,
+.swbIconSocialTopicF,
+.swbIconUserRepository,
+.swbIconRoles,
+.swbIconRole,
+.swbIconUserGroups,
+.swbIconUserGroup,
+.swbIconRuleGrp,
+.swbIconSocialRule,
+.swbIconActionEmail,
+.swbIconActionPost,
+.swbIconActionPrioritary,
+.swbSocialIconPFlows,
+.swbSocialIconPFlow,
+.swbSocialIconPFlowU
+{
+background-repeat: no-repeat;
+width:20px;
+height: 18px;
+text-align: center;
+padding-right:0px;
+background-image: url(images/iconos-swbSocial.png) !important; }
+
+.swbIconSocialAdminSite  { background-position: 0px -90px;}
+.swbIconSocialAdminSiteU { background-position: 0px -108px;}
+
+.swbIconSocialSite  { background-position: 0px 0px;}
+.swbIconSocialSiteU { background-position: 0px -18px;}
+
+.swbIconWebSite     { background-position: 0px -54px !important;}
+.swbIconWebSiteU	{ background-position: 0px -72px !important;}
+
+.swbIconSocialNetGrp{ background-position: -20px 0px;}
+.swbIconFacebookGrp { background-position: -20px -36px;}
+.swbIconFacebook    { background-position: -20px -108px;}
+.swbIconFacebookU   { background-position: -40px -108px;}
+.swbIconTwitterGrp  { background-position: -20px -18px;}
+.swbIconTwitter     { background-position: -20px -90px;}
+.swbIconTwitterU    { background-position: -40px -90px;}
+.swbIconYoutubeGrp  { background-position: -20px -54px;}
+.swbIconYouTube     { background-position: -20px -126px;}
+.swbIconYouTubeU    { background-position: -40px -126px;}
+.swbIconFliker      { background-position: -20px -144px;}
+.swbIconFlikerU     { background-position: -40px -144px;}
+
+.swbIconStreamGrp   { background-position: -40px  0px;}
+.swbIconStream      { background-position: -40px -18px;}
+.swbIconStreamU     { background-position: -40px -36px;}
+
+.swbIconSocialTopicGrp 	{ background-position: -60px -18px;}/*temas*/
+.swbIconSocialTopic 	{ background-position: -60px -36px;} 
+.swbIconSocialTopicU	{ background-position: -60px -54px;}
+.swbIconSocialTopicF	{ background-position: -60px -36px;}
+
+.swbIconUserRepository { background-position: -80px 0px;}
+.swbIconRoles          { background-position: -80px -18px;}
+.swbIconRole           { background-position: -80px -54px;}
+.swbIconUserGroups     { background-position: -80px -36px;}
+.swbIconUserGroup      { background-position: -80px -72px;}
+
+.swbIconRuleGrp			 { background-position: -100px 0px;}
+.swbIconSocialRule		 { background-position: -100px -18px;}
+.swbIconActionEmail		 { background-position: -100px -36px;}
+.swbIconActionPost		 { background-position: -100px -54px;}
+.swbIconActionPrioritary { background-position: -100px -72px;}
+
+.swbSocialIconPFlows	 { background-position: -120px 0px;}
+.swbSocialIconPFlow		 { background-position: -120px -18px;}
+.swbSocialIconPFlowU	 { background-position: -120px -36px;}
+
+.swbIconSocialCalendarGrp { background-position: -140px 0px;}
+.swbIconSocialCalendar    { background-position: -140px -18px;}
+.swbIconSocialCalendarU   { background-position: -140px -36px;}
+
+.swbIconRssGrp { background-position: -160px 0px;}
+.swbIconRss    { background-position: -160px -18px;}
+
+
+/*PUBLICAR */
+#publicar {width:762px; margin-left:1em;}
+#publicar p strong { color:#666; font-size:1.05em;}
+
+.sel-media 	    { }
+.sel-media a    { display:inline-block; height:60px; width:60px; margin:0px 35px 0px 10px;}
+.sel-media span { display:none;}
+
+.sel-txt       { background:url(images/sel-publica-txt-1.png);}
+.sel-img       { background:url(images/sel-publica-img-1.png);}
+.sel-vid       { background:url(images/sel-publica-vid-1.png);}
+
+.sel-txt:hover { background:url(images/sel-publica-txt-3.png);}
+.sel-img:hover { background:url(images/sel-publica-img-3.png);}
+.sel-vid:hover { background:url(images/sel-publica-vid-3.png);}
+
+.sel-txt2      { background:url(images/sel-publica-txt-2.png);}
+.sel-img2      { background:url(images/sel-publica-img-2.png);}
+.sel-vid2      { background:url(images/sel-publica-vid-2.png);}
+
+#pub-detalle { border:solid 1px #CCC; background:#fafafa; padding:0 0 1em 0; text-align:center; margin-top:10px;
+behavior: url(border-radius.htc);
+border-radius: 4px; /*IE */
+-moz-border-radius:4px; /*FireFox*/
+-webkit-border-radius:4px; /*Safari Chrome*/
+-khtml-border-radius:4px; /* Linux browers */
+}
+
+.sel-txtdiv { background:url(images/sel-pestana.png); width:15px; height:8px; display:block; position:relative; top:-8px; left:30px;}
+.sel-imgdiv { background:url(images/sel-pestana.png); width:15px; height:8px; display:block; position:relative; top:-8px; left:140px;}
+.sel-viddiv { background:url(images/sel-pestana.png); width:15px; height:8px; display:block; position:relative; top:-8px; left:250px;}
+
+#pub-detalle .titulo { color:#f86014; font-size:.9em; margin-top:0; border-bottom:solid 1px #e1e1e1; padding-bottom:3px}
+
+#pub-detalle select { color:#666; font-size:13px; width:290px;}
+
+.pub-info, .pub-redes { display:table-cell; padding:1.5em 1.5em .5em 1.5em; text-align:left;}
+.pub-info { width:28em;}
+.pub-redes { width:21em;}  
+
+.pub-info label  { color:#666; display:inline-block; width:75px; vertical-align:top;}
+.pub-info input, .pub-info textarea { width:290px; font-family: Verdana, Geneva, sans-serif; color:#666; font-size:12px;} 
+.pub-info textarea { height:60px;}
+.pub-info p 	 {}
+
+.pub-redes ul    { margin:0; padding:0;} 
+.pub-redes li    { list-style-type:none; color:#666; margin:7px 0;}
+.pub-redes input { margin:0 5px;}
+.pub-redes label {}
+.pub-redes span  { display:inline-block; height:18px; width:19px; position:relative; top:2px; margin:0 5px 0 0;}
+
+.ico-twt span { background: url(images/iconos-swbSocial.png) no-repeat -20px -90px;}
+.ico-fcb span { background: url(images/iconos-swbSocial.png) no-repeat -20px -108px;}
+.ico-ytb span { background: url(images/iconos-swbSocial.png) no-repeat -20px -126px;}
+
+.boton { margin:auto; border:#FFF solid 1px; padding:0.4em 0.9em; color:#FFF;
+box-shadow: 0 0 1px #666666;
+background:#eb8602;
+background: -webkit-linear-gradient(#f68800, #d76d00);
+background: -moz-linear-gradient(#f68800, #d76d00);
+behavior: url(border-radius.htc);
+border-radius: 2px; /*IE */
+-moz-border-radius:2px; /*FireFox*/
+-webkit-border-radius:2px; /*Safari Chrome*/
+-khtml-border-radius:2px; /* Linux browers */
+}
+
+/*SWBASearchUsers*/
+#SWBASearchUsers  { background:none !important;}
+#SWBASearchUsers fieldset { border:none !important}
+#SWBASearchUsers td	{ padding-bottom: 10px;}
+#SWBASearchUsers td	div {}
+
+/*registro-data1*/
+#registro-data1 { position:relative; top:-10px; left:20px;}
+#registro-data1 label { display:inline-block; margin-bottom:20px; width:280px;}
+#registro-data1 input { float:left; margin-right:5px;}
+.btn-registro { background:url(images/buttonEnabled.png) repeat-x; border:1px solid #FFAF37; padding:2px;}
+
+/*TABLA 1*/
+.tabla1  { border-collapse:collapse; margin:auto;font-size:12px; font-family:Arial, Helvetica, sans-serif; width:100%;}
+.tabla1 caption      { display:none;}
+.tabla1 th           { color:#CC6600; padding:0px; border-left:1px solid #FFF; border-right: 1px solid #FFF; background:#FFC46A; text-align:center;}
+.tabla1 th a		 { display:block; width:100%; height:2.2em; background:#FFC46A; color:#CC6600; text-decoration:none;}
+.tabla1 th a:hover   { background:#FFBA50;}
+.tabla1 th a:active  { background:#FFD38F;}
+.tabla1 th span	     { /*float:left;*/ margin:0.3em 0.5em;}
+.tabla1 th small     { display:none;}
+.tabla1 td 			 { border-bottom:solid 1px #eaeaea; vertical-align:top; text-align:center; padding:5px 0; }
+.tabla1 td p		 { margin:0; text-align:left; padding-left:5px;}
+.tabla1 td a		 { color:#CC6600}
+.tabla1 td a span    { display:none;}
+.tabla1 td.accion	 { text-align:left; white-space:nowrap;}
+.tabla1 td.accion a	 { width:25px; height:25px; display: inline-block; /*float:left;*/ margin:5px 2px 0 0; }
+.tabla1 td img		 { margin-top:3px}
+.tabla1 td.mensaje	 { width:20%; text-align:left; word-break:break-all;}
+th.accion, th.mensaje { background:#FFC46A; text-align:center;}
+th.accion span, th.mensaje span 		 { margin:0 !important; position:relative; top:-6px; }
+
+.ascen, .ascen:hover, .ascen:active, 
+.descen, .descen:hover, .descen:active { background-repeat:no-repeat !important; background-position:center 16px !important;}
+
+.ascen, .ascen:hover, .ascen:active    { background-image:url(images/descen.png) !important;}
+.descen, .descen:hover, .descen:active { background-image:url(images/ascen.png) !important;}
+
+.ascen, .descen               { }
+.ascen:hover, .descen:hover   { }
+.ascen:active, .descen:active { }
+
+.retema       { background: url(images/ico-retema1.png)}
+.retema:hover { background: url(images/ico-retema2.png)}
+.reevaluar       { background: url(images/ico-reevaluar1.png)}
+.reevaluar:hover { background: url(images/ico-reevaluar2.png)}
+.ver       { background: url(images/ico-ver1.png)}
+.ver:hover { background: url(images/ico-ver2.png)}
+.eliminar       { background: url(images/ico-eliminar1.png)}
+.eliminar:hover { background: url(images/ico-eliminar2.png)}
+.answ       { background: url(images/ico-answ1.png)}
+.answ:hover { background: url(images/ico-answ2.png)}
+.answver       { background: url(images/ico-answver1.png)}
+.answver:hover { background: url(images/ico-answver2.png)}
+
+.editar       { background: url(images/ico-editar1.png)}
+.editar:hover { background: url(images/ico-editar2.png)}
+.aflujo       { background: url(images/ico-aflujo1.png)}
+.aflujo:hover { background: url(images/ico-aflujo2.png)}
+.autorizar       { background: url(images/ico-autoriza1.png)}
+.autorizar:hover { background: url(images/ico-autoriza2.png)}
+
+td.status	{ padding:0 !important; text-align:center; vertical-align:top;}
+td.status a		 	{ display:inline-block; width:55px; word-wrap:break-word; word-break:break-all; padding-top:18px;  }
+td.status strong	{ display:none;}
+.status1	{ background:url(images/ico-status1-revisar.png) no-repeat top center;}
+.status2	{ background:url(images/ico-status2-publicando.png) no-repeat top center;}
+.status3	{ background:url(images/ico-status3-publicado.png) no-repeat top center;}
+.status4	{ background:url(images/ico-status4-rechazado.png) no-repeat center 2px; line-height:12px; padding-top:18px; text-decoration:none;}
+
+
+/*REDES*/
+.clear { clear:both;}
+.timelinefacebook p:first-child { margin-top:0; padding:10px; border-bottom:solid 1px #fafafa;}
+.timeline a { color:#FF9900;}
+.timeline   { border:solid 1px #CCC; background:#fdfdfd; margin-bottom:20px;}
+.timeline img     { margin-right:5px;}
+.timelineusr	  { min-height:55px; margin-left:15px;}
+.timelineusr a img { float:left; }
+.timelineusr img  { border:solid 1px #CCC; }
+.timelineusr p	  { margin:0 0 10px 60px;}
+.timeline ul      { margin-left:17px; border-top:dotted 1px #e1e1e1; padding:10px 0 0 60px;}
+.timeline li      { list-style-type:none; margin-bottom:15px;}
+.timeline li a	  { font-weight:bold;}
+.timeline li img  { float:left; border:solid 1px #CCC;}
+.timeline li p	  { margin:0 0 3px 40px;}
+.timeline li em,
+.timelineresume em{ font-style:normal; margin-right:15px;}
+.timelinedate	  { color: #666; }
+.timelinefacebook span em { color:#666 !important; font-weight:normal !important}
+.timelinedate strong,
+.timelinefacebook .timelineresume strong { background:url(images/like.png) no-repeat; font-weight:normal; padding-left:21px;}
+.timelinetweeter .timelineresume strong { background:url(images/retweet1.png) no-repeat 0px -2px; font-weight:normal; padding-left:21px;}
+.timelinedate strong span,
+.timelineresume strong span { display:none;}
+.timelinemore a { font-weight:normal !important; padding-left:40px;}
+.timelinemore a span { background:#F60; color:#FFFFFF !important; display:inline-block; font-weight:bold; height:13px; line-height:12px; margin-right:5px; position:relative; text-align:center; top:-2px; width:13px;
+border-radius:2px; -moz-border-radius:2px; -webkit-border-radius:2px; -khtml-border-radius:2px;}
+
+.timelineresume { border-top:solid 1px #fafafa; padding:6px 10px 4px !important; color:#666;}
+.timelineresume a { margin:0 5px; padding:2px 6px 2px 20px; color:#FFF; text-decoration:none;
+border-radius:3px;
+-moz-border-radius:3px;
+-webkit-border-radius:3px;
+-khtml-border-radius:3px;}
+.timelineresume span:first-child em { font-weight:normal; color:#666 !important ; background:url(images/reloj.png) no-repeat 0px 0px; padding-left:18px;}
+
+.timelineresume .like 			 { background:url(images/like3.png) no-repeat 1px 1px #f90; padding-left:20px;}
+.timelineresume .like:hover		 { background:url(images/like3.png) no-repeat 1px 1px #f60; padding-left:20px;}
+.timelineresume .retweet 		 { background:url(images/retweet3.png) no-repeat 2px -1px #f90; padding-left:20px;}
+.timelineresume .retweet:hover   { background:url(images/retweet3.png) no-repeat 2px -1px #f60; padding-left:20px;}
+.timelineresume .favorito 		 { background:url(images/favorite3.png) no-repeat 1px 1px #f90; padding-left:20px;}
+.timelineresume .favorito:hover  { background:url(images/favorite3.png) no-repeat 1px 1px #f60; padding-left:20px;}
+.timelineresume .clasifica		 { background:url(images/clasifica3.png) no-repeat 1px 2px #f90; padding-left:20px;}
+.timelineresume .clasifica:hover { background:url(images/clasifica3.png) no-repeat 1px 2px #f60; padding-left:20px;}
+
+.timelineresume .editarYoutube	 		{ background:url(images/ico-editar3.png) no-repeat 1px 1px #f90; padding-left:20px;}
+.timelineresume .editarYoutube:hover	{ background:url(images/ico-editar3.png) no-repeat 1px 1px #f60; padding-left:20px;}
+.timelineresume .eliminarYoutube	 	{ background:url(images/ico-eliminar3.png) no-repeat 1px 1px #f90; padding-left:20px;}
+.timelineresume .eliminarYoutube:hover	{ background:url(images/ico-eliminar3.png) no-repeat 1px 1px #f60; padding-left:20px;}
+
+
+
+
+.timelineresume .nolike 			 { background:url(images/like4.png) no-repeat 1px 1px #f90; padding-left:20px;}
+.timelineresume .nolike:hover		 { background:url(images/like4.png) no-repeat 1px 1px #f60; padding-left:20px;}
+.timelineresume .noretweet 			 { background:url(images/retweet4.png) no-repeat 2px -1px #f90; padding-left:20px;}
+.timelineresume .noretweet:hover 	 { background:url(images/retweet4.png) no-repeat 2px -1px #f60; padding-left:20px;}
+.timelineresume .nofavorito 		 { background:url(images/favorite4.png) no-repeat 1px 1px #f90; padding-left:20px;}
+.timelineresume .nofavorito:hover 	 { background:url(images/favorite4.png) no-repeat 1px 1px #f60; padding-left:20px;}
+.timelineresume .noclasifica		 { background:url(images/clasifica4.png) no-repeat 1px 2px #f90; padding-left:20px;}
+.timelineresume .noclasifica:hover   { background:url(images/clasifica4.png) no-repeat 1px 2px #f60; padding-left:20px;}
+
+
+
+.timelineimg	 { margin:5px 15px 10px 77px;}
+.timelineimg a	 {}
+.timelineimg img { float:left;}
+.timelineimg p	 { margin:0 0 10px 0;}
+.imgtitle		 { font-weight:bold;}
+.imgdesc		 {}
+.imgfoot		 { font-style:italic; color:#666;}
+
+.timelinetweeter p { margin-left:10px;}
+.timelinetweeter a img { }
+.retweeted {}
+.tweeter   { margin:10px 5px 5px 20px !important; font-weight:bold;}
+.tweet     { margin: 5px 5px 10px 20px !important;}
+
+/*NUEVO*/
+.swbpopup        { border:solid 1px #CCC; margin:auto; width:700px;}
+.swbpopup p      { margin: 15px 0; }
+/*.swbpopup span   { display:inline-block; font-weight:bold;}*/
+.swbpopup select {}
+.swbpopup table  { border:solid 1px #ccc;}
+.swbpopup th 	 { border-color:#CCC;}
+.swbpopup .tit	 { text-align:center; border:solid 1px #efefef; padding:5px; background:#fafafa;}
+
+.retema-pop			  { padding:5px;}
+.retema-pop-span 	  { width:85px; display:inline-block; font-weight:bold;}
+.reevaluar-pop		  { }
+.reevaluar-pop form	  { }
+.reevaluar-pop form p { }
+.reevaluar-pop td	  { padding:5px;}
+.reevaluar-pop td:first-child	{ text-align:left;}
+.reevaluar-pop label	{ display:inline-block; width:145px;}
+.reevaluar-pop label em	{ color:red}
+.reevaluar-pop label, .reevaluar-pop textarea, .reevaluar-pop select { display:inline-block; vertical-align:top;}
+
+.answver-pop	{}
+.answver-pop .tabla1 a	 { width:25px; height:25px; display: inline-block; /*float:left;*/ margin:5px 2px 0 0; }
+
+.usr-pop 			 { padding:10px; text-align:center;}
+.usr-pop  p          { margin:0 0 10px 0; text-align:left;}
+.usr-pop  p strong 	 { color:#FF6600;}
+.usr-pop .perfil     { background:#FAFAFA; border:1px solid #CCCCCC; float:left; padding:5px; margin-right:10px; margin-bottom:25px; text-align:center;}
+.usr-pop .perfil img {  }
+.usr-pop .perfil p   { margin:5px 0 0 0 !important;}
+.usr-pop .perfilgral { margin:auto; width:330px;}
+
+.perfilgral .like a, .perfilgral .retweet a, .perfilgral .favorite a	{ text-decoration:none; padding:2px 0px 0px 20px; color:#333;}	
+.perfilgral .like a		{ background:url(images/like2.png) no-repeat;}
+.perfilgral .retweet a	{ background:url(images/retweet2.png) no-repeat;}
+.perfilgral .favorite a	{ background:url(images/favorite2.png) no-repeat;}
+
+
+.msj-div			 { background:url(images/msj-div.jpg) center top no-repeat; height:10px; position:relative; top:-1px;}
+.msj-inf			 { padding:0 10px;}
+.msj-inf img		 { margin:5px;
+-moz-box-shadow:0 0 5px #CCCCCC;
+-webkit-box-shadow:0 0 5px #CCCCCC;
+box-shadow:0 0 5px #CCCCCC;}
+.msj-txt .perfilgral, .msj-img .perfilgral, .msj-vid .perfilgral { text-align:center;}
+.msj-txt .perfil, .msj-img .perfil, .msj-vid .perfil     { border-bottom:1px solid #CCCCCC; padding-bottom:10px;text-align:center; margin:auto; }
+.msj-txt .perfil p, .msj-img .perfil p, .msj-vid .perfil p	 { margin:5px 0 0;}
+.msj-vid .video	{ text-align:center;}
+.msj-vid .video p	{ margin:0; color:#999;}
+.msj-vid .video embed { 
+	-moz-box-shadow:0 0 5px #CCCCCC;
+-webkit-box-shadow:0 0 5px #CCCCCC;
+box-shadow:0 0 5px #CCCCCC;}
+
+#page	{ text-align:center;}
+#pagSumary, #pagination	{ text-align:center; font-size:13px;} 
+#pagSumary	{ color:#666;}
+#pagination			{}
+#pagination	a,
+#pagination strong	{ display:inline-block; font-weight:normal; letter-spacing:-1px; width:26px; text-decoration:none; margin:0 1px; padding: 3px 0 4px;
+border-radius:2px;
+-moz-border-radius:2px;
+-webkit-border-radius:2px;
+-khtml-border-radius:2px;}
+#pagination	a   	{ background:#efefef; color:#999;}
+#pagination strong	{ background:#f8861f; color:#FFF; text-shadow:1px 1px 0px #724400; }
+#pagination	a:hover { background: #999; color:#FFF;}
+#pagination	span	{ }
+#pagination	span a	{ padding:3px 5px 4px; width:35px;}
+#pagination	span a:hover { }
+#pagination .pag-space	 { display:inline-block; width:10px; }
+
+/*RSS*/
+.rssContent		 { font-family:Arial, Helvetica, sans-serif; font-size:12px;}
+.rssContent a	 { color:#F60}
+.rssResul em, 
+.rssWords em	 { display:inline-block; width:105px; font-style:normal;}
+.rssContent	li	 { list-style-type:none; margin:20px 0; }
+.rssContent	span { display:block; margin-bottom:2px;}
+.rssResul		 {}
+.rssWords		 {}
+.rssTitle		 { font-weight:bold;}
+.rssTitle em	 { font-style:normal; background:#999; color:#FFF; padding:2px 4px 1px 2px; display:inline-block;
+border-radius:2px;
+-moz-border-radius:2px;
+-webkit-border-radius:2px;
+-khtml-border-radius:2px;}
+.rssLink		 {}
+.rssGuid		 {}
+.rssDescr	   	 {}
+.rssPubDate		 {}
+.rssDescr, .rssLink, .rssGuid	{ margin-left:41px;}
+
+.swbSocialMapIframe, .swbSocialMapIframe iframe { height:100%;}
+.swbSocialMapIframe iframe {}
+
+#msj-eliminar			{ margin:20px;}
+#msj-eliminar p			{ margin:25px 0}
+.eliminar-boton 		{ float:left; height:110px; width:110px; text-align:center; margin:0 50px 0 0;}
+.eliminar-boton a		{ text-decoration:none; display:block; height:110px; cursor:pointer;} 
+.eliminar-boton em		{ text-decoration:none; display:none;}
+
+.eliminar-boton strong	{ font-style:normal; font-size:18px; position:relative; top:45px;}
+.eliminar-boton a strong 	{ color:#333;}
+.eliminar-boton span strong	{ color:#d6d6d6}
+.entrada-on					{ background:url(images/eliminar-entrada-on.png) no-repeat;}
+.entrada-off				{ background:url(images/eliminar-entrada-off.png) no-repeat;}
+.salida-on					{ background:url(images/eliminar-salida-on.png) no-repeat;}
+.salida-off					{ background:url(images/eliminar-salida-off.png) no-repeat;}
+
+#strm-eliminar			{ margin:20px;}
+#strm-eliminar .eliminar-boton strong { top:8px;}
+.streamtot-on				{ background:url(images/eliminar-stream-total-on.png) no-repeat;}
+.streamtot-off				{ background:url(images/eliminar-stream-total-off.png) no-repeat;}
+.streamsin-on				{ background:url(images/eliminar-stream-sinclas-on.png) no-repeat;}
+.streamsin-off				{ background:url(images/eliminar-stream-sinclas-off.png) no-repeat;}
+
+.eliminar-date	{ background:#f6f6f6; border:solid 1px #ccc; text-align:center; height:104px; width:210px; display:inline-block;
+border-radius:12px; 
+-moz-border-radius:12px;
+-webkit-border-radius:12px;
+-khtml-border-radius:12px;}
+.eliminar-date p	 { margin:6px 0 !important;}
+.eliminar-date input { border:solid 1px #ccc; background: url(images/eliminar-cal.png) no-repeat center right #FFF; padding:3px; text-align:center;}
+
+/*barra*/
+fieldset.barra	{ background:#eff3f4; border:solid 1px #CCC; padding: 0 !important;}
+.barra a		{ text-decoration:none; color:#666; display:inline-block; padding:6px 10px 6px 31px; margin:5px 1px; border:solid 1px #eff3f4;
+border-radius:3px; 
+-moz-border-radius:3px;
+-webkit-border-radius:3px;
+-khtml-border-radius:3px; } 
+.barra a:hover	{ border:solid 1px #dddfe0; background-color:#f7f9fa !important;}
+
+.barra .excel		{ background:url(images/ico-exp-excel.png) no-repeat 5px 2px !important;}
+.barra .excelall	{ background:url(images/ico-exp-exceltodo.png) no-repeat 5px 1px !important;}
+.barra .reclasif	{ background:url(images/ico-reclasificar.png) no-repeat 5px 2px !important;}
+.barra .btnCloud	{ background:url(images/ico-tagcloud.png) no-repeat 5px 2px !important;}
+
+.barra form	{ float:right; margin:3px 5px 0px;}
+.barra input[type=text]	  { border:solid 1px #CCC; color:#333; padding:4px; width:250px;
+border-radius:2px; 
+-moz-border-radius:2px;
+-webkit-border-radius:2px;
+-khtml-border-radius:2px;}
+.barra input[type=button] { background:url(images/btn-busca.png) no-repeat; border:none; display:inline-block; width:25px; height:25px;}
+
+.barra form .dijitButtonNode	{ background: url(images/btn-busca.png) no-repeat !important; border:none !important; width:25px; height:25px; margin-top:1px;}
+.barra form .dijitButtonNode .dijitButtonText { display:none !important;}
+
+/*GRAFICAS DE PIE*/
+#pieGenderParent, #pieEducationParent, #pieRelationParent, #profileGeoLocationParent, #lifeStageParent	{
+	border:solid 1px #ccc;
+}
+#pieGenderParent h1, #pieEducationParent h1, #pieRelationParent h1, #profileGeoLocationParent h1, #lifeStageParent h1	{
+	
+}
+
+#pieGenderParent			{}
+#pieGender					{}
+
+#pieEducationParent			{}
+#pieEducation				{}
+
+#pieRelationParent			{}
+#pieRelation				{}
+
+#profileGeoLocationParent	{}
+#profileGeoLocation			{}
+
+#lifeStageParent			{}
+#lifeStage 					{}
+
+/*REPORTEADOR*/
+#reporteador	{}
+p .promediosen  { margin-bottom:1.5em; margin-top:0px }
+.combosFilter	{ color: #666;}
+.combosFilter label	{ display:inline-block; width:84px;}
+#genero-box, #estudios-box, #etapa-box, #statuslove-box, #estado-box, #mapa-fecha, #mapa-buscar {
+width: 98%;	height: 22px; padding-left:36px; padding-bottom:10px;}
+#genero-box		{ background: url(images/ico-genero2.png) no-repeat; }
+#estudios-box	{ background: url(images/ico-estudios2.png) no-repeat;}
+#etapa-box		{ background: url(images/ico-etapas2.png) no-repeat; }
+#statuslove-box { background: url(images/ico-statuslove2.png) no-repeat;}
+#estado-box		{ background: url(images/ico-estado2.png) no-repeat;}
+#mapa-fecha		{ background: url(images/ico-fechai2.png) no-repeat; height:17px; padding-right:20px; padding-top:5px;}
+#mapa-buscar    { padding-top: 16px;}
+#mapa-buscar button{ margin-right: 14px }
+
+
+/*Vista Previa*/
+#vistaPrevia body	{}
+#vistaPrevia #gral	{}
+#vistaPrevia #name	{}
+#vistaPrevia #movs	{}
+#vistaPrevia #favs	{}
+#vistaPrevia
+#vistaPrevia
+
+
+
+
+
+

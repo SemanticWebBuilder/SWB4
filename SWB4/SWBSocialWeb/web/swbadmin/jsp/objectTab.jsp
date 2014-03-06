@@ -1,6 +1,6 @@
 <%@page contentType="text/html"%><%@page pageEncoding="UTF-8"%><%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*,org.semanticwb.portal.api.*"%>
 <%!
-    
+
     String replaceUriID(String txt)
     {
         String ret=txt;
@@ -10,6 +10,13 @@
         //ret=SWBUtils.TEXT.replaceAll(ret, "eng:", URLEncoder.encode("http://www.owl-ontologies.com/oqp_engine.owl#"));
         return ret;
     }    
+    
+    String replaceId(String id)
+    {
+        id=id.substring(id.lastIndexOf('/')+1);
+        id=id.replace('#', ':');        
+        return id;
+    }
 
 %>
 <%
@@ -20,8 +27,13 @@
         return;
     }
 %>
-<%
+<%    
+    String lang="es";
+    if(user!=null)lang=user.getLanguage();
+    response.setHeader("Cache-Control", "no-cache"); 
+    response.setHeader("Pragma", "no-cache"); 
     String id=request.getParameter("suri");
+    
     //Agregado Jorge Jiménez 17/Octubre/2014, para que no se muestre tab de información de un mensaje cuando ya esta publicado
     //Esto para que no sea alterado (una vez que ya ha sido publicado).
     boolean notShowInfo=false;
@@ -43,43 +55,43 @@
             <%
         }
     }
+    //Termina agregado por Jorge Jiménez
     
-    String lang="es";
-    if(user!=null)lang=user.getLanguage();
-    response.setHeader("Cache-Control", "no-cache"); 
-    response.setHeader("Pragma", "no-cache"); 
-    
-    System.out.println("IDj:"+id);
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
     SemanticObject obj=ont.getSemanticObject(id);
-    System.out.println("objj:"+id);
     WebSite adm=SWBContext.getAdminWebSite();
     //System.out.println("suri:"+id);
     if(obj==null)return;
     SemanticClass cls=obj.getSemanticClass();
-    
-    System.out.println("clsj:"+id);
 
     String loading="<BR/><center><img src='"+SWBPlatform.getContextPath()+"/swbadmin/images/loading.gif'/><center>";
 
     //Div dummy para detectar evento de carga y modificar titulo
     String icon=SWBContext.UTILS.getIconClass(obj);
-    out.println("<div dojoType=\"dijit.layout.ContentPane\" postCreate=\"setTabTitle('"+id+"','"+SWBUtils.TEXT.scape4Script(obj.getDisplayName(lang))+"','"+icon+"');\" />");
+    out.println("<div dojoType=\"dijit.layout.ContentPane\"  postCreate=\"setTabTitle('"+id+"','"+SWBUtils.TEXT.scape4Script(obj.getDisplayName(lang))+"','"+icon+"');\" />");
 
-    out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style_=\"border:0px; width:100%; height:100%\" id=\""+id+"/tab2\" _tabPosition=\"bottom\" nested_=\"true\" _selectedChild=\"btab1\" onButtonClick_=\"alert('click');\" onLoad_=\"alert('Hola');\">");
+    out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" id=\""+replaceId(id)+"_tab2\">");
 
+    //TODO:Modificar este codigo para recarga de clases, posible cambio por onLoad
+    out.println("    <script type=\"dojo/connect\">");
+    out.println("       this.watch(\"selectedChildWidget\", function(name, oval, nval){");
+%>
+    require(["dijit/registry",  "dojo/on", "dojo/ready", "dojo/domReady!"], function (registry, on, ready) {               
+        on(nval.controlButton, "DblClick", function (event) {
+            nval.refresh();
+        });           
+    });
+<%                
+    //out.println("           onClickTab(nval);");
+    out.println("       });    ");
+    out.println("    </script>");
+    
     Iterator<ObjectBehavior> obit=SWBComparator.sortSermanticObjects(ObjectBehavior.ClassMgr.listObjectBehaviors(adm));
     //Iterator<ObjectBehavior> obit=SWBComparator.sortSermanticObjects(new GenericIterator(ObjectBehavior.swbxf_ObjectBehavior, obj.getModel().listInstancesOfClass(ObjectBehavior.swbxf_ObjectBehavior)));
+
     while(obit.hasNext())
     {
         ObjectBehavior ob=obit.next();
-        
-        //System.out.println("obBehavior:"+ob);
-        //Agregado Jorge Jiménez 17/Octubre/2014
-        if(notShowInfo) 
-        {
-            if(ob.getURI().endsWith(":bh_Information")) continue;   //Que no muestre el tag de información
-        }
         
         if(ob.getNsPrefixFilter()!=null)
         {
@@ -128,7 +140,7 @@
                         addDiv=true;
                     }else if(obj.instanceOf(Resource.sclass))
                     {
-                        Resource res=(Resource)obj.getGenericInstance();
+                        Resource res=(Resource)obj.createGenericInstance();
                         SWBResource swbres=SWBPortal.getResourceMgr().getResource(res);
                         if(swbres!=null && swbres instanceof GenericSemResource)
                         {
@@ -172,7 +184,7 @@
 
             //out.println("<div dojoType=\"dojox.layout.ContentPane\" title=\""+title+"\" _style=\"display:true;padding:10px;\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" executeScripts=\"true\">");
             //System.out.println("url:"+url+"?"+params);
-            out.println("<div id=\""+aux.getURI()+"/"+ob.getId()+"\" dojoType=\"dijit.layout.ContentPane\" title=\""+title+"\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\" onLoad=\"onLoadTab(this);\">");
+            out.println("<div id_=\""+aux.getURI()+"/"+ob.getId()+"\" dojoType=\"dijit.layout.ContentPane\" title=\""+title+"\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
             //out.println("    <script type=\"dojo/connect\">");
             //out.println("       dojo.connect(this.controlButton, \"onClick\", onClickTab);");
             //out.println("    </script>");
@@ -185,5 +197,5 @@
         }
     }
 
-    out.println("</div><!-- end Bottom TabContainer -->");
+    out.println("</div><!-- end Bottom TabContainer -->");   
 %>
