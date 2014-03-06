@@ -1263,6 +1263,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                     if ((userCanEdit() && isInMeasurementTime(period) && isEditable(formElement)) ||
                             (userCanCollaborate(collaboration) && isEditable(formElement))) {
                         applyInlineEdit = true;
+                        //atributo agregado para permitir administrar los archivos adjuntos
+                        request.setAttribute("usrWithGrants", "true");
                     }
                     
                     if (fe != null) {
