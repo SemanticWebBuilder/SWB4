@@ -1777,7 +1777,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         return totalComments;      
     }
 
-    @Override
+    
     public double getUserKlout(String facebookUserID) {
        String userThird_party_id=null;
        WebSite wsite=WebSite.ClassMgr.getWebSite(this.getSemanticObject().getModel().getName());

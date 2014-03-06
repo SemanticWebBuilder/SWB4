@@ -660,7 +660,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         return null;
     }
     
-    
+    @Override
     public double getUserKlout(String twitterUserID)
     {
         String url_1="http://api.klout.com/v2/identity.json/tw/"+twitterUserID;

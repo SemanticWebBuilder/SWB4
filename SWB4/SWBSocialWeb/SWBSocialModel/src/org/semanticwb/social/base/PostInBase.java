@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta. 
    */
-public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable
+public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable
 {
    /**
    * Clase a Cambiar despues por "Relacional".Clase en la cual se almacenan los usuarios que escriben los PostIn que llegan. No se puso como identificador de las instancias de esta clase el id que maneja el usuario en la red social, ya que un identificador de una red social, puede ser el mismo para otra red social, pero obviamnete para otro usuario.Es por ello que se puso como AutoGenID esta clase y por ello se maneja por separado el id de un usuario en una determinada red social, esto en la propiedad snu_id.
@@ -34,6 +34,10 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
    * Sentimiento de el mensaje (Post) basado en emoticones encontrados. (1=Positivo;2=Negativo;0=Neutro)
    */
     public static final org.semanticwb.platform.SemanticProperty social_postSentimentalEmoticonType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postSentimentalEmoticonType");
+   /**
+   * Código de país de donde proviene el mensaje. No puse que esta propiedad tuviera como range un social:Country, porque tendría que agregar todos los países posibles para los PostIn em el catalogo de social:Country, Mejor voy a agregar en social:Country los paises que pudieran ser mas importantes y cuando se hagan reportes va a decir que de todos los paises que tengo ahi son un tanto por ciento y otro tanto de paises desconocidos, pero tendré su código de país, con ello podría despues agregar mas paises a social:Country.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_geoCountry=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#geoCountry");
    /**
    * Creación del PostIn. Este campo es un indice para poderlo tomar como ordenamiento via Sparql, por eso no se toma el de Descriptable. Esta propiedad nos indica cuando se creao el PostIn en el sistema, es muy diferente de cuando se creó en la red social, para eso tenemos el campo pi_createdInSocialNet.
    */
@@ -209,6 +213,29 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
         public static java.util.Iterator<org.semanticwb.social.PostIn> listPostInByGeoStateMap(org.semanticwb.social.CountryState value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_geoStateMap,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostIn with a determined Msg_lang
+       * @param value Msg_lang of the type org.semanticwb.model.Language
+       * @param model Model of the org.semanticwb.social.PostIn
+       * @return Iterator with all the org.semanticwb.social.PostIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostIn> listPostInByMsg_lang(org.semanticwb.model.Language value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_msg_lang, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostIn with a determined Msg_lang
+       * @param value Msg_lang of the type org.semanticwb.model.Language
+       * @return Iterator with all the org.semanticwb.social.PostIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostIn> listPostInByMsg_lang(org.semanticwb.model.Language value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_msg_lang,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -424,6 +451,24 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
     public void setPostSentimentalEmoticonType(int value)
     {
         getSemanticObject().setIntProperty(social_postSentimentalEmoticonType, value);
+    }
+
+/**
+* Gets the GeoCountry property
+* @return String with the GeoCountry
+*/
+    public String getGeoCountry()
+    {
+        return getSemanticObject().getProperty(social_geoCountry);
+    }
+
+/**
+* Sets the GeoCountry property
+* @param value long with the GeoCountry
+*/
+    public void setGeoCountry(String value)
+    {
+        getSemanticObject().setProperty(social_geoCountry, value);
     }
 
 /**
