@@ -16,6 +16,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Collections"%>
 <%@page import="org.semanticwb.SWBUtils"%>
+<%@page import="org.semanticwb.model.Language"%>
 <%@page import="java.util.Comparator"%>
 <%@page import="org.semanticwb.social.SocialAdmin"%>
 <%@page import="org.semanticwb.model.SWBContext"%>
@@ -258,36 +259,40 @@
         if(postIn.getMsg_Text()!=null)
         {//If post has message
             String msg=postIn.getMsg_Text().toLowerCase();
-            String lang=SWBSocialUtil.Util.getStringLanguage(msg);
-            if(lang==null) lang.equals("es");
-            if(lang.equals("es"))
+            String lang=null;
+            Language postInLang=postIn.getMsg_lang(); 
+            if(postInLang!=null) lang=postInLang.getId(); 
+            if(lang!=null)
             {
-                msg = SWBSocialUtil.Strings.removePrepositions(msg); 
-            }   
-            msg = Jsoup.clean(msg, Whitelist.simpleText());
-            msg = SWBSocialResUtil.Util.replaceSpecialCharactersAndHtmlCodes(msg, false);
-            msg = SWBSocialUtil.Strings.removePuntualSigns(msg, socialAdminSite);
-
-            String[] mgsWords=msg.split("\\s+");  //Dividir valores
-            for(int i=0;i<mgsWords.length;i++)
-            {
-                String word=mgsWords[i];
-                boolean isStopWord=true;
-                if(lang.equals("es") && !Arrays.asList(SWBSocialUtil.Classifier.getSpanishStopWords()).contains(word)){
-                    isStopWord=false;
-                }else if(lang.equals("en") && !Arrays.asList(SWBSocialUtil.Classifier.getEnglishStopWords()).contains(word)){
-                    isStopWord=false;
-                }
-                if(!isStopWord && !isInteger(word))
+                if(lang.equals("es"))
                 {
-                    Integer frequency = cloudTags.get(word);
-                    if(frequency == null){//New word
-                        cloudTags.put(word, 1);
-                    }else if(frequency > 0){//Repeated word
-                        cloudTags.put(word, ++frequency);
+                    msg = SWBSocialUtil.Strings.removePrepositions(msg); 
+                }   
+                msg = Jsoup.clean(msg, Whitelist.simpleText());
+                msg = SWBSocialResUtil.Util.replaceSpecialCharactersAndHtmlCodes(msg, false);
+                msg = SWBSocialUtil.Strings.removePuntualSigns(msg, socialAdminSite);
+
+                String[] mgsWords=msg.split("\\s+");  //Dividir valores
+                for(int i=0;i<mgsWords.length;i++)
+                {
+                    String word=mgsWords[i];
+                    boolean isStopWord=true;
+                    if(lang.equals("es") && !Arrays.asList(SWBSocialUtil.Classifier.getSpanishStopWords()).contains(word)){
+                        isStopWord=false;
+                    }else if(lang.equals("en") && !Arrays.asList(SWBSocialUtil.Classifier.getEnglishStopWords()).contains(word)){
+                        isStopWord=false;
+                    }
+                    if(!isStopWord && !isInteger(word))
+                    {
+                        Integer frequency = cloudTags.get(word);
+                        if(frequency == null){//New word
+                            cloudTags.put(word, 1);
+                        }else if(frequency > 0){//Repeated word
+                            cloudTags.put(word, ++frequency);
+                        }
                     }
                 }
-              }
+           }
        }
     }
     
