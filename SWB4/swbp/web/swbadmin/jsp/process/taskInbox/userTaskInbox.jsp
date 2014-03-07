@@ -430,6 +430,7 @@ if (!user.isSigned()) {
             <%
             String sort = sortType;
             String filter = sFilter;
+            String pfilter = pFilter;
             if (sort != null && sort.length() > 0) {
                 sort = "sort|"+sort;
             } else {
@@ -437,16 +438,21 @@ if (!user.isSigned()) {
             }
 
             if (filter != null && filter.length() > 0) {
-                filter = "filter|"+filter;
+                filter = "sf|"+filter;
             } else {
                 filter = "";
             }
+            
+            if (pfilter != null && pfilter.length() > 0) {
+                pfilter = "pf|"+pfilter;
+            } else {
+                pfilter = "";
+            }
             %>
-            <!--sort:<%=sort%>-->
-            <!--filter:<%=filter%>-->
             <jsp:include page="/swbadmin/jsp/process/commons/pagination.jsp" flush="true">
                 <jsp:param name="navUrlParams" value="<%=sort%>"/>
                 <jsp:param name="navUrlParams" value="<%=filter%>"/>
+                <jsp:param name="navUrlParams" value="<%=pfilter%>"/>
                 <jsp:param name="showPageOfPage" value="true"/>
             </jsp:include>
         <%
