@@ -317,6 +317,9 @@ public class YoutubeWall extends GenericResource{
                     }
                 }
                 
+                response.setContentType("text/html; charset=ISO-8859-1");
+                response.setHeader("Cache-Control", "no-cache");
+                response.setHeader("Pragma", "no-cache");
                 //The post in has been created
                 final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/postInResponse.jsp";
                 RequestDispatcher dis = request.getRequestDispatcher(path);
