@@ -209,6 +209,14 @@ public class SocialSentPost extends GenericResource {
             } catch (Exception e) {
                 log.error("Error in processRequest() for requestDispatcher" , e);
             }
+        }else if(mode!=null && mode.equals("displayVideo")){
+            String jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/playVideo.jsp";
+            RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
+            try {
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error("Error in displayVideo() for requestDispatcher" , e);
+            }
         }else {
             super.processRequest(request, response, paramRequest);
         }
@@ -3458,7 +3466,14 @@ public class SocialSentPost extends GenericResource {
                 }
             }else if(postOutNet.getSocialNetwork() instanceof Youtube){
                 if(postOutNet.getStatus() == 1){
+                    System.out.println("ESTA PUBLICADO?");
                     doPrintVideo(request, response, paramRequest, out, postOutUri, socialUserExtAttr, this.comments(postOutNet.getPo_socialNetMsgID(), (Youtube)postOutNet.getSocialNetwork()), (Youtube)postOutNet.getSocialNetwork());
+                }else{                    
+                    out.println("<div id=\"configuracion_redes\">");
+                    out.println("<div>");
+                    out.println("<p>Video no encontrado. Aún no existe o está innacesible.</p>");
+                    out.println("</div>");
+                    out.println("</div>");
                 }
             }
             postOutNet.setPo_numResponses(0);
@@ -3580,7 +3595,8 @@ public class SocialSentPost extends GenericResource {
 
         } catch (java.io.IOException ioe) {
             response = getResponse(conex.getErrorStream());
-            ioe.printStackTrace();
+            log.error("Unsuccessful request to: " + url);
+            //ioe.printStackTrace();
         } finally {
             close(in);
             if (conex != null) {
@@ -3707,6 +3723,17 @@ public class SocialSentPost extends GenericResource {
             formatter.setTimeZone(TimeZone.getTimeZone("GMT-6"));
             String postType = "";
             
+            if(!postsData.isNull("error")){
+                if(!postsData.getJSONObject("error").isNull("code")){
+                    log.error("Facebook: Not data found");
+                    writer.write("<div id=\"configuracion_redes\">");
+                    writer.write("<div>");
+                    writer.write("<p>Post no encontrado. Ya no existe o está innacesible.</p>");
+                    writer.write("</div>");
+                    writer.write("</div>");
+                    return;
+                }
+            }
             if(!postsData.isNull("type")){
                 postType = postsData.getString("type");
             }else if(!postsData.isNull("picture") && !postsData.isNull("source")){
@@ -4090,7 +4117,7 @@ public class SocialSentPost extends GenericResource {
                 for (int i = 0; i < actions.length(); i++) {
                     if((actions.getJSONObject(i).getString("name").equals("Comment") || postType.equals("photo") || postType.equals("video")) && socialUserExtAttr.isUserCanRespondMsg()){//I can comment
                         writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + FacebookWall.REPLY + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
-                            writer.write(" <a class=\"clasifica\" href=\"\" onclick=\"hideDialog(); showDialog('" + renderURL.setMode(Mode_ReplyPost).setParameter("postID", postsData.getString("id")) + "','Reply to " + postsData.getJSONObject("from").getString("name") + "');return false;\"><span>Reply</span></a>  ");
+                            writer.write(" <a class=\"clasifica\" href=\"\" onclick=\"hideDialog(); showDialog('" + renderURL.setMode(Mode_ReplyPost).setParameter("postID", postsData.getString("id")) + "','Responder a " + postsData.getJSONObject("from").getString("name") + "');return false;\"><span>Responder</span></a>  ");
                         writer.write("   </span>");
 
                     }else if(actions.getJSONObject(i).getString("name").equals("Like") || postType.equals("photo") || postType.equals("video")){//I can like
@@ -4108,7 +4135,7 @@ public class SocialSentPost extends GenericResource {
             }else{
                 if((postType.equals("photo") || postType.equals("video")) && socialUserExtAttr.isUserCanRespondMsg()){//I can comment
                     writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + FacebookWall.REPLY + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
-                        writer.write(" <a class=\"clasifica\" href=\"\" onclick=\"hideDialog(); showDialog('" + renderURL.setMode(Mode_ReplyPost).setParameter("postID", postsData.getString("id")) + "','Reply to " + postsData.getJSONObject("from").getString("name") + "');return false;\"><span>Reply</span></a>  ");
+                        writer.write(" <a class=\"clasifica\" href=\"\" onclick=\"hideDialog(); showDialog('" + renderURL.setMode(Mode_ReplyPost).setParameter("postID", postsData.getString("id")) + "','Reply to " + postsData.getJSONObject("from").getString("name") + "');return false;\"><span>Responder</span></a>  ");
                     writer.write("   </span>");
 
                 }
@@ -4154,7 +4181,7 @@ public class SocialSentPost extends GenericResource {
         try{
          response = getRequest(params, "https://gdata.youtube.com/feeds/api/videos/" + id,
                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", accessToken);
-
+         System.out.println("EL VIDEO DE YOUTUBE:" + response);
         }catch(Exception e){
             log.error(e);
         }
