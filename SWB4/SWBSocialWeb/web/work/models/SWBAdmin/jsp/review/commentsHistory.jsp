@@ -36,19 +36,19 @@
     
     String loading="<BR/><center><img src='"+SWBPlatform.getContextPath()+"/swbadmin/css/images/loading.gif'/><center>";
     
-    System.out.println("--------------------");
+    //System.out.println("--------------------");
     ArrayList postOutSocialNets = SWBSocialUtil.sparql.getPostOutSocialNetwors(postOut);
     for(int i= 0; i < postOutSocialNets.size(); i++){
         System.out.println("->" + postOutSocialNets.get(i));
     }
     
-    System.out.println("--------------------");
+    //System.out.println("--------------------");
     /*ArrayList postOutSocialOUTNETS = SWBSocialUtil.sparql.getPostOutNetsPostOut(postOut, (SocialNetwork)SemanticObject.createSemanticObject("http://www.NewBrandOne.swb#social_Facebook:1").createGenericInstance());
     for(int i= 0; i < postOutSocialOUTNETS.size(); i++){
         System.out.println("-------->" + postOutSocialOUTNETS.get(i));
     }*/
-    System.out.println("--------------------");
-    System.out.println("POST OUT:" + postOut + "->" + postOut.getMsg_Text() + "</br>");
+    //System.out.println("--------------------");
+    //System.out.println("POST OUT:" + postOut + "->" + postOut.getMsg_Text() + "</br>");
     //out.println("POST OUT:" + postOut + "->" + postOut.getMsg_Text() + "</br>");    
     //Iterator<PostOutNet> itPostOutNets = PostOutNet.ClassMgr.listPostOutNetBySocialPost(postOut, wsite);    
     
