@@ -3466,7 +3466,7 @@ public class SocialSentPost extends GenericResource {
                 }
             }else if(postOutNet.getSocialNetwork() instanceof Youtube){
                 if(postOutNet.getStatus() == 1){
-                    System.out.println("ESTA PUBLICADO?");
+                    //System.out.println("ESTA PUBLICADO?");
                     doPrintVideo(request, response, paramRequest, out, postOutUri, socialUserExtAttr, this.comments(postOutNet.getPo_socialNetMsgID(), (Youtube)postOutNet.getSocialNetwork()), (Youtube)postOutNet.getSocialNetwork());
                 }else{                    
                     out.println("<div id=\"configuracion_redes\">");
@@ -4160,14 +4160,21 @@ public class SocialSentPost extends GenericResource {
     
     public JSONObject comments(String videoId, Youtube youtube){
         JSONObject videoResp = new JSONObject();
+        String video = null;
         try{
-            String video = getFullVideoFromId(videoId, youtube.getAccessToken());
+            video = getFullVideoFromId(videoId, youtube.getAccessToken());
             videoResp = new JSONObject(video);
             if(!videoResp.isNull("entry")){
                 videoResp = videoResp.getJSONObject("entry");
             }
         }catch(Exception e){
-            log.error("Youtube: Not data found for ->" + videoId );
+            if(video != null && video.contains("ResourceNotFoundException")){
+                log.error("Youtube: Not data found for ->" + videoId );
+                videoResp = new JSONObject();
+                try{
+                    videoResp.append("error", video);
+                }catch(JSONException je){}
+            }
         }
         return videoResp;
     }
@@ -4181,9 +4188,9 @@ public class SocialSentPost extends GenericResource {
         try{
          response = getRequest(params, "https://gdata.youtube.com/feeds/api/videos/" + id,
                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", accessToken);
-         System.out.println("EL VIDEO DE YOUTUBE:" + response);
+         //System.out.println("EL VIDEO DE YOUTUBE:" + response);
         }catch(Exception e){
-            log.error(e);
+            log.error("El video: " + id + " probablemente no existe.");
         }
         return response;
     }
@@ -4271,6 +4278,15 @@ public class SocialSentPost extends GenericResource {
         SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
         SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
         Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();        
+        
+        if(video == null || video.length() <=1 || (!video.isNull("error") && video.length()<=1)){
+            out.write("<div id=\"configuracion_redes\">");
+            out.write("<div>");
+            out.write("<p>Video no encontrado. El video ya no existe o está innacesible.</p>");
+            out.write("</div>");
+            out.write("</div>");
+            return;
+        }
         
         try{
                 String videoId = video.getJSONObject("media$group").getJSONObject("yt$videoid").getString("$t");
@@ -4531,9 +4547,9 @@ public class SocialSentPost extends GenericResource {
         } catch (java.io.IOException ioe) {
             if (conex.getResponseCode() >= 400) {
                 response = getResponse(conex.getErrorStream());
-                log.error(response);
+                log.error("Unsuccessful request to: " + url);
             }
-            ioe.printStackTrace();
+            //ioe.printStackTrace();
         } finally {
             close(in);
             if (conex != null) {
