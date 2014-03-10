@@ -51,7 +51,7 @@
 
     <table width="50%" border="0px">            
        <tr>
-           <td colspan="3" style="text-align: center;"><b><%=SWBUtils.TEXT.encode(paramRequest.getLocaleString("whattoPost"),"utf8")%></b></td>        
+           <td colspan="3" style="text-align: center;"><b><%=paramRequest.getLocaleString("whattoPost")%></b></td>        
        </tr>
        <tr>
            <td colspan="3" style="text-align: center;">&nbsp;</td>        
