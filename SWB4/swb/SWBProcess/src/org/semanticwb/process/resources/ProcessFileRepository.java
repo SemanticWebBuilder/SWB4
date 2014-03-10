@@ -261,6 +261,7 @@ public class ProcessFileRepository extends GenericResource {
 
             String validFiles = getResourceBase().getAttribute(VALID_FILES, "");
             String ipp = getResourceBase().getAttribute("itemsPerPage", "");
+            String ssf = getResourceBase().getAttribute("hideSubFolders", "").equals("true")?"checked":"";
 
             out.println("<tr><td colspan=\"2\"><B>" + paramRequest.getLocaleString("msgRolesDefinitionLevel") + "</B></td></tr>");
             out.println("<tr><td align=\"right\" width=150>" + paramRequest.getLocaleString("msgView") + ":</td>");
@@ -274,7 +275,8 @@ public class ProcessFileRepository extends GenericResource {
             out.println("<td><input type=\"text\" name=\"validfiles\"  value=\"" + validFiles + "\"></td></tr>");
             out.println("<tr><td align=\"right\"  width=150>" + paramRequest.getLocaleString("itemsPerPage") + ":</td>");
             out.println("<td><input type=\"text\" name=\"itemsPerPage\"  value=\"" + ipp + "\"></td></tr>");
-
+            out.println("<tr><td align=\"right\"  width=150>" + paramRequest.getLocaleString("hideSubFolders") + ":</td>");
+            out.println("<td><input type=\"checkbox\" name=\"hideSubFolders\"" + ssf + "></td></tr>");
 
             out.println("</table>");
             out.println("</fieldset>");
@@ -533,6 +535,7 @@ public class ProcessFileRepository extends GenericResource {
             String adminrole = request.getParameter("administrar");
             String validfiles = request.getParameter("validfiles");
             String ipp = request.getParameter("itemsPerPage");
+            String ssf = request.getParameter("hideSubFolders")!=null?"true":"false";
 
             try {
                 getResourceBase().setAttribute(LVL_VIEW, viewrole);
@@ -540,6 +543,7 @@ public class ProcessFileRepository extends GenericResource {
                 getResourceBase().setAttribute(LVL_ADMIN, adminrole);
                 getResourceBase().setAttribute(VALID_FILES, validfiles);
                 getResourceBase().setAttribute("itemsPerPage", ipp);
+                getResourceBase().setAttribute("hideSubFolders", ssf);
                 getResourceBase().updateAttributesToDB();
 
             } catch (Exception e) {
@@ -707,6 +711,7 @@ public class ProcessFileRepository extends GenericResource {
         User user = paramRequest.getUser();
         String lang = "es";
         String _itemsPerPage = getResourceBase().getAttribute("itemsPerPage");
+        boolean ssf = "true".equals(getResourceBase().getAttribute("hideSubFolders"));
         int itemsPerPage = 10;
         
         if (_itemsPerPage != null) {
@@ -741,10 +746,12 @@ public class ProcessFileRepository extends GenericResource {
                 ret.add(repoFile);
             }
             
-            Iterator<RepositoryDirectory> folders = repoDir.listChilds();
-            while (folders.hasNext()) {
-                RepositoryDirectory folder = folders.next();
-                ret.add(folder);
+            if (!ssf) {
+                Iterator<RepositoryDirectory> folders = repoDir.listChilds();
+                while (folders.hasNext()) {
+                    RepositoryDirectory folder = folders.next();
+                    ret.add(folder);
+                }
             }
             
             //SORTING
@@ -834,8 +841,6 @@ public class ProcessFileRepository extends GenericResource {
                 page = Integer.valueOf(request.getParameter("p"));
                 if (page < 0) page = 1;
             }
-
-            if (itemsPerPage < 5) itemsPerPage = 5;
         
             if (hmNodes.size() >= itemsPerPage) {
                 maxPages = (int)Math.ceil((double)hmNodes.size() / itemsPerPage);
