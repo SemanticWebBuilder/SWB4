@@ -184,7 +184,7 @@ public static String getRequest(Map<String, String> params, String url,
             out.println("Problem refreshing access token");
             return;
         }
-        out.print("<div align=\"center\"><h1>Displaying videos from " + semanticYoutube.getTitle() + "</h1></div>");
+        out.print("<div align=\"center\"><h1>Videos de " + semanticYoutube.getTitle() + "</h1></div>");
         
         //Validate token from youtube and pass it as param.
                 //String ytResponse = getRequest(params, "http://gdata.youtube.com/feeds/api/users/" + "xxxreckoningxxx" + "/uploads" ,blackcat060406
