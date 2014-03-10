@@ -1507,7 +1507,8 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
         } catch (java.io.IOException ioe) {
             response = getResponse(conex.getErrorStream());
-            ioe.printStackTrace();
+            log.error("Unsuccessful request to: " + url);
+            //ioe.printStackTrace();
         } finally {
             close(in);
             if (conex != null) {
@@ -1762,11 +1763,18 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
             //System.out.println("Facebook response:" + fbResponse);
             JSONObject response = new JSONObject(fbResponse);
-            if(!response.isNull("comments")){
-                if(!response.getJSONObject("comments").isNull("summary")){
-                    if(!response.getJSONObject("comments").getJSONObject("summary").isNull("total_count")){
-                        //System.out.println(response.getJSONObject("comments").getJSONObject("summary"));
-                        totalComments = response.getJSONObject("comments").getJSONObject("summary").getLong("total_count");
+            
+            if(!response.isNull("error")){
+                if(!response.getJSONObject("error").isNull("code")){
+                    log.error("Facebook: Not data found for ->" + postID);
+                }
+            }else{
+                if(!response.isNull("comments")){
+                    if(!response.getJSONObject("comments").isNull("summary")){
+                        if(!response.getJSONObject("comments").getJSONObject("summary").isNull("total_count")){
+                            //System.out.println(response.getJSONObject("comments").getJSONObject("summary"));
+                            totalComments = response.getJSONObject("comments").getJSONObject("summary").getLong("total_count");
+                        }
                     }
                 }
             }
