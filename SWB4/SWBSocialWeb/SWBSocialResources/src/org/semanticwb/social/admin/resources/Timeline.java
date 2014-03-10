@@ -770,7 +770,9 @@ public class Timeline extends GenericResource{
                 log.error("Error trying to setSocialTopic ", e);
             }
             //Create first the post END
-            
+            response.setContentType("text/html; charset=ISO-8859-1");
+            response.setHeader("Cache-Control", "no-cache");
+            response.setHeader("Pragma", "no-cache");
             final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/postInResponse.jsp";
             RequestDispatcher dis = request.getRequestDispatcher(path);
             if (dis != null) {
@@ -1579,7 +1581,7 @@ public class Timeline extends GenericResource{
                 /*creates isolated spans to identify and update only the elemente where the action affects*/
                 writer.write("   <span class=\"inline\" id=\"" + dm.getId() + "\" dojoType=\"dojox.layout.ContentPane\">");                
                 writer.write("<em>" + twitterHumanFriendlyDate(dm.getCreatedAt(), paramRequest) + "</em> ");
-                writer.write("<a class=\"clasifica\" href=\"#\" onclick=\"showDialog('" + renderURL.setMode("replyDM").setParameter("userId", dm.getSenderId()+"") + "','DM to @" + dm.getSenderScreenName()+ "');return false;\"><span>Reply</span></a>  ");
+                writer.write("<a class=\"clasifica\" href=\"#\" onclick=\"showDialog('" + renderURL.setMode("replyDM").setParameter("userId", dm.getSenderId()+"") + "','DM to @" + dm.getSenderScreenName()+ "');return false;\"><span>Responder</span></a>  ");
                 writer.write("   </span>");                
                 writer.write("</div>");
                                
