@@ -315,10 +315,16 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             }
         } catch (Exception ex) {
             try{
-            log.error("PROBLEM UPLOADING VIDEO:" + conn.getResponseMessage());
-            System.out.println("THE ERROR" + getResponse(conn.getErrorStream()));
+                //log.error("PROBLEM UPLOADING VIDEO:" + conn.getResponseMessage());
+                String errorMessage = getResponse(conn.getErrorStream());
+                log.error("PROBLEM UPLOADING VIDEO: " + errorMessage);
+                if (errorMessage != null  &&errorMessage.contains("<error>")) {
+                    SWBSocialUtil.PostOutUtil.savePostOutNetID(video, this, null, errorMessage);
+                }else if(conn.getResponseMessage() != null){
+                    SWBSocialUtil.PostOutUtil.savePostOutNetID(video, this, null, conn.getResponseMessage());
+                }
             }catch(Exception e){
-                System.out.println("INGNORED:" + e.getMessage());
+                System.out.println("IGNORED:" + e.getMessage());
             }
             log.error("ERROR-->",ex);
         }
