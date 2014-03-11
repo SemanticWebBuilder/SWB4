@@ -551,6 +551,7 @@ SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+h_+","+x_+","+y_+");").append
 SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
 SVGjs.append(" framingRect(rect,"+w_+","+h_+","+x_+","+y_+");").append("\n");
 SVGjs.append(" g.insertBefore(rect,lnk);").append("\n");
+
                         //relaciones causa-efecto
                         expression = "//theme[@id='"+tid+"']/obj[@id='"+oid+"']/rel";
                         NodeList nlRels = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
@@ -561,7 +562,7 @@ SVGjs.append(" g.insertBefore(rect,lnk);").append("\n");
                                 txt = attrs.getNamedItem("to").getNodeValue();
                                 rx = assertValue(attrs.getNamedItem("rx").getNodeValue());
                                 ry = assertValue(attrs.getNamedItem("ry").getNodeValue());
-                                SVGjs.append(" path = createArrow('"+txt+"','"+x_+"','"+y_+"','"+rx+"','"+ry+"');").append("\n");
+                                SVGjs.append(" path = createArrow('"+txt+"','"+(x_+w_/2)+"','"+y_+"','"+rx+"','"+ry+"');").append("\n");//ox+tw/2
                                 SVGjs.append(" g.appendChild(path);").append("\n");
                             }
                         }
@@ -594,7 +595,8 @@ SVGjs.append("}").append("\n");
 
 SVGjs.append("function createPath(id,x1,y1,x2,y2) {").append("\n");
 SVGjs.append("  var path = document.createElementNS(SVG_,'path');").append("\n");
-SVGjs.append("  path.setAttributeNS(null, 'd', 'M '+x1+','+y1+' L '+x2+','+y2);").append("\n");
+SVGjs.append("  var d = 'M'+x1+','+y1'+' L'+(x1-5)+','+y1+' L'+(width-3)+','+y1+' L'+(width-3)+','+y2+' L'+x2+','+y2").append("\n");
+SVGjs.append("  path.setAttributeNS(null, 'd', 'M'+x1+','+y1+' L'+x2+','+y2);").append("\n");
 SVGjs.append("  path.style.stroke = \"#000\";").append("\n");
 SVGjs.append("  path.style.strokeWidth = \"3px\";").append("\n");
 //SVGjs.append("  path.style.markerEnd = \"3px\";").append("\n");
