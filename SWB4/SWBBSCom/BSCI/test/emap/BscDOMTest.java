@@ -139,8 +139,8 @@ public class BscDOMTest {
         //final int width = Integer.parseInt(base.getAttribute("width", "800"));
         //final int height = Integer.parseInt(base.getAttribute("height", "600"));
         //final Period period = getPeriod(request);
-        final int width = 800;
-        final int height = 600;
+        final int width = 1024;
+        final int height = 768;
         //Document documentBSC = scorecard.getDom(period);
         
         //root: period, width, height
@@ -304,20 +304,22 @@ public class BscDOMTest {
     
     public String getSvg(Document documentBSC) throws XPathExpressionException
     {
-       String id, expression;
+        String id, expression, txt;
         final int width, height;
         int w, h, w_, h_;
         int x, y, x_, y_;
+        int rx, ry;
         StringBuilder SVGjs = new StringBuilder();
         final String emapId = "DAC";
         
         // XML del BSC
         Element rootBSC = documentBSC.getDocumentElement();
-        width = 800;
-        height = 600;
+        width = 1024;
+        height = 768;
       
-        SVGjs.append("<script type=\"text/javascript\">");
+        SVGjs.append("<script type=\"text/javascript\">").append("\n");
 SVGjs.append(" var SVG_ = '"+SVG_NS_URI+"';").append("\n");
+SVGjs.append(" var XLINK_ = '"+XLNK_NS_URI+"';").append("\n");
 SVGjs.append(" var svg = document.createElementNS(SVG_, 'svg'); ").append("\n");
 //SVGjs.append(" svg.setAttributeNS(null,'xmlns:xlink', '"+XLNK_NS_URI+"');").append("\n");
 SVGjs.append(" svg.setAttributeNS(null,'id','"+emapId+"');").append("\n");
@@ -327,10 +329,31 @@ SVGjs.append(" svg.setAttributeNS(null,'viewBox','0,0,"+width+","+height+"');").
 SVGjs.append(" svg.setAttributeNS(null,'version','1.0');").append("\n");
 SVGjs.append(" document.body.appendChild(svg);").append("\n");
 
+SVGjs.append(" var defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');").append("\n");
+SVGjs.append(" var marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');").append("\n");
+SVGjs.append(" marker.setAttributeNS(null,'id', 'arrow_1');").append("\n");
+SVGjs.append(" marker.setAttributeNS(null,'viewBox', '0 0 10 10');").append("\n");
+SVGjs.append(" marker.setAttributeNS(null,'refX', '8');").append("\n");
+SVGjs.append(" marker.setAttributeNS(null,'refY', '5');").append("\n");
+SVGjs.append(" marker.setAttributeNS(null,'markerUnits', 'strokeWidth');").append("\n");
+SVGjs.append(" marker.setAttributeNS(null,'markerWidth', '7');").append("\n");
+SVGjs.append(" marker.setAttributeNS(null,'markerHeight', '7');").append("\n");
+SVGjs.append(" marker.setAttributeNS(null,'orient', 'auto');").append("\n");
+SVGjs.append(" var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');").append("\n");
+SVGjs.append(" path.setAttributeNS(null,'d', 'M0 0 L10 5 L0 10 z');").append("\n");
+SVGjs.append(" path.setAttributeNS(null,'fill', 'red');").append("\n");
+SVGjs.append(" path.setAttributeNS(null,'stroke', 'red');").append("\n");
+SVGjs.append(" path.setAttributeNS(null,'stroke-width', '0');").append("\n");
+SVGjs.append(" marker.appendChild(path);").append("\n");
+SVGjs.append(" defs.appendChild(marker);").append("\n");
+SVGjs.append(" svg.appendChild(defs);").append("\n");
+
 
 SVGjs.append(" var g;").append("\n");
 SVGjs.append(" var txt;").append("\n");
 SVGjs.append(" var rect;").append("\n");
+SVGjs.append(" var path;").append("\n");
+SVGjs.append(" var lnk;").append("\n");
         
         
 XPath xPath = XPathFactory.newInstance().newXPath();
@@ -339,100 +362,78 @@ Node node = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstant
 if(node!=null && node instanceof Element) {
     NamedNodeMap attrs = node.getAttributes();
     id = attrs.getNamedItem("id").getNodeValue();
-    w = 800;
-    h = 150;
-    x = 0;
-    y = 0;
+    w = assertValue(attrs.getNamedItem("width").getNodeValue());
+    h = assertValue(attrs.getNamedItem("height").getNodeValue());
+    x = assertValue(attrs.getNamedItem("x").getNodeValue());
+    y = assertValue(attrs.getNamedItem("y").getNodeValue());
     
     SVGjs.append(" g = document.createElementNS(SVG_,'g');").append("\n");
     SVGjs.append(" g.setAttributeNS(null,'id','"+id+"');").append("\n");
     SVGjs.append(" svg.appendChild(g);").append("\n");
     
     x_ = x;
-    y_ = y;// + HEADER_TITLE;
+    y_ = y + HEADER_TITLE;
+    int $y = y_;
     w_ = w;
-    h_ = HEADER_TITLE;
     
     // título mapa
     expression = "/bsc/header/title";
-    node = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);
-    if(node!=null && node.getNodeType()==Node.ELEMENT_NODE) {
-//        x_ = x;
-//        y_ = y + HEADER_TITLE;
-//        w_ = w;
-//        h_ = HEADER_TITLE;
-        SVGjs.append(" txt = document.createElementNS(SVG_,'text');").append("\n");
-        SVGjs.append(" txt.setAttributeNS(null,'id','"+id+"_title"+"');").append("\n");
-        SVGjs.append(" txt.setAttributeNS(null,'x','"+x_+"');").append("\n");
-        SVGjs.append(" txt.setAttributeNS(null,'y','"+y_+"');").append("\n");
-        SVGjs.append(" txt.setAttributeNS(null,'font-size','14');").append("\n");
-        SVGjs.append(" txt.setAttributeNS(null,'font-family','Verdana');").append("\n");
-        SVGjs.append(" txt.textContent='"+node.getFirstChild().getNodeValue()+"';").append("\n");
-        SVGjs.append(" g.appendChild(txt);").append("\n");
-        SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+h_+","+x_+","+y_+");").append("\n");
-        SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-        SVGjs.append(" framingRect(rect,"+w_+","+h_+","+x_+","+y_+");").append("\n");
-        SVGjs.append(" g.appendChild(rect);").append("\n");
-    }
+    txt = (String) xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
+    SVGjs.append(" txt = createText('"+txt+"','"+id+"_title"+"','"+x_+"','"+$y+"','22','Verdana');").append("\n");
+    SVGjs.append(" g.appendChild(txt);").append("\n");
+    SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_TITLE+","+x_+","+y+");").append("\n");
+    SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
+    SVGjs.append(" framingRect(rect,"+w_+","+HEADER_TITLE+","+x_+","+y_+");").append("\n");
+    SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
     
-    // misión
-    expression = "/bsc/header/mission";
-    node = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);
-    if(node!=null && node.getNodeType()==Node.ELEMENT_NODE) {
-        y_ = y + HEADER_TITLE + 18;
-        w_ = w/3;
-        h_ = h - HEADER_TITLE;
-        SVGjs.append(" txt = document.createElementNS(SVG_,'text');").append("\n");
-        SVGjs.append(" txt.setAttributeNS(null,'id','"+id+"_mt"+"');").append("\n");
-        SVGjs.append(" txt.setAttributeNS(null,'x','"+x_+"');").append("\n");
-        SVGjs.append(" txt.setAttributeNS(null,'y','"+y_+"');").append("\n");
-        SVGjs.append(" txt.setAttributeNS(null,'font-size','12');").append("\n");
-        SVGjs.append(" txt.setAttributeNS(null,'font-family','Verdana');").append("\n");
-        SVGjs.append(" txt.textContent='"+node.getFirstChild().getNodeValue()+"';").append("\n");
-        SVGjs.append(" g.appendChild(txt);").append("\n");
-        SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+h_+","+x_+","+y_+");").append("\n");
-        SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-        SVGjs.append(" framingRect(rect,"+w_+","+h_+","+x_+","+y_+");").append("\n");
-        SVGjs.append(" g.appendChild(rect);").append("\n");
-    }
-    
+    y_ = y_ + HEADER_TITLE;
+    w_ = w/3;
+    // pleca Mision
+    SVGjs.append(" txt = createText('Mision','"+id+"_pms"+"','"+x_+"','"+y_+"','18','Verdana');").append("\n");
+    SVGjs.append(" g.appendChild(txt);").append("\n");
+    SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_TITLE+","+x_+","+y_+");").append("\n");
+    SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
+    SVGjs.append(" framingRect(rect,"+w_+","+HEADER_TITLE+","+x_+","+y_+");").append("\n");
+    SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
+    // pleca Vision
+    SVGjs.append(" txt = createText('Vision','"+id+"_pvs"+"','"+(x_+2*w_)+"','"+y_+"','18','Verdana');").append("\n");
+    SVGjs.append(" g.appendChild(txt);").append("\n");
+    SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_TITLE+","+(x_+2*w_)+","+y_+");").append("\n");
+    SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
+    SVGjs.append(" framingRect(rect,"+w_+","+HEADER_TITLE+","+(x_+2*w_)+","+y_+");").append("\n");
+    SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
     // logo
     expression = "/bsc/header/logo";
     node = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);
     if(node!=null && node.getNodeType()==Node.ELEMENT_NODE) {
-        x_ = x_ + w_;
-        SVGjs.append(" rect = document.createElementNS(SVG_,'rect');").append("\n");
-        SVGjs.append(" rect.setAttributeNS(null,'id','"+id+"_lg"+"');").append("\n");
-        SVGjs.append(" rect.setAttributeNS(null,'width','"+w_+"');").append("\n");
-        SVGjs.append(" rect.setAttributeNS(null,'height','"+h_+"');").append("\n");
-        SVGjs.append(" rect.setAttributeNS(null,'x','"+x_+"');").append("\n");
-        SVGjs.append(" rect.setAttributeNS(null,'y','"+y_+"');").append("\n");
-        SVGjs.append(" rect.setAttributeNS(null,'fill','none');").append("\n");
-        SVGjs.append(" rect.setAttributeNS(null,'stroke','black');").append("\n");
-        SVGjs.append(" rect.setAttributeNS(null, 'stroke-width','1');").append("\n");
+        SVGjs.append(" rect = createRect('"+id+"_lg"+"','"+w_+"','"+(h-HEADER_TITLE)+"','"+(x_+w_)+"','"+(y_-HEADER_TITLE)+"',0,0,'none',1,'red','1',1);").append("\n");
         SVGjs.append(" g.appendChild(rect);").append("\n");
     }
-    
-    // vision
+
+    // contenido Mision
+    y_ += HEADER_TITLE;
+    h_ = h - 2*HEADER_TITLE;    
+    expression = "/bsc/header/mission";
+    txt = (String) xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
+    SVGjs.append(" txt = createText('"+txt+"','"+id+"_ms"+"','"+x_+"','"+y_+"','14','Verdana');").append("\n");
+    SVGjs.append(" g.appendChild(txt);").append("\n");
+    SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+h_+","+x_+","+y_+");").append("\n");
+    SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
+    SVGjs.append(" framingRect(rect,"+w_+","+h_+","+x_+","+y_+");").append("\n");
+    SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
+    // contenido Vision
     expression = "/bsc/header/vision";
-    node = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);
-    if(node!=null && node.getNodeType()==Node.ELEMENT_NODE) {
-        x_ = x_ + w_;
-        SVGjs.append(" txt = document.createElementNS(SVG_,'text');").append("\n");
-        SVGjs.append(" txt.setAttributeNS(null,'id','"+id+"_vs"+"');").append("\n");
-        SVGjs.append(" txt.setAttributeNS(null,'x','"+x_+"');").append("\n");
-        SVGjs.append(" txt.setAttributeNS(null,'y','"+y_+"');").append("\n");
-        SVGjs.append(" txt.setAttributeNS(null,'font-size','12');").append("\n");
-        SVGjs.append(" txt.setAttributeNS(null,'font-family','Verdana');").append("\n");
-        SVGjs.append(" txt.textContent='"+node.getFirstChild().getNodeValue()+"';").append("\n");
-        SVGjs.append(" g.appendChild(txt);").append("\n");
-        SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+h_+","+x_+","+y_+");").append("\n");
-        SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-        SVGjs.append(" framingRect(rect,"+w_+","+h_+","+x_+","+y_+");").append("\n");
-        SVGjs.append(" g.appendChild(rect);").append("\n");
-    }
+    txt = (String) xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
+    SVGjs.append(" txt = createText('"+txt+"','"+id+"_vs"+"','"+(x_+2*w_)+"','"+y_+"','14','Verdana');").append("\n");
+    SVGjs.append(" g.appendChild(txt);").append("\n");
+    SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+h_+","+(x_+2*w_)+","+y_+");").append("\n");
+    SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
+    SVGjs.append(" framingRect(rect,"+w_+","+h_+","+(x_+2*w_)+","+y_+");").append("\n");
+    SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
 }
 
+
+StringBuilder info;
 //lista de perspectivas
 expression = "/bsc/perspective";
 NodeList nlPersp = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
@@ -458,17 +459,14 @@ SVGjs.append(" g = document.createElementNS(SVG_,'g');").append("\n");
 SVGjs.append(" g.setAttributeNS(null,'id','"+pid+"');").append("\n");
 SVGjs.append(" svg.appendChild(g);").append("\n");
 
-System.out.println("");
-SVGjs.append(" rect = document.createElementNS(SVG_,'rect');").append("\n");
-SVGjs.append(" rect.setAttributeNS(null,'id','"+pid+"_p"+"');").append("\n");
-SVGjs.append(" rect.setAttributeNS(null,'width','"+pw+"');").append("\n");
-SVGjs.append(" rect.setAttributeNS(null,'height','"+ph+"');").append("\n");
-SVGjs.append(" rect.setAttributeNS(null,'x','"+px+"');").append("\n");
-SVGjs.append(" rect.setAttributeNS(null,'y','"+py+"');").append("\n");
-SVGjs.append(" rect.setAttributeNS(null,'fill','none');").append("\n");
-SVGjs.append(" rect.setAttributeNS(null,'stroke','black');").append("\n");
-SVGjs.append(" rect.setAttributeNS(null, 'stroke-width','1');").append("\n");
+SVGjs.append(" rect = createRect('"+pid+"_p"+"','"+pw+"','"+ph+"','"+px+"','"+py+"',0,0,'none',1,'blue','1',1);").append("\n");
 SVGjs.append(" g.appendChild(rect);").append("\n");
+
+SVGjs.append(" txt = createText('"+title+"','"+pid+"_pt"+"','"+px+"','"+(py+ph)+"','18','Verdana');").append("\n");
+SVGjs.append(" txt.setAttribute('textLength','"+ph+"');").append("\n");
+SVGjs.append(" txt.setAttribute('lengthAdjust','spacingAndGlyphs');").append("\n");
+SVGjs.append(" txt.setAttribute('transform','rotate(270,"+px+","+(py+ph)+")');").append("\n");
+SVGjs.append(" g.appendChild(txt);").append("\n");
         
         
         //diferenciadores de la perspectiva
@@ -484,22 +482,14 @@ SVGjs.append(" g.appendChild(rect);").append("\n");
                 x_ = assertValue(attrs.getNamedItem("x").getNodeValue());
                 y_ = assertValue(attrs.getNamedItem("y").getNodeValue());
 
-                expression = "/bsc/perspective[@id='"+pid+"']/diffgroup[1]/diff/title";
-                title = (String)xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
-
-System.out.println("diferenciador="+title);
-SVGjs.append(" txt = document.createElementNS(SVG_,'text');").append("\n");
-SVGjs.append(" txt.setAttributeNS(null,'id','"+did+"');").append("\n");
-SVGjs.append(" txt.setAttributeNS(null,'x','"+x_+"');").append("\n");
-SVGjs.append(" txt.setAttributeNS(null,'y','"+y_+"');").append("\n");
-SVGjs.append(" txt.setAttributeNS(null,'font-size','12');").append("\n");
-SVGjs.append(" txt.setAttributeNS(null,'font-family','Verdana');").append("\n");
-SVGjs.append(" txt.textContent='"+title+"';").append("\n");
+                //expression = "/bsc/perspective[@id='"+pid+"']/diffgroup[1]/diff/title";
+                //title = (String)xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
+SVGjs.append(" txt = createText('"+nodeD.getFirstChild().getNodeValue()+"','"+did+"','"+x_+"','"+y_+"','14','Verdana');").append("\n");
 SVGjs.append(" g.appendChild(txt);").append("\n");
 SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+h_+","+x_+","+y_+");").append("\n");
 SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
 SVGjs.append(" framingRect(rect,"+w_+","+h_+","+x_+","+y_+");").append("\n");
-SVGjs.append(" g.appendChild(rect);").append("\n");                
+SVGjs.append(" g.insertBefore(rect,txt);").append("\n");                
             }
         }
         
@@ -518,19 +508,12 @@ SVGjs.append(" g.appendChild(rect);").append("\n");
 
                 expression = "/bsc/perspective[@id='"+pid+"']/themes/theme[@id='"+tid+"']/title";
                 title = (String)xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
-System.out.println("tema="+title);                
-SVGjs.append(" txt = document.createElementNS(SVG_,'text');").append("\n");
-SVGjs.append(" txt.setAttributeNS(null,'id','"+tid+"');").append("\n");
-SVGjs.append(" txt.setAttributeNS(null,'x','"+x_+"');").append("\n");
-SVGjs.append(" txt.setAttributeNS(null,'y','"+y_+"');").append("\n");
-SVGjs.append(" txt.setAttributeNS(null,'font-size','12');").append("\n");
-SVGjs.append(" txt.setAttributeNS(null,'font-family','Verdana');").append("\n");
-SVGjs.append(" txt.textContent='"+title+"';").append("\n");
+SVGjs.append(" txt = createText('"+title+"','"+tid+"','"+x_+"','"+y_+"','18','Verdana');").append("\n");
 SVGjs.append(" g.appendChild(txt);").append("\n");
 SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+h_+","+x_+","+y_+");").append("\n");
 SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
 SVGjs.append(" framingRect(rect,"+w_+","+h_+","+x_+","+y_+");").append("\n");
-SVGjs.append(" g.appendChild(rect);").append("\n"); 
+SVGjs.append(" g.insertBefore(rect,txt);").append("\n"); 
                 
                 
                 //lista de objetivos
@@ -541,37 +524,115 @@ SVGjs.append(" g.appendChild(rect);").append("\n");
                     if(nodeO!=null && nodeO.getNodeType()==Node.ELEMENT_NODE) {
                         attrs = nodeO.getAttributes();
                         String oid = attrs.getNamedItem("id").getNodeValue();
+                        String href = attrs.getNamedItem("href").getNodeValue();
                         w_ = assertValue(attrs.getNamedItem("width").getNodeValue());
                         h_ = assertValue(attrs.getNamedItem("height").getNodeValue());
                         x_ = assertValue(attrs.getNamedItem("x").getNodeValue());
                         y_ = assertValue(attrs.getNamedItem("y").getNodeValue());
-
+                        txt = attrs.getNamedItem("status").getNodeValue();
+                        
+                        info = new StringBuilder();
+                        expression = "//theme[@id='"+tid+"']/obj[@id='"+oid+"']/prefix";
+                        info.append(xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING));
+                        info.append(" ");
                         expression = "//theme[@id='"+tid+"']/obj[@id='"+oid+"']/title";
-                        title = (String)xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
-System.out.println("objetivo="+title);
-SVGjs.append(" txt = document.createElementNS(SVG_,'text');").append("\n");
-SVGjs.append(" txt.setAttributeNS(null,'id','"+oid+"');").append("\n");
-SVGjs.append(" txt.setAttributeNS(null,'x','"+x_+"');").append("\n");
-SVGjs.append(" txt.setAttributeNS(null,'y','"+y_+"');").append("\n");
-SVGjs.append(" txt.setAttributeNS(null,'font-size','12');").append("\n");
-SVGjs.append(" txt.setAttributeNS(null,'font-family','Verdana');").append("\n");
-SVGjs.append(" txt.textContent='"+title+"';").append("\n");
-SVGjs.append(" g.appendChild(txt);").append("\n");
+                        info.append(xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING));
+                        info.append(" ");
+                        expression = "//theme[@id='"+tid+"']/obj[@id='"+oid+"']/sponsor";
+                        info.append(xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING));
+                        info.append(" ");
+                        expression = "//theme[@id='"+tid+"']/obj[@id='"+oid+"']/frequency";
+                        info.append(xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING));
+SVGjs.append(" lnk = createLink('"+href+"');").append("\n");
+SVGjs.append(" g.appendChild(lnk);").append("\n");
+SVGjs.append(" txt = createText('"+info+"','"+oid+"','"+x_+"','"+y_+"','14','Verdana');").append("\n");
+SVGjs.append(" lnk.appendChild(txt);").append("\n");
 SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+h_+","+x_+","+y_+");").append("\n");
 SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
 SVGjs.append(" framingRect(rect,"+w_+","+h_+","+x_+","+y_+");").append("\n");
-SVGjs.append(" g.appendChild(rect);").append("\n"); 
+SVGjs.append(" g.insertBefore(rect,lnk);").append("\n");
+                        //relaciones causa-efecto
+                        expression = "//theme[@id='"+tid+"']/obj[@id='"+oid+"']/rel";
+                        NodeList nlRels = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+                        for(int n=0; n<nlRels.getLength(); n++) {
+                            Node nodeR = nlRels.item(n);
+                            if(nodeR!=null && nodeR.getNodeType()==Node.ELEMENT_NODE) {
+                                attrs = nodeR.getAttributes();
+                                txt = attrs.getNamedItem("to").getNodeValue();
+                                rx = assertValue(attrs.getNamedItem("rx").getNodeValue());
+                                ry = assertValue(attrs.getNamedItem("ry").getNodeValue());
+                                SVGjs.append(" path = createArrow('"+txt+"','"+x_+"','"+y_+"','"+rx+"','"+ry+"');").append("\n");
+                                SVGjs.append(" g.appendChild(path);").append("\n");
+                            }
+                        }
                     }
                 }
             }
         }
     }
 }
-        
+
+
+SVGjs.append("").append("\n");
+SVGjs.append("").append("\n");
+SVGjs.append("").append("\n");
+SVGjs.append("").append("\n");
+SVGjs.append("").append("\n");
+
+SVGjs.append("function createLink(url) {").append("\n");
+SVGjs.append("  var a = document.createElementNS(SVG_ ,'a');").append("\n");
+SVGjs.append("  a.setAttributeNS(XLINK_,'href',url);").append("\n");
+SVGjs.append("  a.setAttributeNS(null,'title','Ver detalle...');").append("\n");
+SVGjs.append("  return a;").append("\n");
+SVGjs.append("}").append("\n");
+
+SVGjs.append("function createArrow(id,x1,y1,x2,y2) {").append("\n");
+SVGjs.append("  var arrow = createPath(id,x1,y1,x2,y2)").append("\n");
+SVGjs.append("  arrow.setAttributeNS(null, 'marker-end', 'url(#arrow_1)');").append("\n");
+SVGjs.append("  return arrow;").append("\n");
+SVGjs.append("}").append("\n");
+
+SVGjs.append("function createPath(id,x1,y1,x2,y2) {").append("\n");
+SVGjs.append("  var path = document.createElementNS(SVG_,'path');").append("\n");
+SVGjs.append("  path.setAttributeNS(null, 'd', 'M '+x1+','+y1+' L '+x2+','+y2);").append("\n");
+SVGjs.append("  path.style.stroke = \"#000\";").append("\n");
+SVGjs.append("  path.style.strokeWidth = \"3px\";").append("\n");
+//SVGjs.append("  path.style.markerEnd = \"3px\";").append("\n");
+SVGjs.append("  ").append("\n");
+SVGjs.append("  return path;").append("\n");
+SVGjs.append("}").append("\n");
+
+/*SVGjs.append("function createText(text,id,x,y,fontsize,fontfamily) {").append("\n");
+SVGjs.append("  var txt = document.createElementNS(SVG_,'text');").append("\n");
+SVGjs.append("  txt.setAttributeNS(null,'id',id);").append("\n");
+SVGjs.append("  txt.setAttributeNS(null,'x',x);").append("\n");
+SVGjs.append("  txt.setAttributeNS(null,'y',y);").append("\n");
+SVGjs.append("  txt.setAttributeNS(null,'font-size',fontsize);").append("\n");
+SVGjs.append("  txt.setAttributeNS(null,'font-family',fontfamily);").append("\n");
+SVGjs.append("  txt.textContent=text;").append("\n");
+SVGjs.append("  return txt;").append("\n");
+SVGjs.append("}").append("\n");
+
+SVGjs.append("function createRect(id,width,height,x,y,rx,ry,fill,fillopacity,stroke,strokewidth, strokeopacity) {").append("\n");
+SVGjs.append("  var rect = document.createElementNS(SVG_,'rect');").append("\n");
+SVGjs.append("  rect.setAttributeNS(null,'id',id);").append("\n");
+SVGjs.append("  rect.setAttributeNS(null,'width',width);").append("\n");
+SVGjs.append("  rect.setAttributeNS(null,'height',height);").append("\n");
+SVGjs.append("  rect.setAttributeNS(null,'x',x);").append("\n");
+SVGjs.append("  rect.setAttributeNS(null,'y',y);").append("\n");
+SVGjs.append("  rect.setAttributeNS(null,'rx',rx);").append("\n");
+SVGjs.append("  rect.setAttributeNS(null,'ry',ry);").append("\n");
+SVGjs.append("  rect.setAttributeNS(null,'fill',fill);").append("\n");
+SVGjs.append("  rect.setAttributeNS(null,'fill-opacity',fillopacity);").append("\n");
+SVGjs.append("  rect.setAttributeNS(null,'stroke',stroke);").append("\n");
+SVGjs.append("  rect.setAttributeNS(null, 'stroke-width',strokewidth);").append("\n");
+SVGjs.append("  rect.setAttributeNS(null, 'stroke-opacity',strokeopacity);").append("\n");
+SVGjs.append("  return rect;").append("\n");
+SVGjs.append("}").append("\n");
 
 SVGjs.append("function framingRect(rect,width, height, x, y) {").append("\n");
 SVGjs.append("    rect.x.baseVal.value = x;").append("\n");
-SVGjs.append("    rect.y.baseVal.value = y;").append("\n");
+SVGjs.append("    //rect.y.baseVal.value = y;").append("\n");
 SVGjs.append("    rect.width.baseVal.value = width;").append("\n");
 SVGjs.append("    rect.height.baseVal.value = height;").append("\n");
 SVGjs.append("    rect.setAttributeNS(null,'fill','none');").append("\n");
@@ -667,7 +728,7 @@ SVGjs.append("  rect.y.baseVal.value = bbox.y;").append("\n");
 SVGjs.append("  rect.width.baseVal.value = bbox.width;").append("\n");
 SVGjs.append("  rect.height.baseVal.value = bbox.height;").append("\n");
 SVGjs.append("  return rect;").append("\n");
-SVGjs.append(" }").append("\n");
+SVGjs.append(" }").append("\n");*/
 
         SVGjs.append("</script>");
         return SVGjs.toString();
