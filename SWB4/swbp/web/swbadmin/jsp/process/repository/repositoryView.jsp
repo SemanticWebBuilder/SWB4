@@ -53,14 +53,16 @@ if (!user.isSigned()) {
     SWBResourceURL addUrl = paramRequest.getRenderUrl().setMode(ProcessFileRepository.MODE_ADDFILE);
     SWBResourceURL addFolderUrl = paramRequest.getRenderUrl().setMode(ProcessFileRepository.MODE_ADDFOLDER);
     %>
-    <ul class="list-unstyled list-inline">
-        <li>
-            <a href="<%=addUrl%>" class="btn btn-default"><span class="fa fa-plus"></span> <%=paramRequest.getLocaleString("addFile")%></a>
-        </li>
-        <li>
-            <a href="<%=addFolderUrl%>" class="btn btn-default"><span class="fa fa-plus"></span> <%=paramRequest.getLocaleString("msgCreateDirectory")%></a>
-        </li>
-    </ul>
+    <div class="row text-right">
+        <ul class="list-unstyled list-inline">
+            <li>
+                <a href="<%=addUrl%>" class="btn btn-default swbp-btn-action" data-toggle="tooltip" data-placement="bottom" title="<%=paramRequest.getLocaleString("addFile")%>"><span class="fa fa-plus"></span> <span class="fa fa-file-text"></span></a>
+            </li>
+            <li>
+                <a href="<%=addFolderUrl%>" class="btn btn-default swbp-btn-action" data-toggle="tooltip" data-placement="bottom" title="<%=paramRequest.getLocaleString("msgCreateDirectory")%>"><span class="fa fa-plus"></span> <span class="fa fa-folder"></span></a>
+            </li>
+        </ul>
+    </div>
     <%
     if (snv && path != null) {%>
         <ol class="breadcrumb swbp-breadcrumb">
