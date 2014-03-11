@@ -981,7 +981,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                 canGetMoreVideos = false;
                 break;
             }
-            startIndex = startIndex + (count - 1);
+            startIndex = startIndex + (count);
         }
         System.out.println("Total Videos in Array: " + aListExternalPost.size());
 
