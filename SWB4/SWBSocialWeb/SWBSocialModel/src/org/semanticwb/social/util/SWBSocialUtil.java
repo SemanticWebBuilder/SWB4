@@ -1280,7 +1280,8 @@ public class SWBSocialUtil {
            int result=0;   //Mi inicio sera 0(Neutro) y de ahi se va ha tender a la derecha (positivos) o a la izquierda (Negativos)
            int positiveintensityveResult=0;
            int negativeintensityveResult=0;
-           //HashMap sntPhrasesMap=new HashMap();
+           //TODO: Descomentar este bloque.
+           /*
            Iterator<SentimentalLearningPhrase> itSntPhases=SentimentalLearningPhrase.ClassMgr.listSentimentalLearningPhrases(CONFIG_WEBSITE);
            while(itSntPhases.hasNext())
            {
@@ -1330,6 +1331,7 @@ public class SWBSocialUtil {
                    }
                }
            }
+           */
            //System.out.println("result k:"+result);
            //Reglas
            if(result>0)    //Es positivo
@@ -2456,16 +2458,32 @@ public class SWBSocialUtil {
            String lang=null;
             try
             {
+                text=getString2DetectLang(text);
+                //System.out.println("getString2DetectLang Final:"+text);
                 if(text.length()>50) text=text.substring(0, 50);   
                 Detector detector=DetectorFactory.create();
                 detector.append(text);
                 lang=detector.detect();
             }catch(Exception e)
             {
-                log.error(e);
+                //log.error(e);
             }
             return lang;
        }
+       
+       public static String getString2DetectLang(String text)
+       {
+            String text2Return="";
+            String[] words = text.split(" ");
+            for(String w:words)
+            {
+                if(w.startsWith("@") || w.startsWith("http") || w.startsWith("#"))
+                continue;
+                text2Return+=w+" ";
+            }
+            return text2Return;
+       }
+       
         
        public static String changeFormat(String fecha, int formato)
        {
