@@ -35,6 +35,7 @@ if (user != null && user.getLanguage() != null) {
     lang = user.getLanguage();
 }
 SimpleDateFormat format = new SimpleDateFormat("dd/MMM/yyyy - hh:mm");
+boolean snv = "true".equals(paramRequest.getResourceBase().getAttribute("showNavbar"));    
 
 if (!user.isSigned()) {
     if (paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT) {
@@ -60,7 +61,8 @@ if (!user.isSigned()) {
             <a href="<%=addFolderUrl%>" class="btn btn-default"><span class="fa fa-plus"></span> <%=paramRequest.getLocaleString("msgCreateDirectory")%></a>
         </li>
     </ul>
-    <%if (path != null) {%>
+    <%
+    if (snv && path != null) {%>
         <ol class="breadcrumb swbp-breadcrumb">
             <li>
                 <span class="swbp-breadcrumb-title"><%=paramRequest.getLocaleString("msgLocation")%>:</span>
