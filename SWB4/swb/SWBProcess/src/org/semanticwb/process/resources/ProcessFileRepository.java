@@ -755,7 +755,9 @@ public class ProcessFileRepository extends GenericResource {
                 Iterator<RepositoryDirectory> folders = repoDir.listChilds();
                 while (folders.hasNext()) {
                     RepositoryDirectory folder = folders.next();
-                    ret.add(folder);
+                    if (folder.isValid() && user.haveAccess(folder)) {
+                        ret.add(folder);
+                    }
                 }
             }
             
