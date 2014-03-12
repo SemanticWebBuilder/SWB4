@@ -31,7 +31,7 @@
  %>
 
 <br/><br/><br/><br/>
-    <form id="form_<%=socialAdm.getId()%>_twitterGC" dojoType="dijit.form.Form" class="swbform" action="<%=acc_url%>" method="post" onsubmit="submitForm('form_<%=socialAdm.getId()%>_twitterGC'); return false;"> 
+    <form id="form_<%=socialAdm.getId()%>_youtubeGC" dojoType="dijit.form.Form" class="swbform" action="<%=acc_url%>" method="post" onsubmit="submitForm('form_<%=socialAdm.getId()%>_youtubeGC'); return false;"> 
     <%if(youtubekGC!=null){%>    
         <input type="hidden" name="youtubeGCid" value="<%=youtubekGC.getId()%>">    
     <%}%>

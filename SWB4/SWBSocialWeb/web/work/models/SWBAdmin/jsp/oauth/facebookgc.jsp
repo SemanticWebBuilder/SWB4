@@ -30,7 +30,7 @@
 %>
 
 <br/><br/><br/><br/>
-    <form id="form_<%=socialAdm.getId()%>_twitterGC" dojoType="dijit.form.Form" class="swbform" action="<%=acc_url%>" method="post" onsubmit="submitForm('form_<%=socialAdm.getId()%>_twitterGC'); return false;"> 
+    <form id="form_<%=socialAdm.getId()%>_facebookGC" dojoType="dijit.form.Form" class="swbform" action="<%=acc_url%>" method="post" onsubmit="submitForm('form_<%=socialAdm.getId()%>_facebookGC'); return false;"> 
     <%if(facebookGC!=null){%>    
         <input type="hidden" name="facebookGCid" value="<%=facebookGC.getId()%>">    
     <%}%>
