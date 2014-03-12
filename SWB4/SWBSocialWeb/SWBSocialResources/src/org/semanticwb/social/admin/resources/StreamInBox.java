@@ -1882,12 +1882,12 @@ public class StreamInBox extends GenericResource {
            query+=
            "where {\n" +
            "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
+           "  ?postUri social:pi_createdInSocialNet ?postInCreatedInSN. \n" +
            "  }\n";
 
            if(!isCount)
            {
-                query+="ORDER BY desc(?postInCreated) \n";
+                query+="ORDER BY desc(?postInCreatedInSN) \n";
 
                 query+="OFFSET "+offset +"\n";
                 if(limit>0)
@@ -1901,6 +1901,7 @@ public class StreamInBox extends GenericResource {
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
                query=SWBSocial.executeQuery(query, wsite);
            }
+           //System.out.println("query:"+query);
         return query;
     }
     
@@ -2778,6 +2779,7 @@ public class StreamInBox extends GenericResource {
         } else {
             out.println("---");
         }
+        out.println("postIn:"+postIn);
         out.println("</td>");
 
 
