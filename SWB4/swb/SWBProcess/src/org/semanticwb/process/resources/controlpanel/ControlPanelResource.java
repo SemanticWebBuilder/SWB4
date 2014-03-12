@@ -27,10 +27,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.SWBComparator;
@@ -38,6 +44,7 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
+import org.semanticwb.process.model.FlowNodeInstance;
 import org.semanticwb.process.model.ItemAware;
 import org.semanticwb.process.model.ItemAwareReference;
 import org.semanticwb.process.model.ProcessInstance;
@@ -46,6 +53,8 @@ import org.semanticwb.process.model.ProcessGroup;
 import org.semanticwb.process.model.ProcessSite;
 import org.semanticwb.process.model.RepositoryFile;
 import org.semanticwb.process.model.SWBProcessMgr;
+import org.semanticwb.process.model.UserTask;
+import org.semanticwb.process.resources.taskinbox.UserTaskInboxResource;
 import org.semanticwb.process.schema.File;
 import org.semanticwb.process.schema.FileCollection;
 
@@ -59,6 +68,9 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
     public static final int SORT_DATE = 1;
     public static final int SORT_NAME = 2;
     public static final int STATUS_ALL = -1;
+    public static final String MODE_DETAIL="detail";
+    public static final String MODE_CONFIG="config";
+    public static final String MODE_SHOWFILES="showFiles";
     private static final String paramCatalog = "idCol|priorityCol|nameCol|sdateCol|edateCol|pendingCol|rolesCol|actionsCol";
     private Comparator processNameComparator = new Comparator() {
         String lang = "es";
@@ -110,10 +122,12 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
-        if (mode.equals("config")) {
+        if (MODE_CONFIG.equals(mode)) {
             doConfig(request, response, paramRequest);
-        } else if (mode.equals("showFiles")) {
+        } else if (MODE_SHOWFILES.equals(mode)) {
             doShowFiles(request, response, paramRequest);
+        } else if (MODE_DETAIL.equals(mode)) {
+            doDetail(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
@@ -173,7 +187,32 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
         if (getViewJSP() != null && !getViewJSP().trim().equals("")) {
             jsp = getViewJSP();
         }
+
+        //Asignaciones de compatibilidad con JSP anterior
+        if (isShowInstanceGraph()) {
+            getResourceBase().setAttribute(UserTaskInboxResource.ATT_INSTANCEGRAPH, "use");
+        } else {
+            getResourceBase().removeAttribute(UserTaskInboxResource.ATT_INSTANCEGRAPH);
+        }
         
+        if (isShowResponseGraph()) {
+            getResourceBase().setAttribute(UserTaskInboxResource.ATT_RESPONSEGRAPH, "use");
+        } else {
+            getResourceBase().removeAttribute(UserTaskInboxResource.ATT_RESPONSEGRAPH);
+        }
+                
+        if (isShowStatusGraph()) {
+            getResourceBase().setAttribute(UserTaskInboxResource.ATT_STATUSGRAPH, "use");
+        } else {
+            getResourceBase().removeAttribute(UserTaskInboxResource.ATT_STATUSGRAPH);
+        }
+                
+        if (isShowPartGraph()) {
+            getResourceBase().setAttribute(UserTaskInboxResource.ATT_PARTGRAPH, "use");
+        } else {
+            getResourceBase().removeAttribute(UserTaskInboxResource.ATT_PARTGRAPH);
+        }
+                
         //String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/controlPanel/businessControlPanel.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(jsp);
 
@@ -274,6 +313,225 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
         } catch (Exception e) {
             log.error("ControlPanelResource: Error including show docs JSP", e);
         }
+    }
+    
+    public void doDetail(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String jsp = "/swbadmin/jsp/process/monitor/processDetail.jsp";
+
+        try {
+            RequestDispatcher rd = request.getRequestDispatcher(jsp);
+            request.setAttribute("paramRequest", paramRequest);
+            if (paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT) {
+                request.setAttribute("instances", getDetailProcessInstances(request, paramRequest));
+                request.setAttribute("statusWp", getDisplayMapWp());
+                request.setAttribute("itemsPerPage", getItemsPerPage());
+                request.setAttribute("base", getResourceBase());
+            }
+            rd.include(request, response);
+        } catch (Exception e) {
+            log.error("Error including jsp in detail mode", e);
+        }
+    }
+    
+    public ArrayList<ProcessInstance> getDetailProcessInstances(HttpServletRequest request, SWBParamRequest paramRequest) {
+        ArrayList<ProcessInstance> unpaged = new ArrayList<ProcessInstance>();
+        ArrayList<ProcessInstance> instances = new ArrayList<ProcessInstance>();
+        String suri = request.getParameter("suri");
+        Process p = (Process)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
+        HashMap<User, Integer> participantCount = new HashMap<User, Integer>();
+        
+        if (p != null) {
+            int page = 1;
+            int processing = 0;
+            int aborted = 0;
+            int closed = 0;
+            int delayed = 0;
+            int ontime = 0;
+            long maxTime = -3;
+            long minTime = Long.MAX_VALUE;
+            long sumTime = 0;
+            int itemsPerPage = getItemsPerPage();
+            
+            Iterator<ProcessInstance> it = SWBComparator.sortByCreated(p.listProcessInstances(), false);
+            while (it.hasNext()) {
+                ProcessInstance pi = it.next();
+                
+                //Conteo de instancias
+                if (pi.getStatus() == ProcessInstance.STATUS_PROCESSING) {
+//                    if (pi.getCreator() != null) {
+//                        if (participantCount.get(pi.getCreator()) == null) {
+//                            participantCount.put(pi.getCreator(), new Integer(1));
+//                        } else {
+//                            participantCount.put(pi.getCreator(), participantCount.get(pi.getCreator())+1);
+//                        }
+//                    }
+//                    if (pi.getAssignedto()!= null) {
+//                        if (participantCount.get(pi.getAssignedto()) == null) {
+//                            participantCount.put(pi.getAssignedto(), new Integer(1));
+//                        } else {
+//                            participantCount.put(pi.getAssignedto(), participantCount.get(pi.getAssignedto())+1);
+//                        }
+//                    }
+                    boolean isDelayed = false;
+                    //Verifica retraso
+                    Iterator<FlowNodeInstance> itfni = pi.listAllFlowNodeInstance();
+                    while (itfni.hasNext() && !isDelayed) {
+                        FlowNodeInstance fni = itfni.next();
+                        if (fni.getFlowNodeType() instanceof UserTask) {
+                            if (fni.getStatus() == FlowNodeInstance.STATUS_PROCESSING) {
+//                                if (fni.getCreator() != null) {
+//                                    if (participantCount.get(fni.getCreator()) == null) {
+//                                        participantCount.put(fni.getCreator(), new Integer(1));
+//                                    } else {
+//                                        participantCount.put(fni.getCreator(), participantCount.get(fni.getCreator())+1);
+//                                    }
+//                                }
+//                                if (fni.getAssignedto()!= null) {
+//                                    if (participantCount.get(fni.getAssignedto()) == null) {
+//                                        participantCount.put(fni.getAssignedto(), new Integer(1));
+//                                    } else {
+//                                        participantCount.put(fni.getAssignedto(), participantCount.get(fni.getAssignedto())+1);
+//                                    }
+//                                }
+                                
+                                UserTask ut = (UserTask) fni.getFlowNodeType();
+                                int delay = ut.getNotificationTime();
+
+                                if (delay > 0) {
+                                    long today = System.currentTimeMillis();
+                                    long cr = fni.getCreated().getTime();
+                                    if (today - cr > (1000*60*delay)) {
+                                        isDelayed = true;
+                                    }
+                                }
+                            }
+                            
+                            if (fni.getStatus() == FlowNodeInstance.STATUS_CLOSED) {
+                                if (fni.getEndedby() != null) {
+                                    if (participantCount.get(fni.getEndedby()) == null) {
+                                        participantCount.put(fni.getEndedby(), new Integer(1));
+                                    } else {
+                                        participantCount.put(fni.getEndedby(), participantCount.get(fni.getEndedby())+1);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    if (isDelayed) {
+                        delayed++;
+                    } else {
+                        ontime++;
+                    }
+                    processing++;
+                }
+                if (pi.getStatus() == ProcessInstance.STATUS_ABORTED) aborted++;
+                if (pi.getStatus() == ProcessInstance.STATUS_CLOSED) {
+                    if (pi.getEndedby() != null) {
+                        if (participantCount.get(pi.getEndedby()) == null) {
+                            participantCount.put(pi.getEndedby(), new Integer(1));
+                        } else {
+                            participantCount.put(pi.getEndedby(), participantCount.get(pi.getEndedby())+1);
+                        }
+                    }
+                    
+                    //Cálculo de tiempos de respuesta generales
+                    long resTime = pi.getEnded().getTime() - pi.getCreated().getTime();
+                    if (resTime > maxTime) {
+                        maxTime = resTime;
+                    }
+                    
+                    if(resTime < minTime) {
+                        minTime = resTime;
+                    }
+                    sumTime += resTime;
+                    closed++;
+                }
+                unpaged.add(pi);
+            }
+            
+            request.setAttribute("processing", processing);
+            request.setAttribute("aborted", aborted);
+            request.setAttribute("closed", closed);
+            request.setAttribute("delayed", delayed);
+            request.setAttribute("ontime", ontime);
+            
+            if (closed > 0) {
+                request.setAttribute("minTime", TimeUnit.MILLISECONDS.toMinutes(minTime));
+                request.setAttribute("maxTime", TimeUnit.MILLISECONDS.toMinutes(maxTime));
+                request.setAttribute("avgTime", TimeUnit.MILLISECONDS.toMinutes(sumTime/closed));
+            } else {
+                request.setAttribute("minTime", 0L);
+                request.setAttribute("maxTime", 0L);
+                request.setAttribute("avgTime", 0L);
+            }
+        
+            //Realizar paginado de instancias
+            int maxPages = 1;
+            if (request.getParameter("p") != null && !request.getParameter("p").trim().equals("")) {
+                page = Integer.valueOf(request.getParameter("p"));
+                if (page < 0) page = 1;
+            }
+
+            if (itemsPerPage < 5) itemsPerPage = 5;
+
+            if (unpaged.size() >= itemsPerPage) {
+                maxPages = (int)Math.ceil((double)unpaged.size() / itemsPerPage);
+            }
+            if (page > maxPages) page = maxPages;
+
+            int sIndex = (page - 1) * itemsPerPage;
+            if (unpaged.size() > itemsPerPage && sIndex > unpaged.size() - 1) {
+                sIndex = unpaged.size() - itemsPerPage;
+            }
+
+            int eIndex = sIndex + itemsPerPage;
+            if (eIndex >= unpaged.size()) eIndex = unpaged.size();
+
+            request.setAttribute("maxPages", maxPages);
+            
+            for (int i = sIndex; i < eIndex; i++) {
+                ProcessInstance instance = unpaged.get(i);
+                instances.add(instance);
+            }
+            
+            Iterator<User> uit = participantCount.keySet().iterator();
+            if (uit.hasNext()) {
+                int max = 0;
+                User theUser = null;
+                
+                try {
+                    JSONObject processInfo = new JSONObject();
+                    processInfo.put("name", p.getTitle());
+                    processInfo.put("size", 10);
+                    processInfo.put("type", "process");
+
+                    JSONArray users = new JSONArray();
+                    while (uit.hasNext()) {
+                        User key = uit.next();
+                        int value = (Integer) participantCount.get(key);
+                        if (value > max) {
+                            max = value;
+                            theUser = key;
+                        }
+                        
+                        JSONObject jsonUser = new JSONObject();
+                        jsonUser.put("name", key.getFullName()==null?"Anónimo":key.getFullName());
+                        jsonUser.put("size", (10 + (value / 70)));
+                        jsonUser.put("participa", value);
+                        users.put(jsonUser);
+                    }
+                    processInfo.put("max", max);
+                    processInfo.put("children", users);
+                    processInfo.put("theUser", theUser.getFullName()==null?"Anónimo":theUser.getFullName());
+                    
+                    request.setAttribute("participation", processInfo.toString());
+                } catch (JSONException ex) {
+                    log.error("UserTaskInboxResource - Error al generar JSON", ex);
+                }
+            }
+        }
+        return instances;
     }
 
     /***

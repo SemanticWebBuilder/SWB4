@@ -9,120 +9,155 @@
     xmlns:cpanel="http://www.semanticwebbuilder.org/process/resources/ControlPanel#"
   xml:base="http://www.semanticwebbuilder.org/process/resources/ControlPanel">
   <owl:Ontology rdf:about="">
-    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
   </owl:Ontology>
+  <owl:Class rdf:ID="ControlPanelResource">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+    <rdfs:label xml:lang="es">Panel de Control</rdfs:label>
+    <rdfs:label xml:lang="en">Control Panel</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
+  </owl:Class>
   <owl:ObjectProperty rdf:ID="displayMapWp">
+    <rdfs:domain rdf:resource="#ControlPanelResource"/>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_displayMapWp">
-        <rdfs:label xml:lang="en">Status map page</rdfs:label>
-        <rdfs:label xml:lang="es">Página de Mapa de estado</rdfs:label>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <rdfs:label xml:lang="es">Página de Mapa de estado</rdfs:label>
+        <rdfs:label xml:lang="en">Status map page</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
-    <rdfs:domain>
-      <swb:SemanticResource rdf:ID="ControlPanelResource">
-        <rdfs:label xml:lang="en">Control Panel</rdfs:label>
-        <rdfs:label xml:lang="es">Panel de Control</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:SemanticResource>
-    </rdfs:domain>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="trackWp">
-    <rdfs:domain rdf:resource="#ControlPanelResource"/>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_trackWp">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
-        <rdfs:label xml:lang="es">Página Web de Seguimiento</rdfs:label>
         <rdfs:label xml:lang="en">Tracking Webpage</rdfs:label>
+        <rdfs:label xml:lang="es">Página Web de Seguimiento</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+    <rdfs:domain rdf:resource="#ControlPanelResource"/>
   </owl:ObjectProperty>
-  <owl:DatatypeProperty rdf:ID="docsJSP">
+  <owl:DatatypeProperty rdf:ID="showPartGraph">
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_docsJSP">
-        <rdfs:label xml:lang="en">Path to docs view JSP</rdfs:label>
-        <rdfs:label xml:lang="es">Ruta al JSP de vista de documentos</rdfs:label>
-      </swbxf:DisplayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_showPartGraph"/>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="en">Show participation graph</rdfs:label>
+    <rdfs:label xml:lang="es">Mostrar gráfica de participación</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#ControlPanelResource"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="sort">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:label xml:lang="es">Ordenar por</rdfs:label>
-    <rdfs:label xml:lang="en">Sort by</rdfs:label>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="statusFilter">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:label xml:lang="en">Allow to filter by status</rdfs:label>
-    <rdfs:label xml:lang="es">Permitir filtrar por estado</rdfs:label>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="configJSP">
+  <owl:DatatypeProperty rdf:ID="docsJSP">
+    <rdfs:domain rdf:resource="#ControlPanelResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_configJSP">
-        <rdfs:label xml:lang="en">Path to config JSP</rdfs:label>
-        <rdfs:label xml:lang="es">Ruta al JSP de configuración</rdfs:label>
+      <swbxf:DisplayProperty rdf:ID="dp_docsJSP">
+        <rdfs:label xml:lang="es">Ruta al JSP de vista de documentos</rdfs:label>
+        <rdfs:label xml:lang="en">Path to docs view JSP</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="sort">
+    <rdfs:label xml:lang="en">Sort by</rdfs:label>
+    <rdfs:label xml:lang="es">Ordenar por</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="statusFilter">
+    <rdfs:label xml:lang="es">Permitir filtrar por estado</rdfs:label>
+    <rdfs:label xml:lang="en">Allow to filter by status</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="configJSP">
+    <rdfs:domain rdf:resource="#ControlPanelResource"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_configJSP">
+        <rdfs:label xml:lang="es">Ruta al JSP de configuración</rdfs:label>
+        <rdfs:label xml:lang="en">Path to config JSP</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="showInstanceGraph">
+    <rdfs:label xml:lang="en">Show instances graph</rdfs:label>
+    <rdfs:label xml:lang="es">Mostrar gráfica de instancias</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_showInstanceGraph"/>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#ControlPanelResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="itemsPerPage">
-    <rdfs:label xml:lang="en">Items per page</rdfs:label>
-    <rdfs:label xml:lang="es">Elementos por página</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:domain rdf:resource="#ControlPanelResource"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_itemsPerPage">
-        <rdfs:label xml:lang="es">Elementos por página</rdfs:label>
         <rdfs:label xml:lang="en">Items per page</rdfs:label>
+        <rdfs:label xml:lang="es">Elementos por página</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:domain rdf:resource="#ControlPanelResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:label xml:lang="es">Elementos por página</rdfs:label>
+    <rdfs:label xml:lang="en">Items per page</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="showStatusGraph">
+    <rdfs:label xml:lang="en">Show status graph</rdfs:label>
+    <rdfs:label xml:lang="es">Mostrar gráfica de estado</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_showStatusGraph"/>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#ControlPanelResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="displayCols">
-    <rdfs:domain rdf:resource="#ControlPanelResource"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:label xml:lang="es">Propiedades de despliegue</rdfs:label>
-    <rdfs:label xml:lang="en">Display Properties</rdfs:label>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Almacena, separados por pipes, los nombres de las propiedades a desplegar como columnas en el panel de monitoreo.</rdfs:comment>
+    <rdfs:label xml:lang="en">Display Properties</rdfs:label>
+    <rdfs:label xml:lang="es">Propiedades de despliegue</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ControlPanelResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="viewJSP">
+    <rdfs:domain rdf:resource="#ControlPanelResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_viewJSP">
-        <rdfs:label xml:lang="en">Path to view JSP</rdfs:label>
         <rdfs:label xml:lang="es">Ruta al JSP de vista</rdfs:label>
+        <rdfs:label xml:lang="en">Path to view JSP</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="showResponseGraph">
+    <rdfs:label xml:lang="en">Show response time graph</rdfs:label>
+    <rdfs:label xml:lang="es">Mostrar gráfica de tiempos de respuesta</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_showResponseGraph"/>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#ControlPanelResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="filterByGroup">
-    <rdfs:domain rdf:resource="#ControlPanelResource"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_filterByGroup">
-        <rdfs:label xml:lang="es">Filtrar por grupo de usuarios</rdfs:label>
         <rdfs:label xml:lang="en">Filter by user group</rdfs:label>
+        <rdfs:label xml:lang="es">Filtrar por grupo de usuarios</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#ControlPanelResource"/>
   </owl:DatatypeProperty>
   <swbxf:DisplayProperty rdf:ID="dp_ItemsPerPage">
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >1</swb:index>
   </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_statusFilter"/>
   <swb:CodePackage rdf:ID="pkg">
-    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >cpanel</swb:prefix>
     <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.process.resources.controlpanel</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >cpanel</swb:prefix>
   </swb:CodePackage>
-  <swbxf:DisplayProperty rdf:ID="dp_statusFilter"/>
 </rdf:RDF>
 
 <!-- Created with TopBraid -->
