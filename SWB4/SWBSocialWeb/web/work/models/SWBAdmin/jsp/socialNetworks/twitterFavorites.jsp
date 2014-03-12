@@ -4,6 +4,9 @@
     Author     : francisco.jimenez
 --%>
 
+<%@page import="org.semanticwb.social.PostIn"%>
+<%@page import="org.semanticwb.model.SWBModel"%>
+<%@page import="org.semanticwb.social.SocialNetwork"%>
 <%@page import="org.semanticwb.model.SWBContext"%>
 <%@page import="org.semanticwb.social.SocialUserExtAttributes"%>
 <%@page import="org.semanticwb.social.SocialUserExtAttributes"%>
@@ -64,9 +67,17 @@
             if(user.isSigned()){
                 socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
             }
+            SocialNetwork socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+            SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
+            String postURI = null;
             for (Status status : twitterBean.getFavorites(paging)){
+                postURI = null;
                 maxTweetID = status.getId();
-                doPrintTweet(request, response, paramRequest, status, twitterBean, out, null, FAVORITES_TAB, null, socialUserExtAttr);
+                PostIn post = PostIn.getPostInbySocialMsgId(model, maxTweetID+"");
+                if(post != null){
+                    postURI = post.getURI();
+                }
+                doPrintTweet(request, response, paramRequest, status, twitterBean, out, null, FAVORITES_TAB, postURI, socialUserExtAttr);
                 i++;
             }
             System.out.println("Total Favorites" + i);
