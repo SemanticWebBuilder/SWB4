@@ -39,6 +39,7 @@ import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.Photo;
 import org.semanticwb.social.Post;
 import org.semanticwb.social.PostIn;
+import org.semanticwb.social.PostOut;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialPFlow;
@@ -160,7 +161,7 @@ public class Timeline extends GenericResource{
             System.out.println("Error doView: " + e.getMessage());
         }*/
         
-        //Start the listener
+        /*//Start the listener
         TwitterStream twitterStream = null;             //The stream
         SocialUserStreamListener tweetsListener = null; //The listener reads tweets from Twitter        
         
@@ -190,22 +191,53 @@ public class Timeline extends GenericResource{
                  ((SocialUserStreamListener)session.getAttribute( objUri + "tweetsListener")).clearFavoritesStatus();
                  ((SocialUserStreamListener)session.getAttribute( objUri + "tweetsListener")).setStartTime( System.currentTimeMillis());
              }
-        }
+        }*/
         String jspResponse = "";
-        tweetsListener = (SocialUserStreamListener)session.getAttribute(objUri +"tweetsListener");
+        //tweetsListener = (SocialUserStreamListener)session.getAttribute(objUri +"tweetsListener");
         
         //Each one of the tabs is loaded once, so when it loads should verify (and clean its own ArrayList)
-        if(contentTabId != null && contentTabId.equals(HOME_TAB)){
-            tweetsListener.clearHomeStatus();
+        if(contentTabId != null && contentTabId.equals(HOME_TAB)){//El listener es sólo iniciado por el tab principal HOME_TAB
+            //Start the listener
+            TwitterStream twitterStream = null;             //The stream
+            SocialUserStreamListener tweetsListener = null; //The listener reads tweets from Twitter        
+
+            //Use the suri and the name of the parameter to identify multiple instances of Twitter Listeners
+            if((session.getAttribute(objUri + "twitterStream") == null && session.getAttribute(objUri + "tweetsListener") == null) ||
+                    !((SocialUserStreamListener)session.getAttribute(objUri +"tweetsListener")).isStreamActive()){ //If no stream found for the current account/session, create one.
+                twitterStream = new TwitterStreamFactory(configureOAuth(semanticTwitter).build()).getInstance();
+                tweetsListener = new SocialUserStreamListener(twitterStream);
+                twitterStream.addListener(tweetsListener);//Listening for statuses, mentions, favorites, DMsgs
+
+                try{
+                    tweetsListener.setCurrentUser(twitter.getId());
+                }catch(TwitterException te){
+                    log.error("Error asigning twitter user: " + te.getErrorMessage());
+                }
+
+                twitterStream.user();//This method internally starts a thread
+                session.setAttribute(objUri + "tweetsListener", tweetsListener);
+                session.setAttribute(objUri + "twitterStream", twitterStream);
+                System.out.println("Listener started!");
+            }else{
+                 System.out.println("Do not Start a new listener we already have one!!");
+                 if(session.getAttribute(objUri + "tweetsListener") != null){//If the tab is refreshed, clean all 'new' statuses in ArrayList
+                     ((SocialUserStreamListener)session.getAttribute( objUri + "tweetsListener")).clearHomeStatus();
+                     ((SocialUserStreamListener)session.getAttribute( objUri + "tweetsListener")).clearMentionsStatus();
+                     ((SocialUserStreamListener)session.getAttribute( objUri + "tweetsListener")).clearDirectMStatus();
+                     ((SocialUserStreamListener)session.getAttribute( objUri + "tweetsListener")).clearFavoritesStatus();
+                     ((SocialUserStreamListener)session.getAttribute( objUri + "tweetsListener")).setStartTime( System.currentTimeMillis());
+                 }
+            }
+            //tweetsListener.clearHomeStatus();
             jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/timeline.jsp";
         }else if(contentTabId != null && contentTabId.equals(MENTIONS_TAB)){
-            tweetsListener.clearMentionsStatus();
+            //tweetsListener.clearMentionsStatus();
             jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/twitterMentions.jsp";
         }else if(contentTabId != null && contentTabId.equals(FAVORITES_TAB)){
-            tweetsListener.clearFavoritesStatus();
+            //tweetsListener.clearFavoritesStatus();
             jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/twitterFavorites.jsp";
         }else if(contentTabId != null && contentTabId.equals(DIRECT_MESSAGES_TAB)){
-            tweetsListener.clearDirectMStatus();
+            //tweetsListener.clearDirectMStatus();
             jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/twitterDM.jsp";
         }else if(contentTabId != null && contentTabId.equals(DISCOVER_TAB)){
             jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/twitterDiscover.jsp";
@@ -817,11 +849,19 @@ public class Timeline extends GenericResource{
                     if(user.isSigned()){
                         socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
                     }
-                    
-                    for(i = tweetsListener.getHomeStatusSize() - 1 ; i >= 0 ; i-- ){//Most recent status first
+                    //Probablemente es innecesario dado que al ser mensajes nuevos, no han sido clasificados.
+                    SocialNetwork  socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+                    SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
+                    String postURI = null;
+                    for(i = tweetsListener.getHomeStatusSize() - 1 ; i >= 0 ; i-- ){//Most recent status first                        
                          try{
+                            postURI = null;
+                            PostIn post = PostIn.getPostInbySocialMsgId(model, tweetsListener.getHomeStatus(i).getId()+"");
+                            if(post != null){
+                                postURI = post.getURI();
+                            }                                                               
                              //--doPrintTweet(request, response, paramRequest, tweetsListener.getHomeStatus(i), twitter, response.getWriter(), recoverConversations(tweetsListener.getHomeStatus(i).getId(), twitter));
-                             doPrintTweet(request, response, paramRequest, tweetsListener.getHomeStatus(i), twitter, out, null,HOME_TAB, null, socialUserExtAttr);
+                             doPrintTweet(request, response, paramRequest, tweetsListener.getHomeStatus(i), twitter, out, null,HOME_TAB, postURI, socialUserExtAttr);
                          }catch(Exception te){
                             log.error("Error when printing tweet:" , te);
                          }
@@ -846,11 +886,19 @@ public class Timeline extends GenericResource{
                    if(user.isSigned()){
                        socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
                    }
+                   SocialNetwork  socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+                   SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
+                   String postURI = null;
                    
                    for(i = tweetsListener.getFavoritesSize() - 1 ; i >= 0 ; i-- ){//Most recent status first
                        try{
+                           postURI = null;
+                           PostIn post = PostIn.getPostInbySocialMsgId(model, tweetsListener.getFavoritesStatus(i).getId()+"");
+                           if(post != null){
+                               postURI = post.getURI();
+                           }
                            //--doPrintTweet(request, response, paramRequest, tweetsListener.getFavoritesStatus(i), twitter, response.getWriter(), recoverConversations(tweetsListener.getFavoritesStatus(i).getId(), twitter));
-                           doPrintTweet(request, response, paramRequest, tweetsListener.getFavoritesStatus(i), twitter, response.getWriter(), null, FAVORITES_TAB, null, socialUserExtAttr);
+                           doPrintTweet(request, response, paramRequest, tweetsListener.getFavoritesStatus(i), twitter, response.getWriter(), null, FAVORITES_TAB, postURI, socialUserExtAttr);
                        }catch(Exception te){
                            log.error("Error when printing favorite:" , te);
                        }
@@ -875,10 +923,18 @@ public class Timeline extends GenericResource{
                        socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
                    }
                    
+                   SocialNetwork  socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+                   SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
+                   String postURI = null; //When the post has already been saved like a postIn or a postOut
                    for(i = tweetsListener.getMentionsSize() - 1 ; i >= 0 ; i-- ){//Most recent status first
                        try{
+                           postURI = null;
+                           PostIn post = PostIn.getPostInbySocialMsgId(model, tweetsListener.getMentionsStatus(i).getId()+"");
+                           if(post != null){
+                               postURI = post.getURI();
+                           }
                            //--doPrintTweet(request, response, paramRequest, tweetsListener.getMentionsStatus(i), twitter, response.getWriter(), recoverConversations(tweetsListener.getMentionsStatus(i).getId(), twitter));
-                           doPrintTweet(request, response, paramRequest, tweetsListener.getMentionsStatus(i), twitter, response.getWriter(), null,MENTIONS_TAB, null, socialUserExtAttr);
+                           doPrintTweet(request, response, paramRequest, tweetsListener.getMentionsStatus(i), twitter, response.getWriter(), null,MENTIONS_TAB, postURI, socialUserExtAttr);
                        }catch(Exception te){
                            log.error("Error when printing tweet:" , te);
                        }
@@ -1202,10 +1258,19 @@ public class Timeline extends GenericResource{
             if(user.isSigned()){
                 socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
             }
+            SocialNetwork  socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+            SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
+            String postURI = null;
             for (Status status : twitter.getHomeTimeline(paging)) {
                 maxTweetID = status.getId();
+                postURI = null;
+                PostIn post = PostIn.getPostInbySocialMsgId(model, maxTweetID+"");
+                if(post != null){
+                    postURI = post.getURI();
+                }                                
+
                 //--doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),recoverConversations(maxTweetID, twitter));
-                doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),null, HOME_TAB, null, socialUserExtAttr);
+                doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),null, HOME_TAB, postURI, socialUserExtAttr);
                 i++;
             }
 
@@ -1253,10 +1318,19 @@ public class Timeline extends GenericResource{
             if(user.isSigned()){
                 socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
             }
+            SocialNetwork  socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+            SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
+            String postURI = null;
             for (Status status : twitter.getMentionsTimeline(paging)) {
                 maxTweetID = status.getId();
+                postURI = null;
+                PostIn post = PostIn.getPostInbySocialMsgId(model, maxTweetID+"");
+                if(post != null){
+                    postURI = post.getURI();
+                }
+
                 //--doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),recoverConversations(maxTweetID, twitter));
-                doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),null,MENTIONS_TAB, null, socialUserExtAttr);
+                doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),null,MENTIONS_TAB, postURI, socialUserExtAttr);
                 i++;
             }
 
@@ -1303,10 +1377,18 @@ public class Timeline extends GenericResource{
             if(user.isSigned()){
                 socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
             }
+            SocialNetwork  socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+            SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
+            String postURI = null;
             for (Status status : twitter.getFavorites(paging)) {
                 maxTweetID = status.getId();
+                postURI = null;
+                PostIn post = PostIn.getPostInbySocialMsgId(model, maxTweetID+"");
+                if(post != null){
+                    postURI = post.getURI();
+                }
                 //--doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),recoverConversations(maxTweetID, twitter));
-                doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(), null, FAVORITES_TAB, null, socialUserExtAttr);
+                doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(), null, FAVORITES_TAB, postURI, socialUserExtAttr);
                 i++;
             }
             out.println("<div align=\"center\">");
