@@ -212,6 +212,10 @@ public class SocialUserStreamListener implements UserStreamListener {
     public void setCurrentUser(long currentUser){
         this.currentUser = currentUser;
     }
+    
+    public long getCurrentUser(){
+        return this.currentUser;
+    }
 
     public boolean isProcessing() {
         return processing;
