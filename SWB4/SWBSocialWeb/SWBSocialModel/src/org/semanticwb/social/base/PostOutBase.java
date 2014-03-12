@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales. Esta clase no se relaciona con una red social (con la clase SocialNetwork) porque un post de salida (desde la herramienta) podría ser enviado a diferentes redes sociales, sin embargo, es el mismo post de salida. Donde esta a que red social se envía esta en las instancias de la clase PostContainer. 
    */
-public abstract class PostOutBase extends org.semanticwb.social.Post implements org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.Tagable,org.semanticwb.model.CalendarRefable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable
+public abstract class PostOutBase extends org.semanticwb.social.Post implements org.semanticwb.model.Referensable,org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable,org.semanticwb.model.Tagable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Traceable
 {
    /**
    * Propiedad que indica si el postOut esta cerrado para el monitoreo de respuestas o no lo esta. Podría haber utilizado solo la fecha de creación de decir que los que tengan una fecha de mas de una mes que se crearon, no se monitorean mas, pero esto tendría un performance mas deficiente que al tener esta propiedad (isClosedforResponses), que se coloca en true cuando pasa mas de un mes y despues solo busco sobre esta con un listSubjects, el cual es muy rapido al buscar sobre indices.

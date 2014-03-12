@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Acción específica mediante la cual se envía un mensaje por defecto a una o varias redes sociales seleccionadas 
    */
-public abstract class SendPostBase extends org.semanticwb.social.ActionMsg implements org.semanticwb.model.Traceable,org.semanticwb.social.PostImageable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.social.PostVideoable,org.semanticwb.social.PostDataable,org.semanticwb.social.SocialNetworkable,org.semanticwb.social.PostTextable
+public abstract class SendPostBase extends org.semanticwb.social.ActionMsg implements org.semanticwb.social.PostVideoable,org.semanticwb.social.PostDataable,org.semanticwb.social.SocialNetworkable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.PostTextable,org.semanticwb.social.PostImageable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode
 {
    /**
    * Acción específica mediante la cual se envía un mensaje por defecto a una o varias redes sociales seleccionadas
