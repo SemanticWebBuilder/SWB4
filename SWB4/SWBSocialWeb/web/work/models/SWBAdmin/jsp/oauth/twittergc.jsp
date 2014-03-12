@@ -34,6 +34,7 @@
         <input type="hidden" name="twitterGCid" value="<%=twitterGC.getId()%>">    
     <%}%>
     <div id="socialNetCF">
+        <p>Proporcione la siguiente informaci&oacute;n</p>
         <label for="appKey"><span>&nbsp;</span>Llave de aplicaci&oacute;n:</label>
         <input type="textbox" name="appKey" value="<%=appKey!=null?appKey:""%>"/> 
         <br/> 
