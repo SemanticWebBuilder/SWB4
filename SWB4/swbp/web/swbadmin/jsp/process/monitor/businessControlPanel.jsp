@@ -27,6 +27,7 @@
     Created on : 5/07/2011, 04:14:49 PM
     Author     : Hasdai Pacheco {ebenezer.sanchez@infotec.com.mx}
 --%>
+<%@page import="org.semanticwb.process.resources.controlpanel.ControlPanelResource"%>
 <%@page import="org.semanticwb.process.model.IntermediateCatchEvent"%>
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
@@ -121,7 +122,8 @@
 <%
 SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramRequest");
 WebPage statusWp = (WebPage)request.getAttribute("statusWp");
-WebPage detailWp = (WebPage)request.getAttribute("trackWp");
+//WebPage detailWp = (WebPage)request.getAttribute("trackWp");
+SWBResourceURL detailURL = paramRequest.getRenderUrl().setMode(ControlPanelResource.MODE_DETAIL);
 User user = paramRequest.getUser();
 WebSite site = paramRequest.getWebPage().getWebSite();
 String sortType = request.getParameter("sort");
@@ -416,11 +418,9 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                         <a href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessInstance().getEncodedURI()%>" class="btn btn-default" title="<%=paramRequest.getLocaleString("actMap")%>"><span class="fa fa-sitemap fa-rotate-270"></span></a>
                                     <%
                                     }
-                                    if (detailWp != null) {
                                     %>
-                                        <a href="<%=detailWp.getUrl()%>?pid=<%=instance.getProcessType().getId()%>" class="btn btn-default" title="<%=paramRequest.getLocaleString("actDetail")%>"><span class="fa fa-bar-chart-o"></span></a>
+                                        <a href="<%=detailURL.setParameter("suri", instance.getProcessType().getURI())%>" class="btn btn-default" title="<%=paramRequest.getLocaleString("actDetail")%>"><span class="fa fa-bar-chart-o"></span></a>
                                     <%
-                                    }
                                     Role processAdmRole = instance.getProcessType().getAdministrationRole();
                                     if (processAdmRole != null && user.hasRole(processAdmRole)) {
                                         SWBResourceURL delUrl = paramRequest.getActionUrl().setAction(paramRequest.Action_REMOVE);
