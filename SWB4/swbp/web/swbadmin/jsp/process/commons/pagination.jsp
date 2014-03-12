@@ -1,11 +1,22 @@
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%><%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-String pNum = request.getParameter("p");
 
+//Get page param, defaults to "p"
+String pageParam = request.getParameter("pageParam");
+if (pageParam == null || pageParam.length() == 0) pageParam = "p";
+
+//Get maxPages, by default it is taken from request attributes
+String maxPParam = request.getParameter("maxPages");
+if (maxPParam == null || maxPParam.length() == 0) maxPParam = (String) request.getAttribute("maxPages");
+
+//Get show page count config
+boolean showPageOfPage = request.getParameter("showPageOfPage")!= null ? true : false;
+
+String pNum = request.getParameter(pageParam);
 int pageNum = 1;
 int maxPages = 1;
-if (request.getAttribute("maxPages") != null) maxPages = (Integer) request.getAttribute("maxPages");
+if (maxPParam != null) maxPages = (Integer) request.getAttribute("maxPages");
 
 if (pNum != null && !pNum.trim().equals("")) {
     pageNum = Integer.valueOf(pNum);
@@ -13,8 +24,6 @@ if (pNum != null && !pNum.trim().equals("")) {
         pageNum = maxPages;
     }
 }
-
-boolean showPageOfPage = request.getParameter("showPageOfPage")!= null ? true : false;
 
 SWBResourceURL nav = paramRequest.getRenderUrl();
 
@@ -71,19 +80,19 @@ if (navParams != null && navParams.length > 0) {
                 }
 
                 if (sliceIdx != 1) {
-                    nav.setParameter("p", String.valueOf(pageNum-1));
+                    nav.setParameter(pageParam, String.valueOf(pageNum-1));
                     %><li><a href="<%=nav%>">&laquo;</a></li><%
                 }
 
                 for(int k = start; k <= end; k++) {
-                    nav.setParameter("p", String.valueOf(k));
+                    nav.setParameter(pageParam, String.valueOf(k));
                     %>
                     <li <%=(k==pageNum?"class=\"active\"":"")%>><a href="<%=nav%>"><%=k%></a></li>
                     <%
                 }
 
                 if (end < maxPages) {
-                    nav.setParameter("p", String.valueOf(pageNum+1));
+                    nav.setParameter(pageParam, String.valueOf(pageNum+1));
                     %><li><a href="<%=nav%>">&raquo;</a></li><%
                 }
                 %>
