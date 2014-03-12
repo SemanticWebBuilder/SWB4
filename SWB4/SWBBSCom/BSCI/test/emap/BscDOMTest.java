@@ -154,7 +154,7 @@ public class BscDOMTest {
         Element header = documentBSC.createElement("header");
         header.setAttribute("id", HEADER_PREFIX+"DADT");
         header.setAttribute("width", Integer.toString(width));
-        header.setAttribute("height", Integer.toString(HEADER));
+        header.setAttribute("height", Integer.toString(HEADER_HEIGHT));
         header.setAttribute("x", "0");
         header.setAttribute("y", "0");
         String expression = "/bsc/title";
@@ -187,7 +187,7 @@ public class BscDOMTest {
         NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
         perspCount = nodeList.getLength();
         pw = width-MARGEN_LEFT-MARGEN_RIGHT;
-        ph = (height-HEADER)/perspCount -  MARGEN_TOP - MARGEN_BOTTOM;
+        ph = (height-HEADER_HEIGHT)/perspCount -  MARGEN_TOP - MARGEN_BOTTOM;
         px = MARGEN_LEFT;
         //py = MARGEN_TOP;
         //lista de perspectivas
@@ -200,7 +200,7 @@ public class BscDOMTest {
                 Element p = (Element)nodep;
                 uri = p.getAttribute("id");
                 //py = j*(ph+MARGEN_BOTTOM+MARGEN_TOP);
-                py = MARGEN_TOP +HEADER+ j*(ph+MARGEN_BOTTOM+MARGEN_TOP);
+                py = MARGEN_TOP +HEADER_HEIGHT+ j*(ph+MARGEN_BOTTOM+MARGEN_TOP);
 System.out.println("py="+py);                
                 //diferenciadores de la perspectiva
                 expression = "/bsc/perspective[@id='"+uri+"']/diffgroup[1]/diff";
@@ -224,7 +224,7 @@ System.out.println("py="+py);
                 //perspectiva
                 p.setAttribute("width", Integer.toString(pw));
                 if(hasDifferentiators) {
-                    h_ = ph - DIFF_TITLE - BOX_SPACING;
+                    h_ = ph - HEADER_4 - BOX_SPACING;
                 }
                 p.setAttribute("height",Integer.toString(h_));
                 p.setAttribute("x", Integer.toString(px));
@@ -240,9 +240,9 @@ System.out.println("py="+py);
                     final int tw = pw/nlThmsCount;
                     int tx;                    
                     if(hasDifferentiators) {
-                        py = py + DIFF_TITLE + BOX_SPACING;
+                        py = py + HEADER_4 + BOX_SPACING;
                     }
-                    int ty = py + BIND_TOP_SPACING;
+                    int ty = py + PADNG_TOP_SPACING;
                     
                     for(int k=0; k<nlThmsCount; k++)
                     {
@@ -269,23 +269,23 @@ System.out.println("py="+py);
                                     t.setAttribute("height","0");
                                 }else {
                                     //hObj = h_/(nlObjsCount+1);
-                                    hObj = (h_-THEME_TITLE)/nlObjsCount;
+                                    hObj = (h_-HEADER_3)/nlObjsCount;
                                     //t.setAttribute("height",Integer.toString(hObj));
-                                    t.setAttribute("height", Integer.toString(THEME_TITLE));
+                                    t.setAttribute("height", Integer.toString(HEADER_3));
                                 }
                                 for(int l=0; l<nlObjsCount; l++)
                                 {
                                     Node nodeo = nlObjs.item(l);
                                     int ox = tx;
-                                    int oy = hiddenTheme ? 0 : THEME_TITLE;
+                                    int oy = hiddenTheme ? 0 : HEADER_3;
                                     if(nodeo.getNodeType()==Node.ELEMENT_NODE) {
                                         Element o = (Element)nodeo;
                                         uri = o.getAttribute("id");                                
-                                        o.setAttribute("width", Integer.toString(tw-BIND_RIGHT_SPACING));
-                                        o.setAttribute("height", Integer.toString(hObj-BIND_TOP_SPACING));
+                                        o.setAttribute("width", Integer.toString(tw-PADNG_RIGHT_SPACING));
+                                        o.setAttribute("height", Integer.toString(hObj-PADNG_TOP_SPACING));
                                         o.setAttribute("x", Integer.toString(ox));  
-                                        oy += ty + l*hObj + BIND_TOP_SPACING;
-System.out.println("obj:"+uri+"; oy="+oy+"; hObj="+(hObj-BIND_TOP_SPACING));
+                                        oy += ty + l*hObj + PADNG_TOP_SPACING;
+System.out.println("obj:"+uri+"; oy="+oy+"; hObj="+(hObj-PADNG_TOP_SPACING));
                                         o.setAttribute("y", Integer.toString(oy));
                                         o.setAttribute("href",  urlBase+uri);
 
@@ -380,54 +380,54 @@ if(node!=null && node instanceof Element) {
     SVGjs.append(" svg.appendChild(g);").append("\n");
     
     x_ = x;
-    y_ = y + HEADER_TITLE;
-    int $y = y_;
+    //y_ = y + HEADER_1;
+    y_ = y + topPadding(HEADER_1);
     w_ = w;
     
     // título mapa
     expression = "/bsc/header/title";
     txt = (String) xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
-    SVGjs.append(" txt = createText('"+txt+"','"+id+"_title"+"','"+x_+"','"+$y+"','22','Verdana');").append("\n");
+    SVGjs.append(" txt = createText('"+txt+"','"+id+"_title"+"',"+x_+","+y_+","+HEADER_1+",'Verdana');").append("\n");
     SVGjs.append(" g.appendChild(txt);").append("\n");
-    SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_TITLE+","+x_+","+y+");").append("\n");
+    SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_1+","+x_+","+y+");").append("\n");
     SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-    SVGjs.append(" framingRect(rect,"+w_+","+HEADER_TITLE+","+x_+","+y_+");").append("\n");
+    SVGjs.append(" framingRect(rect,"+w_+","+vPadding(HEADER_1)+","+x_+","+vPadding(HEADER_1)+","+HEADER_1+");").append("\n");
     SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
     
-    y_ = y_ + HEADER_TITLE;
+    y_ = y_ + HEADER_2;
     w_ = w/3;
     // pleca Mision
     SVGjs.append(" txt = createText('Mision','"+id+"_pms"+"',"+x_+","+y_+",18,'Verdana');").append("\n");
     SVGjs.append(" g.appendChild(txt);").append("\n");
-    SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_TITLE+","+x_+","+y_+");").append("\n");
+    SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_2+","+x_+","+y_+");").append("\n");
     SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-    SVGjs.append(" framingRect(rect,"+w_+","+HEADER_TITLE+","+x_+","+y_+");").append("\n");
+    SVGjs.append(" framingRect(rect,"+w_+","+HEADER_2+","+x_+","+y_+","+HEADER_2+");").append("\n");
     SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
     // pleca Vision
     SVGjs.append(" txt = createText('Vision','"+id+"_pvs"+"',"+(x_+2*w_)+","+y_+",18,'Verdana');").append("\n");
     SVGjs.append(" g.appendChild(txt);").append("\n");
-    SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_TITLE+","+(x_+2*w_)+","+y_+");").append("\n");
+    SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_2+","+(x_+2*w_)+","+y_+");").append("\n");
     SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-    SVGjs.append(" framingRect(rect,"+w_+","+HEADER_TITLE+","+(x_+2*w_)+","+y_+");").append("\n");
+    SVGjs.append(" framingRect(rect,"+w_+","+HEADER_2+","+(x_+2*w_)+","+y_+","+HEADER_2+");").append("\n");
     SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
     // logo
     expression = "/bsc/header/logo";
     node = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);
     if(node!=null && node.getNodeType()==Node.ELEMENT_NODE) {
-        SVGjs.append(" rect = createRect('"+id+"_lg"+"','"+w_+"','"+(h-HEADER_TITLE)+"','"+(x_+w_)+"','"+(y_-HEADER_TITLE)+"',0,0,'none',1,'red','1',1);").append("\n");
+        SVGjs.append(" rect = createRect('"+id+"_lg"+"','"+w_+"','"+(h-HEADER_2)+"','"+(x_+w_)+"','"+(y_-HEADER_2)+"',0,0,'none',1,'red','1',1);").append("\n");
         SVGjs.append(" g.appendChild(rect);").append("\n");
     }
 
     // contenido Mision
-    y_ += HEADER_TITLE;
-    h_ = h - 2*HEADER_TITLE;    
+    y_ += HEADER_2;
+    h_ = h - 2*HEADER_2;    
     expression = "/bsc/header/mission";
     txt = (String) xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
     SVGjs.append(" txt = createText('"+txt+"','"+id+"_ms"+"',"+x_+","+y_+",14,'Verdana');").append("\n");
     SVGjs.append(" g.appendChild(txt);").append("\n");
     SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+h_+","+x_+","+y_+");").append("\n");
     SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-    SVGjs.append(" framingRect(rect,"+w_+","+h_+","+x_+","+y_+");").append("\n");
+    SVGjs.append(" framingRect(rect,"+w_+","+h_+","+x_+","+y_+","+HEADER_2+");").append("\n");
     SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
     // contenido Vision
     expression = "/bsc/header/vision";
@@ -436,7 +436,7 @@ if(node!=null && node instanceof Element) {
     SVGjs.append(" g.appendChild(txt);").append("\n");
     SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+h_+","+(x_+2*w_)+","+y_+");").append("\n");
     SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-    SVGjs.append(" framingRect(rect,"+w_+","+h_+","+(x_+2*w_)+","+y_+");").append("\n");
+    SVGjs.append(" framingRect(rect,"+w_+","+h_+","+(x_+2*w_)+","+y_+","+HEADER_2+");").append("\n");
     SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
 }
 
@@ -496,7 +496,7 @@ SVGjs.append(" txt = createText('"+nodeD.getFirstChild().getNodeValue()+"','"+di
 SVGjs.append(" g.appendChild(txt);").append("\n");
 SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+h_+","+x_+","+y_+");").append("\n");
 SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-SVGjs.append(" framingRect(rect,"+w_+","+h_+","+x_+","+y_+");").append("\n");
+SVGjs.append(" framingRect(rect,"+w_+","+h_+","+x_+","+y_+","+14+");").append("\n");
 SVGjs.append(" g.insertBefore(rect,txt);").append("\n");                
             }
         }
@@ -520,7 +520,7 @@ SVGjs.append(" txt = createText('"+title+"','"+tid+"','"+x_+"','"+y_+"','18','Ve
 SVGjs.append(" g.appendChild(txt);").append("\n");
 SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+h_+","+x_+","+y_+");").append("\n");
 SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-SVGjs.append(" framingRect(rect,"+w_+","+h_+","+x_+","+y_+");").append("\n");
+SVGjs.append(" framingRect(rect,"+w_+","+h_+","+x_+","+y_+","+18+");").append("\n");
 SVGjs.append(" g.insertBefore(rect,txt);").append("\n"); 
                 
                 
@@ -557,7 +557,7 @@ SVGjs.append(" txt = createText('"+info+"','"+oid+"',"+x_+","+y_+",14,'Verdana')
 SVGjs.append(" lnk.appendChild(txt);").append("\n");
 SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+h_+","+x_+","+y_+");").append("\n");
 SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-SVGjs.append(" framingRect(rect,"+w_+","+h_+","+x_+","+y_+");").append("\n");
+SVGjs.append(" framingRect(rect,"+w_+","+h_+","+x_+","+y_+","+14+");").append("\n");
 SVGjs.append(" g.insertBefore(rect,lnk);").append("\n");
 
                         //relaciones causa-efecto
@@ -755,5 +755,17 @@ SVGjs.append(" }").append("\n");
             val = 0;
         }
         return val;
+    }
+    
+    private int vPadding(int value) {
+        return value+PADNG_TOP_SPACING+PADNG_DOWN_SPACING;
+    }
+    
+    private int topPadding(int value) {
+        return value+PADNG_TOP_SPACING;
+    }
+    
+    private int hPadding(int value) {
+        return value+PADNG_LEFT_SPACING+PADNG_RIGHT_SPACING;
     }
 }
