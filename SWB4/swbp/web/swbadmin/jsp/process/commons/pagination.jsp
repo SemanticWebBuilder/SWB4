@@ -8,7 +8,6 @@ if (pageParam == null || pageParam.length() == 0) pageParam = "p";
 
 //Get maxPages, by default it is taken from request attributes
 String maxPParam = request.getParameter("maxPages");
-if (maxPParam == null || maxPParam.length() == 0) maxPParam = (String) request.getAttribute("maxPages");
 
 //Get show page count config
 boolean showPageOfPage = request.getParameter("showPageOfPage")!= null ? true : false;
@@ -16,7 +15,7 @@ boolean showPageOfPage = request.getParameter("showPageOfPage")!= null ? true : 
 String pNum = request.getParameter(pageParam);
 int pageNum = 1;
 int maxPages = 1;
-if (maxPParam != null) maxPages = (Integer) request.getAttribute("maxPages");
+if (maxPParam == null|| maxPParam.length() == 0) maxPages = (Integer) request.getAttribute("maxPages");
 
 if (pNum != null && !pNum.trim().equals("")) {
     pageNum = Integer.valueOf(pNum);
