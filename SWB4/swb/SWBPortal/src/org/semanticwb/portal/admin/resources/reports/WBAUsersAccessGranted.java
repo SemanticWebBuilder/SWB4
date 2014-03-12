@@ -186,6 +186,7 @@ public class WBAUsersAccessGranted extends GenericResource {
                 out.println("  dojo.addOnLoad(function() {");
                 out.println("    layout= [");
                 out.println("      { field:\"rep\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblRepository") + "\" },");
+                out.println("      { field:\"sec\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblSection") + "\" },");
                 out.println("      { field:\"login\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblUserName") + "\" },");
                 out.println("      { field:\"ln\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblLastName") + "\" },");
                 out.println("      { field:\"sln\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblSecondLastName") + "\" },");
@@ -248,11 +249,12 @@ public class WBAUsersAccessGranted extends GenericResource {
                 
                 out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
-                out.println("Reporte de accesos");
+                out.println(paramsRequest.getLocaleString("daily_report"));
                 out.println("</fieldset>");
 
                 out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\""+address+"\">");
                 out.println("<fieldset>");
+                out.println("<legend>" + paramsRequest.getLocaleString("lblFilter") + "</legend>");
                 out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
                 out.println("<tr><td width=\"183\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"443\"></td></tr>");
                 
@@ -274,7 +276,7 @@ public class WBAUsersAccessGranted extends GenericResource {
                 out.println("</tr>");
 
                 out.println("<tr>");
-                out.println("<td>" + paramsRequest.getLocaleString("lblPage") + ":</td>");                
+                out.println("<td>" + paramsRequest.getLocaleString("lblSection") + ":</td>");                
                 out.println("<td colspan=\"3\"><div id=\"slave\"></div></td>");
                 out.println("</tr>");
                 out.println("</table></fieldset>");
@@ -362,6 +364,7 @@ public class WBAUsersAccessGranted extends GenericResource {
                 obj = new JSONObject();
                 try {
                     obj.put("rep", usrepId);
+                    obj.put("sec", wpId);
                     obj.put("login", user.getLogin());
                     obj.put("ln", user.getLastName()==null?"-":user.getLastName());
                     obj.put("sln", user.getSecondLastName()==null?"-":user.getSecondLastName());
@@ -422,6 +425,9 @@ public class WBAUsersAccessGranted extends GenericResource {
         out.println(paramsRequest.getLocaleString("lblRepository"));
         out.println("</th>");
         out.println("<th>");
+        out.println(paramsRequest.getLocaleString("lblSection"));
+        out.println("</th>");
+        out.println("<th>");
         out.println(paramsRequest.getLocaleString("lblUserName"));
         out.println("</th>");
         out.println("<th>");
@@ -448,6 +454,9 @@ public class WBAUsersAccessGranted extends GenericResource {
                     out.println("<tr>");
                     out.println("<td>");
                     out.println(usrepId);
+                    out.println("</td>");
+                    out.println("<td>");
+                    out.println(wpId);
                     out.println("</td>");
                     out.println("<td>");
                     out.println(user.getLogin());
@@ -516,6 +525,7 @@ public class WBAUsersAccessGranted extends GenericResource {
                 obj = new JSONObject();
                 try {
                     obj.put("rep", usrepId);
+                    obj.put("sec", wpId);
                     obj.put("login", user.getLogin());
                     obj.put("ln", user.getLastName()==null?"-":user.getLastName());
                     obj.put("sln", user.getSecondLastName()==null?"-":user.getSecondLastName());

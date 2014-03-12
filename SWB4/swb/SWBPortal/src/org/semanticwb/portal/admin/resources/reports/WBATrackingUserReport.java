@@ -202,7 +202,7 @@ public class WBATrackingUserReport extends GenericResource {
             out.println("    layout= [");                
             //out.println("      { field:\"uri\", width:\"100px\", name:\"Uri\" },");
             out.println("      { field:\"site\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblSite") + "\" },");
-            out.println("      { field:\"sect\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblPage") + "\" },");
+            out.println("      { field:\"sect\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblSection") + "\" },");
             out.println("      { field:\"id\", width:\"100px\", name:\"" + paramsRequest.getLocaleString("lblId") + "\" },");
             out.println("      { field:\"url\", width:\"150px\", name:\"" + paramsRequest.getLocaleString("lblUrl") + "\" },");
             out.println("      { field:\"dev\", width:\"50px\", name:\"" + paramsRequest.getLocaleString("lblDevice") + "\" },");
@@ -271,6 +271,7 @@ public class WBATrackingUserReport extends GenericResource {
 
             out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");
             out.println("<fieldset>");
+            out.println("<legend>" + paramsRequest.getLocaleString("lblFilter") + "</legend>");
             out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
             out.println("<tr><td width=\"183\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"443\"></td></tr>");
 
@@ -724,7 +725,7 @@ out.println("</tr>");
         out.println(paramsRequest.getLocaleString("lblSite"));
         out.println("</th>");
         out.println("<th>");
-        out.println(paramsRequest.getLocaleString("lblPage"));
+        out.println(paramsRequest.getLocaleString("lblSection"));
         out.println("</th>");
         out.println("<th>");
         out.println(paramsRequest.getLocaleString("lblId"));

@@ -292,6 +292,7 @@ public class WBATrackingPageReport extends GenericResource {
 
                 out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\""+address+"\">");
                 out.println("<fieldset>");
+                out.println("<legend>" + paramsRequest.getLocaleString("lblFilter") + "</legend>");
                 out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
                 out.println("<tr><td width=\"183\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"443\"></td></tr>");
                 
@@ -313,7 +314,7 @@ public class WBATrackingPageReport extends GenericResource {
                 out.println("</tr>");
 
                 out.println("<tr>");
-                out.println("<td>" + paramsRequest.getLocaleString("lblPage") + ":</td>");                
+                out.println("<td>" + paramsRequest.getLocaleString("lblSection") + ":</td>");                
                 out.println("<td colspan=\"3\"><div id=\"slave\"></div></td>");
                 out.println("</tr>");
                 
