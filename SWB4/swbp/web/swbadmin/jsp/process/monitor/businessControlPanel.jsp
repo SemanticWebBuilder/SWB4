@@ -413,7 +413,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
 
                                     if (statusWp != null) {
                                     %>
-                                        <a href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessInstance().getEncodedURI()%>" class="btn btn-default" title="<%=paramRequest.getLocaleString("actMap")%>"><span class="fa fa-cogs"></span></a>
+                                        <a href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessInstance().getEncodedURI()%>" class="btn btn-default" title="<%=paramRequest.getLocaleString("actMap")%>"><span class="fa fa-sitemap fa-rotate-270"></span></a>
                                     <%
                                     }
                                     if (detailWp != null) {
