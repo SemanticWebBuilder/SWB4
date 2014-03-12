@@ -10,7 +10,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-Resource base = (Resource) request.getAttribute("base");
+Resource base = paramRequest.getResourceBase();
 String processInfo = (String)request.getAttribute("participation");
 
 int aborted = (Integer)request.getAttribute("aborted");
@@ -25,28 +25,28 @@ long avgTime = (Long)request.getAttribute("avgTime");
 int ontime = (Integer)request.getAttribute("ontime");
 int delayed = (Integer)request.getAttribute("delayed");
 
-boolean showInstances = base.getAttribute(UserTaskInboxResource.ATT_INSTANCEGRAPH,"").equals("use");
+boolean showInstances = "use".equals(base.getAttribute(UserTaskInboxResource.ATT_INSTANCEGRAPH));
 if (showInstances) {
     if (processing == 0 && closed == 0 && aborted == 0) {
         showInstances = false;
     }
 }
 
-boolean showResponse = base.getAttribute(UserTaskInboxResource.ATT_RESPONSEGRAPH,"").equals("use");
+boolean showResponse = "use".equals(base.getAttribute(UserTaskInboxResource.ATT_RESPONSEGRAPH));
 if (showResponse) {
     if (minTime == 0 && maxTime == 0 && avgTime == 0) {
         showResponse = false;
     }
 }
 
-boolean showStatus = base.getAttribute(UserTaskInboxResource.ATT_STATUSGRAPH,"").equals("use");
-if (showResponse) {
+boolean showStatus = "use".equals(base.getAttribute(UserTaskInboxResource.ATT_STATUSGRAPH));
+if (showStatus) {
     if (delayed == 0 && ontime == 0) {
-        showResponse = false;
+        showStatus = false;
     }
 }
 
-boolean showParticipation  = base.getAttribute(UserTaskInboxResource.ATT_PARTGRAPH,"").equals("use");
+boolean showParticipation  = "use".equals(base.getAttribute(UserTaskInboxResource.ATT_PARTGRAPH));
 if (showParticipation) {
     if (processInfo == null) {
         showParticipation = false;
