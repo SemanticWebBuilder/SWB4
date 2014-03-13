@@ -30,6 +30,14 @@
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Representa un archivo físico utilizado a manera de evidencia sobre la realización de alguna actividad.</rdfs:comment>
     <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="Initiative"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
       <swb:Interface rdf:ID="Attachmentable">
         <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Cualquier elemento BSC al que se le puedan agregar archivos</rdfs:comment>
@@ -59,14 +67,6 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <rdfs:subClassOf>
       <owl:Class rdf:ID="BSCElement"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
-        <owl:allValuesFrom>
-          <owl:Class rdf:ID="Initiative"/>
-        </owl:allValuesFrom>
-      </owl:Restriction>
     </rdfs:subClassOf>
   </owl:Class>
   <owl:Class rdf:ID="EvaluationRule">
@@ -162,6 +162,14 @@
     </rdfs:subClassOf>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.element</swb:classCodePackage>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="Perspective"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Hiddenable"/>
     <rdfs:subClassOf rdf:resource="#BSCElement"/>
     <rdfs:subClassOf>
@@ -175,14 +183,6 @@
       </swb:Interface>
     </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
-        <owl:allValuesFrom>
-          <owl:Class rdf:ID="Perspective"/>
-        </owl:allValuesFrom>
-      </owl:Restriction>
-    </rdfs:subClassOf>
   </owl:Class>
   <owl:Class rdf:ID="Periodicity">
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -421,17 +421,6 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:subClassOf>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Persiste los atributos de un indicador</rdfs:comment>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Committable"/>
-    </rdfs:subClassOf>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Recognizable"/>
-    </rdfs:subClassOf>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
     <rdfs:subClassOf>
       <owl:Restriction>
         <owl:allValuesFrom>
@@ -439,7 +428,7 @@
             <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >true</swb:autogenId>
             <rdfs:subClassOf>
-              <owl:Class rdf:about="#Committable"/>
+              <owl:Class rdf:ID="Committable"/>
             </rdfs:subClassOf>
             <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
             <rdfs:subClassOf rdf:resource="#Sortable"/>
@@ -460,18 +449,18 @@
               </swbxf:DisplayObject>
             </swb:displayObject>
             <rdfs:subClassOf>
+              <owl:Restriction>
+                <owl:allValuesFrom rdf:resource="#Indicator"/>
+                <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+              </owl:Restriction>
+            </rdfs:subClassOf>
+            <rdfs:subClassOf>
               <swb:Interface rdf:ID="Measurable">
                 <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
                 >Comportamiento que presentan las instancias de Series para capturar valores de mediciones de los períodos de medición correspondientes del indicador.</rdfs:comment>
                 <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
                 <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
               </swb:Interface>
-            </rdfs:subClassOf>
-            <rdfs:subClassOf>
-              <owl:Restriction>
-                <owl:allValuesFrom rdf:resource="#Indicator"/>
-                <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
-              </owl:Restriction>
             </rdfs:subClassOf>
             <rdfs:subClassOf>
               <owl:Class rdf:about="#BSCTracing"/>
@@ -487,6 +476,17 @@
         <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
       </owl:Restriction>
     </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Persiste los atributos de un indicador</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Committable"/>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Recognizable"/>
+    </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Undeleteable"/>
     <rdfs:subClassOf>
       <owl:Restriction>
@@ -527,15 +527,27 @@
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Clase que define un factor de riesgo.</rdfs:comment>
     <rdfs:subClassOf>
+      <owl:Class rdf:about="#BSCTracing"/>
+    </rdfs:subClassOf>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_Factor">
+        <rdfs:label xml:lang="es">Factor</rdfs:label>
+        <rdfs:label xml:lang="en">Factor</rdfs:label>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbstrgyIconFactor</swb:iconClass>
+        <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:dragSupport>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.bsc.tracing</swb:classCodePackage>
+    <rdfs:subClassOf>
       <owl:Restriction>
         <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
         <owl:allValuesFrom>
           <owl:Class rdf:ID="Risk"/>
         </owl:allValuesFrom>
       </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#BSCTracing"/>
     </rdfs:subClassOf>
     <rdfs:subClassOf>
       <owl:Restriction>
@@ -570,18 +582,6 @@
         </owl:allValuesFrom>
       </owl:Restriction>
     </rdfs:subClassOf>
-    <swb:displayObject>
-      <swbxf:DisplayObject rdf:ID="do_Factor">
-        <rdfs:label xml:lang="es">Factor</rdfs:label>
-        <rdfs:label xml:lang="en">Factor</rdfs:label>
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbstrgyIconFactor</swb:iconClass>
-        <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swbxf:dragSupport>
-      </swbxf:DisplayObject>
-    </swb:displayObject>
-    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.bsc.tracing</swb:classCodePackage>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Recognizable"/>
     </rdfs:subClassOf>
@@ -589,6 +589,12 @@
   </owl:Class>
   <owl:Class rdf:about="#Initiative">
     <rdfs:subClassOf rdf:resource="#Status"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+        <owl:allValuesFrom rdf:resource="#Deliverable"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_Initiative">
         <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -602,12 +608,6 @@
     <rdfs:subClassOf rdf:resource="#Schedule"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
-        <owl:allValuesFrom rdf:resource="#Deliverable"/>
-      </owl:Restriction>
-    </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="#Attachmentable"/>
     <rdfs:subClassOf rdf:resource="#BSCElement"/>
     <rdfs:subClassOf rdf:resource="#Updateable"/>
@@ -829,8 +829,8 @@
     <rdfs:subClassOf rdf:resource="#BSCElement"/>
     <rdfs:subClassOf>
       <owl:Restriction>
-        <owl:allValuesFrom rdf:resource="#Theme"/>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+        <owl:allValuesFrom rdf:resource="#BSC"/>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
       </owl:Restriction>
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -845,13 +845,13 @@
         >swbstrgyIconPerspective</swb:iconClass>
       </swbxf:DisplayObject>
     </swb:displayObject>
-    <rdfs:subClassOf rdf:resource="#Serializable"/>
     <rdfs:subClassOf>
       <owl:Restriction>
-        <owl:allValuesFrom rdf:resource="#BSC"/>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+        <owl:allValuesFrom rdf:resource="#Theme"/>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
       </owl:Restriction>
     </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Serializable"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Recognizable"/>
     </rdfs:subClassOf>
@@ -960,22 +960,28 @@
   </owl:Class>
   <owl:Class rdf:about="#Objective">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableClass"/>
-    <rdfs:subClassOf rdf:resource="#Serializable"/>
-    <rdfs:subClassOf rdf:resource="#PeriodStatusAssignable"/>
-    <rdfs:subClassOf rdf:resource="#Causal"/>
-    <rdfs:subClassOf rdf:resource="#BSCElement"/>
-    <rdfs:subClassOf rdf:resource="#Seasonable"/>
-    <rdfs:subClassOf rdf:resource="#FixedMeasurable"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#Recognizable"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <rdfs:subClassOf>
       <owl:Restriction>
         <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
         <owl:allValuesFrom rdf:resource="#Indicator"/>
       </owl:Restriction>
     </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Serializable"/>
+    <rdfs:subClassOf rdf:resource="#PeriodStatusAssignable"/>
+    <rdfs:subClassOf rdf:resource="#Causal"/>
+    <rdfs:subClassOf rdf:resource="#BSCElement"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+        <owl:allValuesFrom rdf:resource="#Theme"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Seasonable"/>
+    <rdfs:subClassOf rdf:resource="#FixedMeasurable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#Recognizable"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_Objetive">
         <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -989,12 +995,6 @@
     <rdfs:subClassOf rdf:resource="#Sortable"/>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.element</swb:classCodePackage>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
-        <owl:allValuesFrom rdf:resource="#Theme"/>
-      </owl:Restriction>
-    </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="#Status"/>
     <rdfs:subClassOf>
       <swb:Interface rdf:ID="Preference">
@@ -1044,14 +1044,6 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne"/>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.formelement</swb:classCodePackage>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FormElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="DojoImageUpload">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#DojoFileUpload"/>
-    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.bsc.formelement</swb:classCodePackage>
-    <rdfs:label xml:lang="es">Cargador de Imagenes con Dojo</rdfs:label>
-    <rdfs:label xml:lang="en">Dojo Image Uploader</rdfs:label>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FormElement"/>
   </owl:Class>
   <owl:Class rdf:ID="SummaryView">
@@ -2417,16 +2409,18 @@
       <swbxf:DisplayProperty rdf:ID="dp_file">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >200</swb:index>
+        <rdfs:label xml:lang="en">Attach file</rdfs:label>
+        <rdfs:label xml:lang="es">Archivo adjunto</rdfs:label>
         <swbxf:formElement>
-          <swb:DojoFileUpload rdf:ID="FileUploadAttachment">
-            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
-            >5242880</swbxf:fileMaxSize>
+          <bsc:DojoFileUploadBSC rdf:ID="FileUploadAttachment">
             <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >*.xml:XML|*.doc:DOC|*.docx:DOCX|*.xls:XLS|*.xlsx:XLSX|*.ppt:PPT|*.pptx:PPTX|*.pdf:PDF|*.ppsx:PPSX|*.pps:PPS|*. mpp:MPP|*.mpd:MPD|*.mdb:MBD|*.csv:CSV|*.jpg:JPG|*.jpeg:JPEG|*.bmp:BMP|*.png:PNG|*.gif:GIF</swbxf:fileFilter>
-          </swb:DojoFileUpload>
+            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+            >5242880</swbxf:fileMaxSize>
+            <bsc:showRemove rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</bsc:showRemove>
+          </bsc:DojoFileUploadBSC>
         </swbxf:formElement>
-        <rdfs:label xml:lang="es">Archivo adjunto</rdfs:label>
-        <rdfs:label xml:lang="en">Attach file</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
@@ -2653,7 +2647,6 @@
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="imgMaxHeight">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:domain rdf:resource="#DojoImageUpload"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="classnameToUse">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -2831,6 +2824,23 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="showRemove">
+    <rdfs:domain>
+      <swb:FormElement rdf:ID="DojoFileUploadBSC">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUpload"/>
+        <rdfs:label xml:lang="en">Dojo Image Uploader</rdfs:label>
+        <rdfs:label xml:lang="es">Cargador de Imagenes con Dojo</rdfs:label>
+        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.bsc.formelement</swb:classCodePackage>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:FormElement>
+    </rdfs:domain>
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >true</swb:defaultValue>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Propiedad que define si se muestra o no la opción para eliminar el archivo almacenado actualmente en la propiedad. La vista que es afectada es la Edición.</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="notesFormula">
     <rdfs:domain rdf:resource="#Indicator"/>
@@ -3185,6 +3195,19 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Periodicity"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="modelId">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >filterModelId</swb:propertyCodeName>
+    <rdfs:domain>
+      <swb:FormElement rdf:ID="SelectOneUserByRoleGroup">
+        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.bsc.formelement</swb:classCodePackage>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:FormElement>
+    </rdfs:domain>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="titleY">
     <rdfs:domain rdf:resource="#Grapher"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -3203,19 +3226,6 @@
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#BSC"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="modelId">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >filterModelId</swb:propertyCodeName>
-    <rdfs:domain>
-      <swb:FormElement rdf:ID="SelectOneUserByRoleGroup">
-        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.bsc.formelement</swb:classCodePackage>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:FormElement>
-    </rdfs:domain>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="plannedStart">
     <swb:displayProperty>
@@ -3472,7 +3482,6 @@
     </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="imgMaxWidth">
-    <rdfs:domain rdf:resource="#DojoImageUpload"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
   <swb:DojoFileUpload rdf:ID="DojoFileUpload_Document">
@@ -3610,14 +3619,14 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </rdf:Description>
-  <bsc:DojoImageUpload rdf:ID="DojoImageUpload_1">
-    <bsc:imgMaxHeight rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >150</bsc:imgMaxHeight>
+  <bsc:DojoFileUploadBSC rdf:ID="DojoImageUpload_1">
     <bsc:imgMaxWidth rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >150</bsc:imgMaxWidth>
     <rdfs:label xml:lang="es">Cargador de Imagenes (jpg, gif, png) con Thumbnail de 150x150</rdfs:label>
     <rdfs:label xml:lang="en">Image Uploader with Thimbnail de 150x150 (jpg, gif, png)</rdfs:label>
-  </bsc:DojoImageUpload>
+    <bsc:imgMaxHeight rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >150</bsc:imgMaxHeight>
+  </bsc:DojoFileUploadBSC>
   <swbxf:DisplayProperty rdf:ID="dp_administrativeUnit">
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >50</swb:index>
