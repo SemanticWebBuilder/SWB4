@@ -4,6 +4,7 @@
     Author     : francisco.jimenez
 --%>
 
+<%@page import="org.semanticwb.model.UserGroup"%>
 <%@page import="org.w3c.dom.Document"%>
 <%@page import="org.xml.sax.InputSource"%>
 <%@page import="org.w3c.dom.Node"%>
@@ -225,13 +226,14 @@ public static String getRequest(Map<String, String> params, String url,
             socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
         }
         //System.out.println("SocialUserExtAttributes:" + socialUserExtAttr);
-        
+
+        UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");                            
         //THE INFO OF THE USER SHOULD BE DISPLAYED AT TOP
         int totalVideos = 0;
         if(videosArray != null){
             for(int i = 0; i < videosArray.length(); i++ ){
                 totalVideos++;
-                doPrintVideo(request, response, paramRequest, out, postURI, socialUserExtAttr, videosArray.getJSONObject(i));                                
+                doPrintVideo(request, response, paramRequest, out, postURI, socialUserExtAttr, videosArray.getJSONObject(i), user.hasUserGroup(userSuperAdminGrp));
             }
             
             if(totalVideos >= 25){
