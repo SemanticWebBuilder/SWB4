@@ -1385,16 +1385,9 @@ public class FacebookWall extends GenericResource {
         params.put("access_token", facebook.getAccessToken());
 
         fbResponse = getRequest(params, "https://graph.facebook.com/fql",
-                "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
-        org.semanticwb.model.User user = paramRequest.getUser();
-        SocialUserExtAttributes socialUserExtAttr = null;
-        if (user.isSigned()) {
-            socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
-        }
-        UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
-        //user.hasUserGroup(userSuperAdminGrp)
+                "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");        
         
-        String createdTime = video(fbResponse, out, false, request, paramRequest, model, socialUserExtAttr, user.hasUserGroup(userSuperAdminGrp));
+        String createdTime = video(fbResponse, out, false, request, paramRequest, model);
         if (createdTime == null) {//A problem was found, recover the original value of the param
             createdTime = createdTimeParam;
         }
@@ -1633,8 +1626,14 @@ public class FacebookWall extends GenericResource {
                         }
                     }
                 }
-
-                createdTime = printPicture(out, postsData.getJSONObject(k), postComments, profileID, request, paramRequest, PICTURES_TAB, facebook, model);
+                org.semanticwb.model.User user = paramRequest.getUser();
+                SocialUserExtAttributes socialUserExtAttr = null;
+                if (user.isSigned()) {
+                    socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+                }
+                UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
+                //user.hasUserGroup(userSuperAdminGrp)
+                createdTime = printPicture(out, postsData.getJSONObject(k), postComments, profileID, request, paramRequest, PICTURES_TAB, facebook, model, socialUserExtAttr, user.hasUserGroup(userSuperAdminGrp));
 
                 //Only include the param in session when the page loads the first time and when 
                 if (includeSinceParam && k == 0) {//Only save the most recent picture id(the first), then use this id to ask if new pictures available
@@ -1652,7 +1651,7 @@ public class FacebookWall extends GenericResource {
         return createdTime;
     }
 
-    public static String video(String response, Writer out, boolean includeSinceParam, HttpServletRequest request, SWBParamRequest paramRequest, SWBModel model, SocialUserExtAttributes socialUserExtAtt, boolean userCanDoEverything) {
+    public static String video(String response, Writer out, boolean includeSinceParam, HttpServletRequest request, SWBParamRequest paramRequest, SWBModel model) {
 
         String createdTime = null;
 
@@ -1668,7 +1667,13 @@ public class FacebookWall extends GenericResource {
             JSONArray postsData = null;
             JSONArray userData = null;
             JSONArray pageData = null;
-            
+            org.semanticwb.model.User user = paramRequest.getUser();
+            SocialUserExtAttributes socialUserExtAttr = null;
+            if (user.isSigned()) {
+                socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+            }
+            UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
+            //user.hasUserGroup(userSuperAdminGrp)
             for (int i = 0; i < phraseResp.getJSONArray("data").length(); i++) {
                 if (phraseResp.getJSONArray("data").getJSONObject(i).getString("name").equals("videos")) {//All the posts
                     postsData = phraseResp.getJSONArray("data").getJSONObject(i).getJSONArray("fql_result_set");
@@ -1720,7 +1725,7 @@ public class FacebookWall extends GenericResource {
                     }
                 }
 
-                String createdTimeTmp = doPrintVideo(out, postsData.getJSONObject(k), postComments, profileID, request, paramRequest, PICTURES_TAB, facebook, model, socialUserExtAtt, userCanDoEverything);
+                String createdTimeTmp = doPrintVideo(out, postsData.getJSONObject(k), postComments, profileID, request, paramRequest, PICTURES_TAB, facebook, model, socialUserExtAttr, user.hasUserGroup(userSuperAdminGrp));
                 if (createdTimeTmp != null) {
                     createdTime = createdTimeTmp;
                 }
@@ -2368,7 +2373,7 @@ public class FacebookWall extends GenericResource {
         }
     }
 
-    public static String printPicture(Writer writer, JSONObject postsData, JSONObject commentsData, JSONObject profileData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model) {
+    public static String printPicture(Writer writer, JSONObject postsData, JSONObject commentsData, JSONObject profileData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model, SocialUserExtAttributes socialUserExtAtt, boolean userCanDoEverything) {
         String createdTime = "";
 
         try {
@@ -2535,27 +2540,31 @@ public class FacebookWall extends GenericResource {
                 JSONObject comments = postsData.getJSONObject("comment_info");
 
                 if (comments.getBoolean("can_comment")) {
-                    writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("post_id") + REPLY + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
-                    writer.write(" <a class=\"clasifica\" href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyPost").setParameter("postID", postsData.getString("post_id")) + "','Responder a " + profileData.getString("name") + "');return false;\"><span>Responder</span></a>  ");
-                    writer.write("   </span>");
-
-                    ///////////////////////If I can post I can Classify it to answer it later
-                    PostIn post = PostIn.getPostInbySocialMsgId(model, postsData.getString("post_id"));
-                    writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("post_id") + TOPIC + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
-                    if (post != null) {
-                        String socialT = "";
-                        if (post.getSocialTopic() != null) {
-                            socialT = post.getSocialTopic().getTitle();
-                        }
-                        SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("post_id")).setParameter("postUri", post.getURI()).setParameter("currentTab", tabSuffix);
-                        writer.write("<a href=\"#\" class=\"clasifica\" title=\"" + "Tema actual: " + socialT + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
-                                + paramRequest.getLocaleString("reclassify") + " post'); return false;\"><span>" + paramRequest.getLocaleString("reclassify") + "</span></a>");
-                    } else {
-                        SWBResourceURL clasifybyTopic = renderURL.setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("post_id")).setParameter("currentTab", tabSuffix);
-                        writer.write("<a href=\"#\" class=\"clasifica\" title=\"" + paramRequest.getLocaleString("classify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
-                                + paramRequest.getLocaleString("classify") + " Post'); return false;\"><span>" + paramRequest.getLocaleString("classify") + "</span></a>");
+                    if(socialUserExtAtt.isUserCanRespondMsg() || userCanDoEverything){
+                        writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("post_id") + REPLY + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
+                        writer.write(" <a class=\"clasifica\" href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyPost").setParameter("postID", postsData.getString("post_id")) + "','Responder a " + profileData.getString("name") + "');return false;\"><span>Responder</span></a>  ");
+                        writer.write("   </span>");
                     }
-                    writer.write("   </span>");
+
+                    if(socialUserExtAtt.isUserCanReTopicMsg() || userCanDoEverything){
+                        ///////////////////////If I can post I can Classify it to answer it later
+                        PostIn post = PostIn.getPostInbySocialMsgId(model, postsData.getString("post_id"));
+                        writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("post_id") + TOPIC + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
+                        if (post != null) {
+                            String socialT = "";
+                            if (post.getSocialTopic() != null) {
+                                socialT = post.getSocialTopic().getTitle();
+                            }
+                            SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("post_id")).setParameter("postUri", post.getURI()).setParameter("currentTab", tabSuffix);
+                            writer.write("<a href=\"#\" class=\"clasifica\" title=\"" + "Tema actual: " + socialT + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                                    + paramRequest.getLocaleString("reclassify") + " post'); return false;\"><span>" + paramRequest.getLocaleString("reclassify") + "</span></a>");
+                        } else {
+                            SWBResourceURL clasifybyTopic = renderURL.setMode("doShowTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", postsData.getString("post_id")).setParameter("currentTab", tabSuffix);
+                            writer.write("<a href=\"#\" class=\"clasifica\" title=\"" + paramRequest.getLocaleString("classify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
+                                    + paramRequest.getLocaleString("classify") + " Post'); return false;\"><span>" + paramRequest.getLocaleString("classify") + "</span></a>");
+                        }
+                        writer.write("   </span>");
+                    }
 
                 }
             }
