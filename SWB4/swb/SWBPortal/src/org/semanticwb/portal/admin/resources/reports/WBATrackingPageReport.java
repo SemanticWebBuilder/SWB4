@@ -477,7 +477,7 @@ out.println("</tr>");
                     }
                     obj.put("ln", visitor.getLastName());
                     obj.put("sln", visitor.getSecondLastName());
-                    obj.put("n", visitor.getName());
+                    obj.put("n", visitor.getFirstName());
                 }
                 try {
                     obj.put("year", Integer.parseInt(t[0].substring(0,4)));
@@ -646,7 +646,7 @@ out.println("</tr>");
                     }
                     ln = visitor.getLastName();
                     sln = visitor.getSecondLastName();
-                    n = visitor.getName();
+                    n = visitor.getFirstName();
                 }
 
                 int y,m,d;
@@ -802,7 +802,7 @@ out.println("</tr>");
                     }
                     obj.put("ln", visitor.getLastName());
                     obj.put("sln", visitor.getSecondLastName());
-                    obj.put("n", visitor.getName());
+                    obj.put("n", visitor.getFirstName());
                 }
                 
                 //obj.put("uri", webPage.getURI());
