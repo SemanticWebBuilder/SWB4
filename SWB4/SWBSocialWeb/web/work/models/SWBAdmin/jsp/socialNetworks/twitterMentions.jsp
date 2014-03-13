@@ -4,6 +4,7 @@
     Author     : francisco.jimenez
 --%>
 
+<%@page import="org.semanticwb.model.UserGroup"%>
 <%@page import="org.semanticwb.social.PostIn"%>
 <%@page import="org.semanticwb.model.SWBModel"%>
 <%@page import="org.semanticwb.social.SocialNetwork"%>
@@ -70,6 +71,7 @@
             SocialNetwork socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
             SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
             String postURI = null;
+            UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
             for (Status status : twitterBean.getMentionsTimeline(paging)){
                 postURI = null;
                 maxTweetID = status.getId();
@@ -77,7 +79,7 @@
                 if(post != null){
                     postURI = post.getURI();
                 }
-                doPrintTweet(request, response, paramRequest, status, twitterBean, out,null,MENTIONS_TAB, null,socialUserExtAttr);
+                doPrintTweet(request, response, paramRequest, status, twitterBean, out,null,MENTIONS_TAB, null,socialUserExtAttr,user.hasUserGroup(userSuperAdminGrp));
                 i++;
             }
             System.out.println("Total Mentions:" + i);

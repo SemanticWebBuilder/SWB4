@@ -3,6 +3,7 @@
     Created on : 21/03/2013, 01:55:45 PM
     Author     : francisco.jimenez
 --%>
+<%@page import="org.semanticwb.model.UserGroup"%>
 <%@page import="org.semanticwb.social.SocialUserExtAttributes"%>
 <%@page import="org.semanticwb.model.SWBContext"%>
 <%@page import="org.semanticwb.social.PostIn"%>
@@ -88,6 +89,8 @@
                 socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
             }
             System.out.println("SocialUserExtAttributes:" + socialUserExtAttr);
+            UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
+            //user.hasUserGroup(userSuperAdminGrp)
             for (Status status : twitterBean.getHomeTimeline(paging)){
                 postURI = null;
                 maxTweetID = status.getId();
@@ -96,7 +99,7 @@
                     postURI = post.getURI();
                 }
                 
-                doPrintTweet(request, response, paramRequest, status, twitterBean, out, null,HOME_TAB, postURI, socialUserExtAttr);
+                doPrintTweet(request, response, paramRequest, status, twitterBean, out, null,HOME_TAB, postURI, socialUserExtAttr,user.hasUserGroup(userSuperAdminGrp));
                 i++;
             }
             
