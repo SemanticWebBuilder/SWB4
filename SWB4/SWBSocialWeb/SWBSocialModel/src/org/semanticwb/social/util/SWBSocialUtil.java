@@ -1280,8 +1280,7 @@ public class SWBSocialUtil {
            int result=0;   //Mi inicio sera 0(Neutro) y de ahi se va ha tender a la derecha (positivos) o a la izquierda (Negativos)
            int positiveintensityveResult=0;
            int negativeintensityveResult=0;
-           //TODO: Descomentar este bloque.
-           /*
+           
            Iterator<SentimentalLearningPhrase> itSntPhases=SentimentalLearningPhrase.ClassMgr.listSentimentalLearningPhrases(CONFIG_WEBSITE);
            while(itSntPhases.hasNext())
            {
@@ -1331,7 +1330,7 @@ public class SWBSocialUtil {
                    }
                }
            }
-           */
+           
            //System.out.println("result k:"+result);
            //Reglas
            if(result>0)    //Es positivo
