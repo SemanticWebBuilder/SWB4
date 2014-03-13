@@ -1183,7 +1183,7 @@
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasSocialNetworks">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
+    >false</swb:required>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_hasSocialNetworks">
         <swbxf:propPromptMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -1987,6 +1987,8 @@
     >1000</swb:defaultValue>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="stream_PoolTime">
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >10</swb:defaultValue>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >poolTime</swb:propertyCodeName>
     <rdfs:label xml:lang="en">Time to search information</rdfs:label>
