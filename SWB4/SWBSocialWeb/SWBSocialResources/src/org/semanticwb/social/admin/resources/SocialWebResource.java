@@ -2,20 +2,29 @@ package org.semanticwb.social.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.crypto.SecretKey;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.social.Facebook;
+import org.semanticwb.social.FacebookGC;
+import org.semanticwb.social.SocialAdmin;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialSite;
+import org.semanticwb.social.Twitter;
+import org.semanticwb.social.TwitterGC;
+import org.semanticwb.social.Youtube;
+import org.semanticwb.social.YoutubeGC;
 
 /**
  *
@@ -47,18 +56,76 @@ public class SocialWebResource extends GenericAdmResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        SocialAdmin wsite=(SocialAdmin)SWBContext.getAdminWebSite();         
+        
         PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();
         SocialNetwork socialNetwork;
         String objUri = request.getParameter("suri"); //uri of socialNetwork        
         //System.out.println("Entrando a red doView de autenticate");
         try {
-            socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
-            if(socialNetwork==null){
-                out.println("No fue posible recuperar el objeto con uri:" + objUri);
-                System.out.println("NULL SOCIAL NET");
+            socialNetwork = (SocialNetwork)SemanticObject.createSemanticObject(objUri).getGenericInstance();
+            boolean validConfiguration = false;
+            if(socialNetwork instanceof Twitter){//for twitter nets
+                TwitterGC tw = wsite.getAdm_twittergc();
+                if(tw != null){
+                    validConfiguration = isValidConfiguration(socialNetwork, tw.getAppKey(), tw.getSecretKey());
+                }else{
+                    validConfiguration = isValidConfiguration(socialNetwork, null, null);
+                }
+            }else if(socialNetwork instanceof Facebook){//for facebook nets
+                FacebookGC fb = wsite.getAdm_facebookgc();
+                if(fb != null){
+                    validConfiguration = isValidConfiguration(socialNetwork, fb.getAppKey(), fb.getSecretKey());
+                }else{
+                    validConfiguration = isValidConfiguration(socialNetwork, null, null);
+                }
+            }else if(socialNetwork instanceof Youtube){//for youtube nets
+                YoutubeGC yt = wsite.getAdm_youtubegc();
+                Youtube youtube = (Youtube)socialNetwork;
+                if(yt != null){
+                    validConfiguration = isValidConfiguration(socialNetwork, yt.getAppKey(), yt.getSecretKey());
+                    //Valid appkey and appsecret - validate
+                    if(youtube.getDeveloperKey() == null || youtube.getDeveloperKey().isEmpty()){
+                        if(yt.getDeveloperKey() == null || yt.getDeveloperKey().isEmpty()){
+                            validConfiguration = false;
+                        }else{
+                            youtube.setDeveloperKey(yt.getDeveloperKey());
+                        }
+                    }
+                }else{
+                    validConfiguration = isValidConfiguration(socialNetwork, null, null);
+                    if(youtube.getDeveloperKey() == null || youtube.getDeveloperKey().isEmpty()){
+                        validConfiguration = false;
+                    }
+                }
+            }
+            
+            if(validConfiguration == false ){
+                 out.println("<div id=\"configuracion_redes\">");
+                out.println("<div id=\"autenticacion\">");
+                out.println("<p>No han sido configuradas la llave de la aplicación o la llave secreta ");
+                out.println((socialNetwork instanceof Youtube) ? "o la llave de desarrollador.":"");
+                out.println(".</p></div>");
+                out.println("</div>");
                 return;
-            }else if(socialNetwork.getAppKey() == null || socialNetwork.getSecretKey() == null){
+            }
+            
+            /*if(socialNetwork.getAppKey() == null || socialNetwork.getSecretKey() == null){
+                if(socialNetwork instanceof Twitter){
+                    TwitterGC tw = wsite.getAdm_twittergc();
+                    System.out.println("tw:" + tw.getAppKey());
+                    System.out.println("tw:" + tw.getSecretKey());
+                }else if(socialNetwork instanceof Facebook){
+                    FacebookGC fb = wsite.getAdm_facebookgc();
+                    System.out.println("fb:" + fb.getAppKey());
+                    System.out.println("fb:" + fb.getSecretKey());
+                }else if(socialNetwork instanceof Youtube){
+                    YoutubeGC yt = wsite.getAdm_youtubegc();
+                    System.out.println("yt:" + yt.getAppKey());
+                    System.out.println("yt:" + yt.getSecretKey());
+                    System.out.println("yt:" + yt.getDeveloperKey());
+                }
                 out.println("No han sido configuradas la llave de la aplicación o la llave secreta");
                 System.out.println("NULL SOCIAL NET PARAMS");
                 return;
@@ -66,10 +133,11 @@ public class SocialWebResource extends GenericAdmResource
                 out.println("No han sido configuradas la llave de la aplicación o la llave secreta");
                 System.out.println("EMPTY SOCIAL NET PARAMS");
                 return;
-            }
+            }*/
         }catch(Exception ex) {
             socialNetwork = null;
             System.out.println("No valid value for current social Network");
+            ex.printStackTrace();
             return;
         }
         
@@ -296,4 +364,22 @@ System.out.println("processAction....");
         }
     }
     */
+    
+    private boolean isValidConfiguration(SocialNetwork socialNetwork, String appKey, String appSecret){
+        boolean validConfiguration = true;
+        //System.out.println("appKey:" + appKey + "---" + appSecret);
+        if(socialNetwork.getAppKey() == null || socialNetwork.getAppKey().isEmpty()){
+            if(appKey != null && !appKey.isEmpty()){
+                socialNetwork.setAppKey(appKey);
+                //System.out.println("valid key!");
+            }else{validConfiguration = false;}
+        }
+        if(socialNetwork.getSecretKey() == null || socialNetwork.getSecretKey().isEmpty()){
+            if(appSecret != null && !appSecret.isEmpty()){
+                socialNetwork.setSecretKey(appSecret);
+                //System.out.println("valid secret!");
+            }else{validConfiguration = false;}
+        }
+        return validConfiguration;
+    }
 }
