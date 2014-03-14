@@ -594,9 +594,9 @@ public class ProcessForm extends GenericResource {
                     //redireccionamiento a doSign
                     response.setMode(MODE_SIGN);
                     //response.setAction("");
-                } else if (request.getParameter("accept") != null) {
+                } else if (request.getParameter("accept") != null && request.getParameter("accept").length()>0) {
                     act=Instance.ACTION_ACCEPT;
-                } else if (request.getParameter("reject") != null) {
+                } else if (request.getParameter("reject") != null && request.getParameter("reject").length()>0) {
                     act=Instance.ACTION_REJECT;
                 }
                 
@@ -829,6 +829,13 @@ public class ProcessForm extends GenericResource {
             
             boolean showHeader = base.getAttribute("showHeader", "").equals("use")?true:false;
             out.println("<script type=\"text/javascript\">function validateForm" + foi.getId() + "(form) {var frm = dijit.byId(form); if (frm.isValid()) {return true;} else {alert('"+paramRequest.getLocaleString("cancel")+"'); return false;}}</script>");
+            //--haxdai14032014: Added as workaround for dojo uploader
+            out.println("<script type=\"text/javascript\">function sendProcessForm" + foi.getId() + "(_action) {"
+                    + "var frm = dojo.byId('"+foi.getId()+"/form'); "
+                    + "if (_action && _action !== '') {frm[_action].value=_action;} "
+                    + "frm.submit();}"
+                    + "</script>");
+            //--haxdai14032014
             if (showHeader) {
                 out.println("<h3>"+foi.getFlowNodeType().getTitle()+"</h3>");
             }
@@ -930,18 +937,23 @@ public class ProcessForm extends GenericResource {
             if (btnSave || btnAccept || btnReject || btnCancel) {
                 out.println("<div class=\"panel-footer\">");
             }
+            //--haxdai14032014: Changed submit to onClick events and actions as hidden parameters as a workaround for dojo uploader
             if (btnSave) {
-                out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">"+base.getAttribute("btnSaveLabel",paramRequest.getLocaleString("btnSaveTask"))+"</button>");
+                out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" onclick=\"dojo.byId('"+foi.getId()+"/form').submit();\">"+base.getAttribute("btnSaveLabel",paramRequest.getLocaleString("btnSaveTask"))+"</button>");
             }
             if (btnAccept) {
-                out.println("<button dojoType=\"dijit.form.Button\" name=\"accept\" type=\"submit\">"+base.getAttribute("btnAcceptLabel",paramRequest.getLocaleString("btnCloseTask"))+"</button>");
+                out.println("<input type=\"hidden\" name=\"accept\" />");
+                out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" onclick=\"sendProcessForm"+foi.getId()+"('accept');\">"+base.getAttribute("btnAcceptLabel",paramRequest.getLocaleString("btnCloseTask"))+"</button>");
             }
             if (btnReject) {
-                out.println("<button dojoType=\"dijit.form.Button\" name=\"reject\" type=\"submit\">"+base.getAttribute("btnRejectLabel",paramRequest.getLocaleString("btnRejectTask"))+"</button>");
+                out.println("<input type=\"hidden\" name=\"reject\" />");
+                out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" onclick=\"sendProcessForm"+foi.getId()+"('reject');\">"+base.getAttribute("btnRejectLabel",paramRequest.getLocaleString("btnRejectTask"))+"</button>");
             }
             if (btnCancel) {
+                out.println("<input type=\"hidden\" name=\"cancel\" />");
                 out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getUserTaskInboxUrl() + "?suri=" + suri + "'\">"+base.getAttribute("btnCancelLabel",paramRequest.getLocaleString("btnBack"))+"</button>");
             }
+            //--haxdai14032014
             if (btnSave || btnAccept || btnReject || btnCancel) {
                 out.println("</div>");
             }
