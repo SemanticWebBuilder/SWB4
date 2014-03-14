@@ -65,7 +65,8 @@ import org.semanticwb.portal.api.SWBResourceURLImp;
  *
  * @author juan.fernandez
  */
-public class LiteFileRepository extends GenericResource {
+public class LiteFileRepository extends GenericResource
+{
 
     private Logger log = SWBUtils.getLogger(LiteFileRepository.class);
     private SimpleDateFormat format = new SimpleDateFormat("dd/MMM/yy hh:mm");
@@ -78,17 +79,21 @@ public class LiteFileRepository extends GenericResource {
     private static final NumberFormat numf = NumberFormat.getNumberInstance();
 
     @Override
-    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        if (paramRequest.getMode().equals(MODE_GETFILE)) {
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        if (paramRequest.getMode().equals(MODE_GETFILE))
+        {
             doGetFile(request, response, paramRequest);
-        } else {
+        } else
+        {
             super.processRequest(request, response, paramRequest);
         }
 
     }
 
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -105,15 +110,16 @@ public class LiteFileRepository extends GenericResource {
 
         int luser = getLevelUser(usr);
 
-
         WebPage repoDir = paramRequest.getWebPage();
 
         String action = request.getParameter("act");
-        if (null == action) {
+        if (null == action)
+        {
             action = "";
         }
 
-        if ("".equals(action)) {
+        if ("".equals(action))
+        {
 
             SWBResourceURL urlorder = paramRequest.getRenderUrl();
             //urlorder.setParameter("parentUUID", parentUUID);
@@ -148,44 +154,48 @@ public class LiteFileRepository extends GenericResource {
 
             out.println("<tbody>");
 
-
-
             Iterator<RepositoryFile> itrf = RepositoryFile.ClassMgr.listRepositoryFileByRepositoryFileDirectory(repoDir);
 
             ///// ORDENADO DE ARCHIVOS SEGUN OPCIÓN
-
             String orderBy = request.getParameter("orderBy");
-            if (null == orderBy) {
+            if (null == orderBy)
+            {
                 orderBy = "title";
             }
 
             HashMap<String, RepositoryFile> hmNodes = new HashMap<String, RepositoryFile>();
 
-            while (itrf.hasNext()) {
+            while (itrf.hasNext())
+            {
                 RepositoryFile repoFile = itrf.next();
 
                 VersionInfo version = repoFile.getActualVersion();
                 String skey = repoFile.getId();
 
-                if (orderBy.equals("title")) {
+                if (orderBy.equals("title"))
+                {
                     skey = repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
 
-                } else if (orderBy.equals("date")) {
+                } else if (orderBy.equals("date"))
+                {
                     //nodo.getProperty("jcr:created").getDate().getTime())
                     skey = version.getCreated().getTime() + " - " + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
 
-                } else if (orderBy.equals("type")) {
+                } else if (orderBy.equals("type"))
+                {
                     String file = version.getVersionFile();
                     String type = getFileName(file);
 
                     skey = type + "-" + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
                     //hmNodes.put(skey, repoFile);
-                } else if (orderBy.equals("usr")) {
+                } else if (orderBy.equals("usr"))
+                {
                     User usrc = version.getCreator();
 
                     skey = " - " + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
 
-                    if (usrc != null) {
+                    if (usrc != null)
+                    {
                         skey = usrc.getFullName() + skey;
                     }
                 }
@@ -195,24 +205,22 @@ public class LiteFileRepository extends GenericResource {
             ArrayList list = new ArrayList(hmNodes.keySet());
             Collections.sort(list);
 
-
             //// TERMINA ORDENADO
-
             /// DESPLIEGUE DE ARCHIVOS ENCONTRADOS
-
             Iterator<String> lnit = list.iterator();
-            while (lnit.hasNext()) {
+            while (lnit.hasNext())
+            {
 
                 String skey = lnit.next();
 
                 RepositoryFile repositoryFile = hmNodes.get(skey);
                 VersionInfo vi = repositoryFile.getLastVersion();
 
-                if (vi == null) {
+                if (vi == null)
+                {
                     repositoryFile.remove();
                     continue;
                 }
-
 
                 out.println("<tr>");
                 out.println("<td>");
@@ -228,12 +236,14 @@ public class LiteFileRepository extends GenericResource {
                 String file = "";
                 String type = "";
 
-                if (vi != null && vi.getVersionFile() != null) {
+                if (vi != null && vi.getVersionFile() != null)
+                {
                     file = vi.getVersionFile();
                     type = getFileName(file);
                 }
 
-                if (luser > 0) {
+                if (luser > 0)
+                {
 //                    SWBResourceURL urlview = paramRequest.getRenderUrl();
 //                    urlview.setCallMethod(SWBResourceURL.Call_DIRECT);
 //                    urlview.setParameter("fid", fid);
@@ -243,12 +253,14 @@ public class LiteFileRepository extends GenericResource {
 //                    out.println("<a href=\"" + urlview + "\">");
 //                    out.println("<img border=0 src='" + path + "" + type + "' alt=\"" + getFileType(file) + "\" />");
 //                    out.println("</a>");
-                    
-                    String ulrdirecta = SWBPortal.getWebWorkPath()+repositoryFile.getWorkPath()+"/"+vi.getVersionNumber()+"/"+vi.getVersionFile();
+
+                    //String ulrdirecta = SWBPortal.getWebWorkPath()+repositoryFile.getWorkPath()+"/"+vi.getVersionNumber()+"/"+vi.getVersionFile();
+                    String ulrdirecta = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(MODE_GETFILE).setParameter("fid", repositoryFile.getId()).setParameter("verNum", "" + vi.getVersionNumber()).toString();
                     out.println("<a href=\"" + ulrdirecta + "\">");
                     out.println("<img border=0 src='" + path + "" + type + "' alt=\"" + getFileType(file) + "\" />");
                     out.println("</a>");
-                } else {
+                } else
+                {
                     out.println("<img border=0 src='" + path + "" + type + "' alt=\"" + getFileType(file) + "\" />");
                 }
 
@@ -272,7 +284,8 @@ public class LiteFileRepository extends GenericResource {
 
                 out.println("</a>");
 
-                if (luser == 3 || (vi.getCreator() != null && vi.getCreator().equals(usr) && luser > 1)) {
+                if (luser == 3 || (vi.getCreator() != null && vi.getCreator().equals(usr) && luser > 1))
+                {
                     SWBResourceURL urlremove = paramRequest.getActionUrl();
                     urlremove.setAction("removefile");
                     urlremove.setParameter("act", "remove");
@@ -291,12 +304,14 @@ public class LiteFileRepository extends GenericResource {
             out.println("<tr>");
             out.println("<td colspan=\"5\">");
 
-            if (luser >= 2) {
+            if (luser >= 2)
+            {
                 SWBResourceURL urlnew = paramRequest.getRenderUrl();
                 urlnew.setParameter("act", "new");
                 out.println("<button onclick=\"window.location='" + urlnew + "';\">" + "Agregar archivo" + "</button>");
 
-                if (base.getAttribute(CHK_FOLDERSUPPORT, "1").equals("1")) {
+                if (base.getAttribute(CHK_FOLDERSUPPORT, "1").equals("1"))
+                {
                     SWBResourceURL urlnewDirectory = paramRequest.getRenderUrl();
                     urlnewDirectory.setParameter("act", "newDirectory");
                     out.println("<button onclick=\"window.location='" + urlnewDirectory + "';\">" + "Agregar carpeta" + "</button>");
@@ -309,7 +324,8 @@ public class LiteFileRepository extends GenericResource {
             out.println("</table>");
             out.println("</div>");
 
-        } else if ("detail".equals(action)) {
+        } else if ("detail".equals(action))
+        {
             String fid = request.getParameter("fid");
             RepositoryFile repoFile = RepositoryFile.ClassMgr.getRepositoryFile(fid, repoDir.getWebSite());
             out.println("<div id=\"ProcessFileRepository\">");
@@ -355,7 +371,8 @@ public class LiteFileRepository extends GenericResource {
             out.println("</td>");
             out.println("</tr>");
 
-            if (luser >= 2 || (vl.getCreator() != null && vl.getCreator().equals(usr) && luser > 1)) {
+            if (luser >= 2 || (vl.getCreator() != null && vl.getCreator().equals(usr) && luser > 1))
+            {
                 out.println("<tr>");
                 out.println("<td align=\"right\">");
                 out.println("Agregar nueva Versión:");
@@ -384,7 +401,8 @@ public class LiteFileRepository extends GenericResource {
                 fver = fver + 0.10D;
 
                 String sfver = numf.format(fver);
-                if (sfver.indexOf(".") == -1) {
+                if (sfver.indexOf(".") == -1)
+                {
                     sfver = "" + (float) fver;
                 }
 
@@ -393,7 +411,6 @@ public class LiteFileRepository extends GenericResource {
 
                 out.println("<option value=\"fraction\">" + sfver + "</option>");
                 out.println("<option value=\"nextInt\">" + (float) iver + "</option>");
-
 
                 out.println("</select>");
                 out.println("<button type=\"submit\">Agregar</button>");
@@ -423,7 +440,8 @@ public class LiteFileRepository extends GenericResource {
             out.println("<tr>");
             out.println("<td colspan=\"2\" align=\"right\">");
 
-            if (luser == 3 || (vl.getCreator() != null && vl.getCreator().equals(usr) && luser > 1)) {
+            if (luser == 3 || (vl.getCreator() != null && vl.getCreator().equals(usr) && luser > 1))
+            {
                 SWBResourceURL urlremove = paramRequest.getActionUrl();
                 urlremove.setAction("removefile");
                 urlremove.setParameter("act", "remove");
@@ -441,18 +459,22 @@ public class LiteFileRepository extends GenericResource {
             out.println("</tbody>");
             out.println("</table>");
             out.println("</div>");
-        } else if ("history".equals(action)) {
+        } else if ("history".equals(action))
+        {
             String fid = request.getParameter("fid");
             RepositoryFile repoFile = RepositoryFile.ClassMgr.getRepositoryFile(fid, repoDir.getWebSite());
             VersionInfo ver = null;
             VersionInfo vl = repoFile.getLastVersion();
-            if (null != vl) {
+            if (null != vl)
+            {
                 ver = vl;
-                while (ver.getPreviousVersion() != null) { //
+                while (ver.getPreviousVersion() != null)
+                { //
                     ver = ver.getPreviousVersion();
                 }
             }
-            if (ver != null) {
+            if (ver != null)
+            {
                 out.println("<div id=\"ProcessFileRepository\">");
                 out.println("<table width=\"100%\">");
                 out.println("<thead>");
@@ -499,7 +521,8 @@ public class LiteFileRepository extends GenericResource {
                 out.println("</tr>");
                 out.println("</thead>");
                 out.println("<tbody>");
-                while (ver != null) {
+                while (ver != null)
+                {
                     //lista de las versiones del archivo
 
                     out.println("<tr>");
@@ -508,13 +531,14 @@ public class LiteFileRepository extends GenericResource {
                     String file = "";
                     String type = "";
 
-                    if (ver != null && ver.getVersionFile() != null) {
+                    if (ver != null && ver.getVersionFile() != null)
+                    {
                         file = ver.getVersionFile();
                         type = getFileName(file);
                     }
 
-
-                    if (luser > 0) {
+                    if (luser > 0)
+                    {
                         SWBResourceURL urlview = paramRequest.getRenderUrl();
                         urlview.setCallMethod(SWBResourceURL.Call_DIRECT);
                         urlview.setParameter("fid", fid);
@@ -524,11 +548,10 @@ public class LiteFileRepository extends GenericResource {
                         out.println("<a href=\"" + urlview + "\">");
                         out.println("<img border=0 src='" + path + "" + type + "' alt=\"" + getFileType(file) + "\" />");
                         out.println("</a>");
-                    } else {
+                    } else
+                    {
                         out.println("<img border=0 src='" + path + "" + type + "' alt=\"" + getFileType(file) + "\" />");
                     }
-
-
 
 //                    if (luser > 0) {
 //                        SWBResourceURL urlview = paramRequest.getRenderUrl();
@@ -576,7 +599,8 @@ public class LiteFileRepository extends GenericResource {
                 out.println("</div>");
             }
 
-        } else if ("new".equals(action)) {
+        } else if ("new".equals(action))
+        {
 
             SWBResourceURL urlnew = paramRequest.getActionUrl();
             urlnew.setAction("newfile");
@@ -589,11 +613,14 @@ public class LiteFileRepository extends GenericResource {
             String stitle = "";
             String sdescription = "";
             VersionInfo vl = null;
-            if (null != fid && null != newVersion) {
+            if (null != fid && null != newVersion)
+            {
                 boolean incremento = Boolean.FALSE;
-                if (newVersion.equals("nextInt")) {
+                if (newVersion.equals("nextInt"))
+                {
                     incremento = Boolean.TRUE;
-                } else if (newVersion.equals("fraction")) {
+                } else if (newVersion.equals("fraction"))
+                {
                     incremento = Boolean.FALSE;
                 }
 
@@ -607,17 +634,18 @@ public class LiteFileRepository extends GenericResource {
                 fver = fver + 0.10D;
 
                 String sfver = numf.format(fver);
-                if (sfver.indexOf(".") == -1) {
+                if (sfver.indexOf(".") == -1)
+                {
                     sfver = "" + (float) fver;
                 }
-
 
                 int iver = (int) fver;
                 iver = iver + 1;
 
                 sNxtVersion = sfver;
 
-                if (incremento) {
+                if (incremento)
+                {
                     sNxtVersion = "" + (float) iver;
                 }
             }
@@ -641,7 +669,8 @@ public class LiteFileRepository extends GenericResource {
             out.println("         return; ");
             out.println("     } ");
 
-            if (null != fid && null != newVersion) {
+            if (null != fid && null != newVersion)
+            {
                 out.println("   var filename = document.frmnewdoc.ffile.value;");
                 out.println("   if(filename.indexOf('" + vl.getVersionFile() + "')==-1) ");
                 out.println("     { ");
@@ -657,7 +686,8 @@ public class LiteFileRepository extends GenericResource {
             out.println("<div id=\"ProcessFileRepository\">");
             out.println("<form id=\"frmnewdoc\" name=\"frmnewdoc\" method=\"post\" action=\"" + urlnew + "\"  enctype=\"multipart/form-data\" onsubmit=\"valida();return false;\">");
 
-            if (null != fid && null != newVersion) {
+            if (null != fid && null != newVersion)
+            {
                 out.println("<input type=\"hidden\" name=\"newVersion\" value=\"" + newVersion + "\">");
                 out.println("<input type=\"hidden\" name=\"fid\" value=\"" + fid + "\">");
                 //out.println("<input type=\"hidden\" name=\"fcurrent\" value=\"" + vl.getVersionFile() + "\">");
@@ -690,7 +720,8 @@ public class LiteFileRepository extends GenericResource {
             out.println("</td>");
             out.println("</tr>");
 
-            if (null != fid && null != newVersion) {
+            if (null != fid && null != newVersion)
+            {
 
                 out.println("<tr>");
                 out.println("<td align=\"right\">");
@@ -726,12 +757,12 @@ public class LiteFileRepository extends GenericResource {
             out.println("</table>");
             out.println("</form>");
             out.println("</div>");
-        } else if ("newDirectory".equals(action)) {
+        } else if ("newDirectory".equals(action))
+        {
 
             SWBResourceURL urlnew = paramRequest.getActionUrl();
             urlnew.setAction("newDir");
             urlnew.setParameter("act", "newDir");
-
 
             out.println("<script type=\"text/javascript\" >");
             out.println("function validaDir() ");
@@ -791,43 +822,98 @@ public class LiteFileRepository extends GenericResource {
         }
     }
 
-    public void doGetFile(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doGetFile(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
 
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
-        User user = paramRequest.getUser();
         String fid = request.getParameter("fid");
         String verNumber = request.getParameter("verNum");
         int intVer = 1;
-        if (verNumber != null) {
+        if (verNumber != null)
+        {
             intVer = Integer.parseInt(verNumber);
         }
         RepositoryFile repoFile = RepositoryFile.ClassMgr.getRepositoryFile(fid, paramRequest.getWebPage().getWebSite());
         VersionInfo ver = null;
         VersionInfo vl = repoFile.getLastVersion();
-        if (null != vl) {
+        if (null != vl)
+        {
             ver = vl;
-            while (ver.getPreviousVersion() != null) { //
-                if (ver.getVersionNumber() == intVer) {
+            while (ver.getPreviousVersion() != null)
+            { //
+                if (ver.getVersionNumber() == intVer)
+                {
                     break;
                 }
                 ver = ver.getPreviousVersion();
             }
         }
-        try {
+        try
+        {
             response.setContentType(DEFAULT_MIME_TYPE);
             response.setHeader("Content-Disposition", "attachment; filename=\"" + ver.getVersionFile() + "\";");
 
             OutputStream out = response.getOutputStream();
-            SWBUtils.IO.copyStream(new FileInputStream(SWBPortal.getWorkPath() + repoFile.getWorkPath() + "/" + verNumber + "/" + ver.getVersionFile()), out);
-        } catch (Exception e) {
+            //SWBUtils.IO.copyStream(new FileInputStream(SWBPortal.getWorkPath() + repoFile.getWorkPath() + "/" + verNumber + "/" + ver.getVersionFile()), out);
+            // hace la corrección
+            String dir = SWBPortal.getWorkPath() + repoFile.getWorkPath() + "/" + verNumber + "/";
+            File fdir = new File(dir);
+            File fileTest = new File(dir + ver.getVersionFile());
+            if (!fileTest.exists() && fdir.exists())
+            {
+                File[] files = fdir.listFiles();
+                if (files != null && files.length == 1 && files[0].isFile())
+                {
+                    String newFile = dir + repoFile.getId();
+                    FileInputStream fin = new FileInputStream(files[0]);
+                    FileOutputStream fout = new FileOutputStream(new File(newFile));
+                    byte[] cont = new byte[1024];
+                    int read = fin.read(cont);
+                    while (read != -1)
+                    {
+                        fout.write(cont, 0, read);
+                        read = fin.read(cont);
+                    }
+                    fin.close();
+                    fout.close();
+                }
+                //SWBUtils.IO.copyStream(new FileInputStream(dir + repoFile.getId()), out);
+                FileInputStream fin = new FileInputStream(dir + repoFile.getId());
+                byte[] cont = new byte[1024];
+                int read = fin.read(cont);
+                while (read != -1)
+                {
+                    out.write(cont, 0, read);
+                    read = fin.read(cont);
+                }
+                fin.close();
+                out.close();
+            } else
+            {
+                //SWBUtils.IO.copyStream(new FileInputStream(dir + ver.getVersionFile()), out);
+                FileInputStream fin = new FileInputStream(dir + ver.getVersionFile());
+                byte[] cont = new byte[1024];
+                int read = fin.read(cont);
+                while (read != -1)
+                {
+                    out.write(cont, 0, read);
+                    read = fin.read(cont);
+                }
+                fin.close();
+                out.close();
+            }
+
+        } catch (Exception e)
+        {
             log.error("Error al obtener el archivo del Repositorio de documentos.", e);
         }
     }
 
     @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -836,12 +922,11 @@ public class LiteFileRepository extends GenericResource {
 
         PrintWriter out = response.getWriter();
         String accion = paramRequest.getAction();
-        if (accion == null) {
+        if (accion == null)
+        {
             accion = "";
         }
         User user = paramRequest.getUser();
-
-
 
         WebPage wpage = paramRequest.getWebPage();
 
@@ -849,7 +934,8 @@ public class LiteFileRepository extends GenericResource {
 
         out.println("<div class=\"swbform\">");
 
-        if (accion.equals("edit")) {
+        if (accion.equals("edit"))
+        {
 
             SWBResourceURL urlA = paramRequest.getActionUrl();
             urlA.setAction("admin_update");
@@ -864,7 +950,6 @@ public class LiteFileRepository extends GenericResource {
             out.println("<table width=\"100%\" border=\"0\" >");
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
             out.println("<tr><td colspan=\"2\"><B>" + paramRequest.getLocaleString("msgRolesDefinitionLevel") + "</B></td></tr>");
             out.println("<tr><td align=\"right\" width=150>" + paramRequest.getLocaleString("msgView") + ":</td>");
             out.println("<td><select name=\"ver\">" + getSelectOptions("ver", wsite, paramRequest) + "</select></td></tr>");
@@ -876,7 +961,8 @@ public class LiteFileRepository extends GenericResource {
             Resource base = getResourceBase();
 
             String checked = "checked";
-            if (base.getAttribute(CHK_FOLDERSUPPORT, "1").equals("0")) {
+            if (base.getAttribute(CHK_FOLDERSUPPORT, "1").equals("0"))
+            {
                 checked = "";
             }
 
@@ -901,57 +987,68 @@ public class LiteFileRepository extends GenericResource {
         out.println("</div>");
     }
 
-    public String getSelectOptions(String type, WebSite wsite, SWBParamRequest paramRequest) {
+    public String getSelectOptions(String type, WebSite wsite, SWBParamRequest paramRequest)
+    {
         String strTemp = "";
-        try {
+        try
+        {
 
             Resource base = getResourceBase();
             User user = paramRequest.getUser();
 
             String selectedItem = "";
-            if (type.equals("ver")) {
+            if (type.equals("ver"))
+            {
                 selectedItem = base.getAttribute(LVL_VIEW, "0");
-            } else if (type.equals("modificar")) {
+            } else if (type.equals("modificar"))
+            {
                 selectedItem = base.getAttribute(LVL_MODIFY, "0");
 
-            } else if (type.equals("administrar")) {
+            } else if (type.equals("administrar"))
+            {
                 selectedItem = base.getAttribute(LVL_ADMIN, "0");
             }
 
             strTemp = "<option value=\"-1\">" + paramRequest.getLocaleString("msgNoRolesAvailable") + "</option>";
 
             Iterator<Role> iRoles = wsite.getUserRepository().listRoles(); //DBRole.getInstance().getRoles(topicmap.getDbdata().getRepository());
-            StringBuffer strRules = new StringBuffer("");
-            strRules.append("\n<option value=\"0\">" + paramRequest.getLocaleString("msgSelNone") + "</option>");
+            StringBuilder strRules = new StringBuilder("");
+            strRules.append("\n<option value=\"0\">").append(paramRequest.getLocaleString("msgSelNone")).append("</option>");
             strRules.append("\n<optgroup label=\"Roles\">");
-            while (iRoles.hasNext()) {
+            while (iRoles.hasNext())
+            {
                 Role oRole = iRoles.next();
-                strRules.append("\n<option value=\"" + oRole.getURI() + "\" " + (selectedItem.equals(oRole.getURI()) ? "selected" : "") + ">" + oRole.getDisplayTitle(user.getLanguage()) + "</option>");
+                strRules.append("\n<option value=\"").append(oRole.getURI()).append("\" ").append(selectedItem.equals(oRole.getURI()) ? "selected" : "").append(">").append(oRole.getDisplayTitle(user.getLanguage())).append("</option>");
             }
             strRules.append("\n</optgroup>");
 
             strRules.append("\n<optgroup label=\"User Groups\">");
             Iterator<UserGroup> iugroups = wsite.getUserRepository().listUserGroups();
-            while (iugroups.hasNext()) {
+            while (iugroups.hasNext())
+            {
                 UserGroup oUG = iugroups.next();
                 strRules.append("\n<option value=\"" + oUG.getURI() + "\" " + (selectedItem.equals(oUG.getURI()) ? "selected" : "") + ">" + oUG.getDisplayTitle(user.getLanguage()) + "</option>");
             }
             strRules.append("\n</optgroup>");
-            if (strRules.toString().length() > 0) {
+            if (strRules.toString().length() > 0)
+            {
                 strTemp = strRules.toString();
             }
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             log.error("Error al cargal opciones de selección. getSelectOptions()", e);
         }
 
         return strTemp;
     }
 
-    public int getLevelUser(User user) {
+    public int getLevelUser(User user)
+    {
         int level = 0;
 
-        if (null == user) {
+        if (null == user)
+        {
             return level;
         }
 
@@ -963,77 +1060,105 @@ public class LiteFileRepository extends GenericResource {
 
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         GenericObject gobj = null;
-        try {
+        try
+        {
             gobj = ont.getGenericObject(uriAdmin);
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             //log.error("Errror getLevelUser()",e);
         }
 
         UserGroup ugrp = null;
         Role urole = null;
 
-        if (!uriAdmin.equals("0")) {
-            if (gobj != null) {
-                if (gobj instanceof UserGroup) {
+        if (!uriAdmin.equals("0"))
+        {
+            if (gobj != null)
+            {
+                if (gobj instanceof UserGroup)
+                {
                     ugrp = (UserGroup) gobj;
-                    if (user.hasUserGroup(ugrp)) {
+                    if (user.hasUserGroup(ugrp))
+                    {
                         level = 3;
                     }
-                } else if (gobj instanceof Role) {
+                } else if (gobj instanceof Role)
+                {
                     urole = (Role) gobj;
-                    if (user.hasRole(urole)) {
+                    if (user.hasRole(urole))
+                    {
                         level = 3;
                     }
                 }
-            } else {
+            } else
+            {
                 level = 3;
             }
-        } else {
+        } else
+        {
             level = 3;
         }
 
-        if (level == 0) {
-            if (!uriModify.equals("0")) {
+        if (level == 0)
+        {
+            if (!uriModify.equals("0"))
+            {
                 gobj = ont.getGenericObject(uriModify);
-                if (gobj != null) {
-                    if (gobj instanceof UserGroup) {
+                if (gobj != null)
+                {
+                    if (gobj instanceof UserGroup)
+                    {
                         ugrp = (UserGroup) gobj;
-                        if (user.hasUserGroup(ugrp)) {
+                        if (user.hasUserGroup(ugrp))
+                        {
                             level = 2;
                         }
-                    } else if (gobj instanceof Role) {
+                    } else if (gobj instanceof Role)
+                    {
                         urole = (Role) gobj;
-                        if (user.hasRole(urole)) {
+                        if (user.hasRole(urole))
+                        {
                             level = 2;
                         }
                     }
-                } else {
+                } else
+                {
                     level = 2;
                 }
-            } else {
+            } else
+            {
                 level = 2;
             }
         }
 
-        if (level == 0) {
-            if (!uriView.equals("0")) {
+        if (level == 0)
+        {
+            if (!uriView.equals("0"))
+            {
                 gobj = ont.getGenericObject(uriView);
-                if (gobj != null) {
-                    if (gobj instanceof UserGroup) {
+                if (gobj != null)
+                {
+                    if (gobj instanceof UserGroup)
+                    {
                         ugrp = (UserGroup) gobj;
-                        if (user.hasUserGroup(ugrp)) {
+                        if (user.hasUserGroup(ugrp))
+                        {
                             level = 1;
                         }
-                    } else if (gobj instanceof Role) {
+                    } else if (gobj instanceof Role)
+                    {
                         urole = (Role) gobj;
-                        if (user.hasRole(urole)) {
+                        if (user.hasRole(urole))
+                        {
                             level = 1;
                         }
                     }
-                } else {
+                } else
+                {
                     level = 1;
                 }
-            } else {
+            } else
+            {
                 level = 1;
             }
         }
@@ -1042,19 +1167,22 @@ public class LiteFileRepository extends GenericResource {
     }
 
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
+    {
 
         WebPage wpage = response.getWebPage();
         WebSite wsite = wpage.getWebSite();
         String action = response.getAction();
-        if (action == null) {
+        if (action == null)
+        {
             action = "";
         }
 
-        if ("newfile".equals(action)) {
+        if ("newfile".equals(action))
+        {
             org.semanticwb.portal.util.FileUpload fup = new org.semanticwb.portal.util.FileUpload();
             fup.getFiles(request, null);
-            String fname = fup.getFileName("ffile");
+            String originalName = fup.getFileName("ffile");
             String ftitle = fup.getValue("ftitle");
             String fdescription = fup.getValue("fdescription");
             String fcomment = fup.getValue("fcomment");
@@ -1067,12 +1195,15 @@ public class LiteFileRepository extends GenericResource {
             WebPage repoDir = response.getWebPage();
             RepositoryFile repoFile = null;
             boolean incremento = Boolean.FALSE;
-            if (fid != null) {
+            if (fid != null)
+            {
                 repoFile = RepositoryFile.ClassMgr.getRepositoryFile(fid, repoDir.getWebSite());
-                if (newVersion != null && newVersion.equals("nextInt")) {
+                if (newVersion != null && newVersion.equals("nextInt"))
+                {
                     incremento = Boolean.TRUE;
                 }
-            } else {
+            } else
+            {
                 repoFile = RepositoryFile.ClassMgr.createRepositoryFile(repoDir.getWebSite());
                 repoFile.setRepositoryFileDirectory(repoDir);
             }
@@ -1080,61 +1211,75 @@ public class LiteFileRepository extends GenericResource {
             repoFile.setTitle(ftitle);
             repoFile.setDescription(fdescription);
 
-
-            if (fname.lastIndexOf('/') != -1) {
-                int pos = fname.lastIndexOf('/');
-                fname = fname.substring(pos + 1);
+            if (originalName.lastIndexOf('/') != -1)
+            {
+                int pos = originalName.lastIndexOf('/');
+                originalName = originalName.substring(pos + 1);
             }
-            if (fname.lastIndexOf('\\') != -1) {
-                int pos = fname.lastIndexOf('\\');
-                fname = fname.substring(pos + 1);
+            if (originalName.lastIndexOf('\\') != -1)
+            {
+                int pos = originalName.lastIndexOf('\\');
+                originalName = originalName.substring(pos + 1);
             }
 
-            storeFile(fname, new ByteArrayInputStream(bcont), fcomment, incremento, repoFile);
+            String fname = repoFile.getId();
 
-        } else if ("removefile".equals(action)) {
+            storeFile(originalName, fname, new ByteArrayInputStream(bcont), fcomment, incremento, repoFile);
+
+        } else if ("removefile".equals(action))
+        {
             String fid = request.getParameter("fid");
             WebPage repoDir = response.getWebPage();
             RepositoryFile repoFile = RepositoryFile.ClassMgr.getRepositoryFile(fid, repoDir.getWebSite());
             repoFile.remove();
-        } else if ("admin_update".equals(action)) {
+        } else if ("admin_update".equals(action))
+        {
             String viewrole = request.getParameter("ver");
             String modifyrole = request.getParameter("modificar");
             String adminrole = request.getParameter("administrar");
             String folderSupport = request.getParameter("foldersupport");
-            if(folderSupport==null||folderSupport.equals("null")) folderSupport="0";
+            if (folderSupport == null || folderSupport.equals("null"))
+            {
+                folderSupport = "0";
+            }
 
-            System.out.println("admin---=>" + adminrole+">|||>>>"+folderSupport);
+            System.out.println("admin---=>" + adminrole + ">|||>>>" + folderSupport);
 
-            try {
+            try
+            {
                 getResourceBase().setAttribute(LVL_VIEW, viewrole);
                 getResourceBase().setAttribute(LVL_MODIFY, modifyrole);
                 getResourceBase().setAttribute(LVL_ADMIN, adminrole);
                 getResourceBase().setAttribute(CHK_FOLDERSUPPORT, folderSupport);
                 getResourceBase().updateAttributesToDB();
 
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                 log.error("Error al guardar configuración de niveles de usuario de ProcessFileRepository", e);
             }
             response.setMode(SWBActionResponse.Mode_ADMIN);
             response.setAction("edit");
-        } else if ("newDir".equals(action)) {
+        } else if ("newDir".equals(action))
+        {
 
             String title = request.getParameter("d_title");
             String description = request.getParameter("d_description");
             String idnewwp = SWBPlatform.getIDGenerator().getID(title, null);
 
-            try {
+            try
+            {
 
                 WebPage wp = wsite.getWebPage(idnewwp);
 
-                if (wp != null) {
+                if (wp != null)
+                {
                     idnewwp = "dir_" + idnewwp;
                 }
 
                 wp = wsite.getWebPage(idnewwp);
 
-                if (wp == null) {
+                if (wp == null)
+                {
                     wp = wsite.createWebPage(idnewwp);
 
                     wp.setTitle(title);
@@ -1159,25 +1304,30 @@ public class LiteFileRepository extends GenericResource {
                     response.sendRedirect(url.toString());
 
                 }
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                 log.error("Error al agregar carpeta al repositorio de documentos.");
             }
         }
     }
 
-    public OutputStream storeFile(String name, String comment, boolean bigVersionInc, RepositoryFile repoFile) throws FileNotFoundException {
+    public OutputStream storeFile(String originalName, String name, String comment, boolean bigVersionInc, RepositoryFile repoFile) throws FileNotFoundException
+    {
         VersionInfo v = VersionInfo.ClassMgr.createVersionInfo(repoFile.getRepositoryFileDirectory().getWebSite());
-        v.setVersionFile(name);
+
+        v.setVersionFile(originalName);
 
         numf.setMaximumFractionDigits(1);
 
-        if (comment != null) {
+        if (comment != null)
+        {
             v.setVersionComment(comment);
         }
         VersionInfo vl = repoFile.getLastVersion();
         String sver = "1.0";
         int ver = 1;
-        if (vl != null) {
+        if (vl != null)
+        {
             vl.setNextVersion(v);
             v.setPreviousVersion(vl);
             ver = vl.getVersionNumber();
@@ -1185,14 +1335,17 @@ public class LiteFileRepository extends GenericResource {
 
             double f = Double.parseDouble(sver);
 
-            if (bigVersionInc) {
+            if (bigVersionInc)
+            {
                 f = (int) f + 1;
                 sver = "" + (float) f;
-            } else {
+            } else
+            {
                 f = f + 0.10D;
 
                 String sfver = numf.format(f);
-                if (sfver.indexOf(".") == -1) {
+                if (sfver.indexOf(".") == -1)
+                {
                     sfver = "" + (float) f;
                 }
                 sver = sfver;
@@ -1210,100 +1363,141 @@ public class LiteFileRepository extends GenericResource {
     }
 
     /**
-     * Almacena el archivo en la ruta predefinida del RepositoryFile,
-     * Si no existe ninguna version crea una nueva
-     * Si existe una version anterior agrega una nueva versión
+     * Almacena el archivo en la ruta predefinida del RepositoryFile, Si no
+     * existe ninguna version crea una nueva Si existe una version anterior
+     * agrega una nueva versión
+     *
+     * @param originalName
      * @param name
      * @param out
      * @param comment
      * @param bigVersionInc
      */
-    public void storeFile(String name, InputStream in, String comment, boolean bigVersionInc, RepositoryFile repoFile) {
-        try {
-            OutputStream out = storeFile(name, comment, bigVersionInc, repoFile);
+    public void storeFile(String originalName, String name, InputStream in, String comment, boolean bigVersionInc, RepositoryFile repoFile)
+    {
+        try
+        {
+            OutputStream out = storeFile(originalName, name, comment, bigVersionInc, repoFile);
             SWBUtils.IO.copyStream(in, out);
-        } catch (Exception e) {
+        } catch (IOException e)
+        {
             log.error(e);
         }
     }
 
-    public String getFileType(String filename) {
+    public String getFileType(String filename)
+    {
         String file = "Document";
         String type = filename.toLowerCase();
-        if (type.indexOf(".bmp") != -1) {
+        if (type.indexOf(".bmp") != -1)
+        {
             file = "Image";
-        } else if (type.indexOf(".pdf") != -1) {
+        } else if (type.indexOf(".pdf") != -1)
+        {
             file = "Adobe Acrobat";
-        } else if (type.indexOf(".xls") != -1 || type.indexOf(".xlsx") != -1) {
+        } else if (type.indexOf(".xls") != -1 || type.indexOf(".xlsx") != -1)
+        {
             file = "Microsoft Excel";
-        } else if (type.indexOf(".html") != -1 || type.indexOf(".htm") != -1) {
+        } else if (type.indexOf(".html") != -1 || type.indexOf(".htm") != -1)
+        {
             file = "HTML file";
-        } else if (type.indexOf("jpg") != -1 || type.indexOf("jpeg") != -1) {
+        } else if (type.indexOf("jpg") != -1 || type.indexOf("jpeg") != -1)
+        {
             file = "Image";
-        } else if (type.indexOf(".ppt") != -1 || type.indexOf(".pptx") != -1) {
+        } else if (type.indexOf(".ppt") != -1 || type.indexOf(".pptx") != -1)
+        {
             file = "Microsoft Power Point";
-        } else if (type.indexOf(".vsd") != -1) {
+        } else if (type.indexOf(".vsd") != -1)
+        {
             file = "Microsoft Visio";
-        } else if (type.indexOf(".mpp") != -1) {
+        } else if (type.indexOf(".mpp") != -1)
+        {
             file = "Microsoft Project";
-        } else if (type.indexOf(".mmap") != -1) {
+        } else if (type.indexOf(".mmap") != -1)
+        {
             file = "Mind Manager";
-        } else if (type.indexOf(".exe") != -1) {
+        } else if (type.indexOf(".exe") != -1)
+        {
             file = "Application";
-        } else if (type.indexOf(".txt") != -1) {
+        } else if (type.indexOf(".txt") != -1)
+        {
             file = "Text file";
-        } else if (type.indexOf(".properties") != -1) {
+        } else if (type.indexOf(".properties") != -1)
+        {
             file = "Properties file";
-        } else if (type.indexOf(".doc") != -1 || type.indexOf(".docx") != -1) {
+        } else if (type.indexOf(".doc") != -1 || type.indexOf(".docx") != -1)
+        {
             file = "Microsoft Word";
-        } else if (type.indexOf(".xml") != -1) {
+        } else if (type.indexOf(".xml") != -1)
+        {
             file = "XML file";
-        } else if (type.indexOf(".gif") != -1 || type.indexOf(".png") != -1) {
+        } else if (type.indexOf(".gif") != -1 || type.indexOf(".png") != -1)
+        {
             file = "Image";
-        } else if (type.indexOf(".avi") != -1) {
+        } else if (type.indexOf(".avi") != -1)
+        {
             file = "Media file";
-        } else if (type.indexOf(".mp3") != -1) {
+        } else if (type.indexOf(".mp3") != -1)
+        {
             file = "Audio file";
-        } else if (type.indexOf(".wav") != -1) {
+        } else if (type.indexOf(".wav") != -1)
+        {
             file = "Audio file";
-        } else if (type.indexOf(".xsl") != -1) {
+        } else if (type.indexOf(".xsl") != -1)
+        {
             file = "XSLT file";
         }
         return file;
     }
 
-    public String getFileName(String filename) {
+    public String getFileName(String filename)
+    {
         String file = "ico_default2.gif";
         String type = filename.toLowerCase();
-        if (type.indexOf(".bmp") != -1) {
+        if (type.indexOf(".bmp") != -1)
+        {
             file = "ico_bmp.gif";
-        } else if (type.indexOf(".pdf") != -1) {
+        } else if (type.indexOf(".pdf") != -1)
+        {
             file = "ico_acrobat.gif";
-        } else if (type.indexOf(".xls") != -1 || type.indexOf(".xlsx") != -1) {
+        } else if (type.indexOf(".xls") != -1 || type.indexOf(".xlsx") != -1)
+        {
             file = "ico_excel.gif";
-        } else if (type.indexOf(".html") != -1 || type.indexOf(".htm") != -1) {
+        } else if (type.indexOf(".html") != -1 || type.indexOf(".htm") != -1)
+        {
             file = "ico_html.gif";
-        } else if (type.indexOf("jpg") != -1 || type.indexOf("jpeg") != -1) {
+        } else if (type.indexOf("jpg") != -1 || type.indexOf("jpeg") != -1)
+        {
             file = "ico_jpeg.gif";
-        } else if (type.indexOf(".ppt") != -1 || type.indexOf(".pptx") != -1) {
+        } else if (type.indexOf(".ppt") != -1 || type.indexOf(".pptx") != -1)
+        {
             file = "ico_powerpoint.gif";
-        } else if (type.indexOf(".exe") != -1) {
+        } else if (type.indexOf(".exe") != -1)
+        {
             file = "ico_program.gif";
-        } else if (type.indexOf(".txt") != -1 || type.indexOf(".properties") != -1) {
+        } else if (type.indexOf(".txt") != -1 || type.indexOf(".properties") != -1)
+        {
             file = "ico_text.gif";
-        } else if (type.indexOf(".doc") != -1 || type.indexOf(".docx") != -1) {
+        } else if (type.indexOf(".doc") != -1 || type.indexOf(".docx") != -1)
+        {
             file = "ico_word.gif";
-        } else if (type.indexOf(".xml") != -1 || type.indexOf(".xsl") != -1) {
+        } else if (type.indexOf(".xml") != -1 || type.indexOf(".xsl") != -1)
+        {
             file = "ico_xml.gif";
-        } else if (type.indexOf(".mmap") != -1) {
+        } else if (type.indexOf(".mmap") != -1)
+        {
             file = "ico_mindmanager.GIF";
-        } else if (type.indexOf(".gif") != -1) {
+        } else if (type.indexOf(".gif") != -1)
+        {
             file = "ico_gif.gif";
-        } else if (type.indexOf(".avi") != -1) {
+        } else if (type.indexOf(".avi") != -1)
+        {
             file = "ico_video.gif";
-        } else if (type.indexOf(".mp3") != -1) {
+        } else if (type.indexOf(".mp3") != -1)
+        {
             file = "ico_audio.gif";
-        } else if (type.indexOf(".wav") != -1) {
+        } else if (type.indexOf(".wav") != -1)
+        {
             file = "ico_audio.gif";
         }
         return file;
