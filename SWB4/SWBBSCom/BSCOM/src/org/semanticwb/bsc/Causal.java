@@ -5,4 +5,5 @@ package org.semanticwb.bsc;
    */
 public interface Causal extends org.semanticwb.bsc.base.CausalBase
 {
+    public boolean isValid();
 }
