@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que sera creada cuando un post sea de tipo Foto (una imagen), como lo es flicker y facebook (cuando se envia una foto a facebook). 
    */
-public abstract class PhotoBase extends org.semanticwb.social.PostOut implements org.semanticwb.model.Referensable,org.semanticwb.social.PostTextable,org.semanticwb.social.PostImageable,org.semanticwb.social.PostDataable,org.semanticwb.model.Tagable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Traceable
+public abstract class PhotoBase extends org.semanticwb.social.PostOut implements org.semanticwb.model.CalendarRefable,org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable,org.semanticwb.social.PostImageable,org.semanticwb.model.Referensable,org.semanticwb.social.PostDataable,org.semanticwb.model.Traceable
 {
    /**
    * Clase que sera creada cuando un post sea de tipo Foto (una imagen), como lo es flicker y facebook (cuando se envia una foto a facebook).
@@ -131,6 +131,98 @@ public abstract class PhotoBase extends org.semanticwb.social.PostOut implements
             return it;
         }
        /**
+       * Gets all org.semanticwb.social.Photo with a determined Popr_postOutInv
+       * @param value Popr_postOutInv of the type org.semanticwb.social.PostOutPrivacyRelation
+       * @param model Model of the org.semanticwb.social.Photo
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPopr_postOutInv(org.semanticwb.social.PostOutPrivacyRelation value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_haspopr_postOutInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Photo with a determined Popr_postOutInv
+       * @param value Popr_postOutInv of the type org.semanticwb.social.PostOutPrivacyRelation
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPopr_postOutInv(org.semanticwb.social.PostOutPrivacyRelation value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_haspopr_postOutInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Photo with a determined Msg_lang
+       * @param value Msg_lang of the type org.semanticwb.model.Language
+       * @param model Model of the org.semanticwb.social.Photo
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByMsg_lang(org.semanticwb.model.Language value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_msg_lang, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Photo with a determined Msg_lang
+       * @param value Msg_lang of the type org.semanticwb.model.Language
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByMsg_lang(org.semanticwb.model.Language value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_msg_lang,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Photo with a determined CalendarRef
+       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
+       * @param model Model of the org.semanticwb.social.Photo
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByCalendarRef(org.semanticwb.model.CalendarRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Photo with a determined CalendarRef
+       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByCalendarRef(org.semanticwb.model.CalendarRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Photo with a determined FastCalendar
+       * @param value FastCalendar of the type org.semanticwb.social.FastCalendar
+       * @param model Model of the org.semanticwb.social.Photo
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByFastCalendar(org.semanticwb.social.FastCalendar value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_fastCalendar, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Photo with a determined FastCalendar
+       * @param value FastCalendar of the type org.semanticwb.social.FastCalendar
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByFastCalendar(org.semanticwb.social.FastCalendar value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_fastCalendar,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.social.Photo with a determined GeoStateMap
        * @param value GeoStateMap of the type org.semanticwb.social.CountryState
        * @param model Model of the org.semanticwb.social.Photo
@@ -177,29 +269,6 @@ public abstract class PhotoBase extends org.semanticwb.social.PostOut implements
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.Photo with a determined Popr_postOutInv
-       * @param value Popr_postOutInv of the type org.semanticwb.social.PostOutPrivacyRelation
-       * @param model Model of the org.semanticwb.social.Photo
-       * @return Iterator with all the org.semanticwb.social.Photo
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPopr_postOutInv(org.semanticwb.social.PostOutPrivacyRelation value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_haspopr_postOutInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Photo with a determined Popr_postOutInv
-       * @param value Popr_postOutInv of the type org.semanticwb.social.PostOutPrivacyRelation
-       * @return Iterator with all the org.semanticwb.social.Photo
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPopr_postOutInv(org.semanticwb.social.PostOutPrivacyRelation value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_haspopr_postOutInv,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.social.Photo with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.social.Photo
@@ -243,29 +312,6 @@ public abstract class PhotoBase extends org.semanticwb.social.PostOut implements
         public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoBySocialNetwork(org.semanticwb.social.SocialNetwork value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetwork,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Photo with a determined Msg_lang
-       * @param value Msg_lang of the type org.semanticwb.model.Language
-       * @param model Model of the org.semanticwb.social.Photo
-       * @return Iterator with all the org.semanticwb.social.Photo
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByMsg_lang(org.semanticwb.model.Language value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_msg_lang, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Photo with a determined Msg_lang
-       * @param value Msg_lang of the type org.semanticwb.model.Language
-       * @return Iterator with all the org.semanticwb.social.Photo
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByMsg_lang(org.semanticwb.model.Language value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_msg_lang,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -338,29 +384,6 @@ public abstract class PhotoBase extends org.semanticwb.social.PostOut implements
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.Photo with a determined CalendarRef
-       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
-       * @param model Model of the org.semanticwb.social.Photo
-       * @return Iterator with all the org.semanticwb.social.Photo
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByCalendarRef(org.semanticwb.model.CalendarRef value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Photo with a determined CalendarRef
-       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
-       * @return Iterator with all the org.semanticwb.social.Photo
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByCalendarRef(org.semanticwb.model.CalendarRef value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.social.Photo with a determined PflowInstance
        * @param value PflowInstance of the type org.semanticwb.social.SocialPFlowInstance
        * @param model Model of the org.semanticwb.social.Photo
@@ -381,29 +404,6 @@ public abstract class PhotoBase extends org.semanticwb.social.PostOut implements
         public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPflowInstance(org.semanticwb.social.SocialPFlowInstance value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_pflowInstance,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Photo with a determined FastCalendar
-       * @param value FastCalendar of the type org.semanticwb.social.FastCalendar
-       * @param model Model of the org.semanticwb.social.Photo
-       * @return Iterator with all the org.semanticwb.social.Photo
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByFastCalendar(org.semanticwb.social.FastCalendar value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_fastCalendar, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Photo with a determined FastCalendar
-       * @param value FastCalendar of the type org.semanticwb.social.FastCalendar
-       * @return Iterator with all the org.semanticwb.social.Photo
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByFastCalendar(org.semanticwb.social.FastCalendar value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_fastCalendar,value.getSemanticObject(),sclass));
             return it;
         }
     }

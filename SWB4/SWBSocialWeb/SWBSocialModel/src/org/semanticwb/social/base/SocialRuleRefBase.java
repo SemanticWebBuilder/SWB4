@@ -1,6 +1,9 @@
 package org.semanticwb.social.base;
 
 
+   /**
+   * Referencia a un objeto de tipo SocialRule 
+   */
 public abstract class SocialRuleRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable
 {
    /**
@@ -8,6 +11,9 @@ public abstract class SocialRuleRefBase extends org.semanticwb.model.Reference i
    */
     public static final org.semanticwb.platform.SemanticClass social_SocialRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialRule");
     public static final org.semanticwb.platform.SemanticProperty social_socialRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#socialRule");
+   /**
+   * Referencia a un objeto de tipo SocialRule
+   */
     public static final org.semanticwb.platform.SemanticClass social_SocialRuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialRuleRef");
    /**
    * The semantic class that represents the currentObject

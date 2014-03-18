@@ -467,7 +467,7 @@ public class SentimentalDataClassifier {
                     //System.out.println("messageIn final:"+messageIn.getMsg_Text());
 
                     //Clasificación por palabras relacionadas a un tema
-                    SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(post, externalString2Clasify_TMP, true);
+                    SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(stream, post, externalString2Clasify_TMP, true);
 
                     boolean firstTime = true;
                     boolean rulesClassifierValue = false;

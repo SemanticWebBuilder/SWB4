@@ -6,7 +6,7 @@ package org.semanticwb.social.base;
 public interface SocialPFlowRefableBase extends org.semanticwb.model.Referensable
 {
    /**
-   * Referencia a un objeto de tipo PFlow 
+   * Referencia a un objeto de tipo SocialPFlow 
    */
     public static final org.semanticwb.platform.SemanticClass social_SocialPFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialPFlowRef");
     public static final org.semanticwb.platform.SemanticProperty social_hasPFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPFlowRef");

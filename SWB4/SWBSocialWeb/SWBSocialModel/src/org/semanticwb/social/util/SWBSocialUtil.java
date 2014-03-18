@@ -846,7 +846,7 @@ public class SWBSocialUtil {
          * @text String analized versus topics in the same website
          * @return SocialTopic al que se clasifico el PostIn
          */
-        public static org.semanticwb.social.SocialTopic clasifyMsgbySocialTopic(PostIn postIn, String text, boolean sendEmail2Users)
+        public static org.semanticwb.social.SocialTopic clasifyMsgbySocialTopic(Stream stream, PostIn postIn, String text, boolean sendEmail2Users)
         {
             org.semanticwb.social.SocialTopic socialTopicResult=null;
             SocialSite socialSite=SocialSite.ClassMgr.getSocialSite(postIn.getSemanticObject().getModel().getName());
@@ -870,14 +870,72 @@ public class SWBSocialUtil {
             }**/
             
             //System.out.println("Asocialcion de socialTopic-23");
-
             
+            
+            //Revisa si los SocialTopics que tiene asignado el Stream por el que entró el PostIn tienen palabras que concuerden con el
+            //mensaje del PostIn, de ser así, asigna el PostIn al primer SocialTopic que concuerde en sus palabras clave.
+            Iterator<org.semanticwb.social.SocialTopic> itTopics=stream.listTopics2Applies();
+            while(itTopics.hasNext())
+            {
+                org.semanticwb.social.SocialTopic socialTopic=itTopics.next(); 
+                System.out.println("socialTopic TENIDO:"+socialTopic);
+                if(socialTopic.isActive() && !socialTopic.isDeleted())  //Si el SocialTopic esta activo y no borrado 
+                {
+                    String sTags=socialTopic.getTags();
+                    boolean existWord=false;
+                    if(sTags!=null && sTags.length()>0)
+                    {
+                        String[] tags=sTags.split("\\,");  //Dividir valores
+                        for(int i=0;i<tags.length;i++)
+                        {
+                            String tag=tags[i];
+                            tag=tag.trim();
+                            //System.out.println("tag:"+tag);
+
+                            //Elimino Caracteres especiales (acentuados)
+                            tag=SWBSocialUtil.Strings.replaceSpecialCharacters(tag);
+
+                            tag=SWBSocialUtil.Strings.removePuntualSigns(tag, CONFIG_WEBSITE);
+
+                            //System.out.println("Tag2_Final:"+tag.toLowerCase());
+                            //
+                            //Si una de las palabras clave de un tema esta en el mensaje de entrada, entonces se agrega al postIn ese tema 
+                            //y ya no se continua iterando en los temas
+                            if(externalMsgTMP.toLowerCase().indexOf(tag.toLowerCase())>-1)  //No tendría que hacerlo sobre las palabras, sino sobre todo el texto del mensaje, ya que puedo tener frases de mas de 1 palabra en las palabras clave del tema.
+                            {
+                                //System.out.println("tag SI esta contenido en las palabras:"+tag);
+                               //Hice que un msg de entrada solo se pudiera asignar a un tema debido a que si fuera a mas, entonces sería revisado el mismo msg por 
+                               //varios usuarios en varios flujos, es mejor que se vaya solo a un flujo, asignando bien las palabras clave a cada tema (que no se repitan) 
+                               // y si se clasificó a un tema que no debia de ser (por no colocar correctamente las palabras clave), las personas en un flujo podrían
+                               //reclasificar en cualquier momento el mensaje, para que se vaya a otro tema y por consiguiente a otro flujo.
+                               //System.out.println("Al post se le asocial SocialTopic:"+socialTopic.getURI());
+                               postIn.setSocialTopic(socialTopic);    
+                               socialTopicResult=socialTopic;
+                               if(sendEmail2Users)
+                               {
+                                    //Envío de correo a los usuarios de los grupos que se encuentre asignados al socialtopic, para avisarles
+                                    //del nuevo mensaje que ha llegado a su bandeja
+                                    sendEmail2UsersInSocialTopic(socialTopic, postIn);
+                               }
+                               existWord=true;
+                               break;
+                            }
+                        }
+                        if(existWord) {
+                            break;
+                        }    //Ahora se saldría del while.
+                    }
+                }
+            }
+            
+            //Revisa sobre el resto de los SocialTopics que no tengan Streams a los cuales aplicar            
             Iterator <org.semanticwb.social.SocialTopic> itSocialTopics=org.semanticwb.social.SocialTopic.ClassMgr.listSocialTopics(socialSite); 
             while(itSocialTopics.hasNext())
             {
                 org.semanticwb.social.SocialTopic socialTopic=itSocialTopics.next();
-                if(socialTopic.isActive() && !socialTopic.isDeleted())  //Si el SocialTopic esta activo y no borrado
+                if(!socialTopic.listStreams2ApplyInvs().hasNext() &&  socialTopic.isActive() && !socialTopic.isDeleted())  //Si el SocialTopic esta activo y no borrado
                 {
+                    System.out.println("socialTopic NO TENIDO:"+socialTopic);
                     String sTags=socialTopic.getTags();
                     boolean existWord=false;
                     if(sTags!=null && sTags.length()>0)

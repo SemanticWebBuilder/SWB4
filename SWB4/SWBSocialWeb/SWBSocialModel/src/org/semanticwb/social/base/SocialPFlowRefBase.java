@@ -2,9 +2,9 @@ package org.semanticwb.social.base;
 
 
    /**
-   * Referencia a un objeto de tipo PFlow 
+   * Referencia a un objeto de tipo SocialPFlow 
    */
-public abstract class SocialPFlowRefBase extends org.semanticwb.model.Reference implements org.semanticwb.social.SocialPFlowable,org.semanticwb.model.Activeable
+public abstract class SocialPFlowRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable,org.semanticwb.social.SocialPFlowable
 {
    /**
    * Un Flujo de Publicación es una serie de autorizaciones por las que pasa un contenido antes de publicarse en un Sitio Web
@@ -12,7 +12,7 @@ public abstract class SocialPFlowRefBase extends org.semanticwb.model.Reference 
     public static final org.semanticwb.platform.SemanticClass social_SocialPFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialPFlow");
     public static final org.semanticwb.platform.SemanticProperty social_pflow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#pflow");
    /**
-   * Referencia a un objeto de tipo PFlow
+   * Referencia a un objeto de tipo SocialPFlow
    */
     public static final org.semanticwb.platform.SemanticClass social_SocialPFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialPFlowRef");
    /**
