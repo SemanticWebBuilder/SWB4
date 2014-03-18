@@ -23,6 +23,8 @@ if (user != null && user.getLanguage() != null) {
     lang = user.getLanguage();
 }
 
+response.setCharacterEncoding("utf-8");
+
 Map<String, ArrayList<Process>> groups = new TreeMap<String, ArrayList<Process>>();
 SWBResourceURL createUrl = paramRequest.getActionUrl().setAction(UserTaskInboxResource.ACT_CREATE);
 ArrayList<Process> pccs = null;
@@ -63,7 +65,7 @@ Iterator<String> keys = groups.keySet().iterator();
             <h4><%=paramRequest.getLocaleString("createCase")%></h4>
         </div>
         <%if (keys.hasNext()) {%>
-            <form method="post" action="<%=createUrl%>" onsubmit="showWaitDialog('<%=paramRequest.getLocaleString("createCase")%>','<%=paramRequest.getLocaleString("msgCreating")%>'); return true;">
+            <form method="post" action="<%=createUrl%>">
                 <div class="modal-body">
                     <label for="pid"><%=paramRequest.getLocaleString("promptCreate")%></label>
                     <select class="form-control" name="pid">
