@@ -1551,7 +1551,7 @@ public class StreamInBox extends GenericResource {
                         PostIn postIn=itPostIns.next();
                         if(postIn.getSocialTopic()==null)
                         {
-                            SocialTopic socialTopic=SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(postIn, postIn.getMsg_Text(), false);
+                            SocialTopic socialTopic=SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(stream,postIn, postIn.getMsg_Text(), false);
                             if(socialTopic!=null)   //El sistema si pudo clasificar el postIn en uno de los SocialTopic del website
                             {
                                 //Cambiamos de tema a los PostOut asociados al PostIn que acabamos de reclasificar
@@ -1580,7 +1580,7 @@ public class StreamInBox extends GenericResource {
                     while(itPostIns.hasNext())
                     {
                         PostIn postIn=itPostIns.next();
-                        SocialTopic socialTopic=SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(postIn, postIn.getMsg_Text(), false);
+                        SocialTopic socialTopic=SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(stream, postIn, postIn.getMsg_Text(), false);
                         if(socialTopic!=null)   //El sistema si pudo clasificar el postIn en uno de los SocialTopic del website
                         {
                             //Cambiamos de tema a los PostOut asociados al PostIn que acabamos de reclasificar
