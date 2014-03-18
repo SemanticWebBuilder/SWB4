@@ -109,6 +109,8 @@ public String renderElement(HttpServletRequest request, SemanticObject obj,
                         buffer.append("onChange: function (result) {   if(validateExtention('" + objUri + sourceCall + editionId + "_defaultAuto', true)) {dijit.byId('" + objUri + sourceCall + editionId + "_defaultAuto').upload();}}, \n");
                     }else if (obj.getSemanticClass().getName().equals("Video")) {
                         buffer.append("onChange: function (result) {   if(validateVideo('" + objUri + sourceCall + editionId + "_defaultAuto', '" + objUri + sourceCall + editionId+ "frmUploadVideo')){dijit.byId('" + objUri + sourceCall + editionId + "_defaultAuto').upload();}; }, \n"); 
+                    }else{
+                        buffer.append("onChange: function (result) {   this.upload();}, \n");
                     }
                     buffer.append("onCancel: function() {console.log('cancelled');}, \n"
                     + "onAbort: function() {console.log('aborted');}, \n");
