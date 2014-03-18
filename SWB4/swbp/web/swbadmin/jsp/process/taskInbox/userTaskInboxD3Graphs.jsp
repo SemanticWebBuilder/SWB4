@@ -53,43 +53,52 @@ if (showParticipation) {
     }
 }
 
-if (showInstances) {%>
-    <div class="col-xs-6 col-sm-6 col-md-3">
-        <div id="performanceGraph"></div>
-    </div>
-    <script>
-        var data = [{"label":"<%=paramRequest.getLocaleString("lblProcessing")%>","value":<%=processing%>},
-            {"label":"<%=paramRequest.getLocaleString("lblClosed")%>","value":<%=closed%>},
-            {"label":"<%=paramRequest.getLocaleString("lblAborted")%>","value":<%=aborted%>}
-        ];
-        updateChart("#performanceGraph", "<%=paramRequest.getLocaleString("lblInstances")%>(<%=total%>)", data);
-    </script>
-<%
+if (showInstances) {
+    if (processing > 0 || closed > 0 || aborted > 0) {
+        %>
+        <div class="col-xs-6 col-sm-6 col-md-3">
+            <div id="performanceGraph"></div>
+        </div>
+        <script>
+            var data = [{"label":"<%=paramRequest.getLocaleString("lblProcessing")%>","value":<%=processing%>},
+                {"label":"<%=paramRequest.getLocaleString("lblClosed")%>","value":<%=closed%>},
+                {"label":"<%=paramRequest.getLocaleString("lblAborted")%>","value":<%=aborted%>}
+            ];
+            updateChart("#performanceGraph", "<%=paramRequest.getLocaleString("lblInstances")%>(<%=total%>)", data);
+        </script>
+        <%
+    }
 }
-if (showResponse) {%>
-    <div class="col-xs-6 col-sm-6 col-md-3">
-        <div class="processChartPie" id="responseTime"></div>
-    </div>
-    <script>
-        var data2 = [{"label":"<%=paramRequest.getLocaleString("lblMin")%>","value":<%=minTime%>},
-            {"label":"<%=paramRequest.getLocaleString("lblMax")%>","value":<%=maxTime%>},
-            {"label":"<%=paramRequest.getLocaleString("lblAvg")%>","value":<%=avgTime%>}
-        ];
-        updateChart("#responseTime", "<%=paramRequest.getLocaleString("lblResponsetime")%>", data2);
-    </script>
-<%
+if (showResponse) {
+    if (minTime > 0 || maxTime > 0 || avgTime > 0) {
+        %>
+        <div class="col-xs-6 col-sm-6 col-md-3">
+            <div class="processChartPie" id="responseTime"></div>
+        </div>
+        <script>
+            var data2 = [{"label":"<%=paramRequest.getLocaleString("lblMin")%>","value":<%=minTime%>},
+                {"label":"<%=paramRequest.getLocaleString("lblMax")%>","value":<%=maxTime%>},
+                {"label":"<%=paramRequest.getLocaleString("lblAvg")%>","value":<%=avgTime%>}
+            ];
+            updateChart("#responseTime", "<%=paramRequest.getLocaleString("lblResponsetime")%>", data2);
+        </script>
+        <%
+    }
 }
-if (showStatus) {%>
-    <div class="col-xs-6 col-sm-6 col-md-3">
-        <div class="processChartPie" id="overdueGraph"></div>
-    </div>
-    <script>
-        var data3 = [{"label":"<%=paramRequest.getLocaleString("lblOntime")%>","value":<%=ontime%>},
-                    {"label":"<%=paramRequest.getLocaleString("lblDelayed")%>","value":<%=delayed%>}
-        ];
-        updateChart("#overdueGraph", "<%=paramRequest.getLocaleString("lblOverdue")%>", data3);
-    </script>
-<%
+if (showStatus) {
+    if (ontime > 0 || delayed > 0) { 
+        %>
+        <div class="col-xs-6 col-sm-6 col-md-3">
+            <div class="processChartPie" id="overdueGraph"></div>
+        </div>
+        <script>
+            var data3 = [{"label":"<%=paramRequest.getLocaleString("lblOntime")%>","value":<%=ontime%>},
+                        {"label":"<%=paramRequest.getLocaleString("lblDelayed")%>","value":<%=delayed%>}
+            ];
+            updateChart("#overdueGraph", "<%=paramRequest.getLocaleString("lblOverdue")%>", data3);
+        </script>
+    <%
+    }
 }
 if (showParticipation) {%>
     <div class="col-xs-6 col-sm-6 col-md-3">
