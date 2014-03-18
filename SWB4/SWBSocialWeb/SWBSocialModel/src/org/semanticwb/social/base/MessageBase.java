@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que sera creada cuando un post sea de tipo mensaje 
    */
-public abstract class MessageBase extends org.semanticwb.social.PostOut implements org.semanticwb.model.Referensable,org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable,org.semanticwb.social.FileAble,org.semanticwb.model.Tagable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Traceable
+public abstract class MessageBase extends org.semanticwb.social.PostOut implements org.semanticwb.model.CalendarRefable,org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable,org.semanticwb.social.FileAble,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.social.PostDataable
 {
    /**
    * Clase que sera creada cuando un post sea de tipo mensaje
@@ -131,6 +131,98 @@ public abstract class MessageBase extends org.semanticwb.social.PostOut implemen
             return it;
         }
        /**
+       * Gets all org.semanticwb.social.Message with a determined Popr_postOutInv
+       * @param value Popr_postOutInv of the type org.semanticwb.social.PostOutPrivacyRelation
+       * @param model Model of the org.semanticwb.social.Message
+       * @return Iterator with all the org.semanticwb.social.Message
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByPopr_postOutInv(org.semanticwb.social.PostOutPrivacyRelation value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_haspopr_postOutInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Message with a determined Popr_postOutInv
+       * @param value Popr_postOutInv of the type org.semanticwb.social.PostOutPrivacyRelation
+       * @return Iterator with all the org.semanticwb.social.Message
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByPopr_postOutInv(org.semanticwb.social.PostOutPrivacyRelation value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_haspopr_postOutInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Message with a determined Msg_lang
+       * @param value Msg_lang of the type org.semanticwb.model.Language
+       * @param model Model of the org.semanticwb.social.Message
+       * @return Iterator with all the org.semanticwb.social.Message
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByMsg_lang(org.semanticwb.model.Language value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_msg_lang, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Message with a determined Msg_lang
+       * @param value Msg_lang of the type org.semanticwb.model.Language
+       * @return Iterator with all the org.semanticwb.social.Message
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByMsg_lang(org.semanticwb.model.Language value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_msg_lang,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Message with a determined CalendarRef
+       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
+       * @param model Model of the org.semanticwb.social.Message
+       * @return Iterator with all the org.semanticwb.social.Message
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByCalendarRef(org.semanticwb.model.CalendarRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Message with a determined CalendarRef
+       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
+       * @return Iterator with all the org.semanticwb.social.Message
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByCalendarRef(org.semanticwb.model.CalendarRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Message with a determined FastCalendar
+       * @param value FastCalendar of the type org.semanticwb.social.FastCalendar
+       * @param model Model of the org.semanticwb.social.Message
+       * @return Iterator with all the org.semanticwb.social.Message
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByFastCalendar(org.semanticwb.social.FastCalendar value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_fastCalendar, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Message with a determined FastCalendar
+       * @param value FastCalendar of the type org.semanticwb.social.FastCalendar
+       * @return Iterator with all the org.semanticwb.social.Message
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByFastCalendar(org.semanticwb.social.FastCalendar value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_fastCalendar,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.social.Message with a determined GeoStateMap
        * @param value GeoStateMap of the type org.semanticwb.social.CountryState
        * @param model Model of the org.semanticwb.social.Message
@@ -177,29 +269,6 @@ public abstract class MessageBase extends org.semanticwb.social.PostOut implemen
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.Message with a determined Popr_postOutInv
-       * @param value Popr_postOutInv of the type org.semanticwb.social.PostOutPrivacyRelation
-       * @param model Model of the org.semanticwb.social.Message
-       * @return Iterator with all the org.semanticwb.social.Message
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByPopr_postOutInv(org.semanticwb.social.PostOutPrivacyRelation value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_haspopr_postOutInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Message with a determined Popr_postOutInv
-       * @param value Popr_postOutInv of the type org.semanticwb.social.PostOutPrivacyRelation
-       * @return Iterator with all the org.semanticwb.social.Message
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByPopr_postOutInv(org.semanticwb.social.PostOutPrivacyRelation value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_haspopr_postOutInv,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.social.Message with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.social.Message
@@ -243,29 +312,6 @@ public abstract class MessageBase extends org.semanticwb.social.PostOut implemen
         public static java.util.Iterator<org.semanticwb.social.Message> listMessageBySocialNetwork(org.semanticwb.social.SocialNetwork value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetwork,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Message with a determined Msg_lang
-       * @param value Msg_lang of the type org.semanticwb.model.Language
-       * @param model Model of the org.semanticwb.social.Message
-       * @return Iterator with all the org.semanticwb.social.Message
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByMsg_lang(org.semanticwb.model.Language value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_msg_lang, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Message with a determined Msg_lang
-       * @param value Msg_lang of the type org.semanticwb.model.Language
-       * @return Iterator with all the org.semanticwb.social.Message
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByMsg_lang(org.semanticwb.model.Language value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_msg_lang,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -338,29 +384,6 @@ public abstract class MessageBase extends org.semanticwb.social.PostOut implemen
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.Message with a determined CalendarRef
-       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
-       * @param model Model of the org.semanticwb.social.Message
-       * @return Iterator with all the org.semanticwb.social.Message
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByCalendarRef(org.semanticwb.model.CalendarRef value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Message with a determined CalendarRef
-       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
-       * @return Iterator with all the org.semanticwb.social.Message
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByCalendarRef(org.semanticwb.model.CalendarRef value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.social.Message with a determined PflowInstance
        * @param value PflowInstance of the type org.semanticwb.social.SocialPFlowInstance
        * @param model Model of the org.semanticwb.social.Message
@@ -381,29 +404,6 @@ public abstract class MessageBase extends org.semanticwb.social.PostOut implemen
         public static java.util.Iterator<org.semanticwb.social.Message> listMessageByPflowInstance(org.semanticwb.social.SocialPFlowInstance value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_pflowInstance,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Message with a determined FastCalendar
-       * @param value FastCalendar of the type org.semanticwb.social.FastCalendar
-       * @param model Model of the org.semanticwb.social.Message
-       * @return Iterator with all the org.semanticwb.social.Message
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByFastCalendar(org.semanticwb.social.FastCalendar value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_fastCalendar, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Message with a determined FastCalendar
-       * @param value FastCalendar of the type org.semanticwb.social.FastCalendar
-       * @return Iterator with all the org.semanticwb.social.Message
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByFastCalendar(org.semanticwb.social.FastCalendar value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_fastCalendar,value.getSemanticObject(),sclass));
             return it;
         }
     }

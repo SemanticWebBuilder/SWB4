@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase principal para manejo de reglas en swbSocial 
    */
-public abstract class SocialRuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.social.Relationable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode
+public abstract class SocialRuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Relationable,org.semanticwb.model.Filterable,org.semanticwb.model.XMLable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable
 {
    /**
    * Clase padre de todas las acciones posibles en swbsocial
@@ -14,6 +14,9 @@ public abstract class SocialRuleBase extends org.semanticwb.model.SWBClass imple
    * Una Regla puede tener acciones
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasAction");
+   /**
+   * Referencia a un objeto de tipo SocialRule
+   */
     public static final org.semanticwb.platform.SemanticClass social_SocialRuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialRuleRef");
     public static final org.semanticwb.platform.SemanticProperty social_hasSocialRuleRefInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasSocialRuleRefInv");
    /**

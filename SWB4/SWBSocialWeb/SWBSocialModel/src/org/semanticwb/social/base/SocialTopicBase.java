@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Catalogo de temas de un modelo (Marca) 
    */
-public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.social.SocialPFlowRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Tagable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode
+public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Tagable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.social.SocialPFlowRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.model.Trashable,org.semanticwb.model.Traceable
 {
    /**
    * Catalogo de temas de un modelo (Marca)
@@ -24,6 +24,11 @@ public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass impl
    * Indica si se desea enviar email a los usuarios de los grupos que tenga asignado el SocialTopic para indicarles que existen comentarios nuevos sobre los mensajes que se postearon desde ese socialTopic.
    */
     public static final org.semanticwb.platform.SemanticProperty social_sentEmailInComments=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#sentEmailInComments");
+   /**
+   * Clase que contendra los streams que configurados para cada usuario
+   */
+    public static final org.semanticwb.platform.SemanticClass social_Stream=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Stream");
+    public static final org.semanticwb.platform.SemanticProperty social_hasStreams2ApplyInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasStreams2ApplyInv");
    /**
    * Clase a Cambiar despues por "Relacional", esta y todas sus hijas. Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta..
    */
@@ -213,6 +218,29 @@ public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass impl
         public static java.util.Iterator<org.semanticwb.social.SocialTopic> listSocialTopicByPFlowRef(org.semanticwb.social.SocialPFlowRef value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialTopic> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPFlowRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SocialTopic with a determined Streams2ApplyInv
+       * @param value Streams2ApplyInv of the type org.semanticwb.social.Stream
+       * @param model Model of the org.semanticwb.social.SocialTopic
+       * @return Iterator with all the org.semanticwb.social.SocialTopic
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SocialTopic> listSocialTopicByStreams2ApplyInv(org.semanticwb.social.Stream value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialTopic> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasStreams2ApplyInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SocialTopic with a determined Streams2ApplyInv
+       * @param value Streams2ApplyInv of the type org.semanticwb.social.Stream
+       * @return Iterator with all the org.semanticwb.social.SocialTopic
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SocialTopic> listSocialTopicByStreams2ApplyInv(org.semanticwb.social.Stream value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialTopic> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasStreams2ApplyInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -743,6 +771,45 @@ public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass impl
          if(obj!=null)
          {
              ret=(org.semanticwb.social.SocialPFlowRef)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Gets all the org.semanticwb.social.Stream
+   * @return A GenericIterator with all the org.semanticwb.social.Stream
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.Stream> listStreams2ApplyInvs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.Stream>(getSemanticObject().listObjectProperties(social_hasStreams2ApplyInv));
+    }
+
+   /**
+   * Gets true if has a Streams2ApplyInv
+   * @param value org.semanticwb.social.Stream to verify
+   * @return true if the org.semanticwb.social.Stream exists, false otherwise
+   */
+    public boolean hasStreams2ApplyInv(org.semanticwb.social.Stream value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_hasStreams2ApplyInv,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the Streams2ApplyInv
+   * @return a org.semanticwb.social.Stream
+   */
+    public org.semanticwb.social.Stream getStreams2ApplyInv()
+    {
+         org.semanticwb.social.Stream ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasStreams2ApplyInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.Stream)obj.createGenericInstance();
          }
          return ret;
     }

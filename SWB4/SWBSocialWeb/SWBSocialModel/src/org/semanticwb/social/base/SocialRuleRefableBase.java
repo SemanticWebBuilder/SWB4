@@ -5,6 +5,9 @@ package org.semanticwb.social.base;
    */
 public interface SocialRuleRefableBase extends org.semanticwb.model.Referensable
 {
+   /**
+   * Referencia a un objeto de tipo SocialRule 
+   */
     public static final org.semanticwb.platform.SemanticClass social_SocialRuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialRuleRef");
     public static final org.semanticwb.platform.SemanticProperty social_hasSocialRuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasSocialRuleRef");
    /**
