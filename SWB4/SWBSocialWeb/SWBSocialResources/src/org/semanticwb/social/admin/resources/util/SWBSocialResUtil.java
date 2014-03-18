@@ -111,7 +111,7 @@ public class SWBSocialResUtil {
         {
             //System.out.println("SWBSocialUtil/replaceHref");
             int pos=0;
-            int f = text.indexOf("http://", pos);
+            int f = text.indexOf("http", pos);
             int space=text.indexOf(" ", f);
             if(space==-1) {
               space=text.length();
@@ -122,7 +122,7 @@ public class SWBSocialResUtil {
                 //System.out.println("ENTRA WHILE F:"+f+",space:"+space);
                 text=text.substring(0, f)+"<a target=\"_new\" href=\""+text.substring(f, space)+"\">"+text.substring(f, space)+"</a>"+text.substring(space);
                 pos = f + 24+text.substring(f, space).length()+2+text.substring(f, space).length();
-                f = text.indexOf("http://", pos);
+                f = text.indexOf("http", pos);
                 space=text.indexOf(" ", f);
                 if(space==-1) {
                     space=text.length();
