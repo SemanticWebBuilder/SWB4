@@ -532,7 +532,7 @@
     <rdfs:comment>Clase que hereda de swb:WebSite. Es un tipo de website Social. De esta manera se puede contar con todos los elementos en el arbol de navegación en la administración, y otros elementos utiles para Social Site (Marca).</rdfs:comment>
     <swb:hasClass>
       <swb:Class rdf:ID="SocialPFlowRef">
-        <rdfs:comment>Referencia a un objeto de tipo PFlow</rdfs:comment>
+        <rdfs:comment>Referencia a un objeto de tipo SocialPFlow</rdfs:comment>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
         <rdfs:subClassOf rdf:resource="#SocialPFlowable"/>
@@ -760,6 +760,7 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableClass"/>
   </owl:Class>
   <owl:Class rdf:ID="SocialRuleRef">
+    <rdfs:comment>Referencia a un objeto de tipo SocialRule</rdfs:comment>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Reference"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
@@ -802,13 +803,13 @@
       </swb:Class>
     </rdfs:domain>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="haspopr_postOutInv">
-    <rdfs:comment>Propiedad que lista todas las instancias de PostOutPrivacyRelation que tenga un determinado PostOut. Si se elimina el PostOut se eliminarían todas las instancias de PostOutPrivacyRelation que tengan ese PostOut asociado.</rdfs:comment>
+  <owl:ObjectProperty rdf:ID="hasPostInSocialNetworkInv">
+    <rdfs:comment>Esta propiedad inversa me puede decir cuales son los mensajes que han llegado por el Listener por una determinada red social. Si se elimina una red social, se eliminan todos los mensajes de entrada PostIn.</rdfs:comment>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasPostInSocialNetworkInv">
-    <rdfs:comment>Esta propiedad inversa me puede decir cuales son los mensajes que han llegado por el Listener por una determinada red social. Si se elimina una red social, se eliminan todos los mensajes de entrada PostIn.</rdfs:comment>
+  <owl:ObjectProperty rdf:ID="haspopr_postOutInv">
+    <rdfs:comment>Propiedad que lista todas las instancias de PostOutPrivacyRelation que tenga un determinado PostOut. Si se elimina el PostOut se eliminarían todas las instancias de PostOutPrivacyRelation que tengan ese PostOut asociado.</rdfs:comment>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
   </owl:ObjectProperty>
@@ -976,6 +977,27 @@
     <rdfs:comment>El stream puede tener varias instancias de la clase SocialNetStreamSearch, una por cada red social que tenga asignada.Si se elimina un Stream, se eliminan los objetos de esta clase (SocialNetStreamSerch) Asociados.</rdfs:comment>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasTopics2Apply">
+    <rdfs:label xml:lang="en">Topics to classify messages</rdfs:label>
+    <rdfs:label xml:lang="es">Temas para clasificar mensajes</rdfs:label>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasStreams2ApplyInv"/>
+    </owl:inverseOf>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasTopics2Apply">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+        <swbxf:propPromptMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Seleccione temas a los cuales aplique este Stream</swbxf:propPromptMessage>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="es">Topics to classify messages</rdfs:comment>
+    <rdfs:comment xml:lang="es">Temas en los que se clasificaran los mensajes</rdfs:comment>
+    <rdfs:range rdf:resource="#SocialTopic"/>
+    <rdfs:domain rdf:resource="#Stream"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="parentObj">
     <owl:inverseOf>
@@ -1283,6 +1305,20 @@
     <rdfs:range rdf:resource="#PostOutPrivacy"/>
     <rdfs:domain rdf:resource="#PostOutNet"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasStreams2ApplyInv">
+    <rdfs:label xml:lang="en">Streams which listen this topic (Read Only)</rdfs:label>
+    <rdfs:label xml:lang="es">Streams que escucha el Tema (Solo lectura)</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasStreams2ApplyInv">
+        <swbxf:propPromptMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Streams para los cuales aplicará el SocialTopic (Solo Lectura)</swbxf:propPromptMessage>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="adm_youtubegc">
     <rdfs:comment>Una unica instancia de YoutubeGC.</rdfs:comment>
     <rdfs:range>
@@ -1491,6 +1527,12 @@
     <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >7</swb:defaultValue>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="pfiTime">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >time</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="#SocialPFlowInstance"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="socialwpPhoto">
     <rdfs:domain rdf:resource="#SocialWebPage"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -1518,12 +1560,6 @@
         <swbxf:propGroup rdf:resource="#publish_Grp"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="pfiTime">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >time</swb:propertyCodeName>
-    <rdfs:domain rdf:resource="#SocialPFlowInstance"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="postIntesityType">
     <rdfs:domain rdf:resource="#Post"/>
@@ -1874,6 +1910,23 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:comment>Propiedad con valor entero que representa el tipo de Sentimientos que expresa el Post, estos se estan definiendo de esta manera: 0) Neutro 1) Positivo 2)Negativo, estos valores pueden ser mas y permanecer en un objeto tipo colección en lo futuro.</rdfs:comment>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="msg_Text">
+    <rdfs:comment>Propiedad que almacena un texto o mensaje en un objeto Post que lo requiera.</rdfs:comment>
+    <rdfs:domain rdf:resource="#PostTextable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_msg_Text">
+        <swbxf:propPromptMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Captura el texto a ser envaido en mensaje.</swbxf:propPromptMessage>
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Mensaje</rdfs:label>
+    <rdfs:label xml:lang="en">Message</rdfs:label>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="video">
     <rdfs:comment>Propiedad que almacena el nombre(referencia) de un video en un objeto Post que lo requiera.</rdfs:comment>
     <rdfs:domain rdf:resource="#PostVideoable"/>
@@ -1893,23 +1946,6 @@
         </swbxf:formElement>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="msg_Text">
-    <rdfs:comment>Propiedad que almacena un texto o mensaje en un objeto Post que lo requiera.</rdfs:comment>
-    <rdfs:domain rdf:resource="#PostTextable"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_msg_Text">
-        <swbxf:propPromptMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Captura el texto a ser envaido en mensaje.</swbxf:propPromptMessage>
-        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >100</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:label xml:lang="es">Mensaje</rdfs:label>
-    <rdfs:label xml:lang="en">Message</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="isClosedforResponses">
     <rdfs:comment>Propiedad que indica si el postOut esta cerrado para el monitoreo de respuestas o no lo esta. Podría haber utilizado solo la fecha de creación de decir que los que tengan una fecha de mas de una mes que se crearon, no se monitorean mas, pero esto tendría un performance mas deficiente que al tener esta propiedad (isClosedforResponses), que se coloca en true cuando pasa mas de un mes y despues solo busco sobre esta con un listSubjects, el cual es muy rapido al buscar sobre indices.</rdfs:comment>
@@ -2330,6 +2366,12 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:comment>Nombre del usuario en la Red Social</rdfs:comment>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="pfiStatus">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >status</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="#SocialPFlowInstance"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="hasPhoto">
     <rdfs:label xml:lang="es">Foto</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -2344,12 +2386,6 @@
     <rdfs:comment xml:lang="en">Photo</rdfs:comment>
     <rdfs:comment>Propiedad que almacena el nombre(referencia) de la foto en un objeto Post que lo requiera.</rdfs:comment>
     <rdfs:domain rdf:resource="#PostImageable"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="pfiStatus">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >status</swb:propertyCodeName>
-    <rdfs:domain rdf:resource="#SocialPFlowInstance"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="tokenExpirationDate">
     <rdfs:domain rdf:resource="#Oauthable"/>
