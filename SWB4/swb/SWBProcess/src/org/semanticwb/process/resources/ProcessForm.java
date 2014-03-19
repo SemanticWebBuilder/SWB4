@@ -465,7 +465,7 @@ public class ProcessForm extends GenericResource {
             }
         } else if (ACT_PROCESSSIGN.equals(action)) {
             FlowNodeInstance foi = (FlowNodeInstance) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
-            if (suri == null) {
+            if (suri == null || foi.getStatus() == FlowNodeInstance.STATUS_CLOSED) {
                 return;
             }
             String cadenaOrig=null;
@@ -550,7 +550,7 @@ public class ProcessForm extends GenericResource {
             // al final se cierra ....
         } else if (ACT_PROCESS.equals(action)) {
             FlowNodeInstance foi = (FlowNodeInstance) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
-            if (suri == null) {
+            if (suri == null || foi.getStatus() == FlowNodeInstance.STATUS_CLOSED) {
                 return;
             }
             SWBProcessFormMgr mgr = new SWBProcessFormMgr(foi);
