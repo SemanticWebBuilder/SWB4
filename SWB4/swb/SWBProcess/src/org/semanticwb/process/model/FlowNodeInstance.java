@@ -589,13 +589,18 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
     public String getUserTaskInboxUrl() {
         String url = getProcessWebPage().getUrl();
         ResourceType rtype = ResourceType.ClassMgr.getResourceType("ProcessTaskInbox", getProcessSite());
-
+        
         if (rtype != null) {
-            Resource res = rtype.getResource();
-            if(res != null) {
-                Resourceable resable = res.getResourceable();
-                if(resable instanceof WebPage) {
-                    url = ((WebPage)resable).getUrl();
+            //Resource res = rtype.getResource();
+            Iterator<Resource> itres = rtype.listResources();
+            while (itres.hasNext()) {
+                Resource res = itres.next();
+                if(res != null && res.isValid() && res.isActive()) {
+                    Resourceable resable = res.getResourceable();
+                    if(resable != null && resable instanceof WebPage) {
+                        url = ((WebPage)resable).getUrl();
+                        break;
+                    }
                 }
             }
         }
