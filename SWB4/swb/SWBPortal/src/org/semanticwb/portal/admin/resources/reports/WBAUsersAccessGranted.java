@@ -368,7 +368,7 @@ public class WBAUsersAccessGranted extends GenericResource {
                     obj.put("login", user.getLogin());
                     obj.put("ln", user.getLastName()==null?"-":user.getLastName());
                     obj.put("sln", user.getSecondLastName()==null?"-":user.getSecondLastName());
-                    obj.put("n", user.getName()==null?"-":user.getName());
+                    obj.put("n", user.getFirstName()==null?"-":user.getFirstName());
                 }catch(JSONException jsoe) {
                     continue;
                 }                
@@ -468,7 +468,7 @@ public class WBAUsersAccessGranted extends GenericResource {
                     out.println(user.getSecondLastName()==null?"-":user.getSecondLastName());
                     out.println("</td>");
                     out.println("<td>");
-                    out.println(user.getName()==null?"-":user.getName());
+                    out.println(user.getFirstName()==null?"-":user.getFirstName());
                     out.println("</tr>");
                 }
             }
@@ -529,7 +529,7 @@ public class WBAUsersAccessGranted extends GenericResource {
                     obj.put("login", user.getLogin());
                     obj.put("ln", user.getLastName()==null?"-":user.getLastName());
                     obj.put("sln", user.getSecondLastName()==null?"-":user.getSecondLastName());
-                    obj.put("n", user.getName()==null?"-":user.getName());
+                    obj.put("n", user.getFirstName()==null?"-":user.getFirstName());
                 }catch(JSONException jsoe) {
                     continue;
                 }                
