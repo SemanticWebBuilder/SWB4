@@ -2779,7 +2779,7 @@ public class StreamInBox extends GenericResource {
         } else {
             out.println("---");
         }
-        out.println("postIn:"+postIn);
+        //out.println("postIn:"+postIn);
         out.println("</td>");
 
 
