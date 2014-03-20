@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -120,8 +121,10 @@ public class SWBSocialUtil {
     public static final int POST_TYPE_VIDEO=3;
     private static WebSite CONFIG_WEBSITE=null;
     
-    private static HashMap<Integer, CountryState> mxStates =  new HashMap<Integer,CountryState>();
-    private static ArrayList<double[][]> mxPolygons = new ArrayList<double[][]>();
+    //[Pais, [Estado, poligono]]
+    private static HashMap <Country, double[][]> countries = new HashMap<Country, double[][]>();
+    private static HashMap <Country, HashMap<CountryState, double[][]>> statesPolygons = new HashMap<Country, HashMap <CountryState, double[][]>>();
+
     //private static Properties prop = new Properties();
 
     /**
@@ -284,48 +287,52 @@ public class SWBSocialUtil {
     {
 
         BufferedReader br = null;
-        
-        Country country = Country.ClassMgr.getCountry("MX", SWBSocialUtil.getConfigWebSite());
-        long startTime = System.currentTimeMillis();
+        Iterator<Country> countriesIt = Country.ClassMgr.listCountries(SWBSocialUtil.getConfigWebSite());
+        while(countriesIt.hasNext()){
+            Country country = countriesIt.next();
+            //long startTime = System.currentTimeMillis();
+            try{
+                String pathToPolygons = SWBPortal.getWorkPath()+"/models/"+SWBContext.getAdminWebSite().getId()+"/config/PolygonsByCountry/" + country.getId()+ "/";
+                Iterator<CountryState> itCountryStates=country.listStatesInvs();
 
-        /*LECTURA DE DATOS*/
-        try{
-            String pathToPolygons = SWBPortal.getWorkPath()+"/models/"+SWBContext.getAdminWebSite().getId()+"/config/PolygonsByCountry/MX/";
-            //States for Mexico
-            Iterator<CountryState> itCountryStates=country.listStatesInvs();
-            int countryId = 0;
-            int totalLines = 0;
-            while(itCountryStates.hasNext())
-            {
-                CountryState countryState = itCountryStates.next();
-                mxStates.put(countryId, countryState);
-                countryId ++;
-                String filename = pathToPolygons + "MX_"+ countryState.getId() + ".txt";
-                br = new BufferedReader(new FileReader(filename));
-                String line = br.readLine();
-                String dataFile[] = line.split(",");
-
-                double[][] state = new double[Integer.parseInt(dataFile[0])][2];//n rows,2
-                int lineCounter = 0;
-                while ((line = br.readLine()) != null)
+                int totalLines = 0;
+                //HashMap para guardar todos los estados y sus poligonos
+                //[ID DEL ESTADO, POLIGONO DEL ESTADO]
+                HashMap <CountryState, double[][]> countryPolygons = new HashMap<CountryState, double[][]>();
+                //Read each file(polygon)
+                while(itCountryStates.hasNext())
                 {
-                    String [] latlong = line.split(",");
-                    state[lineCounter][0] = Double.parseDouble(latlong[0]);
-                    state[lineCounter][1] = Double.parseDouble(latlong[1]);
-                    lineCounter++;
+                    CountryState countryState = itCountryStates.next();
+                    String filename = pathToPolygons + country.getId() +"_"+ countryState.getId() + ".txt";
+                    br = new BufferedReader(new FileReader(filename));
+                    String line = br.readLine();
+                    String dataFile[] = line.split(",");
+
+                    double[][] statePolygon = new double[Integer.parseInt(dataFile[0])][2];//number of rows,two columns(lat,long)
+                    int lineCounter = 0;
+                    while ((line = br.readLine()) != null)
+                    {
+                        String [] latlong = line.split(",");
+                        statePolygon[lineCounter][0] = Double.parseDouble(latlong[0]);
+                        statePolygon[lineCounter][1] = Double.parseDouble(latlong[1]);
+                        lineCounter++;
+                    }
+                    countryPolygons.put(countryState, statePolygon);
+                    //System.out.println("THE COUNTRY STATE:" + countryState.getTitle() + " - " + countryState.getId() + "- points:" + lineCounter);
+                    totalLines+= lineCounter;
+                    br.close();//Close current file
                 }
-                mxPolygons.add(state);
-                //System.out.println("THE COUNTRY STATE:" + countryState.getTitle() + " - " + countryState.getId() + "- points:" + lineCounter);
-                totalLines+= lineCounter;
-                br.close();//Close current file
+                //HashMap para guardar todos los estados de un pais
+                //[ID DEL PAIS, [ID DEL ESTADO, POLIGONO DEL ESTADO]]
+                statesPolygons.put(country, countryPolygons);
+
+                System.out.println("TOTAL read points:" + totalLines + " FOR:" + country.getTitle());
+                //long endTime = System.currentTimeMillis();
+                //System.out.println("Reading points took" + (endTime - startTime) + " milliseconds");
+            }catch(IOException ioe){
+                log.error("Problem loading states polygons:", ioe);
             }
-            System.out.println("TOTAL read points:" + totalLines);
-            //long endTime = System.currentTimeMillis();
-            //System.out.println("Reading Files took" + (endTime - startTime) + " milliseconds");
-        }catch(IOException ioe){
-            log.error("Problem loading states polygons:", ioe);
-        }
-        /*LECTURA DE DATOS*/        
+        }                       
     }
     
     public static WebSite getConfigWebSite()
@@ -2488,16 +2495,23 @@ public class SWBSocialUtil {
          * @return return a CountryState from where the post was sent.
          */
        public static CountryState getCountryState(Country country, double lat, double lng)
-       {
-           /*System.out.println("ENTERING COUNTRY STATE");
-           Iterator<CountryState> itCountryStates=country.listStatesInvs();
-           while(itCountryStates.hasNext())
-           {
-               CountryState countryState=itCountryStates.next();
-               System.out.println("THE COUNTRY STATE:" + countryState.getTitle() + " - " + countryState.getId());
-           }*/
-           //long startTime = System.currentTimeMillis();
+       {           
+           long startTime = System.currentTimeMillis();
            
+           //Iterar dentro de los estados de un pais
+           //System.out.println("BUSCANDO EN EL PAÍS:" + country.getTitle());
+           if(statesPolygons.get(country) != null){
+                for (Map.Entry<CountryState, double[][]> entryState : statesPolygons.get(country).entrySet()) {
+                    if(pnpoly(entryState.getValue(), lat, lng)){
+                        long endTime = System.currentTimeMillis(); 
+                        System.out.println("Post: " +lat+","+lng+" is in:" + entryState.getKey().getTitle() + " Time:" + (endTime-startTime) +"ms");
+                         return entryState.getKey();
+                     }            
+                }
+           }else{
+                log.error("Not States available for Country:" + country.getTitle());
+           }
+           /*
            for(int i = 0; i < mxPolygons.size(); i++){
                 if(pnpoly(mxPolygons.get(i), lat, lng)){
                     //System.out.println("El post: " +lat+","+lng+" esta en:" + mxStates.get(i).getTitle());
@@ -2505,7 +2519,7 @@ public class SWBSocialUtil {
                     //System.out.println("Lookin for state " + (endTime - startTime) + " milliseconds");
                     return mxStates.get(i);
                 }
-           }
+           }*/
            return null;   
        }
        
