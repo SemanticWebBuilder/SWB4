@@ -601,45 +601,45 @@ public class ProcessFileRepository extends GenericResource {
         String file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeUNK", locale);
         String type = filename.toLowerCase();
         
-        if (type.indexOf(".bmp") != -1) {
+        if (type.endsWith(".bmp")) {
             file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileImage", locale);;
-        } else if (type.indexOf(".pdf") != -1) {
+        } else if (type.endsWith(".pdf")) {
             file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypePDF", locale);
-        } else if (type.indexOf(".xls") != -1 || type.indexOf(".xlsx") != -1) {
+        } else if (type.endsWith(".xls") || type.endsWith(".xlsx")) {
             file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeXLS", locale);
-        } else if (type.indexOf(".html") != -1 || type.indexOf(".htm") != -1) {
+        } else if (type.endsWith(".html") || type.endsWith(".htm")) {
             file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeHTML", locale);
-        } else if (type.indexOf("jpg") != -1 || type.indexOf("jpeg") != -1) {
+        } else if (type.endsWith(".jpg") || type.endsWith(".jpeg")) {
             file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeImage", locale);
-        } else if (type.indexOf(".ppt") != -1 || type.indexOf(".pptx") != -1) {
+        } else if (type.endsWith(".ppt") || type.endsWith(".pptx")) {
             file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypePPT", locale);
-        } else if (type.indexOf(".vsd") != -1) {
+        } else if (type.endsWith(".vsd")) {
             file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeVSD", locale);
-        } else if (type.indexOf(".mpp") != -1) {
+        } else if (type.endsWith(".mpp")) {
             file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeMPP", locale);
-        } else if (type.indexOf(".mmap") != -1) {
+        } else if (type.endsWith(".mmap")) {
             file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeMMAP", locale);
-        } else if (type.indexOf(".exe") != -1) {
+        } else if (type.endsWith(".exe")) {
             file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeEXE", locale);
-        } else if (type.indexOf(".txt") != -1) {
+        } else if (type.endsWith(".txt")) {
             file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeTXT", locale);
-        } else if (type.indexOf(".properties") != -1) {
+        } else if (type.endsWith(".properties")) {
             file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypePROP", locale);
-        } else if (type.indexOf(".doc") != -1 || type.indexOf(".docx") != -1) {
+        } else if (type.endsWith(".doc") || type.endsWith(".docx")) {
             file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeDOC", locale);
-        } else if (type.indexOf(".xml") != -1) {
+        } else if (type.endsWith(".xml")) {
             file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeXML", locale);
-        } else if (type.indexOf(".gif") != -1 || type.indexOf(".png") != -1) {
+        } else if (type.endsWith(".gif") || type.endsWith(".png")) {
             file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeImage", locale);
-        } else if (type.indexOf(".avi") != -1) {
+        } else if (type.endsWith(".avi")) {
             file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeVIDEO", locale);
-        } else if (type.indexOf(".mp3") != -1) {
+        } else if (type.endsWith(".mp3")) {
             file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeAUDIO", locale);
-        } else if (type.indexOf(".wav") != -1) {
+        } else if (type.endsWith(".wav")) {
             file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeAUDIO", locale);
-        } else if (type.indexOf(".xsl") != -1) {
+        } else if (type.endsWith(".xsl")) {
             file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeXSL", locale);
-        } else {
+        } else if (type.startsWith("http://") || type.startsWith("https://") || type.startsWith("ftp://")) {
             file = SWBUtils.TEXT.getLocaleString(bundle, "lblFileTypeURL", locale);
         }
         return file;
@@ -655,37 +655,37 @@ public class ProcessFileRepository extends GenericResource {
         String path = SWBPlatform.getContextPath()+"/swbadmin/jsp/process/repository/css/images/";
         String ret = "";
         String type = fileName.toLowerCase();
-        if (type.indexOf(".bmp") != -1) {
+        if (type.endsWith(".bmp")) {
             ret = path+"bmp.png";
-        } else if (type.indexOf(".pdf") != -1) {
+        } else if (type.endsWith(".pdf")) {
             ret = path+"pdf.png";
-        } else if (type.indexOf(".png") != -1) {
+        } else if (type.endsWith(".png")) {
             ret = path+"png.png";
-        } else if (type.indexOf(".xls") != -1 || type.indexOf(".xlsx") != -1) {
+        } else if (type.endsWith(".xls") || type.endsWith(".xlsx")) {
             ret = path+"xlsx_win.png";
-        } else if (type.indexOf(".html") != -1 || type.indexOf(".htm") != -1) {
+        } else if (type.endsWith(".html") || type.endsWith(".htm")) {
             ret = path+"css.png";
-        } else if (type.indexOf("jpg") != -1 || type.indexOf("jpeg") != -1) {
+        } else if (type.endsWith(".jpg") || type.endsWith(".jpeg")) {
             ret = path+"jpeg.png";
-        } else if (type.indexOf(".ppt") != -1 || type.indexOf(".pptx") != -1) {
+        } else if (type.endsWith(".ppt") || type.endsWith(".pptx")) {
             ret = path+"pptx_win.png";
-        } else if (type.indexOf(".exe") != -1) {
+        } else if (type.endsWith(".exe")) {
             ret = path+"ini.png";
-        } else if (type.indexOf(".txt") != -1 || type.indexOf(".properties") != -1) {
+        } else if (type.endsWith(".txt") || type.endsWith(".properties")) {
             ret = path+"text.png";
-        } else if (type.indexOf(".doc") != -1 || type.indexOf(".docx") != -1) {
+        } else if (type.endsWith(".doc") || type.endsWith(".docx")) {
             ret = path+"docx_win.png";
-        } else if (type.indexOf(".xml") != -1 || type.indexOf(".xsl") != -1) {
+        } else if (type.endsWith(".xml") || type.endsWith(".xsl")) {
             ret = SWBPlatform.getContextPath()+"/swbadmin/images/repositoryfile/ico_xml.gif";
-        } else if (type.indexOf(".mmap") != -1) {
+        } else if (type.endsWith(".mmap")) {
             ret = SWBPlatform.getContextPath()+"/swbadmin/images/repositoryfile/ico_mindmanager.GIF";
-        } else if (type.indexOf(".gif") != -1) {
+        } else if (type.endsWith(".gif")) {
             ret = path+"gif.png";
-        } else if (type.indexOf(".avi") != -1) {
+        } else if (type.endsWith(".avi")) {
             ret = path+"avi.png";
-        } else if (type.indexOf(".mp3") != -1) {
+        } else if (type.endsWith(".mp3")) {
             ret = path+"mp3.png";
-        } else if (type.indexOf(".wav") != -1) {
+        } else if (type.endsWith(".wav")) {
             ret = "wav.png";
         } else {
             ret = path+"unknown.png";
