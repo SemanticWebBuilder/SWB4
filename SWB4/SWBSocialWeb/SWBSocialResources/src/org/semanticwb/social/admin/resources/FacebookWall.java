@@ -66,6 +66,7 @@ import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.SocialUserExtAttributes;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.VideoIn;
+import org.semanticwb.social.admin.resources.util.SWBSocialResUtil;
 import org.semanticwb.social.util.SWBSocialUtil;
 import org.semanticwb.social.util.SocialLoader;
 
@@ -474,7 +475,7 @@ public class FacebookWall extends GenericResource {
                         postIn.setPi_type(SWBSocialUtil.POST_TYPE_MESSAGE);
                         if (postType.equals("status")) {
                             if (!postData.isNull("message")) {
-                                message = postData.getString("message");
+                                message = SWBSocialResUtil.Util.createHttpLink(postData.getString("message"));
                             } else if (!postData.isNull("story")) {
                                 story = (!postData.isNull("story")) ? postData.getString("story") : "";
                                 story = getTagsFromPost(postData.getJSONObject("story_tags"), story);
@@ -512,7 +513,7 @@ public class FacebookWall extends GenericResource {
                                 story = getTagsFromPost(postData.getJSONObject("story_tags"), story);
                             }
                             if (!postData.isNull("message")) {
-                                message = postData.getString("message");
+                                message = SWBSocialResUtil.Util.createHttpLink(postData.getString("message"));
                             }
                             /*
                              if(postData.has("link") && postData.has("name")){
@@ -562,7 +563,7 @@ public class FacebookWall extends GenericResource {
                         postIn.setPi_type(SWBSocialUtil.POST_TYPE_VIDEO);
                         //Get message and/or story
                         if (!postData.isNull("message")) {
-                            message = postData.getString("message");
+                            message = SWBSocialResUtil.Util.createHttpLink(postData.getString("message"));
                         } else if (!postData.isNull("story")) {
                             story = (!postData.isNull("story")) ? postData.getString("story") : "";
                             story = getTagsFromPost(postData.getJSONObject("story_tags"), story);
@@ -627,7 +628,7 @@ public class FacebookWall extends GenericResource {
                         postIn.setPi_type(SWBSocialUtil.POST_TYPE_PHOTO);
                         //Get message and/or story
                         if (!postData.isNull("message")) {
-                            message = postData.getString("message");
+                            message = SWBSocialResUtil.Util.createHttpLink(postData.getString("message"));
                         } else if (!postData.isNull("story")) {
                             story = (!postData.isNull("story")) ? postData.getString("story") : "";
                             story = getTagsFromPost(postData.getJSONObject("story_tags"), story);
@@ -989,7 +990,7 @@ public class FacebookWall extends GenericResource {
                         postIn.setPi_type(SWBSocialUtil.POST_TYPE_MESSAGE);
                         if (postType.equals("status")) {
                             if (!postData.isNull("message")) {
-                                message = postData.getString("message");
+                                message = SWBSocialResUtil.Util.createHttpLink(postData.getString("message"));
                             } else if (!postData.isNull("story")) {
                                 story = (!postData.isNull("story")) ? postData.getString("story") : "";
                                 story = getTagsFromPost(postData.getJSONObject("story_tags"), story);
@@ -1009,7 +1010,7 @@ public class FacebookWall extends GenericResource {
                                 story = getTagsFromPost(postData.getJSONObject("story_tags"), story);
                             }
                             if (!postData.isNull("message")) {
-                                message = postData.getString("message");
+                                message = SWBSocialResUtil.Util.createHttpLink(postData.getString("message"));
                             }
 
                             if (!message.isEmpty()) {
@@ -1035,7 +1036,7 @@ public class FacebookWall extends GenericResource {
                         postIn.setPi_type(SWBSocialUtil.POST_TYPE_VIDEO);
                         //Get message and/or story
                         if (!postData.isNull("message")) {
-                            message = postData.getString("message");
+                            message = SWBSocialResUtil.Util.createHttpLink(postData.getString("message"));
                         } else if (!postData.isNull("story")) {
                             story = (!postData.isNull("story")) ? postData.getString("story") : "";
                             story = getTagsFromPost(postData.getJSONObject("story_tags"), story);
@@ -1075,7 +1076,7 @@ public class FacebookWall extends GenericResource {
                         postIn.setPi_type(SWBSocialUtil.POST_TYPE_PHOTO);
                         //Get message and/or story
                         if (!postData.isNull("message")) {
-                            message = postData.getString("message");
+                            message = SWBSocialResUtil.Util.createHttpLink(postData.getString("message"));
                         } else if (!postData.isNull("story")) {
                             story = (!postData.isNull("story")) ? postData.getString("story") : "";
                             story = getTagsFromPost(postData.getJSONObject("story_tags"), story);
@@ -1912,7 +1913,7 @@ public class FacebookWall extends GenericResource {
                 }
 
                 if (!postsData.isNull("message")) {
-                    message = postsData.getString("message");
+                    message = SWBSocialResUtil.Util.createHttpLink(postsData.getString("message"));
                     if (!postsData.isNull("message_tags")) {//Users tagged in story
                         message = getTagsFromPost(postsData.getJSONObject("message_tags"), message, renderURL);
                     }
@@ -1960,8 +1961,8 @@ public class FacebookWall extends GenericResource {
                         return;
                     }
                 }
-                if (!postsData.isNull("message")) {
-                    message = postsData.getString("message");
+                if (!postsData.isNull("message")) {                    
+                    message = SWBSocialResUtil.Util.createHttpLink(postsData.getString("message"));
                     if (!postsData.isNull("message_tags")) {//Users tagged in story
                         message = getTagsFromPost(postsData.getJSONObject("message_tags"), message, renderURL);
                     }
@@ -1994,7 +1995,7 @@ public class FacebookWall extends GenericResource {
                     }
                 }
                 if (!postsData.isNull("message")) {
-                    message = postsData.getString("message");
+                    message = SWBSocialResUtil.Util.createHttpLink(postsData.getString("message"));
                     if (!postsData.isNull("message_tags")) {//Users tagged in story
                         JSONObject storyTags = postsData.getJSONObject("message_tags");
                         message = getTagsFromPost(storyTags, message, renderURL);
@@ -2038,7 +2039,7 @@ public class FacebookWall extends GenericResource {
                 }
             } else if (postType.equals("video")) {
                 if (!postsData.isNull("message")) {
-                    message = postsData.getString("message");
+                    message = SWBSocialResUtil.Util.createHttpLink(postsData.getString("message"));
                 }
 
                 if (!postsData.isNull("story")) {
@@ -2051,7 +2052,7 @@ public class FacebookWall extends GenericResource {
             } else if (postType.equals("checkin")) {
 
                 if (!postsData.isNull("message")) {
-                    message = postsData.getString("message");
+                    message = SWBSocialResUtil.Util.createHttpLink(postsData.getString("message"));
                     if (!postsData.isNull("message_tags")) {//Users tagged in story
                         JSONObject storyTags = postsData.getJSONObject("message_tags");
                         message = getTagsFromPost(storyTags, message, renderURL);
@@ -2061,7 +2062,7 @@ public class FacebookWall extends GenericResource {
                 }
             } else if (postType.equals("swf")) {
                 if (!postsData.isNull("message")) {
-                    message = postsData.getString("message");
+                    message = SWBSocialResUtil.Util.createHttpLink(postsData.getString("message"));
                     if (!postsData.isNull("message_tags")) {//Users tagged in story
                         JSONObject storyTags = postsData.getJSONObject("message_tags");
                         message = getTagsFromPost(storyTags, message, renderURL);
@@ -3261,4 +3262,29 @@ public class FacebookWall extends GenericResource {
             }
         }
     }
+
+    /*public static String SWBSocialResUtil.Util.createHttpLink(String text){
+        StringBuilder result = new StringBuilder();
+        String [] words = text.split(" ");
+        for(int i=0; i < words.length ;  i++){
+            String brTags[] = words[i].split("<br>");
+            if(brTags.length > 0){ //found 
+                for(int j=0; j < brTags.length ; j++){
+                    if(brTags[j].startsWith("http://") || words[j].startsWith("https://")){
+                        result.append("<a target=\"_new\" href=\"" + words[i] + "\">" + words[i] + "</a><br>");
+                    }else{
+                        result.append(brTags[j]);
+                    }
+                }
+            }else{
+                if(words[i].startsWith("http://") || words[i].startsWith("https://")){
+                    result.append("<a target=\"_new\" href=\"" + words[i] + "\">" + words[i] + "</a> ");
+                }else{
+                    result.append(words[i] + " ");
+                }
+            }
+        }
+        System.out.println("___________________________________________");
+        return result.toString();
+    }*/
 }
