@@ -386,3 +386,6 @@ h3.dijitCalendarYearLabel  {
     text-decoration: none;
     background-color: green;
 }
+
+/******************************************* NO JAVASCRIPT MESSAGE ****************************************/
+.no-js {display:none;}
