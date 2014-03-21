@@ -137,11 +137,12 @@
                         <option value="all">Todos</option>
                        
                         <%
-                            Iterator<LifeStage> itLifeStages = SWBComparator.sortByCreated(LifeStage.ClassMgr.listLifeStages(SWBContext.getAdminWebSite()));
+                            Iterator<LifeStage> itLifeStages = SWBComparator.sortByCreated(LifeStage.ClassMgr.listLifeStages(SWBContext.getGlobalWebSite()));
                             while (itLifeStages.hasNext()) {
                                 LifeStage lifeStage = itLifeStages.next();
+                                String lifeStageTitle = lifeStage.getTitle(user.getLanguage()) == null ? lifeStage.getTitle() : lifeStage.getTitle(user.getLanguage());
                         %>
-                        <option value="<%=lifeStage.getId()%>" <%=slifeStage.equals(lifeStage.getId()) ? "selected" : ""%>><%=lifeStage.getTitle(user.getLanguage())%></option>
+                        <option value="<%=lifeStage.getId()%>" <%=slifeStage.equals(lifeStage.getId()) ? "selected" : ""%>><%=lifeStageTitle%></option>
                         <%
                             }
                         %>
@@ -165,14 +166,14 @@
                     <select name="countryState">
                         <option value="all">Todos</option>
                         <%
-                            Iterator<org.semanticwb.social.Country> itCountries = org.semanticwb.social.Country.ClassMgr.listCountries(SWBContext.getAdminWebSite());
+                            Iterator<org.semanticwb.social.Country> itCountries = org.semanticwb.social.Country.ClassMgr.listCountries(SWBContext.getGlobalWebSite());
                             while (itCountries.hasNext()) {
                                 org.semanticwb.social.Country country = itCountries.next();
-                                Iterator<CountryState> itCountryStates = CountryState.ClassMgr.listCountryStateByCountry(country, SWBContext.getAdminWebSite());
+                                Iterator<CountryState> itCountryStates = CountryState.ClassMgr.listCountryStateByCountry(country, SWBContext.getGlobalWebSite());
                                 while (itCountryStates.hasNext()) {
                                     CountryState countryState = itCountryStates.next();
                         %>
-                        <option value="<%=countryState.getId()%>" <%=scountryState.equals(countryState.getId()) ? "selected" : ""%>><%=country.getTitle()%>/<%=countryState.getTitle()%></option>
+                        <option value="<%=countryState.getId()%>" <%=scountryState.equals(countryState.getId()) ? "selected" : ""%>><%=country.getId()%>/<%=countryState.getTitle()%></option>
                         <%
                                 }
                             }
