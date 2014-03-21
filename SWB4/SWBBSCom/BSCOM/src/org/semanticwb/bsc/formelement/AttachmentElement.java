@@ -12,6 +12,7 @@ import org.semanticwb.model.FormElementURL;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
@@ -37,14 +38,33 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
     }
 
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, 
-    SemanticProperty prop, String type, String mode, String lang) {
+    public String renderElement(HttpServletRequest request, SemanticObject obj,
+            SemanticProperty prop, String type, String mode, String lang) {
         return super.renderElement(request, obj, prop, type, mode, lang);
     }
 
+    /**
+     * Genera el código HTML para representar la administración de los Archivos
+     * adjuntos de los elementos del BSC.
+     *
+     * @param request la petici&oacute; HTTP hecha por el cliente
+     * @param obj el objeto a quien pertenece la propiedad asociada a este
+     * FormElement
+     * @param prop la propiedad asociada a este FormElement
+     * @param propName el nombre de la propiedad asociada a este FormElement
+     * @param type el tipo de despliegue a generar. Actualmente solo se acepta
+     * el valor {@code dojo}
+     * @param mode el modo en que se presentar&aacute; el despliegue del
+     * FormElement. Los modos soportados son:
+     * {@literal edit}, {@literal create}, {@literal filter} y {@literal view}
+     * @param lang el lenguaje utilizado en la generaci&oacute;n del
+     * c&oacute;digo HTML a regresar
+     * @return el objeto String que representa el c&oacute;digo HTML con la
+     * vista correspondiente al modo especificado para este elemento de forma.
+     */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, 
-    SemanticProperty prop, String propName, String type, String mode, String lang) {
+    public String renderElement(HttpServletRequest request, SemanticObject obj,
+            SemanticProperty prop, String propName, String type, String mode, String lang) {
         StringBuilder toReturn = new StringBuilder();
         String modeTmp = request.getParameter("modeTmp");
 
@@ -65,24 +85,35 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
         super.process(request, obj, prop);
     }
 
+    /**
+     * Procesa la información enviada por el elemento de forma, para almacenarla
+     * en la propiedad del objeto indicado.
+     *
+     * @param request la petici&oacute; HTTP hecha por el cliente
+     * @param obj el objeto a quien pertenece la propiedad asociada a este
+     * FormElement
+     * @param prop la propiedad asociada a este FormElement
+     * @param propName el nombre de la propiedad asociada a este FormElement
+     */
     @Override
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, 
-    String propName) {
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop,
+            String propName) {
         String action = request.getParameter("_action");
         String usrWithGrants = request.getParameter("usrWithGrants");
         WebSite site = SWBContext.getWebSite(getModel().getName());
+        User user = SWBContext.getSessionUser();
         if (Action_ADD.equals(action)) {
             SWBFormMgr mgr = new SWBFormMgr(Attachment.sclass, site.getSemanticObject(), null);
             String sref = request.getParameter("sref");
             SemanticObject semObjRef = SemanticObject.createSemanticObject(sref);
             Attachmentable attachmentable = null;
-            if (mgr != null && (semObjRef != null) && semObjRef.createGenericInstance() 
-                    instanceof Attachmentable) {
+            if (mgr != null && (semObjRef != null) && semObjRef.createGenericInstance() instanceof Attachmentable) {
                 attachmentable = (Attachmentable) semObjRef.createGenericInstance();
                 mgr.setFilterRequired(false);
                 try {
                     SemanticObject sobj = mgr.processForm(request);
                     Attachment attach = (Attachment) sobj.createGenericInstance();
+                    attach.setCreator(user);
                     attachmentable.addAttachments(attach);
                 } catch (FormValidateException ex) {
                     log.error(ex);
@@ -116,7 +147,25 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
                 setParameter("usrWithGrants", usrWithGrants);
     }
 
-    public String renderElementEdit(HttpServletRequest request, SemanticObject obj, 
+    /**
+     * Genera el código HTML para representar la edición de un archivo adjunto.
+     *
+     * @param request la petici&oacute; HTTP hecha por el cliente
+     * @param obj el objeto a quien pertenece la propiedad asociada a este
+     * FormElement
+     * @param prop la propiedad asociada a este FormElement
+     * @param propName el nombre de la propiedad asociada a este FormElement
+     * @param type el tipo de despliegue a generar. Actualmente solo se acepta
+     * el valor {@code dojo}
+     * @param mode el modo en que se presentar&aacute; el despliegue del
+     * FormElement. Los modos soportados son:
+     * {@literal edit}, {@literal create}, {@literal filter} y {@literal view}
+     * @param lang el lenguaje utilizado en la generaci&oacute;n del
+     * c&oacute;digo HTML a regresar
+     * @return el objeto String que representa el c&oacute;digo HTML con la
+     * vista correspondiente al modo especificado para este elemento de forma.
+     */
+    public String renderElementEdit(HttpServletRequest request, SemanticObject obj,
             SemanticProperty prop, String propName, String type, String mode, String lang) {
         StringBuilder toReturn = new StringBuilder();
         String usrWithGrants = (String) request.getAttribute("usrWithGrants");
@@ -158,7 +207,7 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
             toReturn.append("            <tr>\n");
             toReturn.append("                <td align=\"right\">\n");
             toReturn.append("                    ");
-            toReturn.append(formMgr.renderLabel(request, prop1, prop1.getName(), 
+            toReturn.append(formMgr.renderLabel(request, prop1, prop1.getName(),
                     SWBFormMgr.MODE_EDIT));
             toReturn.append("                </td>\n");
             toReturn.append("                <td>\n");
@@ -191,6 +240,25 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
         return toReturn.toString();
     }
 
+    /**
+     * Presenta la vista de los archivos adjuntos asociados al elemento BSC,
+     * aquí se getiona los permisos para los usuarios
+     *
+     * @param request la petici&oacute; HTTP hecha por el cliente
+     * @param obj el objeto a quien pertenece la propiedad asociada a este
+     * FormElement
+     * @param prop la propiedad asociada a este FormElement
+     * @param propName el nombre de la propiedad asociada a este FormElement
+     * @param type el tipo de despliegue a generar. Actualmente solo se acepta
+     * el valor {@code dojo}
+     * @param mode el modo en que se presentar&aacute; el despliegue del
+     * FormElement. Los modos soportados son:
+     * {@literal edit}, {@literal create}, {@literal filter} y {@literal view}
+     * @param lang el lenguaje utilizado en la generaci&oacute;n del
+     * c&oacute;digo HTML a regresar
+     * @return el objeto String que representa el c&oacute;digo HTML con la
+     * vista correspondiente al modo especificado para este elemento de forma.
+     */
     public String renderElementView(HttpServletRequest request, SemanticObject obj,
             SemanticProperty prop, String propName, String type, String mode, String lang) {
         StringBuilder toReturn = new StringBuilder();
@@ -298,12 +366,12 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
                 toReturn.append("\n    });");
                 toReturn.append("\n}");
 
-                String valueStr = Attachment.swb_title.getDisplayName(lang) == null ? 
-                        Attachment.swb_title.getDisplayName() : 
-                        Attachment.swb_title.getDisplayName(lang);
-                String valueStr2 = Attachment.bsc_file.getDisplayName(lang) == null ?
-                        Attachment.bsc_file.getDisplayName() : 
-                        Attachment.bsc_file.getDisplayName(lang);
+                String valueStr = Attachment.swb_title.getDisplayName(lang) == null
+                        ? Attachment.swb_title.getDisplayName()
+                        : Attachment.swb_title.getDisplayName(lang);
+                String valueStr2 = Attachment.bsc_file.getDisplayName(lang) == null
+                        ? Attachment.bsc_file.getDisplayName()
+                        : Attachment.bsc_file.getDisplayName(lang);
                 toReturn.append("\n    function validateData(form, action) {");
                 toReturn.append("\n        var obj = dojo.byId(form);");
                 toReturn.append("\n        if(obj.");
@@ -344,18 +412,18 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
                 toReturn.append("\n<div dojoType=\"dijit.Dialog\" class=\"soria\" ");
                 toReturn.append("style=\"height:125px;\" ");
                 toReturn.append("id=\"swbDialog2\" title=\"");
-                toReturn.append(getLocaleString("successfulOperation", lang)); 
+                toReturn.append(getLocaleString("successfulOperation", lang));
                 toReturn.append("");
                 toReturn.append("\" >\n");
                 toReturn.append("  <div dojoType=\"dojox.layout.ContentPane\" class=\"soria\" ");
                 toReturn.append("style=\"height:125px;width:250px;text-align:center;\" ");
                 toReturn.append("id=\"swbDialogImp2\" executeScripts=\"true\">\n");
-                toReturn.append("          <p style=\"align:center\">"); 
+                toReturn.append("          <p style=\"align:center\">");
                 toReturn.append(getLocaleString("successfulOperation", lang));
                 toReturn.append("</p>\n");
                 toReturn.append("          <p style=\"vertical-align: middle\">");
                 toReturn.append("<button dojoType=\"dijit.form.Button\" ");
-                toReturn.append("onclick=\"dijit.byId('swbDialog2').hide()\">"); 
+                toReturn.append("onclick=\"dijit.byId('swbDialog2').hide()\">");
                 toReturn.append(getLocaleString("success", lang));
                 toReturn.append("</button></p>");
                 toReturn.append("  </div>\n");
@@ -378,7 +446,7 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
                 toReturn.append("<br/>");
                 if (itAttachments.hasNext()) {
                     toReturn.append("\n<div class=\"swbform\" id=\"swbform\">");
-                    toReturn.append(listAttachment(itAttachments, suri, obj, prop, type, 
+                    toReturn.append(listAttachment(itAttachments, suri, obj, prop, type,
                             mode, lang, usrWithGrants));
                     toReturn.append("\n</div>");
                 }
@@ -387,7 +455,26 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
         return toReturn.toString();
     }
 
-    public String renderElementAdd(HttpServletRequest request, SemanticObject obj, 
+    /**
+     * Genera el código HTML para representar la vista para agregar un nuevo
+     * archivo adjunto
+     *
+     * @param request la petici&oacute; HTTP hecha por el cliente
+     * @param obj el objeto a quien pertenece la propiedad asociada a este
+     * FormElement
+     * @param prop la propiedad asociada a este FormElement
+     * @param propName el nombre de la propiedad asociada a este FormElement
+     * @param type el tipo de despliegue a generar. Actualmente solo se acepta
+     * el valor {@code dojo}
+     * @param mode el modo en que se presentar&aacute; el despliegue del
+     * FormElement. Los modos soportados son:
+     * {@literal edit}, {@literal create}, {@literal filter} y {@literal view}
+     * @param lang el lenguaje utilizado en la generaci&oacute;n del
+     * c&oacute;digo HTML a regresar
+     * @return el objeto String que representa el c&oacute;digo HTML con la
+     * vista correspondiente al modo especificado para este elemento de forma.
+     */
+    public String renderElementAdd(HttpServletRequest request, SemanticObject obj,
             SemanticProperty prop, String propName, String type, String mode, String lang) {
         StringBuilder toReturn = new StringBuilder();
         SWBFormMgr formMgr = new SWBFormMgr(Attachment.bsc_Attachment,
@@ -405,7 +492,7 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
         formMgr.addButton("          <button dojoType=\"dijit.form.Button\" type=\"submit\" "
                 + "name=\"enviar\" >" + getLocaleString("send", lang) + "</button>");
         formMgr.addButton("          <button dojoType=\"dijit.form.Button\" "
-                + "onclick=\"dijit.byId('swbDialog').hide()\">" 
+                + "onclick=\"dijit.byId('swbDialog').hide()\">"
                 + getLocaleString("cancel", lang) + "</button>");
         formMgr.setAction(url);
         toReturn.append("<div id=\"frmAdd\">");
@@ -414,7 +501,24 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
         return toReturn.toString();
     }
 
-    private String renderElementReload(HttpServletRequest request, SemanticObject obj, 
+    /**
+     *
+     * @param request la petici&oacute; HTTP hecha por el cliente
+     * @param obj el objeto a quien pertenece la propiedad asociada a este
+     * FormElement
+     * @param prop la propiedad asociada a este FormElement
+     * @param propName el nombre de la propiedad asociada a este FormElement
+     * @param type el tipo de despliegue a generar. Actualmente solo se acepta
+     * el valor {@code dojo}
+     * @param mode el modo en que se presentar&aacute; el despliegue del
+     * FormElement. Los modos soportados son:
+     * {@literal edit}, {@literal create}, {@literal filter} y {@literal view}
+     * @param lang el lenguaje utilizado en la generaci&oacute;n del
+     * c&oacute;digo HTML a regresar
+     * @return el objeto String que representa el c&oacute;digo HTML con la
+     * vista correspondiente al modo especificado para este elemento de forma.
+     */
+    private String renderElementReload(HttpServletRequest request, SemanticObject obj,
             SemanticProperty prop, String type, String mode, String lang) {
         StringBuilder toReturn = new StringBuilder();
         String suri = (String) request.getParameter("suri");
@@ -427,15 +531,15 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
             if (semObj != null && semObj.createGenericInstance() instanceof Attachmentable) {
                 element = (Attachmentable) semObj.createGenericInstance();
                 Iterator<Attachment> itAttachments = element.listAttachmentses();
-                toReturn.append(listAttachment(itAttachments, suri, obj, prop, type, mode, 
+                toReturn.append(listAttachment(itAttachments, suri, obj, prop, type, mode,
                         lang, usrWithGrants));
             }
         }
         return toReturn.toString();
     }
 
-    private String listAttachment(Iterator<Attachment> itAttachments, String suri, 
-            SemanticObject obj, SemanticProperty prop, String type, String mode, String lang, 
+    private String listAttachment(Iterator<Attachment> itAttachments, String suri,
+            SemanticObject obj, SemanticProperty prop, String type, String mode, String lang,
             String usrWithGrants) {
         StringBuilder toReturn = new StringBuilder();
         toReturn.append("\n<table width=\"98%\">");
@@ -461,6 +565,7 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
             toReturn.append(attachment.getCreated() == null ? ""
                     : SWBUtils.TEXT.getStrDate(attachment.getCreated(), "es", "dd/mm/yyyy"));
             toReturn.append("\n</td>");
+//            User user = SWBContext.getSessionUser();
             if ("true".equals(usrWithGrants)) {
                 FormElementURL urlEdit = getRenderURL(obj, prop, type, mode, lang);
                 urlEdit.setParameter("modeTmp", Mode_EDIT);
@@ -480,38 +585,44 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
                 urlRemove.setParameter("usrWithGrants", usrWithGrants);
 
                 toReturn.append("\n<td>");
-                toReturn.append("\n<a href=\"#\" onclick=\"showDialog('");
-                toReturn.append(urlEdit.setContentType("text/html; charset=UTF-8"));
-                toReturn.append("', '");
-                toReturn.append(Attachment.sclass.getDisplayName(lang));
-                toReturn.append("');\">");
-                toReturn.append("\n<img src=\"");
-                toReturn.append(SWBPlatform.getContextPath());
-                toReturn.append("/swbadmin/icons/editar_1.gif\" alt=\"");
-                toReturn.append(getLocaleString("edit", lang));
-                toReturn.append("\"/>");
-                toReturn.append("\n</a>");
+//                if (user.equals(attachment.getCreator())) {
+                    toReturn.append("\n<a href=\"#\" onclick=\"showDialog('");
+                    toReturn.append(urlEdit.setContentType("text/html; charset=UTF-8"));
+                    toReturn.append("', '");
+                    toReturn.append(Attachment.sclass.getDisplayName(lang));
+                    toReturn.append("');\">");
+                    toReturn.append("\n<img src=\"");
+                    toReturn.append(SWBPlatform.getContextPath());
+                    toReturn.append("/swbadmin/icons/editar_1.gif\" alt=\"");
+                    toReturn.append(getLocaleString("edit", lang));
+                    toReturn.append("\"/>");
+                    toReturn.append("\n</a>");
+//                }
                 toReturn.append("\n</td>");
 
                 toReturn.append("\n<td>");
-                toReturn.append("\n<a href=\"#\" onclick=\"if(confirm(\'");
-                toReturn.append("¿");
-                toReturn.append(getLocaleString("alertDeleteElement", lang));
-                toReturn.append(" \\'");
-                toReturn.append(attachment.getTitle());
-                toReturn.append("\\' ?\')){ ");
-                toReturn.append("processUrl('");
-                toReturn.append(urlRemove);
-                toReturn.append("',null); ");
-                toReturn.append("} else { return false;}");
-                toReturn.append("\">");
-                toReturn.append("\n<img src=\"");
-                toReturn.append(SWBPlatform.getContextPath());
-                toReturn.append("/swbadmin/icons/iconelim.png\" alt=\"");
-                toReturn.append(getLocaleString("delete", lang));
-                toReturn.append("\"/>");
-                toReturn.append("\n</a>");
+//                if (user.equals(attachment.getCreator())) {
+                    toReturn.append("\n<a href=\"#\" onclick=\"if(confirm(\'");
+                    toReturn.append("¿");
+                    toReturn.append(getLocaleString("alertDeleteElement", lang));
+                    toReturn.append(" \\'");
+                    toReturn.append(attachment.getTitle());
+                    toReturn.append("\\' ?\')){ ");
+                    toReturn.append("processUrl('");
+                    toReturn.append(urlRemove);
+                    toReturn.append("',null); ");
+                    toReturn.append("} else { return false;}");
+                    toReturn.append("\">");
+                    toReturn.append("\n<img src=\"");
+                    toReturn.append(SWBPlatform.getContextPath());
+                    toReturn.append("/swbadmin/icons/iconelim.png\" alt=\"");
+                    toReturn.append(getLocaleString("delete", lang));
+                    toReturn.append("\"/>");
+                    toReturn.append("\n</a>");
+//                }
                 toReturn.append("\n</td>");
+
+
             }
         }
         toReturn.append("\n</table>");
