@@ -3233,10 +3233,17 @@ public class FacebookWall extends GenericResource {
 
 
                 if (request.getParameter("type").equals("friends")) {
-                    position = next.indexOf("__after_id");
-                    String nextSend = next.substring(position + 11, next.length());
-                    position = next.indexOf("offset");
-                    String offsetFriends = next.substring(position + 7, position + 9);
+                    String params[] = next.split("&");
+                    String nextSend = null;
+                    String offsetFriends = null;
+                    for(int i = 0; i < params.length; i++){                        
+                        if(params[i].startsWith("__after_id")){
+                            nextSend = params[i].substring(params[i].indexOf("=")+1);
+                        }else if(params[i].startsWith("offset")){
+                            offsetFriends = params[i].substring(params[i].indexOf("=")+1);
+                        }
+                    }
+                                        
                     out.println("<div align=\"center\">");
                     out.println("  <label  id=\"" + objUri + "/moreFriendsLabel\" >");
                     out.println("<a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setAction("more").setParameter("type", "friends").setParameter("suri", facebook.getURI()).setParameter("nextPage", nextSend).setParameter("offsetFriends", offsetFriends) + " ', '" + objUri + "/getMoreFriendsFacebook',  'bottom'); try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\" >Mas amigos");
