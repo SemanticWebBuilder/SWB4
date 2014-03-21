@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBRuntimeException;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.FormValidateException;
 import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
@@ -361,4 +362,14 @@ public class DojoFileUploadBSC extends org.semanticwb.bsc.formelement.base.DojoF
     protected String getPropertyName(SemanticProperty prop, SemanticObject obj, String propName) {
         return propName + "_" + (obj.getId() == null ? "new" : obj.getId());
     }
+
+    /*@Override
+    public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) throws FormValidateException {
+        if(request.getParameter("selectFile") != null && request.getParameter("selectFile").equals("")) {
+             throw new FormValidateException(getLocaleString("error", propName));
+        }
+        super.validate(request, obj, prop, propName);
+    }*/
+    
+    
 }
