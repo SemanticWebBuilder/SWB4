@@ -202,6 +202,7 @@ System.out.println("pw="+pw);
                 uri = p.getAttribute("id");
                 //py = j*(ph+MARGEN_BOTTOM+MARGEN_TOP);
                 py = MARGEN_TOP +HEADER_HEIGHT+ j*(ph+MARGEN_BOTTOM+MARGEN_TOP);
+                
                 //diferenciadores de la perspectiva
                 expression = "/bsc/perspective[@id='"+uri+"']/diffgroup[1]/diff";
                 NodeList nlDiffs = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
@@ -216,9 +217,9 @@ System.out.println("dw="+dw);
                         Element d = (Element)noded;
                         d.setAttribute("width", Integer.toString(dw-BOX_SPACING));
                         d.setAttribute("height", "14");
-                        d.setAttribute("x", Integer.toString(px + k*dw));
+                        d.setAttribute("x", Integer.toString(px + k*dw + PADDING_RIGHT));
                         d.setAttribute("y", Integer.toString(py));
-System.out.println("px + k*dw="+(px + k*dw));                        
+System.out.println("px="+(px + k*dw + PADDING_RIGHT));                        
                     }
                     //py = py + DIFF_TITLE + BOX_SPACING;
                 }
@@ -256,7 +257,8 @@ System.out.println("px + k*dw="+(px + k*dw));
                             uri = t.getAttribute("id");
                             hiddenTheme = Boolean.parseBoolean(t.getAttribute("hidden"));
                             t.setAttribute("width", Integer.toString(tw-BOX_SPACING));
-                            tx = px + k*tw + BOX_SPACING;
+                            tx = px + k*tw + PADDING_RIGHT;
+System.out.println("tx="+tx+", px="+px );  
                             t.setAttribute("x", Integer.toString(tx));
                             t.setAttribute("y", Integer.toString(ty));
                             
