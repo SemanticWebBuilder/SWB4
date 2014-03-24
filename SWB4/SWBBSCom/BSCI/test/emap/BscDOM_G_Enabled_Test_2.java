@@ -140,7 +140,7 @@ public class BscDOM_G_Enabled_Test_2 {
         //final int height = Integer.parseInt(base.getAttribute("height", "600"));
         //final Period period = getPeriod(request);
         final int width = 1024;
-        final int height = 768;
+        final int height = 1400;
         //Document documentBSC = scorecard.getDom(period);
         
         //root: period, width, height
@@ -187,6 +187,7 @@ public class BscDOM_G_Enabled_Test_2 {
         NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
         perspCount = nodeList.getLength();
         pw = width-MARGEN_LEFT-MARGEN_RIGHT;
+System.out.println("pw="+pw);
         ph = (height-HEADER_HEIGHT)/perspCount -  MARGEN_TOP - MARGEN_BOTTOM;
         px = MARGEN_LEFT;
         //py = MARGEN_TOP;
@@ -207,7 +208,8 @@ public class BscDOM_G_Enabled_Test_2 {
                 final int nlDiffsCount = nlDiffs.getLength();
                 final boolean hasDifferentiators = nlDiffsCount>0;
                 if(hasDifferentiators) {
-                    final int dw = pw/nlDiffsCount;  
+                    final int dw = pw/nlDiffsCount;
+System.out.println("dw="+dw);
                     //int dx = px;
                     for(int k=0; k<nlDiffsCount; k++) {
                         Node noded = nlDiffs.item(k);
@@ -216,6 +218,7 @@ public class BscDOM_G_Enabled_Test_2 {
                         d.setAttribute("height", "14");
                         d.setAttribute("x", Integer.toString(px + k*dw));
                         d.setAttribute("y", Integer.toString(py));
+System.out.println("px + k*dw="+(px + k*dw));                        
                     }
                     //py = py + DIFF_TITLE + BOX_SPACING;
                 }
@@ -227,7 +230,8 @@ public class BscDOM_G_Enabled_Test_2 {
                 }
                 p.setAttribute("height",Integer.toString(h_));
                 p.setAttribute("x", Integer.toString(px));
-                p.setAttribute("y", Integer.toString(py));
+                //p.setAttribute("y", Integer.toString(py));
+                p.setAttribute("y", "0");
                 
                 //lista de temas por perspectiva                
                 expression = "/bsc/perspective[@id='"+uri+"']/themes/theme";
@@ -333,7 +337,7 @@ public class BscDOM_G_Enabled_Test_2 {
         // XML del BSC
         Element rootBSC = documentBSC.getDocumentElement();
         width = 1024;
-        height = 968;
+        height = 1400;
         
         SVGjs.append("<script type=\"text/javascript\">").append("\n");
         SVGjs.append(" var SVG_ = '"+SVG_NS_URI+"';").append("\n");
@@ -366,6 +370,7 @@ public class BscDOM_G_Enabled_Test_2 {
         SVGjs.append(" svg.appendChild(defs);").append("\n");
         
         SVGjs.append(" var r;").append("\n");
+        SVGjs.append(" var w;").append("\n");
         SVGjs.append(" var g;").append("\n");
         SVGjs.append(" var txt;").append("\n");
         SVGjs.append(" var rect;").append("\n");
@@ -404,28 +409,30 @@ public class BscDOM_G_Enabled_Test_2 {
             SVGjs.append(" txt = createText('"+txt+"',"+(x_+w_/2)+","+y_+","+HEADER_1+",'Verdana');").append("\n");
             SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
             SVGjs.append(" g.appendChild(txt);").append("\n");
-            SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_1+","+x_+","+y_+");").append("\n");
-            SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-            SVGjs.append(" framingRect(rect,'"+id+"_ptitle',"+w_+","+vPadding(HEADER_1)+","+x_+","+y_+");").append("\n");
-            SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
+//            SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_1+","+x_+","+y_+");").append("\n");
+//            SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
+//            SVGjs.append(" framingRect(rect,'"+id+"_ptitle',"+w_+","+vPadding(HEADER_1)+","+x_+","+y_+");").append("\n");
+//            SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
 
-            y_ = y + vPadding(HEADER_1) + topPadding(HEADER_2) + BOX_SPACING;
+            y_ = y + vPadding(HEADER_1) + topPadding(HEADER_2) + PADDING_DOWN;
             w_ = w/3;
-            h_ = h - vPadding(HEADER_1) - BOX_SPACING;
+            h_ = h - vPadding(HEADER_1) - PADDING_DOWN;
             // pleca Mision
-            SVGjs.append(" txt = createText('Mision',"+x_+","+y_+","+HEADER_2+",'Verdana');").append("\n");
+            SVGjs.append(" txt = createText('Mision',"+(x_+w_/2)+","+y_+","+HEADER_2+",'Verdana');").append("\n");
+            SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
             SVGjs.append(" g.appendChild(txt);").append("\n");
-            SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_2+","+x_+","+y_+");").append("\n");
-            SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-            SVGjs.append(" framingRect(rect,'"+id+"_pmission',"+w_+","+vPadding(HEADER_2)+","+x_+","+y_+");").append("\n");
-            SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
+//            SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_2+","+x_+","+y_+");").append("\n");
+//            SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
+//            SVGjs.append(" framingRect(rect,'"+id+"_pmission',"+w_+","+vPadding(HEADER_2)+","+x_+","+y_+");").append("\n");
+//            SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
             // pleca Vision
-            SVGjs.append(" txt = createText('Vision',"+(x_+2*w_)+","+y_+","+HEADER_2+",'Verdana');").append("\n");
+            SVGjs.append(" txt = createText('Vision',"+(x_+5*w_/2)+","+y_+","+HEADER_2+",'Verdana');").append("\n");
+            SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
             SVGjs.append(" g.appendChild(txt);").append("\n");
-            SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_2+","+(x_+2*w_)+","+y_+");").append("\n");
-            SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-            SVGjs.append(" framingRect(rect,'"+id+"_pvision',"+w_+","+vPadding(HEADER_2)+","+(x_+2*w_)+","+y_+");").append("\n");
-            SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
+//            SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_2+","+(x_+2*w_)+","+y_+");").append("\n");
+//            SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
+//            SVGjs.append(" framingRect(rect,'"+id+"_pvision',"+w_+","+vPadding(HEADER_2)+","+(x_+2*w_)+","+y_+");").append("\n");
+//            SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
             // logo
             expression = "/bsc/header/logo";
             node = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);
@@ -460,7 +467,7 @@ public class BscDOM_G_Enabled_Test_2 {
         y = y + HEADER_HEIGHT + MARGEN_TOP;
         SVGjs.append(" var y = "+y+";").append("\n");
         StringBuilder info;
-        //lista de perspectivas
+        // lista de perspectivas
         expression = "/bsc/perspective";
         NodeList nlPersp = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
         for(int j=0; j<nlPersp.getLength(); j++) {
@@ -481,7 +488,7 @@ public class BscDOM_G_Enabled_Test_2 {
         SVGjs.append(" g.setAttributeNS(null,'transform','translate("+px+",'+y+')');").append("\n");
         SVGjs.append(" var y_ = "+PADDING_TOP+";").append("\n");
         
-        //diferenciadores de la perspectiva
+        // diferenciadores de la perspectiva
         expression = "/bsc/perspective[@id='"+pid+"']/diffgroup[1]/diff";
         NodeList nlDiffs = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
         boolean hasDifferentiators = nlDiffs.getLength()>0;
@@ -528,6 +535,13 @@ public class BscDOM_G_Enabled_Test_2 {
                 w_ = assertValue(attrs.getNamedItem("width").getNodeValue());
                 x_ = assertValue(attrs.getNamedItem("x").getNodeValue());
                 
+                
+SVGjs.append(" r = document.createElementNS(SVG_,'rect');").append("\n");
+SVGjs.append(" r.setAttributeNS(null,'id','w_"+pid+"');").append("\n");
+SVGjs.append(" r.setAttributeNS(null,'width',"+w_+");").append("\n");
+SVGjs.append(" defs.appendChild(r);").append("\n");                
+                
+                
                 // rectángulo tema
                 if(!isHidden)
                 {
@@ -541,7 +555,7 @@ public class BscDOM_G_Enabled_Test_2 {
                     SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
                 }
                 
-                //relaciones causa-efecto con este tema
+                // relaciones causa-efecto con este tema
                 expression = "//theme[@id='"+tid+"']/rel";
                 NodeList nlRels = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
                 SVGjs.append(" console.log('el tema "+tid+" ');");
@@ -556,25 +570,36 @@ public class BscDOM_G_Enabled_Test_2 {
                         String parent = attrs.getNamedItem("parent").getNodeValue();
                         SVGjs.append(" to = document.getElementById('"+to+"');").append("\n");
                         SVGjs.append(" parent = document.getElementById('"+parent+"');").append("\n");
-                        SVGjs.append(" console.log('to='+to+', parent='+parent);").append("\n");
-                        SVGjs.append(" matxTo = parent.getCTM();").append("\n");
-                        SVGjs.append(" posTo = svg.createSVGPoint();").append("\n");
-                        SVGjs.append(" posTo.x = to.x.baseVal.value;").append("\n");
-                        SVGjs.append(" posTo.y = to.y.baseVal.value;").append("\n");
-                        SVGjs.append(" posTo = posTo.matrixTransform(matxTo);").append("\n");
-                        SVGjs.append(" console.log('pos='+posTo+', x='+posTo.x+', y='+posTo.y);").append("\n");
-                        SVGjs.append(" matxFrm = g.getCTM();").append("\n");
-                        SVGjs.append(" posFrm = svg.createSVGPoint();").append("\n");
-                        SVGjs.append(" posFrm.x = rect.x.baseVal.value;").append("\n");
-                        SVGjs.append(" posFrm.y = rect.y.baseVal.value;").append("\n");
-                        SVGjs.append(" posFrm = posFrm.matrixTransform(matxFrm);").append("\n");
-                        SVGjs.append(" console.log('pos='+posFrm+', x='+posFrm.x+', y='+posFrm.y);").append("\n");
-                        SVGjs.append(" path = createArrow(posFrm.x+'_'+posFrm.y+'_'+posTo.x+'_'+posTo.y,posFrm.x+"+(w_/2)+",posFrm.y,posTo.x,posTo.y);").append("\n");
-                        SVGjs.append(" svg.appendChild(path);").append("\n");
+                        
+SVGjs.append(" r = document.getElementById('w_"+parent+"');").append("\n");
+SVGjs.append(" if(r) {").append("\n");
+SVGjs.append("     w = r.width.baseVal.value;").append("\n");
+SVGjs.append("     w = w/2;").append("\n");
+SVGjs.append(" }else {").append("\n");
+SVGjs.append("     w = 0;").append("\n");
+SVGjs.append(" }").append("\n");
+                        
+                        SVGjs.append(" if(to && parent) {").append("\n");
+                        SVGjs.append("   console.log('to='+to+', parent='+parent);").append("\n");
+                        SVGjs.append("   matxTo = parent.getCTM();").append("\n");
+                        SVGjs.append("   posTo = svg.createSVGPoint();").append("\n");
+                        SVGjs.append("   posTo.x = to.x.baseVal.value + w;").append("\n");
+                        SVGjs.append("   posTo.y = to.y.baseVal.value;").append("\n");
+                        SVGjs.append("   posTo = posTo.matrixTransform(matxTo);").append("\n");
+                        SVGjs.append("   console.log('pos='+posTo+', x='+posTo.x+', y='+posTo.y);").append("\n");
+                        SVGjs.append("   matxFrm = g.getCTM();").append("\n");
+                        SVGjs.append("   posFrm = svg.createSVGPoint();").append("\n");
+                        SVGjs.append("   posFrm.x = rect.x.baseVal.value;").append("\n");
+                        SVGjs.append("   posFrm.y = rect.y.baseVal.value;").append("\n");
+                        SVGjs.append("   posFrm = posFrm.matrixTransform(matxFrm);").append("\n");
+                        SVGjs.append("   console.log('pos='+posFrm+', x='+posFrm.x+', y='+posFrm.y);").append("\n");
+                        SVGjs.append("   path = createArrow(posFrm.x+'_'+posFrm.y+'_'+posTo.x+'_'+posTo.y,posFrm.x+"+(w_/2)+",posFrm.y,posTo.x,posTo.y);").append("\n");
+                        SVGjs.append("   svg.appendChild(path);").append("\n");
+                        SVGjs.append(" }").append("\n");
                     }
                 }
                 
-                //lista de objetivos
+                // lista de objetivos
                 if(!isHidden) {
                     SVGjs.append(" y_ = y__ + rect.height.baseVal.value + "+BOX_SPACING+";").append("\n"); 
                 }else {
@@ -633,21 +658,34 @@ public class BscDOM_G_Enabled_Test_2 {
                                 String parent = attrs.getNamedItem("parent").getNodeValue();
                                 SVGjs.append(" to = document.getElementById('"+to+"');").append("\n");
                                 SVGjs.append(" parent = document.getElementById('"+parent+"');").append("\n");
-                                SVGjs.append(" console.log('to='+to.id+', parent='+parent.id);").append("\n");
-                                SVGjs.append(" matxTo = parent.getCTM();").append("\n");
-                                SVGjs.append(" posTo = svg.createSVGPoint();").append("\n");
-                                SVGjs.append(" posTo.x = to.x.baseVal.value;").append("\n");
-                                SVGjs.append(" posTo.y = to.y.baseVal.value;").append("\n");
-                                SVGjs.append(" posTo = posTo.matrixTransform(matxTo);").append("\n");
-                                SVGjs.append(" console.log('pos='+posTo+', x='+posTo.x+', y='+posTo.y);").append("\n");
-                                SVGjs.append(" matxFrm = g.getCTM();").append("\n");
-                                SVGjs.append(" posFrm = svg.createSVGPoint();").append("\n");
-                                SVGjs.append(" posFrm.x = rect.x.baseVal.value;").append("\n");
-                                SVGjs.append(" posFrm.y = rect.y.baseVal.value;").append("\n");
-                                SVGjs.append(" posFrm = posFrm.matrixTransform(matxFrm);").append("\n");
-                                SVGjs.append(" console.log('pos='+posFrm+', x='+posFrm.x+', y='+posFrm.y);").append("\n");
-                                SVGjs.append(" path = createArrow(posFrm.x+'_'+posFrm.y+'_'+posTo.x+'_'+posTo.y,posFrm.x+"+(w_/2)+",posFrm.y,posTo.x,posTo.y);").append("\n");
-                                SVGjs.append(" svg.appendChild(path);").append("\n");
+                                
+                                
+SVGjs.append(" r = document.getElementById('w_"+parent+"');").append("\n");
+SVGjs.append(" if(r) {").append("\n");
+SVGjs.append("     w = r.width.baseVal.value;").append("\n");
+SVGjs.append("     w = w/2;").append("\n");
+SVGjs.append(" }else {").append("\n");
+SVGjs.append("     w = 0;").append("\n");
+SVGjs.append(" }").append("\n");
+                                
+                                
+                                SVGjs.append(" if(to && parent) {").append("\n");
+                                SVGjs.append("   console.log('to='+to.id+', parent='+parent.id);").append("\n");
+                                SVGjs.append("   matxTo = parent.getCTM();").append("\n");
+                                SVGjs.append("   posTo = svg.createSVGPoint();").append("\n");
+                                SVGjs.append("   posTo.x = to.x.baseVal.value + w;").append("\n");
+                                SVGjs.append("   posTo.y = to.y.baseVal.value;").append("\n");
+                                SVGjs.append("   posTo = posTo.matrixTransform(matxTo);").append("\n");
+                                SVGjs.append("   console.log('pos='+posTo+', x='+posTo.x+', y='+posTo.y);").append("\n");
+                                SVGjs.append("   matxFrm = g.getCTM();").append("\n");
+                                SVGjs.append("   posFrm = svg.createSVGPoint();").append("\n");
+                                SVGjs.append("   posFrm.x = rect.x.baseVal.value;").append("\n");
+                                SVGjs.append("   posFrm.y = rect.y.baseVal.value;").append("\n");
+                                SVGjs.append("   posFrm = posFrm.matrixTransform(matxFrm);").append("\n");
+                                SVGjs.append("   console.log('pos='+posFrm+', x='+posFrm.x+', y='+posFrm.y);").append("\n");
+                                SVGjs.append("   path = createArrow(posFrm.x+'_'+posFrm.y+'_'+posTo.x+'_'+posTo.y,posFrm.x+"+(w_/2)+",posFrm.y,posTo.x,posTo.y);").append("\n");
+                                SVGjs.append("   svg.appendChild(path);").append("\n");
+                                SVGjs.append(" }").append("\n");
                             }
                         }
                     } //objetivo
