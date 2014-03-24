@@ -156,7 +156,7 @@ public class BscDOM_G_Enabled_Test_2 {
         header.setAttribute("width", Integer.toString(width));
         header.setAttribute("height", Integer.toString(HEADER_HEIGHT));
         header.setAttribute("x", "0");
-        header.setAttribute("y", "0");
+        header.setAttribute("y", "1");
         String expression = "/bsc/title";
         Node node = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);
         header.appendChild(node);
@@ -176,7 +176,6 @@ public class BscDOM_G_Enabled_Test_2 {
         
         
         final int px;
-        int py;
         final int pw, ph;
         final int perspCount;
         String uri;
@@ -190,7 +189,7 @@ public class BscDOM_G_Enabled_Test_2 {
 System.out.println("pw="+pw);
         ph = (height-HEADER_HEIGHT)/perspCount -  MARGEN_TOP - MARGEN_BOTTOM;
         px = MARGEN_LEFT;
-        //py = MARGEN_TOP;
+        
         //lista de perspectivas
         for(int j=0; j<perspCount; j++) {
             int h_ = ph;
@@ -200,8 +199,8 @@ System.out.println("pw="+pw);
                 //perspectiva
                 Element p = (Element)nodep;
                 uri = p.getAttribute("id");
-                //py = j*(ph+MARGEN_BOTTOM+MARGEN_TOP);
-                py = MARGEN_TOP +HEADER_HEIGHT+ j*(ph+MARGEN_BOTTOM+MARGEN_TOP);
+                p.setAttribute("width", Integer.toString(pw));
+                p.setAttribute("x", Integer.toString(px));
                 
                 //diferenciadores de la perspectiva
                 expression = "/bsc/perspective[@id='"+uri+"']/diffgroup[1]/diff";
@@ -211,28 +210,14 @@ System.out.println("pw="+pw);
                 if(hasDifferentiators) {
                     final int dw = pw/nlDiffsCount;
 System.out.println("dw="+dw);
-                    //int dx = px;
                     for(int k=0; k<nlDiffsCount; k++) {
                         Node noded = nlDiffs.item(k);
                         Element d = (Element)noded;
                         d.setAttribute("width", Integer.toString(dw-BOX_SPACING));
-                        d.setAttribute("height", "14");
                         d.setAttribute("x", Integer.toString(px + k*dw + BOX_SPACING));
-                        d.setAttribute("y", Integer.toString(py));
 System.out.println("px="+(px + k*dw + PADDING_RIGHT));                        
                     }
-                    //py = py + DIFF_TITLE + BOX_SPACING;
                 }
-                
-                //perspectiva
-                p.setAttribute("width", Integer.toString(pw));
-                if(hasDifferentiators) {
-                    h_ = ph - HEADER_4 - BOX_SPACING;
-                }
-                p.setAttribute("height",Integer.toString(h_));
-                p.setAttribute("x", Integer.toString(px));
-                //p.setAttribute("y", Integer.toString(py));
-                p.setAttribute("y", "0");
                 
                 //lista de temas por perspectiva                
                 expression = "/bsc/perspective[@id='"+uri+"']/themes/theme";
@@ -242,16 +227,10 @@ System.out.println("px="+(px + k*dw + PADDING_RIGHT));
                 if(hasThemes)
                 {
                     final int tw = pw/nlThmsCount;
-                    int tx;                    
-                    if(hasDifferentiators) {
-                        py = py + HEADER_4 + BOX_SPACING;
-                    }
-                    int ty = py + PADDING_TOP;
-                    
+                    int tx;
                     for(int k=0; k<nlThmsCount; k++)
                     {
                         Node nodet = nlThms.item(k);
-                        //int ty = py + BIND_TOP_SPACING;
                         if(nodet.getNodeType()==Node.ELEMENT_NODE) {
                             Element t = (Element)nodet;
                             uri = t.getAttribute("id");
@@ -260,7 +239,6 @@ System.out.println("px="+(px + k*dw + PADDING_RIGHT));
                             tx = px + k*tw + BOX_SPACING;
 System.out.println("tx="+tx+", px="+px );  
                             t.setAttribute("x", Integer.toString(tx));
-                            t.setAttribute("y", Integer.toString(ty));
                             
                             //relaciones con este tema
                             expression = "//rel[@to='"+uri+"']";
@@ -270,7 +248,6 @@ System.out.println("tx="+tx+", px="+px );
                                 if(noder!=null && noder.getNodeType()==Node.ELEMENT_NODE) {
                                     Element rel = (Element)noder;
                                     rel.setAttribute("rx", Integer.toString(tx+tw/2));
-                                    rel.setAttribute("ry", Integer.toString(ty));
                                 }
                             }
                             
@@ -294,15 +271,12 @@ System.out.println("tx="+tx+", px="+px );
                                 {
                                     Node nodeo = nlObjs.item(l);
                                     int ox = tx;
-                                    int oy = hiddenTheme ? 0 : HEADER_3;
                                     if(nodeo.getNodeType()==Node.ELEMENT_NODE) {
                                         Element o = (Element)nodeo;
                                         uri = o.getAttribute("id");                                
                                         o.setAttribute("width", Integer.toString(tw-PADDING_RIGHT));
                                         o.setAttribute("height", Integer.toString(hObj-PADDING_TOP));
                                         o.setAttribute("x", Integer.toString(ox));  
-                                        oy += ty + l*hObj + PADDING_TOP;
-                                        o.setAttribute("y", Integer.toString(oy));
                                         o.setAttribute("href",  urlBase+uri);
 
                                         //relaciones con este objetivo
@@ -313,7 +287,6 @@ System.out.println("tx="+tx+", px="+px );
                                             if(noder.getNodeType()==Node.ELEMENT_NODE) {
                                                 Element rel = (Element)noder;
                                                 rel.setAttribute("rx", Integer.toString(ox+tw/2));
-                                                rel.setAttribute("ry", Integer.toString(oy));
                                             }
                                         }
                                     }
