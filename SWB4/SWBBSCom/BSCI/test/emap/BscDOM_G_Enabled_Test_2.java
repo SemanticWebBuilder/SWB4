@@ -469,6 +469,7 @@ System.out.println("tx="+tx+", px="+px );
         boolean hasDifferentiators = nlDiffs.getLength()>0;
         if(hasDifferentiators)
         {
+            SVGjs.append(" y_ += "+BOX_SPACING+";").append("\n");
             for(int k=0; k<nlDiffs.getLength(); k++)
             {
                 Node nodeD = nlDiffs.item(k);
@@ -634,15 +635,13 @@ SVGjs.append(" }").append("\n");
                                 SVGjs.append(" to = document.getElementById('"+to+"');").append("\n");
                                 SVGjs.append(" parent = document.getElementById('"+parent+"');").append("\n");
                                 
-                                
-SVGjs.append(" r = document.getElementById('w_"+parent+"');").append("\n");
-SVGjs.append(" if(r) {").append("\n");
-SVGjs.append("     w = r.width.baseVal.value;").append("\n");
-SVGjs.append("     w = w/2;").append("\n");
-SVGjs.append(" }else {").append("\n");
-SVGjs.append("     w = 0;").append("\n");
-SVGjs.append(" }").append("\n");
-                                
+                                SVGjs.append(" r = document.getElementById('w_"+parent+"');").append("\n");
+                                SVGjs.append(" if(r) {").append("\n");
+                                SVGjs.append("     w = r.width.baseVal.value;").append("\n");
+                                SVGjs.append("     w = w/2;").append("\n");
+                                SVGjs.append(" }else {").append("\n");
+                                SVGjs.append("     w = 0;").append("\n");
+                                SVGjs.append(" }").append("\n");
                                 
                                 SVGjs.append(" if(to && parent) {").append("\n");
                                 SVGjs.append("   console.log('to='+to.id+', parent='+parent.id);").append("\n");
