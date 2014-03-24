@@ -4,192 +4,302 @@
  */
 package org.semanticwb.bsc.resources;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.SWBPortal;
-import org.semanticwb.bsc.ContactWork;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
-import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.portal.SWBFormButton;
-import org.semanticwb.portal.SWBFormMgr;
-import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.portal.api.SWBResourceURLImp;
 
 /**
  *
  * @author ana.garcias
  */
-public class UserProfile extends GenericResource {
+public class UserProfile extends GenericAdmResource {
 
+    private final String Mode_CHANGEPASSWORD = "changePassword";
+    private final String Action_CHANGEPASSWORD = "savePassword";
+
+    /**
+     * Genera el despliegue la actualización del perfil de usuario.
+     *
+     * @param request la petici&oacute;n enviada por el cliente
+     * @param response la respuesta generada a la petici&oacute;n recibida
+     * @param paramRequest un objeto de la plataforma de SWB con datos
+     * adicionales de la petici&oacute;n
+     * @throws SWBResourceException si durante la ejecuci&oacute;n no se cuenta
+     * con los recursos necesarios para atender la petici&oacute;n
+     * @throws IOException si durante la ejecuci&oacute;n ocurre alg&uacute;n
+     * problema con la generaci&oacute;n o escritura de la respuesta
+     */
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        //super.doView(request, response, paramRequest); //To change body of generated methods, choose Tools | Templates.
-        final User user = SWBContext.getSessionUser();
-        Resource base = getResourceBase();
-        WebSite wsite = base.getWebSite();
+    public void doView(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD);
-        System.out.println("userId en doView..." + user.getId());
-        SemanticObject usrUri = SemanticObject.createSemanticObject(user.getURI());
-        
-    //SWBFormMgr mgr = new SWBFormMgr(User.sclass, paramRequest.getWebPage().getWebSite().getSemanticObject(), null);
-        SWBFormMgr mgr = new SWBFormMgr(usrUri, null, SWBFormMgr.MODE_EDIT);
-        mgr.setType(SWBFormMgr.TYPE_DOJO);
-        mgr.setFilterRequired(false);
-        String lang = "es";
-        mgr.setLang(lang);
-        mgr.addButton(SWBFormButton.newSaveButton());
-        
-        
-        if (user != null && user.isSigned()) {
-            /*String userName = user.getFullName() == null ? "" : user.getFullName();
-            String email = user.getEmail() == null ? "" : user.getEmail();
-            String employment = "";
-            String twitter = "";
-            String skype = "";
-            String location = "";
-            int lada = 0;
-            int phone = 0;
-            int ext = 0;*/
-            final String pimg;
-            //Revisamos si ya tiene datos asociados en Contacto de trabajo
-           /* if (ContactWork.ClassMgr.hasContactWork(user.getId(), wsite)) {
-                ContactWork cw = ContactWork.ClassMgr.getContactWork(user.getId(), wsite);
-                employment = cw.getEmployment() == null ? "" : cw.getEmployment();
-                twitter = cw.getTwitter() == null ? "" : cw.getTwitter();
-                skype = cw.getSkype() == null ? "" : cw.getSkype();
-                lada = cw.getLada();
-                phone = cw.getPhone();
-                ext = cw.getExt();
-                location = cw.getLocation() == null ? "" : cw.getLocation();
-            }*/
+        Resource base = paramRequest.getResourceBase();
+        if (base.getAttribute("canChangePassword") != null
+                && "true".equals(base.getAttribute("canChangePassword"))) {
+            StringBuilder toReturn = new StringBuilder();
+            StringBuilder toReturn2 = new StringBuilder();
+            SWBResourceURL urlChangePass = paramRequest.getRenderUrl().setMode(Mode_CHANGEPASSWORD);
+            urlChangePass.setCallMethod(SWBResourceURL.Call_DIRECT);
 
-            out.println("<script type=\"text/javascript\">\n");
-            out.println("  dojo.require('dojo.parser');\n");
-            out.println("  dojo.require('dijit.layout.ContentPane');\n");
-            out.println("  dojo.require('dijit.form.Form');\n");
-            out.println("  dojo.require('dijit.form.CheckBox');\n");
-            out.println("  dojo.require('dijit.form.ValidationTextBox');\n");
-            out.println("  dojo.require('dijit.form.TextBox');\n");
-            out.println("</script>\n");
-            out.println("");
-        
-         out.println("<form method=\"post\" id=\"frmUploadPhoto\" action=\" " + url
-                    + "\" class=\"swbform\" type=\"dijit.form.Form\" onsubmit=\""
-                    + "submitForm('frmUploadPhoto');return false;\">");
-            mgr.getFormHiddens();
-            out.println("<input type=\"hidden\" name=\"userId\" value=\"" + user.getId()
-                    + "\">");
+            toReturn.append("<script type=\"text/javascript\">\n");
+            toReturn.append("  dojo.require('dojo.parser');\n");
+            toReturn.append("  dojo.require(\"dijit.Dialog\");\n");
+            toReturn.append("  dojo.require('dijit.form.Form');\n");
+            toReturn.append("  dojo.require(\"dojox.layout.ContentPane\");\n");
+            toReturn.append("  dojo.require('dijit.form.ValidationTextBox');\n");
+            toReturn.append("  dojo.require('dijit.form.TextBox');\n");
 
-            final String img;
-            if (user.getPhoto() == null) {
-                img = SWBPortal.getWebWorkPath() + "/models/" + wsite.getId() + "/css/images/user.jpg";
-
-            } else {
-                img = SWBPortal.getWebWorkPath() + "/models/" + wsite.getId() + "/" + user.getPhoto();
+            toReturn.append("  function checkData() {\n");
+            if (request.getParameter("msg") != null) {
+                toReturn.append("   alert('");
+                toReturn.append(paramRequest.getLocaleString(request.getParameter("msg")));
+                toReturn.append("');");
+                if (!request.getParameter("msg").equals("msgOkUpdate")) {
+                    toReturn.append("showDialog('");
+                    toReturn.append(urlChangePass);
+                    toReturn.append("', '");
+                    toReturn.append(paramRequest.getLocaleString("lblDialogName"));
+                    toReturn.append("');\n");
+                }
             }
-            System.out.println("Ruta img..." + img);
-            
-            out.println("<div class=\"foto\"><img src=\"" + img + "\" alt=\"\" />");
-            out.println("<p class=\"tercio\"><label for=\"foto\">Cambiar mi foto</label>" + mgr.renderElement(request, User.swb_usrPhoto, SWBFormMgr.MODE_EDIT) + "</p>"
-                    + "</div>");
-            out.println("<div class=\"user\"> " + user.getFullName() + "</div>");
-            out.println("<div>");
-            out.println("<p class=\"\">" + paramRequest.getLocaleString("lbl_employment") + "</p>");
-            out.println("<p class=\"\">"+ mgr.renderElement(request, ContactWork.bsc_employment, SWBFormMgr.MODE_EDIT)+"</p>");
-            out.println("</div>");
-            out.println("<div class=\"\">");
-            out.println("<p class=\"\"><strong>" + paramRequest.getLocaleString("lbl_contact") + "</strong></p>");
-            out.println("<p>&nbsp;</p>");
-            out.println("<p class=\"\">" + paramRequest.getLocaleString("lbl_mail") + "</p>");
-            out.println("<p class=\"\">"+ mgr.renderElement(request, User.swb_usrEmail, SWBFormMgr.MODE_EDIT)+"</p>");
-            out.println("<p class=\"\">" + paramRequest.getLocaleString("lbl_twitter") + "</p>");
-            out.println("<p class=\"\">"+ mgr.renderElement(request, ContactWork.bsc_twitter, SWBFormMgr.MODE_EDIT)+"</p>");
-            out.println("<p class=\"\">" + paramRequest.getLocaleString("lbl_skype") + "</p>");
-            out.println("<p class=\"\">"+ mgr.renderElement(request, ContactWork.bsc_skype, SWBFormMgr.MODE_EDIT)+"</p>");
-            out.println("<p class=\"\">" + paramRequest.getLocaleString("lbl_lada") + "</p>");
-            out.println("<p class=\"\">"+ mgr.renderElement(request, ContactWork.bsc_lada, SWBFormMgr.MODE_EDIT)+"</p>");
-            out.println("<p class=\"\">" + paramRequest.getLocaleString("lbl_phone") + "</p>");
-            out.println("<p class=\"\">"+ mgr.renderElement(request, ContactWork.bsc_phone, SWBFormMgr.MODE_EDIT)+"</p>");
-            out.println("<p class=\"\">" + paramRequest.getLocaleString("lbl_ext") + "</p>");
-            out.println("<p class=\"\">"+ mgr.renderElement(request, ContactWork.bsc_ext, SWBFormMgr.MODE_EDIT)+"</p>");
-            out.println("<p class=\"\">" + paramRequest.getLocaleString("lbl_location") + "</p>");
-            out.println("<p class=\"\">"+ mgr.renderElement(request, ContactWork.bsc_location, SWBFormMgr.MODE_EDIT)+"</p>");
-            //temporal valores en duro
-            out.println("<p class=\"\">" + paramRequest.getLocaleString("lbl_area") + "</p>");
-            out.println("<p class=\"\"><select name=\"area\"><option>DAC</option></select></p>");
-            out.println("<p class=\"\">" + paramRequest.getLocaleString("lbl_chief") + "</p>");
-            out.println("<p class=\"\"><select name=\"chief\"><option>Javier Solis</option></select></p>");
-            out.println("<p><button type=\"dijit.form.Button\" type=\"submit\">"
-                    + paramRequest.getLocaleString("lbl_Save") + "</button></p>");
-            out.println("</div>");
-            out.println("</form>");
+            toReturn.append("   }\n");
+
+            toReturn.append("dojo.addOnLoad( function(){\n");
+            toReturn.append("checkData(\"\");}\n");
+            toReturn.append(");\n");
+            toReturn.append("</script>\n");
+
+            toReturn2.append("<div dojoType=\"dijit.Dialog\" class=\"soria\" ");
+            toReturn2.append("style=\"display:width:380px;height:170px;\" ");
+            toReturn2.append("id=\"swbDialog\" title=\"Agregar\" >\n");
+            toReturn2.append("  <div dojoType=\"dojox.layout.ContentPane\" class=\"soria\" ");
+            toReturn2.append("  style=\"display:width:380px;height:170px;\" ");
+            toReturn2.append("  id=\"swbDialogImp\" executeScripts=\"true\">\n");
+            toReturn2.append("    Cargando...\n");
+            toReturn2.append("  </div>\n");
+            toReturn2.append("</div>\n");
+
+            toReturn2.append("<a href=\"#\" onclick=\"showDialog('");
+            toReturn2.append(urlChangePass);
+            toReturn2.append("', '");
+            toReturn2.append(paramRequest.getLocaleString("lblDialogName"));
+            toReturn2.append("')\">\n");
+            toReturn2.append(paramRequest.getLocaleString("lblDialogName"));
+            toReturn2.append("\n</a>");
+
+            out.println(toReturn.toString());
+            out.println(toReturn2.toString());
         }
     }
 
+    /**
+     * Determina el modo a ejecutar, en base a los parámetros recibidos en la
+     * petici&oacute;n del cliente
+     *
+     * @param request la petici&oacute;n enviada por el cliente
+     * @param response la respuesta generada a la petici&oacute;n recibida
+     * @param paramRequest un objeto de la plataforma de SWB con datos
+     * adicionales de la petici&oacute;n
+     * @throws SWBResourceException si durante la ejecuci&oacute;n no se cuenta
+     * con los recursos necesarios para atender la petici&oacute;n
+     * @throws IOException si durante la ejecuci&oacute;n ocurre alg&uacute;n
+     * problema con la generaci&oacute;n o escritura de la respuesta
+     */
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        //super.processAction(request, response); //To change body of generated methods, choose Tools | Templates.
-        System.out.println("entra al metodo processAction");
+    public void processRequest(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String mode = paramRequest.getMode();
+        if (Mode_CHANGEPASSWORD.equals(mode)) {
+            doChangePassword(request, response, paramRequest);
+        } else {
+            super.processRequest(request, response, paramRequest);
+        }
+    }
+
+    /**
+     * Genera el HTML que permite actulizar la contrase&ntilde;a de un usuario
+     * registrado, si la configuración del recurso permite hacerlo
+     *
+     * @param request la petici&oacute;n enviada por el cliente
+     * @param response la respuesta generada a la petici&oacute;n recibida
+     * @param paramRequest un objeto de la plataforma de SWB con datos
+     * adicionales de la petici&oacute;n
+     * @throws SWBResourceException si durante la ejecuci&oacute;n no se cuenta
+     * con los recursos necesarios para atender la petici&oacute;n
+     * @throws IOException si durante la ejecuci&oacute;n ocurre alg&uacute;n
+     * problema con la generaci&oacute;n o escritura de la respuesta
+     */
+    public void doChangePassword(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=UTF-8");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        PrintWriter out = response.getWriter();
+        StringBuilder toReturn = new StringBuilder();
+        SWBResourceURLImp url = new SWBResourceURLImp(request, getResourceBase(),
+                paramRequest.getWebPage(), SWBResourceURLImp.UrlType_ACTION);
+        url.setAction(Action_CHANGEPASSWORD);
+
+        toReturn.append("\n<script language=\"JavaScript\" >");
+        toReturn.append("\nfunction jsValidate(form) {");
+        toReturn.append("\n var obj = dojo.byId(form);");
+        toReturn.append("\n     if(!obj.validate()) {");
+        toReturn.append("\n        alert('");
+        toReturn.append(paramRequest.getLocaleString("lblCheckData"));
+        toReturn.append("');");
+        toReturn.append("\n           return false;");
+        toReturn.append("\n     }");
+
+        toReturn.append("\n       if(dojo.byId('newPassword').value != ");
+        toReturn.append("           dojo.byId('rePassword').value) {");
+        toReturn.append("\n           alert('");
+        toReturn.append(paramRequest.getLocaleString("msgErrNewPassword"));
+        toReturn.append("             ');");
+        toReturn.append("\n           dijit.byId('newPassword').attr('value','');");
+        toReturn.append("\n           dijit.byId('rePassword').attr('value','');");
+        toReturn.append("\n           dijit.byId('newPassword').focus();");
+        toReturn.append("\n           return false;");
+        toReturn.append("\n       }");
+        toReturn.append("\n       if(dojo.byId('newPassword').value.length > 10 ||");
+        toReturn.append("         dojo.byId('newPassword').value.length < 5) {");
+        toReturn.append("\n           alert('");
+        toReturn.append(paramRequest.getLocaleString("lblErrSize"));
+        toReturn.append("             ');");
+        toReturn.append("\n           dijit.byId('newPassword').attr('value','');");
+        toReturn.append("\n           dijit.byId('rePassword').attr('value','');");
+        toReturn.append("\n           dijit.byId('newPassword').focus();");
+        toReturn.append("\n           return false;");
+        toReturn.append("\n       }");
+        toReturn.append("\n}");
+        toReturn.append("\n</script>");
+
+        toReturn.append("\n<form id=\"");
+        toReturn.append(User.swb_User.getClassName());
+        toReturn.append("/edit\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"");
+        toReturn.append(url);
+        toReturn.append("\" method=\"post\" onsubmit=\"return jsValidate(this);\">");
+        toReturn.append("\n<table>");
+        toReturn.append("\n<tbody>");
+        toReturn.append("\n<tr>");
+        toReturn.append("\n<td align=\"right\"><label>");
+        toReturn.append(paramRequest.getLocaleString("lblCurPassword"));
+        toReturn.append("</label></td>");
+        toReturn.append("\n<td><input type=\"password\" name=\"curPassword\" id=\"curPassword\" ");
+        toReturn.append("size=\"30\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" ");
+        toReturn.append("promptMessage=\"");
+        toReturn.append(paramRequest.getLocaleString("userCurPassword"));
+        toReturn.append("\" ");
+        toReturn.append(" invalidMessage=\"");
+        toReturn.append(paramRequest.getLocaleString("userCurPassword"));
+        toReturn.append("\" isValid=\"if(this.textbox.value == '') ");
+        toReturn.append("{return false;} else { return true;}\" ");
+        toReturn.append("trim=\"true\" /></td>");
+        toReturn.append("\n</tr>");
+        toReturn.append("\n<tr>");
+        toReturn.append("\n<td align=\"right\"><label>");
+        toReturn.append(paramRequest.getLocaleString("lblNewPassword"));
+        toReturn.append("</label></td>");
+        toReturn.append("\n<td><input type=\"password\" name=\"newPassword\" ");
+        toReturn.append("id=\"newPassword\" size=\"30\" dojoType=\"dijit.form.ValidationTextBox\" ");
+        toReturn.append("required=\"true\" ");
+        toReturn.append("promptMessage=\"");
+        toReturn.append(paramRequest.getLocaleString("userNewPassword"));
+        toReturn.append("\" invalidMessage=\"");
+        toReturn.append(paramRequest.getLocaleString("userNewPassword"));
+        toReturn.append("\" isValid=\"if(this.textbox.value == '') {return false;");
+        toReturn.append("} else { return true;}\" trim=\"true\" ></td>");
+        toReturn.append("\n</tr>");
+        toReturn.append("\n<tr>");
+        toReturn.append("\n<td align=\"right\"><label>");
+        toReturn.append(paramRequest.getLocaleString("lblConfirmPassword"));
+        toReturn.append("</label></td>");
+        toReturn.append("\n<td><input type=\"password\" name=\"rePassword\" ");
+        toReturn.append("id=\"rePassword\" size=\"30\"  dojoType=\"dijit.form.ValidationTextBox\" ");
+        toReturn.append("required=\"true\" ");
+        toReturn.append("promptMessage=\"");
+        toReturn.append(paramRequest.getLocaleString("userRePassword"));
+        toReturn.append("\" invalidMessage=\"");
+        toReturn.append(paramRequest.getLocaleString("userRePassword"));
+        toReturn.append("\" isValid=\"if(this.textbox.value == '') {return false;} ");
+        toReturn.append("else { return true;}\" trim=\"true\" ></td>");
+        toReturn.append("\n</tr>");
+        toReturn.append("\n</tbody>");
+        toReturn.append("\n<tbody>");
+        toReturn.append("\n<tr>");
+        toReturn.append("\n<td align=\"center\" colspan=\"2\">");
+        toReturn.append("\n<button dojoType='dijit.form.Button' type=\"submit\">");
+        toReturn.append(paramRequest.getLocaleString("lbl_Save"));
+        toReturn.append("</button>\n");
+        toReturn.append("\n<button dojoType='dijit.form.Button' ");
+        toReturn.append("onclick=\"dijit.byId('swbDialog').hide();\">");
+        toReturn.append(paramRequest.getLocaleString("lbl_Cancel"));
+        toReturn.append("</button>\n");
+        toReturn.append("\n</td>");
+        toReturn.append("\n</tr>");
+        toReturn.append("\n</tbody>");
+
+        toReturn.append("\n</table>");
+        toReturn.append("\n</form>");
+        out.println(toReturn.toString());
+    }
+
+    /**
+     * Realiza las operaciones de edici&oacute;n de informaci&oacute;n del
+     * perfil de un usuario.
+     *
+     * @param request la petici&oacute;n enviada por el cliente
+     * @param response la respuesta generada a la petici&oacute;n recibida
+     * @throws SWBResourceException si durante la ejecuci&oacute;n no se cuenta
+     * con los recursos necesarios para atender la petici&oacute;n
+     * @throws IOException si durante la ejecuci&oacute;n ocurre alg&uacute;n
+     * problema con la generaci&oacute;n o escritura de la respuesta
+     */
+    @Override
+    public void processAction(HttpServletRequest request, SWBActionResponse response)
+            throws SWBResourceException, IOException {
         String action = response.getAction();
-        final String userId = request.getParameter("userId");
-        System.out.println("userId que recibe ...." + userId);
-        Resource base = getResourceBase();
-        WebSite wsite = base.getWebSite();
         User user = SWBContext.getSessionUser();
-        
-        SemanticObject usrUri = SemanticObject.createSemanticObject(user.getURI());
+
+        //SemanticObject usrUri = SemanticObject.createSemanticObject(user.getURI());
         if (SWBResourceURL.Action_ADD.equalsIgnoreCase(action)) {
-            System.out.println("entra al action ADD...");
-            SWBFormMgr mgr = new SWBFormMgr(usrUri, null, SWBFormMgr.MODE_EDIT);
-           // mgr.addProperty(ContactWork.bsc_twitter);
-            /*String employment = request.getParameter("employment") == null ? "" : request.getParameter("employment");
-            String twitter = request.getParameter("twitter") == null ? "" : request.getParameter("twitter");
-            String skype = request.getParameter("skype") == null ? "" : request.getParameter("skype");
-            String lada = request.getParameter("lada");
-            int lada_ = Integer.parseInt(lada);
-            String phone = request.getParameter("phone");
-            int phone_ = Integer.parseInt(phone);
-            String ext = request.getParameter("ext");
-            int ext_ = Integer.parseInt(ext);
-            String location = request.getParameter("location") == null ? "" : request.getParameter("location");
-            // area y jefe son objetos//
-            String area = request.getParameter("area") == null ? "" : request.getParameter("area");
-            String chief = request.getParameter("chief") == null ? "" : request.getParameter("chief");
-            */
-           /* if (ContactWork.ClassMgr.hasContactWork(userId, wsite)) {
-                ContactWork cw = ContactWork.ClassMgr.getContactWork(userId, wsite);
-                cw.setEmployment(employment);
-                cw.setTwitter(twitter);
-                cw.setSkype(skype);
-                cw.setLada(lada_);
-                cw.setPhone(phone_);
-                cw.setExt(ext_);
-                cw.setLocation(location);
-                cw.setArea_(null);
-                cw.setChief(null);
-            } else {
-                ContactWork cw = ContactWork.ClassMgr.createContactWork(userId, wsite);
-                cw.setEmployment(employment);
-                cw.setTwitter(twitter);
-                cw.setSkype(skype);
-                cw.setLada(lada_);
-                cw.setPhone(phone_);
-                cw.setExt(ext_);
-                cw.setLocation(location);
-                cw.setArea_(null);
-                cw.setChief(null);
-            }*/
+          //  SWBFormMgr mgr = new SWBFormMgr(usrUri, null, SWBFormMgr.MODE_EDIT);
+        } else if (Action_CHANGEPASSWORD.equals(action)) {
+            String curPassword = request.getParameter("curPassword") == null
+                    ? null : request.getParameter("curPassword").trim();
+            String newPassword = request.getParameter("newPassword") == null
+                    ? null : request.getParameter("newPassword").trim();
+            String rePassword = request.getParameter("rePassword") == null
+                    ? null : request.getParameter("rePassword").trim();
+            if (user.isSigned()) {
+                try {
+                    String alg = user.getPassword().substring(1, user.
+                            getPassword().indexOf("}"));
+                    if (!user.getPassword().equals("") && !SWBUtils.CryptoWrapper.
+                            comparablePassword(curPassword, alg).
+                            equals(user.getPassword())) {
+                        response.setRenderParameter("msg", "msgErrCurrentPassword");
+                    } else if (newPassword != null && !newPassword.equals("")
+                            && rePassword != null && newPassword.equals(rePassword)) {
+                        user.setPassword(newPassword);
+                        response.setRenderParameter("msg", "msgOkUpdate");
+                    } else {
+                        response.setRenderParameter("msg", "msgErrNewPassword");
+                    }
+                } catch (java.security.NoSuchAlgorithmException nse) {
+                    response.setRenderParameter("msg", "msgErrUpdate");
+                }
+            }
         }
     }
 }
