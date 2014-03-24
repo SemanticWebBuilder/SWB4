@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAdmRes" action="true" id="frmAdmRes" method="POST">
+    <fieldset legend="Configuración" >
+        <input type="checkbox" name="canChangePassword" label="Permitir cambiar contraseña" value="true" promptMessage="Permitir cambiar contraseña"/>
+    </fieldset>
+    <fieldset>
+        <input type="submit" name="btnSave" value="Guardar"/>
+        <input type="reset"  name="btnReset" value="Restablecer" />
+    </fieldset>
+    </form>
+</admresource>
