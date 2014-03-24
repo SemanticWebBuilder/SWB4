@@ -217,7 +217,7 @@ System.out.println("dw="+dw);
                         Element d = (Element)noded;
                         d.setAttribute("width", Integer.toString(dw-BOX_SPACING));
                         d.setAttribute("height", "14");
-                        d.setAttribute("x", Integer.toString(px + k*dw + PADDING_RIGHT));
+                        d.setAttribute("x", Integer.toString(px + k*dw + BOX_SPACING));
                         d.setAttribute("y", Integer.toString(py));
 System.out.println("px="+(px + k*dw + PADDING_RIGHT));                        
                     }
@@ -257,7 +257,7 @@ System.out.println("px="+(px + k*dw + PADDING_RIGHT));
                             uri = t.getAttribute("id");
                             hiddenTheme = Boolean.parseBoolean(t.getAttribute("hidden"));
                             t.setAttribute("width", Integer.toString(tw-BOX_SPACING));
-                            tx = px + k*tw + PADDING_RIGHT;
+                            tx = px + k*tw + BOX_SPACING;
 System.out.println("tx="+tx+", px="+px );  
                             t.setAttribute("x", Integer.toString(tx));
                             t.setAttribute("y", Integer.toString(ty));
