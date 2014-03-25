@@ -9,8 +9,10 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -95,12 +97,54 @@ public class Reporter extends GenericResource {
     }
 
     private void doGenerateReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
+        String sinceDate = request.getParameter("sinceDate");
+        String toDate = request.getParameter("toDate");
 
-        String gender = request.getParameter("gender");
+        Date dateSince = null;
+        Date dateTo = null;
+        try{
+            if (!sinceDate.equals("") && !toDate.equals("")) {            
+                SimpleDateFormat formatSince = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat formatTo = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                toDate += " 23:59:59";
+                dateSince = formatSince.parse(sinceDate);
+                dateTo = formatTo.parse(toDate);
+            }
+        }catch(ParseException pe){
+            log.warn("Invalid dates - ignored!");
+        }
+        
+        
+        String genderParams[] = getValidParams(request.getParameterValues("gender"));
+        String schoolGradeParams[] = getValidParams(request.getParameterValues("schoolGrade"));
+        String slifeStageParams[] = getValidParams(request.getParameterValues("lifeStage"));
+        String sentimentalRelationShipParams[] = getValidParams(request.getParameterValues("sentimentalRelationShip"));
+        String scountryStateParams[] = getValidParams(request.getParameterValues("countryState"));
+
+        /*for(int i = 0; i < genderParams.length; i++){
+            System.out.println("gender___" + genderParams[i]);
+        }
+        
+        for(int i = 0; i < schoolGradeParams.length; i++){
+            System.out.println("schoolGradeParams___" + schoolGradeParams[i]);
+        }
+        
+        for(int i = 0; i < slifeStageParams.length; i++){
+            System.out.println("slifeStageParams___" + slifeStageParams[i]);
+        }
+        
+        for(int i = 0; i < sentimentalRelationShipParams.length; i++){
+            System.out.println("sentimentalRelationShipParams___" + sentimentalRelationShipParams[i]);
+        }
+        
+        for(int i = 0; i < scountryStateParams.length; i++){
+            System.out.println("scountryStateParams___" + scountryStateParams[i]);
+        }*/
+        /*String gender = request.getParameter("gender");
         String schoolGrade = request.getParameter("schoolGrade");
         String slifeStage = request.getParameter("lifeStage");
         String sentimentalRelationShip = request.getParameter("sentimentalRelationShip");
-        String scountryState = request.getParameter("countryState");
+        String scountryState = request.getParameter("countryState");*/
         String lang = request.getParameter("lang");
         SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("objUri"));
 
@@ -118,16 +162,88 @@ public class Reporter extends GenericResource {
             SocialTopic socialTopic = (SocialTopic) semObj.getGenericInstance();
             itObjPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
         }
+        
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
-            if (passFilters(postIn, gender, schoolGrade, slifeStage, sentimentalRelationShip, scountryState)) {
-                postin.add(postIn);
+            //makes all the possible combinations to verify if the PostIn is valid
+            boolean isValid = false;
+            for(int genderi = 0; genderi < genderParams.length; genderi++){
+                if(isValid)break;
+                for(int schooli = 0; schooli < schoolGradeParams.length; schooli++){
+                    if(isValid)break;
+                    for(int lifei = 0; lifei < slifeStageParams.length; lifei++){
+                        if(isValid)break;
+                        for(int sentimenti = 0; sentimenti < sentimentalRelationShipParams.length; sentimenti++){
+                            if(isValid)break;
+                            for(int countryi = 0; countryi < scountryStateParams.length; countryi++){
+                                if(isValid){
+                                    break;
+                                }else{
+                                    if(passFilters(postIn, genderParams[genderi], schoolGradeParams[schooli], slifeStageParams[lifei], sentimentalRelationShipParams[sentimenti], scountryStateParams[countryi], dateSince, dateTo)){
+                                        isValid = true;                                        
+                                        postin.add(postIn);
+                                    }
+                                }                                
+                            }
+                        }
+                    }
+                }
             }
         }
+        
+        /*while (itObjPostIns.hasNext()) {
+            PostIn postIn = itObjPostIns.next();
+            if (passFilters(postIn, gender, schoolGrade, slifeStage, sentimentalRelationShip, scountryState, dateSince, dateTo)) {
+                postin.add(postIn);
+            }
+        }*/
         createExcel(postin, paramRequest, response, lang, title);
     }
 
-    private boolean passFilters(PostIn postIn, String gender, String schoolGrade, String slifeStage, String sentimentalRelationShip, String scountryState) {
+    public static boolean passFilters(PostIn postIn, String gender, String schoolGrade, String slifeStage, String sentimentalRelationShip, String scountryState, Date dateSince, Date dateTo) {
+        SocialNetworkUser postInUser = postIn.getPostInSocialNetworkUser();
+        CountryState postInCountryState = postIn.getGeoStateMap();
+        boolean genderZeroEqualsThree = false;       
+        if(postInUser.getSnu_gender() == 0 && gender.equals("3")){
+            genderZeroEqualsThree = true;
+        }
+
+        if (dateSince != null && dateTo != null) {
+            if ((gender.equals("all") || genderZeroEqualsThree || (postInUser.getSnu_gender() > 0 && postInUser.getSnu_gender() == Integer.parseInt(gender)))
+                    && (schoolGrade.equals("all") || (postInUser.getSnu_education() > 0 && postInUser.getSnu_education() == Integer.parseInt(schoolGrade)))
+                    && (slifeStage.equals("all") || (postInUser.getSnu_LifeStage() != null && postInUser.getSnu_LifeStage().getId().equals(slifeStage)))
+                    && (sentimentalRelationShip.equals("all") || (postInUser.getSnu_relationShipStatus() > 0 && postInUser.getSnu_relationShipStatus() == Integer.parseInt(sentimentalRelationShip)))
+                    && (scountryState.equals("all") || (postInCountryState != null && postInCountryState.getId().equals(scountryState)))
+                    && (postIn.getPi_created().compareTo(dateSince) >= 0) && (postIn.getPi_created().compareTo(dateTo) <= 0)) {
+                return true;
+            } else if ((gender.equals("all") || genderZeroEqualsThree || (postInUser.getSnu_gender() > 0 && postInUser.getSnu_gender() == Integer.parseInt(gender)))
+                    && (schoolGrade.equals("all") || (postInUser.getSnu_education() > 0 && postInUser.getSnu_education() == Integer.parseInt(schoolGrade)))
+                    && (slifeStage.equals("all") || (postInUser.getSnu_LifeStage() == null && slifeStage.equals("noDefinido")  ))
+                    && (sentimentalRelationShip.equals("all") || (postInUser.getSnu_relationShipStatus() > 0 && postInUser.getSnu_relationShipStatus() == Integer.parseInt(sentimentalRelationShip)))
+                    && (scountryState.equals("all") || (postInCountryState == null && scountryState.equals("estadonoDefinido")))
+                    && (postIn.getPi_created().compareTo(dateSince) >= 0) && (postIn.getPi_created().compareTo(dateTo) <= 0)) {
+                return true;
+            }
+        } else {
+            if ((gender.equals("all") || genderZeroEqualsThree || (postInUser.getSnu_gender() > 0 && postInUser.getSnu_gender() == Integer.parseInt(gender)))
+                    && (schoolGrade.equals("all") || (postInUser.getSnu_education() > 0 && postInUser.getSnu_education() == Integer.parseInt(schoolGrade)))
+                    && (slifeStage.equals("all") || (postInUser.getSnu_LifeStage() != null && postInUser.getSnu_LifeStage().getId().equals(slifeStage)))
+                    && (sentimentalRelationShip.equals("all") || (postInUser.getSnu_relationShipStatus() > 0 && postInUser.getSnu_relationShipStatus() == Integer.parseInt(sentimentalRelationShip)))
+                    && (scountryState.equals("all") || (postInCountryState != null && postInCountryState.getId().equals(scountryState)))) {
+                return true;
+            } else if ((gender.equals("all") || genderZeroEqualsThree || (postInUser.getSnu_gender() > 0 && postInUser.getSnu_gender() == Integer.parseInt(gender)))
+                    && (schoolGrade.equals("all") || (postInUser.getSnu_education() > 0 && postInUser.getSnu_education() == Integer.parseInt(schoolGrade)))
+                    && (slifeStage.equals("all") || (postInUser.getSnu_LifeStage() == null && slifeStage.equals("noDefinido")  ))
+                    && (sentimentalRelationShip.equals("all") || (postInUser.getSnu_relationShipStatus() > 0 && postInUser.getSnu_relationShipStatus() == Integer.parseInt(sentimentalRelationShip)))
+                    && (scountryState.equals("all") || (postInCountryState == null && scountryState.equals("estadonoDefinido")))) {
+                return true;
+            }
+
+        }
+        return false;
+    }
+    
+    /*private boolean passFilters(PostIn postIn, String gender, String schoolGrade, String slifeStage, String sentimentalRelationShip, String scountryState) {
         SocialNetworkUser postInUser = postIn.getPostInSocialNetworkUser();
         CountryState postInCountryState = postIn.getGeoStateMap();
        
@@ -139,7 +255,7 @@ public class Reporter extends GenericResource {
             return true;
         }
         return false;
-    }
+    }*/
 
     public void createExcel(ArrayList<PostIn> postin, SWBParamRequest paramRequest, HttpServletResponse response, String lang, String title) {
         try {
@@ -382,5 +498,26 @@ public class Reporter extends GenericResource {
 
     }
 
+    public static boolean isAllSelected(String params[]){
+        boolean isAllSelected = false;
+        if(params == null){//If the param is null then use all
+            isAllSelected = true;
+        }else{
+            for(int i = 0; i < params.length ; i++){
+                if(params[i].equalsIgnoreCase("all")){
+                    isAllSelected = true;
+                }
+            }
+        }
+        return isAllSelected;
+    }
 
+    public static String[] getValidParams(String params[]){
+        if(isAllSelected(params)){//Si el valor es null o si esta 'Todo' seleccionado
+            String [] all = {"all"};
+            return all;
+        }else{
+            return params;
+        }
+    }
 }
