@@ -14,27 +14,52 @@
 <%@page import="org.semanticwb.platform.SemanticProperty"%>
 <%@page import="org.semanticwb.portal.api.*"%>
 <%@page import="org.json.*"%>
-<%@page import="java.util.*"%> 
+<%@page import="java.util.*"%>
+<%@page import="static org.semanticwb.social.admin.resources.Reporter.*"%>
 
 
 <%!
     JSONArray getObject(HttpServletRequest request) throws Exception {
+        String genderParams[] = getValidParams(request.getParameterValues("gender"));
+        String schoolGradeParams[] = getValidParams(request.getParameterValues("schoolGrade"));
+        String slifeStageParams[] = getValidParams(request.getParameterValues("slifeStage"));
+        String sentimentalRelationShipParams[] = getValidParams(request.getParameterValues("sentimentalRelationShip"));
+        String scountryStateParams[] = getValidParams(request.getParameterValues("scountryState"));
+        
+        /*for(int i = 0; i < genderParams.length; i++){
+            System.out.println("gender_" + genderParams[i]);
+        }        
+        for(int i = 0; i < schoolGradeParams.length; i++){
+            System.out.println("schoolGradeParams_" + schoolGradeParams[i]);
+        }
+        for(int i = 0; i < slifeStageParams.length; i++){
+            System.out.println("slifeStageParams_" + slifeStageParams[i]);
+        }        
+        for(int i = 0; i < sentimentalRelationShipParams.length; i++){
+            System.out.println("sentimentalRelationShipParams_" + sentimentalRelationShipParams[i]);
+        }
+        for(int i = 0; i < scountryStateParams.length; i++){
+            System.out.println("scountryStateParams_" + scountryStateParams[i]);
+        }*/
+        
         SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("objUri"));
-        String gender = request.getParameter("gender");
+        /*String gender = request.getParameter("gender");
         String schoolGrade = request.getParameter("schoolGrade");
         String slifeStage = request.getParameter("slifeStage");
         String sentimentalRelationShip = request.getParameter("sentimentalRelationShip");
-        String scountryState = request.getParameter("scountryState");
+        String scountryState = request.getParameter("scountryState");*/
         String sinceDate = request.getParameter("sinceDate");
         String toDate = request.getParameter("toDate");
 
         Date dateSince = null;
         Date dateTo = null;
 
-        if (!sinceDate.equals("") && !toDate.equals("")) {
-            SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
-            dateSince = formatoDelTexto.parse(sinceDate);
-            dateTo = formatoDelTexto.parse(toDate);
+        if (!sinceDate.equals("") && !toDate.equals("")) {            
+            SimpleDateFormat formatSince = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat formatTo = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            toDate += " 23:59:59";
+            dateSince = formatSince.parse(sinceDate);
+            dateTo = formatTo.parse(toDate);
         }
 
 
@@ -48,19 +73,41 @@
         } else if (semObj.getGenericInstance() instanceof SocialTopic) {
             SocialTopic socialTopic = (SocialTopic) semObj.getGenericInstance();
             itObjPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
-        }
+        }        
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
-            if (passFilters(postIn, gender, schoolGrade, slifeStage, sentimentalRelationShip, scountryState, dateSince, dateTo)) {
-                if (postIn.getPostSentimentalType() == 0) {
-                    neutrals++;
-                } else if (postIn.getPostSentimentalType() == 1) {
-                    positives++;
-                } else if (postIn.getPostSentimentalType() == 2) {
-                    negatives++;
+            //makes all the possible combinations to verify if the PostIn is valid
+            boolean isValid = false;
+            for(int genderi = 0; genderi < genderParams.length; genderi++){
+                if(isValid)break;
+                for(int schooli = 0; schooli < schoolGradeParams.length; schooli++){
+                    if(isValid)break;
+                    for(int lifei = 0; lifei < slifeStageParams.length; lifei++){
+                        if(isValid)break;
+                        for(int sentimenti = 0; sentimenti < sentimentalRelationShipParams.length; sentimenti++){
+                            if(isValid)break;
+                            for(int countryi = 0; countryi < scountryStateParams.length; countryi++){
+                                if(isValid){
+                                    break;
+                                }else{
+                                    if(passFilters(postIn, genderParams[genderi], schoolGradeParams[schooli], slifeStageParams[lifei], sentimentalRelationShipParams[sentimenti], scountryStateParams[countryi], dateSince, dateTo)){
+                                        isValid = true;
+                                        if (postIn.getPostSentimentalType() == 0) {
+                                            neutrals++;
+                                        } else if (postIn.getPostSentimentalType() == 1) {
+                                            positives++;
+                                        } else if (postIn.getPostSentimentalType() == 2) {
+                                            negatives++;
+                                        }
+                                    }
+                                }                                
+                            }
+                        }
+                    }
                 }
             }
         }
+               
         float intTotalVotos = positives + negatives + neutrals;
 
         //Positivo
@@ -123,35 +170,41 @@
         return node;
     }
 
-    private boolean passFilters(PostIn postIn, String gender, String schoolGrade, String slifeStage, String sentimentalRelationShip, String scountryState, Date dateSince, Date dateTo) {
+    /*private boolean passFilters(PostIn postIn, String gender, String schoolGrade, String slifeStage, String sentimentalRelationShip, String scountryState, Date dateSince, Date dateTo) {
         SocialNetworkUser postInUser = postIn.getPostInSocialNetworkUser();
         CountryState postInCountryState = postIn.getGeoStateMap();
-        //System.out.println("GenderPostIn:"+postInUser.getSnu_gender()+",schoolGrade:"+ postInUser.getSnu_education()+",life:"+slifeStage+"Gender:"+gender);
+        boolean genderZeroEqualsThree = false;       
+        if(postInUser.getSnu_gender() == 0 && gender.equals("3")){
+            genderZeroEqualsThree = true;
+        }
 
         if (dateSince != null && dateTo != null) {
-
-            if ((gender.equals("all") || (postInUser.getSnu_gender() > 0 && postInUser.getSnu_gender() == Integer.parseInt(gender)))
+            System.out.print("dates");
+            if ((gender.equals("all") || genderZeroEqualsThree || (postInUser.getSnu_gender() > 0 && postInUser.getSnu_gender() == Integer.parseInt(gender)))
                     && (schoolGrade.equals("all") || (postInUser.getSnu_education() > 0 && postInUser.getSnu_education() == Integer.parseInt(schoolGrade)))
                     && (slifeStage.equals("all") || (postInUser.getSnu_LifeStage() != null && postInUser.getSnu_LifeStage().getId().equals(slifeStage)))
                     && (sentimentalRelationShip.equals("all") || (postInUser.getSnu_relationShipStatus() > 0 && postInUser.getSnu_relationShipStatus() == Integer.parseInt(sentimentalRelationShip)))
                     && (scountryState.equals("all") || (postInCountryState != null && postInCountryState.getId().equals(scountryState)))
                     && (postIn.getPi_created().compareTo(dateSince) >= 0) && (postIn.getPi_created().compareTo(dateTo) <= 0)) {
+                    System.out.println("       valid1");
                 return true;
-            } else if ((gender.equals("all") || (postInUser.getSnu_gender() > 0 && postInUser.getSnu_gender() == Integer.parseInt(gender)))
+            } else if ((gender.equals("all") || genderZeroEqualsThree || (postInUser.getSnu_gender() > 0 && postInUser.getSnu_gender() == Integer.parseInt(gender)))
                     && (schoolGrade.equals("all") || (postInUser.getSnu_education() > 0 && postInUser.getSnu_education() == Integer.parseInt(schoolGrade)))
                     && (slifeStage.equals("all") || (postInUser.getSnu_LifeStage() == null && slifeStage.equals("noDefinido")  ))
                     && (sentimentalRelationShip.equals("all") || (postInUser.getSnu_relationShipStatus() > 0 && postInUser.getSnu_relationShipStatus() == Integer.parseInt(sentimentalRelationShip)))
-                    && (scountryState.equals("all") || (postInCountryState == null && scountryState.equals("estadonoDefinido")))) {
+                    && (scountryState.equals("all") || (postInCountryState == null && scountryState.equals("estadonoDefinido")))
+                    && (postIn.getPi_created().compareTo(dateSince) >= 0) && (postIn.getPi_created().compareTo(dateTo) <= 0)) {
+                System.out.println("       valid2");
                 return true;
             }
         } else {
-            if ((gender.equals("all") || (postInUser.getSnu_gender() > 0 && postInUser.getSnu_gender() == Integer.parseInt(gender)))
+            if ((gender.equals("all") || genderZeroEqualsThree || (postInUser.getSnu_gender() > 0 && postInUser.getSnu_gender() == Integer.parseInt(gender)))
                     && (schoolGrade.equals("all") || (postInUser.getSnu_education() > 0 && postInUser.getSnu_education() == Integer.parseInt(schoolGrade)))
                     && (slifeStage.equals("all") || (postInUser.getSnu_LifeStage() != null && postInUser.getSnu_LifeStage().getId().equals(slifeStage)))
                     && (sentimentalRelationShip.equals("all") || (postInUser.getSnu_relationShipStatus() > 0 && postInUser.getSnu_relationShipStatus() == Integer.parseInt(sentimentalRelationShip)))
                     && (scountryState.equals("all") || (postInCountryState != null && postInCountryState.getId().equals(scountryState)))) {
                 return true;
-            } else if ((gender.equals("all") || (postInUser.getSnu_gender() > 0 && postInUser.getSnu_gender() == Integer.parseInt(gender)))
+            } else if ((gender.equals("all") || genderZeroEqualsThree || (postInUser.getSnu_gender() > 0 && postInUser.getSnu_gender() == Integer.parseInt(gender)))
                     && (schoolGrade.equals("all") || (postInUser.getSnu_education() > 0 && postInUser.getSnu_education() == Integer.parseInt(schoolGrade)))
                     && (slifeStage.equals("all") || (postInUser.getSnu_LifeStage() == null && slifeStage.equals("noDefinido")  ))
                     && (sentimentalRelationShip.equals("all") || (postInUser.getSnu_relationShipStatus() > 0 && postInUser.getSnu_relationShipStatus() == Integer.parseInt(sentimentalRelationShip)))
@@ -161,7 +214,7 @@
 
         }
         return false;
-    }
+    }*/
 
     private double round(float number) {
         return Math.rint(number * 100) / 100;
