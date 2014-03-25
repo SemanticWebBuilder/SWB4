@@ -51,7 +51,6 @@ public class ExportScoreCard extends GenericResource {
                 boolean hasIndicator = false;
                 Objective ob = itObje.next();
                 objective = ob.getTitle();
-                System.out.println("objId.. " + ob.getId());
                 theme = ob.getTheme().getTitle();
                 perspective = ob.getTheme().getPerspective().getTitle();
                 //Saca los indicadores del periodo y evalua si pertenecen al mismo objetivo
@@ -83,7 +82,6 @@ public class ExportScoreCard extends GenericResource {
                 InputStream is = getClass().getResourceAsStream(jasperTemplate.getTemplatePath());
                 JasperReport jasperReport = (JasperReport) JRLoader.loadObject(is);
                 JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, new JRBeanCollectionDataSource(lista));
-                //JasperViewer.viewReport(jasperPrint, false);
                 JRExporter exporter = new JRPdfExporter();
                 exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
                 exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "iso-8859-1");
