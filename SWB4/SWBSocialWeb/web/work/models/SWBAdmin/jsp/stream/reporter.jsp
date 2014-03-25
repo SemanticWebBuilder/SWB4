@@ -21,6 +21,31 @@
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 
+<%!
+    public static boolean isAllSelected(String params[]){
+        boolean isAllSelected = false;
+        if(params == null){//If the param is null then use all
+            isAllSelected = true;
+        }else{
+            for(int i = 0; i < params.length ; i++){
+                if(params[i].equalsIgnoreCase("all")){
+                    isAllSelected = true;
+                }
+            }
+        }
+        return isAllSelected;
+    }
+
+    public static void getParams(String params[], HashMap<String,String> hm){
+        if(isAllSelected(params)){
+            hm.put("all", "all");
+        }else{
+            for(int i = 0 ; i < params.length ; i++){
+                hm.put(params[i], params[i]);
+            }
+        }
+    }
+%>
 
 <%
     /*
@@ -48,21 +73,26 @@
     url.setParameter("suri", suri);
     url.setParameter("doView", "1");
     url.setAction("showChart");
-    String gender = "";
-    String schoolGrade = "";
-    String slifeStage = "";
-    String sentimentalRelationShip = "";
-    String scountryState = "";
+    HashMap <String,String> genderP = new HashMap<String,String>();
+    HashMap <String,String> schoolGradeP = new HashMap<String,String>();
+    HashMap <String,String> slifeStageP = new HashMap<String,String>();
+    HashMap <String,String> sentimentalRelationShipP = new HashMap<String,String>();
+    HashMap <String,String> scountryStateP = new HashMap<String,String>();    
     String sinceDate = "";
     String toDate = "";
     if (paramRequest.getAction() != null && paramRequest.getAction().equals("showChart")) {
-        gender = request.getParameter("gender");
-        schoolGrade = request.getParameter("schoolGrade");
-        slifeStage = request.getParameter("lifeStage");
-        sentimentalRelationShip = request.getParameter("sentimentalRelationShip");
-        scountryState = request.getParameter("countryState");
-        sinceDate = request.getParameter("sinceDate");
-        toDate = request.getParameter("toDate");
+        getParams(request.getParameterValues("gender"), genderP);
+        getParams(request.getParameterValues("schoolGrade"), schoolGradeP);
+        getParams(request.getParameterValues("lifeStage"), slifeStageP);
+        getParams(request.getParameterValues("sentimentalRelationShip"), sentimentalRelationShipP);
+        getParams(request.getParameterValues("countryState"), scountryStateP);        
+        sinceDate = request.getParameter("sinceDate");               
+        toDate = request.getParameter("toDate");        
+        /*System.out.println(genderP.toString());
+        System.out.println(schoolGradeP.toString());
+        System.out.println(slifeStageP.toString());
+        System.out.println(sentimentalRelationShipP.toString());
+        System.out.println(scountryStateP.toString());*/
     }
 %>
 <head>
@@ -112,29 +142,29 @@
         <p class="promediosen"><%=SWBSocialResUtil.Util.getStringFromGenericLocale("sentimentProm", user.getLanguage())%>:<span> <%=title%></span></p>
         <form id="<%=semObj.getSemanticClass().getClassId()%>/reporterFilter" name="<%=semObj.getSemanticClass().getClassId()%>/reporterFilter" dojoType="dijit.form.Form" class="swbform" method="post" action="<%=url%>" method="post" onsubmit="submitForm('<%=semObj.getSemanticClass().getClassId()%>/reporterFilter');return false;"> 
             <div class="combosFilter">
-                <div id="genero-box">
-                    <label for="gen">Genero</label>
-                    <select name="gender">
-                        <option value="all">Todos</option>
-                        <option value="<%=SocialNetworkUser.USER_GENDER_MALE%>" <%=gender.equals("" + SocialNetworkUser.USER_GENDER_MALE) ? "selected" : ""%>>Hombre</option> 
-                        <option value="<%=SocialNetworkUser.USER_GENDER_FEMALE%>" <%=gender.equals("" + SocialNetworkUser.USER_GENDER_FEMALE) ? "selected" : ""%>>Mujer</option>
-                        <option value="<%=SocialNetworkUser.USER_GENDER_UNDEFINED%>" <%=gender.equals("" + SocialNetworkUser.USER_GENDER_UNDEFINED) ? "selected" : ""%>>Indefinido</option>
+                <div id="genero-box" style="height: 70px;">
+                    <label for="gen">G&eacute;nero</label>
+                    <select name="gender" multiple>
+                        <option value="all" <%=genderP.containsKey("all") || genderP.size() == 0 ? "selected" : ""%>>Todos</option>
+                        <option value="<%=SocialNetworkUser.USER_GENDER_MALE%>" <%=genderP.containsKey("" + SocialNetworkUser.USER_GENDER_MALE) ? "selected" : ""%>>Hombre</option> 
+                        <option value="<%=SocialNetworkUser.USER_GENDER_FEMALE%>" <%=genderP.containsKey("" + SocialNetworkUser.USER_GENDER_FEMALE) ? "selected" : ""%>>Mujer</option>
+                        <option value="<%=SocialNetworkUser.USER_GENDER_UNDEFINED%>" <%=genderP.containsKey("" + SocialNetworkUser.USER_GENDER_UNDEFINED) ? "selected" : ""%>>Indefinido</option>
                     </select>
                 </div>
-                <div id="estudios-box">
+                <div id="estudios-box" style="height: 70px;">
                     <label for="school">Estudios</label>
-                    <select name="schoolGrade">
-                        <option value="all">Todos</option>
-                        <option value="<%=SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL%>" <%=schoolGrade.equals("" + SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL) ? "selected" : ""%>>Secundaria, Preparatoria</option>
-                        <option value="<%=SocialNetworkUser.USER_EDUCATION_COLLEGE%>" <%=schoolGrade.equals("" + SocialNetworkUser.USER_EDUCATION_COLLEGE) ? "selected" : ""%>>Universidad</option>
-                        <option value="<%=SocialNetworkUser.USER_EDUCATION_GRADUATE%>" <%=schoolGrade.equals("" + SocialNetworkUser.USER_EDUCATION_GRADUATE) ? "selected" : ""%>>PostGrado</option>
-                        <option value="<%=SocialNetworkUser.USER_EDUCATION_UNDEFINED%>" <%=schoolGrade.equals("" + SocialNetworkUser.USER_EDUCATION_UNDEFINED) ? "selected" : ""%>>Indefinido</option>
+                    <select name="schoolGrade" multiple>
+                        <option value="all" <%=schoolGradeP.containsKey("all") || schoolGradeP.size() == 0 ? "selected" : ""%>>Todos</option>
+                        <option value="<%=SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL%>" <%=schoolGradeP.containsKey("" + SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL) ? "selected" : ""%>>Secundaria, Preparatoria</option>
+                        <option value="<%=SocialNetworkUser.USER_EDUCATION_COLLEGE%>" <%=schoolGradeP.containsKey("" + SocialNetworkUser.USER_EDUCATION_COLLEGE) ? "selected" : ""%>>Universidad</option>
+                        <option value="<%=SocialNetworkUser.USER_EDUCATION_GRADUATE%>" <%=schoolGradeP.containsKey("" + SocialNetworkUser.USER_EDUCATION_GRADUATE) ? "selected" : ""%>>PostGrado</option>
+                        <option value="<%=SocialNetworkUser.USER_EDUCATION_UNDEFINED%>" <%=schoolGradeP.containsKey("" + SocialNetworkUser.USER_EDUCATION_UNDEFINED) ? "selected" : ""%>>Indefinido</option>
                     </select>
                 </div>
-                <div id="etapa-box">
+                <div id="etapa-box" style="height: 70px;">
                     <label for="life">Etapa</label>
-                    <select name="lifeStage">
-                        <option value="all">Todos</option>
+                    <select name="lifeStage" multiple>
+                        <option value="all" <%=slifeStageP.containsKey("all") || slifeStageP.size() == 0 ? "selected" : ""%>>Todos</option>
                        
                         <%
                             Iterator<LifeStage> itLifeStages = SWBComparator.sortByCreated(LifeStage.ClassMgr.listLifeStages(SWBContext.getGlobalWebSite()));
@@ -142,51 +172,57 @@
                                 LifeStage lifeStage = itLifeStages.next();
                                 String lifeStageTitle = lifeStage.getTitle(user.getLanguage()) == null ? lifeStage.getTitle() : lifeStage.getTitle(user.getLanguage());
                         %>
-                        <option value="<%=lifeStage.getId()%>" <%=slifeStage.equals(lifeStage.getId()) ? "selected" : ""%>><%=lifeStageTitle%></option>
+                        <option value="<%=lifeStage.getId()%>" <%=slifeStageP.containsKey(lifeStage.getId()) ? "selected" : ""%>><%=lifeStageTitle%></option>
                         <%
                             }
                         %>
-                         <option value="noDefinido" <%=slifeStage.equals("noDefinido") ? "selected" : ""%>>No definido</option>
+                         <option value="noDefinido" <%=slifeStageP.containsKey("noDefinido") ? "selected" : ""%>>No definido</option>
                     </select>
                 </div>
-                <div id="statuslove-box">
+                <div id="statuslove-box" style="height: 70px;">
                     <label for="sentimental">Estado civil</label>
-                    <select name="sentimentalRelationShip">
-                        <option value="all">Todos</option>
-                        <option value="<%=SocialNetworkUser.USER_RELATION_SINGLE%>" <%=sentimentalRelationShip.equals("" + SocialNetworkUser.USER_RELATION_SINGLE) ? "selected" : ""%>>Soltero</option>
-                        <option value="<%=SocialNetworkUser.USER_RELATION_MARRIED%>" <%=sentimentalRelationShip.equals("" + SocialNetworkUser.USER_RELATION_MARRIED) ? "selected" : ""%>>Casado</option>
-                        <option value="<%=SocialNetworkUser.USER_RELATION_DIVORCED%>" <%=sentimentalRelationShip.equals("" + SocialNetworkUser.USER_RELATION_DIVORCED) ? "selected" : ""%>>Divorciado</option>
-                        <option value="<%=SocialNetworkUser.USER_RELATION_WIDOWED%>" <%=sentimentalRelationShip.equals("" + SocialNetworkUser.USER_RELATION_WIDOWED) ? "selected" : ""%>>Viudo</option>
-                        <option value="<%=SocialNetworkUser.USER_RELATION_UNDEFINED%>" <%=sentimentalRelationShip.equals("" + SocialNetworkUser.USER_RELATION_UNDEFINED) ? "selected" : ""%>>Indefinido</option>
+                    <select name="sentimentalRelationShip" multiple>
+                        <option value="all" <%=sentimentalRelationShipP.containsKey("all") || genderP.size() == 0 ? "selected" : ""%>>Todos</option>
+                        <option value="<%=SocialNetworkUser.USER_RELATION_SINGLE%>" <%=sentimentalRelationShipP.containsKey("" + SocialNetworkUser.USER_RELATION_SINGLE) ? "selected" : ""%>>Soltero</option>
+                        <option value="<%=SocialNetworkUser.USER_RELATION_MARRIED%>" <%=sentimentalRelationShipP.containsKey("" + SocialNetworkUser.USER_RELATION_MARRIED) ? "selected" : ""%>>Casado</option>
+                        <option value="<%=SocialNetworkUser.USER_RELATION_DIVORCED%>" <%=sentimentalRelationShipP.containsKey("" + SocialNetworkUser.USER_RELATION_DIVORCED) ? "selected" : ""%>>Divorciado</option>
+                        <option value="<%=SocialNetworkUser.USER_RELATION_WIDOWED%>" <%=sentimentalRelationShipP.containsKey("" + SocialNetworkUser.USER_RELATION_WIDOWED) ? "selected" : ""%>>Viudo</option>
+                        <option value="<%=SocialNetworkUser.USER_RELATION_UNDEFINED%>" <%=sentimentalRelationShipP.containsKey("" + SocialNetworkUser.USER_RELATION_UNDEFINED) ? "selected" : ""%>>Indefinido</option>
                     </select>
                 </div>
 
-                <div id="estado-box">
+                <div id="estado-box" style="height: 130px;">
                     <label for="country">Estado</label>
-                    <select name="countryState">
-                        <option value="all">Todos</option>
+                    <select name="countryState" multiple="" size="8">
+                        <option value="all" <%=scountryStateP.containsKey("all") || scountryStateP.size() == 0 ? "selected" : ""%>>Todos</option>
                         <%
                             Iterator<org.semanticwb.social.Country> itCountries = org.semanticwb.social.Country.ClassMgr.listCountries(SWBContext.getGlobalWebSite());
                             while (itCountries.hasNext()) {
                                 org.semanticwb.social.Country country = itCountries.next();
                                 Iterator<CountryState> itCountryStates = CountryState.ClassMgr.listCountryStateByCountry(country, SWBContext.getGlobalWebSite());
+%>
+                                <optgroup label="<%=country.getTitle()%>">
+<%
                                 while (itCountryStates.hasNext()) {
                                     CountryState countryState = itCountryStates.next();
                         %>
-                        <option value="<%=countryState.getId()%>" <%=scountryState.equals(countryState.getId()) ? "selected" : ""%>><%=country.getId()%>/<%=countryState.getTitle()%></option>
+                        <option value="<%=countryState.getId()%>" <%=scountryStateP.containsKey(countryState.getId()) ? "selected" : ""%>><%//=country.getId()%><%=countryState.getTitle()%></option>
                         <%
                                 }
+%>
+                                </optgroup>
+<%
                             }
                         %>    
-                         <option value="estadonoDefinido" <%=slifeStage.equals("estadonoDefinido") ? "selected" : ""%>>No definido</option>
+                         <option value="estadonoDefinido" <%=scountryStateP.containsKey("estadonoDefinido") ? "selected" : ""%>>No definido</option>
                     </select>
                 </div>
 
                 <div id="mapa-fecha">
                     <label>Del día</label>
-                    <input type="text" name="sinceDate" id="sinceDate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true">
+                    <input type="text" name="sinceDate" id="sinceDate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=sinceDate%>">
                     <label for="toDate"> al día:</label>
-                    <input type="text" name="toDate" id="toDate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true">
+                    <input type="text" name="toDate" id="toDate" dojoType="dijit.form.DateTextBox"  size="11" style="width:110px;" hasDownArrow="true" value="<%=toDate%>">
 
                 </div>
                 <div id="mapa-buscar">
@@ -198,14 +234,72 @@
     </div>
     <%
         if (paramRequest.getAction().equals("showChart")) {
+            String genderParams[] = request.getParameterValues("gender");
+            String schoolGradeParams[] = request.getParameterValues("schoolGrade");
+            String slifeStageParams[] = request.getParameterValues("lifeStage");
+            String sentimentalRelationShipParams[] = request.getParameterValues("sentimentalRelationShip");
+            String scountryStateParams[] = request.getParameterValues("countryState");
+            String genderReport = "";
+            String schoolReport = "";
+            String slifeStateReport = "";
+            String sentimentalRelReport = "";
+            String scountryReport = "";
+
+            if(isAllSelected(genderParams)){
+                genderReport = "&gender=all";
+            }else{
+                for(int i = 0; i < genderParams.length; i++){
+                    genderReport += "&gender=" + genderParams[i];
+                }
+            }
+
+            if(isAllSelected(schoolGradeParams)){
+                schoolReport = "&schoolGrade=all";
+            }else{
+                for(int i = 0; i < schoolGradeParams.length; i++){
+                    schoolReport += "&schoolGrade=" + schoolGradeParams[i];
+                }
+            }
+
+            if(isAllSelected(slifeStageParams)){
+                slifeStateReport = "&slifeStage=all";
+            }else{
+                for(int i = 0; i < slifeStageParams.length; i++){
+                    slifeStateReport += "&slifeStage=" + slifeStageParams[i];
+                }
+            }
+
+            if(isAllSelected(sentimentalRelationShipParams)){
+                sentimentalRelReport = "&sentimentalRelationShip=all";
+            }else{
+                for(int i = 0; i < sentimentalRelationShipParams.length; i++){
+                    sentimentalRelReport += "&sentimentalRelationShip=" + sentimentalRelationShipParams[i];
+                }
+            }
+
+            if(isAllSelected(scountryStateParams)){
+                scountryReport = "&scountryState=all";
+            }else{
+                for(int i = 0; i < scountryStateParams.length; i++){
+                    scountryReport += "&scountryState=" + scountryStateParams[i];
+                }
+            }
+
+
+            /*System.out.println(genderReport);
+            System.out.println(schoolReport);
+            System.out.println(slifeStateReport);
+            System.out.println(sentimentalRelReport);
+            System.out.println(scountryReport);*/
+
             String args = "?objUri=" + semObj.getEncodedURI();
             String lang = paramRequest.getUser().getLanguage();
             args += "&lang=" + lang;
-            args += "&gender=" + gender;
-            args += "&schoolGrade=" + schoolGrade;
-            args += "&slifeStage=" + slifeStage;
-            args += "&sentimentalRelationShip=" + sentimentalRelationShip;
-            args += "&scountryState=" + scountryState;
+            args += genderReport;
+            args += schoolReport;
+            args += slifeStateReport;
+            args += sentimentalRelReport;
+            args += scountryReport;
             args += "&sinceDate=" + sinceDate;
             args += "&toDate=" + toDate;
     %>
