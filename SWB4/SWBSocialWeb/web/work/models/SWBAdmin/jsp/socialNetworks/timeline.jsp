@@ -128,7 +128,7 @@
         }else{
 %>    
 <div id="<%=objUri%>/getMoreTweets" dojoType="dojox.layout.ContentPane">
-    <div align="center">
+    <div align="center" style="margin-bottom: 10px;">
         <label id="<%=objUri%>/moreTwitLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMoreTweets").setParameter("maxTweetID", maxTweetID+"")%>','<%=objUri%>' + '/getMoreTweets', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;"><%=paramRequest.getLocaleString("moreTweets")%></a></label>
     </div>
 </div>

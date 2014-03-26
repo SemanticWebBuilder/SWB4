@@ -1,6 +1,7 @@
 <%-- 
-    Document   : facebookNewsFeed
-    Created on : 3/01/2014, 04:34:46 PM
+    Document   : facebookFollowers
+    Created on : 25/03/2014, 07:09:42 PM
+    Author     : francisco.jimenez
 --%>
 
 <%@page import="org.semanticwb.model.User"%>
@@ -67,117 +68,49 @@
 %>
 
 <%
-
+    System.out.println("FOLLLLOWERS!!");
     String objUri = (String) request.getParameter("suri");
 
     SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
-    Facebook facebook = (Facebook) semanticObject.createGenericInstance();   
+    Facebook facebook = (Facebook) semanticObject.createGenericInstance();
     
-    String usrProfile = getFullUserProfileFromId("friends", facebook);
-    System.out.println("array of friends:" + usrProfile);
-    JSONObject usrResp = new JSONObject(usrProfile);
-    JSONArray usrData = usrResp.getJSONArray("data");
+    String username;
+    HashMap<String, String> paramsUsr = new HashMap<String, String>(2);
+    paramsUsr.put("access_token", facebookBean.getAccessToken());
+
+    String user = postRequest(paramsUsr, "https://graph.facebook.com/me",
+                            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
+    System.out.println("user:"+ user);
+    JSONObject userObj = new JSONObject(user);
+    if(!userObj.isNull("name")){
+        username = userObj.getString("name");
+    }else{
+        username = facebookBean.getTitle();
+    }
 
     JSONObject object = new JSONObject();
-    String nextPage = null;
-
+    String usrFollower = getFullUserProfileFromId("subscriber", facebook);
+    JSONObject usrFollow = new JSONObject(usrFollower);
+    JSONArray usrDataFollow = usrFollow.getJSONArray("data");
 %>
 
 
 <div class="timelineTab" style="padding:10px 5px 10px 5px; overflow-y: scroll; height: 400px;">
-<div class="timelineTab-title"><p><strong><%="AMIGOS"%></strong><%="PACO"%></p></div>
-        <div class="swbform" >
+    <div class="timelineTab-title"><p><strong><%=username%></strong><%="Seguidores"%></p></div>
+        
             <%
-
-                out.println("<div class=\"swbform\">");
-                out.println("<div align=\"center\"><h2></br> Amigos" + "</h2><br/></div>");
-
-                String image = "";
-                String name = "";
-                for (int k = 0; k < usrData.length(); k++) {
-                    object = (JSONObject) usrData.get(k);
-
-                    image = object.getString("id");
-                    name = object.getString("name");
-
-            %>
-            <div class="timeline timelinetweeter">
-                <p class="tweeter">
-                    <a onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("fullProfile").setParameter("suri", objUri).setParameter("type", "noType").setParameter("id", image).setParameter("targetUser", name)%>','<%= name + " - " + name%>'); return false;" href="#"><%=name%></a>
-                </p>
-                <p class="tweet">
-                    <a onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("fullProfile").setParameter("suri", objUri).setParameter("type", "noType").setParameter("id", image).setParameter("targetUser", name)%>','<%= name + " - " + name%>'); return false;" href="#">
-                        <img src="https://graph.facebook.com/<%=image%>/picture?width=150&height=150" width="150" height="150"/>                   
-                    </a>
-                </p>                
-            </div>
-            <%
-                }
-                out.println("</div>");
-            %>
-
-            <%
-
-                if (usrResp.has("paging")) {
-                    nextPage = usrResp.getJSONObject("paging").getString("next");
-                    System.out.println("------THA NEXT PAGE:" + nextPage);
-                    String params[] = nextPage.split("&");
-                    String nextPageSend = null;
-                    String offsetFriends = null;
-                    for(int i = 0; i < params.length; i++){                        
-                        if(params[i].startsWith("__after_id")){
-                            nextPageSend = params[i].substring(params[i].indexOf("=")+1);
-                        }else if(params[i].startsWith("offset")){
-                            offsetFriends = params[i].substring(params[i].indexOf("=")+1);
-                        }
-                    }
-                    System.out.println("np:" + nextPageSend + " of:" + offsetFriends);
-                    /*int position = nextPage.indexOf("__after_id");
-                    String nextPageSend = nextPage.substring(position + 11, nextPage.length());
-
-                    position = nextPage.indexOf("offset");
-                    String offsetFriends = nextPage.substring(position + 7, position + 9);*/
-
-            %>
-
-            <br><br>
-
-            <div id="<%=objUri%>/getMoreFriendsFacebook" dojoType="dojox.layout.ContentPane">
-                <div align="center">
-                    <label id="<%=objUri%>/moreFriendsLabel">
-                        <a href="#" onclick="appendHtmlAt('<%=paramRequest.getRenderUrl().setMode("more").setParameter("type", "friends").setParameter("suri", facebook.getURI()).setParameter("nextPage", nextPageSend).setParameter("offsetFriends", offsetFriends)%>','<%=objUri%>/getMoreFriendsFacebook', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;">Mas amigos</a>
-                    </label>
-                </div>
-            </div>
-            <%   }%>
-        </div>
-    </div>
-
-    <%
-
-        String usrFollower = getFullUserProfileFromId("subscriber", facebook);
-
-        JSONObject usrFollow = new JSONObject(usrFollower);
-        JSONArray usrDataFollow = usrFollow.getJSONArray("data");
-
-    %>
-    <div style="margin-left:50%;">
-        <div class="swbform">
-            <%
-                out.println("<div class=\"swbform\">");
-                out.println("<div align=\"center\"><h2></br>Seguidores" + "</h2><br/></div>");
-
                 String imageFollow = "";
                 String nameFollow = "";
                 String nextpageFollow = "";
+                
                 for (int k = 0; k < usrDataFollow.length(); k++) {
                     object = (JSONObject) usrDataFollow.get(k);
                     imageFollow = object.getString("id");
                     nameFollow = object.getString("name");
+    
 
             %>
             <div class="timeline timelinetweeter">
-
                 <p class="tweet">
                     <a onclick="showDialog('<%=paramRequest.getRenderUrl().setMode("fullProfile").setParameter("suri", objUri).setParameter("type", "noType").setParameter("id", imageFollow).setParameter("targetUser", nameFollow)%>','<%= nameFollow + " - " + nameFollow%>'); return false;" href="#"><%=nameFollow%></a>
                 </p>
@@ -187,15 +120,13 @@
                     </a>
                 </p>
             </div>
-
             <%
-                }
+                }     
             %>
 
             <%
-                out.println("</div>");
-                if (usrFollow.has("paging")) {
 
+                if (usrFollow.has("paging")) {
                     nextpageFollow = usrFollow.getJSONObject("paging").getString("next");
                     int position = nextpageFollow.indexOf("after");
                     String nextpageFollowSend = nextpageFollow.substring(position + 6, nextpageFollow.length());
@@ -207,14 +138,15 @@
                     String offset = nextpageFollow.substring(position + 6, position + 8);
             %>
 
+            </br></br>
+            
+            
             <div id="<%=objUri%>/getMoreSubscribers" dojoType="dojox.layout.ContentPane">
-                <div align="center">
+                <div align="center" style="margin-bottom: 10px;">
                     <label>
                         <a href="#" onclick="appendHtmlAt('<%=paramRequest.getRenderUrl().setMode("more").setParameter("type", "subscriber").setParameter("suri", facebook.getURI()).setParameter("nextPage", nextpageFollowSend).setParameter("offsetFollow", offset)%>', '<%=objUri%>/getMoreSubscribers', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;">Mas seguidores</a>
                     </label>
-                    <%   }%>
                 </div>
             </div>
-        </div>    
-    </div>
+            <%}%>
 </div>

@@ -46,8 +46,8 @@
             username = facebookBean.getTitle();
         }
 %>
-<div class="swbform">
-<div align="center"><h2><%=username%> - <%=paramRequest.getLocaleString("myImages")%></h2><br/></div>
+<div class="timelineTab" style="padding:10px 5px 10px 5px; overflow-y: scroll; height: 400px;">
+<div class="timelineTab-title"><p><strong><%=username%></strong><%=paramRequest.getLocaleString("myImages")%></p></div>
 <div class="bar" id="<%=objUri%>newPicturesAvailable" dojoType="dojox.layout.ContentPane"></div>
 <div id="<%=objUri%>picturesStream" dojoType="dojox.layout.ContentPane"></div>
 <%
@@ -89,7 +89,7 @@ I have listed down type codes I have found:
     */
 %>
 <div id="<%=objUri%>getMorePictures" dojoType="dijit.layout.ContentPane">
-    <div align="center">
+    <div align="center" style="margin-bottom: 10px;">
         <label id="<%=objUri%>morePicturesLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMorePictures").setParameter("createdTime", createdTime).setParameter("currentTab", PICTURES_TAB)%>','<%=objUri%>getMorePictures', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;"><%=paramRequest.getLocaleString("getMoreImages")%></a></label>
     </div>
 </div>

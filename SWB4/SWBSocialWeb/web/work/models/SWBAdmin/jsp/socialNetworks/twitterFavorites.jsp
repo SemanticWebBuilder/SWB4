@@ -107,7 +107,7 @@
         }else{
 %>
 <div id="<%=objUri%>/getMoreFavorites" dojoType="dojox.layout.ContentPane">
-    <div align="center">
+    <div align="center" style="margin-bottom: 10px;">
         <label id="<%=objUri%>/moreFavoritesLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMoreFavorites").setParameter("maxTweetID", maxTweetID+"")%>','<%=objUri%>/getMoreFavorites', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;"><%=paramRequest.getLocaleString("moreFavorites")%></a></label>
     </div>
 </div>

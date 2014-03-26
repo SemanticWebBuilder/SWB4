@@ -74,8 +74,8 @@
             username = facebookBean.getTitle();
         }
 %>
-<div class="swbform">
-<div align="center"><h2><%=username%> - <%=paramRequest.getLocaleString("newsFeed")%></h2><br/></div>
+<div class="timelineTab" style="padding:10px 5px 10px 5px; overflow-y: scroll; height: 400px;">
+<div class="timelineTab-title"><p><strong><%=username%> </strong><%=paramRequest.getLocaleString("newsFeed")%></p></div>
 <div class="bar" id="<%=objUri%>newPostsAvailable" dojoType="dojox.layout.ContentPane"></div>
 <div id="<%=objUri%>facebookStream" dojoType="dojox.layout.ContentPane"></div>
 <%
@@ -131,7 +131,7 @@
    </script>
 </div>
 <div id="<%=objUri%>getMorePosts" dojoType="dijit.layout.ContentPane">
-    <div align="center">
+    <div align="center" style="margin-bottom: 10px;">
         <label id="<%=objUri%>morePostsLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMorePosts").setParameter("until", untilPost).setParameter("scope", "newsFeed")%>','<%=objUri%>getMorePosts', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;"><%=paramRequest.getLocaleString("getMorePosts")%></a></label>
     </div>
 </div>
