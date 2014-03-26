@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase en donde se almacenan todos los post de tipo Video y que entran por el Listener 
    */
-public abstract class VideoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable,org.semanticwb.social.PostVideoable,org.semanticwb.social.PostDataable
+public abstract class VideoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostVideoable,org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable,org.semanticwb.model.Tagable
 {
    /**
    * Clase en donde se almacenan todos los post de tipo Video y que entran por el Listener
@@ -243,6 +243,29 @@ public abstract class VideoInBase extends org.semanticwb.social.PostIn implement
         public static java.util.Iterator<org.semanticwb.social.VideoIn> listVideoInBySocialTopic(org.semanticwb.social.SocialTopic value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.VideoIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_socialTopic,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.VideoIn with a determined GeoCountryObj
+       * @param value GeoCountryObj of the type org.semanticwb.social.Country
+       * @param model Model of the org.semanticwb.social.VideoIn
+       * @return Iterator with all the org.semanticwb.social.VideoIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.VideoIn> listVideoInByGeoCountryObj(org.semanticwb.social.Country value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.VideoIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_geoCountryObj, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.VideoIn with a determined GeoCountryObj
+       * @param value GeoCountryObj of the type org.semanticwb.social.Country
+       * @return Iterator with all the org.semanticwb.social.VideoIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.VideoIn> listVideoInByGeoCountryObj(org.semanticwb.social.Country value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.VideoIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_geoCountryObj,value.getSemanticObject(),sclass));
             return it;
         }
     }

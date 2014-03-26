@@ -752,6 +752,7 @@ public class SentimentalDataClassifier {
                         //System.out.println("country en el que encuentra el mensaje:"+country);
                         if (country != null) {
                             postIn.setGeoCountry(country.getId());  //if a country instance is get it, set it to the PostIn.
+                            postIn.setGeoCountryObj(country);
                             //Busca en que estado del país encontrado se encuentra el mensaje.
                             //CountryState countryState = SWBSocialUtil.Util.getMessageMapState(country, postIn.getLatitude(), postIn.getLongitude());
                             CountryState countryState = SWBSocialUtil.Util.getCountryState(country, postIn.getLatitude(), postIn.getLongitude());

@@ -5,6 +5,14 @@ public abstract class CountryStateBase extends org.semanticwb.social.GeoCatalog 
 {
     public static final org.semanticwb.platform.SemanticClass social_Country=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Country");
     public static final org.semanticwb.platform.SemanticProperty social_country=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#country");
+   /**
+   * Clase a Cambiar despues por "Relacional", esta y todas sus hijas. Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta..
+   */
+    public static final org.semanticwb.platform.SemanticClass social_Post=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Post");
+   /**
+   * Obtiene todos los postIn de un estado.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_hasCountryStatePostInInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasCountryStatePostInInv");
     public static final org.semanticwb.platform.SemanticClass social_CountryState=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#CountryState");
    /**
    * The semantic class that represents the currentObject
@@ -95,6 +103,29 @@ public abstract class CountryStateBase extends org.semanticwb.social.GeoCatalog 
         public static java.util.Iterator<org.semanticwb.social.CountryState> listCountryStateByCountry(org.semanticwb.social.Country value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.CountryState> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_country,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.CountryState with a determined CountryStatePostInInv
+       * @param value CountryStatePostInInv of the type org.semanticwb.social.Post
+       * @param model Model of the org.semanticwb.social.CountryState
+       * @return Iterator with all the org.semanticwb.social.CountryState
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.CountryState> listCountryStateByCountryStatePostInInv(org.semanticwb.social.Post value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.CountryState> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasCountryStatePostInInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.CountryState with a determined CountryStatePostInInv
+       * @param value CountryStatePostInInv of the type org.semanticwb.social.Post
+       * @return Iterator with all the org.semanticwb.social.CountryState
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.CountryState> listCountryStateByCountryStatePostInInv(org.semanticwb.social.Post value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.CountryState> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasCountryStatePostInInv,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -198,6 +229,45 @@ public abstract class CountryStateBase extends org.semanticwb.social.GeoCatalog 
          if(obj!=null)
          {
              ret=(org.semanticwb.social.Country)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Gets all the org.semanticwb.social.Post
+   * @return A GenericIterator with all the org.semanticwb.social.Post
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.Post> listCountryStatePostInInvs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.Post>(getSemanticObject().listObjectProperties(social_hasCountryStatePostInInv));
+    }
+
+   /**
+   * Gets true if has a CountryStatePostInInv
+   * @param value org.semanticwb.social.Post to verify
+   * @return true if the org.semanticwb.social.Post exists, false otherwise
+   */
+    public boolean hasCountryStatePostInInv(org.semanticwb.social.Post value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_hasCountryStatePostInInv,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the CountryStatePostInInv
+   * @return a org.semanticwb.social.Post
+   */
+    public org.semanticwb.social.Post getCountryStatePostInInv()
+    {
+         org.semanticwb.social.Post ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasCountryStatePostInInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.Post)obj.createGenericInstance();
          }
          return ret;
     }

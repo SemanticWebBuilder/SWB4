@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales. 
    */
-public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableNode,org.semanticwb.social.Secreteable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Listenerable,org.semanticwb.social.Relationable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable
+public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableClass,org.semanticwb.social.Listenerable,org.semanticwb.social.Relationable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.social.Secreteable
 {
    /**
    * Clase a Cambiar despues por "Relacional".  En esta clase se guardan todos los post que lleguan por el listener, se estima que toda la info. que se guarde en este objeto debe de eliminarse aproximadamente c/mes, siendo este parametro configurable de acuerdo al tiempo que la organización quiera guardar  la información sobre los mensajes que lleguen por el listener. Se almacenan por mes y año, de esta manera sera mucho mas rapido hacer las busquedas sobre las instancias de esta clase. EN ESTE MOMENTO NO SE ESTA UTILIZANDO ESTA CLASE.
@@ -520,24 +520,6 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
     }
 
 /**
-* Gets the Updated property
-* @return java.util.Date with the Updated
-*/
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-/**
-* Sets the Updated property
-* @param value long with the Updated
-*/
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-/**
 * Gets the Created property
 * @return java.util.Date with the Created
 */
@@ -553,6 +535,24 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
     public void setCreated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
 /**
