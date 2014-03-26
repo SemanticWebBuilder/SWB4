@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase en donde se almacenan todos los post de tipo Mensaje y que entran por el Listener 
    */
-public abstract class MessageInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable
+public abstract class MessageInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable,org.semanticwb.model.Tagable
 {
    /**
    * Clase en donde se almacenan todos los post de tipo Mensaje y que entran por el Listener
@@ -243,6 +243,29 @@ public abstract class MessageInBase extends org.semanticwb.social.PostIn impleme
         public static java.util.Iterator<org.semanticwb.social.MessageIn> listMessageInBySocialTopic(org.semanticwb.social.SocialTopic value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.MessageIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_socialTopic,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.MessageIn with a determined GeoCountryObj
+       * @param value GeoCountryObj of the type org.semanticwb.social.Country
+       * @param model Model of the org.semanticwb.social.MessageIn
+       * @return Iterator with all the org.semanticwb.social.MessageIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.MessageIn> listMessageInByGeoCountryObj(org.semanticwb.social.Country value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.MessageIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_geoCountryObj, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.MessageIn with a determined GeoCountryObj
+       * @param value GeoCountryObj of the type org.semanticwb.social.Country
+       * @return Iterator with all the org.semanticwb.social.MessageIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.MessageIn> listMessageInByGeoCountryObj(org.semanticwb.social.Country value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.MessageIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_geoCountryObj,value.getSemanticObject(),sclass));
             return it;
         }
     }

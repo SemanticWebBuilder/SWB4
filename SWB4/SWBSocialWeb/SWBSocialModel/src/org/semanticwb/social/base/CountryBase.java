@@ -3,6 +3,14 @@ package org.semanticwb.social.base;
 
 public abstract class CountryBase extends org.semanticwb.social.GeoCatalog implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.GeoMapable
 {
+   /**
+   * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta.
+   */
+    public static final org.semanticwb.platform.SemanticClass social_PostIn=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostIn");
+   /**
+   * Indica todos los PostIns que provienen del país.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_hasCountryPostIn=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasCountryPostIn");
     public static final org.semanticwb.platform.SemanticClass social_CountryState=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#CountryState");
     public static final org.semanticwb.platform.SemanticProperty social_hasStatesInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasStatesInv");
     public static final org.semanticwb.platform.SemanticClass social_Country=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Country");
@@ -73,6 +81,29 @@ public abstract class CountryBase extends org.semanticwb.social.GeoCatalog imple
         public static boolean hasCountry(String id, org.semanticwb.model.SWBModel model)
         {
             return (getCountry(id, model)!=null);
+        }
+       /**
+       * Gets all org.semanticwb.social.Country with a determined CountryPostIn
+       * @param value CountryPostIn of the type org.semanticwb.social.PostIn
+       * @param model Model of the org.semanticwb.social.Country
+       * @return Iterator with all the org.semanticwb.social.Country
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Country> listCountryByCountryPostIn(org.semanticwb.social.PostIn value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Country> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasCountryPostIn, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Country with a determined CountryPostIn
+       * @param value CountryPostIn of the type org.semanticwb.social.PostIn
+       * @return Iterator with all the org.semanticwb.social.Country
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Country> listCountryByCountryPostIn(org.semanticwb.social.PostIn value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Country> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasCountryPostIn,value.getSemanticObject(),sclass));
+            return it;
         }
        /**
        * Gets all org.semanticwb.social.Country with a determined StatesInv
@@ -198,6 +229,45 @@ public abstract class CountryBase extends org.semanticwb.social.GeoCatalog imple
     public void setNorth(float value)
     {
         getSemanticObject().setFloatProperty(social_north, value);
+    }
+   /**
+   * Gets all the org.semanticwb.social.PostIn
+   * @return A GenericIterator with all the org.semanticwb.social.PostIn
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn> listCountryPostIns()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn>(getSemanticObject().listObjectProperties(social_hasCountryPostIn));
+    }
+
+   /**
+   * Gets true if has a CountryPostIn
+   * @param value org.semanticwb.social.PostIn to verify
+   * @return true if the org.semanticwb.social.PostIn exists, false otherwise
+   */
+    public boolean hasCountryPostIn(org.semanticwb.social.PostIn value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_hasCountryPostIn,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the CountryPostIn
+   * @return a org.semanticwb.social.PostIn
+   */
+    public org.semanticwb.social.PostIn getCountryPostIn()
+    {
+         org.semanticwb.social.PostIn ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasCountryPostIn);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.PostIn)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**

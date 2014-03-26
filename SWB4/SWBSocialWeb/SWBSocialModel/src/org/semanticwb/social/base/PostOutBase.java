@@ -4,16 +4,12 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales. Esta clase no se relaciona con una red social (con la clase SocialNetwork) porque un post de salida (desde la herramienta) podría ser enviado a diferentes redes sociales, sin embargo, es el mismo post de salida. Donde esta a que red social se envía esta en las instancias de la clase PostContainer. 
    */
-public abstract class PostOutBase extends org.semanticwb.social.Post implements org.semanticwb.model.CalendarRefable,org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable,org.semanticwb.model.Referensable,org.semanticwb.social.PostDataable,org.semanticwb.model.Traceable
+public abstract class PostOutBase extends org.semanticwb.social.Post implements org.semanticwb.model.Referensable,org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Tagable
 {
    /**
    * Propiedad que indica si el postOut esta cerrado para el monitoreo de respuestas o no lo esta. Podría haber utilizado solo la fecha de creación de decir que los que tengan una fecha de mas de una mes que se crearon, no se monitorean mas, pero esto tendría un performance mas deficiente que al tener esta propiedad (isClosedforResponses), que se coloca en true cuando pasa mas de un mes y despues solo busco sobre esta con un listSubjects, el cual es muy rapido al buscar sobre indices.
    */
     public static final org.semanticwb.platform.SemanticProperty social_isClosedforResponses=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#isClosedforResponses");
-   /**
-   * Tipo de PostOut. 1=Message;2=Photo;3:Video. Estan con variables estaticas en la clase SWBSocialUtil.
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_po_type=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#po_type");
    /**
    * Clase en la que se almacena la relación entre los PostOut enviados directamente a un usuario o usuarios en una determinada red social.
    */
@@ -22,6 +18,30 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
    * Un PostOut puede tener varias instancias de PostOutDirectUserRelation. Si se elimina el PostOut, se elimina los registros que esten relacionados en con en dicha clase PostOutDirectUserRelation.
    */
     public static final org.semanticwb.platform.SemanticProperty social_haspodur_PostOutInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#haspodur_PostOutInv");
+   /**
+   * Relación de Privacidad entre PostOut y las redes sociales a las cuales se envía.
+   */
+    public static final org.semanticwb.platform.SemanticClass social_PostOutPrivacyRelation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostOutPrivacyRelation");
+   /**
+   * Propiedad que lista todas las instancias de PostOutPrivacyRelation que tenga un determinado PostOut. Si se elimina el PostOut se eliminarían todas las instancias de PostOutPrivacyRelation que tengan ese PostOut asociado.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_haspopr_postOutInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#haspopr_postOutInv");
+   /**
+   * Define si un PostOut se encuentra en estado de publicado o no.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_published=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#published");
+   /**
+   * Clase que se encarga de administrar un calendario para un mensaje de Salida (PostOut). Un PostOut puede tener solo un calendario.
+   */
+    public static final org.semanticwb.platform.SemanticClass social_FastCalendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#FastCalendar");
+   /**
+   * Calendario asociado a un PostOut. Un PostOut solo puede tener como maximo un fastCalendar. Cuando elimino un PostOut, se elimina su FastCalendar (En caso de que tenga uno asociado).
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_fastCalendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#fastCalendar");
+   /**
+   * Tipo de PostOut. 1=Message;2=Photo;3:Video. Estan con variables estaticas en la clase SWBSocialUtil.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_po_type=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#po_type");
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta.
    */
@@ -34,14 +54,6 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
    * Creación del PostOut. Este campo es un indice para poderlo tomar como ordenamiento via Sparql, por eso no se toma el de Descriptable.
    */
     public static final org.semanticwb.platform.SemanticProperty social_pout_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#pout_created");
-   /**
-   * Relación de Privacidad entre PostOut y las redes sociales a las cuales se envía.
-   */
-    public static final org.semanticwb.platform.SemanticClass social_PostOutPrivacyRelation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostOutPrivacyRelation");
-   /**
-   * Propiedad que lista todas las instancias de PostOutPrivacyRelation que tenga un determinado PostOut. Si se elimina el PostOut se eliminarían todas las instancias de PostOutPrivacyRelation que tengan ese PostOut asociado.
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_haspopr_postOutInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#haspopr_postOutInv");
    /**
    * Propiedad que indica si el mensaje de salida (PostOut) se origina de un mensaje que estamos solamente compartiendo de otro mensaje que llego desde PostIn, es decir, desde la red social Twitter, sería como darle a un mensaje de otra persona "retweet" y desde facebook, sería como darle a un mensaje de otra persona "Share".
    */
@@ -67,10 +79,6 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasPostContainer_PostInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPostContainer_PostInv");
    /**
-   * Define si un PostOut se encuentra en estado de publicado o no.
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_published=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#published");
-   /**
    * En este objeto se guardara el identificador que es asignado para cada post en cada una de las redes sociales, es decir, si un mismo post se envía hacia mas de una red social, cada una de esas redes sociales daran un identificador unico para ese post en esa red social, este lo tenemos que guardar nosotros en este objeto para fines de monitoreo de estatus del post en esa red social (En Proceso, Revisado, Publicado, etc), como nosotros para un post, independientemente de a cuantas redes sociales se envíe, solo creamos un objeto PostOut (Message, Photo, Video), tuvimos que crear esta clase para guardar el identificador de ese postOut para c/red social.
    */
     public static final org.semanticwb.platform.SemanticClass social_PostOutNet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostOutNet");
@@ -87,14 +95,6 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
    */
     public static final org.semanticwb.platform.SemanticClass social_SocialPFlowInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialPFlowInstance");
     public static final org.semanticwb.platform.SemanticProperty social_pflowInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#pflowInstance");
-   /**
-   * Clase que se encarga de administrar un calendario para un mensaje de Salida (PostOut). Un PostOut puede tener solo un calendario.
-   */
-    public static final org.semanticwb.platform.SemanticClass social_FastCalendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#FastCalendar");
-   /**
-   * Calendario asociado a un PostOut. Un PostOut solo puede tener como maximo un fastCalendar. Cuando elimino un PostOut, se elimina su FastCalendar (En caso de que tenga uno asociado).
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_fastCalendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#fastCalendar");
    /**
    * Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales. Esta clase no se relaciona con una red social (con la clase SocialNetwork) porque un post de salida (desde la herramienta) podría ser enviado a diferentes redes sociales, sin embargo, es el mismo post de salida. Donde esta a que red social se envía esta en las instancias de la clase PostContainer.
    */
@@ -214,6 +214,98 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
             return it;
         }
        /**
+       * Gets all org.semanticwb.social.PostOut with a determined Popr_postOutInv
+       * @param value Popr_postOutInv of the type org.semanticwb.social.PostOutPrivacyRelation
+       * @param model Model of the org.semanticwb.social.PostOut
+       * @return Iterator with all the org.semanticwb.social.PostOut
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByPopr_postOutInv(org.semanticwb.social.PostOutPrivacyRelation value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_haspopr_postOutInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostOut with a determined Popr_postOutInv
+       * @param value Popr_postOutInv of the type org.semanticwb.social.PostOutPrivacyRelation
+       * @return Iterator with all the org.semanticwb.social.PostOut
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByPopr_postOutInv(org.semanticwb.social.PostOutPrivacyRelation value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_haspopr_postOutInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostOut with a determined Msg_lang
+       * @param value Msg_lang of the type org.semanticwb.model.Language
+       * @param model Model of the org.semanticwb.social.PostOut
+       * @return Iterator with all the org.semanticwb.social.PostOut
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByMsg_lang(org.semanticwb.model.Language value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_msg_lang, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostOut with a determined Msg_lang
+       * @param value Msg_lang of the type org.semanticwb.model.Language
+       * @return Iterator with all the org.semanticwb.social.PostOut
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByMsg_lang(org.semanticwb.model.Language value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_msg_lang,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostOut with a determined CalendarRef
+       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
+       * @param model Model of the org.semanticwb.social.PostOut
+       * @return Iterator with all the org.semanticwb.social.PostOut
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByCalendarRef(org.semanticwb.model.CalendarRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostOut with a determined CalendarRef
+       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
+       * @return Iterator with all the org.semanticwb.social.PostOut
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByCalendarRef(org.semanticwb.model.CalendarRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostOut with a determined FastCalendar
+       * @param value FastCalendar of the type org.semanticwb.social.FastCalendar
+       * @param model Model of the org.semanticwb.social.PostOut
+       * @return Iterator with all the org.semanticwb.social.PostOut
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByFastCalendar(org.semanticwb.social.FastCalendar value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_fastCalendar, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostOut with a determined FastCalendar
+       * @param value FastCalendar of the type org.semanticwb.social.FastCalendar
+       * @return Iterator with all the org.semanticwb.social.PostOut
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByFastCalendar(org.semanticwb.social.FastCalendar value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_fastCalendar,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.social.PostOut with a determined GeoStateMap
        * @param value GeoStateMap of the type org.semanticwb.social.CountryState
        * @param model Model of the org.semanticwb.social.PostOut
@@ -260,29 +352,6 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.PostOut with a determined Popr_postOutInv
-       * @param value Popr_postOutInv of the type org.semanticwb.social.PostOutPrivacyRelation
-       * @param model Model of the org.semanticwb.social.PostOut
-       * @return Iterator with all the org.semanticwb.social.PostOut
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByPopr_postOutInv(org.semanticwb.social.PostOutPrivacyRelation value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_haspopr_postOutInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.PostOut with a determined Popr_postOutInv
-       * @param value Popr_postOutInv of the type org.semanticwb.social.PostOutPrivacyRelation
-       * @return Iterator with all the org.semanticwb.social.PostOut
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByPopr_postOutInv(org.semanticwb.social.PostOutPrivacyRelation value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_haspopr_postOutInv,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.social.PostOut with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.social.PostOut
@@ -326,29 +395,6 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
         public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutBySocialNetwork(org.semanticwb.social.SocialNetwork value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetwork,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.PostOut with a determined Msg_lang
-       * @param value Msg_lang of the type org.semanticwb.model.Language
-       * @param model Model of the org.semanticwb.social.PostOut
-       * @return Iterator with all the org.semanticwb.social.PostOut
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByMsg_lang(org.semanticwb.model.Language value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_msg_lang, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.PostOut with a determined Msg_lang
-       * @param value Msg_lang of the type org.semanticwb.model.Language
-       * @return Iterator with all the org.semanticwb.social.PostOut
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByMsg_lang(org.semanticwb.model.Language value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_msg_lang,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -421,29 +467,6 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.PostOut with a determined CalendarRef
-       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
-       * @param model Model of the org.semanticwb.social.PostOut
-       * @return Iterator with all the org.semanticwb.social.PostOut
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByCalendarRef(org.semanticwb.model.CalendarRef value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.PostOut with a determined CalendarRef
-       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
-       * @return Iterator with all the org.semanticwb.social.PostOut
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByCalendarRef(org.semanticwb.model.CalendarRef value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.social.PostOut with a determined PflowInstance
        * @param value PflowInstance of the type org.semanticwb.social.SocialPFlowInstance
        * @param model Model of the org.semanticwb.social.PostOut
@@ -464,29 +487,6 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
         public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByPflowInstance(org.semanticwb.social.SocialPFlowInstance value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_pflowInstance,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.PostOut with a determined FastCalendar
-       * @param value FastCalendar of the type org.semanticwb.social.FastCalendar
-       * @param model Model of the org.semanticwb.social.PostOut
-       * @return Iterator with all the org.semanticwb.social.PostOut
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByFastCalendar(org.semanticwb.social.FastCalendar value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_fastCalendar, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.PostOut with a determined FastCalendar
-       * @param value FastCalendar of the type org.semanticwb.social.FastCalendar
-       * @return Iterator with all the org.semanticwb.social.PostOut
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByFastCalendar(org.semanticwb.social.FastCalendar value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_fastCalendar,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -578,42 +578,6 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
     {
         getSemanticObject().setDateProperty(swb_created, value);
     }
-
-/**
-* Gets the Updated property
-* @return java.util.Date with the Updated
-*/
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-/**
-* Sets the Updated property
-* @param value long with the Updated
-*/
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-/**
-* Gets the Po_type property
-* @return int with the Po_type
-*/
-    public int getPo_type()
-    {
-        return getSemanticObject().getIntProperty(social_po_type);
-    }
-
-/**
-* Sets the Po_type property
-* @param value long with the Po_type
-*/
-    public void setPo_type(int value)
-    {
-        getSemanticObject().setIntProperty(social_po_type, value);
-    }
    /**
    * Gets all the org.semanticwb.social.PostOutDirectUserRelation
    * @return A GenericIterator with all the org.semanticwb.social.PostOutDirectUserRelation
@@ -652,6 +616,220 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
              ret=(org.semanticwb.social.PostOutDirectUserRelation)obj.createGenericInstance();
          }
          return ret;
+    }
+   /**
+   * Gets all the org.semanticwb.social.PostOutPrivacyRelation
+   * @return A GenericIterator with all the org.semanticwb.social.PostOutPrivacyRelation
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutPrivacyRelation> listpopr_postOutInvs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutPrivacyRelation>(getSemanticObject().listObjectProperties(social_haspopr_postOutInv));
+    }
+
+   /**
+   * Gets true if has a popr_postOutInv
+   * @param value org.semanticwb.social.PostOutPrivacyRelation to verify
+   * @return true if the org.semanticwb.social.PostOutPrivacyRelation exists, false otherwise
+   */
+    public boolean haspopr_postOutInv(org.semanticwb.social.PostOutPrivacyRelation value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_haspopr_postOutInv,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the popr_postOutInv
+   * @return a org.semanticwb.social.PostOutPrivacyRelation
+   */
+    public org.semanticwb.social.PostOutPrivacyRelation getpopr_postOutInv()
+    {
+         org.semanticwb.social.PostOutPrivacyRelation ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_haspopr_postOutInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.PostOutPrivacyRelation)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
+* Gets the Published property
+* @return boolean with the Published
+*/
+    public boolean isPublished()
+    {
+        return getSemanticObject().getBooleanProperty(social_published);
+    }
+
+/**
+* Sets the Published property
+* @param value long with the Published
+*/
+    public void setPublished(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(social_published, value);
+    }
+
+/**
+* Gets the NotInheritCalendarRef property
+* @return boolean with the NotInheritCalendarRef
+*/
+    public boolean isNotInheritCalendarRef()
+    {
+        return getSemanticObject().getBooleanProperty(swb_notInheritCalendarRef);
+    }
+
+/**
+* Sets the NotInheritCalendarRef property
+* @param value long with the NotInheritCalendarRef
+*/
+    public void setNotInheritCalendarRef(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_notInheritCalendarRef, value);
+    }
+   /**
+   * Gets all the org.semanticwb.model.CalendarRef
+   * @return A GenericIterator with all the org.semanticwb.model.CalendarRef
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.CalendarRef> listCalendarRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.CalendarRef>(getSemanticObject().listObjectProperties(swb_hasCalendarRef));
+    }
+
+   /**
+   * Gets true if has a CalendarRef
+   * @param value org.semanticwb.model.CalendarRef to verify
+   * @return true if the org.semanticwb.model.CalendarRef exists, false otherwise
+   */
+    public boolean hasCalendarRef(org.semanticwb.model.CalendarRef value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasCalendarRef,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a CalendarRef
+   * @param value org.semanticwb.model.CalendarRef to add
+   */
+
+    public void addCalendarRef(org.semanticwb.model.CalendarRef value)
+    {
+        getSemanticObject().addObjectProperty(swb_hasCalendarRef, value.getSemanticObject());
+    }
+   /**
+   * Removes all the CalendarRef
+   */
+
+    public void removeAllCalendarRef()
+    {
+        getSemanticObject().removeProperty(swb_hasCalendarRef);
+    }
+   /**
+   * Removes a CalendarRef
+   * @param value org.semanticwb.model.CalendarRef to remove
+   */
+
+    public void removeCalendarRef(org.semanticwb.model.CalendarRef value)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasCalendarRef,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the CalendarRef
+   * @return a org.semanticwb.model.CalendarRef
+   */
+    public org.semanticwb.model.CalendarRef getCalendarRef()
+    {
+         org.semanticwb.model.CalendarRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasCalendarRef);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.CalendarRef)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property FastCalendar
+   * @param value FastCalendar to set
+   */
+
+    public void setFastCalendar(org.semanticwb.social.FastCalendar value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(social_fastCalendar, value.getSemanticObject());
+        }else
+        {
+            removeFastCalendar();
+        }
+    }
+   /**
+   * Remove the value for FastCalendar property
+   */
+
+    public void removeFastCalendar()
+    {
+        getSemanticObject().removeProperty(social_fastCalendar);
+    }
+
+   /**
+   * Gets the FastCalendar
+   * @return a org.semanticwb.social.FastCalendar
+   */
+    public org.semanticwb.social.FastCalendar getFastCalendar()
+    {
+         org.semanticwb.social.FastCalendar ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_fastCalendar);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.FastCalendar)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
+    }
+
+/**
+* Gets the Po_type property
+* @return int with the Po_type
+*/
+    public int getPo_type()
+    {
+        return getSemanticObject().getIntProperty(social_po_type);
+    }
+
+/**
+* Sets the Po_type property
+* @param value long with the Po_type
+*/
+    public void setPo_type(int value)
+    {
+        getSemanticObject().setIntProperty(social_po_type, value);
     }
    /**
    * Sets the value for the property PostInSource
@@ -708,45 +886,6 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
     public void setPout_created(java.util.Date value)
     {
         getSemanticObject().setDateProperty(social_pout_created, value);
-    }
-   /**
-   * Gets all the org.semanticwb.social.PostOutPrivacyRelation
-   * @return A GenericIterator with all the org.semanticwb.social.PostOutPrivacyRelation
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutPrivacyRelation> listpopr_postOutInvs()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutPrivacyRelation>(getSemanticObject().listObjectProperties(social_haspopr_postOutInv));
-    }
-
-   /**
-   * Gets true if has a popr_postOutInv
-   * @param value org.semanticwb.social.PostOutPrivacyRelation to verify
-   * @return true if the org.semanticwb.social.PostOutPrivacyRelation exists, false otherwise
-   */
-    public boolean haspopr_postOutInv(org.semanticwb.social.PostOutPrivacyRelation value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(social_haspopr_postOutInv,value.getSemanticObject());
-        }
-        return ret;
-    }
-
-   /**
-   * Gets the popr_postOutInv
-   * @return a org.semanticwb.social.PostOutPrivacyRelation
-   */
-    public org.semanticwb.social.PostOutPrivacyRelation getpopr_postOutInv()
-    {
-         org.semanticwb.social.PostOutPrivacyRelation ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_haspopr_postOutInv);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.social.PostOutPrivacyRelation)obj.createGenericInstance();
-         }
-         return ret;
     }
 
 /**
@@ -926,24 +1065,6 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
          }
          return ret;
     }
-
-/**
-* Gets the Published property
-* @return boolean with the Published
-*/
-    public boolean isPublished()
-    {
-        return getSemanticObject().getBooleanProperty(social_published);
-    }
-
-/**
-* Sets the Published property
-* @param value long with the Published
-*/
-    public void setPublished(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(social_published, value);
-    }
    /**
    * Gets all the org.semanticwb.social.PostOutNet
    * @return A GenericIterator with all the org.semanticwb.social.PostOutNet
@@ -1001,89 +1122,6 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
     {
         getSemanticObject().setFloatProperty(social_numTotNewResponses, value);
     }
-
-/**
-* Gets the NotInheritCalendarRef property
-* @return boolean with the NotInheritCalendarRef
-*/
-    public boolean isNotInheritCalendarRef()
-    {
-        return getSemanticObject().getBooleanProperty(swb_notInheritCalendarRef);
-    }
-
-/**
-* Sets the NotInheritCalendarRef property
-* @param value long with the NotInheritCalendarRef
-*/
-    public void setNotInheritCalendarRef(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swb_notInheritCalendarRef, value);
-    }
-   /**
-   * Gets all the org.semanticwb.model.CalendarRef
-   * @return A GenericIterator with all the org.semanticwb.model.CalendarRef
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.CalendarRef> listCalendarRefs()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.CalendarRef>(getSemanticObject().listObjectProperties(swb_hasCalendarRef));
-    }
-
-   /**
-   * Gets true if has a CalendarRef
-   * @param value org.semanticwb.model.CalendarRef to verify
-   * @return true if the org.semanticwb.model.CalendarRef exists, false otherwise
-   */
-    public boolean hasCalendarRef(org.semanticwb.model.CalendarRef value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swb_hasCalendarRef,value.getSemanticObject());
-        }
-        return ret;
-    }
-   /**
-   * Adds a CalendarRef
-   * @param value org.semanticwb.model.CalendarRef to add
-   */
-
-    public void addCalendarRef(org.semanticwb.model.CalendarRef value)
-    {
-        getSemanticObject().addObjectProperty(swb_hasCalendarRef, value.getSemanticObject());
-    }
-   /**
-   * Removes all the CalendarRef
-   */
-
-    public void removeAllCalendarRef()
-    {
-        getSemanticObject().removeProperty(swb_hasCalendarRef);
-    }
-   /**
-   * Removes a CalendarRef
-   * @param value org.semanticwb.model.CalendarRef to remove
-   */
-
-    public void removeCalendarRef(org.semanticwb.model.CalendarRef value)
-    {
-        getSemanticObject().removeObjectProperty(swb_hasCalendarRef,value.getSemanticObject());
-    }
-
-   /**
-   * Gets the CalendarRef
-   * @return a org.semanticwb.model.CalendarRef
-   */
-    public org.semanticwb.model.CalendarRef getCalendarRef()
-    {
-         org.semanticwb.model.CalendarRef ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasCalendarRef);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.CalendarRef)obj.createGenericInstance();
-         }
-         return ret;
-    }
    /**
    * Sets the value for the property PflowInstance
    * @param value PflowInstance to set
@@ -1119,44 +1157,6 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
          if(obj!=null)
          {
              ret=(org.semanticwb.social.SocialPFlowInstance)obj.createGenericInstance();
-         }
-         return ret;
-    }
-   /**
-   * Sets the value for the property FastCalendar
-   * @param value FastCalendar to set
-   */
-
-    public void setFastCalendar(org.semanticwb.social.FastCalendar value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(social_fastCalendar, value.getSemanticObject());
-        }else
-        {
-            removeFastCalendar();
-        }
-    }
-   /**
-   * Remove the value for FastCalendar property
-   */
-
-    public void removeFastCalendar()
-    {
-        getSemanticObject().removeProperty(social_fastCalendar);
-    }
-
-   /**
-   * Gets the FastCalendar
-   * @return a org.semanticwb.social.FastCalendar
-   */
-    public org.semanticwb.social.FastCalendar getFastCalendar()
-    {
-         org.semanticwb.social.FastCalendar ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_fastCalendar);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.social.FastCalendar)obj.createGenericInstance();
          }
          return ret;
     }

@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Un Flujo de Publicación es una serie de autorizaciones por las que pasa un contenido antes de publicarse en un Sitio Web 
    */
-public abstract class SocialPFlowBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Relationable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.XMLable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable
+public abstract class SocialPFlowBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.XMLable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.social.Relationable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode
 {
    /**
    * Referencia a un objeto de tipo SocialPFlow
@@ -241,24 +241,6 @@ public abstract class SocialPFlowBase extends org.semanticwb.model.SWBClass impl
     }
 
 /**
-* Gets the Updated property
-* @return java.util.Date with the Updated
-*/
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-/**
-* Sets the Updated property
-* @param value long with the Updated
-*/
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-/**
 * Gets the Created property
 * @return java.util.Date with the Created
 */
@@ -274,6 +256,24 @@ public abstract class SocialPFlowBase extends org.semanticwb.model.SWBClass impl
     public void setCreated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
 /**
