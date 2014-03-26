@@ -150,10 +150,10 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:subClassOf>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <rdfs:comment>Clase que concentra propiedades para configuración general de facebook., para mostrar en sitio admin.</rdfs:comment>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="SocialTopic">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Trashable"/>
@@ -1035,6 +1035,9 @@
       </swb:Class>
     </rdfs:domain>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasCountryStatePostInInv">
+    <rdfs:comment>Obtiene todos los postIn de un estado.</rdfs:comment>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="podur_PostOut">
     <owl:inverseOf rdf:resource="#haspodur_PostOutInv"/>
     <rdfs:comment>PostOut que se esta enviando</rdfs:comment>
@@ -1063,10 +1066,8 @@
     <rdfs:range rdf:resource="#SocialNetwork"/>
     <rdfs:domain rdf:resource="#PostOut"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#hasPostInStreamInv">
-    <rdfs:comment>PostIn asociados a un Stream. Si se elimina el Stream, se eliminan estos PostIn, ya que si no se hiciera, no se podrían ver desde ningún lado, ya que no tuvieran un Stream asociado.</rdfs:comment>
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
+  <owl:ObjectProperty rdf:ID="hasCountryPostIn">
+    <rdfs:comment>Indica todos los PostIns que provienen del país.</rdfs:comment>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="socialTopic">
     <rdfs:domain rdf:resource="#Post"/>
@@ -1075,12 +1076,18 @@
       <owl:ObjectProperty rdf:ID="hasPostInv"/>
     </owl:inverseOf>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasPostInStreamInv">
+    <rdfs:comment>PostIn asociados a un Stream. Si se elimina el Stream, se eliminan estos PostIn, ya que si no se hiciera, no se podrían ver desde ningún lado, ya que no tuvieran un Stream asociado.</rdfs:comment>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="adm_facebookgc">
     <rdfs:range rdf:resource="#FacebookGC"/>
     <rdfs:comment>Una unica instancia de FacebookGC.</rdfs:comment>
     <rdfs:domain rdf:resource="#SocialAdmin"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="geoStateMap">
+    <owl:inverseOf rdf:resource="#hasCountryStatePostInInv"/>
     <rdfs:comment>Instancia de Estado Geográfico de un país de donde provenga el mensaje. Si es que la latitud y longitud del mismo proviene de un estado/país registrados en los catálogos Country/CountryState.</rdfs:comment>
     <rdfs:range>
       <swb:Class rdf:ID="CountryState">
@@ -1143,6 +1150,12 @@
     <rdfs:domain rdf:resource="#PostIn"/>
     <rdfs:range rdf:resource="#SocialNetworkUser"/>
     <rdfs:comment>Usuario creador del Post que llega por el Listener (PostIn). TODO: Al borrar un PostIn, no borro al SocialNetworkUser porque este podría obviamente tenear mas PostIn asociados. Tengo que despues revisar para que si ya un usuario no tiene PostIn(Porque x algun modo se hayan borrado) borre al SocialNetworkUser, ya que de no ser así se quedaran como basura en la BD, haciendo que esta cresca muchisimo.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="geoCountryObj">
+    <rdfs:domain rdf:resource="#PostIn"/>
+    <rdfs:range rdf:resource="#Country"/>
+    <rdfs:comment>País del que proviene el PostIn y que se encuentra en el catálogo "Country".</rdfs:comment>
+    <owl:inverseOf rdf:resource="#hasCountryPostIn"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasPFlowRef">
     <rdfs:range rdf:resource="#SocialPFlowRef"/>
@@ -1314,8 +1327,15 @@
         >Streams para los cuales aplicará el SocialTopic (Solo Lectura)</swbxf:propPromptMessage>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >100</swb:index>
-        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+        <swbxf:propGroup>
+          <swbxf:PropertyGroup rdf:ID="pg_readOnly">
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >500</swb:index>
+            <rdfs:label xml:lang="es">Solo Lectura</rdfs:label>
+            <rdfs:label xml:lang="en">Read Only</rdfs:label>
+          </swbxf:PropertyGroup>
+        </swbxf:propGroup>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:ObjectProperty>
@@ -2145,15 +2165,15 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:comment>Error en la publicación del PostOut en una determimada red social., Este error podría desplegarse para que vieran los usuarios del sistema cual fué la causa de porque no se publicó el mensaje (PostOut).</rdfs:comment>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="geoCountry">
-    <rdfs:domain rdf:resource="#PostIn"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Código de país de donde proviene el mensaje. No puse que esta propiedad tuviera como range un social:Country, porque tendría que agregar todos los países posibles para los PostIn em el catalogo de social:Country, Mejor voy a agregar en social:Country los paises que pudieran ser mas importantes y cuando se hagan reportes va a decir que de todos los paises que tengo ahi son un tanto por ciento y otro tanto de paises desconocidos, pero tendré su código de país, con ello podría despues agregar mas paises a social:Country.</rdfs:comment>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="latitude">
     <rdfs:comment>Latitude de donde se envía el mensaje</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
     <rdfs:domain rdf:resource="#Post"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="geoCountry">
+    <rdfs:comment>Código de país de donde proviene el mensaje. No puse que esta propiedad tuviera como range un social:Country, porque tendría que agregar todos los países posibles para los PostIn en el catalogo de social:Country, Mejor voy a agregar en social:Country los paises que pudieran ser mas importantes y cuando se hagan reportes va a decir que de todos los paises que tengo ahi son un tanto por ciento y otro tanto de paises desconocidos, pero tendré su código de país, con ello podría despues agregar mas paises a social:Country.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#PostIn"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="postSource">
     <rdfs:domain rdf:resource="#PostIn"/>
