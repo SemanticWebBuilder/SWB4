@@ -1278,12 +1278,12 @@ public class Timeline extends GenericResource{
                 i++;
             }
 
-            out.println("<div align=\"center\">");
+            out.println("<div align=\"center\" style=\"margin-bottom: 10px;\">");
             out.println("<label id=\"" + objUri + "/moreTwitLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreTweets").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreTweets','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreTweets") + "</a></label>");
             out.println("</div>");
             //System.out.println("Total tweets:" + i);
         } catch (Exception te) {
-            out.println("<div align=\"center\">");
+            out.println("<div align=\"center\" style=\"margin-bottom: 10px;\">");
             out.println("<label id=\"" + objUri + "/moreTwitLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreTweets").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreTweets','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreTweets") + "</a></label>");
             out.println("</div>");
             log.error("Error when getting timeline: ", te);
@@ -1339,12 +1339,12 @@ public class Timeline extends GenericResource{
                 i++;
             }
 
-            out.println("<div align=\"center\">");
+            out.println("<div align=\"center\" style=\"margin-bottom: 10px;\">");
             out.println("<label id=\"" + objUri + "/moreMentionLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreMentions").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreMentions','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreMentions") +"</a></label>");
             out.println("</div>");
             //System.out.println("Total mentions:" + i);
         } catch (Exception te) {
-            out.println("<div align=\"center\">");
+            out.println("<div align=\"center\" style=\"margin-bottom: 10px;\">");
             out.println("<label id=\"" + objUri + "/moreMentionLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreMentions").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreMentions','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreMentions") +"</a></label>");
             out.println("</div>");
             log.error("Error when getting mentions timeline: ", te);
@@ -1397,12 +1397,12 @@ public class Timeline extends GenericResource{
                 doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(), null, FAVORITES_TAB, postURI, socialUserExtAttr,user.hasUserGroup(userSuperAdminGrp));
                 i++;
             }
-            out.println("<div align=\"center\">");
+            out.println("<div align=\"center\" style=\"margin-bottom: 10px;\">");
             out.println("<label id=\"" + objUri + "/moreFavoritesLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreFavorites").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreFavorites','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreFavorites") + "</a></label>");
             out.println("</div>");
             //System.out.println("Total favorites:" + i);
         } catch (Exception te) {
-            out.println("<div align=\"center\">");
+            out.println("<div align=\"center\" style=\"margin-bottom: 10px;\">");
             out.println("<label id=\"" + objUri + "/moreFavoritesLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreFavorites").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreFavorites','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreFavorites") + "</a></label>");
             out.println("</div>");
             log.error("Error when getting more favorites: ", te);
@@ -1440,7 +1440,7 @@ public class Timeline extends GenericResource{
                 doPrintDM(request, response, paramRequest, directMsg, twitter.getId(), out);
                 i++;
             }
-            out.println("<div align=\"center\">");
+            out.println("<div align=\"center\" style=\"margin-bottom: 10px;\">");
             out.println("<label id=\"" + objUri + "/moreDMLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreDM").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreDM','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreDMs") + "</a></label>");
             out.println("</div>");
             //System.out.println("Total direct messages:" + i);
@@ -1669,7 +1669,7 @@ public class Timeline extends GenericResource{
                 /*creates isolated spans to identify and update only the elemente where the action affects*/
                 writer.write("   <span class=\"inline\" id=\"" + dm.getId() + "\" dojoType=\"dojox.layout.ContentPane\">");                
                 writer.write("<em>" + twitterHumanFriendlyDate(dm.getCreatedAt(), paramRequest) + "</em> ");
-                writer.write("<a class=\"clasifica\" href=\"#\" onclick=\"showDialog('" + renderURL.setMode("replyDM").setParameter("userId", dm.getSenderId()+"") + "','DM to @" + dm.getSenderScreenName()+ "');return false;\"><span>Responder</span></a>  ");
+                writer.write("<a class=\"clasifica\" href=\"#\" onclick=\"showDialog('" + renderURL.setMode("replyDM").setParameter("userId", dm.getSenderId()+"") + "','DM to @" + dm.getSenderScreenName()+ "');return false;\"><span style=\"width:60px;\">Responder</span></a>  ");
                 writer.write("   </span>");                
                 writer.write("</div>");
                                
@@ -1954,12 +1954,12 @@ public class Timeline extends GenericResource{
                 out.println("</div>");
             }
             friendsCursor = friends.getNextCursor();
-            out.println("<div align=\"center\">");
+            out.println("<div align=\"center\" style=\"margin-bottom: 10px;\">");
             out.println("<label id=\"" + objUri + "/moreFriendsLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreFriends").setParameter("friendsCursor", friendsCursor+"") + "','" + objUri + "/getMoreFriends','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreFriends") + "</a></label>");
             out.println("</div>");
         } catch (Exception te) {
             log.error("Error when getting friends: ", te);
-            out.println("<div align=\"center\">");
+            out.println("<div align=\"center\" style=\"margin-bottom: 10px;\">");
             out.println("<label id=\"" + objUri + "/moreFriendsLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreFriends").setParameter("friendsCursor", friendsCursor+"") + "','" + objUri + "/getMoreFriends','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreFriends") + "</a></label>");
             out.println("</div>");
         }
@@ -2015,12 +2015,12 @@ public class Timeline extends GenericResource{
                 out.println("</div>");                
             }
             followersCursor = followers.getNextCursor();
-            out.println("<div align=\"center\">");
+            out.println("<div align=\"center\" style=\"margin-bottom: 10px;\">");
             out.println("<label id=\"" + objUri + "/moreFollowersLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreFollowers").setParameter("followersCursor", followersCursor+"") + "','" + objUri + "/getMoreFollowers','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreFollowers") + "</a></label>");
             out.println("</div>");
         } catch (Exception te) {
             log.error("Error when getting followers: ", te);
-            out.println("<div align=\"center\">");
+            out.println("<div align=\"center\" style=\"margin-bottom: 10px;\">");
             out.println("<label id=\"" + objUri + "/moreFollowersLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreFollowers").setParameter("followersCursor", followersCursor+"") + "','" + objUri + "/getMoreFollowers','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreFollowers") + "</a></label>");
             out.println("</div>");
         }
