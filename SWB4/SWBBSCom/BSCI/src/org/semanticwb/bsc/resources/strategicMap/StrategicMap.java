@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathException;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.apache.batik.dom.svg.SVGDOMImplementation;
@@ -793,7 +792,7 @@ public class StrategicMap extends GenericResource {
     public static final int BOX_SPACING_BOTTOM = 8; // Especifica el espacio entre rectángulos internos de una perspectiva
     
     public static final int PADDING_TOP = 4; // Especifica el espacio libre arriba entre rectángulos para pintar las ligas
-    public static final int PADDING_LEFT = 2; // Especifica el espacio libre a la izquieerda entre rectángulos para pintar las ligas
+    public static final int PADDING_LEFT = 6; // Especifica el espacio libre a la izquieerda entre rectángulos para pintar las ligas
     public static final int PADDING_RIGHT = 2; // Especifica el espacio libre a la derecha entre rectángulos para pintar las ligas
     public static final int PADDING_DOWN = 4; // Especifica el espacio libre a la derecha entre rectángulos para pintar las ligas
     public static final String SVG_NS_URI = "http://www.w3.org/2000/svg";
@@ -1042,19 +1041,20 @@ public class StrategicMap extends GenericResource {
         SVGjs.append(" defs.appendChild(marker);").append("\n");
         SVGjs.append(" svg.appendChild(defs);").append("\n");
         
-        SVGjs.append(" var r;").append("\n");
-        SVGjs.append(" var w;").append("\n");
-        SVGjs.append(" var g;").append("\n");
-        SVGjs.append(" var txt;").append("\n");
-        SVGjs.append(" var rect;").append("\n");
-        SVGjs.append(" var path;").append("\n");
-        SVGjs.append(" var lnk;").append("\n");
-        SVGjs.append(" var to;").append("\n");
-        SVGjs.append(" var parent;").append("\n");
-        SVGjs.append(" var matxTo;").append("\n");
-        SVGjs.append(" var matxFrm;").append("\n");
-        SVGjs.append(" var posTo;").append("\n");
-        SVGjs.append(" var posFrm;").append("\n");
+        SVGjs.append(" var stat;").append("\n");    // figura para estatus de objetivo
+        SVGjs.append(" var r;").append("\n");       // relación causa/efecto
+        SVGjs.append(" var w;").append("\n");       // width
+        SVGjs.append(" var g;").append("\n");       // perspectiva
+        SVGjs.append(" var txt;").append("\n");     // texto
+        SVGjs.append(" var rect;").append("\n");    // elemento
+        SVGjs.append(" var path;").append("\n");    // flecha de la relación causa/efecto
+        SVGjs.append(" var lnk;").append("\n");     // liga
+        SVGjs.append(" var to;").append("\n");      // objetivo destino(target) de la relación
+        SVGjs.append(" var parent;").append("\n");  // perspectiva del objetivo destino de la relación
+        SVGjs.append(" var matxTo;").append("\n");  // matriz del objetivo destino de la relación
+        SVGjs.append(" var matxFrm;").append("\n"); // matriz del objetivo fuente(source) de la relación
+        SVGjs.append(" var posTo;").append("\n");   // posición del objetivo destino(target) de la relación
+        SVGjs.append(" var posFrm;").append("\n");  //  posición del objetivo fuente(source) de la relación
         
         XPath xPath = XPathFactory.newInstance().newXPath();
         expression = "/bsc/header";
@@ -1135,6 +1135,8 @@ public class StrategicMap extends GenericResource {
             SVGjs.append(" framingRect(rect,'"+id+"_cvision',"+w_+","+h_+","+(x_+2*w_)+","+y_+");").append("\n");
             SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
         }
+        
+        
         
         String title;
         y = y + HEADER_HEIGHT + MARGEN_TOP;
@@ -1316,9 +1318,11 @@ public class StrategicMap extends GenericResource {
                                 SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
                                 SVGjs.append(" framingRect(rect,'"+oid+"',"+w_+",0,"+x_+",y_);").append("\n");
                                 SVGjs.append(" g.insertBefore(rect,lnk);").append("\n");
-
                                 SVGjs.append(" y_ = y_ + rect.height.baseVal.value + "+BOX_SPACING+";").append("\n");
-
+SVGjs.append("console.log('oid="+oid+", rect.x='+rect.x.baseVal.value+', rect.y='+rect.y.baseVal.value);").append("\n");
+                                SVGjs.append(" stat = createCircle('stts_"+oid+"',rect.x.baseVal.value+5,rect.y.baseVal.value+5,4,'blue',1,'black',1,1);").append("\n");
+                                SVGjs.append(" g.insertBefore(stat,lnk)").append("\n");
+                                
                                 //relaciones causa-efecto con este objetivo
                                 expression = "//theme[@id='"+tid+"']/obj[@id='"+oid+"']/rel";
                                 nlRels = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
@@ -1548,121 +1552,6 @@ public class StrategicMap extends GenericResource {
 
         SVGjs.append("</script>");
         return SVGjs.toString();
-    }
-    
-    public Document getSvg_(Document documentBSC) throws XPathExpressionException
-    {
-        Resource base = getResourceBase();
-        String w_, h_, x_, y_;
-        String id, expression;
-        int w, h, x, y;
-        Element t, e, r, s, use;
-        
-        // XML del BSC
-        Element rootBSC = documentBSC.getDocumentElement();
-        w_ = rootBSC.getAttribute("width");        
-        h_ = rootBSC.getAttribute("height");
-        
-DOMImplementation impl = SVGDOMImplementation.getDOMImplementation();
-final String svgNS = SVGDOMImplementation.SVG_NAMESPACE_URI;
-Document documentSVG = impl.createDocument(svgNS, "svg", null);        
-        
-        Element rootSVG = documentSVG.getDocumentElement();
-        w_ = rootBSC.getAttribute("width");
-        rootSVG.setAttributeNS(null, "width", w_);
-        h_ = rootBSC.getAttribute("height");
-        rootSVG.setAttributeNS(null, "height", h_);
-        rootSVG.setAttributeNS(null, "viewBox", "0,0,"+w_+","+h_);
-        
-        XPath xPath = XPathFactory.newInstance().newXPath();
-        
-        // <header>
-        expression = "/bsc/header";
-        Node node = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);
-        if(node!=null && node instanceof Element) {
-            NamedNodeMap attrs = node.getAttributes();
-            id = attrs.getNamedItem("id").getNodeValue();
-            s = documentSVG.createElementNS(svgNS, "symbol");
-            s.setAttributeNS(null, "id", id);
-            rootSVG.appendChild(s);
-            
-            use = documentSVG.createElementNS(svgNS, "use");
-            x = Integer.parseInt(attrs.getNamedItem("x").getNodeValue());
-            y = Integer.parseInt(attrs.getNamedItem("y").getNodeName());
-            w = Integer.parseInt(attrs.getNamedItem("width").getNodeName());
-            h = Integer.parseInt(attrs.getNamedItem("height").getNodeValue());
-            use.setAttributeNS(null, "x", Integer.toString(x));
-            use.setAttributeNS(null, "y", Integer.toString(y));
-            use.setAttributeNS(null, "width", Integer.toString(w));
-            use.setAttributeNS(null, "height", Integer.toString(h));
-            use.setAttributeNS(null, "xlink:href", attrs.getNamedItem("id").getNodeValue());
-            
-            NodeList nl = node.getChildNodes();
-            if(nl.getLength()>0)
-            {
-                w = w/nl.getLength();
-                h = Integer.parseInt(attrs.getNamedItem("height").getNodeValue());
-                
-                // <title>
-                expression = "/bsc/header/title";
-                Node n = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);
-                if(n!=null && node instanceof Element) {
-                    Text title = documentSVG.createTextNode(n.getNodeValue());
-                    t = documentSVG.createElementNS(svgNS, "text");
-                    t.setAttributeNS(null, "x", Integer.toString(x));
-                    t.setAttributeNS(null, "y", Integer.toString(y+12));
-                    t.setAttributeNS(null, "font-size", "12");
-                    t.appendChild(title);
-                    s.appendChild(t);                 
-                }
-                
-                // <mission>
-                expression = "/bsc/header/mission";
-                n = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);
-                if(n!=null && node instanceof Element) {
-                    r = documentSVG.createElementNS(svgNS, "rect");
-                    r.setAttributeNS(null, "x", Integer.toString(x+PADDING_LEFT));
-                    r.setAttributeNS(null, "y", Integer.toString(y+PADDING_TOP));
-                    r.setAttributeNS(null, "width", Integer.toString(w-BOX_SPACING));
-                    r.setAttributeNS(null, "height", Integer.toString(h));
-                    r.setAttributeNS(null, "style", "fill:none;stroke:black;stroke-width:1");
-                    s.appendChild(r);
-                }
-                
-                // <logo>
-                x+=w;
-                expression = "/bsc/header/logo";
-                n = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);
-                if(n!=null && node instanceof Element) {
-                    r = documentSVG.createElementNS(svgNS, "rect");
-                    r.setAttributeNS(null, "x", Integer.toString(x+PADDING_LEFT));
-                    r.setAttributeNS(null, "y", Integer.toString(y+PADDING_TOP));
-                    r.setAttributeNS(null, "width", Integer.toString(w-BOX_SPACING));
-                    r.setAttributeNS(null, "height", Integer.toString(h));
-                    r.setAttributeNS(null, "style", "fill:none;stroke:black;stroke-width:1");
-                    s.appendChild(r);
-                }
-                
-                // <vision>
-                x+=w;
-                expression = "/bsc/header/vision";
-                n = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);
-                if(n!=null && node instanceof Element) {
-                    r = documentSVG.createElementNS(svgNS, "rect");
-                    r.setAttributeNS(null, "x", Integer.toString(x+PADDING_LEFT));
-                    r.setAttributeNS(null, "y", Integer.toString(y+PADDING_TOP));
-                    r.setAttributeNS(null, "width", Integer.toString(w-BOX_SPACING));
-                    r.setAttributeNS(null, "height", Integer.toString(h));
-                    r.setAttributeNS(null, "style", "fill:none;stroke:black;stroke-width:1");
-                    s.appendChild(r);
-                }
-            }
-            rootSVG.appendChild(use);
-        }
-        
-        
-        
-        return documentSVG;
     }
     
     private int assertValue(final String textVal)
