@@ -2583,6 +2583,7 @@ public class StreamInBox extends GenericResource {
                   query+="LIMIT "+limit;   
                 }
            }
+           System.out.println("query-User:"+query);
            if(isCount)
            {
                WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
