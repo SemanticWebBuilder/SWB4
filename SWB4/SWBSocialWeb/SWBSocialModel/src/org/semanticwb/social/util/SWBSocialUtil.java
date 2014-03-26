@@ -514,10 +514,13 @@ public class SWBSocialUtil {
          * Elimina signos de puntualcion
          */
         public static String removePuntualSigns(String text, SWBModel model) {
-            Iterator<PunctuationSign> itPunctuationSigns = PunctuationSign.ClassMgr.listPunctuationSigns(model);
-            while (itPunctuationSigns.hasNext()) {
-                PunctuationSign puncSign = itPunctuationSigns.next();
-                text = text.replaceAll(puncSign.getPuntuationSign(), "");
+            if(text!=null)
+            {
+                Iterator<PunctuationSign> itPunctuationSigns = PunctuationSign.ClassMgr.listPunctuationSigns(model);
+                while (itPunctuationSigns.hasNext()) {
+                    PunctuationSign puncSign = itPunctuationSigns.next();
+                    text = text.replaceAll(puncSign.getPuntuationSign(), "");
+                }
             }
             return text;
         }
