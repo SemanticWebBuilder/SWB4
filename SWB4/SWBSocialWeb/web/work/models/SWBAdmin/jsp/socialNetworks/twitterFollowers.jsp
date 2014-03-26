@@ -105,7 +105,7 @@
             }else{
 %>    
 <div id="<%=objUri%>/getMoreFollowers" dojoType="dojox.layout.ContentPane">
-    <div align="center">
+    <div align="center" style="margin-bottom: 10px;">
         <label id="<%=objUri%>/moreFollowersLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMoreFollowers").setParameter("followersCursor", followersCursor+"")%>','<%=objUri%>/getMoreFollowers', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;"><%=paramRequest.getLocaleString("moreFollowers")%></a></label>
     </div>
 </div>

@@ -48,8 +48,8 @@
         username = facebookBean.getTitle();
     }
 %>
-<div class="swbform">
-<div align="center"><h2><%=username%> - <%=paramRequest.getLocaleString("myVideos")%></h2><br/></div>
+<div class="timelineTab" style="padding:10px 5px 10px 5px; overflow-y: scroll; height: 400px;">
+<div class="timelineTab-title"><p><strong><%=username%></strong><%=paramRequest.getLocaleString("myVideos")%></p></div>
 <%
     //TODO: it seems than 'likes' is deprecated and it must be replaced with like_info
     params.put("q", "{\"videos\": \"SELECT actor_id, created_time, like_info, post_id, attachment, message, description, description_tags, type, comment_info FROM stream WHERE filter_key IN " + 
@@ -63,7 +63,7 @@
     SWBResourceURL renderURL = paramRequest.getRenderUrl().setParameter("suri", objUri).setParameter("currentTab", VIDEOS_TAB);
 %>
 <div id="<%=objUri%>getMoreVideos" dojoType="dijit.layout.ContentPane">
-    <div align="center">
+    <div align="center" style="margin-bottom: 10px;">
         <label id="<%=objUri%>moreVideosLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMoreVideos").setParameter("createdTime", createdTime).setParameter("currentTab", VIDEOS_TAB)%>','<%=objUri%>getMoreVideos', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;"><%=paramRequest.getLocaleString("getMoreVideos")%></a></label>
     </div>
 </div>
