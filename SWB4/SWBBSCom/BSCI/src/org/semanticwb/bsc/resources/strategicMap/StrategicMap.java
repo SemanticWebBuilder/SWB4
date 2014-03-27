@@ -788,11 +788,13 @@ public class StrategicMap extends GenericResource {
     public static final int HEADER_5 = 12; // tamaño de fuente para objetivos
     
     public static final int BOX_SPACING = 16; // Especifica el espacio entre rectángulos internos de una perspectiva
+    public static final int BOX_SPACING_LEFT = 15; // Especifica el espacio entre rectángulos internos de una perspectiva
+    public static final int BOX_SPACING_RIGHT = 8; // Especifica el espacio entre rectángulos internos de una perspectiva
     public static final int BOX_SPACING_TOP = 8; // Especifica el espacio entre rectángulos internos de una perspectiva
     public static final int BOX_SPACING_BOTTOM = 8; // Especifica el espacio entre rectángulos internos de una perspectiva
     
     public static final int PADDING_TOP = 4; // Especifica el espacio libre arriba entre rectángulos para pintar las ligas
-    public static final int PADDING_LEFT = 6; // Especifica el espacio libre a la izquieerda entre rectángulos para pintar las ligas
+    public static final int PADDING_LEFT = 2; // Especifica el espacio libre a la izquieerda entre rectángulos para pintar las ligas
     public static final int PADDING_RIGHT = 2; // Especifica el espacio libre a la derecha entre rectángulos para pintar las ligas
     public static final int PADDING_DOWN = 4; // Especifica el espacio libre a la derecha entre rectángulos para pintar las ligas
     public static final String SVG_NS_URI = "http://www.w3.org/2000/svg";
@@ -860,7 +862,7 @@ public class StrategicMap extends GenericResource {
         root.insertBefore(header, p1);
         
         final int px;
-        final int pw, ph;
+        final int pw;//, ph;
         final int perspCount;
         String uri;
         Boolean hiddenTheme;
@@ -870,12 +872,12 @@ public class StrategicMap extends GenericResource {
         NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
         perspCount = nodeList.getLength();
         pw = width-MARGEN_LEFT-MARGEN_RIGHT;
-        ph = (height-HEADER_HEIGHT)/perspCount -  MARGEN_TOP - MARGEN_BOTTOM;
+        //ph = (height-HEADER_HEIGHT)/perspCount -  MARGEN_TOP - MARGEN_BOTTOM;
         px = MARGEN_LEFT;
         
         //lista de perspectivas
         for(int j=0; j<perspCount; j++) {
-            int h_ = ph;
+//            int h_ = ph;
             Node nodep = nodeList.item(j);
             if(nodep.getNodeType()==Node.ELEMENT_NODE)
             {
@@ -895,8 +897,8 @@ public class StrategicMap extends GenericResource {
                     for(int k=0; k<nlDiffsCount; k++) {
                         Node noded = nlDiffs.item(k);
                         Element d = (Element)noded;
-                        d.setAttribute("width", Integer.toString(dw-BOX_SPACING));
-                        d.setAttribute("x", Integer.toString(px + k*dw + BOX_SPACING));
+                        d.setAttribute("width", Integer.toString(dw - PADDING_RIGHT));
+                        d.setAttribute("x", Integer.toString(px + k*dw + PADDING_RIGHT));
                     }
                 }
                 
@@ -916,8 +918,9 @@ public class StrategicMap extends GenericResource {
                             Element t = (Element)nodet;
                             uri = t.getAttribute("id");
                             hiddenTheme = Boolean.parseBoolean(t.getAttribute("hidden"));
-                            t.setAttribute("width", Integer.toString(tw-BOX_SPACING));
-                            tx = px + k*tw + BOX_SPACING;
+                            t.setAttribute("width", Integer.toString(tw-BOX_SPACING_RIGHT));
+                            //tx = px + k*tw + BOX_SPACING_RIGHT;
+                            tx = px + k*tw;
                             t.setAttribute("x", Integer.toString(tx));
                             
                             //relaciones con este tema
@@ -937,16 +940,16 @@ public class StrategicMap extends GenericResource {
                             final int nlObjsCount = nlObjs.getLength();
                             if(nlObjsCount>0)
                             {
-                                int hObj;
-                                if(hiddenTheme) {
-                                    hObj = h_/(nlObjsCount);
-                                    t.setAttribute("height","0");
-                                }else {
-                                    //hObj = h_/(nlObjsCount+1);
-                                    hObj = (h_-HEADER_3)/nlObjsCount;
-                                    //t.setAttribute("height",Integer.toString(hObj));
-                                    t.setAttribute("height", Integer.toString(HEADER_3));
-                                }
+//                                int hObj;
+//                                if(hiddenTheme) {
+//                                    hObj = h_/(nlObjsCount);
+//                                    t.setAttribute("height","0");
+//                                }else {
+//                                    //hObj = h_/(nlObjsCount+1);
+//                                    hObj = (h_-HEADER_3)/nlObjsCount;
+//                                    //t.setAttribute("height",Integer.toString(hObj));
+//                                    t.setAttribute("height", Integer.toString(HEADER_3));
+//                                }
                                 for(int l=0; l<nlObjsCount; l++)
                                 {
                                     Node nodeo = nlObjs.item(l);
@@ -954,9 +957,9 @@ public class StrategicMap extends GenericResource {
                                     if(nodeo.getNodeType()==Node.ELEMENT_NODE) {
                                         Element o = (Element)nodeo;
                                         uri = o.getAttribute("id");                                
-                                        o.setAttribute("width", Integer.toString(tw-PADDING_RIGHT));
-                                        o.setAttribute("height", Integer.toString(hObj-PADDING_TOP));
-                                        o.setAttribute("x", Integer.toString(ox));  
+                                        o.setAttribute("width", Integer.toString(tw-BOX_SPACING_LEFT));
+                                        //o.setAttribute("height", Integer.toString(hObj-PADDING_TOP));
+                                        o.setAttribute("x", Integer.toString(ox+BOX_SPACING_LEFT));  
                                         o.setAttribute("href",  urlBase+uri);
 
                                         //relaciones con este objetivo
@@ -1034,8 +1037,8 @@ public class StrategicMap extends GenericResource {
         SVGjs.append(" marker.setAttributeNS(null,'orient', 'auto');").append("\n");
         SVGjs.append(" var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');").append("\n");
         SVGjs.append(" path.setAttributeNS(null,'d', 'M0 0 L10 5 L0 10 z');").append("\n");
-        SVGjs.append(" path.setAttributeNS(null,'fill', 'red');").append("\n");
-        SVGjs.append(" path.setAttributeNS(null,'stroke', 'red');").append("\n");
+        SVGjs.append(" path.setAttributeNS(null,'fill', '#FF0099');").append("\n");
+        SVGjs.append(" path.setAttributeNS(null,'stroke', '#FF0099');").append("\n");
         SVGjs.append(" path.setAttributeNS(null,'stroke-width', '0');").append("\n");
         SVGjs.append(" marker.appendChild(path);").append("\n");
         SVGjs.append(" defs.appendChild(marker);").append("\n");
@@ -1320,7 +1323,7 @@ public class StrategicMap extends GenericResource {
                                 SVGjs.append(" g.insertBefore(rect,lnk);").append("\n");
                                 SVGjs.append(" y_ = y_ + rect.height.baseVal.value + "+BOX_SPACING+";").append("\n");
 SVGjs.append("console.log('oid="+oid+", rect.x='+rect.x.baseVal.value+', rect.y='+rect.y.baseVal.value);").append("\n");
-                                SVGjs.append(" stat = createCircle('stts_"+oid+"',rect.x.baseVal.value+5,rect.y.baseVal.value+5,4,'blue',1,'black',1,1);").append("\n");
+                                SVGjs.append(" stat = createCircle('stts_"+oid+"',rect.x.baseVal.value-6,rect.y.baseVal.value+5,4,'blue',1,'black',1,1);").append("\n");
                                 SVGjs.append(" g.insertBefore(stat,lnk)").append("\n");
                                 
                                 //relaciones causa-efecto con este objetivo
@@ -1336,7 +1339,7 @@ SVGjs.append("console.log('oid="+oid+", rect.x='+rect.x.baseVal.value+', rect.y=
                                         String parent = attrs.getNamedItem("parent").getNodeValue();
                                         SVGjs.append(" to = document.getElementById('"+to+"');").append("\n");
                                         SVGjs.append(" parent = document.getElementById('"+parent+"');").append("\n");
-
+                                        
                                         SVGjs.append(" r = document.getElementById('w_"+parent+"');").append("\n");
                                         SVGjs.append(" if(r) {").append("\n");
                                         SVGjs.append("     w = r.width.baseVal.value;").append("\n");
@@ -1346,6 +1349,10 @@ SVGjs.append("console.log('oid="+oid+", rect.x='+rect.x.baseVal.value+', rect.y=
                                         SVGjs.append(" }").append("\n");
 
                                         SVGjs.append(" if(to && parent) {").append("\n");
+                                        
+SVGjs.append(" to.addEventListener('mouseover', fadeout, false);").append("\n");
+SVGjs.append(" to.addEventListener('mouseout', fadein, false);").append("\n");                             
+                                        
                                         SVGjs.append("   console.log('to='+to.id+', parent='+parent.id);").append("\n");
                                         SVGjs.append("   matxTo = parent.getCTM();").append("\n");
                                         SVGjs.append("   posTo = svg.createSVGPoint();").append("\n");
@@ -1397,6 +1404,11 @@ SVGjs.append("console.log('oid="+oid+", rect.x='+rect.x.baseVal.value+', rect.y=
 
 
         SVGjs.append("").append("\n");
+        SVGjs.append("").append("\n");
+        SVGjs.append("").append("\n");
+        SVGjs.append("").append("\n");
+        SVGjs.append("").append("\n");
+        SVGjs.append("").append("\n");
 
         SVGjs.append("function createLink(url) {").append("\n");
         SVGjs.append("  var a = document.createElementNS(SVG_ ,'a');").append("\n");
@@ -1405,22 +1417,40 @@ SVGjs.append("console.log('oid="+oid+", rect.x='+rect.x.baseVal.value+', rect.y=
         SVGjs.append("  return a;").append("\n");
         SVGjs.append("}").append("\n");
 
-        SVGjs.append("function createArrow(id,x1,y1,x2,y2) {").append("\n");
-        SVGjs.append("  var arrow = createPath(id,x1,y1,x2,y2);").append("\n");
-        SVGjs.append("  arrow.setAttributeNS(null, 'marker-end', 'url(#arrow_1)');").append("\n");
-        SVGjs.append("  return arrow;").append("\n");
-        SVGjs.append("}").append("\n");
+SVGjs.append("function createArrow(id,x1,y1,x2,y2) {").append("\n");
+SVGjs.append("  var arrow = createPath(id,x1,y1,x2,y2);").append("\n");
+SVGjs.append("  arrow.setAttributeNS(null, 'marker-end', 'url(#arrow_1)');").append("\n");
+SVGjs.append("  arrow.setAttributeNS(null, 'stroke-opacity', 0.2);").append("\n");
+SVGjs.append("  arrow.addEventListener('mouseover', fadeout, false);").append("\n");
+SVGjs.append("  arrow.addEventListener('mouseout', fadein, false);").append("\n");
+SVGjs.append("  return arrow;").append("\n");
+SVGjs.append("}").append("\n");
 
-        SVGjs.append("function createPath(id,x1,y1,x2,y2) {").append("\n");
-        SVGjs.append("  var path = document.createElementNS(SVG_,'path');").append("\n");
-        SVGjs.append("  var d = 'M'+x1+','+y1'+' L'+(x1-5)+','+y1+' L'+(width-3)+','+y1+' L'+(width-3)+','+y2+' L'+x2+','+y2").append("\n");
-        SVGjs.append("  path.setAttributeNS(null, 'd', 'M'+x1+','+y1+' L'+x2+','+y2);").append("\n");
-        SVGjs.append("  path.style.stroke = '#000';").append("\n");
-        SVGjs.append("  path.style.strokeWidth = '3px';").append("\n");
-        //SVGjs.append("  path.style.markerEnd = '3px';").append("\n");
-        SVGjs.append("  ").append("\n");
-        SVGjs.append("  return path;").append("\n");
-        SVGjs.append("}").append("\n");
+SVGjs.append("function fadeout(evt) {").append("\n");
+SVGjs.append("    evt.target.style.stroke = '#0000FF';").append("\n");
+SVGjs.append("    evt.target.style.strokeWidth = '7';").append("\n");
+SVGjs.append("    evt.target.setAttributeNS(null,'stroke-opacity',1);").append("\n");
+SVGjs.append("}").append("\n");
+SVGjs.append("function fadein(evt) {").append("\n");
+SVGjs.append("    evt.target.style.stroke = '#FF0099';").append("\n");
+SVGjs.append("    evt.target.style.strokeWidth = '3';").append("\n");
+SVGjs.append("    evt.target.setAttributeNS(null,'stroke-opacity',0.2);").append("\n");
+SVGjs.append("}").append("\n");
+
+SVGjs.append("var offset_v = 0;").append("\n");
+SVGjs.append("var offset_h = 5;").append("\n");
+SVGjs.append("function createPath(id,x1,y1,x2,y2) {").append("\n");
+SVGjs.append("  var path = document.createElementNS(SVG_,'path');").append("\n");
+SVGjs.append("  var d = 'M'+x1+','+y1+' L'+(x1)+','+(y1-offset_h)+' L'+(width-offset_v)+','+(y1-offset_h)+' L'+(width-offset_v)+','+y2+' L'+x2+','+y2;").append("\n");
+SVGjs.append("  offset_v+=8;").append("\n");
+SVGjs.append("  //offset_h+=3;").append("\n");
+SVGjs.append("  path.setAttributeNS(null, 'id', id);").append("\n");
+SVGjs.append("  path.setAttributeNS(null, 'd', d);").append("\n");
+SVGjs.append("  path.style.fill = 'none';").append("\n");
+SVGjs.append("  path.style.stroke = '#FF0099';").append("\n");
+SVGjs.append("  path.style.strokeWidth = '3';").append("\n");
+SVGjs.append("  return path;").append("\n");
+SVGjs.append("}").append("\n");
 
         SVGjs.append("function createText(text,x,y,fontsize,fontfamily) {").append("\n");
         SVGjs.append("  var txt = document.createElementNS(SVG_,'text');").append("\n");
