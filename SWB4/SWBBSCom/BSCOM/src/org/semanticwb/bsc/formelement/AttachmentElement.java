@@ -47,7 +47,7 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
      * Genera el código HTML para representar la administración de los Archivos
      * adjuntos de los elementos del BSC.
      *
-     * @param request la petici&oacute; HTTP hecha por el cliente
+     * @param request la petici&oacute;n HTTP hecha por el cliente
      * @param obj el objeto a quien pertenece la propiedad asociada a este
      * FormElement
      * @param prop la propiedad asociada a este FormElement
