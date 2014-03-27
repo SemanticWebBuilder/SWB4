@@ -6,12 +6,24 @@ package org.semanticwb.bsc.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.bsc.ContactWork;
+import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
+import org.semanticwb.model.UserGroup;
+import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticProperty;
+import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -43,42 +55,111 @@ public class UserProfile extends GenericAdmResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+
+        final User user = SWBContext.getSessionUser();
+        final String lang = user.getLanguage();
         PrintWriter out = response.getWriter();
-        Resource base = paramRequest.getResourceBase();
+        StringBuilder toReturn = new StringBuilder();
+        Resource base = getResourceBase();
+        WebSite wsite = base.getWebSite();
+
+        String img = "";
+        ContactWork cw = ContactWork.ClassMgr.getContactWork(user.getId(), wsite);
+        if (cw == null) {
+            cw = ContactWork.ClassMgr.createContactWork(user.getId(), wsite);
+        }
+        if (user.getPhoto() == null) {
+            img = SWBPortal.getWebWorkPath() + "/models/" + wsite.getId() + "/css/images/user.jpg";
+        } else {
+            img = SWBPortal.getWebWorkPath() + "/models/" + user.getUserRepository().getId() + "/swb_User/" + user.getId() + "/" + user.getPhoto();
+        }
+        //////FormMgr para FOTO/////////////////////////////////////////////////////////////
+        SWBFormMgr formMgrPhoto = new SWBFormMgr(user.getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
+        formMgrPhoto.clearProperties();
+        formMgrPhoto.addProperty(User.swb_usrPhoto);
+        formMgrPhoto.setType(SWBFormMgr.TYPE_DOJO);
+        formMgrPhoto.setMode(SWBFormMgr.MODE_EDIT);
+        SWBResourceURL urlPhoto = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD);
+
+
+        /////////FormMgr para DATOS DE CONTACTO DE TRABAJO///////////////////////////////////////////////
+        SWBFormMgr formMgr = new SWBFormMgr(cw.getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
+        formMgr.clearProperties();
+        formMgr.addProperty(ContactWork.bsc_employment);
+        formMgr.addProperty(ContactWork.bsc_twitter);
+        formMgr.addProperty(ContactWork.bsc_skype);
+        formMgr.addProperty(ContactWork.bsc_lada);
+        formMgr.addProperty(ContactWork.bsc_phone);
+        formMgr.addProperty(ContactWork.bsc_ext);
+        formMgr.addProperty(ContactWork.bsc_location);
+        formMgr.addProperty(ContactWork.bsc_area_);
+        formMgr.addProperty(ContactWork.bsc_chief);
+        formMgr.setType(SWBFormMgr.TYPE_DOJO);
+        formMgr.setMode(SWBFormMgr.MODE_EDIT);
+        SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_EDIT);
+
+        //////////////////////MUESTRA FORM PARA SUBIR FOTO//////////////////////////////////////////
+        toReturn.append("<div id=\"frmUser\">");
+        toReturn.append("<form id=\"formUserPhoto\" class=\"swbform\" action=\"" + urlPhoto + "\" method=\"post\">\n");
+        toReturn.append(formMgrPhoto.getFormHiddens());
+        toReturn.append("<div id=\"Photo\" class=\"foto\">");
+        toReturn.append("<p><img width=\"205px\" height=\"205px\" src=\"" + img + "\" alt=\"\" /></p>");
+        Iterator<SemanticProperty> itUser = SWBComparator.sortSortableObject(formMgrPhoto.getProperties().iterator());
+        while (itUser.hasNext()) {
+            SemanticProperty prop1 = itUser.next();
+            toReturn.append("<p>");
+            toReturn.append(
+                    formMgrPhoto.getFormElement(prop1).renderElement(
+                    request, user.getSemanticObject(), prop1,
+                    prop1.getName(), "dojo", SWBFormMgr.MODE_EDIT, lang));
+            toReturn.append("</p>");
+        }
+        toReturn.append("<p><button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"enviarPhoto\" >");
+        toReturn.append(paramRequest.getLocaleString("lbl_Save"));
+        toReturn.append("    <script type=\"dojo/on\" data-dojo-event=\"click\" data-dojo-args=\"evt\">");
+        toReturn.append("require([\"dojo/dom\"], function(dom){");
+        toReturn.append("    dom.byId(\"formUserPhoto\").submit();");
+        toReturn.append("});");
+        toReturn.append("</script>");
+        toReturn.append("</button></p>");
+        toReturn.append("</div>");
+
+        toReturn.append("<div id=\"data\">");
+        toReturn.append("<p><strong><font size=\"13\">" + user.getFullName() + "</font></strong></p>");
         if (base.getAttribute("canChangePassword") != null
                 && "true".equals(base.getAttribute("canChangePassword"))) {
-            StringBuilder toReturn = new StringBuilder();
+            StringBuilder toReturn1 = new StringBuilder();
             StringBuilder toReturn2 = new StringBuilder();
             SWBResourceURL urlChangePass = paramRequest.getRenderUrl().setMode(Mode_CHANGEPASSWORD);
             urlChangePass.setCallMethod(SWBResourceURL.Call_DIRECT);
 
-            toReturn.append("<script type=\"text/javascript\">\n");
-            toReturn.append("  dojo.require('dojo.parser');\n");
-            toReturn.append("  dojo.require(\"dijit.Dialog\");\n");
-            toReturn.append("  dojo.require('dijit.form.Form');\n");
-            toReturn.append("  dojo.require(\"dojox.layout.ContentPane\");\n");
-            toReturn.append("  dojo.require('dijit.form.ValidationTextBox');\n");
-            toReturn.append("  dojo.require('dijit.form.TextBox');\n");
+            toReturn1.append("<script type=\"text/javascript\">\n");
+            toReturn1.append("  dojo.require('dojo.parser');\n");
+            toReturn1.append("  dojo.require(\"dijit.Dialog\");\n");
+            toReturn1.append("  dojo.require('dijit.form.Form');\n");
+            toReturn1.append("  dojo.require(\"dojox.layout.ContentPane\");\n");
+            toReturn1.append("  dojo.require('dijit.form.ValidationTextBox');\n");
+            toReturn1.append("  dojo.require('dijit.form.TextBox');\n");
 
-            toReturn.append("  function checkData() {\n");
+            toReturn1.append("  function checkData() {\n");
             if (request.getParameter("msg") != null) {
-                toReturn.append("   alert('");
-                toReturn.append(paramRequest.getLocaleString(request.getParameter("msg")));
-                toReturn.append("');");
+                toReturn1.append("   alert('");
+                toReturn1.append(paramRequest.getLocaleString(request.getParameter("msg")));
+                toReturn1.append("');");
                 if (!request.getParameter("msg").equals("msgOkUpdate")) {
-                    toReturn.append("showDialog('");
-                    toReturn.append(urlChangePass);
-                    toReturn.append("', '");
-                    toReturn.append(paramRequest.getLocaleString("lblDialogName"));
-                    toReturn.append("');\n");
+                    toReturn1.append("showDialog('");
+                    toReturn1.append(urlChangePass);
+                    toReturn1.append("', '");
+                    toReturn1.append(paramRequest.getLocaleString("lblDialogName"));
+                    toReturn1.append("');\n");
                 }
             }
-            toReturn.append("   }\n");
+            toReturn1.append("   }\n");
 
-            toReturn.append("dojo.addOnLoad( function(){\n");
-            toReturn.append("checkData(\"\");}\n");
-            toReturn.append(");\n");
-            toReturn.append("</script>\n");
+            toReturn1.append("dojo.addOnLoad( function(){\n");
+            toReturn1.append("checkData(\"\");}\n");
+            toReturn1.append(");\n");
+            toReturn1.append("</script>\n");
 
             toReturn2.append("<div dojoType=\"dijit.Dialog\" class=\"soria\" ");
             toReturn2.append("style=\"display:width:380px;height:170px;\" ");
@@ -98,8 +179,73 @@ public class UserProfile extends GenericAdmResource {
             toReturn2.append(paramRequest.getLocaleString("lblDialogName"));
             toReturn2.append("\n</a>");
 
-            out.println(toReturn.toString());
+            out.println(toReturn1.toString());
             out.println(toReturn2.toString());
+        }
+
+        toReturn.append("<p>" + user.getEmail() + "</p>");
+        toReturn.append("</div>");
+        toReturn.append("</form>\n");
+        toReturn.append("</div>");
+
+        //////////////////////////MUESTRA FORM PARA DATOS DE CONTACTO DE TRABAJO///////////////////////////
+        toReturn.append("<div id=\"frmEdit\">");
+        toReturn.append("<p><strong>" + paramRequest.getLocaleString("lbl_contact") + "</strong></p>");
+        toReturn.append("<script type=\"text/javascript\">\n");
+        toReturn.append("  dojo.require('dijit.form.ValidationTextBox');\n");
+        toReturn.append("  dojo.require('dijit.form.FilteringSelect');\n");
+        toReturn.append("</script>\n");
+        toReturn.append("<form id=\"formContactWork\" class=\"swbform\" action=\"" + url + "\" method=\"post\" type=\"dijit.form.Form\">\n");
+        toReturn.append(formMgr.getFormHiddens());
+        toReturn.append("	    <table>\n");
+        toReturn.append("        <tbody>\n");
+        Iterator<SemanticProperty> it = SWBComparator.sortSortableObject(formMgr.getProperties().iterator());
+        while (it.hasNext()) {
+            SemanticProperty prop1 = it.next();
+            toReturn.append("            <tr>\n");
+            toReturn.append("                <td width=\"200px\" align=\"right\">\n");
+            toReturn.append("                    ");
+            toReturn.append(formMgr.renderLabel(request, prop1, prop1.getName(), SWBFormMgr.MODE_VIEW));
+            toReturn.append("                </td>\n");
+            toReturn.append("                <td>\n");
+            toReturn.append(
+                    formMgr.getFormElement(prop1).renderElement(
+                    request, cw.getSemanticObject(), prop1,
+                    prop1.getName(), "dojo", SWBFormMgr.MODE_EDIT, lang));
+            toReturn.append("                </td>\n");
+            toReturn.append("                </tr>\n");
+        }
+        toReturn.append("<tr>");
+        toReturn.append("<td align=\"center\" colspan=\"2\">");
+        toReturn.append("          <button dojoType=\"dijit.form.Button\" type=\"button\" name=\"enviar\" >");
+        toReturn.append(paramRequest.getLocaleString("lbl_Save"));
+
+        toReturn.append("    <script type=\"dojo/on\" data-dojo-event=\"click\" data-dojo-args=\"evt\">");
+        toReturn.append("require([\"dojo/dom\"], function(dom){");
+        toReturn.append("if(dom.byId(\"area_\").value!=''){");
+        toReturn.append("    dom.byId(\"formContactWork\").submit();");
+        toReturn.append("}");
+        toReturn.append("else{alert('Debes seleccionar un area');return false;");
+        toReturn.append("}");
+        toReturn.append("});");
+        toReturn.append("</script>");
+        toReturn.append("</button>");
+        toReturn.append("</td>");
+        toReturn.append("</tr>");
+        toReturn.append("	    </table>\n");
+        toReturn.append("</form>\n");
+        toReturn.append("</div>");
+        toReturn.append("<div id=\"chiefDIV\"></div>");
+        out.write(toReturn.toString());
+    }
+
+    public void uploadPhoto(HttpServletRequest request, SemanticObject obj, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        final User user = SWBContext.getSessionUser();
+        SWBFormMgr mgr = new SWBFormMgr(User.sclass, user.getSemanticObject(), null);
+        try {
+            mgr.processForm(request);
+        } catch (FormValidateException ex) {
+            Logger.getLogger(UserProfile2.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -120,7 +266,12 @@ public class UserProfile extends GenericAdmResource {
     public void processRequest(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
-        if (Mode_CHANGEPASSWORD.equals(mode)) {
+
+        if (paramRequest.getMode().equalsIgnoreCase("add")) {
+            final User user = SWBContext.getSessionUser();
+            SemanticObject obj = user.getSemanticObject();
+            uploadPhoto(request, obj, response, paramRequest);
+        } else if (Mode_CHANGEPASSWORD.equals(mode)) {
             doChangePassword(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
@@ -269,11 +420,31 @@ public class UserProfile extends GenericAdmResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response)
             throws SWBResourceException, IOException {
         String action = response.getAction();
+        Resource base = getResourceBase();
+        WebSite wsite = base.getWebSite();
         User user = SWBContext.getSessionUser();
-
+        ContactWork cw = ContactWork.ClassMgr.getContactWork(user.getId(), wsite);
+        if (cw == null) {
+            cw = ContactWork.ClassMgr.createContactWork(user.getId(), wsite);
+        }
         //SemanticObject usrUri = SemanticObject.createSemanticObject(user.getURI());
         if (SWBResourceURL.Action_ADD.equalsIgnoreCase(action)) {
-          //  SWBFormMgr mgr = new SWBFormMgr(usrUri, null, SWBFormMgr.MODE_EDIT);
+            SWBFormMgr formMgrPhoto = new SWBFormMgr(user.getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
+            formMgrPhoto.clearProperties();
+            formMgrPhoto.addProperty(User.swb_usrPhoto);
+            try {
+                SemanticObject semob = formMgrPhoto.processForm(request);
+            } catch (FormValidateException ex) {
+                Logger.getLogger(UserProfile2.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else if (SWBResourceURL.Action_EDIT.equalsIgnoreCase(action)) {
+            SWBFormMgr mgr = new SWBFormMgr(cw.getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
+            try {
+                SemanticObject semob = mgr.processForm(request);
+                ContactWork cw2 = (ContactWork) semob.createGenericInstance();
+            } catch (FormValidateException ex) {
+                Logger.getLogger(UserProfile2.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else if (Action_CHANGEPASSWORD.equals(action)) {
             String curPassword = request.getParameter("curPassword") == null
                     ? null : request.getParameter("curPassword").trim();
