@@ -243,5 +243,10 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
     public HashMap<String, Long> monitorPostOutResponses(PostOut postOut) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public boolean removePostOutfromSocialNet(PostOut postOut) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
     
 }
