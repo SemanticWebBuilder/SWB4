@@ -42,18 +42,12 @@
     boolean gotError = false;
 %>
 
-<div dojoType="dojox.layout.ContentPane">
-    <script type="dojo/method">
-        resetTabTitle('<%=objUri%>','<%=MENTIONS_TAB%>', 'Mentions' );
-   </script>
-</div>
-
 <div class="timelineTab" style="padding:10px 5px 10px 5px; overflow-y: scroll; height: 400px;">
 <%
     try {
             //gets Twitter4j instance with account credentials
             out.println("<div class=\"swbform\">");
-            System.out.println(paramRequest.getLocaleString("showing") + " @" + twitterBean.getScreenName() +  "'s Mentions.");
+            //System.out.println(paramRequest.getLocaleString("showing") + " @" + twitterBean.getScreenName() +  "'s Mentions.");
             out.println("<div class=\"timelineTab-title\"><p><strong>" + paramRequest.getLocaleString("mentionsLabel") + "</strong> @" + twitterBean.getScreenName() + "</p></div>");
 
 	    //out.println("<div align=\"center\"><h2>" + "@" + twitterBean.getScreenName() + " - " + paramRequest.getLocaleString("mentionsLabel") + "</h2><br/></div>");
@@ -82,7 +76,7 @@
                 doPrintTweet(request, response, paramRequest, status, twitterBean, out,null,MENTIONS_TAB, null,socialUserExtAttr,user.hasUserGroup(userSuperAdminGrp));
                 i++;
             }
-            System.out.println("Total Mentions:" + i);
+            //System.out.println("Total Mentions:" + i);
         }catch (TwitterException te) {
             if(te.getErrorCode() == 88){
                 out.println("<div align=\"center\"><h2>YOU HAVE REACHED YOUR RATE LIMIT FOR THIS RESOURCE</h2><br/></div>");
