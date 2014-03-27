@@ -4,7 +4,7 @@ package org.semanticwb.bsc.tracing.base;
    /**
    * Gestiona la información de un control en un Riesgo. 
    */
-public abstract class ControlBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Help,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupable
+public abstract class ControlBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.bsc.Recognizable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.Roleable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable
 {
    /**
    * Permite almacenar los valores que pueden tomar los determinantes definidos para conocer si son suficientes o no los controles de un riesgo
@@ -22,6 +22,11 @@ public abstract class ControlBase extends org.semanticwb.bsc.tracing.BSCTracing 
    * Es de solo lectura. Y permite determinar si un control es suficiente o deficiente para controlar un riesgo
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_determiningControl=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#determiningControl");
+   /**
+   * Clase que define un factor de riesgo.
+   */
+    public static final org.semanticwb.platform.SemanticClass bsc_Factor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Factor");
+    public static final org.semanticwb.platform.SemanticProperty bsc_hasControlInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasControlInv");
    /**
    * Gestiona la información de un control en un Riesgo.
    */
@@ -215,6 +220,29 @@ public abstract class ControlBase extends org.semanticwb.bsc.tracing.BSCTracing 
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Control> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.bsc.tracing.Control with a determined ControlInv
+       * @param value ControlInv of the type org.semanticwb.bsc.tracing.Factor
+       * @param model Model of the org.semanticwb.bsc.tracing.Control
+       * @return Iterator with all the org.semanticwb.bsc.tracing.Control
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.Control> listControlByControlInv(org.semanticwb.bsc.tracing.Factor value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Control> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasControlInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.tracing.Control with a determined ControlInv
+       * @param value ControlInv of the type org.semanticwb.bsc.tracing.Factor
+       * @return Iterator with all the org.semanticwb.bsc.tracing.Control
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.Control> listControlByControlInv(org.semanticwb.bsc.tracing.Factor value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Control> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasControlInv,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
     public static ControlBase.ClassMgr getControlClassMgr()
@@ -350,6 +378,45 @@ public abstract class ControlBase extends org.semanticwb.bsc.tracing.BSCTracing 
     {
         //Override this method in Control object
         getSemanticObject().setProperty(bsc_prefix, value,false);
+    }
+   /**
+   * Gets all the org.semanticwb.bsc.tracing.Factor
+   * @return A GenericIterator with all the org.semanticwb.bsc.tracing.Factor
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Factor> listControlInvs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Factor>(getSemanticObject().listObjectProperties(bsc_hasControlInv));
+    }
+
+   /**
+   * Gets true if has a ControlInv
+   * @param value org.semanticwb.bsc.tracing.Factor to verify
+   * @return true if the org.semanticwb.bsc.tracing.Factor exists, false otherwise
+   */
+    public boolean hasControlInv(org.semanticwb.bsc.tracing.Factor value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(bsc_hasControlInv,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the ControlInv
+   * @return a org.semanticwb.bsc.tracing.Factor
+   */
+    public org.semanticwb.bsc.tracing.Factor getControlInv()
+    {
+         org.semanticwb.bsc.tracing.Factor ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasControlInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.tracing.Factor)obj.createGenericInstance();
+         }
+         return ret;
     }
 
    /**
