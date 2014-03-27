@@ -64,7 +64,7 @@
 <%
     try {
             //gets Twitter4j instance with account credentials
-            System.out.println( paramRequest.getLocaleString("showing") + " @" + twitterBean.getScreenName() + " " +  paramRequest.getLocaleString("timeline"));
+            //System.out.println( paramRequest.getLocaleString("showing") + " @" + twitterBean.getScreenName() + " " +  paramRequest.getLocaleString("timeline"));
             out.println("<div class=\"timelineTab-title\"><p><strong>" + paramRequest.getLocaleString("timelineLabel") + "</strong> @" + twitterBean.getScreenName() + "</p></div>");
 	    //out.println("<div align=\"center\"><h2>" + "@" + twitterBean.getScreenName() +  " - " + paramRequest.getLocaleString("timelineLabel") + "</h2><br/></div>");
             out.println("<div class=\"bar\" id=\"" + objUri + "/newTweetsAvailable\" dojoType=\"dojox.layout.ContentPane\"></div>");
@@ -73,10 +73,10 @@
             Paging paging = new Paging(); //used to set maxId and count
             paging.count(20);//Gets a number of tweets of timeline. Max value is 200           
             int i = 0;
-            System.out.println("consumer K:" + twitterBean.getConfiguration().getOAuthConsumerKey());
+            /*System.out.println("consumer K:" + twitterBean.getConfiguration().getOAuthConsumerKey());
             System.out.println("consumer S:" + twitterBean.getConfiguration().getOAuthConsumerSecret());
             System.out.println("Access T:" + twitterBean.getConfiguration().getOAuthAccessToken());
-            System.out.println("Access S:" + twitterBean.getConfiguration().getOAuthAccessTokenSecret());
+            System.out.println("Access S:" + twitterBean.getConfiguration().getOAuthAccessTokenSecret());*/
             SocialNetwork socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
             SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
 
@@ -84,11 +84,10 @@
             String postURI = null;
             org.semanticwb.model.User user = paramRequest.getUser();
             SocialUserExtAttributes socialUserExtAttr = null;
-            if(user.isSigned()){
-                System.out.println("logeado pero??:");
+            if(user.isSigned()){                
                 socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
             }
-            System.out.println("SocialUserExtAttributes:" + socialUserExtAttr);
+            
             UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
             //user.hasUserGroup(userSuperAdminGrp)
             for (Status status : twitterBean.getHomeTimeline(paging)){
@@ -103,7 +102,7 @@
                 i++;
             }
             
-            System.out.println("Total tweets:" + i);
+            //System.out.println("Total tweets:" + i);
         }catch (TwitterException te) {
             if(te.getErrorCode() == 88){
                 out.println("<div align=\"center\"><h2>YOU HAVE REACHED YOUR RATE LIMIT FOR THIS RESOURCE</h2><br/></div>");
