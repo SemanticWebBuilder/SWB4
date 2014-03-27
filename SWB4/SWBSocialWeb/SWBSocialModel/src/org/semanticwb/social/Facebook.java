@@ -1927,5 +1927,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         }
         return null;
     }
+
+    @Override
+    public boolean removePostOutfromSocialNet(PostOut postOut) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
     
 }

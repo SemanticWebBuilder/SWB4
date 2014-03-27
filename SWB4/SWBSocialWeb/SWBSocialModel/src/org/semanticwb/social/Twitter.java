@@ -838,6 +838,10 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         return hMapPostOutNets;
     }
 
+    @Override
+    public boolean removePostOutfromSocialNet(PostOut postOut) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
     
     
 }
