@@ -4,8 +4,13 @@ package org.semanticwb.bsc.tracing.base;
    /**
    * Define un riesgo que puede presentarse mediante un elemento del BSC: Objetivo, Entregable, Iniciativa o Indicador. Un riesgo tambien puede presentarse independientemente. 
    */
-public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.bsc.MitigationActionAssignable,org.semanticwb.bsc.Help,org.semanticwb.bsc.MitigationInitiativeAssignable,org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.DepartmentOrganizable,org.semanticwb.model.Activeable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Filterable
+public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.bsc.MitigationActionAssignable,org.semanticwb.model.Traceable,org.semanticwb.bsc.MitigationInitiativeAssignable,org.semanticwb.bsc.DepartmentOrganizable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Help,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupable
 {
+   /**
+   * Representa un archivo físico utilizado a manera de evidencia sobre la realización de alguna actividad.
+   */
+    public static final org.semanticwb.platform.SemanticClass bsc_Deliverable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Deliverable");
+    public static final org.semanticwb.platform.SemanticProperty bsc_deliverableInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#deliverableInv");
    /**
    * Permite seleccionar una alineación. Los posibles valores son Estrategia, Objetivo y Meta
    */
@@ -18,6 +23,10 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
    * La escala de valor deberá relacionar con los factores de riesgos señalados. Los riesgos deben evaluarse en una escala de valor del 1 al 10
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_finAssessmentLikelihood=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#finAssessmentLikelihood");
+   /**
+   * Utilizado para relacionar el año de creación del riesgo
+   */
+    public static final org.semanticwb.platform.SemanticProperty bsc_yearRisk=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#yearRisk");
    /**
    * Define la clasificación de un Riesgo.
    */
@@ -61,13 +70,13 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_iniAssessmentLikelihood=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#iniAssessmentLikelihood");
    /**
-   * Se evalúa en función de la magnitud de los efectos identificados y registrados en el apartado de, en caso de materializarse el Riesgo (10 al de mayor y 1 al de menor magnitud).
-   */
-    public static final org.semanticwb.platform.SemanticProperty bsc_iniAssessmentImpactLevel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#iniAssessmentImpactLevel");
-   /**
    * Elemento BSC(Entregable, Objetivo, Iniciativa o Indicador) relacionado a un riesgo
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_elementRelated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#elementRelated");
+   /**
+   * Se evalúa en función de la magnitud de los efectos identificados y registrados en el apartado de, en caso de materializarse el Riesgo (10 al de mayor y 1 al de menor magnitud).
+   */
+    public static final org.semanticwb.platform.SemanticProperty bsc_iniAssessmentImpactLevel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#iniAssessmentImpactLevel");
    /**
    * Clase que define un factor de riesgo.
    */
@@ -150,6 +159,29 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
         public static boolean hasRisk(String id, org.semanticwb.model.SWBModel model)
         {
             return (getRisk(id, model)!=null);
+        }
+       /**
+       * Gets all org.semanticwb.bsc.tracing.Risk with a determined DeliverableInv
+       * @param value DeliverableInv of the type org.semanticwb.bsc.element.Deliverable
+       * @param model Model of the org.semanticwb.bsc.tracing.Risk
+       * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByDeliverableInv(org.semanticwb.bsc.element.Deliverable value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_deliverableInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.tracing.Risk with a determined DeliverableInv
+       * @param value DeliverableInv of the type org.semanticwb.bsc.element.Deliverable
+       * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByDeliverableInv(org.semanticwb.bsc.element.Deliverable value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_deliverableInv,value.getSemanticObject(),sclass));
+            return it;
         }
        /**
        * Gets all org.semanticwb.bsc.tracing.Risk with a determined ModifiedBy
@@ -373,6 +405,44 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
     {
         super(base);
     }
+   /**
+   * Sets the value for the property DeliverableInv
+   * @param value DeliverableInv to set
+   */
+
+    public void setDeliverableInv(org.semanticwb.bsc.element.Deliverable value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(bsc_deliverableInv, value.getSemanticObject());
+        }else
+        {
+            removeDeliverableInv();
+        }
+    }
+   /**
+   * Remove the value for DeliverableInv property
+   */
+
+    public void removeDeliverableInv()
+    {
+        getSemanticObject().removeProperty(bsc_deliverableInv);
+    }
+
+   /**
+   * Gets the DeliverableInv
+   * @return a org.semanticwb.bsc.element.Deliverable
+   */
+    public org.semanticwb.bsc.element.Deliverable getDeliverableInv()
+    {
+         org.semanticwb.bsc.element.Deliverable ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_deliverableInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.element.Deliverable)obj.createGenericInstance();
+         }
+         return ret;
+    }
 
 /**
 * Gets the SelectingAlignment property
@@ -426,6 +496,24 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
     public void setFinAssessmentLikelihood(int value)
     {
         getSemanticObject().setIntProperty(bsc_finAssessmentLikelihood, value);
+    }
+
+/**
+* Gets the YearRisk property
+* @return String with the YearRisk
+*/
+    public String getYearRisk()
+    {
+        return getSemanticObject().getProperty(bsc_yearRisk);
+    }
+
+/**
+* Sets the YearRisk property
+* @param value long with the YearRisk
+*/
+    public void setYearRisk(String value)
+    {
+        getSemanticObject().setProperty(bsc_yearRisk, value);
     }
    /**
    * Gets all the org.semanticwb.bsc.element.Initiative
@@ -817,24 +905,6 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
     }
 
 /**
-* Gets the IniAssessmentImpactLevel property
-* @return int with the IniAssessmentImpactLevel
-*/
-    public int getIniAssessmentImpactLevel()
-    {
-        return getSemanticObject().getIntProperty(bsc_iniAssessmentImpactLevel);
-    }
-
-/**
-* Sets the IniAssessmentImpactLevel property
-* @param value long with the IniAssessmentImpactLevel
-*/
-    public void setIniAssessmentImpactLevel(int value)
-    {
-        getSemanticObject().setIntProperty(bsc_iniAssessmentImpactLevel, value);
-    }
-
-/**
 * Gets the ElementRelated property
 * @return String with the ElementRelated
 */
@@ -850,6 +920,24 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
     public void setElementRelated(String value)
     {
         getSemanticObject().setProperty(bsc_elementRelated, value);
+    }
+
+/**
+* Gets the IniAssessmentImpactLevel property
+* @return int with the IniAssessmentImpactLevel
+*/
+    public int getIniAssessmentImpactLevel()
+    {
+        return getSemanticObject().getIntProperty(bsc_iniAssessmentImpactLevel);
+    }
+
+/**
+* Sets the IniAssessmentImpactLevel property
+* @param value long with the IniAssessmentImpactLevel
+*/
+    public void setIniAssessmentImpactLevel(int value)
+    {
+        getSemanticObject().setIntProperty(bsc_iniAssessmentImpactLevel, value);
     }
    /**
    * Gets all the org.semanticwb.bsc.tracing.Factor

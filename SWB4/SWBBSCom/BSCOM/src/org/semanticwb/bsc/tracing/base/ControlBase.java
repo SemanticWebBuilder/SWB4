@@ -4,7 +4,7 @@ package org.semanticwb.bsc.tracing.base;
    /**
    * Gestiona la información de un control en un Riesgo. 
    */
-public abstract class ControlBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Roleable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help
+public abstract class ControlBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Help,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupable
 {
    /**
    * Permite almacenar los valores que pueden tomar los determinantes definidos para conocer si son suficientes o no los controles de un riesgo
@@ -330,6 +330,26 @@ public abstract class ControlBase extends org.semanticwb.bsc.tracing.BSCTracing 
     public void setDeterminingControl(String value)
     {
         getSemanticObject().setProperty(bsc_determiningControl, value);
+    }
+
+/**
+* Gets the Prefix property
+* @return String with the Prefix
+*/
+    public String getPrefix()
+    {
+        //Override this method in Control object
+        return getSemanticObject().getProperty(bsc_prefix,false);
+    }
+
+/**
+* Sets the Prefix property
+* @param value long with the Prefix
+*/
+    public void setPrefix(String value)
+    {
+        //Override this method in Control object
+        getSemanticObject().setProperty(bsc_prefix, value,false);
     }
 
    /**
