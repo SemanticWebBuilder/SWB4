@@ -21,6 +21,7 @@
     }
     tipo.setType(SWBFormMgr.TYPE_DOJO);
     tipo.setLang(lang);
+    SWBResourceURL urlAction = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD);
 %>
 <div class="row">
     <div class="col-xs-0 col-sm-1 col-md-3"></div>
@@ -29,14 +30,14 @@
             <div class="panel-heading">
                 <div class="panel-title"><strong><%=paramRequest.getLocaleString("add") + " " + paramRequest.getLocaleString("report")%></strong></div>
             </div>
-            <form action="<%=paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD)%>"
-                  ethod="post" class="form-horizontal" role="form" enctype="multipart/form-data">
+            <form id="upload" action="<%=urlAction%>"
+                   method="post" class="form-horizontal">
                 <div class="panel-body">
                     <%out.println(tipo.getFormHiddens());%>
-                    <div class="form-group">
+                    <div class="form-group" id="divtitle">
                         <label for="" class="col-lg-4 control-label"><%=paramRequest.getLocaleString("title")%> *</label>
                         <div class="col-lg-6">
-                            <input type="text" name="title" id="title" class="form-control"/>
+                            <input type="text" name="title" id="title" class="form-control" required="true" >
                         </div>
                     </div>
                     <div class="form-group">
@@ -64,8 +65,8 @@
                        data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("back")%>">
                         <li class="fa fa-mail-reply"></li> Regresar
                     </a>
-                    <button class="btn btn-success btn-sm" type="submit"
-                            data-placement="bottom" data-toggle="tooltip" data-original-title="<%=paramRequest.getLocaleString("save")%>">
+                    <button class="btn btn-success btn-sm" id="saveForm" type="submit"
+                            data-placement="bottom">
                         <li class="fa fa-save"></li> <%=paramRequest.getLocaleString("save")%>
                     </button>
                 </div>
@@ -76,23 +77,27 @@
 </div>
 <form method="post" action="<%=paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW)%>" name="back"></form>
 <script type="text/javascript">
-                           dojo.require("dijit.Dialog");
-                           dojo.require("dojo.parser");
-                           dojo.require("dijit._Calendar");
-                           dojo.require("dijit.ProgressBar");
-                           dojo.require("dijit.Editor");
-                           dojo.require("dijit.form.Form");
-                           dojo.require("dijit.form.CheckBox");
-                           dojo.require("dijit.form.Textarea");
-                           dojo.require("dijit.form.FilteringSelect");
-                           dojo.require("dijit.form.TextBox");
-                           dojo.require("dijit.form.DateTextBox");
-                           dojo.require("dijit.form.TimeTextBox");
-                           dojo.require("dijit.form.Button");
-                           dojo.require("dijit.form.NumberSpinner");
-                           dojo.require("dijit.form.Slider");
-                           dojo.require("dojox.form.BusyButton");
-                           dojo.require("dojox.form.TimeSpinner");
-                           dojo.require("dojox.form.ValidationTextBox");
+                           
+                            $('#saveForm').click(function() {
+                                console.log('enter jquery');
+                                var $inputs = $('#upload :input');
+                                var cont = 0;
+                                $inputs.each(function() {
+                                    if (this.required) {
+                                        var diverror = $('#div' + this.name);
+                                        if ($(this).val().length === 0) {
+                                            diverror.addClass('has-error');
+                                            cont++;
+                                        } else {
+                                            diverror.removeClass('has-error');
+                                        }
+                                    }
+                                });
+                                if (cont === 0) {
+                                    console.log('submit form...');
+                                    document.getElementById('upload').submit();
+                                }
+                                return false;
+                            });
 </script>
 <script>document.getElementById("title").focus();</script> 
