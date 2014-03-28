@@ -93,7 +93,7 @@ public String renderElement(HttpServletRequest request, SemanticObject obj,
 
         System.out.println("EN EL RECURSO: "+filtros);
 
-        String multiple = "false;";
+        String multiple = "false;";        
         if (!"view".equals(mode)) {
             buffer.append("<input "
                     + "name=\"uploadedfile\" "
@@ -111,6 +111,7 @@ public String renderElement(HttpServletRequest request, SemanticObject obj,
                         buffer.append("onChange: function (result) {   if(validateVideo('" + objUri + sourceCall + editionId + "_defaultAuto', '" + objUri + sourceCall + editionId+ "frmUploadVideo')){dijit.byId('" + objUri + sourceCall + editionId + "_defaultAuto').upload();}; }, \n"); 
                     }else{
                         buffer.append("onChange: function (result) {   this.upload();}, \n");
+                        multiple = "true";//Multiple file uploaders in 'RULE'.
                     }
                     buffer.append("onCancel: function() {console.log('cancelled');}, \n"
                     + "onAbort: function() {console.log('aborted');}, \n");
@@ -129,7 +130,7 @@ public String renderElement(HttpServletRequest request, SemanticObject obj,
                     + "type=\"file\" "
                     + "data-dojo-type=\"dojox.form.Uploader\" "
                     + "label=\"Select File\" "
-                    + "id=\""+objUri+sourceCall+editionId + "_defaultAuto\""
+                    + "id=\""+objUri+sourceCall+editionId + (multiple.equals("true") ? cad : "") +  "_defaultAuto\""
                     + "/>  ");
 //            buffer.append("<input dojoType=\"dojox/form/Uploader\"  "
 //                    + "multiple=\""+multiple+"\" "
