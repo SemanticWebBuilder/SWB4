@@ -22,6 +22,7 @@
 <%@page import="org.semanticwb.model.Descriptiveable"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
+<%@page import="org.semanticwb.social.Country"%>
 
 <!DOCTYPE html>
 <%
@@ -47,7 +48,23 @@
     if (semObj.getGenericInstance() instanceof Descriptiveable) {
         title = ((Descriptiveable) semObj.getGenericInstance()).getDisplayTitle(lang);
     }
+    
+
 %>
+
+<%!    public String reemplazar(String cadena) {
+
+        String original = "·‡‰ÈËÎÌÏÔÛÚˆ˙˘uÒ¡¿ƒ…»ÀÕÃœ”“÷⁄Ÿ‹—Á«";
+        // Cadena de caracteres ASCII que reemplazar·n los originales.
+        String ascii = "aaaeeeiiiooouuunAAAEEEIIIOOOUUUNcC";
+        String output = cadena;
+        for (int i = 0; i < original.length(); i++) {
+            // Reemplazamos los caracteres especiales.
+            output = output.replace(original.charAt(i), ascii.charAt(i));
+        }//for i
+
+        return output;
+    }%>
 
 <!DOCTYPE html>
 <meta charset="utf-8">
@@ -62,7 +79,7 @@
     <script type="text/javascript" >
         function post()
         {
-            alert('entro');
+            //alert('entro');
             var content='';               
             
             var url='<%=urlRender.setMode("exportExcel").setParameter("type", "education").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>';
@@ -91,7 +108,7 @@
             
         function sendform(id, funcion)
         {
-            alert('entro al send form');
+            //alert('entro al send form');
             var _form = dojo.byId(id);
                 
             var xhrArgs = {
@@ -99,11 +116,11 @@
                 handleAs: "text",
                 load: function(data){
                     //dojo.byId("response").innerHTML = "Form posted.";
-                    alert('respuesta: '+data);
+                    //alert('respuesta: '+data);
                     funcion();
                 },
                 error: function(error){
-                    alert('error'+error);
+                    //alert('error'+error);
                     // We'll 404 in the demo, but that's okay.  We don't have a 'postIt' service on the
                     // docs server.
                     //dojo.byId("response").innerHTML = "Form posted.";
@@ -1265,65 +1282,32 @@
         pieLifeStage('all', '0');
     </script>
 
+    <!-- grafica de mexico -->
     <div id="profileGeoLocationParent">
         <div class="grafTit">
-            <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("location", lang)%></h1>
-            <a id="hrefGeo" href="<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+            <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("location", lang)%> MÈxico</h1>
+            <a id="hrefGeo" href="<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang).setParameter("country", "MX")  %>" class="excel">Exportar excel</a>
         </div> 
         <div id="profileGeoLocation">
-        </div>
-        <%
-            ArrayList list = new ArrayList();
-            list.add("Baja California");
-            list.add("Baja California Sur");
-            list.add("Campeche");
-            list.add("Colima");
-            list.add("Distrito Federal");
-            list.add("Durango");
-            list.add("Guanajuato");
-            list.add("Guerrero");
-            list.add("Hidalgo");
-            list.add("Jalisco");
-            list.add("Estado de MÈxico");
-            list.add("Michoac·n");
-            list.add("Morelos");
-            list.add("Nayarit");
-            list.add("Nuevo LeÛn");
-            list.add("Oaxaca");
-            list.add("Puebla");
-            list.add("QuerÈtaro");
-            list.add("Quintana Roo");
-            list.add("San Luis PotosÌ");
-            list.add("Sinaloa");
-            list.add("Sonora");
-            list.add("Tabasco");
-            list.add("Tamaulipas");
-            list.add("Tlaxcala");
-            list.add("Veracruz");
-            list.add("Yucat·n");
-            list.add("Zacatecas");
-            list.add("No definido");
-        %>
+        </div>     
         <div class="grafOptions">
             <div>
                 <input id="todogeo" type="radio" name="geo" value="all" checked="">
                 <label title="Todos" for="todogeo">Todos</label>
                 <div id="todogeoDiv"></div>
             </div>
-            <div>
-                <input id="indegeo" type="radio" name="geo" value="No definido">
-                <label title="No definido" for="indegeo">No definido</label>
-                <div id="indegeoDiv"></div>
-            </div>
+
             <div class="geoselect">
                 <%
-                    Iterator i = list.iterator();
+                    Iterator<CountryState> i = CountryState.ClassMgr.listCountryStates();
                     while (i.hasNext()) {
-                        String value = i.next().toString();
+                        CountryState c = i.next();
+                        if (c.getCountry().getId().equals("MX")) {
                 %>
-                <input id="bcn<%=value%>" type="radio" name="geo" value="<%=value%>">
-                <label for="bcn<%=value%>"><%=value%></label>
+                <input id="bcn<%=c.getTitle()%>" type="radio" name="geo" value="<%=c.getTitle()%>">
+                <label for="bcn<%=c.getTitle()%>"><%=c.getTitle()%></label>
                 <%
+                        }
                     }
                 %>
             </div>
@@ -1343,7 +1327,7 @@
             }
  
             var val = document.querySelector('input[name="geo"]:checked').value;
-            document.getElementById("hrefGeo").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>&filterGeneral="+val ;
+            document.getElementById("hrefGeo").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("country", "MX").setParameter("lang", lang)%>&filterGeneral="+val ;
      
             var opciones =  document.getElementsByName("geo");//.disabled=false;
             for(var i=0; i<opciones.length; i++) {        
@@ -1462,6 +1446,272 @@
                     for (var i=0; i<acentos.length; i++) {
                         filter = filter.replace(acentos.charAt(i), original.charAt(i));
                     }
+                    var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("country", "MX").setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
+                    document.location.href = url;
+                    //document.hrefGeo.href = url;
+                }) 
+                .on("mousemove", function(d, i) {
+                    d3.select(tooltips[0][i])
+                    .style("top", d3.event.pageY-10+"px")
+                    .style("left", d3.event.pageX+10+"px")
+                });
+
+                //Create slices
+                g.append("path")
+                .attr("d", arc)
+                .style("stroke", "white")
+                .style("stroke-width", "2")
+                .style("fill", function(d, i) {
+                    return  d.data.color;
+                });
+
+                svg
+                .append("text")
+                .text("title")
+                .style("text-anchor","middle")
+                .style("fill","black")
+                .style("font-size","10pt")
+                .style("font-weight","bold")
+                .attr("x","0")
+                .attr("y",function(d) {
+                    return - width/2;
+                });
+        
+               
+               // if(cont  == 0){
+                    
+                    ////if(data.length!=1){
+                        for (var x = data.length-1; x < data.length; x++) {  
+                            var to;
+                            to = data[x].valor;
+                            var paraPositives= document.createElement("p");   
+                            var paraNegatives= document.createElement("p");   
+                            var paraNeutrals= document.createElement("p");   
+
+                            var nodPositives = document.createTextNode(to.positivos);
+                            var nodNegatives= document.createTextNode(to.negativos);
+                            var nodNeutrals = document.createTextNode(to.neutros);
+                            
+                            paraPositives.appendChild(nodPositives);
+                            paraNegatives.appendChild(nodNegatives);
+                            paraNeutrals.appendChild(nodNeutrals);
+                        
+                            var element = document.getElementById("todogeoDiv");                            
+                            element.appendChild(paraPositives);
+                            element.appendChild(paraNegatives);
+                            element.appendChild(paraNeutrals);
+                            break;
+                            cont++;
+                        }       
+                        
+                       /* for (var i = 0; i < data.length; i++) {        
+                            if(data[i].label==="No definido"){
+                           
+                                var pPositives= document.createElement("p");   
+                                var pNegatives= document.createElement("p");   
+                                var pNeutrals= document.createElement("p");   
+                                var myJSONObject = data[i].valor; 
+                        
+                                var nodePositives = document.createTextNode(myJSONObject.positivos);
+                                var nodeNegatives = document.createTextNode(myJSONObject.negativos);
+                                var nodeNeutros = document.createTextNode(myJSONObject.neutros );             
+                        
+                                pPositives.appendChild(nodePositives);
+                                pNegatives.appendChild(nodeNegatives);
+                                pNeutrals.appendChild(nodeNeutros);
+                        
+                                var element=document.getElementById("indegeoDiv");
+                                element.appendChild(pPositives);
+                                element.appendChild(pNegatives);
+                                element.appendChild(pNeutrals);
+                            }                       
+                        }  */
+                 //   }
+                    cont++;
+              //  }
+                var opciones =  document.getElementsByName("geo");//.disabled=false;
+                for(var i=0; i<opciones.length; i++) {        
+                    opciones[i].disabled = false;
+                }
+            });
+    
+        }  
+        
+        pieGeo('all', '0'); 
+    </script>
+
+
+
+
+
+
+
+
+<!-- grafica de estados unidos -->
+
+    <div id="profileGeoLocationParentEU">
+        <div class="grafTit">
+            <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("location", lang)%> Estados Unidos</h1>
+            <a id="hrefGeoEU" href="<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang).setParameter("country", "US")%>" class="excel">Exportar excel</a>
+        </div> 
+        <div id="profileGeoLocationEU">
+        </div>     
+        <div class="grafOptions">
+            <div>
+                <input id="todogeoEU" type="radio" name="geoUS" value="all" checked="">
+                <label title="Todos" for="todogeoEU">Todos</label>
+                <div id="todogeoDivEU"></div>
+            </div>
+
+            <div class="geoselectEU">
+                <%
+                    Iterator<CountryState> ieU = CountryState.ClassMgr.listCountryStates();
+                    while (ieU.hasNext()) {
+                        CountryState c = ieU.next();
+                        if (c.getCountry().getId().equals("US")) {
+                %>
+                <input id="bcn<%=c.getTitle()%>" type="radio" name="geoUS" value="<%=c.getTitle()%>">
+                <label for="bcn<%=c.getTitle()%>"><%=c.getTitle()%></label>
+                <%
+                        }
+                    }
+                %>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function pieGeoEU(parametro, cont){
+            document.getElementById('profileGeoLocationEU').innerHTML="";
+            console.log('THE PARAM GEOEU:' + parametro);        
+        
+            var acentosP = "√¿¡ƒ¬»…À ÃÕœŒ“”÷‘Ÿ⁄‹€„‡·‰‚ËÈÎÍÏÌÔÓÚÛˆÙ˘˙¸˚—Ò«Á";
+            var originalP = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
+
+            for (var i=0; i<acentosP.length; i++) {
+                parametro = parametro.replace(acentosP.charAt(i), originalP.charAt(i));
+            }
+ 
+            var val = document.querySelector('input[name="geoUS"]:checked').value;
+            document.getElementById("hrefGeoEU").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("country", "US").setParameter("lang", lang)%>&filterGeneral="+val ;
+     
+            var opciones =  document.getElementsByName("geoUS");//.disabled=false;
+            for(var i=0; i<opciones.length; i++) {        
+                opciones[i].disabled = true;
+            }
+                    
+            var width = 760,
+            height = 300,
+            radius = Math.min(width, height) / 2;
+            var geoArray = new Array();
+
+            var arc = d3.svg.arc()
+            .outerRadius(radius - 20)
+            .innerRadius(radius - 100);
+
+            var pie = d3.layout.pie()
+            .sort(null)
+            .value(function(d) { return d.value2; });
+
+            var arcOver = d3.svg.arc()
+            .outerRadius(radius - 10)
+            .innerRadius(0);
+    
+   
+
+            d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieProfileGeoLocationEU.jsp<%=args%>&filter="+parametro, function(error, data) {
+
+                document.getElementById("profileGeoLocationEU").removeAttribute("style");
+            
+                var svg = d3.select("#profileGeoLocationEU").append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .append("g")
+                .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+                var path = svg.datum(data).selectAll("path")
+                .data(pie)
+                .enter().append("path")
+                .attr("fill", function(d, i) { return d.data.color; })
+                .attr("d", arc)
+                .each(function(d) { this._current = d; }); // store the initial angles
+
+                   
+                d3.selectAll("input[name=geoUS]")
+                .on("change", change);
+      
+                function change() {
+                    //  console.log('entro a change');
+                    var opciones =  document.getElementsByName("geoUS");//.disabled=false;
+                    for(var i=0; i<opciones.length; i++) {        
+                        opciones[i].disabled = true;
+                    }
+                    pieGeoEU(this.value, cont);
+                    var value = this.value;
+                    pie.value(function(d) { return d[value]; }); // change the value function
+                    path = path.data(pie); // compute the new angles
+                    path.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
+                }
+  
+                function arcTween(a) {
+                    var i = d3.interpolate(this._current, a);
+                    this._current = i(0);
+                    return function(t) {
+                        return arc(i(t));
+                    };}
+            
+                var gl = svg.selectAll(".arcOver")
+                .data(pie(data))
+                .enter().append("g")
+                .attr("class", "arcOver")
+                .style("visibility","hidden");
+            
+                gl.append("path")
+                .attr("d", arcOver)
+                .style("fill-opacity", "0.6")
+                .style("fill", function(d) { return d.data.color; });
+
+                var tooltips = svg.select("#profileGeoLocationEU")
+                .data(pie(data))
+                .enter().append("div")
+                .attr("class","chartToolTip")
+                .style("display", "none")
+                .style("position", "absolute")
+                .style("z-index", "10");
+
+                tooltips.append("p")
+                //.append("span")
+                .attr('class', 'd3-tip')      
+                .html(function(d) {                
+                    return ""+d.data.label+"<br><center>"+d.data.value1+"/"+d.data.value2+"%</center>";;
+                });       
+        
+        
+                var g = svg.selectAll(".arc")
+                .data(pie(data))
+                .enter().append("g")
+                .attr("class", "arc")
+                .on("mouseover", function(d, i) {
+                    d3.select(gl[0][i]).style("visibility","visible"); 
+                    d3.select(tooltips[0][i])
+                    .style("display","block");
+                })
+                .on("mouseout", function(d, i) {
+                    d3.select(gl[0][i]).style("visibility","hidden"); 
+                    d3.select(tooltips[0][i])
+                    .style("display","none");
+                    d3.select(gl[0][i]).style("fill",function(d) {
+                        return d.data.color;
+                    });
+                })
+                .on("click", function(d) {
+                    var filter = d.data.label;  
+                    var acentos = "√¿¡ƒ¬»…À ÃÕœŒ“”÷‘Ÿ⁄‹€„‡·‰‚ËÈÎÍÏÌÔÓÚÛˆÙ˘˙¸˚—Ò«Á";
+                    var original = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
+
+                    for (var i=0; i<acentos.length; i++) {
+                        filter = filter.replace(acentos.charAt(i), original.charAt(i));
+                    }
 
                     var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
                     document.location.href = url;
@@ -1494,10 +1744,10 @@
                 });
         
                
-                if(cont  == 0){
+              //  if(cont  == 0){
                     
                     if(data.length!=1){
-                        for (var x = 0; x < data.length; x++) {  
+                        for (var x = data.length-1; x < data.length; x++) {  
                             var to;
                             to = data[x].label3;
                             var paraPositives= document.createElement("p");   
@@ -1513,7 +1763,7 @@
                             paraNegatives.appendChild(nodNegatives);
                             paraNeutrals.appendChild(nodNeutrals);
                         
-                            var element = document.getElementById("todogeoDiv");                            
+                            var element = document.getElementById("todogeoDivEU");                            
                             element.appendChild(paraPositives);
                             element.appendChild(paraNegatives);
                             element.appendChild(paraNeutrals);
@@ -1537,16 +1787,16 @@
                                 pNegatives.appendChild(nodeNegatives);
                                 pNeutrals.appendChild(nodeNeutros);
                         
-                                var element=document.getElementById("indegeoDiv");
+                                var element=document.getElementById("indegeoDivEU");
                                 element.appendChild(pPositives);
                                 element.appendChild(pNegatives);
                                 element.appendChild(pNeutrals);
                             }                       
                         }  
-                    }
+                  //  }
                     cont++;
                 }
-                var opciones =  document.getElementsByName("geo");//.disabled=false;
+                var opciones =  document.getElementsByName("geoUS");//.disabled=false;
                 for(var i=0; i<opciones.length; i++) {        
                     opciones[i].disabled = false;
                 }
@@ -1554,7 +1804,540 @@
     
         }  
         
-        pieGeo('all', '0'); 
+        pieGeoEU('all', '0'); 
     </script>
+
+
+
+
+
+
+    <!--  grafica lenguajes-->
+
+    <div id="profileLanguageParent">
+        <div class="grafTit">
+            <h1> Lenguajes </h1>
+            <a id="hrefLanguage" href="<%=urlRender.setMode("exportExcel").setParameter("type", "languages").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+        </div> 
+        <div id="profileLanguage">
+        </div>     
+        <div class="grafOptions">
+            <div>
+                <input id="todolanguage" type="radio" name="language" value="all" checked="">
+                <label title="Todos" for="todolanguage">Todos</label>
+                <div id="todoLanguageDiv"></div>
+            </div>
+            <div class="languageselect">
+
+                <%
+                    // Iterator languagei=  Language.ClassMgr.listLanguages(SWBContext.getAdminWebSite());
+                    Iterator languagei = Language.ClassMgr.listLanguages(SWBSocialUtil.getConfigWebSite());
+                    while (languagei.hasNext()) {
+                        Language language = (Language) languagei.next();
+
+                %>
+                <input id="bcn<%=language.getTitle()%>" type="radio" name="language" value="<%=reemplazar( language.getTitle())%>">
+                <label for="bcn<%=language.getTitle()%>"><%=language.getTitle()%></label>
+                <%
+                    }
+                %>
+            </div>
+        </div>
+    </div>
+    <script>
+        function pieLanguage(parametro, cont){
+            document.getElementById('profileLanguage').innerHTML="";
+            //console.log('THE PARAM GEO:' + parametro);        
+        
+            var acentosP = "√¿¡ƒ¬»…À ÃÕœŒ“”÷‘Ÿ⁄‹€„‡·‰‚ËÈÎÍÏÌÔÓÚÛˆÙ˘˙¸˚—Ò«Á";
+            var originalP = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
+
+            for (var i=0; i<acentosP.length; i++) {
+                parametro = parametro.replace(acentosP.charAt(i), originalP.charAt(i));
+            }
+ 
+            var val = document.querySelector('input[name="language"]:checked').value;
+            document.getElementById("hrefLanguage").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "languages").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>&filterGeneral="+val ;
+     
+            var opciones =  document.getElementsByName("language");//.disabled=false;
+            for(var i=0; i<opciones.length; i++) {        
+                opciones[i].disabled = true;
+            }
+                    
+            var width = 760,
+            height = 300,
+            radius = Math.min(width, height) / 2;
+            var geoArray = new Array();
+
+            var arc = d3.svg.arc()
+            .outerRadius(radius - 20)
+            .innerRadius(radius - 100);
+
+            var pie = d3.layout.pie()
+            .sort(null)
+            .value(function(d) { return d.value2; });
+
+            var arcOver = d3.svg.arc()
+            .outerRadius(radius - 10)
+            .innerRadius(0);
+    
+   
+
+            d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieLanguage.jsp<%=args%>&filter="+parametro, function(error, data) {
+
+                document.getElementById("profileLanguage").removeAttribute("style");
+            
+                var svg = d3.select("#profileLanguage").append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .append("g")
+                .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+                var path = svg.datum(data).selectAll("path")
+                .data(pie)
+                .enter().append("path")
+                .attr("fill", function(d, i) { return d.data.color; })
+                .attr("d", arc)
+                .each(function(d) { this._current = d; }); // store the initial angles
+
+                   
+                d3.selectAll("input[name=language]")
+                .on("change", change);
+      
+                function change() {
+                    //  console.log('entro a change');
+                    var opciones =  document.getElementsByName("language");//.disabled=false;
+                    for(var i=0; i<opciones.length; i++) {        
+                        opciones[i].disabled = true;
+                    }
+                    pieLanguage(this.value, cont);
+                    var value = this.value;
+                    pie.value(function(d) { return d[value]; }); // change the value function
+                    path = path.data(pie); // compute the new angles
+                    path.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
+                }
+  
+                function arcTween(a) {
+                    var i = d3.interpolate(this._current, a);
+                    this._current = i(0);
+                    return function(t) {
+                        return arc(i(t));
+                    };}
+            
+                var gl = svg.selectAll(".arcOver")
+                .data(pie(data))
+                .enter().append("g")
+                .attr("class", "arcOver")
+                .style("visibility","hidden");
+            
+                gl.append("path")
+                .attr("d", arcOver)
+                .style("fill-opacity", "0.6")
+                .style("fill", function(d) { return d.data.color; });
+
+                var tooltips = svg.select("#profileLanguage")
+                .data(pie(data))
+                .enter().append("div")
+                .attr("class","chartToolTip")
+                .style("display", "none")
+                .style("position", "absolute")
+                .style("z-index", "10");
+
+                tooltips.append("p")
+                //.append("span")
+                .attr('class', 'd3-tip')      
+                .html(function(d) {                
+                    return ""+d.data.label+"<br><center>"+d.data.value1+"/"+d.data.value2+"%</center>";;
+                });       
+        
+        
+                var g = svg.selectAll(".arc")
+                .data(pie(data))
+                .enter().append("g")
+                .attr("class", "arc")
+                .on("mouseover", function(d, i) {
+                    d3.select(gl[0][i]).style("visibility","visible"); 
+                    d3.select(tooltips[0][i])
+                    .style("display","block");
+                })
+                .on("mouseout", function(d, i) {
+                    d3.select(gl[0][i]).style("visibility","hidden"); 
+                    d3.select(tooltips[0][i])
+                    .style("display","none");
+                    d3.select(gl[0][i]).style("fill",function(d) {
+                        return d.data.color;
+                    });
+                })
+                .on("click", function(d) {
+                    var filter = d.data.label;  
+                    var acentos = "√¿¡ƒ¬»…À ÃÕœŒ“”÷‘Ÿ⁄‹€„‡·‰‚ËÈÎÍÏÌÔÓÚÛˆÙ˘˙¸˚—Ò«Á";
+                    var original = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
+
+                    for (var i=0; i<acentos.length; i++) {
+                        filter = filter.replace(acentos.charAt(i), original.charAt(i));
+                    }
+
+                    var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "languages").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
+                    document.location.href = url;
+                }) 
+                .on("mousemove", function(d, i) {
+                    d3.select(tooltips[0][i])
+                    .style("top", d3.event.pageY-10+"px")
+                    .style("left", d3.event.pageX+10+"px")
+                });
+
+                //Create slices
+                g.append("path")
+                .attr("d", arc)
+                .style("stroke", "white")
+                .style("stroke-width", "2")
+                .style("fill", function(d, i) {
+                    return  d.data.color;
+                });
+
+                svg
+                .append("text")
+                .text("title")
+                .style("text-anchor","middle")
+                .style("fill","black")
+                .style("font-size","10pt")
+                .style("font-weight","bold")
+                .attr("x","0")
+                .attr("y",function(d) {
+                    return - width/2;
+                });
+        
+               
+               // if(cont  == 0){
+                    
+                    if(data.length!=1){
+                        for (var x = data.length-1; x < data.length; x++) {  
+                            var to;
+                            to = data[x].valor;
+                            var paraPositives= document.createElement("p");   
+                            var paraNegatives= document.createElement("p");   
+                            var paraNeutrals= document.createElement("p");   
+                            
+
+                            var nodPositives = document.createTextNode(to.positivos);
+                            var nodNegatives= document.createTextNode(to.negativos);
+                            var nodNeutrals = document.createTextNode(to.neutros);
+                            
+                            paraPositives.appendChild(nodPositives);
+                            paraNegatives.appendChild(nodNegatives);
+                            paraNeutrals.appendChild(nodNeutrals);
+                        
+                            var element = document.getElementById("todoLanguageDiv");               // gaby            
+                            element.appendChild(paraPositives);
+                            element.appendChild(paraNegatives);
+                            element.appendChild(paraNeutrals);
+                            break;
+                            cont++;
+                        }       
+                        
+                        for (var i = 0; i < data.length; i++) {        
+                            if(data[i].label==="No definido"){
+                           
+                                var pPositives= document.createElement("p");   
+                                var pNegatives= document.createElement("p");   
+                                var pNeutrals= document.createElement("p");   
+                                var myJSONObject = data[i].valor; 
+                        
+                                var nodePositives = document.createTextNode(myJSONObject.positivos);
+                                var nodeNegatives = document.createTextNode(myJSONObject.negativos);
+                                var nodeNeutros = document.createTextNode(myJSONObject.neutros );             
+                        
+                                pPositives.appendChild(nodePositives);
+                                pNegatives.appendChild(nodeNegatives);
+                                pNeutrals.appendChild(nodeNeutros);
+                        
+                                //var element=document.getElementById("todoLanguageDiv");
+                                //element.appendChild(pPositives);
+                                //element.appendChild(pNegatives);
+                                //element.appendChild(pNeutrals);
+                            }                       
+                        }  
+                 //   }
+                    cont++;
+                }
+                var opciones =  document.getElementsByName("language");//.disabled=false;
+                for(var i=0; i<opciones.length; i++) {        
+                    opciones[i].disabled = false;
+                }
+            });
+    
+        }  
+        
+        pieLanguage('all', '0'); 
+    </script>
+
+
+
+
+
+
+
+    <!--  grafica Countrys-->
+
+    <div id="profileCountryParent">
+        <div class="grafTit">
+            <h1> Global </h1>
+            <a id="hrefCountry" href="<%=urlRender.setMode("exportExcel").setParameter("type", "geolocationCountry").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+        </div> 
+        <div id="profileCountry">
+        </div>     
+        <div class="grafOptions">
+            <div>
+                <input id="todocountry" type="radio" name="country" value="all" checked="">
+                <label title="Todos" for="todocountry">Todos</label>
+                <div id="todoCountryDiv"></div>
+            </div>
+            <div class="countryselect">
+                <input id="bcnNodefinido" type="radio" name="country" value="No definido">
+                <label for="bcnNodefinido">No definido</label>
+                <%
+                    // Iterator languagei=  Language.ClassMgr.listLanguages(SWBContext.getAdminWebSite());
+                    WebSite ss = SWBSocialUtil.getConfigWebSite();
+                    Iterator<Country> country = Country.ClassMgr.listCountries(ss);
+                    while (country.hasNext()) {
+                        Country co = country.next();
+                %>
+                <input id="bcn<%=co.getId()%>" type="radio" name="country" value="<%=reemplazar(co.getTitle())%>">
+                <label for="bcn<%=co.getId()%>"><%=co.getTitle()%></label>
+                <%
+                    }
+                %>
+            </div>
+        </div>
+    </div>
+    <script>
+        function pieCountry(parametro, cont){
+            document.getElementById('profileCountry').innerHTML="";
+            //console.log('THE PARAM GEO:' + parametro);        
+        
+            var acentosP = "√¿¡ƒ¬»…À ÃÕœŒ“”÷‘Ÿ⁄‹€„‡·‰‚ËÈÎÍÏÌÔÓÚÛˆÙ˘˙¸˚—Ò«Á";
+            var originalP = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
+
+            for (var i=0; i<acentosP.length; i++) {
+                parametro = parametro.replace(acentosP.charAt(i), originalP.charAt(i));
+            }
+ 
+            var val = document.querySelector('input[name="country"]:checked').value;
+            document.getElementById("hrefCountry").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "geolocationCountry").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>&filterGeneral="+val ;
+     
+            var opciones =  document.getElementsByName("country");//.disabled=false;
+            for(var i=0; i<opciones.length; i++) {        
+                opciones[i].disabled = true;
+            }
+                    
+            var width = 760,
+            height = 300,
+            radius = Math.min(width, height) / 2;
+            var geoArray = new Array();
+
+            var arc = d3.svg.arc()
+            .outerRadius(radius - 20)
+            .innerRadius(radius - 100);
+
+            var pie = d3.layout.pie()
+            .sort(null)
+            .value(function(d) { return d.value2; });
+
+            var arcOver = d3.svg.arc()
+            .outerRadius(radius - 10)
+            .innerRadius(0);
+    
+   
+
+            d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieMapCountry.jsp<%=args%>&filter="+parametro, function(error, data) {
+
+                document.getElementById("profileCountry").removeAttribute("style");
+            
+                var svg = d3.select("#profileCountry").append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .append("g")
+                .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+                var path = svg.datum(data).selectAll("path")
+                .data(pie)
+                .enter().append("path")
+                .attr("fill", function(d, i) { return d.data.color; })
+                .attr("d", arc)
+                .each(function(d) { this._current = d; }); // store the initial angles
+
+                   
+                d3.selectAll("input[name=country]")
+                .on("change", change);
+      
+                function change() {
+                    //  console.log('entro a change');
+                    var opciones =  document.getElementsByName("country");//.disabled=false;
+                    for(var i=0; i<opciones.length; i++) {        
+                        opciones[i].disabled = true;
+                    }
+                    pieCountry(this.value, cont);
+                    var value = this.value;
+                    pie.value(function(d) { return d[value]; }); // change the value function
+                    path = path.data(pie); // compute the new angles
+                    path.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
+                }
+  
+                function arcTween(a) {
+                    var i = d3.interpolate(this._current, a);
+                    this._current = i(0);
+                    return function(t) {
+                        return arc(i(t));
+                    };}
+            
+                var gl = svg.selectAll(".arcOver")
+                .data(pie(data))
+                .enter().append("g")
+                .attr("class", "arcOver")
+                .style("visibility","hidden");
+            
+                gl.append("path")
+                .attr("d", arcOver)
+                .style("fill-opacity", "0.6")
+                .style("fill", function(d) { return d.data.color; });
+
+                var tooltips = svg.select("#profileCountry")
+                .data(pie(data))
+                .enter().append("div")
+                .attr("class","chartToolTip")
+                .style("display", "none")
+                .style("position", "absolute")
+                .style("z-index", "10");
+
+                tooltips.append("p")
+                //.append("span")
+                .attr('class', 'd3-tip')      
+                .html(function(d) {                
+                    return ""+d.data.label+"<br><center>"+d.data.value1+"/"+d.data.value2+"%</center>";;
+                });       
+        
+        
+                var g = svg.selectAll(".arc")
+                .data(pie(data))
+                .enter().append("g")
+                .attr("class", "arc")
+                .on("mouseover", function(d, i) {
+                    d3.select(gl[0][i]).style("visibility","visible"); 
+                    d3.select(tooltips[0][i])
+                    .style("display","block");
+                })
+                .on("mouseout", function(d, i) {
+                    d3.select(gl[0][i]).style("visibility","hidden"); 
+                    d3.select(tooltips[0][i])
+                    .style("display","none");
+                    d3.select(gl[0][i]).style("fill",function(d) {
+                        return d.data.color;
+                    });
+                })
+                .on("click", function(d) {
+                    var filter = d.data.label;  
+                    var acentos = "√¿¡ƒ¬»…À ÃÕœŒ“”÷‘Ÿ⁄‹€„‡·‰‚ËÈÎÍÏÌÔÓÚÛˆÙ˘˙¸˚—Ò«Á";
+                    var original = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
+
+                    for (var i=0; i<acentos.length; i++) {
+                        filter = filter.replace(acentos.charAt(i), original.charAt(i));
+                    }
+
+                    var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "geolocationCountry").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
+                    document.location.href = url;
+                }) 
+                .on("mousemove", function(d, i) {
+                    d3.select(tooltips[0][i])
+                    .style("top", d3.event.pageY-10+"px")
+                    .style("left", d3.event.pageX+10+"px")
+                });
+
+                //Create slices
+                g.append("path")
+                .attr("d", arc)
+                .style("stroke", "white")
+                .style("stroke-width", "2")
+                .style("fill", function(d, i) {
+                    return  d.data.color;
+                });
+
+                svg
+                .append("text")
+                .text("title")
+                .style("text-anchor","middle")
+                .style("fill","black")
+                .style("font-size","10pt")
+                .style("font-weight","bold")
+                .attr("x","0")
+                .attr("y",function(d) {
+                    return - width/2;
+                });
+        
+               
+               // if(cont  == 0){
+                    
+                    if(data.length!=1){
+                        for (var x = data.length-1; x < data.length; x++) {  
+                            var to;
+                            to = data[x].valor;
+                            var paraPositives= document.createElement("p");   
+                            var paraNegatives= document.createElement("p");   
+                            var paraNeutrals= document.createElement("p");   
+
+                            var nodPositives = document.createTextNode(to.positivos);
+                            var nodNegatives= document.createTextNode(to.negativos);
+                            var nodNeutrals = document.createTextNode(to.neutros);
+                            
+                            paraPositives.appendChild(nodPositives);
+                            paraNegatives.appendChild(nodNegatives);
+                            paraNeutrals.appendChild(nodNeutrals);
+                        
+                            var element = document.getElementById("todoCountryDiv");               // gaby            
+                            element.appendChild(paraPositives);
+                            element.appendChild(paraNegatives);
+                            element.appendChild(paraNeutrals);
+                            break;
+                            cont++;
+                        }       
+                        
+                     /*   for (var i = 0; i < data.length; i++) {        
+                            if(data[i].label==="No definido"){
+                           
+                                var pPositives= document.createElement("p");   
+                                var pNegatives= document.createElement("p");   
+                                var pNeutrals= document.createElement("p");   
+                                var myJSONObject = data[i].valor; 
+                        
+                                var nodePositives = document.createTextNode(myJSONObject.positivos);
+                                var nodeNegatives = document.createTextNode(myJSONObject.negativos);
+                                var nodeNeutros = document.createTextNode(myJSONObject.neutros );             
+                        
+                                pPositives.appendChild(nodePositives);
+                                pNegatives.appendChild(nodeNegatives);
+                                pNeutrals.appendChild(nodeNeutros);
+                        
+                                //var element=document.getElementById("todoLanguageDiv");
+                                //element.appendChild(pPositives);
+                                //element.appendChild(pNegatives);
+                                //element.appendChild(pNeutrals);
+                            }                       
+                        }  */
+                 //   }
+                    cont++;
+                }
+                var opciones =  document.getElementsByName("country");//.disabled=false;
+                for(var i=0; i<opciones.length; i++) {        
+                    opciones[i].disabled = false;
+                }
+            });
+    
+        }  
+        
+        pieCountry('all', '0'); 
+    </script>
+
+
+
+
 
 </div>
