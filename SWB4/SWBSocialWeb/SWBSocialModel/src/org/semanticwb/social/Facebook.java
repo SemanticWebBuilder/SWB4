@@ -21,7 +21,6 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.io.SWBFile;
 import org.semanticwb.io.SWBFileInputStream;
 import org.semanticwb.model.Language;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
@@ -1929,7 +1928,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     }
 
     @Override
-    public boolean removePostOutfromSocialNet(PostOut postOut) {
+    public boolean removePostOutfromSocialNet(PostOut postOut, SocialNetwork socialNet) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
