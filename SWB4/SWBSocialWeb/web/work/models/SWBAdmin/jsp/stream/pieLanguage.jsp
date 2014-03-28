@@ -27,36 +27,29 @@
 
 
 
-<%!
-private  static int positivesGlobal = 0;
+<%!    
+    private static int positivesGlobal = 0;
     private static int negativesGlobal = 0;
     private static int neutralsGlobal = 0;
+
     JSONArray getObject(SemanticObject semObj, String lang, String idModel, String fi) throws Exception {
         ArrayList<PostIn> list = new ArrayList<PostIn>();
 
         HashMap map = new HashMap();
         WebSite ss = SWBSocialUtil.getConfigWebSite();
-        //System.out.println("ss" + ss);
         Iterator i = null;
 
         i = Language.ClassMgr.listLanguages(ss);
-       // i = Language.ClassMgr.listLanguages(SWBContext.getAdminWebSite());
         while (i.hasNext()) {
             Language language = (Language) i.next();
-            //System.out.println("---->" + language.getId());
-            //System.out.println("----.............>" + language.getTitle());
+
             map.put(reemplazar(language.getTitle()), new ArrayList<PostIn>());
 
         }
 
         map.put("No definido", new ArrayList<PostIn>());
 
-
-
         String filter = reemplazar(fi);
-
-
-
 
         int neutrals = 0, positives = 0, negatives = 0, totalPost = 0;
         Iterator<PostIn> itObjPostIns = null;
@@ -73,17 +66,6 @@ private  static int positivesGlobal = 0;
         Iterator c = CountryState.ClassMgr.listCountryStates(model);
         Iterator coun = Country.ClassMgr.listCountries(model);
 
-        // HashMap mapCountry = new HashMap();
-        // while (coun.hasNext()) {
-        //   Country cou = (Country) coun.next();
-        // mapCountry.put(cou.getTitle(), mapCountry.containsKey(cou.getTitle()) ? (Integer.parseInt(mapCountry.get(cou.getTitle()).toString()) + 1) : 0);
-        // }
-
-        int size = 1;
-
-
-
-
         JSONArray node = new JSONArray();
 
 
@@ -93,30 +75,23 @@ private  static int positivesGlobal = 0;
             Language key = null;
 
             String title = "";
-           // System.out.println("******"+postIn.getMsg_lang());
             if (postIn.getMsg_lang() == null) {
-                //System.out.println("ES NULO");
                 title = "No definido";
                 map.put(title, map.containsKey(title) ? addArray(map.get(title), postIn, title) : new ArrayList<PostIn>());
             } else {
-                // if (key != null) { // este puede venir nulo            
-                //  String languageTitle = key.getTitle();
+
                 key = postIn.getMsg_lang();
                 title = reemplazar(key.getTitle());
-              //  System.out.println("title " + key.getId());
-                // map.put(title, map.containsKey(title) ? Integer.parseInt(map.get(title).toString()) + 1 : 0);
+
                 map.put(title, map.containsKey(title) ? addArray(map.get(title), postIn, title) : new ArrayList<PostIn>());
                 totalPost++;
                 //  }
             }
         }
-        //System.out.println("ANTESSSS DEL NULL");
         Iterator it = map.entrySet().iterator();
-        //System.out.println("FILTERRR: " + filter);
         if (filter.equals("all")) {
             while (it.hasNext()) {
                 Map.Entry e = (Map.Entry) it.next();
-                //System.out.println("1...................." + e.getKey() + " - " + e.getValue());
                 ArrayList lista = (ArrayList) e.getValue();
                 getJson(node, lista, totalPost, e.getKey().toString());
 
@@ -132,8 +107,8 @@ private  static int positivesGlobal = 0;
             }
         }
 
-         positivesGlobal = 0;
-        negativesGlobal=0;
+        positivesGlobal = 0;
+        negativesGlobal = 0;
         neutralsGlobal = 0;
         return node;
 
@@ -147,11 +122,10 @@ private  static int positivesGlobal = 0;
         int neutrals = 0, positives = 0, negatives = 0, total = 0;
 
         Iterator i = list.iterator();
-        
+
         while (i.hasNext()) {
-            //System.out.println("TRAE DATOSSS");
             PostIn p = (PostIn) i.next();
-            nombre=  p.getMsg_lang().getTitle();
+            nombre = p.getMsg_lang().getTitle();
             total++;
             if (p.getPostSentimentalType() == 0) {
                 neutrals++;
@@ -162,10 +136,10 @@ private  static int positivesGlobal = 0;
             }
         }
         positivesGlobal = positivesGlobal + positives;
-        negativesGlobal = negativesGlobal +negatives;
-        neutralsGlobal =  neutralsGlobal+ neutrals;
-        
-       
+        negativesGlobal = negativesGlobal + negatives;
+        neutralsGlobal = neutralsGlobal + neutrals;
+
+
         porcentajeNeutrals = ((float) neutrals * 100) / (float) total;
         porcentajePositives = ((float) positives * 100) / (float) total;
         porcentajeNegatives = ((float) negatives * 100) / (float) total;
@@ -196,7 +170,6 @@ private  static int positivesGlobal = 0;
             node_.put("label3", joTotal);
         }
         node.put(node_);
-        //System.out.println("despues");
         return node;
 
 
@@ -212,7 +185,6 @@ private  static int positivesGlobal = 0;
         Iterator i = list.iterator();
 
         while (i.hasNext()) {
-            //System.out.println("TRAE DATOSSS");
             PostIn p = (PostIn) i.next();
             total++;
             if (p.getPostSentimentalType() == 0) {
@@ -314,129 +286,17 @@ private  static int positivesGlobal = 0;
 
     }
 
-    public JSONArray getJsonPositivesNegativesNeutrals(String filter, JSONArray node, int positives, int negatives, int neutrals, float intPorcentajePositives, float intPorcentajeNegatives, float intPorcentajeNeutrals) throws Exception {
-
-        if (neutrals == 0 && positives == 0 && negatives == 0) {
-
-            JSONObject node4 = new JSONObject();
-            node4.put("label", "Sin Datos");
-            node4.put("value1", "0");
-            node4.put("value2", "100");
-            node4.put("color", "#E6E6E6");
-            node4.put("chartclass", "neuClass");
-            JSONObject jor = new JSONObject();
-            jor.put("positivos", "" + positives);
-            jor.put("negativos", "" + negatives);
-            jor.put("neutros", "" + neutrals);
-            node4.put("valor", jor);
-            node.put(node4);
-            return node;
-
-        }
-        if (neutrals > 0) {
-            JSONObject node4 = new JSONObject();
-            node4.put("label", "Neutros");
-            node4.put("value1", "" + neutrals);
-            node4.put("value2", "" + round(intPorcentajeNeutrals));
-            node4.put("label2", "" + filter + "Positivos" + positives + " Negativos" + negatives + " Neutros : " + neutrals);
-            node4.put("color", "#FFD700");
-            node4.put("chartclass", "possClass");
-            //node4.put("label3", "Total de Post: " + totalPost);
-            node.put(node4);
-        }
-
-        if (positives > 0) {
-            JSONObject node5 = new JSONObject();
-            node5.put("label", "Positivos");
-            node5.put("value1", "" + positives);
-            node5.put("value2", "" + round(intPorcentajePositives));
-            node5.put("color", "#008000");
-            node5.put("label2", "");
-            node5.put("chartclass", "possClass");
-            //node5.put("label3", "Total de Post: " + totalPost);
-            node.put(node5);
-        }
-
-        if (negatives > 0) {
-
-            JSONObject node6 = new JSONObject();
-            node6.put("label", "Negativos");
-            node6.put("value1", "" + negatives);
-            node6.put("value2", "" + round(intPorcentajeNegatives));
-            node6.put("color", "#FF0000");
-            node6.put("label2", "");
-            node6.put("chartclass", "possClass");
-            // node6.put("label3", "Total de Post: " + totalPost);
-            node.put(node6);
-        }
-
-
-        return node;
-
-    }
-
     public double round(float number) {
         return Math.rint(number * 100) / 100;
     }
 
-    public String cad(String cadena, PostIn pi) {
-        //System.out.println("----->ENTRO" + cadena);
-        Integer total;
-        Integer positives = 0;
-        Integer negatives = 0;
-        Integer neutrals = 0;
-        String[] phrasesStream = cadena.split(",");
-
-
-        total = Integer.parseInt(phrasesStream[0]) + 1;
-        //System.out.println("total" + total);
-
-        if (pi.getPostSentimentalType() == 0) {
-            //System.out.println("NEUTROS" + Integer.parseInt(phrasesStream[1]));
-            neutrals = Integer.parseInt(phrasesStream[1]) + 1;
-            //System.out.println("total NEUTROS" + neutrals);
-        } else {
-            //System.out.println("neutros" + Integer.parseInt(phrasesStream[1]));
-            neutrals = Integer.parseInt(phrasesStream[1]);
-        }
-        if (pi.getPostSentimentalType() == 1) {
-            //System.out.println("POSITIVOS" + Integer.parseInt(phrasesStream[2]));
-            positives = Integer.parseInt(phrasesStream[2]) + 1;
-        } else {
-            //System.out.println("positivos" + Integer.parseInt(phrasesStream[2]));
-            positives = Integer.parseInt(phrasesStream[2]);
-        }
-        if (pi.getPostSentimentalType() == 2) {
-            //System.out.println("NEGATIVOS" + Integer.parseInt(phrasesStream[3]));
-            negatives = Integer.parseInt(phrasesStream[3]) + 1;
-        } else {
-            //System.out.println("negativos" + Integer.parseInt(phrasesStream[3]));
-            negatives = Integer.parseInt(phrasesStream[3]);
-        }
-        String cade = "";
-        positives.toString();
-        cade += total.toString() + ",";
-        cade += neutrals.toString() + ",";
-        cade += positives.toString() + ",";
-        cade += negatives.toString();
-
-        //System.out.println("cade" + cade);
-        return cade;
-    }
-
     public ArrayList addArray(Object lista, PostIn postIn, String title) {
-        //System.out.println("entro: " + lista + "" + postIn);
         Boolean c = lista instanceof ArrayList;
-        //System.out.println("INSTaNCIA: " + c);
         if (lista == null) {
             lista = new ArrayList<PostIn>();
         }
         ArrayList l = (ArrayList) lista;
-        //System.out.println("TITULO: " + title);
-        //System.out.println("TITULO POST: " + postIn.getGeoStateMap().getTitle());
         l.add(postIn);
-
-
         return l;
 
     }
@@ -462,7 +322,6 @@ private  static int positivesGlobal = 0;
         String lang = request.getParameter("lang");
         String idModel = request.getParameter("idModel");
         String filter = request.getParameter("filter");
-       // System.out.println("Filter: " + filter);
         out.println(getObject(semObj, lang, idModel, filter));
     }
 %>
