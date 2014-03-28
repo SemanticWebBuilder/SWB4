@@ -703,11 +703,11 @@
                                 if (socialNetwork instanceof Facebook && postIn == null && postOut == null) {
                             %>
                             <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
-                                <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">PUBLIC</option>
+                                <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">Público</option>
                                 <%
                                     for (int i = 0; i < selectFacebook.size(); i++) {
                                 %>
-                                <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i)%>"><%=selectFacebook.get(i).getDisplayTitle(user.getLanguage())%></option>
+                                <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i).getId()%>"><%=selectFacebook.get(i).getDisplayTitle(user.getLanguage())%></option>
                                 <%
                                     }
                                 %>
@@ -1109,11 +1109,11 @@
                                 if (socialNetwork instanceof Youtube && postIn == null && postOut == null) {
                             %>
                             <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
-                                <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">PUBLIC</option>
+                                <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">Público</option>
                                 <%
                                     for (int i = 0; i < selectYoutube.size(); i++) {
                                 %>
-                                <option value="<%=socialNetwork.getURI() + "|" + selectYoutube.get(i)%>"><%=selectYoutube.get(i).getDisplayTitle(user.getLanguage())%></option>
+                                <option value="<%=socialNetwork.getURI() + "|" + selectYoutube.get(i).getId()%>"><%=selectYoutube.get(i).getDisplayTitle(user.getLanguage())%></option>
                                 <%
                                     }
                                 %>
@@ -1132,11 +1132,11 @@
                                 if (socialNetwork instanceof Facebook && postIn == null) {
                             %>
                             <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
-                                <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">PUBLIC</option>
+                                <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">Público</option>
                                 <%
                                     for (int i = 0; i < selectFacebook.size(); i++) {
                                 %>
-                                <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i)%>"><%=selectFacebook.get(i).getDisplayTitle(user.getLanguage())%></option>
+                                <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i).getId()%>"><%=selectFacebook.get(i).getDisplayTitle(user.getLanguage())%></option>
                                 <%
                                     }
                                 %>
