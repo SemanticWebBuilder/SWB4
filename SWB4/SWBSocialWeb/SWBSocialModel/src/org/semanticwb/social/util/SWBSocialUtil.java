@@ -2534,7 +2534,7 @@ public class SWBSocialUtil {
             {
                 text=getString2DetectLang(text);
                 //System.out.println("getString2DetectLang Final:"+text);
-                if(text.length()>50) text=text.substring(0, 50);   
+                if(text.length()>100) text=text.substring(0, 100);   
                 Detector detector=DetectorFactory.create();
                 detector.append(text);
                 lang=detector.detect();
