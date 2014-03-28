@@ -134,12 +134,9 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
                 lang = "es";
             }
         }
-        System.out.println("");
         if (response.getAction().equals(SWBResourceURL.Action_ADD)) {
             SWBFormMgr reportMgr = new SWBFormMgr(Report.sclass, response.getWebPage().getWebSite().getSemanticObject(), null);
             reportMgr.clearProperties();
-            System.out.println("title : " + request.getParameter("title"));
-            System.out.println("pagingSize : " + request.getParameter("pagingSize"));
             Iterator<SemanticProperty> propReport = Report.sclass.listProperties();
             while (propReport.hasNext()) {
                 SemanticProperty semProp = propReport.next();
@@ -441,7 +438,7 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
                 cellStyle.setFont(fontTitle);
                 cellTitle.setCellStyle(cellStyle);
                 worksheet.addMergedRegion(new Region(3, (short) 0, 3, (short) (i - 1)));
-                InputStream is = new FileInputStream(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/taskInbox/css/images/cabecera-logo.png");
+                InputStream is = new FileInputStream(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/commons/css/images/cabecera-logo.png");
                 byte[] bytes = IOUtils.toByteArray(is);
                 int pictureIdx = workbook.addPicture(bytes, workbook.PICTURE_TYPE_JPEG);
                 is.close();
@@ -552,7 +549,7 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
                     log.error("error to create " + ou + " -- " + ex.getMessage());
                 }
                 document.open();
-                Image header = Image.getInstance(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/taskInbox/css/images/cabecera-logo.png");
+                Image header = Image.getInstance(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/commons/css/images/cabecera-logo.png");
                 header.setAlignment(Chunk.ALIGN_LEFT);
                 header.rectangle(230, 20);
                 document.add(header);
