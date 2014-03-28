@@ -245,7 +245,7 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
     }
 
     @Override
-    public boolean removePostOutfromSocialNet(PostOut postOut) {
+    public boolean removePostOutfromSocialNet(PostOut postOut, SocialNetwork socialNet) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     

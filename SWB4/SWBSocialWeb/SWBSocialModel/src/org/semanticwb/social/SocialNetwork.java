@@ -207,7 +207,7 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
     }
 
     @Override
-    public boolean removePostOutfromSocialNet(PostOut postOut) {
+    public boolean removePostOutfromSocialNet(PostOut postOut, SocialNetwork socialNet) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

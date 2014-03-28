@@ -1622,4 +1622,10 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         }
         return null;
     }
+    
+    
+    @Override
+    public boolean removePostOutfromSocialNet(PostOut postOut, SocialNetwork socialNet) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

@@ -13,7 +13,7 @@ public interface Listenerable extends org.semanticwb.social.base.ListenerableBas
      
      public JSONObject getUserInfobyId(String userId);
      
-     public boolean removePostOutfromSocialNet(PostOut postOut);
+     public boolean removePostOutfromSocialNet(PostOut postOut, SocialNetwork socialNet);
      
    
 }
