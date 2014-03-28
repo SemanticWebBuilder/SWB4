@@ -125,6 +125,195 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
         }
     }
 
+    @Override
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException, FileNotFoundException {
+        String lang = null;
+        if (response.getUser() != null) {
+            lang = response.getUser().getLanguage();
+            if (lang == null) {
+                lang = "es";
+            }
+        }
+        System.out.println("");
+        if (response.getAction().equals(SWBResourceURL.Action_ADD)) {
+            SWBFormMgr reportMgr = new SWBFormMgr(Report.sclass, response.getWebPage().getWebSite().getSemanticObject(), null);
+            reportMgr.clearProperties();
+            System.out.println("title : " + request.getParameter("title"));
+            System.out.println("pagingSize : " + request.getParameter("pagingSize"));
+            Iterator<SemanticProperty> propReport = Report.sclass.listProperties();
+            while (propReport.hasNext()) {
+                SemanticProperty semProp = propReport.next();
+                if (semProp.isInt()) {
+                    try {
+                        Integer pagingSize = Integer.parseInt(request.getParameter("pagingSize"));
+                        if (pagingSize > 0) {
+                            reportMgr.addProperty(semProp);
+                        }
+                    } catch (NumberFormatException nfe) {
+                    }
+                } else {
+                    reportMgr.addProperty(semProp);
+                }
+            }
+            try {
+                SemanticObject sem = reportMgr.processForm(request);
+                Report report = (Report) sem.createGenericInstance();
+                if (report.getTitle() == null) {
+                    report.setTitle(report.getProcessName().getTitle().trim());
+                } else {
+                    report.setTitle(report.getTitle().trim());
+                }
+                response.setRenderParameter("idReport", report.getId());
+                response.setMode(SWBResourceURL.Mode_EDIT);
+            } catch (FormValidateException ex) {
+                log.error("Error " + ex.getMessage());
+            }
+        } else if (response.getAction().equals(SWBResourceURL.Action_EDIT)) {
+            Report report = Report.ClassMgr.getReport(request.getParameter("idReport"), response.getWebPage().getWebSite());
+            SWBFormMgr reportMgr = new SWBFormMgr(report.getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
+            try {
+                reportMgr.clearProperties();
+                Iterator<SemanticProperty> propReport = Report.sclass.listProperties();
+                while (propReport.hasNext()) {
+                    SemanticProperty semProp = propReport.next();
+                    if (semProp.isInt()) {
+                        try {
+                            Integer pagingSize = Integer.parseInt(request.getParameter("pagingSize"));
+                            if (pagingSize >= 0) {
+                                reportMgr.addProperty(semProp);
+                            }
+                        } catch (NumberFormatException nfe) {
+                        }
+                    } else {
+                        reportMgr.addProperty(semProp);
+                    }
+                }
+                reportMgr.processForm(request);
+                if (report.getTitle() == null) {
+                    report.setTitle(report.getProcessName().getTitle().trim());
+                }
+                response.setRenderParameter("idReport", report.getId());
+                response.setMode(SWBResourceURL.Mode_EDIT);
+            } catch (FormValidateException ex) {
+                log.error("Error " + ex.getMessage());
+            }
+        } else if (response.getAction().equals("addColumn")) {
+            Report report = Report.ClassMgr.getReport(request.getParameter("idReport"), response.getWebPage().getWebSite());
+            String[] items = request.getParameterValues("property");
+            if (items != null) {
+                for (int i = 0; i < items.length; i++) {
+                    ColumnReport col = ColumnReport.ClassMgr.createColumnReport(response.getWebPage().getWebSite());
+                    Iterator<ColumnReport> columna = SWBComparator.sortSortableObject(report.listColumnReports());
+                    Integer indice = 0;
+                    while (columna.hasNext()) {
+                        columna.next();
+                        indice++;
+                    }
+                    if (indice != 0) {
+                        col.setIndex((indice + 1));
+                    } else {
+                        col.setIndex(1);
+                    }
+                    col.setReportName(report);
+                    col.setColumnVisible(true);
+                    col.setDefaultValue("");
+                    col.setDefaultValueMax("");
+                    report.addColumnReport(col);
+                    col.setNameProperty(items[i]);
+                }
+            }
+            response.setRenderParameter("idReport", report.getId());
+            response.setMode(SWBResourceURL.Mode_EDIT);
+        } else if (response.getAction().equals("updateColumn")) {
+            Integer indice = 0;
+            Report report = Report.ClassMgr.getReport(request.getParameter("idReport"), response.getWebPage().getWebSite());
+            Iterator<ColumnReport> col = SWBComparator.sortSortableObject(report.listColumnReports());
+            while (col.hasNext()) {
+                ColumnReport cr = col.next();
+                indice++;
+                if (request.getParameter("delete" + cr.getURI()) != null) {
+                    report.removeColumnReport(cr);
+                    cr.remove();
+                    indice--;
+                } else {
+                    cr.setIndex(indice);
+                    cr.setTitleColumn(request.getParameter("title" + cr.getURI()));
+                    if (request.getParameter("enabledOrder" + cr.getURI()) != null) {
+                        cr.setEnabledOrder(true);
+                    } else {
+                        cr.setEnabledOrder(false);
+                    }
+                    if (request.getParameter("columnVisible" + cr.getURI()) != null) {
+                        cr.setColumnVisible(true);
+                    } else {
+                        cr.setColumnVisible(false);
+                    }
+                    if (request.getParameter("defaultValue" + cr.getURI()) != null) {
+                        if (!request.getParameter("defaultValue" + cr.getURI()).equals("")) {
+                            cr.setDefaultValue(request.getParameter("defaultValue" + cr.getURI()));
+                        } else {
+                            cr.setDefaultValue("");
+                        }
+                    }
+                    if (request.getParameter("defaultValueMax" + cr.getURI()) != null) {
+                        if (request.getParameter("defaultValueMax" + cr.getURI()) != null) {
+                            if (!request.getParameter("defaultValueMax" + cr.getURI()).equals("")) {
+                                cr.setDefaultValueMax(request.getParameter("defaultValueMax" + cr.getURI()));
+                            } else {
+                                cr.setDefaultValueMax("");
+                            }
+                        } else {
+                            cr.setDefaultValueMax("");
+                        }
+                    }
+                }
+                response.setRenderParameter("idReport", report.getId());
+                response.setMode(SWBResourceURL.Mode_EDIT);
+            }
+        } else if (response.getAction().equals("moveUp")) {
+            ColumnReport col = ColumnReport.ClassMgr.getColumnReport(request.getParameter("idColumn"), response.getWebPage().getWebSite());
+            Integer index = col.getIndex();
+            Iterator<ColumnReport> cor = SWBComparator.sortSortableObject(col.getReportName().listColumnReports());
+            while (cor.hasNext()) {
+                ColumnReport colRep = (ColumnReport) cor.next();
+                if (colRep.getIndex() == index) {
+                    colRep.setIndex(index - 1);
+                }
+                if (colRep.getIndex() == (index - 1) && !colRep.getId().equals(col.getId())) {
+                    colRep.setIndex(index);
+                }
+            }
+            response.setRenderParameter("idReport", col.getReportName().getId());
+            response.setMode(SWBResourceURL.Mode_EDIT);
+        } else if (response.getAction().equals("moveDown")) {
+            ColumnReport col = ColumnReport.ClassMgr.getColumnReport(request.getParameter("idColumn"), response.getWebPage().getWebSite());
+            Integer index = col.getIndex();
+            Iterator<ColumnReport> cor = SWBComparator.sortSortableObject(col.getReportName().listColumnReports());
+            while (cor.hasNext()) {
+                ColumnReport colRep = (ColumnReport) cor.next();
+                if (colRep.getIndex() == index) {
+                    colRep.setIndex(index + 1);
+                }
+                if (colRep.getIndex() == (index + 1) && !colRep.getId().equals(col.getId())) {
+                    colRep.setIndex(index);
+                }
+            }
+            response.setRenderParameter("idReport", col.getReportName().getId());
+            response.setMode(SWBResourceURL.Mode_EDIT);
+        } else if (SWBResourceURL.Action_REMOVE.equals(response.getAction())) {
+            Report report = Report.ClassMgr.getReport(request.getParameter("idReport"), response.getWebPage().getWebSite());
+            removeReport(report);
+            report.remove();
+            response.setMode(SWBResourceURL.Mode_VIEW);
+        } else if (response.getAction().equals("removeFileReport")) {
+            FileReport fileReport = FileReport.ClassMgr.getFileReport(request.getParameter("idFileReport"), response.getWebPage().getWebSite());
+            fileReport.remove();
+            response.setMode(SWBResourceURL.Mode_VIEW);
+        } else {
+            response.setMode(SWBResourceURL.Mode_VIEW);
+        }
+    }
+
     public void doShowURSReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, ParsePropertyException, InvalidFormatException {
         WebSite site = paramRequest.getWebPage().getWebSite();
         String inPath = SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/reports/URSReportTemplate.xls";
@@ -168,7 +357,7 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
     }
 
     public void doExportFile(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, ParseException, ServletException {
-        String path = SWBPlatform.getContextPath() + "/swbadmin/jsp/process/reports/ReportResourceDialog.jsp";
+        String path = "/swbadmin/jsp/process/reports/ReportResourceDialog.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(path);
         request.setAttribute("paramRequest", paramRequest);
         request.setAttribute("isSaveOnSystem", isSaveOnSystem());
@@ -718,192 +907,6 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
             rd.include(request, response);
         } catch (ServletException ex) {
             log.error("Error to load " + path + ", " + ex.getMessage());
-        }
-    }
-
-    @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException, FileNotFoundException {
-        String lang = null;
-        if (response.getUser() != null) {
-            lang = response.getUser().getLanguage();
-            if (lang == null) {
-                lang = "es";
-            }
-        }
-        if (response.getAction().equals(SWBResourceURL.Action_ADD)) {
-            SWBFormMgr reportMgr = new SWBFormMgr(Report.sclass, response.getWebPage().getWebSite().getSemanticObject(), null);
-            reportMgr.clearProperties();
-            Iterator<SemanticProperty> propReport = Report.sclass.listProperties();
-            while (propReport.hasNext()) {
-                SemanticProperty semProp = propReport.next();
-                if (semProp.isInt()) {
-                    try {
-                        Integer pagingSize = Integer.parseInt(request.getParameter("pagingSize"));
-                        if (pagingSize > 0) {
-                            reportMgr.addProperty(semProp);
-                        }
-                    } catch (NumberFormatException nfe) {
-                    }
-                } else {
-                    reportMgr.addProperty(semProp);
-                }
-            }
-            try {
-                SemanticObject sem = reportMgr.processForm(request);
-                Report report = (Report) sem.createGenericInstance();
-                if (report.getTitle() == null) {
-                    report.setTitle(report.getProcessName().getTitle().trim());
-                } else {
-                    report.setTitle(report.getTitle().trim());
-                }
-                response.setRenderParameter("idReport", report.getId());
-                response.setMode(SWBResourceURL.Mode_EDIT);
-            } catch (FormValidateException ex) {
-                log.error("Error " + ex.getMessage());
-            }
-        } else if (response.getAction().equals(SWBResourceURL.Action_EDIT)) {
-            Report report = Report.ClassMgr.getReport(request.getParameter("idReport"), response.getWebPage().getWebSite());
-            SWBFormMgr reportMgr = new SWBFormMgr(report.getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
-            try {
-                reportMgr.clearProperties();
-                Iterator<SemanticProperty> propReport = Report.sclass.listProperties();
-                while (propReport.hasNext()) {
-                    SemanticProperty semProp = propReport.next();
-                    if (semProp.isInt()) {
-                        try {
-                            Integer pagingSize = Integer.parseInt(request.getParameter("pagingSize"));
-                            if (pagingSize >= 0) {
-                                reportMgr.addProperty(semProp);
-                            }
-                        } catch (NumberFormatException nfe) {
-                        }
-                    } else {
-                        reportMgr.addProperty(semProp);
-                    }
-                }
-                reportMgr.processForm(request);
-                if (report.getTitle() == null) {
-                    report.setTitle(report.getProcessName().getTitle().trim());
-                }
-                response.setRenderParameter("idReport", report.getId());
-                response.setMode(SWBResourceURL.Mode_EDIT);
-            } catch (FormValidateException ex) {
-                log.error("Error " + ex.getMessage());
-            }
-        } else if (response.getAction().equals("addColumn")) {
-            Report report = Report.ClassMgr.getReport(request.getParameter("idReport"), response.getWebPage().getWebSite());
-            String[] items = request.getParameterValues("property");
-            if (items != null) {
-                for (int i = 0; i < items.length; i++) {
-                    ColumnReport col = ColumnReport.ClassMgr.createColumnReport(response.getWebPage().getWebSite());
-                    Iterator<ColumnReport> columna = SWBComparator.sortSortableObject(report.listColumnReports());
-                    Integer indice = 0;
-                    while (columna.hasNext()) {
-                        columna.next();
-                        indice++;
-                    }
-                    if (indice != 0) {
-                        col.setIndex((indice + 1));
-                    } else {
-                        col.setIndex(1);
-                    }
-                    col.setReportName(report);
-                    col.setColumnVisible(true);
-                    col.setDefaultValue("");
-                    col.setDefaultValueMax("");
-                    report.addColumnReport(col);
-                    col.setNameProperty(items[i]);
-                }
-            }
-            response.setRenderParameter("idReport", report.getId());
-            response.setMode(SWBResourceURL.Mode_EDIT);
-        } else if (response.getAction().equals("updateColumn")) {
-            Integer indice = 0;
-            Report report = Report.ClassMgr.getReport(request.getParameter("idReport"), response.getWebPage().getWebSite());
-            Iterator<ColumnReport> col = SWBComparator.sortSortableObject(report.listColumnReports());
-            while (col.hasNext()) {
-                ColumnReport cr = col.next();
-                indice++;
-                if (request.getParameter("delete" + cr.getURI()) != null) {
-                    report.removeColumnReport(cr);
-                    cr.remove();
-                    indice--;
-                } else {
-                    cr.setIndex(indice);
-                    cr.setTitleColumn(request.getParameter("title" + cr.getURI()));
-                    if (request.getParameter("enabledOrder" + cr.getURI()) != null) {
-                        cr.setEnabledOrder(true);
-                    } else {
-                        cr.setEnabledOrder(false);
-                    }
-                    if (request.getParameter("columnVisible" + cr.getURI()) != null) {
-                        cr.setColumnVisible(true);
-                    } else {
-                        cr.setColumnVisible(false);
-                    }
-                    if (request.getParameter("defaultValue" + cr.getURI()) != null) {
-                        if (!request.getParameter("defaultValue" + cr.getURI()).equals("")) {
-                            cr.setDefaultValue(request.getParameter("defaultValue" + cr.getURI()));
-                        } else {
-                            cr.setDefaultValue("");
-                        }
-                    }
-                    if (request.getParameter("defaultValueMax" + cr.getURI()) != null) {
-                        if (request.getParameter("defaultValueMax" + cr.getURI()) != null) {
-                            if (!request.getParameter("defaultValueMax" + cr.getURI()).equals("")) {
-                                cr.setDefaultValueMax(request.getParameter("defaultValueMax" + cr.getURI()));
-                            } else {
-                                cr.setDefaultValueMax("");
-                            }
-                        } else {
-                            cr.setDefaultValueMax("");
-                        }
-                    }
-                }
-                response.setRenderParameter("idReport", report.getId());
-                response.setMode(SWBResourceURL.Mode_EDIT);
-            }
-        } else if (response.getAction().equals("moveUp")) {
-            ColumnReport col = ColumnReport.ClassMgr.getColumnReport(request.getParameter("idColumn"), response.getWebPage().getWebSite());
-            Integer index = col.getIndex();
-            Iterator<ColumnReport> cor = SWBComparator.sortSortableObject(col.getReportName().listColumnReports());
-            while (cor.hasNext()) {
-                ColumnReport colRep = (ColumnReport) cor.next();
-                if (colRep.getIndex() == index) {
-                    colRep.setIndex(index - 1);
-                }
-                if (colRep.getIndex() == (index - 1) && !colRep.getId().equals(col.getId())) {
-                    colRep.setIndex(index);
-                }
-            }
-            response.setRenderParameter("idReport", col.getReportName().getId());
-            response.setMode(SWBResourceURL.Mode_EDIT);
-        } else if (response.getAction().equals("moveDown")) {
-            ColumnReport col = ColumnReport.ClassMgr.getColumnReport(request.getParameter("idColumn"), response.getWebPage().getWebSite());
-            Integer index = col.getIndex();
-            Iterator<ColumnReport> cor = SWBComparator.sortSortableObject(col.getReportName().listColumnReports());
-            while (cor.hasNext()) {
-                ColumnReport colRep = (ColumnReport) cor.next();
-                if (colRep.getIndex() == index) {
-                    colRep.setIndex(index + 1);
-                }
-                if (colRep.getIndex() == (index + 1) && !colRep.getId().equals(col.getId())) {
-                    colRep.setIndex(index);
-                }
-            }
-            response.setRenderParameter("idReport", col.getReportName().getId());
-            response.setMode(SWBResourceURL.Mode_EDIT);
-        } else if (SWBResourceURL.Action_REMOVE.equals(response.getAction())) {
-            Report report = Report.ClassMgr.getReport(request.getParameter("idReport"), response.getWebPage().getWebSite());
-            removeReport(report);
-            report.remove();
-            response.setMode(SWBResourceURL.Mode_VIEW);
-        } else if (response.getAction().equals("removeFileReport")) {
-            FileReport fileReport = FileReport.ClassMgr.getFileReport(request.getParameter("idFileReport"), response.getWebPage().getWebSite());
-            fileReport.remove();
-            response.setMode(SWBResourceURL.Mode_VIEW);
-        } else {
-            response.setMode(SWBResourceURL.Mode_VIEW);
         }
     }
 
