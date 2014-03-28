@@ -1849,6 +1849,7 @@ public class SocialSentPost extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
 
         String action = response.getAction();
+        User user=response.getUser();
         //System.out.println("SocialSentPost/processAction-1:" + action);
         try {
             if (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo")) {
@@ -1942,15 +1943,45 @@ public class SocialSentPost extends GenericResource {
                 PostOut postOut = (PostOut) so.getGenericInstance();
 
                 //System.out.println("SocialSentPost-REMOVEj2:"+postOut);
-
-                postOut.remove();
-
-                //System.out.println("SocialSentPost-REMOVEj3-LISTO");
-
+                
+                int cont=0;
+                String removedFrom=response.getLocaleString("removedFrom");
+                boolean canRemove=false;
+                Iterator<PostOutNet> itpostOuts=postOut.listPostOutNetInvs();
+                while(itpostOuts.hasNext())
+                {
+                    PostOutNet postOutNet=itpostOuts.next();
+                    if(postOutNet.getStatus()==1)   //Esta publicado el PostOutNet
+                    {
+                        SocialNetwork socialNet=postOutNet.getSocialNetwork();
+                        if(socialNet.removePostOutfromSocialNet(postOut, socialNet))
+                        {
+                            cont++;
+                            postOutNet.remove();
+                            canRemove=canRemove&true;
+                            if(cont>1) removedFrom+=",";
+                            removedFrom+=" "+socialNet.getDisplayTitle(user.getLanguage());
+                        }else{
+                            canRemove=canRemove&false;
+                        }
+                    }else{
+                            canRemove=canRemove&false;
+                    }
+                }
+                if(canRemove)
+                {
+                   postOut.remove(); 
+                }
+                response.setMode(SWBActionResponse.Mode_EDIT);
                 response.setRenderParameter("dialog", "close");
                 response.setRenderParameter("suri", request.getParameter("suri"));
-                response.setRenderParameter("statmsg", response.getLocaleString("postDeleted"));
-                response.setMode(SWBActionResponse.Mode_EDIT);
+                if(cont>0)
+                {
+                    response.setRenderParameter("statmsg", removedFrom);
+                }else{
+                    response.setRenderParameter("statmsg", response.getLocaleString("msgNotRemoved"));
+                }
+                
             } else if ("send2flow".equals(action)) {
                 String id = request.getParameter("suri");
                 SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
