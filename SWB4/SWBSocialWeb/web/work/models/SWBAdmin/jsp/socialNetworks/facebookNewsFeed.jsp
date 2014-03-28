@@ -66,7 +66,7 @@
         
         String user = postRequest(params, "https://graph.facebook.com/me",
                                 "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
-        System.out.println("user:"+ user);
+        //System.out.println("user:"+ user);
         JSONObject userObj = new JSONObject(user);
         if(!userObj.isNull("name")){
             username = userObj.getString("name");
@@ -92,17 +92,17 @@
     String untilPost = parseResponse(fbResponse, out, true, request, paramRequest, NEWS_FEED_TAB, model);//Gets the newest post and saves the ID of the last one    
     SWBResourceURL renderURL = paramRequest.getRenderUrl().setParameter("suri", objUri).setParameter("currentTab", NEWS_FEED_TAB);
     String since = (String)session.getAttribute(objUri + NEWS_FEED_TAB + "since");
-    System.out.println("\n\n\nsession.getAttribute(since):" + session.getAttribute(objUri + NEWS_FEED_TAB +  "since"));
+    //System.out.println("\n\n\nsession.getAttribute(since):" + session.getAttribute(objUri + NEWS_FEED_TAB +  "since"));
 %>
 
 <div dojoType="dojox.layout.ContentPane">
     <script type="dojo/method">
         <%
-            System.out.println("SINCE: " +  since);
+            //System.out.println("SINCE: " +  since);
             
             if(since != null){//Check what this is for
                 String intervalId = (String)session.getAttribute(objUri + "pooling");
-                System.out.println("\n\nSESSION VAR FOR CURRENT FACEBOOK TAB:" + intervalId);
+                //System.out.println("\n\nSESSION VAR FOR CURRENT FACEBOOK TAB:" + intervalId);
         
                 if(intervalId == null){
         %>

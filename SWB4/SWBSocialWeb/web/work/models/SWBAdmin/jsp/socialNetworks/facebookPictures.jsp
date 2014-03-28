@@ -38,7 +38,7 @@
         params.put("access_token", facebookBean.getAccessToken());
         String user = postRequest(params, "https://graph.facebook.com/me",
                                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
-        System.out.println("user:"+ user);
+        //System.out.println("user:"+ user);
         JSONObject userObj = new JSONObject(user);
         if(!userObj.isNull("name")){
             username = userObj.getString("name");
@@ -51,7 +51,7 @@
 <div class="bar" id="<%=objUri%>newPicturesAvailable" dojoType="dojox.layout.ContentPane"></div>
 <div id="<%=objUri%>picturesStream" dojoType="dojox.layout.ContentPane"></div>
 <%
-    System.out.println("SURI jsp: " + paramRequest.getMode().toString());
+    //System.out.println("SURI jsp: " + paramRequest.getMode().toString());
     SWBModel model=WebSite.ClassMgr.getWebSite(facebookBean.getSemanticObject().getModel().getName());
 
     params.put("q", "{\"pictures\": \"SELECT actor_id, created_time, like_info, post_id, attachment, message, description, description_tags, type, comment_info FROM stream WHERE filter_key IN " + 
