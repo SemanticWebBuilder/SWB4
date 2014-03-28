@@ -80,7 +80,7 @@
     int mutualFriendsCount = 0;
     
     if(usrData.length()==1){
-        System.out.println("Displaying user information!!");
+        //System.out.println("Displaying user information!!");
         JSONObject information = usrData.getJSONObject(0);
 
         if(!information.isNull("sex")){
@@ -94,12 +94,12 @@
         profileUrl =  information.getString("profile_url");
         if(!information.isNull("friend_count")){
             friendsCount = information.getInt("friend_count");
-            System.out.println("Friends:" + friendsCount);
+            //System.out.println("Friends:" + friendsCount);
         }
         
         if(!information.isNull("mutual_friend_count")){
             mutualFriendsCount = information.getInt("mutual_friend_count");
-            System.out.println("Mutual" + mutualFriendsCount);
+            //System.out.println("Mutual" + mutualFriendsCount);
         }
         if(!information.isNull("birthday_date")){
             birthday = information.getString("birthday_date");

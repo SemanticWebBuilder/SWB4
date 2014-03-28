@@ -33,14 +33,14 @@
 
 <%
     String objUri = (String) request.getParameter("suri");
-    System.out.println("SURI jsp: " + paramRequest.getMode().toString());
+    //System.out.println("SURI jsp: " + paramRequest.getMode().toString());
     SWBModel model=WebSite.ClassMgr.getWebSite(facebookBean.getSemanticObject().getModel().getName());
     HashMap<String, String> params = new HashMap<String, String>(3);//SELECT uid, name, first_name, middle_name, last_name FROM user WHERE uid = 1921576442
     params.put("access_token", facebookBean.getAccessToken());
     String username="";
     String user = postRequest(params, "https://graph.facebook.com/me",
                             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
-    System.out.println("user:"+ user);
+    //System.out.println("user:"+ user);
     JSONObject userObj = new JSONObject(user);
     if(!userObj.isNull("name")){
         username = userObj.getString("name");

@@ -57,7 +57,7 @@
         params.put("access_token", facebookBean.getAccessToken());
         String user = postRequest(params, "https://graph.facebook.com/me",
                             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
-        System.out.println("user:"+ user);
+        //System.out.println("user:"+ user);
         JSONObject userObj = new JSONObject(user);
         if(!userObj.isNull("name")){
             username = userObj.getString("name");
@@ -75,7 +75,7 @@
         params.put("limit", "50");
         params.put("fields", "id,from,to,message,message_tags,story,story_tags,picture,caption,link,object_id,application,source,name,description,properties,icon,actions,privacy,type,status_type,created_time,likes.summary(true),comments.limit(5).summary(true),place,icon");
         String since = (String)session.getAttribute("since");
-        System.out.println("session.getAttribute(since):" + session.getAttribute("since"));
+        //System.out.println("session.getAttribute(since):" + session.getAttribute("since"));
         
         //GETS ONLY MY POSTS
         String fbResponse = postRequest(params, "https://graph.facebook.com/me/feed",

@@ -28,6 +28,6 @@
     String fbResponse = getRequest(params1, "https://graph.facebook.com/fql",
                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
     //String untilPost = picture(fbResponse, out, true, request, paramRequest);//Gets the newest post and saves the ID of the last one
-    System.out.println("fbresponse:" + fbResponse);
+    //System.out.println("fbresponse:" + fbResponse);
 %>
 </div>

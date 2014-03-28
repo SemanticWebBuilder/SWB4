@@ -65,7 +65,7 @@
     long fanCount = 0;
     
     if(pageData.length()==1){
-        System.out.println("Displaying page information!!");
+        //System.out.println("Displaying page information!!");
         JSONObject information = pageData.getJSONObject(0);
         
         if(!information.isNull("about")){
