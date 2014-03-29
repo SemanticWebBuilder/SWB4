@@ -21,7 +21,6 @@
 
 <%!
     JSONArray getObject(SemanticObject semObj, String lang, String filter) throws Exception {
-        System.out.println("entro a piesocialnetwork");
         int positives = 0, negatives = 0, neutrals = 0, total = 0;
         int totalPost = 0;
         Iterator<PostIn> itObjPostIns = null;
@@ -55,7 +54,6 @@
             cont++;
             SemanticObject sO = (SemanticObject) i.next();
             SocialNetwork s = (SocialNetwork) sO.getGenericInstance();
-            System.out.println("RED SOCIAL: " + s.getTitle());
             //obtenemos los post que estan en un  stream y una red en especifico
             if (semObj.getGenericInstance() instanceof Stream) {
 
@@ -95,7 +93,6 @@
 
     public JSONArray getJsonArray(JSONArray node, Iterator i, String title, int totalPost, String filter, int positives, int negatives, int neutrals, int total) throws Exception {
 
-        System.out.println("entro en getJson array");
 
         float intPorcentaje = 0F;
         int positivesF = 0;
@@ -118,7 +115,6 @@
         }
 
         if (filter.equals("all")) {
-            System.out.println("mostarrar todos");
             intPorcentaje = ((float) total * 100) / (float) totalPost;
             JSONObject node1 = new JSONObject();
             node1.put("label", "" + title);
@@ -136,7 +132,6 @@
             node1.put("label3", "Total de Post: ");
             node.put(node1);
         } else {
-            System.out.println("tiene un filtro");
             float intPorcentajeNeutrals = 0;
             float intPorcentajePositives = 0;
             float intPorcentajeNegatives = 0;
