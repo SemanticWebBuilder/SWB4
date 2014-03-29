@@ -1588,9 +1588,7 @@
             var acentosP = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç";
             var originalP = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
 
-            for (var i=0; i<acentosP.length; i++) {
-                parametro = parametro.replace(acentosP.charAt(i), originalP.charAt(i));
-            }
+       
  
             var val = document.querySelector('input[name="geoUS"]:checked').value;
             document.getElementById("hrefGeoEU").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("country", "US").setParameter("lang", lang)%>&filterGeneral="+val ;
@@ -1706,12 +1704,7 @@
                 })
                 .on("click", function(d) {
                     var filter = d.data.label;  
-                    var acentos = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç";
-                    var original = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
-
-                    for (var i=0; i<acentos.length; i++) {
-                        filter = filter.replace(acentos.charAt(i), original.charAt(i));
-                    }
+                    
 
                     var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
                     document.location.href = url;
