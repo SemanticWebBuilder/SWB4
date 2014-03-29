@@ -209,7 +209,8 @@
 <script src="http://d3js.org/d3.v3.min.js"></script>    
 
 <div id="graficador">
-    <div id="pieGenderParent">
+    
+    <div id="pieSentimientos">
         <div class="grafTit">
             <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("sentimentProm", lang)%>: <%=title%></h1>
             <a href="<%=urlRender.setMode("exportExcel").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("type", "").setParameter("lang", lang)%>" class="excel">Exportar excel</a>
@@ -346,31 +347,53 @@
     </script>
 
 
-    <div id="pieSocialNetwork">
+    <div id="pieRedes">
         <div class="grafTit">
             <h1>Redes Sociales</h1>
             <a id="hrefGender" href="<%=urlRender.setMode("exportExcel").setParameter("type", "socialNetwork").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
         </div>
         <div id="pieNetworkSocial">
         </div>    
-        <div>
+        <div class="grafOptions">
+            <div>
+                <input  type="radio" name="socialNetwork" id="todored" value="all" checked >  
+                <label title="Todos" for="todored">Todos</label>      
+            </div>
             <%
                 Iterator i = socialNetworks.iterator();
             %>
-            <input  type="radio" name="socialNetwork" id="socialNetwork" value="all" checked />  Todos<br>
             <%
                 while (i.hasNext()) {
+            %>
+            <div>
+                <%
                     SemanticObject sO = (SemanticObject) i.next();
                     SocialNetwork sN = (SocialNetwork) sO.getGenericInstance();
-                    System.out.println("SOCIAL" + sN.getURI());
-            %>         
-            <input type="radio" name="socialNetwork" id="socialNetwork" value="<%=sN.getTitle()%>" /> <%=sN.getTitle()%><br>
+                    if (sN instanceof Facebook) {
+                %>
+                <input type="radio" name="socialNetwork" id="grafFacebook" value="<%=sN.getTitle()%>" >
+                <label title="FaceBook" for="grafFacebook"><%=sN.getTitle()%></label>
+                <%
+
+                } else if(sN instanceof Twitter){
+                %>         
+                <input type="radio" name="socialNetwork" id="grafTwitter" value="<%=sN.getTitle()%>" > 
+                <label title="Twitter" for="grafTwitter"><%=sN.getTitle()%></label>
+                <%
+                    }else if(sN instanceof Youtube){
+                %>
+                <input type="radio" name="socialNetwork" id="grafYoutube" value="<%=sN.getTitle()%>" > 
+                <label title="Masculino" for="grafYoutube"><%=sN.getTitle()%></label>
+
+            </div>
             <%
+                       }
                 }
             %>
         </div>
         <div class="clear"></div>
     </div>
+        
 </div>
 <script>    
     function pieNetworkSocial(parametro, cont){   
@@ -429,12 +452,10 @@
     
             }
 
-            document.getElementById("pieNetworkSocial").removeAttribute("style");
             //d3.select("svg") .remove();
             //d3.select("#pieNetworkSocial").remove();
             
             var svg = d3.select("#pieNetworkSocial").append("svg")
-            .attr("id", "amazingViz")
             .attr("width", width)
             .attr("height", height)
             .append("g")
@@ -672,7 +693,8 @@
         }                   
     }
 </script>
-
+  <div class="clear"></div>
+<div>
 <h1>Mensajes recibidos de :<%=title%></h1>
 <div class="pub-redes">
     <p class="titulo">Tipo de filtro que desea:</p> 
@@ -724,14 +746,14 @@
                         <select name="selectAnio2" id="selectAnio2">
                             <option value=""><---Seleccione el año----></option>
                             <%
-                            String a = String.valueOf(calendario.get(Calendar.YEAR));
-                            String b = String.valueOf(calendario.get(Calendar.YEAR)-1);
-                            String c = String.valueOf(calendario.get(Calendar.YEAR)-2);
+                                String a = String.valueOf(calendario.get(Calendar.YEAR));
+                                String b = String.valueOf(calendario.get(Calendar.YEAR) - 1);
+                                String c = String.valueOf(calendario.get(Calendar.YEAR) - 2);
                             %>
                             <option value="<%=a%>"><%=a%></option>
                             <option value="<%=b%>"><%=b%></option>
                             <option value="<%=c%>"><%=c%></option>
-                           
+
                         </select>
                     </td>
                     <td>
@@ -760,14 +782,14 @@
 </div>
 
 
-</div>
+
 <div id="selectgraphBar" dojoType="dijit.layout.ContentPane">
-</div>               
+</div>         
 
 
 <div id="showgraphBar" dojoType="dijit.layout.ContentPane" title="Preguntas" selected="true">
 </div>
-
+</div>
 </body>
 
 
