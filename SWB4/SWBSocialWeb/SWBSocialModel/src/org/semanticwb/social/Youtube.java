@@ -1626,6 +1626,52 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
     
     @Override
     public boolean removePostOutfromSocialNet(PostOut postOut, SocialNetwork socialNet) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        boolean removed = false;
+        try {                        
+            Iterator<PostOutNet> ponets = postOut.listPostOutNetInvs();
+            while(ponets.hasNext()){
+                PostOutNet postoutnet = ponets.next();
+                if(postoutnet.getSocialNetwork().equals(socialNet)){//PostOut enviado de la red social
+                    if(postoutnet.getStatus() == 1){//publicado
+                        System.out.println("1va a borrar!");
+                        if(postoutnet.getPo_socialNetMsgID() != null){//Tiene id
+                            String urlVideo = "http://gdata.youtube.com/feeds/api/users/default/uploads/" + postoutnet.getPo_socialNetMsgID();
+                            URL url;
+                            HttpURLConnection conn = null;
+                            try {
+                                url = new URL(urlVideo);
+                                conn = (HttpURLConnection) url.openConnection();
+                                conn.setDoInput(true);
+                                conn.setDoOutput(true);
+                                conn.setRequestMethod("DELETE");
+                                conn.setUseCaches(false);
+                                conn.setRequestProperty("Host", "gdata.youtube.com");
+                                conn.setRequestProperty("Content-Type", "application/atom+xml");
+                                conn.setRequestProperty("Authorization", "Bearer " + this.getAccessToken());
+                                conn.setRequestProperty("GData-Version", "2");
+                                conn.setRequestProperty("X-GData-Key", "key=" + this.getDeveloperKey());
+                                conn.connect();
+                                System.out.println("Video Borrado:" + getResponse(conn.getInputStream()));
+                                //BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                                //String docxml = readerl.readLine();
+                                //System.out.println("Video Borrado:" + docxml);
+                                
+                                
+                                removed = true;
+                            }catch(Exception ex){
+                                log.error("ERROR deleting video", ex);
+                                //ex.printStackTrace();
+                            }
+                            
+                        }
+                    }
+                }
+            }
+        }catch(Exception e){
+            log.error("Post Not removed!");
+        }
+        return removed;
     }
+    
+    
 }
