@@ -1929,7 +1929,33 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
     @Override
     public boolean removePostOutfromSocialNet(PostOut postOut, SocialNetwork socialNet) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        boolean removed = false;
+        
+        try {                        
+            Iterator<PostOutNet> ponets = postOut.listPostOutNetInvs();
+            while(ponets.hasNext()){
+                PostOutNet postoutnet = ponets.next();
+                if(postoutnet.getSocialNetwork().equals(socialNet)){//PostOut enviado de la red social
+                    if(postoutnet.getStatus() == 1){//publicado
+                        System.out.println("1va a borrar!");
+                        if(postoutnet.getPo_socialNetMsgID() != null){//Tiene id
+                            HashMap<String, String> params = new HashMap<String, String>(2);
+                            params.put("access_token", this.getAccessToken());
+
+                            String fbResponse = "";
+                            fbResponse = postRequest(params, "https://graph.facebook.com/" + postoutnet.getPo_socialNetMsgID(),
+                                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "DELETE");
+                            if(fbResponse.equalsIgnoreCase("true")){
+                                removed = true;
+                                System.out.println("borrado de FB");
+                            }
+                        }
+                    }
+                }
+            }
+        }catch(Exception e){
+            log.error("Post Not removed!");
+        }
+        return removed;
     }
-    
 }

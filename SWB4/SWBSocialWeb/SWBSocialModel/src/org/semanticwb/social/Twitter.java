@@ -840,7 +840,38 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
     @Override
     public boolean removePostOutfromSocialNet(PostOut postOut, SocialNetwork socialNet) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        boolean removed = false;
+        twitter4j.Twitter twitter = new TwitterFactory().getInstance();
+        try {
+            twitter.setOAuthConsumer(this.getAppKey(), this.getSecretKey());
+            AccessToken accessToken = new AccessToken(this.getAccessToken(), this.getAccessTokenSecret());
+            twitter.setOAuthAccessToken(accessToken);
+            
+            Iterator<PostOutNet> ponets = postOut.listPostOutNetInvs();
+            while(ponets.hasNext()){
+                PostOutNet postoutnet = ponets.next();
+                if(postoutnet.getSocialNetwork().equals(socialNet)){//PostOut enviado de la red social
+                    if(postoutnet.getStatus() == 1){//publicado
+                        System.out.println("1va a borrar!");
+                        if(postoutnet.getPo_socialNetMsgID() != null){//Tiene id
+                            System.out.println("2va a borrar!");
+                            Status removedSt = twitter.destroyStatus(Long.parseLong(postoutnet.getPo_socialNetMsgID()));
+                            if(removedSt != null){
+                                System.out.println("3va a borrar!");
+                                if(removedSt.getId() == Long.parseLong(postoutnet.getPo_socialNetMsgID())){
+                                    System.out.println("4va a borrar!");
+                                    removed = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return removed;
+        //throw new UnsupportedOperationException("Not supported yet.");
     }
     
     
