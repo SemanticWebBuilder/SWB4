@@ -38,10 +38,11 @@
 
         java.util.Date date = null;
         Calendar calendario = Calendar.getInstance();        
+      
         
         String anio = request.getParameter("selectedAnio");        
         if(anio.equals("")){        
-        anio = "2014";
+        anio = String.valueOf(calendario.get(Calendar.YEAR)) ;
         }
 
         String selectedAnio = anio;
