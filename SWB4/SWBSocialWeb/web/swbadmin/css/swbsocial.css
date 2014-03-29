@@ -752,7 +752,7 @@ background:none !important; border:none !important; padding:0 !important; color:
 .soria .dijitAccordionTitle          { background:url(images/titleBar.png) repeat-x left top #FAFAFA !important; color:#685521 !important; }
 .soria .dijitAccordionTitle-selected { background:url(images/accordionItemActive.png) repeat-x left top #FAFAFA !important; color:#5F4324 !important; } 
 .soria .dijitTreeNodeSelected .dijitTreeLabel { background:none;} /*Seleccionado*/
-.soria .dijitAccordionContainer-dijitContentPane { background-color:#EAEAEA; padding:0px !important; width:100% !important;} /*FONDO donde viene el árbol*/
+.soria .dijitAccordionContainer-dijitContentPane { background-color:#EAEAEA; padding:0px !important; width:100% !important;} /*FONDO donde viene el ?rbol*/
 .soria .dijitTreeIsRoot { background: url(images/bg-dijitTreeIsRoot.gif) !important; margin-bottom:1px;} /*MARCA*/
 .soria .dijitTreeLabel { font-weight:bold !important;}
 .soria .dijitAccordionArrow { float:right;}
@@ -1528,7 +1528,7 @@ box-shadow:0px 0px 5px #e1e1e1; margin:10px 20px; background:#FBFBFB; padding:10
 
 iframe { border:none;}
 
-#pieGenderParent, #pieEducationParent, #pieRelationParent, #profileGeoLocationParent, #lifeStageParent, #pieSentimientos, #pieRedes	{
+#pieGenderParent, #pieEducationParent, #pieRelationParent, #profileGeoLocationParent,#profileGeoLocationParentEU ,#profileLanguageParent , #profileCountryParent , #lifeStageParent, #pieSentimientos, #pieRedes	{
 border:solid 1px #505B5F; margin:15px 5px; display:inline-block; padding-bottom:10px; background:#FDFDFD;
 border-radius:6px; 
 -moz-border-radius:6px;
@@ -1542,6 +1542,9 @@ border-radius:6px;
 #profileGeoLocationParent { width:600px; height:470px;}
 #pieSentimientos		  { width:600px; height:470px;}
 #pieRedes				  { width:600px; height:470px;}
+#profileGeoLocationParentEU   { width:600px; height:470px;}
+#profileLanguageParent   { width:600px; height:470px;}
+#profileCountryParent   { width:600px; height:470px;}
 
 #pieGenderParent h1			 { width:93%}
 #pieEducationParent h1		 { width:93%}
@@ -1550,12 +1553,18 @@ border-radius:6px;
 #profileGeoLocationParent h1 { width:93%}
 #pieSentimientos h1			 { width:93%}
 #pieRedes h1	    		 { width:93%}
+#profileGeoLocationParentEU h1               { width:93%}
+#profileLanguageParent h1               { width:93%}
+#profileCountryParent h1               { width:93%}
 
 #pieGenderParent .grafOptions div 		 	{ margin:0 20px}
 #pieEducationParent .grafOptions div	 	{ margin:0 15px}
 #pieRelationParent .grafOptions div 		{ margin:0 10px}
 #lifeStageParent .grafOptions div 		 	{ margin:0 0px 10px;}
 #profileGeoLocationParent .grafOptions div	{ margin:0 20px}
+#profileGeoLocationParentEU .grafOptions div	{ margin:0 20px}
+#profileLanguage .grafOptions div	{ margin:0 20px}
+#profileCountry .grafOptions div	{ margin:0 20px}
 
 .grafTit	{ background:#505B5F; text-align:center; padding:5px; height:33px; margin-bottom:10px;
 border-radius:4px 4px 0 0; 
@@ -1590,6 +1599,9 @@ border-radius:0px 0px 4px 4px;
 .grafOptions #todorel + label,
 .grafOptions #todolif + label,
 .grafOptions #todogeo + label,
+.grafOptions #todogeoEU + label,
+.grafOptions #todolanguage + label,
+.grafOptions #todocountry+ label,
 .grafOptions #todored + label  { background:url(images/graf-todos1.png) no-repeat;}
 
 .grafOptions #indegen + label,
@@ -1603,6 +1615,9 @@ border-radius:0px 0px 4px 4px;
 .grafOptions #todorel:checked + label,
 .grafOptions #todolif:checked + label,
 .grafOptions #todogeo:checked + label,
+.grafOptions #todogeoEU:checked + label,
+.grafOptions #todolanguage:checked + label,
+.grafOptions #todocountry:checked + label,
 .grafOptions #todored:checked + label  { background:url(images/graf-todos2.png) no-repeat;}
 
 .grafOptions #indegen:checked + label,
@@ -1660,6 +1675,37 @@ border-radius:4px;
 .grafOptions .geoselect	input[type=radio] + label { background:url(images/radioBttn-Off.png) no-repeat 4px 4px !important }
 .grafOptions .geoselect	input[type=radio]:checked + label { background:url(images/radioBttn-on.png) no-repeat 4px 4px  !important; color:#cc6600}
 
+.grafOptions .geoselectEU	{ border:solid 1px #ececec; width:160px; text-align:left; margin:6px 18px 0 18px !important; height:105px; background:#f7f7f7; font-size:11px; color:#666; overflow-x:hidden; overflow-y:scroll;
+border-radius:4px; 
+-moz-border-radius:4px;
+-webkit-border-radius:4px;
+-khtml-border-radius:4px}
+.grafOptions .geoselectEU	input 	{}
+.grafOptions .geoselectEU	label	{ text-indent:0px !important; height:auto !important; width:100px !important; display:block !important; padding:4px 0 4px 20px;}
+.grafOptions .geoselectEU	input[type=radio] + label { background:url(images/radioBttn-Off.png) no-repeat 4px 4px !important }
+.grafOptions .geoselectEU	input[type=radio]:checked + label { background:url(images/radioBttn-on.png) no-repeat 4px 4px  !important; color:#cc6600}
+
+.grafOptions .languageselect	{ border:solid 1px #ececec; width:160px; text-align:left; margin:6px 18px 0 18px !important; height:105px; background:#f7f7f7; font-size:11px; color:#666; overflow-x:hidden; overflow-y:scroll;
+border-radius:4px; 
+-moz-border-radius:4px;
+-webkit-border-radius:4px;
+-khtml-border-radius:4px}
+.grafOptions .languageselect	input 	{}
+.grafOptions .languageselect	label	{ text-indent:0px !important; height:auto !important; width:100px !important; display:block !important; padding:4px 0 4px 20px;}
+.grafOptions .languageselect	input[type=radio] + label { background:url(images/radioBttn-Off.png) no-repeat 4px 4px !important }
+.grafOptions .languageselect	input[type=radio]:checked + label { background:url(images/radioBttn-on.png) no-repeat 4px 4px  !important; color:#cc6600}
+
+.grafOptions .countryselect	{ border:solid 1px #ececec; width:160px; text-align:left; margin:6px 18px 0 18px !important; height:105px; background:#f7f7f7; font-size:11px; color:#666; overflow-x:hidden; overflow-y:scroll;
+border-radius:4px; 
+-moz-border-radius:4px;
+-webkit-border-radius:4px;
+-khtml-border-radius:4px}
+.grafOptions .countryselect	input 	{}
+.grafOptions .countryselect	label	{ text-indent:0px !important; height:auto !important; width:100px !important; display:block !important; padding:4px 0 4px 20px;}
+.grafOptions .countryselect	input[type=radio] + label { background:url(images/radioBttn-Off.png) no-repeat 4px 4px !important }
+.grafOptions .countryselect	input[type=radio]:checked + label { background:url(images/radioBttn-on.png) no-repeat 4px 4px  !important; color:#cc6600}
+
+
 .grafTit h1	{color:#FFF !important; font-size:14px; letter-spacing:1px; margin:0; float:left; display:block; position:relative; top:9px;}
 .grafTit p { clear:both;}
 
@@ -1668,6 +1714,9 @@ border-radius:4px;
 #pieRelationParent input[type=radio], 
 #pieRelationShipStatusParent input[type=radio], 
 #profileGeoLocationParent input[type=radio], 
+#profileGeoLocationParentEU input[type=radio], 
+#profileLanguageParent input[type=radio], 
+#profileCountryParent input[type=radio], 
 #lifeStageParent input[type=radio], 
 #profileLifeStageParent input[type=radio],
 #pieSentimientos input[type=radio],
@@ -1678,6 +1727,9 @@ border-radius:4px;
 #pieRelation svg,
 #pieRelationShipStatus svg, 
 #profileGeoLocation svg, 
+#profileGeoLocationEU svg, 
+#profileLanguage svg, 
+#profileCountry svg, 
 #lifeStage svg,
 #profileLifeStage svg,
 #pieSentimientos svg,
