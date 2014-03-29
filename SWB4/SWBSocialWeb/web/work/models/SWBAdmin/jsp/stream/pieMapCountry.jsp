@@ -101,9 +101,10 @@
                 key = postIn.getGeoStateMap().getCountry();
                 title = reemplazar(key.getTitle());
                 map.put(title, map.containsKey(title) ? addArray(map.get(title), postIn, title) : new ArrayList<PostIn>());
-                totalPost++;
+
                 //  }
             }
+            totalPost++;
         }
         Iterator it = map.entrySet().iterator();
         if (filter.equals("all")) {
@@ -126,73 +127,95 @@
         positivesGlobal = 0;
         negativesGlobal = 0;
         neutralsGlobal = 0;
+          if (node.length() == 0) {
+            JSONObject node3 = new JSONObject();
+            node3.put("label", "Sin Datos");
+            node3.put("value1", "0");
+            node3.put("value2", "100");
+            node3.put("color", "#E6E6E6");
+            node3.put("chartclass", "neuClass");
+            JSONObject jor = new JSONObject();
+            jor.put("positivos", "" + 0);
+            jor.put("negativos", "" + 0);
+            jor.put("neutros", "" + 0);
+            node3.put("valor", jor);
+            node.put(node3);
+        }
+
         return node;
 
     }
 
     public JSONArray getJson(JSONArray node, ArrayList list, int totalPost, String nombre) throws Exception {
-        float intPorcentaje = ((float) list.size() * 100) / (float) totalPost; //total de post de mexico
-        float porcentajeNeutrals = 0;
-        float porcentajePositives = 0;
-        float porcentajeNegatives = 0;
-        int neutrals = 0, positives = 0, negatives = 0, total = 0;
-
-        Iterator i = list.iterator();
-
-        while (i.hasNext()) {
-            PostIn p = (PostIn) i.next();
-
-            if (p.getGeoStateMap() == null) {
-                nombre = "No definido";
-            } else {
-                nombre = p.getGeoStateMap().getCountry().getTitle(); //;p.getGeoStateMap().getCountry().getTitle();
-            }
-            total++;
-            if (p.getPostSentimentalType() == 0) {
-                neutrals++;
-            } else if (p.getPostSentimentalType() == 1) {
-                positives++;
-            } else if (p.getPostSentimentalType() == 2) {
-                negatives++;
-            }
+        float intPorcentaje = 0;
+        if (totalPost > 0) {
+            intPorcentaje = ((float) list.size() * 100) / (float) totalPost; //total de post de mexico
         }
-
-        positivesGlobal = positivesGlobal + positives;
-        negativesGlobal = negativesGlobal + negatives;
-        neutralsGlobal = neutralsGlobal + neutrals;
-
-        porcentajeNeutrals = ((float) neutrals * 100) / (float) total;
-        porcentajePositives = ((float) positives * 100) / (float) total;
-        porcentajeNegatives = ((float) negatives * 100) / (float) total;
-
-        //   System.out.println("desoues de datsos");
-        JSONObject node_ = new JSONObject();
-        node_.put("label", "" + nombre);
-        node_.put("value1", "" + total);
-        node_.put("value2", "" + round(intPorcentaje));
-        JSONObject joChild = new JSONObject();
-        joChild.put("positivos", "" + positivesGlobal);
-        joChild.put("negativos", "" + negativesGlobal);
-        joChild.put("neutros", "" + neutralsGlobal);
-        node_.put("valor", joChild);
-        if (positives > negatives && positives > neutrals) {
-            node_.put("color", "#008000");
-        } else if (negatives > neutrals) {
-            node_.put("color", "#FF0000");
+        if (intPorcentaje == 0) {
+            return node;
         } else {
-            node_.put("color", "#FFD700");
+            float porcentajeNeutrals = 0;
+            float porcentajePositives = 0;
+            float porcentajeNegatives = 0;
+            int neutrals = 0, positives = 0, negatives = 0, total = 0;
+
+            Iterator i = list.iterator();
+
+            while (i.hasNext()) {
+                PostIn p = (PostIn) i.next();
+
+                if (p.getGeoStateMap() == null) {
+                    nombre = "No definido";
+                } else {
+                    nombre = p.getGeoStateMap().getCountry().getTitle(); //;p.getGeoStateMap().getCountry().getTitle();
+                }
+                total++;
+                if (p.getPostSentimentalType() == 0) {
+                    neutrals++;
+                } else if (p.getPostSentimentalType() == 1) {
+                    positives++;
+                } else if (p.getPostSentimentalType() == 2) {
+                    negatives++;
+                }
+            }
+
+            positivesGlobal = positivesGlobal + positives;
+            negativesGlobal = negativesGlobal + negatives;
+            neutralsGlobal = neutralsGlobal + neutrals;
+
+            porcentajeNeutrals = ((float) neutrals * 100) / (float) total;
+            porcentajePositives = ((float) positives * 100) / (float) total;
+            porcentajeNegatives = ((float) negatives * 100) / (float) total;
+
+            //   System.out.println("desoues de datsos");
+            JSONObject node_ = new JSONObject();
+            node_.put("label", "" + nombre);
+            node_.put("value1", "" + total);
+            node_.put("value2", "" + round(intPorcentaje));
+            JSONObject joChild = new JSONObject();
+            joChild.put("positivos", "" + positivesGlobal);
+            joChild.put("negativos", "" + negativesGlobal);
+            joChild.put("neutros", "" + neutralsGlobal);
+            node_.put("valor", joChild);
+            if (positives > negatives && positives > neutrals) {
+                node_.put("color", "#008000");
+            } else if (negatives > neutrals) {
+                node_.put("color", "#FF0000");
+            } else {
+                node_.put("color", "#FFD700");
+            }
+            node_.put("label2", "" + nombre + ": " + total + " -     Positivos : " + positives + "  Negativos: " + negatives + "  Neutros : " + neutrals);
+            node_.put("chartclass", "possClass");
+            if (true) {
+                JSONObject joTotal = new JSONObject();
+                joTotal.put("positivos", "" + positives);
+                joTotal.put("negativos", "" + negatives);
+                joTotal.put("neutros", "" + neutrals);
+                node_.put("valor", joTotal);
+            }
+            node.put(node_);
+            return node;
         }
-        node_.put("label2", "" + nombre + ": " + total + " -     Positivos : " + positives + "  Negativos: " + negatives + "  Neutros : " + neutrals);
-        node_.put("chartclass", "possClass");
-        if (true) {
-            JSONObject joTotal = new JSONObject();
-            joTotal.put("positivos", "" + positives);
-            joTotal.put("negativos", "" + negatives);
-            joTotal.put("neutros", "" + neutrals);
-            node_.put("label3", joTotal);
-        }
-        node.put(node_);
-        return node;
 
 
     }

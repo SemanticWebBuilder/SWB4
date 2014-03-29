@@ -48,7 +48,7 @@
     if (semObj.getGenericInstance() instanceof Descriptiveable) {
         title = ((Descriptiveable) semObj.getGenericInstance()).getDisplayTitle(lang);
     }
-    
+
 
 %>
 
@@ -1286,7 +1286,7 @@
     <div id="profileGeoLocationParent">
         <div class="grafTit">
             <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("location", lang)%> México</h1>
-            <a id="hrefGeo" href="<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang).setParameter("country", "MX")  %>" class="excel">Exportar excel</a>
+            <a id="hrefGeo" href="<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang).setParameter("country", "MX")%>" class="excel">Exportar excel</a>
         </div> 
         <div id="profileGeoLocation">
         </div>     
@@ -1476,35 +1476,35 @@
                 .attr("y",function(d) {
                     return - width/2;
                 });
-        
+
                
-               // if(cont  == 0){
+                if(cont  == 0){
                     
                     ////if(data.length!=1){
-                        for (var x = data.length-1; x < data.length; x++) {  
-                            var to;
-                            to = data[x].valor;
-                            var paraPositives= document.createElement("p");   
-                            var paraNegatives= document.createElement("p");   
-                            var paraNeutrals= document.createElement("p");   
+                    for (var x = data.length-1; x < data.length; x++) {  
+                        var to;
+                        to = data[x].valor;
+                        var paraPositives= document.createElement("p");   
+                        var paraNegatives= document.createElement("p");   
+                        var paraNeutrals= document.createElement("p");   
 
-                            var nodPositives = document.createTextNode(to.positivos);
-                            var nodNegatives= document.createTextNode(to.negativos);
-                            var nodNeutrals = document.createTextNode(to.neutros);
+                        var nodPositives = document.createTextNode(to.positivos);
+                        var nodNegatives= document.createTextNode(to.negativos);
+                        var nodNeutrals = document.createTextNode(to.neutros);
                             
-                            paraPositives.appendChild(nodPositives);
-                            paraNegatives.appendChild(nodNegatives);
-                            paraNeutrals.appendChild(nodNeutrals);
+                        paraPositives.appendChild(nodPositives);
+                        paraNegatives.appendChild(nodNegatives);
+                        paraNeutrals.appendChild(nodNeutrals);
                         
-                            var element = document.getElementById("todogeoDiv");                            
-                            element.appendChild(paraPositives);
-                            element.appendChild(paraNegatives);
-                            element.appendChild(paraNeutrals);
-                            break;
-                            cont++;
-                        }       
+                        var element = document.getElementById("todogeoDiv");                            
+                        element.appendChild(paraPositives);
+                        element.appendChild(paraNegatives);
+                        element.appendChild(paraNeutrals);
+                        break;
+                        cont++;
+                    }       
                         
-                       /* for (var i = 0; i < data.length; i++) {        
+                    /* for (var i = 0; i < data.length; i++) {        
                             if(data[i].label==="No definido"){
                            
                                 var pPositives= document.createElement("p");   
@@ -1526,9 +1526,9 @@
                                 element.appendChild(pNeutrals);
                             }                       
                         }  */
-                 //   }
-                    cont++;
-              //  }
+                }
+                cont++;
+                //  }
                 var opciones =  document.getElementsByName("geo");//.disabled=false;
                 for(var i=0; i<opciones.length; i++) {        
                     opciones[i].disabled = false;
@@ -1547,7 +1547,7 @@
 
 
 
-<!-- grafica de estados unidos -->
+    <!-- grafica de estados unidos -->
 
     <div id="profileGeoLocationParentEU">
         <div class="grafTit">
@@ -1744,12 +1744,12 @@
                 });
         
                
-              //  if(cont  == 0){
-                    
-                    if(data.length!=1){
+                if(cont  == 0){
+              
+                 //   if(data.length!=1){
                         for (var x = data.length-1; x < data.length; x++) {  
                             var to;
-                            to = data[x].label3;
+                            to = data[x].valor;
                             var paraPositives= document.createElement("p");   
                             var paraNegatives= document.createElement("p");   
                             var paraNeutrals= document.createElement("p");   
@@ -1793,7 +1793,7 @@
                                 element.appendChild(pNeutrals);
                             }                       
                         }  
-                  //  }
+                   // }
                     cont++;
                 }
                 var opciones =  document.getElementsByName("geoUS");//.disabled=false;
@@ -1836,7 +1836,7 @@
                         Language language = (Language) languagei.next();
 
                 %>
-                <input id="bcn<%=language.getTitle()%>" type="radio" name="language" value="<%=reemplazar( language.getTitle())%>">
+                <input id="bcn<%=language.getTitle()%>" type="radio" name="language" value="<%=reemplazar(language.getTitle())%>">
                 <label for="bcn<%=language.getTitle()%>"><%=language.getTitle()%></label>
                 <%
                     }
@@ -2007,11 +2007,14 @@
                     return - width/2;
                 });
         
-               
-               // if(cont  == 0){
+                var o=   parseInt(data.length);
+                var z =  o - 1;
+
+                if(cont  == 0){
                     
-                    if(data.length!=1){
-                        for (var x = data.length-1; x < data.length; x++) {  
+                  //  if(data.length!=1){
+                       
+                        for (var x =z; x < data.length; x++) {  
                             var to;
                             to = data[x].valor;
                             var paraPositives= document.createElement("p");   
@@ -2057,7 +2060,7 @@
                                 //element.appendChild(pNeutrals);
                             }                       
                         }  
-                 //   }
+                  //  }
                     cont++;
                 }
                 var opciones =  document.getElementsByName("language");//.disabled=false;
@@ -2274,10 +2277,11 @@
                 });
         
                
-               // if(cont  == 0){
-                    
-                    if(data.length!=1){
-                        for (var x = data.length-1; x < data.length; x++) {  
+                if(cont  == 0){
+                    var temp =  parseInt(data.length);
+                    var fin= temp -1 ; 
+                   // if(data.length!=1){
+                        for (var x = fin; x < data.length; x++) {  
                             var to;
                             to = data[x].valor;
                             var paraPositives= document.createElement("p");   
@@ -2300,7 +2304,7 @@
                             cont++;
                         }       
                         
-                     /*   for (var i = 0; i < data.length; i++) {        
+                        /*   for (var i = 0; i < data.length; i++) {        
                             if(data[i].label==="No definido"){
                            
                                 var pPositives= document.createElement("p");   
@@ -2322,7 +2326,7 @@
                                 //element.appendChild(pNeutrals);
                             }                       
                         }  */
-                 //   }
+                //    }
                     cont++;
                 }
                 var opciones =  document.getElementsByName("country");//.disabled=false;
