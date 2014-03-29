@@ -27,6 +27,7 @@
 <%@page import="java.util.HashMap"%>
 <%@page import="org.json.JSONException"%>
 <%@page import="org.json.JSONObject"%>
+<%@page import="java.util.Calendar"%>
 
 <!DOCTYPE html>
 <%
@@ -86,9 +87,13 @@
     listMeses.add("Diciembre");
     Iterator iMeses = listMeses.iterator();
 
+    Calendar calendario = Calendar.getInstance();
+    String year = String.valueOf(calendario.get(Calendar.YEAR));
+
     ArrayList listAnio = new ArrayList();
-    listAnio.add("2013");
-    listAnio.add("2012");
+    listAnio.add(year);
+    listAnio.add(String.valueOf(Integer.parseInt(year) - 1));
+    listAnio.add(String.valueOf(Integer.parseInt(year) - 2));
 
     Iterator iAnio = listAnio.iterator();
 
@@ -718,10 +723,15 @@
                     <td>
                         <select name="selectAnio2" id="selectAnio2">
                             <option value=""><---Seleccione el año----></option>
-                            <option value="2012">2012</option>
-                            <option value="2013">2013</option>
-                            <option value="2014">2014</option>
-                            <option value="2015">2015</option>                                                   
+                            <%
+                            String a = String.valueOf(calendario.get(Calendar.YEAR));
+                            String b = String.valueOf(calendario.get(Calendar.YEAR)-1);
+                            String c = String.valueOf(calendario.get(Calendar.YEAR)-2);
+                            %>
+                            <option value="<%=a%>"><%=a%></option>
+                            <option value="<%=b%>"><%=b%></option>
+                            <option value="<%=c%>"><%=c%></option>
+                           
                         </select>
                     </td>
                     <td>
