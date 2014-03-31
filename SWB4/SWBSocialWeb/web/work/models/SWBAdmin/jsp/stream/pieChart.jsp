@@ -359,13 +359,14 @@
                 <input  type="radio" name="socialNetwork" id="todored" value="all" checked >  
                 <label title="Todos" for="todored">Todos</label>      
             </div>
+           
             <%
                 Iterator i = socialNetworks.iterator();
             %>
             <%
                 while (i.hasNext()) {
             %>
-            <div>
+             <div>
                 <%
                     SemanticObject sO = (SemanticObject) i.next();
                     SocialNetwork sN = (SocialNetwork) sO.getGenericInstance();
@@ -385,9 +386,12 @@
                 <input type="radio" name="socialNetwork" id="grafYoutube" value="<%=sN.getTitle()%>" > 
                 <label title="Masculino" for="grafYoutube"><%=sN.getTitle()%></label>
 
-            </div>
+          
             <%
                        }
+                    %>
+                      </div>
+                    <%
                 }
             %>
         </div>
