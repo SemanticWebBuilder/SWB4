@@ -366,23 +366,26 @@
             <%
                 while (i.hasNext()) {
             %>
-             <div>
+           
                 <%
                     SemanticObject sO = (SemanticObject) i.next();
                     SocialNetwork sN = (SocialNetwork) sO.getGenericInstance();
                     if (sN instanceof Facebook) {
                 %>
+                  <div>
                 <input type="radio" name="socialNetwork" id="grafFacebook" value="<%=sN.getTitle()%>" >
                 <label title="FaceBook" for="grafFacebook"><%=sN.getTitle()%></label>
                 <%
 
                 } else if(sN instanceof Twitter){
-                %>         
+                %>     
+                  <div>
                 <input type="radio" name="socialNetwork" id="grafTwitter" value="<%=sN.getTitle()%>" > 
                 <label title="Twitter" for="grafTwitter"><%=sN.getTitle()%></label>
                 <%
                     }else if(sN instanceof Youtube){
                 %>
+                  <div>
                 <input type="radio" name="socialNetwork" id="grafYoutube" value="<%=sN.getTitle()%>" > 
                 <label title="Masculino" for="grafYoutube"><%=sN.getTitle()%></label>
 
