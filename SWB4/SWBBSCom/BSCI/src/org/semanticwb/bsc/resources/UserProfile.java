@@ -100,6 +100,7 @@ public class UserProfile extends GenericAdmResource {
 
         //////////////////////MUESTRA FORM PARA SUBIR FOTO//////////////////////////////////////////
         toReturn.append("<div id=\"frmUser\">");
+        toReturn.append("<table height=\"200px\"><tr><td>HOLA</td></tr></table>");
         toReturn.append("<form id=\"formUserPhoto\" class=\"swbform\" action=\"" + urlPhoto + "\" method=\"post\">\n");
         toReturn.append(formMgrPhoto.getFormHiddens());
         toReturn.append("<div id=\"Photo\" class=\"foto\">");
@@ -236,7 +237,7 @@ public class UserProfile extends GenericAdmResource {
         toReturn.append("</form>\n");
         toReturn.append("</div>");
         toReturn.append("<div id=\"chiefDIV\"></div>");
-        out.write(toReturn.toString());
+        out.println(toReturn.toString());
     }
 
     public void uploadPhoto(HttpServletRequest request, SemanticObject obj, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -245,7 +246,7 @@ public class UserProfile extends GenericAdmResource {
         try {
             mgr.processForm(request);
         } catch (FormValidateException ex) {
-            Logger.getLogger(UserProfile2.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserProfile.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -435,7 +436,7 @@ public class UserProfile extends GenericAdmResource {
             try {
                 SemanticObject semob = formMgrPhoto.processForm(request);
             } catch (FormValidateException ex) {
-                Logger.getLogger(UserProfile2.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UserProfile.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if (SWBResourceURL.Action_EDIT.equalsIgnoreCase(action)) {
             SWBFormMgr mgr = new SWBFormMgr(cw.getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
@@ -443,7 +444,7 @@ public class UserProfile extends GenericAdmResource {
                 SemanticObject semob = mgr.processForm(request);
                 ContactWork cw2 = (ContactWork) semob.createGenericInstance();
             } catch (FormValidateException ex) {
-                Logger.getLogger(UserProfile2.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UserProfile.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if (Action_CHANGEPASSWORD.equals(action)) {
             String curPassword = request.getParameter("curPassword") == null
