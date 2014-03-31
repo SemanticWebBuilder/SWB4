@@ -52,8 +52,9 @@
         int cont = 0;
         while (i.hasNext()) {
             cont++;
-            SemanticObject sO = (SemanticObject) i.next();
-            SocialNetwork s = (SocialNetwork) sO.getGenericInstance();
+            SemanticObject semanticObject= (SemanticObject) i.next();
+            SocialNetwork s = (SocialNetwork) semanticObject.createGenericInstance();
+
             //obtenemos los post que estan en un  stream y una red en especifico
             if (semObj.getGenericInstance() instanceof Stream) {
 
