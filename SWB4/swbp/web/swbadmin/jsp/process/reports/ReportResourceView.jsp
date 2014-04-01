@@ -29,9 +29,8 @@
 <%
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
     boolean isSaveOnSystem = Boolean.parseBoolean(request.getAttribute("isSaveOnSystem").toString());
-    SWBResourceURL urlReport = paramRequest.getRenderUrl().setMode("generate").setCallMethod(SWBParamRequest.Call_DIRECT);
+    //SWBResourceURL urlReport = paramRequest.getRenderUrl().setMode("generate").setCallMethod(SWBParamRequest.Call_DIRECT);
     SWBResourceURL url = paramRequest.getRenderUrl();
-    Integer contador = 0;
     String lang = null;
     if (paramRequest.getUser() != null) {
         lang = paramRequest.getUser().getLanguage();
@@ -40,22 +39,12 @@
         }
     }
     Report obj = Report.ClassMgr.getReport(request.getParameter("idReport"), paramRequest.getWebPage().getWebSite());
-    int pageNum = 1;
-    int maxPages = (Integer) request.getAttribute("maxPages");
-    if (request.getParameter("page") != null && !request.getParameter("page").trim().equals("")) {
-        pageNum = Integer.valueOf(request.getParameter("page"));
-    }
-    String sortType = null;
-    if (request.getAttribute("sort") != null) {
-        sortType = request.getAttribute("sort").toString();
-    }
-    String dataType = null;
-    if (request.getAttribute("dataType") != null) {
-        dataType = request.getAttribute("dataType").toString();
-    }
+    String uriObject = "";
+    String idProperty = "";
+    String dataType = "";
     String des = "";
-    if (request.getAttribute("des") != null) {
-        des = request.getAttribute("des").toString();
+    if (request.getParameter("des") != null) {
+        des = request.getParameter("des").toString();
     }
     SWBResourceURL urlDialog = paramRequest.getRenderUrl().setMode("dialog").setCallMethod(SWBResourceURL.Call_DIRECT);
     urlDialog.setParameter("idReport", obj.getId());
@@ -110,19 +99,22 @@
             <thead>
                 <tr>
                     <%
-
                         while (colum.hasNext()) {
                             ColumnReport colu = colum.next();
-                            //System.out.println("propiedad: " + colu.getNameProperty().substring(colu.getNameProperty().indexOf("|") + 1));
                             SemanticProperty sp = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(colu.getNameProperty().substring(colu.getNameProperty().indexOf("|") + 1));
                             SWBResourceURL order = paramRequest.getRenderUrl();
                             order.setParameter("idReport", obj.getId());
-                            order.setParameter("sort", colu.getNameProperty());
+                            uriObject = colu.getNameProperty().substring(0, colu.getNameProperty().lastIndexOf("|"));
+                            idProperty = colu.getNameProperty().substring((colu.getNameProperty().lastIndexOf("|") + 1), colu.getNameProperty().length());
+                            order.setParameter("sort", idProperty);
+                            order.setParameter("uriObject", uriObject);
+                            //order.setParameter("page", request.getParameter("page"));
                             if (sp.isDataTypeProperty()) {
                                 order.setParameter("dataType", "isDataTypeProperty");
                             } else {
                                 order.setParameter("dataType", "isObjectProperty");
                             }
+
                             if (des.equals("des")) {
                                 order.setParameter("des", "asc");
                             } else {
@@ -131,14 +123,12 @@
                             if (colu.isColumnVisible()) {
                     %>
                     <th class="tban-id" title="<%=colu.getTitleColumn() == null ? sp.getDisplayName(lang) : colu.getTitleColumn()%>">
-                        <a <%if (colu.isEnabledOrder()) {%>href="<%=order%>" style="color: white; text-decoration: none;">
-                            <%if (des.equals("des")) {%>
-                            <li class="fa fa-sort-by-alphabet"></li>
-                                <%} else {%>
-                            <li class="fa fa-sort-by-alphabet-alt"></li>
-                                <%}%>
-                                <%}%>
-                            <label style="color: white; text-decoration: none;cursor: pointer;"><%=colu.getTitleColumn() == null ? sp.getDisplayName(lang) : colu.getTitleColumn()%></label>
+                        <a <%if (colu.isEnabledOrder()) {%>href="<%=order%>"<%}%> >
+                            <%if (colu.isEnabledOrder()) {%>
+                            <span class="fa fa-sort"></span>
+                            <%}%>
+                            
+                            <%=colu.getTitleColumn() == null ? sp.getDisplayName(lang) : colu.getTitleColumn()%>
                         </a>
                     </th>
                     <%}
@@ -163,9 +153,7 @@
                             while (iar.hasNext()) {
                                 ItemAwareReference iarr = (ItemAwareReference) iar.next();
                                 if (iarr.getItemAware() != null && pins.getItemAwareReference().getProcessObject() != null) {
-                                    contador++;
                                     if (iarr.getItemAware().equals(ite)) {
-                                        //System.out.println("the array: " + array[1]);
                                         SemanticProperty spt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(array[1]);
                 %>
                 <td>
@@ -180,12 +168,8 @@
                             }
                         } else if (!spt.isInverseOf() && spt.isObjectProperty()) {
                             if (iarr.getProcessObject().getSemanticObject().getObjectProperty(spt) != null) {
-                                
-                                String ou = forMgr.renderElement(request,spt, SWBFormMgr.MODE_VIEW);
-                                
+                                String ou = forMgr.renderElement(request, spt, SWBFormMgr.MODE_VIEW);
                                 out.print(forMgr.renderElement(request, spt, SWBFormMgr.MODE_VIEW));
-                                System.out.println("element: " + forMgr.renderElement(request, spt, SWBFormMgr.MODE_VIEW));
-                                System.out.println("label: " + forMgr.renderLabel(request, spt, SWBFormMgr.MODE_VIEW));
                             } else {
                                 out.print("--");
                             }
@@ -202,58 +186,32 @@
         </table>
     </div>
     <!--/BEGIN PAGINATION-->
-    <div class="swbp-pagination">
-        <span class="swbp-pagination-info pull-left"><%=paramRequest.getLocaleString("page")%>: <%=pageNum%> <%=paramRequest.getLocaleString("of")%> <%=maxPages%></span>
-        <%if (maxPages > 1) {%>
-        <div class="swbp-pagination-nav pull-right">
-            <ul class="pagination pagination-sm">
-                <%
-                    int pagSlice = 5;
-                    int sliceIdx = 1;
-                    int start = 1;
-                    int end = pagSlice * sliceIdx;
-
-                    if (pageNum > end) {
-                        do {
-                            sliceIdx++;
-                            end = pagSlice * sliceIdx;
-                        } while (pageNum > end);
-                    }
-                    end = pagSlice * sliceIdx;
-
-                    if (end > maxPages) {
-                        end = maxPages;
-                    }
-
-                    start = (end - pagSlice) + 1;
-                    if (start < 1) {
-                        start = 1;
-                    }
-
-                    SWBResourceURL nav = paramRequest.getRenderUrl();
-                    nav.setParameter("sort", sortType);
-                    nav.setParameter("page", String.valueOf(start - 1));
-
-                    nav.setParameter("des", des);
-                    nav.setParameter("dataType", dataType);
-                    nav.setParameter("idReport", obj.getId());
-                    if (sliceIdx != 1) {
-                        nav.setParameter("page", String.valueOf(pageNum - 1));
-                %><li><a href="<%=nav%>">&laquo;</a></li><%
-                    }
-                    for (int k = start; k <= end; k++) {
-                        nav.setParameter("page", String.valueOf(k));
-                    %>
-                <li <%=(k == pageNum ? "class=\"active\"" : "")%>><a href="<%=nav%>"><%=k%></a></li>
-                    <%
-                        }
-                        if (end < maxPages) {
-                            nav.setParameter("page", String.valueOf(pageNum + 1));
-                    %><li><a href="<%=nav%>">&raquo;</a></li><%
-                            }
-                        }%>
-        </div>
-    </div>
+    <%
+        String sort = request.getParameter("sort");
+        if (sort != null && sort.length() > 0) {
+            sort = "sort|" + sort;
+        } else {
+            sort = "";
+        }
+        dataType = request.getParameter("dataType");
+        if (dataType != null && dataType.length() > 0) {
+            dataType = "dataType|" + dataType;
+        } else {
+            dataType = "";
+        }
+        String idReport = "idReport|" + obj.getId();
+        uriObject = "uriObject|" + uriObject;
+        des = "des|" + des;
+    %>
+    <jsp:include page="/swbadmin/jsp/process/commons/pagination.jsp" flush="true">
+        <jsp:param name="navUrlParams" value="<%=sort%>"/>
+        <jsp:param name="navUrlParams" value="<%=idReport%>"/>
+        <jsp:param name="navUrlParams" value="<%=dataType%>"/>
+        <jsp:param name="navUrlParams" value="<%=uriObject%>"/>
+        <jsp:param name="navUrlParams" value="<%=des%>"/>
+        <jsp:param name="showPageOfPage" value="true"/>
+        <jsp:param name="pageParam" value="page"/>
+    </jsp:include>  
     <!--/END PAGINATION-->
 </div>
 <%} else {%>
@@ -277,9 +235,7 @@
                    {
                        count++;
                        document.getElementById('out').style.display = 'block';
-                       //alert(count);
                        document.getElementById('count').innerHTML = count;
-                       //setInterval(function(){myTimer()},2000);
                        return response;
                    },
                    error: function(response, ioArgs) {
@@ -291,23 +247,4 @@
                    handleAs: "text"
                });
            }
-</script>
-<script type="text/javascript">
-    dojo.require("dijit.Dialog");
-    dojo.require("dojo.parser");
-    dojo.require("dijit._Calendar");
-    dojo.require("dijit.ProgressBar");
-    dojo.require("dijit.Editor");
-    dojo.require("dijit.form.Form");
-    dojo.require("dijit.form.CheckBox");
-    dojo.require("dijit.form.Textarea");
-    dojo.require("dijit.form.FilteringSelect");
-    dojo.require("dijit.form.TextBox");
-    dojo.require("dijit.form.DateTextBox");
-    dojo.require("dijit.form.TimeTextBox");
-    dojo.require("dijit.form.Button");
-    dojo.require("dijit.form.NumberSpinner");
-    dojo.require("dijit.form.Slider");
-    dojo.require("dojox.form.BusyButton");
-    dojo.require("dojox.form.TimeSpinner");
 </script>
