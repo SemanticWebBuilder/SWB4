@@ -685,7 +685,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         Iterator<String> files = message.listFiles();
         if(files.hasNext()){//If at least one file found
             String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
-            urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + message.getEncodedURI();
+            urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + message.getEncodedURI() + "&neturi=" + this.getEncodedURI();
         }
         
         Map<String, String> params = new HashMap<String, String>(2);
@@ -784,7 +784,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         //String urlLocalPost = "http://localhost:8080/swbadmin/jsp/social/postViewFiles.jsp?uri=" + photo.getEncodedURI();
         //String uriTemp = "http://" + request.getServerName() + ":" + request.getServerPort() + SWBPortal.getWebWorkPath() + "/models/SWBAdmin/jsp/oauth/callback.jsp";
         String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
-        String urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + photo.getEncodedURI();
+        String urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + photo.getEncodedURI() + "&neturi=" + this.getEncodedURI();
         try {
             String photoToPublish = "";
             String additionalPhotos = "";
@@ -915,7 +915,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         JSONObject jsonResponse = null;
         //String urlLocalPost = "http://localhost:8080/swbadmin/jsp/social/postViewFiles.jsp?uri=" + video.getEncodedURI();
         String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
-        String urlLocalPost = absolutePath + "/swbadmin/jsp/social/ViewPostFiles?uri=" + video.getEncodedURI();
+        String urlLocalPost = absolutePath + "/swbadmin/jsp/social/ViewPostFiles?uri=" + video.getEncodedURI() + "&neturi=" + this.getEncodedURI();
 
         try {
             String videoPath = SWBPortal.getWorkPath() + video.getWorkPath() + "/" + video.getVideo();
@@ -1419,7 +1419,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         url.append("encodeURI('").append(getRedirectUrl(request, paramRequest)).append("')+");
         url.append("'&scope='+");
         //url.append("encodeURIComponent('publish_stream,read_stream')+");
-        url.append("encodeURIComponent('user_about_me,friends_about_me,user_activities,friends_activities,user_birthday,friends_birthday,user_checkins,friends_checkins,user_education_history,friends_education_history,user_events,friends_events,user_groups,friends_groups,user_hometown,friends_hometown,user_interests,friends_interests,user_likes,friends_likes,user_location,friends_location,user_notes,friends_notes,user_photos,friends_photos,user_relationships,friends_relationships,user_relationship_details,friends_relationship_details,user_religion_politics,friends_religion_politics,user_status,friends_status,user_videos,friends_videos,user_website,friends_website,email,manage_pages,publish_stream,read_stream,read_page_mailboxes,read_insights,ads_management,user_questions,user_subscriptions,user_work_history,user_games_activity,friends_subscriptions,friends_work_history,friends_questions,friends_games_activity,publish_actions,create_note,friends_online_presence,share_item,status_update')+");
+        url.append("encodeURIComponent('user_about_me,friends_about_me,user_activities,friends_activities,user_birthday,friends_birthday,user_checkins,friends_checkins,user_education_history,friends_education_history,user_events,friends_events,user_groups,friends_groups,user_hometown,friends_hometown,user_interests,friends_interests,user_likes,friends_likes,user_location,friends_location,user_notes,friends_notes,user_photos,friends_photos,user_relationships,friends_relationships,user_relationship_details,friends_relationship_details,user_religion_politics,friends_religion_politics,user_status,friends_status,user_videos,friends_videos,user_website,friends_website,email,manage_pages,publish_stream,read_stream,read_page_mailboxes,read_insights,ads_management,user_questions,user_subscriptions,user_work_history,user_games_activity,friends_subscriptions,friends_work_history,friends_questions,friends_games_activity,publish_actions,create_note,friends_online_presence,share_item,status_update,manage_pages')+");
         url.append("'&state='+");
         url.append("'").append(state).append("'");
         return url.toString();

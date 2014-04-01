@@ -1246,7 +1246,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                 Iterator<String> files = message.listFiles();
                 if(files.hasNext()){//If at least one file found
                     String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
-                    urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + message.getEncodedURI();
+                    urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + message.getEncodedURI() + "&neturi=" + this.getEncodedURI();
                     comment += " " + urlLocalPost;
                 }
                 
