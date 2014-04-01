@@ -70,11 +70,33 @@
 
 <%
 
-if(request.getParameter("uri") != null) 
+if(request.getParameter("uri") != null && request.getParameter("netUri")!=null) 
 {
     SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("uri"));
     if(semObj!=null)
     {
+        //Conteo de Hits de Attaches al PostOut
+        PostOut postOut=(PostOut)semObj.createGenericInstance();  
+        if(postOut!=null)
+        {
+            SocialNetwork socialNet=(SocialNetwork)SemanticObject.createSemanticObject(request.getParameter("netUri")).createGenericInstance(); 
+            if(socialNet!=null)
+            {
+                Iterator<PostOutNet> itPostOutNets=PostOutNet.ClassMgr.listPostOutNetBySocialPost(postOut);
+                while(itPostOutNets.hasNext())
+                {
+                    PostOutNet postOutNet=itPostOutNets.next();
+                    if(postOutNet.getSocialNetwork().getURI().equals(socialNet.getURI()))
+                    {
+                        postOutNet.setHitsAttach(postOutNet.getHitsAttach()+1); 
+                        break;
+                    }
+                }
+            }
+        }
+        //Termina Conteo de Hits de Attaches al PostOut
+        
+        
         ArrayList aPostFiles=new ArrayList();
         ArrayList aPostImages=new ArrayList();
         ArrayList aPostVideos=new ArrayList();
