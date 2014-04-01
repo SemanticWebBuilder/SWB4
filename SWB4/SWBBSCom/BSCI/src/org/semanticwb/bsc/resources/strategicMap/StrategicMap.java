@@ -12,7 +12,11 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-import org.apache.batik.dom.svg.SVGDOMImplementation;
+import org.apache.batik.transcoder.TranscoderException;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.PNGTranscoder;
+import org.apache.fop.svg.PDFTranscoder;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.accessory.DifferentiatorGroup;
@@ -28,13 +32,11 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 
 /**
  * Recurso Mapa Estrat&eacute;gico. Permite generar un recurso para SWB que se
@@ -46,6 +48,21 @@ import org.w3c.dom.Text;
  * @since 1.0
  */
 public class StrategicMap extends GenericResource {
+    
+    public static final String Mode_PNGImage = "png";
+    public static final String Mode_PDFDocument = "pdf";
+
+    @Override
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        final String mode = paramRequest.getMode();
+        if(Mode_PNGImage.equals(mode)) {
+            doGetPNGImage(request, response, paramRequest);
+        }else if(Mode_PDFDocument.equals(mode)) {
+            doGetPDFDocument(request, response, paramRequest);
+        }else {
+            super.processRequest(request, response, paramRequest);
+        }
+    }
 
     /**
      * Genera la vista del mapa Estrat&eacute;gico.
@@ -67,30 +84,108 @@ public class StrategicMap extends GenericResource {
         
         Resource base = getResourceBase();
         WebSite webSite = base.getWebSite();
-        PrintWriter out = response.getWriter();
+        if(webSite instanceof BSC)
+        {
+            PrintWriter out = response.getWriter();
+            BSC model = (BSC)webSite;
+            Document dom = model.getDom();
+            Document map = null;
+            try {
+                map = getDom(dom);
+            }catch(XPathExpressionException xpathe) {
+                System.out.println("XPath con problemas... "+xpathe);
+            }
+            String SVGjs = null;
+            try {
+                 SVGjs = getSvg(map);
+            }catch(XPathExpressionException xpe) {
+                System.out.println(xpe.toString());
+            }
+            out.println(SVGjs);
+            
+            final String suri = request.getParameter("suri");
+            SWBResourceURL exportUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
+            out.println(" <form id=\"svgform\" accept-charset=\"utf-8\" method=\"post\" action=\"#\">");
+            out.println("  <input type=\"hidden\" name=\"suri\" value=\""+suri+"\" />");
+            out.println("  <input type=\"hidden\" id=\"data\" name=\"data\" value=\"\" />");
+            out.println("  <input type=\"button\" value=\"Imagen\" onclick=\"getFile('"+exportUrl.setMode(Mode_PNGImage)+"')\"  />");
+            out.println("  <input type=\"button\" value=\"PDF\" onclick=\"getFile('"+exportUrl.setMode(Mode_PDFDocument)+"')\"  />");
+            out.println(" </form>");
+            
+            out.println(" <script type=\"text/javascript\">");
+            out.println("  function getFile(url) {");
+            out.println("   var form = document.getElementById('svgform');");
+            out.println("   var svg = document.getElementsByTagName('svg')[0];");
+            out.println("   var svg_xml = (new XMLSerializer).serializeToString(svg);");
+            out.println("   form.action = url;");
+            out.println("   form['data'].value = svg_xml;");
+            out.println("   form.submit();");
+            out.println("  };");
+            out.println(" </script>");   
+        }     
+    }
+    
+    public void doGetPNGImage(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        WebSite webSite = getResourceBase().getWebSite();
+        response.setContentType("image/png; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Content-Disposition", "attachment; filename=\""+webSite.getTitle()+".png\"");
         
-        if (webSite instanceof BSC) {
-            Period period = getPeriod(request);
-            if(period != null) {
-                //Resource base = paramRequest.getResourceBase();
-                BSC bsc = (BSC)webSite;
-                StringBuilder svg = new StringBuilder();
-                svg.append("\n<div id=\"emap_"+bsc.getId()+"\">\n");
-//                try {
-//                    Document dom = bsc.getDom(period);    
-//                    svg.append(getSvg(dom));
-//                }catch(XPathException xpe) {
-//                }
-                svg.append("</div>\n");
-//                CausalMap map = new CausalMap();
-//                CausalArrows arrows = new CausalArrows(map);
-//                out.println(arrows.draw(bsc, period, base));
-            } else {
-                out.println("<p>" + paramRequest.getLocaleString("errorPeriod") + "</p>");
+        
+        if(webSite instanceof BSC) {
+//            Period period = getPeriod(request);
+//            if(period != null) {
+//
+//            } else {
+//                out.println("<p>" + paramRequest.getLocaleString("errorPeriod") + "</p>");
+//            }
+            final String data = request.getParameter("data");
+            Document svg = SWBUtils.XML.xmlToDom(data);
+            PNGTranscoder t = new PNGTranscoder();
+            //t.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, new Float(.8));
+            TranscoderInput input = new TranscoderInput(svg);
+            TranscoderOutput output = new TranscoderOutput(response.getOutputStream());
+            try {
+                t.transcode(input, output);
+                response.getOutputStream().flush();
+                response.getOutputStream().close();
+            }catch(TranscoderException tcdre) {
             }
         }
     }
 
+    public void doGetPDFDocument(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        WebSite webSite = getResourceBase().getWebSite();
+        response.setContentType("application/pdf; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Content-Disposition", "attachment; filename=\""+webSite.getTitle()+".pdf\"");
+        
+        if(webSite instanceof BSC) {
+//            Period period = getPeriod(request);
+//            if(period != null) {
+//
+//            } else {
+//                out.println("<p>" + paramRequest.getLocaleString("errorPeriod") + "</p>");
+//            }
+            final String data = request.getParameter("data");
+            Document svg = SWBUtils.XML.xmlToDom(data);
+            PDFTranscoder t = new PDFTranscoder();
+            //t.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, new Float(.8));
+            TranscoderInput input = new TranscoderInput(svg);
+            TranscoderOutput output = new TranscoderOutput(response.getOutputStream());
+            try {
+                t.transcode(input, output);
+                response.getOutputStream().flush();
+                response.getOutputStream().close();
+            }catch(TranscoderException tcdre) {
+            }
+        }
+    }
+    
     /**
      * Permite capturar y almacenar la informaci&oacute;n para configurar un
      * mapa estrat&eacute;gico
@@ -691,6 +786,25 @@ public class StrategicMap extends GenericResource {
         out.println(sb.toString());
     }
 
+    @Override
+    public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/xml:; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Content-Disposition", "attachment; filename=\"abc.pdf\"");
+        
+        WebSite webSite = getResourceBase().getWebSite();
+        if(webSite instanceof BSC)
+        {
+            BSC model = (BSC)webSite;
+            PrintWriter out = response.getWriter();
+            Document dom = model.getDom();
+            out.println(SWBUtils.XML.domToXml(dom));
+            out.flush();
+            out.close();
+        }
+    }
+    
     /**
      * Realiza las operaciones de almacenamiento de la configuraci&oacute;n para
      * la visualizaci&oacute;n del mapa estrat&eacute;gico.
@@ -771,7 +885,7 @@ public class StrategicMap extends GenericResource {
     {
         super.setResourceBase(base);
         WebPage wp = base.getWebSite().getWebPage(Objective.class.getSimpleName());
-        urlBase = wp.getUrl() + "?suri=";
+        urlBase = "#";
     }
     
     public static final String HEADER_PREFIX = "head_";
@@ -1015,8 +1129,11 @@ public class StrategicMap extends GenericResource {
         height = 1400;
     
         SVGjs.append("<script type=\"text/javascript\">").append("\n");
+        SVGjs.append(" var width = "+width+";").append("\n");
+        SVGjs.append(" var height = "+height+";").append("\n");
         SVGjs.append(" var SVG_ = '"+SVG_NS_URI+"';").append("\n");
         SVGjs.append(" var XLINK_ = '"+XLNK_NS_URI+"';").append("\n");
+        SVGjs.append(" window.onload = function() {").append("\n");
         SVGjs.append(" var svg = document.createElementNS(SVG_,'svg'); ").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'id','"+emapId+"');").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'width','"+width+"');").append("\n");
@@ -1401,9 +1518,13 @@ SVGjs.append(" to.addEventListener('mouseout', fadein, false);").append("\n");
                 SVGjs.append(" y = y + h_ + "+MARGEN_BOTTOM+";").append("\n");
             } // perspectiva
         } // lista de perspectivas
-
-
-        SVGjs.append("").append("\n");
+        SVGjs.append("};").append("\n");
+        
+        
+        
+        
+        
+        
         SVGjs.append("").append("\n");
         SVGjs.append("").append("\n");
         SVGjs.append("").append("\n");
@@ -1461,6 +1582,20 @@ SVGjs.append("}").append("\n");
         SVGjs.append("  txt.textContent=text;").append("\n");
         SVGjs.append("  return txt;").append("\n");
         SVGjs.append("}").append("\n");
+        
+SVGjs.append("function createCircle(id,cx,cy,r,fill,fillopacity,stroke,strokewidth, strokeopacity) {").append("\n");
+SVGjs.append("  var circle = document.createElementNS(SVG_,'circle');").append("\n");
+SVGjs.append("  circle.setAttributeNS(null,'id',id);").append("\n");
+SVGjs.append("  circle.setAttributeNS(null,'cx',cx);").append("\n");
+SVGjs.append("  circle.setAttributeNS(null,'cy',cy);").append("\n");
+SVGjs.append("  circle.setAttributeNS(null,'r',r);").append("\n");
+SVGjs.append("  circle.setAttributeNS(null,'fill',fill);").append("\n");
+SVGjs.append("  circle.setAttributeNS(null,'fill-opacity',fillopacity);").append("\n");
+SVGjs.append("  circle.setAttributeNS(null,'stroke',stroke);").append("\n");
+SVGjs.append("  circle.setAttributeNS(null, 'stroke-width',strokewidth);").append("\n");
+SVGjs.append("  circle.setAttributeNS(null, 'stroke-opacity',strokeopacity);").append("\n");
+SVGjs.append("  return circle;").append("\n");
+SVGjs.append("}").append("\n");
 
         SVGjs.append("function createRect(id,width,height,x,y,rx,ry,fill,fillopacity,stroke,strokewidth, strokeopacity) {").append("\n");
         SVGjs.append("  var rect = document.createElementNS(SVG_,'rect');").append("\n");
@@ -1480,75 +1615,74 @@ SVGjs.append("}").append("\n");
         SVGjs.append("}").append("\n");
 
         SVGjs.append("function framingRect(rect,id,width, height, x, y) {").append("\n");
-        SVGjs.append("    rect.setAttributeNS(null,'id',id);").append("\n");
-        SVGjs.append("    rect.x.baseVal.value = x;").append("\n");
-        SVGjs.append("    rect.y.baseVal.value = y;").append("\n");
-        SVGjs.append("    rect.width.baseVal.value = width;").append("\n");
-        SVGjs.append("    rect.height.baseVal.value = height;").append("\n");
-        SVGjs.append("    rect.setAttributeNS(null,'fill','none');").append("\n");
-        SVGjs.append("    rect.setAttributeNS(null,'stroke','black');").append("\n");
-        SVGjs.append("    rect.setAttributeNS(null, 'stroke-width','1');").append("\n");
+        SVGjs.append("  rect.setAttributeNS(null,'id',id);").append("\n");
+        SVGjs.append("  //rect.x.baseVal.value = x;").append("\n");
+        SVGjs.append("  //rect.y.baseVal.value = y;").append("\n");
+        SVGjs.append("  rect.width.baseVal.value = width;").append("\n");
+        SVGjs.append("  //rect.height.baseVal.value = height;").append("\n");
+        SVGjs.append("  rect.setAttributeNS(null,'fill','#660000');").append("\n");
+        SVGjs.append("  rect.setAttributeNS(null,'fill-opacity',0.1);").append("\n");
+        SVGjs.append("  rect.setAttributeNS(null,'stroke','#660000');").append("\n");
+        SVGjs.append("  rect.setAttributeNS(null, 'stroke-width','1');").append("\n");
+        SVGjs.append("  rect.setAttributeNS(null, 'stroke-opacity',0.3);").append("\n");
         SVGjs.append("}").append("\n");
 
-        SVGjs.append("function fixParagraphAtBounding(text_element, width, height, x, y) {").append("\n");
-        SVGjs.append("    var dy = getFontSize(text_element);").append("\n");
-        SVGjs.append("    var text = text_element.textContent;").append("\n");
-        SVGjs.append("    var words = text.split(' ');").append("\n");
-        SVGjs.append("    var tspan_element = document.createElementNS(SVG_, 'tspan');").append("\n");
-        SVGjs.append("    var text_node = document.createTextNode(words[0]);").append("\n");
+SVGjs.append(" function fixParagraphAtBounding(text_element, width, height, x, y) {").append("\n");
+SVGjs.append("     var dy = getFontSize(text_element);").append("\n");
+SVGjs.append("     if(dy<13) {").append("\n");
+SVGjs.append("     	createParagraph(text_element, width, height, x, y);").append("\n");
+SVGjs.append("     }else {").append("\n");
+SVGjs.append("     	fixParagraphAtBounding_(text_element, width, height, x, y, dy);").append("\n");
+SVGjs.append("     }").append("\n");
+SVGjs.append(" }").append("\n");
 
-        SVGjs.append("    text_element.textContent='';").append("\n");
-        SVGjs.append("    tspan_element.appendChild(text_node);").append("\n");
-        SVGjs.append("    text_element.appendChild(tspan_element);").append("\n");
-
-        SVGjs.append("    var h;").append("\n");
-
-        SVGjs.append("    for(var i=1; i<words.length; i++)").append("\n");
-        SVGjs.append("    {").append("\n");
-        SVGjs.append("        h = getBoundingHeight(text_element);").append("\n");
-        SVGjs.append("        var len = tspan_element.firstChild.data.length;").append("\n");
-        SVGjs.append("        tspan_element.firstChild.data += ' ' + words[i];").append("\n");
-
-        SVGjs.append("        if (tspan_element.getComputedTextLength() > width)").append("\n");
-        SVGjs.append("        {").append("\n");
-        SVGjs.append("            dy = dy - (h/height);").append("\n");
-        SVGjs.append("            text_element.setAttributeNS(null, 'font-size', dy);").append("\n");
-        SVGjs.append("            var childElements = text_element.getElementsByTagName('tspan');").append("\n");
-        SVGjs.append("            for (var j=0; j<childElements.length; j++) {").append("\n");
-        SVGjs.append("                if(childElements[j].getAttribute('dy')) {").append("\n");
-        SVGjs.append("                    childElements[j].setAttributeNS(null,'dy',dy);").append("\n");
-        SVGjs.append("                }").append("\n");
-        SVGjs.append("            }").append("\n");
-        SVGjs.append("            h = getBoundingHeight(text_element);").append("\n");
-
-        SVGjs.append("            if (tspan_element.getComputedTextLength() > width)").append("\n");
-        SVGjs.append("            {").append("\n");
-        SVGjs.append("                tspan_element.firstChild.data = tspan_element.firstChild.data.slice(0, len);").append("\n");  // Remove added word
-
-        SVGjs.append("                var tspan_element = document.createElementNS(SVG_, 'tspan');").append("\n");
-        SVGjs.append("                tspan_element.setAttributeNS(null, 'x', x);").append("\n");
-        SVGjs.append("                tspan_element.setAttributeNS(null, 'dy', dy);").append("\n");
-        SVGjs.append("                text_node = document.createTextNode(words[i]);").append("\n");
-        SVGjs.append("                tspan_element.appendChild(text_node);").append("\n");
-        SVGjs.append("                text_element.appendChild(tspan_element);").append("\n");
-        SVGjs.append("            }").append("\n");
-        SVGjs.append("        }").append("\n");
-        SVGjs.append("    }").append("\n");
-
-        SVGjs.append("    h = getBoundingHeight(text_element);").append("\n");
-        SVGjs.append("    while(h>height && dy>0) {").append("\n");
-        SVGjs.append("        dy--;").append("\n");
-        SVGjs.append("        text_element.setAttributeNS(null, 'font-size', dy);").append("\n");
-
-        SVGjs.append("        var childElements = text_element.getElementsByTagName('tspan');").append("\n");
-        SVGjs.append("        for (var i=0; i < childElements.length; i++) {").append("\n");
-        SVGjs.append("            if(childElements[i].getAttribute('dy')) {").append("\n");
-        SVGjs.append("                childElements[i].setAttributeNS(null,'dy',dy-0.5);").append("\n");
-        SVGjs.append("            }").append("\n");
-        SVGjs.append("        }").append("\n");
-        SVGjs.append("        h = getBoundingHeight(text_element);").append("\n");
-        SVGjs.append("    }").append("\n");
-        SVGjs.append("}").append("\n");
+SVGjs.append(" function fixParagraphAtBounding_(text_element, width, height, x, y, dy) {").append("\n");
+SVGjs.append("     var text = text_element.textContent;").append("\n");
+SVGjs.append("     var words = text.split(' ');").append("\n");
+SVGjs.append("     var tspan_element = document.createElementNS(SVG_, 'tspan');").append("\n");
+SVGjs.append("     var text_node = document.createTextNode(words[0]);").append("\n");
+SVGjs.append("     text_element.textContent='';").append("\n");
+SVGjs.append("     tspan_element.appendChild(text_node);").append("\n");
+SVGjs.append("     text_element.appendChild(tspan_element);").append("\n");
+SVGjs.append("     var h;").append("\n");
+SVGjs.append("     for(var i=1; i<words.length; i++) {").append("\n");
+SVGjs.append("         h = getBoundingHeight(text_element);").append("\n");
+SVGjs.append("         var len = tspan_element.firstChild.data.length;").append("\n");
+SVGjs.append("         tspan_element.firstChild.data += ' ' + words[i];").append("\n");
+SVGjs.append("         if (tspan_element.getComputedTextLength() > width) {").append("\n");
+SVGjs.append("             dy = dy - (h/height);").append("\n");
+SVGjs.append("             text_element.setAttributeNS(null, 'font-size', dy);").append("\n");
+SVGjs.append("             var childElements = text_element.getElementsByTagName('tspan');").append("\n");
+SVGjs.append("             for (var j=0; j<childElements.length; j++) {").append("\n");
+SVGjs.append("                 if(childElements[j].getAttribute('dy')) {").append("\n");
+SVGjs.append("                     childElements[j].setAttributeNS(null,'dy',dy);").append("\n");
+SVGjs.append("                 }").append("\n");
+SVGjs.append("             }").append("\n");
+SVGjs.append("             h = getBoundingHeight(text_element);").append("\n");
+SVGjs.append("             if (tspan_element.getComputedTextLength() > width) {").append("\n");
+SVGjs.append("                 tspan_element.firstChild.data = tspan_element.firstChild.data.slice(0, len);").append("\n");
+SVGjs.append("                 var tspan_element = document.createElementNS(SVG_, 'tspan');").append("\n");
+SVGjs.append("                 tspan_element.setAttributeNS(null, 'x', x);").append("\n");
+SVGjs.append("                 tspan_element.setAttributeNS(null, 'dy', dy);").append("\n");
+SVGjs.append("                 text_node = document.createTextNode(words[i]);").append("\n");
+SVGjs.append("                 tspan_element.appendChild(text_node);").append("\n");
+SVGjs.append("                 text_element.appendChild(tspan_element);").append("\n");
+SVGjs.append("             }").append("\n");
+SVGjs.append("         }").append("\n");
+SVGjs.append("     }").append("\n");
+SVGjs.append("     h = getBoundingHeight(text_element);").append("\n");
+SVGjs.append("     while(h>height && dy>0) {").append("\n");
+SVGjs.append("         dy--;").append("\n");
+SVGjs.append("         text_element.setAttributeNS(null, 'font-size', dy);").append("\n");
+SVGjs.append("         var childElements = text_element.getElementsByTagName('tspan');").append("\n");
+SVGjs.append("         for (var i=0; i < childElements.length; i++) {").append("\n");
+SVGjs.append("             if(childElements[i].getAttribute('dy')) {").append("\n");
+SVGjs.append("                 childElements[i].setAttributeNS(null,'dy',dy-0.5);").append("\n");
+SVGjs.append("             }").append("\n");
+SVGjs.append("         }").append("\n");
+SVGjs.append("         h = getBoundingHeight(text_element);").append("\n");
+SVGjs.append("     }").append("\n");
+SVGjs.append(" }").append("\n");
 
         SVGjs.append(" function getFontSize(text_element) {").append("\n");
         SVGjs.append("  var fs_ = window.getComputedStyle(text_element, null).getPropertyValue('font-size');").append("\n");
@@ -1579,8 +1713,59 @@ SVGjs.append("}").append("\n");
         SVGjs.append("  rect.height.baseVal.value = bbox.height;").append("\n");
         SVGjs.append("  return rect;").append("\n");
         SVGjs.append(" }").append("\n");
+        
+SVGjs.append("function createParagraph(text_element, width, height, x, y) {").append("\n");
+SVGjs.append("    fixParagraphToWidth(text_element, width, x);").append("\n");
+SVGjs.append("    fixParagraphToHeight(text_element, height);").append("\n");
+SVGjs.append("}").append("\n");
 
-        SVGjs.append("</script>");
+SVGjs.append("function fixParagraphToWidth(text_element, width, x) {").append("\n");
+SVGjs.append("    var dy = getFontSize(text_element);").append("\n");
+SVGjs.append("    var text = text_element.textContent;").append("\n");
+SVGjs.append("    var words = text.split(' ');").append("\n");
+SVGjs.append("    var tspan_element = document.createElementNS(SVG_, 'tspan');").append("\n");
+SVGjs.append("    var text_node = document.createTextNode(words[0]);").append("\n");
+
+SVGjs.append("    text_element.textContent='';").append("\n");
+SVGjs.append("    tspan_element.appendChild(text_node);").append("\n");
+SVGjs.append("    text_element.appendChild(tspan_element);").append("\n");
+
+SVGjs.append("    for(var i=1; i<words.length; i++)").append("\n");
+SVGjs.append("    {").append("\n");
+SVGjs.append("        var len = tspan_element.firstChild.data.length;").append("\n");
+SVGjs.append("        tspan_element.firstChild.data += ' ' + words[i];").append("\n");
+
+SVGjs.append("        if (tspan_element.getComputedTextLength() > width)").append("\n");
+SVGjs.append("        {").append("\n");
+SVGjs.append("            tspan_element.firstChild.data = tspan_element.firstChild.data.slice(0, len);  // Remove added word").append("\n");
+
+SVGjs.append("            var tspan_element = document.createElementNS(SVG_, 'tspan');").append("\n");
+SVGjs.append("            tspan_element.setAttributeNS(null, 'x', x);").append("\n");
+SVGjs.append("            tspan_element.setAttributeNS(null, 'dy', dy);").append("\n");
+SVGjs.append("            text_node = document.createTextNode(words[i]);").append("\n");
+SVGjs.append("            tspan_element.appendChild(text_node);").append("\n");
+SVGjs.append("            text_element.appendChild(tspan_element);").append("\n");
+SVGjs.append("        }").append("\n");
+SVGjs.append("    }").append("\n");
+SVGjs.append("}").append("\n");
+
+SVGjs.append("function fixParagraphToHeight(text_element, height) {").append("\n");
+SVGjs.append("    var fs = getFontSize(text_element);").append("\n");
+SVGjs.append("    var h = getBoundingHeight(text_element);").append("\n");
+SVGjs.append("    while(h>height) {").append("\n");
+SVGjs.append("        fs--;").append("\n");
+SVGjs.append("        text_element.setAttributeNS(null, 'font-size', fs);").append("\n");
+SVGjs.append("        var childElements = text_element.getElementsByTagName('tspan');").append("\n");
+SVGjs.append("        for (var i=0; i < childElements.length; i++) {").append("\n");
+SVGjs.append("            if(childElements[i].getAttribute('dy')) {").append("\n");
+SVGjs.append("                childElements[i].setAttributeNS(null,'dy',fs-0.5);").append("\n");
+SVGjs.append("            }").append("\n");
+SVGjs.append("        }").append("\n");
+SVGjs.append("        h = getBoundingHeight(text_element);").append("\n");
+SVGjs.append("    }").append("\n");
+SVGjs.append("}").append("\n");
+
+        SVGjs.append("</script>").append("\n");
         return SVGjs.toString();
     }
     
