@@ -70,7 +70,7 @@
 
 <%
 
-if(request.getParameter("uri") != null && request.getParameter("netUri")!=null) 
+if(request.getParameter("uri") != null && request.getParameter("neturi")!=null) 
 {
     SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("uri"));
     if(semObj!=null)
@@ -79,7 +79,7 @@ if(request.getParameter("uri") != null && request.getParameter("netUri")!=null)
         PostOut postOut=(PostOut)semObj.createGenericInstance();  
         if(postOut!=null)
         {
-            SocialNetwork socialNet=(SocialNetwork)SemanticObject.createSemanticObject(request.getParameter("netUri")).createGenericInstance(); 
+            SocialNetwork socialNet=(SocialNetwork)SemanticObject.createSemanticObject(request.getParameter("neturi")).createGenericInstance(); 
             if(socialNet!=null)
             {
                 Iterator<PostOutNet> itPostOutNets=PostOutNet.ClassMgr.listPostOutNetBySocialPost(postOut);
