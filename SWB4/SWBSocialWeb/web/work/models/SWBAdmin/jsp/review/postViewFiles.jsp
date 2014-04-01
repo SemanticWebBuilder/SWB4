@@ -88,8 +88,10 @@ if(request.getParameter("uri") != null && request.getParameter("netUri")!=null)
                     PostOutNet postOutNet=itPostOutNets.next();
                     if(postOutNet.getSocialNetwork().getURI().equals(socialNet.getURI()))
                     {
+                        System.out.println("postOutNet Hits Antes de:"+postOutNet.getHitsAttach());
                         postOutNet.setHitsAttach(postOutNet.getHitsAttach()+1); 
-                        break;
+                        System.out.println("postOutNet Hits Despues de:"+postOutNet.getHitsAttach());
+                        break; 
                     }
                 }
             }
