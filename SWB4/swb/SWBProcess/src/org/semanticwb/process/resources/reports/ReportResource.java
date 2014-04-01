@@ -121,6 +121,7 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
                 super.processRequest(request, response, paramRequest);
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
             log.error("Error on processRequest, " + ex.getMessage());
         }
     }
@@ -648,8 +649,9 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
             e.printStackTrace();
         }
     }
-    String[] array = null;
+    String uriObject = "";
     String des = null;
+    String sortType = "";
 
     private ArrayList<ProcessInstance> getProcessInstances(HttpServletRequest request, SWBParamRequest paramRequest) throws ParseException {
         ArrayList<ProcessInstance> t_instances = new ArrayList<ProcessInstance>();
@@ -665,17 +667,19 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
                 columns += column.getId();
             }
         }
+        uriObject = "";
+        sortType = "";
+        des = null;
         Iterator<ProcessInstance> pi = obj.getProcessName().listProcessInstances();
         int rows = 0;
         int pagingSize = obj.getPagingSize();
         int page = 1;
-        String sortType = null;
+        uriObject = request.getParameter("uriObject") != null ? request.getParameter("uriObject") : "";
         if (request.getParameter("sort") != null) {
             sortType = request.getParameter("sort");
         }
         if (request.getParameter("des") != null) {
             des = request.getParameter("des");
-            request.setAttribute("des", des);
         }
         if (request.getParameter("page") != null && !request.getParameter("page").trim().equals("")) {
             page = Integer.valueOf(request.getParameter("page"));
@@ -684,24 +688,17 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
             }
         }
         if (pagingSize < 1) {
-            pagingSize = 10000;
+            pagingSize = 10;
         }
         while (pi.hasNext()) {
             ProcessInstance processInstance = pi.next();
             rows++;
             t_instances.add(processInstance);
         }
-
-        if (sortType != null) {
-            array = sortType.split("\\|");
-            request.setAttribute("sort", sortType);
-        }
-        if (sortType != null) {
+        if (!sortType.equals("")) {
             if (request.getParameter("dataType").equals("isDataTypeProperty")) {
-                request.setAttribute("dataType", "isDataTypeProperty");
                 Collections.sort(t_instances, processNameComparator);
             } else {
-                request.setAttribute("dataType", "isObjectProperty");
                 Collections.sort(t_instances, processObjectComparator);
             }
         }
@@ -820,7 +817,7 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
 
         @Override
         public int compare(Object t, Object t1) {
-            SemanticProperty spt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(array[1]);
+            SemanticProperty spt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(sortType);
             int it = 0;
             int it1 = 0;
             if (((ProcessInstance) t).getItemAwareReference() != null && ((ProcessInstance) t1).getItemAwareReference() != null) {
@@ -862,7 +859,7 @@ public class ReportResource extends org.semanticwb.process.resources.reports.bas
 
         @Override
         public int compare(Object t, Object t1) {
-            SemanticProperty spt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(array[1]);
+            SemanticProperty spt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(sortType);
             String st = "--";
             String st1 = "--";
             if (((ProcessInstance) t).getItemAwareReference() != null && ((ProcessInstance) t1).getItemAwareReference() != null) {
