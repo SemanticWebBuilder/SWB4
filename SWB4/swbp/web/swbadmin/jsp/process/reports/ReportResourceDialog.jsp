@@ -22,21 +22,7 @@
         title = paramRequest.getLocaleString("generate");
     }
     title += " " + paramRequest.getLocaleString("report") + " " + report.getTitle();
-%>
-<script type="text/javascript">
-    dojo.require("dojox.form.FileInputAuto");
-    $(document).ready(function() {
-        //Initialize bootstrap tooltips
-        if ($("[data-toggle=tooltip]").length) {
-            $("[data-toggle=tooltip]").tooltip();
-        }
-        //Destroy modals content
-        $('#modalDialog').on('hidden.bs.modal', function() {
-            $(this).removeData('bs.modal');
-        });
-    });
-</script>
-<%if (action.equals("export")) {%>
+if (action.equals("export")) {%>
 <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
