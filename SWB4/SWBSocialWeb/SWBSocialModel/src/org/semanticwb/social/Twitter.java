@@ -92,7 +92,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 Iterator<String> files = message.listFiles();
                 if(files.hasNext()){//If at least one file found
                     String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
-                    urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + message.getEncodedURI();
+                    urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + message.getEncodedURI() + "&neturi=" + this.getEncodedURI();
                 }
                 if(message.getPostInSource()!=null && message.getPostInSource().getSocialNetMsgId()!=null)
                 {
@@ -158,7 +158,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 return;
             }else if (photoNumber > 1){
                 String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
-                additionalPhotos = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + photo.getEncodedURI();
+                additionalPhotos = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + photo.getEncodedURI() + "&neturi=" + this.getEncodedURI();
                 //System.out.println("Path form multiple photos:" + additionalPhotos);
             }
             
