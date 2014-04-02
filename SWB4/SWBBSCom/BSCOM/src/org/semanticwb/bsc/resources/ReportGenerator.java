@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -18,15 +19,24 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.accessory.Period;
+import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.bsc.element.BSCElement;
+import org.semanticwb.bsc.element.Deliverable;
+import org.semanticwb.bsc.element.Indicator;
+import org.semanticwb.bsc.element.Initiative;
+import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.bsc.utils.PropertiesComparator;
+import org.semanticwb.model.Descriptiveable;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -372,7 +382,12 @@ public class ReportGenerator extends GenericResource {
     public void doReport(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         
-        //TODO:Con datos del request generar instancia de ReportCriteria y ejecutar reporte
+        //TODO:Generar instancia de ReportCriteria y ejecutar reporte
+        ReportCriteria criteria = createCriteria(request);
+        
+        processReport(criteria, paramRequest);
+        
+        
     }
     
     /**
@@ -485,4 +500,244 @@ public class ReportGenerator extends GenericResource {
         return exists;
     }
 
+    /**
+     * Crea la instancia de {@code ReportCriteria} con la que se generar&aacute; el reporte solicitado en el {@code request}
+     * @param request petici&oacute;n del cliente con los criterios para generar el reporte
+     * @return la instancia de {@code ReportCriteria} con los criterios para generar el reporte
+     */
+    private ReportCriteria createCriteria(HttpServletRequest request) {
+        
+        ReportCriteria criteria = new ReportCriteria();
+        ArrayList<String> related = new ArrayList<String>(4);
+        ArrayList<SemanticProperty> properties = new ArrayList<SemanticProperty>(16);
+        
+        Enumeration parameters = request.getParameterNames();
+        while (parameters != null && parameters.hasMoreElements()) {
+            String parameterName = (String) parameters.nextElement();
+            if (parameterName.equals("elementType") && request.getParameter(parameterName) != null &&
+                    !request.getParameter(parameterName).isEmpty()) {
+                criteria.setElementType(request.getParameter(parameterName));
+            }
+            if (parameterName.equals("title") && request.getParameter(parameterName) != null &&
+                    !request.getParameter(parameterName).isEmpty()) {
+                criteria.setObjectTitle(request.getParameter(parameterName));
+            }
+            if (parameterName.startsWith("relElem") && request.getParameter(parameterName) != null &&
+                    !request.getParameter(parameterName).isEmpty()) {
+                related.add(request.getParameter(parameterName));
+            }
+            if (parameterName.equals("initialPeriod") && request.getParameter(parameterName) != null &&
+                    !request.getParameter(parameterName).isEmpty()) {
+                SemanticObject periodSem = SemanticObject.createSemanticObject(request.getParameter(parameterName));
+                GenericObject periodGen = periodSem.createGenericInstance();
+                if (periodGen instanceof Period) {
+                    criteria.setInitialPeriod((Period) periodGen);
+                }
+            }
+            if (parameterName.equals("finalPeriod") && request.getParameter(parameterName) != null &&
+                    !request.getParameter(parameterName).isEmpty()) {
+                SemanticObject periodSem = SemanticObject.createSemanticObject(request.getParameter(parameterName));
+                GenericObject periodGen = periodSem.createGenericInstance();
+                if (periodGen instanceof Period) {
+                    criteria.setFinalPeriod((Period) periodGen);
+                }
+            }
+            if (parameterName.equals("status") && request.getParameter(parameterName) != null &&
+                    !request.getParameter(parameterName).isEmpty()) {
+                SemanticObject statusSem = SemanticObject.createSemanticObject(request.getParameter(parameterName));
+                GenericObject statusGen = statusSem.createGenericInstance();
+                if (statusGen instanceof State) {
+                    criteria.setStatus((State) statusGen);
+                }
+            }
+            if (parameterName.equals("champion") && request.getParameter(parameterName) != null &&
+                    !request.getParameter(parameterName).isEmpty()) {
+                SemanticObject championSem = SemanticObject.createSemanticObject(request.getParameter(parameterName));
+                GenericObject championGen = championSem.createGenericInstance();
+                if (championGen instanceof User) {
+                    criteria.setChampion((User) championGen);
+                }
+            }
+            if (parameterName.equals("sponsor") && request.getParameter(parameterName) != null &&
+                    !request.getParameter(parameterName).isEmpty()) {
+                SemanticObject sponsorSem = SemanticObject.createSemanticObject(request.getParameter(parameterName));
+                GenericObject sponsorGen = sponsorSem.createGenericInstance();
+                if (sponsorGen instanceof User) {
+                    criteria.setSponsor((User) sponsorGen);
+                }
+            }
+            if (parameterName.equals("props2Show") && request.getParameter(parameterName) != null &&
+                    !request.getParameter(parameterName).isEmpty()) {
+                
+                String[] selectedProps = request.getParameterValues(parameterName);
+                SemanticOntology ontology = SWBPlatform.getSemanticMgr().getOntology();
+                for (String property : selectedProps) {
+                    SemanticObject propSO = SemanticObject.createSemanticObject(property);
+                    SemanticProperty prop = ontology.getSemanticProperty(property);
+                    if (prop == null) {
+                        prop = propSO.transformToSemanticProperty();
+                    }
+                    properties.add(prop);
+                }
+                criteria.setProps2Show(properties);
+            }
+        }
+        if (!related.isEmpty()) {
+            criteria.setRelatedElements(related);
+        }
+        return criteria;
+    }
+    
+    /**
+     * Procesa los datos disponibles en el sistema para obtener el conjunto de datos a presentar en el reporte.
+     * @param criteria contiene los criterios que deben cumplir los datos a mostrar en el reporte
+     * @param paramRequest un objeto de la plataforma de SWB con datos adicionales de la petici&oacute;n
+     */
+    private void processReport(ReportCriteria criteria, SWBParamRequest paramRequest) {
+        
+        SWBModel model = paramRequest.getWebPage().getWebSite();
+        Iterator initialSet = null;
+        System.out.println("Criteria: \n" + criteria.toString());
+        if (criteria.getElementType() != null) {
+            String id = null;
+            //se extrae el identificador del uri recibido
+            if (criteria.getObjectTitle() != null && criteria.getObjectTitle().lastIndexOf(":") != -1) {
+                id = criteria.getObjectTitle().substring(criteria.getObjectTitle().lastIndexOf(":") + 1);
+            }
+            if (criteria.getElementType().equals(Objective.sclass.getName())) {
+                ArrayList<SemanticObject> forNow = new ArrayList<SemanticObject>(128);
+                if (criteria.getObjectTitle() != null) {
+                    Objective element = Objective.ClassMgr.getObjective(id, model);
+                    if (element != null) {
+                        forNow.add(element.getSemanticObject());
+                    } else {
+                        System.out.println("BSCElement con id: " + id + " --No encontrado");
+                    }
+                    initialSet = forNow.iterator();
+                } else {
+                    initialSet = Objective.ClassMgr.listObjectives(model);
+                    while (initialSet != null && initialSet.hasNext()) {
+                        forNow.add((SemanticObject) initialSet.next());
+                    }
+                    initialSet = forNow.iterator();
+                }
+/*            } else if (criteria.getElementType().equals(Indicator.sclass.getName())) {
+                if (criteria.getObjectTitle() != null) {
+                    Indicator element = Indicator.ClassMgr.getIndicator(id, model);
+                    ArrayList<Indicator> forNow = new ArrayList<Indicator>(2);
+                    if (element != null) {
+                        forNow.add(element);
+                    } else {
+                        System.out.println("BSCElement con id: " + id + " --No encontrado");
+                    }
+                    initialSet = forNow.iterator();
+                } else {
+                    initialSet = Indicator.ClassMgr.listIndicators(model);
+                }
+            } else if (criteria.getElementType().equals(Initiative.sclass.getName())) {
+                if (criteria.getObjectTitle() != null) {
+                    Initiative element = Initiative.ClassMgr.getInitiative(id, model);
+                    ArrayList<Initiative> forNow = new ArrayList<Initiative>(2);
+                    if (element != null) {
+                        forNow.add(element);
+                    } else {
+                        System.out.println("BSCElement con id: " + id + " --No encontrado");
+                    }
+                    initialSet = forNow.iterator();
+                } else {
+                    initialSet = Initiative.ClassMgr.listInitiatives(model);
+                }
+            } else if (criteria.getElementType().equals(Deliverable.sclass.getName())) {
+                if (criteria.getObjectTitle() != null) {
+                    Deliverable element = Deliverable.ClassMgr.getDeliverable(id, model);
+                    ArrayList<Deliverable> forNow = new ArrayList<Deliverable>(2);
+                    if (element != null) {
+                        forNow.add(element);
+                    } else {
+                        System.out.println("BSCElement con id: " + id + " --No encontrado");
+                    }
+                    initialSet = forNow.iterator();
+                } else {
+                    initialSet = Deliverable.ClassMgr.listDeliverables(model);
+                }*/
+            }
+        } else {
+            ArrayList<SemanticObject> allTypes = new ArrayList<SemanticObject>(256);
+            Iterator<Objective> objectives = Objective.ClassMgr.listObjectives(model);
+            Iterator<Indicator> indicators = Indicator.ClassMgr.listIndicators(model);
+            Iterator<Initiative> initiatives = Initiative.ClassMgr.listInitiatives(model);
+            Iterator<Deliverable> deliverables = Deliverable.ClassMgr.listDeliverables(model);
+            while (objectives != null && objectives.hasNext()) {
+                allTypes.add(objectives.next().getSemanticObject());
+            }
+            while (indicators != null && indicators.hasNext()) {
+                allTypes.add(indicators.next().getSemanticObject());
+            }
+            while (initiatives != null && initiatives.hasNext()) {
+                allTypes.add((initiatives.next().getSemanticObject()));
+            }
+            while (deliverables != null && deliverables.hasNext()) {
+                allTypes.add(deliverables.next().getSemanticObject());
+            }
+            initialSet = allTypes.iterator();
+        }
+        
+        int count = 0;
+        ArrayList<SemanticObject> processed = new ArrayList<SemanticObject>(256);
+        
+        
+        while (initialSet != null && initialSet.hasNext()) {
+            GenericObject inTurn = ((SemanticObject) initialSet.next()).createGenericInstance();
+            boolean mustBeAdded = false;
+            if (criteria.getInitialPeriod() != null && criteria.getFinalPeriod() != null) {
+                
+            }
+            //Se evalua filtro de Champion
+            if (criteria.getChampion() != null) {
+                mustBeAdded = false;
+                if (inTurn instanceof Indicator) {
+                    if ( ((Indicator) inTurn).getChampion().equals(criteria.getChampion()) ) {
+                        mustBeAdded = true;
+                    }
+                } else {
+                    if (inTurn instanceof Objective) {
+                        Iterator<Indicator> indicators = ((Objective) inTurn).listIndicators();
+                        while (indicators != null && indicators.hasNext()) {
+                            if (indicators.next().getChampion().equals(criteria.getChampion())) {
+                                mustBeAdded = true;
+                                break;
+                            }
+                        }
+                    } else if (inTurn instanceof Initiative) {
+                        //TODO: Debe existir esta relacion
+                    } else if (inTurn instanceof Deliverable) {
+                        //TODO: Debe existir esta relacion
+                    }
+                }
+            }
+            //se evalua filtro de Sponsor
+            if (criteria.getSponsor() != null) {
+                mustBeAdded = false;
+                if (inTurn instanceof Objective) {
+                    if ( ((Objective) inTurn).getSponsor().equals(criteria.getSponsor()) ) {
+                        mustBeAdded = true;
+                    }
+                } else {
+                    if (inTurn instanceof Indicator) {
+                        if (((Indicator) inTurn).getObjective().getSponsor().equals(criteria.getSponsor())) {
+                            mustBeAdded = true;
+                        }
+                    }
+                }
+                //TODO: verificar relacion entre Iniciativa/Entregable con Indicador/Objetivo
+            }
+            if (inTurn instanceof BSCElement) {
+                System.out.println("Titulo BSCE: " + ((BSCElement) inTurn).getTitle());
+            } else {
+                System.out.println("SO Tit: " + inTurn.getSemanticObject().getLiteralProperty(Descriptiveable.swb_title));
+            }
+            count++;
+        }
+        System.out.println(count + " elementos encontrados.");
+    }
 }

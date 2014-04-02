@@ -1,6 +1,7 @@
 package org.semanticwb.bsc.resources;
 
 
+import java.util.ArrayList;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.model.User;
@@ -53,12 +54,12 @@ public class ReportCriteria {
     /**
      * Almacena los tipos de elementos relacionados que se desea se incluyan en los resultados de extracci&oacute;n de datos del reporte
      */
-    private String[] relatedElements;
+    private ArrayList<String> relatedElements;
     
     /**
      * Almacena las propiedades seleccionadas como estructura del listado de resultados
      */
-    private SemanticProperty[] props2Show;
+    private ArrayList<SemanticProperty> props2Show;
 
     /**
      * Obtiene el tipo de elementos a mostrar en el reporte
@@ -176,7 +177,7 @@ public class ReportCriteria {
      * Obtiene los tipos de elementos relacionados que se desea se incluyan en los resultados de extracci&oacute;n de datos del reporte
      * @return los tipos de elementos relacionados que se desea incluir
      */
-    public String[] getRelatedElements() {
+    public ArrayList<String> getRelatedElements() {
         return relatedElements;
     }
 
@@ -184,7 +185,7 @@ public class ReportCriteria {
      * Fija los tipos de elementos relacionados que se desea se incluyan en los resultados de extracci&oacute;n de datos del reporte
      * @param relatedElements los tipos de elementos relacionados que se desea incluir
      */
-    public void setRelatedElements(String[] relatedElements) {
+    public void setRelatedElements(ArrayList<String> relatedElements) {
         this.relatedElements = relatedElements;
     }
 
@@ -192,7 +193,7 @@ public class ReportCriteria {
      * Obtiene las propiedades seleccionadas como estructura del listado de resultados
      * @return el arreglo con las {@code SemanticProperty} seleccionadas
      */
-    public SemanticProperty[] getProps2Show() {
+    public ArrayList<SemanticProperty> getProps2Show() {
         return props2Show;
     }
 
@@ -200,7 +201,7 @@ public class ReportCriteria {
      * Fija las propiedades seleccionadas como estructura del listado de resultados
      * @param props2Show el arreglo con las {@code SemanticProperty} seleccionadas
      */
-    public void setProps2Show(SemanticProperty[] props2Show) {
+    public void setProps2Show(ArrayList<SemanticProperty> props2Show) {
         this.props2Show = props2Show;
     }
     
@@ -229,14 +230,18 @@ public class ReportCriteria {
         toReturn.append(";sponsor:");
         toReturn.append(this.getSponsor() != null ? this.getSponsor().getURI() : "");
         toReturn.append(";relatedElements:[");
-        for (String s : this.getRelatedElements()) {
-            toReturn.append(s);
-            toReturn.append(",");
+        if (this.getRelatedElements() != null) {
+            for (String s : this.getRelatedElements()) {
+                toReturn.append(s);
+                toReturn.append(",");
+            }
         }
         toReturn.append("];props2Show:[");
-        for (SemanticProperty prop : this.getProps2Show()) {
-            toReturn.append(prop.getURI());
-            toReturn.append(",");
+        if (this.getProps2Show() != null) {
+            for (SemanticProperty prop : this.getProps2Show()) {
+                toReturn.append(prop.getURI());
+                toReturn.append(",");
+            }
         }
         toReturn.append("]");
         
