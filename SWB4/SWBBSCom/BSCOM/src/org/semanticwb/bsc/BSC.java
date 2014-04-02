@@ -3,6 +3,7 @@ package org.semanticwb.bsc;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.accessory.Differentiator;
@@ -134,7 +135,9 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
         alt.setValue(getDisplayDescription(lang)==null?(getDescription()==null?"Desconocido":getDescription()):getDisplayDescription(lang));
         e.setAttributeNode(alt);
         Attr src = doc.createAttribute("src");
-        src.setValue(getLogo()==null?"#":getLogo());
+        if(getLogo()!=null) {
+            src.setValue(getLogo());
+        }
         e.setAttributeNode(src);
         eroot.appendChild(e);
         
@@ -307,7 +310,7 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
         alt.setValue(getDisplayDescription(lang)==null?(getDescription()==null?"Desconocido":getDescription()):getDisplayDescription(lang));
         e.setAttributeNode(alt);
         Attr src = doc.createAttribute("src");
-        src.setValue(getLogo()==null?"#":getLogo());
+        src.setValue(getLogo());
         e.setAttributeNode(src);
         eroot.appendChild(e);
         
@@ -457,5 +460,10 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
             }
         }
         return doc;
+    }
+
+    @Override
+    public String getLogo() {
+        return super.getLogo()==null ? null : SWBPortal.getWebWorkPath() + getWorkPath() + "/" + super.getLogo();
     }
 }
