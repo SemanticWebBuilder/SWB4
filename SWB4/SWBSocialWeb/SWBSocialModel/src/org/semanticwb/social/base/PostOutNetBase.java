@@ -16,6 +16,10 @@ public abstract class PostOutNetBase extends org.semanticwb.model.SWBClass
    */
     public static final org.semanticwb.platform.SemanticProperty social_postMonitorInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postMonitorInv");
    /**
+   * Cantidad de hits(click) que tiene el PostOut. Estas vistas son contabilizadas cada vez que en una red social se da click a un mensaje que haya salido desde la herramienta y que se quiera visualizar archivos anexos al mismo en la instancia de SWBSocial desde donde haya salido. Es decir, se contabilizan el el archivo jsp/review/PostViewFiles.jsp
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_hitsAttach=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hitsAttach");
+   /**
    * Clase de tipo catálogo que define las privacidades para los Post
    */
     public static final org.semanticwb.platform.SemanticClass social_PostOutPrivacy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostOutPrivacy");
@@ -299,6 +303,24 @@ public abstract class PostOutNetBase extends org.semanticwb.model.SWBClass
              ret=(org.semanticwb.social.PostMonitor)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the HitsAttach property
+* @return int with the HitsAttach
+*/
+    public int getHitsAttach()
+    {
+        return getSemanticObject().getIntProperty(social_hitsAttach);
+    }
+
+/**
+* Sets the HitsAttach property
+* @param value long with the HitsAttach
+*/
+    public void setHitsAttach(int value)
+    {
+        getSemanticObject().setIntProperty(social_hitsAttach, value);
     }
    /**
    * Sets the value for the property Po_privacy
