@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que guarda la relación de los links que se encuentran en el texto de un PostOuts y los hits (clicks) que tienen por parte de los usuarios en las redes sociales a las cuales se envío (dicho PostOut). 
    */
-public abstract class PostOutLinksHitsBase extends org.semanticwb.model.SWBClass 
+public abstract class PostOutLinksHitsBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable
 {
    /**
    * Short Url definida para el link enviado a la cuenta de red social y en el PostOut dados.
@@ -107,6 +107,29 @@ public abstract class PostOutLinksHitsBase extends org.semanticwb.model.SWBClass
             return (getPostOutLinksHits(id, model)!=null);
         }
        /**
+       * Gets all org.semanticwb.social.PostOutLinksHits with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.social.PostOutLinksHits
+       * @return Iterator with all the org.semanticwb.social.PostOutLinksHits
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostOutLinksHits> listPostOutLinksHitsByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutLinksHits> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostOutLinksHits with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.social.PostOutLinksHits
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostOutLinksHits> listPostOutLinksHitsByModifiedBy(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutLinksHits> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.social.PostOutLinksHits with a determined PostOut
        * @param value PostOut of the type org.semanticwb.social.PostOut
        * @param model Model of the org.semanticwb.social.PostOutLinksHits
@@ -127,6 +150,29 @@ public abstract class PostOutLinksHitsBase extends org.semanticwb.model.SWBClass
         public static java.util.Iterator<org.semanticwb.social.PostOutLinksHits> listPostOutLinksHitsByPostOut(org.semanticwb.social.PostOut value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutLinksHits> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postOut,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostOutLinksHits with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.social.PostOutLinksHits
+       * @return Iterator with all the org.semanticwb.social.PostOutLinksHits
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostOutLinksHits> listPostOutLinksHitsByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutLinksHits> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostOutLinksHits with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.social.PostOutLinksHits
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostOutLinksHits> listPostOutLinksHitsByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutLinksHits> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -167,6 +213,44 @@ public abstract class PostOutLinksHitsBase extends org.semanticwb.model.SWBClass
     {
         super(base);
     }
+   /**
+   * Sets the value for the property ModifiedBy
+   * @param value ModifiedBy to set
+   */
+
+    public void setModifiedBy(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
+    }
+   /**
+   * Remove the value for ModifiedBy property
+   */
+
+    public void removeModifiedBy()
+    {
+        getSemanticObject().removeProperty(swb_modifiedBy);
+    }
+
+   /**
+   * Gets the ModifiedBy
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getModifiedBy()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
 
 /**
 * Gets the Pol_code property
@@ -184,6 +268,42 @@ public abstract class PostOutLinksHitsBase extends org.semanticwb.model.SWBClass
     public void setPol_code(String value)
     {
         getSemanticObject().setProperty(social_pol_code, value);
+    }
+
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
 /**
@@ -238,6 +358,44 @@ public abstract class PostOutLinksHitsBase extends org.semanticwb.model.SWBClass
          if(obj!=null)
          {
              ret=(org.semanticwb.social.PostOut)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property Creator
+   * @param value Creator to set
+   */
+
+    public void setCreator(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
+    }
+   /**
+   * Remove the value for Creator property
+   */
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(swb_creator);
+    }
+
+   /**
+   * Gets the Creator
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getCreator()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
