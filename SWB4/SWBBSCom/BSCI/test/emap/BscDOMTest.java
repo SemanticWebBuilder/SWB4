@@ -17,7 +17,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import static org.semanticwb.bsc.resources.strategicMap.StrategicMap.*;
+import static org.semanticwb.bsc.resources.maps.StrategicMap.*;
 import org.w3c.dom.NamedNodeMap;
 
 /**
@@ -84,10 +84,10 @@ public class BscDOMTest {
             setUpSessionUser(model);            
             
             Document dom = model.getDom();
-            System.out.println("xml:\n"+SWBUtils.XML.domToXml(dom));
+            System.out.println("modelo bsc:\n"+SWBUtils.XML.domToXml(dom));
             try {
                 getDom(dom);
-                System.out.println("svg:\n"+SWBUtils.XML.domToXml(dom));
+                System.out.println("mapa:\n"+SWBUtils.XML.domToXml(dom));
             }catch(XPathExpressionException xpathe) {
                 fail("XPath con problemas... "+xpathe);
             }
@@ -201,7 +201,6 @@ public class BscDOMTest {
                 uri = p.getAttribute("id");
                 //py = j*(ph+MARGEN_BOTTOM+MARGEN_TOP);
                 py = MARGEN_TOP +HEADER_HEIGHT+ j*(ph+MARGEN_BOTTOM+MARGEN_TOP);
-System.out.println("py="+py);                
                 //diferenciadores de la perspectiva
                 expression = "/bsc/perspective[@id='"+uri+"']/diffgroup[1]/diff";
                 NodeList nlDiffs = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
@@ -242,7 +241,7 @@ System.out.println("py="+py);
                     if(hasDifferentiators) {
                         py = py + HEADER_4 + BOX_SPACING;
                     }
-                    int ty = py + PADNG_TOP_SPACING;
+                    int ty = py + PADDING_TOP;
                     
                     for(int k=0; k<nlThmsCount; k++)
                     {
@@ -257,7 +256,19 @@ System.out.println("py="+py);
                             t.setAttribute("x", Integer.toString(tx));
                             t.setAttribute("y", Integer.toString(ty));
                             
-                            //lista de objetivos
+                            //relaciones con este tema
+                            expression = "//rel[@to='"+uri+"']";
+                            NodeList nlRels = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+                            for(int v=0; v<nlRels.getLength(); v++) {
+                                Node noder = nlRels.item(v);
+                                if(noder!=null && noder.getNodeType()==Node.ELEMENT_NODE) {
+                                    Element rel = (Element)noder;
+                                    rel.setAttribute("rx", Integer.toString(tx+tw/2));
+                                    rel.setAttribute("ry", Integer.toString(ty));
+                                }
+                            }
+                            
+                            //lista de objetivos por tema
                             expression = "//theme[@id='"+uri+"']/obj";
                             NodeList nlObjs = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
                             final int nlObjsCount = nlObjs.getLength();
@@ -281,17 +292,16 @@ System.out.println("py="+py);
                                     if(nodeo.getNodeType()==Node.ELEMENT_NODE) {
                                         Element o = (Element)nodeo;
                                         uri = o.getAttribute("id");                                
-                                        o.setAttribute("width", Integer.toString(tw-PADNG_RIGHT_SPACING));
-                                        o.setAttribute("height", Integer.toString(hObj-PADNG_TOP_SPACING));
+                                        o.setAttribute("width", Integer.toString(tw-PADDING_RIGHT));
+                                        o.setAttribute("height", Integer.toString(hObj-PADDING_TOP));
                                         o.setAttribute("x", Integer.toString(ox));  
-                                        oy += ty + l*hObj + PADNG_TOP_SPACING;
-System.out.println("obj:"+uri+"; oy="+oy+"; hObj="+(hObj-PADNG_TOP_SPACING));
+                                        oy += ty + l*hObj + PADDING_TOP;
                                         o.setAttribute("y", Integer.toString(oy));
                                         o.setAttribute("href",  urlBase+uri);
 
                                         //relaciones con este objetivo
                                         expression = "//rel[@to='"+uri+"']";
-                                        NodeList nlRels = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+                                        nlRels = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
                                         for(int m=0; m<nlRels.getLength(); m++) {
                                             Node noder = nlRels.item(m);
                                             if(noder.getNodeType()==Node.ELEMENT_NODE) {
@@ -301,13 +311,13 @@ System.out.println("obj:"+uri+"; oy="+oy+"; hObj="+(hObj-PADNG_TOP_SPACING));
                                             }
                                         }
                                     }
-                                }//lista de objetivos por tema
+                                } //lista de objetivos por tema
                             }
                         }
-                    }//lista de temas
+                    } //lista de temas
                 }
             }
-        }//lista de perspectivas
+        } //lista de perspectivas
     }
     
     public String getSvg(Document documentBSC) throws XPathExpressionException
@@ -344,8 +354,8 @@ SVGjs.append(" marker.setAttributeNS(null,'viewBox', '0 0 10 10');").append("\n"
 SVGjs.append(" marker.setAttributeNS(null,'refX', '8');").append("\n");
 SVGjs.append(" marker.setAttributeNS(null,'refY', '5');").append("\n");
 SVGjs.append(" marker.setAttributeNS(null,'markerUnits', 'strokeWidth');").append("\n");
-SVGjs.append(" marker.setAttributeNS(null,'markerWidth', '7');").append("\n");
-SVGjs.append(" marker.setAttributeNS(null,'markerHeight', '7');").append("\n");
+SVGjs.append(" marker.setAttributeNS(null,'markerWidth', '4');").append("\n");
+SVGjs.append(" marker.setAttributeNS(null,'markerHeight', '4');").append("\n");
 SVGjs.append(" marker.setAttributeNS(null,'orient', 'auto');").append("\n");
 SVGjs.append(" var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');").append("\n");
 SVGjs.append(" path.setAttributeNS(null,'d', 'M0 0 L10 5 L0 10 z');").append("\n");
@@ -380,7 +390,6 @@ if(node!=null && node instanceof Element) {
     SVGjs.append(" svg.appendChild(g);").append("\n");
     
     x_ = x;
-    //y_ = y + HEADER_1;
     y_ = y + topPadding(HEADER_1);
     w_ = w;
     
@@ -389,38 +398,39 @@ if(node!=null && node instanceof Element) {
     txt = (String) xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
     SVGjs.append(" txt = createText('"+txt+"','"+id+"_title"+"',"+x_+","+y_+","+HEADER_1+",'Verdana');").append("\n");
     SVGjs.append(" g.appendChild(txt);").append("\n");
-    SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_1+","+x_+","+y+");").append("\n");
+    SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_1+","+x_+","+y_+");").append("\n");
     SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-    SVGjs.append(" framingRect(rect,"+w_+","+vPadding(HEADER_1)+","+x_+","+vPadding(HEADER_1)+","+HEADER_1+");").append("\n");
+    SVGjs.append(" framingRect(rect,"+w_+","+vPadding(HEADER_1)+","+x_+","+y_+","+HEADER_1+");").append("\n");
     SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
     
-    y_ = y_ + HEADER_2;
+    y_ = y + vPadding(HEADER_1) + topPadding(HEADER_2) + BOX_SPACING;
     w_ = w/3;
+    h_ = h - vPadding(HEADER_1) - BOX_SPACING;
     // pleca Mision
-    SVGjs.append(" txt = createText('Mision','"+id+"_pms"+"',"+x_+","+y_+",18,'Verdana');").append("\n");
+    SVGjs.append(" txt = createText('Mision','"+id+"_pms"+"',"+x_+","+y_+","+HEADER_2+",'Verdana');").append("\n");
     SVGjs.append(" g.appendChild(txt);").append("\n");
     SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_2+","+x_+","+y_+");").append("\n");
     SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-    SVGjs.append(" framingRect(rect,"+w_+","+HEADER_2+","+x_+","+y_+","+HEADER_2+");").append("\n");
+    SVGjs.append(" framingRect(rect,"+w_+","+vPadding(HEADER_2)+","+x_+","+y_+","+HEADER_2+");").append("\n");
     SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
     // pleca Vision
-    SVGjs.append(" txt = createText('Vision','"+id+"_pvs"+"',"+(x_+2*w_)+","+y_+",18,'Verdana');").append("\n");
+    SVGjs.append(" txt = createText('Vision','"+id+"_pvs"+"',"+(x_+2*w_)+","+y_+","+HEADER_2+",'Verdana');").append("\n");
     SVGjs.append(" g.appendChild(txt);").append("\n");
     SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_2+","+(x_+2*w_)+","+y_+");").append("\n");
     SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-    SVGjs.append(" framingRect(rect,"+w_+","+HEADER_2+","+(x_+2*w_)+","+y_+","+HEADER_2+");").append("\n");
+    SVGjs.append(" framingRect(rect,"+w_+","+vPadding(HEADER_2)+","+(x_+2*w_)+","+y_+","+HEADER_2+");").append("\n");
     SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
     // logo
     expression = "/bsc/header/logo";
     node = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);
     if(node!=null && node.getNodeType()==Node.ELEMENT_NODE) {
-        SVGjs.append(" rect = createRect('"+id+"_lg"+"','"+w_+"','"+(h-HEADER_2)+"','"+(x_+w_)+"','"+(y_-HEADER_2)+"',0,0,'none',1,'red','1',1);").append("\n");
+        SVGjs.append(" rect = createRect('"+id+"_lg"+"',"+w_+","+h_+","+(x_+w_)+","+(y_-HEADER_2)+",0,0,'none',1,'red',1,1);").append("\n");
         SVGjs.append(" g.appendChild(rect);").append("\n");
     }
 
     // contenido Mision
-    y_ += HEADER_2;
-    h_ = h - 2*HEADER_2;    
+    y_ = y_ + vPadding(HEADER_2);
+    h_ = h_ - vPadding(HEADER_2);    
     expression = "/bsc/header/mission";
     txt = (String) xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
     SVGjs.append(" txt = createText('"+txt+"','"+id+"_ms"+"',"+x_+","+y_+",14,'Verdana');").append("\n");
@@ -459,17 +469,17 @@ for(int j=0; j<nlPersp.getLength(); j++) {
         expression = "/bsc/perspective[@id='"+pid+"']/title";
         String title = (String)xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
         // prefijo de la perspectiva
-        expression = "/bsc/perspective[@id='"+pid+"']/prefix";
-        String prefix = (String)xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
+        //expression = "/bsc/perspective[@id='"+pid+"']/prefix";
+        //String prefix = (String)xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
         
 System.out.println("perspectiva="+title);
 SVGjs.append(" g = document.createElementNS(SVG_,'g');").append("\n");
 SVGjs.append(" g.setAttributeNS(null,'id','"+pid+"');").append("\n");
 SVGjs.append(" svg.appendChild(g);").append("\n");
-
-SVGjs.append(" rect = createRect('"+pid+"_p"+"',"+pw+","+ph+","+px+","+py+",0,0,'none',1,'blue',1,1);").append("\n");
+// rectángulo perspectiva
+SVGjs.append(" rect = createRect('"+pid+"_p"+"',"+pw+","+ph+","+px+","+py+",0,0,'blue',0.1,'blue',1,0.1);").append("\n");
 SVGjs.append(" g.appendChild(rect);").append("\n");
-
+// título de la perspectiva
 SVGjs.append(" txt = createText('"+title+"','"+pid+"_pt"+"',"+px+","+(py+ph)+",18,'Verdana');").append("\n");
 SVGjs.append(" txt.setAttribute('textLength',"+ph+");").append("\n");
 SVGjs.append(" txt.setAttribute('lengthAdjust','spacingAndGlyphs');").append("\n");
@@ -480,6 +490,7 @@ SVGjs.append(" g.appendChild(txt);").append("\n");
         //diferenciadores de la perspectiva
         expression = "/bsc/perspective[@id='"+pid+"']/diffgroup[1]/diff";
         NodeList nlDiffs = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+        boolean hasDifferentiators = nlDiffs.getLength()>0;
         for(int k=0; k<nlDiffs.getLength(); k++) {
             Node nodeD = nlDiffs.item(k);
             if(nodeD!=null && nodeD.getNodeType()==Node.ELEMENT_NODE) {
@@ -489,15 +500,18 @@ SVGjs.append(" g.appendChild(txt);").append("\n");
                 h_ = assertValue(attrs.getNamedItem("height").getNodeValue());
                 x_ = assertValue(attrs.getNamedItem("x").getNodeValue());
                 y_ = assertValue(attrs.getNamedItem("y").getNodeValue());
+                
+                y_ = y_ + topPadding(HEADER_4);
+                //y_ = y_ + topPadding(HEADER_4) + BOX_SPACING_TOP;
 
                 //expression = "/bsc/perspective[@id='"+pid+"']/diffgroup[1]/diff/title";
                 //title = (String)xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
-SVGjs.append(" txt = createText('"+nodeD.getFirstChild().getNodeValue()+"','"+did+"',"+x_+","+y_+",14,'Verdana');").append("\n");
+SVGjs.append(" txt = createText('"+nodeD.getFirstChild().getNodeValue()+"','"+did+"',"+x_+","+y_+","+HEADER_4+",'Verdana');").append("\n");
 SVGjs.append(" g.appendChild(txt);").append("\n");
-SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+h_+","+x_+","+y_+");").append("\n");
+SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_4+","+x_+","+y_+");").append("\n");
 SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-SVGjs.append(" framingRect(rect,"+w_+","+h_+","+x_+","+y_+","+14+");").append("\n");
-SVGjs.append(" g.insertBefore(rect,txt);").append("\n");                
+SVGjs.append(" framingRect(rect,"+w_+","+vPadding(HEADER_4)+","+x_+","+y_+","+HEADER_4+");").append("\n");
+SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
             }
         }
         
@@ -508,21 +522,44 @@ SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
             Node nodeT = nlThms.item(l);
             if(nodeT!=null && nodeT.getNodeType()==Node.ELEMENT_NODE) {
                 attrs = nodeT.getAttributes();
+                boolean isHidden = Boolean.parseBoolean(attrs.getNamedItem("hidden").getNodeValue());
                 String tid = attrs.getNamedItem("id").getNodeValue();
                 w_ = assertValue(attrs.getNamedItem("width").getNodeValue());
                 h_ = assertValue(attrs.getNamedItem("height").getNodeValue());
                 x_ = assertValue(attrs.getNamedItem("x").getNodeValue());
                 y_ = assertValue(attrs.getNamedItem("y").getNodeValue());
-
+                
+                //if(hasDifferentiators) {
+                    y_ = y_ + topPadding(HEADER_3) + BOX_SPACING_TOP + BOX_SPACING_BOTTOM;
+                //}else {
+                    //y_ = y_ + topPadding(HEADER_3);
+                //}
+                
+                if(!isHidden) {
                 expression = "/bsc/perspective[@id='"+pid+"']/themes/theme[@id='"+tid+"']/title";
                 title = (String)xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
-SVGjs.append(" txt = createText('"+title+"','"+tid+"','"+x_+"','"+y_+"','18','Verdana');").append("\n");
+SVGjs.append(" txt = createText('"+title+"','"+tid+"',"+x_+","+y_+","+HEADER_3+",'Verdana');").append("\n");
 SVGjs.append(" g.appendChild(txt);").append("\n");
-SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+h_+","+x_+","+y_+");").append("\n");
+SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_3+","+x_+","+y_+");").append("\n");
 SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-SVGjs.append(" framingRect(rect,"+w_+","+h_+","+x_+","+y_+","+18+");").append("\n");
+SVGjs.append(" framingRect(rect,"+w_+","+vPadding(HEADER_3)+","+x_+","+y_+","+HEADER_3+");").append("\n");
 SVGjs.append(" g.insertBefore(rect,txt);").append("\n"); 
+                }
                 
+                //relaciones  causa-efecto con este tema
+                expression = "//theme[@id='"+tid+"']/rel";
+                NodeList nlRels = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+                for(int n=0; n<nlRels.getLength(); n++) {
+                    Node nodeR = nlRels.item(n);
+                    if(nodeR!=null && nodeR.getNodeType()==Node.ELEMENT_NODE) {
+                        attrs = nodeR.getAttributes();
+                        txt = attrs.getNamedItem("to").getNodeValue();
+                        rx = assertValue(attrs.getNamedItem("rx").getNodeValue());
+                        ry = assertValue(attrs.getNamedItem("ry").getNodeValue());
+                        SVGjs.append(" path = createArrow('"+txt+"',"+(x_+w_/2)+","+y_+","+rx+","+ry+");").append("\n");//ox+tw/2
+                        SVGjs.append(" g.appendChild(path);").append("\n");
+                    }
+                }
                 
                 //lista de objetivos
                 expression = "//theme[@id='"+tid+"']/obj";
@@ -539,6 +576,16 @@ SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
                         y_ = assertValue(attrs.getNamedItem("y").getNodeValue());
                         txt = attrs.getNamedItem("status").getNodeValue();
                         
+                        if(hasDifferentiators) {
+                            y_ = y_ + topPadding(HEADER_5) + topPadding(HEADER_3) + topPadding(HEADER_4);
+                            h_ = h_ - topPadding(HEADER_5) - topPadding(HEADER_3) - topPadding(HEADER_4);
+                        }else {
+                            y_ = y_ + topPadding(HEADER_5) + topPadding(HEADER_3);
+                            h_ = h_ - topPadding(HEADER_5) - topPadding(HEADER_3);
+                        }
+                        
+                        
+                        
                         info = new StringBuilder();
                         expression = "//theme[@id='"+tid+"']/obj[@id='"+oid+"']/prefix";
                         info.append(xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING));
@@ -551,18 +598,24 @@ SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
                         info.append(" ");
                         expression = "//theme[@id='"+tid+"']/obj[@id='"+oid+"']/frequency";
                         info.append(xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING));
+// rectángulo objetivo
 SVGjs.append(" lnk = createLink('"+href+"');").append("\n");
 SVGjs.append(" g.appendChild(lnk);").append("\n");
-SVGjs.append(" txt = createText('"+info+"','"+oid+"',"+x_+","+y_+",14,'Verdana');").append("\n");
+SVGjs.append(" txt = createText('"+info+"','"+oid+"',"+x_+","+y_+","+HEADER_5+",'Verdana');").append("\n");
 SVGjs.append(" lnk.appendChild(txt);").append("\n");
-SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+h_+","+x_+","+y_+");").append("\n");
+SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+vPadding(h_)+","+x_+","+y_+");").append("\n");
 SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-SVGjs.append(" framingRect(rect,"+w_+","+h_+","+x_+","+y_+","+14+");").append("\n");
+SVGjs.append(" rect.setAttributeNS(null,'fill','black');").append("\n");
+SVGjs.append(" rect.setAttributeNS(null,'fill-opacity','0.1');").append("\n");
+SVGjs.append(" rect.setAttributeNS(null,'stroke','black');").append("\n");
+SVGjs.append(" rect.setAttributeNS(null, 'stroke-width','1');").append("\n");
+SVGjs.append(" rect.setAttributeNS(null, 'stroke-opacity','0.1');").append("\n");
+SVGjs.append(" framingRect(rect,"+w_+","+vPadding(h_)+","+x_+","+y_+","+HEADER_5+");").append("\n");
 SVGjs.append(" g.insertBefore(rect,lnk);").append("\n");
 
                         //relaciones causa-efecto
                         expression = "//theme[@id='"+tid+"']/obj[@id='"+oid+"']/rel";
-                        NodeList nlRels = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+                        nlRels = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
                         for(int n=0; n<nlRels.getLength(); n++) {
                             Node nodeR = nlRels.item(n);
                             if(nodeR!=null && nodeR.getNodeType()==Node.ELEMENT_NODE) {
@@ -575,7 +628,7 @@ SVGjs.append(" g.insertBefore(rect,lnk);").append("\n");
                             }
                         }
                     }
-                }
+                } //lista de objetivos
             }
         }
     }
@@ -588,7 +641,7 @@ SVGjs.append("").append("\n");
 SVGjs.append("").append("\n");
 SVGjs.append("").append("\n");
 
-SVGjs.append("function createLink(url) {").append("\n");
+/*SVGjs.append("function createLink(url) {").append("\n");
 SVGjs.append("  var a = document.createElementNS(SVG_ ,'a');").append("\n");
 SVGjs.append("  a.setAttributeNS(XLINK_,'href',url);").append("\n");
 SVGjs.append("  a.setAttributeNS(null,'title','Ver detalle...');").append("\n");
@@ -596,7 +649,7 @@ SVGjs.append("  return a;").append("\n");
 SVGjs.append("}").append("\n");
 
 SVGjs.append("function createArrow(id,x1,y1,x2,y2) {").append("\n");
-SVGjs.append("  var arrow = createPath(id,x1,y1,x2,y2)").append("\n");
+SVGjs.append("  var arrow = createPath(id,x1,y1,x2,y2);").append("\n");
 SVGjs.append("  arrow.setAttributeNS(null, 'marker-end', 'url(#arrow_1)');").append("\n");
 SVGjs.append("  return arrow;").append("\n");
 SVGjs.append("}").append("\n");
@@ -605,9 +658,9 @@ SVGjs.append("function createPath(id,x1,y1,x2,y2) {").append("\n");
 SVGjs.append("  var path = document.createElementNS(SVG_,'path');").append("\n");
 SVGjs.append("  var d = 'M'+x1+','+y1'+' L'+(x1-5)+','+y1+' L'+(width-3)+','+y1+' L'+(width-3)+','+y2+' L'+x2+','+y2").append("\n");
 SVGjs.append("  path.setAttributeNS(null, 'd', 'M'+x1+','+y1+' L'+x2+','+y2);").append("\n");
-SVGjs.append("  path.style.stroke = \"#000\";").append("\n");
-SVGjs.append("  path.style.strokeWidth = \"3px\";").append("\n");
-//SVGjs.append("  path.style.markerEnd = \"3px\";").append("\n");
+SVGjs.append("  path.style.stroke = '#000';").append("\n");
+SVGjs.append("  path.style.strokeWidth = '3px';").append("\n");
+//SVGjs.append("  path.style.markerEnd = '3px';").append("\n");
 SVGjs.append("  ").append("\n");
 SVGjs.append("  return path;").append("\n");
 SVGjs.append("}").append("\n");
@@ -696,7 +749,7 @@ SVGjs.append("        }").append("\n");
 SVGjs.append("    }").append("\n");
 
 SVGjs.append("    h = getBoundingHeight(text_element);").append("\n");
-SVGjs.append("    while(h>height) {").append("\n");
+SVGjs.append("    while(h>height && dy>0) {").append("\n");
 SVGjs.append("        dy--;").append("\n");
 SVGjs.append("        text_element.setAttributeNS(null, 'font-size', dy);").append("\n");
 
@@ -738,7 +791,7 @@ SVGjs.append("  rect.y.baseVal.value = bbox.y;").append("\n");
 SVGjs.append("  rect.width.baseVal.value = bbox.width;").append("\n");
 SVGjs.append("  rect.height.baseVal.value = bbox.height;").append("\n");
 SVGjs.append("  return rect;").append("\n");
-SVGjs.append(" }").append("\n");
+SVGjs.append(" }").append("\n");*/
 
         SVGjs.append("</script>");
         return SVGjs.toString();
@@ -758,14 +811,18 @@ SVGjs.append(" }").append("\n");
     }
     
     private int vPadding(int value) {
-        return value+PADNG_TOP_SPACING+PADNG_DOWN_SPACING;
+        return value+PADDING_TOP+PADDING_DOWN;
     }
     
     private int topPadding(int value) {
-        return value+PADNG_TOP_SPACING;
+        return value+PADDING_TOP;
+    }
+    
+    private int bottomPadding(int value) {
+        return value+PADDING_TOP;
     }
     
     private int hPadding(int value) {
-        return value+PADNG_LEFT_SPACING+PADNG_RIGHT_SPACING;
+        return value+PADDING_LEFT+PADDING_RIGHT;
     }
 }

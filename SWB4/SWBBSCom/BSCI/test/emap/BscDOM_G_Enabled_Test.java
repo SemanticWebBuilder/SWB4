@@ -17,7 +17,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import static org.semanticwb.bsc.resources.strategicMap.StrategicMap.*;
+import static org.semanticwb.bsc.resources.maps.StrategicMap.*;
 import org.w3c.dom.NamedNodeMap;
 
 /**
