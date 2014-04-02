@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social Facebook. 
    */
-public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.social.PostOutMonitorable,org.semanticwb.social.Photoable,org.semanticwb.model.FilterableNode,org.semanticwb.social.Videoable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Oauthable,org.semanticwb.social.Secreteable,org.semanticwb.model.Activeable,org.semanticwb.social.Messageable,org.semanticwb.social.Listenerable,org.semanticwb.social.Relationable
+public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Messageable,org.semanticwb.social.Secreteable,org.semanticwb.model.Filterable,org.semanticwb.social.Relationable,org.semanticwb.social.Videoable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.social.Listenerable,org.semanticwb.social.PostOutMonitorable,org.semanticwb.model.Trashable,org.semanticwb.model.Traceable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Oauthable,org.semanticwb.social.Photoable,org.semanticwb.model.FilterableClass
 {
    /**
    * Access token de la aplicación. Esta propiedad se utiliza para poder obtener la propiedad Third_party_id de facebook y esta a su vez, para poder obtener el klout de facebook en la red Klout.
@@ -297,6 +297,29 @@ public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork i
         public static java.util.Iterator<org.semanticwb.social.Facebook> listFacebookByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Facebook> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Facebook with a determined PostOutLinksInv
+       * @param value PostOutLinksInv of the type org.semanticwb.social.PostOutLinksHits
+       * @param model Model of the org.semanticwb.social.Facebook
+       * @return Iterator with all the org.semanticwb.social.Facebook
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Facebook> listFacebookByPostOutLinksInv(org.semanticwb.social.PostOutLinksHits value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Facebook> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPostOutLinksInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Facebook with a determined PostOutLinksInv
+       * @param value PostOutLinksInv of the type org.semanticwb.social.PostOutLinksHits
+       * @return Iterator with all the org.semanticwb.social.Facebook
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Facebook> listFacebookByPostOutLinksInv(org.semanticwb.social.PostOutLinksHits value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Facebook> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostOutLinksInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**

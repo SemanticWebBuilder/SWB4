@@ -2,7 +2,7 @@ package org.semanticwb.social.base;
 
 
    /**
-   * Clase en la que se almacena la relación entre los PostOut enviados directamente a un usuario o usuarios en una determinada red social. 
+   * Clase en la que se almacena la relación entre los PostOut enviados directamente a un usuario o usuarios en una determinada red social. ESTA CLASE NO SE ESTA USANDO ACTUALMENTE, LA USAREMOS EN ALGÚN MOMENTO SI LAS REDES SOCIALES NOS PERMITEN ENVIAR MENSAJES DIRECTAMENTE A LOS USUARIOS, EN ESTE MOMENTO ELLAS CONSIDERAN QUE PUEDE SER SPAM Y POR ESO NO LO PERMITEN. 
    */
 public abstract class PostOutDirectUserRelationBase extends org.semanticwb.model.SWBClass 
 {
@@ -27,7 +27,7 @@ public abstract class PostOutDirectUserRelationBase extends org.semanticwb.model
    */
     public static final org.semanticwb.platform.SemanticProperty social_podur_SocialNetwork=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#podur_SocialNetwork");
    /**
-   * Clase en la que se almacena la relación entre los PostOut enviados directamente a un usuario o usuarios en una determinada red social.
+   * Clase en la que se almacena la relación entre los PostOut enviados directamente a un usuario o usuarios en una determinada red social. ESTA CLASE NO SE ESTA USANDO ACTUALMENTE, LA USAREMOS EN ALGÚN MOMENTO SI LAS REDES SOCIALES NOS PERMITEN ENVIAR MENSAJES DIRECTAMENTE A LOS USUARIOS, EN ESTE MOMENTO ELLAS CONSIDERAN QUE PUEDE SER SPAM Y POR ESO NO LO PERMITEN.
    */
     public static final org.semanticwb.platform.SemanticClass social_PostOutDirectUserRelation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostOutDirectUserRelation");
    /**

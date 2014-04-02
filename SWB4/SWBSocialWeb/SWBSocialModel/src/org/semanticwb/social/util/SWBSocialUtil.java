@@ -2477,6 +2477,50 @@ public class SWBSocialUtil {
     
     public static class Util{
         
+    /*
+     * Codificación de un número a base 64
+     */ 
+    public static String encodeLong(long l)
+    {   
+         String str="";
+         do
+         {
+             char c=0;
+             byte x=(byte)(l&63);
+             if(x<10)c=(char)(x+48);
+             else if(x<36)c=(char)(x+65-10);
+             else if(x<62)c=(char)(x+97-36);
+             else if(x==62)c=45;
+             else if(x==63)c=95;
+             str=c+str;
+             l=l>>6;
+         }while(l>0);
+         return str;
+    }
+
+    /*
+     * DeCodificación de un número a base 64
+     */ 
+     public static long decodeStr(String str)
+     {   
+         long l=0;
+         int i=0;
+         do
+         {
+             byte x=0;
+             char c=str.charAt(i);
+             if(c==45)x=62;
+             else  if(c==95)x=63;
+             else if(c<59)x=(byte)(c-48);
+             else if(c<92)x=(byte)(c-65+10);
+             else if(c<124)x=(byte)(c-97+36);
+             l=(l<<6)+x;
+             i++;
+         }while(i<str.length());
+         return l;
+     }    
+        
+        
        private static boolean pnpoly(double[][] vert, double testx, double testy)  
         {  
             int i, j = 0;
