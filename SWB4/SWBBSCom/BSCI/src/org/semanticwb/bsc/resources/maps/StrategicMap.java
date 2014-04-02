@@ -1,5 +1,5 @@
 
-package org.semanticwb.bsc.resources.strategicMap;
+package org.semanticwb.bsc.resources.maps;
 
 import java.io.IOException;
 import java.io.PrintWriter;
