@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales. 
    */
-public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.social.Secreteable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableNode,org.semanticwb.social.Listenerable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.social.Relationable
+public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.social.Secreteable,org.semanticwb.model.Trashable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.social.Relationable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableNode,org.semanticwb.social.Listenerable,org.semanticwb.model.FilterableClass
 {
    /**
    * Clase a Cambiar despues por "Relacional".  En esta clase se guardan todos los post que lleguan por el listener, se estima que toda la info. que se guarde en este objeto debe de eliminarse aproximadamente c/mes, siendo este parametro configurable de acuerdo al tiempo que la organización quiera guardar  la información sobre los mensajes que lleguen por el listener. Se almacenan por mes y año, de esta manera sera mucho mas rapido hacer las busquedas sobre las instancias de esta clase. EN ESTE MOMENTO NO SE ESTA UTILIZANDO ESTA CLASE.
@@ -51,7 +51,7 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasSocialPostInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasSocialPostInv");
    /**
-   * Clase en la que se almacena la relación entre los PostOut enviados directamente a un usuario o usuarios en una determinada red social.
+   * Clase en la que se almacena la relación entre los PostOut enviados directamente a un usuario o usuarios en una determinada red social. ESTA CLASE NO SE ESTA USANDO ACTUALMENTE, LA USAREMOS EN ALGÚN MOMENTO SI LAS REDES SOCIALES NOS PERMITEN ENVIAR MENSAJES DIRECTAMENTE A LOS USUARIOS, EN ESTE MOMENTO ELLAS CONSIDERAN QUE PUEDE SER SPAM Y POR ESO NO LO PERMITEN.
    */
     public static final org.semanticwb.platform.SemanticClass social_PostOutDirectUserRelation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostOutDirectUserRelation");
    /**
@@ -66,6 +66,14 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
    * PostOut que tiene una red social. Si se elimina una red social, No se eliminan todos los mensajes que tiene de salida, porque puede que un PostOut tenga otra red social asociada ademas de esta que se intenta eliminar, por lo tanto eso lo controlo en un Observador en esta clase (SocialNetwork, ahi busco todos los PostOut de la red social que se desea eliminar y si No tienen mas intancias de SocialNetwork asociadas los elimino, de lo contrario, no lo hago.
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasSocialNetworkPostOutInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasSocialNetworkPostOutInv");
+   /**
+   * Clase que guarda la relación de los links que se encuentran en el texto de un PostOuts y los hits (clicks) que tienen por parte de los usuarios en las redes sociales a las cuales se envío (dicho PostOut).
+   */
+    public static final org.semanticwb.platform.SemanticClass social_PostOutLinksHits=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostOutLinksHits");
+   /**
+   * Links que tiene la cuenta de red social para un determinado PostOut. Si se elimina la cuenta de red social, se eliminan sus instancias de esta clase (PostOutLinksHits)
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_hasPostOutLinksInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPostOutLinksInv");
    /**
    * Relación de Privacidad entre PostOut y las redes sociales a las cuales se envía.
    */
@@ -357,6 +365,29 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
         public static java.util.Iterator<org.semanticwb.social.SocialNetwork> listSocialNetworkByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetwork> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SocialNetwork with a determined PostOutLinksInv
+       * @param value PostOutLinksInv of the type org.semanticwb.social.PostOutLinksHits
+       * @param model Model of the org.semanticwb.social.SocialNetwork
+       * @return Iterator with all the org.semanticwb.social.SocialNetwork
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SocialNetwork> listSocialNetworkByPostOutLinksInv(org.semanticwb.social.PostOutLinksHits value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetwork> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPostOutLinksInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SocialNetwork with a determined PostOutLinksInv
+       * @param value PostOutLinksInv of the type org.semanticwb.social.PostOutLinksHits
+       * @return Iterator with all the org.semanticwb.social.SocialNetwork
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SocialNetwork> listSocialNetworkByPostOutLinksInv(org.semanticwb.social.PostOutLinksHits value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetwork> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostOutLinksInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -971,6 +1002,45 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(swb_title, title, lang);
+    }
+   /**
+   * Gets all the org.semanticwb.social.PostOutLinksHits
+   * @return A GenericIterator with all the org.semanticwb.social.PostOutLinksHits
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutLinksHits> listPostOutLinksInvs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutLinksHits>(getSemanticObject().listObjectProperties(social_hasPostOutLinksInv));
+    }
+
+   /**
+   * Gets true if has a PostOutLinksInv
+   * @param value org.semanticwb.social.PostOutLinksHits to verify
+   * @return true if the org.semanticwb.social.PostOutLinksHits exists, false otherwise
+   */
+    public boolean hasPostOutLinksInv(org.semanticwb.social.PostOutLinksHits value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_hasPostOutLinksInv,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the PostOutLinksInv
+   * @return a org.semanticwb.social.PostOutLinksHits
+   */
+    public org.semanticwb.social.PostOutLinksHits getPostOutLinksInv()
+    {
+         org.semanticwb.social.PostOutLinksHits ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasPostOutLinksInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.PostOutLinksHits)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Gets all the org.semanticwb.social.PostOutPrivacyRelation

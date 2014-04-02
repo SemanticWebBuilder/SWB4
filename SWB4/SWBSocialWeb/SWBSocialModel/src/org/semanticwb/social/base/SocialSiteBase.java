@@ -4,12 +4,16 @@ package org.semanticwb.social.base;
    /**
    * Clase que hereda de swb:WebSite. Es un tipo de website Social. De esta manera se puede contar con todos los elementos en el arbol de navegación en la administración, y otros elementos utiles para Social Site (Marca). 
    */
-public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Localeable,org.semanticwb.model.Activeable,org.semanticwb.model.Countryable
+public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.OntologyDepable,org.semanticwb.model.Filterable,org.semanticwb.model.Countryable,org.semanticwb.model.Indexable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Trashable,org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass
 {
    /**
    * Número de Días antes de que se refresque información del usuario en las redes sociales
    */
     public static final org.semanticwb.platform.SemanticProperty social_numDaysToRefreshUserData=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#numDaysToRefreshUserData");
+   /**
+   * Contador que indica cuantas ligas se han codificado.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_counter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#counter");
    /**
    * Acción específica mediante la cual se envía un correo electrónico
    */
@@ -424,6 +428,24 @@ public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implem
     public void setNumDaysToRefreshUserData(int value)
     {
         getSemanticObject().setIntProperty(social_numDaysToRefreshUserData, value);
+    }
+
+/**
+* Gets the Counter property
+* @return int with the Counter
+*/
+    public int getCounter()
+    {
+        return getSemanticObject().getIntProperty(social_counter);
+    }
+
+/**
+* Sets the Counter property
+* @param value long with the Counter
+*/
+    public void setCounter(int value)
+    {
+        getSemanticObject().setIntProperty(social_counter, value);
     }
 
     public org.semanticwb.social.SendEmail getSendEmail(String id)
