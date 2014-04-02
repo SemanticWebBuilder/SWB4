@@ -1098,6 +1098,7 @@
     <rdfs:range rdf:resource="#PostOut"/>
     <rdfs:domain>
       <swb:Class rdf:ID="PostOutLinksHits">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
         <rdfs:comment>Clase que guarda la relación de los links que se encuentran en el texto de un PostOuts y los hits (clicks) que tienen por parte de los usuarios en las redes sociales a las cuales se envío (dicho PostOut).</rdfs:comment>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
