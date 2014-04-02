@@ -17,8 +17,6 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.fop.svg.PDFTranscoder;
-import org.semanticwb.SWBPortal;
-import static org.semanticwb.SWBPortal.getWorkPath;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.accessory.DifferentiatorGroup;
@@ -891,7 +889,7 @@ public class StrategicMap extends GenericResource {
     }
     
     public static final String HEADER_PREFIX = "head_";
-    public static final int MARGEN_LEFT = 10; // Especifica el margen izquierdo del rectángulo de una perspectiva
+    public static final int MARGEN_LEFT = 12; // Especifica el margen izquierdo del rectángulo de una perspectiva
     public static final int MARGEN_RIGHT = 100; // Especifica el margen derecho del rectángulo de una perspectiva
     public static final int MARGEN_TOP = 20; // Especifica el margen superior del rectángulo de una perspectiva
     public static final int MARGEN_BOTTOM = 20; // Especifica el margen inferior del rectángulo de una perspectiva
@@ -953,7 +951,7 @@ public class StrategicMap extends GenericResource {
         header.setAttribute("id", HEADER_PREFIX+"DADT");
         header.setAttribute("width", Integer.toString(width));
         header.setAttribute("height", Integer.toString(HEADER_HEIGHT));
-        header.setAttribute("x", "0");
+        header.setAttribute("x", Integer.toString(PADDING_LEFT));
         header.setAttribute("y", "1");
         String expression = "/bsc/title";
         Node node = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);
@@ -1155,6 +1153,7 @@ public class StrategicMap extends GenericResource {
         SVGjs.append(" var posTo;").append("\n");   // posición del objetivo destino(target) de la relación
         SVGjs.append(" var posFrm;").append("\n");  //  posición del objetivo fuente(source) de la relación
         
+        // Encabezado
         XPath xPath = XPathFactory.newInstance().newXPath();
         expression = "/bsc/header";
         Node node = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);
@@ -1252,7 +1251,7 @@ public class StrategicMap extends GenericResource {
         
         
         
-        String title;
+        String title, perspectiveName;
         y = y + HEADER_HEIGHT + MARGEN_TOP;
         SVGjs.append(" var y = "+y+";").append("\n");
         StringBuilder info;
@@ -1269,7 +1268,7 @@ public class StrategicMap extends GenericResource {
 
                 // título de la perspectiva
                 expression = "/bsc/perspective[@id='"+pid+"']/title";
-                String title_ = (String)xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
+                perspectiveName = (String)xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
 
                 SVGjs.append(" g = document.createElementNS(SVG_,'g');").append("\n");
                 SVGjs.append(" g.setAttributeNS(null,'id','"+pid+"');").append("\n");
@@ -1391,7 +1390,7 @@ public class StrategicMap extends GenericResource {
 
                         // lista de objetivos
                         if(!isHidden) {
-                            SVGjs.append(" y_ = y__ + rect.height.baseVal.value + "+BOX_SPACING+";").append("\n"); 
+                            SVGjs.append(" y_ = y__ + rect.height.baseVal.value + "+BOX_SPACING+";").append("\n");
                         }else {
                             SVGjs.append(" y_ = y__ + "+BOX_SPACING+";").append("\n");
                         }
@@ -1500,7 +1499,7 @@ SVGjs.append("   to.addEventListener('mouseout', fadein, false);").append("\n");
                 SVGjs.append(" rect.setAttributeNS(null, 'stroke-opacity','1');").append("\n");
                 SVGjs.append(" g.insertBefore(rect,g.firstChild);").append("\n");
                 // título de la perspectiva
-                SVGjs.append(" txt = createText('"+title_+"',("+px+"+h_/2),h_,"+HEADER_3+",'Verdana');").append("\n");
+                SVGjs.append(" txt = createText('"+perspectiveName+"',("+px+"+h_/2),(h_-"+BOX_SPACING_RIGHT+"),"+HEADER_3+",'Verdana');").append("\n");
                 //SVGjs.append(" txt.setAttributeNS(null,'textLength',rect.height.baseVal.value);").append("\n");
                 //SVGjs.append(" txt.setAttributeNS(null,'lengthAdjust','spacingAndGlyphs');").append("\n");
                 SVGjs.append(" txt.setAttributeNS(null,'transform','rotate(270,"+px+",'+h_+')');").append("\n");
