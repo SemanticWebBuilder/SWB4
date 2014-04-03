@@ -15,10 +15,11 @@ public class Control extends org.semanticwb.bsc.tracing.base.ControlBase {
     }
 
     /**
-     * Obtiene el prefijo en base al prefijo del Factor padre. La nomenclatura en la
-     * que se basa se muestra a continuaci&oacute;n:  Prefijo del Factor  + "."
-     *  + n&uacute;mero consecutivo del Control.
-     * @return el objeto String que representa el prefijo para un Control 
+     * Obtiene el prefijo en base al prefijo del Factor padre. La nomenclatura
+     * en la que se basa se muestra a continuaci&oacute;n: Prefijo del Factor +
+     * "." + n&uacute;mero consecutivo del Control.
+     *
+     * @return el objeto String que representa el prefijo para un Control
      */
     @Override
     public String getPrefix() {
@@ -36,13 +37,15 @@ public class Control extends org.semanticwb.bsc.tracing.base.ControlBase {
 
     /**
      * Obtiene el siguiente prefijo consecutivo para un Control dado un Riesgo.
+     *
      * @param prefixControl el prefijo del Factor
      * @param factor el Factor que contiene al Control actual
-     * @return el objeto String que representa el siguiente prefijo para un Control 
+     * @return el objeto String que representa el siguiente prefijo para un
+     * Control
      */
     private String getConsecutive(String prefixFactor, Factor factor) {
         String consecutive = "";
-        List<String> map = new ArrayList<String>();
+        List map = new ArrayList();
         Iterator<Control> it = factor.listControls();
         while (it.hasNext()) {
             Control obj = it.next();
@@ -51,7 +54,8 @@ public class Control extends org.semanticwb.bsc.tracing.base.ControlBase {
             if (prefix != null && prefix.lastIndexOf(".") > -1) {
                 prefix = prefix.substring(prefix.lastIndexOf(".") + 1,
                         prefix.length());
-                map.add(prefix);
+                int intPrefix = Integer.parseInt(prefix);
+                map.add(intPrefix);
             }
         }
         try {
