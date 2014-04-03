@@ -2685,7 +2685,7 @@ public class StreamInBox extends GenericResource {
     }
    
    private void printPostIn(PostIn postIn, SWBParamRequest paramRequest, HttpServletResponse response, Stream stream, 
-           boolean userCanRemoveMsg, boolean userCanRetopicMsg, boolean userCanRevalueMsg, boolean userCanRespondMsg, boolean userCandoEveryThing) throws SWBResourceException, IOException {
+        boolean userCanRemoveMsg, boolean userCanRetopicMsg, boolean userCanRevalueMsg, boolean userCanRespondMsg, boolean userCandoEveryThing) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter(); 
         User user = paramRequest.getUser();
         String lang = user.getLanguage();
@@ -2888,15 +2888,17 @@ public class StreamInBox extends GenericResource {
                 HashMap userKloutDat=SWBSocialUtil.Classifier.classifybyKlout(postIn.getPostInSocialNetwork(), stream, socialNetUser, socialNetUser.getSnu_id(), true);
                 userKloutScore=((Integer)userKloutDat.get("userKloutScore")).intValue();
                 socialNetUser.setSnu_klout(userKloutScore);
-                if(userKloutScore<streamKloutValue) //El klout del postIn es menor al del stream, talvez cuando entro el postIn el stream tenía definido un valor de filtro de klout menor al de este momento.
+                if(streamKloutValue==0) out.println("---");
+                else if(userKloutScore<streamKloutValue) //El klout del postIn es menor al del stream, talvez cuando entro el postIn el stream tenía definido un valor de filtro de klout menor al de este momento.
                 {
-                    out.println("<font color=\"#FF6600\">"+userKloutScore+"</font>");
+                    out.println("<font color=\"#FF6600\"><div class=\"klout\">"+userKloutScore+"</div></font>");
                 }else{
-                    out.println(userKloutScore);
+                    out.println("<div class=\"klout\">"+userKloutScore+"</div>"); 
                 }
                 //System.out.println("checkKlout--J2:"+userKloutScore+", NO VOLVERA A PONER KLOUT PARA ESTE USER:"+socialNetUser);
             }else{
-                out.println(socialNetUser.getSnu_klout());
+                if(streamKloutValue==0) out.println("---");
+                else out.println("<div class=\"klout\">"+socialNetUser.getSnu_klout()+"</div>");
             }
         }
         else{
