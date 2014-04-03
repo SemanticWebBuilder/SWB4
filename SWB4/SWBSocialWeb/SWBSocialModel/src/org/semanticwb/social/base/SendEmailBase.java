@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Acción específica mediante la cual se envía un correo electrónico 
    */
-public abstract class SendEmailBase extends org.semanticwb.social.ActionMsg implements org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.social.PostDataable,org.semanticwb.model.FilterableNode,org.semanticwb.social.PostTextable,org.semanticwb.model.FilterableClass,org.semanticwb.social.Emailable,org.semanticwb.model.Descriptiveable
+public abstract class SendEmailBase extends org.semanticwb.social.ActionMsg implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable,org.semanticwb.social.Emailable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable
 {
    /**
    * Acción específica mediante la cual se envía un correo electrónico
