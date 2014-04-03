@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,6 +19,9 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.BSC;
+import org.semanticwb.bsc.Schedule;
+import org.semanticwb.bsc.Seasonable;
+import org.semanticwb.bsc.Status;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.bsc.element.BSCElement;
@@ -689,11 +693,30 @@ public class ReportGenerator extends GenericResource {
         while (initialSet != null && initialSet.hasNext()) {
             GenericObject inTurn = ((SemanticObject) initialSet.next()).createGenericInstance();
             boolean mustBeAdded = false;
+            
+            //evaluacion de periodos; si se seleccionaron
             if (criteria.getInitialPeriod() != null && criteria.getFinalPeriod() != null) {
-                
+                if (inTurn instanceof Status) {
+                    Seasonable seasonable = (Seasonable) inTurn;
+                    if (seasonable.hasPeriod(criteria.getInitialPeriod()) && seasonable.hasPeriod(criteria.getFinalPeriod())) {
+                        mustBeAdded = true;
+                    }
+                } else if (inTurn instanceof Schedule) {
+                    Schedule schedule = (Schedule) inTurn;
+                    Date initial2Compare = schedule.getActualStart() != null ? schedule.getActualStart() : schedule.getPlannedStart();
+                    Date final2Compare = schedule.getActualEnd() != null ? schedule.getActualEnd() : schedule.getPlannedEnd();
+                    if (initial2Compare != null && final2Compare != null && criteria.getInitialPeriod().getStart().before(initial2Compare) &&
+                            initial2Compare.before(criteria.getFinalPeriod().getEnd()) && criteria.getInitialPeriod().getStart().before(final2Compare) &&
+                            final2Compare.before(criteria.getFinalPeriod().getEnd())) {
+                        mustBeAdded = true;
+                    }
+                }
+            } else {
+                //si los periodos no se indicaron, no es filtro de seleccion
+                mustBeAdded = true;
             }
             //Se evalua filtro de Champion
-            if (criteria.getChampion() != null) {
+            if (criteria.getChampion() != null && mustBeAdded) {
                 mustBeAdded = false;
                 if (inTurn instanceof Indicator) {
                     if ( ((Indicator) inTurn).getChampion().equals(criteria.getChampion()) ) {
@@ -714,9 +737,11 @@ public class ReportGenerator extends GenericResource {
                         //TODO: Debe existir esta relacion
                     }
                 }
+            } else if (criteria.getChampion() == null) {
+                mustBeAdded = true;
             }
             //se evalua filtro de Sponsor
-            if (criteria.getSponsor() != null) {
+            if (criteria.getSponsor() != null && mustBeAdded) {
                 mustBeAdded = false;
                 if (inTurn instanceof Objective) {
                     if ( ((Objective) inTurn).getSponsor().equals(criteria.getSponsor()) ) {
@@ -730,7 +755,11 @@ public class ReportGenerator extends GenericResource {
                     }
                 }
                 //TODO: verificar relacion entre Iniciativa/Entregable con Indicador/Objetivo
+            } else if (criteria.getSponsor() == null) {
+                mustBeAdded = true;
             }
+            
+            
             if (inTurn instanceof BSCElement) {
                 System.out.println("Titulo BSCE: " + ((BSCElement) inTurn).getTitle());
             } else {
