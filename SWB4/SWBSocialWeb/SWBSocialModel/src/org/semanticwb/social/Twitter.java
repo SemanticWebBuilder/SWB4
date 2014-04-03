@@ -16,6 +16,7 @@ import java.util.Iterator;
 import javaQuery.j2ee.tinyURL;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
@@ -689,11 +690,51 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                          Double kloutUserScore = userScoreData != null && userScoreData.get("score") != null ? (Double) userScoreData.get("score") : 0.00;
                          return Math.rint(kloutUserScore.doubleValue());
                     }
+                    /*
+                    //TEST: OBTENCIÓN DE TOPICS DEL USUARIO
+                    String url_3="http://api.klout.com/v2/user.json/"+kloutUserId+"/topics";
+                    System.out.println("url_3:"+url_3);
+                    String kloutJsonResponse_3=getData(url_3);
+                    System.out.println("kloutJsonResponse_3-Json:"+kloutJsonResponse_3);
+                    if(kloutJsonResponse_3!=null)
+                    {
+                        JSONObject userScoreData = new JSONObject(kloutJsonResponse_3);
+                        
+                        JSONArray jArrayIds=userScoreData.getJSONArray("id");
+                        for (int i = 0; i < jArrayIds.length(); i++) {
+                            JSONObject jsonObj = jArrayIds.getJSONObject(i);
+                            System.out.println("jsonObj:"+jsonObj);
+                        }
+                    }
+                       
+                    String kloutTopicId = userScoreData != null && userScoreData.get("id") != null ? (String)userScoreData.get("id"):"";
+                    String kloutTopicDisplayName  = userScoreData != null && userScoreData.get("displayName") != null ? (String)userScoreData.get("displayName"):"";
+                    String kloutTopicName  = userScoreData != null && userScoreData.get("name") != null ? (String)userScoreData.get("name"):"";
+                    String kloutTopicSlug  = userScoreData != null && userScoreData.get("slug") != null ? (String)userScoreData.get("slug"):"";
+                    String kloutTopicImgUrl  = userScoreData != null && userScoreData.get("imageUrl") != null ? (String)userScoreData.get("imageUrl"):"";
+                    String kloutTopicType  = userScoreData != null && userScoreData.get("topicType") != null ? (String)userScoreData.get("topicType"):"";
+                    System.out.println("kloutTopicType:"+kloutTopicType);
+                    if(kloutTopicType.equals("sub"))
+                    {
+                       try{ 
+                           SWBUtils.IO.log2File("c://kloutTypes.txt", kloutTopicType);
+                       }catch(Exception e){log.error(e);
+                       }
+                       System.out.println("kloutUserId:"+kloutUserId);
+                       System.out.println("kloutTopicId:"+kloutTopicId);
+                       System.out.println("kloutTopicDisplayName:"+kloutTopicDisplayName);
+                       System.out.println("kloutTopicName:"+kloutTopicName);
+                       System.out.println("kloutTopicSlug:"+kloutTopicSlug);
+                       System.out.println("kloutTopicImgUrl:"+kloutTopicImgUrl);
+                    }
+                    */
+                    //FINALIZA TEST
+                   
                 }
             }
         }catch(JSONException je)
         {
-            
+            log.error(je);
         }
         return 0;
     }
@@ -710,7 +751,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             url=url+"?key="+key;
             URLConnection conex = null;
             try {
-                //System.out.println("Url a enviar a Klout:"+url);
+                System.out.println("Url a enviar a Klout:"+url);
                 URL pagina = new URL(url);
 
                 String host = pagina.getHost();
