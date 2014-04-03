@@ -47,7 +47,7 @@ public class Factor extends org.semanticwb.bsc.tracing.base.FactorBase {
      */
     private String getConsecutive(String prefixRisk, Risk risk) {
         String consecutive = "";
-        List<String> map = new ArrayList<String>();
+        List map = new ArrayList();
         Iterator<Factor> it = risk.listFactors();
         while (it.hasNext()) {
             Factor obj = it.next();
@@ -56,7 +56,8 @@ public class Factor extends org.semanticwb.bsc.tracing.base.FactorBase {
             if (prefix != null && prefix.lastIndexOf(".") > -1) {
                 prefix = prefix.substring(prefix.lastIndexOf(".") + 1,
                         prefix.length());
-                map.add(prefix);
+                int intPrefix = Integer.parseInt(prefix);
+                map.add(intPrefix);
             }
         }
         try {

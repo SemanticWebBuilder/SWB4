@@ -33,20 +33,19 @@ public class Risk extends org.semanticwb.bsc.tracing.base.RiskBase {
      */
     private String getConsecutive() {
         String consecutive = "";
-        List<String> map = new ArrayList<String>();
+        List map = new ArrayList();
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
         Iterator<SemanticObject> it = getBSC().getSemanticModel()
                 .listSubjects(bsc_yearRisk, year + "");
         while (it.hasNext()) {
             SemanticObject obj = it.next();
-            Risk risk = (Risk) obj.createGenericInstance();
-            String prefix = risk.getSemanticObject()
-                    .getProperty(bsc_prefix, false);
+            String prefix = obj.getProperty(bsc_prefix, false);
             if (prefix != null && prefix.lastIndexOf("_") > -1) {
                 prefix = prefix.substring(prefix.lastIndexOf("_") + 1,
                         prefix.length());
-                map.add(prefix);
+                int intPrefix = Integer.parseInt(prefix);
+                map.add(intPrefix);
             }
         }
         try {
