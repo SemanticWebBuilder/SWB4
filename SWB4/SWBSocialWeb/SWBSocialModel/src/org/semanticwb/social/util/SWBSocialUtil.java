@@ -2110,7 +2110,7 @@ public class SWBSocialUtil {
                     }
                     
                     //PostOutLinksHits manager
-                        PostOutLinksHitsManager(postOut);                    
+                        PostOutLinksHitsManager(postOut, aSocialNets);                    
                     //
                     
                     //SocialPFlow al que se va ha enviar el nuevo post, si no tiene(que llegue Nulo), entonces se envía el PostOut sin pasar por flujo
@@ -2136,7 +2136,7 @@ public class SWBSocialUtil {
          * Manage PostOutLinksHitsManager given a PostOut message
          * @param postOut 
          */
-        private static void PostOutLinksHitsManager(PostOut postOut)
+        private static void PostOutLinksHitsManager(PostOut postOut, ArrayList<SocialNetwork> socialNets)
         {
             
         }
