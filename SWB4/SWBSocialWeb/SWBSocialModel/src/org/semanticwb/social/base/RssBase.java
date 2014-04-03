@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Manejo de Rss en una marca 
    */
-public abstract class RssBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Tagable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable
+public abstract class RssBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Tagable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode
 {
    /**
    * Url del rss

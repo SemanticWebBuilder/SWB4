@@ -66,6 +66,12 @@ public abstract class PostOutLinksHitsBase extends org.semanticwb.model.SWBClass
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutLinksHits>(it, true);
         }
+
+        public static org.semanticwb.social.PostOutLinksHits createPostOutLinksHits(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.social.PostOutLinksHits.ClassMgr.createPostOutLinksHits(String.valueOf(id), model);
+        }
        /**
        * Gets a org.semanticwb.social.PostOutLinksHits
        * @param id Identifier for org.semanticwb.social.PostOutLinksHits
