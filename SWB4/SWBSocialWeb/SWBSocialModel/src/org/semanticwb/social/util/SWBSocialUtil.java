@@ -2109,6 +2109,9 @@ public class SWBSocialUtil {
                         }
                     }
                     
+                    //PostOutLinksHits manager
+                        PostOutLinksHitsManager(postOut);                    
+                    //
                     
                     //SocialPFlow al que se va ha enviar el nuevo post, si no tiene(que llegue Nulo), entonces se envía el PostOut sin pasar por flujo
                     if (socialPFlow != null) {
@@ -2127,6 +2130,15 @@ public class SWBSocialUtil {
             } catch (Exception e) {
                 log.error(e);
             }
+        }
+        
+        /**
+         * Manage PostOutLinksHitsManager given a PostOut message
+         * @param postOut 
+         */
+        private static void PostOutLinksHitsManager(PostOut postOut)
+        {
+            
         }
         
         
