@@ -88,6 +88,7 @@ import org.semanticwb.social.SocialFlow.SocialPFlowMgr;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialTopic;
+import org.semanticwb.social.PostOutLinksHits;
 import org.semanticwb.social.SocialUserExtAttributes;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.util.SWBSocialUtil;
@@ -144,6 +145,7 @@ public class SocialSentPost extends GenericResource {
     private static final String Mode_ShowMoreNets = "showMoreNets";
     private static final String Mode_ShowFastCalendar = "showFastCalendar";
     public static final String Mode_MsgComments="msgComments";
+    public static final String Mode_LinksHits="linksHits";
     public static final String Mode_RecoverComments="recoverComments";
     public static final String Mode_AllComments="allComments";
     public static final String Mode_CommentVideo="commentVideo";
@@ -184,6 +186,8 @@ public class SocialSentPost extends GenericResource {
             doShowPhotos(request, response, paramRequest);
         }else if (Mode_MsgComments.equals(mode)) {
             doShowMsgComments(request, response, paramRequest);
+        }else if(Mode_LinksHits.equals(mode)){
+            doShowLinksHits(request, response, paramRequest);
         }else if(Mode_RecoverComments.equals(mode)){
             doShowRecoveredComments(request, response, paramRequest);
         }else if(Mode_AllComments.equals(mode)){
@@ -973,6 +977,13 @@ public class SocialSentPost extends GenericResource {
                 SWBResourceURL postOutCommentsUrl = paramRequest.getRenderUrl().setMode(Mode_MsgComments).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postOut.getURI());
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("msgComments") + "\" class=\"msgComments\" onclick=\"showDialog('" + postOutCommentsUrl + "','" + paramRequest.getLocaleString("msgComments")
                         + "'); return false;\">"+Math.round(postOut.getNumTotNewResponses())+"</a>");
+            }
+            
+            if(PostOutLinksHits.ClassMgr.listPostOutLinksHitsByPostOut(postOut).hasNext())
+            {
+                SWBResourceURL postOutLinksHits = paramRequest.getRenderUrl().setMode(Mode_LinksHits).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postOut.getURI());
+                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("msgLinksHits") + "\" class=\"msgLinksHits\" onclick=\"showDialog('" + postOutLinksHits + "','" + paramRequest.getLocaleString("msgLinksHits")
+                        + "'); return false;\"></a>");
             }
 
             out.println("</td>");
@@ -3445,6 +3456,29 @@ public class SocialSentPost extends GenericResource {
             }
         }
     }
+    
+    
+    /*
+     * Shows the Hits of a PostOut Link
+     */
+    private void doShowLinksHits(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
+        final String myPath = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostOutLinksHist.jsp";
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        RequestDispatcher dis = request.getRequestDispatcher(myPath);
+        if (dis != null) {
+            try {                
+                request.setAttribute("postOut", request.getParameter("postUri"));
+                request.setAttribute("paramRequest", paramRequest);
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error(e);
+                e.printStackTrace(System.out);
+            }
+        }
+    }
+    
     
     public void doShowRecoveredComments(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");

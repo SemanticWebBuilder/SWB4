@@ -2661,7 +2661,7 @@ public class SocialTopicInBox extends GenericResource {
 
         //Klout
         out.println("<td align=\"center\">");
-        out.println(postIn.getPostInSocialNetworkUser() != null ? postIn.getPostInSocialNetworkUser().getSnu_klout():"---");
+        out.println(postIn.getPostInSocialNetworkUser() != null ? "<div class=\"klout\">"+postIn.getPostInSocialNetworkUser().getSnu_klout()+"</div>":"---");
         out.println("</td>");
 
         //Place
