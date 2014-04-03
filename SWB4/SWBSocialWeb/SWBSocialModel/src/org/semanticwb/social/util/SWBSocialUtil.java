@@ -26,6 +26,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import javaQuery.j2ee.tinyURL;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.semanticwb.Logger;
@@ -39,6 +40,7 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroupRef;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormMgr;
@@ -71,6 +73,7 @@ import org.semanticwb.social.Video;
 import org.semanticwb.social.Videoable;
 import org.semanticwb.social.util.lucene.SpanishAnalizer;
 import org.semanticwb.social.FastCalendar;
+import org.semanticwb.social.PostOutLinksHits;
 import org.semanticwb.social.SWBSocial;
 
 /**
@@ -2138,7 +2141,28 @@ public class SWBSocialUtil {
          */
         private static void PostOutLinksHitsManager(PostOut postOut, ArrayList<SocialNetwork> socialNets)
         {
-            
+            if(postOut.getMsg_Text() != null && !postOut.getMsg_Text().isEmpty()){                
+                SocialSite socialSite = SocialSite.ClassMgr.getSocialSite(postOut.getSemanticObject().getModel().getName());                
+                String[] splittedWords = postOut.getMsg_Text().split(" ");                
+                UrlValidator defaultValidator = new UrlValidator(); // default schemes
+                
+                for (int i = 0; i < splittedWords.length; i++){
+                    if(defaultValidator.isValid(splittedWords[i])){//assumed string starts with ftp, http, https
+                        for(SocialNetwork socialNet: socialNets){//linksHits for each social network
+                            int currentCounter = socialSite.getCounter() + 1;
+                            String encoded = SWBSocialUtil.Util.encodeLong(currentCounter);
+                            socialSite.setCounter(currentCounter);
+                            //System.out.println("current: " + currentCounter + " encoded:" + encoded);
+                            PostOutLinksHits linksHits = PostOutLinksHits.ClassMgr.createPostOutLinksHits(socialSite);
+                            linksHits.setTargetUrl(splittedWords[i]);
+                            linksHits.setSocialNet(socialNet);
+                            linksHits.setPol_code(encoded);
+                            linksHits.setPostOut(postOut);
+                            //System.out.println("valid:" + splittedWords[i] + " post:" + linksHits);
+                        }
+                    }
+                }
+            }
         }
         
         
@@ -2812,7 +2836,7 @@ public class SWBSocialUtil {
                 String delimiter = " ";
                 String[] temp = urlLong.split(delimiter);
                 for (int i = 0; i < temp.length; i++) {
-                    if ((temp[i].startsWith("http://") || temp[i].startsWith("https://")) && ((temp[i].length() > 9))) {
+                    if ((temp[i].startsWith("http://") || temp[i].startsWith("https://") || temp[i].startsWith("ftp://")) && ((temp[i].length() > 9))) {
                         tinyURL tU = new tinyURL();
                         temp[i] = tU.getTinyURL(temp[i]);
                     }
@@ -2820,6 +2844,20 @@ public class SWBSocialUtil {
                 }
             }
             return parsedMessage;
+        }
+        
+        /**
+         * Replaces full urls with shorten urls.
+         * @param validUrl valid url string
+         * @return shorted url
+         */
+        public static String shortSingleUrl(String validUrl) {
+            String parsedUrl = "";
+            if (validUrl != null && !validUrl.isEmpty()) {                
+                tinyURL tU = new tinyURL();
+                parsedUrl = tU.getTinyURL(validUrl);                    
+            }            
+            return parsedUrl;
         }
         
         
