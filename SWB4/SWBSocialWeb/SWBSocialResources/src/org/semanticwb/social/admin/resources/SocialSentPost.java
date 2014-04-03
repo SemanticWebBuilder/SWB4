@@ -979,7 +979,7 @@ public class SocialSentPost extends GenericResource {
                         + "'); return false;\">"+Math.round(postOut.getNumTotNewResponses())+"</a>");
             }
             
-            if(PostOutLinksHits.ClassMgr.listPostOutLinksHitsByPostOut(postOut).hasNext())
+            if(PostOutLinksHits.ClassMgr.listPostOutLinksHitsByPostOut(postOut).hasNext())  //if postOut has Links in PostOutLinksHits
             {
                 SWBResourceURL postOutLinksHits = paramRequest.getRenderUrl().setMode(Mode_LinksHits).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postOut.getURI());
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("msgLinksHits") + "\" class=\"msgLinksHits\" onclick=\"showDialog('" + postOutLinksHits + "','" + paramRequest.getLocaleString("msgLinksHits")
