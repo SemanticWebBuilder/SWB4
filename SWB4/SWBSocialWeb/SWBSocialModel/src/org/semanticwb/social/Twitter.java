@@ -16,6 +16,7 @@ import java.util.Iterator;
 import javaQuery.j2ee.tinyURL;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.validator.routines.UrlValidator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,6 +25,9 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.WebPage;
+import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.social.listener.Classifier;
@@ -74,13 +78,14 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     }
 
     @Override
-    public void postMsg(Message message) {
+    public void postMsg(Message message) {        
         if(!isSn_authenticated() || getAccessToken() == null ){
             log.error("Not authenticated network: " + getTitle() + ". Unable to post Message");
             return;
         }
         
         if (message != null && message.getMsg_Text() != null && message.getMsg_Text().trim().length() > 1) {
+            String messageText = this.shortMsgText(message);
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
             try {
                 twitter.setOAuthConsumer(this.getAppKey(), this.getSecretKey());
@@ -94,21 +99,22 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 if(files.hasNext()){//If at least one file found
                     String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
                     urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + message.getEncodedURI() + "&neturi=" + this.getEncodedURI();
-                }
+                    urlLocalPost = SWBSocialUtil.Util.shortSingleUrl(urlLocalPost);
+                }                
                 if(message.getPostInSource()!=null && message.getPostInSource().getSocialNetMsgId()!=null)
                 {
                     //System.out.println("Twitter Msg PRIMERA OPCION...:"+message.getPostInSource().getPostInSocialNetworkUser().getSnu_name());
                     if(!urlLocalPost.isEmpty()){
-                        sup = twitter.updateStatus(new StatusUpdate(new String(SWBSocialUtil.Util.shortUrl(message.getPostInSource().getPostInSocialNetworkUser().getSnu_name()+" " +message.getMsg_Text() + " " + urlLocalPost).getBytes(), "ISO-8859-1")).inReplyToStatusId(Long.parseLong(message.getPostInSource().getSocialNetMsgId())));
+                        sup = twitter.updateStatus(new StatusUpdate(new String((message.getPostInSource().getPostInSocialNetworkUser().getSnu_name()+" " + messageText + " " + urlLocalPost).getBytes(), "ISO-8859-1")).inReplyToStatusId(Long.parseLong(message.getPostInSource().getSocialNetMsgId())));
                     }else{
-                        sup = twitter.updateStatus(new StatusUpdate(new String(SWBSocialUtil.Util.shortUrl(message.getPostInSource().getPostInSocialNetworkUser().getSnu_name()+" " +message.getMsg_Text()).getBytes(), "ISO-8859-1")).inReplyToStatusId(Long.parseLong(message.getPostInSource().getSocialNetMsgId())));
+                        sup = twitter.updateStatus(new StatusUpdate(new String((message.getPostInSource().getPostInSocialNetworkUser().getSnu_name()+" " + messageText).getBytes(), "ISO-8859-1")).inReplyToStatusId(Long.parseLong(message.getPostInSource().getSocialNetMsgId())));
                     }
                 }else{
                     //System.out.println("Twitter Msg SEGUNDA OPCION...");
                     if(!urlLocalPost.isEmpty()){
-                        sup = twitter.updateStatus(new StatusUpdate(new String(SWBSocialUtil.Util.shortUrl(message.getMsg_Text() + " " + urlLocalPost).getBytes(), "ISO-8859-1")));
+                        sup = twitter.updateStatus(new StatusUpdate(new String((messageText + " " + urlLocalPost).getBytes(), "ISO-8859-1")));
                     }else{
-                        sup = twitter.updateStatus(new StatusUpdate(new String(SWBSocialUtil.Util.shortUrl(message.getMsg_Text()).getBytes(), "ISO-8859-1")));
+                        sup = twitter.updateStatus(new StatusUpdate(new String((messageText).getBytes(), "ISO-8859-1")));
                     }
                 }
                 //Status stat = twitter.updateStatus(sup);
@@ -140,6 +146,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         }
         //System.out.println("Inside post photo TWITTER");
         if (photo != null) {
+            String messageText = this.shortMsgText(photo);
             String photoToPublish="";
             String additionalPhotos="";
             int photoNumber = 0;
@@ -160,6 +167,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             }else if (photoNumber > 1){
                 String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
                 additionalPhotos = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + photo.getEncodedURI() + "&neturi=" + this.getEncodedURI();
+                additionalPhotos = SWBSocialUtil.Util.shortSingleUrl(additionalPhotos);
                 //System.out.println("Path form multiple photos:" + additionalPhotos);
             }
             
@@ -167,7 +175,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
             twitter.setOAuthConsumer(this.getAppKey(), this.getSecretKey());
             AccessToken accessToken = new AccessToken(this.getAccessToken(), this.getAccessTokenSecret());
-            String description = photo.getMsg_Text()!= null ? photo.getMsg_Text() : "";
+            //String description = photo.getMsg_Text()!= null ? photo.getMsg_Text() : "";
             twitter.setOAuthAccessToken(accessToken);
             
             try {
@@ -178,15 +186,15 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 {
                     //System.out.println("Twitter Photo PRIMERA OPCION...:"+photo.getPostInSource().getPostInSocialNetworkUser().getSnu_name());
                     //sup = new StatusUpdate(new String(shortUrl(photo.getPostInSource().getPostInSocialNetworkUser().getSnu_name() + " " +description).getBytes(), "ISO-8859-1"));
-                    description = description + (additionalPhotos.trim().length() > 0 ? " " + additionalPhotos : "" ); //
-                    sup = new StatusUpdate(new String(SWBSocialUtil.Util.shortUrl(photo.getPostInSource().getPostInSocialNetworkUser().getSnu_name() + " " + description ).getBytes(), "ISO-8859-1"));
+                    messageText = messageText + (additionalPhotos.trim().length() > 0 ? " " + additionalPhotos : "" ); //
+                    sup = new StatusUpdate(new String((photo.getPostInSource().getPostInSocialNetworkUser().getSnu_name() + " " + messageText ).getBytes(), "ISO-8859-1"));
                     //sup.setMedia(new File(photoSend));
                     sup.setMedia(new File(photoToPublish));
                     stat = twitter.updateStatus(sup.inReplyToStatusId(Long.parseLong(photo.getPostInSource().getSocialNetMsgId())));
                 }else{
                     //System.out.println("Twitter Photo SEGUNDA OPCION...");
-                    description = description + (additionalPhotos.trim().length() > 0 ? " " + additionalPhotos : "" ); //
-                    sup = new StatusUpdate(new String(SWBSocialUtil.Util.shortUrl(description).getBytes(), "ISO-8859-1"));
+                    messageText = messageText + (additionalPhotos.trim().length() > 0 ? " " + additionalPhotos : "" ); //
+                    sup = new StatusUpdate(new String((messageText).getBytes(), "ISO-8859-1"));
                     //sup.setMedia(new File(photoSend));
                     sup.setMedia(new File(photoToPublish));
                     stat = twitter.updateStatus(sup);
@@ -913,6 +921,33 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         }
         return removed;
         //throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    
+    public String shortMsgText(PostOut postOut){
+        SocialSite socialSite = SocialSite.ClassMgr.getSocialSite(postOut.getSemanticObject().getModel().getName());                
+        String msgText = postOut.getMsg_Text();
+        WebSite admin = SWBContext.getAdminWebSite();
+        WebPage linksRedirector  = admin.getWebPage("linksredirector");
+        String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
+        
+        Iterator<PostOutLinksHits> savedLinks = PostOutLinksHits.ClassMgr.listPostOutLinksHitsByPostOut(postOut, socialSite);
+        while(savedLinks.hasNext()){
+            PostOutLinksHits savedLink = savedLinks.next();
+            //System.out.println("--->" + savedLink);
+            if(savedLink.getSocialNet().getURI().equals(this.getURI())){//La misma red
+                if(msgText.contains(savedLink.getTargetUrl())){//La url existe                    
+                    String targetUrl = absolutePath + linksRedirector.getUrl() + "?uri=" + postOut.getEncodedURI() + "&code=" + savedLink.getPol_code() + "&neturi=" + this.getEncodedURI();                    
+                    //System.out.println("\n\n---------------\ntarget:" + targetUrl);
+                    targetUrl = SWBSocialUtil.Util.shortSingleUrl(targetUrl);                    
+                    //System.out.println("shorted:" + targetUrl);
+                    msgText = msgText.replace(savedLink.getTargetUrl(), targetUrl);
+                    //System.out.println("msg:" + targetUrl);
+                }
+            }
+        }
+        //System.out.println("RETURNED MESSAGE:" + msgText);
+        return msgText;
     }
     
     
