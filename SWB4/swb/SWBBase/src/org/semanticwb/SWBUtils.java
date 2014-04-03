@@ -434,7 +434,8 @@ public class SWBUtils {
         private static SimpleDateFormatTS iso8601dateFormat1 = new SimpleDateFormatTS("yyyy-MM-dd'T'HH:mm:ss'.'SSS");
         private static SimpleDateFormatTS iso8601dateFormat2 = new SimpleDateFormatTS("yyyy-MM-dd'T'HH:mm:ss");
         private static SimpleDateFormatTS iso8601dateFormat3 = new SimpleDateFormatTS("yyyy-MM-dd");
-                
+        private static SimpleDateFormatTS iso8601dateFormat4 = new SimpleDateFormatTS("yyyy-MM");
+        private static SimpleDateFormatTS iso8601dateFormat5 = new SimpleDateFormatTS("yyyy");
                 
         
 
