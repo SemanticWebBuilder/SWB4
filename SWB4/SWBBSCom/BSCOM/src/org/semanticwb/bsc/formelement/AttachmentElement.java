@@ -21,6 +21,10 @@ import org.semanticwb.portal.SWBFormMgr;
 /**
  * Form Element que presentará la vista para administrar archivos adjuntos
  * (Creación, Edición y Eliminación)
+ * 
+ * @author Martha Elvia Jim&eacute;nez Salgado
+ * @version %I%, %G%
+ * @since 1.0
  */
 public class AttachmentElement extends org.semanticwb.bsc.formelement.base.AttachmentElementBase {
 
