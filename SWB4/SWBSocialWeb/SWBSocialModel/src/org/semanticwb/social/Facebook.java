@@ -21,7 +21,9 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.io.SWBFile;
 import org.semanticwb.io.SWBFileInputStream;
 import org.semanticwb.model.Language;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -682,20 +684,24 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         }
         
         String urlLocalPost = "";
+        String messageText = this.shortMsgText(message);
         Iterator<String> files = message.listFiles();
         if(files.hasNext()){//If at least one file found
             String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
             urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + message.getEncodedURI() + "&neturi=" + this.getEncodedURI();
+            urlLocalPost = SWBSocialUtil.Util.shortSingleUrl(urlLocalPost);
         }
         
         Map<String, String> params = new HashMap<String, String>(2);
         params.put("access_token", this.getAccessToken());
         if(urlLocalPost.isEmpty()){
-            params.put("message", message.getMsg_Text());
+            //params.put("message", message.getMsg_Text());
+            params.put("message", messageText);
         }else{
-            String messageWithLink = SWBSocialUtil.Util.shortUrl(message.getMsg_Text() + " " + urlLocalPost);
-            params.put("message", messageWithLink);
-            message.setMsg_Text(messageWithLink);//Save the message with link
+            //String messageWithLink = SWBSocialUtil.Util.shortUrl(message.getMsg_Text() + " " + urlLocalPost);
+            //params.put("message", messageWithLink);
+            params.put("message", messageText + " " + urlLocalPost);
+            //message.setMsg_Text(messageWithLink);//Save the message with link
         }
         params.put("privacy", "{'value':'" + privacyValue(message) + "'}");
         String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/feed";
@@ -780,14 +786,11 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         }
 
         String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/photos";
-        JSONObject jsonResponse = null;
-        //String urlLocalPost = "http://localhost:8080/swbadmin/jsp/social/postViewFiles.jsp?uri=" + photo.getEncodedURI();
-        //String uriTemp = "http://" + request.getServerName() + ":" + request.getServerPort() + SWBPortal.getWebWorkPath() + "/models/SWBAdmin/jsp/oauth/callback.jsp";
-        String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
-        String urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + photo.getEncodedURI() + "&neturi=" + this.getEncodedURI();
+        JSONObject jsonResponse = null;                
+        String urlLocalPost = "";
+        String messageText = this.shortMsgText(photo);
         try {
-            String photoToPublish = "";
-            String additionalPhotos = "";
+            String photoToPublish = "";            
             int photoNumber = 0;
 
             Iterator<String> photos = photo.listPhotos();
@@ -795,16 +798,15 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 String sPhoto = photos.next();
                 if (++photoNumber == 1) {//post the first Photo
                     photoToPublish = SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + sPhoto;
-                }/*else{
-                 additionalPhotos += SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + sPhoto + " ";
-                 }*/
+                }
             }
             if (photoNumber == 0) {
                 log.error("No photo(s) found!");
-                //System.out.println("No Photos FOUND");
                 return;
             } else if (photoNumber > 1) {
-                additionalPhotos = urlLocalPost;
+                String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
+                urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + photo.getEncodedURI() + "&neturi=" + this.getEncodedURI();
+                urlLocalPost = SWBSocialUtil.Util.shortUrl(urlLocalPost);
             }
 
             //System.out.println("The photo to be published FACEBOOK:" + photoToPublish);
@@ -812,19 +814,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
 
             //if text is not null, add it to the message. Always include additionalPhotos it may be empty if only one picture was found.
-            params.put("message", (photo.getMsg_Text() == null ? "" : SWBSocialUtil.Util.shortUrl(photo.getMsg_Text() + " " + additionalPhotos)));
-            /*
-             if (photo.getMsg_Text() != null) {
-             if(!additionalPhotos.isEmpty()){//Msg and photos
-             params.put("message", photo.getMsg_Text() + " " + additionalPhotos);
-             }else{//Only msg
-             params.put("message", photo.getMsg_Text());
-             }
-             }else if(!additionalPhotos.isEmpty()){//Only photos
-             params.put("message", additionalPhotos);
-             }else {//Empty msg
-             params.put("message", "");
-             }*/
+            //params.put("message", (photo.getMsg_Text() == null ? "" : SWBSocialUtil.Util.shortUrl(photo.getMsg_Text() + " " + additionalPhotos)));            
 
             SWBFile photoFile = new SWBFile(photoToPublish);
 
@@ -834,14 +824,25 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
                 //if it's a response to a post and a photo is included don't upload the photo, only the url to the local site
                 if (photo.getPostInSource() != null && photo.getPostInSource().getSocialNetMsgId() != null) {
-                    params.put("message", (photo.getMsg_Text() == null ? "" : SWBSocialUtil.Util.shortUrl(photo.getMsg_Text() + " " + urlLocalPost)));
+                    String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
+                    urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + photo.getEncodedURI() + "&neturi=" + this.getEncodedURI();
+                    urlLocalPost = SWBSocialUtil.Util.shortUrl(urlLocalPost);
+                    
+                    params.put("message", (messageText == null ? "" : messageText + " " + urlLocalPost));
                     facebookResponse = postRequest(params, "https://graph.facebook.com/" + photo.getPostInSource().getSocialNetMsgId() + "/comments",
                             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "POST");
                     //System.out.println("1ST OPTION: RESPONDING TO SOMEONE WITH PICTURE:" + photo.getPostInSource().getSocialNetMsgId());
 
                 } else {//is a single post to my wall
-                    facebookResponse = postFileRequest(params, url,
+                    if(photoNumber == 1 && urlLocalPost.isEmpty()){//Una sola foto
+                        params.put("message", (photo.getMsg_Text() == null ? "" : messageText));
+                        facebookResponse = postFileRequest(params, url,
                             photoToPublish, fileStream, "POST", "photo");
+                    }else{
+                        params.put("message", (photo.getMsg_Text() == null ? "" : messageText + " " + urlLocalPost));
+                        facebookResponse = postFileRequest(params, url,
+                            photoToPublish, fileStream, "POST", "photo");
+                    }
                     //System.out.println("2ND OPTION: MAKING SINGLE POST WITH PICTURE");
                 }
                 jsonResponse = new JSONObject(facebookResponse);
@@ -1957,5 +1958,31 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             log.error("Post Not removed!");
         }
         return removed;
+    }
+    
+    public String shortMsgText(PostOut postOut){
+        SocialSite socialSite = SocialSite.ClassMgr.getSocialSite(postOut.getSemanticObject().getModel().getName());                
+        String msgText = postOut.getMsg_Text();
+        WebSite admin = SWBContext.getAdminWebSite();
+        WebPage linksRedirector  = admin.getWebPage("linksredirector");
+        String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
+        
+        Iterator<PostOutLinksHits> savedLinks = PostOutLinksHits.ClassMgr.listPostOutLinksHitsByPostOut(postOut, socialSite);
+        while(savedLinks.hasNext()){
+            PostOutLinksHits savedLink = savedLinks.next();
+            //System.out.println("--->" + savedLink);
+            if(savedLink.getSocialNet().getURI().equals(this.getURI())){//La misma red
+                if(msgText.contains(savedLink.getTargetUrl())){//La url existe                    
+                    String targetUrl = absolutePath + linksRedirector.getUrl() + "?uri=" + postOut.getEncodedURI() + "&code=" + savedLink.getPol_code() + "&neturi=" + this.getEncodedURI();                    
+                    //System.out.println("\n\n---------------\ntarget:" + targetUrl);
+                    targetUrl = SWBSocialUtil.Util.shortSingleUrl(targetUrl);                    
+                    //System.out.println("shorted:" + targetUrl);
+                    msgText = msgText.replace(savedLink.getTargetUrl(), targetUrl);
+                    //System.out.println("msg:" + targetUrl);
+                }
+            }
+        }
+        //System.out.println("RETURNED MESSAGE:" + msgText);
+        return msgText;
     }
 }
