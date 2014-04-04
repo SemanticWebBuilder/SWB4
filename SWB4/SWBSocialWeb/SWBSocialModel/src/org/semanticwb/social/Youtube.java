@@ -63,6 +63,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.io.SWBFile;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -1236,18 +1237,20 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             return;
         }
         System.out.println("Posting comment to a video");
-        if (message != null && message.getMsg_Text() != null && message.getMsg_Text().trim().length() > 1) {
+        if (message != null && message.getMsg_Text() != null && message.getMsg_Text().trim().length() > 1) {            
             if(message.getPostInSource()!=null && message.getPostInSource().getSocialNetMsgId()!=null){
-                System.out.println("Youtube Making comment:...:" + message.getPostInSource().getPostInSocialNetworkUser().getSnu_name());
+                String messageText = this.shortMsgText(message);                
+                System.out.println("Youtube Making comment:...:" + message.getPostInSource().getPostInSocialNetworkUser().getSnu_name());                
                 String videoId = message.getPostInSource().getSocialNetMsgId();
-                String comment = message.getMsg_Text();
+                //String comment = message.getMsg_Text();
                 
                 String urlLocalPost = "";
                 Iterator<String> files = message.listFiles();
                 if(files.hasNext()){//If at least one file found
                     String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
                     urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + message.getEncodedURI() + "&neturi=" + this.getEncodedURI();
-                    comment += " " + urlLocalPost;
+                    urlLocalPost = SWBSocialUtil.Util.shortSingleUrl(urlLocalPost);
+                    messageText += " " + urlLocalPost;
                 }
                 
                 if(!this.validateToken()){
@@ -1275,7 +1278,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                     String xml = "<?xml version=\"1.0\"?>"
                         + "<entry xmlns=\"http://www.w3.org/2005/Atom\""
                         + " xmlns:yt=\"http://gdata.youtube.com/schemas/2007\">"
-                        + "<content>" + SWBSocialUtil.Util.shortUrl(comment) + "</content>"
+                        + "<content>" + messageText + "</content>"
                         + "</entry>";
                     writer.write(xml.getBytes("UTF-8"));
                     writer.flush();
@@ -1673,5 +1676,29 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         return removed;
     }
     
-    
+    public String shortMsgText(PostOut postOut){
+        SocialSite socialSite = SocialSite.ClassMgr.getSocialSite(postOut.getSemanticObject().getModel().getName());                
+        String msgText = postOut.getMsg_Text();
+        WebSite admin = SWBContext.getAdminWebSite();
+        WebPage linksRedirector  = admin.getWebPage("linksredirector");
+        String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
+        
+        Iterator<PostOutLinksHits> savedLinks = PostOutLinksHits.ClassMgr.listPostOutLinksHitsByPostOut(postOut, socialSite);
+        while(savedLinks.hasNext()){
+            PostOutLinksHits savedLink = savedLinks.next();
+            //System.out.println("--->" + savedLink);
+            if(savedLink.getSocialNet().getURI().equals(this.getURI())){//La misma red
+                if(msgText.contains(savedLink.getTargetUrl())){//La url existe                    
+                    String targetUrl = absolutePath + linksRedirector.getUrl() + "?uri=" + postOut.getEncodedURI() + "&code=" + savedLink.getPol_code() + "&neturi=" + this.getEncodedURI();                    
+                    //System.out.println("\n\n---------------\ntarget:" + targetUrl);
+                    targetUrl = SWBSocialUtil.Util.shortSingleUrl(targetUrl);                    
+                    //System.out.println("shorted:" + targetUrl);
+                    msgText = msgText.replace(savedLink.getTargetUrl(), targetUrl);
+                    //System.out.println("msg:" + targetUrl);
+                }
+            }
+        }
+        //System.out.println("RETURNED MESSAGE:" + msgText);
+        return msgText;
+    }
 }
