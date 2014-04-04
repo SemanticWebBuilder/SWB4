@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Persiste los atributos de un indicador 
    */
-public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Referensable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Updateable,org.semanticwb.bsc.Seasonable,org.semanticwb.bsc.Serializable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Status,org.semanticwb.bsc.Attachmentable,org.semanticwb.model.Filterable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Committable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable
+public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Roleable,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Undeleteable,org.semanticwb.bsc.Attachmentable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Seasonable,org.semanticwb.model.Referensable,org.semanticwb.bsc.Status,org.semanticwb.bsc.Updateable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Committable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Serializable,org.semanticwb.model.Filterable
 {
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
@@ -24,15 +24,15 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
    * Persiste información de una nota a la fórmula de un indicador
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_notesFormula=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#notesFormula");
-   /**
-   * Persiste una fuente de información de un indicador
-   */
-    public static final org.semanticwb.platform.SemanticProperty bsc_informationSource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#informationSource");
     public static final org.semanticwb.platform.SemanticClass bsc_Series=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Series");
    /**
    * Series taken as reference. Indica qué serie usará el indicador para evaluar el período. Usualmente se ocupa la serie Actual.
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_star=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#star");
+   /**
+   * Persiste una fuente de información de un indicador
+   */
+    public static final org.semanticwb.platform.SemanticProperty bsc_informationSource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#informationSource");
    /**
    * Persiste información de la descripción de metas en un indicador
    */
@@ -858,24 +858,6 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
     {
         getSemanticObject().setBooleanProperty(swb_undeleteable, value);
     }
-
-/**
-* Gets the InformationSource property
-* @return String with the InformationSource
-*/
-    public String getInformationSource()
-    {
-        return getSemanticObject().getProperty(bsc_informationSource);
-    }
-
-/**
-* Sets the InformationSource property
-* @param value long with the InformationSource
-*/
-    public void setInformationSource(String value)
-    {
-        getSemanticObject().setProperty(bsc_informationSource, value);
-    }
    /**
    * Sets the value for the property Star
    * @param value Star to set
@@ -913,6 +895,24 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
              ret=(org.semanticwb.bsc.tracing.Series)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the InformationSource property
+* @return String with the InformationSource
+*/
+    public String getInformationSource()
+    {
+        return getSemanticObject().getProperty(bsc_informationSource);
+    }
+
+/**
+* Sets the InformationSource property
+* @param value long with the InformationSource
+*/
+    public void setInformationSource(String value)
+    {
+        getSemanticObject().setProperty(bsc_informationSource, value);
     }
 
 /**
