@@ -20,6 +20,10 @@
 
 
 <%!
+ private static int positivesGlobal = 0;
+    private static int negativesGlobal = 0;
+    private static int neutralsGlobal = 0;
+    
     JSONArray getObject(SemanticObject semObj, String lang, String filter) throws Exception {
         int positives = 0, negatives = 0, neutrals = 0, total = 0;
         int totalPost = 0;
@@ -74,6 +78,9 @@
 
 
         }
+         positivesGlobal = 0;
+        negativesGlobal = 0;
+        neutralsGlobal = 0;
         if (cont == 0) {
             JSONObject node3 = new JSONObject();
             node3.put("label", "Sin Datos");
@@ -114,6 +121,10 @@
                 }
             }
         }
+        
+           positivesGlobal = positivesGlobal + positivesF;
+            negativesGlobal = negativesGlobal + negativesF;
+            neutralsGlobal = neutralsGlobal + neutralsF;
 
         if (filter.equals("all")) {
             intPorcentaje = ((float) total * 100) / (float) totalPost;
@@ -121,6 +132,11 @@
             node1.put("label", "" + title);
             node1.put("value1", "" + total);
             node1.put("value2", "" + round(intPorcentaje));
+              JSONObject joChild = new JSONObject();
+            joChild.put("positivos", "" + positivesGlobal);
+            joChild.put("negativos", "" + negativesGlobal);
+            joChild.put("neutros", "" + neutralsGlobal);
+            node1.put("valor", joChild);
             if (positivesF > negativesF && positivesF > neutralsF) {
                 node1.put("color", "#008000");
             } else if (negativesF > neutralsF) {
@@ -130,8 +146,13 @@
             }
             node1.put("label2", "");
             node1.put("chartclass", "possClass");
-            node1.put("label3", "Total de Post: ");
-            node.put(node1);
+   if (true) {
+                JSONObject joTotal = new JSONObject();
+                joTotal.put("positivos", "" + positivesF);
+                joTotal.put("negativos", "" + negativesF);
+                joTotal.put("neutros", "" + neutralsF);
+                node1.put("label3", joTotal);
+            }            node.put(node1);
         } else {
             float intPorcentajeNeutrals = 0;
             float intPorcentajePositives = 0;
