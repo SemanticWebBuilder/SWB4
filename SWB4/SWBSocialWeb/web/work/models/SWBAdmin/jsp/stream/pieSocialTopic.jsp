@@ -782,6 +782,35 @@
                     //Obtenemos los valores para los radios
            
                     if(cont == 0){
+                        
+                         if(xArray.length==1){
+                            for (var x = data.length-1; x < data.length; x++) {  
+                                var to;
+                                to = data[x].valor;
+                  
+                                var paraPositives= document.createElement("p");   
+                                var paraNegatives= document.createElement("p");   
+                                var paraNeutrals= document.createElement("p");   
+
+                                var nodPositives = document.createTextNode(to.positivos);
+                                var nodNegatives= document.createTextNode(to.negativos);
+                                var nodNeutrals = document.createTextNode(to.neutros);
+                                
+                                paraPositives.appendChild(nodPositives);
+                                paraNegatives.appendChild(nodNegatives);
+                                paraNeutrals.appendChild(nodNeutrals);
+
+                                var element = document.getElementById("grafSentiPosBellow");                            
+                                element.appendChild(paraPositives);
+                                var element1 = document.getElementById("grafSentiNegBellow");                          
+                                element1.appendChild(paraNegatives);
+                                var element2 = document.getElementById("grafSentiNeuBellow");                            
+                                element2.appendChild(paraNeutrals);
+                                break;
+                                cont++;
+                            }  
+                    
+                        }
                  
                         if(xArray.length!=1){                      
                    
@@ -991,15 +1020,42 @@
                         return - width/2;
                     });    
          
-         var total;      
-                     var xArray = new Array();
+                    var total;      
+                    var xArray = new Array();
 
             
                     if(cont == 0){
-                               for (var i = 0; i < data.length; i++) {         
-                        xArray.push(data[i].valor);                                            
-                    }  
-                 
+                        for (var i = 0; i < data.length; i++) {                                   
+                            xArray.push(data[i].valor);                                            
+                        }  
+                        if(xArray.length==1){
+                            for (var x = data.length-1; x < data.length; x++) {  
+                                var to;
+                                to = data[x].valor;
+                  
+                                var paraPositives= document.createElement("p");   
+                                var paraNegatives= document.createElement("p");   
+                                var paraNeutrals= document.createElement("p");   
+
+                                var nodPositives = document.createTextNode(to.positivos);
+                                var nodNegatives= document.createTextNode(to.negativos);
+                                var nodNeutrals = document.createTextNode(to.neutros);
+                                
+                                paraPositives.appendChild(nodPositives);
+                                paraNegatives.appendChild(nodNegatives);
+                                paraNeutrals.appendChild(nodNeutrals);
+
+                                var element = document.getElementById("grafSentiPosBellow");                            
+                                element.appendChild(paraPositives);
+                                var element1 = document.getElementById("grafSentiNegBellow");                          
+                                element1.appendChild(paraNegatives);
+                                var element2 = document.getElementById("grafSentiNeuBellow");                            
+                                element2.appendChild(paraNeutrals);
+                                break;
+                                cont++;
+                            }  
+                    
+                        }
                         if(xArray.length!=1){                      
                    
                             for (var x = data.length-1; x < data.length; x++) {  
