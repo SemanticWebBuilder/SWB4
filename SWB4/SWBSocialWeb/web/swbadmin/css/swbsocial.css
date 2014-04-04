@@ -1528,7 +1528,7 @@ box-shadow:0px 0px 5px #e1e1e1; margin:10px 20px; background:#FBFBFB; padding:10
 
 iframe { border:none;}
 
-#pieGenderParent, #pieEducationParent, #pieRelationParent, #profileGeoLocationParent,#profileGeoLocationParentEU ,#profileLanguageParent , #profileCountryParent , #lifeStageParent, #pieSentimientos, #pieRedes	{
+#pieGenderParent, #pieEducationParent, #pieRelationParent, #profileGeoLocationParent,#profileGeoLocationParentEU ,#profileLanguageParent , #profileCountryParent , #lifeStageParent, #pieSentimientos, #pieRedes,#pieRedesPostOut{
 border:solid 1px #505B5F; margin:15px 5px; display:inline-block; padding-bottom:10px; background:#FDFDFD;
 border-radius:6px; 
 -moz-border-radius:6px;
@@ -1541,7 +1541,8 @@ border-radius:6px;
 #lifeStageParent		  { width:600px; height:470px;}
 #profileGeoLocationParent { width:600px; height:470px;}
 #pieSentimientos		  { width:600px; height:470px;}
-#pieRedes				  { width:600px; height:510px;}
+#pieRedes				  { width:600px; height:600px;}
+#pieRedesPostOut				  { width:600px; height:510px;}
 #profileGeoLocationParentEU   { width:600px; height:470px;}
 #profileLanguageParent   { width:600px; height:470px;}
 #profileCountryParent   { width:600px; height:470px;}
@@ -1553,6 +1554,7 @@ border-radius:6px;
 #profileGeoLocationParent h1 { width:93%}
 #pieSentimientos h1			 { width:93%}
 #pieRedes h1	    		 { width:93%}
+#pieRedesPostOut h1	    		 { width:93%}
 #profileGeoLocationParentEU h1               { width:93%}
 #profileLanguageParent h1               { width:93%}
 #profileCountryParent h1               { width:93%}
@@ -1599,6 +1601,7 @@ border-radius:0px 0px 4px 4px;
 .grafOptions #todorel + label,
 .grafOptions #todolif + label,
 .grafOptions #todogeo + label,
+.grafOptions #todoPostOutNet + label,
 .grafOptions #todogeoEU + label,
 .grafOptions #todolanguage + label,
 .grafOptions #todocountry+ label,
@@ -1615,6 +1618,7 @@ border-radius:0px 0px 4px 4px;
 .grafOptions #todorel:checked + label,
 .grafOptions #todolif:checked + label,
 .grafOptions #todogeo:checked + label,
+.grafOptions #todoPostOutNet:checked + label,
 .grafOptions #todogeoEU:checked + label,
 .grafOptions #todolanguage:checked + label,
 .grafOptions #todocountry:checked + label,
@@ -1643,8 +1647,11 @@ border-radius:0px 0px 4px 4px;
 .grafOptions #adul + label { background:url(images/graf-adul1.png) no-repeat;}
 .grafOptions #terc + label { background:url(images/graf-terc1.png) no-repeat;}
 .grafOptions #grafTwitter + label { background:url(images/graf-twit1.png) no-repeat;}
+.grafOptions #grafTwitterPostOutNet + label { background:url(images/graf-twit1.png) no-repeat;}
 .grafOptions #grafFacebook + label { background:url(images/graf-face1.png) no-repeat;}
+.grafOptions #grafFacebookPostOutNet + label { background:url(images/graf-face1.png) no-repeat;}
 .grafOptions #grafYoutube + label { background:url(images/graf-yout1.png) no-repeat;}
+.grafOptions #grafYoutubePostOutNet + label { background:url(images/graf-yout1.png) no-repeat;}
 
 .grafOptions #feme:checked + label { background:url(images/graf-fem2.png) no-repeat;}
 .grafOptions #masc:checked + label { background:url(images/graf-masc2.png) no-repeat;}
@@ -1662,8 +1669,11 @@ border-radius:0px 0px 4px 4px;
 .grafOptions #adul:checked + label { background:url(images/graf-adul2.png) no-repeat;}
 .grafOptions #terc:checked + label { background:url(images/graf-terc2.png) no-repeat;}
 .grafOptions #grafTwitter:checked + label { background:url(images/graf-twit2.png) no-repeat;}
+.grafOptions #grafTwitterPostOutNet:checked + label { background:url(images/graf-twit2.png) no-repeat;}
 .grafOptions #grafFacebook:checked + label { background:url(images/graf-face2.png) no-repeat;}
+.grafOptions #grafFacebookPostOutNet:checked + label { background:url(images/graf-face2.png) no-repeat;}
 .grafOptions #grafYoutube:checked + label { background:url(images/graf-yout2.png) no-repeat;}
+.grafOptions #grafYoutubePostOutNet:checked + label { background:url(images/graf-yout2.png) no-repeat;}
 
 .grafOptions .geoselect	{ border:solid 1px #ececec; width:160px; text-align:left; margin:6px 18px 0 18px !important; height:105px; background:#f7f7f7; font-size:11px; color:#666; overflow-x:hidden; overflow-y:scroll;
 border-radius:4px; 
@@ -1717,6 +1727,7 @@ border-radius:4px;
 #profileGeoLocationParentEU input[type=radio], 
 #profileLanguageParent input[type=radio], 
 #profileCountryParent input[type=radio], 
+#pieRedesPostOut input[type=radio], 
 #lifeStageParent input[type=radio], 
 #profileLifeStageParent input[type=radio],
 #pieSentimientos input[type=radio],
@@ -1727,13 +1738,17 @@ border-radius:4px;
 #pieRelation svg,
 #pieRelationShipStatus svg, 
 #profileGeoLocation svg, 
+#piePostOutSendUser svg, 
+#pieTopTen svg, 
+#pieBelow svg, 
 #profileGeoLocationEU svg, 
 #profileLanguage svg, 
 #profileCountry svg, 
 #lifeStage svg,
 #profileLifeStage svg,
 #pieSentimientos svg,
-#pieRedes svg { left:-120px; position:relative} 
+#pieRedesPostOut svg,
+#pieRedes svg {left:-120px; position:relative} 
 
 .grafSentiPos, .grafSentiNeg, .grafSentiNeu	{ border:solid 1px #CCC; padding:12px 8px 12px 19px; margin:35px 10px !important;
 border-radius:4px; 
