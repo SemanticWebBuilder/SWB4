@@ -817,7 +817,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             //params.put("message", (photo.getMsg_Text() == null ? "" : SWBSocialUtil.Util.shortUrl(photo.getMsg_Text() + " " + additionalPhotos)));            
 
             SWBFile photoFile = new SWBFile(photoToPublish);
-
+            
             if (photoFile.exists()) {
                 SWBFileInputStream fileStream = new SWBFileInputStream(photoFile);
                 String facebookResponse = "";
@@ -907,8 +907,9 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         if (video.getTitle() != null) {
             params.put("title", video.getTitle());    //TODO:Estoy enviando esto como título a la red social, ver como lo pone en la misma
         }
+        String messageText = this.shortMsgText(video);
         if (video.getMsg_Text() != null) {
-            params.put("description", video.getMsg_Text());
+            params.put("description", messageText);
         }
         params.put("privacy", "{'value':'" + privacyValue(video) + "'}");
         //String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/videos";
@@ -917,6 +918,8 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         //String urlLocalPost = "http://localhost:8080/swbadmin/jsp/social/postViewFiles.jsp?uri=" + video.getEncodedURI();
         String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
         String urlLocalPost = absolutePath + "/swbadmin/jsp/social/ViewPostFiles?uri=" + video.getEncodedURI() + "&neturi=" + this.getEncodedURI();
+        urlLocalPost = SWBSocialUtil.Util.shortSingleUrl(urlLocalPost);
+        
 
         try {
             String videoPath = SWBPortal.getWorkPath() + video.getWorkPath() + "/" + video.getVideo();
@@ -925,7 +928,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             if (videoFile.exists()) {
                 String facebookResponse;
                 if (video.getPostInSource() != null && video.getPostInSource().getSocialNetMsgId() != null) {
-                    params.put("message", (video.getMsg_Text() == null ? "" : SWBSocialUtil.Util.shortUrl(video.getMsg_Text() + " " + urlLocalPost)));
+                    params.put("message", (video.getMsg_Text() == null ? "" : messageText + " " + urlLocalPost));
+                    params.remove("title");
+                    params.remove("description");
+                    params.remove("privacy");
                     facebookResponse = postRequest(params, "https://graph.facebook.com/" + video.getPostInSource().getSocialNetMsgId() + "/comments",
                             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "POST");
                     //System.out.println("1ST OPTION: RESPONDING TO SOMEONE WITH VIDEO:" + video.getPostInSource().getSocialNetMsgId());
