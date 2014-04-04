@@ -3078,6 +3078,83 @@ public class SWBSocialUtil {
                 ORDER BY DESC(?postOuCreated) 
                */
         }
-    }
-    
+        
+        public static ArrayList getSocialNetworkPostOut(org.semanticwb.social.SocialTopic socialTopic) {
+            String query =
+                    "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                    + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                    + "\n";
+
+            query += "select DISTINCT ?semObj" + "\n";
+            query +=
+                    "where {\n"
+                    + " ?postUri social:socialTopic <" + socialTopic.getURI() + ">. \n"
+                    + " ?postUri social:hasSocialNetwork ?semObj. \n"
+                    + "  }\n";
+
+
+            WebSite wsite = WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+            return SWBSocial.executeQueryArraySemObj(query, wsite);
+
+        }
+
+        public static ArrayList getPostOutbySocialNetwork(org.semanticwb.social.SocialTopic socialTopic, SocialNetwork socialNetwork) {
+            String query =
+                    "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                    + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                    + "\n";
+
+            query += "select ?semObj" + "\n";
+            query +=
+                    "where {\n"
+                    + " ?semObj social:socialTopic <" + socialTopic.getURI() + ">. \n"
+                    + " ?semObj social:pout_created?semObj. \n"
+                    + " ?postUri social:hasSocialNetwork<" + socialNetwork.getURI() + ">. \n"
+                    + "  }\n";
+
+            WebSite wsite = WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+            return SWBSocial.executeQueryArraySemObj(query, wsite);
+
+        }
+
+        public static ArrayList getAllPostOut(org.semanticwb.social.SocialTopic socialTopic) {
+            String query =
+                    "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                    + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                    + "\n";
+
+            query += "select ?semObj" + "\n";
+            query +=
+                    "where {\n"
+                    + " ?semObj social:socialTopic <" + socialTopic.getURI() + ">. \n"
+                    + " ?semObj social:pout_created?semObj. \n"
+                    + "  }\n";
+
+            WebSite wsite = WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+            return SWBSocial.executeQueryArraySemObj(query, wsite);
+
+        }
+
+        public static ArrayList getUserPostOut(org.semanticwb.social.SocialTopic socialTopic) {
+            String query =
+                    "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                    + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>\n"
+                    + "PREFIX swb: <http://www.semanticwebbuilder.org/swb4/ontology#>\n" 
+                    + "\n";
+
+            query += "select DISTINCT ?semObj" + "\n";
+            query +=
+                    "where {\n"
+                    + " ?postUri social:socialTopic <" + socialTopic.getURI() + ">. \n"
+                    + " ?postUri swb:creator?semObj. \n"
+                    + "  }\n";
+
+            WebSite wsite = WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+            if(wsite.getUserRepository()!= null){
+            wsite.getUserRepository().listUsers();
+            }            
+            return SWBSocial.executeQueryArraySemObj(query, wsite);
+
+        }
+    }//close sparql    
 }
