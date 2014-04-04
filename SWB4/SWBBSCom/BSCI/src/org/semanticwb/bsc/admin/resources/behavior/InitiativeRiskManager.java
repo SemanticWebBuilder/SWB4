@@ -6,15 +6,17 @@ package org.semanticwb.bsc.admin.resources.behavior;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
-import org.semanticwb.bsc.tracing.MitigationAction;
+import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.bsc.tracing.Risk;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.GenericResource;
@@ -24,23 +26,25 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
 /**
- * Permite visualizar, editar y eliminar Acciones de Mitigación de un Riesgo en
- * especifico
+ * Permite visualizar, editar y eliminar Iniciativas de un Riesgo en especifico.
+ * Esta iniciativa fue creada desde el tablero de riesgos.
+ *
  * @author martha.jimenez
  * @version %I%, %G%
  * @since 1.0
  */
-public class MitigationActionManager extends GenericResource {
+public class InitiativeRiskManager extends GenericResource {
 
-    public static org.semanticwb.platform.SemanticProperty bsc_hasMitigationAction 
-            = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary()
-            .getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasMitigationAction");
+    public static org.semanticwb.platform.SemanticProperty bsc_hasInitiativeRisk =
+            org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().
+            getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasInitiativeRisk");
     public static final String Action_DELETE = "delete";
 
     /**
      * M&eacute;todo que se encarga de presentar la vista para visualizar,
-     * editar o eliminar una acci&oacute;n de mitigaci&oacute;n en un Riesgo.
-     * 
+     * editar o eliminar una iniciativa en un Riesgo. Esta iniciativa fue creada
+     * desde el tablero de riesgos.
+     *
      * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
      * @param response Proporciona funcionalidad especifica HTTP para
      * envi&oacute; en la respuesta
@@ -50,8 +54,8 @@ public class MitigationActionManager extends GenericResource {
      * @throws IOException Excepti&oacute;n de IO
      */
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, 
-    SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doView(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         StringBuilder toReturn = new StringBuilder();
         response.setHeader("Cache-Control", "no-cache");
@@ -74,7 +78,8 @@ public class MitigationActionManager extends GenericResource {
         SemanticObject semObj = ont.getSemanticObject(suri);
         Risk risk = (Risk) semObj.createGenericInstance();
         if (risk != null) {
-            Iterator<MitigationAction> it = risk.listMitigationActions();
+            //createInstances(risk, risk.getBSC());
+            Iterator<Initiative> it = risk.listInitiativeRisks();
 
             toReturn.append("<script type=\"text/javascript\">");
             toReturn.append("  dojo.require('dojo.parser');");
@@ -88,42 +93,42 @@ public class MitigationActionManager extends GenericResource {
             toReturn.append("<thead>");
             toReturn.append("<tr>");
             toReturn.append("<th></th>");
-            toReturn.append("<th>" 
-                    + paramRequest.getLocaleString("lbl_title") 
+            toReturn.append("<th>"
+                    + paramRequest.getLocaleString("lbl_title")
                     + "</th>");
-            toReturn.append("<th>" 
-                    + paramRequest.getLocaleString("lbl_description") 
+            toReturn.append("<th>"
+                    + paramRequest.getLocaleString("lbl_description")
                     + "</th>");
-            toReturn.append("<th>" 
-                    + paramRequest.getLocaleString("lbl_created") 
+            toReturn.append("<th>"
+                    + paramRequest.getLocaleString("lbl_created")
                     + "</th>");
-            toReturn.append("<th>" 
-                    + paramRequest.getLocaleString("lbl_updated") 
+            toReturn.append("<th>"
+                    + paramRequest.getLocaleString("lbl_updated")
                     + "</th>");
             toReturn.append("</tr>");
             toReturn.append("</thead>");
 
             while (it.hasNext()) {
-                MitigationAction mitAction = it.next();
+                Initiative initiative = it.next();
                 SWBResourceURL urlDelete = paramRequest.getActionUrl();
 
-                if (mitAction != null && ((mitAction.isValid() && user.haveAccess(mitAction)) 
-                        || (!mitAction.isActive() && 
-                        semObj.hasObjectProperty(bsc_hasMitigationAction, mitAction.getSemanticObject()) 
-                        && user.haveAccess(mitAction)))) {
+                if (initiative != null && ((initiative.isValid() && user.haveAccess(initiative))
+                        || (!initiative.isActive()
+                        && semObj.hasObjectProperty(bsc_hasInitiativeRisk, initiative.getSemanticObject())
+                        && user.haveAccess(initiative)))) {
                     urlDelete.setParameter("suri", suri);
                     urlDelete.setParameter("reloadTab", "true");
-                    urlDelete.setParameter("sval", mitAction.getId());
+                    urlDelete.setParameter("sval", initiative.getId());
                     urlDelete.setAction(Action_DELETE);
                     toReturn.append("<tr>");
                     toReturn.append("<td>");
-                    toReturn.append("\n<a href=\"#\" onclick=\"if(confirm('" 
-                            + paramRequest.getLocaleString("lbl_msgDelete") 
-                            + "'))submitUrl('" 
-                            + urlDelete 
+                    toReturn.append("\n<a href=\"#\" onclick=\"if(confirm('"
+                            + paramRequest.getLocaleString("lbl_msgDelete")
+                            + "'))submitUrl('"
+                            + urlDelete
                             + "',this.domNode);reloadTab('"
-                            +risk.getURI()
-                            +"');return false;\">");
+                            + risk.getURI()
+                            + "');return false;\">");
                     toReturn.append("\n<img src=\"");
                     toReturn.append(SWBPlatform.getContextPath());
                     toReturn.append("/swbadmin/icons/iconelim.png\" alt=\"");
@@ -133,37 +138,37 @@ public class MitigationActionManager extends GenericResource {
 
                     toReturn.append("</td>");
                     toReturn.append("<td>");
-                    toReturn.append("<a href=\"#\" onclick=\"addNewTab('" 
-                            + mitAction.getURI() 
+                    toReturn.append("<a href=\"#\" onclick=\"addNewTab('"
+                            + initiative.getURI()
                             + "','");
-                    toReturn.append(SWBPlatform.getContextPath() 
-                            + "/swbadmin/jsp/objectTab.jsp" 
-                            + "','" 
-                            + mitAction.getTitle());
+                    toReturn.append(SWBPlatform.getContextPath()
+                            + "/swbadmin/jsp/objectTab.jsp"
+                            + "','"
+                            + initiative.getTitle());
                     toReturn.append("');return false;\" >"
-                            + (mitAction.getTitle(lang) == null ? 
-                            (mitAction.getTitle() == null ? 
-                            paramRequest.getLocaleString("lbl_undefined") : 
-                            mitAction.getTitle().replaceAll("'", "")) : 
-                            mitAction.getTitle(lang).replaceAll("'", "")) 
+                            + (initiative.getTitle(lang) == null
+                            ? (initiative.getTitle() == null
+                            ? paramRequest.getLocaleString("lbl_undefined")
+                            : initiative.getTitle().replaceAll("'", ""))
+                            : initiative.getTitle(lang).replaceAll("'", ""))
                             + "</a>");
                     toReturn.append("</td>");
-                    toReturn.append("<td>" 
-                            + (mitAction.getDescription(lang) == null 
-                            ? (mitAction.getDescription() == null 
-                            ? paramRequest.getLocaleString("lbl_undefined") 
-                            : mitAction.getDescription()) : 
-                            mitAction.getDescription(lang)) 
+                    toReturn.append("<td>"
+                            + (initiative.getDescription(lang) == null
+                            ? (initiative.getDescription() == null
+                            ? paramRequest.getLocaleString("lbl_undefined")
+                            : initiative.getDescription())
+                            : initiative.getDescription(lang))
                             + "</td>");
-                    toReturn.append("<td>" 
-                            + (mitAction.getCreated() == null ? "" : 
-                            SWBUtils.TEXT.getStrDate(mitAction.getCreated(), 
-                            "es", "dd/mm/yyyy")) 
+                    toReturn.append("<td>"
+                            + (initiative.getCreated() == null ? ""
+                            : SWBUtils.TEXT.getStrDate(initiative.getCreated(),
+                            "es", "dd/mm/yyyy"))
                             + "</td>");
-                    toReturn.append("<td>" 
-                            + (mitAction.getUpdated() == null ? "" 
-                            : SWBUtils.TEXT.getStrDate(mitAction.getCreated(), 
-                            "es", "dd/mm/yyyy")) 
+                    toReturn.append("<td>"
+                            + (initiative.getUpdated() == null ? ""
+                            : SWBUtils.TEXT.getStrDate(initiative.getCreated(),
+                            "es", "dd/mm/yyyy"))
                             + "</td>");
                     toReturn.append("</tr>");
                 }
@@ -172,16 +177,16 @@ public class MitigationActionManager extends GenericResource {
             toReturn.append("</fieldset>\n");
             toReturn.append("</div>");
 
-            if (request.getParameter("statmsg") != null && 
-                    !request.getParameter("statmsg").isEmpty()) {
+            if (request.getParameter("statmsg") != null
+                    && !request.getParameter("statmsg").isEmpty()) {
                 toReturn.append("<div dojoType=\"dojox.layout.ContentPane\">");
                 toReturn.append("<script type=\"dojo/method\">");
-                toReturn.append("showStatus('" + request.getParameter("statmsg")); 
+                toReturn.append("showStatus('" + request.getParameter("statmsg"));
                 toReturn.append("');\n");
                 toReturn.append("</script>\n");
                 toReturn.append("</div>");
             }
-            
+
         } else {
             toReturn.append("objeto semántico no ubicado");
         }
@@ -189,10 +194,10 @@ public class MitigationActionManager extends GenericResource {
     }
 
     /**
-     * 
+     *
      * M&eacute;todo que se encarga de persistir la informaci&oacute;n de forma
-     * segura de la administraci&oacute;n de acciones de mitigaci&oacute;n de
-     * un Riesgo
+     * segura de la administraci&oacute;n de iniciativas de un Riesgo. Esta
+     * asociación se hace desde el tablero de Riesgos.
      *
      * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
      * @param response Objeto con el cual se acceden a los objetos de SWB
@@ -201,7 +206,7 @@ public class MitigationActionManager extends GenericResource {
      * @throws IOException Excepti&oacute;n de IO
      */
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) 
+    public void processAction(HttpServletRequest request, SWBActionResponse response)
             throws SWBResourceException, IOException {
         final String action = response.getAction();
         final String suri = request.getParameter("suri");
@@ -214,14 +219,14 @@ public class MitigationActionManager extends GenericResource {
         Risk risk = (Risk) semObj.getGenericInstance();
         BSC bsc = risk.getBSC();
         if (Action_DELETE.equalsIgnoreCase(action)) {
-            final String mitActionId = request.getParameter("sval");
-            if (mitActionId != null) {
-                MitigationAction mitAction = null;
-                if (MitigationAction.ClassMgr.hasMitigationAction(mitActionId, bsc)) {
-                    mitAction = MitigationAction.ClassMgr.
-                            getMitigationAction(mitActionId, bsc);
-                    risk.removeMitigationAction(mitAction);
-                    mitAction.remove();
+            final String mitInitiativeId = request.getParameter("sval");
+            if (mitInitiativeId != null) {
+                Initiative initiative = null;
+                if (Initiative.ClassMgr.hasInitiative(mitInitiativeId, bsc)) {
+                    initiative = Initiative.ClassMgr.
+                            getInitiative(mitInitiativeId, bsc);
+                    risk.removeInitiativeRisk(initiative);
+                    initiative.remove();
                     response.setRenderParameter("statmsg", response
                             .getLocaleString("msgDeleteSuccessful"));
                 }
@@ -229,5 +234,13 @@ public class MitigationActionManager extends GenericResource {
         }
     }
 
-
+    private void createInstances(Risk risk, WebSite ws) {
+        Initiative initiative = Initiative.ClassMgr.createInitiative(ws);
+        initiative.setTitle("Acción 1");
+        initiative.setDescription("Descripción de Acción 1");
+        initiative.setActive(true);
+        initiative.setCreated(new Date());
+        initiative.setUpdated(new Date());
+        risk.addInitiativeRisk(initiative);
+    }
 }
