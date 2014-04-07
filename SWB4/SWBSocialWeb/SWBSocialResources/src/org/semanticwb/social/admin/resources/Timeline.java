@@ -1803,23 +1803,42 @@ public class Timeline extends GenericResource{
      */
     public static String lookForEntities(String statusText, SWBResourceURL renderURL, URLEntity urlEnts[],  MediaEntity mediaEnts[], HashtagEntity htEnts[], UserMentionEntity usrEnts[]){
         //Looking for URL entities
+        HashMap<String, String> urlEntsHM = new HashMap<String,String>();
+        HashMap<String, String> urlMediaHM = new HashMap<String,String>();
+        HashMap<String, String> urlHtHM = new HashMap<String,String>();        
+        
         if(urlEnts!=null && urlEnts.length >0){
-            for(URLEntity urlEnt: urlEnts){                       
-                statusText=statusText.replace(urlEnt.getURL(), "<a href=\"" + urlEnt.getURL() +  "\" target=\"_blank\">" + urlEnt.getURL() +"</a>");
+            for(URLEntity urlEnt: urlEnts){
+                urlEntsHM.put(urlEnt.getURL(), urlEnt.getURL());
+            }
+            Iterator it = urlEntsHM.keySet().iterator();
+            while(it.hasNext()){
+                String key = (String)it.next();//key                
+                statusText=statusText.replaceAll(key, "<a href=\"" + key +  "\" target=\"_blank\">" + key +"</a>");
             }
         }
         
         //Looking for multimedia entities
         if(mediaEnts!=null && mediaEnts.length >0){
-            for(MediaEntity mediaEnt: mediaEnts){       
-                statusText=statusText.replace(mediaEnt.getURL(), "<a href=\"" + mediaEnt.getURL() +  "\" target=\"_blank\">" + mediaEnt.getURL() +"</a>");
+            for(MediaEntity mediaEnt: mediaEnts){
+                urlMediaHM.put(mediaEnt.getURL(), mediaEnt.getURL());
+            }
+            Iterator it = urlMediaHM.keySet().iterator();
+            while(it.hasNext()){
+                String key = (String)it.next();//key                
+                statusText=statusText.replaceAll(key, "<a href=\"" + key +  "\" target=\"_blank\">" + key +"</a>");
             }
         }
         
         //Looking for hashtag entities
         if(htEnts!=null && htEnts.length >0){
-            for(HashtagEntity htEnt: htEnts){       
-                statusText=statusText.replace("#" + htEnt.getText(), "<a href=\"https://twitter.com/search?q=%23" + htEnt.getText() +  "&src=hash\" target=\"_blank\">#"+ htEnt.getText() +"</a>");
+            for(HashtagEntity htEnt: htEnts){
+                urlHtHM.put(htEnt.getText(), htEnt.getText());
+            }
+            Iterator it = urlHtHM.keySet().iterator();
+            while(it.hasNext()){
+                String key = (String)it.next();//key                
+                statusText=statusText.replaceAll("#" + key, "<a href=\"https://twitter.com/search?q=%23" + key +  "&src=hash\" target=\"_blank\">#"+ key +"</a>");
             }
         }
         
