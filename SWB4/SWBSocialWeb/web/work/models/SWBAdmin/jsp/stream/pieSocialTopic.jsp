@@ -93,7 +93,7 @@
                 while (i.hasNext()) {
                     Object c = i.next();
                     SemanticObject so = SemanticObject.getSemanticObject(c.toString());
-                    SocialNetwork sn = (SocialNetwork) so.getGenericInstance();
+                    SocialNetwork sn = (SocialNetwork) so.createGenericInstance();
                     //  if (c.getCountry().getId().equals("MX")) {
                     if (sn instanceof Facebook) {
             %>
