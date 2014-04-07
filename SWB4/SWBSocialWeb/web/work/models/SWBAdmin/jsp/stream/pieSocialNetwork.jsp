@@ -109,7 +109,7 @@
         while (i.hasNext()) {
 
             SemanticObject so = (SemanticObject) i.next();
-            PostIn pi = (PostIn) so.getGenericInstance();
+            PostIn pi = (PostIn) so.createGenericInstance();// so.getGenericInstance();
             if (filter.equals("all") || filter.equals(pi.getPostInSocialNetwork().getTitle())) {
                 total++;
                 if (pi.getPostSentimentalType() == 0) {
@@ -221,7 +221,7 @@
         while (i.hasNext()) {
 
             SemanticObject so = (SemanticObject) i.next();
-            PostIn pi = (PostIn) so.getGenericInstance();
+            PostIn pi = (PostIn) so.createGenericInstance();//so.getGenericInstance();
             if (filter.equals("all") || filter.equals(pi.getPostInSocialNetwork().getTitle())) {
                 total++;
                 if (pi.getPostSentimentalType() == 0) {
