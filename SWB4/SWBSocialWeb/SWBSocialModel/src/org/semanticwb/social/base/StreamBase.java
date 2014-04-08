@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que contendra los streams que configurados para cada usuario 
    */
-public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.social.SocialRuleRefable,org.semanticwb.model.Filterable,org.semanticwb.social.Geolocable,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable
+public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.social.Geolocable,org.semanticwb.model.Referensable,org.semanticwb.social.SocialRuleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Trashable,org.semanticwb.model.Activeable
 {
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
@@ -30,6 +30,10 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
    * El stream puede tener varias instancias de la clase SocialNetStreamSearch, una por cada red social que tenga asignada.Si se elimina un Stream, se eliminan los objetos de esta clase (SocialNetStreamSerch) Asociados.
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasSocialNetStreamSearch=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasSocialNetStreamSearch");
+   /**
+   * Descarta estas palabras de la búsqueda
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_stream_notPhrase=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#stream_notPhrase");
    /**
    * Propiedad que indica si en el stream se desea aceptar que entren los mensajes que sean clasificados con sentimiento negativo
    */
@@ -63,6 +67,10 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasPostInStreamInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPostInStreamInv");
    /**
+   * Busca en estas cuentas
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_stream_fromAccount=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#stream_fromAccount");
+   /**
    * Propiedad que indica si en el stream se desea aceptar que entren los mensajes que sean clasificados con sentimiento positivo
    */
     public static final org.semanticwb.platform.SemanticProperty social_filterSentimentalPositive=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#filterSentimentalPositive");
@@ -95,9 +103,17 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
    */
     public static final org.semanticwb.platform.SemanticProperty social_filterSentimentalNeutral=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#filterSentimentalNeutral");
    /**
+   * This property will accept an exact phrase to be search over SocialNetworks
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_stream_exactPhrase=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#stream_exactPhrase");
+   /**
    * Propiedad que indica si en el stream se desea aceptar que entren los mensajes que sean clasificados con intensidad media
    */
     public static final org.semanticwb.platform.SemanticProperty social_filterIntensityMedium=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#filterIntensityMedium");
+   /**
+   * Busca todas las palabras definidas en este campo
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_stream_allPhrases=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#stream_allPhrases");
    /**
    * Número de resultados que se despliegan en las páginas de los reportes, ver si lo ocuparía o despues lo quito
    */
@@ -616,6 +632,24 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     }
 
 /**
+* Gets the Stream_notPhrase property
+* @return String with the Stream_notPhrase
+*/
+    public String getStream_notPhrase()
+    {
+        return getSemanticObject().getProperty(social_stream_notPhrase);
+    }
+
+/**
+* Sets the Stream_notPhrase property
+* @param value long with the Stream_notPhrase
+*/
+    public void setStream_notPhrase(String value)
+    {
+        getSemanticObject().setProperty(social_stream_notPhrase, value);
+    }
+
+/**
 * Gets the FilterSentimentalNegative property
 * @return boolean with the FilterSentimentalNegative
 */
@@ -760,6 +794,24 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
              ret=(org.semanticwb.social.PostIn)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Stream_fromAccount property
+* @return String with the Stream_fromAccount
+*/
+    public String getStream_fromAccount()
+    {
+        return getSemanticObject().getProperty(social_stream_fromAccount);
+    }
+
+/**
+* Sets the Stream_fromAccount property
+* @param value long with the Stream_fromAccount
+*/
+    public void setStream_fromAccount(String value)
+    {
+        getSemanticObject().setProperty(social_stream_fromAccount, value);
     }
 
 /**
@@ -1148,6 +1200,24 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     }
 
 /**
+* Gets the Stream_exactPhrase property
+* @return String with the Stream_exactPhrase
+*/
+    public String getStream_exactPhrase()
+    {
+        return getSemanticObject().getProperty(social_stream_exactPhrase);
+    }
+
+/**
+* Sets the Stream_exactPhrase property
+* @param value long with the Stream_exactPhrase
+*/
+    public void setStream_exactPhrase(String value)
+    {
+        getSemanticObject().setProperty(social_stream_exactPhrase, value);
+    }
+
+/**
 * Gets the FilterIntensityMedium property
 * @return boolean with the FilterIntensityMedium
 */
@@ -1228,6 +1298,24 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
              ret=(org.semanticwb.social.SocialRuleRef)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Stream_allPhrases property
+* @return String with the Stream_allPhrases
+*/
+    public String getStream_allPhrases()
+    {
+        return getSemanticObject().getProperty(social_stream_allPhrases);
+    }
+
+/**
+* Sets the Stream_allPhrases property
+* @param value long with the Stream_allPhrases
+*/
+    public void setStream_allPhrases(String value)
+    {
+        getSemanticObject().setProperty(social_stream_allPhrases, value);
     }
 
 /**
