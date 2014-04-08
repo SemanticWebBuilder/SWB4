@@ -1969,7 +1969,7 @@ public class SocialSentPost extends GenericResource {
                         {
                             cont++;
                             postOutNet.remove();
-                            canRemove=canRemove&true;
+                            canRemove=true;
                             if(cont>1) removedFrom+=",";
                             removedFrom+=" "+socialNet.getDisplayTitle(user.getLanguage());
                         }else{
