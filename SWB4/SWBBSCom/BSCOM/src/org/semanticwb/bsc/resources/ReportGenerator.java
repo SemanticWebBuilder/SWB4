@@ -21,7 +21,6 @@ import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.Schedule;
 import org.semanticwb.bsc.Seasonable;
-import org.semanticwb.bsc.Status;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.bsc.element.BSCElement;
@@ -29,8 +28,11 @@ import org.semanticwb.bsc.element.Deliverable;
 import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.bsc.element.Objective;
+import org.semanticwb.bsc.tracing.Measure;
+import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.utils.PropertiesComparator;
 import org.semanticwb.model.Descriptiveable;
+import org.semanticwb.model.FormElement;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.SWBComparator;
@@ -42,6 +44,7 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
+import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -386,12 +389,55 @@ public class ReportGenerator extends GenericResource {
     public void doReport(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         
-        //TODO:Generar instancia de ReportCriteria y ejecutar reporte
+        PrintWriter out = response.getWriter();
+        StringBuilder output = new StringBuilder(256);
         ReportCriteria criteria = createCriteria(request);
+        ArrayList<SemanticObject> results = processReport(criteria, paramRequest);
+        int itemsCount = 0;
+        int titleIndex = -1;
         
-        processReport(criteria, paramRequest);
+        output.append("<table>\n");
+        output.append("  <tr>\n");
+        for (SemanticProperty prop : criteria.getProps2Show()) {
+            output.append("    <th>");
+            output.append(prop.getLabel());
+            output.append("</th>\n");
+            if (prop.getURI().indexOf("title") != -1 && titleIndex == -1) {
+                titleIndex = itemsCount;
+            }
+            itemsCount++;
+        }
+        output.append("  </tr>\n");
         
-        
+        for (SemanticObject item : results) {
+            GenericObject gralItem = item.createGenericInstance();
+            boolean sameKind = false;
+            
+            if (gralItem.getURI().contains(criteria.getElementType())) {
+                sameKind = true;
+            }
+            itemsCount = 0;
+            output.append("  <tr>\n");
+            for (SemanticProperty prop : criteria.getProps2Show()) {
+                
+                output.append("    <td>\n");
+                if (sameKind) {
+                    output.append(renderPropertyValue(request, item, prop.getURI(), paramRequest.getUser().getLanguage()));
+                } else {
+                    //de los objetos relacionados solo se va a mostrar el titulo en la tabla
+                    if (itemsCount == titleIndex) {
+                        output.append(renderPropertyValue(request, item, prop.getURI(), paramRequest.getUser().getLanguage()));
+                    } else {
+                        output.append("      &nbsp;\n");
+                    }
+                }
+                output.append("    </td>\n");
+                itemsCount++;
+            }
+            output.append("  </tr>\n");
+        }
+        output.append("</table>");
+        out.print(output.toString());
     }
     
     /**
@@ -435,6 +481,14 @@ public class ReportGenerator extends GenericResource {
         return users;
     }
     
+    /**
+     * Genera un {@code String} que representa un arreglo de objetos en JavaScript con los valores y etiquetas
+     * de las propiedades de los objetos indicados en {@code children} para representarlos en objetos de forma de HTML.
+     * @param children contiene el conjunto de objetos sem&aacute;nticos de los que se quiere obtener sus propiedades.
+     * @return un {@code String} que representa un arreglo de objetos en JavaScript. Cada objeto contiene dos atributos:
+     * objectType (el nombre de la clase semantica correspondiente) y data (un arreglo de objetos an&oacute;nimos con las propiedades:
+     * value -uri de una propiedad sem&aacute;ntica y label -nombre a desplegar de la propiedad)
+     */
     private String getClassesProperties(HashMap<String, OntClass> children) {
         
         StringBuilder script = new StringBuilder(512);
@@ -589,6 +643,10 @@ public class ReportGenerator extends GenericResource {
         if (!related.isEmpty()) {
             criteria.setRelatedElements(related);
         }
+        
+        if (criteria.getProps2Show().isEmpty() || !criteria.getProps2Show().contains(Descriptiveable.swb_title)) {
+            criteria.getProps2Show().add(0, Descriptiveable.swb_title);
+        }
         return criteria;
     }
     
@@ -596,20 +654,21 @@ public class ReportGenerator extends GenericResource {
      * Procesa los datos disponibles en el sistema para obtener el conjunto de datos a presentar en el reporte.
      * @param criteria contiene los criterios que deben cumplir los datos a mostrar en el reporte
      * @param paramRequest un objeto de la plataforma de SWB con datos adicionales de la petici&oacute;n
+     * @return el conjunto de elementos del BSC que coinciden con los criterios de busqueda seleccionados por el usuario
      */
-    private void processReport(ReportCriteria criteria, SWBParamRequest paramRequest) {
+    private ArrayList<SemanticObject> processReport(ReportCriteria criteria, SWBParamRequest paramRequest) {
         
         SWBModel model = paramRequest.getWebPage().getWebSite();
         Iterator initialSet = null;
         System.out.println("Criteria: \n" + criteria.toString());
         if (criteria.getElementType() != null) {
+            ArrayList<SemanticObject> forNow = new ArrayList<SemanticObject>(128);
             String id = null;
             //se extrae el identificador del uri recibido
             if (criteria.getObjectTitle() != null && criteria.getObjectTitle().lastIndexOf(":") != -1) {
                 id = criteria.getObjectTitle().substring(criteria.getObjectTitle().lastIndexOf(":") + 1);
             }
             if (criteria.getElementType().equals(Objective.sclass.getName())) {
-                ArrayList<SemanticObject> forNow = new ArrayList<SemanticObject>(128);
                 if (criteria.getObjectTitle() != null) {
                     Objective element = Objective.ClassMgr.getObjective(id, model);
                     if (element != null) {
@@ -619,51 +678,60 @@ public class ReportGenerator extends GenericResource {
                     }
                     initialSet = forNow.iterator();
                 } else {
-                    initialSet = Objective.ClassMgr.listObjectives(model);
-                    while (initialSet != null && initialSet.hasNext()) {
-                        forNow.add((SemanticObject) initialSet.next());
+                    Iterator<Objective> firstSet = Objective.ClassMgr.listObjectives(model);
+                    while (firstSet != null && firstSet.hasNext()) {
+                        forNow.add(firstSet.next().getSemanticObject());
                     }
                     initialSet = forNow.iterator();
                 }
-/*            } else if (criteria.getElementType().equals(Indicator.sclass.getName())) {
+            } else if (criteria.getElementType().equals(Indicator.sclass.getName())) {
                 if (criteria.getObjectTitle() != null) {
                     Indicator element = Indicator.ClassMgr.getIndicator(id, model);
-                    ArrayList<Indicator> forNow = new ArrayList<Indicator>(2);
                     if (element != null) {
-                        forNow.add(element);
+                        forNow.add(element.getSemanticObject());
                     } else {
                         System.out.println("BSCElement con id: " + id + " --No encontrado");
                     }
                     initialSet = forNow.iterator();
                 } else {
-                    initialSet = Indicator.ClassMgr.listIndicators(model);
+                    Iterator<Indicator> firstSet = Indicator.ClassMgr.listIndicators(model);
+                    while (firstSet != null && firstSet.hasNext()) {
+                        forNow.add(firstSet.next().getSemanticObject());
+                    }
+                    initialSet = forNow.iterator();
                 }
             } else if (criteria.getElementType().equals(Initiative.sclass.getName())) {
                 if (criteria.getObjectTitle() != null) {
                     Initiative element = Initiative.ClassMgr.getInitiative(id, model);
-                    ArrayList<Initiative> forNow = new ArrayList<Initiative>(2);
                     if (element != null) {
-                        forNow.add(element);
+                        forNow.add(element.getSemanticObject());
                     } else {
                         System.out.println("BSCElement con id: " + id + " --No encontrado");
                     }
                     initialSet = forNow.iterator();
                 } else {
-                    initialSet = Initiative.ClassMgr.listInitiatives(model);
+                    Iterator<Initiative> firstSet = Initiative.ClassMgr.listInitiatives(model);
+                    while (firstSet != null && firstSet.hasNext()) {
+                        forNow.add(firstSet.next().getSemanticObject());
+                    }
+                    initialSet = forNow.iterator();
                 }
             } else if (criteria.getElementType().equals(Deliverable.sclass.getName())) {
                 if (criteria.getObjectTitle() != null) {
                     Deliverable element = Deliverable.ClassMgr.getDeliverable(id, model);
-                    ArrayList<Deliverable> forNow = new ArrayList<Deliverable>(2);
                     if (element != null) {
-                        forNow.add(element);
+                        forNow.add(element.getSemanticObject());
                     } else {
                         System.out.println("BSCElement con id: " + id + " --No encontrado");
                     }
                     initialSet = forNow.iterator();
                 } else {
-                    initialSet = Deliverable.ClassMgr.listDeliverables(model);
-                }*/
+                    Iterator<Deliverable> firstSet = Deliverable.ClassMgr.listDeliverables(model);
+                    while (firstSet != null && firstSet.hasNext()) {
+                        forNow.add(firstSet.next().getSemanticObject());
+                    }
+                    initialSet = forNow.iterator();
+                }
             }
         } else {
             ArrayList<SemanticObject> allTypes = new ArrayList<SemanticObject>(256);
@@ -686,20 +754,64 @@ public class ReportGenerator extends GenericResource {
             initialSet = allTypes.iterator();
         }
         
-        int count = 0;
         ArrayList<SemanticObject> processed = new ArrayList<SemanticObject>(256);
+        int count = 0;
         
-        
+        //el conjunto inicial de objetos, se filtra con los criterios seleccionados por el usuario
         while (initialSet != null && initialSet.hasNext()) {
             GenericObject inTurn = ((SemanticObject) initialSet.next()).createGenericInstance();
             boolean mustBeAdded = false;
             
             //evaluacion de periodos; si se seleccionaron
             if (criteria.getInitialPeriod() != null && criteria.getFinalPeriod() != null) {
-                if (inTurn instanceof Status) {
-                    Seasonable seasonable = (Seasonable) inTurn;
-                    if (seasonable.hasPeriod(criteria.getInitialPeriod()) && seasonable.hasPeriod(criteria.getFinalPeriod())) {
-                        mustBeAdded = true;
+                if (inTurn instanceof Seasonable) {
+                    //Sin seleccion de estatus
+                    if (criteria.getStatus() == null) {
+                        Seasonable seasonable = (Seasonable) inTurn;
+                        if (seasonable.hasPeriod(criteria.getInitialPeriod()) && seasonable.hasPeriod(criteria.getFinalPeriod())) {
+                            mustBeAdded = true;
+                        }
+                    } else {
+                        //el estatus seleccionado, debe estar asignado en el intervalo indicado
+                        Period thisPeriod = criteria.getInitialPeriod();
+                        boolean intervalFinished = false;
+                        boolean isObjective = false;
+                        PeriodStatus periodStatus = null;
+                        Objective objective = null;
+                        Indicator indicator = null;
+                        
+                        if (inTurn instanceof Objective) {
+                            objective = (Objective) inTurn;
+                            isObjective = true;
+                        } else if (inTurn instanceof Indicator) {
+                            indicator = (Indicator) inTurn;
+                        }
+                            
+                        while (!intervalFinished) {
+                            if (isObjective) {
+                                periodStatus = objective.getPeriodStatus(thisPeriod);
+                            } else {
+                                Measure measure = indicator != null && indicator.getStar() != null 
+                                        ? indicator.getStar().getMeasure(thisPeriod) : null;
+                                if (measure != null && measure.getEvaluation() != null) {
+                                    periodStatus = measure.getEvaluation();
+                                }
+                            }
+                            //Si los estados de criterios y del periodo evaluado son iguales, se debe agregar el elemento
+                            if (periodStatus != null && periodStatus.getStatus().equals(criteria.getStatus())) {
+                                mustBeAdded = true;
+                                break;
+                            }
+                            //Se obtiene el siguiente periodo del intervalo definido por el usuario
+                            if (thisPeriod.equals(criteria.getFinalPeriod())) {
+                                intervalFinished = true;
+                            } else if (thisPeriod.getNext() != null) {
+                                thisPeriod = (Period) thisPeriod.getNext();
+                            } else {
+                                //si el siguiente periodo no esta definido, se rompe el ciclo
+                                break;
+                            }
+                        }
                     }
                 } else if (inTurn instanceof Schedule) {
                     Schedule schedule = (Schedule) inTurn;
@@ -708,7 +820,19 @@ public class ReportGenerator extends GenericResource {
                     if (initial2Compare != null && final2Compare != null && criteria.getInitialPeriod().getStart().before(initial2Compare) &&
                             initial2Compare.before(criteria.getFinalPeriod().getEnd()) && criteria.getInitialPeriod().getStart().before(final2Compare) &&
                             final2Compare.before(criteria.getFinalPeriod().getEnd())) {
-                        mustBeAdded = true;
+                        //Sin seleccion de estatus
+                        if (criteria.getStatus() == null) {
+                            mustBeAdded = true;
+                        } else {
+                            //el estatus debe estar asignado al entregable
+                            if (inTurn instanceof Deliverable) {
+                                Deliverable deli = (Deliverable) inTurn;
+                                if ((deli.getAutoStatus() != null && deli.getAutoStatus().equals(criteria.getStatus())) || 
+                                        (deli.getStatusAssigned() != null && deli.getStatusAssigned().equals(criteria.getStatus()))) {
+                                    mustBeAdded = true;
+                                }
+                            }
+                        }
                     }
                 }
             } else {
@@ -731,11 +855,8 @@ public class ReportGenerator extends GenericResource {
                                 break;
                             }
                         }
-                    } else if (inTurn instanceof Initiative) {
-                        //TODO: Debe existir esta relacion
-                    } else if (inTurn instanceof Deliverable) {
-                        //TODO: Debe existir esta relacion
                     }
+                    //para iniciativas y entregables no se consideran relaciones indirectas para obtener el champion
                 }
             } else if (criteria.getChampion() == null) {
                 mustBeAdded = true;
@@ -752,21 +873,159 @@ public class ReportGenerator extends GenericResource {
                         if (((Indicator) inTurn).getObjective().getSponsor().equals(criteria.getSponsor())) {
                             mustBeAdded = true;
                         }
+                    } else if (inTurn instanceof Initiative) {
+                        if (((Initiative) inTurn).getObjectiveInitiative().getSponsor().equals(criteria.getSponsor())) {
+                            mustBeAdded = true;
+                        }
+                    } else if (inTurn instanceof Deliverable) {
+                        if (((Deliverable) inTurn).getInitiative().getObjectiveInitiative().getSponsor().equals(criteria.getSponsor())) {
+                            mustBeAdded = true;
+                        }
                     }
                 }
-                //TODO: verificar relacion entre Iniciativa/Entregable con Indicador/Objetivo
             } else if (criteria.getSponsor() == null) {
                 mustBeAdded = true;
             }
             
-            
-            if (inTurn instanceof BSCElement) {
-                System.out.println("Titulo BSCE: " + ((BSCElement) inTurn).getTitle());
-            } else {
-                System.out.println("SO Tit: " + inTurn.getSemanticObject().getLiteralProperty(Descriptiveable.swb_title));
+            if (mustBeAdded) {
+                processed.add(inTurn.getSemanticObject());
+                if (criteria.getRelatedElements() != null) {
+                    addRelated(processed, inTurn, criteria.getRelatedElements());
+                }
             }
             count++;
         }
-        System.out.println(count + " elementos encontrados.");
+        System.out.println("Conjunto de " + count + " elementos iniciales");
+        return processed;
     }
+    
+    /**
+     * Agrega a la coleccion {@code resultSet} los objetos relacionados al elemento {@code element}
+     * de los tipos especificados en {@code relatedTypes}
+     * @param resultSet la coleccion que contiene el total de elementos a devolver en el reporte
+     * @param element el elemento del BSC del que se obtendran los elementos relacionados
+     * @param relatedTypes los tipos de objeto que se deben agregar al conjunto de resultados
+     */
+    private void addRelated(ArrayList<SemanticObject> resultSet, GenericObject element, ArrayList<String> relatedTypes) {
+        
+        ArrayList<SemanticObject> additional = new ArrayList<SemanticObject>(64);
+        if (element instanceof Objective) {
+            Objective obj = (Objective) element;
+            for (String type : relatedTypes) {
+                if (type.endsWith(Indicator.bsc_Indicator.getName())) {
+                    Iterator<Indicator> it = obj.listIndicators();
+                    while (it != null && it.hasNext()) {
+                        additional.add(it.next().getSemanticObject());
+                    }
+                } else if (type.endsWith(Initiative.bsc_Initiative.getName())) {
+                    Iterator<Initiative> it = obj.listInitiatives();
+                    while (it != null && it.hasNext()) {
+                        additional.add(it.next().getSemanticObject());
+                    }
+                } else if (type.endsWith(Deliverable.bsc_Deliverable.getName())) {
+                    //se obtiene el entregable, a partir de la iniciativa
+                    Iterator<Initiative> it = obj.listInitiatives();
+                    while (it != null && it.hasNext()) {
+                        Initiative ini = it.next();
+                        Iterator<Deliverable> itDeli = ini.listDeliverables();
+                        while (itDeli != null && itDeli.hasNext()) {
+                            additional.add(itDeli.next().getSemanticObject());
+                        }
+                    }
+                }
+            }
+        } else if (element instanceof Indicator) {
+            Indicator indi = (Indicator) element;
+            for (String type : relatedTypes) {
+                if (type.endsWith(Objective.bsc_Objective.getName())) {
+                    additional.add(indi.getObjective().getSemanticObject());
+                } else if (type.endsWith(Initiative.bsc_Initiative.getName())) {
+                    //No se consideran relaciones indirectas entre iniciativas e indicadores 
+                } else if (type.endsWith(Deliverable.bsc_Deliverable.getName())) {
+                    //No se consideran relaciones indirectas entre entregables e indicadores 
+                }
+            }
+        } else if (element instanceof Initiative) {
+            Initiative ini = (Initiative) element;
+            for (String type : relatedTypes) {
+                if (type.endsWith(Objective.bsc_Objective.getName())) {
+                    additional.add(ini.getObjectiveInitiative().getSemanticObject());
+                } else if (type.endsWith(Indicator.bsc_Indicator.getName())) {
+                    //No se consideran relaciones indirectas entre iniciativas e indicadores
+                } else if (type.endsWith(Deliverable.bsc_Deliverable.getName())) {
+                    Iterator<Deliverable> it = ini.listDeliverables();
+                    while (it != null && it.hasNext()) {
+                        additional.add(it.next().getSemanticObject());
+                    }
+                }
+            }
+        } else if (element instanceof Deliverable) {
+            Deliverable deli = (Deliverable) element;
+            for (String type : relatedTypes) {
+                if (type.endsWith(Objective.bsc_Objective.getName())) {
+                    //se obtiene el objetivo del entregable a partir de la iniciativa
+                    additional.add(deli.getInitiative().getObjectiveInitiative().getSemanticObject());
+                } else if (type.endsWith(Indicator.bsc_Indicator.getName())) {
+                    //No se consideran relaciones indirectas entre entregables e indicadores 
+                } else if (type.endsWith(Initiative.bsc_Initiative.getName())) {
+                    additional.add(deli.getInitiative().getSemanticObject());
+                }
+            }
+        }
+        //se agregan los elementos seleccionados a resultSet
+        for (SemanticObject addition : additional) {
+            resultSet.add(addition);
+        }
+    }
+    
+    /**
+     * Devuelve el despliegue correspondiente al valor de la propiedad especificada, del objeto indicado.
+     * @param request petici&oacute;n HTTP realizada por el cliente
+     * @param elementBSC representa el objeto del cual se desea extraer la informaci&oacute;n
+     * @param propUri representa la uri de la propiedad semantica de la que se desea obtener su valor
+     * @param lang representa el lenguaje en que se desea mostrar el valor de la propiedad indicada
+     * @return el despliegue del valor almacenado para la propiedad indicada
+     */
+    private String renderPropertyValue(HttpServletRequest request, SemanticObject elementBSC,
+            String propUri, String lang) {
+        
+        String ret = null;
+        SWBFormMgr formMgr = new SWBFormMgr(elementBSC, null, SWBFormMgr.MODE_VIEW);
+        SemanticProperty semProp = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propUri);
+        
+        //Codigo para obtener el displayElement
+        Statement st = semProp.getRDFProperty().getProperty(
+                SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(
+                "http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
+        if (st != null) {
+            //Se obtiene: SemanticProperty: displayElement de la propiedad en cuestion (prop)
+            SemanticObject soDisplayElement = SemanticObject.createSemanticObject(st.getResource());
+            if (soDisplayElement != null) {
+                SemanticObject formElement = soDisplayElement.getObjectProperty(
+                        org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(
+                        "http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement"));
+                if (formElement != null) {
+                    FormElement fe = (FormElement) formElement.createGenericInstance();
+                    
+                    if (fe != null) {
+                        if (formMgr.getSemanticObject() != null) {
+                            fe.setModel(formMgr.getSemanticObject().getModel());
+                        }
+                        ret = fe.renderElement(request, elementBSC, semProp, semProp.getName(),
+                                SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_VIEW, lang);
+                    }
+                }
+            }
+        }
+        
+        if (ret == null) {
+            FormElement formElement = formMgr.getFormElement(semProp);
+            if (formElement != null) {
+                ret = formElement.renderElement(request, elementBSC, semProp, semProp.getName(),
+                        SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_VIEW, lang);
+            }
+        }
+        return ret != null ? ret : "";
+    }    
 }
+
