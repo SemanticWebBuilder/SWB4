@@ -1935,16 +1935,6 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="snu_id">
-    <rdfs:comment>Id del usuario en una determinada red social, es decir, en twitter, facebook, google+, youtube, flicker, etc.</rdfs:comment>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="snu_gender">
-    <rdfs:comment>Genero registrado en el red social para el usuario. 1=Hombre; 2=Mujer; 3=Indefinido.</rdfs:comment>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="SentimentType">
     <rdfs:label xml:lang="es">Tipo de Sentimiento</rdfs:label>
     <rdfs:label xml:lang="en">Sentiment Type</rdfs:label>
@@ -1960,6 +1950,36 @@
     <rdfs:comment>Calor sentimental que le dan los usuarios al clasificar los mensajes, este valor se lo dan a las palabras o secuencia de palabras que se guardan en este objeto. 1=Positivo, 2=Negativo</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#SentimentalLearningPhrase"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="snu_id">
+    <rdfs:comment>Id del usuario en una determinada red social, es decir, en twitter, facebook, google+, youtube, flicker, etc.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="snu_gender">
+    <rdfs:comment>Genero registrado en el red social para el usuario. 1=Hombre; 2=Mujer; 3=Indefinido.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="stream_notPhrase">
+    <rdfs:comment>Descarta estas palabras de la búsqueda</rdfs:comment>
+    <rdfs:label xml:lang="en">None of these words</rdfs:label>
+    <rdfs:label xml:lang="es">Ninguna de estas palabras</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_stream_notPhrase">
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >44</swb:index>
+        <swbxf:formElement>
+          <social:TextPhrase rdf:ID="TextPhrase_NotPhrase">
+            <social:tf_socialNet rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >T,Y</social:tf_socialNet>
+          </social:TextPhrase>
+        </swbxf:formElement>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Stream"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="podur_userIds">
     <rdfs:domain rdf:resource="#PostOutDirectUserRelation"/>
@@ -2082,6 +2102,26 @@
     <rdfs:label xml:lang="en">Is Prioritary</rdfs:label>
     <rdfs:label xml:lang="es">Es Prioritario</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="stream_exactPhrase">
+    <rdfs:label xml:lang="en">Exactly these words</rdfs:label>
+    <rdfs:label xml:lang="es">Exactamente estas palabras</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_stream_exactPhrase">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >42</swb:index>
+        <swbxf:formElement>
+          <social:TextPhrase rdf:ID="TextPhrase_ExactPhrase">
+            <social:tf_socialNet rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >T,Y</social:tf_socialNet>
+          </social:TextPhrase>
+        </swbxf:formElement>
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>This property will accept an exact phrase to be search over SocialNetworks</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Stream"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="geoRadio">
     <rdfs:comment>Distancia del centro (punto de latitud y longitud) a buscar mensajes</rdfs:comment>
@@ -2297,6 +2337,26 @@
     >poolTime</swb:propertyCodeName>
     <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >10</swb:defaultValue>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="stream_fromAccount">
+    <rdfs:comment>Busca en estas cuentas</rdfs:comment>
+    <rdfs:label xml:lang="en">From these accounts</rdfs:label>
+    <rdfs:label xml:lang="es">En estas cuentas</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_stream_fromAccount">
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+        <swbxf:formElement>
+          <social:TextPhrase rdf:ID="TextPhrase_From">
+            <social:tf_socialNet rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >T</social:tf_socialNet>
+          </social:TextPhrase>
+        </swbxf:formElement>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Stream"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="refreshToken">
     <rdfs:domain rdf:resource="#DeveloperKeyable"/>
@@ -2580,16 +2640,21 @@
     <rdfs:domain rdf:resource="#SocialNetwork"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="stream_phrase">
-    <rdfs:label xml:lang="en">Phrase</rdfs:label>
-    <rdfs:label xml:lang="es">Frase</rdfs:label>
+    <rdfs:label xml:lang="es">Cualquiera de estas frases (OR)</rdfs:label>
+    <rdfs:label xml:lang="en">Any of these phrases (OR)</rdfs:label>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >phrase</swb:propertyCodeName>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_stream_phase">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >10</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+        >40</swb:index>
         <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+        <swbxf:formElement>
+          <social:TextPhrase rdf:ID="TextPhrase_Or">
+            <social:tf_socialNet rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >T,F</social:tf_socialNet>
+          </social:TextPhrase>
+        </swbxf:formElement>
         <swbxf:propInvalidMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Este campo debe ser llenado con la(s) frase a monitorear en las redes sociales.</swbxf:propInvalidMessage>
         <swbxf:propPromptMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -2768,6 +2833,16 @@
     <rdfs:comment>Password o contraseña con la cual una organización se puede conectar a una determinada instancia de Red Social.</rdfs:comment>
     <rdfs:domain rdf:resource="#Authenticable"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="tf_socialNet">
+    <rdfs:comment>The set of social networks that will be accepted in this property</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain>
+      <swb:FormElement rdf:ID="TextPhrase">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Text"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:FormElement>
+    </rdfs:domain>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="month">
     <rdfs:comment>Mes en el cual es creada una instancia de PostContainer,esta propiedad servira mucho  para buscar los postOut de manera optima, ya que pudieran ser muchos en un corto tiempo.</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -2802,6 +2877,26 @@
     <rdfs:comment>Indica si se desea enviar email a los usuarios de los grupos que tenga asignado el SocialTopic para indicarles que existen comentarios nuevos sobre los mensajes que se postearon desde ese socialTopic.</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#SocialTopic"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="stream_allPhrases">
+    <rdfs:comment>Busca todas las palabras definidas en este campo</rdfs:comment>
+    <rdfs:label xml:lang="en">All these words</rdfs:label>
+    <rdfs:label xml:lang="es">Todas estas palabras</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_stream_allPhrases">
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+        <swbxf:formElement>
+          <social:TextPhrase rdf:ID="TextPhrase_allPhrases">
+            <social:tf_socialNet rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >T,Y</social:tf_socialNet>
+          </social:TextPhrase>
+        </swbxf:formElement>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >46</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Stream"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="filterIntensityMedium">
     <rdfs:label xml:lang="en">Medium Intensity</rdfs:label>
@@ -3070,6 +3165,7 @@
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >50</swb:index>
   </swbxf:DisplayProperty>
+  <social:TextPhrase rdf:ID="TextPhrase_1"/>
   <swb:DojoImageUpload rdf:ID="socialImageWP">
     <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     > jpg file:*.jpg|jpeg file:*.jpeg|png file:*.png</swbxf:fileFilter>
@@ -3096,6 +3192,12 @@
     <swbxf:propPromptMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Capture una longitude para entrada de mensajes en el Stream.</swbxf:propPromptMessage>
   </swbxf:DisplayProperty>
+  <swbxf:PropertyGroup rdf:ID="Phrases">
+    <rdfs:label xml:lang="en">Phrases</rdfs:label>
+    <rdfs:label xml:lang="es">Frases</rdfs:label>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >10</swb:index>
+  </swbxf:PropertyGroup>
   <swbxf:DisplayProperty rdf:ID="dp_userFavorite">
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >200</swb:index>
