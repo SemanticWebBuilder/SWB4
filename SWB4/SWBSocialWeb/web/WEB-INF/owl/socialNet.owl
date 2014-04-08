@@ -17,13 +17,10 @@
     <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
     <rdfs:comment>Clase en la que se agregan instancias de tipo SocialNetwork, para que alguna  sea asignada a un tipo de privacidad (Privacy) por parte de un administrador</rdfs:comment>
   </rdfs:Class>
-  <owl:Class rdf:ID="TwitterGC">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="GeneralConfig"/>
-    </rdfs:subClassOf>
-    <rdfs:comment>Clase que concentra propiedades para configuración general de twitter., para mostrar en sitio admin.</rdfs:comment>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
+  <owl:Class rdf:ID="YouTubeCategory">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:comment>Categorias a llenar en una colección.</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="PostOutPrivacyRelation">
@@ -44,10 +41,13 @@
     <rdfs:comment>Interface que es utilizada para definir metodos necesarios para el envio y recepción de Post de tipo Video en las diferentes redes sociales que así lo requieran.</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
   </owl:Class>
-  <owl:Class rdf:ID="YouTubeCategory">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-    <rdfs:comment>Categorias a llenar en una colección.</rdfs:comment>
+  <owl:Class rdf:ID="TwitterGC">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="GeneralConfig"/>
+    </rdfs:subClassOf>
+    <rdfs:comment>Clase que concentra propiedades para configuración general de twitter., para mostrar en sitio admin.</rdfs:comment>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="MarkMsgAsPrioritary">
@@ -259,13 +259,6 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="PostOutPrivacy">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <rdfs:comment>Clase de tipo catálogo que define las privacidades para los Post</rdfs:comment>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
   <owl:Class rdf:about="#PostOut">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <swb:classGroupId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -273,6 +266,13 @@
     <rdfs:subClassOf rdf:resource="#Post"/>
     <rdfs:comment>Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales. Esta clase no se relaciona con una red social (con la clase SocialNetwork) porque un post de salida (desde la herramienta) podría ser enviado a diferentes redes sociales, sin embargo, es el mismo post de salida. Donde esta a que red social se envía esta en las instancias de la clase PostContainer.</rdfs:comment>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#CalendarRefable"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="PostOutPrivacy">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:comment>Clase de tipo catálogo que define las privacidades para los Post</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="SocialRule">
@@ -486,6 +486,13 @@
                 <rdf:type rdf:resource="#NetworkType"/>
                 <rdfs:label xml:lang="en">Facebook Account</rdfs:label>
                 <rdfs:comment>Clase que almacenara las diferentes cuentas de una organización para la red social Facebook.</rdfs:comment>
+                <rdfs:subClassOf>
+                  <swb:Interface rdf:ID="Pageable">
+                    <rdfs:comment>Interface that is used to those SocialNets that supports the manage of FanPages. (Just Facebook at this momment)</rdfs:comment>
+                    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+                    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+                  </swb:Interface>
+                </rdfs:subClassOf>
                 <rdfs:subClassOf rdf:resource="#Videoable"/>
                 <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
                 >true</swb:autogenId>
@@ -586,6 +593,58 @@
     </swb:hasClass>
     <rdfs:subClassOf>
       <rdf:Description rdf:about="http://www.semanticwebbuilder.org/swb4/ontology#WebSite">
+        <swb:hasClass>
+          <swb:Class rdf:ID="FacePageTab">
+            <rdfs:comment>Clase que controla un tab de page en Facebook</rdfs:comment>
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
+            <rdfs:subClassOf>
+              <swb:Class rdf:ID="PageTab">
+                <rdfs:subClassOf>
+                  <swb:Class rdf:ID="SociaNetPage">
+                    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                    >true</swb:autogenId>
+                    <rdfs:comment>Clase de la cual desciende todo el manejo de FanPages en las redes sociales.</rdfs:comment>
+                    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+                    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+                  </swb:Class>
+                </rdfs:subClassOf>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </swb:Class>
+            </rdfs:subClassOf>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+            <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+            <rdfs:subClassOf>
+              <owl:Restriction>
+                <owl:allValuesFrom>
+                  <swb:Class rdf:ID="FacebookFanPage">
+                    <rdfs:subClassOf>
+                      <owl:Restriction>
+                        <owl:allValuesFrom rdf:resource="#FacePageTab"/>
+                        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+                      </owl:Restriction>
+                    </rdfs:subClassOf>
+                    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+                    <rdfs:label>Facebook FanPage</rdfs:label>
+                    <rdfs:comment>Clase manejadora de una cuenta de Facebook para controlar páginas sociales.</rdfs:comment>
+                    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                    >true</swb:autogenId>
+                    <rdfs:subClassOf>
+                      <swb:Class rdf:ID="FanPages">
+                        <rdfs:subClassOf rdf:resource="#SociaNetPage"/>
+                        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+                      </swb:Class>
+                    </rdfs:subClassOf>
+                    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+                  </swb:Class>
+                </owl:allValuesFrom>
+                <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+              </owl:Restriction>
+            </rdfs:subClassOf>
+            <rdfs:label>Page Tab</rdfs:label>
+          </swb:Class>
+        </swb:hasClass>
+        <swb:hasClass rdf:resource="#FacebookFanPage"/>
         <swb:hasHerarquicalNode rdf:resource="#hn_SocialNets"/>
         <swb:hasClass>
           <swb:Class rdf:ID="SocialWebPage">
@@ -1410,6 +1469,23 @@
     </rdfs:range>
     <rdfs:domain rdf:resource="#SocialNetworkUser"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="sn_socialNet">
+    <rdfs:domain rdf:resource="#FanPages"/>
+    <rdfs:label xml:lang="es">Cuenta de Red Social</rdfs:label>
+    <rdfs:label xml:lang="en">Social Network account</rdfs:label>
+    <rdfs:comment>Cuenta de SocialNetwork a la cual esta haciendose referencia para su manejo.</rdfs:comment>
+    <rdfs:range rdf:resource="#SocialNetwork"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_sn_socialNet">
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+        <swbxf:formElement>
+          <social:SelectOneActive rdf:ID="SelectOneActive_1"/>
+        </swbxf:formElement>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasYoutubeCategory">
     <rdfs:label xml:lang="en">Categories to listen</rdfs:label>
     <rdfs:label xml:lang="es">Categorias a escuchar</rdfs:label>
@@ -1817,6 +1893,21 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:comment>Propiedad que indica si en el stream se desea aceptar que entren los mensajes que sean clasificados con sentimiento neutro</rdfs:comment>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="face_appid">
+    <rdfs:domain rdf:resource="#FacePageTab"/>
+    <rdfs:label xml:lang="es">Id de Aplicación</rdfs:label>
+    <rdfs:label xml:lang="en">Application ID</rdfs:label>
+    <rdfs:comment>Facebook Aplication ID</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_face_appid">
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="nextDatetoSearch">
     <rdfs:comment>Fecha o id siguiente para busqueda en una red social.</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -1880,17 +1971,17 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#SocialNetworkUser"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="snu_relationShipStatus">
-    <rdfs:comment>Relación sentimental del usuario en la red social. 1=Soltero; 2=Unión Libre; 3=Casado; 4=Divordiado; 5=Viudo;</rdfs:comment>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="geoCenterLatitude">
     <rdfs:label xml:lang="en">Longitude</rdfs:label>
     <rdfs:label xml:lang="es">Latitud</rdfs:label>
     <rdfs:domain rdf:resource="#Geolocable"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
     <rdfs:comment>Latitud del punto central a buscar mensajes</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="snu_relationShipStatus">
+    <rdfs:comment>Relación sentimental del usuario en la red social. 1=Soltero; 2=Unión Libre; 3=Casado; 4=Divordiado; 5=Viudo;</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="secretKey">
     <swb:displayProperty>
@@ -2319,6 +2410,21 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#PostIn"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="page_id">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_page_id">
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">ID de Página</rdfs:label>
+    <rdfs:label xml:lang="en">Page Id</rdfs:label>
+    <rdfs:comment>Facebook PageID to manage</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#FacebookFanPage"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="west">
     <rdfs:comment>Punto oeste, del punto South West (SW) de un bounding box.</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
@@ -2364,6 +2470,11 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:comment>Login o usuario con la cual una organización se puede conectar a una determinada instancia de Red Social.</rdfs:comment>
     <rdfs:domain rdf:resource="#Authenticable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="pageAccessToken">
+    <rdfs:comment>Facebook Access token, it is returned by facebook and its used to mannage the Fan Page, meaning to link a Tab to it.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#FacebookFanPage"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="IntensityValue">
     <rdfs:domain rdf:resource="#SentimentWords"/>
@@ -2491,6 +2602,12 @@
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</swb:required>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="accessToken">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Almacena el access Token autorizado para hacer publicaciones, por conveniencia no utiliza displayProperty</rdfs:comment>
+    <rdfs:domain rdf:resource="#Oauthable"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="userCanReTopicMsg">
     <rdfs:domain rdf:resource="#SocialUserExtAttributes"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
@@ -2503,12 +2620,6 @@
         <swbxf:propGroup rdf:resource="#SocialUserGroup"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="accessToken">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Almacena el access Token autorizado para hacer publicaciones, por conveniencia no utiliza displayProperty</rdfs:comment>
-    <rdfs:domain rdf:resource="#Oauthable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="snu_name">
     <rdfs:comment>Nombre del usuario en la Red Social</rdfs:comment>
@@ -2947,6 +3058,12 @@
     <swbxf:formElement rdf:resource="#socialDojoImageUpload"/>
   </swbxf:DisplayProperty>
   <swbxf:DisplayProperty rdf:ID="dp_isPrioritary"/>
+  <swb:FormElement rdf:ID="SelectOneActive">
+    <rdfs:label>social:SelectOneActive</rdfs:label>
+    <rdfs:comment>social:SelectOneActive</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:FormElement>
   <swbxf:DisplayProperty rdf:ID="dp_tree_action">
     <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
     <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
