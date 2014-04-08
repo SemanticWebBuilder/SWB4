@@ -1965,7 +1965,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         }
         return removed;
     }
-    
+
     public String shortMsgText(PostOut postOut){
         SocialSite socialSite = SocialSite.ClassMgr.getSocialSite(postOut.getSemanticObject().getModel().getName());                
         String msgText = postOut.getMsg_Text();
@@ -1991,4 +1991,15 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         //System.out.println("RETURNED MESSAGE:" + msgText);
         return msgText;
     }
+    
+    @Override
+    public void createPageTab(PageTab pageTab) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void removePageTab(PageTab pageTab) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }
