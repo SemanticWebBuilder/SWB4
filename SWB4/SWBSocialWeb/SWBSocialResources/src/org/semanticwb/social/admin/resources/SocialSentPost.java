@@ -1982,6 +1982,7 @@ public class SocialSentPost extends GenericResource {
                             canRemove=false;
                     }
                 }
+                
                 if(canRemove)
                 {
                    postOut.remove(); 
