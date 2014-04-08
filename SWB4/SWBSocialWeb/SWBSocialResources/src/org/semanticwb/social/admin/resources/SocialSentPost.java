@@ -1956,11 +1956,13 @@ public class SocialSentPost extends GenericResource {
                 //System.out.println("SocialSentPost-REMOVEj2:"+postOut);
                 
                 int cont=0;
+                int cont2=0;
                 String removedFrom=response.getLocaleString("removedFrom");
                 boolean canRemove=false;
                 Iterator<PostOutNet> itpostOuts=postOut.listPostOutNetInvs();
                 while(itpostOuts.hasNext())
                 {
+                    cont2=cont2++;
                     PostOutNet postOutNet=itpostOuts.next();
                     if(postOutNet.getStatus()==1)   //Esta publicado el PostOutNet
                     {
@@ -1969,14 +1971,15 @@ public class SocialSentPost extends GenericResource {
                         {
                             cont++;
                             postOutNet.remove();
-                            canRemove=true;
+                            if(cont2==1) canRemove=true;
+                            else if(cont2>1) canRemove=canRemove&true;
                             if(cont>1) removedFrom+=",";
                             removedFrom+=" "+socialNet.getDisplayTitle(user.getLanguage());
                         }else{
-                            canRemove=canRemove&false;
+                            canRemove=false;
                         }
                     }else{
-                            canRemove=canRemove&false;
+                            canRemove=false;
                     }
                 }
                 if(canRemove)
