@@ -1344,8 +1344,19 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     //System.out.println("error error error error error error error error 3\n"+e);
                     answer = "";
                 }
-                String aux = null;
-                if (answer.indexOf("&") > 0) {
+                //String aux = null;
+                //System.out.println("access token original:" + answer);
+                if(answer.contains("access_token")){
+                    String params[] = answer.split("&");
+                    for(int i = 0 ; i < params.length ; i++){
+                        if(params[i].indexOf("=") > 0 && params[i].contains("access_token")){
+                            accessToken = params[i].split("=")[1];
+                            break;
+                        }
+                    }
+                }
+                //System.out.println("access token original final:" + accessToken);
+                /*if (answer.indexOf("&") > 0) {
                     aux = answer.split("&")[0];
                     if (aux.indexOf("=") > 0) {
                         accessToken = aux.split("=")[1];
@@ -1354,7 +1365,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     if (aux.indexOf("=") > 0) {
 //                            secsToExpiration = Long.parseLong(aux.split("=")[1]);
                     }
-                }
+                }*/
             }
 //            }
             if (accessToken != null) {
@@ -1994,12 +2005,14 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     
     @Override
     public void createPageTab(PageTab pageTab) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        System.out.println("CREANDO TAB!!!!!!");
+        //throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void removePageTab(PageTab pageTab) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        System.out.println("ELIMINANDO TAB!!!!!!");
+        //throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }
