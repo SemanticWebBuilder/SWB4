@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Persiste la información de una Sesión. Existen  dos tipos de sesiones: RAE y NOA 
    */
-public abstract class MeetingBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Roleable,org.semanticwb.model.Filterable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Help,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupable
+public abstract class MeetingBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Help,org.semanticwb.model.Roleable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable
 {
    /**
    * Persiste información de dos dígitos. El número de sesiones se reinicia con el número de año actual.
@@ -197,47 +197,24 @@ public abstract class MeetingBase extends org.semanticwb.bsc.element.BSCElement 
             return it;
         }
        /**
-       * Gets all org.semanticwb.bsc.element.Meeting with a determined RuleRef
-       * @param value RuleRef of the type org.semanticwb.model.RuleRef
-       * @param model Model of the org.semanticwb.bsc.element.Meeting
-       * @return Iterator with all the org.semanticwb.bsc.element.Meeting
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Meeting> listMeetingByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Meeting> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.element.Meeting with a determined RuleRef
-       * @param value RuleRef of the type org.semanticwb.model.RuleRef
-       * @return Iterator with all the org.semanticwb.bsc.element.Meeting
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Meeting> listMeetingByRuleRef(org.semanticwb.model.RuleRef value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Meeting> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.bsc.element.Meeting with a determined Agreement
-       * @param value Agreement of the type org.semanticwb.bsc.tracing.Agreement
+       * @param value Agreement of the type org.semanticwb.bsc.element.Agreement
        * @param model Model of the org.semanticwb.bsc.element.Meeting
        * @return Iterator with all the org.semanticwb.bsc.element.Meeting
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Meeting> listMeetingByAgreement(org.semanticwb.bsc.tracing.Agreement value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Meeting> listMeetingByAgreement(org.semanticwb.bsc.element.Agreement value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Meeting> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasAgreement, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.bsc.element.Meeting with a determined Agreement
-       * @param value Agreement of the type org.semanticwb.bsc.tracing.Agreement
+       * @param value Agreement of the type org.semanticwb.bsc.element.Agreement
        * @return Iterator with all the org.semanticwb.bsc.element.Meeting
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Meeting> listMeetingByAgreement(org.semanticwb.bsc.tracing.Agreement value)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Meeting> listMeetingByAgreement(org.semanticwb.bsc.element.Agreement value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Meeting> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasAgreement,value.getSemanticObject(),sclass));
             return it;
@@ -296,21 +273,21 @@ public abstract class MeetingBase extends org.semanticwb.bsc.element.BSCElement 
         getSemanticObject().setProperty(bsc_meetingType, value);
     }
    /**
-   * Gets all the org.semanticwb.bsc.tracing.Agreement
-   * @return A GenericIterator with all the org.semanticwb.bsc.tracing.Agreement
+   * Gets all the org.semanticwb.bsc.element.Agreement
+   * @return A GenericIterator with all the org.semanticwb.bsc.element.Agreement
    */
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Agreement> listAgreements()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Agreement> listAgreements()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Agreement>(getSemanticObject().listObjectProperties(bsc_hasAgreement));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Agreement>(getSemanticObject().listObjectProperties(bsc_hasAgreement));
     }
 
    /**
    * Gets true if has a Agreement
-   * @param value org.semanticwb.bsc.tracing.Agreement to verify
-   * @return true if the org.semanticwb.bsc.tracing.Agreement exists, false otherwise
+   * @param value org.semanticwb.bsc.element.Agreement to verify
+   * @return true if the org.semanticwb.bsc.element.Agreement exists, false otherwise
    */
-    public boolean hasAgreement(org.semanticwb.bsc.tracing.Agreement value)
+    public boolean hasAgreement(org.semanticwb.bsc.element.Agreement value)
     {
         boolean ret=false;
         if(value!=null)
@@ -321,10 +298,10 @@ public abstract class MeetingBase extends org.semanticwb.bsc.element.BSCElement 
     }
    /**
    * Adds a Agreement
-   * @param value org.semanticwb.bsc.tracing.Agreement to add
+   * @param value org.semanticwb.bsc.element.Agreement to add
    */
 
-    public void addAgreement(org.semanticwb.bsc.tracing.Agreement value)
+    public void addAgreement(org.semanticwb.bsc.element.Agreement value)
     {
         getSemanticObject().addObjectProperty(bsc_hasAgreement, value.getSemanticObject());
     }
@@ -338,25 +315,25 @@ public abstract class MeetingBase extends org.semanticwb.bsc.element.BSCElement 
     }
    /**
    * Removes a Agreement
-   * @param value org.semanticwb.bsc.tracing.Agreement to remove
+   * @param value org.semanticwb.bsc.element.Agreement to remove
    */
 
-    public void removeAgreement(org.semanticwb.bsc.tracing.Agreement value)
+    public void removeAgreement(org.semanticwb.bsc.element.Agreement value)
     {
         getSemanticObject().removeObjectProperty(bsc_hasAgreement,value.getSemanticObject());
     }
 
    /**
    * Gets the Agreement
-   * @return a org.semanticwb.bsc.tracing.Agreement
+   * @return a org.semanticwb.bsc.element.Agreement
    */
-    public org.semanticwb.bsc.tracing.Agreement getAgreement()
+    public org.semanticwb.bsc.element.Agreement getAgreement()
     {
-         org.semanticwb.bsc.tracing.Agreement ret=null;
+         org.semanticwb.bsc.element.Agreement ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasAgreement);
          if(obj!=null)
          {
-             ret=(org.semanticwb.bsc.tracing.Agreement)obj.createGenericInstance();
+             ret=(org.semanticwb.bsc.element.Agreement)obj.createGenericInstance();
          }
          return ret;
     }
