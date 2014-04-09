@@ -619,10 +619,7 @@
                 <owl:allValuesFrom>
                   <swb:Class rdf:ID="FacebookFanPage">
                     <rdfs:subClassOf>
-                      <owl:Restriction>
-                        <owl:allValuesFrom rdf:resource="#FacePageTab"/>
-                        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
-                      </owl:Restriction>
+                      <owl:Class rdf:ID="FanPage"/>
                     </rdfs:subClassOf>
                     <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
                     <rdfs:label>Facebook FanPage</rdfs:label>
@@ -630,10 +627,10 @@
                     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
                     >true</swb:autogenId>
                     <rdfs:subClassOf>
-                      <swb:Class rdf:ID="FanPages">
-                        <rdfs:subClassOf rdf:resource="#SociaNetPage"/>
-                        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-                      </swb:Class>
+                      <owl:Restriction>
+                        <owl:allValuesFrom rdf:resource="#FacePageTab"/>
+                        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+                      </owl:Restriction>
                     </rdfs:subClassOf>
                     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
                   </swb:Class>
@@ -879,6 +876,10 @@
   <owl:Class rdf:about="#PostDataable">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:about="#FanPage">
+    <rdfs:subClassOf rdf:resource="#SociaNetPage"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="Photo">
     <rdfs:label xml:lang="es">Foto</rdfs:label>
@@ -1470,7 +1471,7 @@
     <rdfs:domain rdf:resource="#SocialNetworkUser"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="sn_socialNet">
-    <rdfs:domain rdf:resource="#FanPages"/>
+    <rdfs:domain rdf:resource="#FanPage"/>
     <rdfs:label xml:lang="es">Cuenta de Red Social</rdfs:label>
     <rdfs:label xml:lang="en">Social Network account</rdfs:label>
     <rdfs:comment>Cuenta de SocialNetwork a la cual esta haciendose referencia para su manejo.</rdfs:comment>
@@ -1673,16 +1674,16 @@
     <rdfs:label xml:lang="es">País</rdfs:label>
     <rdfs:label xml:lang="en">Country</rdfs:label>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="fromUser">
-    <rdfs:comment>Usuario autor del mensaje</rdfs:comment>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
-    <rdfs:domain rdf:resource="#UserMessage"/>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasSocialRuleRef">
     <rdfs:domain rdf:resource="#SocialRuleRefable"/>
     <rdfs:range rdf:resource="#SocialRuleRef"/>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="fromUser">
+    <rdfs:comment>Usuario autor del mensaje</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <rdfs:domain rdf:resource="#UserMessage"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="pflow">
     <rdfs:domain rdf:resource="#SocialPFlowRef"/>
@@ -1850,11 +1851,6 @@
     <rdfs:comment>Maxima cantidad de registros (mensajes) que almacenara un stream</rdfs:comment>
     <rdfs:domain rdf:resource="#Stream"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="snu_photoUrl">
-    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Url de la foto del usuario. La foto nunca se va ha guardar en SWBSocial, solo se guarda la url de la misma en el servidor de la red social.</rdfs:comment>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="filterSentimentalPositive">
     <rdfs:label xml:lang="en">Positive Sentiment</rdfs:label>
     <rdfs:label xml:lang="es">Sentimiento Positivo</rdfs:label>
@@ -1868,6 +1864,11 @@
     <rdfs:domain rdf:resource="#Stream"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:comment>Propiedad que indica si en el stream se desea aceptar que entren los mensajes que sean clasificados con sentimiento positivo</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="snu_photoUrl">
+    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Url de la foto del usuario. La foto nunca se va ha guardar en SWBSocial, solo se guarda la url de la misma en el servidor de la red social.</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="postShared">
     <rdfs:comment>Veces que ha sido re-enviado o compartido el post</rdfs:comment>
@@ -3057,6 +3058,11 @@
     <rdfs:comment>Localización del usuario que se encuentra en el profile de la red social específica. Ej. Tampico, Tamaulipas.</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#SocialNetworkUser"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="face_old_appid">
+    <rdfs:comment>Antiguo id de aplicación, este se buscaría para eliminarlo de la página de facebook.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#FacePageTab"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="ls_maxAge">
     <swb:displayProperty>
