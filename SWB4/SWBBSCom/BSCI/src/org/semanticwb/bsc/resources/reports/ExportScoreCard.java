@@ -80,7 +80,7 @@ public class ExportScoreCard extends GenericResource {
             }
 
             if (exp == 0) {
-                lista.add(new ParamsScoreCard("", "", "","", scoreCard,"No existen objetivos para el periodo seleccionado", this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                lista.add(new ParamsScoreCard("", "", "","", scoreCard,"No existen objetivos válidos para el periodo seleccionado", this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
             }
             try {
                 JasperTemplates jasperTemplate = JasperTemplates.SCORECARD;
