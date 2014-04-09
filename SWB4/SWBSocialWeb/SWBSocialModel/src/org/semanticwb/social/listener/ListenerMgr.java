@@ -94,7 +94,7 @@ public class ListenerMgr implements SWBAppObject {
      */
     public static boolean createUpdateTimers(Stream stream)
     {
-        System.out.println("createUpdateTimers/STREAM:"+stream);
+        //System.out.println("createUpdateTimers/STREAM:"+stream);
         try
         {
             synchronized(stream)
@@ -134,18 +134,18 @@ public class ListenerMgr implements SWBAppObject {
             try
             {
                 //System.out.println("Entra a Listener/createUpdateTimers-2:"+stream.getURI());
-                System.out.println("ListerJ1");
+                //System.out.println("ListerJ1");
                 //Se revisa si el timer del stream puede ser creado, esto es, si el stream esta activo, si hay palabras a buscar, etc., si no es así, se elimina
                 if(!createTimer(stream))    
                 {
                     //System.out.println("Entra a Listener/createUpdateTimers-3:"+stream.getURI());
-                    System.out.println("ListerJ1.1");
+                    //System.out.println("ListerJ1.1");
                     removeTimer(stream, true);
-                    System.out.println("Elimino timer k");
+                    //System.out.println("Elimino timer k");
                 }else
                 {
                     //System.out.println("Entra a Listener/createUpdateTimers-4:"+stream.getURI());
-                    System.out.println("ListerJ2");
+                    //System.out.println("ListerJ2");
                     Timer timer=removeTimer(stream, true);
                     timer=new Timer();
                     int time=stream.getPoolTime();
@@ -164,11 +164,11 @@ public class ListenerMgr implements SWBAppObject {
             }
         }else
         {
-            System.out.println("ListerJ3");
+            //System.out.println("ListerJ3");
             if(createTimer(stream))
             {
                 //Se arranca un timer que se ejecutara cada tantos segundos configurados en el stream
-                System.out.println("Levanta Timer:"+stream.getPoolTime());
+                //System.out.println("Levanta Timer:"+stream.getPoolTime());
                 Timer timer = new Timer();
                 int time=stream.getPoolTime();
                 //Este número es por defecto, ya que si el stream maneja solo una red tipo listenAlive, es posible que no le hayan puesto un 
@@ -206,7 +206,7 @@ public class ListenerMgr implements SWBAppObject {
             if(createTimer(stream))
             {
                 boolean isThereNoListenAliveNets=false;
-                System.out.println("Ejecuta Timer:"+stream);
+                //System.out.println("Ejecuta Timer:"+stream);
                 Iterator<SocialNetwork> itSocialNets=stream.listSocialNetworks();
                 while(itSocialNets.hasNext())
                 {
@@ -218,7 +218,7 @@ public class ListenerMgr implements SWBAppObject {
                         //siguiente red social del Stream, dado que la actual no se va a enviar a que escuche.
                         if(socialNet instanceof KeepAliveListenerable)
                         {
-                            System.out.println("Ejecuta Red Social/ListenAlive:"+socialNet.getId());
+                            //System.out.println("Ejecuta Red Social/ListenAlive:"+socialNet.getId());
                             KeepAliveListenerable listenAliveableNet=(KeepAliveListenerable)socialNet;
                             try{
                                 listenAliveableNet.listenAlive(stream);
@@ -227,7 +227,7 @@ public class ListenerMgr implements SWBAppObject {
                             }
                         }else   //De lo contrario, si se envía a que escuche
                         {
-                            System.out.println("Ejecuta Red Social/Listen:"+socialNet.getId());
+                            //System.out.println("Ejecuta Red Social/Listen:"+socialNet.getId());
                             try{
                                 //socialNet.listen(stream);
                                  ListenerClassifierThread lisClassThread=new ListenerClassifierThread(socialNet, stream);
@@ -239,7 +239,7 @@ public class ListenerMgr implements SWBAppObject {
                         }
                     }else   //De lo contrario, si se envía a que escuche
                     {
-                        System.out.println("Ejecuta Red Social/Listen:"+socialNet.getId());
+                        //System.out.println("Ejecuta Red Social/Listen:"+socialNet.getId());
                         try{
                             //socialNet.listen(stream);
                             ListenerClassifierThread lisClassThread=new ListenerClassifierThread(socialNet, stream);
@@ -258,7 +258,7 @@ public class ListenerMgr implements SWBAppObject {
                 }
             }else
             {
-                System.out.println("stream es nulo o es inactivo o esta borrado.....:"+stream);
+                //System.out.println("stream es nulo o es inactivo o esta borrado.....:"+stream);
                 removeTimer(stream, true);
             }
             canEnter=true;
@@ -270,52 +270,55 @@ public class ListenerMgr implements SWBAppObject {
      */
     private static boolean createTimer(Stream stream)
     {
-        System.out.println("ListerJ5");
-        if(stream.getSocialSite().isValid() && stream!=null && stream.isActive() && !stream.isDeleted() && stream.getPhrase()!=null && stream.getPhrase().trim().length()>0 && stream.listSocialNetworks().hasNext())
+        //System.out.println("ListerJ5");
+        if(stream.getSocialSite().isValid() && stream!=null && stream.isActive() && !stream.isDeleted() && stream.getPhrase().trim().length()>0 && stream.listSocialNetworks().hasNext())
         {
-            Iterator<SocialNetwork> itNets=stream.listSocialNetworks();
-            while(itNets.hasNext())
+            if(stream.getPhrase()!=null || stream.getStream_allPhrases()!=null || stream.getStream_exactPhrase()!=null || stream.getStream_fromAccount()!=null)
             {
-                SocialNetwork socialNets=itNets.next();
-                if(!socialNets.isActive() || socialNets.isDeleted())
+                Iterator<SocialNetwork> itNets=stream.listSocialNetworks();
+                while(itNets.hasNext())
                 {
-                    return false;
+                    SocialNetwork socialNets=itNets.next();
+                    if(!socialNets.isActive() || socialNets.isDeleted())
+                    {
+                        return false;
+                    }
                 }
-            }
-            
-            //Si es isKeepAliveManager==true, no importaría si no le ponen un tiempo para que este llamandose el thread, 
-            //ya que este es llamado internamente desde cada red social que maneje esta caracteristica
-            System.out.println("IsKeppAlive:"+stream.isKeepAliveManager()+",poolTime:"+stream.getPoolTime());
-            if(stream.isKeepAliveManager() || stream.getPoolTime() > 0)
-            {
-                return true;
-            }
-            //Revisa si en el Stream esta indicado (Active) si se va a manejar KeepAlive en las redes sociales que así lo permitan y que esten
-            //asociadas a dicho Stream
-            /*
-            if(stream.isKeepAliveManager())
-            {
-                //Busca si alguna de las redes sociales que estan registradas en el Stream es de tipo KeepAliveListenerable, si es así no creara el Timer para ese Stream
-                boolean isNotKeepAliveable=false;
-                Iterator<SocialNetwork> itSocialNets=stream.listSocialNetworks(); 
-                while(itSocialNets.hasNext())
-                {
-                   SocialNetwork socialNet=itSocialNets.next();
-                   if(!(socialNet instanceof KeepAliveListenerable))
-                   {
-                       isNotKeepAliveable=true;
-                       break;
-                   }
-                }
-                //Si alguna red social del Stream, no es de tipo KeepAliveListenerable, entonces se regresa true, esto para que SI se genere un timer para ese stream
-                if(isNotKeepAliveable) 
+
+                //Si es isKeepAliveManager==true, no importaría si no le ponen un tiempo para que este llamandose el thread, 
+                //ya que este es llamado internamente desde cada red social que maneje esta caracteristica
+                //System.out.println("IsKeppAlive:"+stream.isKeepAliveManager()+",poolTime:"+stream.getPoolTime());
+                if(stream.isKeepAliveManager() || stream.getPoolTime() > 0)
                 {
                     return true;
                 }
-            }else{
-                return true;
+                //Revisa si en el Stream esta indicado (Active) si se va a manejar KeepAlive en las redes sociales que así lo permitan y que esten
+                //asociadas a dicho Stream
+                /*
+                if(stream.isKeepAliveManager())
+                {
+                    //Busca si alguna de las redes sociales que estan registradas en el Stream es de tipo KeepAliveListenerable, si es así no creara el Timer para ese Stream
+                    boolean isNotKeepAliveable=false;
+                    Iterator<SocialNetwork> itSocialNets=stream.listSocialNetworks(); 
+                    while(itSocialNets.hasNext())
+                    {
+                       SocialNetwork socialNet=itSocialNets.next();
+                       if(!(socialNet instanceof KeepAliveListenerable))
+                       {
+                           isNotKeepAliveable=true;
+                           break;
+                       }
+                    }
+                    //Si alguna red social del Stream, no es de tipo KeepAliveListenerable, entonces se regresa true, esto para que SI se genere un timer para ese stream
+                    if(isNotKeepAliveable) 
+                    {
+                        return true;
+                    }
+                }else{
+                    return true;
+                }
+                * */
             }
-            * */
         }
         return false;
     }
@@ -327,8 +330,8 @@ public class ListenerMgr implements SWBAppObject {
      {
         if(htTimers.get(stream.getURI())!=null)
         {
-            System.out.println("Entra a removeTimer de stream:"+stream.getURI());
-            System.out.println("Entra a removeTimer de stream-GeorgEEEEEE:"+stream.getURI());
+            //System.out.println("Entra a removeTimer de stream:"+stream.getURI());
+            //System.out.println("Entra a removeTimer de stream-GeorgEEEEEE:"+stream.getURI());
             if(stopNetListeners)
             {
                 //Mandar llamar a cada una de las redes sociales con el Stream que deseo detener
@@ -367,7 +370,7 @@ public class ListenerMgr implements SWBAppObject {
                 timer.cancel();
                 timer.purge();
                 timer=null;
-                System.out.println("Entra a removeTimer de stream-1:"+stream.getURI());
+                //System.out.println("Entra a removeTimer de stream-1:"+stream.getURI());
                 return timer;
             }catch(Exception e)
             {
@@ -399,17 +402,17 @@ public class ListenerMgr implements SWBAppObject {
         //TODO:Desabilitar guardado de log, revisar con Javier despues
         WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
         wsite.getSemanticModel().setTraceable(false);
-        System.out.println("DESACTIVA TRACE DE MODELO:"+wsite);
+        //System.out.println("DESACTIVA TRACE DE MODELO:"+wsite);
         //Termina
                 
-        System.out.println("Entra a doSomeTask...-1");
+        //System.out.println("Entra a doSomeTask...-1");
         //Revisar redes sociales que se encuentran en este momento en el stream
         ArrayList asocialNetIDs=new ArrayList();    //White List -Lista buena-Lista que si esta en el stream
         Iterator <SocialNetwork> itSn=stream.listSocialNetworks();
         while(itSn.hasNext())
         {
             SocialNetwork socialNet=itSn.next();
-            System.out.println("doSomeTask/socialNet lista blanca:"+socialNet.getURI());
+            //System.out.println("doSomeTask/socialNet lista blanca:"+socialNet.getURI());
             asocialNetIDs.add(socialNet.getURI());   //Se agrega el id de la red social a la lista blanca (asocialNetIDs)
         }
 
@@ -423,12 +426,12 @@ public class ListenerMgr implements SWBAppObject {
                 //Si la red social del objeto socialNetStreamSearch, no se encuentra en la lista blanca, se eliminara dicho objeto
                 if(!asocialNetIDs.contains(socialNetStreamSearch.getSocialNetwork().getURI()))  
                 {
-                    System.out.println("doSomeTask/Se elimina SocialNet:"+socialNetStreamSearch.getSocialNetwork().getURI()+" de la clase:SocialNetStreamSearch, puesto que ya no esta en el strea:"+stream.getURI());
+                    //System.out.println("doSomeTask/Se elimina SocialNet:"+socialNetStreamSearch.getSocialNetwork().getURI()+" de la clase:SocialNetStreamSearch, puesto que ya no esta en el strea:"+stream.getURI());
                     socialNetStreamSearch.remove();
                 }
             }
         }
-        System.out.println("Entra a doSomeTask...-2");
+        //System.out.println("Entra a doSomeTask...-2");
         //Se actualiza el Listener del stream
     }
     
