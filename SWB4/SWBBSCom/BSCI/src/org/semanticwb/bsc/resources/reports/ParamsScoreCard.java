@@ -16,14 +16,16 @@ public class ParamsScoreCard {
     private String objective;
     private String indicator;
     private String scoreCard;
+    private String msg;
     private InputStream logo;
     
-    public ParamsScoreCard(String perspective, String theme, String objective, String indicator, String scoreCard, InputStream logo){
+    public ParamsScoreCard(String perspective, String theme, String objective, String indicator, String scoreCard, String msg, InputStream logo){
         this.perspective = perspective;
         this.theme = theme;
         this.objective = objective;
         this.indicator = indicator;
         this.scoreCard = scoreCard;
+        this.msg = msg;
         this.logo = logo;
     }
 
@@ -65,6 +67,14 @@ public class ParamsScoreCard {
 
     public void setScoreCard(String scoreCard) {
         this.scoreCard = scoreCard;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
     public InputStream getLogo() {
