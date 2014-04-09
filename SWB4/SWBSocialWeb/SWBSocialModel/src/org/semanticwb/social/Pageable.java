@@ -5,7 +5,9 @@ package org.semanticwb.social;
    */
 public interface Pageable extends org.semanticwb.social.base.PageableBase
 {
-    public void createPageTab(PageTab pageTab);
+    public boolean createPageTab(PageTab pageTab);
     
-    public void removePageTab(PageTab pageTab);
+    public boolean removePageTab(PageTab pageTab);
+    
+    public boolean removePageTab(FanPage fanPage, String app_id);
 }

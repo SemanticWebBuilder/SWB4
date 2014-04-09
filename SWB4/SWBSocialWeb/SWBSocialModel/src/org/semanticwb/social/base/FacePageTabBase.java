@@ -4,12 +4,16 @@ package org.semanticwb.social.base;
    /**
    * Clase que controla un tab de page en Facebook 
    */
-public abstract class FacePageTabBase extends org.semanticwb.social.PageTab implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Searchable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Rankable,org.semanticwb.model.Viewable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Countryable,org.semanticwb.model.Indexable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Expirable,org.semanticwb.model.Resourceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Tagable,org.semanticwb.model.Localeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.model.Hiddenable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Filterable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Activeable
+public abstract class FacePageTabBase extends org.semanticwb.social.PageTab implements org.semanticwb.model.Searchable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Rankable,org.semanticwb.model.Localeable,org.semanticwb.model.Viewable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Indexable,org.semanticwb.model.RoleRefable,org.semanticwb.model.FilterableNode,org.semanticwb.model.TemplateRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.model.Expirable,org.semanticwb.model.Resourceable,org.semanticwb.model.Tagable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Countryable,org.semanticwb.model.Hiddenable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Filterable
 {
    /**
    * Facebook Aplication ID
    */
     public static final org.semanticwb.platform.SemanticProperty social_face_appid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#face_appid");
+   /**
+   * Antiguo id de aplicación, este se buscaría para eliminarlo de la página de facebook.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_face_old_appid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#face_old_appid");
    /**
    * Clase que controla un tab de page en Facebook
    */
@@ -580,6 +584,24 @@ public abstract class FacePageTabBase extends org.semanticwb.social.PageTab impl
     public void setFace_appid(String value)
     {
         getSemanticObject().setProperty(social_face_appid, value);
+    }
+
+/**
+* Gets the Face_old_appid property
+* @return String with the Face_old_appid
+*/
+    public String getFace_old_appid()
+    {
+        return getSemanticObject().getProperty(social_face_old_appid);
+    }
+
+/**
+* Sets the Face_old_appid property
+* @param value long with the Face_old_appid
+*/
+    public void setFace_old_appid(String value)
+    {
+        getSemanticObject().setProperty(social_face_old_appid, value);
     }
 
    /**
