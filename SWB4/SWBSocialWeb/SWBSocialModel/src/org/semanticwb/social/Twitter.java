@@ -349,8 +349,12 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         
         try{            
             long lastTweetID = getLastTweetID(stream); //gets the value stored in NextDatetoSearch
-            twitter4j.Twitter twitter = new TwitterFactory(configureOAuth().build()).getInstance();            
-            String searchPhrases = getPhrases(stream.getPhrase());
+            twitter4j.Twitter twitter = new TwitterFactory(configureOAuth().build()).getInstance();
+            String searchPhrases = formatsTwitterPhrases(stream);//getPhrases(stream.getPhrase());
+            if(searchPhrases == null || searchPhrases.isEmpty()){
+                log.warn("\n Not a valid value to make a twitter search:" +searchPhrases);
+               return; 
+            }
             if(searchPhrases == null || searchPhrases.isEmpty()){
                 return;
             }
@@ -949,6 +953,125 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         //System.out.println("RETURNED MESSAGE:" + msgText);
         return msgText;
     }
-    
+
+    /**
+     * Formats phrases according to Query requirements.
+     * takes all the phrases from the search fields and formats the 'words' according to 
+     * the twitter requirements.
+     * @param stream
+     * @return Formated phrases.
+     */
+    private String formatsTwitterPhrases(Stream stream){
+        String parsedPhrases = ""; // parsed phrases 
+        String exactPhrases = "";
+        String orPhrases = "";
+        String notPhrases = "";
+        String allPhrases ="";
+        String fromAccounts = "";
+        if(stream.getPhrase() != null && !stream.getPhrase().trim().isEmpty()){//OR (Default)
+            orPhrases = stream.getPhrase();            
+            orPhrases = SWBSocialUtil.Strings.replaceSpecialCharacters(orPhrases);
+            orPhrases = orPhrases.trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for one only one space
+            String words[] = orPhrases.split(" ");
+            int wordsNumber = words.length;
+            String tmpString = "";
+            for (int i = 0; i < wordsNumber; i++) {
+                if(!words[i].trim().isEmpty()){ 
+                    tmpString += words[i];
+                    if ((i + 1) < wordsNumber) {
+                        tmpString += " OR ";
+                    }
+                }
+            }
+            orPhrases = tmpString;
+        }
+        if(stream.getStream_allPhrases() != null && !stream.getStream_allPhrases().trim().isEmpty()){//All phrases
+            allPhrases = stream.getStream_allPhrases();
+            allPhrases = SWBSocialUtil.Strings.replaceSpecialCharacters(allPhrases);
+            allPhrases = allPhrases.trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for one only one space
+            String words[] = allPhrases.split(" ");
+            int wordsNumber = words.length;
+            String tmpString = "";
+            for (int i = 0; i < wordsNumber; i++) {
+                if(!words[i].trim().isEmpty()){
+                    tmpString += words[i];
+                    if ((i + 1) < wordsNumber) {
+                        tmpString += " ";
+                    }
+                }
+            }
+            allPhrases = tmpString;
+        }
+        if(stream.getStream_notPhrase() != null && !stream.getStream_notPhrase().trim().isEmpty()){//Not phrases
+            notPhrases = stream.getStream_notPhrase();
+            notPhrases = SWBSocialUtil.Strings.replaceSpecialCharacters(notPhrases);
+            notPhrases = notPhrases.trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for one only one space
+            String words[] = notPhrases.split(" ");
+            int wordsNumber = words.length;
+            String tmpString = "";
+            for (int i = 0; i < wordsNumber; i++) {
+                if(!words[i].trim().isEmpty()){
+                    tmpString += ( i>0 ? " " : "") + "-" + words[i];
+                }
+            }
+            notPhrases = tmpString;
+        }
+        if(stream.getStream_exactPhrase() != null && !stream.getStream_exactPhrase().trim().isEmpty()){//Exact phrase
+            exactPhrases = stream.getStream_exactPhrase();
+            exactPhrases = SWBSocialUtil.Strings.replaceSpecialCharacters(exactPhrases);
+            exactPhrases = exactPhrases.trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for one only one space
+            exactPhrases = "\"" + exactPhrases + "\"";
+        }
+        
+        if(stream.getStream_fromAccount() != null && !stream.getStream_fromAccount().trim().isEmpty()){//Find in certains accounts
+            fromAccounts = stream.getStream_fromAccount();
+            fromAccounts = SWBSocialUtil.Strings.replaceSpecialCharacters(fromAccounts);
+            fromAccounts = fromAccounts.trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for one only one space
+            String words[] = fromAccounts.split(" ");
+            int wordsNumber = words.length;
+            String tmpString = "";
+            for (int i = 0; i < wordsNumber; i++) {
+                if(!words[i].trim().isEmpty()){
+                    tmpString += ( i>0 ? " OR " : "") + "from:" + words[i];                    
+                }                
+            }
+            fromAccounts = tmpString;
+        }
+
+        if(!allPhrases.isEmpty()){
+            parsedPhrases += allPhrases;
+        }
+        if(!exactPhrases.isEmpty()){
+            if(parsedPhrases.isEmpty()){
+                parsedPhrases = exactPhrases;
+            }else{
+                parsedPhrases += " " + exactPhrases;
+            }
+        }
+        if(!orPhrases.isEmpty()){
+            if(parsedPhrases.isEmpty()){
+                parsedPhrases = orPhrases;
+            }else{
+                parsedPhrases += " " + orPhrases;
+            }
+        }
+        if(!fromAccounts.isEmpty()){
+            if(parsedPhrases.isEmpty()){
+                parsedPhrases = fromAccounts;
+            }else{
+                parsedPhrases += " " + fromAccounts;
+            }
+        }
+        if(!notPhrases.isEmpty()){
+            if(parsedPhrases.isEmpty()){
+                parsedPhrases = notPhrases;
+            }else{
+                parsedPhrases += " " + notPhrases;
+            }
+        }
+        
+        System.out.println("Final String-->" + parsedPhrases + "<-");        
+        return parsedPhrases;
+    }
     
 }
