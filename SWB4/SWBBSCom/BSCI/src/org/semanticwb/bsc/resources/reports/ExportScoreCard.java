@@ -47,38 +47,43 @@ public class ExportScoreCard extends GenericResource {
             scoreCard = ws.getTitle();
             JasperTemplates jasperLogo = JasperTemplates.LOGO;
             Iterator<Objective> itObje = Objective.ClassMgr.listObjectiveByPeriod(period, ws);
+            int exp = 0;
             while (itObje.hasNext()) {
-                boolean hasIndicator = false;
                 Objective ob = itObje.next();
-                objective = ob.getTitle();
-                theme = ob.getTheme().getTitle();
-                perspective = ob.getTheme().getPerspective().getTitle();
-                //Saca los indicadores del periodo y evalua si pertenecen al mismo objetivo
-                Iterator<Indicator> itIndPeriod = Indicator.ClassMgr.listIndicatorByPeriod(period, ws);
-                int count = 0;
+                if (ob.isActive()) {
+                    exp = 1;
+                    boolean hasIndicator = false;
+                    objective = ob.getTitle();
+                    theme = ob.getTheme().getTitle();
+                    perspective = ob.getTheme().getPerspective().getTitle();
+                    //Saca los indicadores del periodo y evalua si pertenecen al mismo objetivo
+                    Iterator<Indicator> itIndPeriod = Indicator.ClassMgr.listIndicatorByPeriod(period, ws);
+                    int count = 0;
 
-                while (itIndPeriod.hasNext()) {
-                    Indicator indic = itIndPeriod.next();
-                    if (indic.getObjective().equals(ob)) {
-                        hasIndicator = true;
-                        indicator = indic.getTitle();
-                        if (count == 0) {
-                            lista.add(new ParamsScoreCard(perspective, theme, objective, indicator, scoreCard, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
-                        } else {
-                            lista.add(new ParamsScoreCard("", "", "", indicator, scoreCard, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                    while (itIndPeriod.hasNext()) {
+                        Indicator indic = itIndPeriod.next();
+                        if (indic.getObjective().equals(ob) && indic.isActive()) {
+                            hasIndicator = true;
+                            indicator = indic.getTitle();
+                            if (count == 0) {
+                                lista.add(new ParamsScoreCard(perspective, theme, objective, indicator, scoreCard,"", this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                            } else {
+                                lista.add(new ParamsScoreCard("", "", "", indicator, scoreCard,"", this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                            }
+                            count++;
                         }
-                        count++;
+                    }
+                    if (hasIndicator == false) {
+                        lista.add(new ParamsScoreCard(perspective, theme, objective, "", scoreCard,"", this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
                     }
                 }
-                if (hasIndicator == false) {
-                    lista.add(new ParamsScoreCard(perspective, theme, objective, "", scoreCard, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
-                }
-
             }
-            JasperTemplates jasperTemplate = JasperTemplates.SCORECARD;
 
+            if (exp == 0) {
+                lista.add(new ParamsScoreCard("", "", "","", scoreCard,"No existen objetivos para el periodo seleccionado", this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+            }
             try {
-
+                JasperTemplates jasperTemplate = JasperTemplates.SCORECARD;
                 InputStream is = getClass().getResourceAsStream(jasperTemplate.getTemplatePath());
                 JasperReport jasperReport = (JasperReport) JRLoader.loadObject(is);
                 JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, new JRBeanCollectionDataSource(lista));
@@ -91,6 +96,7 @@ public class ExportScoreCard extends GenericResource {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
         }
 
     }
@@ -127,10 +133,10 @@ public class ExportScoreCard extends GenericResource {
         WebSite ws = getResourceBase().getWebSite();
         Period period = null;
         //if (request.getSession(true).getAttribute(ws.getId()) != null) {
-            String pid = (String) request.getSession(true).getAttribute(ws.getId());
-            if (Period.ClassMgr.hasPeriod(pid, ws)) {
-                period = Period.ClassMgr.getPeriod(pid, ws);
-            }
+        String pid = (String) request.getSession(true).getAttribute(ws.getId());
+        if (Period.ClassMgr.hasPeriod(pid, ws)) {
+            period = Period.ClassMgr.getPeriod(pid, ws);
+        }
         //}
         return period;
     }
