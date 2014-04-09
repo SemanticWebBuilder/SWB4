@@ -1805,6 +1805,20 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#SocialWebPage"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="fp_notLinked">
+    <rdfs:label xml:lang="en">UnLinked</rdfs:label>
+    <rdfs:label xml:lang="es">No Ligada</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_fp_notLinked">
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#FanPage"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment>Propiedad que indica que se desligue todo lo que se realice en la página de Social con la Red Social Seleccionada. De no seleccionarse esta opción y si ya exiten elementos ligados para la página (Tabs), de eliminarse la página se eliminarían dichos tabs de las redes sociales.</rdfs:comment>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="postIntesityType">
     <rdfs:comment>Tipo de Intensidad. 2=Alta;1=Media;0=Baja;</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
